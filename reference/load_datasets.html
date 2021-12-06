@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9029</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9030</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -231,7 +204,7 @@ shiny application - it returns shiny server module.</p>
 <span class='r-in'><span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dataset_connector.html'>dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='va'>pull_fun_adsl</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'>load_datasets</span><span class='op'>(</span><span class='va'>adsl</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='get_dataset.html'>get_dataset</a></span><span class='op'>(</span><span class='va'>adsl</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> A TealDataset object containing the following data.frame (400 rows and 38 columns):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A TealDataset object containing the following data.frame (400 rows and 39 columns):</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   STUDYID               USUBJID SUBJID SITEID AGE SEX                      RACE</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1 AB12345  AB12345-CHN-3-id-128 id-128  CHN-3  32   M                     ASIAN</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 2 AB12345 AB12345-CHN-15-id-262 id-262 CHN-15  35   M BLACK OR AFRICAN AMERICAN</span>
@@ -260,20 +233,20 @@ shiny application - it returns shiny server module.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 4        Y       Y 2019-02-27 2019-03-01 13:33:03 2021-03-01 01:11:27</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 5        N       N 2019-03-01 2019-03-02 00:09:16 2021-03-01 11:47:40</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 6        Y       N 2019-03-05 2019-03-05 15:23:44 2021-02-17 20:23:53</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         EOSSTT      EOSDT EOSDY          DCSREAS DTHDT DTHCAUS DTHCAT LDDTHELD</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    COMPLETED 2021-02-23   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    COMPLETED 2021-02-25   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3    COMPLETED 2021-02-27   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 DISCONTINUED 2021-02-17   716 LACK OF EFFICACY  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   LDDTHGR1   LSTALVDT study_duration_secs</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     &lt;NA&gt; 2021-03-05            63113904</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     &lt;NA&gt; 2021-03-15            63113904</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3     &lt;NA&gt; 2021-03-15            63113904</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     &lt;NA&gt; 2021-03-17            63113904</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5     &lt;NA&gt; 2021-03-25            63113904</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6     &lt;NA&gt; 2021-03-01            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         EOSSTT       EOTSTT      EOSDT EOSDY          DCSREAS DTHDT DTHCAUS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    COMPLETED    COMPLETED 2021-02-23   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    COMPLETED    COMPLETED 2021-02-25   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3    COMPLETED    COMPLETED 2021-02-27   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4    COMPLETED    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5    COMPLETED    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 DISCONTINUED DISCONTINUED 2021-02-17   716 LACK OF EFFICACY  &lt;NA&gt;    &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   DTHCAT LDDTHELD LDDTHGR1   LSTALVDT study_duration_secs</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-05            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-15            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-15            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-17            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-25            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-01            63113904</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ...</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>     STUDYID               USUBJID SUBJID SITEID AGE SEX</span>
@@ -304,27 +277,27 @@ shiny application - it returns shiny server module.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 398       A      S2 6.326863    LOW     Y     Y        N       Y 2021-02-07</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 399       C      S1 4.076818    LOW     Y     Y        N       Y 2021-02-09</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 400       B      S1 3.726935    LOW     Y     Y        Y       N 2021-02-14</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                 TRTSDTM             TRTEDTM       EOSSTT      EOSDT EOSDY</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 395 2021-01-27 01:57:07 2023-01-27 13:35:31    COMPLETED 2023-01-27   731</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 396 2021-02-02 09:04:52 2023-02-02 20:43:16    COMPLETED 2023-02-02   731</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 397 2021-02-02 19:14:46 2023-02-03 06:53:10    COMPLETED 2023-02-03   731</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 398 2021-02-09 05:28:52 2021-02-19 19:06:01 DISCONTINUED 2021-02-19    11</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 399 2021-02-11 21:33:08 2021-02-17 09:12:06 DISCONTINUED 2021-02-17     6</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 400 2021-02-17 14:42:27 2023-02-18 02:20:51    COMPLETED 2023-02-18   731</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                DCSREAS      DTHDT DTHCAUS DTHCAT LDDTHELD LDDTHGR1   LSTALVDT</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 395               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-02-22</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 396               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-02-23</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 397               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-03-03</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 398              DEATH 2021-03-29 MISSING  OTHER       38      &gt;30 2021-03-29</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 399 PHYSICIAN DECISION       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-17</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 400               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-03-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     study_duration_secs</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 395            63113904</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 396            63113904</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 397            63113904</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 398            63113904</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 399            63113904</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 400            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 TRTSDTM             TRTEDTM       EOSSTT       EOTSTT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 395 2021-01-27 01:57:07 2023-01-27 13:35:31    COMPLETED    COMPLETED</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 396 2021-02-02 09:04:52 2023-02-02 20:43:16    COMPLETED    COMPLETED</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 397 2021-02-02 19:14:46 2023-02-03 06:53:10    COMPLETED    COMPLETED</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 398 2021-02-09 05:28:52 2021-02-19 19:06:01 DISCONTINUED DISCONTINUED</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 399 2021-02-11 21:33:08 2021-02-17 09:12:06 DISCONTINUED DISCONTINUED</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400 2021-02-17 14:42:27 2023-02-18 02:20:51    COMPLETED    COMPLETED</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          EOSDT EOSDY            DCSREAS      DTHDT DTHCAUS DTHCAT LDDTHELD</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 395 2023-01-27   731               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 396 2023-02-02   731               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 397 2023-02-03   731               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 398 2021-02-19    11              DEATH 2021-03-29 MISSING  OTHER       38</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 399 2021-02-17     6 PHYSICIAN DECISION       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400 2023-02-18   731               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     LDDTHGR1   LSTALVDT study_duration_secs</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 395     &lt;NA&gt; 2023-02-22            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 396     &lt;NA&gt; 2023-02-23            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 397     &lt;NA&gt; 2023-03-03            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 398      &gt;30 2021-03-29            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 399     &lt;NA&gt; 2021-03-17            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400     &lt;NA&gt; 2023-03-01            63113904</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>pull_fun_adae</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span></span>
 <span class='r-in'>  <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span><span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adae</span><span class='op'>}</span></span>

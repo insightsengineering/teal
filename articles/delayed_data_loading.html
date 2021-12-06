@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9029</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9030</span>
       </span>
     </div>
 
@@ -73,33 +73,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -124,7 +97,7 @@ Other releases
       <h1 data-toc-skip>Delayed Data Loading</h1>
                         <h4 class="author">Dawid Kałędkowski</h4>
             
-            <h4 class="date">2021-12-03</h4>
+            <h4 class="date">2021-12-06</h4>
       
       
       <div class="hidden name"><code>delayed_data_loading.Rmd</code></div>
@@ -168,7 +141,7 @@ Other releases
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: shiny</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; You are using teal version 0.10.0.9029</span>
+<span class="co">#&gt; You are using teal version 0.10.0.9030</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 
@@ -181,7 +154,7 @@ Other releases
 <span class="co"># execute function with arguments set</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">fun</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 6 × 38</span>
+<span class="co">#&gt; # A tibble: 6 × 39</span>
 <span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
 <span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt; &lt;chr&gt; &lt;chr&gt; </span>
 <span class="co">#&gt; 1 AB12345 AB12345-… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…</span>
@@ -190,12 +163,13 @@ Other releases
 <span class="co">#&gt; 4 AB12345 AB12345-… id-220 CHN-11    26 F     ASIAN   CHN     N     INV … Dr. C…</span>
 <span class="co">#&gt; 5 AB12345 AB12345-… id-267 CHN-7     40 M     ASIAN   CHN     N     INV … Dr. C…</span>
 <span class="co">#&gt; 6 AB12345 AB12345-… id-201 CHN-15    49 M     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; # … with 27 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
+<span class="co">#&gt; # … with 28 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
 <span class="co">#&gt; #   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span>
-<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOSDT &lt;date&gt;,</span>
-<span class="co">#&gt; #   EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;, DTHCAT &lt;fct&gt;,</span>
-<span class="co">#&gt; #   LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;, study_duration_secs &lt;dbl&gt;</span>
+<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOTSTT &lt;fct&gt;,</span>
+<span class="co">#&gt; #   EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;,</span>
+<span class="co">#&gt; #   DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   study_duration_secs &lt;dbl&gt;</span>
 
 <span class="co"># check reproducible code</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="va">fun</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
@@ -205,7 +179,7 @@ Other releases
 <code class="sourceCode R"><span class="co"># add arguments on the fly</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">fun</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span>args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adae"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 6 × 66</span>
+<span class="co">#&gt; # A tibble: 6 × 69</span>
 <span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE  COUNTRY DTHFL INVID  INVNAM </span>
 <span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt; &lt;chr&gt;  &lt;chr&gt;  </span>
 <span class="co">#&gt; 1 AB12345 AB12345-… id-134 BRA-1     47 M     WHITE BRA     N     INV I… Dr. BR…</span>
@@ -214,13 +188,13 @@ Other releases
 <span class="co">#&gt; 4 AB12345 AB12345-… id-134 BRA-1     47 M     WHITE BRA     N     INV I… Dr. BR…</span>
 <span class="co">#&gt; 5 AB12345 AB12345-… id-141 BRA-1     35 F     WHITE BRA     N     INV I… Dr. BR…</span>
 <span class="co">#&gt; 6 AB12345 AB12345-… id-141 BRA-1     35 F     WHITE BRA     N     INV I… Dr. BR…</span>
-<span class="co">#&gt; # … with 55 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
+<span class="co">#&gt; # … with 58 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
 <span class="co">#&gt; #   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span>
-<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOSDT &lt;date&gt;,</span>
-<span class="co">#&gt; #   EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;, DTHCAT &lt;fct&gt;,</span>
-<span class="co">#&gt; #   LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;, study_duration_secs &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ASEQ &lt;int&gt;, AESEQ &lt;int&gt;, AETERM &lt;fct&gt;, AELLT &lt;fct&gt;, AEDECOD &lt;fct&gt;, …</span>
+<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOTSTT &lt;fct&gt;,</span>
+<span class="co">#&gt; #   EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;,</span>
+<span class="co">#&gt; #   DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   study_duration_secs &lt;dbl&gt;, ASEQ &lt;int&gt;, AESEQ &lt;int&gt;, AETERM &lt;fct&gt;, …</span>
 
 <span class="co"># dynamic arguments not reflected in the call</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="va">fun</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
@@ -244,7 +218,7 @@ Other releases
 <span class="co"># execute function</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">fun</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 6 × 39</span>
+<span class="co">#&gt; # A tibble: 6 × 40</span>
 <span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
 <span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt; &lt;chr&gt; &lt;chr&gt; </span>
 <span class="co">#&gt; 1 AB12345 AB12345-… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…</span>
@@ -253,13 +227,13 @@ Other releases
 <span class="co">#&gt; 4 AB12345 AB12345-… id-220 CHN-11    26 F     ASIAN   CHN     N     INV … Dr. C…</span>
 <span class="co">#&gt; 5 AB12345 AB12345-… id-267 CHN-7     40 M     ASIAN   CHN     N     INV … Dr. C…</span>
 <span class="co">#&gt; 6 AB12345 AB12345-… id-201 CHN-15    49 M     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; # … with 28 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
+<span class="co">#&gt; # … with 29 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
 <span class="co">#&gt; #   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span>
-<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOSDT &lt;date&gt;,</span>
-<span class="co">#&gt; #   EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;, DTHCAT &lt;fct&gt;,</span>
-<span class="co">#&gt; #   LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;, study_duration_secs &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   new_col &lt;lgl&gt;</span>
+<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOTSTT &lt;fct&gt;,</span>
+<span class="co">#&gt; #   EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;,</span>
+<span class="co">#&gt; #   DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   study_duration_secs &lt;dbl&gt;, new_col &lt;lgl&gt;</span>
 
 <span class="co"># get R code</span>
 <span class="va">fun</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span>
@@ -290,7 +264,7 @@ Other releases
 <span class="co"># evaluate call</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">code</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 6 × 50</span>
+<span class="co">#&gt; # A tibble: 6 × 51</span>
 <span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
 <span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt; &lt;chr&gt; &lt;chr&gt; </span>
 <span class="co">#&gt; 1 AB12345 AB12345-… id-105 BRA-1     38 M     BLACK … BRA     N     INV … Dr. B…</span>
@@ -299,13 +273,13 @@ Other releases
 <span class="co">#&gt; 4 AB12345 AB12345-… id-134 BRA-1     47 M     WHITE   BRA     N     INV … Dr. B…</span>
 <span class="co">#&gt; 5 AB12345 AB12345-… id-141 BRA-1     35 F     WHITE   BRA     N     INV … Dr. B…</span>
 <span class="co">#&gt; 6 AB12345 AB12345-… id-141 BRA-1     35 F     WHITE   BRA     N     INV … Dr. B…</span>
-<span class="co">#&gt; # … with 39 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
+<span class="co">#&gt; # … with 40 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
 <span class="co">#&gt; #   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span>
-<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOSDT &lt;date&gt;,</span>
-<span class="co">#&gt; #   EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;, DTHCAT &lt;fct&gt;,</span>
-<span class="co">#&gt; #   LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;, study_duration_secs &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ASEQ &lt;int&gt;, TTESEQ &lt;int&gt;, PARAM &lt;fct&gt;, PARAMCD &lt;fct&gt;, AVAL &lt;dbl&gt;, …</span></code></pre></div>
+<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOTSTT &lt;fct&gt;,</span>
+<span class="co">#&gt; #   EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;,</span>
+<span class="co">#&gt; #   DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   study_duration_secs &lt;dbl&gt;, ASEQ &lt;int&gt;, TTESEQ &lt;int&gt;, PARAM &lt;fct&gt;, …</span></code></pre></div>
 </div>
 <div id="tealdataset-including-cdisctealdataset" class="section level3">
 <h3 class="hasAnchor">
@@ -337,18 +311,19 @@ Other releases
 
 <span class="co"># get data.frame</span>
 <span class="fu"><a href="../reference/get_raw_data.html">get_raw_data</a></span><span class="op">(</span><span class="va">adsl_dataset</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 3 × 38</span>
+<span class="co">#&gt; # A tibble: 3 × 39</span>
 <span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
 <span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt; &lt;chr&gt; &lt;chr&gt; </span>
 <span class="co">#&gt; 1 AB12345 AB12345-… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…</span>
 <span class="co">#&gt; 2 AB12345 AB12345-… id-262 CHN-15    35 M     BLACK … CHN     N     INV … Dr. C…</span>
 <span class="co">#&gt; 3 AB12345 AB12345-… id-378 RUS-3     30 F     ASIAN   RUS     N     INV … Dr. R…</span>
-<span class="co">#&gt; # … with 27 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
+<span class="co">#&gt; # … with 28 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
 <span class="co">#&gt; #   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span>
-<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOSDT &lt;date&gt;,</span>
-<span class="co">#&gt; #   EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;, DTHCAT &lt;fct&gt;,</span>
-<span class="co">#&gt; #   LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;, study_duration_secs &lt;dbl&gt;</span>
+<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOTSTT &lt;fct&gt;,</span>
+<span class="co">#&gt; #   EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;,</span>
+<span class="co">#&gt; #   DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   study_duration_secs &lt;dbl&gt;</span>
 
 <span class="co"># get keys (i.e. the primary keys of the dataset)</span>
 <span class="va">adsl_dataset</span><span class="op">$</span><span class="fu">get_keys</span><span class="op">(</span><span class="op">)</span>
@@ -377,7 +352,7 @@ Other releases
 
 <span class="co"># get raw data</span>
 <span class="fu"><a href="../reference/get_raw_data.html">get_raw_data</a></span><span class="op">(</span><span class="va">adsl_conn</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 400 × 38</span>
+<span class="co">#&gt; # A tibble: 400 × 39</span>
 <span class="co">#&gt;    STUDYID USUBJID  SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt; &lt;chr&gt; &lt;chr&gt; </span>
 <span class="co">#&gt;  1 AB12345 AB12345… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…</span>
@@ -390,13 +365,13 @@ Other releases
 <span class="co">#&gt;  8 AB12345 AB12345… id-261 USA-1     32 F     ASIAN   USA     N     INV … Dr. U…</span>
 <span class="co">#&gt;  9 AB12345 AB12345… id-173 NGA-11    24 F     BLACK … NGA     N     INV … Dr. N…</span>
 <span class="co">#&gt; 10 AB12345 AB12345… id-307 CHN-1     24 M     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; # … with 390 more rows, and 27 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;,</span>
+<span class="co">#&gt; # … with 390 more rows, and 28 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;,</span>
 <span class="co">#&gt; #   ACTARM &lt;fct&gt;, ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;,</span>
 <span class="co">#&gt; #   BMRKR1 &lt;dbl&gt;, BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;,</span>
 <span class="co">#&gt; #   BEP01FL &lt;fct&gt;, RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;,</span>
-<span class="co">#&gt; #   EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;,</span>
-<span class="co">#&gt; #   DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;,</span>
-<span class="co">#&gt; #   study_duration_secs &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt; #   EOTSTT &lt;fct&gt;, EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   DTHCAUS &lt;fct&gt;, DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;,</span>
+<span class="co">#&gt; #   LSTALVDT &lt;date&gt;, study_duration_secs &lt;dbl&gt;</span></code></pre></div>
 <p><code>teal</code> also allows other variables to be passed to the connector which <code>Callable</code> object can depend on. In the code below, one can add an <code>adsl</code> object created above and <code>set_args</code> to <code>CallableFunction</code>. To properly link <code>ADSL</code> argument several parameters have to match: 1. <code>dataname</code> of <code>adsl</code> should be <code>"ADSL"</code> 2. <code>vars = list(ADSL = adsl)</code> - <code>adsl</code> object should be passed to vars as a list element with name <code>ADSL</code>. 3. Value of the <code>ADSL</code> argument in the <code>CallableFunction</code> has to be <code>as.name("ADSL")</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># here we use the general dataset_connector function which pulls an object of type TealDataset</span>
@@ -756,7 +731,7 @@ Other releases
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">adsl_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span>
 <span class="fu"><a href="../reference/variable_choices.html">variable_choices</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">adsl_data</span><span class="op">)</span>
-<span class="co">#&gt; number of choices: 38 </span>
+<span class="co">#&gt; number of choices: 39 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; STUDYID: Study Identifier</span>
 <span class="co">#&gt; USUBJID: Unique Subject Identifier</span>
@@ -776,7 +751,7 @@ Other releases
 <span class="co">#&gt; REGION1: Geographic Region 1</span>
 <span class="co">#&gt; STRATA1: Stratification Factor 1</span>
 <span class="co">#&gt; STRATA2: Stratification Factor 2</span>
-<span class="co">#&gt; BMRKR1: Continous Level Biomarker 1</span>
+<span class="co">#&gt; BMRKR1: Continuous Level Biomarker 1</span>
 <span class="co">#&gt; BMRKR2: Categorical Level Biomarker 2</span>
 <span class="co">#&gt; ITTFL: Intent-To-Treat Population Flag</span>
 <span class="co">#&gt; SAFFL: Safety Population Flag</span>
@@ -786,6 +761,7 @@ Other releases
 <span class="co">#&gt; TRTSDTM: Datetime of First Exposure to Treatment</span>
 <span class="co">#&gt; TRTEDTM: Datetime of Last Exposure to Treatment</span>
 <span class="co">#&gt; EOSSTT: End of Study Status</span>
+<span class="co">#&gt; EOTSTT: End of Treatment Status</span>
 <span class="co">#&gt; EOSDT: End of Study Date</span>
 <span class="co">#&gt; EOSDY: End of Study Relative Day</span>
 <span class="co">#&gt; DCSREAS: Reason for Discontinuation from Study</span>
