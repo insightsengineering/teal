@@ -155,16 +155,13 @@ srv_nested_tabs <- function(id, datasets, modules) {
       res <- switch(
         class(modules)[[1]],
         teal_modules = {
-          cat("tab:", id, "\n")
           # id is the id of the tabset, the corresponding input element states which tab is selected
           active_submodule_label <- input[[id]]
           stopifnot(!is.null(active_submodule_label))
           get_active_module(modules$children[[active_submodule_label]], id_parent = id)
         },
         teal_module = {
-          cat("module: ", id, "\n")
           stopifnot(is.null(input[[id]])) # id should not exist
-          message("module ", id, " is active")
           modules
         },
         stop("unknown module class ", class(modules))
@@ -177,10 +174,7 @@ srv_nested_tabs <- function(id, datasets, modules) {
     get_tabset_input_names <- function(modules, id_parent) {
       id <- label_to_id(modules$label, prefix = id_parent)
       if (is(modules, "teal_modules")) {
-        unlist(
-          c(id,
-            lapply(modules$children, get_tabset_input_names, id_parent = id))
-        )
+        unlist(c(id, lapply(modules$children, get_tabset_input_names, id_parent = id)))
       } else if (is(modules, "teal_module")) {
         NULL
       } else {
@@ -190,7 +184,6 @@ srv_nested_tabs <- function(id, datasets, modules) {
     lapply(
       get_tabset_input_names(modules, NULL),
       function(i) {
-        cat("initialize observer for tab:", label_to_id(i), "\n")
         observeEvent(
           eventExpr = input[[label_to_id(i)]], # this reacts only on the root tabs - nested tabs ignored
           ignoreNULL = TRUE,
