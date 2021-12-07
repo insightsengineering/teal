@@ -149,33 +149,60 @@ srv_nested_tabs <- function(id, datasets, modules) {
     # we observe them and react whenever a tab is clicked by:
     # - displaying only the relevant datasets in the right hand filter in the
     # sections: filter info, filtering vars per dataname and add filter variable per dataname
-    # recursively goes down tabs to figure out the active module
+    # recursively goes down tabs to figure out the active module.
     get_active_module <- function(modules, id_parent) {
       id <- label_to_id(modules$label, id_parent)
       res <- switch(
         class(modules)[[1]],
         teal_modules = {
+          cat("tab:", id, "\n")
           # id is the id of the tabset, the corresponding input element states which tab is selected
           active_submodule_label <- input[[id]]
           stopifnot(!is.null(active_submodule_label))
           get_active_module(modules$children[[active_submodule_label]], id_parent = id)
         },
         teal_module = {
+          cat("module: ", id, "\n")
           stopifnot(is.null(input[[id]])) # id should not exist
+          message("module ", id, " is active")
           modules
         },
         stop("unknown module class ", class(modules))
       )
       return(res)
     }
-    active_module <- eventReactive(
-      eventExpr = input[[label_to_id(modules$label)]], # this reacts only on the root tabs - nested tabs ignored
-      ignoreNULL = TRUE,
-      valueExpr = {
-        logger::log_trace("srv_nested_tabs@1 switched active tab to { input[[label_to_id(modules$label)]] }.")
-        get_active_module(modules, id_parent = NULL)
+
+    # One observer for each tabsetPanel. Possible when using modules()
+    active_module <- reactiveVal()
+    get_tabset_input_names <- function(modules, id_parent) {
+      id <- label_to_id(modules$label, prefix = id_parent)
+      if (is(modules, "teal_modules")) {
+        unlist(
+          c(id,
+            lapply(modules$children, get_tabset_input_names, id_parent = id))
+        )
+      } else if (is(modules, "teal_module")) {
+        NULL
+      } else {
+        stop("unknown module class ", class(modules))
+      }
+    }
+    lapply(
+      get_tabset_input_names(modules, NULL),
+      function(i) {
+        cat("initialize observer for tab:", label_to_id(i), "\n")
+        observeEvent(
+          eventExpr = input[[label_to_id(i)]], # this reacts only on the root tabs - nested tabs ignored
+          ignoreNULL = TRUE,
+          handlerExpr = {
+            reactiveValuesToList(input)
+            logger::log_trace("srv_nested_tabs@1 switched active tab to { input[[label_to_id(modules$label)]] }.")
+            active_module(get_active_module(modules, id_parent = NULL))
+          }
+        )
       }
     )
+
     return(active_module)
   })
 
