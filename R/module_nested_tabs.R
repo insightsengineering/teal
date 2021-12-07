@@ -188,7 +188,6 @@ srv_nested_tabs <- function(id, datasets, modules) {
           eventExpr = input[[label_to_id(i)]], # this reacts only on the root tabs - nested tabs ignored
           ignoreNULL = TRUE,
           handlerExpr = {
-            reactiveValuesToList(input)
             logger::log_trace("srv_nested_tabs@1 switched active tab to { input[[label_to_id(modules$label)]] }.")
             active_module(get_active_module(modules, id_parent = NULL))
           }
