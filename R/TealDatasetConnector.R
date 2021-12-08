@@ -424,7 +424,7 @@ TealDatasetConnector <- R6::R6Class( #nolint
       return(TRUE)
     },
     # ___ shiny ====
-    #' @description 
+    #' @description
     #' Sets the shiny UI according to the given inputs.
     #' Inputs must provide only scalar (length of 1) variables.
     #' @param inputs (`function`) A shiny module UI function with single argument `ns`.
@@ -456,7 +456,7 @@ TealDatasetConnector <- R6::R6Class( #nolint
       logger::log_trace("TealDatasetConnector$set_ui_input ui_input set for dataset: { self$get_dataname() }.")
       return(invisible(self))
     },
-    #' @description 
+    #' @description
     #' Get shiny ui function
     #' @param id (`character`) namespace id
     #' @return shiny UI in given namespace id
@@ -464,13 +464,13 @@ TealDatasetConnector <- R6::R6Class( #nolint
       stopifnot(is_character_single(id))
       return(if_not_null(private$ui, private$ui(id)))
     },
-    #' @description 
+    #' @description
     #' Get shiny server function
     #' @return shiny server function
     get_server = function() {
       return(private$server)
     },
-    #' @description 
+    #' @description
     #' Launches a shiny app.
     #' @return Shiny app
     #' @examples
@@ -602,12 +602,15 @@ TealDatasetConnector <- R6::R6Class( #nolint
       code <- if (inherits(private$pull_callable, "CallableCode")) {
         tmp <- private$pull_callable$get_call(deparse = FALSE)
         tmp[[length(tmp)]] <- substitute(a <- b, list(a = as.name(private$dataname), b = tmp[[length(tmp)]]))
-        paste0(vapply(tmp, pdeparse, character(1)), collapse = "\n")
+        paste0(vapply(tmp, deparse1, character(1), collapse = "\n"), collapse = "\n")
       } else {
-        pdeparse(substitute(
+        deparse1(substitute(
           a <- b,
-          list(a = as.name(private$dataname),
-               b = private$pull_callable$get_call(deparse = FALSE, args = args))))
+          list(
+            a = as.name(private$dataname),
+            b = private$pull_callable$get_call(deparse = FALSE, args = args)
+          )
+        ), collapse = "\n")
       }
 
       res$set_code(code = code, dataname = private$dataname, deps = names(private$pull_vars))
