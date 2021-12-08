@@ -96,6 +96,6 @@ to_relational_data.list <- function(data) { #nousage
 }
 
 #' @export
-to_relational_data.MultiAssayExperiment <- function(data) { #nousage
+to_relational_data.MultiAssayExperiment <- function(data) { #nousage # nolint
   teal_data(mae_dataset("MAE", data))
 }
