@@ -282,7 +282,9 @@ FilterState <- R6::R6Class( # nolint
       private$na_count <- sum(is.na(x))
       private$keep_na <- reactiveVal(value = FALSE)
 
-      logger::log_trace("Instantiated { class(self)[1] }, dataname: { deparse1(private$input_dataname) }")
+      logger::log_trace(
+        "Instantiated { class(self)[1] }, dataname: { deparse1(private$input_dataname, collapse = \"\n\") }"
+      )
       invisible(self)
     },
 

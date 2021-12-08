@@ -32,7 +32,7 @@
 #'
 #'     output$call <- renderText({
 #'       paste(
-#'         vapply(adsl_fd$get_call(), pdeparse, character(1)),
+#'         vapply(adsl_fd$get_call(), deparse1, character(1), collapse = "\n"),
 #'         collapse = "\n"
 #'       )
 #'     })
