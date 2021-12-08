@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -240,7 +213,7 @@ additional arguments for specific classes: keys</p></td>
 <span class='r-in'>      data <span class='op'>=</span> <span class='va'>df</span></span>
 <span class='r-in'>    <span class='op'>)</span></span>
 <span class='r-in'>    <span class='va'>output</span><span class='op'>$</span><span class='va'>expr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderText</a></span><span class='op'>(</span><span class='op'>{</span></span>
-<span class='r-in'>      <span class='fu'><a href='pdeparse.html'>pdeparse</a></span><span class='op'>(</span><span class='va'>rf</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>      <span class='fu'><a href='https://rdrr.io/r/base/deparse.html'>deparse1</a></span><span class='op'>(</span><span class='va'>rf</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span>, deparse <span class='op'>=</span> <span class='st'>"\n"</span><span class='op'>)</span></span>
 <span class='r-in'>    <span class='op'>}</span><span class='op'>)</span></span>
 <span class='r-in'>    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/observeEvent.html'>observeEvent</a></span><span class='op'>(</span></span>
 <span class='r-in'>      <span class='va'>input</span><span class='op'>$</span><span class='va'>clear</span>,</span>
