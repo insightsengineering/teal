@@ -235,9 +235,9 @@ TealDataConnection <- R6::R6Class( # nolint
       }
 
       if (isTRUE(deparse)) {
-        return(pdeparse(open_call))
+        deparse1(open_call, collapse = "\n")
       } else {
-        return(open_call)
+        open_call
       }
     },
     #' @description

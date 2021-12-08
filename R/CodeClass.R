@@ -137,7 +137,7 @@ CodeClass <- R6::R6Class( # nolint
         )
 
         if (is(out, "error")) {
-          error_msg <- sprintf("%s\n\nEvaluation of the code failed:\n %s", pdeparse(x), conditionMessage(out))
+          error_msg <- sprintf("%s\n\nEvaluation of the code failed:\n %s", deparse1(x, collapse = "\n"), conditionMessage(out))
 
           rlang::with_options(
             stop(error_msg, call. = FALSE),
@@ -244,12 +244,12 @@ list_to_code_class <- function(x) {
         res$append(var_value$get_code_class())
         if (var_name != var_value$get_dataname()) {
           res$set_code(
-            pdeparse(call("<-", as.name(var_name), as.name(var_value$get_dataname()))),
+            deparse1(call("<-", as.name(var_name), as.name(var_value$get_dataname())), collapse = "\n"),
             dataname = var_value$get_dataname()
           )
         }
       } else {
-        var_code <- pdeparse(call("<-", as.name(var_name), var_value))
+        var_code <- deparse1(call("<-", as.name(var_name), var_value), collapse = "\n")
         res$set_code(var_code, var_name)
       }
     }
@@ -286,7 +286,7 @@ pretty_code_string <- function(code_vector) {
         # if string code cannot be passed into expression (e.g. code comment) then pass on the string
         code_single
       } else {
-        vapply(as.list(as.call(parse(text = code_single))), pdeparse, character(1))
+        vapply(as.list(as.call(parse(text = code_single))), deparse1, character(1), collapse = "\n")
       }
     }
   )
