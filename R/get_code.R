@@ -130,7 +130,7 @@ get_code.default <- function(x,
 
   if (deparse) {
     return(paste(
-      vapply(lines, function(x) deparse1(x, collapse = "\n"), FUN.VALUE = character(1)),
+      vapply(lines, deparse1, collapse = "\n", FUN.VALUE = character(1)),
       collapse = "\n"
     ))
   } else {
