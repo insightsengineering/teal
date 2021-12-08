@@ -94,3 +94,8 @@ to_relational_data.list <- function(data) { #nousage
     do.call("teal_data", args = datasets_list)
   }
 }
+
+#' @export
+to_relational_data.MultiAssayExperiment <- function(data) { #nousage
+  teal_data(mae_dataset("MAE", data))
+}
