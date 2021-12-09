@@ -237,7 +237,6 @@ reference:
     - include_js_files
     - include_source_code
     - include_teal_css_js
-    - label_to_id
     - modules_depth
     - picker_options
     - picker_options_content
