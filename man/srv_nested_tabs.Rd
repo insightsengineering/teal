@@ -2,9 +2,18 @@
 % Please edit documentation in R/module_nested_tabs.R
 \name{srv_nested_tabs}
 \alias{srv_nested_tabs}
+\alias{srv_nested_tabs.default}
+\alias{srv_nested_tabs.teal_modules}
+\alias{srv_nested_tabs.teal_module}
 \title{Server function that returns currently active module}
 \usage{
 srv_nested_tabs(id, datasets, modules)
+
+\method{srv_nested_tabs}{default}(id, datasets, modules)
+
+\method{srv_nested_tabs}{teal_modules}(id, datasets, modules)
+
+\method{srv_nested_tabs}{teal_module}(id, datasets, modules)
 }
 \arguments{
 \item{id}{(\code{character})\cr
@@ -27,3 +36,22 @@ more details.}
 \description{
 Server function that returns currently active module
 }
+\details{
+This module calls recursively all elements of the \code{modules} returns one which
+is currently active. To determine which module is active see the diagram.
+\if{html}{\figure{uml_nested_tabs.jpg}{options: width="75\%" alt="Figure: uml_nested_tabs.jpg"}}
+\if{latex}{\figure{uml_nested_tabs.jpg}{options: width=7cm}}
+Above depicts hypothetical situation in which one has module structure defined in following way:\preformatted{+ root
+  + tab1
+    + test1
+    + test2
+  + tab2
+    + test3
+}
+\itemize{
+\item \code{teal_module} returns self as a active module
+\item \code{teal_modules} returns module active within self which is determined by the \code{input$Active_tab}.
+The choice of active module is done recursively (diagram from right to left).
+}
+}
+\keyword{internal}

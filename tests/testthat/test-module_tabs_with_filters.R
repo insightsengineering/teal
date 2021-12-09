@@ -25,7 +25,7 @@ testthat::test_that("active_datanames() returns dataname from single tab", {
     ),
     expr = {
       testthat::expect_error(active_datanames()) # to trigger active_module
-      session$setInputs(`modules_ui-root` = "iris_tab")
+      session$setInputs(`root-Active_tab` = "iris_tab")
       testthat::expect_identical(active_datanames(), "iris")
     }
   )
@@ -41,10 +41,11 @@ testthat::test_that("active_datanames() returns dataname from active tab after c
     ),
     expr = {
       testthat::expect_error(active_datanames()) # to trigger active_module
-      session$setInputs(`modules_ui-root` = "iris_tab")
+      session$setInputs(`root-Active_tab` = "iris_tab")
       testthat::expect_identical(active_datanames(), "iris")
-      session$setInputs(`modules_ui-root` = "mtcars_tab")
+      session$setInputs(`root-Active_tab` = "mtcars_tab")
       testthat::expect_identical(active_datanames(), "mtcars")
     }
   )
 })
+
