@@ -34,7 +34,7 @@ shinyApp(
   ),
   server = function(input, output, session) {
     adsl_fd$srv_add_filter_state(
-      adsl_fd$srv_add_filter_state,
+      vars_include = adsl_fd$get_filterable_varnames(),
       id = "add"
     )
 
