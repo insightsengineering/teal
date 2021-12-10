@@ -535,10 +535,10 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
       )
     },
 
-    #' @description Remove a single FilterState of a FilteredDataset
+    #' @description Remove a single `FilterState` of a `FilteredDataset`
     #'
     #' @param element_id (`character`)\cr
-    #'  Name of variable to remove its FilterState.
+    #'  Name of variable to remove its `FilterState`.
     #'
     #' @return `NULL`
     #'
@@ -892,10 +892,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       )
     },
 
-    #' @description Remove a single FilterState of a MAEFilteredDataset
+    #' @description Remove a single `FilterState` of a `MAEFilteredDataset`
     #'
     #' @param element_id (`character`)\cr
-    #'  Name of variable to remove its FilterState.
+    #'  Name of variable to remove its `FilterState`.
     #'
     #' @return `NULL`
     #'

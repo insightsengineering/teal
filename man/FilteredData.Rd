@@ -563,7 +563,7 @@ nested list of filter selections applied to datasets.}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
 \subsection{Method \code{remove_filter_state()}}{
-Remove a single FilterState of a FilteredDataset in a FilteredData object
+Remove a single \code{FilterState} of a \code{FilteredDataset} in a \code{FilteredData} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$remove_filter_state(state)}\if{html}{\out{</div>}}
 }
@@ -584,7 +584,7 @@ nested list of filter selections applied to datasets.}
 \if{html}{\out{<a id="method-remove_all_filter_states"></a>}}
 \if{latex}{\out{\hypertarget{method-remove_all_filter_states}{}}}
 \subsection{Method \code{remove_all_filter_states()}}{
-Remove all FilterStates of a FilteredDataset or all FilterStates of a FilteredData object
+Remove all \code{FilterStates} of a \code{FilteredDataset} or all \code{FilterStates} of a \code{FilteredData} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$remove_all_filter_states(datanames)}\if{html}{\out{</div>}}
 }
@@ -593,7 +593,7 @@ Remove all FilterStates of a FilteredDataset or all FilterStates of a FilteredDa
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{datanames}}{(\code{character})\cr
-datanames to remove their FilterStates or empty which removes all FilterStates in the FilteredData object.}
+datanames to remove their \code{FilterStates} or empty which removes all \code{FilterStates} in the \code{FilteredData} object.}
 }
 \if{html}{\out{</div>}}
 }

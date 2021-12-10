@@ -417,7 +417,7 @@ FilterStates <- R6::R6Class( # nolint
       )
     },
 
-    #' @description Remove a single FilterState of a FilteredDataset
+    #' @description Remove a single `FilterState` of a `FilteredDataset`
     #'
     #' @param element_id (`character`)\cr
     #'  Name of variable to remove its FilterState.
@@ -573,7 +573,7 @@ FilterStates <- R6::R6Class( # nolint
     #' Module to update the UI element of a variable
     #'
     #' This module updates the UI element of the variable which eventually
-    #' launches the reactivity chain to update the exisitng `FilterState` in the queue.
+    #' launches the reactivity chain to update the existing `FilterState` in the queue.
     #'
     #' parameter id (`character(1)`) id of shiny module
     #' parameter filter_state (`FilterState`) of the variable to be updated.
@@ -726,7 +726,7 @@ DFFilterStates <- R6::R6Class( # nolint
             value <- state[[varname]]
             if (varname %in% names(filter_states)) {
               fstate <- filter_states[[varname]]
-              collapsed_varname <- gsub('_', '', varname)
+              collapsed_varname <- gsub("_", "", varname)
               private$update_filter_state(id = paste0("var_", collapsed_varname), fstate, value)
             } else {
               fstate <- init_filter_state(
@@ -1003,7 +1003,7 @@ MAEFilterStates <- R6::R6Class( # nolint
             value <- state[[varname]]
             if (varname %in% names(filter_states)) {
               fstate <- filter_states[[varname]]
-              collapsed_varname <- gsub('_', '', varname)
+              collapsed_varname <- gsub("_", "", varname)
               private$update_filter_state(id = paste0("var_", collapsed_varname), fstate, value)
 
             } else {
@@ -1276,7 +1276,7 @@ SEFilterStates <- R6::R6Class( # nolint
             value <- state$subset[[varname]]
             if (varname %in% names(filter_states)) {
               fstate <- filter_states[[varname]]
-              collapsed_varname <- gsub('_', '', varname)
+              collapsed_varname <- gsub("_", "", varname)
               private$update_filter_state(id = paste0("var_", collapsed_varname), fstate, value)
             } else {
               fstate <- init_filter_state(
@@ -1631,7 +1631,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
             value <- state[[varname]]
             if (varname %in% names(filter_states)) {
               fstate <- filter_states[[varname]]
-              collapsed_varname <- gsub('_', '', varname)
+              collapsed_varname <- gsub("_", "", varname)
               private$update_filter_state(id = paste0("var_", collapsed_varname), fstate, value)
             } else {
               fstate <- init_filter_state(

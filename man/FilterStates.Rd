@@ -287,7 +287,7 @@ column in \code{data}.}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
 \subsection{Method \code{remove_filter_state()}}{
-Remove a single FilterState of a FilteredDataset
+Remove a single \code{FilterState} of a \code{FilteredDataset}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$remove_filter_state(element_id)}\if{html}{\out{</div>}}
 }
@@ -367,7 +367,7 @@ return \code{moduleServer} function which returns \code{NULL}
 Module to update the UI element of a variable
 
 This module updates the UI element of the variable which eventually
-launches the reactivity chain to update the exisitng \code{FilterState} in the queue.
+launches the reactivity chain to update the existing \code{FilterState} in the queue.
 
 parameter id (\code{character(1)}) id of shiny module
 parameter filter_state (\code{FilterState}) of the variable to be updated.

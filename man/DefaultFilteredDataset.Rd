@@ -113,7 +113,7 @@ to the referred column.}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
 \subsection{Method \code{remove_filter_state()}}{
-Remove a single FilterState of a FilteredDataset
+Remove a single \code{FilterState} of a \code{FilteredDataset}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$remove_filter_state(element_id)}\if{html}{\out{</div>}}
 }
@@ -122,7 +122,7 @@ Remove a single FilterState of a FilteredDataset
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{element_id}}{(\code{character})\cr
-Name of variable to remove its FilterState.}
+Name of variable to remove its \code{FilterState}.}
 }
 \if{html}{\out{</div>}}
 }

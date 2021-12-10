@@ -397,7 +397,7 @@ FilteredData <- R6::R6Class( # nolint
     },
 
 
-    #' @description Remove a single FilterState of a FilteredDataset in a FilteredData object
+    #' @description Remove a single `FilterState` of a `FilteredDataset` in a `FilteredData` object
     #'
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
@@ -415,10 +415,10 @@ FilteredData <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
-    #' @description Remove all FilterStates of a FilteredDataset or all FilterStates of a FilteredData object
+    #' @description Remove all `FilterStates` of a `FilteredDataset` or all `FilterStates` of a `FilteredData` object
     #'
     #' @param datanames (`character`)\cr
-    #'  datanames to remove their FilterStates or empty which removes all FilterStates in the FilteredData object.
+    #'  datanames to remove their `FilterStates` or empty which removes all `FilterStates` in the `FilteredData` object.
     #'
     #' @return `NULL`
     #'
