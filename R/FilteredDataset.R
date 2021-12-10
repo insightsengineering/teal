@@ -543,8 +543,14 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' @return `NULL`
     #'
     remove_filter_state = function(element_id) {
+      logger::log_trace(
+        "DefaultFilteredDataset$remove_filter_state removing filters in : { self$get_dataname() }"
+      )
       fdataset_filter_state <- self$get_filter_states()[[1]]
       fdataset_filter_state$remove_filter_state(element_id)
+      logger::log_trace(
+        "DefaultFilteredDataset$remove_filter_state done sremoving filters in : { self$get_dataname() }"
+      )
       invisible(NULL)
     },
 
@@ -900,12 +906,16 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' @return `NULL`
     #'
     remove_filter_state = function(element_id) {
+      logger::log_trace("MAEFilteredDataset$remove_filter_state removing filters: { self$get_dataname() }")
+
       for (fs_name in names(element_id)) {
         fdataset_filter_state <- self$get_filter_states()[[fs_name]]
         fdataset_filter_state$remove_filter_state(
           `if`(fs_name == "subjects", element_id[[fs_name]][[1]], element_id[[fs_name]])
         )
       }
+      logger::log_trace("MAEFilteredDataset$remove_filter_state done removing filters: { self$get_dataname() }")
+      invisible(NULL)
     },
 
     #' @description

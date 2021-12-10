@@ -296,7 +296,7 @@ Remove a single \code{FilterState} of a \code{FilteredDataset}
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{element_id}}{(\code{character})\cr
-Name of variable to remove its FilterState.}
+Name of variable to remove its \code{FilterState}.}
 }
 \if{html}{\out{</div>}}
 }

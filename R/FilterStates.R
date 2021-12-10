@@ -420,7 +420,7 @@ FilterStates <- R6::R6Class( # nolint
     #' @description Remove a single `FilterState` of a `FilteredDataset`
     #'
     #' @param element_id (`character`)\cr
-    #'  Name of variable to remove its FilterState.
+    #'  Name of variable to remove its `FilterState`.
     #'
     #' @return `NULL`
     #'
@@ -585,7 +585,16 @@ FilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          browser()
+          logger::log_trace(paste(
+            "{ class(self)[1] }$update_filter_state called to update FilterState of",
+            "input_dataname: { deparse1(private$input_dataname) }"
+          ))
           filter_state$update_selected_input(id = "content", value)
+          logger::log_trace(paste(
+            "{ class(self)[1] }$update_filter_state updated FilterState of",
+            "input_dataname: { deparse1(private$input_dataname) }"
+          ))
           invisible(NULL)
       })
     },

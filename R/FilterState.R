@@ -903,6 +903,10 @@ LogicalFilterState <- R6::R6Class( # nolint
     #'
     update_selected_input = function(id, value) {
       moduleServer(id = id, function(input, output, session) {
+        logger::log_trace(paste(
+          "LogicalFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) } updating selected",
+          "input to: selected={ value$selected }, keep_na={ value$keep_na }"
+        ))
         updateSliderInput(
           session = session,
           inputId = "selection",
@@ -914,7 +918,10 @@ LogicalFilterState <- R6::R6Class( # nolint
           inputId = "keep_na",
           value = value$keep_na
         )
-
+        logger::log_trace(paste(
+          "LogicalFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
+          "done updating selected input."
+        ))
         invisible(NULL)
       })
     }
@@ -1220,6 +1227,10 @@ RangeFilterState <- R6::R6Class( # nolint
     #'
     update_selected_input = function(id, value) {
       moduleServer(id = id, function(input, output, session) {
+        logger::log_trace(paste(
+          "RangeFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) } updating selected",
+          "input to: selected={ value$selected }, keep_na={ value$keep_na }, keep_inf={ value$keep_inf }"
+        ))
         updateSliderInput(
           session = session,
           inputId = "selection",
@@ -1238,7 +1249,10 @@ RangeFilterState <- R6::R6Class( # nolint
           inputId = "keep_na",
           value = value$keep_na
         )
-
+        logger::log_trace(paste(
+          "RangeFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
+          "done updating selected input."
+        ))
         invisible(NULL)
       })
     }
@@ -1564,6 +1578,10 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' @return `NULL`
     update_selected_input = function(id, value) {
       moduleServer(id = id, function(input, output, session) {
+        logger::log_trace(paste(
+          "ChoicesFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
+          "updating selected input to: selected={ value$selected }, keep_na={ value$keep_na }"
+        ))
         if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
           updateCheckboxGroupInput(
             session = session,
@@ -1589,6 +1607,10 @@ ChoicesFilterState <- R6::R6Class( # nolint
             value = value$keep_na
           )
         }
+        logger::log_trace(paste(
+          "ChoicesFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
+          "done updating selected input."
+        ))
         invisible(NULL)
       })
     }
@@ -1837,6 +1859,10 @@ DateFilterState <- R6::R6Class( # nolint
     #' @return `NULL`
     update_selected_input = function(id, value) {
       moduleServer(id = id, function(input, output, session) {
+        logger::log_trace(paste(
+          "DateFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
+          "updating selected input to: selected={ value$selected }, keep_na={ value$keep_na }"
+        ))
         updateDateRangeInput(
           session = session,
           inputId = "selection",
@@ -1849,7 +1875,10 @@ DateFilterState <- R6::R6Class( # nolint
           inputId = "keep_na",
           value = value$keep_na
         )
-
+        logger::log_trace(paste(
+          "DateFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
+          "done updating selected input."
+        ))
         invisible(NULL)
       })
     }
@@ -2162,6 +2191,10 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #' @return `NULL`
     update_selected_input = function(id, value) {
       moduleServer(id = id, function(input, output, session) {
+        logger::log_trace(paste(
+          "DatetimeFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
+          "updating selected input to: selected={ value$selected }, keep_na={ value$keep_na }"
+        ))
         shinyWidgets::updateAirDateInput(
           session = session,
           inputId = "selection_start",
@@ -2180,6 +2213,10 @@ DatetimeFilterState <- R6::R6Class( # nolint
           value = value$keep_na
         )
 
+        logger::log_trace(paste(
+          "DatetimeFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
+          "done updating selected input."
+        ))
         invisible(NULL)
       })
     }

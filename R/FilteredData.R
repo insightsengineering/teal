@@ -437,7 +437,7 @@ FilteredData <- R6::R6Class( # nolint
           fdataset$queues_empty()
         }
         logger::log_trace(
-          "FilteredData$remove_all_filter_states removed all FilterStates of { paste(dataname, collapse = ', ') }"
+          "FilteredData$remove_all_filter_states removed all FilterStates of { paste(datanames, collapse = ', ') }"
         )
       }
 
