@@ -19,7 +19,7 @@ Initialize \code{MAEFilterStates} object
 \itemize{
 \item \href{#method-new}{\code{MAEFilterStates$new()}}
 \item \href{#method-get_fun}{\code{MAEFilterStates$get_fun()}}
-\item \href{#method-set_filter_state}{\code{MAEFilterStates$set_filter_state()}}
+\item \href{#method-set_bookmark_filter_state}{\code{MAEFilterStates$set_bookmark_filter_state()}}
 \item \href{#method-remove_filter_state}{\code{MAEFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MAEFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MAEFilterStates$srv_add_filter_state()}}
@@ -93,12 +93,12 @@ For \code{MAEFilterStates}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
-\subsection{Method \code{set_filter_state()}}{
+\if{html}{\out{<a id="method-set_bookmark_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_bookmark_filter_state}{}}}
+\subsection{Method \code{set_bookmark_filter_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$set_filter_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$set_bookmark_filter_state(id, data, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

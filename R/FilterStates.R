@@ -408,7 +408,7 @@ FilterStates <- R6::R6Class( # nolint
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
     #' @return `moduleServer` function which throws an error
-    set_filter_state = function(id, data, state) {
+    set_bookmark_filter_state = function(id, data, state) {
       moduleServer(
         id = id,
         function(input, output, session) {
@@ -585,7 +585,6 @@ FilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          browser()
           logger::log_trace(paste(
             "{ class(self)[1] }$update_filter_state called to update FilterState of",
             "input_dataname: { deparse1(private$input_dataname) }"
@@ -719,14 +718,14 @@ DFFilterStates <- R6::R6Class( # nolint
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
     #' @return `moduleServer` function which returns `NULL`
-    set_filter_state = function(id, data, state) {
+    set_bookmark_filter_state = function(id, data, state) {
       stopifnot(is.data.frame(data))
       stopifnot(all(names(state) %in% names(data)) || is(state, "default_filter"))
       moduleServer(
         id = id,
         function(input, output, session)  {
           logger::log_trace(
-            "{ class(self)[1] }$set_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
+            "{ class(self)[1] }$set_bookmark_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
           )
           filter_states <- private$get_filter_state(1L)
           html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colnames(data)))
@@ -755,7 +754,7 @@ DFFilterStates <- R6::R6Class( # nolint
             }
           }
           logger::log_trace(
-            "{ class(self)[1] }$set_filter_state initialized, dataname: { deparse1(private$input_dataname) }"
+            "{ class(self)[1] }$set_bookmark_filter_state initialized, dataname: { deparse1(private$input_dataname) }"
           )
           NULL
         }
@@ -994,7 +993,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `colData(data)`
     #' @return `moduleServer` function which returns `NULL`
-    set_filter_state = function(id, data, state) {
+    set_bookmark_filter_state = function(id, data, state) {
       stopifnot(is(data, "MultiAssayExperiment"))
       stopifnot(
         all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
@@ -1003,7 +1002,7 @@ MAEFilterStates <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace(paste(
-            "MAEFilterState$set_filter_state initializing,",
+            "MAEFilterState$set_bookmark_filter_state initializing,",
             "dataname: { deparse1(private$input_dataname) }"
           ))
           filter_states <- private$get_filter_state("y")
@@ -1036,7 +1035,7 @@ MAEFilterStates <- R6::R6Class( # nolint
             }
           }
           logger::log_trace(paste(
-            "MAEFilterState$set_filter_state initialized,",
+            "MAEFilterState$set_bookmark_filter_state initialized,",
             "dataname: { deparse1(private$input_dataname) }"
           ))
           NULL
@@ -1260,7 +1259,7 @@ SEFilterStates <- R6::R6Class( # nolint
     #'   Names of each the `list` element in `subset` and `select` should correspond to
     #'   the name of the column in `rowData(data)` and `colData(data)`.
     #' @return `moduleServer` function which returns `NULL`
-    set_filter_state = function(id, data, state) {
+    set_bookmark_filter_state = function(id, data, state) {
 
       stopifnot(is(data, "SummarizedExperiment"))
       stopifnot(
@@ -1275,7 +1274,7 @@ SEFilterStates <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace(paste(
-            "SEFilterState$set_filter_state initializing,",
+            "SEFilterState$set_bookmark_filter_state initializing,",
             "dataname: { deparse1(private$input_dataname) }"
           ))
           row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::rowData(data)))
@@ -1323,7 +1322,7 @@ SEFilterStates <- R6::R6Class( # nolint
             )
           }
           logger::log_trace(paste(
-            "SEFilterState$set_filter_state initialized,",
+            "SEFilterState$set_bookmark_filter_state initialized,",
             "dataname: { deparse1(private$input_dataname) }"
           ))
           NULL
@@ -1622,7 +1621,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
     #' @return `moduleServer` function which returns `NULL`
-    set_filter_state = function(id, data, state) {
+    set_bookmark_filter_state = function(id, data, state) {
       stopifnot(is(data, "matrix"))
       stopifnot(
         all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
@@ -1631,7 +1630,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace(paste(
-            "MatrixFilterState$set_filter_state initializing,",
+            "MatrixFilterState$set_bookmark_filter_state initializing,",
             "dataname: { deparse1(private$input_dataname) }"
           ))
           html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
@@ -1661,7 +1660,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
             }
           }
           logger::log_trace(paste(
-            "MatrixFilterState$set_filter_state initialized,",
+            "MatrixFilterState$set_bookmark_filter_state initialized,",
             "dataname: { deparse1(private$input_dataname) }"
           ))
           NULL

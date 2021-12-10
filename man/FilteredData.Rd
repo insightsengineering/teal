@@ -115,7 +115,7 @@ isolate(datasets$get_call("mtcars"))
 \item \href{#method-set_dataset}{\code{FilteredData$set_dataset()}}
 \item \href{#method-set_code}{\code{FilteredData$set_code()}}
 \item \href{#method-get_bookmark_state}{\code{FilteredData$get_bookmark_state()}}
-\item \href{#method-set_filter_state}{\code{FilteredData$set_filter_state()}}
+\item \href{#method-set_bookmark_filter_state}{\code{FilteredData$set_bookmark_filter_state()}}
 \item \href{#method-remove_filter_state}{\code{FilteredData$remove_filter_state()}}
 \item \href{#method-remove_all_filter_states}{\code{FilteredData$remove_all_filter_states()}}
 \item \href{#method-restore_state_from_bookmark}{\code{FilteredData$restore_state_from_bookmark()}}
@@ -536,12 +536,12 @@ named list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
-\subsection{Method \code{set_filter_state()}}{
+\if{html}{\out{<a id="method-set_bookmark_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_bookmark_filter_state}{}}}
+\subsection{Method \code{set_bookmark_filter_state()}}{
 Sets a bookmarked state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_filter_state(id, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_bookmark_filter_state(id, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

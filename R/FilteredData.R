@@ -377,20 +377,20 @@ FilteredData <- R6::R6Class( # nolint
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
     #' @return `moduleServer` function which returns `NULL`
-    set_filter_state = function(id, state) {
+    set_bookmark_filter_state = function(id, state) {
       stopifnot(all(names(state) %in% self$datanames()))
       moduleServer(
         id,
         function(input, output, session) {
-          logger::log_trace("FilteredData$set_filter_state initializing")
+          logger::log_trace("FilteredData$set_bookmark_filter_state initializing")
           for(dataname in names(state)) {
             fdataset <- self$get_filtered_dataset(dataname = dataname)
-            fdataset$set_filter_state(
+            fdataset$set_bookmark_filter_state(
               id = private$get_ui_add_filter_id(dataname),
               state = state[[dataname]]
             )
           }
-          logger::log_trace("FilteredData$set_filter_state initialized")
+          logger::log_trace("FilteredData$set_bookmark_filter_state initialized")
           invisible(NULL)
         }
       )

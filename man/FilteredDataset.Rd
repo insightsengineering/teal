@@ -30,7 +30,7 @@ components of the \code{TealDataset}.
 \item \href{#method-get_varnames}{\code{FilteredDataset$get_varnames()}}
 \item \href{#method-get_filtered_dataname}{\code{FilteredDataset$get_filtered_dataname()}}
 \item \href{#method-get_filterable_varnames}{\code{FilteredDataset$get_filterable_varnames()}}
-\item \href{#method-set_filter_state}{\code{FilteredDataset$set_filter_state()}}
+\item \href{#method-set_bookmark_filter_state}{\code{FilteredDataset$set_bookmark_filter_state()}}
 \item \href{#method-ui}{\code{FilteredDataset$ui()}}
 \item \href{#method-server}{\code{FilteredDataset$server()}}
 \item \href{#method-ui_add_filter_state}{\code{FilteredDataset$ui_add_filter_state()}}
@@ -325,12 +325,12 @@ Gets variable names for the filtering.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
-\subsection{Method \code{set_filter_state()}}{
+\if{html}{\out{<a id="method-set_bookmark_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_bookmark_filter_state}{}}}
+\subsection{Method \code{set_bookmark_filter_state()}}{
 Sets the bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$set_filter_state(id, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$set_bookmark_filter_state(id, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
