@@ -24,8 +24,6 @@ testthat::test_that("active_datanames() returns dataname from single tab", {
       modules = root_modules(test_module1)
     ),
     expr = {
-      testthat::expect_error(active_datanames()) # to trigger active_module
-      session$setInputs(`root-Active_tab` = "iris_tab")
       testthat::expect_identical(active_datanames(), "iris")
     }
   )

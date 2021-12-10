@@ -147,8 +147,14 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules) {
     })
 
     get_active_module <- reactive({
-      req(input[["Active_tab"]])
-      lapply(modules_reactive, function(child) child())[[input[["Active_tab"]]]]
+      if (length(modules$children) == 1L) {
+        # single tab is active by default
+        modules_reactive[[1]]()
+      } else {
+        # switch to active tab
+        req(input$Active_tab)
+        lapply(modules_reactive, function(child) child())[[input$Active_tab]]
+      }
     })
 
     get_active_module
