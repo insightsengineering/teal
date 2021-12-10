@@ -377,26 +377,80 @@ FilteredData <- R6::R6Class( # nolint
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
     #' @return `moduleServer` function which returns `NULL`
-    set_bookmark_state = function(id, state) {
-      stopifnot(
-        all(names(state) %in% self$datanames())
-      )
+    set_filter_state = function(id, state) {
+      stopifnot(all(names(state) %in% self$datanames()))
       moduleServer(
         id,
         function(input, output, session) {
-          logger::log_trace("FilteredData$set_bookmark_state initializing")
+          logger::log_trace("FilteredData$set_filter_state initializing")
           for(dataname in names(state)) {
             fdataset <- self$get_filtered_dataset(dataname = dataname)
-            fdataset$set_bookmark_state(
+            fdataset$set_filter_state(
               id = private$get_ui_add_filter_id(dataname),
               state = state[[dataname]]
             )
           }
-          logger::log_trace("FilteredData$set_bookmark_state initialized")
+          logger::log_trace("FilteredData$set_filter_state initialized")
           invisible(NULL)
         }
       )
     },
+
+
+    #' @description Remove a single FilterState of a FilteredDataset in a FilteredData object
+    #'
+    #' @param state (`named list`)\cr
+    #'  nested list of filter selections applied to datasets.
+    #'
+    #' @return `NULL`
+    #'
+    remove_filter_state = function(state) {
+      logger::log_trace("FilteredData$remove_filter_state called")
+
+      for(dataname in names(state)) {
+        fdataset <- self$get_filtered_dataset(dataname = dataname)
+        fdataset$remove_filter_state(element_id = state[[dataname]])
+      }
+
+      invisible(NULL)
+    },
+
+    #' @description Remove all FilterStates of a FilteredDataset or all FilterStates of a FilteredData object
+    #'
+    #' @param datanames (`character`)\cr
+    #'  datanames to remove their FilterStates or empty which removes all FilterStates in the FilteredData object.
+    #'
+    #' @return `NULL`
+    #'
+    remove_all_filter_states = function(datanames) {
+      logger::log_trace("FilteredData$remove_all_filter_states called")
+      if (missing(datanames)) {
+        lapply(
+          self$get_filtered_dataset(),
+          function(x) {
+            x$queues_empty()}
+        )
+        logger::log_trace("FilteredData$remove_all_filter_states removed all FilterStates.")
+      } else {
+        for(dataname in datanames) {
+          fdataset <- self$get_filtered_dataset(dataname = dataname)
+          fdataset$queues_empty()
+        }
+        logger::log_trace(
+          "FilteredData$remove_all_filter_states removed all FilterStates of { paste(dataname, collapse = ', ') }"
+        )
+      }
+
+      invisible(NULL)
+    },
+
+    # get_filter_states = function(id = character(0)) {
+    #   if (is_empty(id)) {
+    #     private$filter_states
+    #   } else {
+    #     private$filter_states[[id]]
+    #   }
+    # },
 
     #' @description
     #' Sets this object from a bookmarked state

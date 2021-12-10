@@ -6,6 +6,8 @@
 \title{\code{FilterState} object for numeric variable}
 \value{
 invisibly \code{NULL}
+
+\code{NULL}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -50,6 +52,7 @@ filter$set_selected(c(2, 3))
 \item \href{#method-set_keep_inf}{\code{RangeFilterState$set_keep_inf()}}
 \item \href{#method-set_state}{\code{RangeFilterState$set_state()}}
 \item \href{#method-set_selected}{\code{RangeFilterState$set_selected()}}
+\item \href{#method-update_selected_input}{\code{RangeFilterState$update_selected_input()}}
 \item \href{#method-clone}{\code{RangeFilterState$clone()}}
 }
 }
@@ -248,6 +251,25 @@ filter$set_selected(c(2, 3))
 
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_selected_input"></a>}}
+\if{latex}{\out{\hypertarget{method-update_selected_input}{}}}
+\subsection{Method \code{update_selected_input()}}{
+Updates the selected values of this \code{RangeFilterState}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$update_selected_input(id, value)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{(\code{character(1)})\cr an ID string that corresponds with the ID used to call the module's UI function.}
+
+\item{\code{value}}{(\code{list}) A list of the values \code{selected}, \code{keep_na} and \code{keep_inf}.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

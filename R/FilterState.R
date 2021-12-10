@@ -424,6 +424,20 @@ FilterState <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Update the selected values of this `LogicalFilterState`.
+    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param value (`list`) A list of the values `selected` and `keep_na`.
+    #'
+    #' @returns `NULL`.
+    update_selected_input = function(id, value) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          stop("This variable can not be updated from the filter.")
+      })
+    },
+
+    #' @description
     #' Server module
     #' @param id (`character(1)`)\cr
     #'   an ID string that corresponds with the ID used to call the module's UI function.
@@ -875,6 +889,32 @@ LogicalFilterState <- R6::R6Class( # nolint
     #' filter$set_selected(TRUE)
     set_selected = function(value) {
       super$set_selected(value)
+    },
+
+    #' @description
+    #' Update the selected values of this `LogicalFilterState`.
+    #'
+    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param value (`list`) A list of the values `selected` and `keep_na`.
+    #'
+    #' @returns `NULL`.
+    #'
+    update_selected_input = function(id, value) {
+      moduleServer(id = id, function(input, output, session) {
+        updateSliderInput(
+          session = session,
+          inputId = "selection",
+          value = value$selected
+        )
+
+        updateCheckboxInput(
+          session = session,
+          inputId = "keep_na",
+          value = value$keep_na
+        )
+
+        invisible(NULL)
+      })
     }
   ),
   private = list(
@@ -1166,6 +1206,39 @@ RangeFilterState <- R6::R6Class( # nolint
     #'
     set_selected = function(value) {
       super$set_selected(value)
+    },
+
+    #' @description
+    #' Updates the selected values of this `RangeFilterState`.
+    #'
+    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param value (`list`) A list of the values `selected`, `keep_na` and `keep_inf`.
+    #'
+    #' @returns `NULL`
+    #'
+    update_selected_input = function(id, value) {
+      moduleServer(id = id, function(input, output, session) {
+        updateSliderInput(
+          session = session,
+          inputId = "selection",
+          value = value$selected
+        )
+
+        updateCheckboxInput(
+          session = session,
+          inputId = "keep_inf",
+          sprintf("Keep Inf (%s)", private$inf_count),
+          value =  value$keep_inf
+        )
+
+        updateCheckboxInput(
+          session = session,
+          inputId = "keep_na",
+          value = value$keep_na
+        )
+
+        invisible(NULL)
+      })
     }
   ),
   private = list(
@@ -1364,7 +1437,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
               ns("selection"),
               label = NULL,
               choices =  private$choices,
-              selected = isolate(self$get_selected()),
+              selected = self$get_selected(),
               width = "100%"
             )
           )
@@ -1372,7 +1445,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
           optionalSelectInput(
             inputId = ns("selection"),
             choices = private$choices,
-            selected = isolate(self$get_selected()),
+            selected = self$get_selected(),
             multiple = TRUE,
             options = shinyWidgets::pickerOptions(
               actionsBox = TRUE,
@@ -1432,7 +1505,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
           private$observers$selection <- observeEvent(
             ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-            eventExpr = input$selection,
+            eventExpr = input$selection,#private$selected(),
             handlerExpr = {
               self$set_selected(if_null(input$selection, character(0)))
               logger::log_trace("ChoicesFilterState$server@1 selection changed, dataname: { private$input_dataname }")
@@ -1478,6 +1551,44 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' filter$set_selected(c("c", "a"))
     set_selected = function(value) {
       super$set_selected(value)
+    },
+
+    #' @description
+    #' Updates the selected values of this `ChoicesFilterState`.
+    #'
+    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param value (`list`) A list of the values `selected` and `keep_na`.
+    #'
+    #' @return `NULL`
+    update_selected_input = function(id, value) {
+      moduleServer(id = id, function(input, output, session) {
+        if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
+          updateCheckboxGroupInput(
+            session = session,
+            inputId = "selection",
+            selected = value
+          )
+
+          updateCheckboxInput(
+            session = session,
+            inputId = "keep_na",
+            value = value$keep_na
+          )
+        } else {
+          updateOptionalSelectInput(
+            session = session,
+            inputId = "selection",
+            selected = value
+          )
+
+          updateCheckboxInput(
+            session = session,
+            inputId = "keep_na",
+            value = value$keep_na
+          )
+        }
+        invisible(NULL)
+      })
     }
   ),
   private = list(
@@ -1521,6 +1632,8 @@ ChoicesFilterState <- R6::R6Class( # nolint
       }
       values[in_choices_mask]
     }
+
+
   )
 )
 
@@ -1711,6 +1824,32 @@ DateFilterState <- R6::R6Class( # nolint
     #' filter$set_selected(c(date + 1, date + 2))
     set_selected = function(value) {
       super$set_selected(value)
+    },
+
+    #' @description
+    #' Updates the selected values of this `DateFilterState`.
+    #'
+    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param value (`list`) A list of the values `selected` and `keep_na`.
+    #'
+    #' @return `NULL`
+    update_selected_input = function(id, value) {
+      moduleServer(id = id, function(input, output, session) {
+        updateDateRangeInput(
+          session = session,
+          inputId = "selection",
+          start = value$selected[1],
+          end = value$selected[2]
+        )
+
+        updateCheckboxInput(
+          session = session,
+          inputId = "keep_na",
+          value = value$keep_na
+        )
+
+        invisible(NULL)
+      })
     }
   ),
   private = list(
@@ -2010,6 +2149,37 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #' filter$set_selected(c(date + 1, date + 2))
     set_selected = function(value) {
       super$set_selected(value)
+    },
+
+    #' @description
+    #' Updates the selected values of this `DatetimeFilterState`.
+    #'
+    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param value (`list`) A list of the values `selected` and `keep_na`.
+    #'
+    #' @return `NULL`
+    update_selected_input = function(id, value) {
+      moduleServer(id = id, function(input, output, session) {
+        shinyWidgets::updateAirDateInput(
+          session = session,
+          inputId = "selection_start",
+          value = value$selected[1]
+        )
+
+        shinyWidgets::updateAirDateInput(
+          session = session,
+          inputId = "selection_end",
+          value = value$selected[2]
+        )
+
+        updateCheckboxInput(
+          session = session,
+          inputId = "keep_na",
+          value = value$keep_na
+        )
+
+        invisible(NULL)
+      })
     }
   ),
   private = list(

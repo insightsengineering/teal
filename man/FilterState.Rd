@@ -4,6 +4,9 @@
 \name{FilterState}
 \alias{FilterState}
 \title{Abstract class to encapsulate filter states}
+\value{
+\code{NULL}.
+}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
@@ -46,6 +49,7 @@ chain.
 \item \href{#method-set_na_rm}{\code{FilterState$set_na_rm()}}
 \item \href{#method-set_selected}{\code{FilterState$set_selected()}}
 \item \href{#method-set_state}{\code{FilterState$set_state()}}
+\item \href{#method-update_selected_input}{\code{FilterState$update_selected_input()}}
 \item \href{#method-server}{\code{FilterState$server()}}
 \item \href{#method-ui}{\code{FilterState$ui()}}
 \item \href{#method-clone}{\code{FilterState$clone()}}
@@ -276,6 +280,25 @@ contains fields relevant for a specific class
 \item{\code{selected}}{ defines initial selection}
 \item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
 }}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_selected_input"></a>}}
+\if{latex}{\out{\hypertarget{method-update_selected_input}{}}}
+\subsection{Method \code{update_selected_input()}}{
+Update the selected values of this \code{LogicalFilterState}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilterState$update_selected_input(id, value)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{(\code{character(1)})\cr an ID string that corresponds with the ID used to call the module's UI function.}
+
+\item{\code{value}}{(\code{list}) A list of the values \code{selected} and \code{keep_na}.}
 }
 \if{html}{\out{</div>}}
 }

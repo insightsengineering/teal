@@ -127,7 +127,7 @@ testthat::test_that("get_filter_overview_info returns overview matrix for MAEFil
   )
 })
 
-testthat::test_that("MAEFilteredDataset$set_bookmark_state sets filters in FilterStates specified by list names", {
+testthat::test_that("MAEFilteredDataset$set_filter_state sets filters in FilterStates specified by list names", {
   dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
   fs <- list(
     subjects = list(
@@ -139,7 +139,7 @@ testthat::test_that("MAEFilteredDataset$set_bookmark_state sets filters in Filte
       subset = list(ARRAY_TYPE = "")
     )
   )
-  shiny::testServer(dataset$set_bookmark_state, args = list(state = fs), expr = NULL)
+  shiny::testServer(dataset$set_filter_state, args = list(state = fs), expr = NULL)
   testthat::expect_equal(
     isolate(dataset$get_call()),
     list(
@@ -161,11 +161,11 @@ testthat::test_that("MAEFilteredDataset$set_bookmark_state sets filters in Filte
   )
 })
 
-testthat::test_that("MAEFilteredDataset$set_bookmark_state throws error if state argument is not a list ", {
+testthat::test_that("MAEFilteredDataset$set_filter_state throws error if state argument is not a list ", {
   dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
   fs <- c("not_list")
   testthat::expect_error(
-    shiny::testServer(dataset$set_bookmark_state, args = list(state = fs), expr = NULL),
+    shiny::testServer(dataset$set_filter_state, args = list(state = fs), expr = NULL),
     "is.list(state) is not TRUE",
     fixed = TRUE
   )
@@ -190,7 +190,7 @@ testthat::test_that("MAEFilteredDataset filters removed using remove_filters", {
   )
 
   shiny::testServer(
-    filtered_dataset$set_bookmark_state,
+    filtered_dataset$set_filter_state,
     args = list(state = fs),
     expr =  {
       session$setInputs(remove_filters = FALSE)

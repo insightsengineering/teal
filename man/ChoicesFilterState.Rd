@@ -42,6 +42,7 @@ filter$set_selected(c("c", "a"))
 \item \href{#method-server}{\code{ChoicesFilterState$server()}}
 \item \href{#method-set_state}{\code{ChoicesFilterState$set_state()}}
 \item \href{#method-set_selected}{\code{ChoicesFilterState$set_selected()}}
+\item \href{#method-update_selected_input}{\code{ChoicesFilterState$update_selected_input()}}
 \item \href{#method-clone}{\code{ChoicesFilterState$clone()}}
 }
 }
@@ -208,6 +209,28 @@ filter$set_selected(c("c", "a"))
 
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_selected_input"></a>}}
+\if{latex}{\out{\hypertarget{method-update_selected_input}{}}}
+\subsection{Method \code{update_selected_input()}}{
+Updates the selected values of this \code{ChoicesFilterState}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$update_selected_input(id, value)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{(\code{character(1)})\cr an ID string that corresponds with the ID used to call the module's UI function.}
+
+\item{\code{value}}{(\code{list}) A list of the values \code{selected} and \code{keep_na}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

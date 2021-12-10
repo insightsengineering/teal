@@ -120,7 +120,7 @@ testthat::test_that("get call returns a call assigning the filtered object to <n
   testthat::expect_equal(mock_iris_FILTERED, mock_iris)
 })
 
-testthat::test_that("FilteredData$set_bookmark_state sets filters is FilteredDataset specified by the named list", {
+testthat::test_that("FilteredData$set_filter_state sets filters is FilteredDataset specified by the named list", {
   datasets <- teal:::FilteredData$new()
   datasets$set_dataset(dataset("iris", iris))
   datasets$set_dataset(dataset("mtcars", mtcars))
@@ -134,7 +134,7 @@ testthat::test_that("FilteredData$set_bookmark_state sets filters is FilteredDat
         disp = default_filter()
       )
     )
-  shiny::testServer(datasets$set_bookmark_state, args = list(state = fs), expr = NULL)
+  shiny::testServer(datasets$set_filter_state, args = list(state = fs), expr = NULL)
   testthat::expect_equal(
     isolate(datasets$get_call("iris")),
     list(

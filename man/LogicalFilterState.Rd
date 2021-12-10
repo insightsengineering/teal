@@ -6,6 +6,8 @@
 \title{\code{FilterState} object for logical variable}
 \value{
 invisibly \code{NULL}.
+
+\code{NULL}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -45,6 +47,7 @@ filter$set_selected(TRUE)
 \item \href{#method-ui}{\code{LogicalFilterState$ui()}}
 \item \href{#method-server}{\code{LogicalFilterState$server()}}
 \item \href{#method-set_selected}{\code{LogicalFilterState$set_selected()}}
+\item \href{#method-update_selected_input}{\code{LogicalFilterState$update_selected_input()}}
 \item \href{#method-clone}{\code{LogicalFilterState$clone()}}
 }
 }
@@ -183,6 +186,25 @@ filter$set_selected(TRUE)
 
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_selected_input"></a>}}
+\if{latex}{\out{\hypertarget{method-update_selected_input}{}}}
+\subsection{Method \code{update_selected_input()}}{
+Update the selected values of this \code{LogicalFilterState}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LogicalFilterState$update_selected_input(id, value)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{(\code{character(1)})\cr an ID string that corresponds with the ID used to call the module's UI function.}
+
+\item{\code{value}}{(\code{list}) A list of the values \code{selected} and \code{keep_na}.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

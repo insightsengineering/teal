@@ -284,7 +284,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
     #' @return `moduleServer` function.
-    set_bookmark_state = function(id, state) {
+    set_filter_state = function(id, state) {
       moduleServer(
         id = id,
         function(input, output, session) {
@@ -511,27 +511,41 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
     #' @return `moduleServer` function which returns `NULL`
-    set_bookmark_state = function(id, state) {
+    set_filter_state = function(id, state) {
       stopifnot(is.list(state))
       moduleServer(
         id = id,
         function(input, output, session) {
           logger::log_trace(
-            "DefaultFilteredDataset$set_bookmark_state setting up bookmarked filters in : { self$get_dataname() }"
+            "DefaultFilteredDataset$set_filter_state setting up bookmarked filters in : { self$get_dataname() }"
           )
+
           data <- self$get_data(filtered = FALSE)
           fs <- self$get_filter_states()[[1]]
-          fs$set_bookmark_state(
+          fs$set_filter_state(
             id = "filter",
             state = state,
             data = data
           )
           logger::log_trace(
-            "DefaultFilteredDataset$set_bookmark_state done setting up bookmarked filters in : { self$get_dataname() }"
+            "DefaultFilteredDataset$set_filter_state done setting up bookmarked filters in : { self$get_dataname() }"
           )
           NULL
         }
       )
+    },
+
+    #' @description Remove a single FilterState of a FilteredDataset
+    #'
+    #' @param element_id (`character`)\cr
+    #'  Name of variable to remove its FilterState.
+    #'
+    #' @return `NULL`
+    #'
+    remove_filter_state = function(element_id) {
+      fdataset_filter_state <- self$get_filter_states()[[1]]
+      fdataset_filter_state$remove_filter_state(element_id)
+      invisible(NULL)
     },
 
     #' @description
@@ -853,7 +867,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'  names of the experiments. Values of initial state should be relevant
     #'  to the referred column.
     #' @return `moduleServer` function which returns `NULL`
-    set_bookmark_state = function(id, state) {
+    set_filter_state = function(id, state) {
       stopifnot(
         is.list(state),
         all(names(state) %in% c(names(self$get_filter_states())))
@@ -861,21 +875,37 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          logger::log_trace("MAEFilteredDataset$set_bookmark_state setting up filters: { self$get_dataname() }")
+          logger::log_trace("MAEFilteredDataset$set_filter_state setting up filters: { self$get_dataname() }")
           data <- self$get_data(filtered = FALSE)
           for (fs_name in names(state)) {
             fs <- self$get_filter_states()[[fs_name]]
-            fs$set_bookmark_state(
+            fs$set_filter_state(
               id = fs_name,
               state = state[[fs_name]],
               data = `if`(fs_name == "subjects", data, data[[fs_name]])
             )
           }
 
-          logger::log_trace("MAEFilteredDataset$set_bookmark_state done setting filters: { self$get_dataname() }")
+          logger::log_trace("MAEFilteredDataset$set_filter_state done setting filters: { self$get_dataname() }")
           NULL
         }
       )
+    },
+
+    #' @description Remove a single FilterState of a MAEFilteredDataset
+    #'
+    #' @param element_id (`character`)\cr
+    #'  Name of variable to remove its FilterState.
+    #'
+    #' @return `NULL`
+    #'
+    remove_filter_state = function(element_id) {
+      for (fs_name in names(element_id)) {
+        fdataset_filter_state <- self$get_filter_states()[[fs_name]]
+        fdataset_filter_state$remove_filter_state(
+          `if`(fs_name == "subjects", element_id[[fs_name]][[1]], element_id[[fs_name]])
+        )
+      }
     },
 
     #' @description

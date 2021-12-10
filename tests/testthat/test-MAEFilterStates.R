@@ -91,7 +91,7 @@ testthat::test_that("get_call returns a call filtering an MAE object using Range
   )
 })
 
-testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterState(s) specified by the named list", {
+testthat::test_that("MAEFilterStates$set_filter_state sets filters in FilterState(s) specified by the named list", {
   maefs <- teal:::MAEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",
@@ -105,7 +105,7 @@ testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterSt
     gender = "female"
   )
   shiny::testServer(
-    maefs$set_bookmark_state,
+    maefs$set_filter_state,
     args = list(state = fs, data = MultiAssayExperiment::miniACC),
     expr = NULL
   )

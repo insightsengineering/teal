@@ -115,7 +115,9 @@ isolate(datasets$get_call("mtcars"))
 \item \href{#method-set_dataset}{\code{FilteredData$set_dataset()}}
 \item \href{#method-set_code}{\code{FilteredData$set_code()}}
 \item \href{#method-get_bookmark_state}{\code{FilteredData$get_bookmark_state()}}
-\item \href{#method-set_bookmark_state}{\code{FilteredData$set_bookmark_state()}}
+\item \href{#method-set_filter_state}{\code{FilteredData$set_filter_state()}}
+\item \href{#method-remove_filter_state}{\code{FilteredData$remove_filter_state()}}
+\item \href{#method-remove_all_filter_states}{\code{FilteredData$remove_all_filter_states()}}
 \item \href{#method-restore_state_from_bookmark}{\code{FilteredData$restore_state_from_bookmark()}}
 \item \href{#method-ui_filter_panel}{\code{FilteredData$ui_filter_panel()}}
 \item \href{#method-srv_filter_panel}{\code{FilteredData$srv_filter_panel()}}
@@ -534,12 +536,12 @@ named list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
 Sets a bookmarked state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_bookmark_state(id, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_filter_state(id, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -555,6 +557,48 @@ nested list of filter selections applied to datasets.}
 }
 \subsection{Returns}{
 \code{moduleServer} function which returns \code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
+\subsection{Method \code{remove_filter_state()}}{
+Remove a single FilterState of a FilteredDataset in a FilteredData object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$remove_filter_state(state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\verb{named list})\cr
+nested list of filter selections applied to datasets.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_all_filter_states"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_all_filter_states}{}}}
+\subsection{Method \code{remove_all_filter_states()}}{
+Remove all FilterStates of a FilteredDataset or all FilterStates of a FilteredData object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$remove_all_filter_states(datanames)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{datanames}}{(\code{character})\cr
+datanames to remove their FilterStates or empty which removes all FilterStates in the FilteredData object.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

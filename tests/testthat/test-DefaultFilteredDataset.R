@@ -11,13 +11,13 @@ testthat::test_that("get_call returns a list of calls", {
   testthat::expect_true(is_class_list("language")(filtered_dataset$get_call()))
 })
 
-testthat::test_that("DefaultFilteredDataset$set_bookmark_state sets filters in FilterStates specified by list names", {
+testthat::test_that("DefaultFilteredDataset$set_filter_state sets filters in FilterStates specified by list names", {
   dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
   fs <- list(
     Sepal.Length = c(5.1, 6.4),
     Species = c("setosa", "versicolor")
   )
-  shiny::testServer(dataset$set_bookmark_state, args = list(state = fs), expr = NULL)
+  shiny::testServer(dataset$set_filter_state, args = list(state = fs), expr = NULL)
   testthat::expect_equal(
     isolate(dataset$get_call()),
     list(

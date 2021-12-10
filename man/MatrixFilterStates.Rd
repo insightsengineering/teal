@@ -18,7 +18,8 @@ Initialize \code{MatrixFilterStates} object
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{MatrixFilterStates$new()}}
-\item \href{#method-set_bookmark_state}{\code{MatrixFilterStates$set_bookmark_state()}}
+\item \href{#method-set_filter_state}{\code{MatrixFilterStates$set_filter_state()}}
+\item \href{#method-remove_filter_state}{\code{MatrixFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MatrixFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MatrixFilterStates$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{MatrixFilterStates$clone()}}
@@ -63,12 +64,12 @@ text label value.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
 Sets a bookmarked state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$set_bookmark_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$set_filter_state(id, data, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -89,6 +90,26 @@ column in \code{data}.}
 }
 \subsection{Returns}{
 \code{moduleServer} function which returns \code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
+\subsection{Method \code{remove_filter_state()}}{
+Remove a variable from the \code{ReactiveQueue} and its corresponding UI element.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$remove_filter_state(element_id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element_id}}{(\code{character(1)})\cr name of \code{ReactiveQueue} element.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

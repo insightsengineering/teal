@@ -16,7 +16,8 @@
 \itemize{
 \item \href{#method-new}{\code{DefaultFilteredDataset$new()}}
 \item \href{#method-get_call}{\code{DefaultFilteredDataset$get_call()}}
-\item \href{#method-set_bookmark_state}{\code{DefaultFilteredDataset$set_bookmark_state()}}
+\item \href{#method-set_filter_state}{\code{DefaultFilteredDataset$set_filter_state()}}
+\item \href{#method-remove_filter_state}{\code{DefaultFilteredDataset$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{DefaultFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{DefaultFilteredDataset$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{DefaultFilteredDataset$clone()}}
@@ -84,12 +85,12 @@ filter \code{call} or \code{list} of filter calls
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$set_bookmark_state(id, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$set_filter_state(id, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -106,6 +107,27 @@ to the referred column.}
 }
 \subsection{Returns}{
 \code{moduleServer} function which returns \code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
+\subsection{Method \code{remove_filter_state()}}{
+Remove a single FilterState of a FilteredDataset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$remove_filter_state(element_id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element_id}}{(\code{character})\cr
+Name of variable to remove its FilterState.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

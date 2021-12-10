@@ -43,40 +43,29 @@ testthat::test_that("set_bookmark_state throws error when input is missing", {
     output_dataname = "test",
     datalabel = "test"
   )
-  testthat::expect_error(filter_states$set_bookmark_state())
+  testthat::expect_error(filter_states$set_filter_state())
 })
 
-testthat::test_that("set_bookmark_state throws error when no data argument is inputted", {
+testthat::test_that("set_filter_state throws error when no data argument is inputted", {
   filter_states <- SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test",
     datalabel = "test"
   )
-  testthat::expect_error(filter_states$set_bookmark_state(state = list(subset = NULL, select = NULL)))
+  testthat::expect_error(filter_states$set_filter_state(state = list(subset = NULL, select = NULL)))
 })
 
-testthat::test_that("set_bookmark_state throws error when data argument is not of class SummarizedExperiment", {
-  filter_states <- SEFilterStates$new(
-    input_dataname = "test",
-    output_dataname = "test",
-    datalabel = "test"
-  )
-  data <- data.frame(a = "test")
-  testthat::expect_error(filter_states$set_bookmark_state(data = data, state = list(subset = NULL, select = NULL)))
-})
-
-testthat::test_that("set_bookmark_state throws error when state argument contains extra elements", {
+testthat::test_that("set_filter_state throws error when data argument is not of class SummarizedExperiment", {
   filter_states <- SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test",
     datalabel = "test"
   )
   data <- data.frame(a = "test")
-  class(data) <- "SummarizedExperiment"
-  testthat::expect_error(filter_states$set_bookmark_state(data = data, state = list(A = "test")))
+  testthat::expect_error(filter_states$set_filter_state(data = data, state = list(subset = NULL, select = NULL)))
 })
 
-testthat::test_that("set_bookmark_state throws error when state argument is not a list", {
+testthat::test_that("set_filter_state throws error when state argument contains extra elements", {
   filter_states <- SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test",
@@ -84,11 +73,22 @@ testthat::test_that("set_bookmark_state throws error when state argument is not 
   )
   data <- data.frame(a = "test")
   class(data) <- "SummarizedExperiment"
-  testthat::expect_error(filter_states$set_bookmark_state(data = data, state = c(subset = "A", select = "B")))
+  testthat::expect_error(filter_states$set_filter_state(data = data, state = list(A = "test")))
 })
 
-## acceptable inputs to set_bookmark_state
-testthat::test_that("set_bookmark_state returns NULL when state argument contains subset and select set as NULL", {
+testthat::test_that("set_filter_state throws error when state argument is not a list", {
+  filter_states <- SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test",
+    datalabel = "test"
+  )
+  data <- data.frame(a = "test")
+  class(data) <- "SummarizedExperiment"
+  testthat::expect_error(filter_states$set_filter_state(data = data, state = c(subset = "A", select = "B")))
+})
+
+## acceptable inputs to set_filter_state
+testthat::test_that("set_filter_state returns NULL when state argument contains subset and select set as NULL", {
   filter_states <- SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test",
@@ -98,14 +98,14 @@ testthat::test_that("set_bookmark_state returns NULL when state argument contain
   obj <- get_test_data()
   testthat::expect_null(
     testServer(
-      app = filter_states$set_bookmark_state,
+      app = filter_states$set_filter_state,
       args = list(data = obj, state = list(subset = NULL, select = NULL)),
       expr = NULL
     )
   )
 })
 
-testthat::test_that("set_bookmark_state returns NULL when state argument is an empty list", {
+testthat::test_that("set_filter_state returns NULL when state argument is an empty list", {
   filter_states <- SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test",
@@ -114,7 +114,7 @@ testthat::test_that("set_bookmark_state returns NULL when state argument is an e
   obj <- get_test_data()
   testthat::expect_null(
     testServer(
-      app = filter_states$set_bookmark_state,
+      app = filter_states$set_filter_state,
       args = list(data = obj, state = list()),
       expr = NULL
     )
@@ -163,7 +163,7 @@ testthat::test_that("get_call returns `output_dataname <- input_dataname` when n
   )
 })
 
-testthat::test_that("SEFilterStates$set_bookmark_state sets state with only subset", {
+testthat::test_that("SEFilterStates$set_filter_state sets state with only subset", {
   obj <- get_test_data()
   test <- obj
 
@@ -176,7 +176,7 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets state with only subs
   fs <- list(
     subset = list(feature_id = c("ID001", "ID002"))
   )
-  shiny::testServer(sefs$set_bookmark_state, args = list(state = fs, data = obj), expr = NULL)
+  shiny::testServer(sefs$set_filter_state, args = list(state = fs, data = obj), expr = NULL)
   testthat::expect_equal(
     isolate(sefs$get_call()),
     quote(
@@ -188,7 +188,7 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets state with only subs
   )
 })
 
-testthat::test_that("SEFilterStates$set_bookmark_state sets state with neither subset nor select", {
+testthat::test_that("SEFilterStates$set_filter_state sets state with neither subset nor select", {
   obj <- get_test_data()
   test <- obj
 
@@ -198,13 +198,13 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets state with neither s
     datalabel = character(0)
   )
 
-  shiny::testServer(sefs$set_bookmark_state, args = list(state = list(), data = obj), expr = NULL)
+  shiny::testServer(sefs$set_filter_state, args = list(state = list(), data = obj), expr = NULL)
 
   eval(isolate(sefs$get_call()))
   testthat::expect_equal(test_filtered, test)
 })
 
-testthat::test_that("SEFilterStates$set_bookmark_state sets filters in ReactiveQueue specified by the named list", {
+testthat::test_that("SEFilterStates$set_filter_state sets filters in ReactiveQueue specified by the named list", {
   obj <- get_test_data()
   test <- obj
   sefs <- teal:::SEFilterStates$new(
@@ -218,7 +218,7 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets filters in ReactiveQ
     subset = list(feature_id = c("ID001", "ID002"))
   )
 
-  shiny::testServer(sefs$set_bookmark_state, args = list(state = fs, data = obj), expr = NULL)
+  shiny::testServer(sefs$set_filter_state, args = list(state = fs, data = obj), expr = NULL)
 
   eval(isolate(sefs$get_call()))
   testthat::expect_equal(test_filtered, subset(
