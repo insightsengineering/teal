@@ -34,7 +34,7 @@ shinyApp(
   ),
   server = function(input, output, session) {
     adsl_fd$srv_add_filter_state(
-      adsl_fd$srv_add_filter_state,
+      vars_include = adsl_fd$get_filterable_varnames(),
       id = "add"
     )
 
@@ -42,7 +42,7 @@ shinyApp(
 
     output$call <- renderText({
       paste(
-        vapply(adsl_fd$get_call(), pdeparse, character(1)),
+        vapply(adsl_fd$get_call(), deparse1, character(1), collapse = "\n"),
         collapse = "\n"
       )
     })

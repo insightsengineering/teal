@@ -1,4 +1,4 @@
-# teal 0.10.0.9030
+# teal 0.10.0.9033
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
@@ -23,6 +23,7 @@
 * Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
 * Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
+* Added `S3 method`, `to_relational_data`, for `MultiAssayExperiment` objects.
  
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
