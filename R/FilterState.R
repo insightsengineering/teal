@@ -1,5 +1,3 @@
-.threshold_slider_vs_checkboxgroup <- 5 #nolint
-
 # label of checkbox to keep / remove NAs
 label_keep_na_count <- function(na_count) {
   sprintf("Keep NA (%s)", na_count)
@@ -121,7 +119,7 @@ init_filter_state.numeric <- function(x, #nousage
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
-  if (length(unique(x[!is.na(x)])) < .threshold_slider_vs_checkboxgroup) {
+  if (length(unique(x[!is.na(x)])) < getOption("teal.threshold_slider_vs_checkboxgroup")) {
     ChoicesFilterState$new(x = x,
                            varname = varname,
                            varlabel = varlabel,
@@ -1301,7 +1299,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
       stopifnot(
         is.character(x) ||
           is.factor(x) ||
-          (length(unique(x[!is.na(x)])) < .threshold_slider_vs_checkboxgroup)
+          (length(unique(x[!is.na(x)])) < getOption("teal.threshold_slider_vs_checkboxgroup"))
       )
       super$initialize(x, varname, varlabel, input_dataname, extract_type)
 
@@ -1355,7 +1353,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
     ui = function(id) {
       ns <- NS(id)
       fluidRow(
-        if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
+        if (length(private$choices) <= getOption("teal.threshold_slider_vs_checkboxgroup")) {
           div(
             style = "position: relative;",
             div(
@@ -1408,7 +1406,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
           output$plot <- renderPlot(
             bg = "transparent",
             expr = {
-              if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
+              if (length(private$choices) <= getOption("teal.threshold_slider_vs_checkboxgroup")) {
                 # Proportional
                 data <- private$histogram_data
                 data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
