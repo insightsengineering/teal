@@ -120,7 +120,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     logger::log_trace("srv_teal initializing the module.")
 
     output$identifier <- renderText(
-      paste0("Pid:", Sys.getpid(), " Token: ", substr(session$token, 25, 32))
+      paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
     )
 
     # Javascript code ----
