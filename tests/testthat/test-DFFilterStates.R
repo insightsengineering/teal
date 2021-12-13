@@ -20,7 +20,7 @@ testthat::test_that("get_fun returns dplyr::filter", {
 })
 
 testthat::test_that(
-  "DFFilterStates$set_bookmark_filter_state sets filters in FilterState(s) specified by the named list", {
+  "DFFilterStates$set_filter_state sets filters in FilterState(s) specified by the named list", {
     dffs <- teal:::DFFilterStates$new(
       input_dataname = "iris",
       output_dataname = "iris_filtered",
@@ -32,7 +32,7 @@ testthat::test_that(
       Sepal.Length = c(5.1, 6.4),
       Species = c("setosa", "versicolor")
     )
-    shiny::testServer(dffs$set_bookmark_filter_state, args = list(state = fs, data = iris), expr = NULL)
+    shiny::testServer(dffs$set_filter_state, args = list(state = fs, data = iris), expr = NULL)
     testthat::expect_equal(
       isolate(dffs$get_call()),
       quote(
@@ -46,7 +46,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that("DFFilterStates$set_bookmark_filter_state sets filters as a named/unnamed list", {
+testthat::test_that("DFFilterStates$set_filter_state sets filters as a named/unnamed list", {
   dffs <- teal:::DFFilterStates$new(
     input_dataname = "iris",
     output_dataname = "iris_filtered",
@@ -58,7 +58,7 @@ testthat::test_that("DFFilterStates$set_bookmark_filter_state sets filters as a 
     Sepal.Length = list(c(5.1, 6.4)),
     Species = list(selected = c("setosa", "versicolor"))
   )
-  shiny::testServer(dffs$set_bookmark_filter_state, args = list(state = fs, data = iris), expr = NULL)
+  shiny::testServer(dffs$set_filter_state, args = list(state = fs, data = iris), expr = NULL)
   testthat::expect_equal(
     isolate(dffs$get_call()),
     quote(
@@ -137,3 +137,30 @@ testthat::test_that("Adding 'var_to_add' adds another filter state", {
     )
   )
 })
+
+testthat::test_that(
+  "DFFilterStates$remove_filter_state removes specified filter in FilterState(s)", {
+    dffs <- teal:::DFFilterStates$new(
+      input_dataname = "iris",
+      output_dataname = "iris_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      Sepal.Length = list(selected = c(5.1, 6.4)),
+      Species = list(selected = c("setosa", "versicolor"))
+    )
+    shiny::testServer(
+      dffs$set_filter_state,
+      args = list(state = fs, data = iris),
+      expr = {
+        dffs$remove_filter_state("Species")
+      }
+    )
+    testthat::expect_equal(
+      isolate(dffs$get_call()),
+      quote(iris_filtered <- dplyr::filter(iris, Sepal.Length >= 5.1 & Sepal.Length <= 6.4))
+    )
+  }
+)

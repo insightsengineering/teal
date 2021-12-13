@@ -73,3 +73,64 @@ testthat::test_that("get_filter_overview_info returns right array for CDISCFilte
     matrix(list("0/1", "0/1"), nrow = 1, dimnames = list(c("ADSL"), c("Obs", "Subjects")))
   )
 })
+
+testthat::test_that("CDISCFilteredDataset$set_filter_state adds desired filter in FilterStates", {
+  adsl_df <- as.data.frame(as.list(setNames(nm = c(get_cdisc_keys("ADSL")))))
+  adsl <- rbind(adsl_df, adsl_df)
+  adsl$sex <- c("F", "M")
+  adsl$sex <- factor(adsl$sex, levels = c("M", "F"))
+  filtered_dataset <- CDISCFilteredDataset$new(
+    dataset = CDISCTealDataset$new(
+      "ADSL",
+      adsl,
+      parent = character(0),
+      keys = get_cdisc_keys("ADSL")
+    )
+  )
+  fs <- list(sex = "M")
+  shiny::testServer(
+    filtered_dataset$set_filter_state,
+    args = list(state = fs),
+    expr = NULL
+  )
+  testthat::expect_equal(
+    isolate(filtered_dataset$get_call()),
+    list(
+      filter = quote(
+        ADSL_FILTERED <- dplyr::filter( # nolint
+          ADSL,
+          sex == "M"
+        )
+      )
+    )
+  )
+})
+
+testthat::test_that("CDISCFilteredDataset$remove_filter_state removes desired filter in FilterStates", {
+  adsl_df <- as.data.frame(as.list(setNames(nm = c(get_cdisc_keys("ADSL")))))
+  adsl <- rbind(adsl_df, adsl_df)
+  adsl$sex <- c("F", "M")
+  adsl$sex <- factor(adsl$sex, levels = c("M", "F"))
+  filtered_dataset <- CDISCFilteredDataset$new(
+    dataset = CDISCTealDataset$new(
+      "ADSL",
+      adsl,
+      parent = character(0),
+      keys = get_cdisc_keys("ADSL")
+    )
+  )
+  fs <- list(sex = "M")
+  shiny::testServer(
+    filtered_dataset$set_filter_state,
+    args = list(state = fs),
+    expr = filtered_dataset$remove_filter_state("sex")
+  )
+  testthat::expect_equal(
+    isolate(filtered_dataset$get_call()),
+    list(
+      filter = quote(
+        ADSL_FILTERED <- ADSL
+      )
+    )
+  )
+})

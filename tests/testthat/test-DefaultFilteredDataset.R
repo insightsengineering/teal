@@ -12,13 +12,13 @@ testthat::test_that("get_call returns a list of calls", {
 })
 
 testthat::test_that(
-  "DefaultFilteredDataset$set_bookmark_filter_state sets filters in FilterStates specified by list names", {
+  "DefaultFilteredDataset$set_filter_state sets filters in FilterStates specified by list names", {
     dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
     fs <- list(
       Sepal.Length = c(5.1, 6.4),
       Species = c("setosa", "versicolor")
     )
-    shiny::testServer(dataset$set_bookmark_filter_state, args = list(state = fs), expr = NULL)
+    shiny::testServer(dataset$set_filter_state, args = list(state = fs), expr = NULL)
     testthat::expect_equal(
       isolate(dataset$get_call()),
       list(
@@ -40,6 +40,32 @@ testthat::test_that("get_filter_overview_info returns overview matrix for Defaul
     matrix(list("6/6", ""), nrow = 1, dimnames = list(c("iris"), c("Obs", "Subjects")))
   )
 })
+
+testthat::test_that(
+  "DefaultFilteredDataset$remove_filter_state removes desired filter in FilterStates", {
+    dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+    fs <- list(
+      Sepal.Length = c(5.1, 6.4),
+      Species = c("setosa", "versicolor")
+    )
+    shiny::testServer(
+      dataset$set_filter_state,
+      args = list(state = fs),
+      expr = dataset$remove_filter_state("Species")
+    )
+    testthat::expect_equal(
+      isolate(dataset$get_call()),
+      list(
+        filter = quote(
+          iris_FILTERED <- dplyr::filter( # nolint
+            iris,
+            Sepal.Length >= 5.1 & Sepal.Length <= 6.4
+          )
+        )
+      )
+    )
+  }
+)
 
 testthat::test_that("get_filter_overview_info returns overview matrix for DefaultFilteredDataset with filtering", {
   dataset_iris <- DefaultFilteredDataset$new(dataset = TealDataset$new("iris", head(iris)))

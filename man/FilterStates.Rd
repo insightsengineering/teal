@@ -52,7 +52,7 @@ isolate(filter_states$get_call())
 \item \href{#method-queue_push}{\code{FilterStates$queue_push()}}
 \item \href{#method-queue_remove}{\code{FilterStates$queue_remove()}}
 \item \href{#method-ui}{\code{FilterStates$ui()}}
-\item \href{#method-set_bookmark_filter_state}{\code{FilterStates$set_bookmark_filter_state()}}
+\item \href{#method-set_filter_state}{\code{FilterStates$set_filter_state()}}
 \item \href{#method-remove_filter_state}{\code{FilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{FilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{FilterStates$srv_add_filter_state()}}
@@ -255,12 +255,12 @@ shiny.tag
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_filter_state}{}}}
-\subsection{Method \code{set_bookmark_filter_state()}}{
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilterStates$set_bookmark_filter_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilterStates$set_filter_state(id, data, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

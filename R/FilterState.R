@@ -1582,11 +1582,13 @@ ChoicesFilterState <- R6::R6Class( # nolint
           "ChoicesFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
           "updating selected input to: selected={ value$selected }, keep_na={ value$keep_na }"
         ))
+
         if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
+          #browser()
           updateCheckboxGroupInput(
             session = session,
             inputId = "selection",
-            selected = value
+            selected = value$selected
           )
 
           updateCheckboxInput(
@@ -1598,7 +1600,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
           updateOptionalSelectInput(
             session = session,
             inputId = "selection",
-            selected = value
+            selected = value$selected
           )
 
           updateCheckboxInput(

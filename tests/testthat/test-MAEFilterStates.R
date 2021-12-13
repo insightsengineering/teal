@@ -92,7 +92,7 @@ testthat::test_that("get_call returns a call filtering an MAE object using Range
 })
 
 testthat::test_that(
-  "MAEFilterStates$set_bookmark_filter_state sets filters in FilterState(s) specified by the named list", {
+  "MAEFilterStates$set_filter_state sets filters in FilterState(s) specified by the named list", {
     maefs <- teal:::MAEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
@@ -106,7 +106,7 @@ testthat::test_that(
       gender = "female"
     )
     shiny::testServer(
-      maefs$set_bookmark_filter_state,
+      maefs$set_filter_state,
       args = list(state = fs, data = MultiAssayExperiment::miniACC),
       expr = NULL
     )
@@ -123,19 +123,37 @@ testthat::test_that(
     )
   }
 )
-if (compareVersion(as.character(packageVersion("MultiAssayExperiment")), "1.20.0") >= 0) {
-  testthat::test_that(
-    "MultiAssayExperiment::subsetByColData returns error when variable contains NAs", {
-      # if this test fails it means that we can remove FilterState$set_na_rm which
-      # has been created after breaking change in MAE
-      library(MultiAssayExperiment)
-      data(miniACC)
-      miniACC$test <- sample(c(TRUE, NA), size = nrow(miniACC@colData), replace = TRUE)
 
-      testthat::expect_error(
-        subsetByColData(miniACC, miniACC$test),
-        "logical subscript contains NAs"
+testthat::test_that(
+  "MAEFilterStates$remove_filter_state removes filters in FilterState(s)", {
+    maefs <- teal:::MAEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      years_to_birth = c(30, 50),
+      vital_status = 1,
+      gender = "female"
+    )
+    years_to_birth_remove_fs <- "years_to_birth"
+
+    shiny::testServer(
+      maefs$set_filter_state,
+      args = list(state = fs, data = MultiAssayExperiment::miniACC),
+      expr = maefs$remove_filter_state(years_to_birth_remove_fs)
+    )
+    testthat::expect_equal(
+      isolate(maefs$get_call()),
+      quote(
+        test_filtered <- MultiAssayExperiment::subsetByColData(
+          test,
+          y = test$vital_status == "1" &
+            test$gender == "female"
+        )
       )
-    }
-  )
-}
+    )
+  }
+)

@@ -23,7 +23,7 @@ conditions are passed to unnamed arguments (\code{...}).
 \itemize{
 \item \href{#method-new}{\code{DFFilterStates$new()}}
 \item \href{#method-get_fun}{\code{DFFilterStates$get_fun()}}
-\item \href{#method-set_bookmark_filter_state}{\code{DFFilterStates$set_bookmark_filter_state()}}
+\item \href{#method-set_filter_state}{\code{DFFilterStates$set_filter_state()}}
 \item \href{#method-remove_filter_state}{\code{DFFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{DFFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{DFFilterStates$srv_add_filter_state()}}
@@ -90,12 +90,12 @@ For \code{DFFilterStates} \code{dplyr::filter} is used}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_filter_state}{}}}
-\subsection{Method \code{set_bookmark_filter_state()}}{
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$set_bookmark_filter_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$set_filter_state(id, data, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

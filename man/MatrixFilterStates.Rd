@@ -18,7 +18,7 @@ Initialize \code{MatrixFilterStates} object
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{MatrixFilterStates$new()}}
-\item \href{#method-set_bookmark_filter_state}{\code{MatrixFilterStates$set_bookmark_filter_state()}}
+\item \href{#method-set_filter_state}{\code{MatrixFilterStates$set_filter_state()}}
 \item \href{#method-remove_filter_state}{\code{MatrixFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MatrixFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MatrixFilterStates$srv_add_filter_state()}}
@@ -64,12 +64,12 @@ text label value.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_filter_state}{}}}
-\subsection{Method \code{set_bookmark_filter_state()}}{
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
 Sets a bookmarked state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$set_bookmark_filter_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$set_filter_state(id, data, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

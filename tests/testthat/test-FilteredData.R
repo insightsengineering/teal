@@ -121,7 +121,7 @@ testthat::test_that("get call returns a call assigning the filtered object to <n
 })
 
 testthat::test_that(
-  "FilteredData$set_bookmark_filter_state sets filters is FilteredDataset specified by the named list", {
+  "FilteredData$set_filter_state sets filters in FilteredDataset specified by the named list", {
     datasets <- teal:::FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
@@ -135,7 +135,7 @@ testthat::test_that(
           disp = default_filter()
         )
       )
-    shiny::testServer(datasets$set_bookmark_filter_state, args = list(state = fs), expr = NULL)
+    shiny::testServer(datasets$set_filter_state, args = list(state = fs), expr = NULL)
     testthat::expect_equal(
       isolate(datasets$get_call("iris")),
       list(
@@ -147,6 +147,81 @@ testthat::test_that(
           )
         )
       )
+    )
+
+    testthat::expect_equal(
+      isolate(datasets$get_call("mtcars")),
+      list(
+        filter = quote(
+          mtcars_FILTERED <- dplyr::filter( # nolint
+            mtcars,
+            cyl %in% c("4", "6") & (disp >= 71.1 & disp <= 472)
+          )
+        )
+      )
+    )
+  }
+)
+
+testthat::test_that(
+  "FilteredData$remove_all_filter_states removes all filters of all datasets in FilteredData", {
+    datasets <- teal:::FilteredData$new()
+    datasets$set_dataset(dataset("iris", iris))
+    datasets$set_dataset(dataset("mtcars", mtcars))
+    fs <- list(
+      iris = list(
+        Sepal.Length = list(c(5.1, 6.4)),
+        Species = c("setosa", "versicolor")
+      ),
+      mtcars = list(
+        cyl = c(4, 6),
+        disp = default_filter()
+      )
+    )
+    shiny::testServer(
+      datasets$set_filter_state,
+      args = list(id = "test", state = fs),
+      expr = datasets$remove_all_filter_states()
+    )
+    testthat::expect_equal(
+      isolate(datasets$get_call("iris")),
+      list(filter = quote(iris_FILTERED <- iris))
+    )
+
+    testthat::expect_equal(
+      isolate(datasets$get_call("mtcars")),
+      list(
+        filter = quote(
+          mtcars_FILTERED <- mtcars
+        )
+      )
+    )
+  }
+)
+
+testthat::test_that(
+  "FilteredData$remove_all_filter_states remove the filters of the desired dataset only", {
+    datasets <- teal:::FilteredData$new()
+    datasets$set_dataset(dataset("iris", iris))
+    datasets$set_dataset(dataset("mtcars", mtcars))
+    fs <- list(
+      iris = list(
+        Sepal.Length = list(c(5.1, 6.4)),
+        Species = c("setosa", "versicolor")
+      ),
+      mtcars = list(
+        cyl = c(4, 6),
+        disp = default_filter()
+      )
+    )
+    shiny::testServer(
+      datasets$set_filter_state,
+      args = list(id = "test", state = fs),
+      expr = datasets$remove_all_filter_states(datanames = "iris")
+    )
+    testthat::expect_equal(
+      isolate(datasets$get_call("iris")),
+      list(filter = quote(iris_FILTERED <- iris))
     )
 
     testthat::expect_equal(

@@ -128,7 +128,7 @@ testthat::test_that("get_filter_overview_info returns overview matrix for MAEFil
 })
 
 testthat::test_that(
-  "MAEFilteredDataset$set_bookmark_filter_state sets filters in FilterStates specified by list names", {
+  "MAEFilteredDataset$set_filter_state sets filters in FilterStates specified by list names", {
     dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
@@ -140,7 +140,7 @@ testthat::test_that(
         subset = list(ARRAY_TYPE = "")
       )
     )
-    shiny::testServer(dataset$set_bookmark_filter_state, args = list(state = fs), expr = NULL)
+    shiny::testServer(dataset$set_filter_state, args = list(state = fs), expr = NULL)
     testthat::expect_equal(
       isolate(dataset$get_call()),
       list(
@@ -163,15 +163,54 @@ testthat::test_that(
   }
 )
 
-testthat::test_that("MAEFilteredDataset$set_bookmark_filter_state throws error if state argument is not a list ", {
+testthat::test_that("MAEFilteredDataset$set_filter_state throws error if state argument is not a list ", {
   dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
   fs <- c("not_list")
   testthat::expect_error(
-    shiny::testServer(dataset$set_bookmark_filter_state, args = list(state = fs), expr = NULL),
+    shiny::testServer(dataset$set_filter_state, args = list(state = fs), expr = NULL),
     "is.list(state) is not TRUE",
     fixed = TRUE
   )
 })
+
+testthat::test_that(
+  "MAEFilteredDataset$remove_filter_state removes desired filters in FilterStates", {
+    dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+    fs <- list(
+      subjects = list(
+        years_to_birth = c(30, 50),
+        vital_status = 1,
+        gender = "female"
+      ),
+      RPPAArray = list(
+        subset = list(ARRAY_TYPE = "")
+      )
+    )
+    shiny::testServer(
+      dataset$set_filter_state,
+      args = list(state = fs),
+      expr = dataset$remove_filter_state(element_id = list(subjects = list("years_to_birth")))
+    )
+    testthat::expect_equal(
+      isolate(dataset$get_call()),
+      list(
+        subjects = quote(
+          MAE_FILTERED <- MultiAssayExperiment::subsetByColData( # nolint
+            MAE,
+            y = MAE$vital_status == "1" &
+              MAE$gender == "female"
+          )
+        ),
+        RPPAArray = quote(
+          MAE_FILTERED[["RPPAArray"]] <- subset( # nolint
+            MAE_FILTERED[["RPPAArray"]],
+            subset = ARRAY_TYPE == ""
+          )
+        )
+      )
+    )
+  }
+)
 
 testthat::test_that("MAEFilteredDataset$get_filterable_varnames returns character(0)", {
   filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
@@ -192,7 +231,7 @@ testthat::test_that("MAEFilteredDataset filters removed using remove_filters", {
   )
 
   shiny::testServer(
-    filtered_dataset$set_bookmark_filter_state,
+    filtered_dataset$set_filter_state,
     args = list(state = fs),
     expr =  {
       session$setInputs(remove_filters = FALSE)
