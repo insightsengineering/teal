@@ -388,9 +388,8 @@ FilterStates <- R6::R6Class( # nolint
     #' @return shiny.tag
     ui = function(id) {
       ns <- NS(id)
-      private$card_id <- ns("cards")
       tags$div(
-        id = private$card_id,
+        id = ns("cards"),
         class = "list-group hideable-list-group",
         `data-label` = ifelse(private$datalabel == "", "", (paste0("> ", private$datalabel)))
       )
@@ -480,7 +479,7 @@ FilterStates <- R6::R6Class( # nolint
     #' parameter element_id (`character(1)`)\cr
     #'   name of `ReactiveQueue` element.
     #' return `moduleServer` function which returns `NULL`
-    add_filter_state = function(id, filter_state, queue_index, element_id) {
+    insert_filter_state_ui = function(id, filter_state, queue_index, element_id) {
       stopifnot(is(filter_state, "FilterState"))
       stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
       stopifnot(is_character_single(element_id))
@@ -706,6 +705,33 @@ DFFilterStates <- R6::R6Class( # nolint
       return("dplyr::filter")
     },
 
+    server = function(id) {
+      current_state <- reactiveVal(isolate(self$queue_get(1L)))
+      added_state_name <- reactiveVal(NULL)
+      removed_state_name <- reactiveVal(NULL)
+
+      # add_filter_state()
+      observeEvent(self$queue_get(1L), {
+        # find what has been added or removed
+        added_state_name(
+          setdiff(names(self$queue_get(1L)), names(current_state))
+        )
+        removed_state_name(
+          setdiff(names(current_state), names(self$queue_get(1L)))
+        )
+      })
+
+      observeEvent(added_state, ignoreNULL = TRUE, {
+        insertUI(session$ns())
+      })
+
+      observeEvent(removed_state, ignoreNULL = TRUE, {
+        self$queue_remove(1L, removed_state_name())
+        private$remove_filter_state_ui(queue_index, element_id)
+      })
+
+    },
+
     #' @description
     #' Set bookmark state
     #'
@@ -746,7 +772,7 @@ DFFilterStates <- R6::R6Class( # nolint
               )
               set_filter_state(x = value, fstate)
               id <- html_id_mapping[[varname]]
-              private$add_filter_state(
+              private$queue_push(
                 id = id,
                 filter_state = fstate,
                 queue_index = 1L,
@@ -882,7 +908,7 @@ DFFilterStates <- R6::R6Class( # nolint
                 "dataname: { deparse1(private$input_dataname) }"
               ))
               id <- html_id_mapping[[input$var_to_add]]
-              private$add_filter_state(
+              private$queue_push(
                 id = id,
                 filter_state = init_filter_state(
                   data[[input$var_to_add]],
