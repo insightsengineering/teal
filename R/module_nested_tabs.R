@@ -86,11 +86,15 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 1L) {
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 1L) {
   stopifnot(is(datasets, "FilteredData"))
   args <- isolate(resolve_delayed(modules$ui_args, datasets))
-  tagList(
-    if (depth >= 2) div(style = "margin-top: 25px;"),
-    do.call(
-      modules$ui,
-      c(list(id = id, datasets = datasets), args)
+  tags$div(
+    id = id,
+    class = "teal_module",
+    tagList(
+      if (depth >= 3) div(style = "margin-top: 25px;"),
+      do.call(
+        modules$ui,
+        c(list(id = id, datasets = datasets), args)
+      )
     )
   )
 }
