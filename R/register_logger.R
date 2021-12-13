@@ -131,8 +131,8 @@ layout_teal_glue_generator <- function(
       with(logger::get_logger_meta_variables(
         log_level = level, namespace = namespace, .logcall = .logcall, .topcall = .topcall,
         .topenv = .topenv), {
-          token = substr(shiny::getDefaultReactiveDomain()$token, 25, 32)
-          if(length(token) == 0) {
+          token <- substr(shiny::getDefaultReactiveDomain()$token, 25, 32)
+          if (length(token) == 0) {
             token <- ""
           }
           glue::glue(format)
