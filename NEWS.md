@@ -18,7 +18,7 @@
 * Added support for `shiny::moduleServer` passed to the `server` parameter of `teal::module`.
 * Added `pid` into footnote so app developers can identify logs for apps.
 * Added logs to the modules and sub-modules returned from `init`.
-* Add `teal.threshold_slider_vs_checkboxgroup)` as an option: If a categorical variable has more than this number of unique values, the filter panel use a drop-down select input instead of a checkbox group.
+* Added `teal.threshold_slider_vs_checkboxgroup` as an option: If a categorical variable has more than this number of unique values, the filter panel use a drop-down select input instead of a checkbox group.
 
 ### Bug fixes
 * Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
