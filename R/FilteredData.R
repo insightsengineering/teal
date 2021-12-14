@@ -384,6 +384,7 @@ FilteredData <- R6::R6Class( # nolint
         function(input, output, session) {
           logger::log_trace("FilteredData$set_filter_state initializing")
           for(dataname in names(state)) {
+
             fdataset <- self$get_filtered_dataset(dataname = dataname)
             fdataset$set_filter_state(
               id = private$get_ui_add_filter_id(dataname),

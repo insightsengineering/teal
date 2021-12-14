@@ -364,6 +364,14 @@ FilteredDataset <- R6::R6Class( # nolint
             is_character_single(dataname)
           )
 
+          lapply(
+            names(self$get_filter_states()),
+            function(x) {
+              #browser()
+              self$get_filter_states(id = x)$server(id = x)
+            }
+          )
+
           observeEvent(input$remove_filters, {
             logger::log_trace("FilteredDataset$server@1 removing filters, name: { dataname }")
             lapply(
@@ -523,7 +531,6 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
           data <- self$get_data(filtered = FALSE)
           fs <- self$get_filter_states()[[1]]
           fs$set_filter_state(
-            id = "filter",
             state = state,
             data = data
           )

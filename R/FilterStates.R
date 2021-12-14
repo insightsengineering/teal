@@ -388,8 +388,10 @@ FilterStates <- R6::R6Class( # nolint
     #' @return shiny.tag
     ui = function(id) {
       ns <- NS(id)
+      private$card_id <- ns("cards")
+
       tags$div(
-        id = ns("cards"),
+        id = ns("cards"),#private$card_id
         class = "list-group hideable-list-group",
         `data-label` = ifelse(private$datalabel == "", "", (paste0("> ", private$datalabel)))
       )
@@ -486,17 +488,13 @@ FilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          logger::log_trace(paste(
-            "{ class(self)[1] }$add_filter_state, adding FilterState,",
-            "input_dataname: { deparse1(private$input_dataname) }"
-          ))
-          self$queue_push(
-            x = filter_state,
-            queue_index = queue_index,
-            element_id = element_id
-          )
+          #session <- getDefaultReactiveDomain()
+          #browser()
+          dd <- paste0("var_", element_id)
 
-          card_id <- session$ns("card")
+          card_id <- session$ns(dd)
+          #card_id <- session$ns("card")
+
           queue_id <- sprintf("%s-%s", queue_index, element_id)
           private$card_ids[queue_id] <- card_id
 
@@ -505,7 +503,7 @@ FilterStates <- R6::R6Class( # nolint
             where = "beforeEnd",
             # add span with id to be removable
             ui = div(
-              id = card_id,
+              id = session$ns("card"),
               class = "list-group-item",
               fluidPage(
                 fluidRow(
@@ -546,27 +544,23 @@ FilterStates <- R6::R6Class( # nolint
           private$observers[[queue_id]] <- observeEvent(
             ignoreInit = TRUE,
             ignoreNULL = TRUE,
+            once = TRUE,
             eventExpr = input$remove,
             handlerExpr = {
+              cat("REMOVE", element_id)
               logger::log_trace(paste(
                 "{ class(self)[1] }$add_filter_state@1 removing FilterState from queue '{ queue_index }',",
                 "input_dataname: { deparse1(private$input_dataname) }"
               ))
               self$queue_remove(queue_index, element_id)
-              private$remove_filter_state_ui(queue_index, element_id)
+              #removeUI(selector = sprintf("#%s", session$ns("card")))
               logger::log_trace(paste(
                 "{ class(self)[1] }$add_filter_state@1 removed FilterState from queue '{ queue_index }',",
                 "input_dataname: { deparse1(private$input_dataname) }"
               ))            }
           )
+        })
 
-          logger::log_trace(paste(
-            "{ class(self)[1] }$add_filter_state, added FilterState,",
-            "input_dataname: { deparse1(private$input_dataname) }"
-          ))
-          NULL
-        }
-      )
     },
 
     #' Module to update the UI element of a variable
@@ -594,7 +588,7 @@ FilterStates <- R6::R6Class( # nolint
             "input_dataname: { deparse1(private$input_dataname) }"
           ))
           invisible(NULL)
-      })
+        })
     },
 
     # Remove shiny element. Method can be called from reactive session where
@@ -603,16 +597,16 @@ FilterStates <- R6::R6Class( # nolint
     #' to remove shiny elements from anywhere. In `add_filter_state` `session$ns(NULL)`
     #' is equivalent to `private$ns(queue_index)`. This means that
     #'
-    remove_filter_state_ui = function(queue_index, element_id) {
-      queue_id <- sprintf("%s-%s", queue_index, element_id)
+    remove_filter_state_ui = function(id) {
+      # queue_id <- sprintf("%s-%s", queue_index, element_id)
 
       removeUI(
-        selector = sprintf("#%s", private$card_ids[queue_id])
+        selector = sprintf("#%s", session$ns("card"))
       )
-      private$card_ids <- private$card_ids[names(private$card_ids) != queue_id]
+      #private$card_ids <- private$card_ids[names(private$card_ids) != queue_id]
 
-      private$observers[[queue_id]]$destroy()
-      private$observers[[queue_id]] <- NULL
+      # private$observers[[queue_id]]$destroy()
+      # private$observers[[queue_id]] <- NULL
     },
 
     #' Get all `FilterState` in the queue.
@@ -706,29 +700,38 @@ DFFilterStates <- R6::R6Class( # nolint
     },
 
     server = function(id) {
-      current_state <- reactiveVal(isolate(self$queue_get(1L)))
-      added_state_name <- reactiveVal(NULL)
-      removed_state_name <- reactiveVal(NULL)
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          current_state <- reactiveVal(isolate(self$queue_get(1L)))
+          added_state_name <- reactiveVal(NULL)
+          removed_state_name <- reactiveVal(NULL)
 
-      # add_filter_state()
-      observeEvent(self$queue_get(1L), {
-        # find what has been added or removed
-        added_state_name(
-          setdiff(names(self$queue_get(1L)), names(current_state))
-        )
-        removed_state_name(
-          setdiff(names(current_state), names(self$queue_get(1L)))
-        )
-      })
+          # add_filter_state()
+          observeEvent(self$queue_get(1L), {
+            #browser()
+            # find what has been added or removed
+            added_state_name(
+              setdiff(names(self$queue_get(1L)), names(current_state()))
+            )
+            # removed_state_name(
+            #   setdiff(names(current_state()), names(self$queue_get(1L)))
+            # )
+          })
 
-      observeEvent(added_state, ignoreNULL = TRUE, {
-        insertUI(session$ns())
-      })
-
-      observeEvent(removed_state, ignoreNULL = TRUE, {
-        self$queue_remove(1L, removed_state_name())
-        private$remove_filter_state_ui(queue_index, element_id)
-      })
+          observeEvent(added_state_name(), ignoreNULL = TRUE, {
+            fstates <- private$get_filter_state(1L)
+            #browser()
+            #for (fname in )
+            for (fname in added_state_name()) {
+              private$insert_filter_state_ui(id = fname, fstates[[fname]], queue_index = 1L, fname)
+            }
+          })
+        })
+      # observeEvent(removed_state_name, ignoreNULL = TRUE, {
+      #   self$queue_remove(1L, removed_state_name())
+      #   private$remove_filter_state_ui(queue_index, element_id)
+      # })
 
     },
 
@@ -744,48 +747,45 @@ DFFilterStates <- R6::R6Class( # nolint
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
     #' @return `moduleServer` function which returns `NULL`
-    set_filter_state = function(id, data, state) {
+    set_filter_state = function(data, state) {
       stopifnot(is.data.frame(data))
       #browser()
       stopifnot(all(names(state) %in% names(data)) || is(state, "default_filter"))
-      moduleServer(
-        id = id,
-        function(input, output, session)  {
-          logger::log_trace(
-            "{ class(self)[1] }$set_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
-          )
-          filter_states <- private$get_filter_state(1L)
-          html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colnames(data)))
-
-          for (varname in names(state)) {
-            value <- state[[varname]]
-            if (varname %in% names(filter_states)) {
-              fstate <- filter_states[[varname]]
-              collapsed_varname <- gsub("\\.", "", varname)
-              private$update_filter_state(id = paste0("var_", collapsed_varname), fstate, value)
-            } else {
-              fstate <- init_filter_state(
-                data[[varname]],
-                varname = as.name(varname),
-                varlabel = private$get_varlabels(varname),
-                input_dataname = private$input_dataname
-              )
-              set_filter_state(x = value, fstate)
-              id <- html_id_mapping[[varname]]
-              private$queue_push(
-                id = id,
-                filter_state = fstate,
-                queue_index = 1L,
-                element_id = varname
-              )
-            }
-          }
-          logger::log_trace(
-            "{ class(self)[1] }$set_filter_state initialized, dataname: { deparse1(private$input_dataname) }"
-          )
-          NULL
-        }
+      logger::log_trace(
+        "{ class(self)[1] }$set_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
       )
+
+      filter_states <- private$get_filter_state(1L)
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colnames(data)))
+
+      for (varname in names(state)) {
+        value <- state[[varname]]
+        #browser()
+        if (varname %in% names(filter_states)) {
+          fstate <- filter_states[[varname]]
+          collapsed_varname <- gsub("\\.", "", varname)
+          private$update_filter_state(id = paste0("var_", collapsed_varname), fstate, value)
+        } else {
+          fstate <- init_filter_state(
+            data[[varname]],
+            varname = as.name(varname),
+            varlabel = private$get_varlabels(varname),
+            input_dataname = private$input_dataname
+          )
+          set_filter_state(x = value, fstate)
+          id <- html_id_mapping[[varname]]
+
+          self$queue_push(
+            x = fstate,
+            queue_index = 1L,
+            element_id = varname
+          )
+        }
+      }
+      logger::log_trace(
+        "{ class(self)[1] }$set_filter_state initialized, dataname: { deparse1(private$input_dataname) }"
+      )
+      NULL
     },
 
     #' @description Remove a variable from the `ReactiveQueue` and its corresponding UI element.
@@ -908,9 +908,8 @@ DFFilterStates <- R6::R6Class( # nolint
                 "dataname: { deparse1(private$input_dataname) }"
               ))
               id <- html_id_mapping[[input$var_to_add]]
-              private$queue_push(
-                id = id,
-                filter_state = init_filter_state(
+              self$queue_push(
+                x = init_filter_state(
                   data[[input$var_to_add]],
                   varname = as.name(input$var_to_add),
                   varlabel = private$get_varlabels(input$var_to_add),
@@ -952,7 +951,7 @@ DFFilterStates <- R6::R6Class( # nolint
         varlabels <- private$varlabels[variables]
         varlabels[is.na(varlabels) | varlabels == ""] <- variables[
           is.na(varlabels) | varlabels == ""
-          ]
+        ]
         varlabels
       }
     }
@@ -1237,7 +1236,7 @@ MAEFilterStates <- R6::R6Class( # nolint
         varlabels <- private$varlabels[variables]
         varlabels[is.na(varlabels) || varlabels == ""] <- variables[
           is.na(varlabels) || varlabels == ""
-          ]
+        ]
         varlabels
       }
 
