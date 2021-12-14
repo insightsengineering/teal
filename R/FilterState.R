@@ -1059,7 +1059,6 @@ RangeFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      #browser()
       pretty_range_inputs <- private$get_pretty_range_inputs(private$choices)
       fluidRow(
         div(
@@ -1231,7 +1230,6 @@ RangeFilterState <- R6::R6Class( # nolint
           "RangeFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) } updating selected",
           "input to: selected={ value$selected }, keep_na={ value$keep_na }, keep_inf={ value$keep_inf }"
         ))
-        #browser()
         updateSliderInput(
           session = session,
           inputId = "selection",
@@ -1586,7 +1584,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
         ))
 
         if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
-          #browser()
           updateCheckboxGroupInput(
             session = session,
             inputId = "selection",

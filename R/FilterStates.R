@@ -498,41 +498,41 @@ FilterStates <- R6::R6Class( # nolint
             # add span with id to be removable
             ui = {
               div(
-              id = card_id,
-              class = "list-group-item",
-              fluidPage(
-                fluidRow(
-                  column(
-                    width = 10,
-                    class = "no-left-right-padding",
-                    tags$div(
-                      tags$span(filter_state$get_varname(),
-                                class = "filter_panel_varname"
-                      ),
-                      if_not_character_empty(
-                        filter_state$get_varlabel(),
-                        if (tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
-                          tags$span(filter_state$get_varlabel(),
-                                    class = "filter_panel_varlabel"
-                          )
-                        }
+                id = card_id,
+                class = "list-group-item",
+                fluidPage(
+                  fluidRow(
+                    column(
+                      width = 10,
+                      class = "no-left-right-padding",
+                      tags$div(
+                        tags$span(filter_state$get_varname(),
+                                  class = "filter_panel_varname"
+                        ),
+                        if_not_character_empty(
+                          filter_state$get_varlabel(),
+                          if (tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
+                            tags$span(filter_state$get_varlabel(),
+                                      class = "filter_panel_varlabel"
+                            )
+                          }
+                        )
+                      )
+                    ),
+                    column(
+                      width = 2,
+                      class = "no-left-right-padding",
+                      actionLink(
+                        session$ns("remove"),
+                        label = "",
+                        icon = icon("times-circle", lib = "font-awesome"),
+                        class = "remove pull-right"
                       )
                     )
                   ),
-                  column(
-                    width = 2,
-                    class = "no-left-right-padding",
-                    actionLink(
-                      session$ns("remove"),
-                      label = "",
-                      icon = icon("times-circle", lib = "font-awesome"),
-                      class = "remove pull-right"
-                    )
-                  )
-                ),
-                filter_state$ui(id = session$ns("content"))
+                  filter_state$ui(id = session$ns("content"))
+                )
               )
-            )
             }
           )
 
@@ -696,11 +696,16 @@ DFFilterStates <- R6::R6Class( # nolint
       return("dplyr::filter")
     },
 
+    #' @description
+    #' Server module
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(
         id = id,
         function(input, output, session) {
-          current_state <- reactiveVal(isolate(self$queue_get(1L)))
+          previous_state <- reactiveVal(isolate(self$queue_get(1L)))
           added_state_name <- reactiveVal(character(0))
           removed_state_name <- reactiveVal(character(0))
 
@@ -708,12 +713,12 @@ DFFilterStates <- R6::R6Class( # nolint
           observeEvent(self$queue_get(1L), {
             # find what has been added or removed
             added_state_name(
-              setdiff(names(self$queue_get(1L)), names(current_state()))
+              setdiff(names(self$queue_get(1L)), names(previous_state()))
             )
             removed_state_name(
-              setdiff(names(current_state()), names(self$queue_get(1L)))
+              setdiff(names(previous_state()), names(self$queue_get(1L)))
             )
-            current_state(self$queue_get(1L))
+            previous_state(self$queue_get(1L))
           })
 
           observeEvent(added_state_name(), ignoreNULL = TRUE, {
@@ -733,6 +738,8 @@ DFFilterStates <- R6::R6Class( # nolint
           })
 
           # event to trigger the update
+
+          NULL
         })
     },
 
@@ -761,6 +768,7 @@ DFFilterStates <- R6::R6Class( # nolint
       for (varname in names(state)) {
         value <- state[[varname]]
         if (varname %in% names(filter_states)) {
+          private$queue[[1L]]$get()[varname]
           fstate <- filter_states[[varname]]
           collapsed_varname <- gsub("\\.", "", varname)
           private$update_filter_state(id = paste0("var_", collapsed_varname), fstate, value)
@@ -1064,11 +1072,16 @@ MAEFilterStates <- R6::R6Class( # nolint
 
     },
 
+    #' @description
+    #' Server module
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(
         id = id,
         function(input, output, session) {
-          current_state <- reactiveVal(isolate(self$queue_get(1L)))
+          previous_state <- reactiveVal(isolate(self$queue_get("y")))
           added_state_name <- reactiveVal(character(0))
           removed_state_name <- reactiveVal(character(0))
 
@@ -1076,21 +1089,23 @@ MAEFilterStates <- R6::R6Class( # nolint
           observeEvent(self$queue_get("y"), {
             # find what has been added or removed
             added_state_name(
-              setdiff(names(self$queue_get("y")), names(current_state()))
+              setdiff(names(self$queue_get("y")), names(previous_state()))
             )
             removed_state_name(
-              setdiff(names(current_state()), names(self$queue_get("y")))
+              setdiff(names(previous_state()), names(self$queue_get("y")))
             )
-            current_state(self$queue_get("y"))
+            previous_state(self$queue_get("y"))
           })
 
           observeEvent(added_state_name(), ignoreNULL = TRUE, {
             fstates <- private$get_filter_state("y")
             for (fname in added_state_name()) {
-              private$insert_filter_state_ui(id = fname,
-                                             filter_state = fstates[[fname]],
-                                             queue_index = "y",
-                                             element_id = fname)
+              private$insert_filter_state_ui(
+                id = fname,
+                filter_state = fstates[[fname]],
+                queue_index = "y",
+                element_id = fname
+              )
             }
             added_state_name(character(0))
           })
@@ -1102,6 +1117,7 @@ MAEFilterStates <- R6::R6Class( # nolint
             }
             removed_state_name(character(0))
           })
+          NULL
         })
     },
 
@@ -1231,9 +1247,8 @@ MAEFilterStates <- R6::R6Class( # nolint
               )
               fstate$set_na_rm(TRUE)
 
-              private$add_filter_state(
-                id = id,
-                filter_state = fstate,
+              self$queue_push(
+                x = fstate,
                 queue_index = "y",
                 element_id = input$var_to_add
               )
@@ -1262,7 +1277,6 @@ MAEFilterStates <- R6::R6Class( # nolint
     #'  name of the variable for which label should be returned
     #' return `character(1)`
     get_varlabels = function(variables = character(0)) {
-      #browser()
       stopifnot(is.character(variables))
       if (identical(variables, character(0))) {
         private$varlabels
@@ -1392,31 +1406,36 @@ SEFilterStates <- R6::R6Class( # nolint
       )
     },
 
+    #' @description
+    #' Server module
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(
         id = id,
         function(input, output, session) {
-          # remember subset and select
-          current_state <- reactiveVal(isolate(self$queue_get(1L)))
+          previous_state <- reactiveVal(isolate(self$queue_get("subset")))
           added_state_name <- reactiveVal(character(0))
           removed_state_name <- reactiveVal(character(0))
 
-          # add_filter_state()
-          observeEvent(self$queue_get(1L), {
+          observeEvent(self$queue_get("subset"), {
             # find what has been added or removed
             added_state_name(
-              setdiff(names(self$queue_get(1L)), names(current_state()))
+              setdiff(names(self$queue_get("subset")), names(previous_state()))
             )
             removed_state_name(
-              setdiff(names(current_state()), names(self$queue_get(1L)))
+              setdiff(names(previous_state()), names(self$queue_get("subset")))
             )
-            current_state(self$queue_get(1L))
+            previous_state(self$queue_get("subset"))
           })
 
           observeEvent(added_state_name(), ignoreNULL = TRUE, {
-            fstates <- private$get_filter_state(1L)
+            fstates <- private$get_filter_state("subset")
+
             for (fname in added_state_name()) {
-              private$insert_filter_state_ui(id = fname, filter_state = fstates[[fname]], queue_index = 1L, element_id = fname)
+              print("subset")
+              private$insert_filter_state_ui(id = fname, filter_state = fstates[[fname]], queue_index = "subset", element_id = fname)
             }
             added_state_name(character(0))
           })
@@ -1424,10 +1443,43 @@ SEFilterStates <- R6::R6Class( # nolint
           observeEvent(removed_state_name(), {
             req(removed_state_name())
             for (fname in removed_state_name()) {
-              private$remove_filter_state_ui(1L, fname)
+              private$remove_filter_state_ui("subset", fname)
             }
             removed_state_name(character(0))
           })
+
+          #select
+          previous_state <- reactiveVal(isolate(self$queue_get("select")))
+          added_state_name <- reactiveVal(character(0))
+          removed_state_name <- reactiveVal(character(0))
+
+          observeEvent(self$queue_get("select"), {
+            # find what has been added or removed
+            added_state_name(
+              setdiff(names(self$queue_get("select")), names(previous_state()))
+            )
+            removed_state_name(
+              setdiff(names(previous_state()), names(self$queue_get("select")))
+            )
+            previous_state(self$queue_get("select"))
+          })
+
+          observeEvent(added_state_name(), ignoreNULL = TRUE, {
+            fstates <- private$get_filter_state("select")
+            for (fname in added_state_name()) {
+              private$insert_filter_state_ui(id = fname, filter_state = fstates[[fname]], queue_index = "select", element_id = fname)
+            }
+            added_state_name(character(0))
+          })
+
+          observeEvent(removed_state_name(), {
+            req(removed_state_name())
+            for (fname in removed_state_name()) {
+              private$remove_filter_state_ui("select", fname)
+            }
+            removed_state_name(character(0))
+          })
+          NULL
         })
     },
 
@@ -1628,9 +1680,8 @@ SEFilterStates <- R6::R6Class( # nolint
                 "dataname: { deparse1(private$input_dataname) }"
               ))
               id <- col_html_mapping[[input$col_to_add]]
-              private$add_filter_state(
-                id = id,
-                filter_state = init_filter_state(
+              self$queue_push(
+                x = init_filter_state(
                   SummarizedExperiment::colData(data)[[input$col_to_add]],
                   varname = as.name(input$col_to_add),
                   input_dataname = private$input_dataname
@@ -1655,9 +1706,8 @@ SEFilterStates <- R6::R6Class( # nolint
                 "dataname: { deparse1(private$input_dataname) }"
               ))
               id <- row_html_mapping[[input$row_to_add]]
-              private$add_filter_state(
-                id = id,
-                filter_state = init_filter_state(
+              self$queue_push(
+                x = init_filter_state(
                   SummarizedExperiment::rowData(data)[[input$row_to_add]],
                   varname = as.name(input$row_to_add),
                   input_dataname = private$input_dataname
@@ -1768,6 +1818,49 @@ MatrixFilterStates <- R6::R6Class( # nolint
           NULL
         }
       )
+    },
+
+    #' @description
+    #' Server module
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          previous_state <- reactiveVal(isolate(self$queue_get("subset")))
+          added_state_name <- reactiveVal(character(0))
+          removed_state_name <- reactiveVal(character(0))
+
+          observeEvent(self$queue_get("subset"), {
+            # find what has been added or removed
+            added_state_name(
+              setdiff(names(self$queue_get("subset")), names(previous_state()))
+            )
+            removed_state_name(
+              setdiff(names(previous_state()), names(self$queue_get("subset")))
+            )
+            previous_state(self$queue_get("subset"))
+          })
+
+          observeEvent(added_state_name(), ignoreNULL = TRUE, {
+            fstates <- private$get_filter_state("subset")
+            for (fname in added_state_name()) {
+              private$insert_filter_state_ui(id = fname, filter_state = fstates[[fname]], queue_index = "subset", element_id = fname)
+            }
+            added_state_name(character(0))
+          })
+
+          observeEvent(removed_state_name(), {
+            req(removed_state_name())
+            for (fname in removed_state_name()) {
+              private$remove_filter_state_ui("subset", fname)
+            }
+            removed_state_name(character(0))
+          })
+          NULL
+        })
     },
 
     #' @description Remove a variable from the `ReactiveQueue` and its corresponding UI element.
@@ -1882,9 +1975,8 @@ MatrixFilterStates <- R6::R6Class( # nolint
                 "dataname: { deparse1(private$input_dataname) }"
               ))
               id <- html_id_mapping[[input$var_to_add]]
-              private$add_filter_state(
-                id = id,
-                filter_state = init_filter_state(
+              self$queue_push(
+                x = init_filter_state(
                   subset(data, select = input$var_to_add),
                   varname = as.name(input$var_to_add),
                   varlabel = private$get_varlabel(input$var_to_add),
