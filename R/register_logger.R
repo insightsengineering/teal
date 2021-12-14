@@ -117,8 +117,15 @@ log_system_info <- function() {
 }
 
 
-# Function which behaves as logger::layout_glue_generator but allows the shiny session token (last 8 chars)
-# to be included in the logging layout
+#' Generate log layout function using common variables available via glue syntax including shiny session token
+#'
+#' @param format glue-flavored layout of the log message see [logger::layout_glue_generator()]
+#'   for more details
+#' @return function taking level and msg arguments - keeping the original call creating the generator
+#'   in the generator attribute that is returned when calling log_layout for the currently used layout
+#' @details this function behaves in the same way as [logger::layout_glue_generator()]
+#'   but allows the shiny session token (last 8 chars) to be included in the logging layout
+#' @noRd
 layout_teal_glue_generator <- function(
   format = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} fun:{fn} [{level}] {msg}") {
   force(format)
