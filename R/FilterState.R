@@ -73,7 +73,6 @@ init_filter_state <- function(x,
   )
   stopifnot(extract_type %in% c("list", "matrix"))
 
-
   if (all(is.na(x))) {
     return(
       EmptyFilterState$new(
@@ -85,7 +84,6 @@ init_filter_state <- function(x,
       )
     )
   }
-
   UseMethod("init_filter_state")
 }
 

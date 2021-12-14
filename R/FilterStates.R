@@ -283,9 +283,6 @@ FilterStates <- R6::R6Class( # nolint
         queue_elements <- names(self$queue_get(queue_index = queue_index))
         lapply(queue_elements, function(element_id) {
           self$queue_remove(queue_index = queue_index, element_id = element_id)
-          if (shiny::isRunning()) {
-            private$remove_filter_state_ui(queue_index, element_id)
-          }
         })
       })
 
@@ -389,9 +386,8 @@ FilterStates <- R6::R6Class( # nolint
     ui = function(id) {
       ns <- NS(id)
       private$card_id <- ns("cards")
-
       tags$div(
-        id = ns("cards"),#private$card_id
+        id = private$card_id,
         class = "list-group hideable-list-group",
         `data-label` = ifelse(private$datalabel == "", "", (paste0("> ", private$datalabel)))
       )
@@ -488,13 +484,11 @@ FilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          #session <- getDefaultReactiveDomain()
-          #browser()
-          dd <- paste0("var_", element_id)
-
-          card_id <- session$ns(dd)
-          #card_id <- session$ns("card")
-
+          logger::log_trace(paste(
+            "{ class(self)[1] }$add_filter_state, adding FilterState,",
+            "input_dataname: { deparse1(private$input_dataname) }"
+          ))
+          card_id <- session$ns("SEX-card")
           queue_id <- sprintf("%s-%s", queue_index, element_id)
           private$card_ids[queue_id] <- card_id
 
@@ -502,8 +496,9 @@ FilterStates <- R6::R6Class( # nolint
             selector = sprintf("#%s", private$card_id),
             where = "beforeEnd",
             # add span with id to be removable
-            ui = div(
-              id = session$ns("card"),
+            ui = {
+              div(
+              id = card_id,
               class = "list-group-item",
               fluidPage(
                 fluidRow(
@@ -538,29 +533,49 @@ FilterStates <- R6::R6Class( # nolint
                 filter_state$ui(id = session$ns("content"))
               )
             )
+            }
           )
 
           filter_state$server(id = "content")
           private$observers[[queue_id]] <- observeEvent(
             ignoreInit = TRUE,
             ignoreNULL = TRUE,
-            once = TRUE,
             eventExpr = input$remove,
             handlerExpr = {
-              cat("REMOVE", element_id)
               logger::log_trace(paste(
                 "{ class(self)[1] }$add_filter_state@1 removing FilterState from queue '{ queue_index }',",
                 "input_dataname: { deparse1(private$input_dataname) }"
               ))
               self$queue_remove(queue_index, element_id)
-              #removeUI(selector = sprintf("#%s", session$ns("card")))
               logger::log_trace(paste(
                 "{ class(self)[1] }$add_filter_state@1 removed FilterState from queue '{ queue_index }',",
                 "input_dataname: { deparse1(private$input_dataname) }"
-              ))            }
+              ))
+            }
           )
-        })
 
+          logger::log_trace(paste(
+            "{ class(self)[1] }$add_filter_state, added FilterState,",
+            "input_dataname: { deparse1(private$input_dataname) }"
+          ))
+          NULL
+        }
+      )
+
+    },
+
+    # Remove shiny element. Method can be called from reactive session where
+    #' `observeEvent` for remove-filter-state is set and also from `FilteredDataset`
+    #' level, where shiny-session-namespace is different. That is why it's important
+    #' to remove shiny elements from anywhere. In `add_filter_state` `session$ns(NULL)`
+    #' is equivalent to `private$ns(queue_index)`. This means that
+    #'
+    remove_filter_state_ui = function(queue_index, element_id) {
+      queue_id <- sprintf("%s-%s", queue_index, element_id)
+      removeUI(selector = sprintf("#%s", private$card_ids[queue_id]))
+      private$card_ids <- private$card_ids[names(private$card_ids) != queue_id]
+      private$observers[[queue_id]]$destroy()
+      private$observers[[queue_id]] <- NULL
     },
 
     #' Module to update the UI element of a variable
@@ -589,24 +604,6 @@ FilterStates <- R6::R6Class( # nolint
           ))
           invisible(NULL)
         })
-    },
-
-    # Remove shiny element. Method can be called from reactive session where
-    #' `observeEvent` for remove-filter-state is set and also from `FilteredDataset`
-    #' level, where shiny-session-namespace is different. That is why it's important
-    #' to remove shiny elements from anywhere. In `add_filter_state` `session$ns(NULL)`
-    #' is equivalent to `private$ns(queue_index)`. This means that
-    #'
-    remove_filter_state_ui = function(id) {
-      # queue_id <- sprintf("%s-%s", queue_index, element_id)
-
-      removeUI(
-        selector = sprintf("#%s", session$ns("card"))
-      )
-      #private$card_ids <- private$card_ids[names(private$card_ids) != queue_id]
-
-      # private$observers[[queue_id]]$destroy()
-      # private$observers[[queue_id]] <- NULL
     },
 
     #' Get all `FilterState` in the queue.
@@ -704,35 +701,39 @@ DFFilterStates <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           current_state <- reactiveVal(isolate(self$queue_get(1L)))
-          added_state_name <- reactiveVal(NULL)
-          removed_state_name <- reactiveVal(NULL)
+          added_state_name <- reactiveVal(character(0))
+          removed_state_name <- reactiveVal(character(0))
 
           # add_filter_state()
           observeEvent(self$queue_get(1L), {
-            #browser()
             # find what has been added or removed
             added_state_name(
               setdiff(names(self$queue_get(1L)), names(current_state()))
             )
-            # removed_state_name(
-            #   setdiff(names(current_state()), names(self$queue_get(1L)))
-            # )
+            removed_state_name(
+              setdiff(names(current_state()), names(self$queue_get(1L)))
+            )
+            current_state(self$queue_get(1L))
           })
 
           observeEvent(added_state_name(), ignoreNULL = TRUE, {
             fstates <- private$get_filter_state(1L)
-            #browser()
-            #for (fname in )
             for (fname in added_state_name()) {
-              private$insert_filter_state_ui(id = fname, fstates[[fname]], queue_index = 1L, fname)
+              private$insert_filter_state_ui(id = fname, filter_state = fstates[[fname]], queue_index = 1L, element_id = fname)
             }
+            added_state_name(character(0))
           })
-        })
-      # observeEvent(removed_state_name, ignoreNULL = TRUE, {
-      #   self$queue_remove(1L, removed_state_name())
-      #   private$remove_filter_state_ui(queue_index, element_id)
-      # })
 
+          observeEvent(removed_state_name(), {
+            req(removed_state_name())
+            for (fname in removed_state_name()) {
+              private$remove_filter_state_ui(1L, fname)
+            }
+            removed_state_name(character(0))
+          })
+
+          # event to trigger the update
+        })
     },
 
     #' @description
@@ -749,7 +750,6 @@ DFFilterStates <- R6::R6Class( # nolint
     #' @return `moduleServer` function which returns `NULL`
     set_filter_state = function(data, state) {
       stopifnot(is.data.frame(data))
-      #browser()
       stopifnot(all(names(state) %in% names(data)) || is(state, "default_filter"))
       logger::log_trace(
         "{ class(self)[1] }$set_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
@@ -760,7 +760,6 @@ DFFilterStates <- R6::R6Class( # nolint
 
       for (varname in names(state)) {
         value <- state[[varname]]
-        #browser()
         if (varname %in% names(filter_states)) {
           fstate <- filter_states[[varname]]
           collapsed_varname <- gsub("\\.", "", varname)
@@ -774,12 +773,7 @@ DFFilterStates <- R6::R6Class( # nolint
           )
           set_filter_state(x = value, fstate)
           id <- html_id_mapping[[varname]]
-
-          self$queue_push(
-            x = fstate,
-            queue_index = 1L,
-            element_id = varname
-          )
+          self$queue_push(x = fstate, queue_index = 1L, element_id = varname)
         }
       }
       logger::log_trace(
@@ -1070,6 +1064,47 @@ MAEFilterStates <- R6::R6Class( # nolint
 
     },
 
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          current_state <- reactiveVal(isolate(self$queue_get(1L)))
+          added_state_name <- reactiveVal(character(0))
+          removed_state_name <- reactiveVal(character(0))
+
+          # add_filter_state()
+          observeEvent(self$queue_get("y"), {
+            # find what has been added or removed
+            added_state_name(
+              setdiff(names(self$queue_get("y")), names(current_state()))
+            )
+            removed_state_name(
+              setdiff(names(current_state()), names(self$queue_get("y")))
+            )
+            current_state(self$queue_get("y"))
+          })
+
+          observeEvent(added_state_name(), ignoreNULL = TRUE, {
+            fstates <- private$get_filter_state("y")
+            for (fname in added_state_name()) {
+              private$insert_filter_state_ui(id = fname,
+                                             filter_state = fstates[[fname]],
+                                             queue_index = "y",
+                                             element_id = fname)
+            }
+            added_state_name(character(0))
+          })
+
+          observeEvent(removed_state_name(), {
+            req(removed_state_name())
+            for (fname in removed_state_name()) {
+              private$remove_filter_state_ui("y", fname)
+            }
+            removed_state_name(character(0))
+          })
+        })
+    },
+
     #' @description Remove a variable from the `ReactiveQueue` and its corresponding UI element.
     #'
     #' @param element_id (`character(1)`)\cr name of `ReactiveQueue` element.
@@ -1355,6 +1390,45 @@ SEFilterStates <- R6::R6Class( # nolint
           NULL
         }
       )
+    },
+
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          # remember subset and select
+          current_state <- reactiveVal(isolate(self$queue_get(1L)))
+          added_state_name <- reactiveVal(character(0))
+          removed_state_name <- reactiveVal(character(0))
+
+          # add_filter_state()
+          observeEvent(self$queue_get(1L), {
+            # find what has been added or removed
+            added_state_name(
+              setdiff(names(self$queue_get(1L)), names(current_state()))
+            )
+            removed_state_name(
+              setdiff(names(current_state()), names(self$queue_get(1L)))
+            )
+            current_state(self$queue_get(1L))
+          })
+
+          observeEvent(added_state_name(), ignoreNULL = TRUE, {
+            fstates <- private$get_filter_state(1L)
+            for (fname in added_state_name()) {
+              private$insert_filter_state_ui(id = fname, filter_state = fstates[[fname]], queue_index = 1L, element_id = fname)
+            }
+            added_state_name(character(0))
+          })
+
+          observeEvent(removed_state_name(), {
+            req(removed_state_name())
+            for (fname in removed_state_name()) {
+              private$remove_filter_state_ui(1L, fname)
+            }
+            removed_state_name(character(0))
+          })
+        })
     },
 
     #' @description Remove a variable from the `ReactiveQueue` and its corresponding UI element.
