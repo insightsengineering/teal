@@ -1,4 +1,4 @@
-# teal 0.10.0.9033
+# teal 0.10.0.9034
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
@@ -16,7 +16,7 @@
 * Added logging at the info and trace level to the filter panel.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
 * Added support for `shiny::moduleServer` passed to the `server` parameter of `teal::module`.
-* Added `pid` into footnote so app developers can identify logs for apps.
+* Added `pid` and shiny session token into footnote so app developers can identify logs for apps.
 * Added logs to the modules and sub-modules returned from `init`.
 * Added `teal.threshold_slider_vs_checkboxgroup` as an option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.
 

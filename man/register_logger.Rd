@@ -9,7 +9,9 @@ register_logger(namespace = NA_character_, layout = NULL, level = NULL)
 \arguments{
 \item{namespace}{(\code{character(1)} or \code{NA}) the name of the logging namespace}
 
-\item{layout}{(\code{character(1)}) the log layout}
+\item{layout}{(\code{character(1)}) the log layout. Alongside the standard logging variables
+provided by the \code{logging} package (e.g. \code{pid}) the \code{token} variable can be used which will
+write the last 8 characters of the shiny session token to the log.}
 
 \item{level}{(\code{character(1)} or \code{call}) the log level. Can be passed as
 character or one of the \code{logger}'s objects.
