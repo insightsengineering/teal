@@ -396,6 +396,20 @@ FilterState <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
+    update_selected = function(value) {
+      logger::log_trace(
+        "{ class(self)[1] }$set_selected setting selection, dataname: { deparse1(private$input_dataname) }"
+      )
+      value <- private$cast_and_validate(value)
+      value <- private$remove_out_of_bound_values(value)
+      private$validate_selection(value)
+      private$selected(value)
+      logger::log_trace(
+        "{ class(self)[1] }$set_selected selection set, dataname: { deparse1(private$input_dataname) }"
+      )
+      invisible(NULL)
+    },
+
     #' @description
     #' Set state
     #' @param state (`list`)\cr
@@ -1577,11 +1591,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #'
     #' @return `NULL`
     update_selected_input = function(id, value) {
-      moduleServer(id = id, function(input, output, session) {
-        logger::log_trace(paste(
-          "ChoicesFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
-          "updating selected input to: selected={ value$selected }, keep_na={ value$keep_na }"
-        ))
 
         if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
           updateCheckboxGroupInput(
@@ -1613,7 +1622,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
           "done updating selected input."
         ))
         invisible(NULL)
-      })
     }
   ),
   private = list(
@@ -1864,7 +1872,6 @@ DateFilterState <- R6::R6Class( # nolint
           "DateFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
           "updating selected input to: selected={ value$selected }, keep_na={ value$keep_na }"
         ))
-        browser()
         updateDateRangeInput(
           session = session,
           inputId = "selection",

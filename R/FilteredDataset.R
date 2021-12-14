@@ -892,7 +892,6 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           for (fs_name in names(state)) {
             fs <- self$get_filter_states()[[fs_name]]
             fs$set_filter_state(
-              id = fs_name,
               state = state[[fs_name]],
               data = `if`(fs_name == "subjects", data, data[[fs_name]])
             )
