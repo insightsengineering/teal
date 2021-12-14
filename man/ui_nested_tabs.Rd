@@ -7,13 +7,13 @@
 \alias{ui_nested_tabs.teal_module}
 \title{Create a UI of nested tabs of \code{teal_modules}}
 \usage{
-ui_nested_tabs(id, modules, datasets, depth = 1L)
+ui_nested_tabs(id, modules, datasets, depth = 0L)
 
-\method{ui_nested_tabs}{default}(id, modules, datasets, depth = 1)
+\method{ui_nested_tabs}{default}(id, modules, datasets, depth = 0L)
 
-\method{ui_nested_tabs}{teal_modules}(id, modules, datasets, depth = 1L)
+\method{ui_nested_tabs}{teal_modules}(id, modules, datasets, depth = 0L)
 
-\method{ui_nested_tabs}{teal_module}(id, modules, datasets, depth = 1L)
+\method{ui_nested_tabs}{teal_module}(id, modules, datasets, depth = 0L)
 }
 \arguments{
 \item{id}{(\code{character(1)})\cr
