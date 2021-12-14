@@ -40,7 +40,7 @@
 #' runApp(app)
 #' }
 #' @keywords internal
-ui_nested_tabs <- function(id, modules, datasets, depth = 1L) {
+ui_nested_tabs <- function(id, modules, datasets, depth = 0L) {
   stopifnot(inherits(datasets, "FilteredData"))
   stopifnot(inherits(depth, "integer") && length(depth) == 1)
   UseMethod("ui_nested_tabs", modules)
@@ -49,14 +49,14 @@ ui_nested_tabs <- function(id, modules, datasets, depth = 1L) {
 #' @rdname ui_nested_tabs
 #' @export
 #' @keywords internal
-ui_nested_tabs.default <- function(id, modules, datasets, depth = 1) {
+ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname ui_nested_tabs
 #' @export
 #' @keywords internal
-ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 1L) {
+ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
   ns <- NS(id)
   do.call(
     tabsetPanel,
@@ -83,14 +83,14 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 1L) {
 #' @rdname ui_nested_tabs
 #' @export
 #' @keywords internal
-ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 1L) {
+ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   stopifnot(is(datasets, "FilteredData"))
   args <- isolate(resolve_delayed(modules$ui_args, datasets))
   tags$div(
     id = id,
     class = "teal_module",
     tagList(
-      if (depth >= 3) div(style = "margin-top: 25px;"),
+      if (depth >= 2L) div(style = "margin-top: 25px;"),
       do.call(
         modules$ui,
         c(list(id = id, datasets = datasets), args)
