@@ -127,7 +127,7 @@ log_system_info <- function() {
 #'   but allows the shiny session token (last 8 chars) to be included in the logging layout
 #' @noRd
 layout_teal_glue_generator <- function(
-  format = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} fun:{fn} [{level}] {msg}") {
+  format = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} fun:{fn} [{level}] {msg}") {
   force(format)
   structure(
     function(level, msg, namespace = NA_character_, .logcall = sys.call(), .topcall = sys.call(-1),
