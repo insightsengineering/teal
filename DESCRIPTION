@@ -28,6 +28,7 @@ Depends:
 Imports:
     digest,
     dplyr,
+    glue,
     ggplot2,
     grDevices,
     lifecycle,

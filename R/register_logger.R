@@ -27,7 +27,9 @@
 #' about layouts and how to use `logger`.
 #'
 #' @param namespace (`character(1)` or `NA`) the name of the logging namespace
-#' @param layout (`character(1)`) the log layout
+#' @param layout (`character(1)`) the log layout. Alongside the standard logging variables
+#'   provided by the `logging` package (e.g. `pid`) the `token` variable can be used which will
+#'   write the last 8 characters of the shiny session token to the log.
 #' @param level (`character(1)` or `call`) the log level. Can be passed as
 #'   character or one of the `logger`'s objects.
 #'   See \code{\link[logger:log_threshold]{logger::log_threshold}} for more information.
@@ -66,7 +68,7 @@ register_logger <- function(namespace = NA_character_,
   if (is.null(layout)) layout <- Sys.getenv("TEAL.LOG_LAYOUT")
   if (is.null(layout) || layout == "") layout <- getOption("teal.log_layout")
   tryCatch({
-    logger::log_layout(logger::layout_glue_generator(layout), namespace = namespace)
+    logger::log_layout(layout_teal_glue_generator(layout), namespace = namespace)
     logger::log_appender(logger::appender_file(nullfile()), namespace = namespace)
     logger::log_success("Set up the logger", namespace = namespace)
     logger::log_appender(logger::appender_stdout, namespace = namespace)
@@ -112,4 +114,37 @@ log_system_info <- function() {
 
   pasted_names_and_versions <- paste(paste_pkgs_name_with_version(names(info$loadedOnly)), collapse = ", ")
   logger::log_trace("Loaded packages: { pasted_names_and_versions }")
+}
+
+
+#' Generate log layout function using common variables available via glue syntax including shiny session token
+#'
+#' @param format glue-flavored layout of the log message see [logger::layout_glue_generator()]
+#'   for more details
+#' @return function taking level and msg arguments - keeping the original call creating the generator
+#'   in the generator attribute that is returned when calling log_layout for the currently used layout
+#' @details this function behaves in the same way as [logger::layout_glue_generator()]
+#'   but allows the shiny session token (last 8 chars) to be included in the logging layout
+#' @noRd
+layout_teal_glue_generator <- function(
+  format = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} fun:{fn} [{level}] {msg}") {
+  force(format)
+  structure(
+    function(level, msg, namespace = NA_character_, .logcall = sys.call(), .topcall = sys.call(-1),
+             .topenv = parent.frame()) {
+      if (!inherits(level, "loglevel")) {
+        stop("Invalid log level, see ?logger::log_levels")
+      }
+      with(logger::get_logger_meta_variables(
+        log_level = level, namespace = namespace, .logcall = .logcall, .topcall = .topcall,
+        .topenv = .topenv), {
+          token <- substr(shiny::getDefaultReactiveDomain()$token, 25, 32)
+          if (length(token) == 0) {
+            token <- ""
+          }
+          glue::glue(format)
+        }
+      )
+    }, generator = deparse(match.call())
+  )
 }
