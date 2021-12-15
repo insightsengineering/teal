@@ -285,12 +285,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'  to the referred column.
     #' @return `moduleServer` function.
     set_filter_state = function(id, state) {
-      moduleServer(
-        id = id,
-        function(input, output, session) {
-          stop("Pure virtual method.")
-        }
-      )
+      stop("Pure virtual method.")
     },
 
     # modules ------
@@ -904,6 +899,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' @return `NULL`
     #'
     remove_filter_state = function(element_id) {
+      stopifnot(
+        is_fully_named_list(element_id),
+        all(names(element_id) %in% c(names(self$get_filter_states())))
+      )
       logger::log_trace("MAEFilteredDataset$remove_filter_state removing filters: { self$get_dataname() }")
 
       for (fs_name in names(element_id)) {
