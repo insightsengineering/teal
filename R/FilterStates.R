@@ -569,8 +569,10 @@ FilterStates <- R6::R6Class( # nolint
       queue_id <- sprintf("%s-%s", queue_index, element_id)
       removeUI(selector = sprintf("#%s", private$card_ids[queue_id]))
       private$card_ids <- private$card_ids[names(private$card_ids) != queue_id]
-      private$observers[[queue_id]]$destroy()
-      private$observers[[queue_id]] <- NULL
+      if (length(private$observers[[queue_id]]) > 0) {
+        private$observers[[queue_id]]$destroy()
+        private$observers[[queue_id]] <- NULL
+      }
     },
 
     #' Module to update the UI element of a variable
