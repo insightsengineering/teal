@@ -414,21 +414,10 @@ FilterState <- R6::R6Class( # nolint
     #' @returns `NULL`
     #'
     set_selected_reactive = function(value) {
-      private$selected_reactive(value)
-    },
-
-    update_selected = function(value) {
-      logger::log_trace(
-        "{ class(self)[1] }$set_selected setting selection, dataname: { deparse1(private$input_dataname) }"
-      )
       value <- private$cast_and_validate(value)
       value <- private$remove_out_of_bound_values(value)
       private$validate_selection(value)
-      private$selected(value)
-      logger::log_trace(
-        "{ class(self)[1] }$set_selected selection set, dataname: { deparse1(private$input_dataname) }"
-      )
-      invisible(NULL)
+      private$selected_reactive(value)
     },
 
     #' @description
