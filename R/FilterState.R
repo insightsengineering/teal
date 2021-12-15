@@ -277,6 +277,7 @@ FilterState <- R6::R6Class( # nolint
       }
       private$extract_type <- extract_type
       private$selected <- reactiveVal(NULL)
+      private$selected_update <- reactiveVal(NULL)
       private$na_count <- sum(is.na(x))
       private$keep_na <- reactiveVal(value = FALSE)
 
@@ -395,6 +396,17 @@ FilterState <- R6::R6Class( # nolint
       )
       invisible(NULL)
     },
+    #' @description
+    #' Updates the selected values of this `RangeFilterState`.
+    #'
+    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param value (`list`) A list of the values `selected`, `keep_na` and `keep_inf`.
+    #'
+    #' @returns `NULL`
+    #'
+    set_selected_update = function(value) {
+      private$selected_update(value)
+    }
 
     update_selected = function(value) {
       logger::log_trace(
@@ -1230,18 +1242,6 @@ RangeFilterState <- R6::R6Class( # nolint
     #'
     set_selected = function(value) {
       super$set_selected(value)
-    },
-
-    #' @description
-    #' Updates the selected values of this `RangeFilterState`.
-    #'
-    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param value (`list`) A list of the values `selected`, `keep_na` and `keep_inf`.
-    #'
-    #' @returns `NULL`
-    #'
-    set_selected_update = function(value) {
-      private$selected_update(value)
     }
   ),
   private = list(
