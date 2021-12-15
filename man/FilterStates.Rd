@@ -258,7 +258,7 @@ shiny.tag
 \if{html}{\out{<a id="method-set_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
 \subsection{Method \code{set_filter_state()}}{
-Set bookmark state
+Set filter state
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$set_filter_state(data, state)}\if{html}{\out{</div>}}
 }
@@ -273,21 +273,18 @@ data which are supposed to be filtered}
 should contain values which are initial selection in the \code{FilterState}.
 Names of the \code{list} element should correspond to the name of the
 column in \code{data}.}
-
-\item{\code{id}}{(\code{character(1)})\cr
-an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{moduleServer} function which throws an error
+function which throws an error
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
 \subsection{Method \code{remove_filter_state()}}{
-Remove a single \code{FilterState} of a \code{FilteredDataset}
+Remove a single \code{FilterState} from the \code{ReactiveQueue}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$remove_filter_state(element_id)}\if{html}{\out{</div>}}
 }
@@ -352,11 +349,10 @@ object containing columns to be used as filter variables.}
 }
 \subsection{Returns}{
 \code{moduleServer} function which returns \code{NULL}
-Module to add \code{FilterState} to queue
+Module to insert/remove \code{FilterState} UI
 
-This module adds \code{FilterState} object to queue, inserts
-shiny UI to the Active Filter Variables, calls \code{FilterState} modules and
-create observer to remove state
+This module adds the shiny UI of the newly added \code{FilterState} object to queue to the Active Filter
+Variables, calls \code{FilterState} modules and creates observer to remove state
 parameter filter_state (\code{FilterState})
 
 parameter queue_index (\code{character(1)}, \code{logical(1)})\cr
@@ -369,17 +365,6 @@ level, where shiny-session-namespace is different. That is why it's important
 to remove shiny elements from anywhere. In \code{add_filter_state} \code{session$ns(NULL)}
 is equivalent to \code{private$ns(queue_index)}. This means that
 
-Module to update the UI element of a variable
-
-This module updates the UI element of the variable which eventually
-launches the reactivity chain to update the existing \code{FilterState} in the queue.
-
-parameter id (\code{character(1)}) id of shiny module
-parameter filter_state (\code{FilterState}) of the variable to be updated.
-parameter value (\code{character(1)}, \code{logical(1)}, \code{numeric})\cr
-value to be updated in the \code{FilterState}.
-
-return \code{moduleServer} function which returns \code{NULL}
 Get all \code{FilterState} in the queue.
 parameter queue_index (\code{character(1)} or \code{integer})
 index of the \code{private$queue} list where \code{ReactiveQueue} are kept.

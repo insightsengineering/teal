@@ -394,7 +394,6 @@ FilteredData <- R6::R6Class( # nolint
     #'  nested list of filter selections applied to datasets.
     #'
     #' @return `NULL`
-    #'
     remove_filter_state = function(state) {
       logger::log_trace("FilteredData$remove_filter_state called")
 

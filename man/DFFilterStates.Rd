@@ -115,7 +115,7 @@ an ID string that corresponds with the ID used to call the module's UI function.
 \if{html}{\out{<a id="method-set_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
 \subsection{Method \code{set_filter_state()}}{
-Set bookmark state
+Set filter state
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$set_filter_state(data, state)}\if{html}{\out{</div>}}
 }
@@ -141,7 +141,7 @@ column in \code{data}.}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
 \subsection{Method \code{remove_filter_state()}}{
-Remove a variable from the \code{ReactiveQueue} and its corresponding UI element.
+Remove a \code{FilterState} from the \code{ReactiveQueue}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$remove_filter_state(element_id)}\if{html}{\out{</div>}}
 }

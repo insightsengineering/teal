@@ -16,7 +16,6 @@ the last one to be returned from it.
 \item \href{#method-size}{\code{Queue$size()}}
 \item \href{#method-get}{\code{Queue$get()}}
 \item \href{#method-remove}{\code{Queue$remove()}}
-\item \href{#method-update}{\code{Queue$update()}}
 \item \href{#method-print}{\code{Queue$print()}}
 \item \href{#method-clone}{\code{Queue$clone()}}
 }
@@ -124,15 +123,6 @@ conversions of R types to compare a removed element with elements in this queue.
 \subsection{Returns}{
 invisibly self
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update"></a>}}
-\if{latex}{\out{\hypertarget{method-update}{}}}
-\subsection{Method \code{update()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Queue$update(element_update, name)}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
