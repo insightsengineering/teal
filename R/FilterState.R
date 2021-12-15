@@ -279,7 +279,8 @@ FilterState <- R6::R6Class( # nolint
       private$selected <- reactiveVal(NULL)
       private$selected_update <- reactiveVal(NULL)
       private$na_count <- sum(is.na(x))
-      private$keep_na <- reactiveVal(value = FALSE)
+      private$keep_na <- reactiveVal(FALSE)
+      private$keep_na_update <- reactiveVal(FALSE)
 
       logger::log_trace(
         "Instantiated { class(self)[1] }, dataname: { deparse1(private$input_dataname, collapse = \"\n\") }"
@@ -364,6 +365,13 @@ FilterState <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
+    set_keep_na_update = function(value) {
+      stopifnot(is_logical_single(value))
+      private$keep_na_update(value)
+      logger::log_trace("{ class(self)[1] }$set_keep_na set to { private$keep_na() }")
+      invisible(NULL)
+    },
+
     #' @description
     #' Some methods needs additional `!is.na(varame)` condition to not include
     #' missing values. When `private$na_rm = TRUE` is set, `self$get_call` returns
@@ -406,7 +414,7 @@ FilterState <- R6::R6Class( # nolint
     #'
     set_selected_update = function(value) {
       private$selected_update(value)
-    }
+    },
 
     update_selected = function(value) {
       logger::log_trace(
@@ -441,6 +449,25 @@ FilterState <- R6::R6Class( # nolint
       }
       if (!is.null(state$selected)) {
         self$set_selected(state$selected)
+      }
+      logger::log_trace(paste(
+        "{ class(self)[1] }$set_state, dataname: { deparse1(private$input_dataname) }",
+        "done setting state"
+      ))
+      invisible(NULL)
+    },
+
+    set_state_update = function(state) {
+      logger::log_trace(paste(
+        "{ class(self)[1] }$set_state, dataname: { deparse1(private$input_dataname) }",
+        "setting state to: selected={ state$selected }, keep_na={ state$keep_na }"
+      ))
+      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na")))
+      if (!is.null(state$keep_na)) {
+        self$set_keep_na_update(state$keep_na)
+      }
+      if (!is.null(state$selected)) {
+        self$set_selected_update(state$selected)
       }
       logger::log_trace(paste(
         "{ class(self)[1] }$set_state, dataname: { deparse1(private$input_dataname) }",
@@ -1050,7 +1077,8 @@ RangeFilterState <- R6::R6Class( # nolint
       }
       private$inf_count <- sum(is.infinite(x))
       private$is_integer <- is.integer(x)
-      private$keep_inf <- reactiveVal(value = FALSE)
+      private$keep_inf <- reactiveVal(FALSE)
+      private$keep_inf_update <- reactiveVal(FALSE)
 
       return(invisible(self))
     },
@@ -1157,6 +1185,18 @@ RangeFilterState <- R6::R6Class( # nolint
             }
           )
 
+          private$observers$selection_update <- observeEvent(
+            private$selected_update(),
+            ignoreNULL = TRUE,
+            handlerExpr = {
+              updateSliderInput(
+                session = session,
+                inputId = "selection",
+                value = private$selected_update()
+              )
+              private$selected_update()
+            })
+
           private$observers$selection <- observeEvent(
             ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
@@ -1207,6 +1247,12 @@ RangeFilterState <- R6::R6Class( # nolint
       private$keep_inf(value)
     },
 
+    set_keep_inf_update = function(value) {
+      #browser()
+      stopifnot(is_logical_single(value))
+      private$keep_inf_update(value)
+    },
+
     #' @description
     #' Set state
     #' @param state (`list`)\cr
@@ -1222,6 +1268,17 @@ RangeFilterState <- R6::R6Class( # nolint
         self$set_keep_inf(state$keep_inf)
       }
       super$set_state(state[names(state) %in% c("selected", "keep_na")])
+      invisible(NULL)
+    },
+
+    set_state_update = function(state) {
+      #browser()
+      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na", "keep_inf")))
+      if (!is.null(state$keep_inf)) {
+        self$set_keep_inf_update(state$keep_inf)
+      }
+      #browser()
+      super$set_state_update(state[names(state) %in% c("selected", "keep_na")])
       invisible(NULL)
     },
 
@@ -1506,13 +1563,16 @@ ChoicesFilterState <- R6::R6Class( # nolint
             }
           )
 
-          observeEvent(private$selected_update(), ignoreNULL = TRUE, {
-            updateCheckboxInput(
-              session = session,
-              inputId = "selected",
-              value =  private$selected_update()
-            )
-            private$selected_update()
+          private$observers$selection_update <- observeEvent(
+            private$selected_update(),
+            ignoreNULL = TRUE,
+            handlerExpr = {
+              updateCheckboxInput(
+                session = session,
+                inputId = "selection",
+                value =  private$selected_update()
+              )
+              private$selected_update()
           })
 
           private$observers$selection <- observeEvent(
@@ -1545,6 +1605,14 @@ ChoicesFilterState <- R6::R6Class( # nolint
         state$selected <- as.character(state$selected)
       }
       super$set_state(state)
+      invisible(NULL)
+    },
+
+    set_state_update = function(state) {
+      if (!is.null(state$selected)) {
+        state$selected <- as.character(state$selected)
+      }
+      super$set_state_update(state)
       invisible(NULL)
     },
 

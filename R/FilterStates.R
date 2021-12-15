@@ -764,8 +764,9 @@ DFFilterStates <- R6::R6Class( # nolint
       for (varname in names(state)) {
         value <- state[[varname]]
         if (varname %in% names(filter_states)) {
+          #browser()
           fstate <- filter_states[[varname]]
-          fstate$set_selected_update(value = value$selected)
+          fstate$set_state_update(state = value)
         } else {
           fstate <- init_filter_state(
             data[[varname]],
