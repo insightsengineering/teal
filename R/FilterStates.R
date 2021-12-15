@@ -729,7 +729,6 @@ DFFilterStates <- R6::R6Class( # nolint
           observeEvent(removed_state_name(), {
             req(removed_state_name())
             for (fname in removed_state_name()) {
-              print("1111")
               private$remove_filter_state_ui(1L, fname)
             }
             removed_state_name(character(0))
@@ -764,9 +763,8 @@ DFFilterStates <- R6::R6Class( # nolint
       for (varname in names(state)) {
         value <- state[[varname]]
         if (varname %in% names(filter_states)) {
-          #browser()
           fstate <- filter_states[[varname]]
-          fstate$set_state_update(state = value)
+          fstate$set_state_reactive(state = value)
         } else {
           fstate <- init_filter_state(
             data[[varname]],
@@ -1040,8 +1038,6 @@ MAEFilterStates <- R6::R6Class( # nolint
                     observeEvent(removed_state_name(), {
                       req(removed_state_name())
                       for (fname in removed_state_name()) {
-                        print("2222")
-                        #browser()
                         private$remove_filter_state_ui("y", fname)
                       }
                       removed_state_name(character(0))
@@ -1075,9 +1071,7 @@ MAEFilterStates <- R6::R6Class( # nolint
                   value <- state[[varname]]
                   if (varname %in% names(filter_states)) {
                     fstate <- filter_states[[varname]]
-                    collapsed_varname <- gsub("_", "", varname)
-                    private$update_filter_state(id = paste0("var_", collapsed_varname), fstate, value)
-
+                    fstate$set_state_reactive(state = value)
                   } else {
                     fstate <- init_filter_state(
                       SummarizedExperiment::colData(data)[[varname]],
@@ -1338,8 +1332,6 @@ SEFilterStates <- R6::R6Class( # nolint
                     observeEvent(removed_state_name_subset(), {
                       req(removed_state_name_subset())
                       for (fname in removed_state_name_subset()) {
-                        print("3333")
-
                         private$remove_filter_state_ui("subset", fname)
                       }
                       removed_state_name_subset(character(0))
@@ -1377,8 +1369,6 @@ SEFilterStates <- R6::R6Class( # nolint
 
                     observeEvent(removed_state_name_select(), {
                       req(removed_state_name_select())
-                      print("4444")
-
                       for (fname in removed_state_name_select()) {
                         private$remove_filter_state_ui("select", fname)
                       }
@@ -1400,7 +1390,6 @@ SEFilterStates <- R6::R6Class( # nolint
               #'   the name of the column in `rowData(data)` and `colData(data)`.
               #' @return `NULL`
               set_filter_state = function(data, state) {
-                #browser()
                 stopifnot(is(data, "SummarizedExperiment"))
                 stopifnot(
                   is(state, "list"),
@@ -1417,8 +1406,7 @@ SEFilterStates <- R6::R6Class( # nolint
                   value <- state$subset[[varname]]
                   if (varname %in% names(filter_states)) {
                     fstate <- filter_states[[varname]]
-                    collapsed_varname <- gsub("_", "", varname)
-                    private$update_filter_state(id = paste0("var_", collapsed_varname), fstate, value)
+                    fstate$set_state_reactive(state = value)
                   } else {
                     fstate <- init_filter_state(
                       SummarizedExperiment::rowData(data)[[varname]],
@@ -1767,7 +1755,6 @@ MatrixFilterStates <- R6::R6Class( # nolint
 
                     observeEvent(removed_state_name(), {
                       req(removed_state_name())
-                      print("5555")
 
                       for (fname in removed_state_name()) {
                         private$remove_filter_state_ui("subset", fname)
@@ -1803,8 +1790,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
                   value <- state[[varname]]
                   if (varname %in% names(filter_states)) {
                     fstate <- filter_states[[varname]]
-                    collapsed_varname <- gsub("_", "", varname)
-                    private$update_filter_state(id = paste0("var_", collapsed_varname), fstate, value)
+                    fstate$set_state_reactive(state = value)
                   } else {
                     fstate <- init_filter_state(
                       data[,varname],
