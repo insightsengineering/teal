@@ -21,8 +21,7 @@
 * Added logs to the modules and sub-modules returned from `init`.
 
 ### Bug fixes
-* Refactored `module_nested_tabs` to fix the issue with filter-panel not reacting on a change
-of nested tabs. 
+* Refactored `module_nested_tabs` to fix the issue with filter-panel not reacting on a change of nested tabs. 
 * Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
 * Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
