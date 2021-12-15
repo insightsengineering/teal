@@ -21,7 +21,7 @@ modules <- function(label, ...) {
   stopifnot(is_character_single(label))
 
   submodules <- list(...)
-  is_right_class <- vapply(submodules, function(x) is(x, "teal_module") || is(x, "teal_modules"), logical(1))
+  is_right_class <- vapply(submodules, inherits, logical(1), c("teal_module", "teal_modules"))
   if (any(!is_right_class)) {
     stop(paste(
       "modules: not all arguments are of class teal_module or teal_modules. Indices:",
@@ -36,12 +36,11 @@ modules <- function(label, ...) {
 
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
-  submodules <- setNames(
-    submodules,
-    labels
-  )
+  submodules <- setNames(submodules, labels)
   structure(
-    list(label = label, children = submodules),
+    list(label = label,
+         id = gsub("[^[:alnum:]]", "_", tolower(label)),
+         children = submodules),
     class = "teal_modules"
   )
 }
@@ -121,7 +120,8 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 
   structure(
     list(
-      label = label, server = server, ui = ui, filters = filters,
+      label = label, id = gsub("[^[:alnum:]]", "_", tolower(label)),
+      server = server, ui = ui, filters = filters,
       server_args = server_args, ui_args = ui_args
     ),
     class = "teal_module"

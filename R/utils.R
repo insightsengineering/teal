@@ -121,46 +121,6 @@ check_pkg_quietly <- function(pckg, msg) {
   return(invisible(NULL))
 }
 
-#' Turn a label into a valid html id, prefix a string
-#'
-#' From both `label` and `prefix`, remove one trailing and
-#' one leading "_", then convert all non-alphanumeric characters
-#' to "_".
-#' This can be used to create a hierarchy within a Shiny module namespace
-#' itself, e.g. create nested tabs whose ids all live in one namespace,
-#' but where a child tab's name is prefixed with the parent tab's name.
-#' See [ui_nested_tabs].
-#'
-#' @param label label of module
-#' @param prefix `character or NULL` to prepend to label;
-#'   `NULL` for no prefix
-#'
-#' @return valid HTML label with invalid characters removed
-#' @examples
-#' label_to_id <- teal:::label_to_id
-#' label_to_id("var", prefix = "prefix")
-#' label_to_id("var")
-#' label_to_id("__var___", prefix = "prefix")
-#' label_to_id("__var___", prefix = "_prefix__")
-label_to_id <- function(label, prefix = NULL) {
-  stopifnot(is_character_single(label))
-  stopifnot(is_character_single(prefix) || is.null(prefix))
-
-  replace_remove_invalid <- function(x) {
-    # remove one leading or trailing "_"
-    # then replace all non alpha-numeric characters by "_"
-    # explain why?
-    gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", x))
-  }
-  label <- replace_remove_invalid(label)
-  if (!is.null(prefix)) {
-    prefix <- replace_remove_invalid(prefix)
-    paste(prefix, label, sep = "_")
-  } else {
-    label
-  }
-}
-
 #' Check that a given range is valid
 #' @param subinterval (`numeric` or `date`)\cr
 #'  vector of length 2 to be  compared against the full range.

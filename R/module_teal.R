@@ -89,7 +89,7 @@ ui_teal <- function(id,
       shiny_busy_message_panel,
       splash_ui,
       tags$hr(),
-      tags$footer(div(footer, p(paste("Pid:", Sys.getpid()))))
+      tags$footer(div(footer, textOutput(ns("identifier"))))
     )
   )
   return(res)
@@ -118,6 +118,11 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
   stopifnot(is.reactive(raw_data))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal initializing the module.")
+
+    output$identifier <- renderText(
+      paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
+    )
+
     # Javascript code ----
     if (getOption("teal_show_js_log", default = FALSE)) {
       shinyjs::showLog() # to show Javascript console logs in the R console

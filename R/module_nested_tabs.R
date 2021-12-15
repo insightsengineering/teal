@@ -3,17 +3,19 @@
 #' Create a UI of nested tabs of `teal_modules`
 #'
 #' Each `teal_modules` is translated to a `tabsetPanel` and each
-#' of its children is put into one tab. The UI of a `teal_module`
-#' is obtained by calling the `ui` function on it.
+#' of its children is another tab-module called recursively. The UI of a
+#' `teal_module` is obtained by calling the `ui` function on it.
 #'
 #' The `datasets` argument is required to resolve the teal arguments in an
 #' isolated context (with respect to reactivity)
 #'
 #' @inheritParams ui_tabs_with_filters
+#' @param depth (`integer(1)`)\cr
+#'  number which helps to determine depth of the modules nesting.
 #' @return depending on class of `modules`:
 #'   - `teal_module`: instantiated UI of the module
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
-#'     calling this function on it
+#'     calling this function on it.
 #' @examples
 #' mods <- teal:::get_dummy_modules()
 #' datasets <- teal:::get_dummy_datasets()
@@ -37,146 +39,156 @@
 #' \dontrun{
 #' runApp(app)
 #' }
-ui_nested_tabs <- function(id, modules, datasets) {
-  stopifnot(
-    # `modules` class tested below
-    is(datasets, "FilteredData")
-  )
+#' @keywords internal
+ui_nested_tabs <- function(id, modules, datasets, depth = 0L) {
+  stopifnot(inherits(datasets, "FilteredData"))
+  stopifnot(inherits(depth, "integer") && length(depth) == 1)
+  UseMethod("ui_nested_tabs", modules)
+}
 
+#' @rdname ui_nested_tabs
+#' @export
+#' @keywords internal
+ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L) {
+  stop("Modules class not supported: ", paste(class(modules), collapse = " "))
+}
+
+#' @rdname ui_nested_tabs
+#' @export
+#' @keywords internal
+ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
   ns <- NS(id)
-
-  # recursively creates the tabsetted UI within the `ns`,
-  # within the `ns`, the tabset panel forms another hierarchy, parent ids within
-  # the `ns` are prefixed to the children labels to obtain their ids
-  # each module within the `ns` is the label plus the id of its parent (id_parent)
-  # is_root: whether top element of modules should be at the root,
-  # i.e. in no `tabSet`, ignored if `teal_module`
-  # depth: stores the depth of the module nesting
-  create_ui <- function(modules, id_parent, is_root = TRUE, depth = 0) {
-    stopifnot(
-      is_character_single(id_parent) || is.null(id_parent),
-      is_logical_single(is_root)
-    )
-
-    id <- label_to_id(modules$label, id_parent)
-    res <- switch(
-      class(modules)[[1]],
-      teal_modules = {
-        do.call(
-          tabsetPanel,
-          c(
-            # by giving an id, we can reactively respond to tab changes
-            list(id = ns(id), type = if (is_root) "pills" else "tabs"),
-            unname(lapply(
-              modules$children,
-              function(submodules) {
-                tabPanel(
-                  title = submodules$label, # also acts as value of input$tabsetId that this tabPanel is embedded in
-                  create_ui(modules = submodules, id_parent = id, is_root = FALSE, depth = depth + 1)
-                )
-              }
-            ))
+  do.call(
+    tabsetPanel,
+    c(
+      # by giving an id, we can reactively respond to tab changes
+      list(
+        id = ns("Active_tab"),
+        type = if (modules$id == "root") "pills" else "tabs"
+      ),
+      unname(lapply(
+        modules$children,
+        function(submodules) {
+          tabPanel(
+            title = submodules$label, # also acts as value of input$tabsetId that this tabPanel is embedded in
+            value = submodules$id, # when clicked this tab value changes input$<tabset panel id>
+            ui_nested_tabs(id = ns(submodules$id), modules = submodules, datasets, depth = depth + 1L)
           )
-        )
-      },
-      teal_module = {
-        args <- isolate(resolve_delayed(modules$ui_args, datasets))
-        # we pass the unfiltered datasets as they may be needed to create the UI
-        tagList(
-          if (depth >= 2) div(style = "margin-top: 25px;"),
-          do.call(
-            modules$ui,
-            c(list(id = ns(id), datasets = datasets), args)
-          )
-        )
-      },
-      stop("unknown class ", class(modules), ", id_parent ", id_parent)
+        }
+      ))
     )
-    return(res)
-  }
-  return(create_ui(modules, id_parent = NULL))
+  )
+}
+
+#' @rdname ui_nested_tabs
+#' @export
+#' @keywords internal
+ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
+  stopifnot(is(datasets, "FilteredData"))
+  args <- isolate(resolve_delayed(modules$ui_args, datasets))
+  tags$div(
+    id = id,
+    class = "teal_module",
+    tagList(
+      if (depth >= 2L) div(style = "margin-top: 1.5rem;"),
+      do.call(
+        modules$ui,
+        c(list(id = id, datasets = datasets), args)
+      )
+    )
+  )
 }
 
 #' Server function that returns currently active module
 #'
 #' @inheritParams srv_tabs_with_filters
+#' @details
+#' This module calls recursively all elements of the `modules` returns one which
+#' is currently active. To determine which module is active see the diagram.
+#' \if{html}{\figure{uml_nested_tabs.jpg}{options: width="75\%" alt="Figure: uml_nested_tabs.jpg"}}
+#' \if{latex}{\figure{uml_nested_tabs.jpg}{options: width=7cm}}
+#' Above depicts hypothetical situation in which one has module structure defined in following way:
+#' ```
+#' + root
+#'   + tab1
+#'     + test1
+#'     + test2
+#'   + tab2
+#'     + test3
+#' ```
+#' * `teal_module` returns self as a active module
+#' * `teal_modules` returns module active within self which is determined by the `input$Active_tab`.
+#' The choice of active module is done recursively (diagram from right to left).
+#'
 #' @return `reactive` which returns the active module that corresponds to the selected tab
+#' @keywords internal
 srv_nested_tabs <- function(id, datasets, modules) {
-  # modules checked below through recursion
-  stopifnot(is(datasets, "FilteredData"))
+  stopifnot(inherits(datasets, "FilteredData"))
+  UseMethod("srv_nested_tabs", modules)
+}
+
+#' @rdname srv_nested_tabs
+#' @export
+#' @keywords internal
+srv_nested_tabs.default <- function(id, datasets, modules) {
+  stop("Modules class not supported: ", paste(class(modules), collapse = " "))
+}
+
+#' @rdname srv_nested_tabs
+#' @export
+#' @keywords internal
+srv_nested_tabs.teal_modules <- function(id, datasets, modules) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_trace(
       paste(
-        "srv_nested_tabs initializing the module with:",
+        "srv_nested_tabs.teal_modules initializing the module with:",
         "datasets { paste(datasets$datanames(), collapse = ' ' )};",
-        "modules { gsub('\n', '', toString(modules)) }."
+        "module { modules$label }."
       )
     )
+    modules_reactive <- lapply(modules$children, function(child) {
+      srv_nested_tabs(id = child$id, datasets = datasets, modules = child)
+    })
 
-    # recursively call `callModule` on (nested) teal modules ----
-    call_modules <- function(modules, id_parent) {
-      id <- label_to_id(modules$label, prefix = id_parent)
-
-      switch(
-        class(modules)[[1]],
-        teal_modules = {
-          lapply(modules$children, call_modules, id_parent = id)
-        },
-        teal_module = {
-          modules$server_args <- resolve_delayed(modules$server_args, datasets)
-          is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
-          if (is_module_server) {
-            do.call(modules$server, c(list(id = id, datasets = datasets), modules$server_args))
-          } else {
-            do.call(
-              callModule,
-              c(
-                list(module = modules$server, id = id, datasets = datasets),
-                modules$server_args
-              )
-            )
-          }
-        },
-        stop("unsupported class ", class(modules), ", id_parent is ", id_parent)
-      )
-      return(invisible(NULL))
-    }
-    call_modules(modules, id_parent = NULL)
-
-    # figure out currently active module -> `active_datanames` ----
-
-    # the call to `ui_tabs_with_filters` creates inputs that watch the tabs prefixed by `teal_modules`
-    # we observe them and react whenever a tab is clicked by:
-    # - displaying only the relevant datasets in the right hand filter in the
-    # sections: filter info, filtering vars per dataname and add filter variable per dataname
-    # recursively goes down tabs to figure out the active module
-    get_active_module <- function(modules, id_parent) {
-      id <- label_to_id(modules$label, id_parent)
-      res <- switch(
-        class(modules)[[1]],
-        teal_modules = {
-          # id is the id of the tabset, the corresponding input element states which tab is selected
-          active_submodule_label <- input[[id]]
-          stopifnot(!is.null(active_submodule_label))
-          get_active_module(modules$children[[active_submodule_label]], id_parent = id)
-        },
-        teal_module = {
-          stopifnot(is.null(input[[id]])) # id should not exist
-          modules
-        },
-        stop("unknown module class ", class(modules))
-      )
-      return(res)
-    }
-    active_module <- eventReactive(
-      eventExpr = input[[label_to_id(modules$label)]], # this reacts only on the root tabs - nested tabs ignored
-      ignoreNULL = TRUE,
-      valueExpr = {
-        logger::log_trace("srv_nested_tabs@1 switched active tab to { input[[label_to_id(modules$label)]] }.")
-        get_active_module(modules, id_parent = NULL)
+    get_active_module <- reactive({
+      if (length(modules$children) == 1L) {
+        # single tab is active by default
+        modules_reactive[[1]]()
+      } else {
+        # switch to active tab
+        req(input$Active_tab)
+        lapply(modules_reactive, function(child) child())[[input$Active_tab]]
       }
-    )
-    return(active_module)
-  })
+    })
 
+    get_active_module
+  })
+}
+
+#' @rdname srv_nested_tabs
+#' @export
+#' @keywords internal
+srv_nested_tabs.teal_module <- function(id, datasets, modules) {
+  logger::log_trace(
+    paste(
+      "srv_nested_tabs.teal_module initializing the module with:",
+      "datasets { paste(datasets$datanames(), collapse = ' ' )};",
+      "module { modules$label }."
+    )
+  )
+
+  modules$server_args <- resolve_delayed(modules$server_args, datasets)
+  is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
+  if (is_module_server) {
+    do.call(modules$server, c(list(id = id, datasets = datasets), modules$server_args))
+  } else {
+    do.call(
+      callModule,
+      c(
+        list(module = modules$server, id = id, datasets = datasets),
+        modules$server_args
+      )
+    )
+  }
+  reactive(modules)
 }

@@ -1,4 +1,4 @@
-# teal 0.10.0.9033
+# teal 0.10.0.9036
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
@@ -7,6 +7,7 @@
 * Deprecated all functions related to connectors that have been moved to their own separate packages.
 * Running `teal` application via `ui_teal_with_splash` and `srv_teal_with_splash` is now no longer recommended because it doesn't support some new features (e.g. logging, bookmarking). Use `init` instead.
 * Updated `init` to accept `RelationalData`, `data.frame`, `Dataset`, `DatasetConnector`, `list` or a function returning a named list as data input.
+* Change of the `html-id` of the modules. Each tabs-set in the app is now a new `shiny` namespace.
 
 ### New features
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
@@ -16,10 +17,12 @@
 * Added logging at the info and trace level to the filter panel.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
 * Added support for `shiny::moduleServer` passed to the `server` parameter of `teal::module`.
-* Added `pid` into footnote so app developers can identify logs for apps.
+* Added `pid` and shiny session token into footnote so app developers can identify logs for apps.
 * Added logs to the modules and sub-modules returned from `init`.
+* Added `teal.threshold_slider_vs_checkboxgroup` as an option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.
 
 ### Bug fixes
+* Refactored `module_nested_tabs` to fix the issue with filter-panel not reacting on a change of nested tabs. 
 * Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
 * Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
