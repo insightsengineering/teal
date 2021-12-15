@@ -1600,7 +1600,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
           private$observers$selection <- observeEvent(
             ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-            eventExpr = input$selection,#private$selected(),
+            eventExpr = input$selection,
             handlerExpr = {
               self$set_selected(if_null(input$selection, character(0)))
               logger::log_trace("ChoicesFilterState$server@1 selection changed, dataname: { private$input_dataname }")

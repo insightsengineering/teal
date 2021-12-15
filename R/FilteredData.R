@@ -433,14 +433,6 @@ FilteredData <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
-    # get_filter_states = function(id = character(0)) {
-    #   if (is_empty(id)) {
-    #     private$filter_states
-    #   } else {
-    #     private$filter_states[[id]]
-    #   }
-    # },
-
     #' @description
     #' Sets this object from a bookmarked state
     #'
