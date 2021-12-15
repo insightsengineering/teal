@@ -41,8 +41,8 @@ filter$set_selected(c("c", "a"))
 \item \href{#method-ui}{\code{ChoicesFilterState$ui()}}
 \item \href{#method-server}{\code{ChoicesFilterState$server()}}
 \item \href{#method-set_state}{\code{ChoicesFilterState$set_state()}}
+\item \href{#method-set_state_reactive}{\code{ChoicesFilterState$set_state_reactive()}}
 \item \href{#method-set_selected}{\code{ChoicesFilterState$set_selected()}}
-\item \href{#method-update_selected_input}{\code{ChoicesFilterState$update_selected_input()}}
 \item \href{#method-clone}{\code{ChoicesFilterState$clone()}}
 }
 }
@@ -56,7 +56,10 @@ filter$set_selected(c("c", "a"))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel">}\href{../../teal/html/FilterState.html#method-get_varlabel}{\code{teal::FilterState$get_varlabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na">}\href{../../teal/html/FilterState.html#method-set_keep_na}{\code{teal::FilterState$set_keep_na()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na_reactive">}\href{../../teal/html/FilterState.html#method-set_keep_na_reactive}{\code{teal::FilterState$set_keep_na_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_na_rm">}\href{../../teal/html/FilterState.html#method-set_na_rm}{\code{teal::FilterState$set_na_rm()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_selected_reactive">}\href{../../teal/html/FilterState.html#method-set_selected_reactive}{\code{teal::FilterState$set_selected_reactive()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="update_selected">}\href{../../teal/html/FilterState.html#method-update_selected}{\code{teal::FilterState$update_selected()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -181,6 +184,15 @@ contains fields relevant for a specific class
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_state_reactive"></a>}}
+\if{latex}{\out{\hypertarget{method-set_state_reactive}{}}}
+\subsection{Method \code{set_state_reactive()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$set_state_reactive(state)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_selected"></a>}}
 \if{latex}{\out{\hypertarget{method-set_selected}{}}}
 \subsection{Method \code{set_selected()}}{
@@ -209,28 +221,6 @@ filter$set_selected(c("c", "a"))
 
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_selected_input"></a>}}
-\if{latex}{\out{\hypertarget{method-update_selected_input}{}}}
-\subsection{Method \code{update_selected_input()}}{
-Updates the selected values of this \code{ChoicesFilterState}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$update_selected_input(id, value)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{(\code{character(1)})\cr an ID string that corresponds with the ID used to call the module's UI function.}
-
-\item{\code{value}}{(\code{list}) A list of the values \code{selected} and \code{keep_na}.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{NULL}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

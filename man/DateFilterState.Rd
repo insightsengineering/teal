@@ -46,7 +46,6 @@ filter$set_selected(c(date + 1, date + 2))
 \item \href{#method-ui}{\code{DateFilterState$ui()}}
 \item \href{#method-server}{\code{DateFilterState$server()}}
 \item \href{#method-set_selected}{\code{DateFilterState$set_selected()}}
-\item \href{#method-update_selected_input}{\code{DateFilterState$update_selected_input()}}
 \item \href{#method-clone}{\code{DateFilterState$clone()}}
 }
 }
@@ -60,8 +59,12 @@ filter$set_selected(c(date + 1, date + 2))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel">}\href{../../teal/html/FilterState.html#method-get_varlabel}{\code{teal::FilterState$get_varlabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na">}\href{../../teal/html/FilterState.html#method-set_keep_na}{\code{teal::FilterState$set_keep_na()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na_reactive">}\href{../../teal/html/FilterState.html#method-set_keep_na_reactive}{\code{teal::FilterState$set_keep_na_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_na_rm">}\href{../../teal/html/FilterState.html#method-set_na_rm}{\code{teal::FilterState$set_na_rm()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_selected_reactive">}\href{../../teal/html/FilterState.html#method-set_selected_reactive}{\code{teal::FilterState$set_selected_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_state">}\href{../../teal/html/FilterState.html#method-set_state}{\code{teal::FilterState$set_state()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_state_reactive">}\href{../../teal/html/FilterState.html#method-set_state_reactive}{\code{teal::FilterState$set_state_reactive()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="update_selected">}\href{../../teal/html/FilterState.html#method-update_selected}{\code{teal::FilterState$update_selected()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -196,28 +199,6 @@ filter$set_selected(c(date + 1, date + 2))
 
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_selected_input"></a>}}
-\if{latex}{\out{\hypertarget{method-update_selected_input}{}}}
-\subsection{Method \code{update_selected_input()}}{
-Updates the selected values of this \code{DateFilterState}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DateFilterState$update_selected_input(id, value)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{(\code{character(1)})\cr an ID string that corresponds with the ID used to call the module's UI function.}
-
-\item{\code{value}}{(\code{list}) A list of the values \code{selected} and \code{keep_na}.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{NULL}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

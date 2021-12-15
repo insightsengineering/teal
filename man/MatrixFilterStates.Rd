@@ -18,6 +18,7 @@ Initialize \code{MatrixFilterStates} object
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{MatrixFilterStates$new()}}
+\item \href{#method-server}{\code{MatrixFilterStates$server()}}
 \item \href{#method-set_filter_state}{\code{MatrixFilterStates$set_filter_state()}}
 \item \href{#method-remove_filter_state}{\code{MatrixFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MatrixFilterStates$ui_add_filter_state()}}
@@ -64,12 +65,12 @@ text label value.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
-\subsection{Method \code{set_filter_state()}}{
-Sets a bookmarked state
+\if{html}{\out{<a id="method-server"></a>}}
+\if{latex}{\out{\hypertarget{method-server}{}}}
+\subsection{Method \code{server()}}{
+Server module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$set_filter_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$server(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -77,7 +78,25 @@ Sets a bookmarked state
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
 an ID string that corresponds with the ID used to call the module's UI function.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{moduleServer} function which returns \code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
+Sets a filter state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$set_filter_state(data, state)}\if{html}{\out{</div>}}
+}
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
 \item{\code{data}}{(\code{matrix})\cr
 data which are supposed to be filtered}
 
@@ -89,7 +108,7 @@ column in \code{data}.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{moduleServer} function which returns \code{NULL}
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

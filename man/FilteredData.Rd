@@ -539,24 +539,21 @@ named list
 \if{html}{\out{<a id="method-set_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
 \subsection{Method \code{set_filter_state()}}{
-Sets a bookmarked state
+Sets a filter state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_filter_state(id, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_filter_state(state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{(\code{character(1)})\cr
-an ID string that corresponds with the ID used to call the module's UI function.}
-
 \item{\code{state}}{(\verb{named list})\cr
 nested list of filter selections applied to datasets.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{moduleServer} function which returns \code{NULL}
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

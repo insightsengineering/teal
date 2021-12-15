@@ -367,35 +367,26 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @return named list
     get_bookmark_state = function() {
-      stop("Pure virtual method.")
+      # stop("Pure virtual method.")
+      # only to test bookmark state
+      list(ADSL = list(AGE = list(selected = c(0, 40), keep_na = TRUE, keep_inf = TRUE)))
     },
 
     #' @description
-    #' Sets a bookmarked state
-    #' @param id (`character(1)`)\cr
-    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' Sets a filter state
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
-    #' @return `moduleServer` function which returns `NULL`
-    set_filter_state = function(id, state) {
+    #' @return `NULL`
+    set_filter_state = function(state) {
       stopifnot(all(names(state) %in% self$datanames()))
-      moduleServer(
-        id,
-        function(input, output, session) {
-          logger::log_trace("FilteredData$set_filter_state initializing")
-          for(dataname in names(state)) {
-            fdataset <- self$get_filtered_dataset(dataname = dataname)
-            fdataset$set_filter_state(
-              id = private$get_ui_add_filter_id(dataname),
-              state = state[[dataname]]
-            )
-          }
-          logger::log_trace("FilteredData$set_filter_state initialized")
-          invisible(NULL)
-        }
-      )
+      logger::log_trace("FilteredData$set_filter_state initializing")
+      for(dataname in names(state)) {
+        fdataset <- self$get_filtered_dataset(dataname = dataname)
+        fdataset$set_filter_state(state = state[[dataname]])
+      }
+      logger::log_trace("FilteredData$set_filter_state initialized")
+      invisible(NULL)
     },
-
 
     #' @description Remove a single `FilterState` of a `FilteredDataset` in a `FilteredData` object
     #'
@@ -403,7 +394,6 @@ FilteredData <- R6::R6Class( # nolint
     #'  nested list of filter selections applied to datasets.
     #'
     #' @return `NULL`
-    #'
     remove_filter_state = function(state) {
       logger::log_trace("FilteredData$remove_filter_state called")
 

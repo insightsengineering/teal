@@ -23,6 +23,7 @@ conditions are passed to unnamed arguments (\code{...}).
 \itemize{
 \item \href{#method-new}{\code{DFFilterStates$new()}}
 \item \href{#method-get_fun}{\code{DFFilterStates$get_fun()}}
+\item \href{#method-server}{\code{DFFilterStates$server()}}
 \item \href{#method-set_filter_state}{\code{DFFilterStates$set_filter_state()}}
 \item \href{#method-remove_filter_state}{\code{DFFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{DFFilterStates$ui_add_filter_state()}}
@@ -90,12 +91,12 @@ For \code{DFFilterStates} \code{dplyr::filter} is used}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
-\subsection{Method \code{set_filter_state()}}{
-Set bookmark state
+\if{html}{\out{<a id="method-server"></a>}}
+\if{latex}{\out{\hypertarget{method-server}{}}}
+\subsection{Method \code{server()}}{
+Server module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$set_filter_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$server(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -103,7 +104,25 @@ Set bookmark state
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
 an ID string that corresponds with the ID used to call the module's UI function.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{moduleServer} function which returns \code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
+Set filter state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$set_filter_state(data, state)}\if{html}{\out{</div>}}
+}
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
 \item{\code{data}}{(\code{data.frame})\cr
 data which are supposed to be filtered}
 
@@ -115,14 +134,14 @@ column in \code{data}.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{moduleServer} function which returns \code{NULL}
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
 \subsection{Method \code{remove_filter_state()}}{
-Remove a variable from the \code{ReactiveQueue} and its corresponding UI element.
+Remove a \code{FilterState} from the \code{ReactiveQueue}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$remove_filter_state(element_id)}\if{html}{\out{</div>}}
 }

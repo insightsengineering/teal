@@ -99,13 +99,7 @@ testthat::test_that(
     )
 
     obj <- get_test_data()
-    testthat::expect_null(
-      testServer(
-        app = filter_states$set_filter_state,
-        args = list(data = obj, state = list(subset = NULL, select = NULL)),
-        expr = NULL
-      )
-    )
+    testthat::expect_null(filter_states$set_filter_state(data = obj, state = list(subset = NULL, select = NULL)))
   }
 )
 
@@ -116,13 +110,7 @@ testthat::test_that("set_filter_state returns NULL when state argument is an emp
     datalabel = "test"
   )
   obj <- get_test_data()
-  testthat::expect_null(
-    testServer(
-      app = filter_states$set_filter_state,
-      args = list(data = obj, state = list()),
-      expr = NULL
-    )
-  )
+  testthat::expect_null(filter_states$set_filter_state(data = obj, state = list()))
 })
 
 testthat::test_that("clone method returns object with the same state", {
@@ -180,7 +168,7 @@ testthat::test_that("SEFilterStates$set_filter_state sets state with only subset
   fs <- list(
     subset = list(feature_id = c("ID001", "ID002"))
   )
-  shiny::testServer(sefs$set_filter_state, args = list(state = fs, data = obj), expr = NULL)
+  sefs$set_filter_state(state = fs, data = obj)
   testthat::expect_equal(
     isolate(sefs$get_call()),
     quote(
@@ -202,7 +190,7 @@ testthat::test_that("SEFilterStates$set_filter_state sets state with neither sub
     datalabel = character(0)
   )
 
-  shiny::testServer(sefs$set_filter_state, args = list(state = list(), data = obj), expr = NULL)
+  sefs$set_filter_state(state = list(), data = obj)
 
   eval(isolate(sefs$get_call()))
   testthat::expect_equal(test_filtered, test)
@@ -222,8 +210,7 @@ testthat::test_that(
       select = list(Treatment = "ChIP"),
       subset = list(feature_id = c("ID001", "ID002"))
     )
-
-    shiny::testServer(sefs$set_filter_state, args = list(state = fs, data = obj), expr = NULL)
+    sefs$set_filter_state(state = fs, data = obj)
 
     eval(isolate(sefs$get_call()))
     testthat::expect_equal(test_filtered, subset(
@@ -249,11 +236,8 @@ testthat::test_that(
       subset = list(feature_id = c("ID001", "ID002"))
     )
 
-    shiny::testServer(
-      sefs$set_filter_state,
-      args = list(state = fs, data = obj),
-      expr = sefs$remove_filter_state(list(subset = "feature_id"))
-    )
+    sefs$set_filter_state(state = fs, data = obj)
+    sefs$remove_filter_state(list(subset = "feature_id"))
 
     eval(isolate(sefs$get_call()))
     testthat::expect_equal(test_filtered, subset(
@@ -278,11 +262,8 @@ testthat::test_that(
       subset = list(feature_id = c("ID001", "ID002"))
     )
 
-    shiny::testServer(
-      sefs$set_filter_state,
-      args = list(state = fs, data = obj),
-      expr = sefs$remove_filter_state(list(subset = "feature_id", select = "Treatment"))
-    )
+    sefs$set_filter_state(state = fs, data = obj)
+    sefs$remove_filter_state(list(subset = "feature_id", select = "Treatment"))
 
     eval(isolate(sefs$get_call()))
     testthat::expect_equal(test_filtered, test)

@@ -55,14 +55,13 @@ filtered_data_set.TealData <- function(data, datasets) { # nolintr # nousage
 filtered_data_set_filters <- function(datasets, filter) {
   stopifnot(
     is(datasets, "FilteredData"),
-    is_fully_named_list(filter),
-    all(names(filter) %in% datasets$datanames())
+    is_fully_named_list(filter)
   )
 
   if (length(filter) > 0) {
     # preceeded by main_ui to adjust htmlid of filterstate added by bookmark
     # to htmlid of element added by selecting in the app
-    datasets$set_filter_state("main_ui-filter_panel", filter)
+    datasets$set_filter_state(filter)
   }
 
   return(invisible(NULL))

@@ -105,11 +105,8 @@ testthat::test_that(
       vital_status = 1,
       gender = "female"
     )
-    shiny::testServer(
-      maefs$set_filter_state,
-      args = list(state = fs, data = MultiAssayExperiment::miniACC),
-      expr = NULL
-    )
+    maefs$set_filter_state(state = fs, data = MultiAssayExperiment::miniACC)
+
     testthat::expect_equal(
       isolate(maefs$get_call()),
       quote(
@@ -140,11 +137,9 @@ testthat::test_that(
     )
     years_to_birth_remove_fs <- "years_to_birth"
 
-    shiny::testServer(
-      maefs$set_filter_state,
-      args = list(state = fs, data = MultiAssayExperiment::miniACC),
-      expr = maefs$remove_filter_state(years_to_birth_remove_fs)
-    )
+    maefs$set_filter_state(state = fs, data = MultiAssayExperiment::miniACC)
+    maefs$remove_filter_state(years_to_birth_remove_fs)
+
     testthat::expect_equal(
       isolate(maefs$get_call()),
       quote(

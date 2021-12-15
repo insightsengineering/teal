@@ -6,8 +6,6 @@
 \title{\code{FilterState} object for numeric variable}
 \value{
 invisibly \code{NULL}
-
-\code{NULL}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -50,9 +48,10 @@ filter$set_selected(c(2, 3))
 \item \href{#method-ui}{\code{RangeFilterState$ui()}}
 \item \href{#method-server}{\code{RangeFilterState$server()}}
 \item \href{#method-set_keep_inf}{\code{RangeFilterState$set_keep_inf()}}
+\item \href{#method-set_keep_inf_reactive}{\code{RangeFilterState$set_keep_inf_reactive()}}
 \item \href{#method-set_state}{\code{RangeFilterState$set_state()}}
+\item \href{#method-set_state_reactive}{\code{RangeFilterState$set_state_reactive()}}
 \item \href{#method-set_selected}{\code{RangeFilterState$set_selected()}}
-\item \href{#method-update_selected_input}{\code{RangeFilterState$update_selected_input()}}
 \item \href{#method-clone}{\code{RangeFilterState$clone()}}
 }
 }
@@ -66,7 +65,10 @@ filter$set_selected(c(2, 3))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel">}\href{../../teal/html/FilterState.html#method-get_varlabel}{\code{teal::FilterState$get_varlabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na">}\href{../../teal/html/FilterState.html#method-set_keep_na}{\code{teal::FilterState$set_keep_na()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na_reactive">}\href{../../teal/html/FilterState.html#method-set_keep_na_reactive}{\code{teal::FilterState$set_keep_na_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_na_rm">}\href{../../teal/html/FilterState.html#method-set_na_rm}{\code{teal::FilterState$set_na_rm()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_selected_reactive">}\href{../../teal/html/FilterState.html#method-set_selected_reactive}{\code{teal::FilterState$set_selected_reactive()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="update_selected">}\href{../../teal/html/FilterState.html#method-update_selected}{\code{teal::FilterState$update_selected()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -202,6 +204,15 @@ modules after selecting check-box-input in the shiny interface. Values are set t
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_keep_inf_reactive"></a>}}
+\if{latex}{\out{\hypertarget{method-set_keep_inf_reactive}{}}}
+\subsection{Method \code{set_keep_inf_reactive()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$set_keep_inf_reactive(value)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_state}{}}}
 \subsection{Method \code{set_state()}}{
@@ -223,6 +234,15 @@ contains fields relevant for a specific class
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_state_reactive"></a>}}
+\if{latex}{\out{\hypertarget{method-set_state_reactive}{}}}
+\subsection{Method \code{set_state_reactive()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$set_state_reactive(state)}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_selected"></a>}}
@@ -251,25 +271,6 @@ filter$set_selected(c(2, 3))
 
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_selected_input"></a>}}
-\if{latex}{\out{\hypertarget{method-update_selected_input}{}}}
-\subsection{Method \code{update_selected_input()}}{
-Updates the selected values of this \code{RangeFilterState}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$update_selected_input(id, value)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{(\code{character(1)})\cr an ID string that corresponds with the ID used to call the module's UI function.}
-
-\item{\code{value}}{(\code{list}) A list of the values \code{selected}, \code{keep_na} and \code{keep_inf}.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

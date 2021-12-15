@@ -73,7 +73,6 @@ init_filter_state <- function(x,
   )
   stopifnot(extract_type %in% c("list", "matrix"))
 
-
   if (all(is.na(x))) {
     return(
       EmptyFilterState$new(
@@ -85,7 +84,6 @@ init_filter_state <- function(x,
       )
     )
   }
-
   UseMethod("init_filter_state")
 }
 
@@ -279,8 +277,10 @@ FilterState <- R6::R6Class( # nolint
       }
       private$extract_type <- extract_type
       private$selected <- reactiveVal(NULL)
+      private$selected_reactive <- reactiveVal(NULL)
       private$na_count <- sum(is.na(x))
-      private$keep_na <- reactiveVal(value = FALSE)
+      private$keep_na <- reactiveVal(FALSE)
+      private$keep_na_reactive <- reactiveVal(FALSE)
 
       logger::log_trace(
         "Instantiated { class(self)[1] }, dataname: { deparse1(private$input_dataname, collapse = \"\n\") }"
@@ -365,6 +365,13 @@ FilterState <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
+    set_keep_na_reactive = function(value) {
+      stopifnot(is_logical_single(value))
+      private$keep_na_reactive(value)
+      logger::log_trace("{ class(self)[1] }$set_keep_na set to { private$keep_na() }")
+      invisible(NULL)
+    },
+
     #' @description
     #' Some methods needs additional `!is.na(varame)` condition to not include
     #' missing values. When `private$na_rm = TRUE` is set, `self$get_call` returns
@@ -399,6 +406,21 @@ FilterState <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Updates the selected values of this `RangeFilterState`.
+    #'
+    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param value (`list`) A list of the values `selected`, `keep_na` and `keep_inf`.
+    #'
+    #' @returns `NULL`
+    #'
+    set_selected_reactive = function(value) {
+      value <- private$cast_and_validate(value)
+      value <- private$remove_out_of_bound_values(value)
+      private$validate_selection(value)
+      private$selected_reactive(value)
+    },
+
+    #' @description
     #' Set state
     #' @param state (`list`)\cr
     #'  contains fields relevant for a specific class
@@ -425,18 +447,23 @@ FilterState <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
-    #' @description
-    #' Update the selected values of this `LogicalFilterState`.
-    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param value (`list`) A list of the values `selected` and `keep_na`.
-    #'
-    #' @returns `NULL`.
-    update_selected_input = function(id, value) {
-      moduleServer(
-        id = id,
-        function(input, output, session) {
-          stop("This variable can not be updated from the filter.")
-      })
+    set_state_reactive = function(state) {
+      logger::log_trace(paste(
+        "{ class(self)[1] }$set_state, dataname: { deparse1(private$input_dataname) }",
+        "setting state to: selected={ state$selected }, keep_na={ state$keep_na }"
+      ))
+      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na")))
+      if (!is.null(state$keep_na)) {
+        self$set_keep_na_reactive(state$keep_na)
+      }
+      if (!is.null(state$selected)) {
+        self$set_selected_reactive(state$selected)
+      }
+      logger::log_trace(paste(
+        "{ class(self)[1] }$set_state, dataname: { deparse1(private$input_dataname) }",
+        "done setting state"
+      ))
+      invisible(NULL)
     },
 
     #' @description
@@ -466,10 +493,12 @@ FilterState <- R6::R6Class( # nolint
     choices = NULL,  # because each class has different choices type
     input_dataname = character(0),
     keep_na = NULL,  # reactiveVal logical()
+    keep_na_reactive = NULL, # reactiveVal logical()
     na_count = integer(0),
     na_rm = FALSE, # logical(1)
     observers = NULL, # here observers are stored
     selected = NULL,  # because it holds reactiveVal and each class has different choices type
+    selected_reactive = NULL, # because it holds reactiveVal and each class has different choices type
     varname = character(0),
     varlabel = character(0),
     extract_type = logical(0),
@@ -524,6 +553,21 @@ FilterState <- R6::R6Class( # nolint
         ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
         eventExpr = input$keep_na,
         handlerExpr = self$set_keep_na(if_null(input$keep_na, FALSE))
+      )
+      invisible(NULL)
+    },
+
+    observe_keep_na_reactive = function(value) {
+      private$observers$keep_na_reactive <- observeEvent(
+        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+        eventExpr = private$keep_na_reactive(),
+        handlerExpr = {
+          updateCheckboxInput(
+            inputId = "keep_na",
+            value = value
+          )
+        }
       )
       invisible(NULL)
     },
@@ -856,6 +900,20 @@ LogicalFilterState <- R6::R6Class( # nolint
             }
           )
 
+          private$observers$selection_reactive <- observeEvent(
+            private$selected_reactive(),
+            ignoreNULL = TRUE,
+            handlerExpr = {
+              updateRadioButtons(
+                session = session,
+                inputId = "selection",
+                selected =  private$selected_reactive()
+              )
+              private$selected_reactive()
+            }
+          )
+          private$observe_keep_na_reactive(private$keep_na_reactive())
+
           private$observers$selection <- observeEvent(
             ignoreNULL = FALSE,
             ignoreInit = TRUE,
@@ -891,39 +949,6 @@ LogicalFilterState <- R6::R6Class( # nolint
     #' filter$set_selected(TRUE)
     set_selected = function(value) {
       super$set_selected(value)
-    },
-
-    #' @description
-    #' Update the selected values of this `LogicalFilterState`.
-    #'
-    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param value (`list`) A list of the values `selected` and `keep_na`.
-    #'
-    #' @returns `NULL`.
-    #'
-    update_selected_input = function(id, value) {
-      moduleServer(id = id, function(input, output, session) {
-        logger::log_trace(paste(
-          "LogicalFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) } updating selected",
-          "input to: selected={ value$selected }, keep_na={ value$keep_na }"
-        ))
-        updateSliderInput(
-          session = session,
-          inputId = "selection",
-          value = value$selected
-        )
-
-        updateCheckboxInput(
-          session = session,
-          inputId = "keep_na",
-          value = value$keep_na
-        )
-        logger::log_trace(paste(
-          "LogicalFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
-          "done updating selected input."
-        ))
-        invisible(NULL)
-      })
     }
   ),
   private = list(
@@ -1024,7 +1049,8 @@ RangeFilterState <- R6::R6Class( # nolint
       }
       private$inf_count <- sum(is.infinite(x))
       private$is_integer <- is.integer(x)
-      private$keep_inf <- reactiveVal(value = FALSE)
+      private$keep_inf <- reactiveVal(FALSE)
+      private$keep_inf_reactive <- reactiveVal(FALSE)
 
       return(invisible(self))
     },
@@ -1114,6 +1140,7 @@ RangeFilterState <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace("RangeFilterState$server initializing, dataname: { private$input_dataname }")
+
           output$plot <- renderPlot(
             bg = "transparent",
             height = 25,
@@ -1127,6 +1154,33 @@ RangeFilterState <- R6::R6Class( # nolint
                 ggplot2::theme_void() +
                 ggplot2::scale_y_continuous(expand = c(0, 0)) +
                 ggplot2::scale_x_continuous(expand = c(0, 0))
+            }
+          )
+
+          private$observers$selection_reactive <- observeEvent(
+            private$selected_reactive(),
+            ignoreNULL = TRUE,
+            handlerExpr = {
+              updateSliderInput(
+                session = session,
+                inputId = "selection",
+                value = private$selected_reactive()
+              )
+              private$selected_reactive()
+            }
+          )
+          private$observe_keep_na_reactive(private$keep_na_reactive())
+          private$observers$keep_inf_reactive <- observeEvent(
+            private$keep_inf_reactive(),
+            ignoreNULL = TRUE,
+            handlerExpr = {
+              print(private$keep_inf_reactive())
+              updateCheckboxInput(
+                session = session,
+                inputId = "keep_inf",
+                value =  private$keep_inf_reactive()
+              )
+              private$keep_inf_reactive()
             }
           )
 
@@ -1180,6 +1234,11 @@ RangeFilterState <- R6::R6Class( # nolint
       private$keep_inf(value)
     },
 
+    set_keep_inf_reactive = function(value) {
+      stopifnot(is_logical_single(value))
+      private$keep_inf_reactive(value)
+    },
+
     #' @description
     #' Set state
     #' @param state (`list`)\cr
@@ -1195,6 +1254,15 @@ RangeFilterState <- R6::R6Class( # nolint
         self$set_keep_inf(state$keep_inf)
       }
       super$set_state(state[names(state) %in% c("selected", "keep_na")])
+      invisible(NULL)
+    },
+
+    set_state_reactive = function(state) {
+      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na", "keep_inf")))
+      if (!is.null(state$keep_inf)) {
+        self$set_keep_inf_reactive(state$keep_inf)
+      }
+      super$set_state_reactive(state[names(state) %in% c("selected", "keep_na")])
       invisible(NULL)
     },
 
@@ -1215,51 +1283,12 @@ RangeFilterState <- R6::R6Class( # nolint
     #'
     set_selected = function(value) {
       super$set_selected(value)
-    },
-
-    #' @description
-    #' Updates the selected values of this `RangeFilterState`.
-    #'
-    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param value (`list`) A list of the values `selected`, `keep_na` and `keep_inf`.
-    #'
-    #' @returns `NULL`
-    #'
-    update_selected_input = function(id, value) {
-      moduleServer(id = id, function(input, output, session) {
-        logger::log_trace(paste(
-          "RangeFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) } updating selected",
-          "input to: selected={ value$selected }, keep_na={ value$keep_na }, keep_inf={ value$keep_inf }"
-        ))
-        updateSliderInput(
-          session = session,
-          inputId = "selection",
-          value = value$selected
-        )
-
-        updateCheckboxInput(
-          session = session,
-          inputId = "keep_inf",
-          sprintf("Keep Inf (%s)", private$inf_count),
-          value =  value$keep_inf
-        )
-
-        updateCheckboxInput(
-          session = session,
-          inputId = "keep_na",
-          value = value$keep_na
-        )
-        logger::log_trace(paste(
-          "RangeFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
-          "done updating selected input."
-        ))
-        invisible(NULL)
-      })
     }
   ),
   private = list(
     histogram_data = data.frame(),
     keep_inf = NULL, # because it holds reactiveVal
+    keep_inf_reactive = NULL, # because it holds reactiveVal
     inf_count = integer(0),
     is_integer = logical(0),
 
@@ -1492,6 +1521,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace("ChoicesFilterState$server initializing, dataname: { private$input_dataname }")
+
           output$plot <- renderPlot(
             bg = "transparent",
             expr = {
@@ -1517,6 +1547,18 @@ ChoicesFilterState <- R6::R6Class( # nolint
             }
           )
 
+          private$observers$selection_reactive <- observeEvent(
+            private$selected_reactive(),
+            ignoreNULL = TRUE,
+            handlerExpr = {
+              updateCheckboxInput(
+                session = session,
+                inputId = "selection",
+                value =  private$selected_reactive()
+              )
+              private$selected_reactive()
+          })
+          private$observe_keep_na_reactive(private$keep_na_reactive())
 
           private$observers$selection <- observeEvent(
             ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
@@ -1551,6 +1593,14 @@ ChoicesFilterState <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
+    set_state_reactive = function(state) {
+      if (!is.null(state$selected)) {
+        state$selected <- as.character(state$selected)
+      }
+      super$set_state_reactive(state)
+      invisible(NULL)
+    },
+
     #' @description
     #' Sets the selected values of this `ChoicesFilterState`.
     #'
@@ -1567,54 +1617,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' filter$set_selected(c("c", "a"))
     set_selected = function(value) {
       super$set_selected(value)
-    },
-
-    #' @description
-    #' Updates the selected values of this `ChoicesFilterState`.
-    #'
-    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param value (`list`) A list of the values `selected` and `keep_na`.
-    #'
-    #' @return `NULL`
-    update_selected_input = function(id, value) {
-      moduleServer(id = id, function(input, output, session) {
-        logger::log_trace(paste(
-          "ChoicesFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
-          "updating selected input to: selected={ value$selected }, keep_na={ value$keep_na }"
-        ))
-
-        if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
-          #browser()
-          updateCheckboxGroupInput(
-            session = session,
-            inputId = "selection",
-            selected = value$selected
-          )
-
-          updateCheckboxInput(
-            session = session,
-            inputId = "keep_na",
-            value = value$keep_na
-          )
-        } else {
-          updateOptionalSelectInput(
-            session = session,
-            inputId = "selection",
-            selected = value$selected
-          )
-
-          updateCheckboxInput(
-            session = session,
-            inputId = "keep_na",
-            value = value$keep_na
-          )
-        }
-        logger::log_trace(paste(
-          "ChoicesFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
-          "done updating selected input."
-        ))
-        invisible(NULL)
-      })
     }
   ),
   private = list(
@@ -1792,6 +1794,21 @@ DateFilterState <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace("DateFilterState$server initializing, dataname: { private$input_dataname }")
+          private$observers$selection_reactive <- observeEvent(
+            private$selected_reactive(),
+            ignoreNULL = TRUE,
+            handlerExpr = {
+              updateDateRangeInput(
+                session = session,
+                inputId = "selection",
+                start = private$selected_reactive()[1],
+                end = private$selected_reactive()[2]
+              )
+              private$selected_reactive()
+            }
+          )
+          private$observe_keep_na_reactive(private$keep_na_reactive())
+
           private$observers$selection <- observeEvent(
             ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
@@ -1850,39 +1867,6 @@ DateFilterState <- R6::R6Class( # nolint
     #' filter$set_selected(c(date + 1, date + 2))
     set_selected = function(value) {
       super$set_selected(value)
-    },
-
-    #' @description
-    #' Updates the selected values of this `DateFilterState`.
-    #'
-    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param value (`list`) A list of the values `selected` and `keep_na`.
-    #'
-    #' @return `NULL`
-    update_selected_input = function(id, value) {
-      moduleServer(id = id, function(input, output, session) {
-        logger::log_trace(paste(
-          "DateFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
-          "updating selected input to: selected={ value$selected }, keep_na={ value$keep_na }"
-        ))
-        updateDateRangeInput(
-          session = session,
-          inputId = "selection",
-          start = value$selected[1],
-          end = value$selected[2]
-        )
-
-        updateCheckboxInput(
-          session = session,
-          inputId = "keep_na",
-          value = value$keep_na
-        )
-        logger::log_trace(paste(
-          "DateFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
-          "done updating selected input."
-        ))
-        invisible(NULL)
-      })
     }
   ),
   private = list(
@@ -2112,6 +2096,26 @@ DatetimeFilterState <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace("DatetimeFilterState$server initializing, dataname: { private$input_dataname }")
+          private$observers$selection_reactive <- observeEvent(
+            private$selected_reactive(),
+            ignoreNULL = TRUE,
+            handlerExpr = {
+              shinyWidgets::updateAirDateInput(
+                session = session,
+                inputId = "selection_start",
+                value = private$selected_reactive()[1]
+              )
+
+              shinyWidgets::updateAirDateInput(
+                session = session,
+                inputId = "selection_end",
+                value = private$selected_reactive()[2]
+              )
+              private$selected_reactive()
+            }
+          )
+          private$observe_keep_na_reactive(private$keep_na_reactive())
+
           private$observers$selection <- observeEvent(
             ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
@@ -2182,45 +2186,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #' filter$set_selected(c(date + 1, date + 2))
     set_selected = function(value) {
       super$set_selected(value)
-    },
-
-    #' @description
-    #' Updates the selected values of this `DatetimeFilterState`.
-    #'
-    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param value (`list`) A list of the values `selected` and `keep_na`.
-    #'
-    #' @return `NULL`
-    update_selected_input = function(id, value) {
-      moduleServer(id = id, function(input, output, session) {
-        logger::log_trace(paste(
-          "DatetimeFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
-          "updating selected input to: selected={ value$selected }, keep_na={ value$keep_na }"
-        ))
-        shinyWidgets::updateAirDateInput(
-          session = session,
-          inputId = "selection_start",
-          value = value$selected[1]
-        )
-
-        shinyWidgets::updateAirDateInput(
-          session = session,
-          inputId = "selection_end",
-          value = value$selected[2]
-        )
-
-        updateCheckboxInput(
-          session = session,
-          inputId = "keep_na",
-          value = value$keep_na
-        )
-
-        logger::log_trace(paste(
-          "DatetimeFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
-          "done updating selected input."
-        ))
-        invisible(NULL)
-      })
     }
   ),
   private = list(
