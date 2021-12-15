@@ -59,7 +59,6 @@ filter$set_selected(c("c", "a"))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na_reactive">}\href{../../teal/html/FilterState.html#method-set_keep_na_reactive}{\code{teal::FilterState$set_keep_na_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_na_rm">}\href{../../teal/html/FilterState.html#method-set_na_rm}{\code{teal::FilterState$set_na_rm()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_selected_reactive">}\href{../../teal/html/FilterState.html#method-set_selected_reactive}{\code{teal::FilterState$set_selected_reactive()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="update_selected">}\href{../../teal/html/FilterState.html#method-update_selected}{\code{teal::FilterState$update_selected()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -187,10 +186,23 @@ contains fields relevant for a specific class
 \if{html}{\out{<a id="method-set_state_reactive"></a>}}
 \if{latex}{\out{\hypertarget{method-set_state_reactive}{}}}
 \subsection{Method \code{set_state_reactive()}}{
+Set state when using \code{set_filter_state}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$set_state_reactive(state)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\code{list})\cr
+contains fields relevant for a specific class
+\itemize{
+\item{\code{selected}}{ defines initial selection}
+\item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
+}}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_selected"></a>}}

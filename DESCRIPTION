@@ -118,6 +118,7 @@ Collate:
     'log_app_usage.R'
     'logging.R'
     'module_nested_tabs.R'
+    'module_set_bookmark_state.R'
     'module_tabs_with_filters.R'
     'module_teal.R'
     'module_teal_with_splash.R'

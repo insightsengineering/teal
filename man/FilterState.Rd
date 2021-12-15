@@ -4,9 +4,6 @@
 \name{FilterState}
 \alias{FilterState}
 \title{Abstract class to encapsulate filter states}
-\value{
-\code{NULL}
-}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
@@ -50,7 +47,6 @@ chain.
 \item \href{#method-set_na_rm}{\code{FilterState$set_na_rm()}}
 \item \href{#method-set_selected}{\code{FilterState$set_selected()}}
 \item \href{#method-set_selected_reactive}{\code{FilterState$set_selected_reactive()}}
-\item \href{#method-update_selected}{\code{FilterState$update_selected()}}
 \item \href{#method-set_state}{\code{FilterState$set_state()}}
 \item \href{#method-set_state_reactive}{\code{FilterState$set_state_reactive()}}
 \item \href{#method-server}{\code{FilterState$server()}}
@@ -228,10 +224,21 @@ modules after selecting check-box-input in the shiny interface. Values are set t
 \if{html}{\out{<a id="method-set_keep_na_reactive"></a>}}
 \if{latex}{\out{\hypertarget{method-set_keep_na_reactive}{}}}
 \subsection{Method \code{set_keep_na_reactive()}}{
+Set if \code{NA} should be kept when using \code{set_filter_state}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterState$set_keep_na_reactive(value)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{value}}{(\code{logical(1)})\cr
+value(s) which come from the filter selection. Value is set in \code{server}
+modules when using \code{set_filter_state} instead of the shiny interface. Values are set to
+\code{private$keep_na_reactive} which is reactive.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_na_rm"></a>}}
@@ -267,7 +274,7 @@ Set selection
 \describe{
 \item{\code{value}}{(\code{vector})\cr
 value(s) which come from the filter selection. Values are set in \code{server}
-modules after choosing value in app interface. Values are set to
+module after choosing value in app interface. Values are set to
 \code{private$selected} which is reactive. Values type have to be the
 same as \code{private$choices}.}
 }
@@ -278,7 +285,7 @@ same as \code{private$choices}.}
 \if{html}{\out{<a id="method-set_selected_reactive"></a>}}
 \if{latex}{\out{\hypertarget{method-set_selected_reactive}{}}}
 \subsection{Method \code{set_selected_reactive()}}{
-Updates the selected values of this \code{RangeFilterState}.
+Set selection when using \code{set_filter_state}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterState$set_selected_reactive(value)}\if{html}{\out{</div>}}
 }
@@ -286,21 +293,14 @@ Updates the selected values of this \code{RangeFilterState}.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{value}}{(\code{list}) A list of the values \code{selected}, \code{keep_na} and \code{keep_inf}.}
-
-\item{\code{id}}{(\code{character(1)})\cr an ID string that corresponds with the ID used to call the module's UI function.}
+\item{\code{value}}{(\code{vector})\cr
+value(s) which come from the filters set by the user. Values are set in \code{server}
+modules after setting filters in \code{set_filter_state}. Values are set to
+\code{private$set_selected_reactive} which is reactive. Values type have to be the
+same as \code{private$choices}.}
 }
 \if{html}{\out{</div>}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_selected"></a>}}
-\if{latex}{\out{\hypertarget{method-update_selected}{}}}
-\subsection{Method \code{update_selected()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilterState$update_selected(value)}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_state"></a>}}
@@ -328,10 +328,23 @@ contains fields relevant for a specific class
 \if{html}{\out{<a id="method-set_state_reactive"></a>}}
 \if{latex}{\out{\hypertarget{method-set_state_reactive}{}}}
 \subsection{Method \code{set_state_reactive()}}{
+Set state when using \code{set_filter_state}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterState$set_state_reactive(state)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\code{list})\cr
+contains fields relevant for a specific class
+\itemize{
+\item{\code{selected}}{ defines initial selection}
+\item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
+}}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-server"></a>}}
@@ -383,6 +396,9 @@ dataname to be evaluated as extracted object, for example
 \code{data$var}
 return (\code{name} or \code{call})
 Sets \code{keep_na} field according to observed \code{input$keep_na}
+If \code{keep_na = TRUE} \code{is.na(varname)} is added to the returned call.
+Otherwise returned call excludes \code{NA} when executed.
+Sets \code{keep_na} field according to \code{keep_na} value passed in \code{set_filter_state}.
 If \code{keep_na = TRUE} \code{is.na(varname)} is added to the returned call.
 Otherwise returned call excludes \code{NA} when executed.
 Set choices

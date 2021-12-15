@@ -4,7 +4,7 @@
 \alias{srv_tabs_with_filters}
 \title{Server function}
 \usage{
-srv_tabs_with_filters(id, datasets, modules)
+srv_tabs_with_filters(id, datasets, modules, filter)
 }
 \arguments{
 \item{id}{(\code{character})\cr
@@ -20,6 +20,31 @@ details see \code{\link{FilteredData}}.}
 \item{modules}{(\code{list} or \code{teal_modules})\cr
 nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
+
+\item{filter}{(\code{list})\cr
+You can define filters that show when the app starts.
+The general pattern is:
+\code{list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)}.
+An example is:
+\code{list(iris = list(Species = c("setosa", "versicolor")))}.
+More generally, the filters for the variable, e.g. \code{Species} can be
+specified as follows:
+\code{list(Species = c("setosa", "versicolor"))},
+\code{list(Species = list(c("setosa", "versicolor"), keep_na = TRUE))},
+or equivalently with:
+\code{list(Species = c("setosa", "versicolor", NA))},
+or for the default filter (not very restrictive):
+\code{list(Species = default_filter())}
+
+Instead of \code{choices} above, use the following names:
+\itemize{
+\item \code{numerical}: \code{range}
+\item \code{factor}: \code{choices}
+\item \code{logical}: \code{logical}
+A general example is:
+\code{list( iris = list(Sepal.Length = default_filter(), Species = c("M", NA)), mtcars = list(mpg = default_filter())   )}
+Ignored if the app is restored from a bookmarked state.
+}}
 }
 \value{
 \code{reactive} currently selected active_module

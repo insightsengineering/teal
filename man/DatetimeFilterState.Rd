@@ -64,7 +64,6 @@ filter$set_selected(c(date + 1, date + 2))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_selected_reactive">}\href{../../teal/html/FilterState.html#method-set_selected_reactive}{\code{teal::FilterState$set_selected_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_state">}\href{../../teal/html/FilterState.html#method-set_state}{\code{teal::FilterState$set_state()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_state_reactive">}\href{../../teal/html/FilterState.html#method-set_state_reactive}{\code{teal::FilterState$set_state_reactive()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="update_selected">}\href{../../teal/html/FilterState.html#method-update_selected}{\code{teal::FilterState$update_selected()}}\out{</span>}
 }
 \out{</details>}
 }

@@ -363,6 +363,12 @@ FilterState <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
+    #' @description
+    #' Set if `NA` should be kept when using `set_filter_state`
+    #' @param value (`logical(1)`)\cr
+    #'  value(s) which come from the filter selection. Value is set in `server`
+    #'  modules when using `set_filter_state` instead of the shiny interface. Values are set to
+    #'  `private$keep_na_reactive` which is reactive.
     set_keep_na_reactive = function(value) {
       stopifnot(is_logical_single(value))
       private$keep_na_reactive(value)
@@ -386,7 +392,7 @@ FilterState <- R6::R6Class( # nolint
     #' Set selection
     #' @param value (`vector`)\cr
     #'  value(s) which come from the filter selection. Values are set in `server`
-    #'  modules after choosing value in app interface. Values are set to
+    #'  module after choosing value in app interface. Values are set to
     #'  `private$selected` which is reactive. Values type have to be the
     #'  same as `private$choices`.
     set_selected = function(value) {
@@ -404,18 +410,24 @@ FilterState <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Updates the selected values of this `RangeFilterState`.
-    #'
-    #' @param id (`character(1)`)\cr an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param value (`list`) A list of the values `selected`, `keep_na` and `keep_inf`.
-    #'
-    #' @returns `NULL`
-    #'
+    #' Set selection when using `set_filter_state`
+    #' @param value (`vector`)\cr
+    #'  value(s) which come from the filters set by the user. Values are set in `server`
+    #'  modules after setting filters in `set_filter_state`. Values are set to
+    #'  `private$set_selected_reactive` which is reactive. Values type have to be the
+    #'  same as `private$choices`.
     set_selected_reactive = function(value) {
+      logger::log_trace(
+        "{ class(self)[1] }$set_selected_reactive setting selection, dataname: { deparse1(private$input_dataname) }"
+      )
       value <- private$cast_and_validate(value)
       value <- private$remove_out_of_bound_values(value)
       private$validate_selection(value)
       private$selected_reactive(value)
+      logger::log_trace(
+        "{ class(self)[1] }$set_selected_reactive selection set, dataname: { deparse1(private$input_dataname) }"
+      )
+      invisible(NULL)
     },
 
     #' @description
@@ -445,9 +457,17 @@ FilterState <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
+    #' @description
+    #' Set state when using `set_filter_state`
+    #' @param state (`list`)\cr
+    #'  contains fields relevant for a specific class
+    #' \itemize{
+    #' \item{`selected`}{ defines initial selection}
+    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
+    #' }
     set_state_reactive = function(state) {
       logger::log_trace(paste(
-        "{ class(self)[1] }$set_state, dataname: { deparse1(private$input_dataname) }",
+        "{ class(self)[1] }$set_state_reactive, dataname: { deparse1(private$input_dataname) }",
         "setting state to: selected={ state$selected }, keep_na={ state$keep_na }"
       ))
       stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na")))
@@ -555,6 +575,9 @@ FilterState <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
+    #' Sets `keep_na` field according to `keep_na` value passed in `set_filter_state`.
+    #' If `keep_na = TRUE` `is.na(varname)` is added to the returned call.
+    #' Otherwise returned call excludes `NA` when executed.
     observe_keep_na_reactive = function(value) {
       private$observers$keep_na_reactive <- observeEvent(
         ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
@@ -569,6 +592,7 @@ FilterState <- R6::R6Class( # nolint
       )
       invisible(NULL)
     },
+
     #' Set choices
     #'
     #' Set choices is supposed to be executed once in the constructor
@@ -1168,6 +1192,7 @@ RangeFilterState <- R6::R6Class( # nolint
             }
           )
           private$observe_keep_na_reactive(private$keep_na_reactive())
+
           private$observers$keep_inf_reactive <- observeEvent(
             private$keep_inf_reactive(),
             ignoreNULL = TRUE,
@@ -1232,6 +1257,12 @@ RangeFilterState <- R6::R6Class( # nolint
       private$keep_inf(value)
     },
 
+    #' @description
+    #' Set if `Inf` should be kept when passing filters using `set_filter_state`
+    #' @param value (`logical(1)`)\cr
+    #'  Value(s) which come from the filter set by the user. Value is set in `server`
+    #'  modules after setting the filters using `set_filter_state`. Values are set to
+    #'  `private$keep_inf_reactive` which is reactive.
     set_keep_inf_reactive = function(value) {
       stopifnot(is_logical_single(value))
       private$keep_inf_reactive(value)
@@ -1255,6 +1286,15 @@ RangeFilterState <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
+    #' @description
+    #' Set state when using `set_filter_state`
+    #' @param state (`list`)\cr
+    #'  contains fields relevant for a specific class
+    #' \itemize{
+    #' \item{`selected`}{ defines initial selection}
+    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
+    #' \item{`keep_inf` (`logical`)}{ defines whether to keep or remove `Inf` values}
+    #' }
     set_state_reactive = function(state) {
       stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na", "keep_inf")))
       if (!is.null(state$keep_inf)) {
@@ -1591,6 +1631,14 @@ ChoicesFilterState <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
+    #' @description
+    #' Set state when using `set_filter_state`
+    #' @param state (`list`)\cr
+    #'  contains fields relevant for a specific class
+    #' \itemize{
+    #' \item{`selected`}{ defines initial selection}
+    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
+    #' }
     set_state_reactive = function(state) {
       if (!is.null(state$selected)) {
         state$selected <- as.character(state$selected)
