@@ -230,15 +230,6 @@ testthat::test_that("MAEFilteredDataset filters removed using remove_filters", {
 
   filtered_dataset$set_filter_state(state = fs)
 
-  shiny::testServer(
-    filtered_dataset$server,
-    expr =  {
-      #browser()
-      session$setInputs(remove_filters = FALSE)
-      testthat::expect_false(input$remove_filters)
-    }
-  )
-
   testthat::expect_identical(
     isolate(filtered_dataset$get_call()),
     list(
