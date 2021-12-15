@@ -88,12 +88,10 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 
   # use isolate because we assume that the number of datasets does not change over the course of the teal app
   # this will just create placeholders which are shown only if non-empty
-  filter_and_info_ui <- datasets$ui_filter_panel(
-    ns("filter_panel")
-  )
+  filter_and_info_ui <- datasets$ui_filter_panel(ns("filter_panel"))
 
   # modules must be teal_modules, not teal_module; otherwise we will get the UI and not a tabsetPanel of UIs
-  teal_ui <- ui_nested_tabs(ns("modules_ui"), modules = modules, datasets)
+  teal_ui <- ui_nested_tabs(ns(modules$id), modules = modules, datasets)
 
   filter_panel_btn <- tags$li(
     style = "flex-grow : 1;",
@@ -136,7 +134,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, filter) {
     logger::log_trace(
       "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ' )}."
     )
-    active_module <- srv_nested_tabs(id = "modules_ui", datasets = datasets, modules = modules)
+    active_module <- srv_nested_tabs(id = modules$id, datasets = datasets, modules = modules)
 
     active_datanames <- eventReactive(
       eventExpr = active_module(),
