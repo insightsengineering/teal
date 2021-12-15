@@ -88,11 +88,8 @@ testthat::test_that("CDISCFilteredDataset$set_filter_state adds desired filter i
     )
   )
   fs <- list(sex = "M")
-  shiny::testServer(
-    filtered_dataset$set_filter_state,
-    args = list(state = fs),
-    expr = NULL
-  )
+  filtered_dataset$set_filter_state(state = fs)
+
   testthat::expect_equal(
     isolate(filtered_dataset$get_call()),
     list(
@@ -120,11 +117,9 @@ testthat::test_that("CDISCFilteredDataset$remove_filter_state removes desired fi
     )
   )
   fs <- list(sex = "M")
-  shiny::testServer(
-    filtered_dataset$set_filter_state,
-    args = list(state = fs),
-    expr = filtered_dataset$remove_filter_state("sex")
-  )
+  filtered_dataset$set_filter_state(state = fs)
+  filtered_dataset$remove_filter_state("sex")
+
   testthat::expect_equal(
     isolate(filtered_dataset$get_call()),
     list(

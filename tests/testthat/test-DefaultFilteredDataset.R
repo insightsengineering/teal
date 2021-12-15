@@ -18,7 +18,7 @@ testthat::test_that(
       Sepal.Length = c(5.1, 6.4),
       Species = c("setosa", "versicolor")
     )
-    shiny::testServer(dataset$set_filter_state, args = list(state = fs), expr = NULL)
+    dataset$set_filter_state(state = fs)
     testthat::expect_equal(
       isolate(dataset$get_call()),
       list(
@@ -48,11 +48,9 @@ testthat::test_that(
       Sepal.Length = c(5.1, 6.4),
       Species = c("setosa", "versicolor")
     )
-    shiny::testServer(
-      dataset$set_filter_state,
-      args = list(state = fs),
-      expr = dataset$remove_filter_state("Species")
-    )
+    dataset$set_filter_state(state = fs)
+    dataset$remove_filter_state("Species")
+
     testthat::expect_equal(
       isolate(dataset$get_call()),
       list(

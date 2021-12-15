@@ -135,7 +135,7 @@ testthat::test_that(
           disp = default_filter()
         )
       )
-    shiny::testServer(datasets$set_filter_state, args = list(state = fs), expr = NULL)
+    datasets$set_filter_state(state = fs)
     testthat::expect_equal(
       isolate(datasets$get_call("iris")),
       list(
@@ -178,11 +178,9 @@ testthat::test_that(
         disp = default_filter()
       )
     )
-    shiny::testServer(
-      datasets$set_filter_state,
-      args = list(id = "test", state = fs),
-      expr = datasets$remove_all_filter_states()
-    )
+    datasets$set_filter_state(state = fs)
+    datasets$remove_all_filter_states()
+
     testthat::expect_equal(
       isolate(datasets$get_call("iris")),
       list(filter = quote(iris_FILTERED <- iris))
@@ -214,11 +212,9 @@ testthat::test_that(
         disp = default_filter()
       )
     )
-    shiny::testServer(
-      datasets$set_filter_state,
-      args = list(id = "test", state = fs),
-      expr = datasets$remove_all_filter_states(datanames = "iris")
-    )
+    datasets$set_filter_state(state = fs)
+    datasets$remove_all_filter_states(datanames = "iris")
+
     testthat::expect_equal(
       isolate(datasets$get_call("iris")),
       list(filter = quote(iris_FILTERED <- iris))

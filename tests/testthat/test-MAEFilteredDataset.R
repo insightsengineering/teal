@@ -140,7 +140,7 @@ testthat::test_that(
         subset = list(ARRAY_TYPE = "")
       )
     )
-    shiny::testServer(dataset$set_filter_state, args = list(state = fs), expr = NULL)
+    dataset$set_filter_state(state = fs)
     testthat::expect_equal(
       isolate(dataset$get_call()),
       list(
@@ -167,7 +167,7 @@ testthat::test_that("MAEFilteredDataset$set_filter_state throws error if state a
   dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
   fs <- c("not_list")
   testthat::expect_error(
-    shiny::testServer(dataset$set_filter_state, args = list(state = fs), expr = NULL),
+    dataset$set_filter_state(state = fs),
     "is.list(state) is not TRUE",
     fixed = TRUE
   )
@@ -186,11 +186,9 @@ testthat::test_that(
         subset = list(ARRAY_TYPE = "")
       )
     )
-    shiny::testServer(
-      dataset$set_filter_state,
-      args = list(state = fs),
-      expr = dataset$remove_filter_state(element_id = list(subjects = list("years_to_birth")))
-    )
+    dataset$set_filter_state(state = fs)
+    dataset$remove_filter_state(element_id = list(subjects = list("years_to_birth")))
+
     testthat::expect_equal(
       isolate(dataset$get_call()),
       list(
@@ -230,10 +228,12 @@ testthat::test_that("MAEFilteredDataset filters removed using remove_filters", {
     )
   )
 
+  filtered_dataset$set_filter_state(state = fs)
+
   shiny::testServer(
-    filtered_dataset$set_filter_state,
-    args = list(state = fs),
+    filtered_dataset$server,
     expr =  {
+      #browser()
       session$setInputs(remove_filters = FALSE)
       testthat::expect_false(input$remove_filters)
     }

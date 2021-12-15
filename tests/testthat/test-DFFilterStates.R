@@ -32,7 +32,7 @@ testthat::test_that(
       Sepal.Length = c(5.1, 6.4),
       Species = c("setosa", "versicolor")
     )
-    shiny::testServer(dffs$set_filter_state, args = list(state = fs, data = iris), expr = NULL)
+    dffs$set_filter_state(state = fs, data = iris)
     testthat::expect_equal(
       isolate(dffs$get_call()),
       quote(
@@ -58,7 +58,7 @@ testthat::test_that("DFFilterStates$set_filter_state sets filters as a named/unn
     Sepal.Length = list(c(5.1, 6.4)),
     Species = list(selected = c("setosa", "versicolor"))
   )
-  shiny::testServer(dffs$set_filter_state, args = list(state = fs, data = iris), expr = NULL)
+  dffs$set_filter_state(state = fs, data = iris)
   testthat::expect_equal(
     isolate(dffs$get_call()),
     quote(
@@ -151,13 +151,10 @@ testthat::test_that(
       Sepal.Length = list(selected = c(5.1, 6.4)),
       Species = list(selected = c("setosa", "versicolor"))
     )
-    shiny::testServer(
-      dffs$set_filter_state,
-      args = list(state = fs, data = iris),
-      expr = {
-        dffs$remove_filter_state("Species")
-      }
-    )
+
+    dffs$set_filter_state(state = fs, data = iris)
+    dffs$remove_filter_state("Species")
+
     testthat::expect_equal(
       isolate(dffs$get_call()),
       quote(iris_filtered <- dplyr::filter(iris, Sepal.Length >= 5.1 & Sepal.Length <= 6.4))
