@@ -124,7 +124,7 @@ testthat::test_that("CDISCFilteredDataset$remove_filter_state removes desired fi
     isolate(filtered_dataset$get_call()),
     list(
       filter = quote(
-        ADSL_FILTERED <- ADSL
+        ADSL_FILTERED <- ADSL # nolint
       )
     )
   )

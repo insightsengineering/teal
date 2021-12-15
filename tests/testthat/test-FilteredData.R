@@ -183,14 +183,14 @@ testthat::test_that(
 
     testthat::expect_equal(
       isolate(datasets$get_call("iris")),
-      list(filter = quote(iris_FILTERED <- iris))
+      list(filter = quote(iris_FILTERED <- iris)) # nolint
     )
 
     testthat::expect_equal(
       isolate(datasets$get_call("mtcars")),
       list(
         filter = quote(
-          mtcars_FILTERED <- mtcars
+          mtcars_FILTERED <- mtcars # nolint
         )
       )
     )
@@ -217,7 +217,7 @@ testthat::test_that(
 
     testthat::expect_equal(
       isolate(datasets$get_call("iris")),
-      list(filter = quote(iris_FILTERED <- iris))
+      list(filter = quote(iris_FILTERED <- iris)) # nolint
     )
 
     testthat::expect_equal(
