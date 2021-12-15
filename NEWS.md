@@ -7,6 +7,7 @@
 * Deprecated all functions related to connectors that have been moved to their own separate packages.
 * Running `teal` application via `ui_teal_with_splash` and `srv_teal_with_splash` is now no longer recommended because it doesn't support some new features (e.g. logging, bookmarking). Use `init` instead.
 * Updated `init` to accept `RelationalData`, `data.frame`, `Dataset`, `DatasetConnector`, `list` or a function returning a named list as data input.
+* Change of the `html-id` of the modules. Each tabs-set in the app is now a new `shiny` namespace.
 
 ### New features
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
@@ -21,6 +22,7 @@
 * Added `teal.threshold_slider_vs_checkboxgroup` as an option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.
 
 ### Bug fixes
+* Refactored `module_nested_tabs` to fix the issue with filter-panel not reacting on a change of nested tabs. 
 * Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
 * Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
