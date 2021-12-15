@@ -46,7 +46,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that("DFFilterStates$set_filter_state sets filters as a named/unnamed list", {
+testthat::test_that("DFFilterStates$set_filter_state sets filters as a named/unnamed selected list", {
   dffs <- teal:::DFFilterStates$new(
     input_dataname = "iris",
     output_dataname = "iris_filtered",
@@ -70,6 +70,23 @@ testthat::test_that("DFFilterStates$set_filter_state sets filters as a named/unn
     )
   )
 })
+
+testthat::test_that(
+  "DFFilterStates$set_filter_state throws error when using an unnamed list", {
+    dffs <- teal:::DFFilterStates$new(
+      input_dataname = "iris",
+      output_dataname = "iris_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      c(5.1, 6.4),
+      Species = c("setosa", "versicolor")
+    )
+    testthat::expect_error(dffs$set_filter_state(state = fs, data = iris))
+  }
+)
 
 testthat::test_that("Selecting a new variable initializes a new filter state", {
   dffs <- teal:::DFFilterStates$new(

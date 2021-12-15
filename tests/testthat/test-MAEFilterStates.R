@@ -122,6 +122,24 @@ testthat::test_that(
 )
 
 testthat::test_that(
+  "MAEFilterStates$set_filter_state throws error when not using a named list", {
+    maefs <- teal:::MAEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      c(30, 50),
+      vital_status = 1,
+      gender = "female"
+    )
+    testthat::expect_error(maefs$set_filter_state(state = fs, data = MultiAssayExperiment::miniACC))
+  }
+)
+
+testthat::test_that(
   "MAEFilterStates$remove_filter_state removes filters in FilterState(s)", {
     maefs <- teal:::MAEFilterStates$new(
       input_dataname = "test",

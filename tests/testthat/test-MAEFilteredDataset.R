@@ -163,6 +163,40 @@ testthat::test_that(
   }
 )
 
+testthat::test_that(
+  "MAEFilteredDataset$set_filter_state throws error when using unnamed list", {
+    dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+    fs <- list(
+      list(
+        years_to_birth = c(30, 50),
+        vital_status = 1,
+        gender = "female"
+      ),
+      RPPAArray = list(
+        subset = list(ARRAY_TYPE = "")
+      )
+    )
+    testthat::expect_error(dataset$set_filter_state(state = fs))
+  }
+)
+
+testthat::test_that(
+  "MAEFilteredDataset$set_filter_state throws error when using unnamed variables list", {
+    dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+    fs <- list(
+      subjects = list(
+        c(30, 50),
+        vital_status = 1,
+        gender = "female"
+      ),
+      RPPAArray = list(
+        subset = list(ARRAY_TYPE = "")
+      )
+    )
+    testthat::expect_error(dataset$set_filter_state(state = fs))
+  }
+)
+
 testthat::test_that("MAEFilteredDataset$set_filter_state throws error if state argument is not a list ", {
   dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
   fs <- c("not_list")
@@ -174,7 +208,7 @@ testthat::test_that("MAEFilteredDataset$set_filter_state throws error if state a
 })
 
 testthat::test_that(
-  "MAEFilteredDataset$remove_filter_state removes desired filters in FilterStates", {
+  "MAEFilteredDataset$remove_filter_state removes desired filter", {
     dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
@@ -210,6 +244,23 @@ testthat::test_that(
   }
 )
 
+testthat::test_that(
+  "MAEFilteredDataset$remove_filter_state throws error if list in unnamed", {
+    dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+    fs <- list(
+      subjects = list(
+        years_to_birth = c(30, 50),
+        vital_status = 1,
+        gender = "female"
+      ),
+      RPPAArray = list(
+        subset = list(ARRAY_TYPE = "")
+      )
+    )
+    dataset$set_filter_state(state = fs)
+    testthat::expect_error(dataset$remove_filter_state(element_id = list("years_to_birth")))
+  }
+)
 testthat::test_that("MAEFilteredDataset$get_filterable_varnames returns character(0)", {
   filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
   testthat::expect_identical(filtered_dataset$get_filterable_varnames(), character(0))

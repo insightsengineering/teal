@@ -12,8 +12,9 @@ testthat::test_that("get_call returns a list of calls", {
 })
 
 testthat::test_that(
-  "DefaultFilteredDataset$set_filter_state sets filters in FilterStates specified by list names", {
+  "DefaultFilteredDataset$set_filter_state sets filters specified by list names", {
     dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+
     fs <- list(
       Sepal.Length = c(5.1, 6.4),
       Species = c("setosa", "versicolor")
@@ -34,21 +35,26 @@ testthat::test_that(
   }
 )
 
-testthat::test_that("get_filter_overview_info returns overview matrix for DefaultFilteredDataset without filtering", {
-  testthat::expect_equal(
-    isolate(DefaultFilteredDataset$new(dataset = TealDataset$new("iris", head(iris)))$get_filter_overview_info()),
-    matrix(list("6/6", ""), nrow = 1, dimnames = list(c("iris"), c("Obs", "Subjects")))
-  )
-})
+testthat::test_that(
+  "DefaultFilteredDataset$set_filter_state throws error when list is not named", {
+    dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+    fs <- list(
+      c(5.1, 6.4),
+      Species = c("setosa", "versicolor")
+    )
+    testthat::expect_error(dataset$set_filter_state(state = fs))
+  }
+)
 
 testthat::test_that(
-  "DefaultFilteredDataset$remove_filter_state removes desired filter in FilterStates", {
+  "DefaultFilteredDataset$remove_filter_state removes desired filter", {
     dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
     fs <- list(
       Sepal.Length = c(5.1, 6.4),
       Species = c("setosa", "versicolor")
     )
     dataset$set_filter_state(state = fs)
+    isolate(dataset$get_call())
     dataset$remove_filter_state("Species")
 
     testthat::expect_equal(
@@ -64,6 +70,13 @@ testthat::test_that(
     )
   }
 )
+
+testthat::test_that("get_filter_overview_info returns overview matrix for DefaultFilteredDataset without filtering", {
+  testthat::expect_equal(
+    isolate(DefaultFilteredDataset$new(dataset = TealDataset$new("iris", head(iris)))$get_filter_overview_info()),
+    matrix(list("6/6", ""), nrow = 1, dimnames = list(c("iris"), c("Obs", "Subjects")))
+  )
+})
 
 testthat::test_that("get_filter_overview_info returns overview matrix for DefaultFilteredDataset with filtering", {
   dataset_iris <- DefaultFilteredDataset$new(dataset = TealDataset$new("iris", head(iris)))

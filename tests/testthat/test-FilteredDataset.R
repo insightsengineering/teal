@@ -112,8 +112,8 @@ testthat::test_that("set_filter_state state is pure virtual", {
   )
 
   testthat::expect_error(
-    shiny::testServer(filtered_dataset$set_filter_state, expr = NULL),
-    regex = "Pure virtual"
+    filtered_dataset$set_filter_state(),
+    "Pure virtual method."
   )
 })
 
