@@ -371,32 +371,22 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Sets a bookmarked state
-    #' @param id (`character(1)`)\cr
-    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' Sets a filter state
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
-    #' @return `moduleServer` function which returns `NULL`
-    set_filter_state = function(id, state) {
+    #' @return `NULL`
+    set_filter_state = function(state) {
       stopifnot(all(names(state) %in% self$datanames()))
-      moduleServer(
-        id,
-        function(input, output, session) {
-          logger::log_trace("FilteredData$set_filter_state initializing")
-          for(dataname in names(state)) {
-
-            fdataset <- self$get_filtered_dataset(dataname = dataname)
-            fdataset$set_filter_state(
-              id = private$get_ui_add_filter_id(dataname),
-              state = state[[dataname]]
-            )
-          }
-          logger::log_trace("FilteredData$set_filter_state initialized")
-          invisible(NULL)
-        }
-      )
+      logger::log_trace("FilteredData$set_filter_state initializing")
+      for(dataname in names(state)) {
+        fdataset <- self$get_filtered_dataset(dataname = dataname)
+        fdataset$set_filter_state(
+          state = state[[dataname]]
+        )
+      }
+      logger::log_trace("FilteredData$set_filter_state initialized")
+      invisible(NULL)
     },
-
 
     #' @description Remove a single `FilterState` of a `FilteredDataset` in a `FilteredData` object
     #'

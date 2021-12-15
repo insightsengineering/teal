@@ -48,6 +48,7 @@ chain.
 \item \href{#method-set_keep_na}{\code{FilterState$set_keep_na()}}
 \item \href{#method-set_na_rm}{\code{FilterState$set_na_rm()}}
 \item \href{#method-set_selected}{\code{FilterState$set_selected()}}
+\item \href{#method-update_selected}{\code{FilterState$update_selected()}}
 \item \href{#method-set_state}{\code{FilterState$set_state()}}
 \item \href{#method-update_selected_input}{\code{FilterState$update_selected_input()}}
 \item \href{#method-server}{\code{FilterState$server()}}
@@ -261,6 +262,15 @@ same as \code{private$choices}.}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_selected"></a>}}
+\if{latex}{\out{\hypertarget{method-update_selected}{}}}
+\subsection{Method \code{update_selected()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilterState$update_selected(value)}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_state"></a>}}

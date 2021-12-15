@@ -27,6 +27,7 @@ the last one to be returned from it.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Queue" data-id="push">}\href{../../teal/html/Queue.html#method-push}{\code{teal::Queue$push()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Queue" data-id="remove">}\href{../../teal/html/Queue.html#method-remove}{\code{teal::Queue$remove()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Queue" data-id="size">}\href{../../teal/html/Queue.html#method-size}{\code{teal::Queue$size()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Queue" data-id="update">}\href{../../teal/html/Queue.html#method-update}{\code{teal::Queue$update()}}\out{</span>}
 }
 \out{</details>}
 }

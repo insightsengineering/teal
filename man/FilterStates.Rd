@@ -260,15 +260,12 @@ shiny.tag
 \subsection{Method \code{set_filter_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilterStates$set_filter_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilterStates$set_filter_state(data, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{(\code{character(1)})\cr
-an ID string that corresponds with the ID used to call the module's UI function.}
-
 \item{\code{data}}{(\code{data.frame})\cr
 data which are supposed to be filtered}
 
@@ -276,6 +273,9 @@ data which are supposed to be filtered}
 should contain values which are initial selection in the \code{FilterState}.
 Names of the \code{list} element should correspond to the name of the
 column in \code{data}.}
+
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
@@ -364,6 +364,11 @@ index of the \code{private$queue} list where \code{ReactiveQueue} are kept.
 parameter element_id (\code{character(1)})\cr
 name of \code{ReactiveQueue} element.
 return \code{moduleServer} function which returns \code{NULL}
+\code{observeEvent} for remove-filter-state is set and also from \code{FilteredDataset}
+level, where shiny-session-namespace is different. That is why it's important
+to remove shiny elements from anywhere. In \code{add_filter_state} \code{session$ns(NULL)}
+is equivalent to \code{private$ns(queue_index)}. This means that
+
 Module to update the UI element of a variable
 
 This module updates the UI element of the variable which eventually
@@ -375,11 +380,6 @@ parameter value (\code{character(1)}, \code{logical(1)}, \code{numeric})\cr
 value to be updated in the \code{FilterState}.
 
 return \code{moduleServer} function which returns \code{NULL}
-\code{observeEvent} for remove-filter-state is set and also from \code{FilteredDataset}
-level, where shiny-session-namespace is different. That is why it's important
-to remove shiny elements from anywhere. In \code{add_filter_state} \code{session$ns(NULL)}
-is equivalent to \code{private$ns(queue_index)}. This means that
-
 Get all \code{FilterState} in the queue.
 parameter queue_index (\code{character(1)} or \code{integer})
 index of the \code{private$queue} list where \code{ReactiveQueue} are kept.
