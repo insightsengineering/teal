@@ -367,7 +367,9 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @return named list
     get_bookmark_state = function() {
-      stop("Pure virtual method.")
+      # stop("Pure virtual method.")
+      # only to test bookmark state
+      list(ADSL = list(AGE = list(selected = c(0, 40), keep_na = TRUE, keep_inf = TRUE)))
     },
 
     #' @description
@@ -380,9 +382,7 @@ FilteredData <- R6::R6Class( # nolint
       logger::log_trace("FilteredData$set_filter_state initializing")
       for(dataname in names(state)) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)
-        fdataset$set_filter_state(
-          state = state[[dataname]]
-        )
+        fdataset$set_filter_state(state = state[[dataname]])
       }
       logger::log_trace("FilteredData$set_filter_state initialized")
       invisible(NULL)

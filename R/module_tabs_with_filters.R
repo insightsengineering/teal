@@ -130,7 +130,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #'   object to store filter state and filtered datasets, shared across modules. For more
 #'   details see [`FilteredData`].
 #' @return `reactive` currently selected active_module
-srv_tabs_with_filters <- function(id, datasets, modules) {
+srv_tabs_with_filters <- function(id, datasets, modules, filter) {
   stopifnot(is(datasets, "FilteredData"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
@@ -148,6 +148,7 @@ srv_tabs_with_filters <- function(id, datasets, modules) {
       })
 
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
+    srv_set_bookmark_state(id = "bookmark_state", datasets = datasets, filter = filter)
 
     logger::log_trace(
       "srv_tabs_with_filters initialized the module with datasets { paste(datasets$datanames(), collapse = ' ' )}."
