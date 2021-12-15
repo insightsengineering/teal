@@ -146,7 +146,8 @@ srv_tabs_with_filters <- function(id, datasets, modules, filter) {
       })
 
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
-    srv_set_bookmark_state(id = "bookmark_state", datasets = datasets, filter = filter)
+    srv_init_filter_state(id = "bookmark_state", datasets = datasets, filter = filter)
+    showNotification("Data loaded - App fully started up")
 
     logger::log_trace(
       "srv_tabs_with_filters initialized the module with datasets { paste(datasets$datanames(), collapse = ' ' )}."

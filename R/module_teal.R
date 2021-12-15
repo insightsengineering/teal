@@ -162,9 +162,9 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     # if restored from bookmarked state, `filter` is ignored
     observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, {
       logger::log_trace("srv_teal@3 setting main ui after data was pulled")
+      progress$set(0.5, message = "Setting up main UI")
       on.exit(progress$close())
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
-      progress$set(0.5, message = "Setting up main UI")
       removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
       insertUI(
         selector = paste0("#", session$ns("main_ui_container")),
@@ -184,9 +184,6 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
                                              datasets =  datasets_reactive(),
                                              modules = modules,
                                              filter = filter)
-
-      showNotification("Data loaded - App fully started up")
-
       return(active_module)
     })
   })
