@@ -1197,7 +1197,6 @@ RangeFilterState <- R6::R6Class( # nolint
             private$keep_inf_reactive(),
             ignoreNULL = TRUE,
             handlerExpr = {
-              print(private$keep_inf_reactive())
               updateCheckboxInput(
                 session = session,
                 inputId = "keep_inf",

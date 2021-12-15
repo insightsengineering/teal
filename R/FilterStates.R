@@ -478,7 +478,7 @@ FilterStates <- R6::R6Class( # nolint
             "{ class(self)[1] }$insert_filter_state_ui, adding FilterState UI,",
             "input_dataname: { deparse1(private$input_dataname) }"
           ))
-          card_id <- session$ns("SEX-card")
+          card_id <- session$ns("card")
           queue_id <- sprintf("%s-%s", queue_index, element_id)
           private$card_ids[queue_id] <- card_id
 
@@ -700,9 +700,6 @@ DFFilterStates <- R6::R6Class( # nolint
             }
             removed_state_name(character(0))
           })
-
-          # event to trigger the update
-
           NULL
         })
     },

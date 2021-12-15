@@ -590,14 +590,18 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          logger::log_trace("DefaultFilteredDataset$srv_add_filter_state initializing, dataname: { self$get_dataname() }")
+          logger::log_trace(
+            "DefaultFilteredDataset$srv_add_filter_state initializing, dataname: { self$get_dataname() }"
+          )
           data <- get_raw_data(self$get_dataset())
           self$get_filter_states(id = "filter")$srv_add_filter_state(
             id = "filter",
             data = data,
             ...
           )
-          logger::log_trace("DefaultFilteredDataset$srv_add_filter_state initialized, dataname: { self$get_dataname() }")
+          logger::log_trace(
+            "DefaultFilteredDataset$srv_add_filter_state initialized, dataname: { self$get_dataname() }"
+          )
           NULL
         }
       )
