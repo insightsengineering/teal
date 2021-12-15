@@ -2,7 +2,8 @@
   # adapted from https://github.com/r-lib/devtools/blob/master/R/zzz.R
   teal_default_options <- list(
     teal_logging = TRUE,
-    teal_show_js_log = FALSE
+    teal_show_js_log = FALSE,
+    teal.threshold_slider_vs_checkboxgroup = 5
   )
 
   op <- options()
@@ -19,7 +20,7 @@
 
   # Set up the teal logger instance
   options(
-    teal.log_layout = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} {ans} fun:{fn} [{level}] {msg}",
+    teal.log_layout = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} fun:{fn} [{level}] {msg}",
     teal.log_level = logger::INFO
   )
   register_logger("teal")
