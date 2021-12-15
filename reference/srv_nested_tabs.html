@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9034</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9035</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -171,7 +144,16 @@ Other releases
     <p>Server function that returns currently active module</p>
     </div>
 
-    <pre class="usage"><span class='fu'>srv_nested_tabs</span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>datasets</span>, <span class='va'>modules</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>srv_nested_tabs</span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>datasets</span>, <span class='va'>modules</span><span class='op'>)</span>
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>srv_nested_tabs</span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>datasets</span>, <span class='va'>modules</span><span class='op'>)</span>
+
+<span class='co'># S3 method for teal_modules</span>
+<span class='fu'>srv_nested_tabs</span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>datasets</span>, <span class='va'>modules</span><span class='op'>)</span>
+
+<span class='co'># S3 method for teal_module</span>
+<span class='fu'>srv_nested_tabs</span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>datasets</span>, <span class='va'>modules</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -201,6 +183,25 @@ more details.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>reactive</code> which returns the active module that corresponds to the selected tab</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This module calls recursively all elements of the <code>modules</code> returns one which
+is currently active. To determine which module is active see the diagram.
+<img src='figures/uml_nested_tabs.jpg' width="75%" alt="Figure: uml_nested_tabs.jpg" />
+
+Above depicts hypothetical situation in which one has module structure defined in following way:</p><pre><span class='op'>+</span> <span class='va'>root</span>
+  <span class='op'>+</span> <span class='va'>tab1</span>
+    <span class='op'>+</span> <span class='va'>test1</span>
+    <span class='op'>+</span> <span class='va'>test2</span>
+  <span class='op'>+</span> <span class='va'>tab2</span>
+    <span class='op'>+</span> <span class='va'>test3</span>
+</pre>
+<ul>
+<li><p><code>teal_module</code> returns self as a active module</p></li>
+<li><p><code>teal_modules</code> returns module active within self which is determined by the <code>input$Active_tab</code>.
+The choice of active module is done recursively (diagram from right to left).</p></li>
+</ul>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
