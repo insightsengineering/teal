@@ -27,30 +27,68 @@
 #' @param title (`NULL` or `character`)\cr
 #'   The browser window title (defaults to the host URL of the page).
 #' @param filter (`list`)\cr
-#'   You can define filters that show when the app starts.
-#'   The general pattern is:
-#'   `list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)`.
-#'   An example is:
-#'   `list(iris = list(Species = c("setosa", "versicolor")))`.
-#'   More generally, the filters for the variable, e.g. `Species` can be
-#'   specified as follows:
-#'   `list(Species = c("setosa", "versicolor"))`,
-#'   `list(Species = list(c("setosa", "versicolor"), keep_na = TRUE))`,
-#'   or equivalently with:
-#'   `list(Species = c("setosa", "versicolor", NA))`,
-#'   or for the default filter (not very restrictive):
-#'   `list(Species = default_filter())`
+#'   You can define filters that show when the app starts. List names should be
+#'   named according to datanames passed to the `data` argument.
+#'   In case of  data.frame` the list should be composed as follows:
+#'   ```
+#'   list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
+#'        <dataname2> = list(...),
+#'        ...)
 #'
-#'   Instead of `choices` above, use the following names:
-#'   - `numerical`: `range`
-#'   - `factor`: `choices`
-#'   - `logical`: `logical`
-#'   A general example is:
-#'   `list(
-#'     iris = list(Sepal.Length = default_filter(), Species = c("M", NA)),
-#'     mtcars = list(mpg = default_filter())
-#'   )`
-#'   Ignored if the app is restored from a bookmarked state.
+#'   ```
+#'
+#'   For example, filters for variable `Sepal.Length` in `iris` can be specified as
+#'   follows:
+#'   ```
+#'   list(iris = list(Sepal.Length = list(selected = c(5.0, 7.0))))
+#'   list(iris = list(Sepal.Length = c(5.0, 7.0)))
+#'   ```
+#'
+#'   In case developer would like to include `NA` and `Inf` values in  the
+#'   filtered dataset.
+#'   ```
+#'   list(Species = list(selected = c(5.0, 7.0), keep_na = TRUE, keep_inf = TRUE))
+#'   list(Species = c(c(5.0, 7.0), NA, Inf))
+#'   ```
+#'
+#'   To initialize with specific variable filter with all values on start, one
+#'   can use
+#'   ```
+#'   list(Species = default_filter())
+#'   ```
+#'   \cr
+#'   `filter` should be set with respect to the class of the column:
+#'   * `numeric`: `selected` should be a two elements vector defining the range
+#'   of the filter.
+#'   * `Date`: `selected` should be a two elements vector defining the date-range
+#'   of the filter
+#'   * `POSIXct`: `selected` should be a two elements vector defining the
+#'   datetime-range of the filter
+#'   * `character` and `factor`: `selected` should be a vector of any length
+#'   defining initial values selected to filter.
+#'   \cr
+#'   \cr
+#'   `MultiAssayExperiment` `filter` should be specified in slightly different
+#'   way. Since [MultiAssayExperiment::MultiAssayExperiment()] contains
+#'   patient data ([SummarizedExperiment::colData]) with list of experiments
+#'   ([MultiAssayExperiment::ExperimentList]), `filter` list should be named
+#'   in the following name.\cr
+#'
+#'   ```
+#'   list(
+#'     <MAE dataname> = list(
+#'       subjects = list(<column in colData> = ..., <column in colData> = ...),
+#'       <experiment name> = list(
+#'         subset = list(<column in rowData of experiment> = ...,
+#'                       <column in rowData of experiment> = ...),
+#'         select = list(<column in colData of experiment> = ...,
+#'                       <column in colData of experiment> = ...)
+#'       )
+#'     )
+#'   )
+#'   ```
+#'   \cr
+#'   `filter` is ignored if the app is restored from a bookmarked state.
 #' @param header (`character` or `shiny.tag`) \cr
 #'   the header of the app. Note shiny code placed here (and in the footer
 #'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function

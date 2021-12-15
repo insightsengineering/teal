@@ -21,29 +21,61 @@ more details.}
 returns the \code{TealData}, only evaluated once, \code{NULL} value is ignored}
 
 \item{filter}{(\code{list})\cr
-You can define filters that show when the app starts.
-The general pattern is:
-\code{list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)}.
-An example is:
-\code{list(iris = list(Species = c("setosa", "versicolor")))}.
-More generally, the filters for the variable, e.g. \code{Species} can be
-specified as follows:
-\code{list(Species = c("setosa", "versicolor"))},
-\code{list(Species = list(c("setosa", "versicolor"), keep_na = TRUE))},
-or equivalently with:
-\code{list(Species = c("setosa", "versicolor", NA))},
-or for the default filter (not very restrictive):
-\code{list(Species = default_filter())}
+You can define filters that show when the app starts. List names should be
+named according to datanames passed to the \code{data} argument.
+In case of  data.frame` the list should be composed as follows:\preformatted{list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
+     <dataname2> = list(...),
+     ...)
 
-Instead of \code{choices} above, use the following names:
+}
+
+For example, filters for variable \code{Sepal.Length} in \code{iris} can be specified as
+follows:\preformatted{list(iris = list(Sepal.Length = list(selected = c(5.0, 7.0))))
+list(iris = list(Sepal.Length = c(5.0, 7.0)))
+}
+
+In case developer would like to include \code{NA} and \code{Inf} values in  the
+filtered dataset.\preformatted{list(Species = list(selected = c(5.0, 7.0), keep_na = TRUE, keep_inf = TRUE))
+list(Species = c(c(5.0, 7.0), NA, Inf))
+}
+
+To initialize with specific variable filter with all values on start, one
+can use\preformatted{list(Species = default_filter())
+}
+
+\cr
+\code{filter} should be set with respect to the class of the column:
 \itemize{
-\item \code{numerical}: \code{range}
-\item \code{factor}: \code{choices}
-\item \code{logical}: \code{logical}
-A general example is:
-\code{list( iris = list(Sepal.Length = default_filter(), Species = c("M", NA)), mtcars = list(mpg = default_filter())   )}
-Ignored if the app is restored from a bookmarked state.
-}}
+\item \code{numeric}: \code{selected} should be a two elements vector defining the range
+of the filter.
+\item \code{Date}: \code{selected} should be a two elements vector defining the date-range
+of the filter
+\item \code{POSIXct}: \code{selected} should be a two elements vector defining the
+datetime-range of the filter
+\item \code{character} and \code{factor}: \code{selected} should be a vector of any length
+defining initial values selected to filter.
+\cr
+\cr
+\code{MultiAssayExperiment} \code{filter} should be specified in slightly different
+way. Since \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}} contains
+patient data (\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment::colData}) with list of experiments
+(\link[MultiAssayExperiment:ExperimentList]{MultiAssayExperiment::ExperimentList}), \code{filter} list should be named
+in the following name.\cr
+}\preformatted{list(
+  <MAE dataname> = list(
+    subjects = list(<column in colData> = ..., <column in colData> = ...),
+    <experiment name> = list(
+      subset = list(<column in rowData of experiment> = ...,
+                    <column in rowData of experiment> = ...),
+      select = list(<column in colData of experiment> = ...,
+                    <column in colData of experiment> = ...)
+    )
+  )
+)
+}
+
+\cr
+\code{filter} is ignored if the app is restored from a bookmarked state.}
 }
 \value{
 \code{reactive} which returns the currently active module
