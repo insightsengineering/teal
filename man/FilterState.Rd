@@ -38,8 +38,8 @@ Setting the \code{FilterState} is possible in:
 or using \code{set_selected}, \code{set_keep_na} or \code{set_keep_inf}
 \item In the shiny application by changing the input
 \item In running shiny app using methods \code{set_selected_reactive},
-\code{set_keep_na_reactive} \code{set_keep_inf_reactive} which serves as a programatic
-api.
+\code{set_keep_na_reactive} \code{set_keep_inf_reactive} which serves as a programmatic
+API.
 Above three scenarios are depicted on the diagram below
 \if{html}{\figure{filter_state_reactivity.jpg}{options: width="100\%" alt="Figure: filter_state_reactivity.jpg"}}
 \if{latex}{\figure{filter_state_reactivity.jpg}{options: width=7cm}}

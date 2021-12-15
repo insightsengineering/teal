@@ -233,8 +233,8 @@ init_filter_state.POSIXlt <- function(x, #nousage
 #'   or using `set_selected`, `set_keep_na` or `set_keep_inf`
 #' * In the shiny application by changing the input
 #' * In running shiny app using methods `set_selected_reactive`,
-#' `set_keep_na_reactive` `set_keep_inf_reactive` which serves as a programatic
-#' api.
+#' `set_keep_na_reactive` `set_keep_inf_reactive` which serves as a programmatic
+#' API.
 #' Above three scenarios are depicted on the diagram below
 #' \if{html}{\figure{filter_state_reactivity.jpg}{options: width="100\%" alt="Figure: filter_state_reactivity.jpg"}}
 #' \if{latex}{\figure{filter_state_reactivity.jpg}{options: width=7cm}}

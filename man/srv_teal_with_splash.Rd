@@ -57,15 +57,15 @@ of the filter.
 \item \code{Date}: \code{selected} should be a two elements vector defining the date-range
 of the filter
 \item \code{POSIXct}: \code{selected} should be a two elements vector defining the
-datetime-range of the filter
+\code{datetime} range of the filter
 \item \code{character} and \code{factor}: \code{selected} should be a vector of any length
 defining initial values selected to filter.
 \cr
 \cr
 \code{MultiAssayExperiment} \code{filter} should be specified in slightly different
 way. Since \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}} contains
-patient data (\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment::colData}) with list of experiments
-(\link[MultiAssayExperiment:ExperimentList]{MultiAssayExperiment::ExperimentList}), \code{filter} list should be named
+patient data (\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment::colData()}}) with list of experiments
+(\code{\link[MultiAssayExperiment:ExperimentList]{MultiAssayExperiment::ExperimentList()}}), \code{filter} list should be named
 in the following name.\cr
 }\preformatted{list(
   <MAE dataname> = list(

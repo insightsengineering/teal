@@ -63,15 +63,15 @@
 #'   * `Date`: `selected` should be a two elements vector defining the date-range
 #'   of the filter
 #'   * `POSIXct`: `selected` should be a two elements vector defining the
-#'   datetime-range of the filter
+#'   `datetime` range of the filter
 #'   * `character` and `factor`: `selected` should be a vector of any length
 #'   defining initial values selected to filter.
 #'   \cr
 #'   \cr
 #'   `MultiAssayExperiment` `filter` should be specified in slightly different
 #'   way. Since [MultiAssayExperiment::MultiAssayExperiment()] contains
-#'   patient data ([SummarizedExperiment::colData]) with list of experiments
-#'   ([MultiAssayExperiment::ExperimentList]), `filter` list should be named
+#'   patient data ([SummarizedExperiment::colData()]) with list of experiments
+#'   ([MultiAssayExperiment::ExperimentList()]), `filter` list should be named
 #'   in the following name.\cr
 #'
 #'   ```
