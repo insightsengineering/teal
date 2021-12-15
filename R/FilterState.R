@@ -478,10 +478,12 @@ FilterState <- R6::R6Class( # nolint
     choices = NULL,  # because each class has different choices type
     input_dataname = character(0),
     keep_na = NULL,  # reactiveVal logical()
+    keep_na_update = NULL, # reactiveVal logical()
     na_count = integer(0),
     na_rm = FALSE, # logical(1)
     observers = NULL, # here observers are stored
     selected = NULL,  # because it holds reactiveVal and each class has different choices type
+    selected_update = NULL, # because it holds reactiveVal and each class has different choices type
     varname = character(0),
     varlabel = character(0),
     extract_type = logical(0),
@@ -1238,41 +1240,14 @@ RangeFilterState <- R6::R6Class( # nolint
     #'
     #' @returns `NULL`
     #'
-    update_selected_input = function(id, value) {
-      moduleServer(id = id, function(input, output, session) {
-        logger::log_trace(paste(
-          "RangeFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) } updating selected",
-          "input to: selected={ value$selected }, keep_na={ value$keep_na }, keep_inf={ value$keep_inf }"
-        ))
-        updateSliderInput(
-          session = session,
-          inputId = "selection",
-          value = value$selected
-        )
-
-        updateCheckboxInput(
-          session = session,
-          inputId = "keep_inf",
-          sprintf("Keep Inf (%s)", private$inf_count),
-          value =  value$keep_inf
-        )
-
-        updateCheckboxInput(
-          session = session,
-          inputId = "keep_na",
-          value = value$keep_na
-        )
-        logger::log_trace(paste(
-          "RangeFilterState$update_selected_input, dataname: { deparse1(private$input_dataname) }",
-          "done updating selected input."
-        ))
-        invisible(NULL)
-      })
+    set_selected_update = function(value) {
+      private$selected_update(value)
     }
   ),
   private = list(
     histogram_data = data.frame(),
     keep_inf = NULL, # because it holds reactiveVal
+    keep_inf_update = NULL, # because it holds reactiveVal
     inf_count = integer(0),
     is_integer = logical(0),
 
@@ -1531,6 +1506,14 @@ ChoicesFilterState <- R6::R6Class( # nolint
             }
           )
 
+          observeEvent(private$selected_update(), ignoreNULL = TRUE, {
+            updateCheckboxInput(
+              session = session,
+              inputId = "selected",
+              value =  private$selected_update()
+            )
+            private$selected_update()
+          })
 
           private$observers$selection <- observeEvent(
             ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
