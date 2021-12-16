@@ -170,3 +170,24 @@ testthat::test_that(
     )
   }
 )
+
+testthat::test_that(
+  "MAEFilterStates$remove_filter_state throws error when name is not in FilterStates", {
+    maefs <- teal:::MAEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      years_to_birth = c(30, 50),
+      vital_status = 1,
+      gender = "female"
+    )
+    years_to_birth_remove_fs <- "years_to_birth2"
+
+    maefs$set_filter_state(state = fs, data = MultiAssayExperiment::miniACC)
+    testthat::expect_error(maefs$remove_filter_state(years_to_birth_remove_fs))
+  }
+)

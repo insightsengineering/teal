@@ -269,3 +269,43 @@ testthat::test_that(
     testthat::expect_equal(test_filtered, test)
   }
 )
+
+testthat::test_that(
+  "SEFilterStates$remove_filter_state throws error when list is not named", {
+    obj <- get_test_data()
+    test <- obj
+    sefs <- teal:::SEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0)
+    )
+
+    fs <- list(
+      select = list(Treatment = "ChIP"),
+      subset = list(feature_id = c("ID001", "ID002"))
+    )
+
+    sefs$set_filter_state(state = fs, data = obj)
+    testthat::expect_error(sefs$remove_filter_state(list("feature_id")))
+  }
+)
+
+testthat::test_that(
+  "SEFilterStates$remove_filter_state throws error when list has unknown name in the FilterState", {
+    obj <- get_test_data()
+    test <- obj
+    sefs <- teal:::SEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0)
+    )
+
+    fs <- list(
+      select = list(Treatment = "ChIP"),
+      subset = list(feature_id = c("ID001", "ID002"))
+    )
+
+    sefs$set_filter_state(state = fs, data = obj)
+    testthat::expect_error(sefs$remove_filter_state(list(subset = list("feature_id2"))))
+  }
+)

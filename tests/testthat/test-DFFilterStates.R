@@ -178,3 +178,22 @@ testthat::test_that(
     )
   }
 )
+
+testthat::test_that(
+  "DFFilterStates$remove_filter_state throws error when name is not in FilterStates", {
+    dffs <- teal:::DFFilterStates$new(
+      input_dataname = "iris",
+      output_dataname = "iris_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      Sepal.Length = list(selected = c(5.1, 6.4)),
+      Species = list(selected = c("setosa", "versicolor"))
+    )
+
+    dffs$set_filter_state(state = fs, data = iris)
+    testthat::expect_error(dffs$remove_filter_state("Species2"))
+  }
+)

@@ -129,3 +129,48 @@ testthat::test_that("set_state overwrites fields included in the input only", {
   testthat::expect_identical(isolate(filter_state$get_selected()), c(objects[3], objects[4]))
   testthat::expect_true(isolate(filter_state$get_keep_na()))
 })
+
+testthat::test_that("set_state_reactive needs a named list with selected and keep_na elements", {
+  objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "test")
+  testthat::expect_error(
+    filter_state$set_state_reactive(list(selected = c(objects[2], objects[3]), keep_na = TRUE)),
+    NA
+  )
+  testthat::expect_error(
+    filter_state$set_state_reactive(list(selected = c(objects[2], objects[3]), unknown = TRUE)),
+    "all\\(names\\(state\\)"
+  )
+})
+
+testthat::test_that("set_selected_reactive warns when selection not within allowed range", {
+  objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
+  objects2 <- as.POSIXct(c(1), origin = "1899/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "test")
+  testthat::expect_warning(
+    filter_state$set_selected_reactive(c(objects2, objects[3])),
+    "Value: 1899-01-01 01:00:01 is outside of the possible range for column test of dataset  ."
+  )
+})
+
+testthat::test_that("set_selected_reactive throws error when one argument is given only", {
+  objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "test")
+  testthat::expect_error(
+    filter_state$set_selected_reactive(c(objects[3])),
+    "The array of set values must have length two."
+  )
+})
+
+testthat::test_that("set_keep_na_reactive accepts logical input", {
+  objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "test")
+  testthat::expect_error(filter_state$set_keep_na_reactive(TRUE), NA)
+})
+
+testthat::test_that("set_keep_na_reactive throws error if input is not logical", {
+  objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "test")
+  testthat::expect_error(filter_state$set_keep_na_reactive("TRUE"))
+  testthat::expect_error(filter_state$set_keep_na_reactive(1))
+})
