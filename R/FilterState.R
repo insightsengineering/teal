@@ -1810,13 +1810,13 @@ DateFilterState <- R6::R6Class( # nolint
           actionButton(
             inputId = ns("start_date_reset"),
             label = NULL,
-            icon = icon("undo fa-xs"),
+            icon = icon("fas fa-undo"),
             style = "float: left; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
           ),
           actionButton(
             inputId = ns("end_date_reset"),
             label = NULL,
-            icon = icon("undo fa-xs"),
+            icon = icon("fas fa-undo"),
             style = "float: right; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
           ),
           div(
@@ -2078,13 +2078,13 @@ DatetimeFilterState <- R6::R6Class( # nolint
           actionButton(
             inputId = ns("start_date_reset"),
             label = NULL,
-            icon = icon("undo fa-xs"),
+            icon = icon("fas fa-undo"),
             style = "float: left; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
           ),
           actionButton(
             inputId = ns("end_date_reset"),
             label = NULL,
-            icon = icon("undo fa-xs"),
+            icon = icon("fas fa-undo"),
             style = "float: right; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
           ),
           div(
