@@ -714,8 +714,10 @@ DFFilterStates <- R6::R6Class( # nolint
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
+    #' @param vars_include copy from the srvv_add_filter_state
+    #' @param ... ignored.
     #' @return `NULL`
-    set_filter_state = function(data, state) {
+    set_filter_state = function(data, state, vars_include = get_filterable_varnames(data = data), ...) {
       stopifnot(is.data.frame(data))
       stopifnot(all(names(state) %in% names(data)) || is(state, "default_filter"))
       logger::log_trace(
@@ -723,6 +725,14 @@ DFFilterStates <- R6::R6Class( # nolint
       )
 
       filter_states <- private$get_filter_state(1L)
+      excluded_vars <- setdiff(names(filter_states), vars_include)
+      if (length(excluded_vars) > 0) {
+        warning("")
+        logger::log_warn("")
+      }
+
+      filters_to_apply <- filter_states[names(filter_state) %in% vars_include]
+
       for (varname in names(state)) {
         value <- state[[varname]]
         if (varname %in% names(filter_states)) {
@@ -818,10 +828,7 @@ DFFilterStates <- R6::R6Class( # nolint
 
           # available choices to display
           avail_column_choices <- reactive({
-            choices <- setdiff(
-              vars_include,
-              active_filter_vars()
-            )
+            choices <- setdiff(vars_include, active_filter_vars())
 
             data_choices_labeled(
               data = data,
@@ -1017,7 +1024,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `colData(data)`
     #' @return `NULL`
-    set_filter_state = function(data, state) {
+    set_filter_state = function(data, state, ...) {
       stopifnot(is(data, "MultiAssayExperiment"))
       stopifnot(
         all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
@@ -1358,7 +1365,7 @@ SEFilterStates <- R6::R6Class( # nolint
               #'   Names of each the `list` element in `subset` and `select` should correspond to
               #'   the name of the column in `rowData(data)` and `colData(data)`.
               #' @return `NULL`
-              set_filter_state = function(data, state) {
+              set_filter_state = function(data, state, ...) {
                 stopifnot(is(data, "SummarizedExperiment"))
                 stopifnot(
                   is(state, "list"),
@@ -1763,7 +1770,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
     #' @return `NULL`
-    set_filter_state = function(data, state) {
+    set_filter_state = function(data, state, ...) {
       stopifnot(is(data, "matrix"))
       stopifnot(
         all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
