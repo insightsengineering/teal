@@ -41,6 +41,7 @@
 #'   follows:
 #'   ```
 #'   list(iris = list(Sepal.Length = list(selected = c(5.0, 7.0))))
+#'   # or
 #'   list(iris = list(Sepal.Length = c(5.0, 7.0)))
 #'   ```
 #'
