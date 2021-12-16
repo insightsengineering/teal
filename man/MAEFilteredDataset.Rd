@@ -141,7 +141,7 @@ Gets variable names for the filtering.
 \subsection{Method \code{set_filter_state()}}{
 Set filter state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$set_filter_state(state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$set_filter_state(state, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -152,6 +152,8 @@ names of the list should correspond to the names of the initialized \code{Filter
 kept in \code{private$filter_states}. For this object they are \code{"subjects"} and
 names of the experiments. Values of initial state should be relevant
 to the referred column.}
+
+\item{\code{...}}{ignored.}
 }
 \if{html}{\out{</div>}}
 }

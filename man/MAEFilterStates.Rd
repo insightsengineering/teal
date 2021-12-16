@@ -120,19 +120,21 @@ an ID string that corresponds with the ID used to call the module's UI function.
 \subsection{Method \code{set_filter_state()}}{
 Set filter state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$set_filter_state(data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$set_filter_state(data, state, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{data}}{(\code{MultiAssayExperiment})\cr
-data which are supposed to be filtered}
+data which are supposed to be filtered.}
 
 \item{\code{state}}{(\verb{named list})\cr
 should contain values which are initial selection in the \code{FilterState}.
 Names of the \code{list} element should correspond to the name of the
-column in \code{colData(data)}}
+column in \code{colData(data)}.}
+
+\item{\code{...}}{ignored.}
 }
 \if{html}{\out{</div>}}
 }

@@ -162,4 +162,3 @@ testthat::test_that("set_keep_na_reactive throws error if input is not logical",
   testthat::expect_error(filter_state$set_keep_na_reactive("TRUE"))
   testthat::expect_error(filter_state$set_keep_na_reactive(1))
 })
-

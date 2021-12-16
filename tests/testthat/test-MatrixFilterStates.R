@@ -98,5 +98,3 @@ testthat::test_that("remove_filter_state throws error when element_id is not in 
 
   testthat::expect_error(filter_states$remove_filter_state("B"))
 })
-
-

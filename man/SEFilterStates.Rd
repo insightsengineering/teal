@@ -91,20 +91,22 @@ an ID string that corresponds with the ID used to call the module's UI function.
 \subsection{Method \code{set_filter_state()}}{
 Set filter state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$set_filter_state(data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$set_filter_state(data, state, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{data}}{(\code{SummarizedExperiment})\cr
-data which are supposed to be filtered}
+data which are supposed to be filtered.}
 
 \item{\code{state}}{(\verb{named list})\cr
 this list should contain \code{subset} and \code{select} element where
 each should be a named list containing values as a selection in the \code{FilterState}.
 Names of each the \code{list} element in \code{subset} and \code{select} should correspond to
 the name of the column in \code{rowData(data)} and \code{colData(data)}.}
+
+\item{\code{...}}{ignored.}
 }
 \if{html}{\out{</div>}}
 }

@@ -90,7 +90,7 @@ filter \code{call} or \code{list} of filter calls
 \subsection{Method \code{set_filter_state()}}{
 Set filter state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$set_filter_state(state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$set_filter_state(state, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -99,6 +99,9 @@ Set filter state
 \item{\code{state}}{(\verb{named list})\cr
 containing values of the initial filter. Values should be relevant
 to the referred column.}
+
+\item{\code{...}}{Additional arguments like \code{include_update} for \code{CDISCFilteredDataset}.
+Note that this is ignored for other \code{FilteredDatasets}.}
 }
 \if{html}{\out{</div>}}
 }

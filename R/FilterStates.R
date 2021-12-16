@@ -709,12 +709,13 @@ DFFilterStates <- R6::R6Class( # nolint
     #' Set filter state
     #'
     #' @param data (`data.frame`)\cr
-    #'   data which are supposed to be filtered
+    #'   data which are supposed to be filtered.
     #' @param state (`named list`)\cr
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
-    #' @param vars_include copy from the srvv_add_filter_state
+    #' @param vars_include (`character(n)`)\cr
+    #'  optional, vector of column names to be included.
     #' @param ... ignored.
     #' @return `NULL`
     set_filter_state = function(data, state, vars_include = get_filterable_varnames(data = data), ...) {
@@ -725,15 +726,28 @@ DFFilterStates <- R6::R6Class( # nolint
       )
 
       filter_states <- private$get_filter_state(1L)
-      excluded_vars <- setdiff(names(filter_states), vars_include)
+      state_names <- names(state)
+      excluded_vars <- setdiff(state_names, vars_include)
       if (length(excluded_vars) > 0) {
-        warning("")
-        logger::log_warn("")
+        warning(
+          paste(
+            "These columns filters were excluded:",
+            paste(excluded_vars, collapse = ", "),
+            "from dataset",
+            private$input_dataname
+          )
+        )
+        logger::log_warn(
+          paste(
+            "Columns filters { paste(excluded_vars, collapse = ', ') } were excluded",
+            "from { deparse1(private$input_dataname) }"
+          )
+        )
       }
 
-      filters_to_apply <- filter_states[names(filter_state) %in% vars_include]
+      filters_to_apply <- state_names[state_names %in% vars_include]
 
-      for (varname in names(state)) {
+      for (varname in filters_to_apply) {
         value <- state[[varname]]
         if (varname %in% names(filter_states)) {
           fstate <- filter_states[[varname]]
@@ -1017,11 +1031,12 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' Set filter state
     #'
     #' @param data (`MultiAssayExperiment`)\cr
-    #'   data which are supposed to be filtered
+    #'   data which are supposed to be filtered.
     #' @param state (`named list`)\cr
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
-    #'   column in `colData(data)`
+    #'   column in `colData(data)`.
+    #' @param ... ignored.
     #' @return `NULL`
     set_filter_state = function(data, state, ...) {
       stopifnot(is(data, "MultiAssayExperiment"))
@@ -1354,12 +1369,13 @@ SEFilterStates <- R6::R6Class( # nolint
               #' Set filter state
               #'
               #' @param data (`SummarizedExperiment`)\cr
-              #'   data which are supposed to be filtered
+              #'   data which are supposed to be filtered.
               #' @param state (`named list`)\cr
               #'   this list should contain `subset` and `select` element where
               #'   each should be a named list containing values as a selection in the `FilterState`.
               #'   Names of each the `list` element in `subset` and `select` should correspond to
               #'   the name of the column in `rowData(data)` and `colData(data)`.
+              #' @param ... ignored.
               #' @return `NULL`
               set_filter_state = function(data, state, ...) {
                 stopifnot(is(data, "SummarizedExperiment"))
@@ -1763,11 +1779,12 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #' Sets a filter state
     #'
     #' @param data (`matrix`)\cr
-    #'   data which are supposed to be filtered
+    #'   data which are supposed to be filtered.
     #' @param state (`named list`)\cr
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
+    #' @param ... ignored.
     #' @return `NULL`
     set_filter_state = function(data, state, ...) {
       stopifnot(is(data, "matrix"))
