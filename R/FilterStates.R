@@ -751,6 +751,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #' @return `NULL`
     #'
     remove_filter_state = function(element_id) {
+      stopifnot(all(element_id %in% names(private$get_filter_state(1L))))
       self$queue_remove(queue_index = 1L, element_id = element_id)
     },
 
@@ -854,7 +855,6 @@ DFFilterStates <- R6::R6Class( # nolint
             }
           )
 
-          html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colnames(data)))
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
@@ -862,7 +862,6 @@ DFFilterStates <- R6::R6Class( # nolint
                 "DFFilterStates$srv_add_filter_state@2 adding FilterState,",
                 "dataname: { deparse1(private$input_dataname) }"
               ))
-              id <- html_id_mapping[[input$var_to_add]]
               self$queue_push(
                 x = init_filter_state(
                   data[[input$var_to_add]],
@@ -1065,6 +1064,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' @return `NULL`
     #'
     remove_filter_state = function(element_id) {
+      stopifnot(all(element_id %in% names(private$get_filter_state("y"))))
       self$queue_remove(queue_index = "y", element_id = element_id)
     },
 
@@ -1164,9 +1164,6 @@ MAEFilterStates <- R6::R6Class( # nolint
             }
           )
 
-          html_id_mapping <- private$map_vars_to_html_ids(
-            get_filterable_varnames(SummarizedExperiment::colData(data))
-          )
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
@@ -1174,7 +1171,6 @@ MAEFilterStates <- R6::R6Class( # nolint
                 "MAEFilterStates$srv_add_filter_state@2 adding FilterState,",
                 "dataname: { deparse1(private$input_dataname) }"
               ))
-              id <- html_id_mapping[[input$var_to_add]]
 
               fstate <- init_filter_state(
                 SummarizedExperiment::colData(data)[[input$var_to_add]],
@@ -1429,11 +1425,14 @@ SEFilterStates <- R6::R6Class( # nolint
               #'
               #' @return `NULL`
               remove_filter_state = function(element_id) {
+                stopifnot(!is.null(names(element_id)) & all(names(element_id) %in% c("subset", "select")))
                 for (varname in element_id$subset) {
+                  stopifnot(all(unlist(element_id$subset) %in% names(private$get_filter_state("subset"))))
                   self$queue_remove(queue_index = "subset", element_id = varname)
                 }
 
                 for (varname in element_id$select) {
+                  stopifnot(all(unlist(element_id$select) %in% names(private$get_filter_state("select"))))
                   self$queue_remove(queue_index = "select", element_id = varname)
                 }
               },
@@ -1765,13 +1764,12 @@ MatrixFilterStates <- R6::R6Class( # nolint
     set_filter_state = function(data, state) {
       stopifnot(is(data, "matrix"))
       stopifnot(
-        all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
+        (!is.null(names(state)) & all(names(state) %in% colnames(data))) || is(state, "default_filter")
       )
       logger::log_trace(paste(
         "MatrixFilterState$set_filter_state initializing,",
         "dataname: { deparse1(private$input_dataname) }"
       ))
-      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
       filter_states <- private$get_filter_state("subset")
       for (varname in names(state)) {
         value <- state[[varname]]
@@ -1808,6 +1806,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #'
     #' @return `NULL`
     remove_filter_state = function(element_id) {
+      stopifnot(all(element_id %in% names(private$get_filter_state("subset"))))
       self$queue_remove(queue_index = "subset", element_id = element_id)
     },
 
@@ -1904,7 +1903,6 @@ MatrixFilterStates <- R6::R6Class( # nolint
             }
           )
 
-          html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
@@ -1912,7 +1910,6 @@ MatrixFilterStates <- R6::R6Class( # nolint
                 "MatrixFilterState$srv_add_filter_state@2 adding FilterState,",
                 "dataname: { deparse1(private$input_dataname) }"
               ))
-              id <- html_id_mapping[[input$var_to_add]]
               self$queue_push(
                 x = init_filter_state(
                   subset(data, select = input$var_to_add),
