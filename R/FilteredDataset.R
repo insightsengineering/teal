@@ -529,21 +529,23 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
       NULL
     },
 
-    #' @description Remove a single `FilterState` of a `FilteredDataset`
+    #' @description Remove one or more `FilterState` of a `FilteredDataset`
     #'
     #' @param element_id (`character`)\cr
-    #'  Name of variable to remove its `FilterState`.
+    #'  Vector of character names of variables to remove their `FilterState`.
     #'
     #' @return `NULL`
-    #'
     remove_filter_state = function(element_id) {
       logger::log_trace(
         "DefaultFilteredDataset$remove_filter_state removing filters in : { self$get_dataname() }"
       )
+
       fdata_filter_state <- self$get_filter_states()[[1]]
-      fdata_filter_state$remove_filter_state(element_id)
+      for (element in element_id) {
+        fdata_filter_state$remove_filter_state(element)
+      }
       logger::log_trace(
-        "DefaultFilteredDataset$remove_filter_state done sremoving filters in : { self$get_dataname() }"
+        "DefaultFilteredDataset$remove_filter_state done removing filters in : { self$get_dataname() }"
       )
       invisible(NULL)
     },
@@ -892,10 +894,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
 
     },
 
-    #' @description Remove a single `FilterState` of a `MAEFilteredDataset`
+    #' @description Remove one or more `FilterState` of a `MAEFilteredDataset`
     #'
-    #' @param element_id (`character`)\cr
-    #'  Name of variable to remove its `FilterState`.
+    #' @param element_id (`list`)\cr
+    #'  Named list of variables to remove their `FilterState`.
     #'
     #' @return `NULL`
     #'

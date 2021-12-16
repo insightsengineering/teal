@@ -41,6 +41,7 @@ In case of  data.frame` the list should be composed as follows:\preformatted{lis
 
 For example, filters for variable \code{Sepal.Length} in \code{iris} can be specified as
 follows:\preformatted{list(iris = list(Sepal.Length = list(selected = c(5.0, 7.0))))
+# or
 list(iris = list(Sepal.Length = c(5.0, 7.0)))
 }
 

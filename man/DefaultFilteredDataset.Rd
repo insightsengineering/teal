@@ -113,7 +113,7 @@ Note that this is ignored for other \code{FilteredDatasets}.}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
 \subsection{Method \code{remove_filter_state()}}{
-Remove a single \code{FilterState} of a \code{FilteredDataset}
+Remove one or more \code{FilterState} of a \code{FilteredDataset}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$remove_filter_state(element_id)}\if{html}{\out{</div>}}
 }
@@ -122,7 +122,7 @@ Remove a single \code{FilterState} of a \code{FilteredDataset}
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{element_id}}{(\code{character})\cr
-Name of variable to remove its \code{FilterState}.}
+Vector of character names of variables to remove their \code{FilterState}.}
 }
 \if{html}{\out{</div>}}
 }

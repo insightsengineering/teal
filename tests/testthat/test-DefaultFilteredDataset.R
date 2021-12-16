@@ -54,7 +54,6 @@ testthat::test_that(
       Species = c("setosa", "versicolor")
     )
     dataset$set_filter_state(state = fs)
-    isolate(dataset$get_call())
     dataset$remove_filter_state("Species")
 
     testthat::expect_equal(
@@ -66,6 +65,25 @@ testthat::test_that(
             Sepal.Length >= 5.1 & Sepal.Length <= 6.4
           )
         )
+      )
+    )
+  }
+)
+
+testthat::test_that(
+  "DefaultFilteredDataset$remove_filter_state removes more than one filter", {
+    dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+    fs <- list(
+      Sepal.Length = c(5.1, 6.4),
+      Species = c("setosa", "versicolor")
+    )
+    dataset$set_filter_state(state = fs)
+    dataset$remove_filter_state(c("Species", "Sepal.Length"))
+
+    testthat::expect_equal(
+      isolate(dataset$get_call()),
+      list(
+        filter = quote(iris_FILTERED <- iris) # nolint
       )
     )
   }

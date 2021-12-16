@@ -394,7 +394,7 @@ FilteredData <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
-    #' @description Remove a single `FilterState` of a `FilteredDataset` in a `FilteredData` object
+    #' @description Remove one or more `FilterState` of a `FilteredDataset` in a `FilteredData` object
     #'
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
@@ -421,22 +421,16 @@ FilteredData <- R6::R6Class( # nolint
     remove_all_filter_states = function(datanames) {
       logger::log_trace("FilteredData$remove_all_filter_states called")
 
-      if (missing(datanames)) {
-        lapply(
-          self$get_filtered_dataset(),
-          function(x) {
-            x$queues_empty()}
-        )
-        logger::log_trace("FilteredData$remove_all_filter_states removed all FilterStates.")
-      } else {
-        for(dataname in datanames) {
-          fdataset <- self$get_filtered_dataset(dataname = dataname)
-          fdataset$queues_empty()
-        }
-        logger::log_trace(
-          "FilteredData$remove_all_filter_states removed all FilterStates of { paste(datanames, collapse = ', ') }"
-        )
+      if (missing(datanames)) datanames <- names(self$get_filtered_dataset())
+
+      for(dataname in datanames) {
+        fdataset <- self$get_filtered_dataset(dataname = dataname)
+        fdataset$queues_empty()
       }
+
+      logger::log_trace(
+        "FilteredData$remove_all_filter_states removed all FilterStates of { paste(datanames, collapse = ', ') }"
+      )
 
       invisible(NULL)
     },

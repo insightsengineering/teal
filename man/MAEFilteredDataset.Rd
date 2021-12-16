@@ -165,7 +165,7 @@ to the referred column.}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
 \subsection{Method \code{remove_filter_state()}}{
-Remove a single \code{FilterState} of a \code{MAEFilteredDataset}
+Remove one or more \code{FilterState} of a \code{MAEFilteredDataset}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$remove_filter_state(element_id)}\if{html}{\out{</div>}}
 }
@@ -173,8 +173,8 @@ Remove a single \code{FilterState} of a \code{MAEFilteredDataset}
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{element_id}}{(\code{character})\cr
-Name of variable to remove its \code{FilterState}.}
+\item{\code{element_id}}{(\code{list})\cr
+Named list of variables to remove their \code{FilterState}.}
 }
 \if{html}{\out{</div>}}
 }

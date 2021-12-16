@@ -776,7 +776,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #' @return `NULL`
     #'
     remove_filter_state = function(element_id) {
-      stopifnot(all(element_id %in% names(private$get_filter_state(1L))))
+      stopifnot(element_id %in% names(private$get_filter_state(1L)))
       self$queue_remove(queue_index = 1L, element_id = element_id)
     },
 

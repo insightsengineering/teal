@@ -561,7 +561,7 @@ nested list of filter selections applied to datasets.}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
 \subsection{Method \code{remove_filter_state()}}{
-Remove a single \code{FilterState} of a \code{FilteredDataset} in a \code{FilteredData} object
+Remove one or more \code{FilterState} of a \code{FilteredDataset} in a \code{FilteredData} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$remove_filter_state(state)}\if{html}{\out{</div>}}
 }
