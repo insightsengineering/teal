@@ -40,6 +40,7 @@ filter_states$queue_push(
 )
 isolate(filter_states$get_call())
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

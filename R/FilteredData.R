@@ -34,6 +34,8 @@
 #' 2. `dataname`: the name of one of the datasets in this `FilteredData`
 #' 3. `varname`: one of the columns in a dataset
 #'
+#' @keywords internal
+#'
 #' @examples
 #' library(shiny)
 #' datasets <- teal:::FilteredData$new()

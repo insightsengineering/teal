@@ -124,6 +124,7 @@ init_filter_states.SummarizedExperiment <- function(data, #nolint #nousage
 #' Currently `data.frame`, `MultiAssayExperiment`,
 #' `SummarizedExperiment` and `matrix` are available.
 #'
+#' @keywords internal
 #'
 #' @examples
 #' library(shiny)

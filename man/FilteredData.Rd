@@ -93,6 +93,7 @@ queue$queue_push(filter_state_mtcars, queue_index = 1L, element_id = "mpg")
 isolate(datasets$get_call("iris"))
 isolate(datasets$get_call("mtcars"))
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

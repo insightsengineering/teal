@@ -56,7 +56,6 @@
 #'   ```
 #'   list(Species = default_filter())
 #'   ```
-#'   \cr
 #'   `filter` should be set with respect to the class of the column:
 #'   * `numeric`: `selected` should be a two elements vector defining the range
 #'   of the filter.
@@ -67,12 +66,12 @@
 #'   * `character` and `factor`: `selected` should be a vector of any length
 #'   defining initial values selected to filter.
 #'   \cr
-#'   \cr
 #'   `MultiAssayExperiment` `filter` should be specified in slightly different
 #'   way. Since [MultiAssayExperiment::MultiAssayExperiment()] contains
 #'   patient data ([SummarizedExperiment::colData()]) with list of experiments
 #'   ([MultiAssayExperiment::ExperimentList()]), `filter` list should be named
-#'   in the following name.\cr
+#'   in the following name.
+#'   \cr
 #'
 #'   ```
 #'   list(
@@ -87,7 +86,6 @@
 #'     )
 #'   )
 #'   ```
-#'   \cr
 #'   `filter` is ignored if the app is restored from a bookmarked state.
 #' @param header (`character` or `shiny.tag`) \cr
 #'   the header of the app. Note shiny code placed here (and in the footer
