@@ -78,7 +78,6 @@ test_that("get_filterable_varnames does not return child duplicates", {
   )
 })
 
-
 test_that("get_filterable_varnames return all from parent dataset", {
   adsl <- cdisc_dataset(
     dataname = "ADSL",
@@ -96,5 +95,25 @@ test_that("get_filterable_varnames return all from parent dataset", {
   expect_identical(
     fd$get_filterable_varnames("ADSL"),
     c("USUBJID", "STUDYID", "a", "b")
+  )
+})
+
+test_that("set_filter_state returns warning when setting a filter on a column which belongs to parent dataset", {
+  adsl <- cdisc_dataset(
+    dataname = "ADSL",
+    x = data.frame(USUBJID = 1L, STUDYID = 1L, a = 1L, b = 1L)
+  )
+  child <- cdisc_dataset(
+    dataname = "ADTTE",
+    parent = "ADSL",
+    x = data.frame(USUBJID = 1L, STUDYID = 1L, PARAMCD = 1L, a = 1L, c = 1L)
+  )
+  data <- cdisc_data(adsl, child)
+
+  fd <- filtered_data_new(data)
+  filtered_data_set(data, fd)
+  testthat::expect_warning(
+    fd$set_filter_state(list(ADTTE = list(USUBJID = "1"))),
+    "These columns filters were excluded: USUBJID from dataset ADTTE"
   )
 })
