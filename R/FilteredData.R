@@ -34,6 +34,8 @@
 #' 2. `dataname`: the name of one of the datasets in this `FilteredData`
 #' 3. `varname`: one of the columns in a dataset
 #'
+#' @keywords internal
+#'
 #' @examples
 #' library(shiny)
 #' datasets <- teal:::FilteredData$new()
@@ -379,8 +381,15 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(all(names(state) %in% self$datanames()))
       logger::log_trace("FilteredData$set_filter_state initializing")
       for(dataname in names(state)) {
+
         fdataset <- self$get_filtered_dataset(dataname = dataname)
-        fdataset$set_filter_state(state = state[[dataname]])
+        dataset_state <- state[[dataname]]
+
+        fdataset$set_filter_state(
+          id = private$get_ui_add_filter_id(dataname),
+          state = dataset_state,
+          vars_include = self$get_filterable_varnames(dataname)
+        )
       }
       logger::log_trace("FilteredData$set_filter_state initialized")
       invisible(NULL)

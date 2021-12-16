@@ -43,7 +43,6 @@ To initialize with specific variable filter with all values on start, one
 can use\preformatted{list(Species = default_filter())
 }
 
-\cr
 \code{filter} should be set with respect to the class of the column:
 \itemize{
 \item \code{numeric}: \code{selected} should be a two elements vector defining the range
@@ -55,12 +54,12 @@ of the filter
 \item \code{character} and \code{factor}: \code{selected} should be a vector of any length
 defining initial values selected to filter.
 \cr
-\cr
 \code{MultiAssayExperiment} \code{filter} should be specified in slightly different
 way. Since \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}} contains
 patient data (\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment::colData()}}) with list of experiments
 (\code{\link[MultiAssayExperiment:ExperimentList]{MultiAssayExperiment::ExperimentList()}}), \code{filter} list should be named
-in the following name.\cr
+in the following name.
+\cr
 }\preformatted{list(
   <MAE dataname> = list(
     subjects = list(<column in colData> = ..., <column in colData> = ...),
@@ -74,7 +73,6 @@ in the following name.\cr
 )
 }
 
-\cr
 \code{filter} is ignored if the app is restored from a bookmarked state.}
 }
 \value{

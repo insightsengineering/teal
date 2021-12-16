@@ -75,6 +75,7 @@ init_filtered_dataset.MAETealDataset <- function(dataset) { #nolint #nousage
 #' (`data.frame`) or multiple (`MultiAssayExperiment`) `FilterStates` objects.
 #' Each `FilterStates` is responsible for one filter/subset expression applied for specific
 #' components of the `TealDataset`.
+#' @keywords internal
 FilteredDataset <- R6::R6Class( # nolint
   "FilteredDataset",
   ## __Public Methods ====
@@ -511,7 +512,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
     #' @return `NULL`
-    set_filter_state = function(state) {
+    set_filter_state = function(state, ...) {
       stopifnot(is.list(state))
       logger::log_trace(
         "DefaultFilteredDataset$set_filter_state setting up filters in : { self$get_dataname() }"
@@ -519,10 +520,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
 
       data <- self$get_data(filtered = FALSE)
       fs <- self$get_filter_states()[[1]]
-      fs$set_filter_state(
-        state = state,
-        data = data
-      )
+      fs$set_filter_state(state = state, data = data, ...)
       logger::log_trace(
         "DefaultFilteredDataset$set_filter_state done setting up filters in : { self$get_dataname() }"
       )
@@ -869,7 +867,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'  names of the experiments. Values of initial state should be relevant
     #'  to the referred column.
     #' @return `NULL`
-    set_filter_state = function(state) {
+    set_filter_state = function(state, ...) {
       stopifnot(
         is.list(state),
         all(names(state) %in% c(names(self$get_filter_states())))
@@ -977,6 +975,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           self$get_filter_states("subjects")$srv_add_filter_state(
             id = "subjects",
             data = data # MultiAssayExperiment
+            # ignoring vars_include
           )
 
           experiment_names <- names(data)
@@ -986,6 +985,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
               self$get_filter_states(experiment_name)$srv_add_filter_state(
                 id = experiment_name,
                 data = data[[experiment_name]] # SummarizedExperiment or matrix
+                # ignoring vars_include
               )
             }
           )

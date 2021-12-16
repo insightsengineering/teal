@@ -226,8 +226,11 @@ init_filter_state.POSIXlt <- function(x, #nousage
 #' state of the filter through reactive values `selected`, `keep_na`, `keep_inf`
 #' which trigger `get_call()` and every R function call up in reactive
 #' chain.
-#'
-#' Setting the `FilterState` is possible in:
+#' \cr
+#' \cr
+#' \if{html}{\figure{filter_state_reactivity.jpg}{options: width="100\%" alt="Figure: filter_state_reactivity.jpg"}}
+#' \if{latex}{\figure{filter_state_reactivity.jpg}{options: width=7cm}}
+#' Setting the `FilterState` is possible in three scenarios depicted above:
 #' * In the interactive session by directly specifying values of `selected`,
 #'   `keep_na` or `keep_inf` using `set_state` method (to update all at once),
 #'   or using `set_selected`, `set_keep_na` or `set_keep_inf`
@@ -235,10 +238,8 @@ init_filter_state.POSIXlt <- function(x, #nousage
 #' * In running shiny app using methods `set_selected_reactive`,
 #' `set_keep_na_reactive` `set_keep_inf_reactive` which serves as a programmatic
 #' API.
-#' Above three scenarios are depicted on the diagram below
-#' \if{html}{\figure{filter_state_reactivity.jpg}{options: width="100\%" alt="Figure: filter_state_reactivity.jpg"}}
-#' \if{latex}{\figure{filter_state_reactivity.jpg}{options: width=7cm}}
 #'
+#' @keywords internal
 FilterState <- R6::R6Class( # nolint
   "FilterState",
   public = list(

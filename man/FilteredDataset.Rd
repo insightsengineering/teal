@@ -10,6 +10,7 @@ Each \code{FilteredDataset} contains \code{filter_states} field - a \code{list} 
 Each \code{FilterStates} is responsible for one filter/subset expression applied for specific
 components of the \code{TealDataset}.
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
