@@ -58,7 +58,8 @@ defining initial values selected to filter.
 way. Since \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}} contains
 patient data (\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment::colData()}}) with list of experiments
 (\code{\link[MultiAssayExperiment:ExperimentList]{MultiAssayExperiment::ExperimentList()}}), \code{filter} list should be named
-in the following name.\cr
+in the following name.
+\cr
 }\preformatted{list(
   <MAE dataname> = list(
     subjects = list(<column in colData> = ..., <column in colData> = ...),
