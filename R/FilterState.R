@@ -1613,7 +1613,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
                 inputId = "selection",
                 value =  private$selected_reactive()
               )
-              private$selected_reactive()
+              private$selected_reactive(NULL)
           })
           private$observe_keep_na_reactive(private$keep_na_reactive())
 
@@ -1871,7 +1871,7 @@ DateFilterState <- R6::R6Class( # nolint
                 start = private$selected_reactive()[1],
                 end = private$selected_reactive()[2]
               )
-              private$selected_reactive()
+              private$selected_reactive(NULL)
             }
           )
           private$observe_keep_na_reactive(private$keep_na_reactive())
@@ -2182,7 +2182,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
                 inputId = "selection_end",
                 value = private$selected_reactive()[2]
               )
-              private$selected_reactive()
+              private$selected_reactive(NULL)
             }
           )
           private$observe_keep_na_reactive(private$keep_na_reactive())

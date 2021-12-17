@@ -55,7 +55,8 @@ filtered_data_set.TealData <- function(data, datasets) { # nolintr # nousage
 filtered_data_set_filters <- function(datasets, filter) {
   stopifnot(
     is(datasets, "FilteredData"),
-    is_fully_named_list(filter)
+    is_fully_named_list(filter),
+    all(names(filter) %in% datasets$datanames())
   )
 
   if (length(filter) > 0) {
