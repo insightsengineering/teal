@@ -122,7 +122,7 @@ testthat::test_that("get call returns a call assigning the filtered object to <n
 
 testthat::test_that(
   "FilteredData$set_filter_state sets filters in FilteredDataset specified by the named list", {
-    datasets <- teal:::FilteredData$new()
+    datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
     fs <- list(
@@ -165,7 +165,7 @@ testthat::test_that(
 
 testthat::test_that(
   "FilteredData$set_filter_state throws error with unnamed datasets list", {
-    datasets <- teal:::FilteredData$new()
+    datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
     fs <- list(
@@ -184,7 +184,7 @@ testthat::test_that(
 
 testthat::test_that(
   "FilteredData$set_filter_state throws error with unnamed variables list", {
-    datasets <- teal:::FilteredData$new()
+    datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
     fs <- list(
@@ -203,7 +203,7 @@ testthat::test_that(
 
 testthat::test_that(
   "FilteredData$remove_all_filter_states removes all filters of all datasets in FilteredData", {
-    datasets <- teal:::FilteredData$new()
+    datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
     fs <- list(
@@ -237,7 +237,7 @@ testthat::test_that(
 
 testthat::test_that(
   "FilteredData$remove_all_filter_states remove the filters of the desired dataset only", {
-    datasets <- teal:::FilteredData$new()
+    datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
     fs <- list(

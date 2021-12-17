@@ -13,7 +13,7 @@ testthat::test_that("get_call returns a list of calls", {
 
 testthat::test_that(
   "DefaultFilteredDataset$set_filter_state sets filters specified by list names", {
-    dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+    dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
 
     fs <- list(
       Sepal.Length = c(5.1, 6.4),
@@ -37,7 +37,7 @@ testthat::test_that(
 
 testthat::test_that(
   "DefaultFilteredDataset$set_filter_state throws error when list is not named", {
-    dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+    dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
     fs <- list(
       c(5.1, 6.4),
       Species = c("setosa", "versicolor")
@@ -48,7 +48,7 @@ testthat::test_that(
 
 testthat::test_that(
   "DefaultFilteredDataset$remove_filter_state removes desired filter", {
-    dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+    dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
     fs <- list(
       Sepal.Length = c(5.1, 6.4),
       Species = c("setosa", "versicolor")
@@ -72,7 +72,7 @@ testthat::test_that(
 
 testthat::test_that(
   "DefaultFilteredDataset$remove_filter_state removes more than one filter", {
-    dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+    dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
     fs <- list(
       Sepal.Length = c(5.1, 6.4),
       Species = c("setosa", "versicolor")

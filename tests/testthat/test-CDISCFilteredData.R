@@ -1,6 +1,6 @@
 options(teal_logging = FALSE)
 
-ds <- teal:::CDISCFilteredData$new()
+ds <- CDISCFilteredData$new()
 
 test_that("datanames() returns an empty character array after initialization", {
   expect_setequal(isolate(ds$datanames()), character(0))

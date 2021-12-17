@@ -129,7 +129,7 @@ testthat::test_that("get_filter_overview_info returns overview matrix for MAEFil
 
 testthat::test_that(
   "MAEFilteredDataset$set_filter_state sets filters in FilterStates specified by list names", {
-    dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+    dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
         years_to_birth = c(30, 50),
@@ -165,7 +165,7 @@ testthat::test_that(
 
 testthat::test_that(
   "MAEFilteredDataset$set_filter_state throws error when using unnamed list", {
-    dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+    dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       list(
         years_to_birth = c(30, 50),
@@ -182,7 +182,7 @@ testthat::test_that(
 
 testthat::test_that(
   "MAEFilteredDataset$set_filter_state throws error when using unnamed variables list", {
-    dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+    dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
         c(30, 50),
@@ -198,7 +198,7 @@ testthat::test_that(
 )
 
 testthat::test_that("MAEFilteredDataset$set_filter_state throws error if state argument is not a list ", {
-  dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+  dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
   fs <- c("not_list")
   testthat::expect_error(
     dataset$set_filter_state(state = fs),
@@ -209,7 +209,7 @@ testthat::test_that("MAEFilteredDataset$set_filter_state throws error if state a
 
 testthat::test_that(
   "MAEFilteredDataset$remove_filter_state removes desired filter", {
-    dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+    dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
         years_to_birth = c(30, 50),
@@ -246,7 +246,7 @@ testthat::test_that(
 
 testthat::test_that(
   "MAEFilteredDataset$remove_filter_state throws error if list in unnamed", {
-    dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+    dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
         years_to_birth = c(30, 50),

@@ -93,7 +93,7 @@ testthat::test_that("get_call returns a call filtering an MAE object using Range
 
 testthat::test_that(
   "MAEFilterStates$set_filter_state sets filters in FilterState(s) specified by the named list", {
-    maefs <- teal:::MAEFilterStates$new(
+    maefs <- MAEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
       datalabel = character(0),
@@ -123,7 +123,7 @@ testthat::test_that(
 
 testthat::test_that(
   "MAEFilterStates$set_filter_state throws error when not using a named list", {
-    maefs <- teal:::MAEFilterStates$new(
+    maefs <- MAEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
       datalabel = character(0),
@@ -141,7 +141,7 @@ testthat::test_that(
 
 testthat::test_that(
   "MAEFilterStates$remove_filter_state removes filters in FilterState(s)", {
-    maefs <- teal:::MAEFilterStates$new(
+    maefs <- MAEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
       datalabel = character(0),
@@ -173,7 +173,7 @@ testthat::test_that(
 
 testthat::test_that(
   "MAEFilterStates$remove_filter_state throws error when name is not in FilterStates", {
-    maefs <- teal:::MAEFilterStates$new(
+    maefs <- MAEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
       datalabel = character(0),

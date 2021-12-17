@@ -143,7 +143,7 @@ testthat::test_that("get_fun method returns subset", {
 testthat::test_that("get_call returns `output_dataname <- input_dataname` when no state is set", {
   obj <- get_test_data()
   test <- obj
-  sefs <- teal:::SEFilterStates$new(
+  sefs <- SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",
     datalabel = character(0)
@@ -159,7 +159,7 @@ testthat::test_that("SEFilterStates$set_filter_state sets state with only subset
   obj <- get_test_data()
   test <- obj
 
-  sefs <- teal:::SEFilterStates$new(
+  sefs <- SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",
     datalabel = character(0)
@@ -184,7 +184,7 @@ testthat::test_that("SEFilterStates$set_filter_state sets state with neither sub
   obj <- get_test_data()
   test <- obj
 
-  sefs <- teal:::SEFilterStates$new(
+  sefs <- SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",
     datalabel = character(0)
@@ -200,7 +200,7 @@ testthat::test_that(
   "SEFilterStates$set_filter_state sets filters in ReactiveQueue specified by the named list", {
     obj <- get_test_data()
     test <- obj
-    sefs <- teal:::SEFilterStates$new(
+    sefs <- SEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
       datalabel = character(0)
@@ -225,7 +225,7 @@ testthat::test_that(
   "SEFilterStates$remove_filter_state removes filters in ReactiveQueue", {
     obj <- get_test_data()
     test <- obj
-    sefs <- teal:::SEFilterStates$new(
+    sefs <- SEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
       datalabel = character(0)
@@ -251,7 +251,7 @@ testthat::test_that(
   "SEFilterStates$remove_filter_state removes all filters in ReactiveQueue", {
     obj <- get_test_data()
     test <- obj
-    sefs <- teal:::SEFilterStates$new(
+    sefs <- SEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
       datalabel = character(0)
@@ -274,7 +274,7 @@ testthat::test_that(
   "SEFilterStates$remove_filter_state throws error when list is not named", {
     obj <- get_test_data()
     test <- obj
-    sefs <- teal:::SEFilterStates$new(
+    sefs <- SEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
       datalabel = character(0)
@@ -294,7 +294,7 @@ testthat::test_that(
   "SEFilterStates$remove_filter_state throws error when list has unknown name in the FilterState", {
     obj <- get_test_data()
     test <- obj
-    sefs <- teal:::SEFilterStates$new(
+    sefs <- SEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
       datalabel = character(0)
