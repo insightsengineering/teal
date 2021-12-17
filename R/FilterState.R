@@ -587,7 +587,12 @@ FilterState <- R6::R6Class( # nolint
         ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
         ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
         eventExpr = input$keep_na,
-        handlerExpr = self$set_keep_na(if_null(input$keep_na, FALSE))
+        handlerExpr = {
+          self$set_keep_na(if_null(input$keep_na, FALSE))
+          logger::log_trace(
+            "{ class(self)[1] }$server keep_na set to: { input$keep_na }, dataname: { private$input_dataname }"
+          )
+        }
       )
       invisible(NULL)
     },
@@ -606,6 +611,9 @@ FilterState <- R6::R6Class( # nolint
             value = value
           )
           private$keep_na_reactive(NULL)
+          logger::log_trace(
+            "{ class(self)[1] }$server keep_inf set to: { value }, dataname: { private$input_dataname }"
+          )
         }
       )
       invisible(NULL)
@@ -949,7 +957,10 @@ LogicalFilterState <- R6::R6Class( # nolint
                 inputId = "selection",
                 selected =  private$selected_reactive()
               )
-              private$selected_reactive()
+              logger::log_trace(
+                "LogicalFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
+              )
+              private$selected_reactive(NULL)
             }
           )
           private$observe_keep_na_reactive(private$keep_na_reactive())
@@ -962,7 +973,7 @@ LogicalFilterState <- R6::R6Class( # nolint
               selection_state <- input$selection
               self$set_selected(if_null(as.logical(selection_state), logical(0)))
               logger::log_trace(
-                "LogicalFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
+                "LogicalFilterState$server@2 selection changed, dataname: { deparse1(private$input_dataname) }"
               )
             }
           )
@@ -1207,7 +1218,10 @@ RangeFilterState <- R6::R6Class( # nolint
                 inputId = "selection",
                 value = private$selected_reactive()
               )
-              private$selected_reactive()
+              private$selected_reactive(NULL)
+              logger::log_trace(
+                "RangeFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
+              )
             }
           )
           private$observe_keep_na_reactive(private$keep_na_reactive())
@@ -1221,6 +1235,10 @@ RangeFilterState <- R6::R6Class( # nolint
                 inputId = "keep_inf",
                 value =  private$keep_inf_reactive()
               )
+              logger::log_trace(paste(
+                "RangeFilterState$server@2 keep_inf set to:",
+                "{ private$keep_inf_reactive() }, dataname: { private$input_dataname }"
+              ))
               private$keep_inf_reactive(NULL)
             }
           )
@@ -1242,7 +1260,7 @@ RangeFilterState <- R6::R6Class( # nolint
                 self$set_selected(if_null(selection_state, numeric(0)))
               }
               logger::log_trace(
-                "RangeFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
+                "RangeFilterState$server@3 selection changed, dataname: { deparse1(private$input_dataname) }"
               )
             })
 
@@ -1255,7 +1273,7 @@ RangeFilterState <- R6::R6Class( # nolint
             handlerExpr = {
               self$set_keep_inf(if_null(input$keep_inf, FALSE))
               logger::log_trace(
-                "RangeFilterState$server@2 keep_inf set to: { input$keep_inf }, dataname: { private$input_dataname }"
+                "RangeFilterState$server@4 keep_inf set to: { input$keep_inf }, dataname: { private$input_dataname }"
               )
             }
           )
@@ -1275,6 +1293,7 @@ RangeFilterState <- R6::R6Class( # nolint
     set_keep_inf = function(value) {
       stopifnot(is_logical_single(value))
       private$keep_inf(value)
+      logger::log_trace("{ class(self)[1] }$set_keep_inf set to { value }")
     },
 
     #' @description
@@ -1286,6 +1305,7 @@ RangeFilterState <- R6::R6Class( # nolint
     set_keep_inf_reactive = function(value) {
       stopifnot(is_logical_single(value))
       private$keep_inf_reactive(value)
+      logger::log_trace("{ class(self)[1] }$set_keep_inf_reactive set to { value }")
     },
 
     #' @description
@@ -1614,6 +1634,9 @@ ChoicesFilterState <- R6::R6Class( # nolint
                 inputId = "selection",
                 value =  private$selected_reactive()
               )
+              logger::log_trace(
+                "ChoicesFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
+              )
               private$selected_reactive(NULL)
           })
           private$observe_keep_na_reactive(private$keep_na_reactive())
@@ -1625,7 +1648,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
             handlerExpr = {
               self$set_selected(if_null(input$selection, character(0)))
               logger::log_trace(
-                "ChoicesFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
+                "ChoicesFilterState$server@2 selection changed, dataname: { deparse1(private$input_dataname) }"
               )
             }
           )
@@ -1872,6 +1895,9 @@ DateFilterState <- R6::R6Class( # nolint
                 start = private$selected_reactive()[1],
                 end = private$selected_reactive()[2]
               )
+              logger::log_trace(
+                "DateFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
+              )
               private$selected_reactive(NULL)
             }
           )
@@ -1887,7 +1913,7 @@ DateFilterState <- R6::R6Class( # nolint
 
               self$set_selected(c(start_date, end_date))
               logger::log_trace(
-                "DateFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
+                "DateFilterState$server@2 selection changed, dataname: { deparse1(private$input_dataname) }"
               )
             }
           )
@@ -1901,7 +1927,7 @@ DateFilterState <- R6::R6Class( # nolint
               start = private$choices[1]
             )
             logger::log_trace(
-              "DateFilterState$server@2 reset start date, dataname: { deparse1(private$input_dataname) }"
+              "DateFilterState$server@3 reset start date, dataname: { deparse1(private$input_dataname) }"
             )
           })
 
@@ -1911,7 +1937,7 @@ DateFilterState <- R6::R6Class( # nolint
               inputId = "selection",
               end = private$choices[2]
             )
-            logger::log_trace("DateFilterState$server@3 reset end date, dataname: { deparse1(private$input_dataname) }")
+            logger::log_trace("DateFilterState$server@4 reset end date, dataname: { deparse1(private$input_dataname) }")
           })
           logger::log_trace("DateFilterState$server initialized, dataname: { deparse1(private$input_dataname) }")
           NULL
@@ -2183,6 +2209,9 @@ DatetimeFilterState <- R6::R6Class( # nolint
                 inputId = "selection_end",
                 value = private$selected_reactive()[2]
               )
+              logger::log_trace(
+                "DatetimeFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
+              )
               private$selected_reactive(NULL)
             }
           )
@@ -2210,7 +2239,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
 
               self$set_selected(c(start_date, end_date))
               logger::log_trace(
-                "DatetimeFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
+                "DatetimeFilterState$server@2 selection changed, dataname: { deparse1(private$input_dataname) }"
               )
             }
           )
