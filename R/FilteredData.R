@@ -379,7 +379,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @return `NULL`
     set_filter_state = function(state) {
       stopifnot(all(names(state) %in% self$datanames()))
-      logger::log_trace("FilteredData$set_filter_state initializing")
+      logger::log_trace("FilteredData$set_filter_state initializing, dataname: { names(state) }")
       for(dataname in names(state)) {
 
         fdataset <- self$get_filtered_dataset(dataname = dataname)
@@ -390,7 +390,7 @@ FilteredData <- R6::R6Class( # nolint
           vars_include = self$get_filterable_varnames(dataname)
         )
       }
-      logger::log_trace("FilteredData$set_filter_state initialized")
+      logger::log_trace("FilteredData$set_filter_state initialized, dataname: { names(state) }")
       invisible(NULL)
     },
 
@@ -401,13 +401,14 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @return `NULL`
     remove_filter_state = function(state) {
-      logger::log_trace("FilteredData$remove_filter_state called")
+      logger::log_trace("FilteredData$remove_filter_state called, dataname: { names(state) }")
 
       for(dataname in names(state)) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)
         fdataset$remove_filter_state(element_id = state[[dataname]])
       }
 
+      logger::log_trace("FilteredData$remove_filter_state done, dataname: { names(state) }")
       invisible(NULL)
     },
 
@@ -419,9 +420,12 @@ FilteredData <- R6::R6Class( # nolint
     #' @return `NULL`
     #'
     remove_all_filter_states = function(datanames) {
-      logger::log_trace("FilteredData$remove_all_filter_states called")
-
       if (missing(datanames)) datanames <- names(self$get_filtered_dataset())
+
+      logger::log_trace(
+        "FilteredData$remove_all_filter_states called, datanames: { paste(datanames, collapse = ', ') }"
+      )
+
 
       for(dataname in datanames) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)
@@ -429,7 +433,10 @@ FilteredData <- R6::R6Class( # nolint
       }
 
       logger::log_trace(
-        "FilteredData$remove_all_filter_states removed all FilterStates of { paste(datanames, collapse = ', ') }"
+        paste(
+          "FilteredData$remove_all_filter_states removed all FilterStates,",
+          "datanames: { paste(datanames, collapse = ', ') }"
+        )
       )
 
       invisible(NULL)

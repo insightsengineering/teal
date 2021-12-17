@@ -537,7 +537,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' @return `NULL`
     remove_filter_state = function(element_id) {
       logger::log_trace(
-        "DefaultFilteredDataset$remove_filter_state removing filters in : { self$get_dataname() }"
+        "DefaultFilteredDataset$remove_filter_state removing filters, dataname: { self$get_dataname() }"
       )
 
       fdata_filter_state <- self$get_filter_states()[[1]]
@@ -545,7 +545,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
         fdata_filter_state$remove_filter_state(element)
       }
       logger::log_trace(
-        "DefaultFilteredDataset$remove_filter_state done removing filters in : { self$get_dataname() }"
+        "DefaultFilteredDataset$remove_filter_state done removing filters, dataname: { self$get_dataname() }"
       )
       invisible(NULL)
     },

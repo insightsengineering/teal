@@ -477,7 +477,7 @@ FilterStates <- R6::R6Class( # nolint
         function(input, output, session) {
           logger::log_trace(paste(
             "{ class(self)[1] }$insert_filter_state_ui, adding FilterState UI,",
-            "input_dataname: { deparse1(private$input_dataname) }"
+            "dataname: { deparse1(private$input_dataname) }"
           ))
           card_id <- session$ns("card")
           queue_id <- sprintf("%s-%s", queue_index, element_id)
@@ -535,19 +535,19 @@ FilterStates <- R6::R6Class( # nolint
             handlerExpr = {
               logger::log_trace(paste(
                 "{ class(self)[1] }$insert_filter_state_ui@1 removing FilterState from queue '{ queue_index }',",
-                "input_dataname: { deparse1(private$input_dataname) }"
+                "dataname: { deparse1(private$input_dataname) }"
               ))
               self$queue_remove(queue_index, element_id)
               logger::log_trace(paste(
                 "{ class(self)[1] }$insert_filter_state_ui@1 removed FilterState from queue '{ queue_index }',",
-                "input_dataname: { deparse1(private$input_dataname) }"
+                "dataname: { deparse1(private$input_dataname) }"
               ))
             }
           )
 
           logger::log_trace(paste(
             "{ class(self)[1] }$insert_filter_state_ui, added FilterState UI,",
-            "input_dataname: { deparse1(private$input_dataname) }"
+            "dataname: { deparse1(private$input_dataname) }"
           ))
           NULL
         }
@@ -776,8 +776,14 @@ DFFilterStates <- R6::R6Class( # nolint
     #' @return `NULL`
     #'
     remove_filter_state = function(element_id) {
+      logger::log_trace(
+        "{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }"
+      )
       stopifnot(element_id %in% names(private$get_filter_state(1L)))
       self$queue_remove(queue_index = 1L, element_id = element_id)
+      logger::log_trace(
+        "{ class(self)[1] }$remove_filter_state done, dataname: { deparse1(private$input_dataname) }"
+      )
     },
 
     #' @description
