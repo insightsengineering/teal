@@ -605,6 +605,7 @@ FilterState <- R6::R6Class( # nolint
             inputId = "keep_na",
             value = value
           )
+          private$keep_na_reactive(NULL)
         }
       )
       invisible(NULL)
@@ -1220,7 +1221,7 @@ RangeFilterState <- R6::R6Class( # nolint
                 inputId = "keep_inf",
                 value =  private$keep_inf_reactive()
               )
-              private$keep_inf_reactive()
+              private$keep_inf_reactive(NULL)
             }
           )
 
