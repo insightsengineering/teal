@@ -1,2 +1,5 @@
-linters: with_defaults(line_length_linter = line_length_linter(120), cyclocomp_linter = NULL, object_usage_linter = NULL)
-error_on_lint: TRUE
+linters: with_defaults(
+  line_length_linter = line_length_linter(120),
+  cyclocomp_linter = NULL,
+  object_usage_linter = NULL
+  )
