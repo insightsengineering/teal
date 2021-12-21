@@ -276,19 +276,6 @@ FilteredDataset <- R6::R6Class( # nolint
       get_filterable_varnames(self$get_data(filtered = FALSE))
     },
 
-    #' @description
-    #' Sets the bookmark state
-    #'
-    #' @param id (`character(1)`)\cr
-    #'   an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param state (`named list`)\cr
-    #'  containing values of the initial filter. Values should be relevant
-    #'  to the referred column.
-    #' @return `moduleServer` function.
-    set_filter_state = function(id, state) {
-      stop("Pure virtual method.")
-    },
-
     # modules ------
     #' @description
     #' UI module for dataset active filters
