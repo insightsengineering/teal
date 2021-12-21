@@ -1,3 +1,3 @@
 * @insightsengineering/nest-core-dev
-.github/workflows/* @insightsengineering/nest-automation
-.gitlab-ci.yml @insightsengineering/nest-automation
+.github/workflows/* @insightsengineering/idr
+.gitlab-ci.yml @insightsengineering/idr
