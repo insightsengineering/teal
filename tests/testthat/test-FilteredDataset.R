@@ -106,17 +106,6 @@ testthat::test_that("get_filtered_dataname returns <dataname>_FILTERED as defaul
   testthat::expect_equal(filtered_dataset$get_filtered_dataname(), "iris_FILTERED")
 })
 
-testthat::test_that("set_filter_state state is pure virtual", {
-  filtered_dataset <- FilteredDataset$new(
-    dataset = TealDataset$new("iris", head(iris))
-  )
-
-  testthat::expect_error(
-    filtered_dataset$set_filter_state(),
-    "Pure virtual method."
-  )
-})
-
 testthat::test_that("ui_add_filter_state is pure virtual", {
   filtered_dataset <- FilteredDataset$new(
     dataset = TealDataset$new("iris", head(iris))
