@@ -48,6 +48,7 @@ Imports:
     yaml
 Suggests:
     askpass,
+    checkmate,
     covr,
     httr,
     knitr,

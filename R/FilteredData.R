@@ -378,7 +378,7 @@ FilteredData <- R6::R6Class( # nolint
     #'  nested list of filter selections applied to datasets.
     #' @return `NULL`
     set_filter_state = function(state) {
-      stopifnot(all(names(state) %in% self$datanames()))
+      checkmate::assert_subset(names(state), self$datanames())
       logger::log_trace("FilteredData$set_filter_state initializing, dataname: { names(state) }")
       for(dataname in names(state)) {
 
@@ -425,7 +425,6 @@ FilteredData <- R6::R6Class( # nolint
       logger::log_trace(
         "FilteredData$remove_all_filter_states called, datanames: { paste(datanames, collapse = ', ') }"
       )
-
 
       for(dataname in datanames) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)

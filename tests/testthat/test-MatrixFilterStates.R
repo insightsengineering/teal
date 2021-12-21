@@ -60,7 +60,7 @@ testthat::test_that("set_filter_state throws error when list is unnamed", {
 
   testthat::expect_error(
     filter_states$set_filter_state(state = fs, data = test),
-    "!is.null(names(state))",
+    "Assertion on 'checkmate::test_null(names(state))' failed. FALSE.",
     fixed = TRUE
   )
 })
@@ -83,7 +83,7 @@ testthat::test_that("remove_filter_state removes filters from reactiveQueue", {
   testthat::expect_equal(output, test)
 })
 
-testthat::test_that("remove_filter_state throws error when element_id is not in reactiveQueue", {
+testthat::test_that("remove_filter_state throws warning when element_id is not in reactiveQueue", {
   filter_states <- MatrixFilterStates$new(
     input_dataname = "test",
     output_dataname = "output",
@@ -96,5 +96,5 @@ testthat::test_that("remove_filter_state throws error when element_id is not in 
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(output, test[1:2, 1, drop = FALSE])
 
-  testthat::expect_error(filter_states$remove_filter_state("B"))
+  testthat::expect_warning(filter_states$remove_filter_state("B"))
 })

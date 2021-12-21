@@ -291,7 +291,7 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "SEFilterStates$remove_filter_state throws error when list has unknown name in the FilterState", {
+  "SEFilterStates$remove_filter_state throws warning when list has unknown name in the FilterState", {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -306,6 +306,6 @@ testthat::test_that(
     )
 
     sefs$set_filter_state(state = fs, data = obj)
-    testthat::expect_error(sefs$remove_filter_state(list(subset = list("feature_id2"))))
+    testthat::expect_warning(sefs$remove_filter_state(list(subset = list("feature_id2"))))
   }
 )

@@ -202,7 +202,7 @@ testthat::test_that("MAEFilteredDataset$set_filter_state throws error if state a
   fs <- c("not_list")
   testthat::expect_error(
     dataset$set_filter_state(state = fs),
-    "is.list(state) is not TRUE",
+    "Must be of type 'list', not 'character'.",
     fixed = TRUE
   )
 })

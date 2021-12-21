@@ -515,7 +515,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #'  Note that this is ignored for other `FilteredDatasets`.
     #' @return `NULL`
     set_filter_state = function(state, ...) {
-      stopifnot(is.list(state))
+      checkmate::assert_list(state)
       logger::log_trace(
         "DefaultFilteredDataset$set_filter_state setting up filters in : { self$get_dataname() }"
       )
@@ -873,10 +873,9 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' @param ... ignored.
     #' @return `NULL`
     set_filter_state = function(state, ...) {
-      stopifnot(
-        is.list(state),
-        all(names(state) %in% c(names(self$get_filter_states())))
-      )
+      checkmate::assert_list(state)
+      checkmate::assert_subset(names(state), c(names(self$get_filter_states())))
+
       logger::log_trace("MAEFilteredDataset$set_filter_state setting up filters: { self$get_dataname() }")
       data <- self$get_data(filtered = FALSE)
       for (fs_name in names(state)) {
@@ -891,7 +890,6 @@ MAEFilteredDataset <- R6::R6Class( # nolint
         "MAEFilteredDataset$set_filter_state done setting filters: { self$get_dataname() }"
       )
       NULL
-
     },
 
     #' @description Remove one or more `FilterState` of a `MAEFilteredDataset`
@@ -902,10 +900,9 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' @return `NULL`
     #'
     remove_filter_state = function(element_id) {
-      stopifnot(
-        is_fully_named_list(element_id),
-        all(names(element_id) %in% c(names(self$get_filter_states())))
-      )
+      checkmate::assert_list(element_id, names = "unique")
+      checkmate::assert_subset(names(element_id), c(names(self$get_filter_states())))
+
       logger::log_trace("MAEFilteredDataset$remove_filter_state removing filters: { self$get_dataname() }")
 
       for (fs_name in names(element_id)) {

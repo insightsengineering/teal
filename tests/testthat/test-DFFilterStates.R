@@ -180,7 +180,7 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "DFFilterStates$remove_filter_state throws error when name is not in FilterStates", {
+  "DFFilterStates$remove_filter_state throws warning when name is not in FilterStates", {
     dffs <- DFFilterStates$new(
       input_dataname = "iris",
       output_dataname = "iris_filtered",
@@ -194,6 +194,6 @@ testthat::test_that(
     )
 
     dffs$set_filter_state(state = fs, data = iris)
-    testthat::expect_error(dffs$remove_filter_state("Species2"))
+    testthat::expect_warning(dffs$remove_filter_state("Species2"))
   }
 )

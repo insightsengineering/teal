@@ -469,9 +469,9 @@ FilterStates <- R6::R6Class( # nolint
     #'   name of `ReactiveQueue` element.
     #' return `moduleServer` function which returns `NULL`
     insert_filter_state_ui = function(id, filter_state, queue_index, element_id) {
-      stopifnot(is(filter_state, "FilterState"))
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
-      stopifnot(is_character_single(element_id))
+      checkmate::assert_class(filter_state, "FilterState")
+      assert(checkmate::check_int(queue_index), checkmate::check_character(queue_index, len = 1), combine = "or")
+      checkmate::assert_character(element_id, len = 1)
       moduleServer(
         id = id,
         function(input, output, session) {
@@ -719,8 +719,12 @@ DFFilterStates <- R6::R6Class( # nolint
     #' @param ... ignored.
     #' @return `NULL`
     set_filter_state = function(data, state, vars_include = get_filterable_varnames(data = data), ...) {
-      stopifnot(is.data.frame(data))
-      stopifnot(all(names(state) %in% names(data)) || is(state, "default_filter"))
+      checkmate::assert_data_frame(data)
+      checkmate::assert(
+        checkmate::check_subset(names(state), names(data)),
+        checkmate::check_class(state, "default_filter"),
+        combine = "or"
+      )
       logger::log_trace(
         "{ class(self)[1] }$set_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
       )
@@ -1054,9 +1058,11 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' @param ... ignored.
     #' @return `NULL`
     set_filter_state = function(data, state, ...) {
-      stopifnot(is(data, "MultiAssayExperiment"))
-      stopifnot(
-        all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
+      checkmate::assert_class(data, "MultiAssayExperiment")
+      checkmate::assert(
+        checkmate::check_subset(names(state), names(SummarizedExperiment::colData(data))),
+        checkmate::check_class(state, "default_filter"),
+        combine = "or"
       )
       logger::log_trace(paste(
         "MAEFilterState$set_filter_state initializing,",
@@ -1408,17 +1414,31 @@ SEFilterStates <- R6::R6Class( # nolint
     #' @param ... ignored.
     #' @return `NULL`
     set_filter_state = function(data, state, ...) {
-      stopifnot(is(data, "SummarizedExperiment"))
-      stopifnot(
-        is(state, "list"),
-        all(names(state) %in% c("subset", "select")) || is(state, "default_filter"),
-        is.null(state$subset) ||
-          (is(state$subset, "list") &&
-             all(names(state$subset) %in% names(SummarizedExperiment::rowData(data)))),
-        is.null(state$select) ||
-          (is(state$select, "list") &&
-             all(names(state$select) %in% names(SummarizedExperiment::colData(data))))
+      checkmate::assert_class(data, "SummarizedExperiment")
+      checkmate::assert_class(state, "list")
+
+      checkmate::assert(
+        checkmate::check_subset(names(state), c("subset", "select")),
+        checkmate::check_class(state, "default_filter"),
+        combine = "or"
       )
+      checkmate::assert(
+        checkmate::test_null(state$subset),
+          checkmate::assert(
+            checkmate::check_class(state$subset, "list"),
+            checkmate::check_subset(names(state$subset), names(SummarizedExperiment::rowData(data))),
+            combine = "and"),
+        combine = "or"
+      )
+      checkmate::assert(
+        checkmate::test_null(state$select),
+        checkmate::assert(
+          checkmate::check_class(state$select, "list"),
+          checkmate::check_subset(names(state$select), names(SummarizedExperiment::colData(data))),
+          combine = "and"),
+        combine = "or"
+      )
+
       row_html_mapping <- private$map_vars_to_html_ids(
         get_filterable_varnames(SummarizedExperiment::rowData(data))
       )
@@ -1481,7 +1501,11 @@ SEFilterStates <- R6::R6Class( # nolint
     remove_filter_state = function(element_id) {
       logger::log_trace("{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }")
 
-      stopifnot(!is.null(names(element_id)) & all(names(element_id) %in% c("subset", "select")))
+      checkmate::assert(
+        !checkmate::test_null(names(element_id)),
+        checkmate::check_subset(names(element_id), c("subset", "select")),
+        combine = "and"
+      )
       for (varname in element_id$subset) {
         if (!all(unlist(element_id$subset) %in% names(private$get_filter_state("subset")))) {
           warning(paste(
@@ -1846,9 +1870,15 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #' @param ... ignored.
     #' @return `NULL`
     set_filter_state = function(data, state, ...) {
-      stopifnot(is(data, "matrix"))
-      stopifnot(
-        (!is.null(names(state)) & all(names(state) %in% colnames(data))) || is(state, "default_filter")
+      checkmate::assert_class(data, "matrix")
+      checkmate::assert(
+        checkmate::assert(
+          !checkmate::test_null(names(state)),
+          checkmate::check_subset(names(state), colnames(data)),
+          combine = "and"
+        ),
+        checkmate::check_class(state, "default_filter"),
+        combine = "or"
       )
       logger::log_trace(paste(
         "MatrixFilterState$set_filter_state initializing,",
