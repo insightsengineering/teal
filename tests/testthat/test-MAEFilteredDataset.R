@@ -84,6 +84,22 @@ testthat::test_that("MAEFilteredDataset get_data returns filtered MAE data when 
   testthat::expect_identical(unique(filtered_mae$race), "white")
 })
 
+testthat::test_that("MAEFilteredDataset$get_data throws error when filtered input is not logical", {
+  filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
+  testthat::expect_error(
+    isolate(filtered_dataset$get_data(filtered = "TRUE")),
+    "Assertion on 'filtered' failed: Must be of type 'logical', not 'character'."
+  )
+  testthat::expect_error(
+    isolate(filtered_dataset$get_data(filtered = 1)),
+    "Assertion on 'filtered' failed: Must be of type 'logical', not 'double'."
+  )
+  testthat::expect_error(
+    isolate(filtered_dataset$get_data(filtered = list(TRUE))),
+    "Assertion on 'filtered' failed: Must be of type 'logical', not 'list'."
+  )
+})
+
 testthat::test_that("get_filter_overview_info returns overview matrix for MAEFilteredDataset without filtering", {
   filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
   testthat::expect_equal(

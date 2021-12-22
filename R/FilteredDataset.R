@@ -153,6 +153,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @return type of returned object depending on a data stored in
     #' `TealDataset`. Currently `data.frame` or `MultiAssayExperiment`
     get_data = function(filtered) {
+      checkmate::assert_logical(filtered)
       if (isTRUE(filtered)) {
         self$get_data_reactive()()
       } else {
@@ -804,6 +805,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'   whether returned data should be filtered or not
     #' @return `MultiAssayExperiment`
     get_data = function(filtered) {
+      checkmate::assert_logical(filtered)
       if (isTRUE(filtered)) {
         # This try is specific for MAEFilteredDataset due to a bug in
         # S4Vectors causing errors when using the subset function on MAE objects.
