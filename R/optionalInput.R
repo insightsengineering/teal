@@ -31,43 +31,54 @@
 #' @examples
 #'
 #' optionalSelectInput(inputId = "xvar", label = "x variable", choices = "A", selected = "A")
-#' optionalSelectInput(inputId = "xvar",
-#'                     label = "x variable",
-#'                     choices = LETTERS[1:5],
-#'                      selected = "A")
-#' optionalSelectInput(inputId = "xvar",
-#'                     label = "x variable",
-#'                     choices = c("A - value A" = "A"),
-#'                     selected = "A")
+#' optionalSelectInput(
+#'   inputId = "xvar",
+#'   label = "x variable",
+#'   choices = LETTERS[1:5],
+#'   selected = "A"
+#' )
+#' optionalSelectInput(
+#'   inputId = "xvar",
+#'   label = "x variable",
+#'   choices = c("A - value A" = "A"),
+#'   selected = "A"
+#' )
 #'
 #' library(scda)
 #' ADRS <- synthetic_cdisc_data("latest")$adrs
-#' optionalSelectInput(inputId = "xvar",
-#'                     label = "x variable",
-#'                     choices = choices_labeled(
-#'                       choices = letters,
-#'                       labels = LETTERS,
-#'                       types = sample(
-#'                         c("primary_key", "numeric", "factor", "Date"),
-#'                         length(letters),
-#'                         TRUE
-#'                       ),
-#'                       subset = c("a", "b", "c")
-#'                     ),
-#'                     selected = "a")
-#' optionalSelectInput(inputId = "xvar",
-#'                     label = "x variable",
-#'                     choices = variable_choices(data = ADRS, subset = c("AGE", "SEX", "PARAMCD")),
-#'                     selected = "PARAMCD")
+#' optionalSelectInput(
+#'   inputId = "xvar",
+#'   label = "x variable",
+#'   choices = choices_labeled(
+#'     choices = letters,
+#'     labels = LETTERS,
+#'     types = sample(
+#'       c("primary_key", "numeric", "factor", "Date"),
+#'       length(letters),
+#'       TRUE
+#'     ),
+#'     subset = c("a", "b", "c")
+#'   ),
+#'   selected = "a"
+#' )
+#' optionalSelectInput(
+#'   inputId = "xvar",
+#'   label = "x variable",
+#'   choices = variable_choices(data = ADRS, subset = c("AGE", "SEX", "PARAMCD")),
+#'   selected = "PARAMCD"
+#' )
 #'
 #' selected_value <- paste0(lapply(ADRS[1, c("PARAMCD", "AVISIT")], as.character), collapse = " - ")
-#' optionalSelectInput(inputId = "xvar",
-#'                     label = "x variable",
-#'                     choices = value_choices(data = ADRS,
-#'                                             var_choices = c("PARAMCD", "AVISIT"),
-#'                                             var_label = c("PARAM", "AVISIT")),
-#'                     selected = selected_value)
-#'
+#' optionalSelectInput(
+#'   inputId = "xvar",
+#'   label = "x variable",
+#'   choices = value_choices(
+#'     data = ADRS,
+#'     var_choices = c("PARAMCD", "AVISIT"),
+#'     var_label = c("PARAM", "AVISIT")
+#'   ),
+#'   selected = selected_value
+#' )
 optionalSelectInput <- function(inputId, # nolint
                                 label = NULL,
                                 choices = NULL,
@@ -83,9 +94,10 @@ optionalSelectInput <- function(inputId, # nolint
   stopifnot(is.null(choices) || length(choices) >= 1)
   stopifnot(
     is.null(selected) ||
-    length(selected) == 0 ||
-    all(selected %in% choices) ||
-    all(selected %in% unlist(choices, recursive = FALSE)))
+      length(selected) == 0 ||
+      all(selected %in% choices) ||
+      all(selected %in% unlist(choices, recursive = FALSE))
+  )
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(sep) || is_character_single(sep))
   stopifnot(is.list(options))
@@ -133,13 +145,9 @@ optionalSelectInput <- function(inputId, # nolint
   }
 
   if (is.null(choices)) {
-
     return(shinyjs::hidden(ui))
-
   } else {
-
     if (fixed) {
-
       return(div(
         shinyjs::hidden(ui),
         tags$label(id = paste0(inputId, "_textonly"), class = "control-label", sub(":[[:space:]]+$", "", label)),
@@ -199,8 +207,10 @@ updateOptionalSelectInput <- function(session, # nolint
 #'   data type in each column.
 #'
 #' @examples
-#' teal:::variable_type_icons(c("integer", "numeric", "logical", "Date", "POSIXct", "POSIXlt",
-#' "factor", "character", "unknown", ""))
+#' teal:::variable_type_icons(c(
+#'   "integer", "numeric", "logical", "Date", "POSIXct", "POSIXlt",
+#'   "factor", "character", "unknown", ""
+#' ))
 variable_type_icons <- function(var_type) {
   stopifnot(is_character_vector(var_type, min_length = 0))
 
@@ -315,8 +325,8 @@ picker_options <- function(choices) {
 #'   \code{selected} inputs into the values of the different columns
 #' @return choices simplified
 extract_raw_choices <- function(choices, sep) {
- if (!is.null(sep)) {
-   vapply(choices, paste, collapse = sep, character(1))
+  if (!is.null(sep)) {
+    vapply(choices, paste, collapse = sep, character(1))
   } else if (is(choices, "choices_labeled")) {
     unname(unlist(choices))
   } else {

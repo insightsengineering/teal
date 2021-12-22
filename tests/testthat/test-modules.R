@@ -49,7 +49,7 @@ testthat::test_that("module correct server and ui arguments", {
 testthat::test_that("module with incorrect server and/or ui arguments", {
   expect_error(module(
     "callModule",
-    server =  function(input, sth, session, datasets) {
+    server = function(input, sth, session, datasets) {
     },
     ui = ui_fun1,
     filters = "all"
@@ -227,7 +227,6 @@ testthat::test_that("root_modules needs at least one argument", {
 
 
 testthat::test_that("all modules arguments are of class teal_module or teal_modules", {
-
   expect_error(modules(
     "aa", module("aaa",
       server = call_module_server_fun,
@@ -246,5 +245,4 @@ testthat::test_that("all modules arguments are of class teal_module or teal_modu
     ui = ui_fun1,
     filters = "all"
   ), list()), "modules: not all arguments are of class teal_module or teal_modules.")
-
 })

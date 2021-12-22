@@ -21,12 +21,16 @@ Depth starts at 0, so a single \code{teal.module} has depth 0.
 Nesting it increases overall depth by 1.
 }
 \examples{
-create_mod <- function(module_name) module(
-  module_name,
-  server = function(input, output, session, datasets) {},
-  ui = function(id, ...) { tags$p(id) },
-  filters = 'all'
-)
+create_mod <- function(module_name) {
+  module(
+    module_name,
+    server = function(input, output, session, datasets) {},
+    ui = function(id, ...) {
+      tags$p(id)
+    },
+    filters = "all"
+  )
+}
 mods <- modules(
   "d1",
   modules(

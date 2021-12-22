@@ -139,10 +139,10 @@ check_pkg_quietly <- function(pckg, msg) {
 #' check_in_range(
 #'   c(as.Date("2020-01-01"), as.Date("2020-01-20")),
 #'   c(as.Date("2020-01-01"), as.Date("2020-01-02"))
-#'   )
+#' )
 #' }
 check_in_range <- function(subinterval, range, pre_msg = "") {
-  epsilon <- .Machine$double.eps^0.5 #needed for floating point arithmetic; same value as in base::all.equal()
+  epsilon <- .Machine$double.eps^0.5 # needed for floating point arithmetic; same value as in base::all.equal()
   if ((length(subinterval) != 2)) {
     stop(
       sprintf(
@@ -293,11 +293,10 @@ read_script <- function(file, dataname = NULL) {
 #' get_key_duplicates(rel_adsl)
 #'
 #' df <- as.data.frame(
-#'   list(a = c('a', 'a', 'b', 'b', 'c'), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
+#'   list(a = c("a", "a", "b", "b", "c"), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
 #' )
-#' res <- get_key_duplicates(df, keys = c('a', 'b')) # duplicated keys are in rows 3 and 4
+#' res <- get_key_duplicates(df, keys = c("a", "b")) # duplicated keys are in rows 3 and 4
 #' print(res) # prints a tibble
-#'
 #' \dontrun{
 #' get_key_duplicates(df) # raises an exception, because keys are missing with no default
 #' }
@@ -334,11 +333,10 @@ get_key_duplicates <- function(dataset, keys = NULL) {
 #' # is in the recognized ADAM nomenclature ("ADSL")
 #' rel_adsl <- cdisc_dataset("ADSL", adsl)
 #' get_key_duplicates(rel_adsl)
-#'
 #' @seealso [get_key_duplicates] [get_key_duplicates_util]
 #'
 #' @export
-get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { #nolint
+get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { # nolint
   df <- get_raw_data(dataset)
   keys <- if_null(keys, if_null(get_keys(dataset), character(0)))
 
@@ -360,15 +358,14 @@ get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { #nolint
 #'
 #' @examples
 #' df <- as.data.frame(
-#'   list(a = c('a', 'a', 'b', 'b', 'c'), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
+#'   list(a = c("a", "a", "b", "b", "c"), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
 #' )
-#' res <- get_key_duplicates(df, keys = c('a', 'b')) # duplicated keys are in rows 3 and 4
+#' res <- get_key_duplicates(df, keys = c("a", "b")) # duplicated keys are in rows 3 and 4
 #' print(res) # outputs a tibble
-#'
 #' @seealso [get_key_duplicates] [get_key_duplicates_util]
 #'
 #' @export
-get_key_duplicates.data.frame <- function(dataset, keys = NULL) { #nolint
+get_key_duplicates.data.frame <- function(dataset, keys = NULL) { # nolint
   keys <- if_null(keys, if_null(attr(dataset, "primary_key"), character(0)))
 
   get_key_duplicates_util(dataset, keys)
@@ -401,7 +398,6 @@ get_key_duplicates.data.frame <- function(dataset, keys = NULL) { #nolint
 #' )
 #' res <- teal:::get_key_duplicates_util(df, keys = c("a", "b")) # duplicated keys are in rows 3 and 4
 #' print(res) # outputs a tibble
-#'
 #' @seealso [get_key_duplicates]
 get_key_duplicates_util <- function(dataframe, keys) {
   stopifnot(!is.null(keys))
@@ -420,7 +416,7 @@ get_key_duplicates_util <- function(dataframe, keys) {
   summary <- summary[
     duplicated(dplyr::select(summary, dplyr::all_of(keys))) |
       duplicated(dplyr::select(summary, dplyr::all_of(keys)), fromLast = TRUE),
-    ]
+  ]
   summary <- dplyr::summarise(
     dplyr::group_by(summary, dplyr::across(dplyr::all_of(keys))),
     rows = paste0(.data$rows, collapse = ","),

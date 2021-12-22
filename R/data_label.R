@@ -55,8 +55,10 @@ get_cdisc_keys <- function(dataname) {
   stopifnot(is_character_single(dataname))
 
   if (!(dataname %in% names(default_cdisc_keys))) {
-    stop(sprintf("There is no dataset called: %s \n  List of supported cdisc_datasets:\n   %s",
-                 dataname, paste(names(default_cdisc_keys), collapse = ", ")))
+    stop(sprintf(
+      "There is no dataset called: %s \n  List of supported cdisc_datasets:\n   %s",
+      dataname, paste(names(default_cdisc_keys), collapse = ", ")
+    ))
   } else {
     cdisc_keys <- default_cdisc_keys[[dataname]]$primary
 
@@ -79,7 +81,7 @@ get_cdisc_keys <- function(dataname) {
 #' @examples
 #' library(scda)
 #'
-#' ADSL <-  synthetic_cdisc_data("latest")$adsl
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
 #'
 #' get_labels(ADSL)
 get_labels <- function(data, fill = TRUE) {

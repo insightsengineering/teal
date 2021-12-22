@@ -12,7 +12,6 @@
 #'
 #' library(MultiAssayExperiment)
 #' MAE_d <- dataset("MAE", miniACC)
-#'
 #' \dontrun{
 #' shinyApp(
 #'   ui = fluidPage(
@@ -48,22 +47,22 @@
 #'   }
 #' )
 #' }
-init_filtered_dataset <- function(dataset) { #nolint
+init_filtered_dataset <- function(dataset) { # nolint
   UseMethod("init_filtered_dataset")
 }
 
 #' @export
-init_filtered_dataset.TealDataset <- function(dataset) { #nolint #nousage
+init_filtered_dataset.TealDataset <- function(dataset) { # nolint #nousage
   DefaultFilteredDataset$new(dataset)
 }
 
 #' @export
-init_filtered_dataset.CDISCTealDataset <- function(dataset) { #nolint #nousage
+init_filtered_dataset.CDISCTealDataset <- function(dataset) { # nolint #nousage
   CDISCFilteredDataset$new(dataset)
 }
 
 #' @export
-init_filtered_dataset.MAETealDataset <- function(dataset) { #nolint #nousage
+init_filtered_dataset.MAETealDataset <- function(dataset) { # nolint #nousage
   MAEFilteredDataset$new(dataset)
 }
 
@@ -762,10 +761,8 @@ MAEFilteredDataset <- R6::R6Class( # nolint
             ),
             id = experiment_name
           )
-
         }
       )
-
     },
 
     #' @description
@@ -806,11 +803,13 @@ MAEFilteredDataset <- R6::R6Class( # nolint
         # Link to the issue: https://github.com/insightsengineering/teal/issues/210
         tryCatch(
           self$get_data_reactive()(),
-          error = function(error) shiny::validate(paste(
-            "Filtering expression returned error(s). Please change filters.\nThe error message was:",
-            error$message,
-            sep = "\n"
-          ))
+          error = function(error) {
+            shiny::validate(paste(
+              "Filtering expression returned error(s). Please change filters.\nThe error message was:",
+              error$message,
+              sep = "\n"
+            ))
+          }
         )
       } else {
         get_raw_data(self$get_dataset())

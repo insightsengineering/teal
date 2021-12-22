@@ -67,12 +67,13 @@ register_logger <- function(namespace = NA_character_,
 
   if (is.null(layout)) layout <- Sys.getenv("TEAL.LOG_LAYOUT")
   if (is.null(layout) || layout == "") layout <- getOption("teal.log_layout")
-  tryCatch({
-    logger::log_layout(layout_teal_glue_generator(layout), namespace = namespace)
-    logger::log_appender(logger::appender_file(nullfile()), namespace = namespace)
-    logger::log_success("Set up the logger", namespace = namespace)
-    logger::log_appender(logger::appender_stdout, namespace = namespace)
-  },
+  tryCatch(
+    { # nolint
+      logger::log_layout(layout_teal_glue_generator(layout), namespace = namespace)
+      logger::log_appender(logger::appender_file(nullfile()), namespace = namespace)
+      logger::log_success("Set up the logger", namespace = namespace)
+      logger::log_appender(logger::appender_stdout, namespace = namespace)
+    },
     error = function(condition) {
       stop(paste(
         "Error setting the layout of the logger.",
@@ -127,7 +128,8 @@ log_system_info <- function() {
 #'   but allows the shiny session token (last 8 chars) to be included in the logging layout
 #' @noRd
 layout_teal_glue_generator <- function(
-  format = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} fun:{fn} [{level}] {msg}") {
+  format = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} fun:{fn} [{level}] {msg}"
+  ) {
   force(format)
   structure(
     function(level, msg, namespace = NA_character_, .logcall = sys.call(), .topcall = sys.call(-1),
@@ -137,14 +139,15 @@ layout_teal_glue_generator <- function(
       }
       with(logger::get_logger_meta_variables(
         log_level = level, namespace = namespace, .logcall = .logcall, .topcall = .topcall,
-        .topenv = .topenv), {
-          token <- substr(shiny::getDefaultReactiveDomain()$token, 25, 32)
-          if (length(token) == 0) {
-            token <- ""
-          }
-          glue::glue(format)
+        .topenv = .topenv
+      ), {
+        token <- substr(shiny::getDefaultReactiveDomain()$token, 25, 32)
+        if (length(token) == 0) {
+          token <- ""
         }
-      )
-    }, generator = deparse(match.call())
+        glue::glue(format)
+      })
+    },
+    generator = deparse(match.call())
   )
 }

@@ -114,7 +114,7 @@ testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterSt
     quote(
       test_filtered <- MultiAssayExperiment::subsetByColData(
         test,
-        y = test$years_to_birth >=  30 & test$years_to_birth <= 50 &
+        y = test$years_to_birth >= 30 & test$years_to_birth <= 50 &
           test$vital_status == "1" &
           test$gender == "female"
       )
@@ -123,12 +123,13 @@ testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterSt
 })
 if (compareVersion(as.character(packageVersion("MultiAssayExperiment")), "1.20.0") >= 0) {
   testthat::test_that(
-    "MultiAssayExperiment::subsetByColData returns error when variable contains NAs", {
+    "MultiAssayExperiment::subsetByColData returns error when variable contains NAs",
+    { # nolint
       # if this test fails it means that we can remove FilterState$set_na_rm which
       # has been created after breaking change in MAE
       library(MultiAssayExperiment)
       data(miniACC)
-      miniACC$test <- sample(c(TRUE, NA), size = nrow(miniACC@colData), replace = TRUE)
+      miniACC$test <- sample(c(TRUE, NA), size = nrow(miniACC@colData), replace = TRUE) # nolint
 
       testthat::expect_error(
         subsetByColData(miniACC, miniACC$test),

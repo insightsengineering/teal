@@ -36,7 +36,7 @@
 #' \enumerate{
 #'   \item{`TealDataset` with multiple filters and column selection}{
 #'     \preformatted{
-#'adtte_filters <- filter_spec(
+#' adtte_filters <- filter_spec(
 #' vars = c("PARAMCD", "CNSR"),
 #' sep = "-",
 #' choices = c("OS-1" = "OS-1", "OS-0" = "OS-0", "PFS-1" = "PFS-1"),
@@ -111,19 +111,19 @@
 #'     }
 #'   }
 #' }
-#'}
+#' }
 #'
 #' @references [select_spec] [filter_spec]
 data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = FALSE) {
   stopifnot(is_character_single(dataname))
   stopifnot(
     is.null(select) ||
-    (is(select, "select_spec") && length(select) >= 1)
+      (is(select, "select_spec") && length(select) >= 1)
   )
   stopifnot(
     is.null(filter) ||
-    is(filter, "filter_spec") ||
-    is_class_list("filter_spec")(filter)
+      is(filter, "filter_spec") ||
+      is_class_list("filter_spec")(filter)
   )
   stopifnot(is_logical_single(reshape))
 
@@ -143,10 +143,11 @@ data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = 
   for (idx in seq_along(filter)) filter[[idx]]$dataname <- dataname
 
   if (is(select, "delayed_select_spec") ||
-      any(vapply(filter, is, logical(1), "delayed_filter_spec"))) {
+    any(vapply(filter, is, logical(1), "delayed_filter_spec"))) {
     structure(
       list(dataname = dataname, select = select, filter = filter, reshape = reshape),
-      class = c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
+      class = c("delayed_data_extract_spec", "delayed_data", "data_extract_spec")
+    )
   } else {
     structure(
       list(dataname = dataname, select = select, filter = filter, reshape = reshape),

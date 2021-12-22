@@ -4,13 +4,13 @@ filtered_data$set_dataset(dataset(dataname = "mtcars", x = head(mtcars)))
 
 test_module1 <- module(
   label = "iris_tab",
-  ui =  function(id, ...) NULL,
+  ui = function(id, ...) NULL,
   server = function(id, datasets) moduleServer(id, function(input, output, session) NULL),
   filters = "iris"
 )
 test_module2 <- module(
   label = "mtcars_tab",
-  ui =  function(id, ...) NULL,
+  ui = function(id, ...) NULL,
   server = function(id, datasets) moduleServer(id, function(input, output, session) NULL),
   filters = "mtcars"
 )

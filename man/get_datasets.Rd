@@ -29,32 +29,39 @@ object containing datasets.}
 
 # TealData --------
 library(scda)
-adsl <- cdisc_dataset(dataname = "ADSL",
-                      x = synthetic_cdisc_data("latest")$adsl,
-                      code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
+adsl <- cdisc_dataset(
+  dataname = "ADSL",
+  x = synthetic_cdisc_data("latest")$adsl,
+  code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl"
+)
 
-adae <- cdisc_dataset(dataname = "ADAE",
-                       x = synthetic_cdisc_data("latest")$adae,
-                       code = "library(scda)\nADTTE <- synthetic_cdisc_data(\"latest\")$adae")
+adae <- cdisc_dataset(
+  dataname = "ADAE",
+  x = synthetic_cdisc_data("latest")$adae,
+  code = "library(scda)\nADTTE <- synthetic_cdisc_data(\"latest\")$adae"
+)
 
 rd <- cdisc_data(adsl, adae)
 get_datasets(rd)
 
 # TealDataConnector --------
 adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
-adsl <- cdisc_dataset_connector(dataname = "ADSL",
-                                pull_callable = adsl_cf,
-                                keys = get_cdisc_keys("ADSL"))
+adsl <- cdisc_dataset_connector(
+  dataname = "ADSL",
+  pull_callable = adsl_cf,
+  keys = get_cdisc_keys("ADSL")
+)
 adlb_cf <- callable_function(function() synthetic_cdisc_data("latest")$adlb)
-adlb <- cdisc_dataset_connector(dataname = "ADLB",
-                                pull_callable = adlb_cf,
-                                keys = get_cdisc_keys("ADLB"))
+adlb <- cdisc_dataset_connector(
+  dataname = "ADLB",
+  pull_callable = adlb_cf,
+  keys = get_cdisc_keys("ADLB")
+)
 
 rdc <- relational_data_connector(
   connection = data_connection(),
   connectors = list(adsl, adlb)
 )
-
 \dontrun{
 load_datasets(rdc)
 get_datasets(rdc)
@@ -69,10 +76,11 @@ get_datasets(drc)
 # TealDatasetConnector --------
 library(scda)
 adsl_cf <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adsl}
+  function() {
+    synthetic_cdisc_data("latest")$adsl
+  }
 )
 rdc <- cdisc_dataset_connector("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
-
 \dontrun{
 load_datasets(rdc)
 get_datasets(rdc)
@@ -80,9 +88,11 @@ get_datasets(rdc)
 
 # TealDataset --------
 library(scda)
-adsl <- cdisc_dataset(dataname = "ADSL",
-                      x = synthetic_cdisc_data("latest")$adsl,
-                      code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
+adsl <- cdisc_dataset(
+  dataname = "ADSL",
+  x = synthetic_cdisc_data("latest")$adsl,
+  code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl"
+)
 
 get_datasets(adsl)
 }

@@ -32,11 +32,10 @@ rel_adsl <- cdisc_dataset("ADSL", adsl)
 get_key_duplicates(rel_adsl)
 
 df <- as.data.frame(
-  list(a = c('a', 'a', 'b', 'b', 'c'), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
+  list(a = c("a", "a", "b", "b", "c"), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
 )
-res <- get_key_duplicates(df, keys = c('a', 'b')) # duplicated keys are in rows 3 and 4
+res <- get_key_duplicates(df, keys = c("a", "b")) # duplicated keys are in rows 3 and 4
 print(res) # prints a tibble
-
 \dontrun{
 get_key_duplicates(df) # raises an exception, because keys are missing with no default
 }

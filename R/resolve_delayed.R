@@ -60,8 +60,9 @@
 #'
 #'   # nested list (arm_ref_comp)
 #'   arm_ref_comp <- list(
-#'     ARMCD = list(ref = variable_choices("ADSL"),
-#'     comp = variable_choices("ADSL")
+#'     ARMCD = list(
+#'       ref = variable_choices("ADSL"),
+#'       comp = variable_choices("ADSL")
 #'     )
 #'   )
 #'
@@ -189,15 +190,19 @@ resolve_delayed_expr <- function(x, ds, is_value_choices) {
   # check returned value
   if (is_value_choices) {
     if (!is.atomic(res) || anyDuplicated(res)) {
-      stop(paste("The following function must return a vector with unique values",
-                 "from the respective columns of the dataset.\n\n",
-                 deparse1(bquote(.(x)), collapse = "\n")))
+      stop(paste(
+        "The following function must return a vector with unique values",
+        "from the respective columns of the dataset.\n\n",
+        deparse1(bquote(.(x)), collapse = "\n")
+      ))
     }
   } else {
     if (!is_character_vector(res, min_length = 0L) || length(res) > ncol(ds) || anyDuplicated(res)) {
-      stop(paste("The following function must return a character vector with unique",
-                 "names from the available columns of the dataset:\n\n",
-                 deparse1(bquote(.(x)), collapse = "\n")))
+      stop(paste(
+        "The following function must return a character vector with unique",
+        "names from the available columns of the dataset:\n\n",
+        deparse1(bquote(.(x)), collapse = "\n")
+      ))
     }
   }
 

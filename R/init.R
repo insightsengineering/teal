@@ -199,7 +199,7 @@ init <- function(data,
 #' @param ... additional arguments to `shinyApp`
 #' @return `shinyApp` value
 #' @export
-bookmarkableShinyApp <- function(ui, server, ...) { #nolint
+bookmarkableShinyApp <- function(ui, server, ...) { # nolint
   # ui must be a function of request to be bookmarkable
   ui_new <- function(request) {
     # we use similar logic to `shiny:::uiHttpHandler`

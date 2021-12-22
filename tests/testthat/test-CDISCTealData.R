@@ -110,7 +110,7 @@ testthat::test_that("two datasets / datasets code", {
 
   # MUTATE
   testthat::expect_silent(
-    data <- cdisc_data(adsl, adtte, check = TRUE)  %>%
+    data <- cdisc_data(adsl, adtte, check = TRUE) %>%
       mutate_dataset(dataname = "ADSL", code = "ADSL <- dplyr::filter(ADSL, USUBJID == 'a')") %>%
       mutate_dataset(
         dataname = "ADTTE",
@@ -186,8 +186,9 @@ testthat::test_that("two datasets / datasets code", {
   testthat::expect_identical(
     vapply(
       list(
-        ADSL =  data$get_dataset("ADSL")$get_raw_data(),
-        ADTTE = data$get_dataset("ADTTE")$get_raw_data()),
+        ADSL = data$get_dataset("ADSL")$get_raw_data(),
+        ADTTE = data$get_dataset("ADTTE")$get_raw_data()
+      ),
       nrow,
       numeric(1)
     ),
@@ -199,7 +200,8 @@ testthat::test_that("two datasets / datasets code", {
     vapply(
       list(
         ADSL =  data$get_dataset("ADSL")$get_raw_data(),
-        ADTTE = data$get_dataset("ADSL")$get_raw_data()),
+        ADTTE = data$get_dataset("ADSL")$get_raw_data()
+      ),
       nrow,
       numeric(1)
     ),
@@ -260,7 +262,7 @@ testthat::test_that("two datasets / datasets code", {
     cdisc_data(
       adsl,
       adtte,
-      code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADTTE <- synthetic_cdisc_data(\"latest\")$adtte", #nolint
+      code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADTTE <- synthetic_cdisc_data(\"latest\")$adtte", # nolint
       check = TRUE
     )
   )
@@ -648,12 +650,12 @@ testthat::test_that("two datasets / datasets code", {
 
   testthat::expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADSL"),
-      paste(
-        "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
-        "ADRS <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADRS\"))))",
-        "x <- ADSL",
-        sep = "\n"
-      )
+    paste(
+      "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
+      "ADRS <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADRS\"))))",
+      "x <- ADSL",
+      sep = "\n"
+    )
   )
 
   testthat::expect_identical(
@@ -781,7 +783,8 @@ testthat::test_that("two datasets / datasets code", {
     vapply(
       list(
         ADSL =  data$get_dataset("ADSL")$get_raw_data(),
-        ADTTE = data$get_dataset("ADSL")$get_raw_data()),
+        ADTTE = data$get_dataset("ADSL")$get_raw_data()
+      ),
       nrow,
       numeric(1)
     ),
@@ -819,7 +822,8 @@ testthat::test_that("only connectors", {
       mutate_dataset(
         dataname = "ADTTE",
         code = "ADTTE$test <- ADSL$test",
-        vars = list(ADSL = adsl)) %>%
+        vars = list(ADSL = adsl)
+      ) %>%
       mutate_dataset(dataname = "ADSL", code = "ADSL$x <- 1")
   )
 
@@ -889,7 +893,9 @@ testthat::test_that("Basic example - without code and check", {
   testthat::expect_silent(cdisc_data(cdisc_dataset("ADSL", adsl_raw), code = "", check = FALSE))
   testthat::expect_silent(cdisc_data(cdisc_dataset("ADSL", adsl_raw),
     cdisc_dataset("ARG1", adsl_raw, keys = get_cdisc_keys("ADSL")),
-    cdisc_dataset("ARG2", adsl_raw, keys = get_cdisc_keys("ADSL")), code = "", check = FALSE))
+    cdisc_dataset("ARG2", adsl_raw, keys = get_cdisc_keys("ADSL")),
+    code = "", check = FALSE
+  ))
 })
 
 testthat::test_that("Basic example - check overall code", {
@@ -949,7 +955,8 @@ testthat::test_that("Basic example - dataset depending on other dataset", {
       cdisc_dataset(
         "ADSL",
         adsl_raw,
-        code = "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))"),
+        code = "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))"
+      ),
       check = TRUE
     )
   )
@@ -1117,14 +1124,15 @@ testthat::test_that("Error - objects differs", {
 })
 
 testthat::test_that("Error - ADSL is missing in cdisc_data", {
-  testthat::expect_error({
-    x <- cdisc_data(
-      cdisc_dataset("ADTTE", adtte_raw),
-      code = "ADTTE <- synthetic_cdisc_data(\"latest\")$adtte", check = FALSE
-    )
-    x$check_metadata()
-  },
-  "ADSL dataset is missing."
+  testthat::expect_error(
+    { # nolint
+      x <- cdisc_data(
+        cdisc_dataset("ADTTE", adtte_raw),
+        code = "ADTTE <- synthetic_cdisc_data(\"latest\")$adtte", check = FALSE
+      )
+      x$check_metadata()
+    },
+    "ADSL dataset is missing."
   )
 })
 

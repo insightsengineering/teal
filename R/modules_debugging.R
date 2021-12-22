@@ -147,7 +147,7 @@ debug_browser_module <- function(label = "Browser Debug Module") { # nousage # n
       ns <- NS(id)
       div(
         h2("Debugging"),
-        p("Once in the console, you can type `debug(your_fcn)` and resume execution. This will then debug the function the next time it is called. For example, `debugonce(session$doBookmark)`. You can also access the datasets."), #nolint
+        p("Once in the console, you can type `debug(your_fcn)` and resume execution. This will then debug the function the next time it is called. For example, `debugonce(session$doBookmark)`. You can also access the datasets."), # nolint
         actionButton(ns("call_browser"), "Call browser()")
       )
     },
@@ -185,13 +185,16 @@ reset_filters_module <- function(label = "Reset Filters Module", active_dataname
       # The UI may not be ready yet, i.e. updating "datasets_to_reset" won't have any effect.
       # Therefore, we ignore the first reactive cycle. The UI is ready at the next reactive cycle.
       active_datanames_r_next_cycle <- trigger_after_first_cycle(active_datanames_r)
-      observeEvent(active_datanames_r_next_cycle(), {
-        # we want to run this once the "datasets_to_reset" UI exists
-        updateCheckboxGroupInput(
-          session, "datasets_to_reset",
-          choices = active_datanames_r(), selected = active_datanames_r()
-        )
-      }, ignoreNULL = FALSE)
+      observeEvent(active_datanames_r_next_cycle(),
+        { # nolint
+          # we want to run this once the "datasets_to_reset" UI exists
+          updateCheckboxGroupInput(
+            session, "datasets_to_reset",
+            choices = active_datanames_r(), selected = active_datanames_r()
+          )
+        },
+        ignoreNULL = FALSE
+      )
     },
     ui = function(id, ...) {
       ns <- NS(id)
@@ -370,7 +373,8 @@ predefined_filters_module <- function(label = "Apply filters", filter) { # nousa
         named_list_to_string <- function(lst) {
           lst <- lapply(lst, toString)
           paste(
-            names(lst), lst, sep = ": ", collapse = "\n"
+            names(lst), lst,
+            sep = ": ", collapse = "\n"
           )
         }
         paste0(

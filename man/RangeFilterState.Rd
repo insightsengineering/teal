@@ -27,7 +27,6 @@ isolate(filter_state$set_keep_na(TRUE))
 isolate(filter_state$set_keep_inf(TRUE))
 isolate(filter_state$get_call())
 
-
 ## ------------------------------------------------
 ## Method `RangeFilterState$set_selected`
 ## ------------------------------------------------

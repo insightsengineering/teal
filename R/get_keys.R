@@ -40,7 +40,9 @@ get_keys.TealDataset <- function(x, ...) {
 #'
 #' library(scda)
 #' pull_fun_adsl <- callable_function(
-#'   function() {synthetic_cdisc_data("latest")$adsl}
+#'   function() {
+#'     synthetic_cdisc_data("latest")$adsl
+#'   }
 #' )
 #' get_keys(
 #'   dataset_connector(
@@ -116,7 +118,9 @@ set_keys.TealDataset <- function(x, keys, ...) {
 #'
 #' library(scda)
 #' pull_fun_adsl <- callable_function(
-#'   function() {synthetic_cdisc_data("latest")$adsl}
+#'   function() {
+#'     synthetic_cdisc_data("latest")$adsl
+#'   }
 #' )
 #' set_keys(
 #'   dataset_connector(

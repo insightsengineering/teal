@@ -103,5 +103,4 @@ ADSL_mutated <- ADSL_mutated \%>\%
   mutate_dataset(code = read_script(file_example))
 
 ADSL_mutated$get_raw_data()$new_variable[1]
-
 }

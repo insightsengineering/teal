@@ -30,6 +30,6 @@ check_in_range(c(0, 3), c(1, 3))
 check_in_range(
   c(as.Date("2020-01-01"), as.Date("2020-01-20")),
   c(as.Date("2020-01-01"), as.Date("2020-01-02"))
-  )
+)
 }
 }

@@ -125,15 +125,15 @@ testthat::test_that("FilteredData$set_bookmark_state sets filters is FilteredDat
   datasets$set_dataset(dataset("iris", iris))
   datasets$set_dataset(dataset("mtcars", mtcars))
   fs <- list(
-      iris = list(
-        Sepal.Length = list(c(5.1, 6.4)),
-        Species = c("setosa", "versicolor")
-      ),
-      mtcars = list(
-        cyl = c(4, 6),
-        disp = default_filter()
-      )
+    iris = list(
+      Sepal.Length = list(c(5.1, 6.4)),
+      Species = c("setosa", "versicolor")
+    ),
+    mtcars = list(
+      cyl = c(4, 6),
+      disp = default_filter()
     )
+  )
   shiny::testServer(datasets$set_bookmark_state, args = list(state = fs), expr = NULL)
   testthat::expect_equal(
     isolate(datasets$get_call("iris")),
@@ -142,7 +142,7 @@ testthat::test_that("FilteredData$set_bookmark_state sets filters is FilteredDat
         iris_FILTERED <- dplyr::filter( # nolint
           iris,
           Sepal.Length >= 5.1 & Sepal.Length <= 6.4 &
-          Species %in% c("setosa", "versicolor")
+            Species %in% c("setosa", "versicolor")
         )
       )
     )
@@ -194,12 +194,15 @@ testthat::test_that("get_filter_overview returns overview matrix for non-filtere
     matrix(
       list(
         "1/1", "1/1", "6/6", "", "", "92/92", "79/79", "79/79", "90/90",
-        "90/90", "46/46", "46/46", "90/90", "90/90", "80/80", "80/80"),
+        "90/90", "46/46", "46/46", "90/90", "90/90", "80/80", "80/80"
+      ),
       nrow = 8,
       byrow = TRUE,
       dimnames = list(
-        c("ADSL", "mock_iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
-          "- RPPAArray", "- Mutations", "- miRNASeqGene"),
+        c(
+          "ADSL", "mock_iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
+          "- RPPAArray", "- Mutations", "- miRNASeqGene"
+        ),
         c("Obs", "Subjects")
       )
     )
@@ -225,12 +228,15 @@ testthat::test_that("get_filter_overview returns overview matrix for filtered da
     matrix(
       list(
         "0/1", "0/1", "6/6", "", "", "78/92", "66/79", "66/79", "76/90",
-        "76/90", "35/46", "35/46", "77/90", "77/90", "67/80", "67/80"),
+        "76/90", "35/46", "35/46", "77/90", "77/90", "67/80", "67/80"
+      ),
       nrow = 8,
       byrow = TRUE,
       dimnames = list(
-        c("ADSL", "mock_iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
-          "- RPPAArray", "- Mutations", "- miRNASeqGene"),
+        c(
+          "ADSL", "mock_iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
+          "- RPPAArray", "- Mutations", "- miRNASeqGene"
+        ),
         c("Obs", "Subjects")
       )
     )

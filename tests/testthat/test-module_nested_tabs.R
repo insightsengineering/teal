@@ -2,25 +2,25 @@ filtered_data <- FilteredData$new()
 filtered_data$set_dataset(dataset(dataname = "iris", x = head(iris)))
 test_module1 <- module(
   label = "test1",
-  ui =  function(id, ...) NULL,
+  ui = function(id, ...) NULL,
   server = function(id, datasets) moduleServer(id, function(input, output, session) message("1")),
   filters = NULL
 )
 test_module2 <- module(
   label = "test2",
-  ui =  function(id, ...) NULL,
+  ui = function(id, ...) NULL,
   server = function(id, datasets) moduleServer(id, function(input, output, session) message("2")),
   filters = NULL
 )
 test_module3 <- module(
   label = "test3",
-  ui =  function(id, ...) NULL,
+  ui = function(id, ...) NULL,
   server = function(id, datasets) moduleServer(id, function(input, output, session) message("3")),
   filters = NULL
 )
 test_module4 <- module(
   label = "test4",
-  ui =  function(id, ...) NULL,
+  ui = function(id, ...) NULL,
   server = function(id, datasets) moduleServer(id, function(input, output, session) message("4")),
   filters = NULL
 )

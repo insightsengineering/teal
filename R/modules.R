@@ -38,9 +38,11 @@ modules <- function(label, ...) {
   # beware however that the label of the submodules should not be changed as it must be kept synced
   submodules <- setNames(submodules, labels)
   structure(
-    list(label = label,
-         id = gsub("[^[:alnum:]]", "_", tolower(label)),
-         children = submodules),
+    list(
+      label = label,
+      id = gsub("[^[:alnum:]]", "_", tolower(label)),
+      children = submodules
+    ),
     class = "teal_modules"
   )
 }
@@ -106,9 +108,11 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 
   server_main_args <- names(formals(server))
   if (!(identical(server_main_args[1:4], c("input", "output", "session", "datasets")) ||
-        identical(server_main_args[1:2], c("id", "datasets")))) {
-    stop(paste("teal modules server functions need ordered arguments ",
-               "\ninput, output, session, and datasets (callModule) or id and datasets (moduleServer)"))
+    identical(server_main_args[1:2], c("id", "datasets")))) {
+    stop(paste(
+      "teal modules server functions need ordered arguments ",
+      "\ninput, output, session, and datasets (callModule) or id and datasets (moduleServer)"
+    ))
   }
 
   if (!identical(names(formals(ui))[[1]], "id")) {
@@ -140,12 +144,16 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' @return depth level for given module
 #'
 #' @examples
-#' create_mod <- function(module_name) module(
-#'   module_name,
-#'   server = function(input, output, session, datasets) {},
-#'   ui = function(id, ...) { tags$p(id) },
-#'   filters = 'all'
-#' )
+#' create_mod <- function(module_name) {
+#'   module(
+#'     module_name,
+#'     server = function(input, output, session, datasets) {},
+#'     ui = function(id, ...) {
+#'       tags$p(id)
+#'     },
+#'     filters = "all"
+#'   )
+#' }
 #' mods <- modules(
 #'   "d1",
 #'   modules(

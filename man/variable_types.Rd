@@ -41,5 +41,4 @@ teal:::variable_types(
     stringsAsFactors = FALSE
   )
 )
-
 }

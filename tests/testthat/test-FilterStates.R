@@ -190,7 +190,7 @@ testthat::test_that("queue_initialize throws an error when passed an empty list"
   testthat::expect_error(
     filter_states$queue_initialize(list()),
     msg = "is_class_list(\"ReactiveQueue\")(x) is not TRUE"
-    )
+  )
 })
 
 testthat::test_that("queue_get returns an empty list after queue_initialize with an empty queue", {

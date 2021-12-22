@@ -1,6 +1,5 @@
 ## TealDataset =====
 testthat::test_that("TealDataset basics", {
-
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
   rtables::var_labels(x) <- c("X", "Y")
 
@@ -53,7 +52,8 @@ testthat::test_that("TealDataset$recreate", {
     keys = character(0),
     code = "mtcars",
     label = character(0),
-    vars = list())
+    vars = list()
+  )
   ds2 <- ds$recreate()
 
   testthat::expect_identical(ds, ds2)
@@ -181,7 +181,9 @@ testthat::test_that("TealDataset$set_vars throws an error if passed the enclosin
   test_ds2$set_vars(vars = list(test_ds1 = test_ds1))
 
   testthat::expect_error(
-    test_ds0$set_vars(vars = list(test_ds2 = test_ds2)), regexp = "Circular dependencies detected")
+    test_ds0$set_vars(vars = list(test_ds2 = test_ds2)),
+    regexp = "Circular dependencies detected"
+  )
 })
 
 testthat::test_that("TealDataset$set_vars throws an error if passed the enclosing TealDatasetConnector", {
@@ -232,7 +234,8 @@ testthat::test_that("TealDataset mutate method with delayed logic", {
   testthat::expect_equal(test_ds0$get_raw_data()$Species, test_ds1$get_raw_data()$Species)
   testthat::expect_equal(
     pretty_code_string(test_ds0$get_code()),
-    c("head_iris <- head(iris)",
+    c(
+      "head_iris <- head(iris)",
       "ds1 <- head_iris",
       "head_mtcars <- head(mtcars)",
       "head_mtcars$carb <- head_mtcars$carb * 2",
@@ -244,7 +247,8 @@ testthat::test_that("TealDataset mutate method with delayed logic", {
 
   testthat::expect_equal(
     pretty_code_string(test_ds0$get_code()),
-    c("head_iris <- head(iris)",
+    c(
+      "head_iris <- head(iris)",
       "ds1 <- head_iris",
       "test_ds1 <- head_iris",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
@@ -262,7 +266,8 @@ testthat::test_that("TealDataset mutate method with delayed logic", {
   testthat::expect_true(test_ds0$is_mutate_delayed())
   testthat::expect_equal(
     pretty_code_string(test_ds0$get_code()),
-    c("head_iris <- head(iris)",
+    c(
+      "head_iris <- head(iris)",
       "ds1 <- head_iris",
       "test_ds1 <- head_iris",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
@@ -280,7 +285,8 @@ testthat::test_that("TealDataset mutate method with delayed logic", {
 
   testthat::expect_equal(
     pretty_code_string(test_ds0$get_code()),
-    c("head_iris <- head(iris)",
+    c(
+      "head_iris <- head(iris)",
       "ds1 <- head_iris",
       "test_ds1 <- head_iris",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
@@ -298,7 +304,8 @@ testthat::test_that("TealDataset mutate method with delayed logic", {
   mutate_dataset(test_ds0, code = "head_mtcars$perm <- ds2$perm", vars = list(ds2 = test_ds2))
   testthat::expect_equal(
     pretty_code_string(test_ds0$get_code()),
-    c("head_iris <- head(iris)",
+    c(
+      "head_iris <- head(iris)",
       "ds1 <- head_iris",
       "test_ds1 <- head_iris",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
@@ -317,7 +324,8 @@ testthat::test_that("TealDataset mutate method with delayed logic", {
   expect_null(test_ds0$get_raw_data()$perm)
   testthat::expect_equal(
     pretty_code_string(test_ds0$get_code()),
-    c("head_iris <- head(iris)",
+    c(
+      "head_iris <- head(iris)",
       "ds1 <- head_iris",
       "test_ds1 <- head_iris",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
@@ -552,17 +560,26 @@ test_that("mutate_dataset", {
     )
   })
 
-  expect_error({
-    mutate_dataset(x = test_ds)
-  }, "is_character_single(code) || is_character_single(script) is not TRUE")
+  expect_error(
+    { # nolint
+      mutate_dataset(x = test_ds)
+    },
+    "is_character_single(code) || is_character_single(script) is not TRUE"
+  )
 
-  expect_error({
-    mutate_dataset(x = test_ds, code = TRUE)
-  }, "character")
+  expect_error(
+    { # nolint
+      mutate_dataset(x = test_ds, code = TRUE)
+    },
+    "character"
+  )
 
-  expect_error({
-    mutate_dataset(x = test_ds, code = "y <- test")
-  }, "Evaluation of the code failed")
+  expect_error(
+    { # nolint
+      mutate_dataset(x = test_ds, code = "y <- test")
+    },
+    "Evaluation of the code failed"
+  )
 
   # error because the code, "y <- test", was added even though it yielded an error.
   expect_error({
@@ -579,13 +596,19 @@ test_that("mutate_dataset", {
     data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
   )
 
-  expect_error({
-    test_ds %>% mutate_dataset("x <- 3")
-  }, "object 'test' not found")
+  expect_error(
+    { # nolint
+      test_ds %>% mutate_dataset("x <- 3")
+    },
+    "object 'test' not found"
+  )
 
-  expect_error({
-    test_ds %>% mutate_dataset(c("x <- 3", "som"))
-  }, "is_character_vector")
+  expect_error(
+    { # nolint
+      test_ds %>% mutate_dataset(c("x <- 3", "som"))
+    },
+    "is_character_vector"
+  )
 
   expect_silent({
     test_ds <- dataset(
@@ -613,9 +636,11 @@ test_that("mutate_dataset", {
 
   expect_equal(
     test_ds_mut$get_raw_data(),
-    data.frame(x = c(1, 2), y = c("a", "b"),
-               z = c("one", "two"),
-               stringsAsFactors = FALSE)
+    data.frame(
+      x = c(1, 2), y = c("a", "b"),
+      z = c("one", "two"),
+      stringsAsFactors = FALSE
+    )
   )
 
   expect_silent({
@@ -624,9 +649,11 @@ test_that("mutate_dataset", {
 
   expect_equal(
     test_ds_mut$get_raw_data(),
-    data.frame(x = c(1, 2), y = c("a", "b"),
-               z = c(1, 1),
-               stringsAsFactors = FALSE)
+    data.frame(
+      x = c(1, 2), y = c("a", "b"),
+      z = c(1, 1),
+      stringsAsFactors = FALSE
+    )
   )
 
   expect_equal(
@@ -642,9 +669,11 @@ test_that("mutate_dataset", {
 
   expect_equal(
     test_ds_mut$get_raw_data(),
-    data.frame(x = c(1, 2), y = c("a", "b"),
-               z = c(1, 1),
-               stringsAsFactors = FALSE)
+    data.frame(
+      x = c(1, 2), y = c("a", "b"),
+      z = c(1, 1),
+      stringsAsFactors = FALSE
+    )
   )
 
   expect_equal(
@@ -654,9 +683,12 @@ test_that("mutate_dataset", {
 
   expect_true(is(test_ds_mut, "TealDataset"))
 
-  expect_error({
-    test_ds_mut <- test_ds %>% mutate_dataset(code = "rm('testds')")
-  }, "Code from testds need to return a data.frame")
+  expect_error(
+    { # nolint
+      test_ds_mut <- test_ds %>% mutate_dataset(code = "rm('testds')")
+    },
+    "Code from testds need to return a data.frame"
+  )
 })
 
 test_that("mutate_dataset with vars argument", {

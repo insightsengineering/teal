@@ -159,7 +159,6 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         )
       )
       state$values$datasets_state <- datasets_reactive()$get_bookmark_state()
-
     })
     saved_datasets_state <- reactiveVal(NULL) # set when restored because data must already be populated
     onRestore(function(state) {
@@ -177,7 +176,9 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
 
     # initialize datasets ------
     datasets_reactive <- reactive({
-      if (is.null(raw_data())) return(NULL)
+      if (is.null(raw_data())) {
+        return(NULL)
+      }
       progress <<- shiny::Progress$new(session)
       progress$set(0.25, message = "Setting data")
       # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
@@ -217,32 +218,32 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         # for example, the data may only be loaded once a password is provided
         # however, onRestore only runs in the first flush and not in the flush when the
         # password was finally provided
-        tryCatch({
-          progress$set(0.75, message = "Restoring from bookmarked state")
-          filtered_data_set_filters(datasets_reactive(), saved_datasets_state())
-
-        },
-        error = function(cnd) {
-          logger::log_error("Attempt to set bookmark state failed.")
-          showModal(
-            modalDialog(
-              div(
-                p("Could not restore the session: "),
-                tags$pre(id = session$ns("error_msg"), cnd$message)
-              ),
-              title = "Error restoring the bookmarked state",
-              footer = tagList(
-                actionButton(
-                  "copy_code", "Copy to Clipboard",
-                  `data-clipboard-target` = paste0("#", session$ns("error_msg"))
+        tryCatch(
+          { # nolint
+            progress$set(0.75, message = "Restoring from bookmarked state")
+            filtered_data_set_filters(datasets_reactive(), saved_datasets_state())
+          },
+          error = function(cnd) {
+            logger::log_error("Attempt to set bookmark state failed.")
+            showModal(
+              modalDialog(
+                div(
+                  p("Could not restore the session: "),
+                  tags$pre(id = session$ns("error_msg"), cnd$message)
                 ),
-                modalButton("Dismiss")
-              ),
-              size = "l",
-              easyClose = TRUE
+                title = "Error restoring the bookmarked state",
+                footer = tagList(
+                  actionButton(
+                    "copy_code", "Copy to Clipboard",
+                    `data-clipboard-target` = paste0("#", session$ns("error_msg"))
+                  ),
+                  modalButton("Dismiss")
+                ),
+                size = "l",
+                easyClose = TRUE
+              )
             )
-          )
-        }
+          }
         )
       } else {
         progress$set(0.75, message = "Setting initial filter state")
@@ -252,7 +253,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)
       # `once = TRUE` ensures this
-      active_module <- srv_tabs_with_filters(id = "main_ui", datasets =  datasets_reactive(), modules = modules)
+      active_module <- srv_tabs_with_filters(id = "main_ui", datasets = datasets_reactive(), modules = modules)
 
       showNotification("Data loaded - App fully started up")
 

@@ -60,7 +60,7 @@ x$set_ui(
 x$set_server(
   function(id, connection, connectors) {
     moduleServer(
-    id = id,
+      id = id,
       module = function(input, output, session) {
         # opens connection
         connection$get_open_server()(id = "open_connection", connection = connection)

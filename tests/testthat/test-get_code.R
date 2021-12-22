@@ -1,4 +1,4 @@
-file_path  <- "./app_get_code/app.R"
+file_path <- "./app_get_code/app.R"
 file_path1 <- "./app_get_code/app_source1.R"
 file_path2 <- "./app_get_code/app_source2.R"
 file_path3 <- "./app_get_code/app_source3.R"
@@ -64,7 +64,6 @@ test_that("Include sourced code", {
   source3 <- readLines(file_path3, n = 1)
 
   expect_true(all(c(source1, source2, source3) %in% code_lines8))
-
 })
 
 testthat::test_that("get_code.TealDataset returns identical code to TealDataset$get_code", {

@@ -41,7 +41,7 @@ testthat::test_that("MAEFilteredDataset$get_call returns a call with applying fi
   testthat::expect_identical(
     get_call_output$subjects,
     quote(
-      miniACC_FILTERED <- MultiAssayExperiment::subsetByColData( #nolint
+      miniACC_FILTERED <- MultiAssayExperiment::subsetByColData( # nolint
         miniACC,
         y = !is.na(miniACC$race) & miniACC$race == "white"
       )
@@ -162,7 +162,7 @@ testthat::test_that("MAEFilteredDataset$set_bookmark_state sets filters in Filte
       subjects = quote(
         MAE_FILTERED <- MultiAssayExperiment::subsetByColData( # nolint
           MAE,
-          y = MAE$years_to_birth >=  30 & MAE$years_to_birth <= 50 &
+          y = MAE$years_to_birth >= 30 & MAE$years_to_birth <= 50 &
             MAE$vital_status == "1" &
             MAE$gender == "female"
         )
@@ -208,7 +208,7 @@ testthat::test_that("MAEFilteredDataset filters removed using remove_filters", {
   shiny::testServer(
     filtered_dataset$set_bookmark_state,
     args = list(state = fs),
-    expr =  {
+    expr = {
       session$setInputs(remove_filters = FALSE)
       testthat::expect_false(input$remove_filters)
     }
@@ -220,7 +220,7 @@ testthat::test_that("MAEFilteredDataset filters removed using remove_filters", {
       subjects = quote(
         MAE_FILTERED <- MultiAssayExperiment::subsetByColData( # nolint
           MAE,
-          y = MAE$years_to_birth >=  30 & MAE$years_to_birth <= 50 &
+          y = MAE$years_to_birth >= 30 & MAE$years_to_birth <= 50 &
             MAE$vital_status == "1" &
             MAE$gender == "female"
         )
@@ -242,5 +242,5 @@ testthat::test_that("MAEFilteredDataset filters removed using remove_filters", {
     }
   )
 
-  testthat::expect_identical(isolate(filtered_dataset$get_call()), list(subjects = quote(MAE_FILTERED <- MAE))) #nolint
+  testthat::expect_identical(isolate(filtered_dataset$get_call()), list(subjects = quote(MAE_FILTERED <- MAE))) # nolint
 })

@@ -67,8 +67,9 @@ CodeClass <- R6::R6Class( # nolint
     #' @param deps optional, (`character`) vector of datanames that given code depends on
     #' @return object of class CodeClass
     initialize = function(code = character(0), dataname = character(0), deps = character(0)) {
-      if (length(code) > 0)
+      if (length(code) > 0) {
         self$set_code(code, dataname, deps)
+      }
       logger::log_trace("CodeClass initialized.")
       return(invisible(self))
     },
@@ -149,7 +150,6 @@ CodeClass <- R6::R6Class( # nolint
       return(invisible(NULL))
     }
   ),
-
   private = list(
     ## __Private Fields ====
     .code = list(),
@@ -162,7 +162,7 @@ CodeClass <- R6::R6Class( # nolint
       # Line shouldn't be added when it contains the same code and the same dataname
       # as a line already present in an object of CodeClass
       if (!id %in% ulapply(private$.code, "attr", "id") ||
-          all_true(dataname, function(x) !x %in% ulapply(private$.code, "attr", "dataname"))) {
+        all_true(dataname, function(x) !x %in% ulapply(private$.code, "attr", "dataname"))) {
         attr(code, "dataname") <- dataname
         attr(code, "deps") <- deps
         attr(code, "id") <- id
@@ -175,14 +175,13 @@ CodeClass <- R6::R6Class( # nolint
       private$get_code_idx(idx = seq_along(private$.code), deparse = deparse)
     },
     get_code_dataname = function(dataname, deparse) {
-      #the lines of code we need for the dataname
+      # the lines of code we need for the dataname
       res <- integer(0)
       # the set of datanames we want code for code for intially just dataname
       datanames <- dataname
 
       # loop backwards along code
       for (idx in rev(seq_along(private$.code))) {
-
         code_entry <- private$.code[[idx]]
 
         # line of code is one we want if it is not empty and
@@ -190,11 +189,11 @@ CodeClass <- R6::R6Class( # nolint
         # already have some lines of code selected
         if ((
           any(datanames %in% attr(code_entry, "dataname")) ||
-          any(grepl("^[*]", attr(code_entry, "dataname"))) ||
-          (!is_empty(res) && is_empty(attr(code_entry, "dataname")))) &&
+            any(grepl("^[*]", attr(code_entry, "dataname"))) ||
+            (!is_empty(res) && is_empty(attr(code_entry, "dataname")))) &&
           !is_empty(code_entry)) {
 
-          #append to index of code we want
+          # append to index of code we want
           res <- c(idx, res)
 
           # and update datasets we want for preceding code with additional datanames and deps

@@ -4,13 +4,14 @@ adtte_filters <- filter_spec(
   choices = c("OS", "PFS", "EFS"),
   selected = "OS",
   multiple = TRUE, # if multiple, then a spread is needed
-  label = "Choose endpoint")
+  label = "Choose endpoint"
+)
 
-#nocode >
-nocode  <- letters[1:10]
+# nocode >
+nocode <- letters[1:10]
 nocode2 <- seq(1, 10)
 # <nocode
 
-a <- "a" #nocode
+a <- "a" # nocode
 
 source("app_source3.R")
