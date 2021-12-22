@@ -10,6 +10,7 @@ Each \code{FilteredDataset} contains \code{filter_states} field - a \code{list} 
 Each \code{FilterStates} is responsible for one filter/subset expression applied for specific
 components of the \code{TealDataset}.
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -30,7 +31,6 @@ components of the \code{TealDataset}.
 \item \href{#method-get_varnames}{\code{FilteredDataset$get_varnames()}}
 \item \href{#method-get_filtered_dataname}{\code{FilteredDataset$get_filtered_dataname()}}
 \item \href{#method-get_filterable_varnames}{\code{FilteredDataset$get_filterable_varnames()}}
-\item \href{#method-set_bookmark_state}{\code{FilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui}{\code{FilteredDataset$ui()}}
 \item \href{#method-server}{\code{FilteredDataset$server()}}
 \item \href{#method-ui_add_filter_state}{\code{FilteredDataset$ui_add_filter_state()}}
@@ -322,31 +322,6 @@ Gets variable names for the filtering.
 
 \subsection{Returns}{
 (\code{character} vector) of variable names
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
-Sets the bookmark state
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$set_bookmark_state(id, state)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{(\code{character(1)})\cr
-an ID string that corresponds with the ID used to call the module's UI function.}
-
-\item{\code{state}}{(\verb{named list})\cr
-containing values of the initial filter. Values should be relevant
-to the referred column.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{moduleServer} function.
 }
 }
 \if{html}{\out{<hr>}}
