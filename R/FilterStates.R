@@ -470,7 +470,11 @@ FilterStates <- R6::R6Class( # nolint
     #' return `moduleServer` function which returns `NULL`
     insert_filter_state_ui = function(id, filter_state, queue_index, element_id) {
       checkmate::assert_class(filter_state, "FilterState")
-      checkmate::assert(checkmate::check_int(queue_index), checkmate::check_character(queue_index, len = 1), combine = "or")
+      checkmate::assert(
+        checkmate::check_int(queue_index),
+        checkmate::check_character(queue_index, len = 1),
+        combine = "or"
+      )
       checkmate::assert_character(element_id, len = 1)
       moduleServer(
         id = id,
@@ -1106,11 +1110,14 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' @return `NULL`
     #'
     remove_filter_state = function(element_id) {
-      logger::log_trace("{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }")
+      logger::log_trace(
+        "{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }"
+      )
 
       if (!element_id %in% names(private$get_filter_state("y"))) {
         warning(paste(
-          "Variable:", element_id, "is not present in the actual active filters of dataset: { private$input_dataname }",
+          "Variable:", element_id,
+          "is not present in the actual active filters of dataset: { private$input_dataname }",
           "therefore no changes are applied."
         ))
         logger::log_warn(
@@ -1121,7 +1128,9 @@ MAEFilterStates <- R6::R6Class( # nolint
         )
       } else {
         self$queue_remove(queue_index = "y", element_id = element_id)
-        logger::log_trace("{ class(self)[1] }$remove_filter_state done, dataname: { deparse1(private$input_dataname) }")
+        logger::log_trace(
+          "{ class(self)[1] }$remove_filter_state done, dataname: { deparse1(private$input_dataname) }"
+        )
       }
     },
 
@@ -1495,7 +1504,9 @@ SEFilterStates <- R6::R6Class( # nolint
     #'
     #' @return `NULL`
     remove_filter_state = function(element_id) {
-      logger::log_trace("{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }")
+      logger::log_trace(
+        "{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }"
+      )
 
       checkmate::assert(
         !checkmate::test_null(names(element_id)),
