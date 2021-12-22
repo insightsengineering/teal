@@ -32,6 +32,22 @@ testthat::test_that("get_data(TRUE) throws an error due to Pure virtual method."
   testthat::expect_error(isolate(filtered_dataset$get_data(filtered = TRUE)), regex = "Pure virtual method.")
 })
 
+testthat::test_that("get_data throws an error when filtered input is not logical.", {
+  filtered_dataset <- FilteredDataset$new(dataset = TealDataset$new("iris", head(iris)))
+  testthat::expect_error(
+    isolate(filtered_dataset$get_data(filtered = "TRUE")),
+    "Assertion on 'filtered' failed: Must be of type 'logical', not 'character'."
+  )
+  testthat::expect_error(
+    isolate(filtered_dataset$get_data(filtered = 1)),
+    "Assertion on 'filtered' failed: Must be of type 'logical', not 'double'."
+  )
+  testthat::expect_error(
+    isolate(filtered_dataset$get_data(filtered = list(TRUE))),
+    "Assertion on 'filtered' failed: Must be of type 'logical', not 'list'."
+  )
+})
+
 testthat::test_that("get_data_reactive throws an error due to pure virtual method", {
   filtered_dataset <- FilteredDataset$new(
     dataset = TealDataset$new("iris", head(iris))
