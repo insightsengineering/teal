@@ -48,7 +48,9 @@ filter$set_selected(c(2, 3))
 \item \href{#method-ui}{\code{RangeFilterState$ui()}}
 \item \href{#method-server}{\code{RangeFilterState$server()}}
 \item \href{#method-set_keep_inf}{\code{RangeFilterState$set_keep_inf()}}
+\item \href{#method-set_keep_inf_reactive}{\code{RangeFilterState$set_keep_inf_reactive()}}
 \item \href{#method-set_state}{\code{RangeFilterState$set_state()}}
+\item \href{#method-set_state_reactive}{\code{RangeFilterState$set_state_reactive()}}
 \item \href{#method-set_selected}{\code{RangeFilterState$set_selected()}}
 \item \href{#method-clone}{\code{RangeFilterState$clone()}}
 }
@@ -63,7 +65,9 @@ filter$set_selected(c(2, 3))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel">}\href{../../teal/html/FilterState.html#method-get_varlabel}{\code{teal::FilterState$get_varlabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na">}\href{../../teal/html/FilterState.html#method-set_keep_na}{\code{teal::FilterState$set_keep_na()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na_reactive">}\href{../../teal/html/FilterState.html#method-set_keep_na_reactive}{\code{teal::FilterState$set_keep_na_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_na_rm">}\href{../../teal/html/FilterState.html#method-set_na_rm}{\code{teal::FilterState$set_na_rm()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_selected_reactive">}\href{../../teal/html/FilterState.html#method-set_selected_reactive}{\code{teal::FilterState$set_selected_reactive()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -199,12 +203,55 @@ modules after selecting check-box-input in the shiny interface. Values are set t
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_keep_inf_reactive"></a>}}
+\if{latex}{\out{\hypertarget{method-set_keep_inf_reactive}{}}}
+\subsection{Method \code{set_keep_inf_reactive()}}{
+Set if \code{Inf} should be kept when passing filters using \code{set_filter_state}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$set_keep_inf_reactive(value)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{value}}{(\code{logical(1)})\cr
+Value(s) which come from the filter set by the user. Value is set in \code{server}
+modules after setting the filters using \code{set_filter_state}. Values are set to
+\code{private$keep_inf_reactive} which is reactive.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_state}{}}}
 \subsection{Method \code{set_state()}}{
 Set state
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$set_state(state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\code{list})\cr
+contains fields relevant for a specific class
+\itemize{
+\item{\code{selected}}{ defines initial selection}
+\item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
+\item{\code{keep_inf} (\code{logical})}{ defines whether to keep or remove \code{Inf} values}
+}}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_state_reactive"></a>}}
+\if{latex}{\out{\hypertarget{method-set_state_reactive}{}}}
+\subsection{Method \code{set_state_reactive()}}{
+Set state when using \code{set_filter_state}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$set_state_reactive(state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

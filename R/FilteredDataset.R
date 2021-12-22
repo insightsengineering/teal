@@ -75,6 +75,7 @@ init_filtered_dataset.MAETealDataset <- function(dataset) { #nolint #nousage
 #' (`data.frame`) or multiple (`MultiAssayExperiment`) `FilterStates` objects.
 #' Each `FilterStates` is responsible for one filter/subset expression applied for specific
 #' components of the `TealDataset`.
+#' @keywords internal
 FilteredDataset <- R6::R6Class( # nolint
   "FilteredDataset",
   ## __Public Methods ====
@@ -276,24 +277,6 @@ FilteredDataset <- R6::R6Class( # nolint
       get_filterable_varnames(self$get_data(filtered = FALSE))
     },
 
-    #' @description
-    #' Sets the bookmark state
-    #'
-    #' @param id (`character(1)`)\cr
-    #'   an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param state (`named list`)\cr
-    #'  containing values of the initial filter. Values should be relevant
-    #'  to the referred column.
-    #' @return `moduleServer` function.
-    set_bookmark_state = function(id, state) {
-      moduleServer(
-        id = id,
-        function(input, output, session) {
-          stop("Pure virtual method.")
-        }
-      )
-    },
-
     # modules ------
     #' @description
     #' UI module for dataset active filters
@@ -360,21 +343,28 @@ FilteredDataset <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           dataname <- self$get_dataname()
-          logger::log_trace("FilteredDataset$server initializing, name: { dataname }")
+          logger::log_trace("FilteredDataset$server initializing, dataname: { dataname }")
           stopifnot(
             is_character_single(dataname)
           )
 
+          lapply(
+            names(self$get_filter_states()),
+            function(x) {
+              self$get_filter_states(id = x)$server(id = x)
+            }
+          )
+
           observeEvent(input$remove_filters, {
-            logger::log_trace("FilteredDataset$server@1 removing filters, name: { dataname }")
+            logger::log_trace("FilteredDataset$server@1 removing filters, dataname: { dataname }")
             lapply(
               self$get_filter_states(),
               function(x) x$queue_empty()
             )
-            logger::log_trace("FilteredDataset$server@1 removed filters, name: { dataname }")
+            logger::log_trace("FilteredDataset$server@1 removed filters, dataname: { dataname }")
           })
 
-          logger::log_trace("FilteredDataset$initialized, name: { dataname }")
+          logger::log_trace("FilteredDataset$initialized, dataname: { dataname }")
           NULL
         }
       )
@@ -504,35 +494,48 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Set bookmark state
+    #' Set filter state
     #'
-    #' @param id (`character(1)`)\cr
-    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
-    #' @return `moduleServer` function which returns `NULL`
-    set_bookmark_state = function(id, state) {
-      stopifnot(is.list(state))
-      moduleServer(
-        id = id,
-        function(input, output, session) {
-          logger::log_trace(
-            "DefaultFilteredDataset$set_bookmark_state setting up bookmarked filters in : { self$get_dataname() }"
-          )
-          data <- self$get_data(filtered = FALSE)
-          fs <- self$get_filter_states()[[1]]
-          fs$set_bookmark_state(
-            id = "filter",
-            state = state,
-            data = data
-          )
-          logger::log_trace(
-            "DefaultFilteredDataset$set_bookmark_state done setting up bookmarked filters in : { self$get_dataname() }"
-          )
-          NULL
-        }
+    #' @param ... Additional arguments like `include_update` for `CDISCFilteredDataset`.
+    #'  Note that this is ignored for other `FilteredDatasets`.
+    #' @return `NULL`
+    set_filter_state = function(state, ...) {
+      checkmate::assert_list(state)
+      logger::log_trace(
+        "DefaultFilteredDataset$set_filter_state setting up filters in : { self$get_dataname() }"
       )
+
+      data <- self$get_data(filtered = FALSE)
+      fs <- self$get_filter_states()[[1]]
+      fs$set_filter_state(state = state, data = data, ...)
+      logger::log_trace(
+        "DefaultFilteredDataset$set_filter_state done setting up filters in : { self$get_dataname() }"
+      )
+      NULL
+    },
+
+    #' @description Remove one or more `FilterState` of a `FilteredDataset`
+    #'
+    #' @param element_id (`character`)\cr
+    #'  Vector of character names of variables to remove their `FilterState`.
+    #'
+    #' @return `NULL`
+    remove_filter_state = function(element_id) {
+      logger::log_trace(
+        "DefaultFilteredDataset$remove_filter_state removing filters, dataname: { self$get_dataname() }"
+      )
+
+      fdata_filter_state <- self$get_filter_states()[[1]]
+      for (element in element_id) {
+        fdata_filter_state$remove_filter_state(element)
+      }
+      logger::log_trace(
+        "DefaultFilteredDataset$remove_filter_state done removing filters, dataname: { self$get_dataname() }"
+      )
+      invisible(NULL)
     },
 
     #' @description
@@ -572,14 +575,18 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          logger::log_trace("DefaultFilteredDataset$srv_add_filter_state initializing, name: { self$get_dataname() }")
+          logger::log_trace(
+            "DefaultFilteredDataset$srv_add_filter_state initializing, dataname: { self$get_dataname() }"
+          )
           data <- get_raw_data(self$get_dataset())
           self$get_filter_states(id = "filter")$srv_add_filter_state(
             id = "filter",
             data = data,
             ...
           )
-          logger::log_trace("DefaultFilteredDataset$srv_add_filter_state initialized, name: { self$get_dataname() }")
+          logger::log_trace(
+            "DefaultFilteredDataset$srv_add_filter_state initialized, dataname: { self$get_dataname() }"
+          )
           NULL
         }
       )
@@ -845,39 +852,56 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Set bookmark state
+    #' Set filter state
     #'
-    #' @param id (`character(1)`)\cr
-    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  names of the list should correspond to the names of the initialized `FilterStates`
     #'  kept in `private$filter_states`. For this object they are `"subjects"` and
     #'  names of the experiments. Values of initial state should be relevant
     #'  to the referred column.
-    #' @return `moduleServer` function which returns `NULL`
-    set_bookmark_state = function(id, state) {
-      stopifnot(
-        is.list(state),
-        all(names(state) %in% c(names(self$get_filter_states())))
-      )
-      moduleServer(
-        id = id,
-        function(input, output, session) {
-          logger::log_trace("MAEFilteredDataset$set_bookmark_state setting up filters: { self$get_dataname() }")
-          data <- self$get_data(filtered = FALSE)
-          for (fs_name in names(state)) {
-            fs <- self$get_filter_states()[[fs_name]]
-            fs$set_bookmark_state(
-              id = fs_name,
-              state = state[[fs_name]],
-              data = `if`(fs_name == "subjects", data, data[[fs_name]])
-            )
-          }
+    #' @param ... ignored.
+    #' @return `NULL`
+    set_filter_state = function(state, ...) {
+      checkmate::assert_list(state)
+      checkmate::assert_subset(names(state), c(names(self$get_filter_states())))
 
-          logger::log_trace("MAEFilteredDataset$set_bookmark_state done setting filters: { self$get_dataname() }")
-          NULL
-        }
+      logger::log_trace("MAEFilteredDataset$set_filter_state setting up filters: { self$get_dataname() }")
+      data <- self$get_data(filtered = FALSE)
+      for (fs_name in names(state)) {
+        fs <- self$get_filter_states()[[fs_name]]
+        fs$set_filter_state(
+          state = state[[fs_name]],
+          data = `if`(fs_name == "subjects", data, data[[fs_name]])
+        )
+      }
+
+      logger::log_trace(
+        "MAEFilteredDataset$set_filter_state done setting filters: { self$get_dataname() }"
       )
+      NULL
+    },
+
+    #' @description Remove one or more `FilterState` of a `MAEFilteredDataset`
+    #'
+    #' @param element_id (`list`)\cr
+    #'  Named list of variables to remove their `FilterState`.
+    #'
+    #' @return `NULL`
+    #'
+    remove_filter_state = function(element_id) {
+      checkmate::assert_list(element_id, names = "unique")
+      checkmate::assert_subset(names(element_id), c(names(self$get_filter_states())))
+
+      logger::log_trace("MAEFilteredDataset$remove_filter_state removing filters: { self$get_dataname() }")
+
+      for (fs_name in names(element_id)) {
+        fdata_filter_state <- self$get_filter_states()[[fs_name]]
+        fdata_filter_state$remove_filter_state(
+          `if`(fs_name == "subjects", element_id[[fs_name]][[1]], element_id[[fs_name]])
+        )
+      }
+      logger::log_trace("MAEFilteredDataset$remove_filter_state done removing filters: { self$get_dataname() }")
+      invisible(NULL)
     },
 
     #' @description
@@ -937,11 +961,12 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          logger::log_trace("MAEFilteredDataset$srv_add_filter_state initializing, name: { self$get_dataname() }")
+          logger::log_trace("MAEFilteredDataset$srv_add_filter_state initializing, dataname: { self$get_dataname() }")
           data <- get_raw_data(self$get_dataset())
           self$get_filter_states("subjects")$srv_add_filter_state(
             id = "subjects",
             data = data # MultiAssayExperiment
+            # ignoring vars_include
           )
 
           experiment_names <- names(data)
@@ -951,10 +976,11 @@ MAEFilteredDataset <- R6::R6Class( # nolint
               self$get_filter_states(experiment_name)$srv_add_filter_state(
                 id = experiment_name,
                 data = data[[experiment_name]] # SummarizedExperiment or matrix
+                # ignoring vars_include
               )
             }
           )
-          logger::log_trace("MAEFilteredDataset$srv_add_filter_state initialized, name: { self$get_dataname() }")
+          logger::log_trace("MAEFilteredDataset$srv_add_filter_state initialized, dataname: { self$get_dataname() }")
           NULL
         }
       )
