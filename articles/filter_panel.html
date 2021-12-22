@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9036</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9037</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -73,37 +69,10 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/insightsengineering/teal">
+  <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -118,13 +87,13 @@ Other releases
 
       
 
-      </header><script src="filter_panel_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Filter panel</h1>
-                        <h4 class="author">Dawid Kałędkowski</h4>
+                        <h4 data-toc-skip class="author">Dawid Kałędkowski</h4>
             
-            <h4 class="date">8/11/2021</h4>
+            <h4 data-toc-skip class="date">8/11/2021</h4>
       
       
       <div class="hidden name"><code>filter_panel.Rmd</code></div>
@@ -133,28 +102,28 @@ Other releases
 
     
     
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>Filter panel is located in the right side of the teal apps and is responsible for filtering data globally for whole application. Filter panel is entirely encapsulated within <code>FilteredData</code> class, which manages filter states, data filtering and reproducible filter code. Filter panel is composed of several classes but <code>FilteredData</code> is the only class which app developer will face directly. <code>FilteredData</code> is accessible in teal modules as a <code>dataset</code> argument.</p>
 <p><img src="images/filter_panel/filter_panel_uml_all.jpg" width="75%"></p>
 <p><code>FilteredData</code> contains one-to-many <code>FilteredDataset</code> objects which contain <code>TealDataset</code> passed from <code>TealData</code> after all datasets are loaded. While <code>FilteredData</code> manages whole filter panel, <code>FilteredDataset</code> is responsible for single dataset filtering. Depending on a variant of <code>FilteredDataset</code> it can contain one or many <code>FilterStates</code>. <code>FilterStates</code> class object has one or two <code>ReactiveQueue</code> where <code>FilterState</code> objects are stored. <code>FilterState</code> is a single filter applied to one variable/column while <code>FilterStates</code> is a collection of filters combined within single filter call.</p>
 </div>
-<div id="initialization" class="section level2">
-<h2 class="hasAnchor">
-<a href="#initialization" class="anchor"></a>Initialization</h2>
+<div class="section level2">
+<h2 id="initialization">Initialization<a class="anchor" aria-label="anchor" href="#initialization"></a>
+</h2>
 <p><img src="images/filter_panel/filtered_data_init.jpg" width="100%"></p>
 <p><code>FilteredData</code> is initialized in <code>srv_teal</code> when <code>TealData$is_pulled()</code> returns <code>TRUE</code>. <code>FilteredData</code> is dispatched on type of <code>TealData</code>, and if DDL is <code>CDISCTealData</code> then <code>CDISCFilteredData</code> is initialized. Each <code>TealDataset</code> from <code>CDISCTealData</code> determines the type of the <code>FilteredDataset</code>. In above diagram <code>CDISCTealDataset</code> initializes <code>CDISCFilteredDataset</code> and <code>MAETealDataset</code> initializes <code>MAEFilteredDataset</code>.<br>
-Most complicated concept in the new filter panel is <code>FilterStates</code>, which are initialized in <code>FilteredDataset</code>. The type and number of <code>FilterStates</code> depends on the data kept in the <code>FilteredDataset</code>. You can imagine <code>FilterStates</code> as one <code>subset</code> call. In case of <code>data.frame</code> (<code>DFFilteredDataset</code>) case is simple, because we know that single <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> call is sufficient to subset data rows. Consider <code>MultiAssayExperiment</code> object which contains patients data in <code>@colData</code> and multiple experiments in <code>@ExperimentList</code>. Because <code>MultiAssayExperiment</code> contains multiple objects and each must be filtered by separate call, this is why multiple <code>FilterStates</code> objects are required for <code>MAEFilteredDataset</code>. <code>ReactiveQueue</code> are created within <code>FilterStates</code> and their number also depends on the <code>FilterStates</code> type.<br>
+Most complicated concept in the new filter panel is <code>FilterStates</code>, which are initialized in <code>FilteredDataset</code>. The type and number of <code>FilterStates</code> depends on the data kept in the <code>FilteredDataset</code>. You can imagine <code>FilterStates</code> as one <code>subset</code> call. In case of <code>data.frame</code> (<code>DFFilteredDataset</code>) case is simple, because we know that single <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter</a></code> call is sufficient to subset data rows. Consider <code>MultiAssayExperiment</code> object which contains patients data in <code>@colData</code> and multiple experiments in <code>@ExperimentList</code>. Because <code>MultiAssayExperiment</code> contains multiple objects and each must be filtered by separate call, this is why multiple <code>FilterStates</code> objects are required for <code>MAEFilteredDataset</code>. <code>ReactiveQueue</code> are created within <code>FilterStates</code> and their number also depends on the <code>FilterStates</code> type.<br>
 Described objects are created instantly when data is loaded and they remain unchanged, whereas <code>FilterState</code> is initialized each time when the new filter is added. Values of the <code>FilterState</code> can change and also it can be removed and added once again.</p>
 </div>
-<div id="classes-description" class="section level2">
-<h2 class="hasAnchor">
-<a href="#classes-description" class="anchor"></a>Classes description</h2>
+<div class="section level2">
+<h2 id="classes-description">Classes description<a class="anchor" aria-label="anchor" href="#classes-description"></a>
+</h2>
 <p>This section describes in detail each class managing filter panel.</p>
-<div id="filtereddata" class="section level3">
-<h3 class="hasAnchor">
-<a href="#filtereddata" class="anchor"></a><code>FilteredData</code>
+<div class="section level3">
+<h3 id="filtereddata">
+<code>FilteredData</code><a class="anchor" aria-label="anchor" href="#filtereddata"></a>
 </h3>
 <p><img src="images/filter_panel/class_details_filtered_data.jpg" width="75%"></p>
 <p><code>FilteredData</code> is exposed to the apps/modules developer as a <code>dataset</code> argument in the modules. <code>FilteredData</code> manages filter panel by returning filtered data, combining reproducible filter call from <code>FilteredDatasets</code>. <code>FilteredData</code> also contains all shiny modules displayed on the right panel in teal apps. <code>FilteredData</code> is a single object which is initialized in <code>srv_teal</code> module and it’s variant depends on <code>TealData</code>. If DDL returns <code>CDISCTealData</code> then <code>CDISCFilteredData</code> is initialized, otherwise <code>FilteredData</code>.</p>
@@ -174,9 +143,9 @@ Described objects are created instantly when data is loaded and they remain unch
 <li>get parent dataset name using <code>datasets$get_parentname(&lt;dataname&gt;)</code> (only in case of <code>CDISCFilteredData</code>)</li>
 </ul>
 </div>
-<div id="filtereddataset" class="section level3">
-<h3 class="hasAnchor">
-<a href="#filtereddataset" class="anchor"></a><code>FilteredDataset</code>
+<div class="section level3">
+<h3 id="filtereddataset">
+<code>FilteredDataset</code><a class="anchor" aria-label="anchor" href="#filtereddataset"></a>
 </h3>
 <p><img src="images/filter_panel/class_details_filtered_dataset.jpg" width="100%"></p>
 <p><code>FilteredDataset</code> is a class which keeps unfiltered data and returns filtered data based on the filter call derived from <code>FilterStates</code>. <code>FilteredDataset</code> class objects are initialized by <code>FilteredData</code>, one for each <code>TealDataset</code>. <code>FilteredDataset</code> contains single <code>TealDataset</code> object and one-to-many <code>FilterStates</code> depending on the type of object. <code>FilteredDataset</code> stores dataset attributes, join keys to other datasets, and also combines and executes the code taken from <code>FilterStates</code>.</p>
@@ -190,9 +159,9 @@ Described objects are created instantly when data is loaded and they remain unch
 <code>MAEFilteredDataset</code> dispatched by <code>MAETealDataset</code> to manage filters for <code>MultiAssayExperiment</code> object.</li>
 </ul>
 </div>
-<div id="filterstates" class="section level3">
-<h3 class="hasAnchor">
-<a href="#filterstates" class="anchor"></a><code>FilterStates</code>
+<div class="section level3">
+<h3 id="filterstates">
+<code>FilterStates</code><a class="anchor" aria-label="anchor" href="#filterstates"></a>
 </h3>
 <p><img src="images/filter_panel/class_details_filter_states.jpg" width="100%"></p>
 <p><code>FilterStates</code> are initialized by the <code>FilteredDataset</code> when teal app starts. The type and number of <code>FilterStates</code> depends on the type of data included in <code>TealDataset</code>. If data in <code>FilteredDataset</code> is composed of multiple objects then the equivalent number of <code>FilterStates</code> is initialized. One <code>FilterStates</code> object is responsible to make one subset call. Consider the case of <code>MultiAssayExperiment</code> object which contains multiple experiments and patients data stored in separate slots. Each of the objects within <code>MultiAssayExperiment</code> can be filtered by separate calls. Each sub-element in <code>TealDataset</code> needs also separate inputs to select subset variables, which then should be applied to the same sub-element of the <code>TealDataset</code>.</p>
@@ -213,20 +182,20 @@ Described objects are created instantly when data is loaded and they remain unch
 <code>ui/srv_add_filter_state</code> allow to add <code>FilterState</code> for selected variable. Variables included in module are the filterable colnames of provided dataset. Variable selection adds <code>FilterState</code> to <code>ReactiveQueue</code> (stored in list <code>private$queue[[queue_id]]</code>). <code>FilterState</code> is dispatched automatically on a selected column class.</li>
 </ul>
 </div>
-<div id="filterstate" class="section level3">
-<h3 class="hasAnchor">
-<a href="#filterstate" class="anchor"></a><code>FilterState</code>
+<div class="section level3">
+<h3 id="filterstate">
+<code>FilterState</code><a class="anchor" aria-label="anchor" href="#filterstate"></a>
 </h3>
 <p><img src="images/filter_panel/class_details_filter_state.jpg" width="100%"></p>
 <p>This class controls single filter card and returns condition call depending on what is selected. <code>FilterState</code> is initialized each time when user selects filter variable in <code>FilterState$add_filter_variable</code> module. <code>FilterState</code> is dispatched on type of selected variable. Depending on a type of filter state, there are different UI inputs - for example only numeric has <code>use_inf</code> checkbox button. <code>private$selected</code>, <code>private$use_na</code>, <code>private$use_inf</code> are reactive values and they trigger re-execution of <code>FilterState$get_call</code> whenever their values change. Constructor if <code>FilterState</code> has <code>extract_type</code> argument which impacts returned call. <code>extract_type</code> can be unspecified, <code>"matrix"</code> or <code>"list"</code> and it’s value corresponds to type of the variable prefix in returned condition call. For example if <code>FilterState</code> is initialized with <code>extract_type = "matrix"</code> then variable in condition call looks like <code>&lt;input_dataname&gt;[, "&lt;varname&gt;"]</code>.</p>
 </div>
 </div>
-<div id="making-reproducible-filter-call" class="section level2">
-<h2 class="hasAnchor">
-<a href="#making-reproducible-filter-call" class="anchor"></a>Making reproducible filter call</h2>
-<div id="overview-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#overview-1" class="anchor"></a>Overview</h3>
+<div class="section level2">
+<h2 id="making-reproducible-filter-call">Making reproducible filter call<a class="anchor" aria-label="anchor" href="#making-reproducible-filter-call"></a>
+</h2>
+<div class="section level3">
+<h3 id="overview-1">Overview<a class="anchor" aria-label="anchor" href="#overview-1"></a>
+</h3>
 <p><img src="images/filter_panel/get_call_overview.jpg" width="100%"></p>
 <p>Above diagram presents filter panel classes and their responsibilities when composing filter calls.</p>
 <ul>
@@ -242,18 +211,18 @@ Described objects are created instantly when data is loaded and they remain unch
 <code>FilteredData$get_call(&lt;dataname&gt;)</code> returns list of calls from specified <code>FilteredDataset</code>.</li>
 </ul>
 </div>
-<div id="example" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h3>
+<div class="section level3">
+<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h3>
 <p><img src="images/filter_panel/get_call_example.jpg" width="100%"></p>
 <p>Calling <code>datasets$get_call(&lt;dataname&gt;)</code> in teal modules executes chain of calls in all filter panel classes. Consider scenario in which:</p>
 <ol style="list-style-type: decimal">
 <li><p><code>FilteredData</code> has three <code>FilteredDataset</code>(s) ADSL , ADTTE, MAE</p></li>
-<li><p><code>CDISCFilteredDataset</code> contains <code>data.frame</code> (ADSL) which can be filtered only in one way executing single <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> call (this is why <code>CDISCFilteredDataset</code> has a single <code>FilterStates</code>)</p></li>
-<li><p><code>FilterStates</code> construct <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> call is based on the <code>FilterState</code> objects added to the <code>ReactiveQueue</code>.</p></li>
-<li><p><code>ReactiveQueue</code> is just a class to manage addition, storage and removal of <code>FilterStates</code> objects. This is it’s only responsibility and the class does not generate any code. <code>DFFilterState</code> contains only one <code>ReactiveQueue</code> which is not named - this tells <code>FilterState</code> that calls from each <code>FilterState</code> should go to unnamed argument in <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code>.</p></li>
-<li><p>When end-user chooses some variable in “Add Filter Variable” section, then new <code>FilterState</code> is added to the <code>ReactiveQueue</code> and this new conditions are added to <code>dplyr::filter(ADSL, ...)</code> call. In the example <code>SEX</code> and <code>AGE</code> has been added - which are automatically dispatched to relevant <code>FilterState</code> class (<code>ChoiceFilterState</code> and <code>RangeFilterState</code>). Since (5) have been added or changed, conditions (<code>SEX == "F"</code> and <code>AGE &gt;= 20 &amp; AGE &lt;= 60</code>) are returned to the <code>DFFilterStates</code> (3) which combines them with <code>&amp;</code> operator and puts to <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> call. <code>CDISCFilteredDataset</code> takes this one call and return to <code>FilteredData</code> as a list.</p></li>
-<li><p>Second <code>FilteredDataset</code> for <code>ADTTE</code> works the same way as <code>ADSL</code> with one difference. <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> for <code>ADTTE</code> is followed by the merge call with <code>FILTERED_ADSL</code> - to be filtered by keys available parent.</p></li>
+<li><p><code>CDISCFilteredDataset</code> contains <code>data.frame</code> (ADSL) which can be filtered only in one way executing single <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter</a></code> call (this is why <code>CDISCFilteredDataset</code> has a single <code>FilterStates</code>)</p></li>
+<li><p><code>FilterStates</code> construct <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter</a></code> call is based on the <code>FilterState</code> objects added to the <code>ReactiveQueue</code>.</p></li>
+<li><p><code>ReactiveQueue</code> is just a class to manage addition, storage and removal of <code>FilterStates</code> objects. This is it’s only responsibility and the class does not generate any code. <code>DFFilterState</code> contains only one <code>ReactiveQueue</code> which is not named - this tells <code>FilterState</code> that calls from each <code>FilterState</code> should go to unnamed argument in <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter</a></code>.</p></li>
+<li><p>When end-user chooses some variable in “Add Filter Variable” section, then new <code>FilterState</code> is added to the <code>ReactiveQueue</code> and this new conditions are added to <code>dplyr::filter(ADSL, ...)</code> call. In the example <code>SEX</code> and <code>AGE</code> has been added - which are automatically dispatched to relevant <code>FilterState</code> class (<code>ChoiceFilterState</code> and <code>RangeFilterState</code>). Since (5) have been added or changed, conditions (<code>SEX == "F"</code> and <code>AGE &gt;= 20 &amp; AGE &lt;= 60</code>) are returned to the <code>DFFilterStates</code> (3) which combines them with <code>&amp;</code> operator and puts to <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter</a></code> call. <code>CDISCFilteredDataset</code> takes this one call and return to <code>FilteredData</code> as a list.</p></li>
+<li><p>Second <code>FilteredDataset</code> for <code>ADTTE</code> works the same way as <code>ADSL</code> with one difference. <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter</a></code> for <code>ADTTE</code> is followed by the merge call with <code>FILTERED_ADSL</code> - to be filtered by keys available parent.</p></li>
 <li><p><code>FilteredDatasetMAE</code> is based on <code>MAETealDataset</code> where <code>raw_data</code> contains multiple object which can be filtered on. In general <code>MultiAssayExperiment</code> contains <code>colData(MAE)</code> which is a <code>DataFrame</code> with ADSL-like patient data. <code>MAE</code> contains also multiple experiments which can be extracted using <code>MAE[["experiment name"]]</code> and they can also be filtered in filter-panel. This means that <code>FilteredDatasetMAE</code> has multiple <code>FilterStates</code> objects: one for subjects data and one for each experiment.</p></li>
 <li><p><code>MAEFilterStates</code> object is initialized for subjects data and for this object <code>SummarizedExperiment::subsetByColData</code> function is applied. <code>SummarizedExperiment::subsetByColData</code> has two arguments <code>x</code> (data) and <code>y</code> (conditions). <code>MAEFilterStates</code> similar to <code>DFFilterStates</code> has one <code>ReactiveQueue</code> (9) list for <code>y</code> argument in the function. Adding new <code>FilterStates</code> triggers returning of the code similar to (4) and (5)</p></li>
 <li><p><code>SEFilterStates</code> is initialized per one experiment in the MAE data. This class is specific because <code>SummarizedExperiment</code> contains <code>colData</code> and <code>rowData</code> which correspond to <code>select</code> and <code>subset</code> arguments in <code>subset.SummarizedExperiment</code> function. Similar to <code>subset.data.frame</code> <code>subset</code> refers to the rows in the object, and <code>select</code> refers to the columns - but the call execution is little different because subsetting and selecting call refers to columns in <code>colData</code> and <code>rowData</code> (objects attached to this experiment).</p></li>
@@ -273,11 +242,13 @@ Described objects are created instantly when data is loaded and they remain unch
 
 
       <footer><div class="copyright">
-  <p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski, Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama, Nikolas Burkoff, Maciej Nasinski, Roche.</p>
+  <p></p>
+<p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski, Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama, Nikolas Burkoff, Maciej Nasinski, Roche.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -285,6 +256,8 @@ Described objects are created instantly when data is loaded and they remain unch
 
   
 
+
+  
 
   </body>
 </html>

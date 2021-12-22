@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://insightsengineering.github.io/teal/404.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/delayed_data_loading.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/developer_apps.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/filter_panel.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/getting_started.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/teal_design_and_implementation.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/authors.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/index.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/pull_request_template.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/CDISCFilteredData.html</loc>
@@ -313,13 +346,13 @@
     <loc>https://insightsengineering.github.io/teal/reference/get_filterable_varnames.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.TealDataset.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.data.frame.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates_util.html</loc>
@@ -350,6 +383,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/include_teal_css_js.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/index.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/init.html</loc>
@@ -596,20 +632,5 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/variable_types.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/delayed_data_loading.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/developer_apps.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/filter_panel.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/getting_started.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/teal_design_and_implementation.html</loc>
   </url>
 </urlset>

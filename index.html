@@ -22,6 +22,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -34,18 +36,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9036</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9037</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -76,37 +72,10 @@
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="index.html">latest</a></li>
-   <li><a href="pre-release/index.html">pre-release</a></li>
-   <li><a href="v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/insightsengineering/teal">
+  <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -124,22 +93,22 @@ Other releases
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="teal-interactive-exploratory-data-analysis-with-shiny-web-applications" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#teal-interactive-exploratory-data-analysis-with-shiny-web-applications" class="anchor"></a>Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications</h1></div>
-<p><em>teal</em> is a shiny-based interactive exploration framework for analyzing clinical trials data. <code>teal</code> currently provides a dynamic filtering facility and diverse data viewers. <code>teal</code> shiny applications are built using standard <a href="https://shiny.rstudio.com/articles/modules.html">shiny modules</a>.</p>
+<div class="section level1">
+<div class="page-header"><h1 id="teal-interactive-exploratory-data-analysis-with-shiny-web-applications">Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications<a class="anchor" aria-label="anchor" href="#teal-interactive-exploratory-data-analysis-with-shiny-web-applications"></a>
+</h1></div>
+<p><em>teal</em> is a shiny-based interactive exploration framework for analyzing clinical trials data. <code>teal</code> currently provides a dynamic filtering facility and diverse data viewers. <code>teal</code> shiny applications are built using standard <a href="https://shiny.rstudio.com/articles/modules.html" class="external-link">shiny modules</a>.</p>
 </div>
-<div id="installation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
-<div id="clone-and-install-manually" class="section level2">
-<h2 class="hasAnchor">
-<a href="#clone-and-install-manually" class="anchor"></a>Clone and install manually</h2>
-<ol>
+<div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
+<div class="section level2">
+<h2 id="clone-and-install-manually">Clone and install manually<a class="anchor" aria-label="anchor" href="#clone-and-install-manually"></a>
+</h2>
+<ol style="list-style-type: decimal">
 <li>
 <p>Clone the repository</p>
-<p>The repository can be downloaded directly from the <code>github.com</code> site as an archive (see <a href="https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository">Github tutorial on cloning to learn more</a>). Alternatively, Git command line tools offer the same functionality, without the need for manual downloading and unpacking the archive, but require to authenticate to Github. You can authenticate using a key pair or a Personal Access Token (PAT). Please refer to excellent Github tutorials on <a href="https://docs.github.com/en/github/authenticating-to-github">connecting to Github using SSH</a> or <a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token">creating and using PAT</a>.</p>
-<ol>
+<p>The repository can be downloaded directly from the <code>github.com</code> site as an archive (see <a href="https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository" class="external-link">Github tutorial on cloning to learn more</a>). Alternatively, Git command line tools offer the same functionality, without the need for manual downloading and unpacking the archive, but require to authenticate to Github. You can authenticate using a key pair or a Personal Access Token (PAT). Please refer to excellent Github tutorials on <a href="https://docs.github.com/en/github/authenticating-to-github" class="external-link">connecting to Github using SSH</a> or <a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token" class="external-link">creating and using PAT</a>.</p>
+<ol style="list-style-type: decimal">
 <li>
 <p>Using PAT. Input in the Git Bash console, PowerShell or any Linux shell:</p>
 <pre><code>$ git clone https://github.com/insightsengineering/teal.git
@@ -165,26 +134,26 @@ Password: your_token_goes_here</code></pre>
 </ol>
 </div>
 </div>
-<div id="acknowledgment" class="section level1">
-<h1 class="hasAnchor">
-<a href="#acknowledgment" class="anchor"></a>Acknowledgment</h1>
+<div class="section level1">
+<h1 id="acknowledgment">Acknowledgment<a class="anchor" aria-label="anchor" href="#acknowledgment"></a>
+</h1>
 <p>We would like to thank everyone who made <code>teal</code> a better analysis environment. Special thanks go to:</p>
 <ul>
 <li>
 <code>Doug Kelkhoff</code> for his contributions to the styling of the filter panel.</li>
 </ul>
 </div>
-<div id="notes-for-developers" class="section level1">
-<h1 class="hasAnchor">
-<a href="#notes-for-developers" class="anchor"></a>Notes for Developers</h1>
-<div id="conventions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#conventions" class="anchor"></a>Conventions</h2>
+<div class="section level1">
+<h1 id="notes-for-developers">Notes for Developers<a class="anchor" aria-label="anchor" href="#notes-for-developers"></a>
+</h1>
+<div class="section level2">
+<h2 id="conventions">Conventions<a class="anchor" aria-label="anchor" href="#conventions"></a>
+</h2>
 <p>Shiny modules are implemented in files <code>&lt;module&gt;.R</code> with UI function <code>ui_&lt;module&gt;</code> and server function <code>srv_&lt;module&gt;</code>.</p>
 <p>A module with a <code>id</code> should not use the id itself (<code>ns(character(0))</code>) as this id belongs to the parent module:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu">NS</span><span class="op">(</span><span class="va">id</span><span class="op">)</span>
-<span class="fu">ns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># should not be used as parent module may be using it to show / hide this module</span>
+<span class="fu">ns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># should not be used as parent module may be using it to show / hide this module</span>
 <span class="fu">ns</span><span class="op">(</span><span class="st">"whole"</span><span class="op">)</span> <span class="co"># is okay, as long as the input to ns is not character(0)</span>
 <span class="fu">ns</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="co"># empty string "" is allowed</span></code></pre></div>
 <p>HTML elements can be given CSS classes even if they are not used within this package to give the end-user the possibility to modify the look-and-feel.</p>
@@ -225,33 +194,33 @@ Password: your_token_goes_here</code></pre>
 <p>Note that <code>\link{another_fcn}</code> links don’t work in the development version. For this, you need to install the package.</p>
 <p>To temporarily install the package, the following code is useful:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/libPaths.html">.libPaths</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">temp_install_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">temp_install_dir</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html">.libPaths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">temp_install_dir</span>, <span class="fu"><a href="https://rdrr.io/r/base/libPaths.html">.libPaths</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html">.libPaths</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">temp_install_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">temp_install_dir</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">temp_install_dir</span>, <span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="op">?</span><span class="va">init</span> <span class="co"># look at doc</span>
 <span class="co"># restore old path once done</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html">.libPaths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/libPaths.html">.libPaths</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html">.libPaths</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>Add a summary at the top of each file to describe what it does.</p>
 <p>Shiny modules should return <code>reactives</code> along with the observers they create. An example is here:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">srv_child</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">o</span> <span class="op">&lt;-</span> <span class="fu">observeEvent</span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     values <span class="op">=</span> <span class="fu">reactive</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>,
-    observers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">o</span><span class="op">)</span>
+    observers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">o</span><span class="op">)</span>
   <span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 <span class="va">srv_parent</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">output</span> <span class="op">&lt;-</span> <span class="fu">callModule</span><span class="op">(</span><span class="va">srv_child</span>, <span class="st">"child"</span><span class="op">)</span>
   <span class="va">o</span> <span class="op">&lt;-</span> <span class="fu">observeEvent</span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     values <span class="op">=</span> <span class="va">output</span><span class="op">$</span><span class="va">values</span>,
-    observers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">output</span><span class="op">$</span><span class="va">observers</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">o</span><span class="op">)</span><span class="op">)</span>
+    observers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">output</span><span class="op">$</span><span class="va">observers</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">o</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>This makes dynamic UI creation possible. If you want to remove a module added with <code>insertUI</code>, you can do so by calling <code>o$destroy()</code> on each of its observers, see the function <code>srv_filter_items</code> for an example.</p>
@@ -266,10 +235,10 @@ Password: your_token_goes_here</code></pre>
 <span class="co">#' }</span></code></pre></div>
 <p>Avoid overloading return statements. For example, refactor:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
   <span class="co"># must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning</span>
-  data_md5sums <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>, <span class="va">self</span><span class="op">$</span><span class="va">get_data_attr</span>, <span class="st">"md5sum"</span><span class="op">)</span>,
+  data_md5sums <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>, <span class="va">self</span><span class="op">$</span><span class="va">get_data_attr</span>, <span class="st">"md5sum"</span><span class="op">)</span>,
     <span class="va">self</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>,
   filter_states <span class="op">=</span> <span class="fu">reactiveValuesToList</span><span class="op">(</span><span class="va">private</span><span class="op">$</span><span class="va">filter_states</span><span class="op">)</span>,
@@ -277,10 +246,10 @@ Password: your_token_goes_here</code></pre>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Into the more easily debuggable form:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
   <span class="co"># must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning</span>
-  data_md5sums <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>, <span class="va">self</span><span class="op">$</span><span class="va">get_data_attr</span>, <span class="st">"md5sum"</span><span class="op">)</span>,
+  data_md5sums <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>, <span class="va">self</span><span class="op">$</span><span class="va">get_data_attr</span>, <span class="st">"md5sum"</span><span class="op">)</span>,
     <span class="va">self</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>,
   filter_states <span class="op">=</span> <span class="fu">reactiveValuesToList</span><span class="op">(</span><span class="va">private</span><span class="op">$</span><span class="va">filter_states</span><span class="op">)</span>,
@@ -289,17 +258,17 @@ Password: your_token_goes_here</code></pre>
 <span class="va">res</span> <span class="co"># put it to not be invisible</span>
 <span class="co"># or (slightly discouraged)</span>
 <span class="co">#return(res)</span></code></pre></div>
-<p>Note that for functions to be dispatched with S3, they need to be exported. This will not actually export the function with the class specifier, but only make it available for S3 method dispatch, see <a href="https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace" class="uri">https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace</a></p>
+<p>Note that for functions to be dispatched with S3, they need to be exported. This will not actually export the function with the class specifier, but only make it available for S3 method dispatch, see <a href="https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace" class="external-link uri">https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace</a></p>
 <p>While working on a PR, you can add a <code>scratch</code> directory to keep scripts to test the code that were not integrated into vignettes or examples yet. Before the PR is merged, remove this directory again. To avoid forgetting this, add a <code>todo</code> comment in the code. The <code>scratch</code> folder is also in <code>.Rbuildignore</code>.</p>
 <p>For <code>FilteredData</code>, when you work on a new module that directly changes it, you can check internal consistency in your reactive expressions through code like:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">datasets</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="fu">validate</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div id="systemfile" class="section level3">
-<h3 class="hasAnchor">
-<a href="#systemfile" class="anchor"></a><code>system.file</code>
+<div class="section level3">
+<h3 id="systemfile">
+<code>system.file</code><a class="anchor" aria-label="anchor" href="#systemfile"></a>
 </h3>
 <p>We recommend against exporting functions that use <code>system.file</code> to access files in other packages as this breaks encapsulation and leads to issues with <code>devtools</code> as explained below.</p>
-<p><code><a href="https://rdrr.io/r/base/system.file.html">base::system.file</a></code> is only overwritten by <code>pkgload:::shim_system.file</code> if the package is loaded by <code><a href="https://devtools.r-lib.org/reference/load_all.html">devtools::load_all()</a></code>. This is done to access files transparently, independent of whether a package was loaded using <code><a href="https://rdrr.io/r/base/library.html">library(pkg)</a></code> or <code>devtools::load(pkg)</code>. The <code>inst</code> folder is in different locations for each of these cases. If a package uses <code>system.file</code> without being loaded via <code>devtools</code>, it will fail when it tries to locate something in another package that is loaded with <code>devtools</code> because it still uses <code><a href="https://rdrr.io/r/base/system.file.html">base::system.file</a></code>. The solution is to explicitly use <code>pkgload:::system.file</code> whenever providing a function that relies on <code>system.file</code> from another package. Or not do it at all (this is the current approach we take with <code>include_css_files</code>). We don’t directly overwrite <code>system.file</code>, this may have unexpected behavior.</p>
+<p><code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">base::system.file</a></code> is only overwritten by <code>pkgload:::shim_system.file</code> if the package is loaded by <code><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">devtools::load_all()</a></code>. This is done to access files transparently, independent of whether a package was loaded using <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(pkg)</a></code> or <code>devtools::load(pkg)</code>. The <code>inst</code> folder is in different locations for each of these cases. If a package uses <code>system.file</code> without being loaded via <code>devtools</code>, it will fail when it tries to locate something in another package that is loaded with <code>devtools</code> because it still uses <code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">base::system.file</a></code>. The solution is to explicitly use <code>pkgload:::system.file</code> whenever providing a function that relies on <code>system.file</code> from another package. Or not do it at all (this is the current approach we take with <code>include_css_files</code>). We don’t directly overwrite <code>system.file</code>, this may have unexpected behavior.</p>
 </div>
 </div>
 </div>
@@ -308,14 +277,23 @@ Password: your_token_goes_here</code></pre>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>Apache License 2.0 | file <a href="LICENSE-text.html">LICENSE</a>
 </li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing teal</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>NEST <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Adrian Waddell <br><small class="roles"> Author </small>  </li>
@@ -328,20 +306,24 @@ Password: your_token_goes_here</code></pre>
 <li>Nikolas Burkoff <br><small class="roles"> Author </small>  </li>
 <li>Maciej Nasinski <br><small class="roles"> Author </small>  </li>
 <li>Roche <br><small class="roles"> Copyright holder, funder </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski, Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama, Nikolas Burkoff, Maciej Nasinski, Roche.</p>
+  <p></p>
+<p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski, Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama, Nikolas Burkoff, Maciej Nasinski, Roche.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -349,6 +331,8 @@ Password: your_token_goes_here</code></pre>
 
   
 
+
+  
 
   </body>
 </html>

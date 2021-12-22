@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9036</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9037</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -73,37 +69,10 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/insightsengineering/teal">
+  <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -118,13 +87,13 @@ Other releases
 
       
 
-      </header><script src="developer_apps_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Developer Apps</h1>
-                        <h4 class="author">Maximilian Mordig</h4>
+                        <h4 data-toc-skip class="author">Maximilian Mordig</h4>
             
-            <h4 class="date">18/06/2020</h4>
+            <h4 data-toc-skip class="date">18/06/2020</h4>
       
       
       <div class="hidden name"><code>developer_apps.Rmd</code></div>
@@ -138,23 +107,23 @@ Other releases
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># execute the vignette as if it were executed interactively</span>
 <span class="co"># when you run KnitR from RStudio, it does not run the vignette interactively</span>
-<span class="va">execute_like_interactive</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html">interactive</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">execute_like_interactive</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co"># execute_like_interactive &lt;- TRUE # only for developing, automation should not run apps #nolint</span>
 
 <span class="co"># load the development version of teal if you have not installed it</span>
 <span class="va">load_dev_teal</span> <span class="op">&lt;-</span> <span class="va">execute_like_interactive</span>
 <span class="kw">if</span> <span class="op">(</span><span class="va">load_dev_teal</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># obfuscated call to avoid dependence on devtools required by R CMD CHECK</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">`::`</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html">quote</a></span><span class="op">(</span><span class="va">devtools</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/substitute.html">quote</a></span><span class="op">(</span><span class="va">load_all</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">`::`</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">devtools</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">load_all</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="op">)</span>
 <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"Loading non-dev version.\n"</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Loading non-dev version.\n"</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
 <span class="op">}</span>
 
 
 <span class="co"># Don't remove these options, the developer may activate them as needed</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>shiny.fullstacktrace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># to show a detailed stack trace, see `?getShinyOption()`</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>teal_logging <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># to log to console</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>shiny.fullstacktrace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># to show a detailed stack trace, see `?getShinyOption()`</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>teal_logging <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># to log to console</span>
 <span class="co"># where to open app (new window or within RStudio)</span>
 <span class="co"># options("shiny.launch.browser" = TRUE) # to open a new window #nolint</span>
 <span class="co"># to open in RStudio Viewer pane, only available in RStudio, so it won't go through `CI` if enabled</span>
@@ -167,20 +136,20 @@ Other releases
   <span class="kw">if</span> <span class="op">(</span><span class="va">execute_app</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="../reference/bookmarkableShinyApp.html">bookmarkableShinyApp</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
   <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"Not executing Shiny app.\n"</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Not executing Shiny app.\n"</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Create the datasets</span>
 
 <span class="co"># nolint start</span>
-<span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+<span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
   STUDYID <span class="op">=</span> <span class="st">"ABC123"</span>,
-  USUBJID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>,
-  AGE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">34</span>, <span class="fl">43</span>, <span class="fl">23</span>, <span class="fl">34</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span>,
-  SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span>, <span class="cn">NA</span>, <span class="st">"F"</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span>,
-  COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="st">"BRAZIL"</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span>,
-  logical_test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">NA</span>, <span class="cn">TRUE</span>, <span class="fl">25</span><span class="op">)</span><span class="op">)</span>
+  USUBJID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>,
+  AGE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">34</span>, <span class="fl">43</span>, <span class="fl">23</span>, <span class="fl">34</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span>,
+  SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span>, <span class="cn">NA</span>, <span class="st">"F"</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span>,
+  COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="st">"BRAZIL"</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span>,
+  logical_test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">NA</span>, <span class="cn">TRUE</span>, <span class="fl">25</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="va">ADSL_code</span> <span class="op">&lt;-</span> <span class="st">'ADSL &lt;- data.frame(
@@ -193,9 +162,9 @@ Other releases
 )'</span>
 
 
-<span class="va">ADAE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADSL</span><span class="op">)</span>
-<span class="va">ADAE</span><span class="op">$</span><span class="va">ASTDTM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fl">18586</span><span class="op">:</span><span class="fl">18785</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span>
-<span class="va">ADAE</span><span class="op">$</span><span class="va">AETERM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"trm A.1.1.1.1"</span>,
+<span class="va">ADAE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADSL</span><span class="op">)</span>
+<span class="va">ADAE</span><span class="op">$</span><span class="va">ASTDTM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fl">18586</span><span class="op">:</span><span class="fl">18785</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span>
+<span class="va">ADAE</span><span class="op">$</span><span class="va">AETERM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"trm A.1.1.1.1"</span>,
                  <span class="st">"trm A.1.1.1.2"</span>,
                  <span class="st">"trm B.1.1.1.1"</span>,
                  <span class="st">"trm B.2.1.2.1"</span>,
@@ -203,7 +172,7 @@ Other releases
                  <span class="st">"trm C.1.1.1.3"</span>,
                  <span class="st">"trm C.2.1.2.1"</span>,
                  <span class="st">"trm D.1.1.1.1"</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span>
-<span class="va">ADAE</span><span class="op">$</span><span class="va">AESEQ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span>
+<span class="va">ADAE</span><span class="op">$</span><span class="va">AESEQ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span>
 
 <span class="va">ADAE_code</span> <span class="op">&lt;-</span> <span class="st">'ADAE &lt;- rbind(ADSL, ADSL)
 ADAE$ASTDTM &lt;- as.Date(18586:18785, origin = "1970-01-01")
@@ -218,10 +187,10 @@ ADAE$AETERM &lt;- rep(c("trm A.1.1.1.1",
 ADAE$AESEQ &lt;- rep(1:10, 20)'</span>
 
 
-<span class="va">ADLB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADSL</span><span class="op">)</span>
-<span class="va">ADLB</span><span class="op">$</span><span class="va">PARAMCD</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"ALT"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span>
-<span class="va">ADLB</span><span class="op">$</span><span class="va">AVISIT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SCREENING"</span>, <span class="st">"BASELINE"</span>, <span class="st">"WEEK 1 DAY 8"</span>, <span class="st">"WEEK 2 DAY 15"</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span>
-<span class="va">ADLB</span><span class="op">$</span><span class="va">ASEQ</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span>, <span class="fl">10</span><span class="op">)</span>
+<span class="va">ADLB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADSL</span><span class="op">)</span>
+<span class="va">ADLB</span><span class="op">$</span><span class="va">PARAMCD</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"ALT"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span>
+<span class="va">ADLB</span><span class="op">$</span><span class="va">AVISIT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SCREENING"</span>, <span class="st">"BASELINE"</span>, <span class="st">"WEEK 1 DAY 8"</span>, <span class="st">"WEEK 2 DAY 15"</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span>
+<span class="va">ADLB</span><span class="op">$</span><span class="va">ASEQ</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span>, <span class="fl">10</span><span class="op">)</span>
 
 <span class="va">ADLB_code</span> <span class="op">&lt;-</span> <span class="st">'ADLB &lt;- rbind(ADSL, ADSL)
 ADLB$PARAMCD &lt;- rep(paste0("ALT", 1:8), 25)
@@ -230,22 +199,22 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 
 <span class="co"># nolint end</span>
 <span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="va">ADSL_code</span><span class="op">)</span>
-<span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="va">ADAE_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span>
-<span class="va">adlb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="va">ADLB_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="apps" class="section level1">
-<h1 class="hasAnchor">
-<a href="#apps" class="anchor"></a>Apps</h1>
+<span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="va">ADAE_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span>
+<span class="va">adlb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="va">ADLB_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="section level1">
+<h1 id="apps">Apps<a class="anchor" aria-label="anchor" href="#apps"></a>
+</h1>
 <p>Don’t forget to reload the app when you change code. The fastest is</p>
-<pre><code>devtools::load_all("../teal")</code></pre>
+<pre><code><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="st">"../teal"</span><span class="op">)</span></code></pre>
 <p>or the keyboard shortcut <code>^ + Shift + L</code> on a Mac.</p>
 <p>We use <code>safeBookmarkableShinyApp</code> instead of <code>shinyApp</code> to allow bookmarking. It wraps the UI function into a function with one argument for the request object. We further wrap it to only execute it when the option is enabled.</p>
 <p>You can execute these apps in any order.</p>
-<div id="main-debugging-app" class="section level2">
-<h2 class="hasAnchor">
-<a href="#main-debugging-app" class="anchor"></a>Main Debugging App</h2>
+<div class="section level2">
+<h2 id="main-debugging-app">Main Debugging App<a class="anchor" aria-label="anchor" href="#main-debugging-app"></a>
+</h2>
 <p>This is the main debugging app to check that the functionality still works after code changes:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
 
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
@@ -256,20 +225,20 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/bookmark_module.html">bookmark_module</a></span><span class="op">(</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/reset_filters_module.html">reset_filters_module</a></span><span class="op">(</span><span class="st">"Reset"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"ADLB"</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/reset_filters_module.html">reset_filters_module</a></span><span class="op">(</span><span class="st">"Reset"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"ADLB"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span>,
-  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
-    ADLB <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ASEQ <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5.6</span>, <span class="fl">20</span><span class="op">)</span>, keep_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+    ADLB <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ASEQ <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.6</span>, <span class="fl">20</span><span class="op">)</span>, keep_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span>,
   header <span class="op">=</span> <span class="st">"App with Debugging Modules"</span>,
   footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"text-muted"</span>, <span class="st">"Source: agile-R website"</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="lazy-filtering-of-datasets" class="section level2">
-<h2 class="hasAnchor">
-<a href="#lazy-filtering-of-datasets" class="anchor"></a>Lazy Filtering of Datasets</h2>
+<div class="section level2">
+<h2 id="lazy-filtering-of-datasets">Lazy Filtering of Datasets<a class="anchor" aria-label="anchor" href="#lazy-filtering-of-datasets"></a>
+</h2>
 <p>The datasets are lazily filtered meaning that when they are not needed for the current tab (as specified with <code>active_datanames</code>), they will simply not be refiltered. You can check this by modifying the filters of <code>ADSL</code> in a tab without <code>ADAE</code>. Then, the console should print that <code>ADSL</code> is refiltered, but not <code>ADAE</code>. Other datasets the tab depends on like <code>ADLB</code> will be refiltered.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
@@ -277,16 +246,16 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
     <span class="va">adsl</span>, <span class="va">adae</span>, <span class="va">adlb</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADAE"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADLB"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADLB"</span><span class="op">)</span><span class="op">)</span>,
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADAE"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>,
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADLB"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADLB"</span><span class="op">)</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/bookmark_module.html">bookmark_module</a></span><span class="op">(</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>,
-  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-      SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-      COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+      SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+      COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
       AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>,
@@ -295,9 +264,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="app-with-delayed-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#app-with-delayed-data" class="anchor"></a>App with Delayed Data</h2>
+<div class="section level2">
+<h2 id="app-with-delayed-data">App with Delayed Data<a class="anchor" aria-label="anchor" href="#app-with-delayed-data"></a>
+</h2>
 <p>This app tests that the app works with delayed data that is not available initially and loaded after the splash screen is submitted. Then, the splash UI is replaced by the main teal UI.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
@@ -305,14 +274,14 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
     <span class="fu"><a href="../reference/code_dataset_connector.html">code_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADSL"</span>, code <span class="op">=</span> <span class="va">adsl_code</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>,
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/bookmark_module.html">bookmark_module</a></span><span class="op">(</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>,
-  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-      SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-      COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+      SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+      COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
       AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>,
@@ -321,9 +290,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="nested-modules" class="section level2">
-<h2 class="hasAnchor">
-<a href="#nested-modules" class="anchor"></a>Nested Modules</h2>
+<div class="section level2">
+<h2 id="nested-modules">Nested Modules<a class="anchor" aria-label="anchor" href="#nested-modules"></a>
+</h2>
 <p>This app shows nested modules and how the filters apply to them. Check the tab hierarchy <code>A1 -&gt; B1.3</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
@@ -333,20 +302,20 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
       label <span class="op">=</span> <span class="st">"A1"</span>,
-      <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"B1.1"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
+      <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"B1.1"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
       <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"B1.2"</span><span class="op">)</span>,
       <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
         label <span class="op">=</span> <span class="st">"B1.3"</span>,
-        <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"C1.1"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
+        <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"C1.1"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
         <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"C1.2"</span><span class="op">)</span>
       <span class="op">)</span>
     <span class="op">)</span>,
-    <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"A2"</span>, <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"D2"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"A2"</span>, <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"D2"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span>,
-  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-      SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-      COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+      SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+      COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
       AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>,
@@ -355,18 +324,18 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="different-ways-to-specify-the-initial-filter-states" class="section level2">
-<h2 class="hasAnchor">
-<a href="#different-ways-to-specify-the-initial-filter-states" class="anchor"></a>Different Ways to Specify the Initial Filter States</h2>
+<div class="section level2">
+<h2 id="different-ways-to-specify-the-initial-filter-states">Different Ways to Specify the Initial Filter States<a class="anchor" aria-label="anchor" href="#different-ways-to-specify-the-initial-filter-states"></a>
+</h2>
 <p>We show different ways of how to specify the initial filter states. To show this, we generate fake data. We implicitly also check that the code works without the usual key <code>STUDYID</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fake_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">fake_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
   USUBJID <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">9</span>,
-  SEX1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="cn">NA_character_</span><span class="op">)</span>,
-  SEX2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="cn">NA_character_</span><span class="op">)</span>,
-  SEX3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="cn">NA_character_</span><span class="op">)</span>,
-  SEX4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="cn">NA_character_</span><span class="op">)</span>,
-  SEX5 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="cn">NA_character_</span><span class="op">)</span>,
+  SEX1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="cn">NA_character_</span><span class="op">)</span>,
+  SEX2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="cn">NA_character_</span><span class="op">)</span>,
+  SEX3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="cn">NA_character_</span><span class="op">)</span>,
+  SEX4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="cn">NA_character_</span><span class="op">)</span>,
+  SEX5 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="cn">NA_character_</span><span class="op">)</span>,
   stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span>
 
@@ -383,12 +352,12 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>,
-  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-      SEX1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span><span class="op">)</span>,
-      SEX2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="cn">NA</span><span class="op">)</span>,
-      SEX3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"M"</span><span class="op">)</span>,
-      SEX4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+      SEX1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span><span class="op">)</span>,
+      SEX2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="cn">NA</span><span class="op">)</span>,
+      SEX3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span><span class="op">)</span>,
+      SEX4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
       SEX5 <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>,
@@ -397,9 +366,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="dataset-not-provided-but-still-referred-to" class="section level2">
-<h2 class="hasAnchor">
-<a href="#dataset-not-provided-but-still-referred-to" class="anchor"></a>Dataset Not Provided But Still Referred To</h2>
+<div class="section level2">
+<h2 id="dataset-not-provided-but-still-referred-to">Dataset Not Provided But Still Referred To<a class="anchor" aria-label="anchor" href="#dataset-not-provided-but-still-referred-to"></a>
+</h2>
 <p>This app shows what happens when a dataset, <code>ADAE</code>, is not provided, but still appears in the <code>active_datanames</code>. A warning is displayed to the console.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
@@ -408,8 +377,8 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
     <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADAE"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>,
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADAE"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>,
   header <span class="op">=</span> <span class="st">"Missing ADAE Dataset Raises Warning"</span>,
@@ -417,15 +386,15 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="apply-several-filters-at-once" class="section level2">
-<h2 class="hasAnchor">
-<a href="#apply-several-filters-at-once" class="anchor"></a>Apply several filters at once</h2>
+<div class="section level2">
+<h2 id="apply-several-filters-at-once">Apply several filters at once<a class="anchor" aria-label="anchor" href="#apply-several-filters-at-once"></a>
+</h2>
 <p>This app checks that several filters can be applied at once. The logic is non-trivial. For instance, one can define a safety filter.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># dummy filter to show how several filters can be applied at once, not sensible</span>
-<span class="va">safety_filter</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>choices <span class="op">=</span> <span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
-  ADLB <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ASEQ <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="va">safety_filter</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+  ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>choices <span class="op">=</span> <span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+  ADLB <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ASEQ <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
@@ -437,13 +406,13 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/predefined_filters_module.html">predefined_filters_module</a></span><span class="op">(</span>filter <span class="op">=</span> <span class="va">safety_filter</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>,
-  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-      SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-      COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+      SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+      COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
       AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>,
-    ADAE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    ADAE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       AEHLT <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>,
@@ -452,9 +421,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="module-with-hidden-filter" class="section level2">
-<h2 class="hasAnchor">
-<a href="#module-with-hidden-filter" class="anchor"></a>Module with Hidden Filter</h2>
+<div class="section level2">
+<h2 id="module-with-hidden-filter">Module with Hidden Filter<a class="anchor" aria-label="anchor" href="#module-with-hidden-filter"></a>
+</h2>
 <p>This app tests that the right filter panel can be hidden.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">module_hidden_filters</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>
@@ -462,7 +431,7 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
   server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span>
   <span class="op">}</span>,
   ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html">p</a></span><span class="op">(</span><span class="st">"There should be no right filter panel."</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">p</a></span><span class="op">(</span><span class="st">"There should be no right filter panel."</span><span class="op">)</span>
   <span class="op">}</span>,
   filters <span class="op">=</span> <span class="cn">NULL</span> <span class="co"># hide filter panel</span>
 <span class="op">)</span>
@@ -480,9 +449,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="raw-app-with-hardly-anything" class="section level2">
-<h2 class="hasAnchor">
-<a href="#raw-app-with-hardly-anything" class="anchor"></a>Raw App with Hardly Anything</h2>
+<div class="section level2">
+<h2 id="raw-app-with-hardly-anything">Raw App with Hardly Anything<a class="anchor" aria-label="anchor" href="#raw-app-with-hardly-anything"></a>
+</h2>
 <p>This app purely tests the modules, it only has one tab and two datasets. It can be used to check that all labels are preserved and shown in the UI.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
@@ -498,16 +467,16 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="app-with-independent-and-non-independent-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#app-with-independent-and-non-independent-data" class="anchor"></a>App with Independent and Non-Independent Data</h2>
+<div class="section level2">
+<h2 id="app-with-independent-and-non-independent-data">App with Independent and Non-Independent Data<a class="anchor" aria-label="anchor" href="#app-with-independent-and-non-independent-data"></a>
+</h2>
 <p>This app shows how to incorporate independent data like <code>iris</code> and <code>mtcars</code> alongside some <code>CDISC</code> datasets.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># construct a unique primary key</span>
 <span class="va">iris_d</span> <span class="op">&lt;-</span> <span class="va">iris</span>
-<span class="va">iris_d</span><span class="op">[</span><span class="st">"rowname"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
+<span class="va">iris_d</span><span class="op">[</span><span class="st">"rowname"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
 <span class="va">mtcars_d</span> <span class="op">&lt;-</span> <span class="va">mtcars</span>
-<span class="va">mtcars_d</span><span class="op">[</span><span class="st">"rowname"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
+<span class="va">mtcars_d</span><span class="op">[</span><span class="st">"rowname"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
 
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/teal_data.html">teal_data</a></span><span class="op">(</span>
@@ -538,11 +507,13 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 
 
       <footer><div class="copyright">
-  <p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski, Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama, Nikolas Burkoff, Maciej Nasinski, Roche.</p>
+  <p></p>
+<p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski, Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama, Nikolas Burkoff, Maciej Nasinski, Roche.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -550,6 +521,8 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 
   
 
+
+  
 
   </body>
 </html>
