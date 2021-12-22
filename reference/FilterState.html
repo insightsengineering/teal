@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9037</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9038</span>
       </span>
     </div>
 
@@ -50,15 +50,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -98,13 +89,22 @@ code relevant to selected values.</p><ul><li><p><code>factor</code>, <code>chara
 <li><p><code>POSIXct</code>, <code>POSIXlt</code>: <code>class = DatetimeFilterState</code></p></li>
 <li><p>all <code>NA</code> entries: <code>class: FilterState</code>, cannot be filtered</p></li>
 <li><p>default: <code>FilterState</code>, cannot be filtered
-Each variable's filter state is a <code>R6</code> object which contains <code>choices</code>,
+Each variable's filter state is an <code>R6</code> object which contains <code>choices</code>,
 <code>selected</code>, <code>varname</code>, <code>dataname</code>, <code>labels</code>, <code>na_count</code>, <code>keep_na</code> and other
 variable type specific fields (<code>keep_inf</code>, <code>inf_count</code>, <code>timezone</code>).
 Object contains also shiny module (<code>ui</code> and <code>server</code>) which manages
 state of the filter through reactive values <code>selected</code>, <code>keep_na</code>, <code>keep_inf</code>
 which trigger <code>get_call()</code> and every R function call up in reactive
-chain.</p></li>
+chain.
+<br><br><img src="figures/filter_state_reactivity.jpg" width="100%" alt="Figure: filter_state_reactivity.jpg">
+
+Modifying a <code>FilterState</code> object is possible in three scenarios depicted above:</p></li>
+</ul><ul><li><p>In the interactive session by directly specifying values of <code>selected</code>,
+<code>keep_na</code> or <code>keep_inf</code> using <code>set_state</code> method (to update all at once),
+or using <code>set_selected</code>, <code>set_keep_na</code> or <code>set_keep_inf</code></p></li>
+<li><p>In a <code>teal</code> application by changing appropriate inputs</p></li>
+<li><p>Using methods <code>set_selected_reactive</code>, <code>set_keep_na_reactive</code>,
+<code>set_keep_inf_reactive</code> which serves as a programmatic API.</p></li>
 </ul></div>
     <div id="methods">
     <h2>Methods</h2>
@@ -121,9 +121,12 @@ chain.</p></li>
 <li><p><a href="#method-get_varname"><code>FilterState$get_varname()</code></a></p></li>
 <li><p><a href="#method-get_selected"><code>FilterState$get_selected()</code></a></p></li>
 <li><p><a href="#method-set_keep_na"><code>FilterState$set_keep_na()</code></a></p></li>
+<li><p><a href="#method-set_keep_na_reactive"><code>FilterState$set_keep_na_reactive()</code></a></p></li>
 <li><p><a href="#method-set_na_rm"><code>FilterState$set_na_rm()</code></a></p></li>
 <li><p><a href="#method-set_selected"><code>FilterState$set_selected()</code></a></p></li>
+<li><p><a href="#method-set_selected_reactive"><code>FilterState$set_selected_reactive()</code></a></p></li>
 <li><p><a href="#method-set_state"><code>FilterState$set_state()</code></a></p></li>
+<li><p><a href="#method-set_state_reactive"><code>FilterState$set_state_reactive()</code></a></p></li>
 <li><p><a href="#method-server"><code>FilterState$server()</code></a></p></li>
 <li><p><a href="#method-ui"><code>FilterState$ui()</code></a></p></li>
 <li><p><a href="#method-clone"><code>FilterState$clone()</code></a></p></li>
@@ -290,17 +293,36 @@ modules after selecting check-box-input in the shiny interface. Values are set t
 </dl><p></p></div>
 </div>
 
+</div><p></p><hr><a id="method-set_keep_na_reactive"></a><div class="section">
+<h3 id="method-set-keep-na-reactive-">Method <code>set_keep_na_reactive()</code><a class="anchor" aria-label="anchor" href="#method-set-keep-na-reactive-"></a></h3>
+<p>Set if <code>NA</code> should be kept when using <code>set_filter_state</code></p><div class="section">
+<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FilterState</span><span class="op">$</span><span class="fu">set_keep_na_reactive</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>value</code></dt>
+<dd><p>(<code>logical(1)</code>)<br>
+value(s) which come from the filter selection. Value is set in <code>server</code>
+modules when using <code>set_filter_state</code> instead of the shiny interface. Values are set to
+<code>private$keep_na_reactive</code> which is reactive.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
 </div><p></p><hr><a id="method-set_na_rm"></a><div class="section">
 <h3 id="method-set-na-rm-">Method <code>set_na_rm()</code><a class="anchor" aria-label="anchor" href="#method-set-na-rm-"></a></h3>
 <p>Some methods needs additional <code>!is.na(varame)</code> condition to not include
 missing values. When <code>private$na_rm = TRUE</code> is set, <code>self$get_call</code> returns
 condition extended by <code>!is.na</code> condition.</p><div class="section">
-<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FilterState</span><span class="op">$</span><span class="fu">set_na_rm</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
+<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>value</code></dt>
 <dd><p>(<code>logical(1)</code>) when <code>TRUE</code>, <code>FilterState$get_call</code> appends an expression
 removing <code>NA</code> values to the filter expression returned by <code>get_call</code></p></dd>
@@ -312,17 +334,37 @@ removing <code>NA</code> values to the filter expression returned by <code>get_c
 </div><p></p><hr><a id="method-set_selected"></a><div class="section">
 <h3 id="method-set-selected-">Method <code>set_selected()</code><a class="anchor" aria-label="anchor" href="#method-set-selected-"></a></h3>
 <p>Set selection</p><div class="section">
-<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FilterState</span><span class="op">$</span><span class="fu">set_selected</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
+<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>value</code></dt>
 <dd><p>(<code>vector</code>)<br>
 value(s) which come from the filter selection. Values are set in <code>server</code>
-modules after choosing value in app interface. Values are set to
+module after choosing value in app interface. Values are set to
 <code>private$selected</code> which is reactive. Values type have to be the
+same as <code>private$choices</code>.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-set_selected_reactive"></a><div class="section">
+<h3 id="method-set-selected-reactive-">Method <code>set_selected_reactive()</code><a class="anchor" aria-label="anchor" href="#method-set-selected-reactive-"></a></h3>
+<p>Set selection when using <code>set_filter_state</code></p><div class="section">
+<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FilterState</span><span class="op">$</span><span class="fu">set_selected_reactive</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>value</code></dt>
+<dd><p>(<code>vector</code>)<br>
+value(s) which come from the filters set by the user. Values are set in <code>server</code>
+modules after setting filters in <code>set_filter_state</code>. Values are set to
+<code>private$set_selected_reactive</code> which is reactive. Values type have to be the
 same as <code>private$choices</code>.</p></dd>
 
 
@@ -332,12 +374,31 @@ same as <code>private$choices</code>.</p></dd>
 </div><p></p><hr><a id="method-set_state"></a><div class="section">
 <h3 id="method-set-state-">Method <code>set_state()</code><a class="anchor" aria-label="anchor" href="#method-set-state-"></a></h3>
 <p>Set state</p><div class="section">
-<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
+<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FilterState</span><span class="op">$</span><span class="fu">set_state</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
+<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>state</code></dt>
+<dd><p>(<code>list</code>)<br>
+contains fields relevant for a specific class</p><ul><li><p><code>selected</code> defines initial selection</p></li>
+<li><p><code>keep_na</code> (<code>logical</code>) defines whether to keep or remove <code>NA</code> values</p></li>
+</ul></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-set_state_reactive"></a><div class="section">
+<h3 id="method-set-state-reactive-">Method <code>set_state_reactive()</code><a class="anchor" aria-label="anchor" href="#method-set-state-reactive-"></a></h3>
+<p>Set state when using <code>set_filter_state</code></p><div class="section">
+<h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FilterState</span><span class="op">$</span><span class="fu">set_state_reactive</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>state</code></dt>
 <dd><p>(<code>list</code>)<br>
 contains fields relevant for a specific class</p><ul><li><p><code>selected</code> defines initial selection</p></li>
@@ -351,12 +412,12 @@ contains fields relevant for a specific class</p><ul><li><p><code>selected</code
 </div><p></p><hr><a id="method-server"></a><div class="section">
 <h3 id="method-server-">Method <code>server()</code><a class="anchor" aria-label="anchor" href="#method-server-"></a></h3>
 <p>Server module</p><div class="section">
-<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
+<h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FilterState</span><span class="op">$</span><span class="fu">server</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
+<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>id</code></dt>
 <dd><p>(<code>character(1)</code>)<br>
 an ID string that corresponds with the ID used to call the module's UI function.</p></dd>
@@ -372,12 +433,12 @@ an ID string that corresponds with the ID used to call the module's UI function.
 </div><p></p><hr><a id="method-ui"></a><div class="section">
 <h3 id="method-ui-">Method <code>ui()</code><a class="anchor" aria-label="anchor" href="#method-ui-"></a></h3>
 <p>UI Module</p><div class="section">
-<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
+<h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FilterState</span><span class="op">$</span><span class="fu">ui</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
+<h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>id</code></dt>
 <dd><p>(<code>character(1)</code>)<br>
 id of shiny element. UI for this class contains simple message
@@ -397,6 +458,9 @@ return (<code>name</code> or <code>call</code>)
 Sets <code>keep_na</code> field according to observed <code>input$keep_na</code>
 If <code>keep_na = TRUE</code> <code>is.na(varname)</code> is added to the returned call.
 Otherwise returned call excludes <code>NA</code> when executed.
+Sets <code>keep_na</code> field according to <code>keep_na</code> value passed in <code>set_filter_state</code>.
+If <code>keep_na = TRUE</code> <code>is.na(varname)</code> is added to the returned call.
+Otherwise returned call excludes <code>NA</code> when executed.
 Set choices</p>
 <p>Set choices is supposed to be executed once in the constructor
 to define set/range which selection is made from.
@@ -411,12 +475,12 @@ return a <code>NULL</code></p></dd>
 </div><p></p><hr><a id="method-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
+<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FilterState</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
+<h4 id="arguments-12">Arguments<a class="anchor" aria-label="anchor" href="#arguments-12"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 

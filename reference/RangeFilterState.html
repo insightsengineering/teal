@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9037</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9038</span>
       </span>
     </div>
 
@@ -50,15 +50,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -109,7 +100,9 @@ making it possible to pass any object coercible to <code>numeric</code> to this 
 <li><p><a href="#method-ui"><code>RangeFilterState$ui()</code></a></p></li>
 <li><p><a href="#method-server"><code>RangeFilterState$server()</code></a></p></li>
 <li><p><a href="#method-set_keep_inf"><code>RangeFilterState$set_keep_inf()</code></a></p></li>
+<li><p><a href="#method-set_keep_inf_reactive"><code>RangeFilterState$set_keep_inf_reactive()</code></a></p></li>
 <li><p><a href="#method-set_state"><code>RangeFilterState$set_state()</code></a></p></li>
+<li><p><a href="#method-set_state_reactive"><code>RangeFilterState$set_state_reactive()</code></a></p></li>
 <li><p><a href="#method-set_selected"><code>RangeFilterState$set_selected()</code></a></p></li>
 <li><p><a href="#method-clone"><code>RangeFilterState$clone()</code></a></p></li>
 </ul></div><p><details><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="destroy_observers"><a href="FilterState.html#method-destroy_observers"><code>teal::FilterState$destroy_observers()</code></a></span></p></li>
@@ -119,7 +112,9 @@ making it possible to pass any object coercible to <code>numeric</code> to this 
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel"><a href="FilterState.html#method-get_varlabel"><code>teal::FilterState$get_varlabel()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname"><a href="FilterState.html#method-get_varname"><code>teal::FilterState$get_varname()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na"><a href="FilterState.html#method-set_keep_na"><code>teal::FilterState$set_keep_na()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na_reactive"><a href="FilterState.html#method-set_keep_na_reactive"><code>teal::FilterState$set_keep_na_reactive()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_na_rm"><a href="FilterState.html#method-set_na_rm"><code>teal::FilterState$set_na_rm()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_selected_reactive"><a href="FilterState.html#method-set_selected_reactive"><code>teal::FilterState$set_selected_reactive()</code></a></span></p></li>
 </ul></details></p><hr><a id="method-new"></a><div class="section">
 <h3 id="method-new-">Method <code><a href="https://rdrr.io/r/methods/new.html" class="external-link">new()</a></code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Initialize a <code>FilterState</code> object</p><div class="section">
@@ -254,15 +249,54 @@ modules after selecting check-box-input in the shiny interface. Values are set t
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-set_state"></a><div class="section">
-<h3 id="method-set-state-">Method <code>set_state()</code><a class="anchor" aria-label="anchor" href="#method-set-state-"></a></h3>
-<p>Set state</p><div class="section">
+</div><p></p><hr><a id="method-set_keep_inf_reactive"></a><div class="section">
+<h3 id="method-set-keep-inf-reactive-">Method <code>set_keep_inf_reactive()</code><a class="anchor" aria-label="anchor" href="#method-set-keep-inf-reactive-"></a></h3>
+<p>Set if <code>Inf</code> should be kept when passing filters using <code>set_filter_state</code></p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">set_state</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">set_keep_inf_reactive</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>value</code></dt>
+<dd><p>(<code>logical(1)</code>)<br>
+Value(s) which come from the filter set by the user. Value is set in <code>server</code>
+modules after setting the filters using <code>set_filter_state</code>. Values are set to
+<code>private$keep_inf_reactive</code> which is reactive.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-set_state"></a><div class="section">
+<h3 id="method-set-state-">Method <code>set_state()</code><a class="anchor" aria-label="anchor" href="#method-set-state-"></a></h3>
+<p>Set state</p><div class="section">
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">set_state</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>state</code></dt>
+<dd><p>(<code>list</code>)<br>
+contains fields relevant for a specific class</p><ul><li><p><code>selected</code> defines initial selection</p></li>
+<li><p><code>keep_na</code> (<code>logical</code>) defines whether to keep or remove <code>NA</code> values</p></li>
+<li><p><code>keep_inf</code> (<code>logical</code>) defines whether to keep or remove <code>Inf</code> values</p></li>
+</ul></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-set_state_reactive"></a><div class="section">
+<h3 id="method-set-state-reactive-">Method <code>set_state_reactive()</code><a class="anchor" aria-label="anchor" href="#method-set-state-reactive-"></a></h3>
+<p>Set state when using <code>set_filter_state</code></p><div class="section">
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">set_state_reactive</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>state</code></dt>
 <dd><p>(<code>list</code>)<br>
 contains fields relevant for a specific class</p><ul><li><p><code>selected</code> defines initial selection</p></li>
@@ -277,12 +311,12 @@ contains fields relevant for a specific class</p><ul><li><p><code>selected</code
 </div><p></p><hr><a id="method-set_selected"></a><div class="section">
 <h3 id="method-set-selected-">Method <code>set_selected()</code><a class="anchor" aria-label="anchor" href="#method-set-selected-"></a></h3>
 <p>Sets the selected values of this <code>RangeFilterState</code>.</p><div class="section">
-<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">set_selected</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
+<h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>value</code></dt>
 <dd><p>(<code>numeric(2)</code>) the two-elements array of the lower and upper bound
 of the selected range. Must not contain NA values.</p></dd>
@@ -300,12 +334,12 @@ of the selected range. Must not contain NA values.</p></dd>
 </div><p></p><hr><a id="method-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
+<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 

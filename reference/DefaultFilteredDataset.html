@@ -18,7 +18,7 @@ DefaultFilteredDataset R6 class"><!-- mathjax --><script src="https://cdnjs.clou
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9037</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9038</span>
       </span>
     </div>
 
@@ -51,15 +51,6 @@ DefaultFilteredDataset R6 class"><!-- mathjax --><script src="https://cdnjs.clou
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -98,7 +89,8 @@ Other releases
 
 <ul><li><p><a href="#method-new"><code>DefaultFilteredDataset$new()</code></a></p></li>
 <li><p><a href="#method-get_call"><code>DefaultFilteredDataset$get_call()</code></a></p></li>
-<li><p><a href="#method-set_bookmark_state"><code>DefaultFilteredDataset$set_bookmark_state()</code></a></p></li>
+<li><p><a href="#method-set_filter_state"><code>DefaultFilteredDataset$set_filter_state()</code></a></p></li>
+<li><p><a href="#method-remove_filter_state"><code>DefaultFilteredDataset$remove_filter_state()</code></a></p></li>
 <li><p><a href="#method-ui_add_filter_state"><code>DefaultFilteredDataset$ui_add_filter_state()</code></a></p></li>
 <li><p><a href="#method-srv_add_filter_state"><code>DefaultFilteredDataset$srv_add_filter_state()</code></a></p></li>
 <li><p><a href="#method-clone"><code>DefaultFilteredDataset$clone()</code></a></p></li>
@@ -154,43 +146,64 @@ applies to one argument (<code>...</code>) in <code><a href="https://dplyr.tidyv
 <p>filter <code>call</code> or <code>list</code> of filter calls</p>
 </div>
 
-</div><p></p><hr><a id="method-set_bookmark_state"></a><div class="section">
-<h3 id="method-set-bookmark-state-">Method <code>set_bookmark_state()</code><a class="anchor" aria-label="anchor" href="#method-set-bookmark-state-"></a></h3>
-<p>Set bookmark state</p><div class="section">
+</div><p></p><hr><a id="method-set_filter_state"></a><div class="section">
+<h3 id="method-set-filter-state-">Method <code><a href="set_filter_state.html">set_filter_state()</a></code><a class="anchor" aria-label="anchor" href="#method-set-filter-state-"></a></h3>
+<p>Set filter state</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DefaultFilteredDataset</span><span class="op">$</span><span class="fu">set_bookmark_state</span><span class="op">(</span><span class="va">id</span>, <span class="va">state</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DefaultFilteredDataset</span><span class="op">$</span><span class="fu">set_filter_state</span><span class="op">(</span><span class="va">state</span>, <span class="va">...</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>id</code></dt>
-<dd><p>(<code>character(1)</code>)<br>
-an ID string that corresponds with the ID used to call the module's UI function.</p></dd>
-
-
-<dt><code>state</code></dt>
+<p></p><div class="arguments"><dl><dt><code>state</code></dt>
 <dd><p>(<code>named list</code>)<br>
 containing values of the initial filter. Values should be relevant
 to the referred column.</p></dd>
+
+
+<dt><code>...</code></dt>
+<dd><p>Additional arguments like <code>include_update</code> for <code>CDISCFilteredDataset</code>.
+Note that this is ignored for other <code>FilteredDatasets</code>.</p></dd>
 
 
 </dl><p></p></div>
 </div>
 <div class="section">
 <h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
-<p><code>moduleServer</code> function which returns <code>NULL</code></p>
+<p><code>NULL</code></p>
+</div>
+
+</div><p></p><hr><a id="method-remove_filter_state"></a><div class="section">
+<h3 id="method-remove-filter-state-">Method <code>remove_filter_state()</code><a class="anchor" aria-label="anchor" href="#method-remove-filter-state-"></a></h3>
+<p>Remove one or more <code>FilterState</code> of a <code>FilteredDataset</code></p><div class="section">
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DefaultFilteredDataset</span><span class="op">$</span><span class="fu">remove_filter_state</span><span class="op">(</span><span class="va">element_id</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>element_id</code></dt>
+<dd><p>(<code>character</code>)<br>
+Vector of character names of variables to remove their <code>FilterState</code>.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+<div class="section">
+<h4 id="returns-2">Returns<a class="anchor" aria-label="anchor" href="#returns-2"></a></h4>
+<p><code>NULL</code></p>
 </div>
 
 </div><p></p><hr><a id="method-ui_add_filter_state"></a><div class="section">
 <h3 id="method-ui-add-filter-state-">Method <code>ui_add_filter_state()</code><a class="anchor" aria-label="anchor" href="#method-ui-add-filter-state-"></a></h3>
 <p>UI module to add filter variable for this dataset</p>
 <p>UI module to add filter variable for this dataset</p><div class="section">
-<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DefaultFilteredDataset</span><span class="op">$</span><span class="fu">ui_add_filter_state</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
+<h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>id</code></dt>
 <dd><p>(<code>character(1)</code>)<br>
 identifier of the element - preferably containing dataset name</p></dd>
@@ -199,7 +212,7 @@ identifier of the element - preferably containing dataset name</p></dd>
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-2">Returns<a class="anchor" aria-label="anchor" href="#returns-2"></a></h4>
+<h4 id="returns-3">Returns<a class="anchor" aria-label="anchor" href="#returns-3"></a></h4>
 <p>function - shiny UI module</p>
 </div>
 
@@ -210,12 +223,12 @@ identifier of the element - preferably containing dataset name</p></dd>
 For this class <code>srv_add_filter_state</code> calls single module
 <code>srv_add_filter_state</code> from <code>FilterStates</code> (<code>DefaultFilteredDataset</code>
 contains single <code>FilterStates</code>)</p><div class="section">
-<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DefaultFilteredDataset</span><span class="op">$</span><span class="fu">srv_add_filter_state</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
+<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>id</code></dt>
 <dd><p>(<code>character(1)</code>)<br>
 an ID string that corresponds with the ID used to call the module's UI function.</p></dd>
@@ -228,19 +241,19 @@ an ID string that corresponds with the ID used to call the module's UI function.
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-3">Returns<a class="anchor" aria-label="anchor" href="#returns-3"></a></h4>
+<h4 id="returns-4">Returns<a class="anchor" aria-label="anchor" href="#returns-4"></a></h4>
 <p><code>moduleServer</code> function which returns <code>NULL</code></p>
 </div>
 
 </div><p></p><hr><a id="method-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DefaultFilteredDataset</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
+<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
