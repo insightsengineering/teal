@@ -166,7 +166,7 @@ test_that("NULL empty", {
       files_path = file_path_nochunks, dataname = "wrongname", exclude_comments = FALSE,
       read_sources = TRUE
     ),
-    "ADSL <- data.frame(1, 2) # nolint\n\nADSL$x <- 2"
+    "ADSL <- data.frame(1, 2) # nolint\n\nADSL$x <- 2 # nolint"
   )
 
   expect_equal(
@@ -174,6 +174,6 @@ test_that("NULL empty", {
       files_path = file_path_nochunks, dataname = "", exclude_comments = FALSE,
       read_sources = TRUE
     ),
-    "ADSL <- data.frame(1, 2) # nolint\n\nADSL$x <- 2"
+    "ADSL <- data.frame(1, 2) # nolint\n\nADSL$x <- 2 # nolint"
   )
 })
