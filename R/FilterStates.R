@@ -470,7 +470,7 @@ FilterStates <- R6::R6Class( # nolint
     #' return `moduleServer` function which returns `NULL`
     insert_filter_state_ui = function(id, filter_state, queue_index, element_id) {
       checkmate::assert_class(filter_state, "FilterState")
-      assert(checkmate::check_int(queue_index), checkmate::check_character(queue_index, len = 1), combine = "or")
+      checkmate::assert(checkmate::check_int(queue_index), checkmate::check_character(queue_index, len = 1), combine = "or")
       checkmate::assert_character(element_id, len = 1)
       moduleServer(
         id = id,
