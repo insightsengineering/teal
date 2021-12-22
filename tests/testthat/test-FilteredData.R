@@ -121,20 +121,21 @@ testthat::test_that("get call returns a call assigning the filtered object to <n
 })
 
 testthat::test_that(
-  "FilteredData$set_filter_state sets filters in FilteredDataset specified by the named list", {
+  "FilteredData$set_filter_state sets filters in FilteredDataset specified by the named list",
+  { # nolint
     datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
     fs <- list(
-        iris = list(
-          Sepal.Length = list(c(5.1, 6.4)),
-          Species = c("setosa", "versicolor")
-        ),
-        mtcars = list(
-          cyl = c(4, 6),
-          disp = default_filter()
-        )
+      iris = list(
+        Sepal.Length = list(c(5.1, 6.4)),
+        Species = c("setosa", "versicolor")
+      ),
+      mtcars = list(
+        cyl = c(4, 6),
+        disp = default_filter()
       )
+    )
     datasets$set_filter_state(state = fs)
     testthat::expect_equal(
       isolate(datasets$get_call("iris")),
@@ -143,7 +144,7 @@ testthat::test_that(
           iris_FILTERED <- dplyr::filter( # nolint
             iris,
             Sepal.Length >= 5.1 & Sepal.Length <= 6.4 &
-            Species %in% c("setosa", "versicolor")
+              Species %in% c("setosa", "versicolor")
           )
         )
       )
@@ -164,7 +165,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "FilteredData$set_filter_state throws error with unnamed datasets list", {
+  "FilteredData$set_filter_state throws error with unnamed datasets list",
+  { # nolint
     datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
@@ -183,7 +185,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "FilteredData$set_filter_state throws error with unnamed variables list", {
+  "FilteredData$set_filter_state throws error with unnamed variables list",
+  { # nolint
     datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
@@ -202,7 +205,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "FilteredData$remove_all_filter_states removes all filters of all datasets in FilteredData", {
+  "FilteredData$remove_all_filter_states removes all filters of all datasets in FilteredData",
+  { # nolint
     datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
@@ -236,7 +240,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "FilteredData$remove_all_filter_states remove the filters of the desired dataset only", {
+  "FilteredData$remove_all_filter_states remove the filters of the desired dataset only",
+  { # nolint
     datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))

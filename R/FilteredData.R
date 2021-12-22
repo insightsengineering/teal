@@ -380,8 +380,7 @@ FilteredData <- R6::R6Class( # nolint
     set_filter_state = function(state) {
       checkmate::assert_subset(names(state), self$datanames())
       logger::log_trace("FilteredData$set_filter_state initializing, dataname: { names(state) }")
-      for(dataname in names(state)) {
-
+      for (dataname in names(state)) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)
         dataset_state <- state[[dataname]]
 
@@ -403,7 +402,7 @@ FilteredData <- R6::R6Class( # nolint
     remove_filter_state = function(state) {
       logger::log_trace("FilteredData$remove_filter_state called, dataname: { names(state) }")
 
-      for(dataname in names(state)) {
+      for (dataname in names(state)) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)
         fdataset$remove_filter_state(element_id = state[[dataname]])
       }
@@ -426,7 +425,7 @@ FilteredData <- R6::R6Class( # nolint
         "FilteredData$remove_all_filter_states called, datanames: { paste(datanames, collapse = ', ') }"
       )
 
-      for(dataname in datanames) {
+      for (dataname in datanames) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)
         fdataset$queues_empty()
       }

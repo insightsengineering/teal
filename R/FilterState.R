@@ -543,12 +543,12 @@ FilterState <- R6::R6Class( # nolint
   private = list(
     choices = NULL, # because each class has different choices type
     input_dataname = character(0),
-    keep_na = NULL,  # reactiveVal logical()
+    keep_na = NULL, # reactiveVal logical()
     keep_na_reactive = NULL, # reactiveVal logical()
     na_count = integer(0),
     na_rm = FALSE, # logical(1)
     observers = NULL, # here observers are stored
-    selected = NULL,  # because it holds reactiveVal and each class has different choices type
+    selected = NULL, # because it holds reactiveVal and each class has different choices type
     selected_reactive = NULL, # because it holds reactiveVal and each class has different choices type
     varname = character(0),
     varlabel = character(0),
@@ -1649,7 +1649,8 @@ ChoicesFilterState <- R6::R6Class( # nolint
                 "ChoicesFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
               )
               private$selected_reactive(NULL)
-          })
+            }
+          )
           private$observe_keep_na_reactive(private$keep_na_reactive())
 
           private$observers$selection <- observeEvent(
@@ -1760,8 +1761,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
       }
       values[in_choices_mask]
     }
-
-
   )
 )
 

@@ -92,7 +92,8 @@ testthat::test_that("get_call returns a call filtering an MAE object using Range
 })
 
 testthat::test_that(
-  "MAEFilterStates$set_filter_state sets filters in FilterState(s) specified by the named list", {
+  "MAEFilterStates$set_filter_state sets filters in FilterState(s) specified by the named list",
+  { # nolint
     maefs <- MAEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
@@ -112,7 +113,7 @@ testthat::test_that(
       quote(
         test_filtered <- MultiAssayExperiment::subsetByColData(
           test,
-          y = test$years_to_birth >=  30 & test$years_to_birth <= 50 &
+          y = test$years_to_birth >= 30 & test$years_to_birth <= 50 &
             test$vital_status == "1" &
             test$gender == "female"
         )
@@ -122,7 +123,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "MAEFilterStates$set_filter_state throws error when not using a named list", {
+  "MAEFilterStates$set_filter_state throws error when not using a named list",
+  { # nolint
     maefs <- MAEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
@@ -140,7 +142,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "MAEFilterStates$remove_filter_state removes filters in FilterState(s)", {
+  "MAEFilterStates$remove_filter_state removes filters in FilterState(s)",
+  { # nolint
     maefs <- MAEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",
@@ -172,7 +175,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "MAEFilterStates$remove_filter_state throws warning when name is not in FilterStates", {
+  "MAEFilterStates$remove_filter_state throws warning when name is not in FilterStates",
+  { # nolint
     maefs <- MAEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",

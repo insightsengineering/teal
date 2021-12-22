@@ -510,13 +510,13 @@ FilterStates <- R6::R6Class( # nolint
                       class = "no-left-right-padding",
                       tags$div(
                         tags$span(filter_state$get_varname(),
-                                  class = "filter_panel_varname"
+                          class = "filter_panel_varname"
                         ),
                         if_not_character_empty(
                           filter_state$get_varlabel(),
                           if (tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
                             tags$span(filter_state$get_varlabel(),
-                                      class = "filter_panel_varlabel"
+                              class = "filter_panel_varlabel"
                             )
                           }
                         )
@@ -713,7 +713,8 @@ DFFilterStates <- R6::R6Class( # nolint
             removed_state_name(character(0))
           })
           NULL
-        })
+        }
+      )
     },
 
     #' @description
@@ -1052,7 +1053,8 @@ MAEFilterStates <- R6::R6Class( # nolint
             removed_state_name(character(0))
           })
           NULL
-        })
+        }
+      )
     },
 
     #' @description
@@ -1373,7 +1375,7 @@ SEFilterStates <- R6::R6Class( # nolint
             removed_state_name_subset(character(0))
           })
 
-          #select
+          # select
           previous_state_select <- reactiveVal(isolate(self$queue_get("select")))
           added_state_name_select <- reactiveVal(character(0))
           removed_state_name_select <- reactiveVal(character(0))
@@ -1390,7 +1392,6 @@ SEFilterStates <- R6::R6Class( # nolint
           })
 
           observeEvent(added_state_name_select(), ignoreNULL = TRUE, {
-
             fstates <- private$get_filter_state("select")
             for (fname in added_state_name_select()) {
               private$insert_filter_state_ui(
@@ -1411,7 +1412,8 @@ SEFilterStates <- R6::R6Class( # nolint
             removed_state_name_select(character(0))
           })
           NULL
-        })
+        }
+      )
     },
 
     #' @description
@@ -1437,10 +1439,11 @@ SEFilterStates <- R6::R6Class( # nolint
       )
       checkmate::assert(
         checkmate::test_null(state$subset),
-          checkmate::assert(
-            checkmate::check_class(state$subset, "list"),
-            checkmate::check_subset(names(state$subset), names(SummarizedExperiment::rowData(data))),
-            combine = "and"),
+        checkmate::assert(
+          checkmate::check_class(state$subset, "list"),
+          checkmate::check_subset(names(state$subset), names(SummarizedExperiment::rowData(data))),
+          combine = "and"
+        ),
         combine = "or"
       )
       checkmate::assert(
@@ -1448,7 +1451,8 @@ SEFilterStates <- R6::R6Class( # nolint
         checkmate::assert(
           checkmate::check_class(state$select, "list"),
           checkmate::check_subset(names(state$select), names(SummarizedExperiment::colData(data))),
-          combine = "and"),
+          combine = "and"
+        ),
         combine = "or"
       )
 
@@ -1871,7 +1875,8 @@ MatrixFilterStates <- R6::R6Class( # nolint
             removed_state_name(character(0))
           })
           NULL
-        })
+        }
+      )
     },
 
     #' @description
@@ -1927,7 +1932,6 @@ MatrixFilterStates <- R6::R6Class( # nolint
         "dataname: { deparse1(private$input_dataname) }"
       ))
       NULL
-
     },
 
     #' @description Remove a variable from the `ReactiveQueue` and its corresponding UI element.

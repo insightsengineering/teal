@@ -20,7 +20,8 @@ testthat::test_that("get_fun returns dplyr::filter", {
 })
 
 testthat::test_that(
-  "DFFilterStates$set_filter_state sets filters in FilterState(s) specified by the named list", {
+  "DFFilterStates$set_filter_state sets filters in FilterState(s) specified by the named list",
+  { # nolint
     dffs <- DFFilterStates$new(
       input_dataname = "iris",
       output_dataname = "iris_filtered",
@@ -72,7 +73,8 @@ testthat::test_that("DFFilterStates$set_filter_state sets filters as a named/unn
 })
 
 testthat::test_that(
-  "DFFilterStates$set_filter_state throws error when using an unnamed list", {
+  "DFFilterStates$set_filter_state throws error when using an unnamed list",
+  { # nolint
     dffs <- DFFilterStates$new(
       input_dataname = "iris",
       output_dataname = "iris_filtered",
@@ -156,7 +158,8 @@ testthat::test_that("Adding 'var_to_add' adds another filter state", {
 })
 
 testthat::test_that(
-  "DFFilterStates$remove_filter_state removes specified filter in FilterState(s)", {
+  "DFFilterStates$remove_filter_state removes specified filter in FilterState(s)",
+  { # nolint
     dffs <- DFFilterStates$new(
       input_dataname = "iris",
       output_dataname = "iris_filtered",
@@ -180,7 +183,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "DFFilterStates$remove_filter_state throws warning when name is not in FilterStates", {
+  "DFFilterStates$remove_filter_state throws warning when name is not in FilterStates",
+  { # nolint
     dffs <- DFFilterStates$new(
       input_dataname = "iris",
       output_dataname = "iris_filtered",

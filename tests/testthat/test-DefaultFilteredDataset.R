@@ -12,7 +12,8 @@ testthat::test_that("get_call returns a list of calls", {
 })
 
 testthat::test_that(
-  "DefaultFilteredDataset$set_filter_state sets filters specified by list names", {
+  "DefaultFilteredDataset$set_filter_state sets filters specified by list names",
+  { # nolint
     dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
 
     fs <- list(
@@ -36,7 +37,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "DefaultFilteredDataset$set_filter_state throws error when list is not named", {
+  "DefaultFilteredDataset$set_filter_state throws error when list is not named",
+  { # nolint
     dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
     fs <- list(
       c(5.1, 6.4),
@@ -47,7 +49,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "DefaultFilteredDataset$remove_filter_state removes desired filter", {
+  "DefaultFilteredDataset$remove_filter_state removes desired filter",
+  { # nolint
     dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
     fs <- list(
       Sepal.Length = c(5.1, 6.4),
@@ -71,7 +74,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "DefaultFilteredDataset$remove_filter_state removes more than one filter", {
+  "DefaultFilteredDataset$remove_filter_state removes more than one filter",
+  { # nolint
     dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
     fs <- list(
       Sepal.Length = c(5.1, 6.4),
