@@ -451,7 +451,7 @@ TealDataset <- R6::R6Class( # nolint
         sprintf(
           "TealDatasetConnector$mutate mutating dataset '%s' using the code (%s lines) and vars (%s).",
           self$get_dataname(),
-          length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
+          length(parse(text = if (is(code, "CodeClass")) code$get_code() else code, keep.source = FALSE)),
           paste(names(vars), collapse = ', ')
         )
       )
@@ -481,7 +481,7 @@ TealDataset <- R6::R6Class( # nolint
         sprintf(
           "TealDataset$mutate mutated dataset '%s' using the code (%s lines) and vars (%s).",
           self$get_dataname(),
-          length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
+          length(parse(text = if (is(code, "CodeClass")) code$get_code() else code, keep.source = FALSE)),
           paste(names(vars), collapse = ', ')
         )
       )
@@ -585,7 +585,7 @@ TealDataset <- R6::R6Class( # nolint
       logger::log_trace(
         sprintf(
           "TealDatasetConnector$mutate_delayed set the code (%s lines) and vars (%s) for dataset: %s.",
-          length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
+          length(parse(text = if (is(code, "CodeClass")) code$get_code() else code, keep.source = FALSE)),
           paste(names(vars), collapse = ', '),
           self$get_dataname()
         )
