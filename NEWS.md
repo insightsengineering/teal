@@ -1,4 +1,4 @@
-# teal 0.10.0.9038
+# teal 0.10.0.9039
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
@@ -20,6 +20,7 @@
 * Added `pid` and shiny session token into footnote so app developers can identify logs for apps.
 * Added logs to the modules and sub-modules returned from `init`.
 * Added `teal.threshold_slider_vs_checkboxgroup` as an option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.
+* Extended the `FilteredData` API to allow managing filter states from outside and not only from the UI.
 
 ### Bug fixes
 * Refactored `module_nested_tabs` to fix the issue with filter-panel not reacting on a change of nested tabs. 

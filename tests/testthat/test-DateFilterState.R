@@ -118,3 +118,47 @@ testthat::test_that("set_state overwrites fields included in the input only", {
   testthat::expect_identical(isolate(filter_state$get_selected()), c(test_date[3], test_date[4]))
   testthat::expect_true(isolate(filter_state$get_keep_na()))
 })
+
+testthat::test_that("set_state_reactive needs a named list with selected and keep_na elements", {
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16", "2013/08/17"))
+  filter_state <- DateFilterState$new(test_date, varname = "test")
+  testthat::expect_error(
+    filter_state$set_state_reactive(list(selected = c("2013/08/16", "2013/08/17"), keep_na = TRUE)),
+    NA
+  )
+  testthat::expect_error(
+    filter_state$set_state_reactive(list(selected = c("2013/08/16", "2013/08/17"), unknown = TRUE)),
+    "all\\(names\\(state\\)"
+  )
+})
+
+testthat::test_that("set_selected_reactive warns when selection not within allowed range", {
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16", "2013/08/17"))
+  filter_state <- DateFilterState$new(test_date, varname = "test")
+  testthat::expect_warning(
+    filter_state$set_selected_reactive(c("2001/08/16", "2013/08/17")),
+    "Value: 2001-08-16 is outside of the possible range for column test of dataset  ."
+  )
+})
+
+testthat::test_that("set_selected_reactive throws error when one argument is given only", {
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16", "2013/08/17"))
+  filter_state <- DateFilterState$new(test_date, varname = "test")
+  testthat::expect_error(
+    filter_state$set_selected_reactive(c("2013/08/17")),
+    "The array of set values must have length two."
+  )
+})
+
+testthat::test_that("set_keep_na_reactive accepts logical input", {
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16", "2013/08/17"))
+  filter_state <- DateFilterState$new(test_date, varname = "test")
+  testthat::expect_error(filter_state$set_keep_na_reactive(TRUE), NA)
+})
+
+testthat::test_that("set_keep_na_reactive throws error if input is not logical", {
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16", "2013/08/17"))
+  filter_state <- DateFilterState$new(test_date, varname = "test")
+  testthat::expect_error(filter_state$set_keep_na_reactive("TRUE"))
+  testthat::expect_error(filter_state$set_keep_na_reactive(1))
+})

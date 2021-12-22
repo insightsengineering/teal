@@ -40,6 +40,7 @@ filter_states$queue_push(
 )
 isolate(filter_states$get_call())
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -52,7 +53,8 @@ isolate(filter_states$get_call())
 \item \href{#method-queue_push}{\code{FilterStates$queue_push()}}
 \item \href{#method-queue_remove}{\code{FilterStates$queue_remove()}}
 \item \href{#method-ui}{\code{FilterStates$ui()}}
-\item \href{#method-set_bookmark_state}{\code{FilterStates$set_bookmark_state()}}
+\item \href{#method-set_filter_state}{\code{FilterStates$set_filter_state()}}
+\item \href{#method-remove_filter_state}{\code{FilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{FilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{FilterStates$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{FilterStates$clone()}}
@@ -254,20 +256,17 @@ shiny.tag
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
-Set bookmark state
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
+Set filter state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilterStates$set_bookmark_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilterStates$set_filter_state(data, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{(\code{character(1)})\cr
-an ID string that corresponds with the ID used to call the module's UI function.}
-
 \item{\code{data}}{(\code{data.frame})\cr
 data which are supposed to be filtered}
 
@@ -279,7 +278,28 @@ column in \code{data}.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{moduleServer} function which throws an error
+function which throws an error
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
+\subsection{Method \code{remove_filter_state()}}{
+Remove a single \code{FilterState} from the \code{ReactiveQueue}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilterStates$remove_filter_state(element_id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element_id}}{(\code{character})\cr
+Name of variable to remove its \code{FilterState}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}
@@ -330,11 +350,10 @@ object containing columns to be used as filter variables.}
 }
 \subsection{Returns}{
 \code{moduleServer} function which returns \code{NULL}
-Module to add \code{FilterState} to queue
+Module to insert/remove \code{FilterState} UI
 
-This module adds \code{FilterState} object to queue, inserts
-shiny UI to the Active Filter Variables, calls \code{FilterState} modules and
-create observer to remove state
+This module adds the shiny UI of the newly added \code{FilterState} object to queue to the Active Filter
+Variables, calls \code{FilterState} modules and creates observer to remove state
 parameter filter_state (\code{FilterState})
 
 parameter queue_index (\code{character(1)}, \code{logical(1)})\cr
@@ -346,6 +365,11 @@ return \code{moduleServer} function which returns \code{NULL}
 level, where shiny-session-namespace is different. That is why it's important
 to remove shiny elements from anywhere. In \code{add_filter_state} \code{session$ns(NULL)}
 is equivalent to \code{private$ns(queue_index)}. This means that
+
+Get all \code{FilterState} in the queue.
+parameter queue_index (\code{character(1)} or \code{integer})
+index of the \code{private$queue} list where \code{ReactiveQueue} are kept.
+returns a list of \code{FilterState}.
 }
 }
 \if{html}{\out{<hr>}}

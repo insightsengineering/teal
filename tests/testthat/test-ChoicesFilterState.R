@@ -44,7 +44,7 @@ testthat::test_that("set_selected sets the intersection of choices and the passe
   testthat::expect_equal(isolate(filter_state$get_selected()), "test1")
 })
 
-testthat::test_that("set_state need named list with selected and keep_na elements", {
+testthat::test_that("set_state needs a named list with selected and keep_na elements", {
   filter_state <- ChoicesFilterState$new(x = c("a", "b", NA_character_), varname = "test")
   testthat::expect_error(filter_state$set_state(list(selected = "a", keep_na = TRUE)), NA)
   testthat::expect_error(filter_state$set_state(list(selected = "a", unknown = TRUE)), "all\\(names\\(state\\)")
@@ -63,4 +63,29 @@ testthat::test_that("set_state overwrites fields included in the input only", {
   testthat::expect_error(filter_state$set_state(list(selected = "b")), NA)
   testthat::expect_identical(isolate(filter_state$get_selected()), "b")
   testthat::expect_true(isolate(filter_state$get_keep_na()))
+})
+
+testthat::test_that("set_state_reactive needs a named list with selected and keep_na elements", {
+  filter_state <- ChoicesFilterState$new(x = c("a", "b", NA_character_), varname = "test")
+  testthat::expect_error(filter_state$set_state_reactive(list(selected = "a", keep_na = TRUE)), NA)
+  testthat::expect_error(
+    filter_state$set_state_reactive(list(selected = "a", unknown = TRUE)),
+    "all\\(names\\(state\\)"
+  )
+})
+
+testthat::test_that("set_selected_reactive warns when selection not within allowed choices", {
+  filter_state <- ChoicesFilterState$new("test", varname = "test")
+  testthat::expect_warning(filter_state$set_selected_reactive(c("test", 7)), "not in choices")
+})
+
+testthat::test_that("set_keep_na_reactive accepts logical input", {
+  filter_state <- ChoicesFilterState$new("test", varname = "test")
+  testthat::expect_error(filter_state$set_keep_na_reactive(TRUE), NA)
+})
+
+testthat::test_that("set_keep_na_reactive throws error if input is not logical", {
+  filter_state <- ChoicesFilterState$new("test", varname = "test")
+  testthat::expect_error(filter_state$set_keep_na_reactive("TRUE"))
+  testthat::expect_error(filter_state$set_keep_na_reactive(1))
 })

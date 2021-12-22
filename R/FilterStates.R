@@ -132,6 +132,7 @@ init_filter_states.SummarizedExperiment <- function(data, # nolint #nousage
 #' Currently `data.frame`, `MultiAssayExperiment`,
 #' `SummarizedExperiment` and `matrix` are available.
 #'
+#' @keywords internal
 #'
 #' @examples
 #' library(shiny)
@@ -291,9 +292,6 @@ FilterStates <- R6::R6Class( # nolint
         queue_elements <- names(self$queue_get(queue_index = queue_index))
         lapply(queue_elements, function(element_id) {
           self$queue_remove(queue_index = queue_index, element_id = element_id)
-          if (shiny::isRunning()) {
-            private$remove_filter_state(queue_index, element_id)
-          }
         })
       })
 
@@ -378,7 +376,6 @@ FilterStates <- R6::R6Class( # nolint
       stopifnot(is_character_single(element_id))
 
       filters <- self$queue_get(queue_index = queue_index, element_id = element_id)
-      lapply(filters, function(filter) filter$destroy_observers())
       private$queue[[queue_index]]$remove(filters)
       logger::log_trace(
         "{ class(self)[1] } removed from queue { queue_index }, dataname: { deparse1(private$input_dataname) }"
@@ -405,24 +402,27 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Set bookmark state
+    #' Set filter state
     #'
-    #' @param id (`character(1)`)\cr
-    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`data.frame`)\cr
     #'   data which are supposed to be filtered
     #' @param state (`named list`)\cr
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
-    #' @return `moduleServer` function which throws an error
-    set_bookmark_state = function(id, data, state) {
-      moduleServer(
-        id = id,
-        function(input, output, session) {
-          stop("Pure virtual method.")
-        }
-      )
+    #' @return function which throws an error
+    set_filter_state = function(data, state) {
+      stop("Pure virtual method.")
+    },
+
+    #' @description Remove a single `FilterState` from the `ReactiveQueue`.
+    #'
+    #' @param element_id (`character`)\cr
+    #'  Name of variable to remove its `FilterState`.
+    #'
+    #' @return `NULL`
+    remove_filter_state = function(element_id) {
+      stop("This variable can not be removed from the filter.")
     },
 
     #' @description
@@ -465,11 +465,10 @@ FilterStates <- R6::R6Class( # nolint
     observers = list(), # observers
     queue = NULL, # list of ReactiveQueue(s) initialized by self$queue_initialize
 
-    #' Module to add `FilterState` to queue
+    #' Module to insert/remove `FilterState` UI
     #'
-    #' This module adds `FilterState` object to queue, inserts
-    #' shiny UI to the Active Filter Variables, calls `FilterState` modules and
-    #' create observer to remove state
+    #' This module adds the shiny UI of the newly added `FilterState` object to queue to the Active Filter
+    #' Variables, calls `FilterState` modules and creates observer to remove state
     #' parameter filter_state (`FilterState`)
     #'
     #' parameter queue_index (`character(1)`, `logical(1)`)\cr
@@ -477,23 +476,21 @@ FilterStates <- R6::R6Class( # nolint
     #' parameter element_id (`character(1)`)\cr
     #'   name of `ReactiveQueue` element.
     #' return `moduleServer` function which returns `NULL`
-    add_filter_state = function(id, filter_state, queue_index, element_id) {
-      stopifnot(is(filter_state, "FilterState"))
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
-      stopifnot(is_character_single(element_id))
+    insert_filter_state_ui = function(id, filter_state, queue_index, element_id) {
+      checkmate::assert_class(filter_state, "FilterState")
+      checkmate::assert(
+        checkmate::check_int(queue_index),
+        checkmate::check_character(queue_index, len = 1),
+        combine = "or"
+      )
+      checkmate::assert_character(element_id, len = 1)
       moduleServer(
         id = id,
         function(input, output, session) {
           logger::log_trace(paste(
-            "{ class(self)[1] }$add_filter_state, adding FilterState,",
-            "input_dataname: { deparse1(private$input_dataname) }"
+            "{ class(self)[1] }$insert_filter_state_ui, adding FilterState UI,",
+            "dataname: { deparse1(private$input_dataname) }"
           ))
-          self$queue_push(
-            x = filter_state,
-            queue_index = queue_index,
-            element_id = element_id
-          )
-
           card_id <- session$ns("card")
           queue_id <- sprintf("%s-%s", queue_index, element_id)
           private$card_ids[queue_id] <- card_id
@@ -502,42 +499,44 @@ FilterStates <- R6::R6Class( # nolint
             selector = sprintf("#%s", private$card_id),
             where = "beforeEnd",
             # add span with id to be removable
-            ui = div(
-              id = card_id,
-              class = "list-group-item",
-              fluidPage(
-                fluidRow(
-                  column(
-                    width = 10,
-                    class = "no-left-right-padding",
-                    tags$div(
-                      tags$span(filter_state$get_varname(),
-                        class = "filter_panel_varname"
-                      ),
-                      if_not_character_empty(
-                        filter_state$get_varlabel(),
-                        if (tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
-                          tags$span(filter_state$get_varlabel(),
-                            class = "filter_panel_varlabel"
-                          )
-                        }
+            ui = {
+              div(
+                id = card_id,
+                class = "list-group-item",
+                fluidPage(
+                  fluidRow(
+                    column(
+                      width = 10,
+                      class = "no-left-right-padding",
+                      tags$div(
+                        tags$span(filter_state$get_varname(),
+                                  class = "filter_panel_varname"
+                        ),
+                        if_not_character_empty(
+                          filter_state$get_varlabel(),
+                          if (tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
+                            tags$span(filter_state$get_varlabel(),
+                                      class = "filter_panel_varlabel"
+                            )
+                          }
+                        )
+                      )
+                    ),
+                    column(
+                      width = 2,
+                      class = "no-left-right-padding",
+                      actionLink(
+                        session$ns("remove"),
+                        label = "",
+                        icon = icon("times-circle", lib = "font-awesome"),
+                        class = "remove pull-right"
                       )
                     )
                   ),
-                  column(
-                    width = 2,
-                    class = "no-left-right-padding",
-                    actionLink(
-                      session$ns("remove"),
-                      label = "",
-                      icon = icon("times-circle", lib = "font-awesome"),
-                      class = "remove pull-right"
-                    )
-                  )
-                ),
-                filter_state$ui(id = session$ns("content"))
+                  filter_state$ui(id = session$ns("content"))
+                )
               )
-            )
+            }
           )
 
           filter_state$server(id = "content")
@@ -547,21 +546,20 @@ FilterStates <- R6::R6Class( # nolint
             eventExpr = input$remove,
             handlerExpr = {
               logger::log_trace(paste(
-                "{ class(self)[1] }$add_filter_state@1 removing FilterState from queue '{ queue_index }',",
-                "input_dataname: { deparse1(private$input_dataname) }"
+                "{ class(self)[1] }$insert_filter_state_ui@1 removing FilterState from queue '{ queue_index }',",
+                "dataname: { deparse1(private$input_dataname) }"
               ))
               self$queue_remove(queue_index, element_id)
-              private$remove_filter_state(queue_index, element_id)
               logger::log_trace(paste(
-                "{ class(self)[1] }$add_filter_state@1 removed FilterState from queue '{ queue_index }',",
-                "input_dataname: { deparse1(private$input_dataname) }"
+                "{ class(self)[1] }$insert_filter_state_ui@1 removed FilterState from queue '{ queue_index }',",
+                "dataname: { deparse1(private$input_dataname) }"
               ))
             }
           )
 
           logger::log_trace(paste(
-            "{ class(self)[1] }$add_filter_state, added FilterState,",
-            "input_dataname: { deparse1(private$input_dataname) }"
+            "{ class(self)[1] }$insert_filter_state_ui, added FilterState UI,",
+            "dataname: { deparse1(private$input_dataname) }"
           ))
           NULL
         }
@@ -574,16 +572,22 @@ FilterStates <- R6::R6Class( # nolint
     #' to remove shiny elements from anywhere. In `add_filter_state` `session$ns(NULL)`
     #' is equivalent to `private$ns(queue_index)`. This means that
     #'
-    remove_filter_state = function(queue_index, element_id) {
+    remove_filter_state_ui = function(queue_index, element_id) {
       queue_id <- sprintf("%s-%s", queue_index, element_id)
-
-      removeUI(
-        selector = sprintf("#%s", private$card_ids[queue_id])
-      )
+      removeUI(selector = sprintf("#%s", private$card_ids[queue_id]))
       private$card_ids <- private$card_ids[names(private$card_ids) != queue_id]
+      if (length(private$observers[[queue_id]]) > 0) {
+        private$observers[[queue_id]]$destroy()
+        private$observers[[queue_id]] <- NULL
+      }
+    },
 
-      private$observers[[queue_id]]$destroy()
-      private$observers[[queue_id]] <- NULL
+    #' Get all `FilterState` in the queue.
+    #' parameter queue_index (`character(1)` or `integer`)
+    #' index of the `private$queue` list where `ReactiveQueue` are kept.
+    #' returns a list of `FilterState`.
+    get_filter_state = function(queue_index) {
+      self$queue_get(queue_index)
     },
 
     # Checks if the queue of the given index was initialized in this `FilterStates`
@@ -623,7 +627,6 @@ DFFilterStates <- R6::R6Class( # nolint
   classname = "DFFilterStates",
   inherit = FilterStates,
   public = list(
-
     #' Initializes `DFFilterStates` object
     #'
     #' Initializes `DFFilterStates` object by setting `input_dataname`,
@@ -669,50 +672,142 @@ DFFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Set bookmark state
+    #' Server module
     #'
     #' @param id (`character(1)`)\cr
     #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          previous_state <- reactiveVal(isolate(self$queue_get(1L)))
+          added_state_name <- reactiveVal(character(0))
+          removed_state_name <- reactiveVal(character(0))
+
+          observeEvent(self$queue_get(1L), {
+            added_state_name(setdiff(names(self$queue_get(1L)), names(previous_state())))
+            removed_state_name(setdiff(names(previous_state()), names(self$queue_get(1L))))
+
+            previous_state(self$queue_get(1L))
+          })
+
+          observeEvent(added_state_name(), ignoreNULL = TRUE, {
+            fstates <- private$get_filter_state(1L)
+            for (fname in added_state_name()) {
+              private$insert_filter_state_ui(
+                id = fname,
+                filter_state = fstates[[fname]],
+                queue_index = 1L,
+                element_id = fname
+              )
+            }
+            added_state_name(character(0))
+          })
+
+          observeEvent(removed_state_name(), {
+            req(removed_state_name())
+            for (fname in removed_state_name()) {
+              private$remove_filter_state_ui(1L, fname)
+            }
+            removed_state_name(character(0))
+          })
+          NULL
+        })
+    },
+
+    #' @description
+    #' Set filter state
+    #'
     #' @param data (`data.frame`)\cr
-    #'   data which are supposed to be filtered
+    #'   data which are supposed to be filtered.
     #' @param state (`named list`)\cr
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
-    #' @return `moduleServer` function which returns `NULL`
-    set_bookmark_state = function(id, data, state) {
-      stopifnot(is.data.frame(data))
-      stopifnot(all(names(state) %in% names(data)) || is(state, "default_filter"))
-      moduleServer(
-        id = id,
-        function(input, output, session) {
-          logger::log_trace(
-            "{ class(self)[1] }$set_bookmark_state initializing, dataname: { deparse1(private$input_dataname) }"
-          )
-          html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colnames(data)))
-          for (varname in names(state)) {
-            value <- state[[varname]]
-            fstate <- init_filter_state(
-              data[[varname]],
-              varname = as.name(varname),
-              varlabel = private$get_varlabels(varname),
-              input_dataname = private$input_dataname
-            )
-            set_filter_state(x = value, fstate)
-            id <- html_id_mapping[[varname]]
-            private$add_filter_state(
-              id = id,
-              filter_state = fstate,
-              queue_index = 1L,
-              element_id = varname
-            )
-          }
-          logger::log_trace(
-            "{ class(self)[1] }$set_bookmark_state initialized, dataname: { deparse1(private$input_dataname) }"
-          )
-          NULL
-        }
+    #' @param vars_include (`character(n)`)\cr
+    #'  optional, vector of column names to be included.
+    #' @param ... ignored.
+    #' @return `NULL`
+    set_filter_state = function(data, state, vars_include = get_filterable_varnames(data = data), ...) {
+      checkmate::assert_data_frame(data)
+      checkmate::assert(
+        checkmate::check_subset(names(state), names(data)),
+        checkmate::check_class(state, "default_filter"),
+        combine = "or"
       )
+      logger::log_trace(
+        "{ class(self)[1] }$set_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
+      )
+
+      filter_states <- private$get_filter_state(1L)
+      state_names <- names(state)
+      excluded_vars <- setdiff(state_names, vars_include)
+      if (length(excluded_vars) > 0) {
+        warning(
+          paste(
+            "These columns filters were excluded:",
+            paste(excluded_vars, collapse = ", "),
+            "from dataset",
+            private$input_dataname
+          )
+        )
+        logger::log_warn(
+          paste(
+            "Columns filters { paste(excluded_vars, collapse = ', ') } were excluded",
+            "from { deparse1(private$input_dataname) }"
+          )
+        )
+      }
+
+      filters_to_apply <- state_names[state_names %in% vars_include]
+
+      for (varname in filters_to_apply) {
+        value <- state[[varname]]
+        if (varname %in% names(filter_states)) {
+          fstate <- filter_states[[varname]]
+          fstate$set_state_reactive(state = value)
+        } else {
+          fstate <- init_filter_state(
+            data[[varname]],
+            varname = as.name(varname),
+            varlabel = private$get_varlabels(varname),
+            input_dataname = private$input_dataname
+          )
+          set_filter_state(x = value, fstate)
+          self$queue_push(x = fstate, queue_index = 1L, element_id = varname)
+        }
+      }
+      logger::log_trace(
+        "{ class(self)[1] }$set_filter_state initialized, dataname: { deparse1(private$input_dataname) }"
+      )
+      NULL
+    },
+
+    #' @description Remove a `FilterState` from the `ReactiveQueue`.
+    #'
+    #' @param element_id (`character(1)`)\cr name of `ReactiveQueue` element.
+    #'
+    #' @return `NULL`
+    #'
+    remove_filter_state = function(element_id) {
+      logger::log_trace("{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }")
+
+      if (!element_id %in% names(private$get_filter_state(1L))) {
+        warning(paste(
+          "Variable:", element_id, "is not present in the actual active filters of dataset: { private$input_dataname }",
+          "therefore no changes are applied."
+        ))
+        logger::log_warn(
+          paste(
+            "Variable:", element_id, "is not present in the actual active filters of dataset:",
+            "{ private$input_dataname } therefore no changes are applied."
+          )
+        )
+      } else {
+        self$queue_remove(queue_index = 1L, element_id = element_id)
+        logger::log_trace("{ class(self)[1] }$remove_filter_state done, dataname: { deparse1(private$input_dataname) }")
+      }
     },
 
     #' @description
@@ -778,10 +873,7 @@ DFFilterStates <- R6::R6Class( # nolint
 
           # available choices to display
           avail_column_choices <- reactive({
-            choices <- setdiff(
-              vars_include,
-              active_filter_vars()
-            )
+            choices <- setdiff(vars_include, active_filter_vars())
 
             data_choices_labeled(
               data = data,
@@ -815,7 +907,6 @@ DFFilterStates <- R6::R6Class( # nolint
             }
           )
 
-          html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colnames(data)))
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
@@ -823,10 +914,8 @@ DFFilterStates <- R6::R6Class( # nolint
                 "DFFilterStates$srv_add_filter_state@2 adding FilterState,",
                 "dataname: { deparse1(private$input_dataname) }"
               ))
-              id <- html_id_mapping[[input$var_to_add]]
-              private$add_filter_state(
-                id = id,
-                filter_state = init_filter_state(
+              self$queue_push(
+                x = init_filter_state(
                   data[[input$var_to_add]],
                   varname = as.name(input$var_to_add),
                   varlabel = private$get_varlabels(input$var_to_add),
@@ -880,7 +969,6 @@ MAEFilterStates <- R6::R6Class( # nolint
   classname = "MAEFilterStates",
   inherit = FilterStates,
   public = list(
-
     #' Initialize `MAEFilterStates` object
     #'
     #' Initialize `MAEFilterStates` object
@@ -924,57 +1012,133 @@ MAEFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Set bookmark state
-    #'
+    #' Server module
     #' @param id (`character(1)`)\cr
     #'   an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param data (`MultiAssayExperiment`)\cr
-    #'   data which are supposed to be filtered
-    #' @param state (`named list`)\cr
-    #'   should contain values which are initial selection in the `FilterState`.
-    #'   Names of the `list` element should correspond to the name of the
-    #'   column in `colData(data)`
     #' @return `moduleServer` function which returns `NULL`
-    set_bookmark_state = function(id, data, state) {
-      stopifnot(is(data, "MultiAssayExperiment"))
-      stopifnot(
-        all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
-      )
+    server = function(id) {
       moduleServer(
         id = id,
         function(input, output, session) {
-          logger::log_trace(paste(
-            "MAEFilterState$set_bookmark_state initializing,",
-            "dataname: { deparse1(private$input_dataname) }"
-          ))
-          html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
-          for (varname in names(state)) {
-            value <- state[[varname]]
-            fstate <- init_filter_state(
-              SummarizedExperiment::colData(data)[[varname]],
-              varname = as.name(varname),
-              varlabel = private$get_varlabels(varname),
-              input_dataname = private$input_dataname,
-              extract_type = "list"
-            )
-            set_filter_state(x = value, fstate)
-            fstate$set_na_rm(TRUE)
+          previous_state <- reactiveVal(isolate(self$queue_get("y")))
+          added_state_name <- reactiveVal(character(0))
+          removed_state_name <- reactiveVal(character(0))
 
-            id <- html_id_mapping[[varname]]
-            private$add_filter_state(
-              id = id,
-              filter_state = fstate,
-              queue_index = "y",
-              element_id = varname
-            )
-          }
-          logger::log_trace(paste(
-            "MAEFilterState$set_bookmark_state initialized,",
-            "dataname: { deparse1(private$input_dataname) }"
-          ))
+          observeEvent(self$queue_get("y"), {
+            added_state_name(setdiff(names(self$queue_get("y")), names(previous_state())))
+            removed_state_name(setdiff(names(previous_state()), names(self$queue_get("y"))))
+
+            previous_state(self$queue_get("y"))
+          })
+
+          observeEvent(added_state_name(), ignoreNULL = TRUE, {
+            fstates <- private$get_filter_state("y")
+            for (fname in added_state_name()) {
+              private$insert_filter_state_ui(
+                id = fname,
+                filter_state = fstates[[fname]],
+                queue_index = "y",
+                element_id = fname
+              )
+            }
+            added_state_name(character(0))
+          })
+
+          observeEvent(removed_state_name(), {
+            req(removed_state_name())
+            for (fname in removed_state_name()) {
+              private$remove_filter_state_ui("y", fname)
+            }
+            removed_state_name(character(0))
+          })
           NULL
-        }
+        })
+    },
+
+    #' @description
+    #' Set filter state
+    #'
+    #' @param data (`MultiAssayExperiment`)\cr
+    #'   data which are supposed to be filtered.
+    #' @param state (`named list`)\cr
+    #'   should contain values which are initial selection in the `FilterState`.
+    #'   Names of the `list` element should correspond to the name of the
+    #'   column in `colData(data)`.
+    #' @param ... ignored.
+    #' @return `NULL`
+    set_filter_state = function(data, state, ...) {
+      checkmate::assert_class(data, "MultiAssayExperiment")
+      checkmate::assert(
+        checkmate::check_subset(names(state), names(SummarizedExperiment::colData(data))),
+        checkmate::check_class(state, "default_filter"),
+        combine = "or"
       )
+      logger::log_trace(paste(
+        "MAEFilterState$set_filter_state initializing,",
+        "dataname: { deparse1(private$input_dataname) }"
+      ))
+      filter_states <- private$get_filter_state("y")
+      html_id_mapping <- private$map_vars_to_html_ids(
+        get_filterable_varnames(SummarizedExperiment::colData(data))
+      )
+      for (varname in names(state)) {
+        value <- state[[varname]]
+        if (varname %in% names(filter_states)) {
+          fstate <- filter_states[[varname]]
+          fstate$set_state_reactive(state = value)
+        } else {
+          fstate <- init_filter_state(
+            SummarizedExperiment::colData(data)[[varname]],
+            varname = as.name(varname),
+            varlabel = private$get_varlabels(varname),
+            input_dataname = private$input_dataname,
+            extract_type = "list"
+          )
+          set_filter_state(x = value, fstate)
+          fstate$set_na_rm(TRUE)
+          self$queue_push(
+            x = fstate,
+            queue_index = "y",
+            element_id = varname
+          )
+        }
+      }
+      logger::log_trace(paste(
+        "MAEFilterState$set_filter_state initialized,",
+        "dataname: { deparse1(private$input_dataname) }"
+      ))
+      NULL
+    },
+
+    #' @description Remove a variable from the `ReactiveQueue` and its corresponding UI element.
+    #'
+    #' @param element_id (`character(1)`)\cr name of `ReactiveQueue` element.
+    #'
+    #' @return `NULL`
+    #'
+    remove_filter_state = function(element_id) {
+      logger::log_trace(
+        "{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }"
+      )
+
+      if (!element_id %in% names(private$get_filter_state("y"))) {
+        warning(paste(
+          "Variable:", element_id,
+          "is not present in the actual active filters of dataset: { private$input_dataname }",
+          "therefore no changes are applied."
+        ))
+        logger::log_warn(
+          paste(
+            "Variable:", element_id, "is not present in the actual active filters of dataset:",
+            "{ private$input_dataname } therefore no changes are applied."
+          )
+        )
+      } else {
+        self$queue_remove(queue_index = "y", element_id = element_id)
+        logger::log_trace(
+          "{ class(self)[1] }$remove_filter_state done, dataname: { deparse1(private$input_dataname) }"
+        )
+      }
     },
 
     #' @description
@@ -1075,7 +1239,6 @@ MAEFilterStates <- R6::R6Class( # nolint
             }
           )
 
-          html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
@@ -1083,7 +1246,6 @@ MAEFilterStates <- R6::R6Class( # nolint
                 "MAEFilterStates$srv_add_filter_state@2 adding FilterState,",
                 "dataname: { deparse1(private$input_dataname) }"
               ))
-              id <- html_id_mapping[[input$var_to_add]]
 
               fstate <- init_filter_state(
                 SummarizedExperiment::colData(data)[[input$var_to_add]],
@@ -1094,9 +1256,8 @@ MAEFilterStates <- R6::R6Class( # nolint
               )
               fstate$set_na_rm(TRUE)
 
-              private$add_filter_state(
-                id = id,
-                filter_state = fstate,
+              self$queue_push(
+                x = fstate,
                 queue_index = "y",
                 element_id = input$var_to_add
               )
@@ -1144,7 +1305,6 @@ SEFilterStates <- R6::R6Class( # nolint
   classname = "SEFilterStates",
   inherit = FilterStates,
   public = list(
-
     #' Initialize `SEFilterStates` object
     #'
     #' Initialize `SEFilterStates` object
@@ -1169,79 +1329,234 @@ SEFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Set bookmark state
-    #'
+    #' Server module
     #' @param id (`character(1)`)\cr
     #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          previous_state_subset <- reactiveVal(isolate(self$queue_get("subset")))
+          added_state_name_subset <- reactiveVal(character(0))
+          removed_state_name_subset <- reactiveVal(character(0))
+
+          observeEvent(self$queue_get("subset"), {
+            added_state_name_subset(
+              setdiff(names(self$queue_get("subset")), names(previous_state_subset()))
+            )
+            removed_state_name_subset(
+              setdiff(names(previous_state_subset()), names(self$queue_get("subset")))
+            )
+            previous_state_subset(self$queue_get("subset"))
+          })
+
+          observeEvent(added_state_name_subset(), ignoreNULL = TRUE, {
+            fstates <- private$get_filter_state("subset")
+
+            for (fname in added_state_name_subset()) {
+              private$insert_filter_state_ui(
+                id = fname,
+                filter_state = fstates[[fname]],
+                queue_index = "subset",
+                element_id = fname
+              )
+            }
+            added_state_name_subset(character(0))
+          })
+
+          observeEvent(removed_state_name_subset(), {
+            req(removed_state_name_subset())
+            for (fname in removed_state_name_subset()) {
+              private$remove_filter_state_ui("subset", fname)
+            }
+            removed_state_name_subset(character(0))
+          })
+
+          #select
+          previous_state_select <- reactiveVal(isolate(self$queue_get("select")))
+          added_state_name_select <- reactiveVal(character(0))
+          removed_state_name_select <- reactiveVal(character(0))
+
+          observeEvent(self$queue_get("select"), {
+            # find what has been added or removed
+            added_state_name_select(
+              setdiff(names(self$queue_get("select")), names(previous_state_select()))
+            )
+            removed_state_name_select(
+              setdiff(names(previous_state_select()), names(self$queue_get("select")))
+            )
+            previous_state_select(self$queue_get("select"))
+          })
+
+          observeEvent(added_state_name_select(), ignoreNULL = TRUE, {
+
+            fstates <- private$get_filter_state("select")
+            for (fname in added_state_name_select()) {
+              private$insert_filter_state_ui(
+                id = fname,
+                filter_state = fstates[[fname]],
+                queue_index = "select",
+                element_id = fname
+              )
+            }
+            added_state_name_select(character(0))
+          })
+
+          observeEvent(removed_state_name_select(), {
+            req(removed_state_name_select())
+            for (fname in removed_state_name_select()) {
+              private$remove_filter_state_ui("select", fname)
+            }
+            removed_state_name_select(character(0))
+          })
+          NULL
+        })
+    },
+
+    #' @description
+    #' Set filter state
+    #'
     #' @param data (`SummarizedExperiment`)\cr
-    #'   data which are supposed to be filtered
+    #'   data which are supposed to be filtered.
     #' @param state (`named list`)\cr
     #'   this list should contain `subset` and `select` element where
     #'   each should be a named list containing values as a selection in the `FilterState`.
     #'   Names of each the `list` element in `subset` and `select` should correspond to
     #'   the name of the column in `rowData(data)` and `colData(data)`.
-    #' @return `moduleServer` function which returns `NULL`
-    set_bookmark_state = function(id, data, state) {
-      stopifnot(is(data, "SummarizedExperiment"))
-      stopifnot(
-        is(state, "list"),
-        all(names(state) %in% c("subset", "select")) || is(state, "default_filter"),
-        is.null(state$subset) ||
-          (is(state$subset, "list") && all(names(state$subset) %in% names(SummarizedExperiment::rowData(data)))),
-        is.null(state$select) ||
-          (is(state$select, "list") && all(names(state$select) %in% names(SummarizedExperiment::colData(data))))
-      )
-      moduleServer(
-        id = id,
-        function(input, output, session) {
-          logger::log_trace(paste(
-            "SEFilterState$set_bookmark_state initializing,",
-            "dataname: { deparse1(private$input_dataname) }"
-          ))
-          row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::rowData(data)))
-          row_html_mapping <- setNames(object = paste0("rowData_", row_html_mapping), nm = names(row_html_mapping))
-          for (varname in names(state$subset)) {
-            value <- state$subset[[varname]]
-            fstate <- init_filter_state(
-              SummarizedExperiment::rowData(data)[[varname]],
-              varname = as.name(varname),
-              input_dataname = private$input_dataname
-            )
-            set_filter_state(x = value, fstate)
-            id <- row_html_mapping[[varname]]
-            private$add_filter_state(
-              id = id,
-              filter_state = fstate,
-              queue_index = "subset",
-              element_id = varname
-            )
-          }
+    #' @param ... ignored.
+    #' @return `NULL`
+    set_filter_state = function(data, state, ...) {
+      checkmate::assert_class(data, "SummarizedExperiment")
+      checkmate::assert_class(state, "list")
 
-          col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
-          col_html_mapping <- setNames(object = paste0("colData_", col_html_mapping), nm = names(col_html_mapping))
-          for (varname in names(state$select)) {
-            value <- state$select[[varname]]
-            fstate <- init_filter_state(
-              SummarizedExperiment::colData(data)[[varname]],
-              varname = as.name(varname),
-              input_dataname = private$input_dataname
-            )
-            set_filter_state(x = value, fstate)
-            id <- col_html_mapping[[varname]]
-            private$add_filter_state(
-              id = id,
-              filter_state = fstate,
-              queue_index = "select",
-              element_id = varname
-            )
-          }
-          logger::log_trace(paste(
-            "SEFilterState$set_bookmark_state initialized,",
-            "dataname: { deparse1(private$input_dataname) }"
-          ))
-          NULL
-        }
+      checkmate::assert(
+        checkmate::check_subset(names(state), c("subset", "select")),
+        checkmate::check_class(state, "default_filter"),
+        combine = "or"
       )
+      checkmate::assert(
+        checkmate::test_null(state$subset),
+          checkmate::assert(
+            checkmate::check_class(state$subset, "list"),
+            checkmate::check_subset(names(state$subset), names(SummarizedExperiment::rowData(data))),
+            combine = "and"),
+        combine = "or"
+      )
+      checkmate::assert(
+        checkmate::test_null(state$select),
+        checkmate::assert(
+          checkmate::check_class(state$select, "list"),
+          checkmate::check_subset(names(state$select), names(SummarizedExperiment::colData(data))),
+          combine = "and"),
+        combine = "or"
+      )
+
+      row_html_mapping <- private$map_vars_to_html_ids(
+        get_filterable_varnames(SummarizedExperiment::rowData(data))
+      )
+      row_html_mapping <- setNames(
+        object = paste0("rowData_", row_html_mapping),
+        nm = names(row_html_mapping)
+      )
+      filter_states <- private$get_filter_state("subset")
+      for (varname in names(state$subset)) {
+        value <- state$subset[[varname]]
+        if (varname %in% names(filter_states)) {
+          fstate <- filter_states[[varname]]
+          fstate$set_state_reactive(state = value)
+        } else {
+          fstate <- init_filter_state(
+            SummarizedExperiment::rowData(data)[[varname]],
+            varname = as.name(varname),
+            input_dataname = private$input_dataname
+          )
+          set_filter_state(x = value, fstate)
+          self$queue_push(
+            x = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        }
+      }
+
+      col_html_mapping <-
+        private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
+      col_html_mapping <-
+        setNames(object = paste0("colData_", col_html_mapping), nm = names(col_html_mapping))
+      for (varname in names(state$select)) {
+        value <- state$select[[varname]]
+        fstate <- init_filter_state(
+          SummarizedExperiment::colData(data)[[varname]],
+          varname = as.name(varname),
+          input_dataname = private$input_dataname
+        )
+        set_filter_state(x = value, fstate)
+        id <- col_html_mapping[[varname]]
+        self$queue_push(
+          x = fstate,
+          queue_index = "select",
+          element_id = varname
+        )
+      }
+      logger::log_trace(paste(
+        "SEFilterState$set_filter_state initialized,",
+        "dataname: { deparse1(private$input_dataname) }"
+      ))
+      NULL
+    },
+
+    #' @description Remove a variable from the `ReactiveQueue` and its corresponding UI element.
+    #'
+    #' @param element_id (`character(1)`)\cr name of `ReactiveQueue` element.
+    #'
+    #' @return `NULL`
+    remove_filter_state = function(element_id) {
+      logger::log_trace(
+        "{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }"
+      )
+
+      checkmate::assert(
+        !checkmate::test_null(names(element_id)),
+        checkmate::check_subset(names(element_id), c("subset", "select")),
+        combine = "and"
+      )
+      for (varname in element_id$subset) {
+        if (!all(unlist(element_id$subset) %in% names(private$get_filter_state("subset")))) {
+          warning(paste(
+            "Variable:", element_id, "is not present in the actual active subset filters of dataset:",
+            "{ deparse(private$input_dataname) } therefore no changes are applied."
+          ))
+          logger::log_warn(
+            paste(
+              "Variable:", element_id, "is not present in the actual active subset filters of dataset:",
+              "{ deparse(private$input_dataname) } therefore no changes are applied."
+            )
+          )
+        } else {
+          self$queue_remove(queue_index = "subset", element_id = varname)
+        }
+      }
+
+      for (varname in element_id$select) {
+        if (!all(unlist(element_id$select) %in% names(private$get_filter_state("select")))) {
+          warning(paste(
+            "Variable:", element_id, "is not present in the actual active select filters of dataset:",
+            "{ private$input_dataname } therefore no changes are applied."
+          ))
+          logger::log_warn(
+            paste(
+              "Variable:", element_id, "is not present in the actual active select filters of dataset:",
+              "{ private$input_dataname } therefore no changes are applied."
+            )
+          )
+        } else {
+          self$queue_remove(queue_index = "select", element_id = varname)
+          logger::log_trace(
+            "{ class(self)[1] }$remove_filter_state done, dataname: { deparse1(private$input_dataname) }"
+          )
+        }
+      }
     },
 
     #' @description
@@ -1417,7 +1732,10 @@ SEFilterStates <- R6::R6Class( # nolint
           )
 
           col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(col_data))
-          col_html_mapping <- setNames(object = paste0("colData_", col_html_mapping), nm = names(col_html_mapping))
+          col_html_mapping <- setNames(
+            object = paste0("colData_", col_html_mapping),
+            nm = names(col_html_mapping)
+          )
           observeEvent(
             eventExpr = input$col_to_add,
             handlerExpr = {
@@ -1426,9 +1744,8 @@ SEFilterStates <- R6::R6Class( # nolint
                 "dataname: { deparse1(private$input_dataname) }"
               ))
               id <- col_html_mapping[[input$col_to_add]]
-              private$add_filter_state(
-                id = id,
-                filter_state = init_filter_state(
+              self$queue_push(
+                x = init_filter_state(
                   SummarizedExperiment::colData(data)[[input$col_to_add]],
                   varname = as.name(input$col_to_add),
                   input_dataname = private$input_dataname
@@ -1444,7 +1761,10 @@ SEFilterStates <- R6::R6Class( # nolint
           )
 
           row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(row_data))
-          row_html_mapping <- setNames(object = paste0("rowData_", row_html_mapping), nm = names(row_html_mapping))
+          row_html_mapping <- setNames(
+            object = paste0("rowData_", row_html_mapping),
+            nm = names(row_html_mapping)
+          )
           observeEvent(
             eventExpr = input$row_to_add,
             handlerExpr = {
@@ -1453,9 +1773,8 @@ SEFilterStates <- R6::R6Class( # nolint
                 "dataname: { deparse1(private$input_dataname) }"
               ))
               id <- row_html_mapping[[input$row_to_add]]
-              private$add_filter_state(
-                id = id,
-                filter_state = init_filter_state(
+              self$queue_push(
+                x = init_filter_state(
                   SummarizedExperiment::rowData(data)[[input$row_to_add]],
                   varname = as.name(input$row_to_add),
                   input_dataname = private$input_dataname
@@ -1485,7 +1804,6 @@ MatrixFilterStates <- R6::R6Class( # nolint
   classname = "MatrixFilterStates",
   inherit = FilterStates,
   public = list(
-
     #' Initialize `MatrixFilterStates` object
     #'
     #' Initialize `MatrixFilterStates` object
@@ -1509,55 +1827,132 @@ MatrixFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Sets a bookmarked state
-    #'
+    #' Server module
     #' @param id (`character(1)`)\cr
     #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          previous_state <- reactiveVal(isolate(self$queue_get("subset")))
+          added_state_name <- reactiveVal(character(0))
+          removed_state_name <- reactiveVal(character(0))
+
+          observeEvent(self$queue_get("subset"), {
+            added_state_name(
+              setdiff(names(self$queue_get("subset")), names(previous_state()))
+            )
+            removed_state_name(
+              setdiff(names(previous_state()), names(self$queue_get("subset")))
+            )
+            previous_state(self$queue_get("subset"))
+          })
+
+          observeEvent(added_state_name(), ignoreNULL = TRUE, {
+            fstates <- private$get_filter_state("subset")
+            for (fname in added_state_name()) {
+              private$insert_filter_state_ui(
+                id = fname,
+                filter_state = fstates[[fname]],
+                queue_index = "subset",
+                element_id = fname
+              )
+            }
+            added_state_name(character(0))
+          })
+
+          observeEvent(removed_state_name(), {
+            req(removed_state_name())
+
+            for (fname in removed_state_name()) {
+              private$remove_filter_state_ui("subset", fname)
+            }
+            removed_state_name(character(0))
+          })
+          NULL
+        })
+    },
+
+    #' @description
+    #' Sets a filter state
+    #'
     #' @param data (`matrix`)\cr
-    #'   data which are supposed to be filtered
+    #'   data which are supposed to be filtered.
     #' @param state (`named list`)\cr
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
-    #' @return `moduleServer` function which returns `NULL`
-    set_bookmark_state = function(id, data, state) {
-      stopifnot(is(data, "matrix"))
-      stopifnot(
-        all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
+    #' @param ... ignored.
+    #' @return `NULL`
+    set_filter_state = function(data, state, ...) {
+      checkmate::assert_class(data, "matrix")
+      checkmate::assert(
+        checkmate::assert(
+          !checkmate::test_null(names(state)),
+          checkmate::check_subset(names(state), colnames(data)),
+          combine = "and"
+        ),
+        checkmate::check_class(state, "default_filter"),
+        combine = "or"
       )
-      moduleServer(
-        id = id,
-        function(input, output, session) {
-          logger::log_trace(paste(
-            "MatrixFilterState$set_bookmark_state initializing,",
-            "dataname: { deparse1(private$input_dataname) }"
-          ))
-          html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
-          for (varname in names(state)) {
-            value <- state[[varname]]
-            fstate <- init_filter_state(
-              data[[varname]],
-              varname = as.name(varname),
-              varlabel = private$get_varlabels(varname),
-              input_dataname = private$input_dataname,
-              extract_type = "matrix"
-            )
-            set_filter_state(x = value, fstate)
-            id <- html_id_mapping[[varname]]
-            private$add_filter_state(
-              id = id,
-              filter_state = fstate,
-              queue_index = "subset",
-              element_id = varname
-            )
-          }
-          logger::log_trace(paste(
-            "MatrixFilterState$set_bookmark_state initialized,",
-            "dataname: { deparse1(private$input_dataname) }"
-          ))
-          NULL
+      logger::log_trace(paste(
+        "MatrixFilterState$set_filter_state initializing,",
+        "dataname: { deparse1(private$input_dataname) }"
+      ))
+      filter_states <- private$get_filter_state("subset")
+      for (varname in names(state)) {
+        value <- state[[varname]]
+        if (varname %in% names(filter_states)) {
+          fstate <- filter_states[[varname]]
+          fstate$set_state_reactive(state = value)
+        } else {
+          fstate <- init_filter_state(
+            data[, varname],
+            varname = as.name(varname),
+            varlabel = varname,
+            input_dataname = private$input_dataname,
+            extract_type = "matrix"
+          )
+          set_filter_state(x = value, fstate)
+          self$queue_push(
+            x = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
         }
-      )
+      }
+      logger::log_trace(paste(
+        "MatrixFilterState$set_filter_state initialized,",
+        "dataname: { deparse1(private$input_dataname) }"
+      ))
+      NULL
+
+    },
+
+    #' @description Remove a variable from the `ReactiveQueue` and its corresponding UI element.
+    #'
+    #' @param element_id (`character(1)`)\cr name of `ReactiveQueue` element.
+    #'
+    #' @return `NULL`
+    remove_filter_state = function(element_id) {
+      logger::log_trace("{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }")
+
+      if (!element_id %in% names(private$get_filter_state("subset"))) {
+        warning(paste(
+          "Variable:", element_id, "is not present in the actual active filters of dataset:",
+          "{ private$input_dataname } therefore no changes are applied."
+        ))
+        logger::log_warn(
+          paste(
+            "Variable:", element_id, "is not present in the actual active filters of dataset:",
+            "{ deparse(private$input_dataname) } therefore no changes are applied."
+          )
+        )
+      } else {
+        self$queue_remove(queue_index = "subset", element_id = element_id)
+        logger::log_trace("{ class(self)[1] }$remove_filter_state done, dataname: { deparse1(private$input_dataname) }")
+      }
     },
 
     #' @description
@@ -1655,7 +2050,6 @@ MatrixFilterStates <- R6::R6Class( # nolint
             }
           )
 
-          html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
@@ -1663,10 +2057,8 @@ MatrixFilterStates <- R6::R6Class( # nolint
                 "MatrixFilterState$srv_add_filter_state@2 adding FilterState,",
                 "dataname: { deparse1(private$input_dataname) }"
               ))
-              id <- html_id_mapping[[input$var_to_add]]
-              private$add_filter_state(
-                id = id,
-                filter_state = init_filter_state(
+              self$queue_push(
+                x = init_filter_state(
                   subset(data, select = input$var_to_add),
                   varname = as.name(input$var_to_add),
                   varlabel = private$get_varlabel(input$var_to_add),

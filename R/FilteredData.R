@@ -34,6 +34,8 @@
 #' 2. `dataname`: the name of one of the datasets in this `FilteredData`
 #' 3. `varname`: one of the columns in a dataset
 #'
+#' @keywords internal
+#'
 #' @examples
 #' library(shiny)
 #' datasets <- teal:::FilteredData$new()
@@ -371,31 +373,72 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Sets a bookmarked state
-    #' @param id (`character(1)`)\cr
-    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' Sets a filter state
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
-    #' @return `moduleServer` function which returns `NULL`
-    set_bookmark_state = function(id, state) {
-      stopifnot(
-        all(names(state) %in% self$datanames())
+    #' @return `NULL`
+    set_filter_state = function(state) {
+      checkmate::assert_subset(names(state), self$datanames())
+      logger::log_trace("FilteredData$set_filter_state initializing, dataname: { names(state) }")
+      for(dataname in names(state)) {
+
+        fdataset <- self$get_filtered_dataset(dataname = dataname)
+        dataset_state <- state[[dataname]]
+
+        fdataset$set_filter_state(
+          state = dataset_state,
+          vars_include = self$get_filterable_varnames(dataname)
+        )
+      }
+      logger::log_trace("FilteredData$set_filter_state initialized, dataname: { names(state) }")
+      invisible(NULL)
+    },
+
+    #' @description Remove one or more `FilterState` of a `FilteredDataset` in a `FilteredData` object
+    #'
+    #' @param state (`named list`)\cr
+    #'  nested list of filter selections applied to datasets.
+    #'
+    #' @return `NULL`
+    remove_filter_state = function(state) {
+      logger::log_trace("FilteredData$remove_filter_state called, dataname: { names(state) }")
+
+      for(dataname in names(state)) {
+        fdataset <- self$get_filtered_dataset(dataname = dataname)
+        fdataset$remove_filter_state(element_id = state[[dataname]])
+      }
+
+      logger::log_trace("FilteredData$remove_filter_state done, dataname: { names(state) }")
+      invisible(NULL)
+    },
+
+    #' @description Remove all `FilterStates` of a `FilteredDataset` or all `FilterStates` of a `FilteredData` object
+    #'
+    #' @param datanames (`character`)\cr
+    #'  datanames to remove their `FilterStates` or empty which removes all `FilterStates` in the `FilteredData` object.
+    #'
+    #' @return `NULL`
+    #'
+    remove_all_filter_states = function(datanames) {
+      if (missing(datanames)) datanames <- names(self$get_filtered_dataset())
+
+      logger::log_trace(
+        "FilteredData$remove_all_filter_states called, datanames: { paste(datanames, collapse = ', ') }"
       )
-      moduleServer(
-        id,
-        function(input, output, session) {
-          logger::log_trace("FilteredData$set_bookmark_state initializing")
-          for (dataname in names(state)) {
-            fdataset <- self$get_filtered_dataset(dataname = dataname)
-            fdataset$set_bookmark_state(
-              id = private$get_ui_add_filter_id(dataname),
-              state = state[[dataname]]
-            )
-          }
-          logger::log_trace("FilteredData$set_bookmark_state initialized")
-          invisible(NULL)
-        }
+
+      for(dataname in datanames) {
+        fdataset <- self$get_filtered_dataset(dataname = dataname)
+        fdataset$queues_empty()
+      }
+
+      logger::log_trace(
+        paste(
+          "FilteredData$remove_all_filter_states removed all FilterStates,",
+          "datanames: { paste(datanames, collapse = ', ') }"
+        )
       )
+
+      invisible(NULL)
     },
 
     #' @description
