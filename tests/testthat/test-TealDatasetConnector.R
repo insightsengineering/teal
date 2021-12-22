@@ -779,7 +779,7 @@ testthat::test_that("TealDatasetConnector mutate method with delayed logic", {
 
   # multi layer dependencies
   pull_fun3 <- callable_function(data.frame)
-  pull_fun3$set_args(args = list(neg_integers = -(1:6)))
+  pull_fun3$set_args(args = list(neg_integers = -(1:6))) # nolint
   t_dc3 <- dataset_connector("test_dc3", pull_fun3)
 
   mutate_dataset(t_dc2, code = "test_dc2$neg_integers <- t_dc3$neg_integers", vars = list(t_dc3 = t_dc3))
