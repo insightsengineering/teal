@@ -21,5 +21,5 @@
 #' choices_selected(choices = letters, selected = all_choices())
 #' @export
 all_choices <- function() {
-  structure(list(), class = "all_choices")
+  structure(list(),class = "all_choices")
 }
