@@ -154,298 +154,298 @@ FilterStates <- R6::R6Class( # nolint
   classname = "FilterStates",
   public = list(
     #' @description
-       #' Initializes this `FilterStates` object.
-       #'
-       #' @param input_dataname (`character(1)` or `name` or `call`)\cr
-       #'   name of the data used on lhs of the expression
-       #'   specified to the function argument attached to this `FilterStates`.
-       #'
-       #' @param output_dataname (`character(1)` or `name` or `call`)\cr
-       #'   name of the output data on the lhs of the assignment expression.
-       #'
-       #' @param datalabel (`character(0)` or `character(1)`)\cr
-       #'   text label value.
-       #'
-       initialize = function(input_dataname, output_dataname, datalabel) {
-         stopifnot(
-           is.call(input_dataname) || is.name(input_dataname) || is_character_single(input_dataname)
-         )
-         stopifnot(
-           is.call(output_dataname) || is.name(output_dataname) || is_character_single(output_dataname)
-         )
-         stopifnot(is_character_vector(datalabel, min = 0, max = 1))
+    #' Initializes this `FilterStates` object.
+    #'
+    #' @param input_dataname (`character(1)` or `name` or `call`)\cr
+    #'   name of the data used on lhs of the expression
+    #'   specified to the function argument attached to this `FilterStates`.
+    #'
+    #' @param output_dataname (`character(1)` or `name` or `call`)\cr
+    #'   name of the output data on the lhs of the assignment expression.
+    #'
+    #' @param datalabel (`character(0)` or `character(1)`)\cr
+    #'   text label value.
+    #'
+    initialize = function(input_dataname, output_dataname, datalabel) {
+      stopifnot(
+        is.call(input_dataname) || is.name(input_dataname) || is_character_single(input_dataname)
+      )
+      stopifnot(
+        is.call(output_dataname) || is.name(output_dataname) || is_character_single(output_dataname)
+      )
+      stopifnot(is_character_vector(datalabel, min = 0, max = 1))
 
-         char_to_name <- function(x) {
-           if (is.character(x)) {
-             as.name(x)
-           } else {
-             x
-           }
-         }
+      char_to_name <- function(x) {
+        if (is.character(x)) {
+          as.name(x)
+        } else {
+          x
+        }
+      }
 
-         private$input_dataname <- char_to_name(input_dataname)
-         private$output_dataname <- char_to_name(output_dataname)
-         private$datalabel <- datalabel
-         logger::log_trace("Instantiated { class(self)[1] }, dataname: { deparse1(private$input_dataname) }")
-         invisible(self)
-       },
-       #' @description
-       #' Filter call
-       #'
-       #' Makes a subset function call based on condition calls from `FilterState`
-       #' objects selection.
-       #' `lhs` of the call is `private$output_dataname` and in `rhs`
-       #' `self$get_fun()` with `private$input_dataname` as argument and list of
-       #' condition calls from `FilterState`. If input and output data-names
-       #' are the same and no filters applied, method returns `NULL` to avoid
-       #' no-op call such as `x <- x`.
-       #'
-       #' @return `call` or `NULL`
-       get_call = function() {
-         # queue (list) names must be the same as argument of the function
-         # for ... list should be unnamed
-         queue_list <- private$queue
-         filter_items <- sapply(
-           X = queue_list,
-           USE.NAMES = TRUE,
-           simplify = FALSE,
-           function(queue) {
-             items <- queue$get()
-             calls <- lapply(
-               items,
-               function(state) {
-                 state$get_call()
-               }
-             )
-             if (length(calls) > 0) {
-               utils.nest::calls_combine_by(
-                 operator = "&",
-                 calls = calls
-               )
-             }
-           }
-         )
-         filter_items <- Filter(
-           x = filter_items,
-           f = Negate(is.null)
-         )
+      private$input_dataname <- char_to_name(input_dataname)
+      private$output_dataname <- char_to_name(output_dataname)
+      private$datalabel <- datalabel
+      logger::log_trace("Instantiated { class(self)[1] }, dataname: { deparse1(private$input_dataname) }")
+      invisible(self)
+    },
+    #' @description
+    #' Filter call
+    #'
+    #' Makes a subset function call based on condition calls from `FilterState`
+    #' objects selection.
+    #' `lhs` of the call is `private$output_dataname` and in `rhs`
+    #' `self$get_fun()` with `private$input_dataname` as argument and list of
+    #' condition calls from `FilterState`. If input and output data-names
+    #' are the same and no filters applied, method returns `NULL` to avoid
+    #' no-op call such as `x <- x`.
+    #'
+    #' @return `call` or `NULL`
+    get_call = function() {
+      # queue (list) names must be the same as argument of the function
+      # for ... list should be unnamed
+      queue_list <- private$queue
+      filter_items <- sapply(
+        X = queue_list,
+        USE.NAMES = TRUE,
+        simplify = FALSE,
+        function(queue) {
+          items <- queue$get()
+          calls <- lapply(
+            items,
+            function(state) {
+              state$get_call()
+            }
+          )
+          if (length(calls) > 0) {
+            utils.nest::calls_combine_by(
+              operator = "&",
+              calls = calls
+            )
+          }
+        }
+      )
+      filter_items <- Filter(
+        x = filter_items,
+        f = Negate(is.null)
+      )
 
-         if (length(filter_items) > 0) {
-           # below code translates to call by the names of filter_items
-           rhs <- utils.nest::call_with_colon(
-             self$get_fun(),
-             private$input_dataname,
-             unlist_args = filter_items
-           )
+      if (length(filter_items) > 0) {
+        # below code translates to call by the names of filter_items
+        rhs <- utils.nest::call_with_colon(
+          self$get_fun(),
+          private$input_dataname,
+          unlist_args = filter_items
+        )
 
-           substitute(
-             env = list(
-               lhs = private$output_dataname,
-               rhs = rhs
-             ),
-             expr = lhs <- rhs
-           )
-         } else if (!identical(private$output_dataname, private$input_dataname)) {
-           substitute(
-             env = list(
-               lhs = private$output_dataname,
-               rhs = private$input_dataname
-             ),
-             expr = lhs <- rhs
-           )
-         } else {
-           # avoid no-op call
-           NULL
-         }
-       },
+        substitute(
+          env = list(
+            lhs = private$output_dataname,
+            rhs = rhs
+          ),
+          expr = lhs <- rhs
+        )
+      } else if (!identical(private$output_dataname, private$input_dataname)) {
+        substitute(
+          env = list(
+            lhs = private$output_dataname,
+            rhs = private$input_dataname
+          ),
+          expr = lhs <- rhs
+        )
+      } else {
+        # avoid no-op call
+        NULL
+      }
+    },
 
-       #' @description
-       #' Gets the name of the function used to filter the data in this `FilterStates`.
-       #'
-       #' Get function name used to create filter call. By default it's a
-       #' "subset" but can be overridden by child class method.
-       #' @return `character(1)` the name of the function
-       get_fun = function() {
-         "subset"
-       },
+    #' @description
+    #' Gets the name of the function used to filter the data in this `FilterStates`.
+    #'
+    #' Get function name used to create filter call. By default it's a
+    #' "subset" but can be overridden by child class method.
+    #' @return `character(1)` the name of the function
+    get_fun = function() {
+      "subset"
+    },
 
-       #' @description
-       #' Remove all `FilterState` objects from all queues in this `FilterStates`.
-       #' @return NULL
-       queue_empty = function() {
-         logger::log_trace("{ class(self)[1] } emptying queue, dataname: { deparse1(private$input_dataname) }")
-         queue_indices <- if (is.null(names(private$queue))) {
-           seq_along(private$queue)
-         } else {
-           names(private$queue)
-         }
+    #' @description
+    #' Remove all `FilterState` objects from all queues in this `FilterStates`.
+    #' @return NULL
+    queue_empty = function() {
+      logger::log_trace("{ class(self)[1] } emptying queue, dataname: { deparse1(private$input_dataname) }")
+      queue_indices <- if (is.null(names(private$queue))) {
+        seq_along(private$queue)
+      } else {
+        names(private$queue)
+      }
 
-         lapply(queue_indices, function(queue_index) {
-           queue_elements <- names(self$queue_get(queue_index = queue_index))
-           lapply(queue_elements, function(element_id) {
-             self$queue_remove(queue_index = queue_index, element_id = element_id)
-           })
-         })
+      lapply(queue_indices, function(queue_index) {
+        queue_elements <- names(self$queue_get(queue_index = queue_index))
+        lapply(queue_elements, function(element_id) {
+          self$queue_remove(queue_index = queue_index, element_id = element_id)
+        })
+      })
 
-         logger::log_trace("{ class(self)[1] } emptied queue, dataname: { deparse1(private$input_dataname) }")
-         invisible(NULL)
-       },
+      logger::log_trace("{ class(self)[1] } emptied queue, dataname: { deparse1(private$input_dataname) }")
+      invisible(NULL)
+    },
 
-       #' @description
-       #' Returns a list of `FilterState` objects stored in this `FilterStates.`
-       #' @param queue_index (`character(1)`, `integer(1)`)\cr
-       #'   index of the `private$queue` list where `ReactiveQueue` are kept.
-       #' @param element_id (`character(1)`)\cr
-       #'   name of `ReactiveQueue` element.
-       #' @return `list` of `FilterState` objects
-       queue_get = function(queue_index, element_id = character(0)) {
-         private$validate_queue_exists(queue_index)
-         stopifnot(is_empty(element_id) || is_character_single(element_id))
+    #' @description
+    #' Returns a list of `FilterState` objects stored in this `FilterStates.`
+    #' @param queue_index (`character(1)`, `integer(1)`)\cr
+    #'   index of the `private$queue` list where `ReactiveQueue` are kept.
+    #' @param element_id (`character(1)`)\cr
+    #'   name of `ReactiveQueue` element.
+    #' @return `list` of `FilterState` objects
+    queue_get = function(queue_index, element_id = character(0)) {
+      private$validate_queue_exists(queue_index)
+      stopifnot(is_empty(element_id) || is_character_single(element_id))
 
-         if (is_empty(element_id)) {
-           private$queue[[queue_index]]$get()
-         } else {
-           private$queue[[queue_index]]$get()[element_id]
-         }
-       },
+      if (is_empty(element_id)) {
+        private$queue[[queue_index]]$get()
+      } else {
+        private$queue[[queue_index]]$get()[element_id]
+      }
+    },
 
-       #' @description
-       #' Sets `ReactiveQueue` objects.
-       #' @param x (`list` of `ReactiveQueue`)\cr
-       #'  must be a list even if single `ReactiveQueue` is set.
-       queue_initialize = function(x) {
-         stopifnot(is_class_list("ReactiveQueue")(x))
-         private$queue <- x
-         invisible(NULL)
-       },
+    #' @description
+    #' Sets `ReactiveQueue` objects.
+    #' @param x (`list` of `ReactiveQueue`)\cr
+    #'  must be a list even if single `ReactiveQueue` is set.
+    queue_initialize = function(x) {
+      stopifnot(is_class_list("ReactiveQueue")(x))
+      private$queue <- x
+      invisible(NULL)
+    },
 
-       #' @description
-       #' Adds a new `FilterState` object to this `FilterStates`
-       #' @param x (`FilterState`)\cr
-       #'   object to be added to the queue
-       #' @param queue_index (`character(1)`, `integer(1)`)\cr
-       #'   index of the `private$queue` list where `ReactiveQueue` are kept.
-       #' @param element_id (`character(1)`)\cr
-       #'   name of the `ReactiveQueue` element.
-       #' @note throws an exception if the length of `x` does not match the length of
-       #'   `element_id`
-       queue_push = function(x, queue_index, element_id) {
-         logger::log_trace("{ class(self)[1] } pushing into queue, dataname: { deparse1(private$input_dataname) }")
-         private$validate_queue_exists(queue_index)
-         stopifnot(is_character_single(element_id))
+    #' @description
+    #' Adds a new `FilterState` object to this `FilterStates`
+    #' @param x (`FilterState`)\cr
+    #'   object to be added to the queue
+    #' @param queue_index (`character(1)`, `integer(1)`)\cr
+    #'   index of the `private$queue` list where `ReactiveQueue` are kept.
+    #' @param element_id (`character(1)`)\cr
+    #'   name of the `ReactiveQueue` element.
+    #' @note throws an exception if the length of `x` does not match the length of
+    #'   `element_id`
+    queue_push = function(x, queue_index, element_id) {
+      logger::log_trace("{ class(self)[1] } pushing into queue, dataname: { deparse1(private$input_dataname) }")
+      private$validate_queue_exists(queue_index)
+      stopifnot(is_character_single(element_id))
 
-         states <- if (is.list(x)) {
-           x
-         } else {
-           list(x)
-         }
-         state <- setNames(states, element_id)
-         private$queue[[queue_index]]$push(state)
-         logger::log_trace("{ class(self)[1] } pushed into queue, dataname: { deparse1(private$input_dataname) }")
-         invisible(NULL)
-       },
+      states <- if (is.list(x)) {
+        x
+      } else {
+        list(x)
+      }
+      state <- setNames(states, element_id)
+      private$queue[[queue_index]]$push(state)
+      logger::log_trace("{ class(self)[1] } pushed into queue, dataname: { deparse1(private$input_dataname) }")
+      invisible(NULL)
+    },
 
-       #' @description
-       #' Removes a single filter state
-       #'
-       #' Removes a single filter state with all shiny elements associated
-       #' with this state. It removes:\cr
-       #' * particular `FilterState` from `private$queue`
-       #' * UI card created for this filter
-       #' * observers listening selection and remove button
-       #' @param queue_index (`character(1)`, `logical(1)`)\cr
-       #'   index of the `private$queue` list where `ReactiveQueue` are kept.
-       #' @param element_id (`character(1)`)\cr
-       #'   name of `ReactiveQueue` element.
-       queue_remove = function(queue_index, element_id) {
-         logger::log_trace(paste(
-           "{ class(self)[1] } removing a filter from queue { queue_index },",
-           "dataname: { deparse1(private$input_dataname) }"
-         ))
-         private$validate_queue_exists(queue_index)
-         stopifnot(is_character_single(element_id))
-         stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
-         stopifnot(is_character_single(element_id))
+    #' @description
+    #' Removes a single filter state
+    #'
+    #' Removes a single filter state with all shiny elements associated
+    #' with this state. It removes:\cr
+    #' * particular `FilterState` from `private$queue`
+    #' * UI card created for this filter
+    #' * observers listening selection and remove button
+    #' @param queue_index (`character(1)`, `logical(1)`)\cr
+    #'   index of the `private$queue` list where `ReactiveQueue` are kept.
+    #' @param element_id (`character(1)`)\cr
+    #'   name of `ReactiveQueue` element.
+    queue_remove = function(queue_index, element_id) {
+      logger::log_trace(paste(
+        "{ class(self)[1] } removing a filter from queue { queue_index },",
+        "dataname: { deparse1(private$input_dataname) }"
+      ))
+      private$validate_queue_exists(queue_index)
+      stopifnot(is_character_single(element_id))
+      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
+      stopifnot(is_character_single(element_id))
 
-         filters <- self$queue_get(queue_index = queue_index, element_id = element_id)
-         private$queue[[queue_index]]$remove(filters)
-         logger::log_trace(
-           "{ class(self)[1] } removed from queue { queue_index }, dataname: { deparse1(private$input_dataname) }"
-         )
-       },
+      filters <- self$queue_get(queue_index = queue_index, element_id = element_id)
+      private$queue[[queue_index]]$remove(filters)
+      logger::log_trace(
+        "{ class(self)[1] } removed from queue { queue_index }, dataname: { deparse1(private$input_dataname) }"
+      )
+    },
 
-       #' @description
-       #' Shiny UI module
-       #'
-       #' Shiny UI element being a container for `FilterState` elements.
-       #' Content of this container is created using `renderUI` in
-       #' `server` module
-       #' @param id (`character(1)`)\cr
-       #'   id of the shiny element
-       #' @return shiny.tag
-       ui = function(id) {
-         ns <- NS(id)
-         private$card_id <- ns("cards")
-         tags$div(
-           id = private$card_id,
-           class = "list-group hideable-list-group",
-           `data-label` = ifelse(private$datalabel == "", "", (paste0("> ", private$datalabel)))
-         )
-       },
+    #' @description
+    #' Shiny UI module
+    #'
+    #' Shiny UI element being a container for `FilterState` elements.
+    #' Content of this container is created using `renderUI` in
+    #' `server` module
+    #' @param id (`character(1)`)\cr
+    #'   id of the shiny element
+    #' @return shiny.tag
+    ui = function(id) {
+      ns <- NS(id)
+      private$card_id <- ns("cards")
+      tags$div(
+        id = private$card_id,
+        class = "list-group hideable-list-group",
+        `data-label` = ifelse(private$datalabel == "", "", (paste0("> ", private$datalabel)))
+      )
+    },
 
-       #' @description
-       #' Set filter state
-       #'
-       #' @param data (`data.frame`)\cr
-       #'   data which are supposed to be filtered
-       #' @param state (`named list`)\cr
-       #'   should contain values which are initial selection in the `FilterState`.
-       #'   Names of the `list` element should correspond to the name of the
-       #'   column in `data`.
-       #' @return function which throws an error
-       set_filter_state = function(data, state) {
-         stop("Pure virtual method.")
-       },
+    #' @description
+    #' Set filter state
+    #'
+    #' @param data (`data.frame`)\cr
+    #'   data which are supposed to be filtered
+    #' @param state (`named list`)\cr
+    #'   should contain values which are initial selection in the `FilterState`.
+    #'   Names of the `list` element should correspond to the name of the
+    #'   column in `data`.
+    #' @return function which throws an error
+    set_filter_state = function(data, state) {
+      stop("Pure virtual method.")
+    },
 
-       #' @description Remove a single `FilterState` from the `ReactiveQueue`.
-       #'
-       #' @param element_id (`character`)\cr
-       #'  Name of variable to remove its `FilterState`.
-       #'
-       #' @return `NULL`
-       remove_filter_state = function(element_id) {
-         stop("This variable can not be removed from the filter.")
-       },
+    #' @description Remove a single `FilterState` from the `ReactiveQueue`.
+    #'
+    #' @param element_id (`character`)\cr
+    #'  Name of variable to remove its `FilterState`.
+    #'
+    #' @return `NULL`
+    remove_filter_state = function(element_id) {
+      stop("This variable can not be removed from the filter.")
+    },
 
-       #' @description
-       #' Shiny UI module to add filter variable.
-       #' @param id (`character(1)`)\cr
-       #'  id of shiny module
-       #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
-       #'  object containing columns to be used as filter variables.
-       #' @return shiny.tag
-       ui_add_filter_state = function(id, data) {
-         div("This object cannot be filtered")
-       },
+    #' @description
+    #' Shiny UI module to add filter variable.
+    #' @param id (`character(1)`)\cr
+    #'  id of shiny module
+    #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
+    #'  object containing columns to be used as filter variables.
+    #' @return shiny.tag
+    ui_add_filter_state = function(id, data) {
+      div("This object cannot be filtered")
+    },
 
-       #' @description
-       #' Shiny server module to add filter variable
-       #'
-       #' @param id (`character(1)`)\cr
-       #'   an ID string that corresponds with the ID used to call the module's UI function.
-       #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
-       #'  object containing columns to be used as filter variables.
-       #' @param ... ignored
-       #' @return `moduleServer` function which returns `NULL`
-       srv_add_filter_state =  function(id, data, ...) {
-         check_ellipsis(..., stop = FALSE)
-         moduleServer(
-           id = id,
-           function(input, output, session) {
-             NULL
-           }
-         )
-       }
+    #' @description
+    #' Shiny server module to add filter variable
+    #'
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
+    #'  object containing columns to be used as filter variables.
+    #' @param ... ignored
+    #' @return `moduleServer` function which returns `NULL`
+    srv_add_filter_state =  function(id, data, ...) {
+      check_ellipsis(..., stop = FALSE)
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          NULL
+        }
+      )
+    }
   ),
   private = list(
     card_id = character(0),
@@ -615,7 +615,6 @@ DFFilterStates <- R6::R6Class( # nolint
   classname = "DFFilterStates",
   inherit = FilterStates,
   public = list(
-
     #' Initializes `DFFilterStates` object
     #'
     #' Initializes `DFFilterStates` object by setting `input_dataname`,
@@ -959,7 +958,6 @@ MAEFilterStates <- R6::R6Class( # nolint
   classname = "MAEFilterStates",
   inherit = FilterStates,
   public = list(
-
     #' Initialize `MAEFilterStates` object
     #'
     #' Initialize `MAEFilterStates` object
@@ -1281,7 +1279,6 @@ MAEFilterStates <- R6::R6Class( # nolint
           ]
         varlabels
       }
-
     }
   )
 )
@@ -1291,7 +1288,6 @@ SEFilterStates <- R6::R6Class( # nolint
   classname = "SEFilterStates",
   inherit = FilterStates,
   public = list(
-
     #' Initialize `SEFilterStates` object
     #'
     #' Initialize `SEFilterStates` object
@@ -1787,7 +1783,6 @@ MatrixFilterStates <- R6::R6Class( # nolint
   classname = "MatrixFilterStates",
   inherit = FilterStates,
   public = list(
-
     #' Initialize `MatrixFilterStates` object
     #'
     #' Initialize `MatrixFilterStates` object

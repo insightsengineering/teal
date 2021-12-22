@@ -219,7 +219,7 @@ init_filter_state.POSIXlt <- function(x, #nousage
 #' - `POSIXct`, `POSIXlt`: `class = DatetimeFilterState`
 #' - all `NA` entries: `class: FilterState`, cannot be filtered
 #' - default: `FilterState`, cannot be filtered
-#' Each variable's filter state is a `R6` object which contains `choices`,
+#' Each variable's filter state is an `R6` object which contains `choices`,
 #' `selected`, `varname`, `dataname`, `labels`, `na_count`, `keep_na` and other
 #' variable type specific fields (`keep_inf`, `inf_count`, `timezone`).
 #' Object contains also shiny module (`ui` and `server`) which manages
@@ -230,14 +230,13 @@ init_filter_state.POSIXlt <- function(x, #nousage
 #' \cr
 #' \if{html}{\figure{filter_state_reactivity.jpg}{options: width="100\%" alt="Figure: filter_state_reactivity.jpg"}}
 #' \if{latex}{\figure{filter_state_reactivity.jpg}{options: width=7cm}}
-#' Setting the `FilterState` is possible in three scenarios depicted above:
+#' Modifying a `FilterState` object is possible in three scenarios depicted above:
 #' * In the interactive session by directly specifying values of `selected`,
 #'   `keep_na` or `keep_inf` using `set_state` method (to update all at once),
 #'   or using `set_selected`, `set_keep_na` or `set_keep_inf`
-#' * In the shiny application by changing the input
-#' * In running shiny app using methods `set_selected_reactive`,
-#' `set_keep_na_reactive` `set_keep_inf_reactive` which serves as a programmatic
-#' API.
+#' * In a `teal` application by changing appropriate inputs
+#' * Using methods `set_selected_reactive`, `set_keep_na_reactive`,
+#'  `set_keep_inf_reactive` which serves as a programmatic API.
 #'
 #' @keywords internal
 FilterState <- R6::R6Class( # nolint
