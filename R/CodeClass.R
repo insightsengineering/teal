@@ -263,7 +263,7 @@ list_to_code_class <- function(x) {
 #'
 #' @return (`call`) object.
 text_to_call <- function(x) {
-  parsed <- parse(text = x)
+  parsed <- parse(text = x, keep.source = FALSE)
   if (is_empty(parsed)) {
     return(NULL)
   } else {
@@ -282,11 +282,16 @@ pretty_code_string <- function(code_vector) {
   ulapply(
     code_vector,
     function(code_single) {
-      if (is_empty(parse(text = code_single))) {
+      if (is_empty(parse(text = code_single, keep.source = FALSE))) {
         # if string code cannot be passed into expression (e.g. code comment) then pass on the string
         code_single
       } else {
-        vapply(as.list(as.call(parse(text = code_single))), deparse1, character(1), collapse = "\n")
+        vapply(
+          as.list(as.call(parse(text = code_single, keep.source = FALSE))),
+          deparse1,
+          character(1),
+          collapse = "\n"
+        )
       }
     }
   )
