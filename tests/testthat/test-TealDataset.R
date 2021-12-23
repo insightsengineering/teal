@@ -597,7 +597,7 @@ test_that("mutate_dataset", {
   )
 
   expect_error(
-    objecy = {
+    object = {
       test_ds %>% mutate_dataset("x <- 3")
     },
     "object 'test' not found"
