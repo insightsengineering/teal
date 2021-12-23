@@ -52,7 +52,6 @@ filter_state <- teal:::RangeFilterState$new(
 filter_state$get_varname()
 filter_state$get_varlabel()
 isolate(filter_state$get_call())
-
 \dontrun{
 shinyApp(
   ui = fluidPage(

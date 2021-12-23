@@ -64,51 +64,59 @@ init_filter_states <- function(data,
 }
 
 #' @export
-init_filter_states.data.frame <- function(data, #nolint #nousage
+init_filter_states.data.frame <- function(data, # nolint #nousage
                                           input_dataname,
                                           output_dataname = input_dataname,
                                           datalabel = character(0),
                                           varlabels = character(0),
                                           keys = character(0)) {
-  DFFilterStates$new(input_dataname = input_dataname,
-                     output_dataname = output_dataname,
-                     datalabel = datalabel,
-                     varlabels = varlabels,
-                     keys = keys)
+  DFFilterStates$new(
+    input_dataname = input_dataname,
+    output_dataname = output_dataname,
+    datalabel = datalabel,
+    varlabels = varlabels,
+    keys = keys
+  )
 }
 
 #' @export
-init_filter_states.matrix <- function(data, #nolint #nousage
+init_filter_states.matrix <- function(data, # nolint #nousage
                                       input_dataname,
                                       output_dataname = input_dataname,
                                       datalabel = character(0)) {
-  MatrixFilterStates$new(input_dataname = input_dataname,
-                         output_dataname = output_dataname,
-                         datalabel = datalabel)
+  MatrixFilterStates$new(
+    input_dataname = input_dataname,
+    output_dataname = output_dataname,
+    datalabel = datalabel
+  )
 }
 
 #' @export
-init_filter_states.MultiAssayExperiment <- function(data, #nolint #nousage
+init_filter_states.MultiAssayExperiment <- function(data, # nolint #nousage
                                                     input_dataname,
                                                     output_dataname = input_dataname,
                                                     datalabel = character(0),
                                                     varlabels,
                                                     keys = character(0)) {
-  MAEFilterStates$new(input_dataname = input_dataname,
-                      output_dataname = output_dataname,
-                      datalabel = datalabel,
-                      varlabels = varlabels,
-                      keys = keys)
+  MAEFilterStates$new(
+    input_dataname = input_dataname,
+    output_dataname = output_dataname,
+    datalabel = datalabel,
+    varlabels = varlabels,
+    keys = keys
+  )
 }
 
 #' @export
-init_filter_states.SummarizedExperiment <- function(data, #nolint #nousage
+init_filter_states.SummarizedExperiment <- function(data, # nolint #nousage
                                                     input_dataname,
                                                     output_dataname = input_dataname,
                                                     datalabel = character(0)) {
-  SEFilterStates$new(input_dataname = input_dataname,
-                     output_dataname = output_dataname,
-                     datalabel = datalabel)
+  SEFilterStates$new(
+    input_dataname = input_dataname,
+    output_dataname = output_dataname,
+    datalabel = datalabel
+  )
 }
 
 
@@ -437,7 +445,7 @@ FilterStates <- R6::R6Class( # nolint
     #'  object containing columns to be used as filter variables.
     #' @param ... ignored
     #' @return `moduleServer` function which returns `NULL`
-    srv_add_filter_state =  function(id, data, ...) {
+    srv_add_filter_state = function(id, data, ...) {
       check_ellipsis(..., stop = FALSE)
       moduleServer(
         id = id,
@@ -451,8 +459,8 @@ FilterStates <- R6::R6Class( # nolint
     card_id = character(0),
     card_ids = character(0),
     datalabel = character(0),
-    input_dataname = NULL,  # because it holds object of class name
-    output_dataname = NULL,  # because it holds object of class name,
+    input_dataname = NULL, # because it holds object of class name
+    output_dataname = NULL, # because it holds object of class name,
     ns = NULL, # shiny ns()
     observers = list(), # observers
     queue = NULL, # list of ReactiveQueue(s) initialized by self$queue_initialize
@@ -502,13 +510,13 @@ FilterStates <- R6::R6Class( # nolint
                       class = "no-left-right-padding",
                       tags$div(
                         tags$span(filter_state$get_varname(),
-                                  class = "filter_panel_varname"
+                          class = "filter_panel_varname"
                         ),
                         if_not_character_empty(
                           filter_state$get_varlabel(),
                           if (tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
                             tags$span(filter_state$get_varlabel(),
-                                      class = "filter_panel_varlabel"
+                              class = "filter_panel_varlabel"
                             )
                           }
                         )
@@ -589,7 +597,7 @@ FilterStates <- R6::R6Class( # nolint
       if (
         !(
           is.numeric(queue_index) && all(queue_index <= length(private$queue) && queue_index > 0) ||
-          is.character(queue_index) && all(queue_index %in% names(private$queue))
+            is.character(queue_index) && all(queue_index %in% names(private$queue))
         )
       ) {
         stop(
@@ -705,7 +713,8 @@ DFFilterStates <- R6::R6Class( # nolint
             removed_state_name(character(0))
           })
           NULL
-        })
+        }
+      )
     },
 
     #' @description
@@ -944,12 +953,11 @@ DFFilterStates <- R6::R6Class( # nolint
       stopifnot(is.character(variables))
       if (identical(variables, character(0))) {
         private$varlabels
-
       } else {
         varlabels <- private$varlabels[variables]
         varlabels[is.na(varlabels) | varlabels == ""] <- variables[
           is.na(varlabels) | varlabels == ""
-          ]
+        ]
         varlabels
       }
     }
@@ -1045,7 +1053,8 @@ MAEFilterStates <- R6::R6Class( # nolint
             removed_state_name(character(0))
           })
           NULL
-        })
+        }
+      )
     },
 
     #' @description
@@ -1200,10 +1209,12 @@ MAEFilterStates <- R6::R6Class( # nolint
               get_filterable_varnames(data = SummarizedExperiment::colData(data)),
               active_filter_vars()
             )
-            data_choices_labeled(data = SummarizedExperiment::colData(data),
-                                 choices = choices,
-                                 varlabels = private$get_varlabels(choices),
-                                 keys = private$keys)
+            data_choices_labeled(
+              data = SummarizedExperiment::colData(data),
+              choices = choices,
+              varlabels = private$get_varlabels(choices),
+              keys = private$keys
+            )
           })
           observeEvent(
             avail_column_choices(),
@@ -1280,12 +1291,11 @@ MAEFilterStates <- R6::R6Class( # nolint
       stopifnot(is.character(variables))
       if (identical(variables, character(0))) {
         private$varlabels
-
       } else {
         varlabels <- private$varlabels[variables]
         varlabels[is.na(varlabels) || varlabels == ""] <- variables[
           is.na(varlabels) || varlabels == ""
-          ]
+        ]
         varlabels
       }
     }
@@ -1365,7 +1375,7 @@ SEFilterStates <- R6::R6Class( # nolint
             removed_state_name_subset(character(0))
           })
 
-          #select
+          # select
           previous_state_select <- reactiveVal(isolate(self$queue_get("select")))
           added_state_name_select <- reactiveVal(character(0))
           removed_state_name_select <- reactiveVal(character(0))
@@ -1382,7 +1392,6 @@ SEFilterStates <- R6::R6Class( # nolint
           })
 
           observeEvent(added_state_name_select(), ignoreNULL = TRUE, {
-
             fstates <- private$get_filter_state("select")
             for (fname in added_state_name_select()) {
               private$insert_filter_state_ui(
@@ -1403,7 +1412,8 @@ SEFilterStates <- R6::R6Class( # nolint
             removed_state_name_select(character(0))
           })
           NULL
-        })
+        }
+      )
     },
 
     #' @description
@@ -1429,10 +1439,11 @@ SEFilterStates <- R6::R6Class( # nolint
       )
       checkmate::assert(
         checkmate::test_null(state$subset),
-          checkmate::assert(
-            checkmate::check_class(state$subset, "list"),
-            checkmate::check_subset(names(state$subset), names(SummarizedExperiment::rowData(data))),
-            combine = "and"),
+        checkmate::assert(
+          checkmate::check_class(state$subset, "list"),
+          checkmate::check_subset(names(state$subset), names(SummarizedExperiment::rowData(data))),
+          combine = "and"
+        ),
         combine = "or"
       )
       checkmate::assert(
@@ -1440,7 +1451,8 @@ SEFilterStates <- R6::R6Class( # nolint
         checkmate::assert(
           checkmate::check_class(state$select, "list"),
           checkmate::check_subset(names(state$select), names(SummarizedExperiment::colData(data))),
-          combine = "and"),
+          combine = "and"
+        ),
         combine = "or"
       )
 
@@ -1590,7 +1602,6 @@ SEFilterStates <- R6::R6Class( # nolint
             noneSelectedText = "Select sample variable"
           )
         )
-
       }
 
       div(
@@ -1652,11 +1663,12 @@ SEFilterStates <- R6::R6Class( # nolint
               active_filter_row_vars()
             )
 
-            data_choices_labeled(data = row_data,
-                                 choices = choices,
-                                 varlabels = character(0),
-                                 keys = NULL)
-
+            data_choices_labeled(
+              data = row_data,
+              choices = choices,
+              varlabels = character(0),
+              keys = NULL
+            )
           })
           avail_col_data_choices <- reactive({
             choices <- setdiff(
@@ -1664,10 +1676,12 @@ SEFilterStates <- R6::R6Class( # nolint
               active_filter_col_vars()
             )
 
-            data_choices_labeled(data = col_data,
-                                 choices = choices,
-                                 varlabels = character(0),
-                                 keys = NULL)
+            data_choices_labeled(
+              data = col_data,
+              choices = choices,
+              varlabels = character(0),
+              keys = NULL
+            )
           })
 
 
@@ -1861,7 +1875,8 @@ MatrixFilterStates <- R6::R6Class( # nolint
             removed_state_name(character(0))
           })
           NULL
-        })
+        }
+      )
     },
 
     #' @description
@@ -1917,7 +1932,6 @@ MatrixFilterStates <- R6::R6Class( # nolint
         "dataname: { deparse1(private$input_dataname) }"
       ))
       NULL
-
     },
 
     #' @description Remove a variable from the `ReactiveQueue` and its corresponding UI element.
@@ -2008,10 +2022,12 @@ MatrixFilterStates <- R6::R6Class( # nolint
               get_filterable_varnames(data = data),
               active_filter_vars()
             )
-            data_choices_labeled(data = data,
-                                 choices = choices,
-                                 varlabels = character(0),
-                                 keys = NULL)
+            data_choices_labeled(
+              data = data,
+              choices = choices,
+              varlabels = character(0),
+              keys = NULL
+            )
           })
           observeEvent(
             avail_column_choices(),
@@ -2098,7 +2114,7 @@ get_filterable_varnames <- function(data) {
 }
 
 #' @export
-get_filterable_varnames.default <- function(data) { #nolint #nousage
+get_filterable_varnames.default <- function(data) { # nolint #nousage
   is_expected_class <- vapply(
     X = data,
     FUN = function(x) any(class(x) %in% .filterable_class),
@@ -2108,7 +2124,7 @@ get_filterable_varnames.default <- function(data) { #nolint #nousage
 }
 
 #' @export
-get_filterable_varnames.matrix <- function(data) { #nolint #nousage
+get_filterable_varnames.matrix <- function(data) { # nolint #nousage
   # all columns are the same type in matrix
   is_expected_class <- class(data[, 1]) %in% .filterable_class
   if (is_expected_class && !is.null(names(data))) {

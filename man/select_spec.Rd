@@ -162,5 +162,4 @@ select_spec(
 # Both below objects are semantically the same
 select_spec(choices = variable_choices("ADSL"), selected = variable_choices("ADSL"))
 select_spec(choices = variable_choices("ADSL"), selected = all_choices())
-
 }

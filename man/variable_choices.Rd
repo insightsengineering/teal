@@ -63,7 +63,8 @@ variable_choices(ADRS_dataset)
 ADRS_conn <- dataset_connector(
   "ADRS",
   pull_callable = callable_code("radrs(cached = TRUE)"),
-  key = get_cdisc_keys("ADRS"))
+  key = get_cdisc_keys("ADRS")
+)
 variable_choices(ADRS_conn)
 
 # functional subset (with delayed data) - return only factor variables

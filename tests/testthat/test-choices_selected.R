@@ -43,7 +43,8 @@ testthat::test_that("delayed version of choices_selected", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- choices_selected(
     variable_choices(adsl, subset = c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
-    selected = variable_choices(adsl, subset = c("STUDYID"), key = get_cdisc_keys("ADSL")))
+    selected = variable_choices(adsl, subset = c("STUDYID"), key = get_cdisc_keys("ADSL"))
+  )
   testthat::expect_equal(res_obj, exp_obj, check.attributes = TRUE)
 
   # functional choices and selected

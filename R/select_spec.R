@@ -131,7 +131,6 @@
 #' # Both below objects are semantically the same
 #' select_spec(choices = variable_choices("ADSL"), selected = variable_choices("ADSL"))
 #' select_spec(choices = variable_choices("ADSL"), selected = all_choices())
-#'
 select_spec <- function(choices,
                         selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
                         multiple = length(selected) > 1 || is(selected, "all_choices"),
@@ -171,7 +170,8 @@ select_spec.delayed_data <- function(choices,
       always_selected = always_selected,
       multiple = multiple,
       fixed = fixed,
-      label = label),
+      label = label
+    ),
     class = c("delayed_select_spec", "delayed_data", "select_spec")
   )
 }
@@ -214,8 +214,10 @@ select_spec.default <- function(choices,
     }
   }
 
-  res <- list(choices = choices, selected = selected, always_selected = always_selected, multiple = multiple,
-    fixed = fixed, label = label)
+  res <- list(
+    choices = choices, selected = selected, always_selected = always_selected, multiple = multiple,
+    fixed = fixed, label = label
+  )
   class(res) <- "select_spec"
 
   return(res)

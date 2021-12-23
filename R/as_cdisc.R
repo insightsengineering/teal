@@ -71,7 +71,9 @@ as_cdisc.TealDataset <- function(x, parent = `if`(identical(get_dataname(x), "AD
 #'
 #' library(scda)
 #' pull_fun_adsl <- callable_function(
-#'   function() {synthetic_cdisc_data("latest")$adsl}
+#'   function() {
+#'     synthetic_cdisc_data("latest")$adsl
+#'   }
 #' )
 #' as_cdisc(
 #'   dataset_connector(
@@ -82,7 +84,9 @@ as_cdisc.TealDataset <- function(x, parent = `if`(identical(get_dataname(x), "AD
 #' )
 #'
 #' pull_fun_adae <- callable_function(
-#'   function() {synthetic_cdisc_data("latest")$adae}
+#'   function() {
+#'     synthetic_cdisc_data("latest")$adae
+#'   }
 #' )
 #' as_cdisc(
 #'   dataset_connector(
@@ -92,7 +96,6 @@ as_cdisc.TealDataset <- function(x, parent = `if`(identical(get_dataname(x), "AD
 #'   ),
 #'   parent = "ADSL"
 #' )
-#'
 as_cdisc.TealDatasetConnector <- function(x, parent = `if`(identical(get_dataname(x), "ADSL"), character(0), "ADSL")) {
   ds <- tryCatch(
     expr = get_dataset(x),

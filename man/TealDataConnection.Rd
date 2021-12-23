@@ -21,7 +21,8 @@ ping_fun <- callable_function(function() TRUE)
 x <- data_connection( # define connection
   ping_fun = ping_fun, # define ping function
   open_fun = open_fun, # define opening function
-  close_fun = close_fun) # define closing function
+  close_fun = close_fun # define closing function
+)
 
 x$set_open_args(args = list(y = letters[1:5])) # define additional arguments if necessary
 
@@ -29,7 +30,6 @@ x$open() # call opening function
 x$get_open_call() # check reproducible R code
 
 # get data from connection via TealDataConnector$get_dataset()
-
 \dontrun{
 x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
 x$close() # call closing function

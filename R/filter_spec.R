@@ -59,7 +59,6 @@
 #'   selected = c("CRP"),
 #'   multiple = TRUE
 #' )
-#'
 #' @details
 #'
 #' The \code{filter_spec} is used inside \code{teal} apps to allow filtering datasets
@@ -168,14 +167,18 @@
 #' @examples
 #' filter_spec(
 #'   vars = variable_choices("ADSL", "ARMCD"),
-#'   choices = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM",
-#'   subset = function(data) {
-#'     levels(data$ARMCD)[1:2]
-#'   }),
-#'   selected = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM",
-#'   subset = function(data) {
-#'     levels(data$ARMCD)[1]
-#'   })
+#'   choices = value_choices("ADSL",
+#'     var_choices = "ARMCD", var_label = "ARM",
+#'     subset = function(data) {
+#'       levels(data$ARMCD)[1:2]
+#'     }
+#'   ),
+#'   selected = value_choices("ADSL",
+#'     var_choices = "ARMCD", var_label = "ARM",
+#'     subset = function(data) {
+#'       levels(data$ARMCD)[1]
+#'     }
+#'   )
 #' )
 filter_spec <- function(vars,
                         choices = NULL,
@@ -187,18 +190,18 @@ filter_spec <- function(vars,
   stopifnot(is_character_vector(vars) || is(vars, "delayed_data") || is(vars, "choices_selected"))
   stopifnot(
     is.null(choices) ||
-    is_character_vector(choices) ||
-    is_numeric_vector(choices) ||
-    is_logical_vector(choices) ||
-    is(choices, "delayed_data")
+      is_character_vector(choices) ||
+      is_numeric_vector(choices) ||
+      is_logical_vector(choices) ||
+      is(choices, "delayed_data")
   )
   stopifnot(
     is.null(selected) ||
-    is_character_vector(selected) ||
-    is_numeric_vector(selected) ||
-    is_logical_vector(selected) ||
-    is(selected, "delayed_data") ||
-    is(selected, "all_choices")
+      is_character_vector(selected) ||
+      is_numeric_vector(selected) ||
+      is_logical_vector(selected) ||
+      is(selected, "delayed_data") ||
+      is(selected, "all_choices")
   )
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(label) || is_character_single(label))
@@ -357,19 +360,18 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
                                               drop_keys = FALSE,
                                               dataname = NULL,
                                               initialized = FALSE) {
-
   stopifnot(
     is_character_vector(vars_choices) ||
-    is_numeric_vector(vars_choices) ||
-    is_logical_vector(vars_choices) ||
-    is(vars_choices, "delayed_data")
+      is_numeric_vector(vars_choices) ||
+      is_logical_vector(vars_choices) ||
+      is(vars_choices, "delayed_data")
   )
   stopifnot(
     is.null(vars_selected) ||
-    is_character_vector(vars_selected) ||
-    is_numeric_vector(vars_selected) ||
-    is_logical_vector(vars_selected) ||
-    is(vars_selected, "delayed_data")
+      is_character_vector(vars_selected) ||
+      is_numeric_vector(vars_selected) ||
+      is_logical_vector(vars_selected) ||
+      is(vars_selected, "delayed_data")
   )
   stopifnot(
     is.null(choices) ||
@@ -407,8 +409,9 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
     class = c(
       "delayed_filter_spec",
       "filter_spec",
-      "delayed_data")
+      "delayed_data"
     )
+  )
   return(out)
 }
 
@@ -430,8 +433,8 @@ filter_spec_internal.default <- function(vars_choices, # nousage
                                          initialized = FALSE) {
   stopifnot(
     is_character_vector(vars_choices) ||
-    is_numeric_vector(vars_choices) ||
-    is_logical_vector(vars_choices)
+      is_numeric_vector(vars_choices) ||
+      is_logical_vector(vars_choices)
   )
   stopifnot(all(!duplicated(vars_choices)))
 

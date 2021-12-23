@@ -1,6 +1,6 @@
 adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
 adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
-adsl  <- CDISCTealDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
+adsl <- CDISCTealDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
 adae <- CDISCTealDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
 
 testthat::test_that("get_code returns the correct code for two CDISCTealDatasetConnector objects", {
@@ -57,7 +57,7 @@ testthat::test_that("TealDataConnector with custom UI and server", {
     test
     as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
   })
-  adsl  <- CDISCTealDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
+  adsl <- CDISCTealDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
   con <- TealDataConnection$new(open_fun = CallableFunction$new(function() "open function"))
   cdisc_data_connector <- CDISCTealDataConnector$new(connection = con, connectors = list(adsl))
 
@@ -102,12 +102,12 @@ testthat::test_that("TealDataConnector with custom UI and server", {
   )
 
   cdisc_data_connector$set_server(function(id, connectors, connection) {
-      raw_datasets <- lapply(connectors, function(connector) {
-        set_args(connector, args(test = input$test))
-        connector$pull(try = TRUE)
+    raw_datasets <- lapply(connectors, function(connector) {
+      set_args(connector, args(test = input$test))
+      connector$pull(try = TRUE)
 
-        connector$get_raw_data()
-      })
+      connector$get_raw_data()
+    })
   })
   set_server <- cdisc_data_connector$get_server()
   testthat::expect_false(is.null(set_server))
@@ -155,8 +155,10 @@ testthat::test_that("cdisc_data_connector returns a CDISCTealDataConnector objec
 testthat::test_that("cdisc_data_connector validates the 'connection' and 'connectors' arguments", {
   testthat::expect_error(cdisc_data_connector(
     connection = 1,
-    connectors = list(adsl, adae)))
+    connectors = list(adsl, adae)
+  ))
   testthat::expect_error(cdisc_data_connector(
-    connection =  TealDataConnection$new(open_fun = CallableFunction$new(function() "open function")),
-    connectors = "a"))
+    connection = TealDataConnection$new(open_fun = CallableFunction$new(function() "open function")),
+    connectors = "a"
+  ))
 })

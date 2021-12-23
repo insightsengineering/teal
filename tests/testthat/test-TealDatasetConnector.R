@@ -321,8 +321,10 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    x$get_code(), paste0("ADSL <- readr::read_delim(file = \"",
-    encodeString(temp_file_csv), "\", delim = \" \")")
+    x$get_code(), paste0(
+      "ADSL <- readr::read_delim(file = \"",
+      encodeString(temp_file_csv), "\", delim = \" \")"
+    )
   )
   data <- x$get_raw_data()
   testthat::expect_true(is.data.frame(data))
@@ -338,7 +340,7 @@ testthat::test_that("csv_dataset_connector attritubes", {
     RACE = c("sth1|sth2", "sth", "sth"),
     stringsAsFactors = FALSE
   )
-  rtables::var_labels(ADSL_ns) <- letters[1:4]
+  rtables::var_labels(ADSL_ns) <- letters[1:4] # nolint
   temp_file_csv <- tempfile(fileext = ".csv")
   write.table(ADSL_ns, file = temp_file_csv, row.names = FALSE, sep = ",")
 
@@ -466,7 +468,7 @@ testthat::test_that("fun_cdisc_dataset_connector", {
       STUDYID = 1,
       USUBJID = 1:40,
       z = stats::rnorm(40),
-      zz = factor(sample(letters[1:3], 40, replace = T)),
+      zz = factor(sample(letters[1:3], 40, replace = TRUE)),
       NAs = rep(NA, 40)
     )
     x$w <- as.numeric(rnorm(40, 0, 1))
@@ -483,7 +485,7 @@ testthat::test_that("fun_cdisc_dataset_connector", {
       STUDYID = 1,
       USUBJID = 1:global_var,
       z = stats::rnorm(40),
-      zz = factor(sample(letters[1:3], 40, replace = T)),
+      zz = factor(sample(letters[1:3], 40, replace = TRUE)),
       NAs = rep(NA, 40)
     )
     x$w <- as.numeric(rnorm(40, 0, 1))
@@ -547,8 +549,10 @@ testthat::test_that("code_dataset_connector - Test various inputs", {
     code = paste0(readLines(file_example), collapse = "\n")
   )
 
-  expect_equal(from_file$get_code(),
-    "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADSL <- ADSL")
+  expect_equal(
+    from_file$get_code(),
+    "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADSL <- ADSL"
+  )
   expect_identical(from_file$pull()$get_raw_data(), adsl)
 
   adsl <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")
@@ -576,10 +580,11 @@ testthat::test_that("code_dataset_connector - Test various inputs", {
     code = get_code(file_example, dataname = "ADSL")
   )
 
-  expect_equal(get_code_file$get_code(),
-    "library(scda)\nADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADSL <- ADSL")
+  expect_equal(
+    get_code_file$get_code(),
+    "library(scda)\nADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADSL <- ADSL"
+  )
   expect_identical(get_code_file$pull()$get_raw_data(), adsl)
-
 })
 
 testthat::test_that("code_dataset_connector - Modify vars", {
@@ -691,7 +696,8 @@ testthat::test_that("TealDatasetConnector mutate method with delayed logic", {
   testthat::expect_true(t_dc$is_mutate_delayed())
   testthat::expect_equal(
     pretty_code_string(t_dc$get_code()),
-    c("head_mtcars <- head(mtcars)",
+    c(
+      "head_mtcars <- head(mtcars)",
       "test_ds1 <- head_mtcars",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
       "test_dc$tail_letters <- tail(letters)"
@@ -704,7 +710,8 @@ testthat::test_that("TealDatasetConnector mutate method with delayed logic", {
 
   testthat::expect_equal(
     pretty_code_string(t_dc$get_code()),
-    c("head_mtcars <- head(mtcars)",
+    c(
+      "head_mtcars <- head(mtcars)",
       "test_ds1 <- head_mtcars",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
       "test_dc$tail_letters <- tail(letters)"
@@ -716,7 +723,8 @@ testthat::test_that("TealDatasetConnector mutate method with delayed logic", {
   testthat::expect_true(t_dc$is_mutate_delayed())
   testthat::expect_equal(
     pretty_code_string(t_dc$get_code()),
-    c("head_mtcars <- head(mtcars)",
+    c(
+      "head_mtcars <- head(mtcars)",
       "test_ds1 <- head_mtcars",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
       "head_iris <- head(iris)",
@@ -732,7 +740,8 @@ testthat::test_that("TealDatasetConnector mutate method with delayed logic", {
   testthat::expect_true(t_dc$is_mutate_delayed())
   testthat::expect_equal(
     pretty_code_string(t_dc$get_code()),
-    c("head_mtcars <- head(mtcars)",
+    c(
+      "head_mtcars <- head(mtcars)",
       "test_ds1 <- head_mtcars",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
       "head_iris <- head(iris)",
@@ -770,7 +779,7 @@ testthat::test_that("TealDatasetConnector mutate method with delayed logic", {
 
   # multi layer dependencies
   pull_fun3 <- callable_function(data.frame)
-  pull_fun3$set_args(args = list(neg_integers = - (1:6)))
+  pull_fun3$set_args(args = list(neg_integers = -(1:6))) # nolint
   t_dc3 <- dataset_connector("test_dc3", pull_fun3)
 
   mutate_dataset(t_dc2, code = "test_dc2$neg_integers <- t_dc3$neg_integers", vars = list(t_dc3 = t_dc3))
@@ -798,8 +807,8 @@ testthat::test_that("TealDatasetConnector mutate method with delayed logic", {
 
   # current state
   testthat::expect_true(all(
-    names(t_dc$get_raw_data()) %in% c("head_letters", "tail_letters", "head_integers", "one", "five"))
-  )
+    names(t_dc$get_raw_data()) %in% c("head_letters", "tail_letters", "head_integers", "one", "five")
+  ))
 
   # load_dataset, which calls pull method, will reset to original state because dependencies have changed
   load_dataset(t_dc)
@@ -824,8 +833,8 @@ testthat::test_that("TealDatasetConnector mutate method with delayed logic", {
   load_dataset(t_dc)
   testthat::expect_false(t_dc$is_mutate_delayed())
   testthat::expect_true(all(c(
-    "head_integers", "tail_letters", "head_integers", "one", "five", "six", "seven") %in% names(t_dc$get_raw_data()))
-  )
+    "head_integers", "tail_letters", "head_integers", "one", "five", "six", "seven"
+  ) %in% names(t_dc$get_raw_data())))
 
   testthat::expect_equal(t_dc$get_raw_data()$seven, rep(7, 6))
   testthat::expect_equal(t_dc$get_raw_data()$six, rep(41, 6))
@@ -1010,7 +1019,7 @@ testthat::test_that("Initializing TealDatasetConnector with code argument works"
   )
   testthat::expect_equal(
     t_dc$get_code(),
-    "head_mtcars <- head(mtcars)\ntest_ds1 <- head_mtcars\ntest_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))\ntest_dc$tail_letters = tail(letters)" #nolint
+    "head_mtcars <- head(mtcars)\ntest_ds1 <- head_mtcars\ntest_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))\ntest_dc$tail_letters = tail(letters)" # nolint
   )
   testthat::expect_equal(
     attr(t_dc$get_code_class()$code[[1]], "dataname"),
@@ -1166,7 +1175,8 @@ testthat::test_that("TealDatasetConnect$print prints dataset when it is pulled",
 
   testthat::expect_equal(
     out,
-    c("A TealDatasetConnector object, named test_dc, containing a TealDataset object that has been loaded/pulled:",
+    c(
+      "A TealDatasetConnector object, named test_dc, containing a TealDataset object that has been loaded/pulled:",
       "A TealDataset object containing the following data.frame (6 rows and 1 columns):",
       "  head_letters",
       "1            a",

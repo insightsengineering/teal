@@ -94,7 +94,6 @@ test_that("Delayed data extract - single data connector with two scda dataset co
 # Delayed choices selected - single data connector with two scda dataset connectors ----
 
 test_that("Delayed choices selected - single data connector with two scda dataset connectors", {
-
   adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
   adae <- scda_cdisc_dataset_connector("ADAE", "adae")
   data <- cdisc_data(adsl, adae)
@@ -120,8 +119,7 @@ test_that("Delayed data extract - filtered", {
     list(
       textInput(inputId = ns("name"), label = "scda name", value = "latest")
     )
-  }
-  )
+  })
   adrs <- scda_cdisc_dataset_connector("ADRS", "adrs")
   data <- cdisc_data(adsl, adrs)
 
@@ -134,9 +132,9 @@ test_that("Delayed data extract - filtered", {
       label = "Select endpoints:",
       vars = "ARMCD",
       choices = value_choices("ADSL",
-                              var_choices = "ARMCD",
-                              var_label = "ARM",
-                              subset = function(data) levels(data$ARMCD)[1:2]
+        var_choices = "ARMCD",
+        var_label = "ARM",
+        subset = function(data) levels(data$ARMCD)[1:2]
       ),
       selected = "ARM A",
       multiple = TRUE
@@ -168,9 +166,9 @@ test_that("Delayed data extract - filtered", {
       label = "Select endpoints:",
       vars = "ARMCD",
       choices = value_choices(ADSL,
-                              var_choices = "ARMCD",
-                              var_label = "ARM",
-                              subset = function(data) levels(data$ARMCD)[1:2]
+        var_choices = "ARMCD",
+        var_label = "ARM",
+        subset = function(data) levels(data$ARMCD)[1:2]
       ),
       selected = "ARM A",
       multiple = TRUE
@@ -203,9 +201,9 @@ test_that("Delayed extract filter concatenated - single data connector with two 
       label = "Select endpoints:",
       vars = "ARMCD",
       choices = value_choices("ADSL",
-                              var_choices = "ARMCD",
-                              var_label = "ARM",
-                              subset = function(data) levels(data$ARMCD)[1:2]
+        var_choices = "ARMCD",
+        var_label = "ARM",
+        subset = function(data) levels(data$ARMCD)[1:2]
       ),
       selected = "ARM A",
       multiple = TRUE
@@ -308,9 +306,9 @@ test_that("Delayed extract two filters - single data connector with two scda dat
       label = "Select endpoints:",
       vars = "ARMCD",
       choices = value_choices("ADSL",
-                              var_choices = "ARMCD",
-                              var_label = "ARM",
-                              subset = function(data) levels(data$ARMCD)[1:2]
+        var_choices = "ARMCD",
+        var_label = "ARM",
+        subset = function(data) levels(data$ARMCD)[1:2]
       ),
       selected = "ARM A",
       multiple = TRUE
@@ -368,9 +366,9 @@ test_that("Delayed extract two filters - single data connector with two scda dat
       label = "Select endpoints:",
       vars = "ARMCD",
       choices = value_choices(ADSL,
-                              var_choices = "ARMCD",
-                              var_label = "ARM",
-                              subset = function(data) levels(data$ARMCD)[1:2]
+        var_choices = "ARMCD",
+        var_label = "ARM",
+        subset = function(data) levels(data$ARMCD)[1:2]
       ),
       selected = "ARM A",
       multiple = TRUE
@@ -416,13 +414,13 @@ test_that("Delayed extract two filters - single data connector with two scda dat
 
 # Delayed extract - dataset & connector ----
 test_that("Delayed extract - TealData with single dataset and multiple connectors", {
-
   adsl <- dataset(
     dataname = "ADSL",
     synthetic_cdisc_data("latest")$adsl,
     keys = get_cdisc_keys("ADSL"),
     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl",
-    label = "ADSL")
+    label = "ADSL"
+  )
   adrs <- scda_cdisc_dataset_connector("ADRS", "adrs", keys = get_cdisc_keys("ADRS"))
   adtte <- scda_cdisc_dataset_connector("ADTTE", "adtte", keys = get_cdisc_keys("ADTTE"))
   data <- cdisc_data(adsl, adrs, adtte)

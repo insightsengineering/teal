@@ -73,8 +73,9 @@ test_that("resolve_delayed select_spec works", {
     USUBJID = letters[1:10],
     BMRKR1 = rnorm(10),
     BMRKR2 = sample(c("L", "M", "H"), 10, replace = TRUE),
-    stringsAsFactors = FALSE)
-  attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+    stringsAsFactors = FALSE
+  )
+  attr(ADSL, "keys") <- get_cdisc_keys("ADSL") # nolint
 
   expected_spec <- select_spec(
     choices = variable_choices(ADSL, c("BMRKR1", "BMRKR2")),
@@ -144,7 +145,8 @@ testthat::test_that("delayed version of select_spec", {
         choices = vc_hard_exp,
         selected = vc_hard_short_exp,
         always_selected = NULL,
-        multiple = FALSE, fixed = FALSE, label = NULL),
+        multiple = FALSE, fixed = FALSE, label = NULL
+      ),
       class = c("delayed_select_spec", "delayed_data", "select_spec")
     )
   )
@@ -152,7 +154,8 @@ testthat::test_that("delayed version of select_spec", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- select_spec(
     variable_choices(adsl, subset = c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
-    selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL")))
+    selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL"))
+  )
   testthat::expect_equal(res_obj, exp_obj)
 
   # functional choices & selected
@@ -164,7 +167,8 @@ testthat::test_that("delayed version of select_spec", {
         choices = vc_fun_exp,
         selected = vc_fun_short,
         always_selected = NULL,
-        multiple = FALSE, fixed = FALSE, label = NULL),
+        multiple = FALSE, fixed = FALSE, label = NULL
+      ),
       class = c("delayed_select_spec", "delayed_data", "select_spec")
     )
   )

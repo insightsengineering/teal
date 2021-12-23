@@ -28,8 +28,10 @@ testthat::test_that("init data accepts a single TealDataset/CDISCTealDataset", {
   testthat::expect_error(
     init(
       data = CDISCTealDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL")),
-      modules = mods),
-  NA)
+      modules = mods
+    ),
+    NA
+  )
   testthat::expect_error(init(data = dataset_1, modules = mods), NA)
   testthat::expect_error(init(data = adsl_dataset, modules = mods), NA)
 })
@@ -43,7 +45,8 @@ testthat::test_that("init data accepts a list of single TealDataset/CDISCTealDat
   testthat::expect_error(init(data = list(TealDataset$new("iris", head(iris))), modules = mods), NA)
   testthat::expect_error(init(
     data = list(CDISCTealDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL"))),
-    modules = mods), NA)
+    modules = mods
+  ), NA)
   testthat::expect_error(init(data = dataset_list, modules = mods), NA)
   testthat::expect_error(init(data = cdisc_dataset_list, modules = mods), NA)
 })
@@ -72,7 +75,8 @@ testthat::test_that("init data accepts a list of a TealDataset and a dataframe w
       data1 = TealDataset$new("iris", head(iris)),
       data2 = as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
     ),
-    modules = mods), NA)
+    modules = mods
+  ), NA)
   testthat::expect_error(init(data = list(data1 = dataset_1, data2 = adsl_df), modules = mods), NA)
 })
 
@@ -87,7 +91,7 @@ testthat::test_that("init data accepts TealDatasetConnector object", {
   testthat::expect_error(init(
     data = TealDatasetConnector$new("iris", CallableFunction$new(function() head(iris))),
     modules = mods
-    ), NA)
+  ), NA)
 })
 
 testthat::test_that("init data accepts a list of TealDatasetConnector object", {
@@ -95,5 +99,6 @@ testthat::test_that("init data accepts a list of TealDatasetConnector object", {
   testthat::expect_error(init(data = dsc1, modules = mods), NA)
   testthat::expect_error(
     init(data = list(TealDatasetConnector$new("iris", CallableFunction$new(function() head(iris)))), modules = mods),
-  NA)
+    NA
+  )
 })

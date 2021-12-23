@@ -22,7 +22,6 @@ adsl_fd <- teal:::init_filtered_dataset(adsl_d)
 
 library(MultiAssayExperiment)
 MAE_d <- dataset("MAE", miniACC)
-
 \dontrun{
 shinyApp(
   ui = fluidPage(

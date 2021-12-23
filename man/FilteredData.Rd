@@ -60,7 +60,7 @@ isolate({
 
   df <- datasets$get_data("iris", filtered = FALSE)
   print(df)
- })
+})
 
 
 filter_state_iris <- teal:::init_filter_state(

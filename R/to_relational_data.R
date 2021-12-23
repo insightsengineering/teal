@@ -29,7 +29,7 @@ to_relational_data.data.frame <- function(data) { # nolint #nousage
 }
 
 #' @export
-to_relational_data.TealDataset <- function(data) { #nousage
+to_relational_data.TealDataset <- function(data) { # nousage
   dataname <- get_dataname(data)
 
   if (dataname %in% names(default_cdisc_keys)) {
@@ -45,7 +45,7 @@ to_relational_data.TealDatasetConnector <- function(data) { # nolint #nousage
 }
 
 #' @export
-to_relational_data.list <- function(data) { #nousage
+to_relational_data.list <- function(data) { # nousage
   call <- substitute(data, parent.frame())
   list_names <- names(data)
   parsed_names <- as.character(call)[-1]
@@ -53,14 +53,14 @@ to_relational_data.list <- function(data) { #nousage
   if (
     (
       is_empty(list_names) &&
-      is_empty(parsed_names) &&
-      (
-        any(sapply(data, function(x) inherits(x, "dataset"))) ||
-        any(sapply(data, function(x) inherits(x, "data.frame")))
-      )
+        is_empty(parsed_names) &&
+        (
+          any(sapply(data, function(x) inherits(x, "dataset"))) ||
+            any(sapply(data, function(x) inherits(x, "data.frame")))
+        )
     ) ||
-    (any(list_names == "") && is_empty(parsed_names)) ||
-    (any(is.na(list_names)))
+      (any(list_names == "") && is_empty(parsed_names)) ||
+      (any(is.na(list_names)))
   ) {
     stop("Unnamed lists shouldn't be provided as input for data. Please use a named list.")
   }
@@ -96,6 +96,6 @@ to_relational_data.list <- function(data) { #nousage
 }
 
 #' @export
-to_relational_data.MultiAssayExperiment <- function(data) { #nousage # nolint
+to_relational_data.MultiAssayExperiment <- function(data) { # nousage # nolint
   teal_data(mae_dataset("MAE", data))
 }

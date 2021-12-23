@@ -47,8 +47,10 @@ CDISCTealData <- R6::R6Class( # nolint
           }
           new_parent <- c(new_parent, added_parent)
         } else {
-          stop(paste("The child elements of CDISCTealData should be only of TealDataset or TealDatasetConnector or",
-                     "TealDataConnector class."))
+          stop(paste(
+            "The child elements of CDISCTealData should be only of TealDataset or TealDatasetConnector or",
+            "TealDataConnector class."
+          ))
         }
       }
 

@@ -29,11 +29,15 @@ Set arguments of a \code{CallableFunction}
 }
 \examples{
 library(scda)
-f <- function(df) {synthetic_cdisc_data('latest')[[df]]}
+f <- function(df) {
+  synthetic_cdisc_data("latest")[[df]]
+}
 fun <- callable_function(f)
 set_args(fun, list(df = "adsl"))
 library(scda)
-f <- function(df) {synthetic_cdisc_data('latest')[[df]]}
+f <- function(df) {
+  synthetic_cdisc_data("latest")[[df]]
+}
 code <- callable_code("f()")
 set_args(code, list(df = "adsl"))
 ds <- dataset_connector("x", pull_callable = callable_function(data.frame))

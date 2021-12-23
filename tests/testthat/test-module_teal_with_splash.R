@@ -4,7 +4,7 @@ data <- teal_data(iris_ds, mtcars_ds)
 
 test_module1 <- module(
   label = "iris_tab",
-  ui =  function(id, ...) NULL,
+  ui = function(id, ...) NULL,
   server = function(id, datasets) moduleServer(id, function(input, output, session) NULL),
   filters = "iris"
 )
@@ -25,7 +25,7 @@ testthat::test_that("srv_teal_with_splash creates reactiveVal returning data inp
 })
 
 testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns NULL before loading", {
-  x <- dataset_connector(dataname = "test_dataset",  pull_callable = callable_code("iris"))
+  x <- dataset_connector(dataname = "test_dataset", pull_callable = callable_code("iris"))
   delayed_data <- teal_data(x)
   shiny::testServer(
     app = srv_teal_with_splash,
@@ -40,7 +40,7 @@ testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns 
 
 testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns pulled data when loaded", {
   suppress_logs()
-  x <- dataset_connector(dataname = "test_dataset",  pull_callable = callable_code("iris"))
+  x <- dataset_connector(dataname = "test_dataset", pull_callable = callable_code("iris"))
   delayed_data <- teal_data(x)
   shiny::testServer(
     app = srv_teal_with_splash,

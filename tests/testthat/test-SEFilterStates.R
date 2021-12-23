@@ -7,10 +7,12 @@ get_test_data <- function() {
     rep(c("chr1", "chr2"), c(50, 150)),
     IRanges(floor(runif(200, 1e5, 1e6)), width = 100),
     strand = sample(c("+", "-"), 200, TRUE),
-    feature_id = sprintf("ID%03d", 1:200))
+    feature_id = sprintf("ID%03d", 1:200)
+  )
   cdata <- DataFrame(
     Treatment = rep(c("ChIP", "Input"), 3),
-    row.names = LETTERS[1:6])
+    row.names = LETTERS[1:6]
+  )
 
   obj <- SummarizedExperiment(
     assays = list(counts = counts),
@@ -91,7 +93,8 @@ testthat::test_that("set_filter_state throws error when state argument is not a 
 
 ## acceptable inputs to set_filter_state
 testthat::test_that(
-  "set_filter_state returns NULL when state argument contains subset and select set as NULL", {
+  "set_filter_state returns NULL when state argument contains subset and select set as NULL",
+  code = {
     filter_states <- SEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test",
@@ -197,7 +200,8 @@ testthat::test_that("SEFilterStates$set_filter_state sets state with neither sub
 })
 
 testthat::test_that(
-  "SEFilterStates$set_filter_state sets filters in ReactiveQueue specified by the named list", {
+  "SEFilterStates$set_filter_state sets filters in ReactiveQueue specified by the named list",
+  code = {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -222,7 +226,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "SEFilterStates$remove_filter_state removes filters in ReactiveQueue", {
+  "SEFilterStates$remove_filter_state removes filters in ReactiveQueue",
+  code = {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -248,7 +253,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "SEFilterStates$remove_filter_state removes all filters in ReactiveQueue", {
+  "SEFilterStates$remove_filter_state removes all filters in ReactiveQueue",
+  code = {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -271,7 +277,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "SEFilterStates$remove_filter_state throws error when list is not named", {
+  "SEFilterStates$remove_filter_state throws error when list is not named",
+  code = {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -291,7 +298,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "SEFilterStates$remove_filter_state throws warning when list has unknown name in the FilterState", {
+  "SEFilterStates$remove_filter_state throws warning when list has unknown name in the FilterState",
+  code = {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(

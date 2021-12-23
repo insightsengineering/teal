@@ -40,10 +40,12 @@ JoinKeys <- R6::R6Class( # nolint
     split = function() {
       list_of_list_of_join_key_set <- lapply(
         names(self$get()),
-        function(dataset_1) lapply(
-          names(self$get()[[dataset_1]]),
-          function(dataset_2) join_key(dataset_1, dataset_2, self$get()[[dataset_1]][[dataset_2]])
-        )
+        function(dataset_1) {
+          lapply(
+            names(self$get()[[dataset_1]]),
+            function(dataset_2) join_key(dataset_1, dataset_2, self$get()[[dataset_1]][[dataset_2]])
+          )
+        }
       )
       res <- lapply(
         list_of_list_of_join_key_set,
@@ -68,8 +70,9 @@ JoinKeys <- R6::R6Class( # nolint
       }
       for (jk in x) {
         for (dataset_1 in names(jk$get())) {
-          for (dataset_2 in names(jk$get()[[dataset_1]]))
+          for (dataset_2 in names(jk$get()[[dataset_1]])) {
             self$mutate(dataset_1, dataset_2, jk$get()[[dataset_1]][[dataset_2]])
+          }
         }
       }
       logger::log_trace("JoinKeys$merge keys merged.")
@@ -144,9 +147,7 @@ JoinKeys <- R6::R6Class( # nolint
   ## __Private Fields ====
   private = list(
     .keys = list(),
-
     join_pair = function(join_key) {
-
       dataset_1 <- join_key$dataset_1
       dataset_2 <- join_key$dataset_2
       keys <- join_key$keys
@@ -161,18 +162,16 @@ JoinKeys <- R6::R6Class( # nolint
           private$.keys[[dataset_2]] <- list()
         }
 
-        if (length(keys) > 0){
+        if (length(keys) > 0) {
           keys <- setNames(names(keys), keys)
         }
         private$.keys[[dataset_2]][[dataset_1]] <- keys
       }
-
     },
     # helper function to deterimine if two key sets contain incompatible keys
     # return TRUE if compatible, throw error otherwise
-    check_compatible_keys = function(join_key_1, join_key_2){
-
-      error_message <- function(dataset_1, dataset_2){
+    check_compatible_keys = function(join_key_1, join_key_2) {
+      error_message <- function(dataset_1, dataset_2) {
         stop(
           paste("cannot specify multiple different join keys between datasets:", dataset_1, "and", dataset_2)
         )
@@ -198,7 +197,7 @@ JoinKeys <- R6::R6Class( # nolint
         }
 
         if (xor(is_empty(join_key_1$keys), is_empty(join_key_2$keys)) ||
-            !identical(sort(join_key_1$keys), sort(setNames(names(join_key_2$keys), join_key_2$keys)))) {
+          !identical(sort(join_key_1$keys), sort(setNames(names(join_key_2$keys), join_key_2$keys)))) {
           error_message(join_key_1$dataset_1, join_key_1$dataset_2)
         }
       }
@@ -235,8 +234,9 @@ JoinKeys <- R6::R6Class( # nolint
 join_keys <- function(...) {
   x <- list(...)
   res <- JoinKeys$new()
-  if (!is_empty(x))
+  if (!is_empty(x)) {
     res$set(x)
+  }
   res
 }
 
@@ -294,7 +294,6 @@ mutate_join_keys.JoinKeys <- function(x, dataset_1, dataset_2, val) {
 #'
 #' mutate_join_keys(x, "ADSL", "ADRS", c("COLUMN1" = "COLUMN2"))
 #' x$get_join_keys()$get("ADSL", "ADRS")
-#'
 mutate_join_keys.TealData <- function(x, dataset_1, dataset_2, val) { # nolint
   x$mutate_join_keys(dataset_1, dataset_2, val)
 }

@@ -106,7 +106,7 @@ ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") # nolint
 
 fun <- callable_function(fun = function(ADSL) { # nolint
   ADSL_2 <- ADSL # nolint
-  ADSL_2$new_col <- TRUE
+  ADSL_2$new_col <- TRUE # nolint
   ADSL_2
 })
 
@@ -169,11 +169,11 @@ library(magrittr)
 
 ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") %>% head(3) # nolint
 
-adsl_dataset <- cdisc_dataset(dataname = "ADSL",
-                      x = ADSL,
-                      code = "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\") %>% head(3)"
+adsl_dataset <- cdisc_dataset(
+  dataname = "ADSL",
+  x = ADSL,
+  code = "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\") %>% head(3)"
 )
-
 ```
 
 The object created above contains all previously defined attributes which can be
@@ -352,9 +352,13 @@ rice_conn$set_open_ui(
 
 rice_conn$set_open_server(
   function(input, output, session, connection) {
-    connection$open(args = list(username = input$username,
-                                password = input$password),
-                    try = TRUE)
+    connection$open(
+      args = list(
+        username = input$username,
+        password = input$password
+      ),
+      try = TRUE
+    )
 
     if (connection$is_open_failed()) {
       shinyjs::alert(
@@ -427,7 +431,7 @@ ignore every arguments set with `set_pull_args`.
 ```{r}
 cat(get_code(data))
 
-#pull ADSL and ADSL_3
+# pull ADSL and ADSL_3
 data$set_pull_args(args = list(name = "latest"))
 data$pull()
 ```
@@ -515,11 +519,13 @@ objects are passed as the `data` argument into `teal::init`.
 
 ```{r}
 data <- cdisc_data(
-  cdisc_dataset(dataname = "ADSL",
+  cdisc_dataset(
+    dataname = "ADSL",
     synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest"),
     code = "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"
   ),
-  cdisc_dataset(dataname = "ADTTE",
+  cdisc_dataset(
+    dataname = "ADTTE",
     synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest"),
     code = "ADTTE <- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"
   )
@@ -590,7 +596,8 @@ adsl <- cdisc_dataset(
 
 
 adtte <- scda_cdisc_dataset_connector(
-  dataname = "ADTTE", "adtte") %>%
+  dataname = "ADTTE", "adtte"
+) %>%
   mutate_dataset(code = "ADTTE$x2 <- 2")
 ```
 
@@ -754,11 +761,12 @@ data_extract_x <- data_extract_spec(
   ),
   filter = filter_spec(
     label = "Select endpoints:",
-    vars = "ARMCD", #variable_choices("ADSL", "ARMCD") # nolint
+    vars = "ARMCD", # variable_choices("ADSL", "ARMCD") # nolint
     choices = value_choices("ADSL",
-                            var_choices = "ARMCD",
-                            var_label = "ARM",
-                            subset = function(data) unique(as.character(data$ARMCD))),
+      var_choices = "ARMCD",
+      var_label = "ARM",
+      subset = function(data) unique(as.character(data$ARMCD))
+    ),
     selected = "ARM A",
     multiple = TRUE
   )
@@ -784,7 +792,8 @@ data_extract_y <- data_extract_spec(
             sep = " - "
           )
         )
-      }),
+      }
+    ),
     multiple = TRUE
   )
 )

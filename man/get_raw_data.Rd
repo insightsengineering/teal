@@ -42,7 +42,9 @@ get_raw_data(x)
 # TealDatasetConnector ---------
 library(scda)
 pull_fun_adsl <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adsl}
+  function() {
+    synthetic_cdisc_data("latest")$adsl
+  }
 )
 dc <- dataset_connector("ADSL", pull_fun_adsl)
 load_dataset(dc)
@@ -50,32 +52,39 @@ get_raw_data(dc)
 
 # TealData ----------------
 library(scda)
-adsl <- cdisc_dataset(dataname = "ADSL",
-                      x = synthetic_cdisc_data("latest")$adsl,
-                      code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
+adsl <- cdisc_dataset(
+  dataname = "ADSL",
+  x = synthetic_cdisc_data("latest")$adsl,
+  code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl"
+)
 
-adtte <- cdisc_dataset(dataname = "ADTTE",
-                       x = synthetic_cdisc_data("latest")$adtte,
-                       code = "library(scda)\nADTTE <- synthetic_cdisc_data(\"latest\")$adtte")
+adtte <- cdisc_dataset(
+  dataname = "ADTTE",
+  x = synthetic_cdisc_data("latest")$adtte,
+  code = "library(scda)\nADTTE <- synthetic_cdisc_data(\"latest\")$adtte"
+)
 
 rd <- teal:::TealData$new(adsl, adtte)
 get_raw_data(rd)
 
 # TealDataConnector --------
 adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
-adsl <- cdisc_dataset_connector(dataname = "ADSL",
-                                pull_callable = adsl_cf,
-                                keys = get_cdisc_keys("ADSL"))
+adsl <- cdisc_dataset_connector(
+  dataname = "ADSL",
+  pull_callable = adsl_cf,
+  keys = get_cdisc_keys("ADSL")
+)
 adlb_cf <- callable_function(function() synthetic_cdisc_data("latest")$adlb)
-adlb <- cdisc_dataset_connector(dataname = "ADLB",
-                                pull_callable = adlb_cf,
-                                keys = get_cdisc_keys("ADLB"))
+adlb <- cdisc_dataset_connector(
+  dataname = "ADLB",
+  pull_callable = adlb_cf,
+  keys = get_cdisc_keys("ADLB")
+)
 
 rdc <- relational_data_connector(
   connection = data_connection(),
   connectors = list(adsl, adlb)
 )
-
 \dontrun{
 load_datasets(rdc)
 get_raw_data(rdc)

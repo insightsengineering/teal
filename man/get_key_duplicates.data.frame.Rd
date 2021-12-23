@@ -25,11 +25,10 @@ looks for \code{primary_key} attribute of the \code{dataset}. If neither are pro
 }
 \examples{
 df <- as.data.frame(
-  list(a = c('a', 'a', 'b', 'b', 'c'), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
+  list(a = c("a", "a", "b", "b", "c"), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
 )
-res <- get_key_duplicates(df, keys = c('a', 'b')) # duplicated keys are in rows 3 and 4
+res <- get_key_duplicates(df, keys = c("a", "b")) # duplicated keys are in rows 3 and 4
 print(res) # outputs a tibble
-
 }
 \seealso{
 \link{get_key_duplicates} \link{get_key_duplicates_util}

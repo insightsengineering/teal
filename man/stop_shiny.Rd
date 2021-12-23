@@ -18,7 +18,9 @@ This will start a separate shiny app with a message
 \examples{
 \dontrun{
 stop_shiny("No data access", "You do not seem to have data access")
-stop_shiny("No data access", tagList(tags$h2("Hello World"), tags$p("paragraph"),
-tags$footer("Please contact", tags$a(href = "mailto:john@doe.com", "John Doe"))))
+stop_shiny("No data access", tagList(
+  tags$h2("Hello World"), tags$p("paragraph"),
+  tags$footer("Please contact", tags$a(href = "mailto:john@doe.com", "John Doe"))
+))
 }
 }

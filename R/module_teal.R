@@ -142,7 +142,9 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     )
 
     datasets_reactive <- reactive({
-      if (is.null(raw_data())) return(NULL)
+      if (is.null(raw_data())) {
+        return(NULL)
+      }
       progress <<- shiny::Progress$new(session)
       progress$set(0.25, message = "Setting data")
       # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
@@ -180,10 +182,12 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)
       # `once = TRUE` ensures this
-      active_module <- srv_tabs_with_filters(id = "main_ui",
-                                             datasets =  datasets_reactive(),
-                                             modules = modules,
-                                             filter = filter)
+      active_module <- srv_tabs_with_filters(
+        id = "main_ui",
+        datasets = datasets_reactive(),
+        modules = modules,
+        filter = filter
+      )
       return(active_module)
     })
   })

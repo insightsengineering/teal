@@ -41,7 +41,7 @@ testthat::test_that("MAEFilteredDataset$get_call returns a call with applying fi
   testthat::expect_identical(
     get_call_output$subjects,
     quote(
-      miniACC_FILTERED <- MultiAssayExperiment::subsetByColData( #nolint
+      miniACC_FILTERED <- MultiAssayExperiment::subsetByColData( # nolint
         miniACC,
         y = !is.na(miniACC$race) & miniACC$race == "white"
       )
@@ -144,7 +144,8 @@ testthat::test_that("get_filter_overview_info returns overview matrix for MAEFil
 })
 
 testthat::test_that(
-  "MAEFilteredDataset$set_filter_state sets filters in FilterStates specified by list names", {
+  "MAEFilteredDataset$set_filter_state sets filters in FilterStates specified by list names",
+  code = {
     dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
@@ -163,7 +164,7 @@ testthat::test_that(
         subjects = quote(
           MAE_FILTERED <- MultiAssayExperiment::subsetByColData( # nolint
             MAE,
-            y = MAE$years_to_birth >=  30 & MAE$years_to_birth <= 50 &
+            y = MAE$years_to_birth >= 30 & MAE$years_to_birth <= 50 &
               MAE$vital_status == "1" &
               MAE$gender == "female"
           )
@@ -180,7 +181,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "MAEFilteredDataset$set_filter_state throws error when using unnamed list", {
+  "MAEFilteredDataset$set_filter_state throws error when using unnamed list",
+  code = {
     dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       list(
@@ -197,7 +199,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "MAEFilteredDataset$set_filter_state throws error when using unnamed variables list", {
+  "MAEFilteredDataset$set_filter_state throws error when using unnamed variables list",
+  code = {
     dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
@@ -224,7 +227,8 @@ testthat::test_that("MAEFilteredDataset$set_filter_state throws error if state a
 })
 
 testthat::test_that(
-  "MAEFilteredDataset$remove_filter_state removes desired filter", {
+  "MAEFilteredDataset$remove_filter_state removes desired filter",
+  code = {
     dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
@@ -261,7 +265,8 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "MAEFilteredDataset$remove_filter_state throws error if list in unnamed", {
+  "MAEFilteredDataset$remove_filter_state throws error if list in unnamed",
+  code = {
     dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
@@ -303,7 +308,7 @@ testthat::test_that("MAEFilteredDataset filters removed using remove_filters", {
       subjects = quote(
         MAE_FILTERED <- MultiAssayExperiment::subsetByColData( # nolint
           MAE,
-          y = MAE$years_to_birth >=  30 & MAE$years_to_birth <= 50 &
+          y = MAE$years_to_birth >= 30 & MAE$years_to_birth <= 50 &
             MAE$vital_status == "1" &
             MAE$gender == "female"
         )
@@ -325,5 +330,5 @@ testthat::test_that("MAEFilteredDataset filters removed using remove_filters", {
     }
   )
 
-  testthat::expect_identical(isolate(filtered_dataset$get_call()), list(subjects = quote(MAE_FILTERED <- MAE))) #nolint
+  testthat::expect_identical(isolate(filtered_dataset$get_call()), list(subjects = quote(MAE_FILTERED <- MAE))) # nolint
 })

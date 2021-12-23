@@ -8,8 +8,8 @@
 #' @param data (`TealData`)
 #' @return dummy filter states
 get_dummy_filter <- function(data) { # nousage # nolint
-  ADSL <- get_raw_data(x = data, dataname = "ADSL") #nolint
-  ADLB <- get_raw_data(x = data, dataname = "ADLB") #nolint
+  ADSL <- get_raw_data(x = data, dataname = "ADSL") # nolint
+  ADLB <- get_raw_data(x = data, dataname = "ADLB") # nolint
 
   res <- list(
     ADSL = list(
@@ -57,8 +57,8 @@ get_dummy_cdisc_data <- function() { # nousage # nolint
     ADLB <- scda::synthetic_cdisc_data("latest")$adlb # nolint
   })
 
-  ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
-  ADSL$SEX[1:150] <- NA
+  ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE) # nolint
+  ADSL$SEX[1:150] <- NA # nolint
 
   res <- cdisc_data(
     cdisc_dataset(dataname = "ADSL", x = ADSL),
@@ -68,7 +68,8 @@ get_dummy_cdisc_data <- function() { # nousage # nolint
       ADSL <- synthetic_cdisc_data(\"latest\")$adsl
       ADAE <- synthetic_cdisc_data(\"latest\")$adae
       ADLB <- synthetic_cdisc_data(\"latest\")$adlb
-    ")
+    "
+  )
   return(res)
 }
 

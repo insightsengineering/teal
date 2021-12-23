@@ -31,7 +31,6 @@ log_app_usage <- function(ta,
                           indication,
                           anl_type,
                           pkg_meta = c("Package", "Title", "Version", "RemoteRef")) {
-
   lifecycle::deprecate_soft(
     when = "0.10.1",
     what = "log_app_usage()",
@@ -58,10 +57,10 @@ log_app_usage <- function(ta,
   }
 
   # assign app usage data fields
-  log_usage <- line_usage_log(ta, molecule, indication, anl_type) #nolint
+  log_usage <- line_usage_log(ta, molecule, indication, anl_type) # nolint
 
   # retrieve and assign package metadata
-  log_pkgs <- line_pkg_log(fields = pkg_meta)  #nolint
+  log_pkgs <- line_pkg_log(fields = pkg_meta) # nolint
 
   # save usage and package metadata to log file as single record per session
   cat(paste(log_usage, log_pkgs, sep = "|"), file = "./logs/utilization.log", append = TRUE)
@@ -99,14 +98,17 @@ line_usage_log <- function(...) {
 #'
 #' @examples
 #' \dontrun{
-#' teal.utils:::line_pkg_log(pkgs = c("rtables", "tern", "teal"),
-#' fields = c("Package", "Title", "Version", "RemoteRef"))
+#' teal.utils:::line_pkg_log(
+#'   pkgs = c("rtables", "tern", "teal"),
+#'   fields = c("Package", "Title", "Version", "RemoteRef")
+#' )
 #' }
 line_pkg_log <- function(fields) {
   nest_packages <- c(
     "utils.nest", "rtables", "hermes", "teal.modules.hermes",
     "tern", "teal", "teal.devel", "teal.modules.general", "teal.modules.clinical",
-    "osprey", "teal.osprey", "goshawk", "teal.goshawk")
+    "osprey", "teal.osprey", "goshawk", "teal.goshawk"
+  )
   pkg_desc <- utils::sessionInfo()$otherPkgs
   pkg_desc <- lapply(pkg_desc, function(x) if (x$Package %in% nest_packages) x[fields] else NULL)
   pkg_desc <- Filter(Negate(is.null), pkg_desc)

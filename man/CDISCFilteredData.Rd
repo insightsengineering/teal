@@ -50,7 +50,7 @@ datasets <- teal:::CDISCFilteredData$new()
 isolate({
   datasets$set_dataset(adsl)
   datasets$set_dataset(adtte)
- })
+})
 
 
 isolate({
@@ -64,7 +64,7 @@ isolate({
 
   df <- datasets$get_data("ADSL", filtered = FALSE)
   print(df)
- })
+})
 
 
 filter_state_adtte <- teal:::init_filter_state(

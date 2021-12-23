@@ -66,8 +66,9 @@ CallableCode <- R6::R6Class( # nolint
       stop_if_not(
         list(
           is.null(args),
-          "'args' are not used to retrieve the call.")
+          "'args' are not used to retrieve the call."
         )
+      )
 
       res <- if (deparse) {
         paste0(vapply(private$call, deparse1, character(1)), collapse = "\n")

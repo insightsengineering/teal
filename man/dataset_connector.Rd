@@ -60,16 +60,20 @@ Create \code{TealDatasetConnector} from \link{callable_function}.
 library(MultiAssayExperiment)
 # data.frame example
 pull_fun2 <- callable_function(data.frame)
-pull_fun2$set_args(args = list(a = c(1,2,3)))
+pull_fun2$set_args(args = list(a = c(1, 2, 3)))
 dataset_connector("test", pull_fun2)
 
 # MultiAssayExperiment example
 pull_fun <- callable_function(
-  function() { library("MultiAssayExperiment"); data("miniACC"); return(miniACC) })
+  function() {
+    library("MultiAssayExperiment")
+    data("miniACC")
+    return(miniACC)
+  }
+)
 dataset_connector(
   "miniacc",
   pull_fun,
   code = 'library("MultiAssayExperiment"); data("miniACC"); return(miniACC)'
 )
-
 }
