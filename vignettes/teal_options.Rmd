@@ -1,0 +1,68 @@
+---
+title: "Modifying a Teal application with R options"
+author: "Paweł Rucki"
+date: " 2021-12-23"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Teal Application Options}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::knitr}
+editor_options:
+  chunk_output_type: console
+---
+
+# Motivation
+Some `R` packages use `options` to modify their runtime behaviour. These usually specify default values for internal functions or determine particular behaviours. For example, `testthat` uses an option `testthat.progress.max_fails` to define a default number of failed expectations before the testing functions terminate execution. While some of these adjustable values can be exposed as function parameters, some are destined to remain an option. This vignette details the options available to users of `teal`, `teal.modules.general`, `teal.modules.clinical` and `teal.devel`.
+
+# Setting an option
+At any time during an interactive session, you can change an option using:
+```{r}
+options(option_to_set = "value")
+```
+The function `getOption` allows to inspect the value of an option:
+```{r}
+getOption("option_to_set")
+```
+
+Once set, the value of an option persists during a session, but it returns to the default value in a new session. Make sure to change the options after all the `teal`-related packages are loaded because some of them initialize the options themselves and will overwrite your custom values.
+
+# Options used in a `teal` application
+## `teal` package
+### `teal.log_layout` (`character`)
+This defines the layout of a log message used in a `teal` application. `teal` uses this layout to format the emitted log messages. Read the documentation of `teal::register_logger` for more information.
+
+Default: `"{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} fun:{fn} [{level}] {msg}"`.
+
+### `teal.log_level` (`character`)
+This is the logging level threshold used in a `teal` application. A `teal` application will not emit logs below this level. Read the documentation of `teal::register_logger` for more information. Possible values: `"TRACE"`, `"INFO"`, `"WARNING"`, `"ERROR"`.
+
+Default: `"INFO"`.
+
+### `teal_logging`
+Deprecated.
+
+### `teal.show_js_log` (`logical`)
+This indicates whether to print the `Javascript` console logs to the `R` console. If set to `TRUE`, the logs will be printed; otherwise, they won't.
+
+Default: `FALSE`.
+
+### `teal.threshold_slider_vs_checkboxgroup` (`numeric`)
+It is the threshold number of unique variable values below which a numeric variable is treated the same way as a factor in the filter panel. As an example, imagine `teal.threshold_slider_vs_checkboxgroup` equals to 2. Then a numeric variable `c(1, 1, 1)`, which has only one unique value (a digit `1`), is treated as a factor in the filter panel (and in the filter panel only!). The filter panel creates a checkbox widget to filter values from this variable, as it would for a factor variable, instead of a usual slider widget for numeric variables.
+
+Default: 5.
+
+## `teal.devel` package
+### `teal.basic_table_args` (`basic_table_args` object)
+This specifies the list of arguments passed to every call to `rtables::basic_table` made in a `teal` application. This can be used to format `rtables` without making any changes to the application code. See the documentation of `teal.devel::basic_table_args` for more information.
+
+Default: `teal.devel::basic_table_args()`.
+
+### `teal.load_nest_code` (`character`)
+The value of this option is appended to the top of the code rendered when using the `Show R Code` modal button. See the documentation of `
+
+Default: `"# Add any code to install/load your NEST environment here"`.
+
+### `teal.ggplot2_args`
+This option allows modifying labels and themes of all `ggplot2` plots in a `teal` application. See the documentation of `teal.devel::ggplot2_args` for more information.
+
+Default: `teal.devel::ggplot2_args()`.
