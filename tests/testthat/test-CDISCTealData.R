@@ -1125,7 +1125,7 @@ testthat::test_that("Error - objects differs", {
 
 testthat::test_that("Error - ADSL is missing in cdisc_data", {
   testthat::expect_error(
-    { # nolint
+    object = {
       x <- cdisc_data(
         cdisc_dataset("ADTTE", adtte_raw),
         code = "ADTTE <- synthetic_cdisc_data(\"latest\")$adtte", check = FALSE

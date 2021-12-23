@@ -561,21 +561,21 @@ test_that("mutate_dataset", {
   })
 
   expect_error(
-    { # nolint
+    object = {
       mutate_dataset(x = test_ds)
     },
     "is_character_single(code) || is_character_single(script) is not TRUE"
   )
 
   expect_error(
-    { # nolint
+    object = {
       mutate_dataset(x = test_ds, code = TRUE)
     },
     "character"
   )
 
   expect_error(
-    { # nolint
+    object = {
       mutate_dataset(x = test_ds, code = "y <- test")
     },
     "Evaluation of the code failed"
@@ -597,14 +597,14 @@ test_that("mutate_dataset", {
   )
 
   expect_error(
-    { # nolint
+    objecy = {
       test_ds %>% mutate_dataset("x <- 3")
     },
     "object 'test' not found"
   )
 
   expect_error(
-    { # nolint
+    object = {
       test_ds %>% mutate_dataset(c("x <- 3", "som"))
     },
     "is_character_vector"
@@ -684,7 +684,7 @@ test_that("mutate_dataset", {
   expect_true(is(test_ds_mut, "TealDataset"))
 
   expect_error(
-    { # nolint
+    object = {
       test_ds_mut <- test_ds %>% mutate_dataset(code = "rm('testds')")
     },
     "Code from testds need to return a data.frame"

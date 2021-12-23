@@ -94,7 +94,7 @@ testthat::test_that("set_filter_state throws error when state argument is not a 
 ## acceptable inputs to set_filter_state
 testthat::test_that(
   "set_filter_state returns NULL when state argument contains subset and select set as NULL",
-  { # nolint
+  code = {
     filter_states <- SEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test",
@@ -201,7 +201,7 @@ testthat::test_that("SEFilterStates$set_filter_state sets state with neither sub
 
 testthat::test_that(
   "SEFilterStates$set_filter_state sets filters in ReactiveQueue specified by the named list",
-  { # nolint
+  code = {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -227,7 +227,7 @@ testthat::test_that(
 
 testthat::test_that(
   "SEFilterStates$remove_filter_state removes filters in ReactiveQueue",
-  { # nolint
+  code = {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -254,7 +254,7 @@ testthat::test_that(
 
 testthat::test_that(
   "SEFilterStates$remove_filter_state removes all filters in ReactiveQueue",
-  { # nolint
+  code = {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -278,7 +278,7 @@ testthat::test_that(
 
 testthat::test_that(
   "SEFilterStates$remove_filter_state throws error when list is not named",
-  { # nolint
+  code = {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -299,7 +299,7 @@ testthat::test_that(
 
 testthat::test_that(
   "SEFilterStates$remove_filter_state throws warning when list has unknown name in the FilterState",
-  { # nolint
+  code = {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(

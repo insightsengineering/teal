@@ -122,7 +122,7 @@ testthat::test_that("get call returns a call assigning the filtered object to <n
 
 testthat::test_that(
   "FilteredData$set_filter_state sets filters in FilteredDataset specified by the named list",
-  { # nolint
+  code = {
     datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
@@ -166,7 +166,7 @@ testthat::test_that(
 
 testthat::test_that(
   "FilteredData$set_filter_state throws error with unnamed datasets list",
-  { # nolint
+  code = {
     datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
@@ -186,7 +186,7 @@ testthat::test_that(
 
 testthat::test_that(
   "FilteredData$set_filter_state throws error with unnamed variables list",
-  { # nolint
+  code = {
     datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
@@ -206,7 +206,7 @@ testthat::test_that(
 
 testthat::test_that(
   "FilteredData$remove_all_filter_states removes all filters of all datasets in FilteredData",
-  { # nolint
+  code = {
     datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))
@@ -241,7 +241,7 @@ testthat::test_that(
 
 testthat::test_that(
   "FilteredData$remove_all_filter_states remove the filters of the desired dataset only",
-  { # nolint
+  code = {
     datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
     datasets$set_dataset(dataset("mtcars", mtcars))

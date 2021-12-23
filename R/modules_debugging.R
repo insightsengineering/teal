@@ -186,7 +186,7 @@ reset_filters_module <- function(label = "Reset Filters Module", active_dataname
       # Therefore, we ignore the first reactive cycle. The UI is ready at the next reactive cycle.
       active_datanames_r_next_cycle <- trigger_after_first_cycle(active_datanames_r)
       observeEvent(active_datanames_r_next_cycle(),
-        { # nolint
+        handlerExpr = {
           # we want to run this once the "datasets_to_reset" UI exists
           updateCheckboxGroupInput(
             session, "datasets_to_reset",

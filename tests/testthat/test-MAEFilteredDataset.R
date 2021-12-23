@@ -145,7 +145,7 @@ testthat::test_that("get_filter_overview_info returns overview matrix for MAEFil
 
 testthat::test_that(
   "MAEFilteredDataset$set_filter_state sets filters in FilterStates specified by list names",
-  { # nolint
+  code = {
     dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
@@ -182,7 +182,7 @@ testthat::test_that(
 
 testthat::test_that(
   "MAEFilteredDataset$set_filter_state throws error when using unnamed list",
-  { # nolint
+  code = {
     dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       list(
@@ -200,7 +200,7 @@ testthat::test_that(
 
 testthat::test_that(
   "MAEFilteredDataset$set_filter_state throws error when using unnamed variables list",
-  { # nolint
+  code = {
     dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
@@ -228,7 +228,7 @@ testthat::test_that("MAEFilteredDataset$set_filter_state throws error if state a
 
 testthat::test_that(
   "MAEFilteredDataset$remove_filter_state removes desired filter",
-  { # nolint
+  code = {
     dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(
@@ -266,7 +266,7 @@ testthat::test_that(
 
 testthat::test_that(
   "MAEFilteredDataset$remove_filter_state throws error if list in unnamed",
-  { # nolint
+  code = {
     dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
     fs <- list(
       subjects = list(

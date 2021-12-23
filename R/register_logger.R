@@ -68,7 +68,7 @@ register_logger <- function(namespace = NA_character_,
   if (is.null(layout)) layout <- Sys.getenv("TEAL.LOG_LAYOUT")
   if (is.null(layout) || layout == "") layout <- getOption("teal.log_layout")
   tryCatch(
-    { # nolint
+    expr = {
       logger::log_layout(layout_teal_glue_generator(layout), namespace = namespace)
       logger::log_appender(logger::appender_file(nullfile()), namespace = namespace)
       logger::log_success("Set up the logger", namespace = namespace)

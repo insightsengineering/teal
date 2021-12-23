@@ -94,7 +94,7 @@ testthat::test_that("CallableFunction returns the correct name if passed a funct
 
 testthat::test_that(
   "CallableFunction throws an error if passed a namespace function via a binding in the parent frame",
-  { # nolint
+  code = {
     x <- print
     testthat::expect_error(callable_function("x")$get_call(), "object 'x' of mode 'function' was not found")
   }
@@ -271,7 +271,7 @@ testthat::test_that("test callable errors", {
   )
 
   testthat::expect_equal(
-    { # nolint
+    object = {
       x <- callable_function(base::all.equal)
       x$set_args(list(target = c("abc"), current = c("abc")))
       x$run()

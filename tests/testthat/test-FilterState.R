@@ -82,7 +82,7 @@ testthat::test_that("label_keep_na_count returns the string with an appended ele
 
 testthat::test_that(
   "add_keep_na_call does not add anything by default",
-  { # nolint
+  code = {
     test_class <- R6::R6Class(
       classname = "TestClass",
       inherit = FilterState,
@@ -102,7 +102,7 @@ testthat::test_that(
 
 testthat::test_that(
   "add_keep_na_call adds `is.na` when `keep_na` is set",
-  { # nolint
+  code = {
     test_class <- R6::R6Class(
       classname = "TestClass",
       inherit = FilterState,
@@ -124,7 +124,7 @@ testthat::test_that(
 
 testthat::test_that(
   "Setting private$na_rm to TRUE adds `!is.na` before condition via add_keep_na_call",
-  { # nolint
+  code = {
     test_class <- R6::R6Class(
       classname = "TestClass",
       inherit = FilterState,
@@ -147,7 +147,7 @@ testthat::test_that(
 testthat::test_that(
   "Setting private$na_rm to TRUE doesn't add `!is.na` before condition via add_keep_na_call
   when variable has no NAs",
-  { # nolint
+  code = {
     test_class <- R6::R6Class(
       classname = "TestClass",
       inherit = FilterState,

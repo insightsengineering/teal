@@ -71,7 +71,7 @@ testthat::test_that("get_raw_data.TealDataAbstract returns dataset objects verba
 
 testthat::test_that(
   "get_raw_data.TealDataAbstract returns dataset objects verbatim when input is TealData",
-  { # nolint
+  code = {
     x <- dataset(dataname = "head_iris", x = head(iris))
 
     y <- dataset(dataname = "head_mtcars", x = head(mtcars))
@@ -89,7 +89,7 @@ testthat::test_that(
 
 testthat::test_that(
   "get_raw_data.TealDataAbstract returns dataset objects verbatim when input is TealDataConnector or CDISCTealData",
-  { # nolint
+  code = {
     adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
     adsl <- cdisc_dataset_connector(
       dataname = "ADSL",
