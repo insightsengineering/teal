@@ -19,8 +19,8 @@
 #' x <- data_connection( # define connection
 #'   ping_fun = ping_fun, # define ping function
 #'   open_fun = open_fun, # define opening function
-#'   close_fun = close_fun
-#' ) # define closing function
+#'   close_fun = close_fun # define closing function
+#' )
 #'
 #' x$set_open_args(args = list(y = letters[1:5])) # define additional arguments if necessary
 #'
