@@ -96,7 +96,6 @@ TealDataset <- R6::R6Class( # nolint
                         code = private$code,
                         label = self$get_dataset_label(),
                         vars = list()) {
-
       res <- self$initialize(
         dataname = dataname,
         x = x,
@@ -121,7 +120,7 @@ TealDataset <- R6::R6Class( # nolint
         private$.ncol
       ))
       print(head(as.data.frame(private$.raw_data)))
-      if(private$.nrow > 6) {
+      if (private$.nrow > 6) {
         cat("\n...\n")
         print(tail(as.data.frame(private$.raw_data)))
       }
@@ -417,8 +416,8 @@ TealDataset <- R6::R6Class( # nolint
     get_vars = function() {
       return(c(
         private$vars,
-        private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)])
-      )
+        private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)]
+      ))
     },
     #' @description
     #' Get internal `mutate_vars` object
@@ -473,7 +472,7 @@ TealDataset <- R6::R6Class( # nolint
         )
       } else {
         private$mutate_delayed(code, vars)
-        if (! (private$is_any_dependency_delayed(vars) || force_delay)) {
+        if (!(private$is_any_dependency_delayed(vars) || force_delay)) {
           private$mutate_eager()
         }
       }
@@ -515,11 +514,14 @@ TealDataset <- R6::R6Class( # nolint
         )
       )
 
-      res_check <- tryCatch({
-        identical(self$get_raw_data(), new_set)
-      }, error = function(e) {
-        FALSE
-      })
+      res_check <- tryCatch(
+        {
+          identical(self$get_raw_data(), new_set)
+        },
+        error = function(e) {
+          FALSE
+        }
+      )
       logger::log_trace("TealDataset$check { self$get_dataname() } reproducibility result: { res_check }.")
 
       return(res_check)
@@ -546,7 +548,6 @@ TealDataset <- R6::R6Class( # nolint
         }
       }
       logger::log_trace("TealDataset$check_keys keys checking passed for dataset: { self$get_dataname() }.")
-
     },
     #' @description
     #' Check if dataset has already been pulled.
@@ -555,7 +556,6 @@ TealDataset <- R6::R6Class( # nolint
     is_pulled = function() {
       return(TRUE)
     }
-
   ),
   ## __Private Fields ====
   private = list(
@@ -592,7 +592,6 @@ TealDataset <- R6::R6Class( # nolint
       )
       return(invisible(self))
     },
-
     mutate_eager = function() {
       logger::log_trace("TealDatasetConnector$mutate_eager executing mutate code for dataset: { self$get_dataname() }...")
       new_df <- private$execute_code(
@@ -632,7 +631,6 @@ TealDataset <- R6::R6Class( # nolint
     deep_clone = function(name, value) {
       deep_clone_r6(name, value)
     },
-
     get_class_colnames = function(class_type = "character") {
       stopifnot(is_character_single(class_type))
 
@@ -640,11 +638,11 @@ TealDataset <- R6::R6Class( # nolint
         lapply(private$.raw_data, class),
         function(x, target_class_name) any(x %in% target_class_name),
         logical(1),
-        target_class_name = class_type))]
+        target_class_name = class_type
+      ))]
 
       return(return_cols)
     },
-
     mutate_list_to_code_class = function() {
       res <- CodeClass$new()
       for (mutate_code in private$mutate_code) {
@@ -660,7 +658,6 @@ TealDataset <- R6::R6Class( # nolint
       }
       return(res)
     },
-
     append_mutate_code = function() {
       for (mutate_code in private$mutate_code) {
         if (is(mutate_code$code, "CodeClass")) {
@@ -674,7 +671,6 @@ TealDataset <- R6::R6Class( # nolint
         }
       }
     },
-
     is_any_dependency_delayed = function(vars = list()) {
       any(vapply(
         c(list(), private$var_r6, vars),
@@ -687,8 +683,8 @@ TealDataset <- R6::R6Class( # nolint
             FALSE
           }
         },
-        FUN.VALUE = logical(1))
-      )
+        FUN.VALUE = logical(1)
+      ))
     },
 
     # Set variables which code depends on

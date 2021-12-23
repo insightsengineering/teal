@@ -1,6 +1,5 @@
 ## CDISCTealDataset ====
 testthat::test_that("CDISCTealDataset basics", {
-
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
   rtables::var_labels(x) <- c("X", "Y")
 
@@ -71,29 +70,34 @@ testthat::test_that("Case 1: CDISCTealDataset$get_code() does not return duplica
 
 testthat::test_that("Case 2: CDISCTealDataset$get_code() does not return duplicated code when
   CDISCTealDataset$mutate method is called", {
-    adsl_d <- cdisc_dataset("ADSL", head(iris))
-    adsl_d %>% mutate_dataset("ADSL$a <- x", vars = list(x = 1)) %>% mutate_dataset("ADSL$b <- y", vars = list(y = 2))
+  adsl_d <- cdisc_dataset("ADSL", head(iris))
+  adsl_d %>%
+    mutate_dataset("ADSL$a <- x", vars = list(x = 1)) %>%
+    mutate_dataset("ADSL$b <- y", vars = list(y = 2))
 
-    adae_d <- code_cdisc_dataset_connector("ADAE", "head(mtcars)")
-    adae_d %>% mutate_dataset("ADAE$a <- x", vars = list(x = 1))
-    adae_d %>% mutate_dataset("ADAE$a <- ADAE$a*2")
-    adae_d %>% load_dataset() %>% mutate_dataset("ADAE$a <- ADAE$a*2")
+  adae_d <- code_cdisc_dataset_connector("ADAE", "head(mtcars)")
+  adae_d %>% mutate_dataset("ADAE$a <- x", vars = list(x = 1))
+  adae_d %>% mutate_dataset("ADAE$a <- ADAE$a*2")
+  adae_d %>%
+    load_dataset() %>%
+    mutate_dataset("ADAE$a <- ADAE$a*2")
 
-    adsl_d %>% mutate_dataset("ADSL$c <- z", vars = list(z = 3))
-    adsl_d %>% mutate_dataset("ADSL$d <- ADAE$a[[1]]", vars = list(ADAE = adae_d))
-    testthat::expect_equal(
-      adsl_d$get_code() %>% pretty_code_string(),
-      c("x <- 1",
-        "y <- 2",
-        "z <- 3",
-        "ADAE <- head(mtcars)",
-        "ADAE$a <- x",
-        "ADAE$a <- ADAE$a * 2",
-        "ADAE$a <- ADAE$a * 2",
-        "ADSL$a <- x",
-        "ADSL$b <- y",
-        "ADSL$c <- z",
-        "ADSL$d <- ADAE$a[[1]]"
-      )
+  adsl_d %>% mutate_dataset("ADSL$c <- z", vars = list(z = 3))
+  adsl_d %>% mutate_dataset("ADSL$d <- ADAE$a[[1]]", vars = list(ADAE = adae_d))
+  testthat::expect_equal(
+    adsl_d$get_code() %>% pretty_code_string(),
+    c(
+      "x <- 1",
+      "y <- 2",
+      "z <- 3",
+      "ADAE <- head(mtcars)",
+      "ADAE$a <- x",
+      "ADAE$a <- ADAE$a * 2",
+      "ADAE$a <- ADAE$a * 2",
+      "ADSL$a <- x",
+      "ADSL$b <- y",
+      "ADSL$c <- z",
+      "ADSL$d <- ADAE$a[[1]]"
     )
-  })
+  )
+})

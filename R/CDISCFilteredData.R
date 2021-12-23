@@ -48,7 +48,7 @@
 #' isolate({
 #'   datasets$set_dataset(adsl)
 #'   datasets$set_dataset(adtte)
-#'  })
+#' })
 #'
 #'
 #' isolate({
@@ -62,7 +62,7 @@
 #'
 #'   df <- datasets$get_data("ADSL", filtered = FALSE)
 #'   print(df)
-#'  })
+#' })
 #'
 #'
 #' filter_state_adtte <- teal:::init_filter_state(
@@ -139,7 +139,6 @@ CDISCFilteredData <- R6::R6Class( # nolint
     #' @param dataname (`character` vector) names of the dataset
     #' @return (`character` vector) of dataset names
     get_filterable_datanames = function(dataname) {
-
       parents <- character(0)
       for (i in dataname) {
         while (!is_empty(i)) {
@@ -201,7 +200,6 @@ CDISCFilteredData <- R6::R6Class( # nolint
         )
       }
     }
-
   ),
 
   ## __Private Methods---------------------
@@ -209,7 +207,6 @@ CDISCFilteredData <- R6::R6Class( # nolint
     # datanames in the order in which they must be evaluated (in case of dependencies)
     # this is a reactive and kept as a field for caching
     ordered_datanames = NULL,
-
     validate = function() {
       stopifnot(
         setequal(private$ordered_datanames, names(private$dataset_filters)),
@@ -270,8 +267,10 @@ topological_sort <- function(graph) {
   }
 
   if (visited != length(in_degrees)) {
-    stop("Graph is not a directed acyclic graph. Cycles involving nodes: ",
-      paste0(setdiff(names(in_degrees), sorted), collapse = " "))
+    stop(
+      "Graph is not a directed acyclic graph. Cycles involving nodes: ",
+      paste0(setdiff(names(in_degrees), sorted), collapse = " ")
+    )
   } else {
     return(sorted)
   }

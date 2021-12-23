@@ -43,7 +43,7 @@
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
 #'
-TealDatasetConnector <- R6::R6Class( #nolint
+TealDatasetConnector <- R6::R6Class( # nolint
 
   ## __Public Methods ====
   classname = "TealDatasetConnector",
@@ -379,7 +379,7 @@ TealDatasetConnector <- R6::R6Class( #nolint
           "TealDatasetConnector$mutate mutated dataset '%s' using the code (%s lines) and vars (%s).",
           self$get_dataname(),
           length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
-          paste(names(vars), collapse = ', ')
+          paste(names(vars), collapse = ", ")
         )
       )
 
@@ -595,7 +595,6 @@ TealDatasetConnector <- R6::R6Class( #nolint
     deep_clone = function(name, value) {
       deep_clone_r6(name, value)
     },
-
     get_pull_code_class = function(args = NULL) {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$pull_vars))
@@ -648,16 +647,19 @@ TealDatasetConnector <- R6::R6Class( #nolint
         }
       }
       # eval CallableFunction with dynamic args
-      tryCatch({
-        private$pull_callable$run(args = args, try = try)
-        }, error = function(e) {
+      tryCatch(
+        {
+          private$pull_callable$run(args = args, try = try)
+        },
+        error = function(e) {
           if (grepl("object 'conn' not found", e$message)) {
             output_message <- "This dataset connector requires connection object (conn) to be provided."
           } else {
             output_message <- paste("Could not pull dataset, the following error message was returned:", e$message)
           }
           stop(output_message, call. = FALSE)
-        })
+        }
+      )
     },
     set_failure = function(res) {
       if (is(res, "error")) {
@@ -694,7 +696,6 @@ TealDatasetConnector <- R6::R6Class( #nolint
       private$dataname <- dataname
       return(invisible(self))
     },
-
     set_ui = function(ui_args = NULL) {
       private$ui <- function(id) {
         ns <- NS(id)

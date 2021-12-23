@@ -56,7 +56,7 @@
 #'
 #'   df <- datasets$get_data("iris", filtered = FALSE)
 #'   print(df)
-#'  })
+#' })
 #'
 #'
 #' filter_state_iris <- teal:::init_filter_state(
@@ -380,8 +380,7 @@ FilteredData <- R6::R6Class( # nolint
     set_filter_state = function(state) {
       checkmate::assert_subset(names(state), self$datanames())
       logger::log_trace("FilteredData$set_filter_state initializing, dataname: { names(state) }")
-      for(dataname in names(state)) {
-
+      for (dataname in names(state)) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)
         dataset_state <- state[[dataname]]
 
@@ -403,7 +402,7 @@ FilteredData <- R6::R6Class( # nolint
     remove_filter_state = function(state) {
       logger::log_trace("FilteredData$remove_filter_state called, dataname: { names(state) }")
 
-      for(dataname in names(state)) {
+      for (dataname in names(state)) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)
         fdataset$remove_filter_state(element_id = state[[dataname]])
       }
@@ -426,7 +425,7 @@ FilteredData <- R6::R6Class( # nolint
         "FilteredData$remove_all_filter_states called, datanames: { paste(datanames, collapse = ', ') }"
       )
 
-      for(dataname in datanames) {
+      for (dataname in datanames) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)
         fdataset$queues_empty()
       }
@@ -504,7 +503,6 @@ FilteredData <- R6::R6Class( # nolint
             self$ui_filter_overview(ns("teal_filters_info"))
           )
         ),
-
         div(
           id = ns("filter_active_vars"), # not used, can be used to customize CSS behavior
           class = "well",
@@ -535,7 +533,6 @@ FilteredData <- R6::R6Class( # nolint
               )
             )
           ),
-
           div(
             id = ns("filter_active_vars_contents"),
             tagList(
@@ -549,7 +546,6 @@ FilteredData <- R6::R6Class( # nolint
             )
           )
         ),
-
         div(
           id = ns("filter_add_vars"), # not used, can be used to customize CSS behavior
           class = "well",
@@ -652,40 +648,44 @@ FilteredData <- R6::R6Class( # nolint
           # the filters for this dataset are just hidden from the UI, but still applied
           # optimization: we set `priority = 1` to execute it before the other
           # observers (default priority 0), so that they are not computed if they are hidden anyways
-          observeEvent(active_datanames(), priority = 1, {
-            logger::log_trace(
-              "FilteredData$srv_filter_panel@1 active datanames: { paste(active_datanames(), collapse = \" \") }"
-            )
-            if (length(active_datanames()) == 0 || is.null(active_datanames())) {
-              # hide whole module UI when no datasets or when NULL
-              shinyjs::hide("filter_panel_whole")
-              shinyjs::runjs('$("#teal_secondary_col").hide();
+          observeEvent(active_datanames(),
+            priority = 1,
+            {
+              logger::log_trace(
+                "FilteredData$srv_filter_panel@1 active datanames: { paste(active_datanames(), collapse = \" \") }"
+              )
+              if (length(active_datanames()) == 0 || is.null(active_datanames())) {
+                # hide whole module UI when no datasets or when NULL
+                shinyjs::hide("filter_panel_whole")
+                shinyjs::runjs('$("#teal_secondary_col").hide();
                              $("#teal_primary_col").attr("class", "col-sm-12").resize();')
-            } else {
-              shinyjs::show("filter_panel_whole")
-              shinyjs::runjs('if (filter_open) {
+              } else {
+                shinyjs::show("filter_panel_whole")
+                shinyjs::runjs('if (filter_open) {
               $("#teal_primary_col").attr("class", "col-sm-9").resize();
               $("#teal_secondary_col").show();}')
 
-              # selectively hide / show to only show `active_datanames` out of all datanames
-              lapply(
-                self$datanames(),
-                function(dataname) {
-                  id_add_filter <- private$get_ui_add_filter_id(dataname)
-                  id_filter_dataname <- private$get_ui_id(dataname)
+                # selectively hide / show to only show `active_datanames` out of all datanames
+                lapply(
+                  self$datanames(),
+                  function(dataname) {
+                    id_add_filter <- private$get_ui_add_filter_id(dataname)
+                    id_filter_dataname <- private$get_ui_id(dataname)
 
-                  if (dataname %in% active_datanames()) {
-                    # shinyjs takes care of the namespace around the id
-                    shinyjs::show(id_add_filter)
-                    shinyjs::show(id_filter_dataname)
-                  } else {
-                    shinyjs::hide(id_add_filter)
-                    shinyjs::hide(id_filter_dataname)
+                    if (dataname %in% active_datanames()) {
+                      # shinyjs takes care of the namespace around the id
+                      shinyjs::show(id_add_filter)
+                      shinyjs::show(id_filter_dataname)
+                    } else {
+                      shinyjs::hide(id_add_filter)
+                      shinyjs::hide(id_filter_dataname)
+                    }
                   }
-                }
-              )
-            }
-          }, ignoreNULL = FALSE)
+                )
+              }
+            },
+            ignoreNULL = FALSE
+          )
 
           observeEvent(input$remove_all_filters, {
             logger::log_trace("FilteredData$srv_filter_panel@1 removing all filters")
@@ -872,7 +872,6 @@ FilteredData <- R6::R6Class( # nolint
 
       return(invisible(NULL))
     },
-
     filtered_dataname = function(dataname) {
       stopifnot(is_character_single(dataname))
       sprintf("%s_FILTERED", dataname)

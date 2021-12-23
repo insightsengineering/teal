@@ -52,8 +52,8 @@ choices_selected(choices = letters, selected = all_choices())
 choices_selected(choices = letters, selected = letters)
 
 choices_selected(
-   choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
-   selected = "X"
+  choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
+  selected = "X"
 )
 
 library(scda)
@@ -63,40 +63,42 @@ choices_selected(variable_choices(ADSL), "SEX")
 # How to select nothing
 # use an empty character
 choices_selected(
-   choices = c("", "A", "B", "C"),
-   selected = ""
+  choices = c("", "A", "B", "C"),
+  selected = ""
 )
 
 # How to allow the user to select nothing
 # use an empty character
 choices_selected(
-   choices = c("A", "", "B", "C"),
-   selected = "A"
+  choices = c("A", "", "B", "C"),
+  selected = "A"
 )
 
 
 # How to make Nothing the Xth choice
 # just use keep_order
 choices_selected(
-   choices = c("A", "", "B", "C"),
-   selected = "A",
-   keep_order = TRUE
+  choices = c("A", "", "B", "C"),
+  selected = "A",
+  keep_order = TRUE
 )
 
 
 # How to give labels to selections
 # by adding names - choices will be replaced by "name" in UI, not in code
 choices_selected(
-   choices = c("name for A" = "A", "Name for nothing" = "", "name for b" = "B", "name for C" = "C"),
-   selected = "A"
+  choices = c("name for A" = "A", "Name for nothing" = "", "name for b" = "B", "name for C" = "C"),
+  selected = "A"
 )
 
 # by using choices_labeled
 # labels will be shown behind the choice
 choices_selected(
-   choices = choices_labeled(c("A", "", "B", "C"),
-                             c("name for A", "nothing", "name for B", "name for C")),
-   selected = "A"
+  choices = choices_labeled(
+    c("A", "", "B", "C"),
+    c("name for A", "nothing", "name for B", "name for C")
+  ),
+  selected = "A"
 )
 
 # functional form (subsetting for factor variables only) of choices_selected
@@ -115,9 +117,10 @@ cs <- choices_selected(
 
 ui <- fluidPage(
   optionalSelectInput(
-  inputId = "id",
-  choices = cs$choices,
-  selected = cs$selected)
+    inputId = "id",
+    choices = cs$choices,
+    selected = cs$selected
+  )
 )
 \dontrun{
 shinyApp(ui, server = function(input, output, session) {})

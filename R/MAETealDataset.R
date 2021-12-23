@@ -117,11 +117,14 @@ MAETealDataset <- R6::R6Class( # nolint
         code = self$get_code_class(),
         vars = private$vars
       )
-      res_check <- tryCatch({
-        identical(self$get_raw_data(), new_set)
-      }, error = function(e) {
-        FALSE
-      })
+      res_check <- tryCatch(
+        {
+          identical(self$get_raw_data(), new_set)
+        },
+        error = function(e) {
+          FALSE
+        }
+      )
       logger::log_trace("TealDataset$check { self$get_dataname() } reproducibility result: { res_check }.")
 
       return(res_check)
@@ -161,7 +164,6 @@ MAETealDataset <- R6::R6Class( # nolint
   ## __Private Fields ====
   private = list(
     .raw_data = MultiAssayExperiment::MultiAssayExperiment(),
-
     get_class_colnames = function(class_type = "character") {
       stopifnot(is_character_single(class_type))
 
@@ -169,7 +171,8 @@ MAETealDataset <- R6::R6Class( # nolint
         lapply(SummarizedExperiment::colData(private$.raw_data), class),
         function(x, target_class_name) any(x %in% target_class_name),
         logical(1),
-        target_class_name = class_type))]
+        target_class_name = class_type
+      ))]
 
       return(return_cols)
     },
@@ -269,7 +272,6 @@ mae_dataset <- function(dataname, # nousage
                         label = data_label(x),
                         code = character(0),
                         vars = list()) {
-
   if (!is(x, "MultiAssayExperiment")) {
     stop("Argument x must be a MultiAssayExperiment object")
   }

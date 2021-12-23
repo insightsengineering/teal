@@ -67,7 +67,6 @@ mutate_dataset <- function(x, ...) {
 #'   mutate_dataset(code = read_script(file_example))
 #'
 #' ADSL_mutated$get_raw_data()$new_variable[1]
-#'
 #' @export
 mutate_dataset.TealDataset <- function(x,
                                        code = character(0),

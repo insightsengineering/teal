@@ -184,16 +184,19 @@ filter_spec(
   selected = c("CRP"),
   multiple = TRUE
 )
-
 filter_spec(
   vars = variable_choices("ADSL", "ARMCD"),
-  choices = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM",
-  subset = function(data) {
-    levels(data$ARMCD)[1:2]
-  }),
-  selected = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM",
-  subset = function(data) {
-    levels(data$ARMCD)[1]
-  })
+  choices = value_choices("ADSL",
+    var_choices = "ARMCD", var_label = "ARM",
+    subset = function(data) {
+      levels(data$ARMCD)[1:2]
+    }
+  ),
+  selected = value_choices("ADSL",
+    var_choices = "ARMCD", var_label = "ARM",
+    subset = function(data) {
+      levels(data$ARMCD)[1]
+    }
+  )
 )
 }

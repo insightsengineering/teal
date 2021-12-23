@@ -70,32 +70,39 @@ testthat::test_that("get_raw_data.TealDataAbstract returns dataset objects verba
 })
 
 testthat::test_that(
-  "get_raw_data.TealDataAbstract returns dataset objects verbatim when input is TealData", {
-  x <- dataset(dataname = "head_iris", x = head(iris))
+  "get_raw_data.TealDataAbstract returns dataset objects verbatim when input is TealData",
+  code = {
+    x <- dataset(dataname = "head_iris", x = head(iris))
 
-  y <- dataset(dataname = "head_mtcars", x = head(mtcars))
+    y <- dataset(dataname = "head_mtcars", x = head(mtcars))
 
-  rd <- teal:::TealData$new(x, y)
+    rd <- teal:::TealData$new(x, y)
 
-  out <- get_raw_data(rd)
+    out <- get_raw_data(rd)
 
-  testthat::expect_equal(length(out), 2)
+    testthat::expect_equal(length(out), 2)
 
-  testthat::expect_identical(out$head_iris, head(iris))
-  testthat::expect_identical(out$head_mtcars, head(mtcars))
-})
+    testthat::expect_identical(out$head_iris, head(iris))
+    testthat::expect_identical(out$head_mtcars, head(mtcars))
+  }
+)
 
 testthat::test_that(
-  "get_raw_data.TealDataAbstract returns dataset objects verbatim when input is TealDataConnector or CDISCTealData", {
+  "get_raw_data.TealDataAbstract returns dataset objects verbatim when input is TealDataConnector or CDISCTealData",
+  code = {
     adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
-    adsl <- cdisc_dataset_connector(dataname = "ADSL",
-                                    pull_callable = adsl_cf,
-                                    keys = get_cdisc_keys("ADSL"))
+    adsl <- cdisc_dataset_connector(
+      dataname = "ADSL",
+      pull_callable = adsl_cf,
+      keys = get_cdisc_keys("ADSL")
+    )
     load_dataset(adsl)
     adlb_cf <- callable_function(function() synthetic_cdisc_data("latest")$adlb)
-    adlb <- cdisc_dataset_connector(dataname = "ADLB",
-                                    pull_callable = adlb_cf,
-                                    keys = get_cdisc_keys("ADLB"))
+    adlb <- cdisc_dataset_connector(
+      dataname = "ADLB",
+      pull_callable = adlb_cf,
+      keys = get_cdisc_keys("ADLB")
+    )
     load_dataset(adlb)
 
     rdc <- relational_data_connector(
@@ -115,4 +122,5 @@ testthat::test_that(
 
     testthat::expect_identical(out_cdisc$ADSL, synthetic_cdisc_data("latest")$adsl)
     testthat::expect_identical(out_cdisc$ADLB, synthetic_cdisc_data("latest")$adlb)
-})
+  }
+)

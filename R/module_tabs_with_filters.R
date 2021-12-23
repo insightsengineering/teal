@@ -116,7 +116,8 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
     tags$hr(style = "margin: 7px 0;"),
     fluidRow(
       column(width = 9, teal_ui$children[[2]], id = "teal_primary_col"),
-      column(width = 3, filter_and_info_ui, id = "teal_secondary_col"))
+      column(width = 3, filter_and_info_ui, id = "teal_secondary_col")
+    )
   )
   return(teal_ui)
 }
@@ -143,7 +144,8 @@ srv_tabs_with_filters <- function(id, datasets, modules, filter) {
           "srv_tabs_with_filters@1 changing active module to: { active_module()$label }."
         )
         datasets$handle_active_datanames(datanames = active_module()$filters)
-      })
+      }
+    )
 
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
     srv_init_filter_state(id = "bookmark_state", datasets = datasets, filter = filter)

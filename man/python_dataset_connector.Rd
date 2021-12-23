@@ -137,7 +137,7 @@ x <- python_dataset_connector(
   code = "import pandas as pd
 data = pd.DataFrame({'STUDYID':  [1, 2], 'USUBJID': [3, 4]})",
   object = "data"
-  )
+)
 
 x$pull()
 x$get_raw_data()

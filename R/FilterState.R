@@ -39,7 +39,6 @@ label_keep_na_count <- function(na_count) {
 #' filter_state$get_varname()
 #' filter_state$get_varlabel()
 #' isolate(filter_state$get_call())
-#'
 #' \dontrun{
 #' shinyApp(
 #'   ui = fluidPage(
@@ -67,7 +66,7 @@ init_filter_state <- function(x,
   stopifnot(is_character_vector(extract_type, min_length = 0, max_length = 1))
   stopifnot(
     length(extract_type) == 0 ||
-    length(extract_type) == 1 && !is.null(input_dataname)
+      length(extract_type) == 1 && !is.null(input_dataname)
   )
   stopifnot(extract_type %in% c("list", "matrix"))
 
@@ -86,115 +85,133 @@ init_filter_state <- function(x,
 }
 
 #' @export
-init_filter_state.default <- function(x, #nousage
+init_filter_state.default <- function(x, # nousage
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
-  FilterState$new(x = x,
-                  varname = varname,
-                  varlabel = varlabel,
-                  input_dataname = input_dataname,
-                  extract_type = extract_type)
+  FilterState$new(
+    x = x,
+    varname = varname,
+    varlabel = varlabel,
+    input_dataname = input_dataname,
+    extract_type = extract_type
+  )
 }
 
 #' @export
-init_filter_state.logical <- function(x, #nousage
+init_filter_state.logical <- function(x, # nousage
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
-  LogicalFilterState$new(x = x,
-                         varname = varname,
-                         varlabel = varlabel,
-                         input_dataname = input_dataname,
-                         extract_type = extract_type)
+  LogicalFilterState$new(
+    x = x,
+    varname = varname,
+    varlabel = varlabel,
+    input_dataname = input_dataname,
+    extract_type = extract_type
+  )
 }
 
 #' @export
-init_filter_state.numeric <- function(x, #nousage
+init_filter_state.numeric <- function(x, # nousage
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
   if (length(unique(x[!is.na(x)])) < getOption("teal.threshold_slider_vs_checkboxgroup")) {
-    ChoicesFilterState$new(x = x,
-                           varname = varname,
-                           varlabel = varlabel,
-                           input_dataname = input_dataname,
-                           extract_type = extract_type)
+    ChoicesFilterState$new(
+      x = x,
+      varname = varname,
+      varlabel = varlabel,
+      input_dataname = input_dataname,
+      extract_type = extract_type
+    )
   } else {
-    RangeFilterState$new(x = x,
-                         varname = varname,
-                         varlabel = varlabel,
-                         input_dataname = input_dataname,
-                         extract_type = extract_type)
+    RangeFilterState$new(
+      x = x,
+      varname = varname,
+      varlabel = varlabel,
+      input_dataname = input_dataname,
+      extract_type = extract_type
+    )
   }
 }
 
 #' @export
-init_filter_state.factor <- function(x, #nousage
+init_filter_state.factor <- function(x, # nousage
                                      varname,
                                      varlabel = if_null(attr(x, "label"), character(0)),
                                      input_dataname = NULL,
                                      extract_type = character(0)) {
-  ChoicesFilterState$new(x = x,
-                         varname = varname,
-                         varlabel = varlabel,
-                         input_dataname = input_dataname,
-                         extract_type = extract_type)
+  ChoicesFilterState$new(
+    x = x,
+    varname = varname,
+    varlabel = varlabel,
+    input_dataname = input_dataname,
+    extract_type = extract_type
+  )
 }
 
 #' @export
-init_filter_state.character <- function(x, #nousage
+init_filter_state.character <- function(x, # nousage
                                         varname,
                                         varlabel = if_null(attr(x, "label"), character(0)),
                                         input_dataname = NULL,
                                         extract_type = character(0)) {
-  ChoicesFilterState$new(x = x,
-                         varname = varname,
-                         varlabel = varlabel,
-                         input_dataname = input_dataname,
-                         extract_type = extract_type)
+  ChoicesFilterState$new(
+    x = x,
+    varname = varname,
+    varlabel = varlabel,
+    input_dataname = input_dataname,
+    extract_type = extract_type
+  )
 }
 
 #' @export
-init_filter_state.Date <- function(x, #nousage
+init_filter_state.Date <- function(x, # nousage
                                    varname,
                                    varlabel = if_null(attr(x, "label"), character(0)),
                                    input_dataname = NULL,
                                    extract_type = character(0)) {
-  DateFilterState$new(x = x,
-                      varname = varname,
-                      varlabel = varlabel,
-                      input_dataname = input_dataname,
-                      extract_type = extract_type)
+  DateFilterState$new(
+    x = x,
+    varname = varname,
+    varlabel = varlabel,
+    input_dataname = input_dataname,
+    extract_type = extract_type
+  )
 }
 
 #' @export
-init_filter_state.POSIXct <- function(x, #nousage
+init_filter_state.POSIXct <- function(x, # nousage
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
-  DatetimeFilterState$new(x = x,
-                          varname = varname,
-                          varlabel = varlabel,
-                          input_dataname = input_dataname,
-                          extract_type = extract_type)
+  DatetimeFilterState$new(
+    x = x,
+    varname = varname,
+    varlabel = varlabel,
+    input_dataname = input_dataname,
+    extract_type = extract_type
+  )
 }
 
 #' @export
-init_filter_state.POSIXlt <- function(x, #nousage
+init_filter_state.POSIXlt <- function(x, # nousage
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
-  DatetimeFilterState$new(x = x,
-                          varname = varname,
-                          varlabel = varlabel,
-                          input_dataname = input_dataname,
-                          extract_type = extract_type)
+  DatetimeFilterState$new(
+    x = x,
+    varname = varname,
+    varlabel = varlabel,
+    input_dataname = input_dataname,
+    extract_type = extract_type
+  )
 }
 
 # FilterState ------
@@ -524,14 +541,14 @@ FilterState <- R6::R6Class( # nolint
     }
   ),
   private = list(
-    choices = NULL,  # because each class has different choices type
+    choices = NULL, # because each class has different choices type
     input_dataname = character(0),
-    keep_na = NULL,  # reactiveVal logical()
+    keep_na = NULL, # reactiveVal logical()
     keep_na_reactive = NULL, # reactiveVal logical()
     na_count = integer(0),
     na_rm = FALSE, # logical(1)
     observers = NULL, # here observers are stored
-    selected = NULL,  # because it holds reactiveVal and each class has different choices type
+    selected = NULL, # because it holds reactiveVal and each class has different choices type
     selected_reactive = NULL, # because it holds reactiveVal and each class has different choices type
     varname = character(0),
     varlabel = character(0),
@@ -549,7 +566,7 @@ FilterState <- R6::R6Class( # nolint
           call("is.na", private$get_varname_prefixed()),
           filter_call
         )
-      } else if (isTRUE(private$na_rm) && private$na_count > 0){
+      } else if (isTRUE(private$na_rm) && private$na_count > 0) {
         call(
           "&",
           substitute(!is.na(var), list(var = private$get_varname_prefixed())),
@@ -746,7 +763,6 @@ EmptyFilterState <- R6::R6Class( # nolint
               value = FALSE
             )
           )
-
         )
       )
     },
@@ -841,7 +857,7 @@ LogicalFilterState <- R6::R6Class( # nolint
       super$initialize(x, varname, varlabel, input_dataname, extract_type)
       df <- as.factor(x)
       if (length(levels(df)) != 2) {
-        if (levels(df) %in% c(TRUE, FALSE)){
+        if (levels(df) %in% c(TRUE, FALSE)) {
           choices_not_included <- c(TRUE, FALSE)[!c(TRUE, FALSE) %in% levels(df)]
           levels(df) <- c(levels(df), choices_not_included)
         }
@@ -1023,13 +1039,13 @@ LogicalFilterState <- R6::R6Class( # nolint
       )
       check_in_subset(value, private$choices, pre_msg = pre_msg)
     },
-
     cast_and_validate = function(values) {
-      tryCatch({
-        values_logical <- as.logical(values)
-        if (any(is.na(values_logical))) stop()
-      },
-      error = function(cond) stop("The array of set values must contain values coercible to logical.")
+      tryCatch(
+        {
+          values_logical <- as.logical(values)
+          if (any(is.na(values_logical))) stop()
+        },
+        error = function(cond) stop("The array of set values must contain values coercible to logical.")
       )
       values_logical
     }
@@ -1055,7 +1071,6 @@ LogicalFilterState <- R6::R6Class( # nolint
 #' isolate(filter_state$set_keep_na(TRUE))
 #' isolate(filter_state$set_keep_inf(TRUE))
 #' isolate(filter_state$get_call())
-#'
 RangeFilterState <- R6::R6Class( # nolint
   "RangeFilterState",
   inherit = FilterState,
@@ -1201,7 +1216,8 @@ RangeFilterState <- R6::R6Class( # nolint
                 ggplot2::geom_area(
                   fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
                   color = NA,
-                  alpha = 0.2) +
+                  alpha = 0.2
+                ) +
                 ggplot2::theme_void() +
                 ggplot2::scale_y_continuous(expand = c(0, 0)) +
                 ggplot2::scale_x_continuous(expand = c(0, 0))
@@ -1258,10 +1274,9 @@ RangeFilterState <- R6::R6Class( # nolint
                 )
                 self$set_selected(if_null(selection_state, numeric(0)))
               }
-              logger::log_trace(
-                "RangeFilterState$server@3 selection changed, dataname: { deparse1(private$input_dataname) }"
-              )
-            })
+              logger::log_trace("RangeFilterState$server@3 selection changed, dataname: { deparse1(private$input_dataname) }")
+            }
+          )
 
           private$observe_keep_na(input)
 
@@ -1280,7 +1295,6 @@ RangeFilterState <- R6::R6Class( # nolint
           NULL
         }
       )
-
     },
 
     #' @description
@@ -1395,7 +1409,6 @@ RangeFilterState <- R6::R6Class( # nolint
         step = `if`(private$is_integer, 1L, v_pretty_range[2] - v_pretty_range[1])
       )
     },
-
     validate_selection = function(value) {
       if (!is.numeric(value)) {
         stop(
@@ -1413,18 +1426,17 @@ RangeFilterState <- R6::R6Class( # nolint
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
     },
-
     cast_and_validate = function(values) {
-      tryCatch({
-        values <- as.numeric(values)
-        if (any(is.na(values))) stop()
-      },
+      tryCatch(
+        {
+          values <- as.numeric(values)
+          if (any(is.na(values))) stop()
+        },
         error = function(error) stop("The array of set values must contain values coercible to numeric.")
       )
       if (length(values) != 2) stop("The array of set values must have length two.")
       values
     },
-
     remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
         warning(paste(
@@ -1637,7 +1649,8 @@ ChoicesFilterState <- R6::R6Class( # nolint
                 "ChoicesFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
               )
               private$selected_reactive(NULL)
-          })
+            }
+          )
           private$observe_keep_na_reactive(private$keep_na_reactive())
 
           private$observers$selection <- observeEvent(
@@ -1711,7 +1724,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
   ),
   private = list(
     histogram_data = data.frame(),
-
     validate_selection = function(value) {
       if (!is.character(value)) {
         stop(
@@ -1729,17 +1741,16 @@ ChoicesFilterState <- R6::R6Class( # nolint
       )
       check_in_subset(value, private$choices, pre_msg = pre_msg)
     },
-
     cast_and_validate = function(values) {
-      tryCatch({
-        values <- as.character(values)
-        if (any(is.na(values))) stop()
-      },
+      tryCatch(
+        {
+          values <- as.character(values)
+          if (any(is.na(values))) stop()
+        },
         error = function(error) stop("The array of set values must contain values coercible to character.")
       )
       values
     },
-
     remove_out_of_bound_values = function(values) {
       in_choices_mask <- values %in% private$choices
       if (length(values[!in_choices_mask]) > 0) {
@@ -1750,8 +1761,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
       }
       values[in_choices_mask]
     }
-
-
   )
 )
 
@@ -1984,18 +1993,17 @@ DateFilterState <- R6::R6Class( # nolint
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
     },
-
     cast_and_validate = function(values) {
-      tryCatch({
-        values <- as.Date(values)
-        if (any(is.na(values))) stop()
-      },
+      tryCatch(
+        {
+          values <- as.Date(values)
+          if (any(is.na(values))) stop()
+        },
         error = function(error) stop("The array of set values must contain values coercible to Date.")
       )
       if (length(values) != 2) stop("The array of set values must have length two.")
       values
     },
-
     remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
         warning(paste(
@@ -2292,7 +2300,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
   ),
   private = list(
     timezone = Sys.timezone(),
-
     validate_selection = function(value) {
       if (!(is(value, "POSIXct") || is(value, "POSIXlt"))) {
         stop(
@@ -2311,18 +2318,17 @@ DatetimeFilterState <- R6::R6Class( # nolint
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
     },
-
     cast_and_validate = function(values) {
-      tryCatch({
-        values <- as.POSIXct(values)
-        if (any(is.na(values))) stop()
-      },
+      tryCatch(
+        {
+          values <- as.POSIXct(values)
+          if (any(is.na(values))) stop()
+        },
         error = function(error) stop("The array of set values must contain values coercible to POSIX.")
       )
       if (length(values) != 2) stop("The array of set values must have length two.")
       values
     },
-
     remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
         warning(paste(

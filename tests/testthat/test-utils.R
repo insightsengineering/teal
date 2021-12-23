@@ -16,7 +16,6 @@ test_that("is in operator", {
   expect_true(all(vec1 %is_in% list1))
   expect_false(all(vec1 %is_in% list2))
   expect_true(all(list1 %is_in% list3))
-
 })
 
 test_that("check_pkg_quietly works", {

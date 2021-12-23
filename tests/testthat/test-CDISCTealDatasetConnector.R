@@ -7,8 +7,7 @@ testthat::test_that("Single scda dataset connector", {
   default_ui <- adsl$get_ui("main-app")
   adsl$set_ui_input(function(ns) {
     list(textInput(inputId = ns("name"), label = "scda name", value = "latest"))
-  }
-  )
+  })
   set_ui <- adsl$get_ui("main-app")
   testthat::expect_false(isTRUE(all.equal(default_ui, set_ui)))
 

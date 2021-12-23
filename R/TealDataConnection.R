@@ -19,7 +19,8 @@
 #' x <- data_connection( # define connection
 #'   ping_fun = ping_fun, # define ping function
 #'   open_fun = open_fun, # define opening function
-#'   close_fun = close_fun) # define closing function
+#'   close_fun = close_fun # define closing function
+#' )
 #'
 #' x$set_open_args(args = list(y = letters[1:5])) # define additional arguments if necessary
 #'
@@ -27,7 +28,6 @@
 #' x$get_open_call() # check reproducible R code
 #'
 #' # get data from connection via TealDataConnector$get_dataset()
-#'
 #' \dontrun{
 #' x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
 #' x$close() # call closing function
@@ -75,10 +75,10 @@ TealDataConnection <- R6::R6Class( # nolint
       logger::log_trace(
         sprintf(
           "TealDataConnection initialized with:%s%s%s%s.",
-          if (!is.null(open_fun))  " open_fun"  else "",
+          if (!is.null(open_fun)) " open_fun" else "",
           if (!is.null(close_fun)) " close_fun" else "",
-          if (!is.null(ping_fun))  " ping_fun"  else "",
-          if (if_conn_obj)         " conn"      else ""
+          if (!is.null(ping_fun)) " ping_fun" else "",
+          if (if_conn_obj) " conn" else ""
         )
       )
       invisible(self)
@@ -160,7 +160,6 @@ TealDataConnection <- R6::R6Class( # nolint
                 stopApp()
               }
             })
-
           })
         }
       )
@@ -581,7 +580,6 @@ TealDataConnection <- R6::R6Class( # nolint
     open_server = NULL,
     close_server = NULL,
     ping_server = NULL,
-
     opened = FALSE,
 
     ## __Private Methods ====
@@ -590,7 +588,6 @@ TealDataConnection <- R6::R6Class( # nolint
     deep_clone = function(name, value) {
       deep_clone_r6(name, value)
     },
-
     check_open_fun = function(silent = FALSE) {
       stopifnot(is_logical_single(silent))
 
@@ -688,7 +685,8 @@ TealDataConnection <- R6::R6Class( # nolint
 #' x <- data_connection( # define connection
 #'   ping_fun = ping_fun, # define ping function
 #'   open_fun = open_fun, # define opening function
-#'   close_fun = close_fun) # define closing function
+#'   close_fun = close_fun # define closing function
+#' )
 #'
 #' x$set_open_args(args = list(y = letters[1:5])) # define additional arguments if necessary
 #'
@@ -696,7 +694,6 @@ TealDataConnection <- R6::R6Class( # nolint
 #' x$get_open_call() # check reproducible R code
 #'
 #' # get data from connection via TealDataConnector$get_dataset()
-#'
 #' \dontrun{
 #' x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
 #' x$close() # call closing function

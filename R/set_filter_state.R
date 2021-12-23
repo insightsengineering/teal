@@ -46,7 +46,7 @@ set_filter_state <- function(x, filter_state) {
 
 #' @rdname set_filter_state
 #' @export
-set_filter_state.default <- function(x, filter_state) { #nousage
+set_filter_state.default <- function(x, filter_state) { # nousage
   state <- list()
   if (any(is.na(x))) {
     state$keep_na <- TRUE
@@ -65,13 +65,13 @@ set_filter_state.default <- function(x, filter_state) { #nousage
 
 #' @rdname set_filter_state
 #' @export
-set_filter_state.default_filter <- function(x, filter_state) { #nolint #nousage
+set_filter_state.default_filter <- function(x, filter_state) { # nolint #nousage
   invisible(NULL)
 }
 
 #' @rdname set_filter_state
 #' @export
-set_filter_state.list <- function(x, filter_state) { #nousage
+set_filter_state.list <- function(x, filter_state) { # nousage
   if (is.null(names(x))) {
     names(x) <- rep("", length(x))
   }

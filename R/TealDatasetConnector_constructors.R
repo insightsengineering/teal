@@ -42,18 +42,22 @@
 #' library(MultiAssayExperiment)
 #' # data.frame example
 #' pull_fun2 <- callable_function(data.frame)
-#' pull_fun2$set_args(args = list(a = c(1,2,3)))
+#' pull_fun2$set_args(args = list(a = c(1, 2, 3)))
 #' dataset_connector("test", pull_fun2)
 #'
 #' # MultiAssayExperiment example
 #' pull_fun <- callable_function(
-#'   function() { library("MultiAssayExperiment"); data("miniACC"); return(miniACC) })
+#'   function() {
+#'     library("MultiAssayExperiment")
+#'     data("miniACC")
+#'     return(miniACC)
+#'   }
+#' )
 #' dataset_connector(
 #'   "miniacc",
 #'   pull_fun,
 #'   code = 'library("MultiAssayExperiment"); data("miniACC"); return(miniACC)'
 #' )
-#'
 #' @export
 dataset_connector <- function(dataname,
                               pull_callable,
@@ -223,7 +227,6 @@ scda_dataset_connector <- function(dataname,
                                    label = character(0),
                                    code = character(0),
                                    script = character(0)) {
-
   check_pkg_quietly("scda", "scda package not available.")
   stopifnot(utils.nest::is_character_single(scda_dataname))
   stopifnot(utils.nest::is_character_single(scda_name))
@@ -361,7 +364,6 @@ rds_cdisc_dataset_connector <- function(dataname,
                                         code = character(0),
                                         script = character(0),
                                         ...) {
-
   x <- rds_dataset_connector(
     dataname = dataname,
     file = file,
@@ -457,7 +459,6 @@ script_cdisc_dataset_connector <- function(dataname,
                                            code = character(0),
                                            script = character(0),
                                            ...) {
-
   x <- script_dataset_connector(
     dataname = dataname,
     file = file,
@@ -574,7 +575,6 @@ code_cdisc_dataset_connector <- function(dataname,
                                          label = character(0),
                                          mutate_code = character(0),
                                          ...) {
-
   x <- code_dataset_connector(
     dataname = dataname,
     code = code,
@@ -919,7 +919,6 @@ csv_cdisc_dataset_connector <- function(dataname,
                                         code = character(0),
                                         script = character(0),
                                         ...) {
-
   x <- csv_dataset_connector(
     dataname = dataname,
     file = file,
@@ -1036,7 +1035,7 @@ fun_dataset_connector <- function(dataname,
   is_locked <- TRUE
   if ((!is.null(cal)) && identical(cal[[1]], as.symbol("::"))) {
     pak <- cal[[2]]
-    pak_char <- as.character(pak) #nolint
+    pak_char <- as.character(pak) # nolint
     library(pak_char, character.only = TRUE)
     func_name <- cal[[3]]
     is_pak <- TRUE
@@ -1080,7 +1079,6 @@ fun_dataset_connector <- function(dataname,
   )
 
   return(x)
-
 }
 
 #' Function `CDISCTealDatasetConnector`
@@ -1106,7 +1104,6 @@ fun_cdisc_dataset_connector <- function(dataname,
                                         script = character(0),
                                         func_name = substitute(fun),
                                         ...) {
-
   x <- fun_dataset_connector(
     dataname = dataname,
     fun = fun,
@@ -1205,7 +1202,7 @@ fun_cdisc_dataset_connector <- function(dataname,
 #'   code = "import pandas as pd
 #' data = pd.DataFrame({'STUDYID':  [1, 2], 'USUBJID': [3, 4]})",
 #'   object = "data"
-#'   )
+#' )
 #'
 #' x$pull()
 #' x$get_raw_data()
@@ -1263,7 +1260,6 @@ python_dataset_connector <- function(dataname,
 
     x_fun <- CallablePythonCode$new("py_run_file") # nolint
     x_fun$set_args(list(file = file, local = TRUE))
-
   } else {
     stopifnot(is_character_single(code))
 

@@ -6,7 +6,7 @@
 #'
 #' Object that stores function name with its arguments. Methods to get call and run it.
 #'
-CallableFunction <- R6::R6Class( #nolint
+CallableFunction <- R6::R6Class( # nolint
   "CallableFunction",
   inherit = Callable,
 
@@ -25,8 +25,10 @@ CallableFunction <- R6::R6Class( #nolint
       super$initialize(env = env)
 
       stop_if_not(
-        list(!missing(fun),
-             "A valid function name must be provided.")
+        list(
+          !missing(fun),
+          "A valid function name must be provided."
+        )
       )
       stop_if_not(list(
         is_character_single(fun) || is.function(fun) || is.call(fun) || is.symbol(fun),
@@ -99,8 +101,10 @@ CallableFunction <- R6::R6Class( #nolint
       stopifnot(is.list(args) && is_fully_named_list(args))
 
       for (idx in seq_along(args)) {
-        self$set_arg_value(name = names(args)[[idx]],
-                           value = args[[idx]])
+        self$set_arg_value(
+          name = names(args)[[idx]],
+          value = args[[idx]]
+        )
       }
       logger::log_trace(
         "CallableFunction$set_args args set for function: { deparse1(private$fun_name) }."
@@ -155,10 +159,11 @@ CallableFunction <- R6::R6Class( #nolint
           private$call <- rlang::parse_expr(
             sprintf("%s$value", deparse1(private$call, collapse = "\n"))
           )
-        } else if (private$fun_name %in% c("py_run_file", "py_run_string"))
+        } else if (private$fun_name %in% c("py_run_file", "py_run_string")) {
           private$call <- rlang::parse_expr(
             sprintf("%s[[%s]]", deparse1(private$call, collapse = "\n"), deparse1(private$object, collapse = "\n"))
           )
+        }
       }
     },
     # @description

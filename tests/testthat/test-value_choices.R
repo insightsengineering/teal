@@ -11,7 +11,6 @@ ds <- teal:::CDISCFilteredData$new()
 isolate(filtered_data_set(data, ds))
 
 testthat::test_that("Will output warnings when value_choices applied on datasets with missing values and / or labels", {
-
   data <- data.frame(
     A = c(1, 2, 3),
     B = c(NA, "a", "b"),
@@ -45,7 +44,8 @@ testthat::test_that("delayed version of value_choices", {
         var_choices = "ARMCD",
         var_label = "ARM",
         subset = c("ARM A", "ARM B"),
-        sep = " - "),
+        sep = " - "
+      ),
       class = c("delayed_value_choices", "delayed_data", "choices_labeled")
     )
   )
@@ -64,7 +64,8 @@ testthat::test_that("delayed version of value_choices", {
     var_label = "ARM",
     subset = function(data) {
       levels(data$ARMCD)[1:2]
-    })
+    }
+  )
   testthat::expect_equal(
     obj,
     structure(
@@ -75,7 +76,8 @@ testthat::test_that("delayed version of value_choices", {
         subset = function(data) {
           levels(data$ARMCD)[1:2]
         },
-        sep = " - "),
+        sep = " - "
+      ),
       class = c("delayed_value_choices", "delayed_data", "choices_labeled")
     )
   )
@@ -83,10 +85,12 @@ testthat::test_that("delayed version of value_choices", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   testthat::expect_equal(
     res_obj,
-    value_choices(adsl, var_choices = "ARMCD", var_label = "ARM",
-                  subset = function(data) {
-                    levels(data$ARMCD)[1:2]
-                  })
+    value_choices(adsl,
+      var_choices = "ARMCD", var_label = "ARM",
+      subset = function(data) {
+        levels(data$ARMCD)[1:2]
+      }
+    )
   )
 
 
@@ -104,7 +108,8 @@ testthat::test_that("delayed version of value_choices", {
     "ADSL",
     var_choices = c("ARMCD", "BMRKR2"),
     var_label = c("ARM", "BMRKR2"),
-    subset = combine_armcd_bmrkr2)
+    subset = combine_armcd_bmrkr2
+  )
   testthat::expect_equal(
     obj,
     structure(
@@ -112,7 +117,8 @@ testthat::test_that("delayed version of value_choices", {
         data = "ADSL",
         var_choices = c("ARMCD", "BMRKR2"),
         var_label = c("ARM", "BMRKR2"),
-        subset = combine_armcd_bmrkr2, sep = " - "),
+        subset = combine_armcd_bmrkr2, sep = " - "
+      ),
       class = c("delayed_value_choices", "delayed_data", "choices_labeled")
     )
   )
@@ -120,7 +126,9 @@ testthat::test_that("delayed version of value_choices", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   testthat::expect_equal(
     res_obj,
-    value_choices(adsl, var_choices = c("ARMCD", "BMRKR2"), var_label = c("ARM", "BMRKR2"),
-                  subset = combine_armcd_bmrkr2)
+    value_choices(adsl,
+      var_choices = c("ARMCD", "BMRKR2"), var_label = c("ARM", "BMRKR2"),
+      subset = combine_armcd_bmrkr2
+    )
   )
 })

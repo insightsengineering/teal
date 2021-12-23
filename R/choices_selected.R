@@ -40,8 +40,8 @@ no_select_keyword <- "-- no selection --"
 #' choices_selected(choices = letters, selected = letters)
 #'
 #' choices_selected(
-#'    choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
-#'    selected = "X"
+#'   choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
+#'   selected = "X"
 #' )
 #'
 #' library(scda)
@@ -51,40 +51,42 @@ no_select_keyword <- "-- no selection --"
 #' # How to select nothing
 #' # use an empty character
 #' choices_selected(
-#'    choices = c("", "A", "B", "C"),
-#'    selected = ""
+#'   choices = c("", "A", "B", "C"),
+#'   selected = ""
 #' )
 #'
 #' # How to allow the user to select nothing
 #' # use an empty character
 #' choices_selected(
-#'    choices = c("A", "", "B", "C"),
-#'    selected = "A"
+#'   choices = c("A", "", "B", "C"),
+#'   selected = "A"
 #' )
 #'
 #'
 #' # How to make Nothing the Xth choice
 #' # just use keep_order
 #' choices_selected(
-#'    choices = c("A", "", "B", "C"),
-#'    selected = "A",
-#'    keep_order = TRUE
+#'   choices = c("A", "", "B", "C"),
+#'   selected = "A",
+#'   keep_order = TRUE
 #' )
 #'
 #'
 #' # How to give labels to selections
 #' # by adding names - choices will be replaced by "name" in UI, not in code
 #' choices_selected(
-#'    choices = c("name for A" = "A", "Name for nothing" = "", "name for b" = "B", "name for C" = "C"),
-#'    selected = "A"
+#'   choices = c("name for A" = "A", "Name for nothing" = "", "name for b" = "B", "name for C" = "C"),
+#'   selected = "A"
 #' )
 #'
 #' # by using choices_labeled
 #' # labels will be shown behind the choice
 #' choices_selected(
-#'    choices = choices_labeled(c("A", "", "B", "C"),
-#'                              c("name for A", "nothing", "name for B", "name for C")),
-#'    selected = "A"
+#'   choices = choices_labeled(
+#'     c("A", "", "B", "C"),
+#'     c("name for A", "nothing", "name for B", "name for C")
+#'   ),
+#'   selected = "A"
 #' )
 #'
 #' # functional form (subsetting for factor variables only) of choices_selected
@@ -103,9 +105,10 @@ no_select_keyword <- "-- no selection --"
 #'
 #' ui <- fluidPage(
 #'   optionalSelectInput(
-#'   inputId = "id",
-#'   choices = cs$choices,
-#'   selected = cs$selected)
+#'     inputId = "id",
+#'     choices = cs$choices,
+#'     selected = cs$selected
+#'   )
 #' )
 #' \dontrun{
 #' shinyApp(ui, server = function(input, output, session) {})
@@ -114,7 +117,6 @@ choices_selected <- function(choices,
                              selected = if (is(choices, "delayed_data")) NULL else choices[1],
                              keep_order = FALSE,
                              fixed = FALSE) {
-
   stopifnot(is.atomic(choices) || is(choices, "delayed_data"))
   stopifnot(is.atomic(selected) || is(selected, "delayed_data") || is(selected, "all_choices"))
   stopifnot(is_logical_single(keep_order))
@@ -129,7 +131,8 @@ choices_selected <- function(choices,
   if (is(choices, "delayed_data")) {
     out <- structure(
       list(choices = choices, selected = selected, keep_order = keep_order, fixed = fixed),
-      class = c("delayed_choices_selected", "delayed_data", "choices_selected"))
+      class = c("delayed_choices_selected", "delayed_data", "choices_selected")
+    )
     return(out)
   }
 
@@ -177,7 +180,6 @@ is.choices_selected <- function(x) { # nolint
 #'
 #' @export
 add_no_selected_choices <- function(x, multiple = FALSE) {
-
   if (is.null(x)) {
     choices_selected(NULL)
   } else {
@@ -190,7 +192,6 @@ add_no_selected_choices <- function(x, multiple = FALSE) {
 
     x
   }
-
 }
 
 #' Check select choices for no choice made
@@ -203,7 +204,7 @@ add_no_selected_choices <- function(x, multiple = FALSE) {
 #' @return the word or NULL
 #'
 #' @export
-no_selected_as_NULL <- function(x) { #nolint
+no_selected_as_NULL <- function(x) { # nolint
   if (is.null(x) || identical(x, no_select_keyword) || x == "") {
     NULL
   } else {
