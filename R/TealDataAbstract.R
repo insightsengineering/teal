@@ -261,8 +261,8 @@ TealDataAbstract <- R6::R6Class( # nolint
       logger::log_trace(
         sprintf(
           "TealDataAbstract$mutate code (%s lines) and vars (%s) set.",
-          length(parse(text = code)),
-          paste(names(vars), collapse = ", ")
+          length(parse(text = code, keep.source = FALSE)),
+          paste(names(vars), collapse = ', ')
         )
       )
       return(invisible(self))
@@ -301,8 +301,8 @@ TealDataAbstract <- R6::R6Class( # nolint
       logger::log_trace(
         sprintf(
           "TealDataAbstract$mutate code (%s lines) and vars (%s) set for dataset: %s.",
-          length(parse(text = code)),
-          paste(names(vars), collapse = ", "),
+          length(parse(text = code, keep.source = FALSE)),
+          paste(names(vars), collapse = ', '),
           dataname
         )
       )

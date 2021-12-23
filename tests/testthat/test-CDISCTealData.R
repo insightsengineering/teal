@@ -61,7 +61,7 @@ testthat::test_that("single dataset / dataset code", {
   data$check_metadata()
 
   new_env <- new.env()
-  eval(parse(text = data$get_code("ADSL")), envir = new_env)
+  eval(parse(text = data$get_code("ADSL"), keep.source = FALSE), envir = new_env)
   testthat::expect_identical(
     get(x = "ADSL", envir = new_env),
     data$get_dataset("ADSL")$get_raw_data()
@@ -379,7 +379,7 @@ testthat::test_that("two datasets / datasets code", {
   data$execute_mutate()
 
   new_env <- new.env()
-  eval(parse(text = data$get_code()), envir = new_env)
+  eval(parse(text = data$get_code(), keep.source = FALSE), envir = new_env)
   testthat::expect_identical(
     get(x = "ADSL", envir = new_env),
     data$get_dataset("ADSL")$get_raw_data()

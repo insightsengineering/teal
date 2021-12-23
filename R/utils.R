@@ -433,7 +433,7 @@ object_file <- function(path, class) {
   stopifnot(is_character_single(class))
 
   lines <- paste0(readLines(path), collapse = "\n")
-  object <- eval(parse(text = lines))
+  object <- eval(parse(text = lines, keep.source = FALSE))
 
   stop_if_not(list(is(object, class), paste("The object returned from the file is not of", class, "class.")))
 

@@ -763,7 +763,7 @@ ricepass_connection <- function() {
     function(id) {
       ns <- NS(id)
       tagList(
-        eval(parse(text = "ricepass::rice_ui_icepass(ns(character(0)))")),
+        eval(parse(text = "ricepass::rice_ui_icepass(ns(character(0)))", keep.source = FALSE)),
         actionButton(ns("ricepass_login_button"), "Click here to login")
       )
     }
@@ -775,7 +775,7 @@ ricepass_connection <- function() {
         id,
         function(input, output, session) {
           observeEvent(input$ricepass_login_button, {
-            eval(parse(text = "ricepass::rice_server_icepass()"))
+            eval(parse(text = "ricepass::rice_server_icepass()", keep.source = FALSE))
             # need to set connection status object to TRUE
             # executes ping() and if response is "opened" then sets to TRUE
             connection$open()
