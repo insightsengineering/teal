@@ -18,7 +18,7 @@ This will start a separate shiny app with a message"><!-- mathjax --><script src
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9038</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9040</span>
       </span>
     </div>
 
@@ -51,15 +51,6 @@ This will start a separate shiny app with a message"><!-- mathjax --><script src
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -101,8 +92,10 @@ This will start a separate shiny app with a message</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="fu">stop_shiny</span><span class="op">(</span><span class="st">"No data access"</span>, <span class="st">"You do not seem to have data access"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">stop_shiny</span><span class="op">(</span><span class="st">"No data access"</span>, <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span><span class="va">tags</span><span class="op">$</span><span class="fu">h2</span><span class="op">(</span><span class="st">"Hello World"</span><span class="op">)</span>, <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"paragraph"</span><span class="op">)</span>,</span>
-<span class="r-in"><span class="va">tags</span><span class="op">$</span><span class="fu">footer</span><span class="op">(</span><span class="st">"Please contact"</span>, <span class="va">tags</span><span class="op">$</span><span class="fu">a</span><span class="op">(</span>href <span class="op">=</span> <span class="st">"mailto:john@doe.com"</span>, <span class="st">"John Doe"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">stop_shiny</span><span class="op">(</span><span class="st">"No data access"</span>, <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">tags</span><span class="op">$</span><span class="fu">h2</span><span class="op">(</span><span class="st">"Hello World"</span><span class="op">)</span>, <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"paragraph"</span><span class="op">)</span>,</span>
+<span class="r-in">  <span class="va">tags</span><span class="op">$</span><span class="fu">footer</span><span class="op">(</span><span class="st">"Please contact"</span>, <span class="va">tags</span><span class="op">$</span><span class="fu">a</span><span class="op">(</span>href <span class="op">=</span> <span class="st">"mailto:john@doe.com"</span>, <span class="st">"John Doe"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>

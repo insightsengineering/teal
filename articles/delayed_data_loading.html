@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9038</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9040</span>
       </span>
     </div>
 
@@ -69,15 +69,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -102,7 +93,7 @@ Other releases
       <h1 data-toc-skip>Delayed Data Loading</h1>
                         <h4 data-toc-skip class="author">Dawid Kałędkowski</h4>
             
-            <h4 data-toc-skip class="date">2021-12-22</h4>
+            <h4 data-toc-skip class="date">2021-12-23</h4>
       
       
       <div class="hidden name"><code>delayed_data_loading.Rmd</code></div>
@@ -146,7 +137,7 @@ Other releases
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: shiny</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; You are using teal version 0.10.0.9038</span>
+<span class="co">#&gt; You are using teal version 0.10.0.9040</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 
@@ -210,7 +201,7 @@ Other releases
 
 <span class="va">fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> <span class="op">{</span> <span class="co"># nolint</span>
   <span class="va">ADSL_2</span> <span class="op">&lt;-</span> <span class="va">ADSL</span> <span class="co"># nolint</span>
-  <span class="va">ADSL_2</span><span class="op">$</span><span class="va">new_col</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span>
+  <span class="va">ADSL_2</span><span class="op">$</span><span class="va">new_col</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># nolint</span>
   <span class="va">ADSL_2</span>
 <span class="op">}</span><span class="op">)</span>
 
@@ -297,9 +288,10 @@ Other releases
 
 <span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span> <span class="co"># nolint</span>
 
-<span class="va">adsl_dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
-                      x <span class="op">=</span> <span class="va">ADSL</span>,
-                      code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\") %&gt;% head(3)"</span>
+<span class="va">adsl_dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>
+  dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
+  x <span class="op">=</span> <span class="va">ADSL</span>,
+  code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\") %&gt;% head(3)"</span>
 <span class="op">)</span></code></pre></div>
 <p>The object created above contains all previously defined attributes which can be extracted in any occasion.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -463,9 +455,13 @@ Other releases
 
 <span class="va">rice_conn</span><span class="op">$</span><span class="fu">set_open_server</span><span class="op">(</span>
   <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">connection</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">connection</span><span class="op">$</span><span class="fu">open</span><span class="op">(</span>args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>username <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">username</span>,
-                                password <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">password</span><span class="op">)</span>,
-                    try <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+    <span class="va">connection</span><span class="op">$</span><span class="fu">open</span><span class="op">(</span>
+      args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+        username <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">username</span>,
+        password <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">password</span>
+      <span class="op">)</span>,
+      try <span class="op">=</span> <span class="cn">TRUE</span>
+    <span class="op">)</span>
 
     <span class="kw">if</span> <span class="op">(</span><span class="va">connection</span><span class="op">$</span><span class="fu">is_open_failed</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
       <span class="fu">shinyjs</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shinyjs/man/messageFuncs.html" class="external-link">alert</a></span><span class="op">(</span>
@@ -526,7 +522,7 @@ Other releases
 <span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL_3 &lt;- (function(ADSL, name, n = 5) ADSL_3 &lt;- head(ADSL, n))(ADSL = ADSL)</span>
 
-<span class="co">#pull ADSL and ADSL_3</span>
+<span class="co"># pull ADSL and ADSL_3</span>
 <span class="va">data</span><span class="op">$</span><span class="fu">set_pull_args</span><span class="op">(</span>args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">data</span><span class="op">$</span><span class="fu">pull</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>By default <code>TealDataConnector</code> creates simple shiny module without any inputs for connectors and datasets. This means that connection opening/closing and pulling datasets are done on default arguments. However, users can easily extend the module using <code>set_ui()</code> and <code>set_server()</code> to specify the UI and server function themselves. The general rule for creating these modules is that callback from server to UI is not possible, because server module is executed after the submit button is clicked. Although see <code>set_preopen_server</code> of <code>TealDataConnection</code> object for a slight relaxation of this rule. Below we extend the app interface by adding a text input which will be passed to the <code>scda</code> function. The UI is created from <code>scda_conn</code> and <code>connectors</code> object while the server module requires <code>connectors</code> and <code>connection</code> objects as additional arguments.</p>
@@ -590,11 +586,13 @@ Other releases
 <p><code>TealData</code> manages <code>TealDataset</code>, <code>TealDatasetConnector</code> and <code>TealDataConnector</code> objects. <code>CDISCTealData</code> is the equivalent object when creating apps to analyse CDISC data. These objects are created using <code>teal_data</code> and <code>cdisc_data</code> respectively and these objects are passed as the <code>data</code> argument into <code><a href="../reference/init.html">teal::init</a></code>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-  <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
+  <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>
+    dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
     <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span>,
     code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"</span>
   <span class="op">)</span>,
-  <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADTTE"</span>,
+  <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>
+    dataname <span class="op">=</span> <span class="st">"ADTTE"</span>,
     <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adtte"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span>,
     code <span class="op">=</span> <span class="st">"ADTTE &lt;- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"</span>
   <span class="op">)</span>
@@ -646,7 +644,8 @@ Other releases
 
 
 <span class="va">adtte</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scda_dataset_connector.html">scda_cdisc_dataset_connector</a></span><span class="op">(</span>
-  dataname <span class="op">=</span> <span class="st">"ADTTE"</span>, <span class="st">"adtte"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  dataname <span class="op">=</span> <span class="st">"ADTTE"</span>, <span class="st">"adtte"</span>
+<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADTTE$x2 &lt;- 2"</span><span class="op">)</span></code></pre></div>
 <p><code><a href="../reference/get_code.html">get_code()</a></code> function returns loading code from <code>CallableFunction</code> and mutation code as provided in using <code>mutate_dataset</code>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
@@ -859,11 +858,12 @@ Other releases
   <span class="op">)</span>,
   filter <span class="op">=</span> <span class="fu"><a href="../reference/filter_spec.html">filter_spec</a></span><span class="op">(</span>
     label <span class="op">=</span> <span class="st">"Select endpoints:"</span>,
-    vars <span class="op">=</span> <span class="st">"ARMCD"</span>, <span class="co">#variable_choices("ADSL", "ARMCD") # nolint</span>
+    vars <span class="op">=</span> <span class="st">"ARMCD"</span>, <span class="co"># variable_choices("ADSL", "ARMCD") # nolint</span>
     choices <span class="op">=</span> <span class="fu"><a href="../reference/value_choices.html">value_choices</a></span><span class="op">(</span><span class="st">"ADSL"</span>,
-                            var_choices <span class="op">=</span> <span class="st">"ARMCD"</span>,
-                            var_label <span class="op">=</span> <span class="st">"ARM"</span>,
-                            subset <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">ARMCD</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+      var_choices <span class="op">=</span> <span class="st">"ARMCD"</span>,
+      var_label <span class="op">=</span> <span class="st">"ARM"</span>,
+      subset <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">ARMCD</span><span class="op">)</span><span class="op">)</span>
+    <span class="op">)</span>,
     selected <span class="op">=</span> <span class="st">"ARM A"</span>,
     multiple <span class="op">=</span> <span class="cn">TRUE</span>
   <span class="op">)</span>
@@ -889,7 +889,8 @@ Other releases
             sep <span class="op">=</span> <span class="st">" - "</span>
           <span class="op">)</span>
         <span class="op">)</span>
-      <span class="op">}</span><span class="op">)</span>,
+      <span class="op">}</span>
+    <span class="op">)</span>,
     multiple <span class="op">=</span> <span class="cn">TRUE</span>
   <span class="op">)</span>
 <span class="op">)</span></code></pre></div>

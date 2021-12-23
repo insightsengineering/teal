@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9038</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9040</span>
       </span>
     </div>
 
@@ -50,15 +50,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -121,7 +112,8 @@ Other releases
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">data_connection</span><span class="op">(</span> <span class="co"># define connection</span></span>
 <span class="r-in">  ping_fun <span class="op">=</span> <span class="va">ping_fun</span>, <span class="co"># define ping function</span></span>
 <span class="r-in">  open_fun <span class="op">=</span> <span class="va">open_fun</span>, <span class="co"># define opening function</span></span>
-<span class="r-in">  close_fun <span class="op">=</span> <span class="va">close_fun</span><span class="op">)</span> <span class="co"># define closing function</span></span>
+<span class="r-in">  close_fun <span class="op">=</span> <span class="va">close_fun</span> <span class="co"># define closing function</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">x</span><span class="op">$</span><span class="fu">set_open_args</span><span class="op">(</span>args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="co"># define additional arguments if necessary</span></span>
 <span class="r-in"></span>
@@ -130,7 +122,6 @@ Other releases
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "data.frame(x = 1:5, y = c(\"a\", \"b\", \"c\", \"d\", \"e\"))"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># get data from connection via TealDataConnector$get_dataset()</span></span>
-<span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="va">x</span><span class="op">$</span><span class="fu">open</span><span class="op">(</span>args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, y <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="co"># able to call opening function with arguments</span></span>
 <span class="r-in"><span class="va">x</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span> <span class="co"># call closing function</span></span>

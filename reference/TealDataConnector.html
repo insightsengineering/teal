@@ -19,7 +19,7 @@ open/close connection."><!-- mathjax --><script src="https://cdnjs.cloudflare.co
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9038</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9040</span>
       </span>
     </div>
 
@@ -52,15 +52,6 @@ open/close connection."><!-- mathjax --><script src="https://cdnjs.cloudflare.co
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -489,7 +480,7 @@ connection.</p>
 <span class="r-in"><span class="va">x</span><span class="op">$</span><span class="fu">set_server</span><span class="op">(</span></span>
 <span class="r-in">  <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">connection</span>, <span class="va">connectors</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span></span>
-<span class="r-in">    id <span class="op">=</span> <span class="va">id</span>,</span>
+<span class="r-in">      id <span class="op">=</span> <span class="va">id</span>,</span>
 <span class="r-in">      module <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">        <span class="co"># opens connection</span></span>
 <span class="r-in">        <span class="va">connection</span><span class="op">$</span><span class="fu">get_open_server</span><span class="op">(</span><span class="op">)</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"open_connection"</span>, connection <span class="op">=</span> <span class="va">connection</span><span class="op">)</span></span>

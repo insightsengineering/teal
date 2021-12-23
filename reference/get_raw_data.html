@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9038</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9040</span>
       </span>
     </div>
 
@@ -50,15 +50,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -145,7 +136,9 @@ if user doesn't specify <code>dataname</code> - (<code>get_raw_data</code> from 
 <span class="r-in"><span class="co"># TealDatasetConnector ---------</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">pull_fun_adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="callable_function.html">callable_function</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span><span class="op">}</span></span>
+<span class="r-in">  <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span></span>
+<span class="r-in">  <span class="op">}</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">dc</span> <span class="op">&lt;-</span> <span class="fu"><a href="dataset_connector.html">dataset_connector</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">pull_fun_adsl</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="load_dataset.html">load_dataset</a></span><span class="op">(</span><span class="va">dc</span><span class="op">)</span></span>
@@ -173,13 +166,17 @@ if user doesn't specify <code>dataname</code> - (<code>get_raw_data</code> from 
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># TealData ----------------</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>,</span>
-<span class="r-in">                      x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span>,</span>
-<span class="r-in">                      code <span class="op">=</span> <span class="st">"library(scda)\nADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span></span>
+<span class="r-in">  dataname <span class="op">=</span> <span class="st">"ADSL"</span>,</span>
+<span class="r-in">  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span>,</span>
+<span class="r-in">  code <span class="op">=</span> <span class="st">"library(scda)\nADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">adtte</span> <span class="op">&lt;-</span> <span class="fu"><a href="cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADTTE"</span>,</span>
-<span class="r-in">                       x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adtte</span>,</span>
-<span class="r-in">                       code <span class="op">=</span> <span class="st">"library(scda)\nADTTE &lt;- synthetic_cdisc_data(\"latest\")$adtte"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">adtte</span> <span class="op">&lt;-</span> <span class="fu"><a href="cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span></span>
+<span class="r-in">  dataname <span class="op">=</span> <span class="st">"ADTTE"</span>,</span>
+<span class="r-in">  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adtte</span>,</span>
+<span class="r-in">  code <span class="op">=</span> <span class="st">"library(scda)\nADTTE &lt;- synthetic_cdisc_data(\"latest\")$adtte"</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">rd</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va"><a href="TealData.html">TealData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adtte</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">get_raw_data</span><span class="op">(</span><span class="va">rd</span><span class="op">)</span></span>
@@ -230,19 +227,22 @@ if user doesn't specify <code>dataname</code> - (<code>get_raw_data</code> from 
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># TealDataConnector --------</span></span>
 <span class="r-in"><span class="va">adsl_cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="callable_function.html">callable_function</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="cdisc_dataset_connector.html">cdisc_dataset_connector</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>,</span>
-<span class="r-in">                                pull_callable <span class="op">=</span> <span class="va">adsl_cf</span>,</span>
-<span class="r-in">                                keys <span class="op">=</span> <span class="fu"><a href="get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="cdisc_dataset_connector.html">cdisc_dataset_connector</a></span><span class="op">(</span></span>
+<span class="r-in">  dataname <span class="op">=</span> <span class="st">"ADSL"</span>,</span>
+<span class="r-in">  pull_callable <span class="op">=</span> <span class="va">adsl_cf</span>,</span>
+<span class="r-in">  keys <span class="op">=</span> <span class="fu"><a href="get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">adlb_cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="callable_function.html">callable_function</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adlb</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">adlb</span> <span class="op">&lt;-</span> <span class="fu"><a href="cdisc_dataset_connector.html">cdisc_dataset_connector</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>,</span>
-<span class="r-in">                                pull_callable <span class="op">=</span> <span class="va">adlb_cf</span>,</span>
-<span class="r-in">                                keys <span class="op">=</span> <span class="fu"><a href="get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADLB"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">adlb</span> <span class="op">&lt;-</span> <span class="fu"><a href="cdisc_dataset_connector.html">cdisc_dataset_connector</a></span><span class="op">(</span></span>
+<span class="r-in">  dataname <span class="op">=</span> <span class="st">"ADLB"</span>,</span>
+<span class="r-in">  pull_callable <span class="op">=</span> <span class="va">adlb_cf</span>,</span>
+<span class="r-in">  keys <span class="op">=</span> <span class="fu"><a href="get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADLB"</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">rdc</span> <span class="op">&lt;-</span> <span class="fu"><a href="relational_data_connector.html">relational_data_connector</a></span><span class="op">(</span></span>
 <span class="r-in">  connection <span class="op">=</span> <span class="fu"><a href="data_connection.html">data_connection</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span class="r-in">  connectors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adlb</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="fu"><a href="load_datasets.html">load_datasets</a></span><span class="op">(</span><span class="va">rdc</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">get_raw_data</span><span class="op">(</span><span class="va">rdc</span><span class="op">)</span></span>

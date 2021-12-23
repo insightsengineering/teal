@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9038</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9040</span>
       </span>
     </div>
 
@@ -50,15 +50,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -204,20 +195,24 @@ within another dataset.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     anyMissing, rowMedians</span>
 <span class="r-in"><span class="co"># data.frame example</span></span>
 <span class="r-in"><span class="va">pull_fun2</span> <span class="op">&lt;-</span> <span class="fu"><a href="callable_function.html">callable_function</a></span><span class="op">(</span><span class="va">data.frame</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pull_fun2</span><span class="op">$</span><span class="fu">set_args</span><span class="op">(</span>args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">pull_fun2</span><span class="op">$</span><span class="fu">set_args</span><span class="op">(</span>args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">dataset_connector</span><span class="op">(</span><span class="st">"test"</span>, <span class="va">pull_fun2</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A TealDatasetConnector object, named test, containing a TealDataset object that has not been loaded/pulled</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># MultiAssayExperiment example</span></span>
 <span class="r-in"><span class="va">pull_fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="callable_function.html">callable_function</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="http://waldronlab.io/MultiAssayExperiment/" class="external-link">"MultiAssayExperiment"</a></span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"miniACC"</span><span class="op">)</span>; <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">miniACC</span><span class="op">)</span> <span class="op">}</span><span class="op">)</span></span>
+<span class="r-in">  <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="http://waldronlab.io/MultiAssayExperiment/" class="external-link">"MultiAssayExperiment"</a></span><span class="op">)</span></span>
+<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"miniACC"</span><span class="op">)</span></span>
+<span class="r-in">    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">miniACC</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">}</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="fu">dataset_connector</span><span class="op">(</span></span>
 <span class="r-in">  <span class="st">"miniacc"</span>,</span>
 <span class="r-in">  <span class="va">pull_fun</span>,</span>
 <span class="r-in">  code <span class="op">=</span> <span class="st">'library("MultiAssayExperiment"); data("miniACC"); return(miniACC)'</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A TealDatasetConnector object, named miniacc, containing a TealDataset object that has not been loaded/pulled</span>
-<span class="r-in"></span>
 </code></pre></div>
     </div>
   </div>

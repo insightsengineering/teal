@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9038</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9040</span>
       </span>
     </div>
 
@@ -50,15 +50,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -111,10 +102,12 @@ list with dataset connectors</p></dd>
 <span class="r-in">  <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span>nm <span class="op">=</span> <span class="fu"><a href="get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va"><a href="CDISCTealDatasetConnector.html">CDISCTealDatasetConnector</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"ADSL"</span>, <span class="va">adsl_cf</span>, keys <span class="op">=</span> <span class="fu"><a href="get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>, parent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span class="r-in">  <span class="st">"ADSL"</span>, <span class="va">adsl_cf</span>,</span>
+<span class="r-in">  keys <span class="op">=</span> <span class="fu"><a href="get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>, parent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">adae</span> <span class="op">&lt;-</span> <span class="va"><a href="CDISCTealDatasetConnector.html">CDISCTealDatasetConnector</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"ADAE"</span>, <span class="va">adae_cf</span>, keys <span class="op">=</span> <span class="fu"><a href="get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span>, parent <span class="op">=</span> <span class="st">"ADSL"</span></span>
+<span class="r-in">  <span class="st">"ADAE"</span>, <span class="va">adae_cf</span>,</span>
+<span class="r-in">  keys <span class="op">=</span> <span class="fu"><a href="get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span>, parent <span class="op">=</span> <span class="st">"ADSL"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">cdisc_data_connector</span><span class="op">(</span></span>
 <span class="r-in">  connection <span class="op">=</span> <span class="fu"><a href="data_connection.html">data_connection</a></span><span class="op">(</span>open_fun <span class="op">=</span> <span class="va"><a href="CallableFunction.html">CallableFunction</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="st">"open function"</span><span class="op">)</span><span class="op">)</span>,</span>

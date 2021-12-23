@@ -20,7 +20,7 @@ input widgets that provide only a single choice."><!-- mathjax --><script src="h
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9038</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9040</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@ input widgets that provide only a single choice."><!-- mathjax --><script src="h
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -149,10 +140,12 @@ e.g. 'auto', 'fit', '100px' or '75%'</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;&lt;option value="A" selected&gt;A&lt;/option&gt;&lt;/select&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
-<span class="r-in"><span class="fu">optionalSelectInput</span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"xvar"</span>,</span>
-<span class="r-in">                    label <span class="op">=</span> <span class="st">"x variable"</span>,</span>
-<span class="r-in">                    choices <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>,</span>
-<span class="r-in">                     selected <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">optionalSelectInput</span><span class="op">(</span></span>
+<span class="r-in">  inputId <span class="op">=</span> <span class="st">"xvar"</span>,</span>
+<span class="r-in">  label <span class="op">=</span> <span class="st">"x variable"</span>,</span>
+<span class="r-in">  choices <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>,</span>
+<span class="r-in">  selected <span class="op">=</span> <span class="st">"A"</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;&lt;option value="A" selected&gt;A&lt;/option&gt;</span>
@@ -161,10 +154,12 @@ e.g. 'auto', 'fit', '100px' or '75%'</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;option value="D"&gt;D&lt;/option&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;option value="E"&gt;E&lt;/option&gt;&lt;/select&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
-<span class="r-in"><span class="fu">optionalSelectInput</span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"xvar"</span>,</span>
-<span class="r-in">                    label <span class="op">=</span> <span class="st">"x variable"</span>,</span>
-<span class="r-in">                    choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A - value A"</span> <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span>,</span>
-<span class="r-in">                    selected <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">optionalSelectInput</span><span class="op">(</span></span>
+<span class="r-in">  inputId <span class="op">=</span> <span class="st">"xvar"</span>,</span>
+<span class="r-in">  label <span class="op">=</span> <span class="st">"x variable"</span>,</span>
+<span class="r-in">  choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A - value A"</span> <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span>,</span>
+<span class="r-in">  selected <span class="op">=</span> <span class="st">"A"</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;&lt;option value="A" selected&gt;A - value A&lt;/option&gt;&lt;/select&gt;</span>
@@ -172,31 +167,35 @@ e.g. 'auto', 'fit', '100px' or '75%'</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">ADRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adrs</span></span>
-<span class="r-in"><span class="fu">optionalSelectInput</span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"xvar"</span>,</span>
-<span class="r-in">                    label <span class="op">=</span> <span class="st">"x variable"</span>,</span>
-<span class="r-in">                    choices <span class="op">=</span> <span class="fu"><a href="choices_labeled.html">choices_labeled</a></span><span class="op">(</span></span>
-<span class="r-in">                      choices <span class="op">=</span> <span class="va">letters</span>,</span>
-<span class="r-in">                      labels <span class="op">=</span> <span class="va">LETTERS</span>,</span>
-<span class="r-in">                      types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span>
-<span class="r-in">                        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"primary_key"</span>, <span class="st">"numeric"</span>, <span class="st">"factor"</span>, <span class="st">"Date"</span><span class="op">)</span>,</span>
-<span class="r-in">                        <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">letters</span><span class="op">)</span>,</span>
-<span class="r-in">                        <span class="cn">TRUE</span></span>
-<span class="r-in">                      <span class="op">)</span>,</span>
-<span class="r-in">                      subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span></span>
-<span class="r-in">                    <span class="op">)</span>,</span>
-<span class="r-in">                    selected <span class="op">=</span> <span class="st">"a"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">optionalSelectInput</span><span class="op">(</span></span>
+<span class="r-in">  inputId <span class="op">=</span> <span class="st">"xvar"</span>,</span>
+<span class="r-in">  label <span class="op">=</span> <span class="st">"x variable"</span>,</span>
+<span class="r-in">  choices <span class="op">=</span> <span class="fu"><a href="choices_labeled.html">choices_labeled</a></span><span class="op">(</span></span>
+<span class="r-in">    choices <span class="op">=</span> <span class="va">letters</span>,</span>
+<span class="r-in">    labels <span class="op">=</span> <span class="va">LETTERS</span>,</span>
+<span class="r-in">    types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span>
+<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"primary_key"</span>, <span class="st">"numeric"</span>, <span class="st">"factor"</span>, <span class="st">"Date"</span><span class="op">)</span>,</span>
+<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">letters</span><span class="op">)</span>,</span>
+<span class="r-in">      <span class="cn">TRUE</span></span>
+<span class="r-in">    <span class="op">)</span>,</span>
+<span class="r-in">    subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">)</span>,</span>
+<span class="r-in">  selected <span class="op">=</span> <span class="st">"a"</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="a" data-content="&amp;lt;i class=&amp;quot;fa fa-chart-bar&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;chart-bar icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; a &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;A&amp;lt;/small&amp;gt;" selected="selected"&gt;a&lt;/option&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="b" data-content="&amp;lt;i class=&amp;quot;fa fa-calendar&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;calendar icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; b &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;B&amp;lt;/small&amp;gt;"&gt;b&lt;/option&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="a" data-content="&amp;lt;i class=&amp;quot;fa fa-key&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;key icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; a &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;A&amp;lt;/small&amp;gt;" selected="selected"&gt;a&lt;/option&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="b" data-content="&amp;lt;i class=&amp;quot;fa fa-key&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;key icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; b &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;B&amp;lt;/small&amp;gt;"&gt;b&lt;/option&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="c" data-content="&amp;lt;i class=&amp;quot;fa fa-sort-numeric-up&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;sort-numeric-up icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; c &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;C&amp;lt;/small&amp;gt;"&gt;c&lt;/option&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/select&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
-<span class="r-in"><span class="fu">optionalSelectInput</span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"xvar"</span>,</span>
-<span class="r-in">                    label <span class="op">=</span> <span class="st">"x variable"</span>,</span>
-<span class="r-in">                    choices <span class="op">=</span> <span class="fu"><a href="variable_choices.html">variable_choices</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ADRS</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"SEX"</span>, <span class="st">"PARAMCD"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                    selected <span class="op">=</span> <span class="st">"PARAMCD"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">optionalSelectInput</span><span class="op">(</span></span>
+<span class="r-in">  inputId <span class="op">=</span> <span class="st">"xvar"</span>,</span>
+<span class="r-in">  label <span class="op">=</span> <span class="st">"x variable"</span>,</span>
+<span class="r-in">  choices <span class="op">=</span> <span class="fu"><a href="variable_choices.html">variable_choices</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ADRS</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"SEX"</span>, <span class="st">"PARAMCD"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span class="r-in">  selected <span class="op">=</span> <span class="st">"PARAMCD"</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;</span>
@@ -207,12 +206,16 @@ e.g. 'auto', 'fit', '100px' or '75%'</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">selected_value</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">ADRS</span><span class="op">[</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARAMCD"</span>, <span class="st">"AVISIT"</span><span class="op">)</span><span class="op">]</span>, <span class="va">as.character</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">optionalSelectInput</span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"xvar"</span>,</span>
-<span class="r-in">                    label <span class="op">=</span> <span class="st">"x variable"</span>,</span>
-<span class="r-in">                    choices <span class="op">=</span> <span class="fu"><a href="value_choices.html">value_choices</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ADRS</span>,</span>
-<span class="r-in">                                            var_choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARAMCD"</span>, <span class="st">"AVISIT"</span><span class="op">)</span>,</span>
-<span class="r-in">                                            var_label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARAM"</span>, <span class="st">"AVISIT"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                    selected <span class="op">=</span> <span class="va">selected_value</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">optionalSelectInput</span><span class="op">(</span></span>
+<span class="r-in">  inputId <span class="op">=</span> <span class="st">"xvar"</span>,</span>
+<span class="r-in">  label <span class="op">=</span> <span class="st">"x variable"</span>,</span>
+<span class="r-in">  choices <span class="op">=</span> <span class="fu"><a href="value_choices.html">value_choices</a></span><span class="op">(</span></span>
+<span class="r-in">    data <span class="op">=</span> <span class="va">ADRS</span>,</span>
+<span class="r-in">    var_choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARAMCD"</span>, <span class="st">"AVISIT"</span><span class="op">)</span>,</span>
+<span class="r-in">    var_label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARAM"</span>, <span class="st">"AVISIT"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">)</span>,</span>
+<span class="r-in">  selected <span class="op">=</span> <span class="va">selected_value</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="true" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;</span>
@@ -230,7 +233,6 @@ e.g. 'auto', 'fit', '100px' or '75%'</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="BESRSPI - SCREENING" data-content="BESRSPI - SCREENING &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Best Confirmed Overall Response by Investigator - SCREENING&amp;lt;/small&amp;gt;"&gt;BESRSPI - SCREENING: Best Confirmed Overall Response by Investigator - SCREENING&lt;/option&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/select&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
-<span class="r-in"></span>
 </code></pre></div>
     </div>
   </div>
