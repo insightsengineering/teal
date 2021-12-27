@@ -516,7 +516,7 @@ testthat::test_that("copy(deep = TRUE) keeps valid references between items", {
   )
 })
 
-testthat::test_that("valid references to the items after init", {
+testthat::test_that("TealData keeps references to the objects passed to the constructor", {
   test_ds0 <- TealDataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
   test_ds1 <- TealDatasetConnector$new(
     dataname = "test_ds1",
@@ -546,4 +546,64 @@ testthat::test_that("reassign_datasets_vars updates the references of vars in it
     data$get_items()$test_ds1$get_var_r6()$test_ds0,
     cloned_items$test_ds0
   )
+})
+
+testthat::test_that("TealData$check returns NULL if the check parameter is false", {
+  mtcars_ds <- TealDataset$new("cars", head(mtcars), code = "cars <- head(mtcars)")
+  data <- TealData$new(mtcars_ds, check = FALSE)
+  testthat::expect_null(data$check())
+})
+
+testthat::test_that("TealData$check throws an error when one of the passed datasets has empty code", {
+  mtcars_ds <- TealDataset$new("cars", head(mtcars))
+  data <- TealData$new(mtcars_ds, check = TRUE)
+  testthat::expect_error(data$check(), "code is empty")
+})
+
+testthat::test_that("TealData$check returns FALSE if the code provided in datasets does not reproduce them", {
+  mtcars_ds <- TealDataset$new("cars", head(mtcars), code = "cars <- head(iris)")
+  data <- TealData$new(mtcars_ds, check = TRUE)
+  testthat::expect_false(data$check())
+})
+
+testthat::test_that("TealData$get_dataset throws an error if no dataset is found with the passed name", {
+  mtcars_ds <- TealDataset$new("cars", head(mtcars), code = "cars <- head(mtcars)")
+  data <- TealData$new(mtcars_ds, check = TRUE)
+  testthat::expect_error(data$get_dataset("iris"), "dataset iris not found")
+})
+
+testthat::test_that("TealData$get_dataset returns the dataset with the passed name", {
+  mtcars_ds <- TealDataset$new("cars", head(mtcars), code = "cars <- head(mtcars)")
+  data <- TealData$new(mtcars_ds, check = TRUE)
+  testthat::expect_identical(data$get_dataset("cars"), mtcars_ds)
+})
+
+testthat::test_that("TealData$get_datasets returns a list of all datasets if passed NULL", {
+  mtcars_ds <- TealDataset$new("cars", head(mtcars), code = "cars <- head(mtcars)")
+  iris_ds <- TealDataset$new("iris", head(iris), code = "iris <- head(iris)")
+  data <- TealData$new(cars = mtcars_ds, iris = iris_ds, check = TRUE)
+  testthat::expect_equal(data$get_dataset(), list(cars = mtcars_ds, iris = iris_ds))
+})
+
+testthat::test_that("TealData$get_items returns a dataset with the passed name", {
+  mtcars_ds <- TealDataset$new("cars", head(mtcars), code = "cars <- head(mtcars)")
+  data <- TealData$new(mtcars_ds, check = TRUE)
+  testthat::expect_identical(data$get_items("cars"), mtcars_ds)
+})
+
+testthat::test_that("TealData$get_items throws an error if there is no dataset found with the passed name", {
+  mtcars_ds <- TealDataset$new("cars", head(mtcars), code = "cars <- head(mtcars)")
+  data <- TealData$new(mtcars_ds, check = TRUE)
+  testthat::expect_error(data$get_dataset("iris"), "dataset iris not found")
+})
+
+testthat::test_that("TealData$new throws if passed a dataset with an empty name", {
+  mtcars_ds <- TealDataset$new("", head(mtcars))
+  testthat::expect_error(TealData$new(mtcars_ds, check = TRUE), "Cannot extract some dataset names")
+})
+
+testthat::test_that("TealData$new throws if passed two datasets with the same name", {
+  mtcars_ds <- TealDataset$new("cars", head(mtcars))
+  mtcars_ds2 <- TealDataset$new("cars", head(mtcars))
+  testthat::expect_error(TealData$new(mtcars_ds, mtcars_ds2), "TealDatasets names should be unique")
 })

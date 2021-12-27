@@ -45,7 +45,7 @@ TealDataAbstract <- R6::R6Class( # nolint
       }
       private$check_result <- res
       logger::log_trace("TealDataAbstract$check executed the code to reproduce the data - result: { res }.")
-      return(res)
+      res
     },
     #' @description
     #' Execute `check()` and raise an error if it's not reproducible.

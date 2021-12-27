@@ -67,7 +67,6 @@ TealData <- R6::R6Class( # nolint
     initialize = function(..., check = FALSE, join_keys) {
       dot_args <- list(...)
       allowed_classes <- c("TealDataConnector", "TealDataset", "TealDatasetConnector")
-
       is_teal_data <- is_any_class_list(dot_args, allowed_classes)
       if (!all(is_teal_data)) {
         stop("All elements should be of TealDataset(Connector) or TealDataConnector class")

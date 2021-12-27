@@ -410,6 +410,11 @@ testthat::test_that("TealDataset check method", {
   )
 })
 
+testthat::test_that("TealDataset$check returns FALSE if the passed code creates a binding with a different object", {
+  test_ds0 <- TealDataset$new("cars", head(mtcars), code = "cars <- head(iris)")
+  testthat::expect_false(test_ds0$check())
+})
+
 testthat::test_that("get_hash returns the hash of the object passed to the constructor", {
   iris_hash <- digest::digest(iris, algo = "md5")
   ds <- TealDataset$new("iris", iris)
