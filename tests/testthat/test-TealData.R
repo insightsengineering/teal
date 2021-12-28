@@ -578,7 +578,7 @@ testthat::test_that("TealData$get_dataset returns the dataset with the passed na
   testthat::expect_identical(data$get_dataset("cars"), mtcars_ds)
 })
 
-testthat::test_that("TealData$get_datasets returns a list of all datasets if passed NULL", {
+testthat::test_that("TealData$get_dataset returns a list of all datasets if passed NULL", {
   mtcars_ds <- TealDataset$new("cars", head(mtcars), code = "cars <- head(mtcars)")
   iris_ds <- TealDataset$new("iris", head(iris), code = "iris <- head(iris)")
   data <- TealData$new(cars = mtcars_ds, iris = iris_ds, check = TRUE)
@@ -594,7 +594,7 @@ testthat::test_that("TealData$get_items returns a dataset with the passed name",
 testthat::test_that("TealData$get_items throws an error if there is no dataset found with the passed name", {
   mtcars_ds <- TealDataset$new("cars", head(mtcars), code = "cars <- head(mtcars)")
   data <- TealData$new(mtcars_ds, check = TRUE)
-  testthat::expect_error(data$get_dataset("iris"), "dataset iris not found")
+  testthat::expect_error(data$get_items("iris"), "dataset iris not found")
 })
 
 testthat::test_that("TealData$new throws if passed a dataset with an empty name", {
