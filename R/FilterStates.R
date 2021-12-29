@@ -299,6 +299,19 @@ FilterStates <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
+    are_queues_empty = function() {
+      sizes <- shiny::reactiveValues("0" = TRUE)
+      empty <- reactiveVal(TRUE)
+      for(i in 1:length(private$queue)) {
+        observeEvent(private$queue[[i]]$get(), {
+          sizes[[as.character(i)]] <- private$queue[[i]]$size() == 0
+          empty(all(unlist(shiny::reactiveValuesToList(sizes))))
+        })
+      }
+
+      empty
+    },
+
     #' @description
     #' Returns a list of `FilterState` objects stored in this `FilterStates.`
     #' @param queue_index (`character(1)`, `integer(1)`)\cr

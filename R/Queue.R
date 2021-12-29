@@ -156,7 +156,7 @@ ReactiveQueue <- R6::R6Class( # nolint
     }
   ),
   private = list(
-    array = NULL, # because it hold reactiveVal
+    array = NULL, # because it holds reactiveVal
     set = function(x, append = FALSE) {
       value_to_set <- if (isTRUE(append)) {
         c(self$get(), x)
