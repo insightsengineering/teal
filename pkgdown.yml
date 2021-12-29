@@ -7,7 +7,8 @@ articles:
   filter_panel: filter_panel.html
   getting_started: getting_started.html
   teal_design_and_implementation: teal_design_and_implementation.html
-last_built: 2021-12-23T16:05Z
+  teal_options: teal_options.html
+last_built: 2021-12-29T16:50Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles
