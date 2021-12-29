@@ -582,14 +582,6 @@ FilterStates <- R6::R6Class( # nolint
       }
     },
 
-    #' Get all `FilterState` in the queue.
-    #' parameter queue_index (`character(1)` or `integer`)
-    #' index of the `private$queue` list where `ReactiveQueue` are kept.
-    #' returns a list of `FilterState`.
-    get_filter_state = function(queue_index) {
-      self$queue_get(queue_index)
-    },
-
     # Checks if the queue of the given index was initialized in this `FilterStates`
     # @param queue_index (character or integer)
     validate_queue_exists = function(queue_index) {
@@ -693,7 +685,7 @@ DFFilterStates <- R6::R6Class( # nolint
           })
 
           observeEvent(added_state_name(), ignoreNULL = TRUE, {
-            fstates <- private$get_filter_state(1L)
+            fstates <- self$queue_get(1L)
             for (fname in added_state_name()) {
               private$insert_filter_state_ui(
                 id = fname,
@@ -741,7 +733,7 @@ DFFilterStates <- R6::R6Class( # nolint
         "{ class(self)[1] }$set_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
       )
 
-      filter_states <- private$get_filter_state(1L)
+      filter_states <- self$queue_get(1L)
       state_names <- names(state)
       excluded_vars <- setdiff(state_names, vars_include)
       if (length(excluded_vars) > 0) {
@@ -794,7 +786,7 @@ DFFilterStates <- R6::R6Class( # nolint
     remove_filter_state = function(element_id) {
       logger::log_trace("{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }")
 
-      if (!element_id %in% names(private$get_filter_state(1L))) {
+      if (!element_id %in% names(self$queue_get(1L))) {
         warning(paste(
           "Variable:", element_id, "is not present in the actual active filters of dataset: { private$input_dataname }",
           "therefore no changes are applied."
@@ -1033,7 +1025,7 @@ MAEFilterStates <- R6::R6Class( # nolint
           })
 
           observeEvent(added_state_name(), ignoreNULL = TRUE, {
-            fstates <- private$get_filter_state("y")
+            fstates <- self$queue_get("y")
             for (fname in added_state_name()) {
               private$insert_filter_state_ui(
                 id = fname,
@@ -1079,7 +1071,7 @@ MAEFilterStates <- R6::R6Class( # nolint
         "MAEFilterState$set_filter_state initializing,",
         "dataname: { deparse1(private$input_dataname) }"
       ))
-      filter_states <- private$get_filter_state("y")
+      filter_states <- self$queue_get("y")
       html_id_mapping <- private$map_vars_to_html_ids(
         get_filterable_varnames(SummarizedExperiment::colData(data))
       )
@@ -1123,7 +1115,7 @@ MAEFilterStates <- R6::R6Class( # nolint
         "{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }"
       )
 
-      if (!element_id %in% names(private$get_filter_state("y"))) {
+      if (!element_id %in% names(self$queue_get("y"))) {
         warning(paste(
           "Variable:", element_id,
           "is not present in the actual active filters of dataset: { private$input_dataname }",
@@ -1354,7 +1346,7 @@ SEFilterStates <- R6::R6Class( # nolint
           })
 
           observeEvent(added_state_name_subset(), ignoreNULL = TRUE, {
-            fstates <- private$get_filter_state("subset")
+            fstates <- self$queue_get("subset")
 
             for (fname in added_state_name_subset()) {
               private$insert_filter_state_ui(
@@ -1392,7 +1384,7 @@ SEFilterStates <- R6::R6Class( # nolint
           })
 
           observeEvent(added_state_name_select(), ignoreNULL = TRUE, {
-            fstates <- private$get_filter_state("select")
+            fstates <- self$queue_get("select")
             for (fname in added_state_name_select()) {
               private$insert_filter_state_ui(
                 id = fname,
@@ -1463,7 +1455,7 @@ SEFilterStates <- R6::R6Class( # nolint
         object = paste0("rowData_", row_html_mapping),
         nm = names(row_html_mapping)
       )
-      filter_states <- private$get_filter_state("subset")
+      filter_states <- self$queue_get("subset")
       for (varname in names(state$subset)) {
         value <- state$subset[[varname]]
         if (varname %in% names(filter_states)) {
@@ -1526,7 +1518,7 @@ SEFilterStates <- R6::R6Class( # nolint
         combine = "and"
       )
       for (varname in element_id$subset) {
-        if (!all(unlist(element_id$subset) %in% names(private$get_filter_state("subset")))) {
+        if (!all(unlist(element_id$subset) %in% names(self$queue_get("subset")))) {
           warning(paste(
             "Variable:", element_id, "is not present in the actual active subset filters of dataset:",
             "{ deparse(private$input_dataname) } therefore no changes are applied."
@@ -1543,7 +1535,7 @@ SEFilterStates <- R6::R6Class( # nolint
       }
 
       for (varname in element_id$select) {
-        if (!all(unlist(element_id$select) %in% names(private$get_filter_state("select")))) {
+        if (!all(unlist(element_id$select) %in% names(self$queue_get("select")))) {
           warning(paste(
             "Variable:", element_id, "is not present in the actual active select filters of dataset:",
             "{ private$input_dataname } therefore no changes are applied."
@@ -1854,7 +1846,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
           })
 
           observeEvent(added_state_name(), ignoreNULL = TRUE, {
-            fstates <- private$get_filter_state("subset")
+            fstates <- self$queue_get("subset")
             for (fname in added_state_name()) {
               private$insert_filter_state_ui(
                 id = fname,
@@ -1905,7 +1897,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
         "MatrixFilterState$set_filter_state initializing,",
         "dataname: { deparse1(private$input_dataname) }"
       ))
-      filter_states <- private$get_filter_state("subset")
+      filter_states <- self$queue_get("subset")
       for (varname in names(state)) {
         value <- state[[varname]]
         if (varname %in% names(filter_states)) {
@@ -1942,7 +1934,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     remove_filter_state = function(element_id) {
       logger::log_trace("{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }")
 
-      if (!element_id %in% names(private$get_filter_state("subset"))) {
+      if (!element_id %in% names(self$queue_get("subset"))) {
         warning(paste(
           "Variable:", element_id, "is not present in the actual active filters of dataset:",
           "{ private$input_dataname } therefore no changes are applied."
