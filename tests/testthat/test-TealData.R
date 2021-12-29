@@ -566,6 +566,12 @@ testthat::test_that("TealData$check returns FALSE if the code provided in datase
   testthat::expect_false(data$check())
 })
 
+testthat::test_that("TealData$check returns TRUE if the code is reproducible", {
+  mtcars_ds <- TealDataset$new("cars", head(mtcars), code = "cars <- head(mtcars)")
+  data <- TealData$new(mtcars_ds, check = TRUE)
+  testthat::expect_true(data$check())
+})
+
 testthat::test_that("TealData$get_dataset throws an error if no dataset is found with the passed name", {
   mtcars_ds <- TealDataset$new("cars", head(mtcars), code = "cars <- head(mtcars)")
   data <- TealData$new(mtcars_ds, check = TRUE)
