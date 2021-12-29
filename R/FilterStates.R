@@ -1453,7 +1453,6 @@ SEFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' @description
     #' Get active filter state
     #'
     #' Get all active filters from this dataset in form of the nested list.

@@ -384,7 +384,7 @@ FilterState <- R6::R6Class( # nolint
     #' Get filter state
     #'
     #' @return `list` containing values taken from the reactive fields:
-    #' * `selected` (`numeric(2)`) range of the filter.
+    #' * `selected` (`atomic`) length depends on a `FilterState` variant.
     #' * `keep_na` (`logical(1)`) whether `NA` should be kept.
     get_state = function() {
       list(
@@ -755,6 +755,17 @@ EmptyFilterState <- R6::R6Class( # nolint
       } else {
         FALSE
       }
+    },
+
+    #' @description
+    #' Get filter state
+    #'
+    #' @return `list` containing values taken from the reactive fields:
+    #' * `keep_na` (`logical(1)`) whether `NA` should be kept.
+    get_state = function() {
+      list(
+        keep_na = self$get_keep_na()
+      )
     },
 
     #' @description
