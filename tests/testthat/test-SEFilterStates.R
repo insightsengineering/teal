@@ -226,6 +226,26 @@ testthat::test_that(
 )
 
 testthat::test_that(
+  "SEFilterStates$get_filter_state returns list identical to input",
+  code = {
+    obj <- get_test_data()
+    test <- obj
+    sefs <- SEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0)
+    )
+
+    fs <- list(
+      subset = list(feature_id = list(selected = c("ID001", "ID002"), keep_na = TRUE)),
+      select = list(Treatment = list(selected = "ChIP", keep_na = FALSE))
+    )
+    sefs$set_filter_state(state = fs, data = obj)
+    testthat::expect_identical(isolate(sefs$get_filter_state()), fs)
+  }
+)
+
+testthat::test_that(
   "SEFilterStates$remove_filter_state removes filters in ReactiveQueue",
   code = {
     obj <- get_test_data()

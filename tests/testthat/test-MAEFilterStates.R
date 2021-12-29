@@ -142,6 +142,26 @@ testthat::test_that(
 )
 
 testthat::test_that(
+  "MAEFilterStates$get_filter_state returns list identical to input",
+  code = {
+    maefs <- MAEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+      vital_status = list(selected = "1", keep_na = FALSE),
+      gender = list(selected = "female", keep_na = TRUE)
+    )
+    maefs$set_filter_state(state = fs, data = MultiAssayExperiment::miniACC)
+    testthat::expect_equal(isolate(maefs$get_filter_state()), fs)
+  }
+)
+
+testthat::test_that(
   "MAEFilterStates$remove_filter_state removes filters in FilterState(s)",
   code = {
     maefs <- MAEFilterStates$new(
