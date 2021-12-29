@@ -36,7 +36,7 @@ Default: `"{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans}
 ### `teal.log_level` (`character`)
 This is the logging level threshold used in a `teal` application. A `teal` application will not emit logs below this level. Read the documentation of `teal::register_logger` for more information. Possible values: `logger::TRACE`, `logger::INFO`, `logger::WARNING`, `logger::ERROR`. See the documentation of `logger::TRACE` for all possible values of logging threshold and more information on what it does.
 
-Default: `"INFO"`.
+Default: `logger::INFO`.
 
 ### `teal_logging`
 Deprecated.
