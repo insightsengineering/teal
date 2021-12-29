@@ -614,10 +614,14 @@ FilterStates <- R6::R6Class( # nolint
 
     # Maps the array of strings to sanitized unique HTML ids.
     # @param keys `character` the array of strings
+    # @param prefix `character(1)` text to prefix id. Needed in case of multiple
+    #  queue objects where keys (variables) might be duplicated across queues
     # @return `list` the mapping
-    map_vars_to_html_ids = function(keys) {
+    map_vars_to_html_ids = function(keys, prefix = "") {
+      checkmate::assert_character(keys, null.ok = TRUE)
+      checkmate::assert_character(prefix, len = 1)
       sanitized_values <- make.unique(gsub("[^[:alnum:]]", perl = TRUE, replacement = "", x = keys))
-      sanitized_values <- paste0("var_", sanitized_values)
+      sanitized_values <- sprintf("%s_var_%s", prefix, sanitized_values)
       stats::setNames(object = sanitized_values, nm = keys)
     }
   )
@@ -695,9 +699,10 @@ DFFilterStates <- R6::R6Class( # nolint
 
           observeEvent(added_state_name(), ignoreNULL = TRUE, {
             fstates <- self$queue_get(1L)
+            html_ids <- private$map_vars_to_html_ids(names(fstates))
             for (fname in added_state_name()) {
               private$insert_filter_state_ui(
-                id = fname,
+                id = html_ids[fname],
                 filter_state = fstates[[fname]],
                 queue_index = 1L,
                 element_id = fname
@@ -1046,9 +1051,10 @@ MAEFilterStates <- R6::R6Class( # nolint
 
           observeEvent(added_state_name(), ignoreNULL = TRUE, {
             fstates <- self$queue_get("y")
+            html_ids <- private$map_vars_to_html_ids(names(fstates))
             for (fname in added_state_name()) {
               private$insert_filter_state_ui(
-                id = fname,
+                id = html_ids[fname],
                 filter_state = fstates[[fname]],
                 queue_index = "y",
                 element_id = fname
@@ -1102,9 +1108,6 @@ MAEFilterStates <- R6::R6Class( # nolint
         "dataname: { deparse1(private$input_dataname) }"
       ))
       filter_states <- self$queue_get("y")
-      html_id_mapping <- private$map_vars_to_html_ids(
-        get_filterable_varnames(SummarizedExperiment::colData(data))
-      )
       for (varname in names(state)) {
         value <- state[[varname]]
         if (varname %in% names(filter_states)) {
@@ -1377,10 +1380,10 @@ SEFilterStates <- R6::R6Class( # nolint
 
           observeEvent(added_state_name_subset(), ignoreNULL = TRUE, {
             fstates <- self$queue_get("subset")
-
+            html_ids <- private$map_vars_to_html_ids(keys = names(fstates), prefix = "rowData")
             for (fname in added_state_name_subset()) {
               private$insert_filter_state_ui(
-                id = fname,
+                id = html_ids[fname],
                 filter_state = fstates[[fname]],
                 queue_index = "subset",
                 element_id = fname
@@ -1415,9 +1418,10 @@ SEFilterStates <- R6::R6Class( # nolint
 
           observeEvent(added_state_name_select(), ignoreNULL = TRUE, {
             fstates <- self$queue_get("select")
+            html_ids <- private$map_vars_to_html_ids(keys = names(fstates), prefix = "colData")
             for (fname in added_state_name_select()) {
               private$insert_filter_state_ui(
-                id = fname,
+                id = html_ids[fname],
                 filter_state = fstates[[fname]],
                 queue_index = "select",
                 element_id = fname
@@ -1499,13 +1503,6 @@ SEFilterStates <- R6::R6Class( # nolint
         combine = "or"
       )
 
-      row_html_mapping <- private$map_vars_to_html_ids(
-        get_filterable_varnames(SummarizedExperiment::rowData(data))
-      )
-      row_html_mapping <- setNames(
-        object = paste0("rowData_", row_html_mapping),
-        nm = names(row_html_mapping)
-      )
       filter_states <- self$queue_get("subset")
       for (varname in names(state$subset)) {
         value <- state$subset[[varname]]
@@ -1527,10 +1524,6 @@ SEFilterStates <- R6::R6Class( # nolint
         }
       }
 
-      col_html_mapping <-
-        private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
-      col_html_mapping <-
-        setNames(object = paste0("colData_", col_html_mapping), nm = names(col_html_mapping))
       for (varname in names(state$select)) {
         value <- state$select[[varname]]
         fstate <- init_filter_state(
@@ -1539,7 +1532,6 @@ SEFilterStates <- R6::R6Class( # nolint
           input_dataname = private$input_dataname
         )
         set_filter_state(x = value, fstate)
-        id <- col_html_mapping[[varname]]
         self$queue_push(
           x = fstate,
           queue_index = "select",
@@ -1778,11 +1770,6 @@ SEFilterStates <- R6::R6Class( # nolint
             }
           )
 
-          col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(col_data))
-          col_html_mapping <- setNames(
-            object = paste0("colData_", col_html_mapping),
-            nm = names(col_html_mapping)
-          )
           observeEvent(
             eventExpr = input$col_to_add,
             handlerExpr = {
@@ -1790,7 +1777,6 @@ SEFilterStates <- R6::R6Class( # nolint
                 "SEFilterStates$srv_add_filter_state@3 adding FilterState to col data,",
                 "dataname: { deparse1(private$input_dataname) }"
               ))
-              id <- col_html_mapping[[input$col_to_add]]
               self$queue_push(
                 x = init_filter_state(
                   SummarizedExperiment::colData(data)[[input$col_to_add]],
@@ -1807,11 +1793,6 @@ SEFilterStates <- R6::R6Class( # nolint
             }
           )
 
-          row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(row_data))
-          row_html_mapping <- setNames(
-            object = paste0("rowData_", row_html_mapping),
-            nm = names(row_html_mapping)
-          )
           observeEvent(
             eventExpr = input$row_to_add,
             handlerExpr = {
@@ -1819,7 +1800,6 @@ SEFilterStates <- R6::R6Class( # nolint
                 "SEFilterStates$srv_add_filter_state@4 adding FilterState to row data,",
                 "dataname: { deparse1(private$input_dataname) }"
               ))
-              id <- row_html_mapping[[input$row_to_add]]
               self$queue_push(
                 x = init_filter_state(
                   SummarizedExperiment::rowData(data)[[input$row_to_add]],
@@ -1896,11 +1876,12 @@ MatrixFilterStates <- R6::R6Class( # nolint
             previous_state(self$queue_get("subset"))
           })
 
-          observeEvent(added_state_name(), ignoreNULL = TRUE, {
+          observeEvent(added_state_name(), ignoreNULL = TRUE,  {
             fstates <- self$queue_get("subset")
+            html_ids <- private$map_vars_to_html_ids(keys = names(fstates))
             for (fname in added_state_name()) {
               private$insert_filter_state_ui(
-                id = fname,
+                id = html_ids[fname],
                 filter_state = fstates[[fname]],
                 queue_index = "subset",
                 element_id = fname
