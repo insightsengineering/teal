@@ -27,6 +27,7 @@ isolate(filter_state$get_call())
 \itemize{
 \item \href{#method-new}{\code{EmptyFilterState$new()}}
 \item \href{#method-get_call}{\code{EmptyFilterState$get_call()}}
+\item \href{#method-get_state}{\code{EmptyFilterState$get_state()}}
 \item \href{#method-ui}{\code{EmptyFilterState$ui()}}
 \item \href{#method-server}{\code{EmptyFilterState$server()}}
 \item \href{#method-set_state}{\code{EmptyFilterState$set_state()}}
@@ -104,6 +105,22 @@ and must be executed in reactive or isolated context.
 \if{html}{\out{<div class="r">}}\preformatted{EmptyFilterState$get_call()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_state}{}}}
+\subsection{Method \code{get_state()}}{
+Get filter state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{EmptyFilterState$get_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} containing values taken from the reactive fields:
+\itemize{
+\item \code{keep_na} (\code{logical(1)}) whether \code{NA} should be kept.
+}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ui"></a>}}

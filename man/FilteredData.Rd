@@ -47,51 +47,52 @@ datasets <- teal:::FilteredData$new()
 # setting the data
 datasets$set_dataset(dataset("iris", iris))
 datasets$set_dataset(dataset("mtcars", mtcars))
-
-isolate({
-  datasets$datanames()
-  datasets$get_filter_overview("iris")
-
-  # filters dataset to obtain information
-  datasets$get_filter_overview("mtcars")
-
-  print(datasets$get_call("iris"))
-  print(datasets$get_call("mtcars"))
-
-  df <- datasets$get_data("iris", filtered = FALSE)
-  print(df)
-})
+datasets$datanames()
 
 
-filter_state_iris <- teal:::init_filter_state(
-  iris$Species,
-  varname = "Species",
-  varlabel = "Species name",
-  input_dataname = as.name("iris"),
-  extract_type = "list"
+df <- datasets$get_data("iris", filtered = FALSE)
+print(df)
+
+datasets$set_filter_state(
+  list(iris = list(Species = list(selected = "virginica")))
 )
-filter_state_iris$set_selected("virginica")
-
-queue <- datasets$get_filtered_dataset("iris")$get_filter_states(1)
-queue$queue_push(filter_state_iris, queue_index = 1L, element_id = "virginica")
-
 isolate(datasets$get_call("iris"))
 
-
-filter_state_mtcars <- teal:::init_filter_state(
-  mtcars$mpg,
-  varname = "mpg",
-  varlabel = "Miles per galon",
-  input_dataname = as.name("mpg"),
-  extract_type = "list"
+datasets$set_filter_state(
+  list(mtcars = list(mpg = list(selected = c(15, 20))))
 )
-filter_state_mtcars$set_selected(c(15, 20))
 
-queue <- datasets$get_filtered_dataset("mtcars")$get_filter_states("filter")
-queue$queue_push(filter_state_mtcars, queue_index = 1L, element_id = "mpg")
-
+isolate(datasets$get_filter_state())
+isolate(datasets$get_filter_overview("iris"))
+isolate(datasets$get_filter_overview("mtcars"))
 isolate(datasets$get_call("iris"))
 isolate(datasets$get_call("mtcars"))
+
+## ------------------------------------------------
+## Method `FilteredData$set_filter_state`
+## ------------------------------------------------
+
+datasets <- teal:::FilteredData$new()
+datasets$set_dataset(dataset("iris", iris))
+datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
+fs <- list(
+  iris = list(
+    Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),
+    Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+  ),
+  mae = list(
+    subjects = list(
+      years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+      vital_status = list(selected = "1", keep_na = FALSE),
+      gender = list(selected = "female", keep_na = TRUE)
+    ),
+    RPPAArray = list(
+      subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+    )
+  )
+)
+datasets$set_filter_state(state = fs)
+shiny::isolate(datasets$get_filter_state())
 }
 \keyword{internal}
 \section{Methods}{
@@ -115,7 +116,7 @@ isolate(datasets$get_call("mtcars"))
 \item \href{#method-handle_active_datanames}{\code{FilteredData$handle_active_datanames()}}
 \item \href{#method-set_dataset}{\code{FilteredData$set_dataset()}}
 \item \href{#method-set_code}{\code{FilteredData$set_code()}}
-\item \href{#method-get_bookmark_state}{\code{FilteredData$get_bookmark_state()}}
+\item \href{#method-get_filter_state}{\code{FilteredData$get_filter_state()}}
 \item \href{#method-set_filter_state}{\code{FilteredData$set_filter_state()}}
 \item \href{#method-remove_filter_state}{\code{FilteredData$remove_filter_state()}}
 \item \href{#method-remove_all_filter_states}{\code{FilteredData$remove_all_filter_states()}}
@@ -521,19 +522,20 @@ unfiltered datasets}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-get_bookmark_state}{}}}
-\subsection{Method \code{get_bookmark_state()}}{
-Returns the state to be bookmarked
+\if{html}{\out{<a id="method-get_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
+\subsection{Method \code{get_filter_state()}}{
+Get active filter state
 
-hash sums of \code{datasets}, \code{FilterState} selections and \code{preproc_code}
-are bookmarked.
+Get all active filters in form of the nested list.
+Output list can be used as an input to \code{self$set_filter_state}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_bookmark_state()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_state()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-named list
+\code{list} with elements number equal to number of datasets with
+active filters.
 }
 }
 \if{html}{\out{<hr>}}
@@ -556,6 +558,34 @@ nested list of filter selections applied to datasets.}
 \subsection{Returns}{
 \code{NULL}
 }
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{datasets <- teal:::FilteredData$new()
+datasets$set_dataset(dataset("iris", iris))
+datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
+fs <- list(
+  iris = list(
+    Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),
+    Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+  ),
+  mae = list(
+    subjects = list(
+      years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+      vital_status = list(selected = "1", keep_na = FALSE),
+      gender = list(selected = "female", keep_na = TRUE)
+    ),
+    RPPAArray = list(
+      subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+    )
+  )
+)
+datasets$set_filter_state(state = fs)
+shiny::isolate(datasets$get_filter_state())
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}

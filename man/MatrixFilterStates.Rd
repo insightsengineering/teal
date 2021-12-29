@@ -19,6 +19,7 @@ Initialize \code{MatrixFilterStates} object
 \itemize{
 \item \href{#method-new}{\code{MatrixFilterStates$new()}}
 \item \href{#method-server}{\code{MatrixFilterStates$server()}}
+\item \href{#method-get_filter_state}{\code{MatrixFilterStates$get_filter_state()}}
 \item \href{#method-set_filter_state}{\code{MatrixFilterStates$set_filter_state()}}
 \item \href{#method-remove_filter_state}{\code{MatrixFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MatrixFilterStates$ui_add_filter_state()}}
@@ -83,6 +84,22 @@ an ID string that corresponds with the ID used to call the module's UI function.
 }
 \subsection{Returns}{
 \code{moduleServer} function which returns \code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
+\subsection{Method \code{get_filter_state()}}{
+Get active filter state
+
+Get all active filters from this dataset in form of the nested list.
+Output list can be used as an input to \code{self$set_filter_state}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$get_filter_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} containing \code{list} with selected values for each \code{FilterState}.
 }
 }
 \if{html}{\out{<hr>}}

@@ -15,6 +15,27 @@ single \code{ReactiveQueue} with no specified name which means that
 when calling the function associated to this class (\code{dplyr::filter}), a list of
 conditions are passed to unnamed arguments (\code{...}).
 }
+\examples{
+
+## ------------------------------------------------
+## Method `DFFilterStates$set_filter_state`
+## ------------------------------------------------
+
+dffs <- teal:::DFFilterStates$new(
+  input_dataname = "iris",
+  output_dataname = "iris_filtered",
+  datalabel = character(0),
+  varlabels = character(0),
+  keys = character(0)
+)
+fs <- list(
+  Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
+  Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+)
+dffs$set_filter_state(state = fs, data = iris)
+shiny::isolate(dffs$get_filter_state())
+
+}
 \section{Super class}{
 \code{\link[teal:FilterStates]{teal::FilterStates}} -> \code{DFFilterStates}
 }
@@ -24,6 +45,7 @@ conditions are passed to unnamed arguments (\code{...}).
 \item \href{#method-new}{\code{DFFilterStates$new()}}
 \item \href{#method-get_fun}{\code{DFFilterStates$get_fun()}}
 \item \href{#method-server}{\code{DFFilterStates$server()}}
+\item \href{#method-get_filter_state}{\code{DFFilterStates$get_filter_state()}}
 \item \href{#method-set_filter_state}{\code{DFFilterStates$set_filter_state()}}
 \item \href{#method-remove_filter_state}{\code{DFFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{DFFilterStates$ui_add_filter_state()}}
@@ -112,6 +134,22 @@ an ID string that corresponds with the ID used to call the module's UI function.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
+\subsection{Method \code{get_filter_state()}}{
+Get active filter state
+
+Get all active filters from this dataset in form of the nested list.
+Output list can be used as an input to \code{self$set_filter_state}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$get_filter_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} containing \code{list} with selected values for each \code{FilterState}.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
 \subsection{Method \code{set_filter_state()}}{
@@ -146,6 +184,27 @@ optional, vector of column names to be included.}
 \subsection{Returns}{
 \code{NULL}
 }
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{dffs <- teal:::DFFilterStates$new(
+  input_dataname = "iris",
+  output_dataname = "iris_filtered",
+  datalabel = character(0),
+  varlabels = character(0),
+  keys = character(0)
+)
+fs <- list(
+  Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
+  Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+)
+dffs$set_filter_state(state = fs, data = iris)
+shiny::isolate(dffs$get_filter_state())
+
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}

@@ -13,30 +13,49 @@ init_filtered_dataset(dataset)
 \code{FilteredDataset} contains \code{TealDataset}
 }
 \examples{
+# DefaultFilteredDataset example
 iris_d <- dataset("iris", iris)
 iris_fd <- teal:::init_filtered_dataset(iris_d)
 
+\dontrun{
+shinyApp(
+  ui = fluidPage(
+    iris_fd$ui_add_filter_state(id = "add"),
+    iris_fd$ui("dataset"),
+    verbatimTextOutput("call"),
+    tableOutput("tbl")
+  ),
+  server = function(input, output, session) {
+    iris_fd$srv_add_filter_state(id = "add")
+    iris_fd$server(id = "dataset")
+
+    output$call <- renderText({
+      paste(
+        vapply(iris_fd$get_call(), deparse1, character(1), collapse = "\n"),
+        collapse = "\n"
+      )
+    })
+
+    output$tbl <- renderTable(iris_fd$get_data(filtered = TRUE))
+  }
+)
+}
+
+# CDISCFilteredDataset example
 library(scda)
 adsl_d <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
 adsl_fd <- teal:::init_filtered_dataset(adsl_d)
 
-library(MultiAssayExperiment)
-MAE_d <- dataset("MAE", miniACC)
 \dontrun{
 shinyApp(
   ui = fluidPage(
-    actionButton("clear", span(icon("times"), "Remove all filters")),
     adsl_fd$ui_add_filter_state(id = "add"),
     adsl_fd$ui("dataset"),
     verbatimTextOutput("call"),
     tableOutput("tbl")
   ),
   server = function(input, output, session) {
-    adsl_fd$srv_add_filter_state(
-      vars_include = adsl_fd$get_filterable_varnames(),
-      id = "add"
-    )
-
+    adsl_fd$srv_add_filter_state(id = "add")
     adsl_fd$server(id = "dataset")
 
     output$call <- renderText({
@@ -46,14 +65,33 @@ shinyApp(
       )
     })
 
-    output$tbl <- renderTable({
-      adsl_fd$get_data(filtered = TRUE)
-    })
+    output$tbl <- renderTable(adsl_fd$get_data(filtered = TRUE))
+  }
+)
+}
 
-    observeEvent(
-      input$clear,
-      adsl_fd$queues_empty()
-    )
+# MAEFilteredDataset example
+library(MultiAssayExperiment)
+MAE_d <- dataset("MAE", miniACC)
+MAE_fd <- teal:::init_filtered_dataset(MAE_d)
+
+\dontrun{
+shinyApp(
+  ui = fluidPage(
+    MAE_fd$ui_add_filter_state(id = "add"),
+    MAE_fd$ui("dataset"),
+    verbatimTextOutput("call")
+  ),
+  server = function(input, output, session) {
+    MAE_fd$srv_add_filter_state(id = "add")
+    MAE_fd$server(id = "dataset")
+
+    output$call <- renderText({
+      paste(
+        vapply(MAE_fd$get_call(), deparse1, character(1), collapse = "\n"),
+        collapse = "\n"
+      )
+    })
   }
 )
 }
