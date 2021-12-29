@@ -4,7 +4,7 @@ author: "Paweł Rucki"
 date: " 2021-12-23"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Teal Application Options}
+  %\VignetteIndexEntry{Modifying a Teal application with R options}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::knitr}
 editor_options:
