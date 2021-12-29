@@ -47,7 +47,7 @@ This indicates whether to print the `Javascript` console logs to the `R` console
 Default: `FALSE`.
 
 ### `teal.threshold_slider_vs_checkboxgroup` (`numeric`)
-It is the threshold which determines if a numeric variable is treated as a factor in the filter panel; If the number of unique values of a numeric variable is less than this threshold this variable will be treated as a factor instead of a numeric. As an example, imagine `teal.threshold_slider_vs_checkboxgroup` equals to 2. Then a numeric variable `c(1, 1, 1)`, which has only one unique value (a digit `1`), is treated as a factor in the filter panel (and in the filter panel only!). The filter panel creates a checkbox widget to filter values from this variable, as it would for a factor variable, instead of a usual slider widget for numeric variables.
+It is the threshold that determines if a numeric variable is treated as a factor in the filter panel. If the number of unique values of a numeric variable is less than this threshold this variable will be treated as a factor instead of a numeric one. As an example, imagine `teal.threshold_slider_vs_checkboxgroup` equals to 2. Then a numeric variable `c(1, 1, 1)`, which has only one unique value (a digit `1`), is treated as a factor in the filter panel (and in the filter panel only!). The filter panel creates a checkbox widget to filter values from this variable, as it would for a factor variable, instead of a usual slider widget for numeric variables.
 
 Default: 5.
 
