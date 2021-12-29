@@ -299,17 +299,26 @@ FilterStates <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
+    #' @description
+    #' Returns a boolean value indicating whether there are any active filters
+    #' in this `FilterStates``.
+    #' @details Uses a singleton pattern for the returned reactive because
+    #' otherwise an observer is returned every time this function is called.
+    #' This is undesirable because it leads to observers watching the result
+    #' of this function to trigger indefinitely.
+    #' @return `TRUE` if there are no active filters; `FALSE` otherwise
     are_queues_empty = function() {
-      sizes <- shiny::reactiveValues("0" = TRUE)
-      empty <- reactiveVal(TRUE)
-      for(i in 1:length(private$queue)) {
-        observeEvent(private$queue[[i]]$get(), {
-          sizes[[as.character(i)]] <- private$queue[[i]]$size() == 0
-          empty(all(unlist(shiny::reactiveValuesToList(sizes))))
-        })
+      if (is.null(private$queues_empty)) {
+        queues_empty <- shiny::reactiveValues("0" = TRUE)
+        private$queues_empty <- reactiveVal(TRUE)
+        for(i in 1:length(private$queue)) {
+          observeEvent(private$queue[[i]]$get(), {
+            queues_empty[[as.character(i)]] <- private$queue[[i]]$size() == 0
+            private$queues_empty(all(unlist(shiny::reactiveValuesToList(queues_empty))))
+          })
+        }
       }
-
-      empty
+      private$queues_empty
     },
 
     #' @description
@@ -472,6 +481,7 @@ FilterStates <- R6::R6Class( # nolint
     card_id = character(0),
     card_ids = character(0),
     datalabel = character(0),
+    queues_empty = NULL,
     input_dataname = NULL, # because it holds object of class name
     output_dataname = NULL, # because it holds object of class name,
     ns = NULL, # shiny ns()

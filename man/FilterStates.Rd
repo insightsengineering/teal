@@ -48,6 +48,7 @@ isolate(filter_states$get_call())
 \item \href{#method-get_call}{\code{FilterStates$get_call()}}
 \item \href{#method-get_fun}{\code{FilterStates$get_fun()}}
 \item \href{#method-queue_empty}{\code{FilterStates$queue_empty()}}
+\item \href{#method-are_queues_empty}{\code{FilterStates$are_queues_empty()}}
 \item \href{#method-queue_get}{\code{FilterStates$queue_get()}}
 \item \href{#method-queue_initialize}{\code{FilterStates$queue_initialize()}}
 \item \href{#method-queue_push}{\code{FilterStates$queue_push()}}
@@ -133,6 +134,27 @@ Remove all \code{FilterState} objects from all queues in this \code{FilterStates
 
 \subsection{Returns}{
 NULL
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-are_queues_empty"></a>}}
+\if{latex}{\out{\hypertarget{method-are_queues_empty}{}}}
+\subsection{Method \code{are_queues_empty()}}{
+Returns a boolean value indicating whether there are any active filters
+in this `FilterStates``.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilterStates$are_queues_empty()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Uses a singleton pattern for the returned reactive because
+otherwise an observer is returned every time this function is called.
+This is undesirable because it leads to observers watching the result
+of this function to trigger indefinitely.
+}
+
+\subsection{Returns}{
+\code{TRUE} if there are no active filters; \code{FALSE} otherwise
 }
 }
 \if{html}{\out{<hr>}}
