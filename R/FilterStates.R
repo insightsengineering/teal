@@ -37,21 +37,16 @@
 #'   ui = fluidPage(
 #'     actionButton("clear", span(icon("times"), "Remove all filters")),
 #'     rf$ui_add_filter_state(id = "add", data = df),
-#'     rf$ui("active"),
+#'     rf$ui("states"),
 #'     verbatimTextOutput("expr"),
 #'   ),
 #'   server = function(input, output, session) {
-#'     rf$srv_add_filter_state(
-#'       id = "add",
-#'       data = df
-#'     )
+#'     rf$srv_add_filter_state(id = "add", data = df)
+#'     rf$server(id = "states")
 #'     output$expr <- renderText({
-#'       deparse1(rf$get_call(), deparse = "\n")
+#'       deparse1(rf$get_call(), collapse = "\n")
 #'     })
-#'     observeEvent(
-#'       input$clear,
-#'       rf$queue_empty()
-#'     )
+#'     observeEvent(input$clear, rf$queue_empty())
 #'   }
 #' )
 #' }
@@ -746,6 +741,21 @@ DFFilterStates <- R6::R6Class( # nolint
     #' @param vars_include (`character(n)`)\cr
     #'  optional, vector of column names to be included.
     #' @param ... ignored.
+    #' @examples
+    #' dffs <- teal:::DFFilterStates$new(
+    #'   input_dataname = "iris",
+    #'   output_dataname = "iris_filtered",
+    #'   datalabel = character(0),
+    #'   varlabels = character(0),
+    #'   keys = character(0)
+    #' )
+    #' fs <- list(
+    #'   Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
+    #'   Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+    #' )
+    #' dffs$set_filter_state(state = fs, data = iris)
+    #' shiny::isolate(dffs$get_filter_state())
+    #'
     #' @return `NULL`
     set_filter_state = function(data, state, vars_include = get_filterable_varnames(data = data), ...) {
       checkmate::assert_data_frame(data)

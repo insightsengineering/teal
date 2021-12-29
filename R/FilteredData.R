@@ -43,49 +43,24 @@
 #' # setting the data
 #' datasets$set_dataset(dataset("iris", iris))
 #' datasets$set_dataset(dataset("mtcars", mtcars))
-#'
-#' isolate({
-#'   datasets$datanames()
-#'   datasets$get_filter_overview("iris")
-#'
-#'   # filters dataset to obtain information
-#'   datasets$get_filter_overview("mtcars")
-#'
-#'   print(datasets$get_call("iris"))
-#'   print(datasets$get_call("mtcars"))
-#'
-#'   df <- datasets$get_data("iris", filtered = FALSE)
-#'   print(df)
-#' })
+#' datasets$datanames()
 #'
 #'
-#' filter_state_iris <- teal:::init_filter_state(
-#'   iris$Species,
-#'   varname = "Species",
-#'   varlabel = "Species name",
-#'   input_dataname = as.name("iris"),
-#'   extract_type = "list"
+#' df <- datasets$get_data("iris", filtered = FALSE)
+#' print(df)
+#'
+#' datasets$set_filter_state(
+#'   list(iris = list(Species = list(selected = "virginica")))
 #' )
-#' filter_state_iris$set_selected("virginica")
-#'
-#' queue <- datasets$get_filtered_dataset("iris")$get_filter_states(1)
-#' queue$queue_push(filter_state_iris, queue_index = 1L, element_id = "virginica")
-#'
 #' isolate(datasets$get_call("iris"))
 #'
-#'
-#' filter_state_mtcars <- teal:::init_filter_state(
-#'   mtcars$mpg,
-#'   varname = "mpg",
-#'   varlabel = "Miles per galon",
-#'   input_dataname = as.name("mpg"),
-#'   extract_type = "list"
+#' datasets$set_filter_state(
+#'   list(mtcars = list(mpg = list(selected = c(15, 20))))
 #' )
-#' filter_state_mtcars$set_selected(c(15, 20))
 #'
-#' queue <- datasets$get_filtered_dataset("mtcars")$get_filter_states("filter")
-#' queue$queue_push(filter_state_mtcars, queue_index = 1L, element_id = "mpg")
-#'
+#' isolate(datasets$get_filter_state())
+#' isolate(datasets$get_filter_overview("iris"))
+#' isolate(datasets$get_filter_overview("mtcars"))
 #' isolate(datasets$get_call("iris"))
 #' isolate(datasets$get_call("mtcars"))
 FilteredData <- R6::R6Class( # nolint
@@ -377,6 +352,28 @@ FilteredData <- R6::R6Class( # nolint
     #' Sets a filter state
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
+    #' @examples
+    #' datasets <- teal:::FilteredData$new()
+    #' datasets$set_dataset(dataset("iris", iris))
+    #' datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
+    #' fs <- list(
+    #'   iris = list(
+    #'     Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),
+    #'     Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+    #'   ),
+    #'   mae = list(
+    #'     subjects = list(
+    #'       years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+    #'       vital_status = list(selected = "1", keep_na = FALSE),
+    #'       gender = list(selected = "female", keep_na = TRUE)
+    #'     ),
+    #'     RPPAArray = list(
+    #'       subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+    #'     )
+    #'   )
+    #' )
+    #' datasets$set_filter_state(state = fs)
+    #' shiny::isolate(datasets$get_filter_state())
     #' @return `NULL`
     set_filter_state = function(state) {
       checkmate::assert_subset(names(state), self$datanames())
