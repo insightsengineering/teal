@@ -402,6 +402,15 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Get filter state from the `ReactiveQueue` objects. Output list can be used
+    #' as an input to `self$set_filter_state`.
+    #'
+    #' @return `list` containing `list` per each `FilterState` in the `ReactiveQueue`
+    get_filter_state = function() {
+      stop("Pure virtual method.")
+    },
+
+    #' @description
     #' Set filter state
     #'
     #' @param data (`data.frame`)\cr
@@ -707,6 +716,17 @@ DFFilterStates <- R6::R6Class( # nolint
           NULL
         }
       )
+    },
+
+    #' @description
+    #' Get active filter state
+    #'
+    #' Get all active filters from this dataset in form of the nested list.
+    #' Output list can be used as an input to `self$set_filter_state`.
+    #'
+    #' @return `list` containing `list` with selected values for each `FilterState`.
+    get_filter_state = function() {
+      lapply(self$queue_get(1L), function(x) x$get_state())
     },
 
     #' @description
@@ -1047,6 +1067,16 @@ MAEFilterStates <- R6::R6Class( # nolint
           NULL
         }
       )
+    },
+
+    #' @description
+    #' Get active filter state
+    #'
+    #' Get all active filters from this dataset in form of the nested list.
+    #' Output list can be used as an input to `self$set_filter_state`.
+    #' @return `list` with elements number equal number of `FilterStates`.
+    get_filter_state = function() {
+      lapply(self$queue_get(queue_index = "y"), function(x) x$get_state())
     },
 
     #' @description
@@ -1406,6 +1436,27 @@ SEFilterStates <- R6::R6Class( # nolint
           NULL
         }
       )
+    },
+
+    #' @description
+    #' @description
+    #' Get active filter state
+    #'
+    #' Get all active filters from this dataset in form of the nested list.
+    #' Output list can be used as an input to `self$set_filter_state`.
+    #'
+    #' @return `list` containing one or two lists  depending on the number of
+    #' `ReactiveQueue` object (I.e. if `rowData` and `colData` exists). Each
+    #' `list` contains elements number equal to number of active filter variables.
+    get_filter_state = function() {
+      states <- sapply(
+        X = names(private$queue),
+        simplify = FALSE,
+        function(x) {
+          lapply(self$queue_get(queue_index = x), function(xx) xx$get_state())
+        }
+      )
+      Filter(function(x) length(x) > 0, states)
     },
 
     #' @description
@@ -1869,6 +1920,17 @@ MatrixFilterStates <- R6::R6Class( # nolint
           NULL
         }
       )
+    },
+
+    #' @description
+    #' Get active filter state
+    #'
+    #' Get all active filters from this dataset in form of the nested list.
+    #' Output list can be used as an input to `self$set_filter_state`.
+    #'
+    #' @return `list` containing `list` with selected values for each `FilterState`.
+    get_filter_state = function() {
+      lapply(self$queue_get(queue_index = "subset"), function(x) x$get_state())
     },
 
     #' @description

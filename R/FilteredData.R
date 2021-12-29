@@ -362,14 +362,15 @@ FilteredData <- R6::R6Class( # nolint
 
     # Functions useful for restoring from another dataset ----
     #' @description
-    #' Returns the state to be bookmarked
+    #' Get active filter state
     #'
-    #' hash sums of `datasets`, `FilterState` selections and `preproc_code`
-    #'  are bookmarked.
-    #'
-    #' @return named list
-    get_bookmark_state = function() {
-      stop("Pure virtual method.")
+    #' Get all active filters in form of the nested list.
+    #' Output list can be used as an input to `self$set_filter_state`.
+    #' @return `list` with elements number equal to number of datasets with
+    #'   active filters.
+    get_filter_state = function() {
+      states <- lapply(self$get_filtered_dataset(), function(x) x$get_filter_state())
+      Filter(function(x) length(x) > 0, states)
     },
 
     #' @description

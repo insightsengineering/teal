@@ -167,6 +167,16 @@ FilteredDataset <- R6::R6Class( # nolint
       private$reactive_data
     },
 
+    #' Get active filter state
+    #'
+    #' Get all active filters from this dataset in form of the nested list.
+    #' Output list can be used as an input to `self$set_filter_state`.
+    #' @return `list` with elements number equal number of `FilterStates`.
+    get_filter_state = function() {
+      states <- lapply(self$get_filter_states(), function(x) x$get_filter_state())
+      Filter(function(x) length(x) > 0, states)
+    },
+
     #' @description
     #' Gets the filter states
     #' @param id (`character(1)`, `character(0)`)\cr
@@ -490,6 +500,16 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
           function(x) x$get_call()
         )
       )
+    },
+
+
+    #' Get active filter state
+    #'
+    #' Get all active filters from this dataset in form of the nested list.
+    #' Output list can be used as an input to `self$set_filter_state`.
+    #' @return `list` with elements number equal to number of `FilterStates`.
+    get_filter_state = function() {
+      self$get_filter_states("filter")$get_filter_state()
     },
 
     #' @description

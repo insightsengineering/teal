@@ -381,6 +381,19 @@ FilterState <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Get filter state
+    #'
+    #' @return `list` containing values taken from the reactive fields:
+    #' * `selected` (`numeric(2)`) range of the filter.
+    #' * `keep_na` (`logical(1)`) whether `NA` should be kept.
+    get_state = function() {
+      list(
+        selected = self$get_selected(),
+        keep_na = self$get_keep_na()
+      )
+    },
+
+    #' @description
     #' Set if `NA` should be kept
     #' @param value (`logical(1)`)\cr
     #'  value(s) which come from the filter selection. Value is set in `server`
@@ -1145,6 +1158,21 @@ RangeFilterState <- R6::R6Class( # nolint
     #' @return (`logical(1)`)
     get_keep_inf = function() {
       private$keep_inf()
+    },
+
+    #' @description
+    #' Get filter state
+    #'
+    #' @return `list` containing values taken from the reactive fields:
+    #' * `selected` (`numeric(2)`) range of the filter.
+    #' * `keep_na` (`logical(1)`) whether `NA` should be kept.
+    #' * `keep_inf` (`logical(1)`)  whether `Inf` should be kept.
+    get_state = function() {
+      list(
+        selected = self$get_selected(),
+        keep_na = self$get_keep_na(),
+        keep_inf = self$get_keep_inf()
+      )
     },
 
     #' UI Module for `RangeFilterState`.

@@ -27,11 +27,11 @@ srv_init_filter_state <- function(id, datasets, filter) {
       # reactivity to recompute the filtered datasets, which is not needed.
       logger::log_trace(
         paste(
-          "srv_teal@2 saving active filter state for",
-          "datasets: { paste(names(datasets$get_bookmark_state()), collapse = ' ') }."
+          "srv_init_filter_state@1 saving active filter state for",
+          "datasets: { paste(names(datasets$get_filter_state()), collapse = ' ') }."
         )
       )
-      state$values$datasets_state <- datasets$get_bookmark_state()
+      state$values$datasets_state <- datasets$get_filter_state()
     })
     saved_datasets_state <- reactiveVal(NULL) # set when restored because data must already be populated
     onRestore(function(state) {
@@ -40,7 +40,7 @@ srv_init_filter_state <- function(id, datasets, filter) {
       # by the user, so we just need to set the filters.
       logger::log_trace(
         paste(
-          "srv_teal@2 restoring filter states from the bookmark for",
+          "srv_init_filter_state@2 restoring filter states from the bookmark for",
           "datasets: { paste(names(state$values$datasets_state), collapse = ' ') }."
         )
       )
@@ -82,7 +82,7 @@ srv_init_filter_state <- function(id, datasets, filter) {
       )
     } else {
       progress$set(0.75, message = "Setting initial filter state")
-      logger::log_trace("srv_teal@4 setting the initial filter state.")
+      logger::log_trace("srv_init_filter_state@3 setting the initial filter state.")
       filtered_data_set_filters(datasets, filter)
     }
     NULL
