@@ -149,7 +149,7 @@ testthat::test_that("set_selected_reactive warns when selection not within allow
   filter_state <- DatetimeFilterState$new(objects, varname = "test")
   testthat::expect_warning(
     filter_state$set_selected_reactive(c(objects2, objects[3])),
-    "Value: 1899-01-01 00:00:01 is outside of the possible range for column test of dataset  ."
+    "is outside of the possible range for column test of dataset  ."
   )
 })
 
