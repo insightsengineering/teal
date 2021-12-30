@@ -260,8 +260,10 @@ shiny.tag
 \if{html}{\out{<a id="method-get_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
 \subsection{Method \code{get_filter_state()}}{
-Get filter state from the \code{ReactiveQueue} objects. Output list can be used
-as an input to \code{self$set_filter_state}.
+Gets the reactive values from the active \code{FilterState} objects.
+
+Get active filter state from the \code{FilterState} objects kept in \code{ReactiveQueue}(s).
+The output list is a compatible input to \code{self$set_filter_state}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$get_filter_state()}\if{html}{\out{</div>}}
 }

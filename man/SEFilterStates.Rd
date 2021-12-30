@@ -90,10 +90,10 @@ an ID string that corresponds with the ID used to call the module's UI function.
 \if{html}{\out{<a id="method-get_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
 \subsection{Method \code{get_filter_state()}}{
-Returns active \code{FilterState} objects.
+Gets the reactive values from the active \code{FilterState} objects.
 
 Gets all active filters from this dataset in form of the nested list.
-The output list can be used as input to \code{self$set_filter_state}.
+The output list is a compatible input to \code{self$set_filter_state}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$get_filter_state()}\if{html}{\out{</div>}}
 }

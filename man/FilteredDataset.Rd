@@ -142,9 +142,9 @@ Gets the reactive object which returns filtered data
 
 \subsection{Returns}{
 (\code{reactive})
-Returns active \code{FilterState} objects.
+Gets the reactive values from the active \code{FilterState} objects.
 
-Gets all active filters from this dataset in the form of a nested list.
+Get all active filters from this dataset in form of the nested list.
 The output list is a compatible input to \code{self$set_filter_state}.
 }
 }
@@ -157,7 +157,8 @@ The output list is a compatible input to \code{self$set_filter_state}.
 }
 
 \subsection{Returns}{
-\code{list} with elements number equal number of \code{FilterStates}.
+\code{list} with named elements corresponding to \code{FilterStates} objects
+with active filters
 }
 }
 \if{html}{\out{<hr>}}

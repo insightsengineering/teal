@@ -525,7 +525,7 @@ unfiltered datasets}
 \if{html}{\out{<a id="method-get_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
 \subsection{Method \code{get_filter_state()}}{
-Returns a list of active \code{FilterState} objects.
+Gets the reactive values from the active \code{FilterState} objects.
 
 Gets all active filters in the form of a nested list.
 The output list is a compatible input to \code{self$set_filter_state}.
@@ -614,7 +614,7 @@ nested list of filter selections applied to datasets.}
 \subsection{Method \code{remove_all_filter_states()}}{
 Remove all \code{FilterStates} of a \code{FilteredDataset} or all \code{FilterStates} of a \code{FilteredData} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$remove_all_filter_states(datanames)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$remove_all_filter_states(datanames = self$datanames())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

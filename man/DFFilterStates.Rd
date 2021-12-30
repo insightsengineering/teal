@@ -137,16 +137,16 @@ an ID string that corresponds with the ID used to call the module's UI function.
 \if{html}{\out{<a id="method-get_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
 \subsection{Method \code{get_filter_state()}}{
-Returns active \code{FilterState} objects.
+Gets the reactive values from the active \code{FilterState} objects.
 
-Gets all active filters from this dataset in form of the nested list.
-The output list can be used as input to \code{self$set_filter_state}.
+Get active filter state from the \code{FilterState} objects kept in \code{ReactiveQueue}.
+The output list is a compatible input to \code{self$set_filter_state}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$get_filter_state()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-\code{list} containing \code{list} with selected values for each \code{FilterState}.
+\code{list} with named elements corresponding to \code{FilterState} in the \code{ReactiveQueue}.
 }
 }
 \if{html}{\out{<hr>}}

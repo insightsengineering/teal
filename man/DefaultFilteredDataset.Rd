@@ -112,10 +112,10 @@ applies to one argument (\code{...}) in \code{dplyr::filter} call.
 
 \subsection{Returns}{
 filter \code{call} or \code{list} of filter calls
-Get active filter state
+Gets the reactive values from the active \code{FilterState} objects.
 
 Get all active filters from this dataset in form of the nested list.
-Output list can be used as an input to \code{self$set_filter_state}.
+The output list is a compatible input to \code{self$set_filter_state}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -127,7 +127,8 @@ Output list can be used as an input to \code{self$set_filter_state}.
 }
 
 \subsection{Returns}{
-\code{list} with elements number equal to number of \code{FilterStates}.
+\code{list} with named elements corresponding to \code{FilterState} objects
+(active filters).
 }
 }
 \if{html}{\out{<hr>}}
