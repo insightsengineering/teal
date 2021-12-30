@@ -381,7 +381,7 @@ FilterState <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get filter state
+    #' Returns the filtering state.
     #'
     #' @return `list` containing values taken from the reactive fields:
     #' * `selected` (`atomic`) length depends on a `FilterState` variant.
@@ -1172,7 +1172,7 @@ RangeFilterState <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get filter state
+    #' Returns the filtering state.
     #'
     #' @return `list` containing values taken from the reactive fields:
     #' * `selected` (`numeric(2)`) range of the filter.

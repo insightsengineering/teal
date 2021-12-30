@@ -337,19 +337,19 @@ FilteredData <- R6::R6Class( # nolint
 
     # Functions useful for restoring from another dataset ----
     #' @description
-    #' Get active filter state
+    #' Returns a list of active `FilterState` objects.
     #'
-    #' Get all active filters in form of the nested list.
-    #' Output list can be used as an input to `self$set_filter_state`.
-    #' @return `list` with elements number equal to number of datasets with
-    #'   active filters.
+    #' Gets all active filters in the form of a nested list.
+    #' The output list is a compatible input to `self$set_filter_state`.
+    #' @return `list` with named elements corresponding to `FilteredDataset` objects
+    #' with active filters
     get_filter_state = function() {
       states <- lapply(self$get_filtered_dataset(), function(x) x$get_filter_state())
       Filter(function(x) length(x) > 0, states)
     },
 
     #' @description
-    #' Sets a filter state
+    #' Sets active filter states.
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
     #' @examples

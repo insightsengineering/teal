@@ -145,7 +145,7 @@ Returns current \code{keep_inf} selection
 \if{html}{\out{<a id="method-get_state"></a>}}
 \if{latex}{\out{\hypertarget{method-get_state}{}}}
 \subsection{Method \code{get_state()}}{
-Get filter state
+Returns the filtering state.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$get_state()}\if{html}{\out{</div>}}
 }

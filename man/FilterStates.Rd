@@ -274,7 +274,7 @@ as an input to \code{self$set_filter_state}.
 \if{html}{\out{<a id="method-set_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
 \subsection{Method \code{set_filter_state()}}{
-Set filter state
+Sets active \code{FilterState} objects.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$set_filter_state(data, state)}\if{html}{\out{</div>}}
 }

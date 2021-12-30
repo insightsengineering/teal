@@ -219,7 +219,7 @@ class of the returned object depends of class of the \code{FilterState}
 \if{html}{\out{<a id="method-get_state"></a>}}
 \if{latex}{\out{\hypertarget{method-get_state}{}}}
 \subsection{Method \code{get_state()}}{
-Get filter state
+Returns the filtering state.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterState$get_state()}\if{html}{\out{</div>}}
 }

@@ -142,10 +142,10 @@ Gets the reactive object which returns filtered data
 
 \subsection{Returns}{
 (\code{reactive})
-Get active filter state
+Returns active \code{FilterState} objects.
 
-Get all active filters from this dataset in form of the nested list.
-Output list can be used as an input to \code{self$set_filter_state}.
+Gets all active filters from this dataset in the form of a nested list.
+The output list is a compatible input to \code{self$set_filter_state}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -164,7 +164,7 @@ Output list can be used as an input to \code{self$set_filter_state}.
 \if{html}{\out{<a id="method-get_filter_states"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_states}{}}}
 \subsection{Method \code{get_filter_states()}}{
-Gets the filter states
+Gets the active \code{FilterStates} objects.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_states(id = character(0))}\if{html}{\out{</div>}}
 }

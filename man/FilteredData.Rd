@@ -525,24 +525,24 @@ unfiltered datasets}
 \if{html}{\out{<a id="method-get_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
 \subsection{Method \code{get_filter_state()}}{
-Get active filter state
+Returns a list of active \code{FilterState} objects.
 
-Get all active filters in form of the nested list.
-Output list can be used as an input to \code{self$set_filter_state}.
+Gets all active filters in the form of a nested list.
+The output list is a compatible input to \code{self$set_filter_state}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_state()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-\code{list} with elements number equal to number of datasets with
-active filters.
+\code{list} with named elements corresponding to \code{FilteredDataset} objects
+with active filters
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
 \subsection{Method \code{set_filter_state()}}{
-Sets a filter state
+Sets active filter states.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_filter_state(state)}\if{html}{\out{</div>}}
 }
