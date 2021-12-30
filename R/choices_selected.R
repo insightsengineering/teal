@@ -92,7 +92,7 @@ no_select_keyword <- "-- no selection --"
 #' # Passing a `delayed_data` object to `subset`
 #' choices_selected(
 #'   choices = variable_choices("ADSL"),
-#'   subset = variable_choices("ADSL", subset = c("STUDYID"))
+#'   selected = variable_choices("ADSL", subset = c("STUDYID"))
 #' )
 #'
 #' # functional form (subsetting for factor variables only) of choices_selected
