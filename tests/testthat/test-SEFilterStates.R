@@ -225,9 +225,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that(
-  "SEFilterStates$get_filter_state returns list identical to input",
-  code = {
+testthat::test_that("SEFilterStates$get_filter_state returns list identical to input", {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -245,9 +243,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that(
-  "SEFilterStates$remove_filter_state removes filters in ReactiveQueue",
-  code = {
+testthat::test_that("SEFilterStates$remove_filter_state removes filters in ReactiveQueue", {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -272,9 +268,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that(
-  "SEFilterStates$remove_filter_state removes all filters in ReactiveQueue",
-  code = {
+testthat::test_that("SEFilterStates$remove_filter_state removes all filters in ReactiveQueue", {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -296,9 +290,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that(
-  "SEFilterStates$remove_filter_state throws error when list is not named",
-  code = {
+testthat::test_that("SEFilterStates$remove_filter_state throws error when list is not named", {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(

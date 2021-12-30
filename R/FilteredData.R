@@ -337,7 +337,7 @@ FilteredData <- R6::R6Class( # nolint
 
     # Functions useful for restoring from another dataset ----
     #' @description
-    #' Returns a list of active `FilterState` objects.
+    #' Gets the reactive values from the active `FilterState` objects.
     #'
     #' Gets all active filters in the form of a nested list.
     #' The output list is a compatible input to `self$set_filter_state`.
@@ -416,9 +416,7 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @return `NULL`
     #'
-    remove_all_filter_states = function(datanames) {
-      if (missing(datanames)) datanames <- names(self$get_filtered_dataset())
-
+    remove_all_filter_states = function(datanames = self$datanames()) {
       logger::log_trace(
         "FilteredData$remove_all_filter_states called, datanames: { paste(datanames, collapse = ', ') }"
       )

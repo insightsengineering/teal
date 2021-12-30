@@ -397,8 +397,10 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get filter state from the `ReactiveQueue` objects. Output list can be used
-    #' as an input to `self$set_filter_state`.
+    #' Gets the reactive values from the active `FilterState` objects.
+    #'
+    #' Get active filter state from the `FilterState` objects kept in `ReactiveQueue`(s).
+    #' The output list is a compatible input to `self$set_filter_state`.
     #'
     #' @return `list` containing `list` per each `FilterState` in the `ReactiveQueue`
     get_filter_state = function() {
@@ -719,12 +721,11 @@ DFFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Returns active `FilterState` objects.
+    #' Gets the reactive values from the active `FilterState` objects.
     #'
-    #' Gets all active filters from this dataset in form of the nested list.
-    #' The output list can be used as input to `self$set_filter_state`.
-    #'
-    #' @return `list` containing `list` with selected values for each `FilterState`.
+    #' Get active filter state from the `FilterState` objects kept in `ReactiveQueue`.
+    #' The output list is a compatible input to `self$set_filter_state`.
+    #' @return `list` with named elements corresponding to `FilterState` in the `ReactiveQueue`.
     get_filter_state = function() {
       lapply(self$queue_get(1L), function(x) x$get_state())
     },
@@ -1454,10 +1455,10 @@ SEFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Returns active `FilterState` objects.
+    #' Gets the reactive values from the active `FilterState` objects.
     #'
     #' Gets all active filters from this dataset in form of the nested list.
-    #' The output list can be used as input to `self$set_filter_state`.
+    #' The output list is a compatible input to `self$set_filter_state`.
     #'
     #' @return `list` containing one or two lists  depending on the number of
     #' `ReactiveQueue` object (I.e. if `rowData` and `colData` exists). Each
