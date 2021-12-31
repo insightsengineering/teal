@@ -497,6 +497,7 @@ FilterStates <- R6::R6Class( # nolint
             "{ class(self)[1] }$insert_filter_state_ui, adding FilterState UI,",
             "dataname: { deparse1(private$input_dataname) }"
           ))
+          shiny::setBookmarkExclude("remove")
           card_id <- session$ns("card")
           queue_id <- sprintf("%s-%s", queue_index, element_id)
           private$card_ids[queue_id] <- card_id
@@ -892,6 +893,7 @@ DFFilterStates <- R6::R6Class( # nolint
           logger::log_trace(
             "DFFilterStates$srv_add_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
           )
+          shiny::setBookmarkExclude(c("var_to_add"))
           active_filter_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = 1L),
@@ -1232,6 +1234,7 @@ MAEFilterStates <- R6::R6Class( # nolint
           logger::log_trace(
             "MAEFilterState$srv_add_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
           )
+          shiny::setBookmarkExclude("var_to_add")
           active_filter_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = "y"),
@@ -1461,7 +1464,7 @@ SEFilterStates <- R6::R6Class( # nolint
     #' The output list is a compatible input to `self$set_filter_state`.
     #'
     #' @return `list` containing one or two lists  depending on the number of
-    #' `ReactiveQueue` object (I.e. if `rowData` and `colData` exists). Each
+    #' `ReactiveQueue` object (I.e. if `rowData` and `colData` exist). Each
     #' `list` contains elements number equal to number of active filter variables.
     get_filter_state = function() {
       states <- sapply(
@@ -1684,6 +1687,7 @@ SEFilterStates <- R6::R6Class( # nolint
             "SEFilterState$srv_add_filter_state initializing,",
             "dataname: { deparse1(private$input_dataname) }"
           ))
+          shiny::setBookmarkExclude(c("row_to_add", "col_to_add"))
           active_filter_col_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = "select"),
@@ -2054,6 +2058,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
           logger::log_trace(
             "MatrixFilterStates$srv_add_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
           )
+          shiny::setBookmarkExclude("var_to_add")
           active_filter_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = "subset"),
@@ -2099,6 +2104,8 @@ MatrixFilterStates <- R6::R6Class( # nolint
               ))
             }
           )
+
+
 
           observeEvent(
             eventExpr = input$var_to_add,

@@ -342,7 +342,7 @@ FilteredData <- R6::R6Class( # nolint
     #' Gets all active filters in the form of a nested list.
     #' The output list is a compatible input to `self$set_filter_state`.
     #' @return `list` with named elements corresponding to `FilteredDataset` objects
-    #' with active filters
+    #' with active filters.
     get_filter_state = function() {
       states <- lapply(self$get_filtered_dataset(), function(x) x$get_filter_state())
       Filter(function(x) length(x) > 0, states)
@@ -603,6 +603,7 @@ FilteredData <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace("FilteredData$srv_filter_panel initializing")
+          shiny::setBookmarkExclude("remove_all_filters")
           self$srv_filter_overview(
             id = "teal_filters_info",
             active_datanames = active_datanames
@@ -630,14 +631,6 @@ FilteredData <- R6::R6Class( # nolint
               )
             }
           )
-
-
-          # we keep anything that may be selected to add (happens when the variable is not available for filtering)
-          # lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter")) #nolint
-          setBookmarkExclude(names = c(
-            # these will be regenerated dynamically
-            lapply(isol_datanames, function(dataname) paste0(dataname, "filters"))
-          ))
 
           # rather than regenerating the UI dynamically for the dataset filtering,
           # we instead choose to hide/show the elements

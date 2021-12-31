@@ -212,7 +212,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Get all active filters from this dataset in form of the nested list.
     #' The output list is a compatible input to `self$set_filter_state`.
     #' @return `list` with named elements corresponding to `FilterStates` objects
-    #' with active filters
+    #' with active filters.
     get_filter_state = function() {
       states <- lapply(self$get_filter_states(), function(x) x$get_filter_state())
       Filter(function(x) length(x) > 0, states)
@@ -394,10 +394,8 @@ FilteredDataset <- R6::R6Class( # nolint
         function(input, output, session) {
           dataname <- self$get_dataname()
           logger::log_trace("FilteredDataset$server initializing, dataname: { dataname }")
-          stopifnot(
-            is_character_single(dataname)
-          )
-
+          stopifnot(is_character_single(dataname))
+          shiny::setBookmarkExclude("remove_filters")
           lapply(
             names(self$get_filter_states()),
             function(x) {
