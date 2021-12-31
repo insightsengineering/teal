@@ -145,7 +145,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       if (is.null(raw_data())) {
         return(NULL)
       }
-      progress <- shiny::Progress$new(session)
+      progress <<- shiny::Progress$new(session)
       progress$set(0.25, message = "Setting data")
       # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
       # this is placed in the module scope so that bookmarking can be used with FilteredData object
