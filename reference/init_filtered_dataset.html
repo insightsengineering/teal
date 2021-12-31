@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9043</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9044</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -98,30 +89,49 @@ Other releases
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">iris_d</span> <span class="op">&lt;-</span> <span class="fu"><a href="dataset.html">dataset</a></span><span class="op">(</span><span class="st">"iris"</span>, <span class="va">iris</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># DefaultFilteredDataset example</span></span>
+<span class="r-in"><span class="va">iris_d</span> <span class="op">&lt;-</span> <span class="fu"><a href="dataset.html">dataset</a></span><span class="op">(</span><span class="st">"iris"</span>, <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">iris_fd</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu">init_filtered_dataset</span><span class="op">(</span><span class="va">iris_d</span><span class="op">)</span></span>
 <span class="r-in"></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<span class="r-in">  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
+<span class="r-in">    <span class="va">iris_fd</span><span class="op">$</span><span class="fu">ui_add_filter_state</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"add"</span><span class="op">)</span>,</span>
+<span class="r-in">    <span class="va">iris_fd</span><span class="op">$</span><span class="fu">ui</span><span class="op">(</span><span class="st">"dataset"</span><span class="op">)</span>,</span>
+<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="st">"call"</span><span class="op">)</span>,</span>
+<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">tableOutput</a></span><span class="op">(</span><span class="st">"tbl"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">)</span>,</span>
+<span class="r-in">  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">    <span class="va">iris_fd</span><span class="op">$</span><span class="fu">srv_add_filter_state</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"add"</span><span class="op">)</span></span>
+<span class="r-in">    <span class="va">iris_fd</span><span class="op">$</span><span class="fu">server</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"dataset"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">call</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
+<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span class="r-in">        <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">iris_fd</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span>, <span class="va">deparse1</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span>,</span>
+<span class="r-in">        collapse <span class="op">=</span> <span class="st">"\n"</span></span>
+<span class="r-in">      <span class="op">)</span></span>
+<span class="r-in">    <span class="op">}</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">renderTable</a></span><span class="op">(</span><span class="va">iris_fd</span><span class="op">$</span><span class="fu">get_data</span><span class="op">(</span>filtered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">}</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># CDISCFilteredDataset example</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">adsl_d</span> <span class="op">&lt;-</span> <span class="fu"><a href="cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">adsl_fd</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu">init_filtered_dataset</span><span class="op">(</span><span class="va">adsl_d</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://waldronlab.io/MultiAssayExperiment/" class="external-link">MultiAssayExperiment</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">MAE_d</span> <span class="op">&lt;-</span> <span class="fu"><a href="dataset.html">dataset</a></span><span class="op">(</span><span class="st">"MAE"</span>, <span class="va">miniACC</span><span class="op">)</span></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
 <span class="r-in">  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="st">"clear"</span>, <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">span</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/icon.html" class="external-link">icon</a></span><span class="op">(</span><span class="st">"times"</span><span class="op">)</span>, <span class="st">"Remove all filters"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span class="r-in">    <span class="va">adsl_fd</span><span class="op">$</span><span class="fu">ui_add_filter_state</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"add"</span><span class="op">)</span>,</span>
 <span class="r-in">    <span class="va">adsl_fd</span><span class="op">$</span><span class="fu">ui</span><span class="op">(</span><span class="st">"dataset"</span><span class="op">)</span>,</span>
 <span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="st">"call"</span><span class="op">)</span>,</span>
 <span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">tableOutput</a></span><span class="op">(</span><span class="st">"tbl"</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span>,</span>
 <span class="r-in">  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="va">adsl_fd</span><span class="op">$</span><span class="fu">srv_add_filter_state</span><span class="op">(</span></span>
-<span class="r-in">      vars_include <span class="op">=</span> <span class="va">adsl_fd</span><span class="op">$</span><span class="fu">get_filterable_varnames</span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">      id <span class="op">=</span> <span class="st">"add"</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in"></span>
+<span class="r-in">    <span class="va">adsl_fd</span><span class="op">$</span><span class="fu">srv_add_filter_state</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"add"</span><span class="op">)</span></span>
 <span class="r-in">    <span class="va">adsl_fd</span><span class="op">$</span><span class="fu">server</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"dataset"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">call</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
@@ -131,14 +141,33 @@ Other releases
 <span class="r-in">      <span class="op">)</span></span>
 <span class="r-in">    <span class="op">}</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">renderTable</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in">      <span class="va">adsl_fd</span><span class="op">$</span><span class="fu">get_data</span><span class="op">(</span>filtered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">}</span><span class="op">)</span></span>
+<span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">renderTable</a></span><span class="op">(</span><span class="va">adsl_fd</span><span class="op">$</span><span class="fu">get_data</span><span class="op">(</span>filtered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">}</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="va">input</span><span class="op">$</span><span class="va">clear</span>,</span>
-<span class="r-in">      <span class="va">adsl_fd</span><span class="op">$</span><span class="fu">queues_empty</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span></span>
+<span class="r-in"><span class="co"># MAEFilteredDataset example</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://waldronlab.io/MultiAssayExperiment/" class="external-link">MultiAssayExperiment</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="va">MAE_d</span> <span class="op">&lt;-</span> <span class="fu"><a href="dataset.html">dataset</a></span><span class="op">(</span><span class="st">"MAE"</span>, <span class="va">miniACC</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">MAE_fd</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu">init_filtered_dataset</span><span class="op">(</span><span class="va">MAE_d</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<span class="r-in">  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
+<span class="r-in">    <span class="va">MAE_fd</span><span class="op">$</span><span class="fu">ui_add_filter_state</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"add"</span><span class="op">)</span>,</span>
+<span class="r-in">    <span class="va">MAE_fd</span><span class="op">$</span><span class="fu">ui</span><span class="op">(</span><span class="st">"dataset"</span><span class="op">)</span>,</span>
+<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="st">"call"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">)</span>,</span>
+<span class="r-in">  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">    <span class="va">MAE_fd</span><span class="op">$</span><span class="fu">srv_add_filter_state</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"add"</span><span class="op">)</span></span>
+<span class="r-in">    <span class="va">MAE_fd</span><span class="op">$</span><span class="fu">server</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"dataset"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">call</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
+<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span class="r-in">        <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">MAE_fd</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span>, <span class="va">deparse1</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span>,</span>
+<span class="r-in">        collapse <span class="op">=</span> <span class="st">"\n"</span></span>
+<span class="r-in">      <span class="op">)</span></span>
+<span class="r-in">    <span class="op">}</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">}</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>

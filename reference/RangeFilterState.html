@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9043</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9044</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -109,6 +100,7 @@ making it possible to pass any object coercible to <code>numeric</code> to this 
 <ul><li><p><a href="#method-new"><code>RangeFilterState$new()</code></a></p></li>
 <li><p><a href="#method-get_call"><code>RangeFilterState$get_call()</code></a></p></li>
 <li><p><a href="#method-get_keep_inf"><code>RangeFilterState$get_keep_inf()</code></a></p></li>
+<li><p><a href="#method-get_state"><code>RangeFilterState$get_state()</code></a></p></li>
 <li><p><a href="#method-ui"><code>RangeFilterState$ui()</code></a></p></li>
 <li><p><a href="#method-server"><code>RangeFilterState$server()</code></a></p></li>
 <li><p><a href="#method-set_keep_inf"><code>RangeFilterState$set_keep_inf()</code></a></p></li>
@@ -197,17 +189,31 @@ optional <code>is.na(&lt;varname&gt;)</code> and <code>is.finite(&lt;varname&gt;
 
 <div class="section">
 <h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
-<p>(<code>logical(1)</code>)
+<p>(<code>logical(1)</code>)</p>
+</div>
+
+</div><p></p><hr><a id="method-get_state"></a><div class="section">
+<h3 id="method-get-state-">Method <code>get_state()</code><a class="anchor" aria-label="anchor" href="#method-get-state-"></a></h3>
+<p>Returns the filtering state.</p><div class="section">
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">get_state</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="returns-2">Returns<a class="anchor" aria-label="anchor" href="#returns-2"></a></h4>
+<p><code>list</code> containing values taken from the reactive fields:</p><ul><li><p><code>selected</code> (<code>numeric(2)</code>) range of the filter.</p></li>
+<li><p><code>keep_na</code> (<code>logical(1)</code>) whether <code>NA</code> should be kept.</p></li>
+<li><p><code>keep_inf</code> (<code>logical(1)</code>)  whether <code>Inf</code> should be kept.
 UI Module for <code>RangeFilterState</code>.
 This UI element contains two values for <code>min</code> and <code>max</code>
-of the range and two checkboxes whether to keep the <code>NA</code> or <code>Inf</code>  values.</p>
-</div>
+of the range and two checkboxes whether to keep the <code>NA</code> or <code>Inf</code>  values.</p></li>
+</ul></div>
 
 </div><p></p><hr><a id="method-ui"></a><div class="section">
 <h3 id="method-ui-">Method <code>ui()</code><a class="anchor" aria-label="anchor" href="#method-ui-"></a></h3>
 
 <div class="section">
-<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">ui</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -224,7 +230,7 @@ id of shiny element</p></dd>
 </div><p></p><hr><a id="method-server"></a><div class="section">
 <h3 id="method-server-">Method <code>server()</code><a class="anchor" aria-label="anchor" href="#method-server-"></a></h3>
 <p>Server module</p><div class="section">
-<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">server</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -238,14 +244,14 @@ an ID string that corresponds with the ID used to call the module's UI function.
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-2">Returns<a class="anchor" aria-label="anchor" href="#returns-2"></a></h4>
+<h4 id="returns-3">Returns<a class="anchor" aria-label="anchor" href="#returns-3"></a></h4>
 <p><code>moduleServer</code> function which returns <code>NULL</code></p>
 </div>
 
 </div><p></p><hr><a id="method-set_keep_inf"></a><div class="section">
 <h3 id="method-set-keep-inf-">Method <code>set_keep_inf()</code><a class="anchor" aria-label="anchor" href="#method-set-keep-inf-"></a></h3>
 <p>Set if <code>Inf</code> should be kept</p><div class="section">
-<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">set_keep_inf</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -264,7 +270,7 @@ modules after selecting check-box-input in the shiny interface. Values are set t
 </div><p></p><hr><a id="method-set_keep_inf_reactive"></a><div class="section">
 <h3 id="method-set-keep-inf-reactive-">Method <code>set_keep_inf_reactive()</code><a class="anchor" aria-label="anchor" href="#method-set-keep-inf-reactive-"></a></h3>
 <p>Set if <code>Inf</code> should be kept when passing filters using <code>set_filter_state</code></p><div class="section">
-<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">set_keep_inf_reactive</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -283,7 +289,7 @@ modules after setting the filters using <code>set_filter_state</code>. Values ar
 </div><p></p><hr><a id="method-set_state"></a><div class="section">
 <h3 id="method-set-state-">Method <code>set_state()</code><a class="anchor" aria-label="anchor" href="#method-set-state-"></a></h3>
 <p>Set state</p><div class="section">
-<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">set_state</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -303,7 +309,7 @@ contains fields relevant for a specific class</p><ul><li><p><code>selected</code
 </div><p></p><hr><a id="method-set_state_reactive"></a><div class="section">
 <h3 id="method-set-state-reactive-">Method <code>set_state_reactive()</code><a class="anchor" aria-label="anchor" href="#method-set-state-reactive-"></a></h3>
 <p>Set state when using <code>set_filter_state</code></p><div class="section">
-<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
+<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">set_state_reactive</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -323,7 +329,7 @@ contains fields relevant for a specific class</p><ul><li><p><code>selected</code
 </div><p></p><hr><a id="method-set_selected"></a><div class="section">
 <h3 id="method-set-selected-">Method <code>set_selected()</code><a class="anchor" aria-label="anchor" href="#method-set-selected-"></a></h3>
 <p>Sets the selected values of this <code>RangeFilterState</code>.</p><div class="section">
-<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">set_selected</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -346,7 +352,7 @@ of the selected range. Must not contain NA values.</p></dd>
 </div><p></p><hr><a id="method-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RangeFilterState</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 

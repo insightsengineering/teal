@@ -18,7 +18,7 @@ Initializes DFFilterStates object"><!-- mathjax --><script src="https://cdnjs.cl
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9043</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9044</span>
       </span>
     </div>
 
@@ -54,15 +54,6 @@ Initializes DFFilterStates object"><!-- mathjax --><script src="https://cdnjs.cl
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -110,6 +101,7 @@ conditions are passed to unnamed arguments (<code>...</code>).</p>
 <ul><li><p><a href="#method-new"><code>DFFilterStates$new()</code></a></p></li>
 <li><p><a href="#method-get_fun"><code>DFFilterStates$get_fun()</code></a></p></li>
 <li><p><a href="#method-server"><code>DFFilterStates$server()</code></a></p></li>
+<li><p><a href="#method-get_filter_state"><code>DFFilterStates$get_filter_state()</code></a></p></li>
 <li><p><a href="#method-set_filter_state"><code>DFFilterStates$set_filter_state()</code></a></p></li>
 <li><p><a href="#method-remove_filter_state"><code>DFFilterStates$remove_filter_state()</code></a></p></li>
 <li><p><a href="#method-ui_add_filter_state"><code>DFFilterStates$ui_add_filter_state()</code></a></p></li>
@@ -198,10 +190,24 @@ an ID string that corresponds with the ID used to call the module's UI function.
 <p><code>moduleServer</code> function which returns <code>NULL</code></p>
 </div>
 
+</div><p></p><hr><a id="method-get_filter_state"></a><div class="section">
+<h3 id="method-get-filter-state-">Method <code>get_filter_state()</code><a class="anchor" aria-label="anchor" href="#method-get-filter-state-"></a></h3>
+<p>Gets the reactive values from the active <code>FilterState</code> objects.</p>
+<p>Get active filter state from the <code>FilterState</code> objects kept in <code>ReactiveQueue</code>.
+The output list is a compatible input to <code>self$set_filter_state</code>.</p><div class="section">
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DFFilterStates</span><span class="op">$</span><span class="fu">get_filter_state</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="returns-2">Returns<a class="anchor" aria-label="anchor" href="#returns-2"></a></h4>
+<p><code>list</code> with named elements corresponding to <code>FilterState</code> in the <code>ReactiveQueue</code>.</p>
+</div>
+
 </div><p></p><hr><a id="method-set_filter_state"></a><div class="section">
 <h3 id="method-set-filter-state-">Method <code><a href="set_filter_state.html">set_filter_state()</a></code><a class="anchor" aria-label="anchor" href="#method-set-filter-state-"></a></h3>
 <p>Set filter state</p><div class="section">
-<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DFFilterStates</span><span class="op">$</span><span class="fu">set_filter_state</span><span class="op">(</span>
   <span class="va">data</span>,
   <span class="va">state</span>,
@@ -236,14 +242,31 @@ optional, vector of column names to be included.</p></dd>
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-2">Returns<a class="anchor" aria-label="anchor" href="#returns-2"></a></h4>
+<h4 id="returns-3">Returns<a class="anchor" aria-label="anchor" href="#returns-3"></a></h4>
 <p><code>NULL</code></p>
 </div>
+<div class="section">
+<h4 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h4>
+<p></p><div class="r example copy"><div class="sourceCode"><pre><code><span class="va">dffs</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va"><a href="../reference/DFFilterStates.html">DFFilterStates</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+  input_dataname <span class="op">=</span> <span class="st">"iris"</span>,
+  output_dataname <span class="op">=</span> <span class="st">"iris_filtered"</span>,
+  datalabel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
+  varlabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
+  keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="va">fs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+  Sepal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">6.4</span><span class="op">)</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span>, keep_inf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+  Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"setosa"</span>, <span class="st">"versicolor"</span><span class="op">)</span>, keep_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="va">dffs</span><span class="op">$</span><span class="fu">set_filter_state</span><span class="op">(</span>state <span class="op">=</span> <span class="va">fs</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">dffs</span><span class="op">$</span><span class="fu">get_filter_state</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
 
 </div><p></p><hr><a id="method-remove_filter_state"></a><div class="section">
 <h3 id="method-remove-filter-state-">Method <code>remove_filter_state()</code><a class="anchor" aria-label="anchor" href="#method-remove-filter-state-"></a></h3>
 <p>Remove a <code>FilterState</code> from the <code>ReactiveQueue</code>.</p><div class="section">
-<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DFFilterStates</span><span class="op">$</span><span class="fu">remove_filter_state</span><span class="op">(</span><span class="va">element_id</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -256,14 +279,14 @@ optional, vector of column names to be included.</p></dd>
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-3">Returns<a class="anchor" aria-label="anchor" href="#returns-3"></a></h4>
+<h4 id="returns-4">Returns<a class="anchor" aria-label="anchor" href="#returns-4"></a></h4>
 <p><code>NULL</code></p>
 </div>
 
 </div><p></p><hr><a id="method-ui_add_filter_state"></a><div class="section">
 <h3 id="method-ui-add-filter-state-">Method <code>ui_add_filter_state()</code><a class="anchor" aria-label="anchor" href="#method-ui-add-filter-state-"></a></h3>
 <p>Shiny UI module to add filter variable</p><div class="section">
-<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DFFilterStates</span><span class="op">$</span><span class="fu">ui_add_filter_state</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -282,7 +305,7 @@ object which columns are used to choose filter variables.</p></dd>
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-4">Returns<a class="anchor" aria-label="anchor" href="#returns-4"></a></h4>
+<h4 id="returns-5">Returns<a class="anchor" aria-label="anchor" href="#returns-5"></a></h4>
 <p>shiny.tag</p>
 </div>
 
@@ -292,7 +315,7 @@ object which columns are used to choose filter variables.</p></dd>
 <p>Module controls available choices to select as a filter variable.
 Selected filter variable is being removed from available choices.
 Removed filter variable gets back to available choices.</p><div class="section">
-<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DFFilterStates</span><span class="op">$</span><span class="fu">srv_add_filter_state</span><span class="op">(</span>
   <span class="va">id</span>,
   <span class="va">data</span>,
@@ -325,7 +348,7 @@ optional, vector of column names to be included.</p></dd>
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-5">Returns<a class="anchor" aria-label="anchor" href="#returns-5"></a></h4>
+<h4 id="returns-6">Returns<a class="anchor" aria-label="anchor" href="#returns-6"></a></h4>
 <p><code>moduleServer</code> function which returns <code>NULL</code>
 description
 Get label of specific variable. In case when variable label is missing
@@ -338,7 +361,7 @@ return <code>character(1)</code></p>
 </div><p></p><hr><a id="method-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">DFFilterStates</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -355,6 +378,49 @@ return <code>character(1)</code></p>
 
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
+<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
+<span class="r-in"><span class="co">## Method `DFFilterStates$set_filter_state`</span></span>
+<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">dffs</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va">DFFilterStates</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span class="r-in">  input_dataname <span class="op">=</span> <span class="st">"iris"</span>,</span>
+<span class="r-in">  output_dataname <span class="op">=</span> <span class="st">"iris_filtered"</span>,</span>
+<span class="r-in">  datalabel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span class="r-in">  varlabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span class="r-in">  keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span class="va">fs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span class="r-in">  Sepal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">6.4</span><span class="op">)</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span>, keep_inf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span class="r-in">  Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"setosa"</span>, <span class="st">"versicolor"</span><span class="op">)</span>, keep_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span class="va">dffs</span><span class="op">$</span><span class="fu">set_filter_state</span><span class="op">(</span>state <span class="op">=</span> <span class="va">fs</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-in"><span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">dffs</span><span class="op">$</span><span class="fu">get_filter_state</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Sepal.Length</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Sepal.Length$selected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5.1 6.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Sepal.Length$keep_na</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Sepal.Length$keep_inf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Species$selected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "setosa"     "versicolor"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Species$keep_na</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

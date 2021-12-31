@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9043</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9044</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -137,21 +128,16 @@ additional arguments for specific classes: keys</p></dd>
 <span class="r-in">  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
 <span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="st">"clear"</span>, <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">span</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/icon.html" class="external-link">icon</a></span><span class="op">(</span><span class="st">"times"</span><span class="op">)</span>, <span class="st">"Remove all filters"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span class="r-in">    <span class="va">rf</span><span class="op">$</span><span class="fu">ui_add_filter_state</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"add"</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="va">rf</span><span class="op">$</span><span class="fu">ui</span><span class="op">(</span><span class="st">"active"</span><span class="op">)</span>,</span>
+<span class="r-in">    <span class="va">rf</span><span class="op">$</span><span class="fu">ui</span><span class="op">(</span><span class="st">"states"</span><span class="op">)</span>,</span>
 <span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="st">"expr"</span><span class="op">)</span>,</span>
 <span class="r-in">  <span class="op">)</span>,</span>
 <span class="r-in">  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="va">rf</span><span class="op">$</span><span class="fu">srv_add_filter_state</span><span class="op">(</span></span>
-<span class="r-in">      id <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span class="r-in">      data <span class="op">=</span> <span class="va">df</span></span>
-<span class="r-in">    <span class="op">)</span></span>
+<span class="r-in">    <span class="va">rf</span><span class="op">$</span><span class="fu">srv_add_filter_state</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"add"</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
+<span class="r-in">    <span class="va">rf</span><span class="op">$</span><span class="fu">server</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"states"</span><span class="op">)</span></span>
 <span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">expr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse1</a></span><span class="op">(</span><span class="va">rf</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span>, deparse <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span>
+<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse1</a></span><span class="op">(</span><span class="va">rf</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span>
 <span class="r-in">    <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="va">input</span><span class="op">$</span><span class="va">clear</span>,</span>
-<span class="r-in">      <span class="va">rf</span><span class="op">$</span><span class="fu">queue_empty</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span></span>
+<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">clear</span>, <span class="va">rf</span><span class="op">$</span><span class="fu">queue_empty</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">}</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9043</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9044</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -112,6 +103,7 @@ making it possible to pass any object coercible to <code>POSIXct</code> to this 
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_dataname"><a href="FilterState.html#method-get_dataname"><code>teal::FilterState$get_dataname()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_keep_na"><a href="FilterState.html#method-get_keep_na"><code>teal::FilterState$get_keep_na()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_selected"><a href="FilterState.html#method-get_selected"><code>teal::FilterState$get_selected()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_state"><a href="FilterState.html#method-get_state"><code>teal::FilterState$get_state()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel"><a href="FilterState.html#method-get_varlabel"><code>teal::FilterState$get_varlabel()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname"><a href="FilterState.html#method-get_varname"><code>teal::FilterState$get_varname()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na"><a href="FilterState.html#method-set_keep_na"><code>teal::FilterState$set_keep_na()</code></a></span></p></li>
@@ -282,13 +274,13 @@ time frame. Must not contain NA values.</p></dd>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x &gt;= as.POSIXct("2021-12-31 09:24:41", tz = "Etc/UTC") &amp; x &lt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     as.POSIXct("2021-12-31 18:24:42", tz = "Etc/UTC")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> x &gt;= as.POSIXct("2021-12-31 12:53:29", tz = "Etc/UTC") &amp; x &lt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     as.POSIXct("2021-12-31 21:53:30", tz = "Etc/UTC")</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">set_selected</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">3L</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">8L</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">set_keep_na</span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> is.na(x) | x &gt;= as.POSIXct("2021-12-31 09:24:44", tz = "Etc/UTC") &amp; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     x &lt; as.POSIXct("2021-12-31 09:24:50", tz = "Etc/UTC")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> is.na(x) | x &gt;= as.POSIXct("2021-12-31 12:53:32", tz = "Etc/UTC") &amp; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     x &lt; as.POSIXct("2021-12-31 12:53:38", tz = "Etc/UTC")</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## ------------------------------------------------</span></span>
 <span class="r-in"><span class="co">## Method `DatetimeFilterState$set_selected`</span></span>
