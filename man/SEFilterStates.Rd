@@ -30,7 +30,6 @@ Initialize \code{SEFilterStates} object
 \if{html}{
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterStates" data-id="are_queues_empty">}\href{../../teal/html/FilterStates.html#method-are_queues_empty}{\code{teal::FilterStates$are_queues_empty()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterStates" data-id="get_call">}\href{../../teal/html/FilterStates.html#method-get_call}{\code{teal::FilterStates$get_call()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterStates" data-id="get_fun">}\href{../../teal/html/FilterStates.html#method-get_fun}{\code{teal::FilterStates$get_fun()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterStates" data-id="queue_empty">}\href{../../teal/html/FilterStates.html#method-queue_empty}{\code{teal::FilterStates$queue_empty()}}\out{</span>}

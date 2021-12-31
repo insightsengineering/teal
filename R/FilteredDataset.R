@@ -403,17 +403,8 @@ FilteredDataset <- R6::R6Class( # nolint
             }
           )
 
-          filter_states_empty <- shiny::reactiveValues("0" = TRUE)
-          all_filter_states_empty <- shiny::reactiveVal(TRUE)
-          for(i in 1:length(self$get_filter_states())) {
-            shiny::observeEvent(self$get_filter_states()[[i]]$are_queues_empty()(), {
-              filter_states_empty[[as.character(i)]] <- self$get_filter_states()[[i]]$are_queues_empty()()
-              all_filter_states_empty(all(unlist(shiny::reactiveValuesToList(filter_states_empty))))
-            })
-          }
-
-          observeEvent(all_filter_states_empty(), {
-            if (all_filter_states_empty()) {
+          shiny::observeEvent(self$get_filter_state(), {
+            if (length(self$get_filter_state()) == 0) {
               shinyjs::hide("remove_filters")
             } else {
               shinyjs::show("remove_filters")
