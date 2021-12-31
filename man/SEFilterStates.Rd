@@ -100,7 +100,7 @@ The output list is a compatible input to \code{self$set_filter_state}.
 
 \subsection{Returns}{
 \code{list} containing one or two lists  depending on the number of
-\code{ReactiveQueue} object (I.e. if \code{rowData} and \code{colData} exists). Each
+\code{ReactiveQueue} object (I.e. if \code{rowData} and \code{colData} exist). Each
 \code{list} contains elements number equal to number of active filter variables.
 }
 }

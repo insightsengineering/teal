@@ -110,7 +110,7 @@ and must be executed in reactive or isolated context.
 \if{html}{\out{<a id="method-get_state"></a>}}
 \if{latex}{\out{\hypertarget{method-get_state}{}}}
 \subsection{Method \code{get_state()}}{
-Get filter state
+Returns the filtering state.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{EmptyFilterState$get_state()}\if{html}{\out{</div>}}
 }

@@ -535,7 +535,7 @@ The output list is a compatible input to \code{self$set_filter_state}.
 
 \subsection{Returns}{
 \code{list} with named elements corresponding to \code{FilteredDataset} objects
-with active filters
+with active filters.
 }
 }
 \if{html}{\out{<hr>}}
