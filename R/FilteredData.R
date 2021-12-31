@@ -609,6 +609,14 @@ FilteredData <- R6::R6Class( # nolint
             active_datanames = active_datanames
           )
 
+          shiny::observeEvent(self$get_filter_state(), {
+            if (length(self$get_filter_state()) == 0) {
+              shinyjs::hide("remove_all_filters")
+            } else {
+              shinyjs::show("remove_all_filters")
+            }
+          })
+
           # use isolate because we assume that the number of datasets does not change over the course of the teal app
           # alternatively, one can proceed as in modules_filter_items to dynamically insert, remove UIs
           isol_datanames <- isolate(self$datanames()) # they are already ordered

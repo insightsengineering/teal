@@ -21,6 +21,7 @@
 * Added logs to the modules and sub-modules returned from `init`.
 * Added `teal.threshold_slider_vs_checkboxgroup` as an option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.
 * Extended the `FilteredData` API to allow managing filter states from outside and not only from the UI.
+* Hid the buttons to remove filters from all datasets and each dataset when there were no active filters.
 
 ### Bug fixes
 * Refactored `module_nested_tabs` to fix the issue with filter-panel not reacting on a change of nested tabs.

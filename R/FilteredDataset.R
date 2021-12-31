@@ -403,6 +403,14 @@ FilteredDataset <- R6::R6Class( # nolint
             }
           )
 
+          shiny::observeEvent(self$get_filter_state(), {
+            if (length(self$get_filter_state()) == 0) {
+              shinyjs::hide("remove_filters")
+            } else {
+              shinyjs::show("remove_filters")
+            }
+          })
+
           observeEvent(input$remove_filters, {
             logger::log_trace("FilteredDataset$server@1 removing filters, dataname: { dataname }")
             lapply(
