@@ -205,6 +205,33 @@ testthat::test_that(
 )
 
 testthat::test_that(
+  "FilteredData$get_filter_state returns list identical to input",
+  code = {
+    datasets <- FilteredData$new()
+    datasets$set_dataset(dataset("iris", iris))
+    datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
+    fs <- list(
+      iris = list(
+        Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),
+        Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+      ),
+      mae = list(
+        subjects = list(
+          years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+          vital_status = list(selected = "1", keep_na = FALSE),
+          gender = list(selected = "female", keep_na = TRUE)
+        ),
+        RPPAArray = list(
+          subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+        )
+      )
+    )
+    datasets$set_filter_state(state = fs)
+    testthat::expect_identical(isolate(datasets$get_filter_state()), fs)
+  }
+)
+
+testthat::test_that(
   "FilteredData$remove_all_filter_states removes all filters of all datasets in FilteredData",
   code = {
     datasets <- FilteredData$new()

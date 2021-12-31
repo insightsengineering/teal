@@ -52,21 +52,16 @@ shinyApp(
   ui = fluidPage(
     actionButton("clear", span(icon("times"), "Remove all filters")),
     rf$ui_add_filter_state(id = "add", data = df),
-    rf$ui("active"),
+    rf$ui("states"),
     verbatimTextOutput("expr"),
   ),
   server = function(input, output, session) {
-    rf$srv_add_filter_state(
-      id = "add",
-      data = df
-    )
+    rf$srv_add_filter_state(id = "add", data = df)
+    rf$server(id = "states")
     output$expr <- renderText({
-      deparse1(rf$get_call(), deparse = "\n")
+      deparse1(rf$get_call(), collapse = "\n")
     })
-    observeEvent(
-      input$clear,
-      rf$queue_empty()
-    )
+    observeEvent(input$clear, rf$queue_empty())
   }
 )
 }

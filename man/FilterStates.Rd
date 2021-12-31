@@ -54,6 +54,7 @@ isolate(filter_states$get_call())
 \item \href{#method-queue_push}{\code{FilterStates$queue_push()}}
 \item \href{#method-queue_remove}{\code{FilterStates$queue_remove()}}
 \item \href{#method-ui}{\code{FilterStates$ui()}}
+\item \href{#method-get_filter_state}{\code{FilterStates$get_filter_state()}}
 \item \href{#method-set_filter_state}{\code{FilterStates$set_filter_state()}}
 \item \href{#method-remove_filter_state}{\code{FilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{FilterStates$ui_add_filter_state()}}
@@ -278,10 +279,26 @@ shiny.tag
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
+\subsection{Method \code{get_filter_state()}}{
+Gets the reactive values from the active \code{FilterState} objects.
+
+Get active filter state from the \code{FilterState} objects kept in \code{ReactiveQueue}(s).
+The output list is a compatible input to \code{self$set_filter_state}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilterStates$get_filter_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} containing \code{list} per each \code{FilterState} in the \code{ReactiveQueue}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
 \subsection{Method \code{set_filter_state()}}{
-Set filter state
+Sets active \code{FilterState} objects.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$set_filter_state(data, state)}\if{html}{\out{</div>}}
 }
@@ -387,11 +404,6 @@ return \code{moduleServer} function which returns \code{NULL}
 level, where shiny-session-namespace is different. That is why it's important
 to remove shiny elements from anywhere. In \code{add_filter_state} \code{session$ns(NULL)}
 is equivalent to \code{private$ns(queue_index)}. This means that
-
-Get all \code{FilterState} in the queue.
-parameter queue_index (\code{character(1)} or \code{integer})
-index of the \code{private$queue} list where \code{ReactiveQueue} are kept.
-returns a list of \code{FilterState}.
 }
 }
 \if{html}{\out{<hr>}}

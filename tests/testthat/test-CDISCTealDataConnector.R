@@ -51,7 +51,7 @@ testthat::test_that("get_code returns the correct code for two CDISCTealDatasetC
 })
 
 
-# TealDataConnector with custom UI and server ----Ś
+# TealDataConnector with custom UI and server ----
 testthat::test_that("TealDataConnector with custom UI and server", {
   adsl_cf <- CallableFunction$new(function(test) {
     test

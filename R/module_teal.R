@@ -123,7 +123,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
     )
 
-    # Javascript code ----
+    # Javascript code
     if (getOption("teal_show_js_log", default = FALSE)) {
       shinyjs::showLog() # to show Javascript console logs in the R console
     }
@@ -141,6 +141,35 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       }
     )
 
+    # bookmarking -----
+    saved_datasets_state <- reactiveVal(NULL) # set when restored because data must already be populated
+    onBookmark(function(state) {
+      # this function is isolated  by Shiny
+      # We store the entire R6 class with reactive values in it, but set the data to NULL.
+      # Note that we cannnot directly do this on datasets as this would trigger
+      # reactivity to recompute the filtered datasets, which is not needed.
+      logger::log_trace(
+        paste(
+          "srv_init_filter_state@1 saving active filter state for",
+          "datasets: { paste(names(datasets_reactive()$get_filter_state()), collapse = ' ') }."
+        )
+      )
+      state$values$datasets_state <- datasets_reactive()$get_filter_state()
+    })
+    onRestore(function(state) {
+      # The saved datasets mainly contains the filter states as the data
+      # was set to NULL before storing. The data should have been set again
+      # by the user, so we just need to set the filters.
+      logger::log_trace(
+        paste(
+          "srv_init_filter_state@2 restoring filter states from the bookmark for",
+          "datasets: { paste(names(state$values$datasets_state), collapse = ' ') }."
+        )
+      )
+      saved_datasets_state(state$values$datasets_state)
+    })
+
+    # loading the data -----
     datasets_reactive <- reactive({
       if (is.null(raw_data())) {
         return(NULL)
@@ -155,7 +184,6 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       logger::log_trace("Raw Data transferred to FilteredData.")
       datasets
     })
-
 
     # Replace splash / welcome screen once data is loaded ----
     # ignoreNULL to not trigger at the beginning when data is NULL
@@ -178,6 +206,9 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         # have any effect as they are ignored when not present, see note in `module_add_filter_variable.R`
         immediate = TRUE
       )
+
+      # switching filter to bookmarked state
+      if (!is.null(saved_datasets_state())) filter <- saved_datasets_state()
 
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)

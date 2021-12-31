@@ -45,7 +45,7 @@ TealDataAbstract <- R6::R6Class( # nolint
       }
       private$check_result <- res
       logger::log_trace("TealDataAbstract$check executed the code to reproduce the data - result: { res }.")
-      return(res)
+      res
     },
     #' @description
     #' Execute `check()` and raise an error if it's not reproducible.
@@ -262,7 +262,7 @@ TealDataAbstract <- R6::R6Class( # nolint
         sprintf(
           "TealDataAbstract$mutate code (%s lines) and vars (%s) set.",
           length(parse(text = code, keep.source = FALSE)),
-          paste(names(vars), collapse = ', ')
+          paste(names(vars), collapse = ", ")
         )
       )
       return(invisible(self))
@@ -302,7 +302,7 @@ TealDataAbstract <- R6::R6Class( # nolint
         sprintf(
           "TealDataAbstract$mutate code (%s lines) and vars (%s) set for dataset: %s.",
           length(parse(text = code, keep.source = FALSE)),
-          paste(names(vars), collapse = ', '),
+          paste(names(vars), collapse = ", "),
           dataname
         )
       )

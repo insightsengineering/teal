@@ -66,6 +66,12 @@ testthat::test_that("set_selected throws when the passed values are not coercibl
   )
 })
 
+
+testthat::test_that("set_selected accepts an array with two numerical elements", {
+  filter_state <- RangeFilterState$new(7, varname = "test")
+  testthat::expect_error(filter_state$set_selected(c(7, 7)), NA)
+})
+
 testthat::test_that("get_call returns a valid call after an unsuccessfull set_selected", {
   filter_state <- RangeFilterState$new(7, varname = "test")
   testthat::expect_error(suppressWarnings(
@@ -74,11 +80,6 @@ testthat::test_that("get_call returns a valid call after an unsuccessfull set_se
   ))
   test <- 7
   testthat::expect_true(all(eval(isolate(filter_state$get_call()))))
-})
-
-testthat::test_that("set_selected accepts an array with two numerical elements", {
-  filter_state <- RangeFilterState$new(7, varname = "test")
-  testthat::expect_error(filter_state$set_selected(c(7, 7)), NA)
 })
 
 testthat::test_that("get_call returns the call with values passed in set_selected", {
@@ -127,6 +128,13 @@ testthat::test_that("get_call returns a condition true for NAs and Inf values af
   filter_state$set_keep_inf(TRUE)
   test <- c(NA, Inf)
   testthat::expect_true(all(eval(isolate(filter_state$get_call()))))
+})
+
+testthat::test_that("get_state returns a list identical to set_state input", {
+  filter_state <- RangeFilterState$new(c(1.0, 8.0, NA_real_, Inf), varname = "test")
+  state <- list(selected = c(2.0, 7.0), keep_na = TRUE, keep_inf = TRUE)
+  filter_state$set_state(state)
+  testthat::expect_identical(isolate(filter_state$get_state()), state)
 })
 
 testthat::test_that("set_state needs a named list with selected, keep_na and keep_inf elements", {

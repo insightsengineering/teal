@@ -225,9 +225,25 @@ testthat::test_that(
   }
 )
 
-testthat::test_that(
-  "SEFilterStates$remove_filter_state removes filters in ReactiveQueue",
-  code = {
+testthat::test_that("SEFilterStates$get_filter_state returns list identical to input", {
+    obj <- get_test_data()
+    test <- obj
+    sefs <- SEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0)
+    )
+
+    fs <- list(
+      subset = list(feature_id = list(selected = c("ID001", "ID002"), keep_na = TRUE)),
+      select = list(Treatment = list(selected = "ChIP", keep_na = FALSE))
+    )
+    sefs$set_filter_state(state = fs, data = obj)
+    testthat::expect_identical(isolate(sefs$get_filter_state()), fs)
+  }
+)
+
+testthat::test_that("SEFilterStates$remove_filter_state removes filters in ReactiveQueue", {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -252,9 +268,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that(
-  "SEFilterStates$remove_filter_state removes all filters in ReactiveQueue",
-  code = {
+testthat::test_that("SEFilterStates$remove_filter_state removes all filters in ReactiveQueue", {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
@@ -276,9 +290,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that(
-  "SEFilterStates$remove_filter_state throws error when list is not named",
-  code = {
+testthat::test_that("SEFilterStates$remove_filter_state throws error when list is not named", {
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(

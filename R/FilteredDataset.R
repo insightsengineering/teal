@@ -1,32 +1,50 @@
 #' Initializes `FilteredDataset`
 #'
 #' `FilteredDataset` contains `TealDataset`
-#' @param dataset (`TealDataset`)\cr
 #' @examples
+#' # DefaultFilteredDataset example
 #' iris_d <- dataset("iris", iris)
 #' iris_fd <- teal:::init_filtered_dataset(iris_d)
 #'
+#' \dontrun{
+#' shinyApp(
+#'   ui = fluidPage(
+#'     iris_fd$ui_add_filter_state(id = "add"),
+#'     iris_fd$ui("dataset"),
+#'     verbatimTextOutput("call"),
+#'     tableOutput("tbl")
+#'   ),
+#'   server = function(input, output, session) {
+#'     iris_fd$srv_add_filter_state(id = "add")
+#'     iris_fd$server(id = "dataset")
+#'
+#'     output$call <- renderText({
+#'       paste(
+#'         vapply(iris_fd$get_call(), deparse1, character(1), collapse = "\n"),
+#'         collapse = "\n"
+#'       )
+#'     })
+#'
+#'     output$tbl <- renderTable(iris_fd$get_data(filtered = TRUE))
+#'   }
+#' )
+#' }
+#'
+#' # CDISCFilteredDataset example
 #' library(scda)
 #' adsl_d <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
 #' adsl_fd <- teal:::init_filtered_dataset(adsl_d)
 #'
-#' library(MultiAssayExperiment)
-#' MAE_d <- dataset("MAE", miniACC)
 #' \dontrun{
 #' shinyApp(
 #'   ui = fluidPage(
-#'     actionButton("clear", span(icon("times"), "Remove all filters")),
 #'     adsl_fd$ui_add_filter_state(id = "add"),
 #'     adsl_fd$ui("dataset"),
 #'     verbatimTextOutput("call"),
 #'     tableOutput("tbl")
 #'   ),
 #'   server = function(input, output, session) {
-#'     adsl_fd$srv_add_filter_state(
-#'       vars_include = adsl_fd$get_filterable_varnames(),
-#'       id = "add"
-#'     )
-#'
+#'     adsl_fd$srv_add_filter_state(id = "add")
 #'     adsl_fd$server(id = "dataset")
 #'
 #'     output$call <- renderText({
@@ -36,17 +54,37 @@
 #'       )
 #'     })
 #'
-#'     output$tbl <- renderTable({
-#'       adsl_fd$get_data(filtered = TRUE)
-#'     })
-#'
-#'     observeEvent(
-#'       input$clear,
-#'       adsl_fd$queues_empty()
-#'     )
+#'     output$tbl <- renderTable(adsl_fd$get_data(filtered = TRUE))
 #'   }
 #' )
 #' }
+#'
+#' # MAEFilteredDataset example
+#' library(MultiAssayExperiment)
+#' MAE_d <- dataset("MAE", miniACC)
+#' MAE_fd <- teal:::init_filtered_dataset(MAE_d)
+#'
+#' \dontrun{
+#' shinyApp(
+#'   ui = fluidPage(
+#'     MAE_fd$ui_add_filter_state(id = "add"),
+#'     MAE_fd$ui("dataset"),
+#'     verbatimTextOutput("call")
+#'   ),
+#'   server = function(input, output, session) {
+#'     MAE_fd$srv_add_filter_state(id = "add")
+#'     MAE_fd$server(id = "dataset")
+#'
+#'     output$call <- renderText({
+#'       paste(
+#'         vapply(MAE_fd$get_call(), deparse1, character(1), collapse = "\n"),
+#'         collapse = "\n"
+#'       )
+#'     })
+#'   }
+#' )
+#' }
+#' @param dataset (`TealDataset`)\cr
 init_filtered_dataset <- function(dataset) { # nolint
   UseMethod("init_filtered_dataset")
 }
@@ -132,6 +170,8 @@ FilteredDataset <- R6::R6Class( # nolint
       logger::log_trace("Removed all filters from FilteredDataset: { self$get_dataname() }")
       NULL
     },
+    # managing filter states -----
+
 
     # getters ----
     #' @description
@@ -167,8 +207,19 @@ FilteredDataset <- R6::R6Class( # nolint
       private$reactive_data
     },
 
+    #' Gets the reactive values from the active `FilterState` objects.
+    #'
+    #' Get all active filters from this dataset in form of the nested list.
+    #' The output list is a compatible input to `self$set_filter_state`.
+    #' @return `list` with named elements corresponding to `FilterStates` objects
+    #' with active filters.
+    get_filter_state = function() {
+      states <- lapply(self$get_filter_states(), function(x) x$get_filter_state())
+      Filter(function(x) length(x) > 0, states)
+    },
+
     #' @description
-    #' Gets the filter states
+    #' Gets the active `FilterStates` objects.
     #' @param id (`character(1)`, `character(0)`)\cr
     #'   the id of the `private$filter_states` list element where `FilterStates` is kept.
     #' @return `FilterStates` or `list` of `FilterStates` objects.
@@ -343,10 +394,8 @@ FilteredDataset <- R6::R6Class( # nolint
         function(input, output, session) {
           dataname <- self$get_dataname()
           logger::log_trace("FilteredDataset$server initializing, dataname: { dataname }")
-          stopifnot(
-            is_character_single(dataname)
-          )
-
+          stopifnot(is_character_single(dataname))
+          shiny::setBookmarkExclude("remove_filters")
           lapply(
             names(self$get_filter_states()),
             function(x) {
@@ -461,6 +510,21 @@ FilteredDataset <- R6::R6Class( # nolint
 
 # DefaultFilteredDataset ------
 #' @title `DefaultFilteredDataset` R6 class
+#' @examples
+#' library(shiny)
+#' ds <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+#' ds$get_data(filtered = FALSE)
+#'
+#' ds$set_filter_state(
+#'   state = list(
+#'     Species = list(selected = "virginica"),
+#'     Petal.Length = list(selected = c(2.0, 5))
+#'   )
+#' )
+#'
+#' isolate(ds$get_filter_state())
+#' isolate(ds$get_filter_overview_info())
+#' isolate(ds$get_call())
 DefaultFilteredDataset <- R6::R6Class( # nolint
   classname = "DefaultFilteredDataset",
   inherit = FilteredDataset,
@@ -509,6 +573,16 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
       )
     },
 
+    #' Gets the reactive values from the active `FilterState` objects.
+    #'
+    #' Get all active filters from this dataset in form of the nested list.
+    #' The output list is a compatible input to `self$set_filter_state`.
+    #' @return `list` with named elements corresponding to `FilterState` objects
+    #' (active filters).
+    get_filter_state = function() {
+      self$get_filter_states("filter")$get_filter_state()
+    },
+
     #' @description
     #' Set filter state
     #'
@@ -517,6 +591,15 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #'  to the referred column.
     #' @param ... Additional arguments like `include_update` for `CDISCFilteredDataset`.
     #'  Note that this is ignored for other `FilteredDatasets`.
+    #' @examples
+    #' dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+    #' fs <- list(
+    #'   Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
+    #'   Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+    #' )
+    #' dataset$set_filter_state(state = fs)
+    #' shiny::isolate(dataset$get_filter_state())
+    #'
     #' @return `NULL`
     set_filter_state = function(state, ...) {
       checkmate::assert_list(state)
@@ -876,6 +959,20 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'  names of the experiments. Values of initial state should be relevant
     #'  to the referred column.
     #' @param ... ignored.
+    #' @examples
+    #' dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+    #' fs <- list(
+    #'   subjects = list(
+    #'     years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+    #'     vital_status = list(selected = "1", keep_na = FALSE),
+    #'     gender = list(selected = "female", keep_na = TRUE)
+    #'   ),
+    #'   RPPAArray = list(
+    #'     subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+    #'   )
+    #' )
+    #' dataset$set_filter_state(state = fs)
+    #' shiny::isolate(dataset$get_filter_state())
     #' @return `NULL`
     set_filter_state = function(state, ...) {
       checkmate::assert_list(state)
