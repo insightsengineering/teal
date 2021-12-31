@@ -76,6 +76,39 @@ testthat::test_that("get_selected returns NULL after initialization", {
   testthat::expect_null(isolate(filter_state$get_selected()))
 })
 
+testthat::test_that("set_selected sets value, get_selected returns the same", {
+  filter_state <- FilterState$new(7L, varname = "7")
+  filter_state$set_selected(7L)
+  testthat::expect_identical(isolate(filter_state$get_selected()), 7L)
+})
+
+testthat::test_that("get_keep_na returns FALSE after initialization", {
+  filter_state <- FilterState$new(7, varname = "7")
+  testthat::expect_false(isolate(filter_state$get_keep_na()))
+})
+
+testthat::test_that("set_state sets selected and keep_na", {
+  filter_state <- FilterState$new(c("a", NA_character_), varname = "var")
+  state <- list(selected = "a", keep_na = TRUE)
+  filter_state$set_state(state)
+  testthat::expect_identical(
+    state,
+    isolate(
+      list(
+        selected = filter_state$get_selected(),
+        keep_na = filter_state$get_keep_na()
+      )
+    )
+  )
+})
+
+testthat::test_that("get_state returns a list identical to set_state input", {
+  filter_state <- FilterState$new(c("a", NA_character_), varname = "var")
+  state <- list(selected = "a", keep_na = TRUE)
+  filter_state$set_state(state)
+  testthat::expect_identical(isolate(filter_state$get_state()), state)
+})
+
 testthat::test_that("label_keep_na_count returns the string with an appended element", {
   testthat::expect_equal(label_keep_na_count(7), "Keep NA (7)")
 })

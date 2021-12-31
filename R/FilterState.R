@@ -381,6 +381,19 @@ FilterState <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Returns the filtering state.
+    #'
+    #' @return `list` containing values taken from the reactive fields:
+    #' * `selected` (`atomic`) length depends on a `FilterState` variant.
+    #' * `keep_na` (`logical(1)`) whether `NA` should be kept.
+    get_state = function() {
+      list(
+        selected = self$get_selected(),
+        keep_na = self$get_keep_na()
+      )
+    },
+
+    #' @description
     #' Set if `NA` should be kept
     #' @param value (`logical(1)`)\cr
     #'  value(s) which come from the filter selection. Value is set in `server`
@@ -745,6 +758,17 @@ EmptyFilterState <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Returns the filtering state.
+    #'
+    #' @return `list` containing values taken from the reactive fields:
+    #' * `keep_na` (`logical(1)`) whether `NA` should be kept.
+    get_state = function() {
+      list(
+        keep_na = self$get_keep_na()
+      )
+    },
+
+    #' @description
     #' UI Module for `EmptyFilterState`.
     #' This UI element contains checkbox input to
     #' filter or keep missing values.
@@ -776,7 +800,7 @@ EmptyFilterState <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           private$observe_keep_na(input)
-          NULL
+          shiny::setBookmarkExclude("keep_na")
         }
       )
     },
@@ -941,6 +965,9 @@ LogicalFilterState <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace("LogicalFilterState$server initializing, dataname: { deparse1(private$input_dataname) }")
+
+          shiny::setBookmarkExclude(c("selection", "keep_na"))
+
           output$plot <- renderPlot(
             bg = "transparent",
             expr = {
@@ -1147,6 +1174,21 @@ RangeFilterState <- R6::R6Class( # nolint
       private$keep_inf()
     },
 
+    #' @description
+    #' Returns the filtering state.
+    #'
+    #' @return `list` containing values taken from the reactive fields:
+    #' * `selected` (`numeric(2)`) range of the filter.
+    #' * `keep_na` (`logical(1)`) whether `NA` should be kept.
+    #' * `keep_inf` (`logical(1)`)  whether `Inf` should be kept.
+    get_state = function() {
+      list(
+        selected = self$get_selected(),
+        keep_na = self$get_keep_na(),
+        keep_inf = self$get_keep_inf()
+      )
+    },
+
     #' UI Module for `RangeFilterState`.
     #' This UI element contains two values for `min` and `max`
     #' of the range and two checkboxes whether to keep the `NA` or `Inf`  values.
@@ -1207,6 +1249,9 @@ RangeFilterState <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace("RangeFilterState$server initializing, dataname: { deparse1(private$input_dataname) }")
+
+          shiny::setBookmarkExclude(c("selection", "keep_na", "keep_inf"))
+
           output$plot <- renderPlot(
             bg = "transparent",
             height = 25,
@@ -1610,7 +1655,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace("ChoicesFilterState$server initializing, dataname: { deparse1(private$input_dataname) }")
-
+          shiny::setBookmarkExclude(c("selection", "keep_na"))
           output$plot <- renderPlot(
             bg = "transparent",
             expr = {
@@ -1893,6 +1938,7 @@ DateFilterState <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace("DateFilterState$server initializing, dataname: { deparse1(private$input_dataname) }")
+          shiny::setBookmarkExclude(c("selection", "keep_na"))
           private$observers$selection_reactive <- observeEvent(
             private$selected_reactive(),
             ignoreNULL = TRUE,
@@ -2201,6 +2247,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace("DatetimeFilterState$server initializing, dataname: { deparse1(private$input_dataname) }")
+          shiny::setBookmarkExclude(c("selection_start", "selection_end", "keep_na"))
           private$observers$selection_reactive <- observeEvent(
             private$selected_reactive(),
             ignoreNULL = TRUE,

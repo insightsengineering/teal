@@ -227,6 +227,25 @@ testthat::test_that("MAEFilteredDataset$set_filter_state throws error if state a
 })
 
 testthat::test_that(
+  "MAEFilteredDataset$get_filter_state returns list identical to input",
+  code = {
+    dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+    fs <- list(
+      subjects = list(
+        years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+        vital_status = list(selected = "1", keep_na = FALSE),
+        gender = list(selected = "female", keep_na = TRUE)
+      ),
+      RPPAArray = list(
+        subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+      )
+    )
+    dataset$set_filter_state(state = fs)
+    testthat::expect_identical(isolate(dataset$get_filter_state()), fs)
+  }
+)
+
+testthat::test_that(
   "MAEFilteredDataset$remove_filter_state removes desired filter",
   code = {
     dataset <- MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))

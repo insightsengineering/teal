@@ -90,6 +90,25 @@ testthat::test_that(
   }
 )
 
+testthat::test_that(
+  "DFFilterStates$get_filter_state returns list identical to input",
+  code = {
+    dffs <- DFFilterStates$new(
+      input_dataname = "iris",
+      output_dataname = "iris_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
+      Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+    )
+    dffs$set_filter_state(state = fs, data = iris)
+    testthat::expect_identical(isolate(dffs$get_filter_state()), fs)
+  }
+)
+
 testthat::test_that("Selecting a new variable initializes a new filter state", {
   dffs <- DFFilterStates$new(
     input_dataname = "iris",

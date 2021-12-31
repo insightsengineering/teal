@@ -74,6 +74,19 @@ testthat::test_that(
 )
 
 testthat::test_that(
+  "DefaultFilteredDataset$get_filter_state returns list identical to input",
+  code = {
+    dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
+    fs <- list(
+      Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
+      Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+    )
+    dataset$set_filter_state(state = fs)
+    testthat::expect_identical(isolate(dataset$get_filter_state()), fs)
+  }
+)
+
+testthat::test_that(
   "DefaultFilteredDataset$remove_filter_state removes more than one filter",
   code = {
     dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
