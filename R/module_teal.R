@@ -141,11 +141,12 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       }
     )
 
-    datasets_reactive <- reactive({
+    env <- environment()
+    datasets_reactive <- reactive(env = env, {
       if (is.null(raw_data())) {
         return(NULL)
       }
-      progress <<- shiny::Progress$new(session)
+      env$progress <- shiny::Progress$new(session)
       progress$set(0.25, message = "Setting data")
       # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
       # this is placed in the module scope so that bookmarking can be used with FilteredData object
@@ -162,7 +163,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     # just handle it once because data obtained through delayed loading should
     # usually not change afterwards
     # if restored from bookmarked state, `filter` is ignored
-    observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, {
+    observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, event.env = env, {
       logger::log_trace("srv_teal@3 setting main ui after data was pulled")
       progress$set(0.5, message = "Setting up main UI")
       on.exit(progress$close())

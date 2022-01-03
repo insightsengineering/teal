@@ -25,6 +25,3 @@ NULL
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom SummarizedExperiment colData
 NULL
-
-utils::globalVariables("progress")
-progress <- NULL
