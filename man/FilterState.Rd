@@ -56,6 +56,7 @@ or using \code{set_selected}, \code{set_keep_na} or \code{set_keep_inf}
 \item \href{#method-get_varlabel}{\code{FilterState$get_varlabel()}}
 \item \href{#method-get_varname}{\code{FilterState$get_varname()}}
 \item \href{#method-get_selected}{\code{FilterState$get_selected()}}
+\item \href{#method-get_state}{\code{FilterState$get_state()}}
 \item \href{#method-set_keep_na}{\code{FilterState$set_keep_na()}}
 \item \href{#method-set_keep_na_reactive}{\code{FilterState$set_keep_na_reactive()}}
 \item \href{#method-set_na_rm}{\code{FilterState$set_na_rm()}}
@@ -212,6 +213,23 @@ Get selected values from \code{FilterState}
 
 \subsection{Returns}{
 class of the returned object depends of class of the \code{FilterState}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_state}{}}}
+\subsection{Method \code{get_state()}}{
+Returns the filtering state.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilterState$get_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} containing values taken from the reactive fields:
+\itemize{
+\item \code{selected} (\code{atomic}) length depends on a \code{FilterState} variant.
+\item \code{keep_na} (\code{logical(1)}) whether \code{NA} should be kept.
+}
 }
 }
 \if{html}{\out{<hr>}}

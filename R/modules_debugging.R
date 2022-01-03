@@ -91,7 +91,7 @@ bookmark_module <- function(label = "Bookmark Module") { # nousage # nolint
         }
       })
 
-      setBookmarkExclude("bookmark") # we do not want the window to open when it is restored
+      shiny::setBookmarkExclude("bookmark") # we do not want the window to open when it is restored
     },
     ui = function(id, ...) {
       ns <- NS(id)

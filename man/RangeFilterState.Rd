@@ -44,6 +44,7 @@ filter$set_selected(c(2, 3))
 \item \href{#method-new}{\code{RangeFilterState$new()}}
 \item \href{#method-get_call}{\code{RangeFilterState$get_call()}}
 \item \href{#method-get_keep_inf}{\code{RangeFilterState$get_keep_inf()}}
+\item \href{#method-get_state}{\code{RangeFilterState$get_state()}}
 \item \href{#method-ui}{\code{RangeFilterState$ui()}}
 \item \href{#method-server}{\code{RangeFilterState$server()}}
 \item \href{#method-set_keep_inf}{\code{RangeFilterState$set_keep_inf()}}
@@ -138,9 +139,27 @@ Returns current \code{keep_inf} selection
 
 \subsection{Returns}{
 (\code{logical(1)})
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_state}{}}}
+\subsection{Method \code{get_state()}}{
+Returns the filtering state.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$get_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} containing values taken from the reactive fields:
+\itemize{
+\item \code{selected} (\code{numeric(2)}) range of the filter.
+\item \code{keep_na} (\code{logical(1)}) whether \code{NA} should be kept.
+\item \code{keep_inf} (\code{logical(1)})  whether \code{Inf} should be kept.
 UI Module for \code{RangeFilterState}.
 This UI element contains two values for \code{min} and \code{max}
 of the range and two checkboxes whether to keep the \code{NA} or \code{Inf}  values.
+}
 }
 }
 \if{html}{\out{<hr>}}

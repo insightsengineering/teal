@@ -116,12 +116,12 @@ isolate(datasets$get_call("ADTTE"))
 \if{html}{
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_bookmark_state">}\href{../../teal/html/FilteredData.html#method-get_bookmark_state}{\code{teal::FilteredData$get_bookmark_state()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_code">}\href{../../teal/html/FilteredData.html#method-get_code}{\code{teal::FilteredData$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_data">}\href{../../teal/html/FilteredData.html#method-get_data}{\code{teal::FilteredData$get_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_data_attr">}\href{../../teal/html/FilteredData.html#method-get_data_attr}{\code{teal::FilteredData$get_data_attr()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_datalabel">}\href{../../teal/html/FilteredData.html#method-get_datalabel}{\code{teal::FilteredData$get_datalabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filter_overview">}\href{../../teal/html/FilteredData.html#method-get_filter_overview}{\code{teal::FilteredData$get_filter_overview()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filter_state">}\href{../../teal/html/FilteredData.html#method-get_filter_state}{\code{teal::FilteredData$get_filter_state()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filtered_dataset">}\href{../../teal/html/FilteredData.html#method-get_filtered_dataset}{\code{teal::FilteredData$get_filtered_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_join_keys">}\href{../../teal/html/FilteredData.html#method-get_join_keys}{\code{teal::FilteredData$get_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_keys">}\href{../../teal/html/FilteredData.html#method-get_keys}{\code{teal::FilteredData$get_keys()}}\out{</span>}

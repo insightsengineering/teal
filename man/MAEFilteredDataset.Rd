@@ -8,6 +8,26 @@
 
 \code{MAEFilteredDataset} R6 class
 }
+\examples{
+
+## ------------------------------------------------
+## Method `MAEFilteredDataset$set_filter_state`
+## ------------------------------------------------
+
+dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+fs <- list(
+  subjects = list(
+    years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+    vital_status = list(selected = "1", keep_na = FALSE),
+    gender = list(selected = "female", keep_na = TRUE)
+  ),
+  RPPAArray = list(
+    subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+  )
+)
+dataset$set_filter_state(state = fs)
+shiny::isolate(dataset$get_filter_state())
+}
 \section{Super class}{
 \code{\link[teal:FilteredDataset]{teal::FilteredDataset}} -> \code{MAEFilteredDataset}
 }
@@ -33,6 +53,7 @@
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_data_reactive">}\href{../../teal/html/FilteredDataset.html#method-get_data_reactive}{\code{teal::FilteredDataset$get_data_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_dataname}{\code{teal::FilteredDataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataset">}\href{../../teal/html/FilteredDataset.html#method-get_dataset}{\code{teal::FilteredDataset$get_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_state">}\href{../../teal/html/FilteredDataset.html#method-get_filter_state}{\code{teal::FilteredDataset$get_filter_state()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_states">}\href{../../teal/html/FilteredDataset.html#method-get_filter_states}{\code{teal::FilteredDataset$get_filter_states()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filtered_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_filtered_dataname}{\code{teal::FilteredDataset$get_filtered_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_hash">}\href{../../teal/html/FilteredDataset.html#method-get_hash}{\code{teal::FilteredDataset$get_hash()}}\out{</span>}
@@ -160,6 +181,26 @@ to the referred column.}
 \subsection{Returns}{
 \code{NULL}
 }
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+fs <- list(
+  subjects = list(
+    years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+    vital_status = list(selected = "1", keep_na = FALSE),
+    gender = list(selected = "female", keep_na = TRUE)
+  ),
+  RPPAArray = list(
+    subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+  )
+)
+dataset$set_filter_state(state = fs)
+shiny::isolate(dataset$get_filter_state())
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-remove_filter_state"></a>}}
