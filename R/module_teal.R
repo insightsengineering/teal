@@ -141,7 +141,6 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       }
     )
 
-    datasets_reactive <- reactive(env = env, {
     # bookmarking -----
     saved_datasets_state <- reactiveVal(NULL) # set when restored because data must already be populated
     onBookmark(function(state) {
