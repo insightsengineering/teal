@@ -796,7 +796,7 @@ DFFilterStates <- R6::R6Class( # nolint
         value <- state[[varname]]
         if (varname %in% names(filter_states)) {
           fstate <- filter_states[[varname]]
-          fstate$set_state_reactive(state = value)
+          set_filter_state(x = value, fstate)
         } else {
           fstate <- init_filter_state(
             data[[varname]],
@@ -1126,7 +1126,7 @@ MAEFilterStates <- R6::R6Class( # nolint
         value <- state[[varname]]
         if (varname %in% names(filter_states)) {
           fstate <- filter_states[[varname]]
-          fstate$set_state_reactive(state = value)
+          set_filter_state(x = value, fstate)
         } else {
           fstate <- init_filter_state(
             SummarizedExperiment::colData(data)[[varname]],
@@ -1522,7 +1522,7 @@ SEFilterStates <- R6::R6Class( # nolint
         value <- state$subset[[varname]]
         if (varname %in% names(filter_states)) {
           fstate <- filter_states[[varname]]
-          fstate$set_state_reactive(state = value)
+          set_filter_state(x = value, fstate)
         } else {
           fstate <- init_filter_state(
             SummarizedExperiment::rowData(data)[[varname]],
@@ -1960,7 +1960,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
         value <- state[[varname]]
         if (varname %in% names(filter_states)) {
           fstate <- filter_states[[varname]]
-          fstate$set_state_reactive(state = value)
+          set_filter_state(x = value, fstate)
         } else {
           fstate <- init_filter_state(
             data[, varname],

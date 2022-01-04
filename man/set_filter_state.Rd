@@ -59,3 +59,4 @@ teal:::set_filter_state(default_filter(), filter_state)
 \item{\code{\link{DatetimeFilterState}}}
 }
 }
+\keyword{internal}

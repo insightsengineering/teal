@@ -28,6 +28,8 @@
 #' \item{\code{\link{DatetimeFilterState}}}
 #' }
 #'
+#' @keywords internal
+#'
 #' @examples
 #' filter_state <- teal:::RangeFilterState$new(
 #'   c(1:10, NA, Inf),
@@ -41,10 +43,12 @@
 #' teal:::set_filter_state(c(1, 2, Inf), filter_state)
 #' teal:::set_filter_state(default_filter(), filter_state)
 set_filter_state <- function(x, filter_state) {
+  checkmate::assert_class(filter_state, "FilterState")
   UseMethod("set_filter_state")
 }
 
 #' @rdname set_filter_state
+#' @keywords internal
 #' @export
 set_filter_state.default <- function(x, filter_state) { # nousage
   state <- list()
@@ -60,16 +64,18 @@ set_filter_state.default <- function(x, filter_state) { # nousage
     state$selected <- x[!(is.infinite(x) | is.na(x))]
   }
 
-  filter_state$set_state(state)
+  set_filter_state(state, filter_state)
 }
 
 #' @rdname set_filter_state
+#' @keywords internal
 #' @export
 set_filter_state.default_filter <- function(x, filter_state) { # nolint #nousage
   invisible(NULL)
 }
 
 #' @rdname set_filter_state
+#' @keywords internal
 #' @export
 set_filter_state.list <- function(x, filter_state) { # nousage
   if (is.null(names(x))) {
@@ -86,5 +92,10 @@ set_filter_state.list <- function(x, filter_state) { # nousage
       names(x)[[x_idx]] <- "selected"
     }
   }
-  filter_state$set_state(state = x)
+  if (shiny::isRunning()) {
+    filter_state$set_state_reactive(state = x)
+  } else {
+    filter_state$set_state(state = x)
+  }
+
 }
