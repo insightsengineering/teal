@@ -224,3 +224,132 @@ because `SummarizedExperiment` contains `colData` and `rowData` which correspond
 `subset` refers to the rows in the object, and `select` refers to the columns - but the call
 execution is little different because subsetting and selecting call refers to columns in `colData`
 and `rowData` (objects attached to this experiment).
+
+## Filter-panel API
+
+Any of filter-panel classes have a dedicated methods to set and get current filter state. These
+methods include:
+- `get_code`
+- `get_data`
+- `get_filter_state`
+- `set_filter_state`
+- `remove_filter_state`
+- `remove_all_filter_states`
+
+Setting and getting filter-panel states are done thorugh a nested list which follows the 
+specific patter. Structure of the list should reflect address of `FilterState`(s) object.
+By default (`data.frame`), structure will follow pattern from the code below,
+with a list element for each variable from each dataset. In case of `MultiAssayExperiment` 
+objects, situation looks different, because these datasets have a multiple objects inside, 
+so the list needs to refer to the object one wants to set/get filter from.
+
+```
+dataset-1: #data.frame
+  variable-1: 
+    selected: [<selected>]
+    keep_na: <keep_na>
+  ...
+
+dataset-n: # MAE
+  subjects:
+    variable-1: 
+      selected: [<selected>]
+      keep_na: <keep_na>
+    ...
+  experiment-1:
+    subset:
+      variable-1: 
+        selected: [<selected>]
+        keep_na: <keep_na>
+      ...
+    select:
+      variable-2: 
+        selected: [<selected>]
+        keep_na: <keep_na>
+      ...
+  ...
+```
+
+Above list structure is applied in `get_filter_state`, `set_filter_state` and
+`remove_filter_state`. In the example below, we present how these method can be used.
+
+```{r, message=FALSE, warning=FALSE}
+library(teal)
+datasets <- teal:::FilteredData$new()
+datasets$set_dataset(dataset(dataname = "iris", x = iris))
+datasets$set_dataset(dataset(dataname = "mtcars", x = mtcars))
+
+# set states
+datasets$set_filter_state(
+  list(
+    iris = list(Species = list(selected = "virginica", keep_na = FALSE)),
+    mtcars = list(mpg = list(selected = c(20.0, 25.0), keep_na = FALSE, keep_inf = FALSE))
+  )
+)
+isolate(datasets$get_filter_state())
+
+# remove state
+datasets$remove_filter_state(
+  list(iris = list("Species"))
+)
+isolate(datasets$get_filter_state())
+
+# modify state
+datasets$set_filter_state(
+  list(
+    mtcars = list(mpg = list(selected = c(22.0, 25.0)))
+  )
+)
+isolate(datasets$get_filter_state())
+```
+
+Above code can be also used in the module
+
+```{r, eval=FALSE}
+app <- teal::init(
+  data = list(
+    dataset(dataname = "iris", x = iris),
+    dataset(dataname = "mtcars", x = mtcars)
+  ),
+  filter = list(
+    iris = list(Species = "virginica"),
+    mtcars = list(mpg = c(20.0, 25.0))
+  ),
+  modules = root_modules(
+    module(
+      label = "custom",
+      ui = function(id, ...) {
+        ns <- NS(id)
+        teal.devel::standard_layout(
+          output = teal.devel::white_small_well(verbatimTextOutput(ns("filter_state"))),
+          encoding = div(
+            actionButton(ns("add_species_filter"), "Add iris$Species filter"),
+            actionButton(ns("remove_species_filter"), "Remove iris$Species filter"),
+            actionButton(ns("remove_all_filters"), "Remove all filters")
+          )
+        )
+      },
+      server = function(input, output, session, datasets) {
+        output$filter_state <- renderText(yaml::as.yaml(datasets$get_filter_state()))
+
+        observeEvent(input$add_species_filter, 
+         datasets$set_filter_state(list(iris = list(Species = list(selected = c("setosa", "versicolor", "virginica")))))
+        )
+                
+        observeEvent(input$remove_species_filter, {
+          states <- datasets$get_filter_state()
+          if (!is.null(states$iris$Species)) 
+            datasets$remove_filter_state(list(iris = "Species"))
+        })
+        
+        observeEvent(input$remove_all_filters, 
+          datasets$remove_all_filter_states()
+        )
+      }
+    )
+  )
+)
+
+runApp(app)
+```
+
