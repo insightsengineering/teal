@@ -176,7 +176,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         return(NULL)
       }
       env$progress <- shiny::Progress$new(session)
-      progress$set(0.25, message = "Setting data")
+      env$progress$set(0.25, message = "Setting data")
       # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
       # this is placed in the module scope so that bookmarking can be used with FilteredData object
       datasets <- filtered_data_new(raw_data())
@@ -193,7 +193,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     # if restored from bookmarked state, `filter` is ignored
     observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, event.env = env, {
       logger::log_trace("srv_teal@3 setting main ui after data was pulled")
-      progress$set(0.5, message = "Setting up main UI")
+      env$progress$set(0.5, message = "Setting up main UI")
       on.exit(env$progress$close())
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
       removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
