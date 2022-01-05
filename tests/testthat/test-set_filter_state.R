@@ -167,3 +167,22 @@ testthat::test_that("set_filter_state - logical values", {
     isolate(filter_state$get_keep_na())
   )
 })
+
+testthat::test_that("set_filter_state changes the filter state when shiny is running", {
+  filter_state <- teal:::init_filter_state(
+    c(1:10, NA, Inf),
+    varname = "x"
+  )
+  set_filter_module <- function(input, output, session) NULL
+
+  shiny::testServer(
+    app = set_filter_module,
+    expr = {
+      set_filter_state(c(1, 5), filter_state)
+      expect_identical(
+        filter_state$get_state(),
+        list(selected = c(1, 5), keep_na = FALSE, keep_inf = FALSE)
+      )
+    }
+  )
+})

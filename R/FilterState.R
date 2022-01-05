@@ -236,6 +236,7 @@ init_filter_state.POSIXlt <- function(x, # nousage
 #' - `POSIXct`, `POSIXlt`: `class = DatetimeFilterState`
 #' - all `NA` entries: `class: FilterState`, cannot be filtered
 #' - default: `FilterState`, cannot be filtered
+#' \cr
 #' Each variable's filter state is an `R6` object which contains `choices`,
 #' `selected`, `varname`, `dataname`, `labels`, `na_count`, `keep_na` and other
 #' variable type specific fields (`keep_inf`, `inf_count`, `timezone`).
@@ -245,9 +246,10 @@ init_filter_state.POSIXlt <- function(x, # nousage
 #' chain.
 #' \cr
 #' \cr
+#' @section Modyfying state:
+#' Modifying a `FilterState` object is possible in three scenarios depicted below:
 #' \if{html}{\figure{filter_state_reactivity.jpg}{options: width="100\%" alt="Figure: filter_state_reactivity.jpg"}}
 #' \if{latex}{\figure{filter_state_reactivity.jpg}{options: width=7cm}}
-#' Modifying a `FilterState` object is possible in three scenarios depicted above:
 #' * In the interactive session by directly specifying values of `selected`,
 #'   `keep_na` or `keep_inf` using `set_state` method (to update all at once),
 #'   or using `set_selected`, `set_keep_na` or `set_keep_inf`

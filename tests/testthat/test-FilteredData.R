@@ -230,17 +230,6 @@ testthat::test_that("FilteredData$get_filter_state returns list identical to inp
   }
 )
 
-testthat::test_that(  "FilteredData$get_filter_state modifies state if already set", {
-  datasets <- teal:::FilteredData$new()
-  datasets$set_dataset(dataset("mtcars", mtcars))
-  datasets$set_filter_state(state = list(mtcars = list(mpg = c(20, 25))))
-  datasets$set_filter_state(state = list(mtcars = list(mpg = c(21, 30))))
-  testthat::expect_identical(
-    isolate(datasets$get_filter_state()),
-    list(mtcars = list(mpg = list(selected = c(21, 30), keep_na = FALSE, keep_inf = FALSE)))
-  )
-})
-
 testthat::test_that("FilteredData$remove_filter_state removes states defined in list", {
   datasets <- teal:::FilteredData$new()
   datasets$set_dataset(dataset("iris", iris))

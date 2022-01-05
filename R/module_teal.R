@@ -194,7 +194,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, event.env = env, {
       logger::log_trace("srv_teal@3 setting main ui after data was pulled")
       progress$set(0.5, message = "Setting up main UI")
-      on.exit(progress$close())
+      on.exit(env$progress$close())
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
       removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
       insertUI(

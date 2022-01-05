@@ -1538,19 +1538,26 @@ SEFilterStates <- R6::R6Class( # nolint
         }
       }
 
+      filter_states <- self$queue_get("select")
       for (varname in names(state$select)) {
         value <- state$select[[varname]]
-        fstate <- init_filter_state(
-          SummarizedExperiment::colData(data)[[varname]],
-          varname = as.name(varname),
-          input_dataname = private$input_dataname
-        )
-        set_filter_state(x = value, fstate)
-        self$queue_push(
-          x = fstate,
-          queue_index = "select",
-          element_id = varname
-        )
+        if (varname %in% names(filter_states)) {
+          fstate <- filter_states[[varname]]
+          set_filter_state(x = value, fstate)
+        } else {
+          fstate <- init_filter_state(
+            SummarizedExperiment::colData(data)[[varname]],
+            varname = as.name(varname),
+            input_dataname = private$input_dataname
+          )
+          set_filter_state(x = value, fstate)
+          self$queue_push(
+            x = fstate,
+            queue_index = "select",
+            element_id = varname
+          )
+        }
+
       }
       logger::log_trace(paste(
         "SEFilterState$set_filter_state initialized,",

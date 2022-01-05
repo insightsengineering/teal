@@ -227,8 +227,8 @@ and `rowData` (objects attached to this experiment).
 
 ## Filter-panel API
 
-Any of filter-panel classes have a dedicated methods to set and get current filter state. These
-methods include:
+Any of filter-panel classes have a dedicated methods to set and get current filter state. 
+These methods include:
 - `get_code`
 - `get_data`
 - `get_filter_state`
@@ -273,37 +273,56 @@ dataset-n: # MAE
 Above list structure is applied in `get_filter_state`, `set_filter_state` and
 `remove_filter_state`. In the example below, we present how these method can be used.
 
+1. Setting the filter state
 ```{r, message=FALSE, warning=FALSE}
 library(teal)
 datasets <- teal:::FilteredData$new()
 datasets$set_dataset(dataset(dataname = "iris", x = iris))
 datasets$set_dataset(dataset(dataname = "mtcars", x = mtcars))
 
-# set states
 datasets$set_filter_state(
   list(
     iris = list(Species = list(selected = "virginica", keep_na = FALSE)),
     mtcars = list(mpg = list(selected = c(20.0, 25.0), keep_na = FALSE, keep_inf = FALSE))
   )
 )
-isolate(datasets$get_filter_state())
+```
 
-# remove state
+2. Getting the filter state
+```{r, message=FALSE, warning=FALSE}
+isolate(datasets$get_filter_state())
+```
+
+3. Removing filter states
+```{r, message=FALSE, warning=FALSE}
 datasets$remove_filter_state(
-  list(iris = list("Species"))
+  list(iris = c("Species"))
 )
-isolate(datasets$get_filter_state())
+```
 
-# modify state
+4. Updating filter states
+```{r, message=FALSE, warning=FALSE}
 datasets$set_filter_state(
   list(
     mtcars = list(mpg = list(selected = c(22.0, 25.0)))
   )
 )
-isolate(datasets$get_filter_state())
 ```
 
-Above code can be also used in the module
+5. Get filtered data
+```{r, message=FALSE, warning=FALSE}
+isolate(
+  datasets$get_data(dataname = "mtcars", filtered = TRUE)
+)
+```
+
+6. Get reproducible filtering call
+```{r, message=FALSE, warning=FALSE}
+isolate(datasets$get_call(dataname = "mtcars"))
+```
+
+Above code can be also used in the modules. In the example below filter-panel states
+are changed when clicking buttons in encoding-panel.
 
 ```{r, eval=FALSE}
 app <- teal::init(
@@ -333,7 +352,7 @@ app <- teal::init(
         output$filter_state <- renderText(yaml::as.yaml(datasets$get_filter_state()))
 
         observeEvent(input$add_species_filter, 
-         datasets$set_filter_state(list(iris = list(Species = list(selected = c("setosa", "versicolor", "virginica")))))
+         datasets$set_filter_state(list(iris = list(Species = list(selected = c("setosa", "versicolor")))))
         )
                 
         observeEvent(input$remove_species_filter, {
@@ -352,4 +371,3 @@ app <- teal::init(
 
 runApp(app)
 ```
-

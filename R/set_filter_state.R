@@ -1,7 +1,10 @@
 #' Sets the filter state in `FilterState` object
 #'
 #' @description `r lifecycle::badge("experimental")`
-#' Sets values of the selection in `FilterState` object
+#' Sets state of `FilterState` object. Function performs in two different scenarios:
+#' - in running `shiny`, then, `FilterState$set_state_reactive()` is called
+#' - interactive session: then `FilterState$set_state()` is set directly
+#' More in [FilterState] documentation in "Modifying state" section
 #' @param x (`list`,`vector`, `default_filter`)\cr
 #'  values of the variable used in filter. Depending on the `FilterState` type
 #'  list should contain:
@@ -64,7 +67,11 @@ set_filter_state.default <- function(x, filter_state) { # nousage
     state$selected <- x[!(is.infinite(x) | is.na(x))]
   }
 
-  set_filter_state(state, filter_state)
+  if (shiny::isRunning()) {
+    filter_state$set_state_reactive(state = state)
+  } else {
+    filter_state$set_state(state = state)
+  }
 }
 
 #' @rdname set_filter_state
