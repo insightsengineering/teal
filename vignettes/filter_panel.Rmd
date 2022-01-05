@@ -236,7 +236,7 @@ These methods include:
 - `remove_filter_state`
 - `remove_all_filter_states`
 
-Setting and getting filter-panel states are done thorugh a nested list which follows the 
+Setting and getting filter-panel states are done through a nested list which follows the 
 specific patter. Structure of the list should reflect address of `FilterState`(s) object.
 By default (`data.frame`), structure will follow pattern from the code below,
 with a list element for each variable from each dataset. In case of `MultiAssayExperiment` 
@@ -351,19 +351,16 @@ app <- teal::init(
       server = function(input, output, session, datasets) {
         output$filter_state <- renderText(yaml::as.yaml(datasets$get_filter_state()))
 
-        observeEvent(input$add_species_filter, 
+        observeEvent(input$add_species_filter,
          datasets$set_filter_state(list(iris = list(Species = list(selected = c("setosa", "versicolor")))))
         )
-                
         observeEvent(input$remove_species_filter, {
           states <- datasets$get_filter_state()
-          if (!is.null(states$iris$Species)) 
+          if (!is.null(states$iris$Species)) {
             datasets$remove_filter_state(list(iris = "Species"))
+          }
         })
-        
-        observeEvent(input$remove_all_filters, 
-          datasets$remove_all_filter_states()
-        )
+        observeEvent(input$remove_all_filters, datasets$remove_all_filter_states())
       }
     )
   )

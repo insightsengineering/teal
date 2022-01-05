@@ -246,7 +246,7 @@ init_filter_state.POSIXlt <- function(x, # nousage
 #' chain.
 #' \cr
 #' \cr
-#' @section Modyfying state:
+#' @section Modifying state:
 #' Modifying a `FilterState` object is possible in three scenarios depicted below:
 #' \if{html}{\figure{filter_state_reactivity.jpg}{options: width="100\%" alt="Figure: filter_state_reactivity.jpg"}}
 #' \if{latex}{\figure{filter_state_reactivity.jpg}{options: width=7cm}}

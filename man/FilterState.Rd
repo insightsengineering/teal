@@ -34,7 +34,7 @@ chain.
 \cr
 }
 }
-\section{Modyfying state}{
+\section{Modifying state}{
 
 Modifying a \code{FilterState} object is possible in three scenarios depicted below:
 \if{html}{\figure{filter_state_reactivity.jpg}{options: width="100\%" alt="Figure: filter_state_reactivity.jpg"}}
