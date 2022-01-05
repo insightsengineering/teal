@@ -22,6 +22,7 @@ code relevant to selected values.
 \item \code{POSIXct}, \code{POSIXlt}: \code{class = DatetimeFilterState}
 \item all \code{NA} entries: \code{class: FilterState}, cannot be filtered
 \item default: \code{FilterState}, cannot be filtered
+\cr
 Each variable's filter state is an \code{R6} object which contains \code{choices},
 \code{selected}, \code{varname}, \code{dataname}, \code{labels}, \code{na_count}, \code{keep_na} and other
 variable type specific fields (\code{keep_inf}, \code{inf_count}, \code{timezone}).
@@ -31,10 +32,13 @@ which trigger \code{get_call()} and every R function call up in reactive
 chain.
 \cr
 \cr
+}
+}
+\section{Modyfying state}{
+
+Modifying a \code{FilterState} object is possible in three scenarios depicted below:
 \if{html}{\figure{filter_state_reactivity.jpg}{options: width="100\%" alt="Figure: filter_state_reactivity.jpg"}}
 \if{latex}{\figure{filter_state_reactivity.jpg}{options: width=7cm}}
-Modifying a \code{FilterState} object is possible in three scenarios depicted above:
-}
 \itemize{
 \item In the interactive session by directly specifying values of \code{selected},
 \code{keep_na} or \code{keep_inf} using \code{set_state} method (to update all at once),
@@ -44,6 +48,7 @@ or using \code{set_selected}, \code{set_keep_na} or \code{set_keep_inf}
 \code{set_keep_inf_reactive} which serves as a programmatic API.
 }
 }
+
 \keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{

@@ -31,7 +31,12 @@ adding \code{NA} and \code{Inf} to the selection vector.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-Sets values of the selection in \code{FilterState} object
+Sets state of \code{FilterState} object. Function performs in two different scenarios:
+\itemize{
+\item in running \code{shiny}, then, \code{FilterState$set_state_reactive()} is called
+\item interactive session: then \code{FilterState$set_state()} is set directly
+More in \link{FilterState} documentation in "Modifying state" section
+}
 }
 \note{
 The value of the \code{x$selected} needs to be modified according to the type
