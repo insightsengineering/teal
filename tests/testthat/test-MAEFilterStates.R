@@ -197,6 +197,7 @@ testthat::test_that(
 testthat::test_that(
   "MAEFilterStates$remove_filter_state throws warning when name is not in FilterStates",
   code = {
+    suppress_logs()
     maefs <- MAEFilterStates$new(
       input_dataname = "test",
       output_dataname = "test_filtered",

@@ -312,6 +312,7 @@ testthat::test_that("SEFilterStates$remove_filter_state throws error when list i
 testthat::test_that(
   "SEFilterStates$remove_filter_state throws warning when list has unknown name in the FilterState",
   code = {
+    suppress_logs()
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(
