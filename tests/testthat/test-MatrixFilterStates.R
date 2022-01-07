@@ -84,6 +84,7 @@ testthat::test_that("remove_filter_state removes filters from reactiveQueue", {
 })
 
 testthat::test_that("remove_filter_state throws warning when element_id is not in reactiveQueue", {
+  suppress_logs()
   filter_states <- MatrixFilterStates$new(
     input_dataname = "test",
     output_dataname = "output",
