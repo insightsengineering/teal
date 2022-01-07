@@ -81,7 +81,7 @@ testthat::test_that("choices_selected throws when selected is delayed and choice
   )
 })
 
-testthat::test_that("choices_selected throws when no_select_keywod is passed to it as a choice", {
+testthat::test_that("choices_selected throws when no_select_keyword is passed to it as a choice", {
   no_select_keyword <- "-- no selection --"
   testthat::expect_error(
     choices_selected(choices = no_select_keyword),
