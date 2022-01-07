@@ -177,7 +177,6 @@ test_that("filter_spec with choices_selected where not all selected in choices t
 })
 
 
-
 test_that("filter_spec_internal", {
   expect_silent(
     filter_spec_internal(
