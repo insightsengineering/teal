@@ -18,7 +18,7 @@ It consists in choices and additionally the variable names for the choices"><!--
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9045</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9049</span>
       </span>
     </div>
 
@@ -54,15 +54,6 @@ It consists in choices and additionally the variable names for the choices"><!--
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -189,19 +180,19 @@ the drop-down menu the app user will see:</p>
         multiple <span class="op">=</span> <span class="cn">FALSE</span>,
         label <span class="op">=</span> <span class="st">"Choose endpoint and Censor"</span>
       <span class="op">)</span></code></pre></div></li>
-<li><p>The version with <code>choices_selected</code>
+<li><p>Using <code>choices_selected</code>
 </p><div class="sourceCode"><pre><code>
       adsl_filter &lt;- filter_spec(
-        vars = choices_selected("ADSL", "SEX", fixed = FALSE),
+        vars = choices_selected(variable_choices("ADSL", subset = c("SEX", "AGE")), "SEX", fixed = FALSE),
         multiple = TRUE
       )      adsl_filter2 &lt;- filter_spec(
-        vars = choices_selected("ADSL", "SEX", fixed = TRUE),
+        vars = choices_selected(variable_choices("ADSL"), "SEX", fixed = TRUE),
         multiple = TRUE
       )
     </code></pre></div></li>
 <li><p>Choose all choices
 </p><div class="sourceCode"><pre><code><span class="va">adsl_filter</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_spec.html">filter_spec</a></span><span class="op">(</span>
-        vars <span class="op">=</span> <span class="fu"><a href="../reference/choices_selected.html">choices_selected</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"SEX"</span>, fixed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
+        vars <span class="op">=</span> <span class="fu"><a href="../reference/choices_selected.html">choices_selected</a></span><span class="op">(</span><span class="fu"><a href="../reference/variable_choices.html">variable_choices</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>, <span class="st">"SEX"</span>, fixed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
         choices <span class="op">=</span> <span class="fu"><a href="../reference/value_choices.html">value_choices</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"SEX"</span><span class="op">)</span>,
         selected <span class="op">=</span> <span class="fu"><a href="../reference/all_choices.html">all_choices</a></span><span class="op">(</span><span class="op">)</span>
       <span class="op">)</span></code></pre></div></li>
@@ -216,7 +207,7 @@ the drop-down menu the app user will see:</p>
 <span class="r-in">  selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CRP - BASELINE"</span><span class="op">)</span>,</span>
 <span class="r-in">  multiple <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> filter_spec with delayed data: CRP - BASELINE filter_spec with delayed data: CRP - SCREENING filter_spec with delayed data: ALT - BASELINE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> filter_spec with delayed data:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ vars_choices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PARAMCD" "AVISIT" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ vars_selected</span>
@@ -253,7 +244,7 @@ the drop-down menu the app user will see:</p>
 <span class="r-in">  selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CRP"</span><span class="op">)</span>,</span>
 <span class="r-in">  multiple <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> filter_spec with delayed data: CRP filter_spec with delayed data: ALT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> filter_spec with delayed data:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ vars_choices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PARAMCD"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ vars_selected</span>
@@ -297,7 +288,7 @@ the drop-down menu the app user will see:</p>
 <span class="r-in">    <span class="op">}</span></span>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> filter_spec with delayed data: ADSL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> filter_spec with delayed data:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ vars_choices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   variable_choices with delayed data: ADSL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   $ data</span>
@@ -332,7 +323,7 @@ the drop-down menu the app user will see:</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   function(data) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       levels(data$ARMCD)[1:2]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x56133c949f68&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55ebc88518b8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   $ sep</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] " - "</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ selected</span>
@@ -347,7 +338,7 @@ the drop-down menu the app user will see:</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   function(data) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       levels(data$ARMCD)[1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x56133c949f68&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55ebc88518b8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   $ sep</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] " - "</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ label</span>
