@@ -191,7 +191,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     # just handle it once because data obtained through delayed loading should
     # usually not change afterwards
     # if restored from bookmarked state, `filter` is ignored
-    observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, event.env = env, {
+    observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, {
       logger::log_trace("srv_teal@3 setting main ui after data was pulled")
       env$progress$set(0.5, message = "Setting up main UI")
       on.exit(env$progress$close())
