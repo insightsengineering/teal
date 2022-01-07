@@ -89,7 +89,7 @@ no_select_keyword <- "-- no selection --"
 #'   selected = "A"
 #' )
 #'
-#' # Passing a `delayed_data` object to `subset`
+#' # Passing a `delayed_data` object to `selected`
 #' choices_selected(
 #'   choices = variable_choices("ADSL"),
 #'   selected = variable_choices("ADSL", subset = c("STUDYID"))
@@ -103,7 +103,6 @@ no_select_keyword <- "-- no selection --"
 #' }))
 #'
 #' # used in a teal `optionalSelectInput`
-#'
 #' cs <- choices_selected(
 #'   choices = c("A", "B", "C"),
 #'   selected = "A"
