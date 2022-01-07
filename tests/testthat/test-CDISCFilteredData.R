@@ -99,6 +99,7 @@ test_that("get_filterable_varnames return all from parent dataset", {
 })
 
 test_that("set_filter_state returns warning when setting a filter on a column which belongs to parent dataset", {
+  suppress_logs()
   adsl <- cdisc_dataset(
     dataname = "ADSL",
     x = data.frame(USUBJID = 1L, STUDYID = 1L, a = 1L, b = 1L)
