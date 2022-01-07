@@ -144,10 +144,10 @@ the drop-down menu the app user will see:
       )
     }
 }
-\item{The version with \code{choices_selected}
+\item{Using \code{choices_selected}
 \preformatted{
       adsl_filter <- filter_spec(
-        vars = choices_selected(variable_choices("ADSL"), "SEX", fixed = FALSE),
+        vars = choices_selected(variable_choices("ADSL", subset = c("SEX", "AGE")), "SEX", fixed = FALSE),
         multiple = TRUE
       )
 
@@ -160,7 +160,7 @@ the drop-down menu the app user will see:
 \item{Choose all choices
 \preformatted{
       adsl_filter <- filter_spec(
-        vars = choices_selected(variable_choices("ADSL"), "SEX", fixed = FALSE),
+        vars = choices_selected(variable_choices("ADSL"), "SEX",  fixed = FALSE),
         choices = value_choices("ADSL", "SEX"),
         selected = all_choices()
       )

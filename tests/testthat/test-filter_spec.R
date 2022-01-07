@@ -165,6 +165,19 @@ test_that("delayed filter_spec", {
 })
 
 
+test_that("filter_spec with choices_selected where all selected in choices does not throw an error", {
+  valid_cs <- choices_selected(choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])), selected = c("A", "B"))
+  expect_error(filter_spec(vars = valid_cs), regexp = NA)
+})
+
+
+test_that("filter_spec with choices_selected where not all selected in choices throws an error", {
+  invalid_cs <- choices_selected(choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])), selected = c("A","X"))
+  expect_error(filter_spec(vars = invalid_cs), "all(vars_selected %in% vars_choices) is not TRUE", fixed = TRUE)
+})
+
+
+
 test_that("filter_spec_internal", {
   expect_silent(
     filter_spec_internal(
