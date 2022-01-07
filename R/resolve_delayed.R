@@ -247,7 +247,7 @@ print.delayed_select_spec <- function(x, indent = 0L, ...) {
 
 #' @export
 print.filter_spec <- function(x, indent = 0L, ...) {
-  cat(indent_msg(indent, paste("filter_spec with delayed data:", x$choices)))
+  cat(indent_msg(indent, "filter_spec with delayed data:"))
   cat("\n")
   print_delayed_list(x, indent)
   return(invisible(NULL))
@@ -255,7 +255,7 @@ print.filter_spec <- function(x, indent = 0L, ...) {
 
 #' @export
 print.delayed_filter_spec <- function(x, indent = 0L, ...) {
-  cat(indent_msg(indent, paste("filter_spec with delayed data:", x$choices$data)))
+  cat(indent_msg(indent, "filter_spec with delayed data:"))
   cat("\n")
   print_delayed_list(x, indent)
   return(invisible(NULL))
