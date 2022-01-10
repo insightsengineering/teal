@@ -129,7 +129,7 @@ log_system_info <- function() {
 #' @noRd
 # styler: off
 layout_teal_glue_generator <- function(
-  format = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} fun:{fn} [{level}] {msg}"
+  format = "{[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} {msg}"
   ) {
   # styler: on
   force(format)
