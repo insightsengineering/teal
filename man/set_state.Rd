@@ -31,3 +31,4 @@ Set state of \code{FilterState}. Function can change states in \link{FilterState
 
 For more, please see section "Modifying state" in \link{FilterState}
 }
+\keyword{internal}
