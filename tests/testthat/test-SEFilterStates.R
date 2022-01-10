@@ -274,92 +274,89 @@ testthat::test_that(
 )
 
 testthat::test_that("SEFilterStates$get_filter_state returns list identical to input", {
-    obj <- get_test_data()
-    test <- obj
-    sefs <- SEFilterStates$new(
-      input_dataname = "test",
-      output_dataname = "test_filtered",
-      datalabel = character(0)
-    )
+  obj <- get_test_data()
+  test <- obj
+  sefs <- SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0)
+  )
 
-    fs <- list(
-      subset = list(feature_id = list(selected = c("ID001", "ID002"), keep_na = TRUE)),
-      select = list(Treatment = list(selected = "ChIP", keep_na = FALSE))
-    )
-    sefs$set_filter_state(state = fs, data = obj)
-    testthat::expect_identical(isolate(sefs$get_filter_state()), fs)
-  }
-)
+  fs <- list(
+    subset = list(feature_id = list(selected = c("ID001", "ID002"), keep_na = TRUE)),
+    select = list(Treatment = list(selected = "ChIP", keep_na = FALSE))
+  )
+  sefs$set_filter_state(state = fs, data = obj)
+  testthat::expect_identical(isolate(sefs$get_filter_state()), fs)
+})
 
 testthat::test_that("SEFilterStates$remove_filter_state removes filters in ReactiveQueue", {
-    obj <- get_test_data()
-    test <- obj
-    sefs <- SEFilterStates$new(
-      input_dataname = "test",
-      output_dataname = "test_filtered",
-      datalabel = character(0)
-    )
+  obj <- get_test_data()
+  test <- obj
+  sefs <- SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0)
+  )
 
-    fs <- list(
-      select = list(Treatment = "ChIP"),
-      subset = list(feature_id = c("ID001", "ID002"))
-    )
+  fs <- list(
+    select = list(Treatment = "ChIP"),
+    subset = list(feature_id = c("ID001", "ID002"))
+  )
 
-    sefs$set_filter_state(state = fs, data = obj)
-    sefs$remove_filter_state(list(subset = "feature_id"))
+  sefs$set_filter_state(state = fs, data = obj)
+  sefs$remove_filter_state(list(subset = "feature_id"))
 
-    eval(isolate(sefs$get_call()))
-    testthat::expect_equal(test_filtered, subset(
-      test,
-      select = Treatment == "ChIP"
-    ))
-  }
-)
+  eval(isolate(sefs$get_call()))
+  testthat::expect_equal(test_filtered, subset(
+    test,
+    select = Treatment == "ChIP"
+  ))
+})
 
 testthat::test_that("SEFilterStates$remove_filter_state removes all filters in ReactiveQueue", {
-    obj <- get_test_data()
-    test <- obj
-    sefs <- SEFilterStates$new(
-      input_dataname = "test",
-      output_dataname = "test_filtered",
-      datalabel = character(0)
-    )
+  obj <- get_test_data()
+  test <- obj
+  sefs <- SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0)
+  )
 
-    fs <- list(
-      select = list(Treatment = "ChIP"),
-      subset = list(feature_id = c("ID001", "ID002"))
-    )
+  fs <- list(
+    select = list(Treatment = "ChIP"),
+    subset = list(feature_id = c("ID001", "ID002"))
+  )
 
-    sefs$set_filter_state(state = fs, data = obj)
-    sefs$remove_filter_state(list(subset = "feature_id", select = "Treatment"))
+  sefs$set_filter_state(state = fs, data = obj)
+  sefs$remove_filter_state(list(subset = "feature_id", select = "Treatment"))
 
-    eval(isolate(sefs$get_call()))
-    testthat::expect_equal(test_filtered, test)
-  }
-)
+  eval(isolate(sefs$get_call()))
+  testthat::expect_equal(test_filtered, test)
+})
 
 testthat::test_that("SEFilterStates$remove_filter_state throws error when list is not named", {
-    obj <- get_test_data()
-    test <- obj
-    sefs <- SEFilterStates$new(
-      input_dataname = "test",
-      output_dataname = "test_filtered",
-      datalabel = character(0)
-    )
+  obj <- get_test_data()
+  test <- obj
+  sefs <- SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0)
+  )
 
-    fs <- list(
-      select = list(Treatment = "ChIP"),
-      subset = list(feature_id = c("ID001", "ID002"))
-    )
+  fs <- list(
+    select = list(Treatment = "ChIP"),
+    subset = list(feature_id = c("ID001", "ID002"))
+  )
 
-    sefs$set_filter_state(state = fs, data = obj)
-    testthat::expect_error(sefs$remove_filter_state(list("feature_id")))
-  }
-)
+  sefs$set_filter_state(state = fs, data = obj)
+  testthat::expect_error(sefs$remove_filter_state(list("feature_id")))
+})
 
 testthat::test_that(
   "SEFilterStates$remove_filter_state throws warning when list has unknown name in the FilterState",
   code = {
+    suppress_logs()
     obj <- get_test_data()
     test <- obj
     sefs <- SEFilterStates$new(

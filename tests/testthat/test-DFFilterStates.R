@@ -228,6 +228,7 @@ testthat::test_that(
 testthat::test_that(
   "DFFilterStates$remove_filter_state throws warning when name is not in FilterStates",
   code = {
+    suppress_logs()
     dffs <- DFFilterStates$new(
       input_dataname = "iris",
       output_dataname = "iris_filtered",

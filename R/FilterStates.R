@@ -1897,7 +1897,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
             previous_state(self$queue_get("subset"))
           })
 
-          observeEvent(added_state_name(), ignoreNULL = TRUE,  {
+          observeEvent(added_state_name(), ignoreNULL = TRUE, {
             fstates <- self$queue_get("subset")
             html_ids <- private$map_vars_to_html_ids(keys = names(fstates))
             for (fname in added_state_name()) {
