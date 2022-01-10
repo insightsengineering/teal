@@ -34,7 +34,8 @@ reference:
     - value_choices
     - variable_choices
   - title: Teal filter-panel API
-    desc: Functions used to modify filter-panel states
+    desc: Functions used to modify filter-panel states.
+    contents:
     - get_filter_state
     - set_filter_state
     - remove_filter_state
