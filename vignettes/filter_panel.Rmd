@@ -337,6 +337,7 @@ app <- teal::init(
   modules = root_modules(
     module(
       label = "custom",
+      filters = "all",
       ui = function(id, ...) {
         ns <- NS(id)
         teal.devel::standard_layout(
