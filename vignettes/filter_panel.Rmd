@@ -229,12 +229,10 @@ and `rowData` (objects attached to this experiment).
 
 Any of filter-panel classes have a dedicated methods to set and get current filter state. 
 These methods include:
-- `get_code`
-- `get_data`
 - `get_filter_state`
 - `set_filter_state`
 - `remove_filter_state`
-- `remove_all_filter_states`
+- `clear_filter_states`
 
 Setting and getting filter-panel states are done through a nested list which follows the 
 specific patter. Structure of the list should reflect address of `FilterState`(s) object.
@@ -280,8 +278,9 @@ datasets <- teal:::FilteredData$new()
 datasets$set_dataset(dataset(dataname = "iris", x = iris))
 datasets$set_dataset(dataset(dataname = "mtcars", x = mtcars))
 
-datasets$set_filter_state(
-  list(
+set_filter_state(
+  datasets = datasets, 
+  filter = list(
     iris = list(Species = list(selected = "virginica", keep_na = FALSE)),
     mtcars = list(mpg = list(selected = c(20.0, 25.0), keep_na = FALSE, keep_inf = FALSE))
   )
@@ -290,35 +289,30 @@ datasets$set_filter_state(
 
 2. Getting the filter state
 ```{r, message=FALSE, warning=FALSE}
-isolate(datasets$get_filter_state())
+get_filter_state(datasets)
 ```
 
 3. Removing filter states
 ```{r, message=FALSE, warning=FALSE}
-datasets$remove_filter_state(
-  list(iris = c("Species"))
+remove_filter_state(
+  datasets = datasets,
+  filter = list(iris = c("Species"))
 )
 ```
 
-4. Updating filter states
+4. Updating filter states. *Works only in the shiny reactive context - not in interactive R session.*
 ```{r, message=FALSE, warning=FALSE}
-datasets$set_filter_state(
-  list(
+set_filter_state(
+  datasets = datasets, 
+  filter = list(
     mtcars = list(mpg = list(selected = c(22.0, 25.0)))
   )
 )
 ```
 
-5. Get filtered data
+5. Clear filter state
 ```{r, message=FALSE, warning=FALSE}
-isolate(
-  datasets$get_data(dataname = "mtcars", filtered = TRUE)
-)
-```
-
-6. Get reproducible filtering call
-```{r, message=FALSE, warning=FALSE}
-isolate(datasets$get_call(dataname = "mtcars"))
+clear_filter_states(datasets)
 ```
 
 Above code can be also used in the modules. In the example below filter-panel states
@@ -350,18 +344,21 @@ app <- teal::init(
         )
       },
       server = function(input, output, session, datasets) {
-        output$filter_state <- renderText(yaml::as.yaml(datasets$get_filter_state()))
+        output$filter_state <- renderText(yaml::as.yaml(get_filter_state(datasets)))
 
         observeEvent(input$add_species_filter,
-         datasets$set_filter_state(list(iris = list(Species = list(selected = c("setosa", "versicolor")))))
+         set_filter_state(
+           datasets,
+           list(iris = list(Species = list(selected = c("setosa", "versicolor"))))
+         )
         )
         observeEvent(input$remove_species_filter, {
-          states <- datasets$get_filter_state()
+          states <- get_filter_state(datasets)
           if (!is.null(states$iris$Species)) {
-            datasets$remove_filter_state(list(iris = "Species"))
+            remove_filter_state(datasets, list(iris = "Species"))
           }
         })
-        observeEvent(input$remove_all_filters, datasets$remove_all_filter_states())
+        observeEvent(input$remove_all_filters, clear_filter_states(datasets))
       }
     )
   )
