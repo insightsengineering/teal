@@ -190,7 +190,7 @@ dataset_connector_file <- function(path) { # nolint
 #' )
 #' x <- cdisc_dataset_connector_file(file_example)
 #' get_code(x)
-cdisc_dataset_connector_file <- function(path) { # nolint # nousage
+cdisc_dataset_connector_file <- function(path) { # nolint
   object <- object_file(path, "CDISCTealDatasetConnector")
   return(object)
 }

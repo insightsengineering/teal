@@ -417,7 +417,7 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
 
 #' @rdname filter_spec_internal
 #' @export
-filter_spec_internal.default <- function(vars_choices, # nousage
+filter_spec_internal.default <- function(vars_choices,
                                          vars_selected = NULL,
                                          vars_label = NULL,
                                          vars_fixed = FALSE,

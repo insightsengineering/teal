@@ -39,7 +39,7 @@
 #' \dontrun{
 #' shinyApp(app$ui, app$server)
 #' }
-filter_calls_module <- function(label = "Filter Calls Module", active_datanames = "all") { # nousage # nolint
+filter_calls_module <- function(label = "Filter Calls Module", active_datanames = "all") { # nolint
   stopifnot(is_character_single(label))
   stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
 
@@ -70,7 +70,7 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
 #' The module also prints a nice error message if bookmarking is not enabled.
 #'
 #' @inheritParams filter_calls_module
-bookmark_module <- function(label = "Bookmark Module") { # nousage # nolint
+bookmark_module <- function(label = "Bookmark Module") { # nolint
   stopifnot(is_character_single(label))
 
   module(
@@ -122,7 +122,7 @@ bookmark_module <- function(label = "Bookmark Module") { # nousage # nolint
 #' code that is executed before `browser()` is called.
 #'
 #' @inheritParams filter_calls_module
-debug_browser_module <- function(label = "Browser Debug Module") { # nousage # nolint
+debug_browser_module <- function(label = "Browser Debug Module") { # nolint
   stopifnot(is_character_single(label))
 
   module(
@@ -161,7 +161,7 @@ debug_browser_module <- function(label = "Browser Debug Module") { # nousage # n
 #' all filters.
 #'
 #' @inheritParams filter_calls_module
-reset_filters_module <- function(label = "Reset Filters Module", active_datanames = "all") { # nousage # nolint
+reset_filters_module <- function(label = "Reset Filters Module", active_datanames = "all") { # nolint
   stopifnot(is_character_single(label))
   stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
 
@@ -229,7 +229,7 @@ reset_filters_module <- function(label = "Reset Filters Module", active_dataname
 #' @param expr `function or reactive`
 #' @return `reactive`
 # sodo1: do you like this code? I don't.
-trigger_after_first_cycle <- function(expr) { # nousage # nolint
+trigger_after_first_cycle <- function(expr) { # nolint
   stopifnot(is.function(expr))
   trigger_now <- FALSE
   reactive({
@@ -269,7 +269,7 @@ trigger_after_first_cycle <- function(expr) { # nousage # nolint
 #' @inheritParams filter_calls_module
 #' @inheritParams init
 #'
-predefined_filters_module <- function(label = "Apply filters", filter) { # nousage # nolint
+predefined_filters_module <- function(label = "Apply filters", filter) { # nolint
   stopifnot(
     is_character_single(label),
     is_fully_named_list(filter)
@@ -458,7 +458,7 @@ predefined_filters_module <- function(label = "Apply filters", filter) { # nousa
 #' \dontrun{
 #' runApp(app)
 #' }
-execute_in_next_cycle <- function(f) { # nousage # nolint
+execute_in_next_cycle <- function(f) { # nolint
   stopifnot(is.function(f))
 
   # reactiveVal to trigger re-evaluation of the expression when its value changes

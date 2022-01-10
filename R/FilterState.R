@@ -85,7 +85,7 @@ init_filter_state <- function(x,
 }
 
 #' @export
-init_filter_state.default <- function(x, # nousage
+init_filter_state.default <- function(x,
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
@@ -100,7 +100,7 @@ init_filter_state.default <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.logical <- function(x, # nousage
+init_filter_state.logical <- function(x,
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
@@ -115,7 +115,7 @@ init_filter_state.logical <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.numeric <- function(x, # nousage
+init_filter_state.numeric <- function(x,
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
@@ -140,7 +140,7 @@ init_filter_state.numeric <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.factor <- function(x, # nousage
+init_filter_state.factor <- function(x,
                                      varname,
                                      varlabel = if_null(attr(x, "label"), character(0)),
                                      input_dataname = NULL,
@@ -155,7 +155,7 @@ init_filter_state.factor <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.character <- function(x, # nousage
+init_filter_state.character <- function(x,
                                         varname,
                                         varlabel = if_null(attr(x, "label"), character(0)),
                                         input_dataname = NULL,
@@ -170,7 +170,7 @@ init_filter_state.character <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.Date <- function(x, # nousage
+init_filter_state.Date <- function(x,
                                    varname,
                                    varlabel = if_null(attr(x, "label"), character(0)),
                                    input_dataname = NULL,
@@ -185,7 +185,7 @@ init_filter_state.Date <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.POSIXct <- function(x, # nousage
+init_filter_state.POSIXct <- function(x,
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
@@ -200,7 +200,7 @@ init_filter_state.POSIXct <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.POSIXlt <- function(x, # nousage
+init_filter_state.POSIXlt <- function(x,
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,

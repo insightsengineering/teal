@@ -12,12 +12,12 @@ filtered_data_new <- function(x) {
 }
 
 #' @export
-filtered_data_new.TealData <- function(x) { # nolintr # nousage
+filtered_data_new.TealData <- function(x) { # nolintr
   FilteredData$new()
 }
 
 #' @export
-filtered_data_new.CDISCTealData <- function(x) { # nolintr # nousage
+filtered_data_new.CDISCTealData <- function(x) { # nolintr
   CDISCFilteredData$new()
 }
 
@@ -31,12 +31,12 @@ filtered_data_new.CDISCTealData <- function(x) { # nolintr # nousage
 #' @return modified `FilteredData` object
 #'
 #' @noRd
-filtered_data_set <- function(data, datasets) { # nolintr # nousage
+filtered_data_set <- function(data, datasets) { # nolintr
   UseMethod("filtered_data_set", data)
 }
 
 #' @export
-filtered_data_set.TealData <- function(data, datasets) { # nolintr # nousage
+filtered_data_set.TealData <- function(data, datasets) { # nolintr
   datasets$set_code(data$get_code_class())
   for (dataset in data$get_datasets()) {
     datasets$set_dataset(dataset)

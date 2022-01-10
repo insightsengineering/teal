@@ -59,7 +59,7 @@ init_filter_states <- function(data,
 }
 
 #' @export
-init_filter_states.data.frame <- function(data, # nolint #nousage
+init_filter_states.data.frame <- function(data, # nolint
                                           input_dataname,
                                           output_dataname = input_dataname,
                                           datalabel = character(0),
@@ -75,7 +75,7 @@ init_filter_states.data.frame <- function(data, # nolint #nousage
 }
 
 #' @export
-init_filter_states.matrix <- function(data, # nolint #nousage
+init_filter_states.matrix <- function(data, # nolint
                                       input_dataname,
                                       output_dataname = input_dataname,
                                       datalabel = character(0)) {
@@ -87,7 +87,7 @@ init_filter_states.matrix <- function(data, # nolint #nousage
 }
 
 #' @export
-init_filter_states.MultiAssayExperiment <- function(data, # nolint #nousage
+init_filter_states.MultiAssayExperiment <- function(data, # nolint
                                                     input_dataname,
                                                     output_dataname = input_dataname,
                                                     datalabel = character(0),
@@ -103,7 +103,7 @@ init_filter_states.MultiAssayExperiment <- function(data, # nolint #nousage
 }
 
 #' @export
-init_filter_states.SummarizedExperiment <- function(data, # nolint #nousage
+init_filter_states.SummarizedExperiment <- function(data, # nolint
                                                     input_dataname,
                                                     output_dataname = input_dataname,
                                                     datalabel = character(0)) {
@@ -2167,7 +2167,7 @@ get_filterable_varnames <- function(data) {
 }
 
 #' @export
-get_filterable_varnames.default <- function(data) { # nolint #nousage
+get_filterable_varnames.default <- function(data) { # nolint
   is_expected_class <- vapply(
     X = data,
     FUN = function(x) any(class(x) %in% .filterable_class),
@@ -2177,7 +2177,7 @@ get_filterable_varnames.default <- function(data) { # nolint #nousage
 }
 
 #' @export
-get_filterable_varnames.matrix <- function(data) { # nolint #nousage
+get_filterable_varnames.matrix <- function(data) { # nolint
   # all columns are the same type in matrix
   is_expected_class <- class(data[, 1]) %in% .filterable_class
   if (is_expected_class && !is.null(names(data))) {

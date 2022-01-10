@@ -234,7 +234,7 @@ MAETealDataset <- R6::R6Class( # nolint
 #' mae_d$get_code()
 #' mae_d$get_raw_data()
 #' @export
-dataset.MultiAssayExperiment <- function(dataname, # nousage
+dataset.MultiAssayExperiment <- function(dataname,
                                          x,
                                          keys = character(0),
                                          label = data_label(x),
@@ -267,7 +267,7 @@ dataset.MultiAssayExperiment <- function(dataname, # nousage
 #' mae_d$get_code()
 #' mae_d$get_raw_data()
 #' @export
-mae_dataset <- function(dataname, # nousage
+mae_dataset <- function(dataname,
                         x,
                         label = data_label(x),
                         code = character(0),
