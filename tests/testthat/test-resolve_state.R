@@ -13,9 +13,17 @@ testthat::test_that("resolve_state do not change the class of any named field", 
   testthat::expect_identical(resolve_state(state), state)
 })
 
-testthat::test_that("resolve_state change single, unnamed field into selected", {
+testthat::test_that("resolve_state changes a single, unnamed field into selected", {
   state <- list("a", keep_na = FALSE)
   testthat::expect_identical(resolve_state(state), list(selected = "a", keep_na = FALSE))
+})
+
+testthat::test_that("resolve_state throws when passed a list with one unnamed element and a `selected` element", {
+  state <- list("a", selected = "test")
+  testthat::expect_error(
+    resolve_state(state),
+    regexp = "Unnamed element of filter state cannot be intepreted as 'selected' because it already exists"
+  )
 })
 
 testthat::test_that("resolve_state returns list with selected when vectors is provided", {
@@ -35,4 +43,9 @@ testthat::test_that("resolve_state returns keep_inf = TRUE if any element of the
 
 testthat::test_that("resolve_state for default filter results in empty list", {
   testthat::expect_identical(resolve_state(default_filter()), list())
+})
+
+testthat::test_that("resolve_state throws when passed a list with more than one unnamed element", {
+  state <- list(1, 2)
+  testthat::expect_error(resolve_state(state), regexp = "More than one element of filter state is unnamed")
 })
