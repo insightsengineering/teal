@@ -174,7 +174,6 @@ reference:
     - register_logger
     - reset_filters_module
     - run_js_files
-    - set_filter_state
     - split_by_sep
     - stop_shiny
     - trigger_after_first_cycle

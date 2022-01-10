@@ -475,6 +475,7 @@ eval_expr_with_msg <- function(expr, env) {
 #'  - `TRUE` to change `reactive` fields which triggers observers in the `FilterState`
 #'  - `FALSE` to change the state directly.
 #' @return invisible `NULL`
+#' @keywords internal
 set_state <- function(x, value, is_reactive = shiny::isRunning()) {
   checkmate::assert_class(x, "FilterState")
   checkmate::assert_list(value)
