@@ -795,7 +795,7 @@ DFFilterStates <- R6::R6Class( # nolint
         value <- resolve_state(state[[varname]])
         if (varname %in% names(filter_states)) {
           fstate <- filter_states[[varname]]
-          fstate$set_state_reactive(value)
+          set_state(x = fstate, value = value)
         } else {
           fstate <- init_filter_state(
             data[[varname]],
@@ -803,7 +803,7 @@ DFFilterStates <- R6::R6Class( # nolint
             varlabel = private$get_varlabels(varname),
             input_dataname = private$input_dataname
           )
-          fstate$set_state(value)
+          set_state(x = fstate, value = value, is_reactive = FALSE)
           self$queue_push(x = fstate, queue_index = 1L, element_id = varname)
         }
       }
@@ -1125,7 +1125,7 @@ MAEFilterStates <- R6::R6Class( # nolint
         value <- resolve_state(state[[varname]])
         if (varname %in% names(filter_states)) {
           fstate <- filter_states[[varname]]
-          fstate$set_state_reactive(value)
+          set_state(x = fstate, value = value)
         } else {
           fstate <- init_filter_state(
             SummarizedExperiment::colData(data)[[varname]],
@@ -1134,7 +1134,7 @@ MAEFilterStates <- R6::R6Class( # nolint
             input_dataname = private$input_dataname,
             extract_type = "list"
           )
-          fstate$set_state(value)
+          set_state(x = fstate, value = value, is_reactive = FALSE)
           fstate$set_na_rm(TRUE)
           self$queue_push(
             x = fstate,
@@ -1521,14 +1521,14 @@ SEFilterStates <- R6::R6Class( # nolint
         value <- resolve_state(state$subset[[varname]])
         if (varname %in% names(filter_states)) {
           fstate <- filter_states[[varname]]
-          fstate$set_state_reactive(value)
+          set_state(x = fstate, value = value)
         } else {
           fstate <- init_filter_state(
             SummarizedExperiment::rowData(data)[[varname]],
             varname = as.name(varname),
             input_dataname = private$input_dataname
           )
-          fstate$set_state(value)
+          set_state(x = fstate, value = value, is_reactive = FALSE)
           self$queue_push(
             x = fstate,
             queue_index = "subset",
@@ -1542,14 +1542,14 @@ SEFilterStates <- R6::R6Class( # nolint
         value <- resolve_state(state$select[[varname]])
         if (varname %in% names(filter_states)) {
           fstate <- filter_states[[varname]]
-          fstate$set_state_reactive(value)
+          set_state(x = fstate, value = value)
         } else {
           fstate <- init_filter_state(
             SummarizedExperiment::colData(data)[[varname]],
             varname = as.name(varname),
             input_dataname = private$input_dataname
           )
-          fstate$set_state(value)
+          set_state(x = fstate, value = value, is_reactive = FALSE)
           self$queue_push(
             x = fstate,
             queue_index = "select",
@@ -1966,7 +1966,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
         value <- resolve_state(state[[varname]])
         if (varname %in% names(filter_states)) {
           fstate <- filter_states[[varname]]
-          fstate$set_state_reactive(value)
+          set_state(x = fstate, value = value)
         } else {
           fstate <- init_filter_state(
             data[, varname],
@@ -1975,7 +1975,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
             input_dataname = private$input_dataname,
             extract_type = "matrix"
           )
-          fstate$set_state(value)
+          set_state(x = fstate, value = value, is_reactive = FALSE)
           self$queue_push(
             x = fstate,
             queue_index = "subset",
