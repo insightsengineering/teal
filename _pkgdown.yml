@@ -33,6 +33,12 @@ reference:
     - select_spec
     - value_choices
     - variable_choices
+  - title: Teal filter-panel API
+    desc: Functions used to modify filter-panel states
+    - get_filter_state
+    - set_filter_state
+    - remove_filter_state
+    - clear_filter_states
   - title: Teal modules UI
     desc: Functions used to filter observations and select variables from dataset.
     contents:

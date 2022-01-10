@@ -279,7 +279,7 @@ datasets$set_dataset(dataset(dataname = "iris", x = iris))
 datasets$set_dataset(dataset(dataname = "mtcars", x = mtcars))
 
 set_filter_state(
-  datasets = datasets, 
+  datasets = datasets,
   filter = list(
     iris = list(Species = list(selected = "virginica", keep_na = FALSE)),
     mtcars = list(mpg = list(selected = c(20.0, 25.0), keep_na = FALSE, keep_inf = FALSE))
@@ -303,7 +303,7 @@ remove_filter_state(
 4. Updating filter states. *Works only in the shiny reactive context - not in interactive R session.*
 ```{r, message=FALSE, warning=FALSE}
 set_filter_state(
-  datasets = datasets, 
+  datasets = datasets,
   filter = list(
     mtcars = list(mpg = list(selected = c(22.0, 25.0)))
   )
@@ -337,7 +337,7 @@ app <- teal::init(
         teal.devel::standard_layout(
           output = teal.devel::white_small_well(verbatimTextOutput(ns("filter_state"))),
           encoding = div(
-            actionButton(ns("add_species_filter"), "Add iris$Species filter"),
+            actionButton(ns("add_species_filter"), "Set iris$Species filter"),
             actionButton(ns("remove_species_filter"), "Remove iris$Species filter"),
             actionButton(ns("remove_all_filters"), "Remove all filters")
           )
@@ -346,12 +346,12 @@ app <- teal::init(
       server = function(input, output, session, datasets) {
         output$filter_state <- renderText(yaml::as.yaml(get_filter_state(datasets)))
 
-        observeEvent(input$add_species_filter,
-         set_filter_state(
-           datasets,
-           list(iris = list(Species = list(selected = c("setosa", "versicolor"))))
-         )
-        )
+        observeEvent(input$add_species_filter, {
+          set_filter_state(
+            datasets,
+            list(iris = list(Species = list(selected = c("setosa", "versicolor"))))
+          )
+        })
         observeEvent(input$remove_species_filter, {
           states <- get_filter_state(datasets)
           if (!is.null(states$iris$Species)) {

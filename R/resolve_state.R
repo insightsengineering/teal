@@ -45,6 +45,10 @@ resolve_state <- function(x) {
 #' @export
 resolve_state.default <- function(x) { # nousage
   state <- list()
+  if (length(x[!(is.infinite(x) | is.na(x))]) > 0) {
+    state$selected <- x[!(is.infinite(x) | is.na(x))]
+  }
+
   if (any(is.na(x))) {
     state$keep_na <- TRUE
   }
@@ -53,9 +57,6 @@ resolve_state.default <- function(x) { # nousage
     state$keep_inf <- TRUE
   }
 
-  if (length(x[!(is.infinite(x) | is.na(x))]) > 0) {
-    state$selected <- x[!(is.infinite(x) | is.na(x))]
-  }
   state
 }
 
