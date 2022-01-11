@@ -13,7 +13,7 @@ to_relational_data <- function(data) {
 }
 
 #' @export
-to_relational_data.data.frame <- function(data) { # nolint #nousage
+to_relational_data.data.frame <- function(data) { # nolint
   dataname <- deparse(substitute(data, parent.frame()), width.cutoff = 500L)
 
   if (grepl("\\)$", dataname) && inherits(data, "data.frame")) {
@@ -29,7 +29,7 @@ to_relational_data.data.frame <- function(data) { # nolint #nousage
 }
 
 #' @export
-to_relational_data.TealDataset <- function(data) { # nousage
+to_relational_data.TealDataset <- function(data) {
   dataname <- get_dataname(data)
 
   if (dataname %in% names(default_cdisc_keys)) {
@@ -40,12 +40,12 @@ to_relational_data.TealDataset <- function(data) { # nousage
 }
 
 #' @export
-to_relational_data.TealDatasetConnector <- function(data) { # nolint #nousage
+to_relational_data.TealDatasetConnector <- function(data) { # nolint
   to_relational_data.TealDataset(data)
 }
 
 #' @export
-to_relational_data.list <- function(data) { # nousage
+to_relational_data.list <- function(data) {
   call <- substitute(data, parent.frame())
   list_names <- names(data)
   parsed_names <- as.character(call)[-1]
@@ -96,6 +96,6 @@ to_relational_data.list <- function(data) { # nousage
 }
 
 #' @export
-to_relational_data.MultiAssayExperiment <- function(data) { # nousage # nolint
+to_relational_data.MultiAssayExperiment <- function(data) { # nolint
   teal_data(mae_dataset("MAE", data))
 }

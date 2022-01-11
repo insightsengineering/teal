@@ -85,7 +85,7 @@ init_filter_state <- function(x,
 }
 
 #' @export
-init_filter_state.default <- function(x, # nousage
+init_filter_state.default <- function(x,
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
@@ -100,7 +100,7 @@ init_filter_state.default <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.logical <- function(x, # nousage
+init_filter_state.logical <- function(x,
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
@@ -115,7 +115,7 @@ init_filter_state.logical <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.numeric <- function(x, # nousage
+init_filter_state.numeric <- function(x,
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
@@ -140,7 +140,7 @@ init_filter_state.numeric <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.factor <- function(x, # nousage
+init_filter_state.factor <- function(x,
                                      varname,
                                      varlabel = if_null(attr(x, "label"), character(0)),
                                      input_dataname = NULL,
@@ -155,7 +155,7 @@ init_filter_state.factor <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.character <- function(x, # nousage
+init_filter_state.character <- function(x,
                                         varname,
                                         varlabel = if_null(attr(x, "label"), character(0)),
                                         input_dataname = NULL,
@@ -170,7 +170,7 @@ init_filter_state.character <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.Date <- function(x, # nousage
+init_filter_state.Date <- function(x,
                                    varname,
                                    varlabel = if_null(attr(x, "label"), character(0)),
                                    input_dataname = NULL,
@@ -185,7 +185,7 @@ init_filter_state.Date <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.POSIXct <- function(x, # nousage
+init_filter_state.POSIXct <- function(x,
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
@@ -200,7 +200,7 @@ init_filter_state.POSIXct <- function(x, # nousage
 }
 
 #' @export
-init_filter_state.POSIXlt <- function(x, # nousage
+init_filter_state.POSIXlt <- function(x,
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
@@ -236,6 +236,7 @@ init_filter_state.POSIXlt <- function(x, # nousage
 #' - `POSIXct`, `POSIXlt`: `class = DatetimeFilterState`
 #' - all `NA` entries: `class: FilterState`, cannot be filtered
 #' - default: `FilterState`, cannot be filtered
+#' \cr
 #' Each variable's filter state is an `R6` object which contains `choices`,
 #' `selected`, `varname`, `dataname`, `labels`, `na_count`, `keep_na` and other
 #' variable type specific fields (`keep_inf`, `inf_count`, `timezone`).
@@ -245,9 +246,10 @@ init_filter_state.POSIXlt <- function(x, # nousage
 #' chain.
 #' \cr
 #' \cr
+#' @section Modifying state:
+#' Modifying a `FilterState` object is possible in three scenarios depicted below:
 #' \if{html}{\figure{filter_state_reactivity.jpg}{options: width="100\%" alt="Figure: filter_state_reactivity.jpg"}}
 #' \if{latex}{\figure{filter_state_reactivity.jpg}{options: width=7cm}}
-#' Modifying a `FilterState` object is possible in three scenarios depicted above:
 #' * In the interactive session by directly specifying values of `selected`,
 #'   `keep_na` or `keep_inf` using `set_state` method (to update all at once),
 #'   or using `set_selected`, `set_keep_na` or `set_keep_inf`

@@ -148,7 +148,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, filter) {
     )
 
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
-    filtered_data_set_filters(datasets = datasets, filter = filter)
+    set_filter_state(datasets = datasets, filter = filter)
     showNotification("Data loaded - App fully started up")
 
     logger::log_trace(

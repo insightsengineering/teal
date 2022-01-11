@@ -183,6 +183,54 @@ testthat::test_that("SEFilterStates$set_filter_state sets state with only subset
   )
 })
 
+testthat::test_that("SEFilterStates$set_filter_state updates select state which has been set already", {
+  obj <- get_test_data()
+  sefs <- SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0)
+  )
+  sefs$set_filter_state(state = list(select = list(Treatment = c("ChIP", "Input"))), data = obj)
+  sefs$set_filter_state(state = list(select = list(Treatment = "ChIP")), data = obj)
+  testthat::expect_equal(
+    isolate(sefs$get_filter_state()),
+    list(select = list(Treatment = list(selected = "ChIP", keep_na = FALSE)))
+  )
+})
+
+testthat::test_that("SEFilterStates$set_filter_state updates subset state which has been set already", {
+  obj <- get_test_data()
+  sefs <- SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0)
+  )
+  sefs$set_filter_state(state = list(subset = list(feature_id = c("ID001", "ID002"))), data = obj)
+  sefs$set_filter_state(state = list(subset = list(feature_id = "ID001")), data = obj)
+  testthat::expect_equal(
+    isolate(sefs$get_filter_state()),
+    list(subset = list(feature_id = list(selected = "ID001", keep_na = FALSE)))
+  )
+})
+
+testthat::test_that("SEFilterStates$set_filter_state updates subset state which has been set already", {
+  obj <- get_test_data()
+  test <- obj
+
+  sefs <- SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0)
+  )
+
+  sefs$set_filter_state(state = list(subset = list(feature_id = c("ID001", "ID002"))), data = obj)
+  sefs$set_filter_state(state = list(subset = list(feature_id = "ID001")), data = obj)
+  testthat::expect_equal(
+    isolate(sefs$get_filter_state()),
+    list(subset = list(feature_id = list(selected = "ID001", keep_na = FALSE)))
+  )
+})
+
 testthat::test_that("SEFilterStates$set_filter_state sets state with neither subset nor select", {
   obj <- get_test_data()
   test <- obj

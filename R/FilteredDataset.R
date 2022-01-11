@@ -90,17 +90,17 @@ init_filtered_dataset <- function(dataset) { # nolint
 }
 
 #' @export
-init_filtered_dataset.TealDataset <- function(dataset) { # nolint #nousage
+init_filtered_dataset.TealDataset <- function(dataset) { # nolint
   DefaultFilteredDataset$new(dataset)
 }
 
 #' @export
-init_filtered_dataset.CDISCTealDataset <- function(dataset) { # nolint #nousage
+init_filtered_dataset.CDISCTealDataset <- function(dataset) { # nolint
   CDISCFilteredDataset$new(dataset)
 }
 
 #' @export
-init_filtered_dataset.MAETealDataset <- function(dataset) { # nolint #nousage
+init_filtered_dataset.MAETealDataset <- function(dataset) { # nolint
   MAEFilteredDataset$new(dataset)
 }
 

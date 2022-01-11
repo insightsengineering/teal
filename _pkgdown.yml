@@ -33,6 +33,13 @@ reference:
     - select_spec
     - value_choices
     - variable_choices
+  - title: Teal filter-panel API
+    desc: Functions used to modify filter-panel states.
+    contents:
+    - get_filter_state
+    - set_filter_state
+    - remove_filter_state
+    - clear_filter_states
   - title: Teal modules UI
     desc: Functions used to filter observations and select variables from dataset.
     contents:
@@ -167,7 +174,6 @@ reference:
     - register_logger
     - reset_filters_module
     - run_js_files
-    - set_filter_state
     - split_by_sep
     - stop_shiny
     - trigger_after_first_cycle
