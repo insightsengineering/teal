@@ -45,8 +45,6 @@ filtered_data_set.TealData <- function(data, datasets) { # nolintr
   return(invisible(NULL))
 }
 
-
-
 #' Managing `FilteredData` states
 #'
 #' Set, get and remove filter states of `FilteredData` object
@@ -105,6 +103,9 @@ filtered_data_set.TealData <- function(data, datasets) { # nolintr
 #' # remove all states
 #' clear_filter_states(datasets)
 #'
+NULL
+
+#' @rdname filter_state_api
 #' @export
 set_filter_state <- function(datasets, filter) {
   checkmate::assert_class(datasets, "FilteredData")
