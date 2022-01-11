@@ -42,11 +42,11 @@ testthat::test_that("set_state does not set 'state' when is_reactive = TRUE in i
     varname = "x"
   )
 
-  teal:::set_state(
+  isolate(teal:::set_state(
     filter_state,
     value = list(selected = c(1, 2), keep_na = TRUE, keep_inf = TRUE),
     is_reactive = TRUE
-  )
+  ))
   testthat::expect_identical(
     isolate(filter_state$get_selected()),
     c(1, 10)
