@@ -485,7 +485,7 @@ variable_types <- function(data, columns = NULL) {
 
 
 #' @export
-variable_types.default <- function(data, columns = NULL) { # nousage
+variable_types.default <- function(data, columns = NULL) {
   stopifnot(
     is.null(columns) || is_character_vector(columns, min_length = 0L)
   )
@@ -513,22 +513,22 @@ variable_types.default <- function(data, columns = NULL) { # nousage
 }
 
 #' @export
-variable_types.data.frame <- function(data, columns = NULL) { # nousage
+variable_types.data.frame <- function(data, columns = NULL) {
   variable_types.default(data, columns)
 }
 
 #' @export
-variable_types.DataTable <- function(data, columns = NULL) { # nousage
+variable_types.DataTable <- function(data, columns = NULL) {
   variable_types.default(data, columns)
 }
 
 #' @export
-variable_types.DFrame <- function(data, columns = NULL) { # nousage
+variable_types.DFrame <- function(data, columns = NULL) {
   variable_types.default(data, columns)
 }
 
 #' @export
-variable_types.matrix <- function(data, columns = NULL) { # nousage
+variable_types.matrix <- function(data, columns = NULL) {
   stopifnot(
     is.null(columns) || is_character_vector(columns, min_length = 0L)
   )
