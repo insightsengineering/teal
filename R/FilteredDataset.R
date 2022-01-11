@@ -596,7 +596,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
       checkmate::assert_list(state)
       logger::log_trace(
         sprintf(
-          "DefaultFilteredDataset$set_filter_state setting up filters of variables %s in dataset: %s",
+          "DefaultFilteredDataset$set_filter_state setting up filters of variables %s, dataname: %s",
           paste(names(state), collapse = ", "),
           self$get_dataname()
         )
@@ -607,7 +607,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
       fs$set_filter_state(state = state, data = data, ...)
       logger::log_trace(
         sprintf(
-          "DefaultFilteredDataset$set_filter_state done setting up filters of variables %s in dataset: %s",
+          "DefaultFilteredDataset$set_filter_state done setting up filters of variables %s, dataname: %s",
           paste(names(state), collapse = ", "),
           self$get_dataname()
         )

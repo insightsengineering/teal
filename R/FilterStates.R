@@ -1145,10 +1145,7 @@ MAEFilterStates <- R6::R6Class( # nolint
         checkmate::check_class(state, "default_filter"),
         combine = "or"
       )
-      logger::log_trace(paste(
-        "MAEFilterState$set_filter_state initializing,",
-        "dataname: { deparse1(private$input_dataname) }"
-      ))
+      logger::log_trace("MAEFilterState$set_filter_state initializing, dataname: { deparse1(private$input_dataname) }")
       filter_states <- self$queue_get("y")
       for (varname in names(state)) {
         value <- state[[varname]]
@@ -1172,10 +1169,7 @@ MAEFilterStates <- R6::R6Class( # nolint
           )
         }
       }
-      logger::log_trace(paste(
-        "MAEFilterState$set_filter_state initialized,",
-        "dataname: { deparse1(private$input_dataname) }"
-      ))
+      logger::log_trace("MAEFilterState$set_filter_state initialized, dataname: { deparse1(private$input_dataname) }")
       NULL
     },
 
