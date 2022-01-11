@@ -311,7 +311,12 @@ FilterState <- R6::R6Class( # nolint
       private$keep_na_reactive <- reactiveVal(FALSE)
 
       logger::log_trace(
-        "Instantiated { class(self)[1] }, dataname: { deparse1(private$input_dataname, collapse = \"\n\") }"
+        sprintf(
+          "Instantiated %s with variable %s, dataname: %s",
+          class(self)[1],
+          deparse1(varname, collapse = "\n"),
+          deparse1(private$input_dataname, collapse = "\n")
+        )
       )
       invisible(self)
     },
@@ -402,7 +407,14 @@ FilterState <- R6::R6Class( # nolint
     set_keep_na = function(value) {
       stopifnot(is_logical_single(value))
       private$keep_na(value)
-      logger::log_trace("{ class(self)[1] }$set_keep_na set to { private$keep_na() }")
+      logger::log_trace(
+        sprintf(
+          "%s$set_keep_na set for variable %s to %s.",
+          class(self)[1],
+          deparse1(self$get_varname()),
+          private$keep_na()
+        )
+      )
       invisible(NULL)
     },
 
@@ -415,7 +427,12 @@ FilterState <- R6::R6Class( # nolint
     set_keep_na_reactive = function(value) {
       stopifnot(is_logical_single(value))
       private$keep_na_reactive(value)
-      logger::log_trace("{ class(self)[1] }$set_keep_na_reactive set to { private$keep_na_reactive() }")
+      sprintf(
+        "%s$set_keep_na_reactive set for variable %s to %s.",
+        class(self)[1],
+        deparse1(self$get_varname()),
+        private$keep_na_reactive()
+      )
       invisible(NULL)
     },
 
@@ -440,7 +457,12 @@ FilterState <- R6::R6Class( # nolint
     #'  same as `private$choices`.
     set_selected = function(value) {
       logger::log_trace(
-        "{ class(self)[1] }$set_selected setting selection, dataname: { deparse1(private$input_dataname) }"
+        sprintf(
+          "%s$set_selected setting selection of variable %s, dataname: %s.",
+          class(self)[1],
+          deparse1(self$get_varname()),
+          deparse1(private$input_dataname)
+        )
       )
       value <- private$cast_and_validate(value)
       value <- private$remove_out_of_bound_values(value)
@@ -461,8 +483,14 @@ FilterState <- R6::R6Class( # nolint
     #'  same as `private$choices`.
     set_selected_reactive = function(value) {
       logger::log_trace(
-        "{ class(self)[1] }$set_selected_reactive setting selection, dataname: { deparse1(private$input_dataname) }"
+        sprintf(
+          "%s$set_selected_reactive setting selection of variable %s, dataname: %s.",
+          class(self)[1],
+          deparse1(self$get_varname()),
+          deparse1(private$input_dataname)
+        )
       )
+
       value <- private$cast_and_validate(value)
       value <- private$remove_out_of_bound_values(value)
       private$validate_selection(value)
@@ -1351,7 +1379,15 @@ RangeFilterState <- R6::R6Class( # nolint
     set_keep_inf = function(value) {
       stopifnot(is_logical_single(value))
       private$keep_inf(value)
-      logger::log_trace("{ class(self)[1] }$set_keep_inf set to { value }")
+      logger::log_trace(
+        sprintf(
+          "%s$set_keep_inf of variable %s set to %s, dataname: %s.",
+          class(self)[1],
+          deparse1(self$get_varname()),
+          value,
+          deparse1(private$input_dataname)
+        )
+      )
     },
 
     #' @description
@@ -1363,7 +1399,15 @@ RangeFilterState <- R6::R6Class( # nolint
     set_keep_inf_reactive = function(value) {
       stopifnot(is_logical_single(value))
       private$keep_inf_reactive(value)
-      logger::log_trace("{ class(self)[1] }$set_keep_inf_reactive set to { value }")
+      logger::log_trace(
+        sprintf(
+          "%s$set_keep_inf_reactive of variable %s set to %s, dataname: %s.",
+          class(self)[1],
+          deparse1(self$get_varname()),
+          value,
+          deparse1(private$input_dataname)
+        )
+      )
     },
 
     #' @description

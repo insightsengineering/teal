@@ -493,10 +493,14 @@ FilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          logger::log_trace(paste(
-            "{ class(self)[1] }$insert_filter_state_ui, adding FilterState UI,",
-            "dataname: { deparse1(private$input_dataname) }"
-          ))
+          logger::log_trace(
+            sprintf(
+              "%s$insert_filter_state_ui, adding FilterState UI of variable %s, dataname: %s",
+              class(self)[1],
+              element_id,
+              deparse1(private$input_dataname)
+            )
+          )
           shiny::setBookmarkExclude("remove")
           card_id <- session$ns("card")
           queue_id <- sprintf("%s-%s", queue_index, element_id)
@@ -564,10 +568,14 @@ FilterStates <- R6::R6Class( # nolint
             }
           )
 
-          logger::log_trace(paste(
-            "{ class(self)[1] }$insert_filter_state_ui, added FilterState UI,",
-            "dataname: { deparse1(private$input_dataname) }"
-          ))
+          logger::log_trace(
+            sprintf(
+              "%s$insert_filter_state_ui, added FilterState UI of variable %s, dataname: %s",
+              class(self)[1],
+              element_id,
+              deparse1(private$input_dataname)
+              )
+            )
           NULL
         }
       )
@@ -821,7 +829,14 @@ DFFilterStates <- R6::R6Class( # nolint
     #' @return `NULL`
     #'
     remove_filter_state = function(element_id) {
-      logger::log_trace("{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }")
+      logger::log_trace(
+        sprintf(
+          "%s$remove_filter_state for variable %s called, dataname: %s",
+          class(self)[1],
+          element_id,
+          deparse1(private$input_dataname)
+        )
+      )
 
       if (!element_id %in% names(self$queue_get(1L))) {
         warning(paste(
@@ -836,7 +851,14 @@ DFFilterStates <- R6::R6Class( # nolint
         )
       } else {
         self$queue_remove(queue_index = 1L, element_id = element_id)
-        logger::log_trace("{ class(self)[1] }$remove_filter_state done, dataname: { deparse1(private$input_dataname) }")
+        logger::log_trace(
+          sprintf(
+            "%s$remove_filter_state for variable %s done, dataname: %s",
+            class(self)[1],
+            element_id,
+            deparse1(private$input_dataname)
+          )
+        )
       }
     },
 
@@ -941,10 +963,13 @@ DFFilterStates <- R6::R6Class( # nolint
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
-              logger::log_trace(paste(
-                "DFFilterStates$srv_add_filter_state@2 adding FilterState,",
-                "dataname: { deparse1(private$input_dataname) }"
-              ))
+              logger::log_trace(
+                sprintf(
+                  "DFFilterStates$srv_add_filter_state@2 adding FilterState of variable %s, dataname: %s",
+                  input$var_to_add,
+                  deparse1(private$input_dataname)
+                )
+              )
               self$queue_push(
                 x = init_filter_state(
                   data[[input$var_to_add]],
@@ -955,10 +980,13 @@ DFFilterStates <- R6::R6Class( # nolint
                 queue_index = 1L,
                 element_id = input$var_to_add
               )
-              logger::log_trace(paste(
-                "DFFilterStates$srv_add_filter_state@2 added FilterState,",
-                "dataname: { deparse1(private$input_dataname) }"
-              ))
+              logger::log_trace(
+                sprintf(
+                  "DFFilterStates$srv_add_filter_state@2 added FilterState of variable %s, dataname: %s",
+                  input$var_to_add,
+                  deparse1(private$input_dataname)
+                )
+              )
             }
           )
 
@@ -1159,7 +1187,12 @@ MAEFilterStates <- R6::R6Class( # nolint
     #'
     remove_filter_state = function(element_id) {
       logger::log_trace(
-        "{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }"
+        sprintf(
+          "%s$remove_filter_state for %s called, dataname: %s",
+          class(self)[1],
+          element_id,
+          deparse1(private$input_dataname)
+        )
       )
 
       if (!element_id %in% names(self$queue_get("y"))) {
@@ -1177,7 +1210,12 @@ MAEFilterStates <- R6::R6Class( # nolint
       } else {
         self$queue_remove(queue_index = "y", element_id = element_id)
         logger::log_trace(
-          "{ class(self)[1] }$remove_filter_state done, dataname: { deparse1(private$input_dataname) }"
+          sprintf(
+            "%s$remove_filter_state for variable %s done, dataname: %s",
+            class(self)[1],
+            element_id,
+            deparse1(private$input_dataname)
+          )
         )
       }
     },
@@ -1284,10 +1322,13 @@ MAEFilterStates <- R6::R6Class( # nolint
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
-              logger::log_trace(paste(
-                "MAEFilterStates$srv_add_filter_state@2 adding FilterState,",
-                "dataname: { deparse1(private$input_dataname) }"
-              ))
+              logger::log_trace(
+                sprintf(
+                  "MAEFilterStates$srv_add_filter_state@2 adding FilterState of variable %s, dataname: %s",
+                  input$var_to_add,
+                  deparse1(private$input_dataname)
+                )
+              )
 
               fstate <- init_filter_state(
                 SummarizedExperiment::colData(data)[[input$var_to_add]],
@@ -1303,10 +1344,13 @@ MAEFilterStates <- R6::R6Class( # nolint
                 queue_index = "y",
                 element_id = input$var_to_add
               )
-              logger::log_trace(paste(
-                "MAEFilterStates$srv_add_filter_state@2 added FilterState,",
-                "dataname: { deparse1(private$input_dataname) }"
-              ))
+              logger::log_trace(
+                sprintf(
+                  "MAEFilterStates$srv_add_filter_state@2 added FilterState of variable %s, dataname: %s",
+                  input$var_to_add,
+                  deparse1(private$input_dataname)
+                )
+              )
             }
           )
 
@@ -1566,7 +1610,11 @@ SEFilterStates <- R6::R6Class( # nolint
     #' @return `NULL`
     remove_filter_state = function(element_id) {
       logger::log_trace(
-        "{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }"
+        sprintf(
+          "%s$remove_filter_state called, dataname: %s",
+          class(self)[1],
+          deparse1(private$input_dataname)
+        )
       )
 
       checkmate::assert(
@@ -1588,6 +1636,14 @@ SEFilterStates <- R6::R6Class( # nolint
           )
         } else {
           self$queue_remove(queue_index = "subset", element_id = varname)
+          logger::log_trace(
+            sprintf(
+              "%s$remove_filter_state for subset variable %s done, dataname: %s",
+              class(self)[1],
+              varname,
+              deparse1(private$input_dataname)
+            )
+          )
         }
       }
 
@@ -1605,8 +1661,11 @@ SEFilterStates <- R6::R6Class( # nolint
           )
         } else {
           self$queue_remove(queue_index = "select", element_id = varname)
-          logger::log_trace(
-            "{ class(self)[1] }$remove_filter_state done, dataname: { deparse1(private$input_dataname) }"
+          sprintf(
+            "%s$remove_filter_state for select variable %s done, dataname: %s",
+            class(self)[1],
+            varname,
+            deparse1(private$input_dataname)
           )
         }
       }
@@ -1683,10 +1742,9 @@ SEFilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          logger::log_trace(paste(
-            "SEFilterState$srv_add_filter_state initializing,",
-            "dataname: { deparse1(private$input_dataname) }"
-          ))
+          logger::log_trace(
+            "SEFilterState$srv_add_filter_state initializing, dataname: { deparse1(private$input_dataname) }"
+          )
           shiny::setBookmarkExclude(c("row_to_add", "col_to_add"))
           active_filter_col_vars <- reactive({
             vapply(
@@ -1788,10 +1846,13 @@ SEFilterStates <- R6::R6Class( # nolint
           observeEvent(
             eventExpr = input$col_to_add,
             handlerExpr = {
-              logger::log_trace(paste(
-                "SEFilterStates$srv_add_filter_state@3 adding FilterState to col data,",
-                "dataname: { deparse1(private$input_dataname) }"
-              ))
+              logger::log_trace(
+                sprintf(
+                  "SEFilterStates$srv_add_filter_state@3 adding FilterState of column %s to col data, dataname: %s",
+                  input$col_to_add,
+                  deparse1(private$input_dataname)
+                )
+              )
               self$queue_push(
                 x = init_filter_state(
                   SummarizedExperiment::colData(data)[[input$col_to_add]],
@@ -1801,9 +1862,11 @@ SEFilterStates <- R6::R6Class( # nolint
                 queue_index = "select",
                 element_id = input$col_to_add
               )
-              logger::log_trace(paste(
-                "SEFilterStates$srv_add_filter_state@3 added FilterState to col data,",
-                "dataname: { deparse1(private$input_dataname) }"
+              logger::log_trace(
+                sprintf(
+                  "SEFilterStates$srv_add_filter_state@3 added FilterState of column %s to col data, dataname: %s",
+                  input$col_to_add,
+                  deparse1(private$input_dataname)
               ))
             }
           )
@@ -1811,10 +1874,13 @@ SEFilterStates <- R6::R6Class( # nolint
           observeEvent(
             eventExpr = input$row_to_add,
             handlerExpr = {
-              logger::log_trace(paste(
-                "SEFilterStates$srv_add_filter_state@4 adding FilterState to row data,",
-                "dataname: { deparse1(private$input_dataname) }"
-              ))
+              logger::log_trace(
+                sprintf(
+                  "SEFilterStates$srv_add_filter_state@4 adding FilterState of variable %s to row data, dataname: %s",
+                  input$row_to_add,
+                  deparse1(private$input_dataname)
+                )
+              )
               self$queue_push(
                 x = init_filter_state(
                   SummarizedExperiment::rowData(data)[[input$row_to_add]],
@@ -1824,10 +1890,13 @@ SEFilterStates <- R6::R6Class( # nolint
                 queue_index = "subset",
                 element_id = input$row_to_add
               )
-              logger::log_trace(paste(
-                "SEFilterStates$srv_add_filter_state@4 added FilterState to row data,",
-                "dataname: { deparse1(private$input_dataname) }"
-              ))
+              logger::log_trace(
+                sprintf(
+                  "SEFilterStates$srv_add_filter_state@4 added FilterState of variable %s to row data, dataname: %s",
+                  input$row_to_add,
+                  deparse1(private$input_dataname)
+                )
+              )
             }
           )
 
@@ -1990,7 +2059,14 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #'
     #' @return `NULL`
     remove_filter_state = function(element_id) {
-      logger::log_trace("{ class(self)[1] }$remove_filter_state called, dataname: { deparse1(private$input_dataname) }")
+      logger::log_trace(
+        sprintf(
+          "%s$remove_filter_state of variable %s, dataname: %s",
+          class(self)[1],
+          element_id,
+          deparse1(private$input_dataname)
+        )
+      )
 
       if (!element_id %in% names(self$queue_get("subset"))) {
         warning(paste(
@@ -2005,7 +2081,14 @@ MatrixFilterStates <- R6::R6Class( # nolint
         )
       } else {
         self$queue_remove(queue_index = "subset", element_id = element_id)
-        logger::log_trace("{ class(self)[1] }$remove_filter_state done, dataname: { deparse1(private$input_dataname) }")
+        logger::log_trace(
+          sprintf(
+            "%s$remove_filter_state of variable %s done, dataname: %s",
+            class(self)[1],
+            element_id,
+            deparse1(private$input_dataname)
+          )
+        )
       }
     },
 
@@ -2110,10 +2193,13 @@ MatrixFilterStates <- R6::R6Class( # nolint
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
-              logger::log_trace(paste(
-                "MatrixFilterState$srv_add_filter_state@2 adding FilterState,",
-                "dataname: { deparse1(private$input_dataname) }"
-              ))
+              logger::log_trace(
+                sprintf(
+                  "MatrixFilterState$srv_add_filter_state@2 adding FilterState of variable %s, dataname: %s",
+                  input$var_to_add,
+                  deparse1(private$input_dataname)
+                )
+              )
               self$queue_push(
                 x = init_filter_state(
                   subset(data, select = input$var_to_add),
@@ -2125,10 +2211,13 @@ MatrixFilterStates <- R6::R6Class( # nolint
                 queue_index = "subset",
                 element_id = input$var_to_add
               )
-              logger::log_trace(paste(
-                "MatrixFilterState$srv_add_filter_state@2 added FilterState,",
-                "dataname: { deparse1(private$input_dataname) }"
-              ))
+              logger::log_trace(
+                sprintf(
+                  "MatrixFilterState$srv_add_filter_state@2 added FilterState of variable %s, dataname: %s",
+                  input$var_to_add,
+                  deparse1(private$input_dataname)
+                )
+              )
             }
           )
 

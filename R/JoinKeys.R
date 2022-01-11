@@ -112,7 +112,14 @@ JoinKeys <- R6::R6Class( # nolint
 
       private$join_pair(join_key(dataset_1, dataset_2, val))
 
-      logger::log_trace("JoinKeys$mutate changed the keys between { dataset_1 } and { dataset_2 }.")
+      logger::log_trace(
+        sprintf(
+          "JoinKeys$mutate updated the keys between %s and %s to %s",
+          dataset_1,
+          dataset_2,
+          paste(val, collapse = ", ")
+        )
+      )
       return(invisible(self))
     },
     #' @description
