@@ -1,14 +1,15 @@
-#' Resolve filter state
+#' Resolve list of filter states
 #'
 #' @description `r lifecycle::badge("experimental")`
 #' Resolves the state values for `FilterState$set_state()` or
-#' `FilterState$set_state_reactive()` which accept only list with `selected`,
-#' `keep_na` and `keep_inf` fields. In case of `default_filter` function returns
-#' `NULL` as during the initialization of `FilterState` values are set to default.
+#' `FilterState$set_state_reactive()`, which accept only a list with `selected`,
+#' `keep_na` and `keep_inf` fields. In case of the `default_filter` function, it
+#' returns `NULL` as during the initialization of `FilterState` values are set to 
+#' default.
 #'
 #' @param x (`list`,`vector`, `default_filter`)\cr
 #'  values of the variable used in filter. Depending on the `FilterState` type
-#'  list should contain these fields:
+#'  list must contain these fields:
 #'  \itemize{
 #'  \item{`selected`}{ defines initial selection. See notes for more details}
 #'  \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
@@ -43,7 +44,7 @@ resolve_state <- function(x) {
 #' @rdname resolve_state
 #' @keywords internal
 #' @export
-resolve_state.default <- function(x) { # nousage
+resolve_state.default <- function(x) {
   state <- list()
   if (length(x[!(is.infinite(x) | is.na(x))]) > 0) {
     state$selected <- x[!(is.infinite(x) | is.na(x))]
@@ -63,14 +64,14 @@ resolve_state.default <- function(x) { # nousage
 #' @rdname resolve_state
 #' @keywords internal
 #' @export
-resolve_state.default_filter <- function(x, filter_state) { # nolint #nousage
+resolve_state.default_filter <- function(x, filter_state) { # nolint
   list()
 }
 
 #' @rdname resolve_state
 #' @keywords internal
 #' @export
-resolve_state.list <- function(x) { # nousage
+resolve_state.list <- function(x) {
   if (is.null(names(x))) {
     names(x) <- rep("", length(x))
   }

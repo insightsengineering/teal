@@ -227,18 +227,18 @@ and `rowData` (objects attached to this experiment).
 
 ## Filter-panel API
 
-Any of filter-panel classes have a dedicated methods to set and get current filter state. 
+All of filter-panel classes have dedicated methods to set and get current filter state. 
 These methods include:
 - `get_filter_state`
 - `set_filter_state`
 - `remove_filter_state`
 - `clear_filter_states`
 
-Setting and getting filter-panel states are done through a nested list which follows the 
-specific patter. Structure of the list should reflect address of `FilterState`(s) object.
-By default (`data.frame`), structure will follow pattern from the code below,
+Setting and getting filter-panel states are done through a nested list which follows a 
+specific pattern. The structure of the list should reflect address of `FilterState`(s) object.
+By default (`data.frame`), the structure will follow the pattern shown in the code below,
 with a list element for each variable from each dataset. In case of `MultiAssayExperiment` 
-objects, situation looks different, because these datasets have a multiple objects inside, 
+objects, the situation looks different, because these datasets have a multiple objects inside, 
 so the list needs to refer to the object one wants to set/get filter from.
 
 ```
@@ -300,7 +300,7 @@ remove_filter_state(
 )
 ```
 
-4. Updating filter states. *Works only in the shiny reactive context - not in interactive R session.*
+4. Updating filter states. *Works only in the shiny reactive context.
 ```{r, message=FALSE, warning=FALSE}
 set_filter_state(
   datasets = datasets,
@@ -310,15 +310,15 @@ set_filter_state(
 )
 ```
 
-5. Clear filter state
+5. Clear the filter state
 ```{r, message=FALSE, warning=FALSE}
 clear_filter_states(datasets)
 ```
 
-Above code can be also used in the modules. In the example below filter-panel states
-are changed when clicking buttons in encoding-panel.
+The above code can be also used in the modules. In the example below filter-panel states
+are changed when clicking the buttons in the encoding-panel.
 
-```{r, eval=FALSE}
+```{r}
 app <- teal::init(
   data = list(
     dataset(dataname = "iris", x = iris),
@@ -363,6 +363,7 @@ app <- teal::init(
     )
   )
 )
-
+```
+```{r, eval=FALSE}
 runApp(app)
 ```
