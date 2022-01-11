@@ -605,7 +605,6 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
       data <- self$get_data(filtered = FALSE)
       fs <- self$get_filter_states()[[1]]
       fs$set_filter_state(state = state, data = data, ...)
-      #browser()
       logger::log_trace(
         sprintf(
           "DefaultFilteredDataset$set_filter_state done setting up filters of variables %s in dataset: %s",
