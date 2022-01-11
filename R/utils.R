@@ -458,3 +458,31 @@ eval_expr_with_msg <- function(expr, env) {
     }
   )
 }
+
+#' Set state of `FilterState`
+#'
+#' @description
+#' Set state of `FilterState`. Function can change states in [FilterState] in two ways, by:
+#' - changing `reactive` state fields which triggers observers in the `FilterState`.
+#' - change state directly.
+#'
+#' For more, please see section "Modifying state" in [FilterState]
+#'
+#' @inheritParams init_filter_state
+#' @param value (named `list`)\cr
+#'  see `set_state` method in [FilterState] and `filter` argument in the [teal::init()]
+#' @param is_reactive (`logical(1)`)\cr
+#'  - `TRUE` to change `reactive` fields which triggers observers in the `FilterState`
+#'  - `FALSE` to change the state directly.
+#' @return invisible `NULL`
+#' @keywords internal
+set_state <- function(x, value, is_reactive = shiny::isRunning()) {
+  checkmate::assert_class(x, "FilterState")
+  checkmate::assert_list(value)
+  if (is_reactive) {
+    x$set_state_reactive(value)
+  } else {
+    x$set_state(value)
+  }
+  invisible(NULL)
+}

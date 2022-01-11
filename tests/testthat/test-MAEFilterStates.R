@@ -122,6 +122,41 @@ testthat::test_that(
   }
 )
 
+testthat::test_that("MAEFilterStates$set_filter_state updates filter state which was set already", {
+  maefs <- MAEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0),
+    varlabels = character(0),
+    keys = character(0)
+  )
+
+  maefs$set_filter_state(
+    state = list(
+      years_to_birth = c(30, 50),
+      vital_status = 1
+    ),
+    data = MultiAssayExperiment::miniACC
+  )
+
+  maefs$set_filter_state(
+    state = list(
+      years_to_birth = c(31, 50),
+      gender = "female"
+    ),
+    data = MultiAssayExperiment::miniACC
+  )
+
+  testthat::expect_equal(
+    isolate(maefs$get_filter_state()),
+    list(
+      years_to_birth = list(selected = c(31, 50), keep_na = FALSE, keep_inf = FALSE),
+      vital_status = list(selected = "1", keep_na = FALSE),
+      gender = list(selected = "female", keep_na = FALSE)
+    )
+  )
+})
+
 testthat::test_that(
   "MAEFilterStates$set_filter_state throws error when not using a named list",
   code = {

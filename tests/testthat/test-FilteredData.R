@@ -204,8 +204,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that(
-  "FilteredData$get_filter_state returns list identical to input",
+testthat::test_that("FilteredData$get_filter_state returns list identical to input",
   code = {
     datasets <- FilteredData$new()
     datasets$set_dataset(dataset("iris", iris))
@@ -230,6 +229,33 @@ testthat::test_that(
     testthat::expect_identical(isolate(datasets$get_filter_state()), fs)
   }
 )
+
+testthat::test_that("FilteredData$remove_filter_state removes states defined in list", {
+  datasets <- teal:::FilteredData$new()
+  datasets$set_dataset(dataset("iris", iris))
+  datasets$set_dataset(dataset("mtcars", mtcars))
+  fs <- list(
+    iris = list(
+      Sepal.Length = list(c(5.1, 6.4)),
+      Species = c("setosa", "versicolor")
+    ),
+    mtcars = list(
+      cyl = c(4, 6),
+      disp = default_filter()
+    )
+  )
+  datasets$set_filter_state(state = fs)
+  datasets$remove_filter_state(state = list(iris = "Sepal.Length", mtcars = c("cyl", "disp")))
+
+  testthat::expect_identical(
+    isolate(datasets$get_filter_state()),
+    list(
+      iris = list(
+        Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+      )
+    )
+  )
+})
 
 testthat::test_that(
   "FilteredData$remove_all_filter_states removes all filters of all datasets in FilteredData",
@@ -383,5 +409,22 @@ testthat::test_that("get_filter_overview returns overview matrix for filtered da
         c("Obs", "Subjects")
       )
     )
+  )
+})
+
+testthat::test_that("restore_state_from_bookmark is a pure virtual method", {
+  testthat::expect_error(
+    FilteredData$new()$restore_state_from_bookmark("test"),
+    regexp = "Pure virtual method"
+  )
+})
+
+testthat::test_that("get_filter_expr returns a string with a filtering expression", {
+  datasets <- FilteredData$new()
+  datasets$set_dataset(dataset("iris", iris, code = "iris <- iris"))
+  datasets$set_dataset(dataset("mtcars", mtcars, code = "mtcars <- mtcars"))
+  testthat::expect_equal(
+    get_filter_expr(datasets),
+    paste("iris_FILTERED <- iris", "mtcars_FILTERED <- mtcars", sep = "\n")
   )
 })

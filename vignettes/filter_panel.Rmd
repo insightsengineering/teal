@@ -224,3 +224,146 @@ because `SummarizedExperiment` contains `colData` and `rowData` which correspond
 `subset` refers to the rows in the object, and `select` refers to the columns - but the call
 execution is little different because subsetting and selecting call refers to columns in `colData`
 and `rowData` (objects attached to this experiment).
+
+## Filter-panel API
+
+All of filter-panel classes have dedicated methods to set and get current filter state. 
+These methods include:
+- `get_filter_state`
+- `set_filter_state`
+- `remove_filter_state`
+- `clear_filter_states`
+
+Setting and getting filter-panel states are done through a nested list which follows a 
+specific pattern. The structure of the list should reflect address of `FilterState`(s) object.
+By default (`data.frame`), the structure will follow the pattern shown in the code below,
+with a list element for each variable from each dataset. In case of `MultiAssayExperiment` 
+objects, the situation looks different, because these datasets have a multiple objects inside, 
+so the list needs to refer to the object one wants to set/get filter from.
+
+```
+dataset-1: #data.frame
+  variable-1: 
+    selected: [<selected>]
+    keep_na: <keep_na>
+  ...
+
+dataset-n: # MAE
+  subjects:
+    variable-1: 
+      selected: [<selected>]
+      keep_na: <keep_na>
+    ...
+  experiment-1:
+    subset:
+      variable-1: 
+        selected: [<selected>]
+        keep_na: <keep_na>
+      ...
+    select:
+      variable-2: 
+        selected: [<selected>]
+        keep_na: <keep_na>
+      ...
+  ...
+```
+
+Above list structure is applied in `get_filter_state`, `set_filter_state` and
+`remove_filter_state`. In the example below, we present how these method can be used.
+
+1. Setting the filter state
+```{r, message=FALSE, warning=FALSE}
+library(teal)
+datasets <- teal:::FilteredData$new()
+datasets$set_dataset(dataset(dataname = "iris", x = iris))
+datasets$set_dataset(dataset(dataname = "mtcars", x = mtcars))
+
+set_filter_state(
+  datasets = datasets,
+  filter = list(
+    iris = list(Species = list(selected = "virginica", keep_na = FALSE)),
+    mtcars = list(mpg = list(selected = c(20.0, 25.0), keep_na = FALSE, keep_inf = FALSE))
+  )
+)
+```
+
+2. Getting the filter state
+```{r, message=FALSE, warning=FALSE}
+get_filter_state(datasets)
+```
+
+3. Removing filter states
+```{r, message=FALSE, warning=FALSE}
+remove_filter_state(
+  datasets = datasets,
+  filter = list(iris = c("Species"))
+)
+```
+
+4. Updating filter states. *Works only in the shiny reactive context.
+```{r, message=FALSE, warning=FALSE}
+set_filter_state(
+  datasets = datasets,
+  filter = list(
+    mtcars = list(mpg = list(selected = c(22.0, 25.0)))
+  )
+)
+```
+
+5. Clear the filter state
+```{r, message=FALSE, warning=FALSE}
+clear_filter_states(datasets)
+```
+
+The above code can be also used in the modules. In the example below filter-panel states
+are changed when clicking the buttons in the encoding-panel.
+
+```{r}
+app <- teal::init(
+  data = list(
+    dataset(dataname = "iris", x = iris),
+    dataset(dataname = "mtcars", x = mtcars)
+  ),
+  filter = list(
+    iris = list(Species = "virginica"),
+    mtcars = list(mpg = c(20.0, 25.0))
+  ),
+  modules = root_modules(
+    module(
+      label = "custom",
+      filters = "all",
+      ui = function(id, ...) {
+        ns <- NS(id)
+        teal.devel::standard_layout(
+          output = teal.devel::white_small_well(verbatimTextOutput(ns("filter_state"))),
+          encoding = div(
+            actionButton(ns("add_species_filter"), "Set iris$Species filter"),
+            actionButton(ns("remove_species_filter"), "Remove iris$Species filter"),
+            actionButton(ns("remove_all_filters"), "Remove all filters")
+          )
+        )
+      },
+      server = function(input, output, session, datasets) {
+        output$filter_state <- renderText(yaml::as.yaml(get_filter_state(datasets)))
+
+        observeEvent(input$add_species_filter, {
+          set_filter_state(
+            datasets,
+            list(iris = list(Species = list(selected = c("setosa", "versicolor"))))
+          )
+        })
+        observeEvent(input$remove_species_filter, {
+          states <- get_filter_state(datasets)
+          if (!is.null(states$iris$Species)) {
+            remove_filter_state(datasets, list(iris = "Species"))
+          }
+        })
+        observeEvent(input$remove_all_filters, clear_filter_states(datasets))
+      }
+    )
+  )
+)
+```
+```{r, eval=FALSE}
+runApp(app)
+```

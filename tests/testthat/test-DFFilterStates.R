@@ -72,8 +72,33 @@ testthat::test_that("DFFilterStates$set_filter_state sets filters as a named/unn
   )
 })
 
-testthat::test_that(
-  "DFFilterStates$set_filter_state throws error when using an unnamed list",
+testthat::test_that("DFFilterStates$set_filter_state updates filter state which was set already", {
+  dffs <- DFFilterStates$new(
+    input_dataname = "iris",
+    output_dataname = "iris_filtered",
+    datalabel = character(0),
+    varlabels = character(0),
+    keys = character(0)
+  )
+  dffs$set_filter_state(
+    state = list(Sepal.Length = c(5.1, 6.4), Species = c("setosa", "versicolor")),
+    data = iris
+  )
+  dffs$set_filter_state(
+    state = list(Species = "setosa", Petal.Length = c(2.0, 5.0)),
+    data = iris
+  )
+  expect_identical(
+    isolate(dffs$get_filter_state()),
+    list(
+      Sepal.Length = list(selected = c(5.1, 6.4), keep_na = FALSE, keep_inf = FALSE),
+      Species = list(selected = "setosa", keep_na = FALSE),
+      Petal.Length = list(selected = c(2.0, 5.0), keep_na = FALSE, keep_inf = FALSE)
+    )
+  )
+})
+
+testthat::test_that("DFFilterStates$set_filter_state throws error when using an unnamed list",
   code = {
     dffs <- DFFilterStates$new(
       input_dataname = "iris",
@@ -90,8 +115,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that(
-  "DFFilterStates$get_filter_state returns list identical to input",
+testthat::test_that("DFFilterStates$get_filter_state returns list identical to input",
   code = {
     dffs <- DFFilterStates$new(
       input_dataname = "iris",
