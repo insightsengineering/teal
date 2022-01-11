@@ -618,8 +618,7 @@ FilterStates <- R6::R6Class( # nolint
       checkmate::assert_character(keys, null.ok = TRUE)
       checkmate::assert_character(prefix, len = 1)
       sanitized_values <- make.unique(gsub("[^[:alnum:]]", perl = TRUE, replacement = "", x = keys))
-      ns_sep <- if (shiny::ns.sep == "-") "_" else "-"
-      sanitized_values <- paste(prefix, "var", sanitized_values, sep = ns_sep)
+      sanitized_values <- paste(prefix, "var", sanitized_values, sep = "_")
       stats::setNames(object = sanitized_values, nm = keys)
     }
   )
