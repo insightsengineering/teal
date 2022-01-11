@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9049</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9051</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -157,6 +148,14 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
           <p><code><a href="variable_choices.html">variable_choices()</a></code> </p>
         </td>
         <td><p>Wrapper on choices_labeled to label variables basing on existing labels in data</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="teal-filter-panel-api">Teal filter-panel API <a href="#teal-filter-panel-api" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Functions used to modify filter-panel states.</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="filter_state_api.html">set_filter_state()</a></code> <code><a href="filter_state_api.html">get_filter_state()</a></code> <code><a href="filter_state_api.html">remove_filter_state()</a></code> <code><a href="filter_state_api.html">clear_filter_states()</a></code> </p>
+        </td>
+        <td><p>Managing <code>FilteredData</code> states</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="teal-modules-ui">Teal modules UI <a href="#teal-modules-ui" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions used to filter observations and select variables from dataset.</p>
@@ -601,10 +600,6 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
           <p><code><a href="run_js_files.html">run_js_files()</a></code> </p>
         </td>
         <td><p>Run <code>JS</code> file from <code>/inst/js/</code> package directory</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_filter_state.html">set_filter_state()</a></code> </p>
-        </td>
-        <td><p>Sets the filter state in <code>FilterState</code> object</p></td>
       </tr><tr><td>
           <p><code><a href="split_by_sep.html">split_by_sep()</a></code> </p>
         </td>

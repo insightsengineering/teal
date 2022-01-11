@@ -295,6 +295,9 @@
     <loc>https://insightsengineering.github.io/teal/reference/filter_spec_internal.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/filter_state_api.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/find_source_code.html</loc>
   </url>
   <url>
@@ -508,6 +511,9 @@
     <loc>https://insightsengineering.github.io/teal/reference/resolve_delayed_expr.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/resolve_state.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/rice_connection.html</loc>
   </url>
   <url>
@@ -538,10 +544,10 @@
     <loc>https://insightsengineering.github.io/teal/reference/set_args.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/set_filter_state.html</loc>
+    <loc>https://insightsengineering.github.io/teal/reference/set_keys.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/set_keys.html</loc>
+    <loc>https://insightsengineering.github.io/teal/reference/set_state.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/snowflake_connection.html</loc>

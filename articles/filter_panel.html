@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9049</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9051</span>
       </span>
     </div>
 
@@ -72,15 +72,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -240,6 +231,149 @@ Described objects are created instantly when data is loaded and they remain unch
 <li><p><code>SEFilterStates</code> is initialized per one experiment in the MAE data. This class is specific because <code>SummarizedExperiment</code> contains <code>colData</code> and <code>rowData</code> which correspond to <code>select</code> and <code>subset</code> arguments in <code>subset.SummarizedExperiment</code> function. Similar to <code>subset.data.frame</code> <code>subset</code> refers to the rows in the object, and <code>select</code> refers to the columns - but the call execution is little different because subsetting and selecting call refers to columns in <code>colData</code> and <code>rowData</code> (objects attached to this experiment).</p></li>
 </ol>
 </div>
+</div>
+<div class="section level2">
+<h2 id="filter-panel-api">Filter-panel API<a class="anchor" aria-label="anchor" href="#filter-panel-api"></a>
+</h2>
+<p>All of filter-panel classes have dedicated methods to set and get current filter state. These methods include: - <code>get_filter_state</code> - <code>set_filter_state</code> - <code>remove_filter_state</code> - <code>clear_filter_states</code></p>
+<p>Setting and getting filter-panel states are done through a nested list which follows a specific pattern. The structure of the list should reflect address of <code>FilterState</code>(s) object. By default (<code>data.frame</code>), the structure will follow the pattern shown in the code below, with a list element for each variable from each dataset. In case of <code>MultiAssayExperiment</code> objects, the situation looks different, because these datasets have a multiple objects inside, so the list needs to refer to the object one wants to set/get filter from.</p>
+<pre><code>dataset-1: #data.frame
+  variable-1: 
+    selected: [&lt;selected&gt;]
+    keep_na: &lt;keep_na&gt;
+  ...
+
+dataset-n: # MAE
+  subjects:
+    variable-1: 
+      selected: [&lt;selected&gt;]
+      keep_na: &lt;keep_na&gt;
+    ...
+  experiment-1:
+    subset:
+      variable-1: 
+        selected: [&lt;selected&gt;]
+        keep_na: &lt;keep_na&gt;
+      ...
+    select:
+      variable-2: 
+        selected: [&lt;selected&gt;]
+        keep_na: &lt;keep_na&gt;
+      ...
+  ...</code></pre>
+<p>Above list structure is applied in <code>get_filter_state</code>, <code>set_filter_state</code> and <code>remove_filter_state</code>. In the example below, we present how these method can be used.</p>
+<ol style="list-style-type: decimal">
+<li>Setting the filter state</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
+<span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va"><a href="../reference/FilteredData.html">FilteredData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<span class="va">datasets</span><span class="op">$</span><span class="fu">set_dataset</span><span class="op">(</span><span class="fu"><a href="../reference/dataset.html">dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"iris"</span>, x <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span>
+<span class="va">datasets</span><span class="op">$</span><span class="fu">set_dataset</span><span class="op">(</span><span class="fu"><a href="../reference/dataset.html">dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, x <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="../reference/filter_state_api.html">set_filter_state</a></span><span class="op">(</span>
+  datasets <span class="op">=</span> <span class="va">datasets</span>,
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    iris <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>selected <span class="op">=</span> <span class="st">"virginica"</span>, keep_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>,
+    mtcars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20.0</span>, <span class="fl">25.0</span><span class="op">)</span>, keep_na <span class="op">=</span> <span class="cn">FALSE</span>, keep_inf <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Getting the filter state</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/filter_state_api.html">get_filter_state</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## $iris</span>
+<span class="co">## $iris$Species</span>
+<span class="co">## $iris$Species$selected</span>
+<span class="co">## [1] "virginica"</span>
+<span class="co">## </span>
+<span class="co">## $iris$Species$keep_na</span>
+<span class="co">## [1] FALSE</span>
+<span class="co">## </span>
+<span class="co">## </span>
+<span class="co">## </span>
+<span class="co">## $mtcars</span>
+<span class="co">## $mtcars$mpg</span>
+<span class="co">## $mtcars$mpg$selected</span>
+<span class="co">## [1] 20 25</span>
+<span class="co">## </span>
+<span class="co">## $mtcars$mpg$keep_na</span>
+<span class="co">## [1] FALSE</span>
+<span class="co">## </span>
+<span class="co">## $mtcars$mpg$keep_inf</span>
+<span class="co">## [1] FALSE</span></code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Removing filter states</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/filter_state_api.html">remove_filter_state</a></span><span class="op">(</span>
+  datasets <span class="op">=</span> <span class="va">datasets</span>,
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span><span class="op">)</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<ol start="4" style="list-style-type: decimal">
+<li>Updating filter states. *Works only in the shiny reactive context.</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/filter_state_api.html">set_filter_state</a></span><span class="op">(</span>
+  datasets <span class="op">=</span> <span class="va">datasets</span>,
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    mtcars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">22.0</span>, <span class="fl">25.0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<ol start="5" style="list-style-type: decimal">
+<li>Clear the filter state</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/filter_state_api.html">clear_filter_states</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span></code></pre></div>
+<p>The above code can be also used in the modules. In the example below filter-panel states are changed when clicking the buttons in the encoding-panel.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">::</span><span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/dataset.html">dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"iris"</span>, x <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/dataset.html">dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, x <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+  <span class="op">)</span>,
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    iris <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"virginica"</span><span class="op">)</span>,
+    mtcars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20.0</span>, <span class="fl">25.0</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span>,
+  modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>
+      label <span class="op">=</span> <span class="st">"custom"</span>,
+      filters <span class="op">=</span> <span class="st">"all"</span>,
+      ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+        <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>
+        <span class="fu">teal.devel</span><span class="fu">::</span><span class="fu">standard_layout</span><span class="op">(</span>
+          output <span class="op">=</span> <span class="fu">teal.devel</span><span class="fu">::</span><span class="fu">white_small_well</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"filter_state"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+          encoding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span>
+            <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"add_species_filter"</span><span class="op">)</span>, <span class="st">"Set iris$Species filter"</span><span class="op">)</span>,
+            <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"remove_species_filter"</span><span class="op">)</span>, <span class="st">"Remove iris$Species filter"</span><span class="op">)</span>,
+            <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"remove_all_filters"</span><span class="op">)</span>, <span class="st">"Remove all filters"</span><span class="op">)</span>
+          <span class="op">)</span>
+        <span class="op">)</span>
+      <span class="op">}</span>,
+      server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span>
+        <span class="va">output</span><span class="op">$</span><span class="va">filter_state</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="fu">yaml</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/yaml/man/as.yaml.html" class="external-link">as.yaml</a></span><span class="op">(</span><span class="fu"><a href="../reference/filter_state_api.html">get_filter_state</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+
+        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">add_species_filter</span>, <span class="op">{</span>
+          <span class="fu"><a href="../reference/filter_state_api.html">set_filter_state</a></span><span class="op">(</span>
+            <span class="va">datasets</span>,
+            <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"setosa"</span>, <span class="st">"versicolor"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+          <span class="op">)</span>
+        <span class="op">}</span><span class="op">)</span>
+        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">remove_species_filter</span>, <span class="op">{</span>
+          <span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_state_api.html">get_filter_state</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span>
+          <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">states</span><span class="op">$</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+            <span class="fu"><a href="../reference/filter_state_api.html">remove_filter_state</a></span><span class="op">(</span><span class="va">datasets</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span><span class="op">)</span>
+          <span class="op">}</span>
+        <span class="op">}</span><span class="op">)</span>
+        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">remove_all_filters</span>, <span class="fu"><a href="../reference/filter_state_api.html">clear_filter_states</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span><span class="op">)</span>
+      <span class="op">}</span>
+    <span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></code></pre></div>
 </div>
   </div>
 
