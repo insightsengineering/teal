@@ -690,7 +690,6 @@ FilterState <- R6::R6Class( # nolint
             value = value
           )
           private$keep_na_reactive(NULL)
-          #browser()
           logger::log_trace(
             sprintf(
               "%s$server keep_na of variable %s set to: %s, dataname: %s",
