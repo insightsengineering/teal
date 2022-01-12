@@ -134,7 +134,7 @@ TealDataAbstract <- R6::R6Class( # nolint
     #' @return (`character`) vector of code to generate datasets.
     get_code = function(dataname = NULL, deparse = TRUE) {
       checkmate::assert_character(dataname, min.len = 1, null.ok = TRUE, any.missing = FALSE)
-      stopifnot(is_logical_single(deparse))
+      checkmate::assert_flag(deparse)
 
       return(self$get_code_class()$get_code(dataname = dataname, deparse = deparse))
     },
@@ -175,9 +175,9 @@ TealDataAbstract <- R6::R6Class( # nolint
     #'
     #' @return `TealDataset`.
     get_dataset = function(dataname = NULL) {
-      stopifnot(is.null(dataname) || is_character_single(dataname))
+      checkmate::assert_string(dataname, null.ok = TRUE)
 
-      if (is_character_single(dataname)) {
+      if (length(dataname) == 1) {
         if (!(dataname %in% self$get_datanames())) {
           stop(paste("dataset", dataname, "not found"))
         }
@@ -208,9 +208,9 @@ TealDataAbstract <- R6::R6Class( # nolint
     #'   name of dataset connector to be returned. If `NULL`, all connectors are returned.
     #' @return `list` with all datasets and all connectors
     get_items = function(dataname = NULL) {
-      stopifnot(is.null(dataname) || is_character_single(dataname))
+      checkmate::assert_string(dataname, null.ok = TRUE)
 
-      if (is_character_single(dataname)) {
+      if (length(dataname) == 1) {
         if (!(dataname %in% self$get_datanames())) {
           stop(paste("dataset", dataname, "not found"))
         }
@@ -316,7 +316,7 @@ TealDataAbstract <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining.
     set_check = function(check = FALSE) {
-      stopifnot(is_logical_single(check))
+      checkmate::assert_flag(check)
       private$.check <- check
       logger::log_trace("TealDataAbstract$set_check check set to: { check }.")
       return(invisible(self))
@@ -330,7 +330,7 @@ TealDataAbstract <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining.
     set_pull_code = function(code) {
-      stopifnot(is_character_single(code))
+      checkmate::assert_string(code)
       is_code_set <- vapply(
         self$get_items(),
         function(item) {

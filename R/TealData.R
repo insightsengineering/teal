@@ -186,7 +186,7 @@ TealData <- R6::R6Class( # nolint
     #'
     #' @return `list` with all datasets and all connectors
     get_items = function(dataname = NULL) {
-      stopifnot(is.null(dataname) || is_character_single(dataname))
+      checkmate::assert_string(dataname, null.ok = TRUE)
 
       get_sets <- function(x) {
         if (is(object = x, class2 = "TealDataConnector")) {
@@ -199,7 +199,7 @@ TealData <- R6::R6Class( # nolint
       sets <- unlist(lapply(private$datasets, get_sets))
       names(sets) <- vapply(sets, get_dataname, character(1))
 
-      if (is_character_single(dataname)) {
+      if (checkmate::test_string(dataname)) {
         if (!(dataname %in% self$get_datanames())) {
           stop(paste("dataset", dataname, "not found"))
         }
@@ -311,8 +311,8 @@ TealData <- R6::R6Class( # nolint
     #' @param val (named `character`) column names used to join
     #' @return (`self`) invisibly for chaining
     mutate_join_keys = function(dataset_1, dataset_2, val) {
-      stopifnot(is_character_single(dataset_1))
-      stopifnot(is_character_single(dataset_2))
+      checkmate::assert_string(dataset_1)
+      checkmate::assert_string(dataset_2)
 
       if (!dataset_1 %in% names(self$get_items())) {
         stop(sprintf("%s is not a name to any dataset stored in object.", dataset_1))

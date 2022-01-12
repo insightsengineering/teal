@@ -152,7 +152,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @param value object value
     #' @return invisibly this `FilteredDataset`
     add_to_eval_env = function(name, value) {
-      stopifnot(is_character_single(name))
+      checkmate::assert_string(name)
       private$eval_env <- c(private$eval_env, setNames(value, name))
       invisible(self)
     },
@@ -339,9 +339,8 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @return function - shiny UI module
     ui = function(id) {
       dataname <- self$get_dataname()
-      stopifnot(
-        is_character_single(dataname)
-      )
+      checkmate::assert_string(dataname)
+
       ns <- NS(id)
       if_multiple_filter_states <- length(self$get_filter_states()) > 1
       span(
@@ -394,7 +393,7 @@ FilteredDataset <- R6::R6Class( # nolint
         function(input, output, session) {
           dataname <- self$get_dataname()
           logger::log_trace("FilteredDataset$server initializing, dataname: { dataname }")
-          stopifnot(is_character_single(dataname))
+          checkmate::assert_string(dataname)
           shiny::setBookmarkExclude("remove_filters")
           lapply(
             names(self$get_filter_states()),
@@ -469,7 +468,7 @@ FilteredDataset <- R6::R6Class( # nolint
     # @param id (`character(1)`)
     add_filter_states = function(filter_states, id) {
       stopifnot(is(filter_states, "FilterStates"))
-      stopifnot(is_character_single(id))
+      checkmate::assert_string(id)
 
       x <- setNames(list(filter_states), id)
       private$filter_states <- c(self$get_filter_states(), x)
@@ -484,7 +483,7 @@ FilteredDataset <- R6::R6Class( # nolint
     # @param varname (`character`) column within the dataset;
     #   if `NULL`, this check is not performed
     check_data_varname_exists = function(varname = NULL) {
-      stopifnot(is.null(varname) || is_character_single(varname))
+      checkmate::assert_string(varname, null.ok = TRUE)
 
       isolate({
         if (!is.null(varname) && !(varname %in% self$get_varnames())) {

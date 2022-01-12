@@ -206,10 +206,12 @@ testthat::test_that("csv_dataset_connector not expected input", {
 
   # check error if is_character_single(file)
   testthat::expect_error(
-    csv_dataset_connector("ADSL", file = c("a", "b"))
+    csv_dataset_connector("ADSL", file = c("a", "b")),
+    "Assertion on 'file'"
   )
   testthat::expect_error(
-    csv_dataset_connector("ADSL", file = 1)
+    csv_dataset_connector("ADSL", file = 1),
+    "Assertion on 'file'"
   )
 })
 

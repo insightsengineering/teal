@@ -115,7 +115,7 @@
 #'
 #' @references [select_spec] [filter_spec]
 data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = FALSE) {
-  stopifnot(is_character_single(dataname))
+  checkmate::assert_string(dataname)
   stopifnot(
     is.null(select) ||
       (is(select, "select_spec") && length(select) >= 1)
@@ -125,7 +125,7 @@ data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = 
       is(filter, "filter_spec") ||
       is_class_list("filter_spec")(filter)
   )
-  stopifnot(is_logical_single(reshape))
+  checkmate::assert_flag(reshape)
 
   if (is.null(select) && is.null(filter)) {
     select <- select_spec(

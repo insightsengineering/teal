@@ -46,10 +46,10 @@ ui_teal <- function(id,
                     title = NULL,
                     header = tags$p(""),
                     footer = tags$p("")) {
-  if (is_character_single(header)) {
+  if (checkmate::test_string(header)) {
     header <- tags$h1(header)
   }
-  if (is_character_single(footer)) {
+  if (checkmate::test_string(footer)) {
     footer <- tags$p(footer)
   }
   stopifnot(

@@ -60,7 +60,10 @@ init_filter_state <- function(x,
                               varlabel = if_null(attr(x, "label"), character(0)),
                               input_dataname = NULL,
                               extract_type = character(0)) {
-  stopifnot(is_character_single(varname) || is.name(varname))
+  checkmate::assert(
+    checkmate::check_string(varname),
+    checkmate::check_class(varname, "name")
+  )
   checkmate::assert_character(varlabel, max.len = 1, any.missing = FALSE)
   stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
   checkmate::assert_character(extract_type, max.len = 1, any.missing = FALSE)
@@ -284,7 +287,11 @@ FilterState <- R6::R6Class( # nolint
                           varlabel = character(0),
                           input_dataname = NULL,
                           extract_type = character(0)) {
-      stopifnot(is.name(varname) || is.call(varname) || is_character_single(varname))
+      checkmate::assert(
+        checkmate::check_class(varname, "name"),
+        checkmate::check_class(varname, "call"),
+        checkmate::check_string(varname)
+      )
       checkmate::assert_character(varlabel, max.len = 1, any.missing = FALSE)
       stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
       checkmate::assert_character(extract_type, max.len = 1, any.missing = FALSE)
@@ -402,7 +409,7 @@ FilterState <- R6::R6Class( # nolint
     #'  modules after selecting check-box-input in the shiny interface. Values are set to
     #'  `private$keep_na` which is reactive.
     set_keep_na = function(value) {
-      stopifnot(is_logical_single(value))
+      checkmate::assert_flag(value)
       private$keep_na(value)
       logger::log_trace("{ class(self)[1] }$set_keep_na set to { private$keep_na() }")
       invisible(NULL)
@@ -415,7 +422,7 @@ FilterState <- R6::R6Class( # nolint
     #'  modules when using `set_filter_state` instead of the shiny interface. Values are set to
     #'  `private$keep_na_reactive` which is reactive.
     set_keep_na_reactive = function(value) {
-      stopifnot(is_logical_single(value))
+      checkmate::assert_flag(value)
       private$keep_na_reactive(value)
       logger::log_trace("{ class(self)[1] }$set_keep_na_reactive set to { private$keep_na_reactive() }")
       invisible(NULL)
@@ -428,7 +435,7 @@ FilterState <- R6::R6Class( # nolint
     #' @param value (`logical(1)`) when `TRUE`, `FilterState$get_call` appends an expression
     #'  removing `NA` values to the filter expression returned by `get_call`
     set_na_rm = function(value) {
-      stopifnot(is_logical_single(value))
+      checkmate::assert_flag(value)
       private$na_rm <- value
       invisible(NULL)
     },
@@ -1051,7 +1058,7 @@ LogicalFilterState <- R6::R6Class( # nolint
   private = list(
     histogram_data = data.frame(),
     validate_selection = function(value) {
-      if (!(is_logical_empty(value) || is_logical_single(value))) {
+      if (!(checkmate::test_logical(value, max.len = 1, any.missing = FALSE))) {
         stop(
           sprintf(
             "value of the selection for `%s` in `%s` should be a logical scalar (TRUE or FALSE)",
@@ -1351,7 +1358,7 @@ RangeFilterState <- R6::R6Class( # nolint
     #'  modules after selecting check-box-input in the shiny interface. Values are set to
     #'  `private$keep_inf` which is reactive.
     set_keep_inf = function(value) {
-      stopifnot(is_logical_single(value))
+      checkmate::assert_flag(value)
       private$keep_inf(value)
       logger::log_trace("{ class(self)[1] }$set_keep_inf set to { value }")
     },
@@ -1363,7 +1370,7 @@ RangeFilterState <- R6::R6Class( # nolint
     #'  modules after setting the filters using `set_filter_state`. Values are set to
     #'  `private$keep_inf_reactive` which is reactive.
     set_keep_inf_reactive = function(value) {
-      stopifnot(is_logical_single(value))
+      checkmate::assert_flag(value)
       private$keep_inf_reactive(value)
       logger::log_trace("{ class(self)[1] }$set_keep_inf_reactive set to { value }")
     },

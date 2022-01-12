@@ -117,7 +117,7 @@ CodeClass <- R6::R6Class( # nolint
     #' @return `character` or `list` of calls
     get_code = function(dataname = NULL, deparse = TRUE) {
       checkmate::assert_character(dataname, min.len = 1, null.ok = TRUE, any.missing = FALSE)
-      stopifnot(is_logical_single(deparse))
+      checkmate::assert_flag(deparse)
       if (is.null(dataname)) {
         private$get_code_all(deparse = deparse)
       } else {

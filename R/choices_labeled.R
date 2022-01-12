@@ -174,7 +174,7 @@ variable_choices <- function(data, subset = NULL, fill = FALSE, key = NULL) {
     checkmate::check_character(subset, null.ok = TRUE, any.missing = FALSE),
     checkmate::check_function(subset)
   )
-  stopifnot(is_logical_single(fill))
+  checkmate::assert_flag(fill)
   checkmate::assert_character(key, null.ok = TRUE, any.missing = FALSE)
 
   UseMethod("variable_choices")
@@ -323,7 +323,7 @@ value_choices <- function(data,
     checkmate::check_vector(subset, null.ok = TRUE),
     checkmate::check_function(subset)
   )
-  stopifnot(is_character_single(sep))
+  checkmate::assert_string(sep)
   UseMethod("value_choices")
 }
 

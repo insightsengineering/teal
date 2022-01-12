@@ -109,8 +109,8 @@ get_code.default <- function(x,
 
   check_ellipsis(...)
   checkmate::assert_character(x, min.len = 1, any.missing = FALSE)
-  stopifnot(is_logical_single(exclude_comments))
-  stopifnot(is_logical_single(read_sources))
+  checkmate::assert_flag(exclude_comments)
+  checkmate::assert_flag(read_sources)
 
   if (!methods::hasArg(dataname)) {
     l_lines <- lapply(x, function(file_path) {
@@ -151,7 +151,7 @@ get_code.default <- function(x,
 #'
 #' @return lines (`character`) of preprocessing code
 get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", file_path)) {
-  stopifnot(is_character_single(file_path))
+  checkmate::assert_string(file_path)
   if (!if_url) {
     stop_if_not(list(
       file.exists(file_path),
@@ -161,8 +161,8 @@ get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", 
       )
     ))
   }
-  stopifnot(is_logical_single(read_sources))
-  stopifnot(is_logical_single(if_url))
+  checkmate::assert_flag(read_sources)
+  checkmate::assert_flag(if_url)
 
   lines <- readLines(file_path)
   if (read_sources) {
@@ -276,7 +276,7 @@ enclosed_with_dataname <- function(lines, dataname = NULL) {
 #' @inheritParams get_code_single
 code_exclude <- function(lines, exclude_comments, file_path) {
   checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
-  stopifnot(is_logical_single(exclude_comments))
+  checkmate::assert_flag(exclude_comments)
 
   nocode_single <- grep("^.+#[[:space:]]*nocode", lines)
   nocode_start <- grep("[[:space:]]*#[[:space:]]*nocode[[:space:]]*>+", lines)

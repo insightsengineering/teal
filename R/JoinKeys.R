@@ -106,8 +106,8 @@ JoinKeys <- R6::R6Class( # nolint
     #' @param val (named `character`) column names used to join
     #' @return (`self`) invisibly for chaining
     mutate = function(dataset_1, dataset_2, val) {
-      stopifnot(is_character_single(dataset_1))
-      stopifnot(is_character_single(dataset_2))
+      checkmate::assert_string(dataset_1)
+      checkmate::assert_string(dataset_2)
       checkmate::assert_character(val, any.missing = FALSE)
 
       private$join_pair(join_key(dataset_1, dataset_2, val))
@@ -315,8 +315,8 @@ mutate_join_keys.TealData <- function(x, dataset_1, dataset_2, val) { # nolint
 #'
 #' @export
 join_key <- function(dataset_1, dataset_2, keys) {
-  stopifnot(is_character_single(dataset_1))
-  stopifnot(is_character_single(dataset_2))
+  checkmate::assert_string(dataset_1)
+  checkmate::assert_string(dataset_2)
   checkmate::assert_character(keys, any.missing = FALSE)
 
   if (!is_empty(keys)) {

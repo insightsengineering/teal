@@ -143,7 +143,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #'
     #' @return optionally deparsed `call` object
     get_code = function(deparse = TRUE) {
-      stopifnot(is_logical_single(deparse))
+      checkmate::assert_flag(deparse)
       return(self$get_code_class()$get_code(deparse = deparse))
     },
     #' @description
@@ -461,7 +461,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #' @param id (`character`) namespace id
     #' @return shiny UI in given namespace id
     get_ui = function(id) {
-      stopifnot(is_character_single(id))
+      checkmate::assert_string(id)
       return(if_not_null(private$ui, private$ui(id)))
     },
     #' @description
@@ -691,7 +691,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       return(invisible(self))
     },
     set_dataname = function(dataname) {
-      stopifnot(is_character_single(dataname))
+      checkmate::assert_string(dataname)
       stopifnot(!grepl("\\s", dataname))
       private$dataname <- dataname
       return(invisible(self))

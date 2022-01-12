@@ -13,7 +13,7 @@
 #'
 #' @export
 get_raw_data <- function(x, dataname = NULL) {
-  stopifnot(is.null(dataname) || is_character_single(dataname))
+  checkmate::assert_string(dataname, null.ok = TRUE)
   UseMethod("get_raw_data")
 }
 

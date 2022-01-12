@@ -40,7 +40,7 @@
 #' shinyApp(app$ui, app$server)
 #' }
 filter_calls_module <- function(label = "Filter Calls Module", active_datanames = "all") { # nolint
-  stopifnot(is_character_single(label))
+  checkmate::assert_string(label)
   checkmate::check_character(active_datanames, min.len = 1, any.missing = FALSE)
 
   module(
@@ -71,7 +71,7 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
 #'
 #' @inheritParams filter_calls_module
 bookmark_module <- function(label = "Bookmark Module") { # nolint
-  stopifnot(is_character_single(label))
+  checkmate::assert_string(label)
 
   module(
     label = label,
@@ -123,7 +123,7 @@ bookmark_module <- function(label = "Bookmark Module") { # nolint
 #'
 #' @inheritParams filter_calls_module
 debug_browser_module <- function(label = "Browser Debug Module") { # nolint
-  stopifnot(is_character_single(label))
+  checkmate::assert_string(label)
 
   module(
     label = label,
@@ -162,7 +162,7 @@ debug_browser_module <- function(label = "Browser Debug Module") { # nolint
 #'
 #' @inheritParams filter_calls_module
 reset_filters_module <- function(label = "Reset Filters Module", active_datanames = "all") { # nolint
-  stopifnot(is_character_single(label))
+  checkmate::assert_string(label)
   checkmate::assert_character(active_datanames, min.len = 1, any.missing = FALSE)
 
   module(
@@ -270,8 +270,8 @@ trigger_after_first_cycle <- function(expr) { # nolint
 #' @inheritParams init
 #'
 predefined_filters_module <- function(label = "Apply filters", filter) { # nolint
+  checkmate::assert_string(label)
   stopifnot(
-    is_character_single(label),
     is_fully_named_list(filter)
   )
   module(

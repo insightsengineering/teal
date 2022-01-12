@@ -7,10 +7,10 @@ test_that("Proper argument types", {
 
   expect_error(select_spec(choices = list(list(choices)), selected = selected))
   expect_error(select_spec(choices = choices, selected = list(list(selected))))
-  expect_error(select_spec(choices = choices, selected = selected, multiple = 1), "is_logical_single")
-  expect_error(select_spec(choices = choices, selected = selected, multiple = c(TRUE, TRUE)), "is_logical_single")
-  expect_error(select_spec(choices = choices, selected = selected, fixed = 1), "is_logical_single")
-  expect_error(select_spec(choices = choices, selected = selected, label = factor("Hello")), "is_character_single")
+  expect_error(select_spec(choices = choices, selected = selected, multiple = 1), "Assertion on 'multiple'")
+  expect_error(select_spec(choices = choices, selected = selected, multiple = c(TRUE, TRUE)), "Assertion on 'multiple'")
+  expect_error(select_spec(choices = choices, selected = selected, fixed = 1), "Assertion on 'fixed'")
+  expect_error(select_spec(choices = choices, selected = selected, label = factor("Hello")), "Assertion on 'label'")
 })
 
 test_that("Single choice", {

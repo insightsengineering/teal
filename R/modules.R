@@ -18,8 +18,7 @@
 #' @return object of class \code{teal_modules}
 #'
 modules <- function(label, ...) {
-  stopifnot(is_character_single(label))
-
+  checkmate::assert_string(label)
   submodules <- list(...)
   is_right_class <- vapply(submodules, inherits, logical(1), c("teal_module", "teal_modules"))
   if (any(!is_right_class)) {
@@ -99,7 +98,7 @@ root_modules <- function(...) {
 #' @export
 #'
 module <- function(label, server, ui, filters, server_args = NULL, ui_args = NULL) {
-  stopifnot(is_character_single(label))
+  checkmate::assert_string(label)
   stopifnot(is.function(server))
   stopifnot(is.function(ui))
   checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = TRUE)

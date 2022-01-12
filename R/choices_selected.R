@@ -124,8 +124,8 @@ choices_selected <- function(choices,
                              fixed = FALSE) {
   stopifnot(is.atomic(choices) || is(choices, "delayed_data"))
   stopifnot(is.atomic(selected) || is(selected, "delayed_data") || is(selected, "all_choices"))
-  stopifnot(is_logical_single(keep_order))
-  stopifnot(is_logical_single(fixed))
+  checkmate::assert_flag(keep_order)
+  checkmate::assert_flag(fixed)
 
   if (is(selected, "all_choices")) selected <- choices
 

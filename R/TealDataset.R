@@ -50,7 +50,7 @@ TealDataset <- R6::R6Class( # nolint
                           code = character(0),
                           label = character(0),
                           vars = list()) {
-      stopifnot(is_character_single(dataname))
+      checkmate::assert_string(dataname)
       stopifnot(is.data.frame(x))
       checkmate::assert_character(keys, any.missing = FALSE)
       checkmate::assert(
@@ -379,7 +379,7 @@ TealDataset <- R6::R6Class( # nolint
     #'
     #' @return optionally deparsed `call` object
     get_code = function(deparse = TRUE) {
-      stopifnot(is_logical_single(deparse))
+      checkmate::assert_flag(deparse)
       res <- self$get_code_class()$get_code(deparse = deparse)
       return(res)
     },
@@ -458,9 +458,12 @@ TealDataset <- R6::R6Class( # nolint
         )
       )
 
-      stopifnot(is_logical_single(force_delay))
+      checkmate::assert_flag(force_delay)
       stopifnot(is_fully_named_list(vars))
-      stopifnot(is_character_single(code) || is(code, "CodeClass"))
+      checkmate::assert(
+        checkmate::check_string(code),
+        checkmate::check_class(code, "CodeClass")
+      )
 
       if (inherits(code, "PythonCodeClass")) {
         self$set_vars(vars)
@@ -499,7 +502,7 @@ TealDataset <- R6::R6Class( # nolint
     #' `get_code()` code is identical to the raw data, else `FALSE`.
     check = function() {
       logger::log_trace("TealDataset$check executing the code to reproduce dataset: { self$get_dataname() }...")
-      if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
+      if (!checkmate::test_character(self$get_code(), len = 1, pattern = "\\w+")) {
         stop(
           sprintf(
             "Cannot check preprocessing code of '%s' - code is empty.",
@@ -635,7 +638,7 @@ TealDataset <- R6::R6Class( # nolint
       deep_clone_r6(name, value)
     },
     get_class_colnames = function(class_type = "character") {
-      stopifnot(is_character_single(class_type))
+      checkmate::assert_string(class_type)
 
       return_cols <- private$.colnames[which(vapply(
         lapply(private$.raw_data, class),
@@ -694,7 +697,7 @@ TealDataset <- R6::R6Class( # nolint
     # @param vars (`named list`) contains any R object which code depends on
     # @param is_mutate_vars (`logical(1)`) whether this var is used in mutate code
     set_vars_internal = function(vars, is_mutate_vars = FALSE) {
-      stopifnot(is_logical_single(is_mutate_vars))
+      checkmate::assert_flag(is_mutate_vars)
       stopifnot(is_fully_named_list(vars))
 
       total_vars <- c(list(), private$vars, private$mutate_vars)
@@ -781,8 +784,10 @@ TealDataset <- R6::R6Class( # nolint
     # @param dataname (`character`) the new name
     # @return self invisibly for chaining
     set_dataname = function(dataname) {
-      stopifnot(is_character_single(dataname))
-      stopifnot(!grepl("\\s", dataname))
+      checkmate::assert_string(dataname)
+      if (make.names(dataname) != dataname) {
+        stop(dataname, " is not valid R object name.")
+      }
       private$dataname <- dataname
       return(invisible(self))
     },
@@ -920,7 +925,7 @@ dataset.data.frame <- function(dataname,
                                label = data_label(x),
                                code = character(0),
                                vars = list()) {
-  stopifnot(is_character_single(dataname))
+  checkmate::assert_string(dataname)
   stopifnot(is.data.frame(x))
   checkmate::assert(
     checkmate::check_character(code, max.len = 1, any.missing = FALSE),

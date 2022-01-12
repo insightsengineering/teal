@@ -89,8 +89,8 @@ optionalSelectInput <- function(inputId, # nolint
                                 label_help = NULL,
                                 fixed = FALSE,
                                 width = NULL) {
-  stopifnot(is_character_single(inputId))
-  stopifnot(is.null(label) || is_character_single(label) || is_html_like(label))
+  checkmate::assert_string(inputId)
+  stopifnot(checkmate::test_string(label, null.ok = TRUE) || is_html_like(label))
   stopifnot(is.null(choices) || length(choices) >= 1)
   stopifnot(
     is.null(selected) ||
@@ -98,11 +98,11 @@ optionalSelectInput <- function(inputId, # nolint
       all(selected %in% choices) ||
       all(selected %in% unlist(choices, recursive = FALSE))
   )
-  stopifnot(is_logical_single(multiple))
-  stopifnot(is.null(sep) || is_character_single(sep))
+  checkmate::assert_flag(multiple)
+  checkmate::assert_string(sep, null.ok = TRUE)
   stopifnot(is.list(options))
-  stopifnot(is.null(label_help) || is_character_single(label_help) || is_html_like(label_help))
-  stopifnot(is_logical_single(fixed))
+  stopifnot(checkmate::test_string(label_help, null.ok = TRUE) || is_html_like(label_help))
+  checkmate::assert_flag(fixed)
 
   if (!is.null(width)) {
     validateCssUnit(width)

@@ -165,10 +165,10 @@ init <- function(data,
     data <- to_relational_data(data = data)
   }
 
+  checkmate::assert_string(title, null.ok = TRUE)
   stopifnot(
     is(data, "TealData"),
     is(modules, "list") || is(modules, "teal_modules"),
-    is.null(title) || is_character_single(title),
     is_fully_named_list(filter),
     all(names(filter) %in% get_dataname(data))
   )

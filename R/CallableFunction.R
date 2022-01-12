@@ -23,17 +23,15 @@ CallableFunction <- R6::R6Class( # nolint
     #' @return new \code{CallableFunction} object
     initialize = function(fun, env = new.env(parent = parent.env(globalenv()))) {
       super$initialize(env = env)
-
       stop_if_not(
         list(
           !missing(fun),
           "A valid function name must be provided."
         )
       )
-      stop_if_not(list(
-        is_character_single(fun) || is.function(fun) || is.call(fun) || is.symbol(fun),
-        "CallableFunction can be specified as character, symbol, call or function"
-      ))
+      if (!(checkmate::test_string(fun) || is.function(fun) || is.call(fun) || is.symbol(fun))) {
+        stop("CallableFunction can be specified as character, symbol, call or function")
+      }
 
       fun_name <- private$get_callable_function(fun)
       private$fun_name <- deparse1(fun_name, collapse = "\n")
@@ -62,7 +60,7 @@ CallableFunction <- R6::R6Class( # nolint
     #'
     #' @return \code{call} or \code{character} depending on \code{deparse} argument
     get_call = function(deparse = TRUE, args = NULL) {
-      stopifnot(is_logical_single(deparse))
+      checkmate::assert_flag(deparse)
       stopifnot(is_empty(args) || is_fully_named_list(args))
 
       old_args <- private$args
@@ -120,7 +118,7 @@ CallableFunction <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining.
     set_arg_value = function(name, value) {
-      stopifnot(is_character_single(name))
+      checkmate::assert_string(name)
       arg_names <- names(formals(eval(str2lang(private$fun_name))))
       stopifnot(name %in% arg_names || "..." %in% arg_names || is.null(arg_names))
 

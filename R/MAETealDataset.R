@@ -51,7 +51,7 @@ MAETealDataset <- R6::R6Class( # nolint
                           code = character(0),
                           label = character(0),
                           vars = list()) {
-      stopifnot(is_character_single(dataname))
+      checkmate::assert_string(dataname)
       stopifnot(is(x, "MultiAssayExperiment"))
       checkmate::assert_character(keys, any.missing = FALSE)
       checkmate::assert(
@@ -107,7 +107,7 @@ MAETealDataset <- R6::R6Class( # nolint
     #' `get_code()` code is identical to the raw data, else `FALSE`.
     check = function() {
       logger::log_trace("TealDataset$check executing the code to reproduce dataset: { self$get_dataname() }...")
-      if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
+      if (!checkmate::test_character(self$get_code(), len = 1, pattern = "\\w+")) {
         stop(
           sprintf(
             "Cannot check preprocessing code of '%s' - code is empty.",
@@ -168,7 +168,7 @@ MAETealDataset <- R6::R6Class( # nolint
   private = list(
     .raw_data = MultiAssayExperiment::MultiAssayExperiment(),
     get_class_colnames = function(class_type = "character") {
-      stopifnot(is_character_single(class_type))
+      checkmate::assert_string(class_type)
 
       return_cols <- private$.colnames[which(vapply(
         lapply(SummarizedExperiment::colData(private$.raw_data), class),
@@ -243,10 +243,10 @@ dataset.MultiAssayExperiment <- function(dataname,
                                          label = data_label(x),
                                          code = character(0),
                                          vars = list()) {
-  stopifnot(is_character_single(dataname))
+  checkmate::assert_string(dataname)
   checkmate::assert(
     checkmate::check_character(code, max.len = 1, any.missing = FALSE),
-    chcekmate::check_class(code, "CodeClass")
+    checkmate::check_class(code, "CodeClass")
   )
   stopifnot(identical(vars, list()) || is_fully_named_list(vars))
 

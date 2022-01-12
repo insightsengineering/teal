@@ -11,13 +11,13 @@ test_that("Proper argument types", {
   expect_error(filter_spec(vars = "var", choices = choices, selected = list("val2")), "Assertion failed.+selected")
   expect_error(filter_spec(vars = 1, choices = choices, selected = choices[1]), "Assertion failed.+vars")
   expect_error(filter_spec(vars = factor("var"), choices = choices, selected = choices[1]), "Assertion failed.+vars")
-  expect_error(filter_spec(vars = "var", choices = choices_f, selected = choices_f[1]), "Assertion failed")
-  expect_error(filter_spec(vars = "var", choices = choices, multiple = 1), "is.logical")
-  expect_error(filter_spec(vars = "var", choices = choices, label = factor("test")), "is.character")
+  expect_error(filter_spec(vars = "var", choices = choices_f, selected = choices_f[1]), "Assertion failed.+choices")
+  expect_error(filter_spec(vars = "var", choices = choices, multiple = 1), "Assertion on 'multiple'")
+  expect_error(filter_spec(vars = "var", choices = choices, label = factor("test")), "Assertion on 'label'")
 
   expect_error(filter_spec(vars = "var", choices = choices_d), "duplicated")
-  expect_error(filter_spec(vars = "var", choices = choices, label = c("test", "test2")), "is_character_single")
-  expect_error(filter_spec(vars = "var", choices = choices, sep = c("-", ",")), "is_character_single")
+  expect_error(filter_spec(vars = "var", choices = choices, label = c("test", "test2")), "Assertion on 'label'")
+  expect_error(filter_spec(vars = "var", choices = choices, sep = c("-", ",")), "Assertion on 'sep'")
 })
 
 test_that("Single choice", {

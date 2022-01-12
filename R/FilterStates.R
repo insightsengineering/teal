@@ -170,11 +170,15 @@ FilterStates <- R6::R6Class( # nolint
     #'   text label value.
     #'
     initialize = function(input_dataname, output_dataname, datalabel) {
-      stopifnot(
-        is.call(input_dataname) || is.name(input_dataname) || is_character_single(input_dataname)
+      checkmate::assert(
+        checkmate::check_class(input_dataname, "call"),
+        checkmate::check_class(input_dataname, "name"),
+        checkmate::check_string(input_dataname)
       )
-      stopifnot(
-        is.call(output_dataname) || is.name(output_dataname) || is_character_single(output_dataname)
+      checkmate::assert(
+        checkmate::check_class(output_dataname, "call"),
+        checkmate::check_class(output_dataname, "name"),
+        checkmate::check_string(output_dataname)
       )
       checkmate::assert_character(datalabel, max.len = 1, any.missing = FALSE)
 
@@ -303,7 +307,7 @@ FilterStates <- R6::R6Class( # nolint
     #' @return `list` of `FilterState` objects
     queue_get = function(queue_index, element_id = character(0)) {
       private$validate_queue_exists(queue_index)
-      stopifnot(is_empty(element_id) || is_character_single(element_id))
+      checkmate::assert_character(element_id, max.len = 1, null.ok = TRUE)
 
       if (is_empty(element_id)) {
         private$queue[[queue_index]]$get()
@@ -335,7 +339,7 @@ FilterStates <- R6::R6Class( # nolint
     queue_push = function(x, queue_index, element_id) {
       logger::log_trace("{ class(self)[1] } pushing into queue, dataname: { deparse1(private$input_dataname) }")
       private$validate_queue_exists(queue_index)
-      stopifnot(is_character_single(element_id))
+      checkmate::assert_string(element_id)
 
       states <- if (is.list(x)) {
         x
@@ -366,9 +370,12 @@ FilterStates <- R6::R6Class( # nolint
         "dataname: { deparse1(private$input_dataname) }"
       ))
       private$validate_queue_exists(queue_index)
-      stopifnot(is_character_single(element_id))
-      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
-      stopifnot(is_character_single(element_id))
+      checkmate::assert_string(element_id)
+      checkmate::assert(
+        checkmate::check_string(queue_index),
+        checkmate::check_int(queue_index)
+      )
+      checkmate::assert_string(element_id)
 
       filters <- self$queue_get(queue_index = queue_index, element_id = element_id)
       private$queue[[queue_index]]$remove(filters)
@@ -591,7 +598,10 @@ FilterStates <- R6::R6Class( # nolint
     # Checks if the queue of the given index was initialized in this `FilterStates`
     # @param queue_index (character or integer)
     validate_queue_exists = function(queue_index) {
-      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
+      checkmate::assert(
+        checkmate::check_string(queue_index),
+        checkmate::check_int(queue_index)
+      )
       if (
         !(
           is.numeric(queue_index) && all(queue_index <= length(private$queue) && queue_index > 0) ||
@@ -846,7 +856,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #'  object which columns are used to choose filter variables.
     #' @return shiny.tag
     ui_add_filter_state = function(id, data) {
-      stopifnot(is_character_single(id))
+      checkmate::assert_string(id)
       stopifnot(is.data.frame(data))
 
       ns <- NS(id)
@@ -1189,7 +1199,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #'  to choose filter variables.
     #' @return shiny.tag
     ui_add_filter_state = function(id, data) {
-      stopifnot(is_character_single(id))
+      checkmate::assert_string(id)
       stopifnot(is(data, "MultiAssayExperiment"))
 
       ns <- NS(id)
@@ -1627,7 +1637,7 @@ SEFilterStates <- R6::R6Class( # nolint
     #'  and `rowData` are separate shiny entities.
     #' @return shiny.tag
     ui_add_filter_state = function(id, data) {
-      stopifnot(is_character_single(id))
+      checkmate::assert_string(id)
       stopifnot(is(data, "SummarizedExperiment"))
 
       ns <- NS(id)
@@ -2022,7 +2032,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #'  object which columns are used to choose filter variables.
     #' @return shiny.tag
     ui_add_filter_state = function(id, data) {
-      stopifnot(is_character_single(id))
+      checkmate::assert_string(id)
       stopifnot(is.matrix(data))
 
       ns <- NS(id)

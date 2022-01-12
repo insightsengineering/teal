@@ -170,7 +170,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param filtered (`logical`) whether to return a filtered or unfiltered dataset
     get_data = function(dataname, filtered = TRUE) {
       private$check_data_varname_exists(dataname)
-      stopifnot(is_logical_single(filtered))
+      checkmate::assert_flag(filtered)
 
       self$get_filtered_dataset(dataname)$get_data(filtered = filtered)
     },
@@ -186,7 +186,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @return value of attribute, may be `NULL` if it does not exist
     get_data_attr = function(dataname, attr) {
       private$check_data_varname_exists(dataname)
-      stopifnot(is_character_single(attr))
+      checkmate::assert_string(attr)
       get_attrs(self$get_filtered_dataset(dataname)$get_dataset())[[attr]]
     },
 
@@ -852,8 +852,8 @@ FilteredData <- R6::R6Class( # nolint
     # @param varname (`character`) column within the dataset;
     #   if `NULL`, this check is not performed
     check_data_varname_exists = function(dataname, varname = NULL) {
-      stopifnot(is_character_single(dataname))
-      stopifnot(is.null(varname) || is_character_single(varname))
+      checkmate::assert_string(dataname)
+      checkmate::assert_string(varname, null.ok = TRUE)
 
       isolate({
         # we isolate everything because we don't want to trigger again when datanames
@@ -870,7 +870,7 @@ FilteredData <- R6::R6Class( # nolint
       return(invisible(NULL))
     },
     filtered_dataname = function(dataname) {
-      stopifnot(is_character_single(dataname))
+      checkmate::assert_string(dataname)
       sprintf("%s_FILTERED", dataname)
     }
   )

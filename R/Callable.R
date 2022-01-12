@@ -63,9 +63,9 @@ Callable <- R6::R6Class( # nolint
     #' argument. If \code{run} fails it will return object of class \code{simple-error error}
     #' when \code{try = TRUE} or will stop if \code{try = FALSE}.
     run = function(return = TRUE, args = NULL, try = FALSE) {
-      stopifnot(is_logical_single(return))
+      checkmate::assert_flag(return)
       stopifnot(is_empty(args) || is_fully_named_list(args))
-      stopifnot(is_logical_single(try))
+      checkmate::assert_flag(try)
 
       # args are "dynamic" are used only to evaluate this call
       # - args not saved to private$call persistently

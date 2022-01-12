@@ -112,8 +112,8 @@ get_client_timezone <- function(ns) {
 #' @return Error or invisible NULL.
 #'
 check_pkg_quietly <- function(pckg, msg) {
-  stopifnot(is_character_single(pckg), is_character_single(msg))
-
+  checkmate::assert_string(pckg)
+  checkmate::assert_string(msg)
   if (!pckg %in% utils::installed.packages()) {
     stop(msg)
   }
@@ -190,7 +190,7 @@ check_in_range <- function(subinterval, range, pre_msg = "") {
 #' check_in_subset("a", LETTERS, pre_msg = "Error: ")
 #' }
 check_in_subset <- function(subset, choices, pre_msg = "") {
-  stopifnot(is_character_single(pre_msg))
+  checkmate::assert_string(pre_msg)
 
   subset <- unique(subset)
   choices <- unique(choices)
@@ -235,12 +235,12 @@ code_from_script <- function(code, script, dataname = NULL) {
     return(character(0))
   }
 
-  if (is_character_single(code) && is_character_single(script)) {
+  if (checkmate::test_string(code) && checkmate::test_string(script)) {
     stop("Function doesn't accept 'code' and 'script' at the same time.
          Please specify either 'code' or 'script'", call. = FALSE)
   }
 
-  if (is_character_single(script)) {
+  if (checkmate::test_string(script)) {
     code <- read_script(file = script, dataname = dataname)
   }
 
@@ -263,7 +263,7 @@ code_from_script <- function(code, script, dataname = NULL) {
 #'
 #' read_script(file_example)
 read_script <- function(file, dataname = NULL) {
-  stopifnot(is_character_single(file))
+  checkmate::assert_string(file)
   stopifnot(file.exists(file))
   get_code_single(file, read_sources = TRUE) %>%
     enclosed_with_dataname(dataname = dataname) %>%
@@ -429,9 +429,9 @@ get_key_duplicates_util <- function(dataframe, keys) {
 
 # Function to be used while trying to load the object of specific class from the script.
 object_file <- function(path, class) {
-  stopifnot(is_character_single(path))
-  stopifnot(file.exists(path))
-  stopifnot(is_character_single(class))
+  checkmate::assert_string(path)
+  checkmate::assert_file_exists(path)
+  checkmate::assert_string(class)
 
   lines <- paste0(readLines(path), collapse = "\n")
   object <- eval(parse(text = lines, keep.source = FALSE))

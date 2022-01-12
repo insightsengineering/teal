@@ -208,10 +208,10 @@ filter_spec <- function(vars,
     checkmate::check_class(selected, "all_choices")
   )
 
-  stopifnot(is_logical_single(multiple))
-  stopifnot(is.null(label) || is_character_single(label))
-  stopifnot(is_character_single(sep))
-  stopifnot(is_logical_single(drop_keys))
+  checkmate::assert_flag(multiple)
+  checkmate::assert_string(label, null.ok = TRUE)
+  checkmate::assert_string(sep)
+  checkmate::assert_flag(drop_keys)
   stopifnot(multiple || !is(selected, "all_choices"))
 
   if (is(selected, "all_choices") && !is.null(choices)) selected <- choices
@@ -315,14 +315,14 @@ filter_spec_internal <- function(vars_choices,
                                  drop_keys = FALSE,
                                  dataname = NULL,
                                  initialized = FALSE) {
-  stopifnot(is.null(vars_label) || is_character_single(vars_label))
-  stopifnot(is_logical_single(vars_fixed))
-  stopifnot(is_logical_single(vars_multiple))
-  stopifnot(is.null(label) || is_character_single(label))
-  stopifnot(is_logical_single(fixed))
-  stopifnot(is_logical_single(multiple))
-  stopifnot(is_character_single(sep))
-  stopifnot(is_logical_single(drop_keys))
+  checkmate::assert_string(vars_label, null.ok = TRUE)
+  checkmate::assert_flag(vars_fixed)
+  checkmate::assert_flag(vars_multiple)
+  checkmate::assert_string(label, null.ok = TRUE)
+  checkmate::assert_flag(fixed)
+  checkmate::assert_flag(multiple)
+  checkmate::assert_string(sep)
+  checkmate::assert_flag(drop_keys)
 
   if (is(vars_choices, "delayed_data") ||
     is(vars_selected, "delayed_data") ||
