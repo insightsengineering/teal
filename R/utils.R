@@ -226,10 +226,11 @@ teal_with_pkg <- function(pkg, code) {
 #' @inheritParams dataset_connector
 #' @return code (`character`)
 code_from_script <- function(code, script, dataname = NULL) {
-  stopifnot(
-    is_character_vector(code, min_length = 0, max_length = 1) || inherits(code, "PythonCodeClass"),
-    is_character_vector(script, min_length = 0, max_length = 1)
+  checkmate::assert(
+    checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+    checkmate::check_class(code, "PythonCodeClass")
   )
+  checkmate::assert_character(script, max.len = 1, any.missing = FALSE)
   if (length(code) == 0 && length(script) == 0) {
     return(character(0))
   }

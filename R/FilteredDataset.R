@@ -291,7 +291,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @return (`character` or `NULL`) variable labels, `NULL` if `column_labels`
     #'   attribute does not exist for the data
     get_varlabels = function(variables = NULL) {
-      stopifnot(is.null(variables) || is_character_vector(variables, min_length = 0L))
+      checkmate::assert_character(variables, null.ok = TRUE, any.missing = FALSE)
 
       labels <- self$get_dataset()$get_column_labels()
       if (is.null(labels)) {

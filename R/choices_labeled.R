@@ -66,7 +66,7 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
     labels <- as.character(labels)
   }
 
-  stopifnot(is_character_vector(labels[!is.na(labels)], min_length = 0L))
+  checkmate::assert_character(labels[!is.na(labels)], any.missing = FALSE)
 
   stop_if_not(list(length(choices) == length(labels), "length of choices must be the same as labels"))
 
@@ -170,9 +170,12 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #'   return(names(data)[idx])
 #' })
 variable_choices <- function(data, subset = NULL, fill = FALSE, key = NULL) {
-  stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0L) || is.function(subset))
+  checkmate::assert(
+    checkmate::check_character(subset, null.ok = TRUE, any.missing = FALSE),
+    checkmate::check_function(subset)
+  )
   stopifnot(is_logical_single(fill))
-  stopifnot(is.null(key) || is_character_vector(key, min_length = 0L))
+  checkmate::assert_character(key, null.ok = TRUE, any.missing = FALSE)
 
   UseMethod("variable_choices")
 }
@@ -314,13 +317,12 @@ value_choices <- function(data,
                           var_label = NULL,
                           subset = NULL,
                           sep = " - ") {
-  stopifnot(is_character_vector(var_choices, min_length = 0L))
-  stopifnot(
-    is.null(var_label) ||
-      (is_character_vector(var_label, min_length = 0L) &&
-        length(var_choices) == length(var_label))
+  checkmate::assert_character(var_choices, any.missing = FALSE)
+  checkmate::assert_character(var_label, len = length(var_choices), null.ok = TRUE, any.missing = FALSE)
+  checkmate::assert(
+    checkmate::check_vector(subset, null.ok = TRUE),
+    checkmate::check_function(subset)
   )
-  stopifnot(is.null(subset) || is.vector(subset) || is.function(subset))
   stopifnot(is_character_single(sep))
   UseMethod("value_choices")
 }
@@ -486,9 +488,7 @@ variable_types <- function(data, columns = NULL) {
 
 #' @export
 variable_types.default <- function(data, columns = NULL) {
-  stopifnot(
-    is.null(columns) || is_character_vector(columns, min_length = 0L)
-  )
+  checkmate::assert_character(columns, null.ok = TRUE, any.missing = FALSE)
 
   res <- if (is.null(columns)) {
     vapply(
@@ -497,7 +497,7 @@ variable_types.default <- function(data, columns = NULL) {
       character(1),
       USE.NAMES = FALSE
     )
-  } else if (is_character_vector(columns, min_length = 0L)) {
+  } else if (checkmate::test_character(columns, any.missing = FALSE)) {
     stopifnot(all(columns %in% names(data) | vapply(columns, identical, logical(1L), "")))
     vapply(
       columns,
@@ -529,9 +529,7 @@ variable_types.DFrame <- function(data, columns = NULL) {
 
 #' @export
 variable_types.matrix <- function(data, columns = NULL) {
-  stopifnot(
-    is.null(columns) || is_character_vector(columns, min_length = 0L)
-  )
+  checkmate::assert_character(columns, null.ok = TRUE, any.missing = FALSE)
 
   res <- if (is.null(columns)) {
     apply(
@@ -539,7 +537,7 @@ variable_types.matrix <- function(data, columns = NULL) {
       2,
       function(x) class(x)[1]
     )
-  } else if (is_character_vector(columns, min_length = 0L)) {
+  } else if (checkmate::test_character(columns, any.missing = FALSE)) {
     stopifnot(
       all(
         columns %in% colnames(data) |

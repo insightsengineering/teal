@@ -612,7 +612,7 @@ test_that("mutate_dataset", {
     object = {
       test_ds %>% mutate_dataset(c("x <- 3", "som"))
     },
-    "is_character_vector"
+    "Assertion failed.+code"
   )
 
   expect_silent({

@@ -248,7 +248,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       if (is.null(label)) {
         label <- character(0)
       }
-      stopifnot(is_character_vector(label, min_length = 0, max_length = 1))
+      checkmate::assert_character(label, max.len = 1, any.missing = FALSE)
       private$dataset_label <- label
       if (self$is_pulled()) {
         private$dataset$set_dataset_label(label)
@@ -261,7 +261,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #' Set new keys
     #' @return (`self`) invisibly for chaining.
     set_keys = function(keys) {
-      stopifnot(is_character_vector(keys, min_length = 0))
+      checkmate::assert_character(keys, any.missing = FALSE)
       if (isTRUE(self$is_pulled())) {
         set_keys(private$dataset, keys)
       }

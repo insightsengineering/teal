@@ -133,7 +133,7 @@ TealDataAbstract <- R6::R6Class( # nolint
     #' @param deparse (`logical`) whether to return the deparsed form of a call
     #' @return (`character`) vector of code to generate datasets.
     get_code = function(dataname = NULL, deparse = TRUE) {
-      stopifnot(is.null(dataname) || is_character_vector(dataname))
+      checkmate::assert_character(dataname, min.len = 1, null.ok = TRUE, any.missing = FALSE)
       stopifnot(is_logical_single(deparse))
 
       return(self$get_code_class()$get_code(dataname = dataname, deparse = deparse))
@@ -287,7 +287,7 @@ TealDataAbstract <- R6::R6Class( # nolint
     #'
     #' @return self invisibly for chaining
     mutate_dataset = function(dataname, code, vars = list()) {
-      stopifnot(is_character_vector(dataname))
+      checkmate::assert_character(dataname, min.len = 1, any.missing = FALSE)
       stopifnot(all(dataname %in% self$get_datanames()))
 
       private$set_mutate_vars(vars = vars)
@@ -438,7 +438,10 @@ TealDataAbstract <- R6::R6Class( # nolint
       return(res)
     },
     set_mutate_code = function(code, dataname = self$get_datanames(), deps = names(private_mutate_vars)) {
-      stopifnot(is_character_vector(code, 0, 1) || inherits(code, "PythonCodeClass"))
+      checkmate::assert(
+        checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+        checkmate::check_class(code, "PythonCodeClass")
+      )
 
       if (inherits(code, "PythonCodeClass")) {
         r <- PythonCodeClass$new()

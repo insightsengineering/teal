@@ -212,7 +212,7 @@ updateOptionalSelectInput <- function(session, # nolint
 #'   "factor", "character", "unknown", ""
 #' ))
 variable_type_icons <- function(var_type) {
-  stopifnot(is_character_vector(var_type, min_length = 0))
+  checkmate::assert_character(var_type, any.missing = FALSE)
 
   class_to_icon <- list(
     numeric = "sort-numeric-up",
@@ -264,8 +264,9 @@ picker_options_content <- function(var_name, var_label, var_type) {
   if (utils.nest::is_empty(var_type) && utils.nest::is_empty(var_label)) {
     return(var_name)
   }
+
+  checkmate::assert_character(var_name, min.len = 1, any.missing = FALSE)
   stopifnot(
-    is_character_vector(var_name),
     is_character_empty(var_type) || length(var_type) == length(var_name),
     is_character_empty(var_label) || length(var_label) == length(var_name)
   )

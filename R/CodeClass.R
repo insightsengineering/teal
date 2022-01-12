@@ -97,11 +97,9 @@ CodeClass <- R6::R6Class( # nolint
     #'
     #' @return changed `CodeClass` object
     set_code = function(code, dataname = character(0), deps = character(0)) {
-      stopifnot(
-        is_character_vector(code),
-        is_character_vector(dataname, min_length = 0),
-        !(dataname %in% deps)
-      )
+      checkmate::assert_character(code, min.len = 1, any.missing = FALSE)
+      checkmate::assert_character(dataname, any.missing = FALSE)
+      stopifnot(!(dataname %in% deps))
 
       code <- pretty_code_string(code)
 
@@ -118,7 +116,7 @@ CodeClass <- R6::R6Class( # nolint
     #' @param deparse optional, (`logical`) whether to return the deparsed form of a call
     #' @return `character` or `list` of calls
     get_code = function(dataname = NULL, deparse = TRUE) {
-      stopifnot(is.null(dataname) || is_character_vector(dataname))
+      checkmate::assert_character(dataname, min.len = 1, null.ok = TRUE, any.missing = FALSE)
       stopifnot(is_logical_single(deparse))
       if (is.null(dataname)) {
         private$get_code_all(deparse = deparse)

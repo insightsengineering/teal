@@ -68,9 +68,9 @@ dataset_connector <- function(dataname,
                               vars = list()) {
   stopifnot(is_character_single(dataname))
   stopifnot(is(pull_callable, "Callable"))
-  stopifnot(is_character_vector(keys, min_length = 0L))
-  stopifnot(is_character_empty(code) || is_character_vector(code))
-  stopifnot(is_character_empty(label) || is_character_vector(label))
+  checkmate::assert_character(keys, any.missing = FALSE)
+  checkmate::assert_character(code, any.missing = FALSE)
+  checkmate::assert_character(label, any.missing = FALSE)
 
   x <- TealDatasetConnector$new(
     dataname = dataname,
@@ -106,10 +106,10 @@ cdisc_dataset_connector <- function(dataname,
                                     vars = list()) {
   stopifnot(is_character_single(dataname))
   stopifnot(is(pull_callable, "Callable"))
-  stopifnot(is_character_vector(keys, min_length = 0L))
+  checkmate::assert_character(keys, any.missing = FALSE)
   stopifnot(is_character_empty(parent) || is_character_single(parent))
-  stopifnot(is_character_empty(code) || is_character_vector(code))
-  stopifnot(is_character_empty(label) || is_character_vector(label))
+  checkmate::assert_character(code, any.missing = FALSE)
+  checkmate::assert_character(label, any.missing = FALSE)
 
   x <- CDISCTealDatasetConnector$new(
     dataname = dataname,
@@ -539,7 +539,7 @@ code_dataset_connector <- function(dataname,
 
   stopifnot(is_fully_named_list(vars))
   stopifnot(is_character_single(code))
-  stopifnot(is_character_vector(code, min_length = 0L, max_length = 1L))
+  checkmate::assert_character(code, max.len = 1, any.missing = FALSE)
 
   call <- callable_code(code = code)
 

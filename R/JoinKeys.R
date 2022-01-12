@@ -108,7 +108,7 @@ JoinKeys <- R6::R6Class( # nolint
     mutate = function(dataset_1, dataset_2, val) {
       stopifnot(is_character_single(dataset_1))
       stopifnot(is_character_single(dataset_2))
-      stopifnot(is_character_vector(val, min_length = 0L))
+      checkmate::assert_character(val, any.missing = FALSE)
 
       private$join_pair(join_key(dataset_1, dataset_2, val))
 
@@ -317,7 +317,7 @@ mutate_join_keys.TealData <- function(x, dataset_1, dataset_2, val) { # nolint
 join_key <- function(dataset_1, dataset_2, keys) {
   stopifnot(is_character_single(dataset_1))
   stopifnot(is_character_single(dataset_2))
-  stopifnot(is_character_vector(keys, min_length = 0))
+  checkmate::assert_character(keys, any.missing = FALSE)
 
   if (!is_empty(keys)) {
     if (is.null(names(keys))) {

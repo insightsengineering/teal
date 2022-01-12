@@ -914,9 +914,9 @@ print.default_filter <- function(x, ...) {
 #'
 #' @return (`expression`)
 get_filter_expr <- function(datasets, datanames = datasets$datanames()) {
+  checkmate::assert_character(datanames, min.len = 1, any.missing = FALSE)
   stopifnot(
     is(datasets, "FilteredData"),
-    is_character_vector(datanames),
     all(datanames %in% datasets$datanames())
   )
 

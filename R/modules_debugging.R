@@ -41,7 +41,7 @@
 #' }
 filter_calls_module <- function(label = "Filter Calls Module", active_datanames = "all") { # nolint
   stopifnot(is_character_single(label))
-  stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
+  checkmate::check_character(active_datanames, min.len = 1, any.missing = FALSE)
 
   module(
     label = label,
@@ -163,7 +163,7 @@ debug_browser_module <- function(label = "Browser Debug Module") { # nolint
 #' @inheritParams filter_calls_module
 reset_filters_module <- function(label = "Reset Filters Module", active_datanames = "all") { # nolint
   stopifnot(is_character_single(label))
-  stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
+  checkmate::assert_character(active_datanames, min.len = 1, any.missing = FALSE)
 
   module(
     label = label,

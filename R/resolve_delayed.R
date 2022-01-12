@@ -197,7 +197,7 @@ resolve_delayed_expr <- function(x, ds, is_value_choices) {
       ))
     }
   } else {
-    if (!is_character_vector(res, min_length = 0L) || length(res) > ncol(ds) || anyDuplicated(res)) {
+    if (!checkmate::test_character(res, any.missing = FALSE) || length(res) > ncol(ds) || anyDuplicated(res)) {
       stop(paste(
         "The following function must return a character vector with unique",
         "names from the available columns of the dataset:\n\n",
@@ -271,7 +271,7 @@ print.delayed_data_extract_spec <- function(x, indent = 0L, ...) {
 
 indent_msg <- function(n, msg) {
   stopifnot(is_integer_single(n) || n == 0)
-  stopifnot(is_character_vector(msg))
+  checkmate::assert_character(msg, min.len = 1, any.missing = FALSE)
   indent <- paste(rep("  ", n), collapse = "")
   return(paste0(indent, msg))
 }

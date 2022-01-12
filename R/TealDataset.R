@@ -52,10 +52,13 @@ TealDataset <- R6::R6Class( # nolint
                           vars = list()) {
       stopifnot(is_character_single(dataname))
       stopifnot(is.data.frame(x))
-      stopifnot(is_character_vector(keys, min_length = 0))
-      stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
+      checkmate::assert_character(keys, any.missing = FALSE)
+      checkmate::assert(
+        checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+        checkmate::check_class(code, "CodeClass")
+      )
       # label might be NULL also because of taking label attribute from data.frame - missing attr is NULL
-      stopifnot(is.null(label) || is_character_vector(label, min_length = 0, max_length = 1))
+      checkmate::assert_character(label, max.len = 1, null.ok = TRUE, any.missing = FALSE)
       stopifnot(is.list(vars))
 
 
@@ -292,7 +295,7 @@ TealDataset <- R6::R6Class( # nolint
       if (is.null(label)) {
         label <- character(0)
       }
-      stopifnot(is_character_vector(label, min_length = 0, max_length = 1))
+      checkmate::assert_character(label, max.len = 1, any.missing = FALSE)
       private$dataset_label <- label
 
       logger::log_trace("TealDataset$set_dataset_label dataset_label set for dataset: { self$get_dataname() }.")
@@ -302,7 +305,7 @@ TealDataset <- R6::R6Class( # nolint
     #' Set new keys
     #' @return (`self`) invisibly for chaining.
     set_keys = function(keys) {
-      stopifnot(is_character_vector(keys, min_length = 0))
+      checkmate::assert_character(keys, any.missing = FALSE)
       private$.keys <- keys
       logger::log_trace("TealDataset$set_keys keys set for dataset: { self$get_dataname() }.")
       return(invisible(self))
@@ -355,7 +358,7 @@ TealDataset <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining
     set_code = function(code) {
-      stopifnot(is_character_vector(code, 0, 1))
+      checkmate::assert_character(code, max.len = 1, any.missing = FALSE)
 
       if (length(code) > 0 && code != "") {
         private$code$set_code(
@@ -919,7 +922,10 @@ dataset.data.frame <- function(dataname,
                                vars = list()) {
   stopifnot(is_character_single(dataname))
   stopifnot(is.data.frame(x))
-  stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
+  checkmate::assert(
+    checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+    checkmate::check_class(code, "CodeClass")
+  )
   stopifnot(identical(vars, list()) || is_fully_named_list(vars))
 
   TealDataset$new(

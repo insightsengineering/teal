@@ -121,7 +121,7 @@ get_labels <- function(data, fill = TRUE) {
 #' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"), fill = FALSE)
 get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
   stopifnot(is.data.frame(data))
-  stopifnot(is.null(columns) || is_character_vector(columns))
+  checkmate::assert_character(columns, min.len = 1, null.ok = TRUE, any.missing = FALSE)
   stopifnot(is_logical_single(fill))
 
   columns <- if_null(columns, colnames(data))

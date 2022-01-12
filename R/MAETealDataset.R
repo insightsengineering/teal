@@ -53,9 +53,12 @@ MAETealDataset <- R6::R6Class( # nolint
                           vars = list()) {
       stopifnot(is_character_single(dataname))
       stopifnot(is(x, "MultiAssayExperiment"))
-      stopifnot(is_character_vector(keys, min_length = 0))
-      stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
-      stopifnot(is.null(label) || is_character_vector(label, min_length = 0, max_length = 1))
+      checkmate::assert_character(keys, any.missing = FALSE)
+      checkmate::assert(
+        checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+        checkmate::check_class(code, "CodeClass")
+      )
+      checkmate::assert_character(label, max.len = 1, null.ok = TRUE, any.missing = FALSE)
       stopifnot(identical(vars, list()) || is_fully_named_list(vars))
 
       private$.raw_data <- x
@@ -241,7 +244,10 @@ dataset.MultiAssayExperiment <- function(dataname,
                                          code = character(0),
                                          vars = list()) {
   stopifnot(is_character_single(dataname))
-  stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
+  checkmate::assert(
+    checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+    chcekmate::check_class(code, "CodeClass")
+  )
   stopifnot(identical(vars, list()) || is_fully_named_list(vars))
 
   MAETealDataset$new(

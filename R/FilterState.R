@@ -61,9 +61,9 @@ init_filter_state <- function(x,
                               input_dataname = NULL,
                               extract_type = character(0)) {
   stopifnot(is_character_single(varname) || is.name(varname))
-  stopifnot(is_character_vector(varlabel, min_length = 0, max_length = 1))
+  checkmate::assert_character(varlabel, max.len = 1, any.missing = FALSE)
   stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
-  stopifnot(is_character_vector(extract_type, min_length = 0, max_length = 1))
+  checkmate::assert_character(extract_type, max.len = 1, any.missing = FALSE)
   stopifnot(
     length(extract_type) == 0 ||
       length(extract_type) == 1 && !is.null(input_dataname)
@@ -285,9 +285,9 @@ FilterState <- R6::R6Class( # nolint
                           input_dataname = NULL,
                           extract_type = character(0)) {
       stopifnot(is.name(varname) || is.call(varname) || is_character_single(varname))
-      stopifnot(is_character_vector(varlabel, min_length = 0, max_length = 1))
+      checkmate::assert_character(varlabel, max.len = 1, any.missing = FALSE)
       stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
-      stopifnot(is_character_vector(extract_type, min_length = 0, max_length = 1))
+      checkmate::assert_character(extract_type, max.len = 1, any.missing = FALSE)
       stopifnot(
         length(extract_type) == 0 ||
           length(extract_type) == 1 && !is.null(input_dataname)

@@ -187,22 +187,27 @@ filter_spec <- function(vars,
                         label = NULL,
                         sep = if_null(attr(choices, "sep"), " - "),
                         drop_keys = FALSE) {
-  stopifnot(is_character_vector(vars) || is(vars, "delayed_data") || is(vars, "choices_selected"))
-  stopifnot(
-    is.null(choices) ||
-      is_character_vector(choices) ||
-      is_numeric_vector(choices) ||
-      is_logical_vector(choices) ||
-      is(choices, "delayed_data")
+  checkmate::assert(
+    checkmate::check_character(vars, min.len = 1, any.missing = FALSE),
+    checkmate::check_class(vars, "delayed_data"),
+    checkmate::check_class(vars, "choices_selected")
   )
-  stopifnot(
-    is.null(selected) ||
-      is_character_vector(selected) ||
-      is_numeric_vector(selected) ||
-      is_logical_vector(selected) ||
-      is(selected, "delayed_data") ||
-      is(selected, "all_choices")
+  checkmate::assert(
+    checkmate::check_null(choices),
+    checkmate::check_character(choices, min.len = 1, any.missing = FALSE),
+    checkmate::check_numeric(choices, min.len = 1, any.missing = FALSE),
+    checkmate::check_logical(choices, min.len = 1, any.missing = FALSE),
+    checkmate::check_class(choices, "delayed_data")
   )
+  checkmate::assert(
+    checkmate::check_null(selected),
+    checkmate::check_character(selected, min.len = 1, any.missing = FALSE),
+    checkmate::check_numeric(selected, min.len = 1, any.missing = FALSE),
+    checkmate::check_logical(selected, min.len = 1, any.missing = FALSE),
+    checkmate::check_class(selected, "delayed_data"),
+    checkmate::check_class(selected, "all_choices")
+  )
+
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(label) || is_character_single(label))
   stopifnot(is_character_single(sep))
@@ -360,33 +365,36 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
                                               drop_keys = FALSE,
                                               dataname = NULL,
                                               initialized = FALSE) {
-  stopifnot(
-    is_character_vector(vars_choices) ||
-      is_numeric_vector(vars_choices) ||
-      is_logical_vector(vars_choices) ||
-      is(vars_choices, "delayed_data")
+  checkmate::assert(
+    checkmate::check_character(vars_choices, min.len = 1, any.missing = FALSE),
+    checkmate::check_numeric(vars_choices, min.len = 1, any.missing = FALSE),
+    checkmate::check_logical(vars_choices, min.len = 1, any.missing = FALSE),
+    checkmate::check_class(vars_choices, "delayed_data")
   )
-  stopifnot(
-    is.null(vars_selected) ||
-      is_character_vector(vars_selected) ||
-      is_numeric_vector(vars_selected) ||
-      is_logical_vector(vars_selected) ||
-      is(vars_selected, "delayed_data")
+
+  checkmate::assert(
+    checkmate::check_null(vars_selected),
+    checkmate::check_character(vars_selected, min.len = 1, any.missing = FALSE),
+    checkmate::check_numeric(vars_selected, min.len = 1, any.missing = FALSE),
+    checkmate::check_logical(vars_selected, min.len = 1, any.missing = FALSE),
+    checkmate::check_class(vars_selected, "delayed_data")
   )
-  stopifnot(
-    is.null(choices) ||
-      is_character_vector(choices) ||
-      is_numeric_vector(choices) ||
-      is_logical_vector(choices) ||
-      is(choices, "delayed_data")
+
+  checkmate::assert(
+    checkmate::check_null(choices),
+    checkmate::check_character(choices, min.len = 1, any.missing = FALSE),
+    checkmate::check_numeric(choices, min.len = 1, any.missing = FALSE),
+    checkmate::check_logical(choices, min.len = 1, any.missing = FALSE),
+    checkmate::check_class(choices, "delayed_data")
   )
-  stopifnot(
-    is.null(selected) ||
-      is_character_vector(selected) ||
-      is_numeric_vector(selected) ||
-      is_logical_vector(selected) ||
-      is(selected, "delayed_data") ||
-      is(selected, "all_choices")
+
+  checkmate::assert(
+    checkmate::check_null(selected),
+    checkmate::check_character(selected, min.len = 1, any.missing = FALSE),
+    checkmate::check_numeric(selected, min.len = 1, any.missing = FALSE),
+    checkmate::check_logical(selected, min.len = 1, any.missing = FALSE),
+    checkmate::check_class(selected, "delayed_data"),
+    checkmate::check_class(selected, "all_choices")
   )
 
   out <- structure(
@@ -431,17 +439,20 @@ filter_spec_internal.default <- function(vars_choices,
                                          drop_keys = FALSE,
                                          dataname = NULL,
                                          initialized = FALSE) {
-  stopifnot(
-    is_character_vector(vars_choices) ||
-      is_numeric_vector(vars_choices) ||
-      is_logical_vector(vars_choices)
+  checkmate::assert(
+    checkmate::check_character(vars_choices, min.len = 1, any.missing = FALSE),
+    checkmate::check_numeric(vars_choices, min.len = 1, any.missing = FALSE),
+    checkmate::check_logical(vars_choices, min.len = 1, any.missing = FALSE)
   )
   stopifnot(all(!duplicated(vars_choices)))
 
   if (!is.null(vars_selected)) {
     stopifnot(vars_multiple || length(vars_selected) == 1)
-    stopifnot(is_character_vector(vars_selected) ||
-      is_numeric_vector(vars_selected) || is_logical_vector(vars_selected))
+    checkmate::assert(
+      checkmate::check_character(vars_selected, min.len = 1, any.missing = FALSE),
+      checkmate::check_numeric(vars_selected, min.len = 1, any.missing = FALSE),
+      checkmate::check_logical(vars_selected, min.len = 1, any.missing = FALSE)
+    )
     stopifnot(all(!duplicated(vars_selected)))
     stopifnot(all(vars_selected %in% vars_choices))
   }
@@ -454,7 +465,11 @@ filter_spec_internal.default <- function(vars_choices,
 
   if (!is.null(selected) && !is(selected, "all_choices")) {
     stopifnot(multiple || length(selected) == 1)
-    stopifnot(is_character_vector(selected) || is_numeric_vector(selected) || is_logical_vector(selected))
+    checkmate::assert(
+      checkmate::check_character(selected, min.len = 1, any.missing = FALSE),
+      checkmate::check_numeric(selected, min.len = 1, any.missing = FALSE),
+      checkmate::check_logical(selected, min.len = 1, any.missing = FALSE)
+    )
     stopifnot(all(!duplicated(selected)))
     stopifnot(all(selected %in% choices))
   }

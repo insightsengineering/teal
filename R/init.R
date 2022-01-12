@@ -170,9 +170,9 @@ init <- function(data,
     is(modules, "list") || is(modules, "teal_modules"),
     is.null(title) || is_character_single(title),
     is_fully_named_list(filter),
-    all(names(filter) %in% get_dataname(data)),
-    is_character_vector(id, min_length = 0, max_length = 1)
+    all(names(filter) %in% get_dataname(data))
   )
+  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   log_system_info()
 
