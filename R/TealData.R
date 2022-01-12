@@ -80,7 +80,7 @@ TealData <- R6::R6Class( # nolint
       }
       stopifnot(is(join_keys, "JoinKeys"))
 
-      datanames <- ulapply(dot_args, get_dataname)
+      datanames <- unlist(lapply(dot_args, get_dataname))
       private$check_names(datanames)
 
       private$datasets <- dot_args
@@ -148,7 +148,7 @@ TealData <- R6::R6Class( # nolint
     #' Derive the names of all datasets
     #' @return (`character` vector) with names
     get_datanames = function() {
-      datasets_names <- ulapply(private$datasets, get_dataname)
+      datasets_names <- unlist(lapply(private$datasets, get_dataname))
 
       return(datasets_names)
     },
@@ -196,7 +196,7 @@ TealData <- R6::R6Class( # nolint
         }
       }
 
-      sets <- ulapply(private$datasets, get_sets)
+      sets <- unlist(lapply(private$datasets, get_sets))
       names(sets) <- vapply(sets, get_dataname, character(1))
 
       if (is_character_single(dataname)) {
@@ -347,7 +347,7 @@ TealData <- R6::R6Class( # nolint
         dataset_colnames <- dataset$get_colnames()
 
         # expected columns in this dataset from JoinKeys specification
-        join_key_cols <- unique(ulapply(self$get_join_keys()$get(dataname), names))
+        join_key_cols <- unique(unlist(lapply(self$get_join_keys()$get(dataname), names)))
         if (!is.null(join_key_cols) && !all(join_key_cols %in% dataset_colnames)) {
           stop(
             paste(

@@ -66,7 +66,7 @@ TealDataAbstract <- R6::R6Class( # nolint
       logger::log_trace("TealDataAbstract$execute_mutate evaluating mutate code...")
       # this will be pulled already! - not needed?
       if (is_empty(private$mutate_code$code)) {
-        res <- ulapply(
+        res <- unlist(lapply(
           private$datasets,
           function(x) {
             if (is_pulled(x)) {
@@ -75,7 +75,7 @@ TealDataAbstract <- R6::R6Class( # nolint
               NULL
             }
           }
-        )
+        ))
         # exit early if mutate isn't required
         logger::log_trace("TealDataAbstract$execute_mutate no code to evaluate.")
         return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
@@ -199,7 +199,7 @@ TealDataAbstract <- R6::R6Class( # nolint
           "- Please use `load_datasets()` to retrieve complete results."
         )
       }
-      ulapply(self$get_items(), get_dataset)
+      unlist(lapply(self$get_items(), get_dataset))
     },
     #' @description
     #' Get all datasets and all dataset connectors

@@ -921,12 +921,12 @@ get_filter_expr <- function(datasets, datanames = datasets$datanames()) {
   )
 
   paste(
-    utils.nest::ulapply(
+    unlist(lapply(
       datanames,
       function(dataname) {
         datasets$get_call(dataname)
       }
-    ),
+    )),
     collapse = "\n"
   )
 }

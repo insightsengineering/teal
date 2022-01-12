@@ -161,8 +161,8 @@ CodeClass <- R6::R6Class( # nolint
                                id = if_null(attr(code, "id"), digest::digest(c(private$.code, code)))) {
       # Line shouldn't be added when it contains the same code and the same dataname
       # as a line already present in an object of CodeClass
-      if (!id %in% ulapply(private$.code, "attr", "id") ||
-        all_true(dataname, function(x) !x %in% ulapply(private$.code, "attr", "dataname"))) {
+      if (!id %in% unlist(lapply(private$.code, "attr", "id")) ||
+        all_true(dataname, function(x) !x %in% unlist(lapply(private$.code, "attr", "dataname")))) {
         attr(code, "dataname") <- dataname
         attr(code, "deps") <- deps
         attr(code, "id") <- id
@@ -206,10 +206,10 @@ CodeClass <- R6::R6Class( # nolint
       if (isFALSE(deparse)) {
         return(Filter(
           Negate(is.null),
-          unname(ulapply(
+          unname(unlist(lapply(
             private$.code[idx],
             function(x) sapply(x, function(i) text_to_call(i), simplify = FALSE)
-          ))
+          )))
         ))
       } else {
         return(paste0(unlist(private$.code[idx]), collapse = "\n"))
@@ -278,7 +278,7 @@ text_to_call <- function(x) {
 #' @return (`character`) string containing the formatted code.
 pretty_code_string <- function(code_vector) {
   # in order to remove bad formatting: text -> code -> text
-  ulapply(
+  unlist(lapply(
     code_vector,
     function(code_single) {
       if (is_empty(parse(text = code_single, keep.source = FALSE))) {
@@ -293,5 +293,5 @@ pretty_code_string <- function(code_vector) {
         )
       }
     }
-  )
+  ))
 }
