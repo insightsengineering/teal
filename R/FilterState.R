@@ -668,9 +668,9 @@ FilterState <- R6::R6Class( # nolint
             sprintf(
               "%s$server keep_na of variable %s set to: %s, dataname: %s",
               class(self)[1],
-              self$get_varname(),
-              input$keep_na,
-              private$input_dataname
+              deparse1(self$get_varname()),
+              deparse1(input$keep_na),
+              deparse1(private$input_dataname)
             )
           )
         }
