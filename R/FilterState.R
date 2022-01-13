@@ -1409,7 +1409,7 @@ RangeFilterState <- R6::R6Class( # nolint
                 sprintf(
                   "RangeFilterState$server@4 keep_inf of variable %s set to: %s, dataname: %s",
                   deparse1(self$get_varname()),
-                  input$keep_inf,
+                  deparse1(input$keep_inf),
                   deparse1(private$input_dataname)
                 )
               )
