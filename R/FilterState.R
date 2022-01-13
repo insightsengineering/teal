@@ -316,8 +316,8 @@ FilterState <- R6::R6Class( # nolint
         sprintf(
           "Instantiated %s with variable %s, dataname: %s",
           class(self)[1],
-          deparse1(varname, collapse = "\n"),
-          deparse1(private$input_dataname, collapse = "\n")
+          deparse1(varname),
+          deparse1(private$input_dataname)
         )
       )
       invisible(self)
