@@ -163,10 +163,43 @@
     <loc>https://insightsengineering.github.io/teal/reference/bookmarkableShinyApp.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/call_check_parse_varname.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/call_condition_choice.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/call_condition_logical.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/call_condition_range.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/call_condition_range_date.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/call_condition_range_posixct.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/call_extract_array.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/call_extract_list.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/call_extract_matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/call_with_colon.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/callable_code.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/callable_function.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/calls_combine_by.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/cdisc_data.html</loc>
@@ -196,6 +229,9 @@
     <loc>https://insightsengineering.github.io/teal/reference/cdse_dataset_connector.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/check_ellipsis.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/check_in_range.html</loc>
   </url>
   <url>
@@ -203,6 +239,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/check_pkg_quietly.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/check_simple_name.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/choices_labeled.html</loc>
@@ -368,6 +407,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_labels.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/get_package_file.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_raw_data.html</loc>
