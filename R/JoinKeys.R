@@ -64,10 +64,8 @@ JoinKeys <- R6::R6Class( # nolint
     #' @param x  `list` of `JoinKeys` objects or single `JoinKeys` object
     #' @return (`self`) invisibly for chaining
     merge = function(x) {
-      stopifnot(is_class_list("JoinKeys")(x) || is(x, "JoinKeys"))
-      if (!is_class_list("JoinKeys")(x)) {
-        x <- list(x)
-      }
+      if (inherits(x, "JoinKeys")) x <- list(x)
+      checkmate::assert_list(x, types = "JoinKeys", min.len = 1)
       for (jk in x) {
         for (dataset_1 in names(jk$get())) {
           for (dataset_2 in names(jk$get()[[dataset_1]])) {
@@ -126,7 +124,7 @@ JoinKeys <- R6::R6Class( # nolint
       if (length(private$.keys) > 0) {
         stop("Keys already set, please use JoinKeys$mutate() to change them")
       }
-      if (!is_class_list("JoinKeySet")(x)) {
+      if (inherits(x, "JoinKeySet")) {
         x <- list(x)
       }
 
@@ -137,7 +135,7 @@ JoinKeys <- R6::R6Class( # nolint
         }
       }
 
-      stopifnot(is_class_list("JoinKeySet")(x))
+      checkmate::assert_list(x, types = "JoinKeySet", min.len = 1)
       lapply(x, private$join_pair)
 
       logger::log_trace("JoinKeys$set keys are set.")

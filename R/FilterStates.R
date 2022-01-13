@@ -321,7 +321,7 @@ FilterStates <- R6::R6Class( # nolint
     #' @param x (`list` of `ReactiveQueue`)\cr
     #'  must be a list even if single `ReactiveQueue` is set.
     queue_initialize = function(x) {
-      stopifnot(is_class_list("ReactiveQueue")(x))
+      checkmate::assert_list(x, types = "ReactiveQueue", min.len = 1)
       private$queue <- x
       invisible(NULL)
     },

@@ -7,7 +7,7 @@
 #' @param name (`character`) argument passed by `deep_clone` function.
 #' @param value (any `R` object) argument passed by `deep_clone` function.
 deep_clone_r6 <- function(name, value) {
-  if (is_class_list("R6")(value)) {
+  if (checkmate::test_list(value, types = "R6")) {
     lapply(value, function(x) x$clone(deep = TRUE))
   } else if (R6::is.R6(value)) {
     value$clone(deep = TRUE)

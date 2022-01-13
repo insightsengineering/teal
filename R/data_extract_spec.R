@@ -120,10 +120,10 @@ data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = 
     is.null(select) ||
       (is(select, "select_spec") && length(select) >= 1)
   )
-  stopifnot(
-    is.null(filter) ||
-      is(filter, "filter_spec") ||
-      is_class_list("filter_spec")(filter)
+  checkmate::assert(
+    checkmate::check_null(filter),
+    checkmate::check_class(filter, "filter_spec"),
+    checkmate::check_list(filter, "filter_spec")
   )
   checkmate::assert_flag(reshape)
 

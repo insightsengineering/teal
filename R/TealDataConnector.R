@@ -95,7 +95,7 @@ TealDataConnector <- R6::R6Class( # nolint
     #' @description
     #' Create a new `TealDataConnector` object
     initialize = function(connection, connectors) {
-      stopifnot(is_class_list("TealDatasetConnector")(connectors))
+      checkmate::assert_list(connectors, types = "TealDatasetConnector", min.len = 1)
 
       connectors_names <- vapply(connectors, get_dataname, character(1))
       connectors <- setNames(connectors, connectors_names)
@@ -556,7 +556,6 @@ TealDataConnector <- R6::R6Class( # nolint
 #' @export
 relational_data_connector <- function(connection, connectors) {
   stopifnot(is(connection, "TealDataConnection"))
-  stopifnot(utils.nest::is_class_list("TealDatasetConnector")(connectors))
-
+  checkmate::assert_list(connectors, types = "TealDatasetConnector", min.len = 1)
   TealDataConnector$new(connection, connectors)
 }

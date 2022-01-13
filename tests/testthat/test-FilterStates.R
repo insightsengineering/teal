@@ -189,7 +189,7 @@ testthat::test_that("queue_initialize throws an error when passed an empty list"
   filter_states <- FilterStates$new(input_dataname = "test", "test", "test")
   testthat::expect_error(
     filter_states$queue_initialize(list()),
-    msg = "is_class_list(\"ReactiveQueue\")(x) is not TRUE"
+    msg = "Assertion on 'x'"
   )
 })
 
@@ -235,7 +235,7 @@ testthat::test_that("queue_get returns the list of FilterState objects", {
   filter_states$queue_initialize(list(ReactiveQueue$new()))
   filter_state <- FilterState$new("test", varname = "test")
   filter_states$queue_push(x = filter_state, queue_index = 1, element_id = "test")
-  testthat::expect_true(is_class_list("FilterState")(filter_states$queue_get(queue_index = 1)))
+  checkmate::expect_list(filter_states$queue_get(queue_index = 1), types = "FilterState")
 })
 
 testthat::test_that("queue_get returns the list with elements passed to queue_push", {

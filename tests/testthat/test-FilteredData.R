@@ -96,7 +96,7 @@ testthat::test_that("get_data does not throw when passed a dataset name", {
 testthat::test_that("get_filtered_dataset returns a list of FilteredDataset", {
   filtered_data <- FilteredData$new()
   filtered_data$set_dataset(TealDataset$new("iris", head(iris)))
-  testthat::expect_true(is_class_list("FilteredDataset")(filtered_data$get_filtered_dataset()))
+  checkmate::expect_list(filtered_data$get_filtered_dataset(), "FilteredDataset")
 })
 
 testthat::test_that("get_filtered_dataset returns a list with elements named after set datasets", {
@@ -109,7 +109,7 @@ testthat::test_that("get_filtered_dataset returns a list with elements named aft
 testthat::test_that("get_call returns a list of language objects", {
   filtered_data <- FilteredData$new()
   filtered_data$set_dataset(TealDataset$new("iris", head(iris)))
-  testthat::expect_true(is_class_list("language")(filtered_data$get_call("iris")))
+  checkmate::expect_list(filtered_data$get_call("iris"), types = "<-")
 })
 
 testthat::test_that("get call returns a call assigning the filtered object to <name>_FILTERED", {
