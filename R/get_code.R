@@ -216,11 +216,11 @@ enclosed_with <- function(lines) {
 #' @return  (`list`) list of lines and their numbers from certain chunks of code at the specific file.
 enclosed_with_dataname <- function(lines, dataname = NULL) {
   checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
-  dataname <- if_blank(dataname, "")
+  if (!checkmate::test_character(dataname, min.len = 1, any.missing = FALSE)) {
+    dataname <- ""
+  }
   dataname <- trimws(dataname)
-
   any_chunk <- any(grepl("#\\s*<?\\s*code", lines))
-
 
   if (any_chunk) {
     any_start <- any(grepl(sprintf("#\\s*code[\\sa-zA-Z_]*%s[\\sa-zA-Z_]*>", dataname), lines, perl = TRUE))
