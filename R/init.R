@@ -164,15 +164,13 @@ init <- function(data,
   if (!is(data, "TealData")) {
     data <- to_relational_data(data = data)
   }
-
-  stopifnot(
-    is(data, "TealData"),
-    is(modules, "list") || is(modules, "teal_modules"),
-    is.null(title) || is_character_single(title),
-    is_fully_named_list(filter),
-    all(names(filter) %in% get_dataname(data)),
-    is_character_vector(id, min_length = 0, max_length = 1)
-  )
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_class(data, "TealData")
+  checkmate::check_list(modules)
+  checkmate::check_class(modules, "teal_modules")
+  checkmate::assert_list(filter, min.len = 0, names = "unique")
+  checkmate::assert_subset(names(filter), choices = get_dataname(data))
+  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   log_system_info()
 
@@ -244,7 +242,11 @@ bookmarkableShinyApp <- function(ui, server, ...) { # nolint
       # evaluating ui with default arguments
       ui()
     } else {
-      stopifnot(is_html_like(ui))
+      checkmate::assert(
+        checkmate::check_class(ui, "shiny.tag"),
+        checkmate::check_class(ui, "shiny.tag.list"),
+        checkmate::check_class(ui, "html")
+      )
       ui
     }
   }

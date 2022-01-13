@@ -10,7 +10,7 @@ filter_spec(
   selected = if (is(choices, "delayed_data")) NULL else choices[1],
   multiple = length(selected) > 1 || is(selected, "all_choices"),
   label = NULL,
-  sep = if_null(attr(choices, "sep"), " - "),
+  sep = attr(choices, "sep"),
   drop_keys = FALSE
 )
 }

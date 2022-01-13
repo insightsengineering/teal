@@ -51,12 +51,15 @@ MAETealDataset <- R6::R6Class( # nolint
                           code = character(0),
                           label = character(0),
                           vars = list()) {
-      stopifnot(is_character_single(dataname))
+      checkmate::assert_string(dataname)
       stopifnot(is(x, "MultiAssayExperiment"))
-      stopifnot(is_character_vector(keys, min_length = 0))
-      stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
-      stopifnot(is.null(label) || is_character_vector(label, min_length = 0, max_length = 1))
-      stopifnot(identical(vars, list()) || is_fully_named_list(vars))
+      checkmate::assert_character(keys, any.missing = FALSE)
+      checkmate::assert(
+        checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+        checkmate::check_class(code, "CodeClass")
+      )
+      checkmate::assert_character(label, max.len = 1, null.ok = TRUE, any.missing = FALSE)
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
 
       private$.raw_data <- x
       private$.ncol <- ncol(SummarizedExperiment::colData(x))
@@ -66,6 +69,7 @@ MAETealDataset <- R6::R6Class( # nolint
       private$.rownames <- rownames(SummarizedExperiment::colData(x))
       private$.col_labels <- vapply(
         X = SummarizedExperiment::colData(x),
+        FUN.VALUE = character(1),
         FUN = function(x) {
           label <- attr(x, "label")
           if (length(label) != 1) {
@@ -73,8 +77,7 @@ MAETealDataset <- R6::R6Class( # nolint
           } else {
             label
           }
-        },
-        FUN.VALUE = character(1)
+        }
       )
       private$.row_labels <- c()
 
@@ -104,7 +107,7 @@ MAETealDataset <- R6::R6Class( # nolint
     #' `get_code()` code is identical to the raw data, else `FALSE`.
     check = function() {
       logger::log_trace("TealDataset$check executing the code to reproduce dataset: { self$get_dataname() }...")
-      if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
+      if (!checkmate::test_character(self$get_code(), len = 1, pattern = "\\w+")) {
         stop(
           sprintf(
             "Cannot check preprocessing code of '%s' - code is empty.",
@@ -135,11 +138,10 @@ MAETealDataset <- R6::R6Class( # nolint
     #'
     #' @return `TRUE` if dataset has been already pulled, else `FALSE`
     check_keys = function(keys = private$.keys) {
-      if (!is_empty(keys)) {
-        stop_if_not(list(
-          all(keys %in% self$get_colnames()),
-          paste("Primary keys specifed for", self$get_dataname(), "do not exist in the data.")
-        ))
+      if (length(keys) > 0) {
+        if (!all(keys %in% self$get_colnames())) {
+          stop("Primary keys specifed for ", self$get_dataname(), " do not exist in the data.")
+        }
 
         duplicates <- get_key_duplicates(as.data.frame(SummarizedExperiment::colData(self$get_raw_data())), keys)
         if (nrow(duplicates) > 0) {
@@ -165,7 +167,7 @@ MAETealDataset <- R6::R6Class( # nolint
   private = list(
     .raw_data = MultiAssayExperiment::MultiAssayExperiment(),
     get_class_colnames = function(class_type = "character") {
-      stopifnot(is_character_single(class_type))
+      checkmate::assert_string(class_type)
 
       return_cols <- private$.colnames[which(vapply(
         lapply(SummarizedExperiment::colData(private$.raw_data), class),
@@ -184,7 +186,7 @@ MAETealDataset <- R6::R6Class( # nolint
     # @return (`environment`) which stores modified `x`
     execute_code = function(code, vars = list()) {
       stopifnot(is(code, "CodeClass"))
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
 
       execution_environment <- new.env(parent = parent.env(globalenv()))
 
@@ -240,9 +242,12 @@ dataset.MultiAssayExperiment <- function(dataname,
                                          label = data_label(x),
                                          code = character(0),
                                          vars = list()) {
-  stopifnot(is_character_single(dataname))
-  stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
-  stopifnot(identical(vars, list()) || is_fully_named_list(vars))
+  checkmate::assert_string(dataname)
+  checkmate::assert(
+    checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+    checkmate::check_class(code, "CodeClass")
+  )
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
 
   MAETealDataset$new(
     dataname = dataname,

@@ -17,7 +17,7 @@ filter_spec_internal(
   label = NULL,
   fixed = FALSE,
   multiple = TRUE,
-  sep = if_null(attr(vars_choices, "sep"), " - "),
+  sep = attr(vars_choices, "sep"),
   drop_keys = FALSE,
   dataname = NULL,
   initialized = FALSE
@@ -34,7 +34,7 @@ filter_spec_internal(
   label = NULL,
   fixed = FALSE,
   multiple = TRUE,
-  sep = if_null(attr(vars_choices, "sep"), " - "),
+  sep = attr(vars_choices, "sep"),
   drop_keys = FALSE,
   dataname = NULL,
   initialized = FALSE
@@ -51,7 +51,7 @@ filter_spec_internal(
   label = NULL,
   fixed = FALSE,
   multiple = TRUE,
-  sep = if_null(attr(vars_choices, "sep"), " - "),
+  sep = attr(vars_choices, "sep"),
   drop_keys = FALSE,
   dataname = NULL,
   initialized = FALSE

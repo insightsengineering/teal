@@ -23,12 +23,9 @@ CallableCode <- R6::R6Class( # nolint
     #'
     #' @return new \code{CallableCode} object
     initialize = function(code, env = new.env(parent = parent.env(globalenv()))) {
-      stop_if_not(
-        list(
-          is_character_single(code),
-          "A string of length one containing the code needed to produce the object must be provided."
-        )
-      )
+      if(!checkmate::test_string(code)) {
+        stop("A string of length one containing the code needed to produce the object must be provided.")
+      }
 
       # reposition all library calls in the code so that they are
       # visible in the new env
@@ -62,13 +59,10 @@ CallableCode <- R6::R6Class( # nolint
     #'
     #' @return \code{list} of \code{calls} or \code{character} depending on \code{deparse} argument
     get_call = function(deparse = TRUE, args = NULL) {
-      stopifnot(is_logical_single(deparse))
-      stop_if_not(
-        list(
-          is.null(args),
-          "'args' are not used to retrieve the call."
-        )
-      )
+      checkmate::assert_flag(deparse)
+      if (!is.null(args)) {
+        stop("'args' are not used to retrieve the call.")
+      }
 
       res <- if (deparse) {
         paste0(vapply(private$call, deparse1, character(1)), collapse = "\n")

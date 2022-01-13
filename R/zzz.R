@@ -15,7 +15,7 @@
   # expose default CDISC dataset names
   # copy from excel file
   default_cdisc_keys <- yaml::yaml.load_file(
-    utils.nest::get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")
+    get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")
   ) # nolint
   assign("default_cdisc_keys", default_cdisc_keys, envir = parent.env(environment()))
 

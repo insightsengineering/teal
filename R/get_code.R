@@ -82,7 +82,7 @@ get_code.TealDataset <- function(x, deparse = TRUE, ...) {
 #' get_code(rd, "XYZ")
 get_code.TealDataAbstract <- function(x, dataname = character(0), deparse = TRUE, ...) { # nolint
   check_ellipsis(...)
-  if (!is_empty(dataname)) {
+  if (length(dataname) > 0) {
     if (any(!(dataname %in% x$get_datanames()))) {
       stop("The dataname provided does not exist")
     }
@@ -108,9 +108,9 @@ get_code.default <- function(x,
   }
 
   check_ellipsis(...)
-  stopifnot(is_character_vector(x))
-  stopifnot(is_logical_single(exclude_comments))
-  stopifnot(is_logical_single(read_sources))
+  checkmate::assert_character(x, min.len = 1, any.missing = FALSE)
+  checkmate::assert_flag(exclude_comments)
+  checkmate::assert_flag(read_sources)
 
   if (!methods::hasArg(dataname)) {
     l_lines <- lapply(x, function(file_path) {
@@ -130,7 +130,7 @@ get_code.default <- function(x,
 
   if (deparse) {
     return(paste(
-      vapply(lines, deparse1, collapse = "\n", FUN.VALUE = character(1)),
+      vapply(lines, FUN = deparse1, collapse = "\n", FUN.VALUE = character(1)),
       collapse = "\n"
     ))
   } else {
@@ -151,18 +151,17 @@ get_code.default <- function(x,
 #'
 #' @return lines (`character`) of preprocessing code
 get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", file_path)) {
-  stopifnot(is_character_single(file_path))
+  checkmate::assert_string(file_path)
   if (!if_url) {
-    stop_if_not(list(
-      file.exists(file_path),
-      paste0(
+    if (!file.exists(file_path)) {
+      stop(
         "Reading preprocessing code from ", file_path, " file failed. ",
         "Please double check if you saved your script."
       )
-    ))
+    }
   }
-  stopifnot(is_logical_single(read_sources))
-  stopifnot(is_logical_single(if_url))
+  checkmate::assert_flag(read_sources)
+  checkmate::assert_flag(if_url)
 
   lines <- readLines(file_path)
   if (read_sources) {
@@ -179,7 +178,7 @@ get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", 
 #' @return (`character`) subset of lines which start and end with preprocessing
 #'   start and stop tags.
 enclosed_with <- function(lines) {
-  stopifnot(is_character_vector(lines))
+  checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
 
   # set beginning of preprocessing
   idx_start <- grep("#\\s*code>", lines)
@@ -215,12 +214,12 @@ enclosed_with <- function(lines) {
 #' @param dataname (`character`) metadata for returned lines
 #' @return  (`list`) list of lines and their numbers from certain chunks of code at the specific file.
 enclosed_with_dataname <- function(lines, dataname = NULL) {
-  stopifnot(is_character_vector(lines))
-  dataname <- if_blank(dataname, "")
+  checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
+  if (!checkmate::test_character(dataname, min.len = 1, any.missing = FALSE)) {
+    dataname <- ""
+  }
   dataname <- trimws(dataname)
-
   any_chunk <- any(grepl("#\\s*<?\\s*code", lines))
-
 
   if (any_chunk) {
     any_start <- any(grepl(sprintf("#\\s*code[\\sa-zA-Z_]*%s[\\sa-zA-Z_]*>", dataname), lines, perl = TRUE))
@@ -275,8 +274,8 @@ enclosed_with_dataname <- function(lines, dataname = NULL) {
 #' @inheritParams get_code
 #' @inheritParams get_code_single
 code_exclude <- function(lines, exclude_comments, file_path) {
-  stopifnot(is_character_vector(lines))
-  stopifnot(is_logical_single(exclude_comments))
+  checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
+  checkmate::assert_flag(exclude_comments)
 
   nocode_single <- grep("^.+#[[:space:]]*nocode", lines)
   nocode_start <- grep("[[:space:]]*#[[:space:]]*nocode[[:space:]]*>+", lines)
@@ -310,7 +309,7 @@ code_exclude <- function(lines, exclude_comments, file_path) {
 #' Finds lines in preprocessing code where `source()` call is located
 #' @inheritParams enclosed_with
 find_source_code <- function(lines) {
-  stopifnot(is_character_vector(lines))
+  checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
   idx <- grep("^[^#]*source\\([\'\"]([A-Za-z0-9_/.]).*\\.R[\'\"].*\\).*$", lines)
 
   if (length(idx) == 0) {
@@ -334,7 +333,7 @@ find_source_code <- function(lines) {
 #' @param dir of the file where source is called from.
 #' @return lines of code with source text included
 include_source_code <- function(lines, dir = NULL) {
-  stopifnot(is_character_vector(lines))
+  checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
   stopifnot(is.null(dir) || dir.exists(dir))
 
 

@@ -170,13 +170,17 @@ FilterStates <- R6::R6Class( # nolint
     #'   text label value.
     #'
     initialize = function(input_dataname, output_dataname, datalabel) {
-      stopifnot(
-        is.call(input_dataname) || is.name(input_dataname) || is_character_single(input_dataname)
+      checkmate::assert(
+        checkmate::check_class(input_dataname, "call"),
+        checkmate::check_class(input_dataname, "name"),
+        checkmate::check_string(input_dataname)
       )
-      stopifnot(
-        is.call(output_dataname) || is.name(output_dataname) || is_character_single(output_dataname)
+      checkmate::assert(
+        checkmate::check_class(output_dataname, "call"),
+        checkmate::check_class(output_dataname, "name"),
+        checkmate::check_string(output_dataname)
       )
-      stopifnot(is_character_vector(datalabel, min = 0, max = 1))
+      checkmate::assert_character(datalabel, max.len = 1, any.missing = FALSE)
 
       char_to_name <- function(x) {
         if (is.character(x)) {
@@ -221,7 +225,7 @@ FilterStates <- R6::R6Class( # nolint
             }
           )
           if (length(calls) > 0) {
-            utils.nest::calls_combine_by(
+            calls_combine_by(
               operator = "&",
               calls = calls
             )
@@ -235,7 +239,7 @@ FilterStates <- R6::R6Class( # nolint
 
       if (length(filter_items) > 0) {
         # below code translates to call by the names of filter_items
-        rhs <- utils.nest::call_with_colon(
+        rhs <- call_with_colon(
           self$get_fun(),
           private$input_dataname,
           unlist_args = filter_items
@@ -303,9 +307,9 @@ FilterStates <- R6::R6Class( # nolint
     #' @return `list` of `FilterState` objects
     queue_get = function(queue_index, element_id = character(0)) {
       private$validate_queue_exists(queue_index)
-      stopifnot(is_empty(element_id) || is_character_single(element_id))
+      checkmate::assert_character(element_id, max.len = 1, null.ok = TRUE, any.missing = FALSE)
 
-      if (is_empty(element_id)) {
+      if (length(element_id) == 0) {
         private$queue[[queue_index]]$get()
       } else {
         private$queue[[queue_index]]$get()[element_id]
@@ -317,7 +321,7 @@ FilterStates <- R6::R6Class( # nolint
     #' @param x (`list` of `ReactiveQueue`)\cr
     #'  must be a list even if single `ReactiveQueue` is set.
     queue_initialize = function(x) {
-      stopifnot(is_class_list("ReactiveQueue")(x))
+      checkmate::assert_list(x, types = "ReactiveQueue", min.len = 1)
       private$queue <- x
       invisible(NULL)
     },
@@ -335,7 +339,7 @@ FilterStates <- R6::R6Class( # nolint
     queue_push = function(x, queue_index, element_id) {
       logger::log_trace("{ class(self)[1] } pushing into queue, dataname: { deparse1(private$input_dataname) }")
       private$validate_queue_exists(queue_index)
-      stopifnot(is_character_single(element_id))
+      checkmate::assert_string(element_id)
 
       states <- if (is.list(x)) {
         x
@@ -366,9 +370,11 @@ FilterStates <- R6::R6Class( # nolint
         "dataname: { deparse1(private$input_dataname) }"
       ))
       private$validate_queue_exists(queue_index)
-      stopifnot(is_character_single(element_id))
-      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
-      stopifnot(is_character_single(element_id))
+      checkmate::assert_string(element_id)
+      checkmate::assert(
+        checkmate::check_string(queue_index),
+        checkmate::check_int(queue_index)
+      )
 
       filters <- self$queue_get(queue_index = queue_index, element_id = element_id)
       private$queue[[queue_index]]$remove(filters)
@@ -523,14 +529,10 @@ FilterStates <- R6::R6Class( # nolint
                         tags$span(filter_state$get_varname(),
                           class = "filter_panel_varname"
                         ),
-                        if_not_character_empty(
-                          filter_state$get_varlabel(),
-                          if (tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
-                            tags$span(filter_state$get_varlabel(),
-                              class = "filter_panel_varlabel"
-                            )
-                          }
-                        )
+                        if (checkmate::test_character(filter_state$get_varlabel(), min.len = 1) &&
+                            tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
+                          tags$span(filter_state$get_varlabel(), class = "filter_panel_varlabel")
+                        }
                       )
                     ),
                     column(
@@ -599,7 +601,10 @@ FilterStates <- R6::R6Class( # nolint
     # Checks if the queue of the given index was initialized in this `FilterStates`
     # @param queue_index (character or integer)
     validate_queue_exists = function(queue_index) {
-      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
+      checkmate::assert(
+        checkmate::check_string(queue_index),
+        checkmate::check_int(queue_index)
+      )
       if (
         !(
           is.numeric(queue_index) && all(queue_index <= length(private$queue) && queue_index > 0) ||
@@ -868,7 +873,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #'  object which columns are used to choose filter variables.
     #' @return shiny.tag
     ui_add_filter_state = function(id, data) {
-      stopifnot(is_character_single(id))
+      checkmate::assert_string(id)
       stopifnot(is.data.frame(data))
 
       ns <- NS(id)
@@ -918,7 +923,7 @@ DFFilterStates <- R6::R6Class( # nolint
             vapply(
               X = self$queue_get(queue_index = 1L),
               FUN.VALUE = character(1),
-              function(x) x$get_varname(deparse = TRUE)
+              FUN = function(x) x$get_varname(deparse = TRUE)
             )
           })
 
@@ -1221,7 +1226,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #'  to choose filter variables.
     #' @return shiny.tag
     ui_add_filter_state = function(id, data) {
-      stopifnot(is_character_single(id))
+      checkmate::assert_string(id)
       stopifnot(is(data, "MultiAssayExperiment"))
 
       ns <- NS(id)
@@ -1269,7 +1274,7 @@ MAEFilterStates <- R6::R6Class( # nolint
             vapply(
               X = self$queue_get(queue_index = "y"),
               FUN.VALUE = character(1),
-              function(x) x$get_varname(deparse = TRUE)
+              FUN = function(x) x$get_varname(deparse = TRUE)
             )
           })
 
@@ -1680,7 +1685,7 @@ SEFilterStates <- R6::R6Class( # nolint
     #'  and `rowData` are separate shiny entities.
     #' @return shiny.tag
     ui_add_filter_state = function(id, data) {
-      stopifnot(is_character_single(id))
+      checkmate::assert_string(id)
       stopifnot(is(data, "SummarizedExperiment"))
 
       ns <- NS(id)
@@ -1749,14 +1754,14 @@ SEFilterStates <- R6::R6Class( # nolint
             vapply(
               X = self$queue_get(queue_index = "select"),
               FUN.VALUE = character(1),
-              function(x) x$get_varname(deparse = TRUE)
+              FUN = function(x) x$get_varname(deparse = TRUE)
             )
           })
           active_filter_row_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = "subset"),
               FUN.VALUE = character(1),
-              function(x) x$get_varname(deparse = TRUE)
+              FUN = function(x) x$get_varname(deparse = TRUE)
             )
           })
 
@@ -2099,7 +2104,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #'  object which columns are used to choose filter variables.
     #' @return shiny.tag
     ui_add_filter_state = function(id, data) {
-      stopifnot(is_character_single(id))
+      checkmate::assert_string(id)
       stopifnot(is.matrix(data))
 
       ns <- NS(id)
@@ -2145,7 +2150,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
             vapply(
               X = self$queue_get(queue_index = "subset"),
               FUN.VALUE = character(1),
-              function(x) x$get_varname(deparse = TRUE)
+              FUN = function(x) x$get_varname(deparse = TRUE)
             )
           })
 
@@ -2289,13 +2294,14 @@ get_filterable_varnames.matrix <- function(data) { # nolint
 #' @return `character(0)` if choices are empty; a `choices_labeled` object otherwise
 #' @noRd
 data_choices_labeled <- function(data, choices, varlabels = character(0), keys = character(0)) {
-  if (is_empty(choices)) {
+  if (length(choices) == 0) {
     return(character(0))
   }
 
   choice_labels <- if (identical(varlabels, character(0))) {
     vapply(
       X = data,
+      FUN.VALUE = character(1),
       FUN = function(x) {
         label <- attr(x, "label")
         if (length(label) != 1) {
@@ -2303,8 +2309,7 @@ data_choices_labeled <- function(data, choices, varlabels = character(0), keys =
         } else {
           label
         }
-      },
-      FUN.VALUE = character(1)
+      }
     )[choices]
   } else {
     varlabels

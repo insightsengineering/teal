@@ -124,8 +124,8 @@ choices_selected <- function(choices,
                              fixed = FALSE) {
   stopifnot(is.atomic(choices) || is(choices, "delayed_data"))
   stopifnot(is.atomic(selected) || is(selected, "delayed_data") || is(selected, "all_choices"))
-  stopifnot(is_logical_single(keep_order))
-  stopifnot(is_logical_single(fixed))
+  checkmate::assert_flag(keep_order)
+  checkmate::assert_flag(fixed)
 
   if (is(selected, "all_choices")) selected <- choices
 
@@ -221,7 +221,7 @@ no_selected_as_NULL <- function(x) { # nolint
 ## Modify vectors and keep attributes
 vector_reorder <- function(vec, idx) {
   stopifnot(is.atomic(vec))
-  stopifnot(is_integer_vector(idx))
+  checkmate::assert_integer(idx, min.len = 1, lower = 1, any.missing = FALSE)
   stopifnot(length(vec) == length(idx))
 
   vec_attrs <- attributes(vec)
@@ -241,7 +241,7 @@ vector_reorder <- function(vec, idx) {
 
 vector_pop <- function(vec, idx) {
   stopifnot(is.atomic(vec))
-  stopifnot(is_integer_vector(idx, min_length = 0))
+  checkmate::assert_integer(idx, lower = 1, any.missing = FALSE)
 
   if (length(idx) == 0) {
     return(vec)

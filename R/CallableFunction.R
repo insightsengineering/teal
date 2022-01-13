@@ -23,17 +23,12 @@ CallableFunction <- R6::R6Class( # nolint
     #' @return new \code{CallableFunction} object
     initialize = function(fun, env = new.env(parent = parent.env(globalenv()))) {
       super$initialize(env = env)
-
-      stop_if_not(
-        list(
-          !missing(fun),
-          "A valid function name must be provided."
-        )
-      )
-      stop_if_not(list(
-        is_character_single(fun) || is.function(fun) || is.call(fun) || is.symbol(fun),
-        "CallableFunction can be specified as character, symbol, call or function"
-      ))
+      if (missing(fun)) {
+        stop("A valid function name must be provided.")
+      }
+      if (!(checkmate::test_string(fun) || is.function(fun) || is.call(fun) || is.symbol(fun))) {
+        stop("CallableFunction can be specified as character, symbol, call or function")
+      }
 
       fun_name <- private$get_callable_function(fun)
       private$fun_name <- deparse1(fun_name, collapse = "\n")
@@ -62,11 +57,11 @@ CallableFunction <- R6::R6Class( # nolint
     #'
     #' @return \code{call} or \code{character} depending on \code{deparse} argument
     get_call = function(deparse = TRUE, args = NULL) {
-      stopifnot(is_logical_single(deparse))
-      stopifnot(is_empty(args) || is_fully_named_list(args))
+      checkmate::assert_flag(deparse)
+      checkmate::assert_list(args, names = "strict", min.len = 0, null.ok = TRUE)
 
       old_args <- private$args
-      if_not_empty(args, self$set_args(args))
+      if (length(args) > 0) self$set_args(args)
 
       res <- if (deparse) {
         deparse1(private$call, collapse = "\n")
@@ -75,7 +70,7 @@ CallableFunction <- R6::R6Class( # nolint
       }
 
       # set args back to default
-      if (!is_empty(args)) {
+      if (length(args) > 0) {
         lapply(names(args), self$set_arg_value, NULL)
         self$set_args(old_args)
       }
@@ -93,12 +88,12 @@ CallableFunction <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining.
     set_args = function(args) {
       # remove args if empty
-      if (is_empty(args)) {
+      if (length(args) == 0) {
         private$args <- NULL
         private$refresh()
         return(invisible(self))
       }
-      stopifnot(is.list(args) && is_fully_named_list(args))
+      checkmate::assert_list(args, min.len = 0, names = "unique")
 
       for (idx in seq_along(args)) {
         self$set_arg_value(
@@ -120,11 +115,11 @@ CallableFunction <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining.
     set_arg_value = function(name, value) {
-      stopifnot(is_character_single(name))
+      checkmate::assert_string(name)
       arg_names <- names(formals(eval(str2lang(private$fun_name))))
       stopifnot(name %in% arg_names || "..." %in% arg_names || is.null(arg_names))
 
-      if (is_empty(private$args)) {
+      if (length(private$args) == 0) {
         private$args <- list()
       }
       private$args[[name]] <- value
@@ -188,10 +183,9 @@ CallableFunction <- R6::R6Class( # nolint
     get_call_from_prefixed_function = function(function_name) {
       package_function_names <- strsplit(function_name, "::")[[1]]
       fun <- get(package_function_names[2], envir = getNamespace(package_function_names[1]))
-      stop_if_not(list(
-        is.function(fun),
-        sprintf("object '%s' of mode 'function' was not found", function_name)
-      ))
+      if (!is.function(fun)) {
+        stop(sprintf("object '%s' of mode 'function' was not found", function_name))
+      }
       str2lang(function_name)
     },
     # @param symbol (`function`, `symbol` or `character`) the item matching a function
@@ -269,9 +263,8 @@ get_binding_name <- function(object, envir) {
     FUN.VALUE = logical(1),
     USE.NAMES = FALSE
   )
-  stop_if_not(list(
-    !is_empty(bindings_names[identical_binding_mask]),
-    "Object not found in the environment"
-  ))
+  if (length(bindings_names[identical_binding_mask]) == 0) {
+    stop("Object not found in the environment")
+  }
   bindings_names[identical_binding_mask]
 }

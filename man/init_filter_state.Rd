@@ -7,7 +7,7 @@
 init_filter_state(
   x,
   varname,
-  varlabel = if_null(attr(x, "label"), character(0)),
+  varlabel = attr(x, "label"),
   input_dataname = NULL,
   extract_type = character(0)
 )

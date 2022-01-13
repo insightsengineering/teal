@@ -89,8 +89,14 @@ optionalSelectInput <- function(inputId, # nolint
                                 label_help = NULL,
                                 fixed = FALSE,
                                 width = NULL) {
-  stopifnot(is_character_single(inputId))
-  stopifnot(is.null(label) || is_character_single(label) || is_html_like(label))
+  checkmate::assert_string(inputId)
+
+  checkmate::assert(
+    checkmate::check_string(label, null.ok = TRUE),
+    checkmate::check_class(label, "shiny.tag"),
+    checkmate::check_class(label, "shiny.tag.list"),
+    checkmate::check_class(label, "html")
+  )
   stopifnot(is.null(choices) || length(choices) >= 1)
   stopifnot(
     is.null(selected) ||
@@ -98,11 +104,16 @@ optionalSelectInput <- function(inputId, # nolint
       all(selected %in% choices) ||
       all(selected %in% unlist(choices, recursive = FALSE))
   )
-  stopifnot(is_logical_single(multiple))
-  stopifnot(is.null(sep) || is_character_single(sep))
+  checkmate::assert_flag(multiple)
+  checkmate::assert_string(sep, null.ok = TRUE)
   stopifnot(is.list(options))
-  stopifnot(is.null(label_help) || is_character_single(label_help) || is_html_like(label_help))
-  stopifnot(is_logical_single(fixed))
+  checkmate::assert(
+    checkmate::check_string(label_help, null.ok = TRUE),
+    checkmate::check_class(label_help, "shiny.tag"),
+    checkmate::check_class(label_help, "shiny.tag.list"),
+    checkmate::check_class(label_help, "html")
+  )
+  checkmate::assert_flag(fixed)
 
   if (!is.null(width)) {
     validateCssUnit(width)
@@ -151,13 +162,12 @@ optionalSelectInput <- function(inputId, # nolint
       return(div(
         shinyjs::hidden(ui),
         tags$label(id = paste0(inputId, "_textonly"), class = "control-label", sub(":[[:space:]]+$", "", label)),
-        if_not_empty(
-          selected,
+        if (length(selected) > 0) {
           tags$code(
             id = paste0(inputId, "_valueonly"),
             paste(selected, collapse = ", ")
           )
-        ),
+        },
         label_help
       ))
     } else {
@@ -212,7 +222,7 @@ updateOptionalSelectInput <- function(session, # nolint
 #'   "factor", "character", "unknown", ""
 #' ))
 variable_type_icons <- function(var_type) {
-  stopifnot(is_character_vector(var_type, min_length = 0))
+  checkmate::assert_character(var_type, any.missing = FALSE)
 
   class_to_icon <- list(
     numeric = "sort-numeric-up",
@@ -230,10 +240,16 @@ variable_type_icons <- function(var_type) {
 
   res <- unname(vapply(
     var_type,
-    function(class) {
-      if_not_cond(class, if_null(class_to_icon[[class]], class_to_icon[["unknown"]]), function(x) x == "")
-    },
-    character(1)
+    FUN.VALUE = character(1),
+    FUN = function(class) {
+      if (class == "") {
+        class
+      } else if (is.null(class_to_icon[[class]])) {
+        class_to_icon[["unknown"]]
+      } else {
+        class_to_icon[[class]]
+      }
+    }
   ))
 
   return(res)
@@ -258,16 +274,16 @@ variable_type_icons <- function(var_type) {
 #'   var_type = c("factor", "numeric")
 #' )
 picker_options_content <- function(var_name, var_label, var_type) {
-  if (utils.nest::is_empty(var_name)) {
+  if (length(var_name) == 0) {
     return(character(0))
   }
-  if (utils.nest::is_empty(var_type) && utils.nest::is_empty(var_label)) {
+  if (length(var_type) == 0 && length(var_label) == 0) {
     return(var_name)
   }
+  checkmate::assert_character(var_name, min.len = 1, any.missing = FALSE)
   stopifnot(
-    is_character_vector(var_name),
-    is_character_empty(var_type) || length(var_type) == length(var_name),
-    is_character_empty(var_label) || length(var_label) == length(var_name)
+    identical(var_type, character(0)) || length(var_type) == length(var_name),
+    identical(var_label, character(0)) || length(var_label) == length(var_name)
   )
 
   var_icon <- variable_type_icons(var_type)
@@ -300,7 +316,7 @@ picker_options <- function(choices) {
         content = picker_options_content(
           var_name  = raw_choices,
           var_label = extract_choices_labels(choices),
-          var_type  = if_null(attr(choices, "types"), character(0))
+          var_type  = if (is.null(attr(choices, "types"))) character(0) else attr(choices, "types")
         )
       )
     )
@@ -310,7 +326,7 @@ picker_options <- function(choices) {
       list(content = picker_options_content(
         var_name  = choices,
         var_label = extract_choices_labels(choices),
-        var_type  = if_null(attr(choices, "types"), character(0))
+        var_type  = if (is.null(attr(choices, "types"))) character(0) else attr(choices, "types")
       ))
     )
   } else {
