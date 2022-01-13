@@ -181,7 +181,7 @@ TealDataConnection <- R6::R6Class( # nolint
     open = function(args = NULL, silent = FALSE, try = FALSE) {
       logger::log_trace("TealDataConnection$open opening the connection...")
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
-      if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
+      if (isFALSE(private$check_open_fun(silent = silent))) return()
       if (isTRUE(private$opened) && isTRUE(private$ping())) {
         private$opened <- TRUE
         logger::log_trace("TealDataConnection$open connection already opened - skipped.")
@@ -229,8 +229,7 @@ TealDataConnection <- R6::R6Class( # nolint
     get_open_call = function(deparse = TRUE, args = NULL, silent = FALSE) {
       checkmate::assert_flag(deparse)
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
-
-      if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
+      if (isFALSE(private$check_open_fun(silent = silent))) return()
       open_call <- private$open_fun$get_call(deparse = FALSE, args = args)
 
       if (private$if_conn_obj) {
@@ -295,7 +294,7 @@ TealDataConnection <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining.
     set_open_args = function(args, silent = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
-      if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
+      if (isFALSE(private$check_open_fun(silent = silent))) return()
       private$open_fun$set_args(args)
       logger::log_trace("TealDataConnection$set_open_args open args set.")
 
@@ -414,7 +413,7 @@ TealDataConnection <- R6::R6Class( # nolint
     #' `error`, for `try = FALSE` otherwise
     close = function(silent = FALSE, try = FALSE) {
       logger::log_trace("TealDataConnection$close closing the connection...")
-      if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
+      if (isFALSE(private$check_close_fun(silent = silent))) return()
       close_res <- private$close_fun$run(try = try)
       if (is(close_res, "error")) {
         logger::log_error("TealDataConnection$close failed to close the connection.")
@@ -435,7 +434,7 @@ TealDataConnection <- R6::R6Class( # nolint
     #' @return optionally deparsed `call` object
     get_close_call = function(deparse = TRUE, silent = FALSE) {
       checkmate::assert_flag(deparse)
-      if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
+      if (isFALSE(private$check_close_fun(silent = silent))) return()
       private$close_fun$get_call(deparse = deparse)
     },
     #' @description
@@ -475,7 +474,7 @@ TealDataConnection <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining.
     set_close_args = function(args, silent = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
-      if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
+      if (isFalse(private$check_close_fun(silent = silent))) return()
       private$close_fun$set_args(args)
       logger::log_trace("TealDataConnection$set_close_args close_args set")
 
