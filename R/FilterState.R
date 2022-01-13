@@ -414,7 +414,7 @@ FilterState <- R6::R6Class( # nolint
           "%s$set_keep_na set for variable %s to %s.",
           class(self)[1],
           deparse1(self$get_varname()),
-          private$keep_na()
+          value
         )
       )
       invisible(NULL)
@@ -433,7 +433,7 @@ FilterState <- R6::R6Class( # nolint
         "%s$set_keep_na_reactive set for variable %s to %s.",
         class(self)[1],
         deparse1(self$get_varname()),
-        private$keep_na_reactive()
+        value
       )
       invisible(NULL)
     },
