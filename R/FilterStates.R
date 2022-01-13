@@ -1339,7 +1339,7 @@ MAEFilterStates <- R6::R6Class( # nolint
               logger::log_trace(
                 sprintf(
                   "MAEFilterStates$srv_add_filter_state@2 added FilterState of variable %s, dataname: %s",
-                  input$var_to_add,
+                  deparse1(input$var_to_add),
                   deparse1(private$input_dataname)
                 )
               )
