@@ -79,14 +79,14 @@ TealDataAbstract <- R6::R6Class( # nolint
         # exit early if mutate isn't required
         logger::log_trace("TealDataAbstract$execute_mutate no code to evaluate.")
         if (!is.null(res)) {
-          setNames(res, vapply(res, get_dataname, character(1)))
+          stats::setNames(res, vapply(res, get_dataname, character(1)))
         }
       }
 
 
       if (inherits(private$mutate_code, "PythonCodeClass")) {
         items <- lapply(self$get_items(), get_raw_data)
-        datasets <- setNames(items, vapply(self$get_items(), get_dataname, character(1)))
+        datasets <- stats::setNames(items, vapply(self$get_items(), get_dataname, character(1)))
 
         new_env <- private$mutate_code$eval(vars = c(datasets, private$mutate_vars))
       } else {

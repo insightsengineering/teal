@@ -106,8 +106,7 @@ call_condition_choice <- function(varname, choices) {
 #' @keywords internal
 #' @export
 call_condition_range <- function(varname, range) {
-  stopifnot(is.numeric(range) && length(range) == 2)
-  stopifnot(range[2] >= range[1])
+  checkmate::assert_numeric(range, len = 2, sorted = TRUE)
 
   varname <- call_check_parse_varname(varname)
   call(
@@ -177,9 +176,8 @@ call_condition_logical <- function(varname, choice) {
 #' @keywords internal
 #' @export
 call_condition_range_posixct <- function(varname, range, timezone = Sys.timezone()) {
-  stopifnot(methods::is(range, "POSIXct") && length(range) == 2)
+  checkmate::assert_posixct(range, len = 2, sorted = TRUE)
   checkmate::assert_string(timezone)
-  stopifnot(range[1] <= range[2])
   varname <- call_check_parse_varname(varname)
 
   range[1] <- trunc(range[1], units = c("secs"))
@@ -217,8 +215,7 @@ call_condition_range_posixct <- function(varname, range, timezone = Sys.timezone
 #' @keywords internal
 #' @export
 call_condition_range_date <- function(varname, range) {
-  stopifnot(methods::is(range, "Date") && length(range) == 2)
-  stopifnot(range[1] <= range[2])
+  checkmate::assert_data(range, len = 2, sorted = TRUE)
   varname <- call_check_parse_varname(varname)
 
   call(
