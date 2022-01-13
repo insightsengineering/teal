@@ -225,7 +225,7 @@ FilterStates <- R6::R6Class( # nolint
             }
           )
           if (length(calls) > 0) {
-            utils.nest::calls_combine_by(
+            calls_combine_by(
               operator = "&",
               calls = calls
             )
@@ -239,7 +239,7 @@ FilterStates <- R6::R6Class( # nolint
 
       if (length(filter_items) > 0) {
         # below code translates to call by the names of filter_items
-        rhs <- utils.nest::call_with_colon(
+        rhs <- call_with_colon(
           self$get_fun(),
           private$input_dataname,
           unlist_args = filter_items
@@ -525,12 +525,9 @@ FilterStates <- R6::R6Class( # nolint
                         tags$span(filter_state$get_varname(),
                           class = "filter_panel_varname"
                         ),
-                        if (checkmate::test_character(filter_state$get_varlabel(), min.len = 1)) {
-                          if (tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
-                            tags$span(filter_state$get_varlabel(),
-                              class = "filter_panel_varlabel"
-                            )
-                          }
+                        if (checkmate::test_character(filter_state$get_varlabel(), min.len = 1) &&
+                            tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
+                          tags$span(filter_state$get_varlabel(), class = "filter_panel_varlabel")
                         }
                       )
                     ),
@@ -904,7 +901,7 @@ DFFilterStates <- R6::R6Class( # nolint
             vapply(
               X = self$queue_get(queue_index = 1L),
               FUN.VALUE = character(1),
-              function(x) x$get_varname(deparse = TRUE)
+              FUN = function(x) x$get_varname(deparse = TRUE)
             )
           })
 
@@ -1245,7 +1242,7 @@ MAEFilterStates <- R6::R6Class( # nolint
             vapply(
               X = self$queue_get(queue_index = "y"),
               FUN.VALUE = character(1),
-              function(x) x$get_varname(deparse = TRUE)
+              FUN = function(x) x$get_varname(deparse = TRUE)
             )
           })
 
@@ -1705,14 +1702,14 @@ SEFilterStates <- R6::R6Class( # nolint
             vapply(
               X = self$queue_get(queue_index = "select"),
               FUN.VALUE = character(1),
-              function(x) x$get_varname(deparse = TRUE)
+              FUN = function(x) x$get_varname(deparse = TRUE)
             )
           })
           active_filter_row_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = "subset"),
               FUN.VALUE = character(1),
-              function(x) x$get_varname(deparse = TRUE)
+              FUN = function(x) x$get_varname(deparse = TRUE)
             )
           })
 
@@ -2076,7 +2073,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
             vapply(
               X = self$queue_get(queue_index = "subset"),
               FUN.VALUE = character(1),
-              function(x) x$get_varname(deparse = TRUE)
+              FUN = function(x) x$get_varname(deparse = TRUE)
             )
           })
 
@@ -2221,6 +2218,7 @@ data_choices_labeled <- function(data, choices, varlabels = character(0), keys =
   choice_labels <- if (identical(varlabels, character(0))) {
     vapply(
       X = data,
+      FUN.VALUE = character(1),
       FUN = function(x) {
         label <- attr(x, "label")
         if (length(label) != 1) {
@@ -2228,8 +2226,7 @@ data_choices_labeled <- function(data, choices, varlabels = character(0), keys =
         } else {
           label
         }
-      },
-      FUN.VALUE = character(1)
+      }
     )[choices]
   } else {
     varlabels

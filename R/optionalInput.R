@@ -241,7 +241,7 @@ variable_type_icons <- function(var_type) {
   res <- unname(vapply(
     var_type,
     FUN.VALUE = character(1),
-    function(class) {
+    FUN = function(class) {
       if (class == "") {
         class
       } else {
@@ -282,11 +282,10 @@ picker_options_content <- function(var_name, var_label, var_type) {
   if (length(var_type) == 0 && length(var_label) == 0) {
     return(var_name)
   }
-
   checkmate::assert_character(var_name, min.len = 1, any.missing = FALSE)
   stopifnot(
-    is_character_empty(var_type) || length(var_type) == length(var_name),
-    is_character_empty(var_label) || length(var_label) == length(var_name)
+    identical(var_type, character(0)) || length(var_type) == length(var_name),
+    identical(var_label, character(0)) || length(var_label) == length(var_name)
   )
 
   var_icon <- variable_type_icons(var_type)

@@ -618,9 +618,9 @@ FilterState <- R6::R6Class( # nolint
     #' return (`name` or `call`)
     get_varname_prefixed = function() {
       if (isTRUE(private$extract_type == "list")) {
-        utils.nest::call_extract_list(private$input_dataname, private$varname)
+        call_extract_list(private$input_dataname, private$varname)
       } else if (isTRUE(private$extract_type == "matrix")) {
-        utils.nest::call_extract_matrix(dataname = private$input_dataname, column = as.character(private$varname))
+        call_extract_matrix(dataname = private$input_dataname, column = as.character(private$varname))
       } else {
         private$varname
       }
@@ -931,7 +931,7 @@ LogicalFilterState <- R6::R6Class( # nolint
     #' For `LogicalFilterState` it's a `!<varname>` or `<varname>` and optionally
     #' `is.na(<varname>)`
     get_call = function() {
-      filter_call <- utils.nest::call_condition_logical(
+      filter_call <- call_condition_logical(
         varname = private$get_varname_prefixed(),
         choice = self$get_selected()
       )
@@ -1182,7 +1182,7 @@ RangeFilterState <- R6::R6Class( # nolint
     #' optional `is.na(<varname>)` and `is.finite(<varname>)`.
     #' @return (`call`)
     get_call = function() {
-      filter_call <- utils.nest::call_condition_range(
+      filter_call <- call_condition_range(
         varname = private$get_varname_prefixed(),
         range = self$get_selected()
       )
@@ -1614,7 +1614,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' optional `is.na(<varname>)`.
     #' @return (`call`)
     get_call = function() {
-      filter_call <- utils.nest::call_condition_choice(
+      filter_call <- call_condition_choice(
         varname = private$get_varname_prefixed(),
         choice = self$get_selected()
       )
@@ -1902,7 +1902,7 @@ DateFilterState <- R6::R6Class( # nolint
     #' optional `is.na(<varname>)`.
     #' @return (`call`)
     get_call = function() {
-      filter_call <- utils.nest::call_condition_range_date(
+      filter_call <- call_condition_range_date(
         varname = private$get_varname_prefixed(),
         range = self$get_selected()
       )
@@ -2176,7 +2176,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #' `<varname> >= as.POSIXct(<min>, tz = <timezone>) & <varname> <= <max>, tz = <timezone>)`
     #' with optional `is.na(<varname>)`.
     get_call = function() {
-      filter_call <- utils.nest::call_condition_range_posixct(
+      filter_call <- call_condition_range_posixct(
         varname = private$get_varname_prefixed(),
         range = self$get_selected(),
         timezone = private$timezone

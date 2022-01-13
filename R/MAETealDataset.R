@@ -69,6 +69,7 @@ MAETealDataset <- R6::R6Class( # nolint
       private$.rownames <- rownames(SummarizedExperiment::colData(x))
       private$.col_labels <- vapply(
         X = SummarizedExperiment::colData(x),
+        FUN.VALUE = character(1),
         FUN = function(x) {
           label <- attr(x, "label")
           if (length(label) != 1) {
@@ -76,8 +77,7 @@ MAETealDataset <- R6::R6Class( # nolint
           } else {
             label
           }
-        },
-        FUN.VALUE = character(1)
+        }
       )
       private$.row_labels <- c()
 

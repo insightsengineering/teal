@@ -105,7 +105,7 @@ line_usage_log <- function(...) {
 #' }
 line_pkg_log <- function(fields) {
   nest_packages <- c(
-    "utils.nest", "rtables", "hermes", "teal.modules.hermes",
+     "rtables", "hermes", "teal.modules.hermes",
     "tern", "teal", "teal.devel", "teal.modules.general", "teal.modules.clinical",
     "osprey", "teal.osprey", "goshawk", "teal.goshawk"
   )

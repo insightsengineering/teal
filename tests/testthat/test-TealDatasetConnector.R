@@ -1189,7 +1189,7 @@ testthat::test_that("TealDatasetConnect$print prints dataset when it is pulled",
   )
 })
 
-testthat::test_that("get_var_r6 returns indentical objects as these passed to the vars argument in
+testthat::test_that("get_var_r6 returns identical objects as these passed to the vars argument in
                     the constructor", {
   test_ds0 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
   test_ds1 <- TealDatasetConnector$new(

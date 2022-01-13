@@ -679,6 +679,7 @@ TealDataset <- R6::R6Class( # nolint
     is_any_dependency_delayed = function(vars = list()) {
       any(vapply(
         c(list(), private$var_r6, vars),
+        FUN.VALUE = logical(1),
         FUN = function(var) {
           if (is(var, "TealDatasetConnector")) {
             !var$is_pulled() || var$is_mutate_delayed()
@@ -687,8 +688,7 @@ TealDataset <- R6::R6Class( # nolint
           } else {
             FALSE
           }
-        },
-        FUN.VALUE = logical(1)
+        }
       ))
     },
 
@@ -704,11 +704,12 @@ TealDataset <- R6::R6Class( # nolint
       if (length(vars) > 0) {
         # not allowing overriding variable names
         over_rides <- names(vars)[vapply(
-          names(vars), function(var_name) {
+          names(vars),
+          FUN.VALUE = logical(1),
+          FUN = function(var_name) {
             var_name %in% names(total_vars) &&
               !identical(total_vars[[var_name]], vars[[var_name]])
-          },
-          FUN.VALUE = logical(1)
+          }
         )]
         if (length(over_rides) > 0) {
           stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))

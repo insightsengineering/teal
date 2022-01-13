@@ -128,7 +128,7 @@ get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
   }
   labels <- as.list(get_labels(data, fill = fill)$column_labels)
   # convert NULL into NA_character for not-existing column
-  vapply(columns, FUN.VALUE = character(1), function(x) {
+  vapply(columns, FUN.VALUE = character(1), FUN = function(x) {
     if (is.null(labels[[x]])) {
       NA_character_
     } else {

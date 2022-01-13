@@ -162,8 +162,14 @@ CodeClass <- R6::R6Class( # nolint
       if (is.null(id)) id <- digest::digest(c(private$.code, code))
       # Line shouldn't be added when it contains the same code and the same dataname
       # as a line already present in an object of CodeClass
-      if (!id %in% unlist(lapply(private$.code, "attr", "id")) ||
-        all_true(dataname, function(x) !x %in% unlist(lapply(private$.code, "attr", "dataname")))) {
+      if (
+        !id %in% unlist(lapply(private$.code, "attr", "id")) ||
+        all(
+          vapply(dataname, FUN.VALUE = logical(1), FUN = function(x) {
+            !x %in% unlist(lapply(private$.code, "attr", "dataname"))
+          })
+        )
+      ) {
         attr(code, "dataname") <- dataname
         attr(code, "deps") <- deps
         attr(code, "id") <- id

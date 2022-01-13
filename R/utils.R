@@ -34,7 +34,8 @@ check_ellipsis <- function(..., stop = FALSE, allowed_args = character(0)) {
       return(invisible(NULL))
     }
     message <- paste(length(extra_args), "total unused argument(s).")
-    named_extra_args <- extra_args[!vapply(extra_args, is_empty_string, logical(1))]
+
+    named_extra_args <- extra_args[!vapply(extra_args, identical, logical(1), "")]
     if (length(named_extra_args) > 0) {
       message <- paste0(
         message,
@@ -50,6 +51,56 @@ check_ellipsis <- function(..., stop = FALSE, allowed_args = character(0)) {
     } else {
       warning(message)
     }
+  }
+}
+
+#' Whether the variable name is good to use within Show R Code
+#'
+#' Spaces are problematic because the variables must be escaped
+#' with backticks.
+#' Also, they should not start with a number as R may silently make
+#' it valid by changing it.
+#' Therefore, we only allow alphanumeric characters with underscores.
+#' The first character of the `name` must be an alphabetic character
+#' and can be followed by alphanumeric characters.
+#'
+#' @md
+#'
+#' @note
+#'   The suffix '_FILTERED' is reserved for filtered data and is not
+#'   allowed in the dataset name.
+#'
+#' @param name `character, single or vector` name to check
+#'
+#' @examples
+#' teal:::check_simple_name("aas2df")
+#' teal:::check_simple_name("ADSL")
+#' teal:::check_simple_name("ADSLmodified")
+#' teal:::check_simple_name("ADSL_2")
+#' teal:::check_simple_name("a1")
+#' # the following fail
+#' \dontrun{
+#' teal:::check_simple_name("1a")
+#' teal:::check_simple_name("ADSL.modified")
+#' teal:::check_simple_name("ADSL_modified")
+#' teal:::check_simple_name("a1...")
+#' teal:::check_simple_name("ADSL_FILTERED")
+#' }
+#' @keywords internal
+check_simple_name <- function(name) {
+  checkmate::assert_character(name, min.len = 1, any.missing = FALSE)
+  if (!grepl("^[[:alpha:]][a-zA-Z0-9_]*$", name, perl = TRUE)) {
+    stop(
+      paste0(
+        "name '",
+        name,
+        "' must only contain alphanumeric characters (with underscores)",
+        " and the first character must be an alphabetic character"
+      )
+    )
+  }
+  if (grepl("_FILTERED$", name, perl = TRUE)) {
+    stop(paste0("name '", name, "' cannot end with the special string '_FILTERED'"))
   }
 }
 
@@ -466,7 +517,7 @@ get_key_duplicates_util <- function(dataframe, keys) {
   stopifnot(is.character(keys))
   stopifnot(
     all(
-      vapply(keys, function(key) key %in% colnames(dataframe), FUN.VALUE = logical(1))
+      vapply(keys, FUN.VALUE = logical(1), FUN = function(key) key %in% colnames(dataframe))
     )
   )
 
@@ -491,7 +542,7 @@ get_key_duplicates_util <- function(dataframe, keys) {
 #'
 #' @param pkg (`character`)\cr
 #'  The name of the package the file should be received from.
-#' @param file_name (code{character`)\cr
+#' @param file_name (`character`)\cr
 #'  The name of the file to be received or path to it starting from
 #'  the base package path.
 #' @return The path to the file
