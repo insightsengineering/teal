@@ -603,7 +603,7 @@ testthat::test_that("TealData$get_items throws an error if there is no dataset f
   testthat::expect_error(data$get_items("iris"), "dataset iris not found")
 })
 
-testthat::test_that("TealData$new throws if dataname is set to invalid R object nam,e", {
+testthat::test_that("TealData$new throws if dataname is set to invalid R object name", {
   testthat::expect_error(TealDataset$new("", head(mtcars)), "Assertion on 'dataname' failed: Must comply to pattern")
 })
 
