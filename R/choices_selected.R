@@ -266,7 +266,7 @@ vector_remove_dups <- function(vec) {
   } else if (is.null(attributes(vec))) {
     return(unique(vec))
   } else if (identical(names(attributes(vec)), "names")) {
-    return(vec[-which(duplicated(vec))])
+    return(vec[-idx])
   } else {
     return(vector_pop(vec, idx))
   }
