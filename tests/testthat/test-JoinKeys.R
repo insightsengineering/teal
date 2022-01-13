@@ -254,7 +254,7 @@ testthat::test_that("JoinKeys$split method returns a named list of JoinKeys obje
   testthat::expect_true(is(res, "list"))
   testthat::expect_equal(length(res), 5)
   testthat::expect_equal(names(res), c("A", "B", "C", "Z", "Y"))
-  testthat::expect_true(utils.nest::is_class_list("JoinKeys")(res))
+  checkmate::expect_list(res, types = "JoinKeys")
 
   testthat::expect_equal(names(res$A$get()), c("A", "B", "C"))
   testthat::expect_equal(names(res$B$get()), c("B", "A"))

@@ -8,7 +8,7 @@ testthat::test_that("get_call returns a list of calls", {
   filtered_dataset <- DefaultFilteredDataset$new(
     dataset = TealDataset$new("iris", head(iris))
   )
-  testthat::expect_true(is_class_list("language")(filtered_dataset$get_call()))
+  checkmate::expect_list(filtered_dataset$get_call(), types = "<-")
 })
 
 testthat::test_that(

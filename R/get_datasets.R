@@ -61,7 +61,7 @@ get_datasets <- function(x) {
 #' }
 get_datasets.TealDataAbstract <- function(x) { # nolint
   res <- x$get_datasets()
-  if (is_empty(res)) {
+  if (length(res) == 0) {
     return(invisible(NULL))
   }
   res
@@ -85,7 +85,7 @@ get_datasets.TealDataAbstract <- function(x) { # nolint
 #' }
 get_datasets.TealDatasetConnector <- function(x) { # nolint
   res <- x$get_dataset()
-  if (is_empty(res)) {
+  if (length(res) == 0) {
     return(invisible(NULL))
   }
   res

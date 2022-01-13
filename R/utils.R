@@ -1,3 +1,107 @@
+#' Ensure the ellipsis, ..., in method arguments are empty
+#'
+#' Ellipsis, ..., are needed as part of method arguments to allow for its arguments to be different from its generic's
+#' arguments and for this to pass check(). Hence, ..., should always be empty. This function will check for this
+#' condition.
+#'
+#' @param ... it should literally just be ...
+#' @param stop TRUE to raise an error; FALSE will output warning message
+#' @param allowed_args character vector naming arguments that are allowed in the \code{...}.
+#'   to allow for unnamed arguments, let "" be one of the elements in this character vector.
+#'
+#' @return \code{NULL} if ... is empty
+#'
+#' @keywords internal
+#'
+#' @examples
+#' method.class <- function(a, b, c, ...) {
+#'   check_ellipsis(...)
+#' }
+#' method.class <- function(a, b, c, ...) {
+#'   check_ellipsis(..., allowed_args = c("y", "z"))
+#' }
+check_ellipsis <- function(..., stop = FALSE, allowed_args = character(0)) {
+  if (!missing(...)) {
+    checkmate::assert_flag(stop)
+    checkmate::assert_character(allowed_args, min.len = 0, null.ok = TRUE, any.missing = FALSE)
+    args <- list(...)
+    arg_names <- names(args)
+    if (is.null(arg_names)) {
+      arg_names <- rep("", length(args))
+    }
+    extra_args <- arg_names[!is.element(arg_names, allowed_args)]
+    if (length(extra_args) == 0) {
+      return(invisible(NULL))
+    }
+    message <- paste(length(extra_args), "total unused argument(s).")
+
+    named_extra_args <- extra_args[!vapply(extra_args, identical, logical(1), "")]
+    if (length(named_extra_args) > 0) {
+      message <- paste0(
+        message,
+        " ",
+        length(named_extra_args),
+        " with name(s): ",
+        paste(named_extra_args, collapse = ", "),
+        "."
+      )
+    }
+    if (stop) {
+      stop(message)
+    } else {
+      warning(message)
+    }
+  }
+}
+
+#' Whether the variable name is good to use within Show R Code
+#'
+#' Spaces are problematic because the variables must be escaped
+#' with backticks.
+#' Also, they should not start with a number as R may silently make
+#' it valid by changing it.
+#' Therefore, we only allow alphanumeric characters with underscores.
+#' The first character of the `name` must be an alphabetic character
+#' and can be followed by alphanumeric characters.
+#'
+#' @md
+#'
+#' @note
+#'   The suffix '_FILTERED' is reserved for filtered data and is not
+#'   allowed in the dataset name.
+#'
+#' @param name `character, single or vector` name to check
+#'
+#' @examples
+#' teal:::check_simple_name("aas2df")
+#' teal:::check_simple_name("ADSL")
+#' teal:::check_simple_name("ADSLmodified")
+#' teal:::check_simple_name("ADSL_2")
+#' teal:::check_simple_name("a1")
+#' # the following fail
+#' \dontrun{
+#' teal:::check_simple_name("1a")
+#' teal:::check_simple_name("ADSL.modified")
+#' teal:::check_simple_name("ADSL_modified")
+#' teal:::check_simple_name("a1...")
+#' teal:::check_simple_name("ADSL_FILTERED")
+#' }
+#' @keywords internal
+check_simple_name <- function(name) {
+  checkmate::assert_character(name, min.len = 1, any.missing = FALSE)
+  if (!grepl("^[[:alpha:]][a-zA-Z0-9_]*$", name, perl = TRUE)) {
+    stop(
+      "name '",
+      name,
+      "' must only contain alphanumeric characters (with underscores)",
+      " and the first character must be an alphabetic character"
+    )
+  }
+  if (grepl("_FILTERED$", name, perl = TRUE)) {
+    stop("name '", name, "' cannot end with the special string '_FILTERED'")
+  }
+}
+
 #' Helper function to deep copy `R6` object
 #'
 #' When cloning an R6 object the private function
@@ -7,7 +111,7 @@
 #' @param name (`character`) argument passed by `deep_clone` function.
 #' @param value (any `R` object) argument passed by `deep_clone` function.
 deep_clone_r6 <- function(name, value) {
-  if (is_class_list("R6")(value)) {
+  if (checkmate::test_list(value, types = "R6")) {
     lapply(value, function(x) x$clone(deep = TRUE))
   } else if (R6::is.R6(value)) {
     value$clone(deep = TRUE)
@@ -112,8 +216,8 @@ get_client_timezone <- function(ns) {
 #' @return Error or invisible NULL.
 #'
 check_pkg_quietly <- function(pckg, msg) {
-  stopifnot(is_character_single(pckg), is_character_single(msg))
-
+  checkmate::assert_string(pckg)
+  checkmate::assert_string(msg)
   if (!pckg %in% utils::installed.packages()) {
     stop(msg)
   }
@@ -190,7 +294,7 @@ check_in_range <- function(subinterval, range, pre_msg = "") {
 #' check_in_subset("a", LETTERS, pre_msg = "Error: ")
 #' }
 check_in_subset <- function(subset, choices, pre_msg = "") {
-  stopifnot(is_character_single(pre_msg))
+  checkmate::assert_string(pre_msg)
 
   subset <- unique(subset)
   choices <- unique(choices)
@@ -226,20 +330,21 @@ teal_with_pkg <- function(pkg, code) {
 #' @inheritParams dataset_connector
 #' @return code (`character`)
 code_from_script <- function(code, script, dataname = NULL) {
-  stopifnot(
-    is_character_vector(code, min_length = 0, max_length = 1) || inherits(code, "PythonCodeClass"),
-    is_character_vector(script, min_length = 0, max_length = 1)
+  checkmate::assert(
+    checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+    checkmate::check_class(code, "PythonCodeClass")
   )
+  checkmate::assert_character(script, max.len = 1, any.missing = FALSE)
   if (length(code) == 0 && length(script) == 0) {
     return(character(0))
   }
 
-  if (is_character_single(code) && is_character_single(script)) {
+  if (checkmate::test_string(code) && checkmate::test_string(script)) {
     stop("Function doesn't accept 'code' and 'script' at the same time.
          Please specify either 'code' or 'script'", call. = FALSE)
   }
 
-  if (is_character_single(script)) {
+  if (checkmate::test_string(script)) {
     code <- read_script(file = script, dataname = dataname)
   }
 
@@ -262,7 +367,7 @@ code_from_script <- function(code, script, dataname = NULL) {
 #'
 #' read_script(file_example)
 read_script <- function(file, dataname = NULL) {
-  stopifnot(is_character_single(file))
+  checkmate::assert_string(file)
   stopifnot(file.exists(file))
   get_code_single(file, read_sources = TRUE) %>%
     enclosed_with_dataname(dataname = dataname) %>%
@@ -338,7 +443,10 @@ get_key_duplicates <- function(dataset, keys = NULL) {
 #' @export
 get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { # nolint
   df <- get_raw_data(dataset)
-  keys <- if_null(keys, if_null(get_keys(dataset), character(0)))
+  if (is.null(keys)) {
+    keys_ds <- get_keys(dataset)
+    keys <- if (is.null(keys_ds)) character(0) else keys_ds
+  }
 
   get_key_duplicates_util(df, keys)
 }
@@ -366,8 +474,10 @@ get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { # nolint
 #'
 #' @export
 get_key_duplicates.data.frame <- function(dataset, keys = NULL) { # nolint
-  keys <- if_null(keys, if_null(attr(dataset, "primary_key"), character(0)))
-
+  if (is.null(keys)) {
+    attr_key <- attr(dataset, "primary_key")
+    keys <- if (is.null(attr_key)) character(0) else attr
+  }
   get_key_duplicates_util(dataset, keys)
 }
 
@@ -405,7 +515,7 @@ get_key_duplicates_util <- function(dataframe, keys) {
   stopifnot(is.character(keys))
   stopifnot(
     all(
-      vapply(keys, function(key) key %in% colnames(dataframe), FUN.VALUE = logical(1))
+      vapply(keys, FUN.VALUE = logical(1), FUN = function(key) key %in% colnames(dataframe))
     )
   )
 
@@ -426,17 +536,46 @@ get_key_duplicates_util <- function(dataframe, keys) {
   summary
 }
 
+#' Function to get a file out of a package
+#'
+#' @param pkg (`character`)\cr
+#'  The name of the package the file should be received from.
+#' @param file_name (`character`)\cr
+#'  The name of the file to be received or path to it starting from
+#'  the base package path.
+#' @return The path to the file
+#' @keywords internal
+#' @examples
+#' teal:::get_package_file("teal", "WORDLIST")
+#' teal:::get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")
+get_package_file <- function(pkg = NULL, file_name = NULL) {
+  checkmate::assert_string(pkg)
+  checkmate::assert_string(file_name)
+
+  base_file <- system.file(file_name, package = pkg)
+  inst_file <- system.file("inst", file_name, package = pkg)
+
+  if (file.exists(base_file)) {
+    return(base_file)
+  } else if (file.exists(inst_file)) {
+    return(inst_file)
+  } else {
+    stop(paste("There is no such file:", file_name, "or package:", pkg))
+  }
+}
+
 # Function to be used while trying to load the object of specific class from the script.
 object_file <- function(path, class) {
-  stopifnot(is_character_single(path))
-  stopifnot(file.exists(path))
-  stopifnot(is_character_single(class))
+  checkmate::assert_string(path)
+  checkmate::assert_file_exists(path)
+  checkmate::assert_string(class)
 
   lines <- paste0(readLines(path), collapse = "\n")
   object <- eval(parse(text = lines, keep.source = FALSE))
 
-  stop_if_not(list(is(object, class), paste("The object returned from the file is not of", class, "class.")))
-
+  if (!is(object, class)) {
+    stop("The object returned from the file is not of ", class, " class.")
+  }
   return(object)
 }
 

@@ -75,7 +75,9 @@ resolve_delayed <- function(x, datasets) {
 
 #' @export
 resolve_delayed.delayed_variable_choices <- function(x, datasets) { # nolint
-  if_null(x$key, x$key <- datasets$get_keys(x$data))
+  if (is.null(x$key)) {
+    x$key <- datasets$get_keys(x$data)
+  }
   x$data <- datasets$get_data(x$data)
   if (is(x$subset, "function")) {
     x$subset <- resolve_delayed_expr(x$subset, ds = x$data, is_value_choices = FALSE)
@@ -177,12 +179,7 @@ resolve_delayed.default <- function(x, datasets) {
 #' )
 #' }
 resolve_delayed_expr <- function(x, ds, is_value_choices) {
-  stopifnot(
-    is.function(x),
-    is_fully_named_list(formals(x)),
-    length(formals(x)) == 1,
-    names(formals(x))[1] == "data"
-  )
+  checkmate::assert_function(x, args = "data", nargs = 1)
 
   # evaluate function
   res <- do.call("x", list(data = ds))
@@ -197,7 +194,7 @@ resolve_delayed_expr <- function(x, ds, is_value_choices) {
       ))
     }
   } else {
-    if (!is_character_vector(res, min_length = 0L) || length(res) > ncol(ds) || anyDuplicated(res)) {
+    if (!checkmate::test_character(res, any.missing = FALSE) || length(res) > ncol(ds) || anyDuplicated(res)) {
       stop(paste(
         "The following function must return a character vector with unique",
         "names from the available columns of the dataset:\n\n",
@@ -270,14 +267,14 @@ print.delayed_data_extract_spec <- function(x, indent = 0L, ...) {
 }
 
 indent_msg <- function(n, msg) {
-  stopifnot(is_integer_single(n) || n == 0)
-  stopifnot(is_character_vector(msg))
+  checkmate::assert_integer(n, len = 1, lower = 0, any.missing = FALSE)
+  checkmate::assert_character(msg, min.len = 1, any.missing = FALSE)
   indent <- paste(rep("  ", n), collapse = "")
   return(paste0(indent, msg))
 }
 
 print_delayed_list <- function(obj, n = 0L) {
-  stopifnot(is_integer_single(n))
+  checkmate::assert_integer(n, len = 1, lower = 0, any.missing = FALSE)
   stopifnot(is.list(obj))
 
   for (idx in seq_along(obj)) {

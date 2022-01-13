@@ -18,7 +18,7 @@ testthat::test_that("get_call returns a list of calls", {
       keys = c("Petal.Length")
     )
   )
-  testthat::expect_true(is_class_list("language")(filtered_dataset$get_call()))
+  checkmate::expect_list(filtered_dataset$get_call(), types = "<-")
 })
 
 testthat::test_that("get_call returns a list call for a CDISCTealDataset with a parent", {
@@ -30,7 +30,7 @@ testthat::test_that("get_call returns a list call for a CDISCTealDataset with a 
       keys = c("Petal.Length")
     )
   )
-  testthat::expect_true(is_class_list("language")(filtered_dataset$get_call()))
+  checkmate::expect_list(filtered_dataset$get_call(), types = "<-")
 })
 
 testthat::test_that("get_filter_overview_info returns right array for CDISCFilteredDataset without filtering", {

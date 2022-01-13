@@ -39,7 +39,7 @@ teal_data <- function(...,
   is_cdisc <- vapply(
     X = data_objects,
     FUN.VALUE = logical(1),
-    function(x) {
+    FUN = function(x) {
       is(x, "CDISCTealDataConnector") || is(x, "CDISCTealDatasetConnector") || is(x, "CDISCTealDataset")
     }
   )

@@ -16,7 +16,7 @@ testthat::test_that("MAEFilteredDataset throws error with non-MAETealDataset dat
 testthat::test_that("MAEFilteredDataset$get_call returns a call without applying filter", {
   filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
   get_call_output <- filtered_dataset$get_call()
-  testthat::expect_true(is_class_list("language")(get_call_output))
+  checkmate::expect_list(get_call_output, types = "<-")
   testthat::expect_identical(deparse(get_call_output$subjects), "miniACC_FILTERED <- miniACC")
 })
 
@@ -37,7 +37,7 @@ testthat::test_that("MAEFilteredDataset$get_call returns a call with applying fi
 
   get_call_output <- isolate(filtered_dataset$get_call())
 
-  testthat::expect_true(is_class_list("language")(get_call_output))
+  checkmate::expect_list(get_call_output, types = "<-")
   testthat::expect_identical(
     get_call_output$subjects,
     quote(

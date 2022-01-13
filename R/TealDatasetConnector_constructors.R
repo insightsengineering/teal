@@ -66,11 +66,11 @@ dataset_connector <- function(dataname,
                               code = character(0),
                               script = character(0),
                               vars = list()) {
-  stopifnot(is_character_single(dataname))
+  checkmate::assert_string(dataname)
   stopifnot(is(pull_callable, "Callable"))
-  stopifnot(is_character_vector(keys, min_length = 0L))
-  stopifnot(is_character_empty(code) || is_character_vector(code))
-  stopifnot(is_character_empty(label) || is_character_vector(label))
+  checkmate::assert_character(keys, any.missing = FALSE)
+  checkmate::assert_character(code, any.missing = FALSE)
+  checkmate::assert_character(label, any.missing = FALSE)
 
   x <- TealDatasetConnector$new(
     dataname = dataname,
@@ -104,12 +104,12 @@ cdisc_dataset_connector <- function(dataname,
                                     code = character(0),
                                     script = character(0),
                                     vars = list()) {
-  stopifnot(is_character_single(dataname))
+  checkmate::assert_string(dataname)
   stopifnot(is(pull_callable, "Callable"))
-  stopifnot(is_character_vector(keys, min_length = 0L))
-  stopifnot(is_character_empty(parent) || is_character_single(parent))
-  stopifnot(is_character_empty(code) || is_character_vector(code))
-  stopifnot(is_character_empty(label) || is_character_vector(label))
+  checkmate::assert_character(keys, any.missing = FALSE)
+  checkmate::assert_character(parent, max.len = 1, any.missing = FALSE)
+  checkmate::assert_character(code, max.len = 1, any.missing = FALSE)
+  checkmate::assert_character(label, max.len = 1, any.missing = FALSE)
 
   x <- CDISCTealDatasetConnector$new(
     dataname = dataname,
@@ -228,8 +228,8 @@ scda_dataset_connector <- function(dataname,
                                    code = character(0),
                                    script = character(0)) {
   check_pkg_quietly("scda", "scda package not available.")
-  stopifnot(utils.nest::is_character_single(scda_dataname))
-  stopifnot(utils.nest::is_character_single(scda_name))
+  checkmate::assert_string(scda_dataname)
+  checkmate::assert_string(scda_name)
   if (scda_dataname == "latest") {
     stop("scda_dataname should be a dataset name e.g 'adsl' not 'latest'")
   }
@@ -321,9 +321,8 @@ rds_dataset_connector <- function(dataname,
                                   script = character(0),
                                   ...) {
   dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-
-  stopifnot(is_character_single(file))
+  checkmate::assert_list(dot_args, min.len = 0, names = "unique")
+  checkmate::assert_string(file)
   if (!file.exists(file)) {
     stop("File ", file, " does not exist.", call. = FALSE)
   }
@@ -416,9 +415,8 @@ script_dataset_connector <- function(dataname,
                                      script = character(0),
                                      ...) {
   vars <- list(...)
-  stopifnot(is_fully_named_list(vars))
-
-  stopifnot(is_character_single(file))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
+  checkmate::assert_string(file)
   if (!file.exists(file)) {
     stop("File ", file, " does not exist.", call. = FALSE)
   }
@@ -536,10 +534,9 @@ code_dataset_connector <- function(dataname,
                                    mutate_script = character(0),
                                    ...) {
   vars <- list(...)
-
-  stopifnot(is_fully_named_list(vars))
-  stopifnot(is_character_single(code))
-  stopifnot(is_character_vector(code, min_length = 0L, max_length = 1L))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
+  checkmate::assert_string(code)
+  checkmate::assert_character(label, max.len = 1, any.missing = FALSE)
 
   call <- callable_code(code = code)
 
@@ -866,7 +863,7 @@ csv_dataset_connector <- function(dataname,
                                   script = character(0),
                                   ...) {
   dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
+  checkmate::assert_list(dot_args, min.len = 0, names = "unique")
 
   check_pkg_quietly(
     "readr",
@@ -878,7 +875,7 @@ csv_dataset_connector <- function(dataname,
     dot_args$delim <- ","
   }
 
-  stopifnot(is_character_single(file))
+  checkmate::assert_string(file)
   if (!file.exists(file)) {
     stop("File ", file, " does not exist.", call. = FALSE)
   }
@@ -1022,8 +1019,7 @@ fun_dataset_connector <- function(dataname,
                                   func_name = substitute(fun),
                                   ...) {
   vars <- list(...)
-
-  stopifnot(is_fully_named_list(vars))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
 
   stopifnot(is.function(fun))
 
@@ -1248,21 +1244,16 @@ python_dataset_connector <- function(dataname,
                                      mutate_code = character(0),
                                      mutate_script = character(0),
                                      vars = list()) {
-  stopifnot(is_character_single(object))
+  checkmate::assert_string(object)
   if (!xor(missing(code), missing(file))) stop("Exactly one of 'code' and 'script' is required")
 
   if (!missing(file)) {
-    stop_if_not(
-      is_character_single(file),
-      list(file.exists(file), paste("File", file, "does not exist")),
-      endsWith(file, ".py")
-    )
-
+    checkmate::assert_string(file)
+    checkmate::assert_file_exists(file, extension = "py")
     x_fun <- CallablePythonCode$new("py_run_file") # nolint
     x_fun$set_args(list(file = file, local = TRUE))
   } else {
-    stopifnot(is_character_single(code))
-
+    checkmate::assert_string(code)
     x_fun <- CallablePythonCode$new("py_run_string") # nolint
     x_fun$set_args(list(code = code, local = TRUE))
   }

@@ -96,7 +96,7 @@ log_system_info <- function() {
   paste_pkgs_name_with_version <- function(names) {
     vapply(
       names,
-      function(name) paste(name, utils::packageVersion(name)),
+      FUN = function(name) paste(name, utils::packageVersion(name)),
       FUN.VALUE = character(1),
       USE.NAMES = FALSE
     )

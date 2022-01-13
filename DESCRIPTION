@@ -26,6 +26,7 @@ Depends:
     R (>= 4.0),
     shiny
 Imports:
+    checkmate,
     digest,
     dplyr,
     ggplot2,
@@ -44,11 +45,9 @@ Imports:
     stats,
     SummarizedExperiment,
     utils,
-    utils.nest (>= 0.2.11),
     yaml
 Suggests:
     askpass,
-    checkmate,
     covr,
     httr,
     knitr,
@@ -96,6 +95,7 @@ Collate:
     'TealDatasetConnector_constructors.R'
     'all_choices.R'
     'as_cdisc.R'
+    'call_utils.R'
     'choices_labeled.R'
     'choices_selected.R'
     'data_extract_spec.R'

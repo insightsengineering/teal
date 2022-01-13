@@ -137,10 +137,10 @@ select_spec <- function(choices,
                         fixed = FALSE,
                         always_selected = NULL,
                         label = NULL) {
-  stopifnot(is_logical_single(multiple))
-  stopifnot(is_logical_single(fixed))
-  stopifnot(is.null(always_selected) || is_character_vector(always_selected, 1))
-  stopifnot(is.null(label) || is_character_single(label))
+  checkmate::assert_flag(multiple)
+  checkmate::assert_flag(fixed)
+  checkmate::assert_character(always_selected, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+  checkmate::assert_string(label, null.ok = TRUE)
   stopifnot(multiple || !is(selected, "all_choices"))
   if (fixed) stopifnot(is.null(always_selected))
 

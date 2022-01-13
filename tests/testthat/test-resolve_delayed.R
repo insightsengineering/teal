@@ -15,17 +15,17 @@ testthat::test_that("resolve_delayed_expr works correctly", {
   # 1) single argument called "data"
   testthat::expect_error(
     resolve_delayed_expr(function() {}, ds = adsl, is_value_choices = FALSE), # nolint
-    regexp = "is_fully_named_list(formals(x)) is not TRUE",
+    regexp = "Assertion on 'x' failed: Must have formal arguments: data.",
     fixed = TRUE
   )
   testthat::expect_error(
     resolve_delayed_expr(function(a) {}, ds = adsl, is_value_choices = FALSE), # nolint
-    regexp = 'names(formals(x))[1] == "data" is not TRUE',
+    regexp = "Assertion on 'x' failed: Must have formal arguments: data.",
     fixed = TRUE
   )
   testthat::expect_error(
     resolve_delayed_expr(function(data, a) {}, ds = adsl, is_value_choices = FALSE), # nolint
-    regexp = "length(formals(x)) == 1 is not TRUE",
+    regexp = "Assertion on 'x' failed: Must have exactly 1 formal arg",
     fixed = TRUE
   )
 

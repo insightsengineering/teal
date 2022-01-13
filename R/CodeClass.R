@@ -79,7 +79,7 @@ CodeClass <- R6::R6Class( # nolint
     #' @return changed `CodeClass` object
     append = function(x) {
       stopifnot(is(x, "CodeClass"))
-      if (!is_empty(x$code)) {
+      if (length(x$code) > 0) {
         for (code_i in x$code) {
           private$set_code_single(code_i)
         }
@@ -97,11 +97,9 @@ CodeClass <- R6::R6Class( # nolint
     #'
     #' @return changed `CodeClass` object
     set_code = function(code, dataname = character(0), deps = character(0)) {
-      stopifnot(
-        is_character_vector(code),
-        is_character_vector(dataname, min_length = 0),
-        !(dataname %in% deps)
-      )
+      checkmate::assert_character(code, min.len = 1, any.missing = FALSE)
+      checkmate::assert_character(dataname, any.missing = FALSE)
+      stopifnot(!(dataname %in% deps))
 
       code <- pretty_code_string(code)
 
@@ -118,8 +116,8 @@ CodeClass <- R6::R6Class( # nolint
     #' @param deparse optional, (`logical`) whether to return the deparsed form of a call
     #' @return `character` or `list` of calls
     get_code = function(dataname = NULL, deparse = TRUE) {
-      stopifnot(is.null(dataname) || is_character_vector(dataname))
-      stopifnot(is_logical_single(deparse))
+      checkmate::assert_character(dataname, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+      checkmate::assert_flag(deparse)
       if (is.null(dataname)) {
         private$get_code_all(deparse = deparse)
       } else {
@@ -156,13 +154,22 @@ CodeClass <- R6::R6Class( # nolint
     deps = list(),
     ## __Private Methods ====
     set_code_single = function(code,
-                               dataname = if_null(attr(code, "dataname"), character(0)),
-                               deps = if_null(attr(code, "deps"), character(0)),
-                               id = if_null(attr(code, "id"), digest::digest(c(private$.code, code)))) {
+                               dataname = attr(code, "dataname"),
+                               deps =  attr(code, "deps"),
+                               id = attr(code, "id")) {
+      if (is.null(dataname)) dataname <- character(0)
+      if (is.null(deps)) deps <- character(0)
+      if (is.null(id)) id <- digest::digest(c(private$.code, code))
       # Line shouldn't be added when it contains the same code and the same dataname
       # as a line already present in an object of CodeClass
-      if (!id %in% ulapply(private$.code, "attr", "id") ||
-        all_true(dataname, function(x) !x %in% ulapply(private$.code, "attr", "dataname"))) {
+      if (
+        !id %in% unlist(lapply(private$.code, "attr", "id")) ||
+        all(
+          vapply(dataname, FUN.VALUE = logical(1), FUN = function(x) {
+            !x %in% unlist(lapply(private$.code, "attr", "dataname"))
+          })
+        )
+      ) {
         attr(code, "dataname") <- dataname
         attr(code, "deps") <- deps
         attr(code, "id") <- id
@@ -187,11 +194,14 @@ CodeClass <- R6::R6Class( # nolint
         # line of code is one we want if it is not empty and
         # has any dataname attribute in the vector datanames or dataname starts with * or is global code and
         # already have some lines of code selected
-        if ((
-          any(datanames %in% attr(code_entry, "dataname")) ||
+        if (
+          (
+            any(datanames %in% attr(code_entry, "dataname")) ||
             any(grepl("^[*]", attr(code_entry, "dataname"))) ||
-            (!is_empty(res) && is_empty(attr(code_entry, "dataname")))) &&
-          !is_empty(code_entry)) {
+            (length(res) > 0 && length(attr(code_entry, "dataname")) == 0)
+          ) &&
+          length(code_entry) > 0
+        ) {
 
           # append to index of code we want
           res <- c(idx, res)
@@ -206,10 +216,10 @@ CodeClass <- R6::R6Class( # nolint
       if (isFALSE(deparse)) {
         return(Filter(
           Negate(is.null),
-          unname(ulapply(
+          unname(unlist(lapply(
             private$.code[idx],
             function(x) sapply(x, function(i) text_to_call(i), simplify = FALSE)
-          ))
+          )))
         ))
       } else {
         return(paste0(unlist(private$.code[idx]), collapse = "\n"))
@@ -231,11 +241,11 @@ CodeClass <- R6::R6Class( # nolint
 
 # Convert named list to `CodeClass` utilizing both `TealDatasetConnector` and `TealDataset`
 list_to_code_class <- function(x) {
-  stopifnot(is_fully_named_list(x))
+  checkmate::assert_list(x, min.len = 0, names = "unique")
 
   res <- CodeClass$new()
 
-  if (!is_empty(x)) {
+  if (length(x) > 0) {
     for (var_idx in seq_along(x)) {
       var_value <- x[[var_idx]]
       var_name <- names(x)[[var_idx]]
@@ -263,7 +273,7 @@ list_to_code_class <- function(x) {
 #' @return (`call`) object.
 text_to_call <- function(x) {
   parsed <- parse(text = x, keep.source = FALSE)
-  if (is_empty(parsed)) {
+  if (length(parsed) == 0) {
     return(NULL)
   } else {
     return(as.list(as.call(parsed))[[1]])
@@ -278,10 +288,10 @@ text_to_call <- function(x) {
 #' @return (`character`) string containing the formatted code.
 pretty_code_string <- function(code_vector) {
   # in order to remove bad formatting: text -> code -> text
-  ulapply(
+  unlist(lapply(
     code_vector,
     function(code_single) {
-      if (is_empty(parse(text = code_single, keep.source = FALSE))) {
+      if (length(parse(text = code_single, keep.source = FALSE)) == 0) {
         # if string code cannot be passed into expression (e.g. code comment) then pass on the string
         code_single
       } else {
@@ -293,5 +303,5 @@ pretty_code_string <- function(code_vector) {
         )
       }
     }
-  )
+  ))
 }

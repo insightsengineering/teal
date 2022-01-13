@@ -96,10 +96,10 @@ CallablePythonCode <- R6::R6Class( # nolint
         assign(var, private$vars_to_assign[[var]], envir = .GlobalEnv)
       }
 
-      if_null(
-        super$run(args = args, try = try),
+      res <- super$run(args = args, try = try)
+      if (is.null(res)) {
         stop("The specified python object returned NULL or does not exist in the python code")
-      )
+      }
     }
   ),
 
@@ -147,8 +147,7 @@ PythonCodeClass <- R6::R6Class( # nolint
     #'
     #' @return `data.frame` containing the mutated dataset
     eval = function(vars = list(), dataname = NULL, envir = .GlobalEnv) {
-      stopifnot(is_fully_named_list(vars))
-
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
       execution_environment <- .GlobalEnv
 
       dupl_vars <- list() # only if using global environment
@@ -270,7 +269,7 @@ PythonCodeClass <- R6::R6Class( # nolint
 python_code <- function(code = character(0), script = character(0)) {
   if (!xor(missing(code), missing(script))) stop("Exactly one of 'code' and 'script' is required")
 
-  if (!is_empty(script)) {
+  if (length(script) > 0) {
     code <- deparse(call("py_run_file", script))
   } else {
     code <- deparse(call("py_run_string", code))

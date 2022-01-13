@@ -64,10 +64,8 @@ JoinKeys <- R6::R6Class( # nolint
     #' @param x  `list` of `JoinKeys` objects or single `JoinKeys` object
     #' @return (`self`) invisibly for chaining
     merge = function(x) {
-      stopifnot(is_class_list("JoinKeys")(x) || is(x, "JoinKeys"))
-      if (!is_class_list("JoinKeys")(x)) {
-        x <- list(x)
-      }
+      if (inherits(x, "JoinKeys")) x <- list(x)
+      checkmate::assert_list(x, types = "JoinKeys", min.len = 1)
       for (jk in x) {
         for (dataset_1 in names(jk$get())) {
           for (dataset_2 in names(jk$get()[[dataset_1]])) {
@@ -106,9 +104,9 @@ JoinKeys <- R6::R6Class( # nolint
     #' @param val (named `character`) column names used to join
     #' @return (`self`) invisibly for chaining
     mutate = function(dataset_1, dataset_2, val) {
-      stopifnot(is_character_single(dataset_1))
-      stopifnot(is_character_single(dataset_2))
-      stopifnot(is_character_vector(val, min_length = 0L))
+      checkmate::assert_string(dataset_1)
+      checkmate::assert_string(dataset_2)
+      checkmate::assert_character(val, any.missing = FALSE)
 
       private$join_pair(join_key(dataset_1, dataset_2, val))
 
@@ -123,10 +121,10 @@ JoinKeys <- R6::R6Class( # nolint
     #' to be specified once
     #' @return (`self`) invisibly for chaining
     set = function(x) {
-      if (!is_empty(private$.keys)) {
+      if (length(private$.keys) > 0) {
         stop("Keys already set, please use JoinKeys$mutate() to change them")
       }
-      if (!is_class_list("JoinKeySet")(x)) {
+      if (inherits(x, "JoinKeySet")) {
         x <- list(x)
       }
 
@@ -137,7 +135,7 @@ JoinKeys <- R6::R6Class( # nolint
         }
       }
 
-      stopifnot(is_class_list("JoinKeySet")(x))
+      checkmate::assert_list(x, types = "JoinKeySet", min.len = 1)
       lapply(x, private$join_pair)
 
       logger::log_trace("JoinKeys$set keys are set.")
@@ -192,11 +190,11 @@ JoinKeys <- R6::R6Class( # nolint
       if (join_key_1$dataset_1 == join_key_2$dataset_2 && join_key_1$dataset_2 == join_key_2$dataset_1) {
 
         # have to handle empty case differently as names(character(0)) is NULL
-        if (is_empty(join_key_1$keys) && is_empty(join_key_2$keys)) {
+        if (length(join_key_1$keys) == 0 && length(join_key_2$keys) == 0) {
           return(TRUE)
         }
 
-        if (xor(is_empty(join_key_1$keys), is_empty(join_key_2$keys)) ||
+        if (xor(length(join_key_1$keys) == 0, length(join_key_2$keys) == 0) ||
           !identical(sort(join_key_1$keys), sort(setNames(names(join_key_2$keys), join_key_2$keys)))) {
           error_message(join_key_1$dataset_1, join_key_1$dataset_2)
         }
@@ -234,7 +232,7 @@ JoinKeys <- R6::R6Class( # nolint
 join_keys <- function(...) {
   x <- list(...)
   res <- JoinKeys$new()
-  if (!is_empty(x)) {
+  if (length(x) > 0) {
     res$set(x)
   }
   res
@@ -315,11 +313,11 @@ mutate_join_keys.TealData <- function(x, dataset_1, dataset_2, val) { # nolint
 #'
 #' @export
 join_key <- function(dataset_1, dataset_2, keys) {
-  stopifnot(is_character_single(dataset_1))
-  stopifnot(is_character_single(dataset_2))
-  stopifnot(is_character_vector(keys, min_length = 0))
+  checkmate::assert_string(dataset_1)
+  checkmate::assert_string(dataset_2)
+  checkmate::assert_character(keys, any.missing = FALSE)
 
-  if (!is_empty(keys)) {
+  if (length(keys) > 0) {
     if (is.null(names(keys))) {
       names(keys) <- keys
     }

@@ -39,6 +39,7 @@
 * Renamed `Dataset` class into `TealDataset`. Applied the same logic for the rest of the dataset and data class names.
 * Added validation to `FilteredDataset::get_data` to accept logical input only.
 * Added a vignette describing the modifications to `teal` applications users can apply using `R` options.
+* Removed dependency on `utils.nest` and replaced those function with equivalents from the `checkmate` package.
 
 # teal 0.10.0
 

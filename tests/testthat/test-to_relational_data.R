@@ -52,10 +52,11 @@ test_that("to_relational_data accepts a named list of data.frame as input", {
 })
 
 test_that("to_relational_data accepts a mixed named list of data.frame as input", {
-  output_dataset_list <- to_relational_data_wrapper(list(AA = head(iris), head(mtcars)))
+  head_mtcars <- head(mtcars) # wouldn't be a valid R object name (head(mtcars))
+  output_dataset_list <- to_relational_data_wrapper(list(AA = head(iris), head_mtcars))
   testthat::expect_error(output_dataset_list, NA)
   testthat::expect_is(output_dataset_list, "TealData")
-  testthat::expect_identical(output_dataset_list$get_datanames(), c("AA", "head(mtcars)"))
+  testthat::expect_identical(output_dataset_list$get_datanames(), c("AA", "head_mtcars"))
 })
 
 test_that("to_relational_data accepts a complete named list of data.frame as input", {

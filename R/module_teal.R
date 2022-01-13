@@ -46,16 +46,26 @@ ui_teal <- function(id,
                     title = NULL,
                     header = tags$p(""),
                     footer = tags$p("")) {
-  if (is_character_single(header)) {
+  if (checkmate::test_string(header)) {
     header <- tags$h1(header)
   }
-  if (is_character_single(footer)) {
+  if (checkmate::test_string(footer)) {
     footer <- tags$p(footer)
   }
-  stopifnot(
-    is_html_like(splash_ui),
-    is_html_like(header),
-    is_html_like(footer)
+  checkmate::assert(
+    checkmate::check_class(splash_ui, "shiny.tag"),
+    checkmate::check_class(splash_ui, "shiny.tag.list"),
+    checkmate::check_class(splash_ui, "html")
+  )
+  checkmate::assert(
+    checkmate::check_class(header, "shiny.tag"),
+    checkmate::check_class(header, "shiny.tag.list"),
+    checkmate::check_class(header, "html")
+  )
+  checkmate::assert(
+    checkmate::check_class(footer, "shiny.tag"),
+    checkmate::check_class(footer, "shiny.tag.list"),
+    checkmate::check_class(footer, "html")
   )
 
   ns <- NS(id)

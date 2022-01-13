@@ -565,19 +565,9 @@ test_that("mutate_dataset", {
     )
   })
 
-  expect_error(
-    object = {
-      mutate_dataset(x = test_ds)
-    },
-    "is_character_single(code) || is_character_single(script) is not TRUE"
-  )
+  expect_error(mutate_dataset(x = test_ds), "Assertion failed.+code")
 
-  expect_error(
-    object = {
-      mutate_dataset(x = test_ds, code = TRUE)
-    },
-    "character"
-  )
+  expect_error(mutate_dataset(x = test_ds, code = TRUE), "Assertion failed.+code")
 
   expect_error(
     object = {
@@ -612,7 +602,7 @@ test_that("mutate_dataset", {
     object = {
       test_ds %>% mutate_dataset(c("x <- 3", "som"))
     },
-    "is_character_vector"
+    "Assertion failed.+code"
   )
 
   expect_silent({

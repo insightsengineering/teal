@@ -15,7 +15,7 @@
 #' ))
 #' }
 stop_shiny <- function(title, body) {
-  if (!is_html_like(body)) {
+  if (!inherits(body, c("shiny.tag", "shiny.tag.list", "html"))) {
     body <- tags$p(body)
   }
   shinyApp(

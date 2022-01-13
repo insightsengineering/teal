@@ -29,7 +29,7 @@ TealDataAbstract <- R6::R6Class( # nolint
       res <- if (isFALSE(private$.check)) {
         NULL
       } else {
-        if (!is_empty(private$pull_code$code)) {
+        if (length(private$pull_code$code) > 0) {
           private$check_combined_code()
         } else {
           all(vapply(
@@ -65,8 +65,8 @@ TealDataAbstract <- R6::R6Class( # nolint
     execute_mutate = function() {
       logger::log_trace("TealDataAbstract$execute_mutate evaluating mutate code...")
       # this will be pulled already! - not needed?
-      if (is_empty(private$mutate_code$code)) {
-        res <- ulapply(
+      if (length(private$mutate_code$code) == 0) {
+        res <- unlist(lapply(
           private$datasets,
           function(x) {
             if (is_pulled(x)) {
@@ -75,16 +75,18 @@ TealDataAbstract <- R6::R6Class( # nolint
               NULL
             }
           }
-        )
+        ))
         # exit early if mutate isn't required
         logger::log_trace("TealDataAbstract$execute_mutate no code to evaluate.")
-        return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
+        if (!is.null(res)) {
+          stats::setNames(res, vapply(res, get_dataname, character(1)))
+        }
       }
 
 
       if (inherits(private$mutate_code, "PythonCodeClass")) {
         items <- lapply(self$get_items(), get_raw_data)
-        datasets <- setNames(items, vapply(self$get_items(), get_dataname, character(1)))
+        datasets <- stats::setNames(items, vapply(self$get_items(), get_dataname, character(1)))
 
         new_env <- private$mutate_code$eval(vars = c(datasets, private$mutate_vars))
       } else {
@@ -133,8 +135,8 @@ TealDataAbstract <- R6::R6Class( # nolint
     #' @param deparse (`logical`) whether to return the deparsed form of a call
     #' @return (`character`) vector of code to generate datasets.
     get_code = function(dataname = NULL, deparse = TRUE) {
-      stopifnot(is.null(dataname) || is_character_vector(dataname))
-      stopifnot(is_logical_single(deparse))
+      checkmate::assert_character(dataname, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+      checkmate::assert_flag(deparse)
 
       return(self$get_code_class()$get_code(dataname = dataname, deparse = deparse))
     },
@@ -175,9 +177,9 @@ TealDataAbstract <- R6::R6Class( # nolint
     #'
     #' @return `TealDataset`.
     get_dataset = function(dataname = NULL) {
-      stopifnot(is.null(dataname) || is_character_single(dataname))
+      checkmate::assert_string(dataname, null.ok = TRUE)
 
-      if (is_character_single(dataname)) {
+      if (length(dataname) == 1) {
         if (!(dataname %in% self$get_datanames())) {
           stop(paste("dataset", dataname, "not found"))
         }
@@ -199,7 +201,7 @@ TealDataAbstract <- R6::R6Class( # nolint
           "- Please use `load_datasets()` to retrieve complete results."
         )
       }
-      ulapply(self$get_items(), get_dataset)
+      unlist(lapply(self$get_items(), get_dataset))
     },
     #' @description
     #' Get all datasets and all dataset connectors
@@ -208,9 +210,9 @@ TealDataAbstract <- R6::R6Class( # nolint
     #'   name of dataset connector to be returned. If `NULL`, all connectors are returned.
     #' @return `list` with all datasets and all connectors
     get_items = function(dataname = NULL) {
-      stopifnot(is.null(dataname) || is_character_single(dataname))
+      checkmate::assert_string(dataname, null.ok = TRUE)
 
-      if (is_character_single(dataname)) {
+      if (length(dataname) == 1) {
         if (!(dataname %in% self$get_datanames())) {
           stop(paste("dataset", dataname, "not found"))
         }
@@ -287,7 +289,7 @@ TealDataAbstract <- R6::R6Class( # nolint
     #'
     #' @return self invisibly for chaining
     mutate_dataset = function(dataname, code, vars = list()) {
-      stopifnot(is_character_vector(dataname))
+      checkmate::assert_character(dataname, min.len = 1, any.missing = FALSE)
       stopifnot(all(dataname %in% self$get_datanames()))
 
       private$set_mutate_vars(vars = vars)
@@ -316,7 +318,7 @@ TealDataAbstract <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining.
     set_check = function(check = FALSE) {
-      stopifnot(is_logical_single(check))
+      checkmate::assert_flag(check)
       private$.check <- check
       logger::log_trace("TealDataAbstract$set_check check set to: { check }.")
       return(invisible(self))
@@ -330,7 +332,7 @@ TealDataAbstract <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining.
     set_pull_code = function(code) {
-      stopifnot(is_character_single(code))
+      checkmate::assert_string(code)
       is_code_set <- vapply(
         self$get_items(),
         function(item) {
@@ -438,7 +440,10 @@ TealDataAbstract <- R6::R6Class( # nolint
       return(res)
     },
     set_mutate_code = function(code, dataname = self$get_datanames(), deps = names(private_mutate_vars)) {
-      stopifnot(is_character_vector(code, 0, 1) || inherits(code, "PythonCodeClass"))
+      checkmate::assert(
+        checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+        checkmate::check_class(code, "PythonCodeClass")
+      )
 
       if (inherits(code, "PythonCodeClass")) {
         r <- PythonCodeClass$new()
@@ -455,8 +460,7 @@ TealDataAbstract <- R6::R6Class( # nolint
       return(invisible(self))
     },
     set_mutate_vars = function(vars) {
-      stopifnot(is_fully_named_list(vars))
-
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
       if (length(vars) > 0) {
         private$mutate_vars <- c(
           private$mutate_vars,
@@ -467,7 +471,7 @@ TealDataAbstract <- R6::R6Class( # nolint
       return(invisible(self))
     },
     check_names = function(x) {
-      if (any(vapply(x, is_empty_string, logical(1)))) {
+      if (any(vapply(x, identical, logical(1), y = ""))) {
         stop("Cannot extract some dataset names")
       }
       if (any(duplicated(x))) {
