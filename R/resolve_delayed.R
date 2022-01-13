@@ -75,7 +75,9 @@ resolve_delayed <- function(x, datasets) {
 
 #' @export
 resolve_delayed.delayed_variable_choices <- function(x, datasets) { # nolint
-  if_null(x$key, x$key <- datasets$get_keys(x$data))
+  if (is.null(x$key)) {
+    x$key <- datasets$get_keys(x$data)
+  }
   x$data <- datasets$get_data(x$data)
   if (is(x$subset, "function")) {
     x$subset <- resolve_delayed_expr(x$subset, ds = x$data, is_value_choices = FALSE)

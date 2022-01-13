@@ -230,10 +230,18 @@ variable_type_icons <- function(var_type) {
 
   res <- unname(vapply(
     var_type,
+    FUN.VALUE = character(1),
     function(class) {
-      if_not_cond(class, if_null(class_to_icon[[class]], class_to_icon[["unknown"]]), function(x) x == "")
-    },
-    character(1)
+      if (class == "") {
+        class
+      } else {
+        if (is.null(class_to_icon[[class]])) {
+          class_to_icon[["unknown"]]
+        } else {
+          class_to_icon[[class]]
+        }
+      }
+    }
   ))
 
   return(res)
@@ -301,7 +309,7 @@ picker_options <- function(choices) {
         content = picker_options_content(
           var_name  = raw_choices,
           var_label = extract_choices_labels(choices),
-          var_type  = if_null(attr(choices, "types"), character(0))
+          var_type  = if (is.null(attr(choices, "types"))) character(0) else attr(choices, "types")
         )
       )
     )
@@ -311,7 +319,7 @@ picker_options <- function(choices) {
       list(content = picker_options_content(
         var_name  = choices,
         var_label = extract_choices_labels(choices),
-        var_type  = if_null(attr(choices, "types"), character(0))
+        var_type  = if (is.null(attr(choices, "types"))) character(0) else attr(choices, "types")
       ))
     )
   } else {

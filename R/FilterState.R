@@ -57,9 +57,10 @@ label_keep_na_count <- function(na_count) {
 #' @return `FilterState` object
 init_filter_state <- function(x,
                               varname,
-                              varlabel = if_null(attr(x, "label"), character(0)),
+                              varlabel = attr(x, "label"),
                               input_dataname = NULL,
                               extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   checkmate::assert(
     checkmate::check_string(varname),
     checkmate::check_class(varname, "name")
@@ -90,9 +91,10 @@ init_filter_state <- function(x,
 #' @export
 init_filter_state.default <- function(x,
                                       varname,
-                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      varlabel = attr(x, "label"),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   FilterState$new(
     x = x,
     varname = varname,
@@ -105,9 +107,10 @@ init_filter_state.default <- function(x,
 #' @export
 init_filter_state.logical <- function(x,
                                       varname,
-                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      varlabel = attr(x, "label"),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   LogicalFilterState$new(
     x = x,
     varname = varname,
@@ -120,9 +123,10 @@ init_filter_state.logical <- function(x,
 #' @export
 init_filter_state.numeric <- function(x,
                                       varname,
-                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      varlabel = attr(x, "label"),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   if (length(unique(x[!is.na(x)])) < getOption("teal.threshold_slider_vs_checkboxgroup")) {
     ChoicesFilterState$new(
       x = x,
@@ -145,9 +149,10 @@ init_filter_state.numeric <- function(x,
 #' @export
 init_filter_state.factor <- function(x,
                                      varname,
-                                     varlabel = if_null(attr(x, "label"), character(0)),
+                                     varlabel = attr(x, "label"),
                                      input_dataname = NULL,
                                      extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   ChoicesFilterState$new(
     x = x,
     varname = varname,
@@ -160,9 +165,10 @@ init_filter_state.factor <- function(x,
 #' @export
 init_filter_state.character <- function(x,
                                         varname,
-                                        varlabel = if_null(attr(x, "label"), character(0)),
+                                        varlabel = attr(x, "label"),
                                         input_dataname = NULL,
                                         extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   ChoicesFilterState$new(
     x = x,
     varname = varname,
@@ -175,9 +181,10 @@ init_filter_state.character <- function(x,
 #' @export
 init_filter_state.Date <- function(x,
                                    varname,
-                                   varlabel = if_null(attr(x, "label"), character(0)),
+                                   varlabel = attr(x, "label"),
                                    input_dataname = NULL,
                                    extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   DateFilterState$new(
     x = x,
     varname = varname,
@@ -190,9 +197,10 @@ init_filter_state.Date <- function(x,
 #' @export
 init_filter_state.POSIXct <- function(x,
                                       varname,
-                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      varlabel = attr(x, "label"),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   DatetimeFilterState$new(
     x = x,
     varname = varname,
@@ -205,9 +213,10 @@ init_filter_state.POSIXct <- function(x,
 #' @export
 init_filter_state.POSIXlt <- function(x,
                                       varname,
-                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      varlabel = attr(x, "label"),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   DatetimeFilterState$new(
     x = x,
     varname = varname,
@@ -626,7 +635,12 @@ FilterState <- R6::R6Class( # nolint
         ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
         eventExpr = input$keep_na,
         handlerExpr = {
-          self$set_keep_na(if_null(input$keep_na, FALSE))
+          keep_na <- if (is.null(input$keep_na)) {
+            FALSE
+          } else {
+            input$keep_na
+          }
+          self$set_keep_na(keep_na)
           logger::log_trace(
             "{ class(self)[1] }$server keep_na set to: { input$keep_na }, dataname: { private$input_dataname }"
           )
@@ -1021,8 +1035,11 @@ LogicalFilterState <- R6::R6Class( # nolint
             ignoreInit = TRUE,
             eventExpr = input$selection,
             handlerExpr = {
-              selection_state <- input$selection
-              self$set_selected(if_null(as.logical(selection_state), logical(0)))
+              selection_state <- as.logical(input$selection)
+              if (is.null(selection_state)) {
+                selection_state <- logical(0)
+              }
+              self$set_selected(selection_state)
               logger::log_trace(
                 "LogicalFilterState$server@2 selection changed, dataname: { deparse1(private$input_dataname) }"
               )
@@ -1318,7 +1335,9 @@ RangeFilterState <- R6::R6Class( # nolint
             eventExpr = input$selection,
             handlerExpr = {
               # because we extended real range into rounded one we need to apply intersect(range_input, range_real)
-              selection_state <- c(max(input$selection[1], private$choices[1]), min(input$selection[2], private$choices[2]))
+              selection_state <- as.numeric(
+                c(max(input$selection[1], private$choices[1]), min(input$selection[2], private$choices[2]))
+              )
               if (!setequal(selection_state, self$get_selected())) {
                 validate(
                   need(
@@ -1326,7 +1345,7 @@ RangeFilterState <- R6::R6Class( # nolint
                     "Left range boundary should be lower than right"
                   )
                 )
-                self$set_selected(if_null(selection_state, numeric(0)))
+                self$set_selected(selection_state)
               }
               logger::log_trace("RangeFilterState$server@3 selection changed, dataname: { deparse1(private$input_dataname) }")
             }
@@ -1339,7 +1358,8 @@ RangeFilterState <- R6::R6Class( # nolint
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
             eventExpr = input$keep_inf,
             handlerExpr = {
-              self$set_keep_inf(if_null(input$keep_inf, FALSE))
+              keep_inf <- if (is.null(input$keep_inf)) FALSE else input$keep_inf
+              self$set_keep_inf(keep_inf)
               logger::log_trace(
                 "RangeFilterState$server@4 keep_inf set to: { input$keep_inf }, dataname: { private$input_dataname }"
               )
@@ -1712,7 +1732,8 @@ ChoicesFilterState <- R6::R6Class( # nolint
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
             eventExpr = input$selection,
             handlerExpr = {
-              self$set_selected(if_null(input$selection, character(0)))
+              selection <- if (is.null(input$selection)) character(0) else input$selection
+              self$set_selected(selection)
               logger::log_trace(
                 "ChoicesFilterState$server@2 selection changed, dataname: { deparse1(private$input_dataname) }"
               )

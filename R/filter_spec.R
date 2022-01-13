@@ -185,8 +185,9 @@ filter_spec <- function(vars,
                         selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
                         multiple = length(selected) > 1 || is(selected, "all_choices"),
                         label = NULL,
-                        sep = if_null(attr(choices, "sep"), " - "),
+                        sep = attr(choices, "sep"),
                         drop_keys = FALSE) {
+  if (is.null(sep)) sep <- " - "
   checkmate::assert(
     checkmate::check_character(vars, min.len = 1, any.missing = FALSE),
     checkmate::check_class(vars, "delayed_data"),
@@ -311,10 +312,11 @@ filter_spec_internal <- function(vars_choices,
                                  label = NULL,
                                  fixed = FALSE,
                                  multiple = TRUE,
-                                 sep = if_null(attr(vars_choices, "sep"), " - "),
+                                 sep = attr(vars_choices, "sep"),
                                  drop_keys = FALSE,
                                  dataname = NULL,
                                  initialized = FALSE) {
+  if (is.null(sep)) sep <- " - "
   checkmate::assert_string(vars_label, null.ok = TRUE)
   checkmate::assert_flag(vars_fixed)
   checkmate::assert_flag(vars_multiple)
@@ -361,10 +363,11 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
                                               label = NULL,
                                               fixed = FALSE,
                                               multiple = TRUE,
-                                              sep = if_null(attr(vars_choices, "sep"), " - "),
+                                              sep = attr(vars_choices, "sep"),
                                               drop_keys = FALSE,
                                               dataname = NULL,
                                               initialized = FALSE) {
+  if (is.null(sep)) sep <- " - "
   checkmate::assert(
     checkmate::check_character(vars_choices, min.len = 1, any.missing = FALSE),
     checkmate::check_numeric(vars_choices, min.len = 1, any.missing = FALSE),
@@ -435,10 +438,11 @@ filter_spec_internal.default <- function(vars_choices,
                                          label = NULL,
                                          fixed = FALSE,
                                          multiple = TRUE,
-                                         sep = if_null(attr(vars_choices, "sep"), " - "),
+                                         sep = attr(vars_choices, "sep"),
                                          drop_keys = FALSE,
                                          dataname = NULL,
                                          initialized = FALSE) {
+  if (is.null(sep)) sep <- " - "
   checkmate::assert(
     checkmate::check_character(vars_choices, min.len = 1, any.missing = FALSE),
     checkmate::check_numeric(vars_choices, min.len = 1, any.missing = FALSE),

@@ -398,21 +398,23 @@ TealData <- R6::R6Class( # nolint
                   function(x) {
                     div(
                       if (is(x, class2 = "TealDataConnector")) {
-                        if_null(
-                          x$get_ui(id = ns(x$id)),
-                          div(
+                        ui <- x$get_ui(id = ns(x$id))
+                        if (is.null(ui)) {
+                          ui <- div(
                             h4("TealDataset Connector for: ", lapply(x$get_datanames(), code)),
                             p(icon("check"), "Ready to Load")
                           )
-                        )
+                        }
+                        ui
                       } else if (is(x, class2 = "TealDatasetConnector")) {
-                        if_null(
-                          x$get_ui(id = ns(paste0(x$get_datanames(), collapse = "_"))),
-                          div(
+                        ui <- x$get_ui(id = ns(paste0(x$get_datanames(), collapse = "_")))
+                        if (is.null(ui)) {
+                          ui <- div(
                             h4("TealDataset Connector for: ", code(x$get_dataname())),
                             p(icon("check"), "Ready to Load")
                           )
-                        )
+                        }
+                        ui
                       } else {
                         div(h4("Data(set) for: ", lapply(x$get_datanames(), code)), p(icon("check"), "Loaded"))
                       },

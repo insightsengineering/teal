@@ -154,9 +154,12 @@ CodeClass <- R6::R6Class( # nolint
     deps = list(),
     ## __Private Methods ====
     set_code_single = function(code,
-                               dataname = if_null(attr(code, "dataname"), character(0)),
-                               deps = if_null(attr(code, "deps"), character(0)),
-                               id = if_null(attr(code, "id"), digest::digest(c(private$.code, code)))) {
+                               dataname = attr(code, "dataname"),
+                               deps =  attr(code, "deps"),
+                               id = attr(code, "id")) {
+      if (is.null(dataname)) dataname <- character(0)
+      if (is.null(deps)) deps <- character(0)
+      if (is.null(id)) id <- digest::digest(c(private$.code, code))
       # Line shouldn't be added when it contains the same code and the same dataname
       # as a line already present in an object of CodeClass
       if (!id %in% unlist(lapply(private$.code, "attr", "id")) ||

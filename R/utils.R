@@ -339,7 +339,10 @@ get_key_duplicates <- function(dataset, keys = NULL) {
 #' @export
 get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { # nolint
   df <- get_raw_data(dataset)
-  keys <- if_null(keys, if_null(get_keys(dataset), character(0)))
+  if (is.null(keys)) {
+    keys_ds <- get_keys(dataset)
+    keys <- if (is.null(keys_ds)) character(0) else keys_ds
+  }
 
   get_key_duplicates_util(df, keys)
 }
@@ -367,8 +370,10 @@ get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { # nolint
 #'
 #' @export
 get_key_duplicates.data.frame <- function(dataset, keys = NULL) { # nolint
-  keys <- if_null(keys, if_null(attr(dataset, "primary_key"), character(0)))
-
+  if (is.null(keys)) {
+    attr_key <- attr(dataset, "primary_key")
+    keys <- if (is.null(attr_key)) character(0) else attr
+  }
   get_key_duplicates_util(dataset, keys)
 }
 

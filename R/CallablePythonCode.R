@@ -96,10 +96,10 @@ CallablePythonCode <- R6::R6Class( # nolint
         assign(var, private$vars_to_assign[[var]], envir = .GlobalEnv)
       }
 
-      if_null(
-        super$run(args = args, try = try),
+      res <- super$run(args = args, try = try)
+      if (is.null(res)) {
         stop("The specified python object returned NULL or does not exist in the python code")
-      )
+      }
     }
   ),
 

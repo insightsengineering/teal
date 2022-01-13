@@ -123,11 +123,16 @@ get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
   stopifnot(is.data.frame(data))
   checkmate::assert_character(columns, min.len = 1, null.ok = TRUE, any.missing = FALSE)
   checkmate::assert_flag(fill)
-
-  columns <- if_null(columns, colnames(data))
+  if (is.null(columns)) {
+    columns <- colnames(data)
+  }
   labels <- as.list(get_labels(data, fill = fill)$column_labels)
   # convert NULL into NA_character for not-existing column
-  res <- vapply(columns, function(x) if_null(labels[[x]], NA_character_), character(1))
-
-  return(res)
+  vapply(columns, FUN.VALUE = character(1), function(x) {
+    if (is.null(labels[[x]])) {
+      NA_character_
+    } else {
+      labels[[x]]
+    }
+  })
 }
