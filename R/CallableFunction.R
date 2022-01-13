@@ -64,7 +64,7 @@ CallableFunction <- R6::R6Class( # nolint
       checkmate::assert_list(args, names = "strict", min.len = 0, null.ok = TRUE)
 
       old_args <- private$args
-      if_not_empty(args, self$set_args(args))
+      if (length(args) > 0) self$set_args(args)
 
       res <- if (deparse) {
         deparse1(private$call, collapse = "\n")

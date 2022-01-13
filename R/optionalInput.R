@@ -151,13 +151,12 @@ optionalSelectInput <- function(inputId, # nolint
       return(div(
         shinyjs::hidden(ui),
         tags$label(id = paste0(inputId, "_textonly"), class = "control-label", sub(":[[:space:]]+$", "", label)),
-        if_not_empty(
-          selected,
+        if (length(selected) > 0) {
           tags$code(
             id = paste0(inputId, "_valueonly"),
             paste(selected, collapse = ", ")
           )
-        ),
+        },
         label_help
       ))
     } else {
