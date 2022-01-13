@@ -244,7 +244,11 @@ bookmarkableShinyApp <- function(ui, server, ...) { # nolint
       # evaluating ui with default arguments
       ui()
     } else {
-      stopifnot(is_html_like(ui))
+      checkmate::assert(
+        checkmate::check_class(ui, "shiny.tag"),
+        checkmate::check_class(ui, "shiny.tag.list"),
+        checkmate::check_class(ui, "html")
+      )
       ui
     }
   }

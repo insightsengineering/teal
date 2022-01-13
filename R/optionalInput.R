@@ -90,7 +90,13 @@ optionalSelectInput <- function(inputId, # nolint
                                 fixed = FALSE,
                                 width = NULL) {
   checkmate::assert_string(inputId)
-  stopifnot(checkmate::test_string(label, null.ok = TRUE) || is_html_like(label))
+
+  checkmate::assert(
+    checkmate::check_string(label, null.ok = TRUE),
+    checkmate::check_class(label, "shiny.tag"),
+    checkmate::check_class(label, "shiny.tag.list"),
+    checkmate::check_class(label, "html")
+  )
   stopifnot(is.null(choices) || length(choices) >= 1)
   stopifnot(
     is.null(selected) ||
@@ -101,7 +107,12 @@ optionalSelectInput <- function(inputId, # nolint
   checkmate::assert_flag(multiple)
   checkmate::assert_string(sep, null.ok = TRUE)
   stopifnot(is.list(options))
-  stopifnot(checkmate::test_string(label_help, null.ok = TRUE) || is_html_like(label_help))
+  checkmate::assert(
+    checkmate::check_string(label_help, null.ok = TRUE),
+    checkmate::check_class(label_help, "shiny.tag"),
+    checkmate::check_class(label_help, "shiny.tag.list"),
+    checkmate::check_class(label_help, "html")
+  )
   checkmate::assert_flag(fixed)
 
   if (!is.null(width)) {
