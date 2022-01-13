@@ -487,6 +487,37 @@ get_key_duplicates_util <- function(dataframe, keys) {
   summary
 }
 
+#' Function to get a file out of a package
+#'
+#' @param pkg (`character`)\cr
+#'  The name of the package the file should be received from.
+#' @param file_name (code{character`)\cr
+#'  The name of the file to be received or path to it starting from
+#'  the base package path.
+#' @return The path to the file
+#' @keywords internal
+#' @examples
+#' get_package_file("teal", "WORDLIST")
+#' get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")
+get_package_file <- function(pkg = NULL, file_name = NULL) {
+  stopifnot(is_character_single(pkg))
+  stopifnot(is_character_single(file_name))
+
+  base_file <- system.file(file_name, package = pkg)
+  inst_file <- system.file("inst", file_name, package = pkg)
+
+  if (file.exists(base_file)) {
+    return(base_file)
+  } else if (file.exists(inst_file)) {
+    return(inst_file)
+  } else {
+    stop(paste("There is no such file:", file_name, "or package:", pkg))
+  }
+}
+© 2022 GitHub, Inc.
+Terms
+
+
 # Function to be used while trying to load the object of specific class from the script.
 object_file <- function(path, class) {
   checkmate::assert_string(path)
