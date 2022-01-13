@@ -22,8 +22,8 @@
 #' }
 check_ellipsis <- function(..., stop = FALSE, allowed_args = character(0)) {
   if (!missing(...)) {
-    stop_if_not(is_logical_single(stop))
-    stop_if_not(is_empty(allowed_args) || is_character_vector(allowed_args))
+    checkmate::assert_flag(stop)
+    checkmate::assert_character(allowed_args, min.len = 0, null.ok = TRUE, any.missing = FALSE)
     args <- list(...)
     arg_names <- names(args)
     if (is.null(arg_names)) {
@@ -500,8 +500,8 @@ get_key_duplicates_util <- function(dataframe, keys) {
 #' get_package_file("teal", "WORDLIST")
 #' get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")
 get_package_file <- function(pkg = NULL, file_name = NULL) {
-  stopifnot(is_character_single(pkg))
-  stopifnot(is_character_single(file_name))
+  checkmate::assert_string(pkg)
+  checkmate::assert_string(file_name)
 
   base_file <- system.file(file_name, package = pkg)
   inst_file <- system.file("inst", file_name, package = pkg)
@@ -524,8 +524,9 @@ object_file <- function(path, class) {
   lines <- paste0(readLines(path), collapse = "\n")
   object <- eval(parse(text = lines, keep.source = FALSE))
 
-  stop_if_not(list(is(object, class), paste("The object returned from the file is not of", class, "class.")))
-
+  if (!is(object, class)) {
+    stop("The object returned from the file is not of ", class, " class.")
+  }
   return(object)
 }
 

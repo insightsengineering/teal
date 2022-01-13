@@ -539,10 +539,9 @@ TealDataset <- R6::R6Class( # nolint
     #' @return `TRUE` if dataset has been already pulled, else `FALSE`
     check_keys = function(keys = private$.keys) {
       if (length(keys) > 0) {
-        stop_if_not(list(
-          all(keys %in% self$get_colnames()),
-          paste("Primary keys specifed for", self$get_dataname(), "do not exist in the data.")
-        ))
+        if (!all(keys %in% self$get_colnames())) {
+          stop("Primary keys specifed for ", self$get_dataname(), " do not exist in the data.")
+        }
 
         duplicates <- get_key_duplicates(self$get_raw_data(), keys)
         if (nrow(duplicates) > 0) {

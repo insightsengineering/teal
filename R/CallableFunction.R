@@ -23,12 +23,9 @@ CallableFunction <- R6::R6Class( # nolint
     #' @return new \code{CallableFunction} object
     initialize = function(fun, env = new.env(parent = parent.env(globalenv()))) {
       super$initialize(env = env)
-      stop_if_not(
-        list(
-          !missing(fun),
-          "A valid function name must be provided."
-        )
-      )
+      if (missing(fun)) {
+        stop("A valid function name must be provided.")
+      }
       if (!(checkmate::test_string(fun) || is.function(fun) || is.call(fun) || is.symbol(fun))) {
         stop("CallableFunction can be specified as character, symbol, call or function")
       }
@@ -186,10 +183,9 @@ CallableFunction <- R6::R6Class( # nolint
     get_call_from_prefixed_function = function(function_name) {
       package_function_names <- strsplit(function_name, "::")[[1]]
       fun <- get(package_function_names[2], envir = getNamespace(package_function_names[1]))
-      stop_if_not(list(
-        is.function(fun),
-        sprintf("object '%s' of mode 'function' was not found", function_name)
-      ))
+      if (!is.function(fun)) {
+        stop(sprintf("object '%s' of mode 'function' was not found", function_name))
+      }
       str2lang(function_name)
     },
     # @param symbol (`function`, `symbol` or `character`) the item matching a function

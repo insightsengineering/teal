@@ -60,12 +60,9 @@ CallableCode <- R6::R6Class( # nolint
     #' @return \code{list} of \code{calls} or \code{character} depending on \code{deparse} argument
     get_call = function(deparse = TRUE, args = NULL) {
       checkmate::assert_flag(deparse)
-      stop_if_not(
-        list(
-          is.null(args),
-          "'args' are not used to retrieve the call."
-        )
-      )
+      if (!is.null(args)) {
+        stop("'args' are not used to retrieve the call.")
+      }
 
       res <- if (deparse) {
         paste0(vapply(private$call, deparse1, character(1)), collapse = "\n")

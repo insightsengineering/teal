@@ -67,9 +67,9 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
   }
 
   checkmate::assert_character(labels[!is.na(labels)], any.missing = FALSE)
-
-  stop_if_not(list(length(choices) == length(labels), "length of choices must be the same as labels"))
-
+  if (length(choices) != length(labels)) {
+    stop("length of choices must be the same as labels")
+  }
   stopifnot(is.null(subset) || is.vector(subset))
   stopifnot(is.null(types) || is.vector(types))
 
@@ -78,7 +78,9 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
   }
 
   if (!is.null(subset)) {
-    stop_if_not(list(all(subset %in% choices), "all of subset variables must be in choices"))
+    if (!all(subset %in% choices)) {
+      stop("all of subset variables must be in choices")
+    }
     labels <- labels[choices %in% subset]
     types <- types[choices %in% subset]
     choices <- choices[choices %in% subset]

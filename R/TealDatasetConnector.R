@@ -447,10 +447,9 @@ TealDatasetConnector <- R6::R6Class( # nolint
     set_ui_input = function(inputs = NULL) {
       stopifnot(is.null(inputs) || is.function(inputs))
       if (is.function(inputs)) {
-        stop_if_not(list(
-          length(formals(inputs)) == 1 && names(formals(inputs)) == "ns",
-          "'inputs' must be a function of a single argument called 'ns'"
-        ))
+        if (!identical(names(formals(inputs)), "ns")) {
+          stop("'inputs' must be a function of a single argument called 'ns'")
+        }
       }
       private$ui_input <- inputs
       logger::log_trace("TealDatasetConnector$set_ui_input ui_input set for dataset: { self$get_dataname() }.")
@@ -535,24 +534,11 @@ TealDatasetConnector <- R6::R6Class( # nolint
       }
       # check ui inputs
       if (!is.null(ui)) {
-        stopifnot(is.list(ui))
-        stop_if_not(
-          list(
-            all(vapply(ui, is, logical(1), class2 = "shiny.tag")),
-            "All elements must be of class shiny.tag"
-          )
-        )
-        stop_if_not(
-          list(
-            all(
-              grepl(
-                "shiny-input-container",
-                vapply(lapply(ui, "[[", i = "attribs"), "[[", character(1), i = "class")
-              )
-            ),
-            "All elements must be shiny inputs"
-          )
-        )
+        checkmate::assert_list(ui, types = "shiny.tag")
+        attr_class <- vapply(lapply(ui, "[[", i = "attribs"), "[[", character(1), i = "class")
+        if (!all(grepl("shiny-input-container", attr_class))) {
+          stop("All elements must be shiny inputs")
+        }
       }
       # create ui
       if (!is.null(ui)) {
@@ -716,24 +702,11 @@ TealDatasetConnector <- R6::R6Class( # nolint
         }
         # check ui inputs
         if (!is.null(ui)) {
-          stopifnot(is.list(ui))
-          stop_if_not(
-            list(
-              all(vapply(ui, is, logical(1), class2 = "shiny.tag")),
-              "All elements must be of class shiny.tag"
-            )
-          )
-          stop_if_not(
-            list(
-              all(
-                grepl(
-                  "shiny-input-container",
-                  vapply(lapply(ui, "[[", i = "attribs"), "[[", character(1), i = "class")
-                )
-              ),
-              "All elements must be shiny inputs"
-            )
-          )
+          checkmate::assert_list(ui, types = "shiny.tag")
+          attr_class <- vapply(lapply(ui, "[[", i = "attribs"), "[[", character(1), i = "class")
+          if (!all(grepl("shiny-input-container", attr_class))) {
+            stop("All elements must be shiny inputs")
+          }
         }
         # create ui
         if (!is.null(ui)) {
