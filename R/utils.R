@@ -1,3 +1,58 @@
+#' Ensure the ellipsis, ..., in method arguments are empty
+#'
+#' Ellipsis, ..., are needed as part of method arguments to allow for its arguments to be different from its generic's
+#' arguments and for this to pass check(). Hence, ..., should always be empty. This function will check for this
+#' condition.
+#'
+#' @param ... it should literally just be ...
+#' @param stop TRUE to raise an error; FALSE will output warning message
+#' @param allowed_args character vector naming arguments that are allowed in the \code{...}.
+#'   to allow for unnamed arguments, let "" be one of the elements in this character vector.
+#'
+#' @return \code{NULL} if ... is empty
+#'
+#' @keywords internal
+#'
+#' @examples
+#' method.class <- function(a, b, c, ...) {
+#'   check_ellipsis(...)
+#' }
+#' method.class <- function(a, b, c, ...) {
+#'   check_ellipsis(..., allowed_args = c("y", "z"))
+#' }
+check_ellipsis <- function(..., stop = FALSE, allowed_args = character(0)) {
+  if (!missing(...)) {
+    stop_if_not(is_logical_single(stop))
+    stop_if_not(is_empty(allowed_args) || is_character_vector(allowed_args))
+    args <- list(...)
+    arg_names <- names(args)
+    if (is.null(arg_names)) {
+      arg_names <- rep("", length(args))
+    }
+    extra_args <- arg_names[!is.element(arg_names, allowed_args)]
+    if (length(extra_args) == 0) {
+      return(invisible(NULL))
+    }
+    message <- paste(length(extra_args), "total unused argument(s).")
+    named_extra_args <- extra_args[!vapply(extra_args, is_empty_string, logical(1))]
+    if (length(named_extra_args) > 0) {
+      message <- paste0(
+        message,
+        " ",
+        length(named_extra_args),
+        " with name(s): ",
+        paste(named_extra_args, collapse = ", "),
+        "."
+      )
+    }
+    if (stop) {
+      stop(message)
+    } else {
+      warning(message)
+    }
+  }
+}
+
 #' Helper function to deep copy `R6` object
 #'
 #' When cloning an R6 object the private function
