@@ -594,14 +594,22 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     set_filter_state = function(state, ...) {
       checkmate::assert_list(state)
       logger::log_trace(
-        "DefaultFilteredDataset$set_filter_state setting up filters in : { self$get_dataname() }"
+        sprintf(
+          "DefaultFilteredDataset$set_filter_state setting up filters of variables %s, dataname: %s",
+          paste(names(state), collapse = ", "),
+          self$get_dataname()
+        )
       )
 
       data <- self$get_data(filtered = FALSE)
       fs <- self$get_filter_states()[[1]]
       fs$set_filter_state(state = state, data = data, ...)
       logger::log_trace(
-        "DefaultFilteredDataset$set_filter_state done setting up filters in : { self$get_dataname() }"
+        sprintf(
+          "DefaultFilteredDataset$set_filter_state done setting up filters of variables %s, dataname: %s",
+          paste(names(state), collapse = ", "),
+          self$get_dataname()
+        )
       )
       NULL
     },
@@ -614,7 +622,11 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' @return `NULL`
     remove_filter_state = function(element_id) {
       logger::log_trace(
-        "DefaultFilteredDataset$remove_filter_state removing filters, dataname: { self$get_dataname() }"
+        sprintf(
+          "DefaultFilteredDataset$remove_filter_state removing filters of variable %s, dataname: %s",
+          element_id,
+          self$get_dataname()
+        )
       )
 
       fdata_filter_state <- self$get_filter_states()[[1]]
@@ -622,7 +634,11 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
         fdata_filter_state$remove_filter_state(element)
       }
       logger::log_trace(
-        "DefaultFilteredDataset$remove_filter_state done removing filters, dataname: { self$get_dataname() }"
+        sprintf(
+          "DefaultFilteredDataset$remove_filter_state done removing filters of variable %s, dataname: %s",
+          element_id,
+          self$get_dataname()
+        )
       )
       invisible(NULL)
     },
@@ -968,7 +984,13 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       checkmate::assert_list(state)
       checkmate::assert_subset(names(state), c(names(self$get_filter_states())))
 
-      logger::log_trace("MAEFilteredDataset$set_filter_state setting up filters: { self$get_dataname() }")
+      logger::log_trace(
+        sprintf(
+          "MAEFilteredDataset$set_filter_state setting up filters of variable %s, dataname: %s",
+          paste(names(state), collapse = ", "),
+          self$get_dataname()
+        )
+      )
       data <- self$get_data(filtered = FALSE)
       for (fs_name in names(state)) {
         fs <- self$get_filter_states()[[fs_name]]
@@ -979,7 +1001,11 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       }
 
       logger::log_trace(
-        "MAEFilteredDataset$set_filter_state done setting filters: { self$get_dataname() }"
+        sprintf(
+          "MAEFilteredDataset$set_filter_state done setting filters of variable %s, dataname: %s",
+          paste(names(state), collapse = ", "),
+          self$get_dataname()
+        )
       )
       NULL
     },
@@ -995,7 +1021,13 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       checkmate::assert_list(element_id, names = "unique")
       checkmate::assert_subset(names(element_id), c(names(self$get_filter_states())))
 
-      logger::log_trace("MAEFilteredDataset$remove_filter_state removing filters: { self$get_dataname() }")
+      logger::log_trace(
+        sprintf(
+          "MAEFilteredDataset$remove_filter_state removing filters of variable %s, dataname: %s",
+          element_id,
+          self$get_dataname()
+        )
+      )
 
       for (fs_name in names(element_id)) {
         fdata_filter_state <- self$get_filter_states()[[fs_name]]
@@ -1003,7 +1035,13 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           `if`(fs_name == "subjects", element_id[[fs_name]][[1]], element_id[[fs_name]])
         )
       }
-      logger::log_trace("MAEFilteredDataset$remove_filter_state done removing filters: { self$get_dataname() }")
+      logger::log_trace(
+        sprintf(
+          "MAEFilteredDataset$remove_filter_state done removing filters of variable %s, dataname: %s",
+          element_id,
+          self$get_dataname()
+        )
+      )
       invisible(NULL)
     },
 

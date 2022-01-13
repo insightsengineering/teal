@@ -307,7 +307,11 @@ TealDataset <- R6::R6Class( # nolint
     set_keys = function(keys) {
       checkmate::assert_character(keys, any.missing = FALSE)
       private$.keys <- keys
-      logger::log_trace("TealDataset$set_keys keys set for dataset: { self$get_dataname() }.")
+      logger::log_trace(sprintf(
+        "TealDataset$set_keys set the keys %s for dataset: %s",
+        paste(keys, collapse = ", "),
+        self$get_dataname()
+      ))
       return(invisible(self))
     },
     #' @description
