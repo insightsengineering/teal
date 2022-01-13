@@ -123,7 +123,7 @@ testthat::test_that("set_state_reactive needs a named list with selected and kee
   test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16", "2013/08/17"))
   filter_state <- DateFilterState$new(test_date, varname = "test")
   testthat::expect_error(
-    isolate(filter_state$set_state_reactive(list(selected = c("2013/08/16", "2013/08/17"), keep_na = TRUE))),
+    filter_state$set_state_reactive(list(selected = c("2013/08/16", "2013/08/17"), keep_na = TRUE)),
     NA
   )
   testthat::expect_error(
@@ -153,7 +153,7 @@ testthat::test_that("set_selected_reactive throws error when one argument is giv
 testthat::test_that("set_keep_na_reactive accepts logical input", {
   test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16", "2013/08/17"))
   filter_state <- DateFilterState$new(test_date, varname = "test")
-  testthat::expect_error(isolate(filter_state$set_keep_na_reactive(TRUE)), NA)
+  testthat::expect_error(filter_state$set_keep_na_reactive(TRUE), NA)
 })
 
 testthat::test_that("set_keep_na_reactive throws error if input is not logical", {
