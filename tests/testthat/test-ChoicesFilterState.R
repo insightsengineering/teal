@@ -67,7 +67,7 @@ testthat::test_that("set_state overwrites fields included in the input only", {
 
 testthat::test_that("set_state_reactive needs a named list with selected and keep_na elements", {
   filter_state <- ChoicesFilterState$new(x = c("a", "b", NA_character_), varname = "test")
-  testthat::expect_error(filter_state$set_state_reactive(list(selected = "a", keep_na = TRUE)), NA)
+  testthat::expect_error(isolate(filter_state$set_state_reactive(list(selected = "a", keep_na = TRUE))), NA)
   testthat::expect_error(
     filter_state$set_state_reactive(list(selected = "a", unknown = TRUE)),
     "all\\(names\\(state\\)"
@@ -81,7 +81,7 @@ testthat::test_that("set_selected_reactive warns when selection not within allow
 
 testthat::test_that("set_keep_na_reactive accepts logical input", {
   filter_state <- ChoicesFilterState$new("test", varname = "test")
-  testthat::expect_error(filter_state$set_keep_na_reactive(TRUE), NA)
+  testthat::expect_error(isolate(filter_state$set_keep_na_reactive(TRUE)), NA)
 })
 
 testthat::test_that("set_keep_na_reactive throws error if input is not logical", {

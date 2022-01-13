@@ -179,7 +179,7 @@ testthat::test_that("set_selected_reactive throws error when selection not withi
 
 testthat::test_that("set_keep_na_reactive accepts logical input", {
   filter_state <- RangeFilterState$new(c(1, 8), varname = "test")
-  testthat::expect_error(filter_state$set_keep_na_reactive(TRUE), NA)
+  testthat::expect_error(isolate(filter_state$set_keep_na_reactive(TRUE)), NA)
 })
 
 testthat::test_that("set_keep_na_reactive throws error if input is not logical", {

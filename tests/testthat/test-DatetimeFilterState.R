@@ -134,7 +134,7 @@ testthat::test_that("set_state_reactive needs a named list with selected and kee
   objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "test")
   testthat::expect_error(
-    filter_state$set_state_reactive(list(selected = c(objects[2], objects[3]), keep_na = TRUE)),
+    isolate(filter_state$set_state_reactive(list(selected = c(objects[2], objects[3]), keep_na = TRUE))),
     NA
   )
   testthat::expect_error(
@@ -165,7 +165,7 @@ testthat::test_that("set_selected_reactive throws error when one argument is giv
 testthat::test_that("set_keep_na_reactive accepts logical input", {
   objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "test")
-  testthat::expect_error(filter_state$set_keep_na_reactive(TRUE), NA)
+  testthat::expect_error(isolate(filter_state$set_keep_na_reactive(TRUE)), NA)
 })
 
 testthat::test_that("set_keep_na_reactive throws error if input is not logical", {
