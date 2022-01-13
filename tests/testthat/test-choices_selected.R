@@ -92,3 +92,18 @@ testthat::test_that("choices_selected throws when no_select_keyword is passed to
 testthat::test_that("is returns choices_selected if passed a choices selected object", {
   testthat::expect_equal(is(choices_selected(choices = "A")), "choices_selected")
 })
+
+testthat::test_that("choices_selected remove duplicates", {
+  testthat::expect_identical(choices_selected(choices = c("A", "A")),
+                             structure(list(choices = "A", selected = "A", fixed = FALSE), class = "choices_selected"))
+  testthat::expect_identical(choices_selected(choices = setNames(c("A", "A"), c("A", "A"))),
+                             structure(list(choices = c(A = "A"), selected = c(A = "A"), fixed = FALSE),
+                                       class = "choices_selected"))
+  testthat::expect_equal(
+    choices_selected(
+      choices = c("name for A" = "A", "name for A" = "A",
+                  "Name for nothing" = "", "name for b" = "B", "name for C" = "C"),
+      selected = "A")$choices,
+    c(`name for A` = "A", `Name for nothing` = "", `name for b` = "B", `name for C` = "C")
+  )
+})
