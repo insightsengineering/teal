@@ -215,7 +215,8 @@ call_condition_range_posixct <- function(varname, range, timezone = Sys.timezone
 #' @keywords internal
 #' @export
 call_condition_range_date <- function(varname, range) {
-  checkmate::assert_data(range, len = 2, sorted = TRUE)
+  checkmate::assert_date(range, len = 2)
+  checkmate::assert_true(range[2] >= range[1])
   varname <- call_check_parse_varname(varname)
 
   call(
