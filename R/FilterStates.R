@@ -1864,7 +1864,7 @@ SEFilterStates <- R6::R6Class( # nolint
               logger::log_trace(
                 sprintf(
                   "SEFilterStates$srv_add_filter_state@3 added FilterState of column %s to col data, dataname: %s",
-                  input$col_to_add,
+                  deparse1(input$col_to_add),
                   deparse1(private$input_dataname)
               ))
             }
