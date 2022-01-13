@@ -321,7 +321,7 @@ rds_dataset_connector <- function(dataname,
                                   script = character(0),
                                   ...) {
   dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
+  checkmate::assert_list(dot_args, min.len = 0, names = "unique")
   checkmate::assert_string(file)
   if (!file.exists(file)) {
     stop("File ", file, " does not exist.", call. = FALSE)
@@ -415,7 +415,7 @@ script_dataset_connector <- function(dataname,
                                      script = character(0),
                                      ...) {
   vars <- list(...)
-  stopifnot(is_fully_named_list(vars))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
   checkmate::assert_string(file)
   if (!file.exists(file)) {
     stop("File ", file, " does not exist.", call. = FALSE)
@@ -534,8 +534,7 @@ code_dataset_connector <- function(dataname,
                                    mutate_script = character(0),
                                    ...) {
   vars <- list(...)
-
-  stopifnot(is_fully_named_list(vars))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
   checkmate::assert_string(code)
   checkmate::assert_character(label, max.len = 1, any.missing = FALSE)
 
@@ -864,7 +863,7 @@ csv_dataset_connector <- function(dataname,
                                   script = character(0),
                                   ...) {
   dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
+  checkmate::assert_list(dot_args, min.len = 0, names = "unique")
 
   check_pkg_quietly(
     "readr",
@@ -1020,8 +1019,7 @@ fun_dataset_connector <- function(dataname,
                                   func_name = substitute(fun),
                                   ...) {
   vars <- list(...)
-
-  stopifnot(is_fully_named_list(vars))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
 
   stopifnot(is.function(fun))
 

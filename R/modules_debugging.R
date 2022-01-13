@@ -271,9 +271,7 @@ trigger_after_first_cycle <- function(expr) { # nolint
 #'
 predefined_filters_module <- function(label = "Apply filters", filter) { # nolint
   checkmate::assert_string(label)
-  stopifnot(
-    is_fully_named_list(filter)
-  )
+  checkmate::assert_list(filter, min.len = 0, names = "unique")
   module(
     label = label,
     server = function(input, output, session, datasets) {

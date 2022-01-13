@@ -460,8 +460,7 @@ TealDataAbstract <- R6::R6Class( # nolint
       return(invisible(self))
     },
     set_mutate_vars = function(vars) {
-      stopifnot(is_fully_named_list(vars))
-
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
       if (length(vars) > 0) {
         private$mutate_vars <- c(
           private$mutate_vars,

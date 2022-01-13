@@ -179,12 +179,7 @@ resolve_delayed.default <- function(x, datasets) {
 #' )
 #' }
 resolve_delayed_expr <- function(x, ds, is_value_choices) {
-  stopifnot(
-    is.function(x),
-    is_fully_named_list(formals(x)),
-    length(formals(x)) == 1,
-    names(formals(x))[1] == "data"
-  )
+  checkmate::assert_function(x, args = "data", nargs = 1)
 
   # evaluate function
   res <- do.call("x", list(data = ds))

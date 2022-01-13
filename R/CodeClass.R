@@ -235,7 +235,7 @@ CodeClass <- R6::R6Class( # nolint
 
 # Convert named list to `CodeClass` utilizing both `TealDatasetConnector` and `TealDataset`
 list_to_code_class <- function(x) {
-  stopifnot(is_fully_named_list(x))
+  checkmate::assert_list(x, min.len = 0, names = "unique")
 
   res <- CodeClass$new()
 

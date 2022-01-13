@@ -59,7 +59,7 @@ MAETealDataset <- R6::R6Class( # nolint
         checkmate::check_class(code, "CodeClass")
       )
       checkmate::assert_character(label, max.len = 1, null.ok = TRUE, any.missing = FALSE)
-      stopifnot(identical(vars, list()) || is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
 
       private$.raw_data <- x
       private$.ncol <- ncol(SummarizedExperiment::colData(x))
@@ -186,7 +186,7 @@ MAETealDataset <- R6::R6Class( # nolint
     # @return (`environment`) which stores modified `x`
     execute_code = function(code, vars = list()) {
       stopifnot(is(code, "CodeClass"))
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
 
       execution_environment <- new.env(parent = parent.env(globalenv()))
 
@@ -247,7 +247,7 @@ dataset.MultiAssayExperiment <- function(dataname,
     checkmate::check_character(code, max.len = 1, any.missing = FALSE),
     checkmate::check_class(code, "CodeClass")
   )
-  stopifnot(identical(vars, list()) || is_fully_named_list(vars))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
 
   MAETealDataset$new(
     dataname = dataname,

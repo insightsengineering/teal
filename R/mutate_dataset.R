@@ -74,7 +74,7 @@ mutate_dataset.TealDataset <- function(x,
                                        vars = list(),
                                        ...) {
   check_ellipsis(...)
-  stopifnot(is_fully_named_list(vars))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
 
   code <- code_from_script(code, script)
   x$mutate(code = code, vars = vars, ...)
@@ -89,7 +89,7 @@ mutate_dataset.TealDatasetConnector <- function(x, # nolint
                                                 vars = list(),
                                                 ...) {
   check_ellipsis(...)
-  stopifnot(is_fully_named_list(vars))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
   code <- code_from_script(code, script)
   x$mutate(code = code, vars = vars, ...)
 }
@@ -104,7 +104,7 @@ mutate_dataset.TealDataAbstract <- function(x,
                                             vars = list(),
                                             ...) {
   check_ellipsis(...)
-  stopifnot(is_fully_named_list(vars))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
 
   code <- code_from_script(code, script)
   x$mutate_dataset(dataname = dataname, code = code, vars = vars)
@@ -144,7 +144,7 @@ mutate_data.TealDataAbstract <- function(x,
                                          code = character(0),
                                          script = character(0),
                                          vars = list()) {
-  stopifnot(is_fully_named_list(vars))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
 
   code <- code_from_script(code, script)
   x$mutate(code = code, vars = vars)

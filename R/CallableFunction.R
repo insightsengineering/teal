@@ -93,7 +93,7 @@ CallableFunction <- R6::R6Class( # nolint
         private$refresh()
         return(invisible(self))
       }
-      stopifnot(is.list(args) && is_fully_named_list(args))
+      checkmate::assert_list(args, min.len = 0, names = "unique")
 
       for (idx in seq_along(args)) {
         self$set_arg_value(

@@ -274,7 +274,7 @@ TealDataset <- R6::R6Class( # nolint
     #' )
     #'
     reassign_datasets_vars = function(datasets) {
-      stopifnot(is_fully_named_list(datasets))
+      checkmate::assert_list(datasets, min.len = 0, names = "unique")
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))
       private$var_r6[common_var_r6] <- datasets[common_var_r6]
@@ -459,7 +459,7 @@ TealDataset <- R6::R6Class( # nolint
       )
 
       checkmate::assert_flag(force_delay)
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
       checkmate::assert(
         checkmate::check_string(code),
         checkmate::check_class(code, "CodeClass")
@@ -697,7 +697,7 @@ TealDataset <- R6::R6Class( # nolint
     # @param is_mutate_vars (`logical(1)`) whether this var is used in mutate code
     set_vars_internal = function(vars, is_mutate_vars = FALSE) {
       checkmate::assert_flag(is_mutate_vars)
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
 
       total_vars <- c(list(), private$vars, private$mutate_vars)
 
@@ -737,7 +737,7 @@ TealDataset <- R6::R6Class( # nolint
     # @return (`environment`) which stores modified `x`
     execute_code = function(code, vars = list()) {
       stopifnot(is(code, "CodeClass"))
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
 
       execution_environment <- new.env(parent = parent.env(globalenv()))
 
@@ -791,7 +791,7 @@ TealDataset <- R6::R6Class( # nolint
       return(invisible(self))
     },
     set_var_r6 = function(vars) {
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
       for (varname in names(vars)) {
         var <- vars[[varname]]
 
@@ -930,7 +930,7 @@ dataset.data.frame <- function(dataname,
     checkmate::check_character(code, max.len = 1, any.missing = FALSE),
     checkmate::check_class(code, "CodeClass")
   )
-  stopifnot(identical(vars, list()) || is_fully_named_list(vars))
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
 
   TealDataset$new(
     dataname = dataname,

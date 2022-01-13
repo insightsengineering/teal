@@ -180,7 +180,7 @@ TealDataConnection <- R6::R6Class( # nolint
     #'
     open = function(args = NULL, silent = FALSE, try = FALSE) {
       logger::log_trace("TealDataConnection$open opening the connection...")
-      stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
+      checkmate::assert_list(args, min.len = 0, names = "unique", null.ok = TRUE)
       if (isFALSE(private$check_open_fun(silent = silent))) return()
       if (isTRUE(private$opened) && isTRUE(private$ping())) {
         private$opened <- TRUE
@@ -228,7 +228,7 @@ TealDataConnection <- R6::R6Class( # nolint
     #' @return optionally deparsed `call` object
     get_open_call = function(deparse = TRUE, args = NULL, silent = FALSE) {
       checkmate::assert_flag(deparse)
-      stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
+      checkmate::assert_list(args, min.len = 0, names = "unique", null.ok = TRUE)
       if (isFALSE(private$check_open_fun(silent = silent))) return()
       open_call <- private$open_fun$get_call(deparse = FALSE, args = args)
 
@@ -293,7 +293,7 @@ TealDataConnection <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining.
     set_open_args = function(args, silent = FALSE) {
-      stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
+      checkmate::assert_list(args, min.len = 0, names = "unique", null.ok = TRUE)
       if (isFALSE(private$check_open_fun(silent = silent))) return()
       private$open_fun$set_args(args)
       logger::log_trace("TealDataConnection$set_open_args open args set.")
@@ -473,7 +473,7 @@ TealDataConnection <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining.
     set_close_args = function(args, silent = FALSE) {
-      stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
+      checkmate::assert_list(args, min.len = 0, names = "unique", null.ok = TRUE)
       if (isFalse(private$check_close_fun(silent = silent))) return()
       private$close_fun$set_args(args)
       logger::log_trace("TealDataConnection$set_close_args close_args set")

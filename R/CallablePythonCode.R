@@ -147,8 +147,7 @@ PythonCodeClass <- R6::R6Class( # nolint
     #'
     #' @return `data.frame` containing the mutated dataset
     eval = function(vars = list(), dataname = NULL, envir = .GlobalEnv) {
-      stopifnot(is_fully_named_list(vars))
-
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
       execution_environment <- .GlobalEnv
 
       dupl_vars <- list() # only if using global environment

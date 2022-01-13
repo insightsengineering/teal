@@ -225,7 +225,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #' @return NULL invisible
     reassign_datasets_vars = function(datasets) {
       logger::log_trace("TealDatasetConnector$reassign_datasets_vars reassigning vars in dataset: { self$get_dataname() }.")
-      stopifnot(is_fully_named_list(datasets))
+      checkmate::assert_list(datasets, min.len = 0, names = "unique")
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))
       private$var_r6[common_var_r6] <- datasets[common_var_r6]
@@ -365,7 +365,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining.
     mutate = function(code, vars = list()) {
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
 
       if (is.null(private$dataset)) {
         # just needs a dummy TealDataset object to store mutate code, hence col = 1
@@ -616,7 +616,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       return(invisible(self))
     },
     set_pull_vars = function(pull_vars) {
-      stopifnot(is_fully_named_list(pull_vars))
+      checkmate::assert_list(pull_vars, min.len = 0, names = "unique")
       private$pull_vars <- pull_vars
       return(invisible(self))
     },
@@ -667,7 +667,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       return(NULL)
     },
     set_var_r6 = function(vars) {
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
       for (varname in names(vars)) {
         var <- vars[[varname]]
 

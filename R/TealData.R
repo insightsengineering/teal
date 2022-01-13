@@ -66,8 +66,7 @@ TealData <- R6::R6Class( # nolint
     #' Create a new object of `TealData` class
     initialize = function(..., check = FALSE, join_keys) {
       dot_args <- list(...)
-      allowed_classes <- c("TealDataConnector", "TealDataset", "TealDatasetConnector")
-      is_teal_data <- is_any_class_list(dot_args, allowed_classes)
+      is_teal_data <- checkmate::test_list(dot_args, types = c("TealDataConnector", "TealDataset", "TealDatasetConnector"))
       if (!all(is_teal_data)) {
         stop("All elements should be of TealDataset(Connector) or TealDataConnector class")
       }
