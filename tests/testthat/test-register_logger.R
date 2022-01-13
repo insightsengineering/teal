@@ -44,7 +44,7 @@ testthat::test_that("register_logger does not throw if passed a correct logger l
 })
 
 testthat::test_that("register_logger does not throw if passed a correct logger level", {
-    withr::with_options(
+  withr::with_options(
     new = list(teal.log_layout = "{msg}"),
     code = testthat::expect_error(register_logger(namespace = "test", level = logger::INFO), NA)
   )
@@ -52,13 +52,13 @@ testthat::test_that("register_logger does not throw if passed a correct logger l
 
 testthat::test_that("register_logger does not throw if passed NULL to either log_layout or log_level
   and valid options are set", {
-    withr::with_options(
-      new = list(teal.log_layout = "{msg}", teal.log_level = logger::INFO),
-      code = testthat::expect_error(
-        register_logger(namespace = "test", level = NULL, layout = NULL),
-        NA
-      )
+  withr::with_options(
+    new = list(teal.log_layout = "{msg}", teal.log_level = logger::INFO),
+    code = testthat::expect_error(
+      register_logger(namespace = "test", level = NULL, layout = NULL),
+      NA
     )
+  )
 })
 
 testthat::test_that("register_logger does not throw if passed NULL to arguments, options are not set and

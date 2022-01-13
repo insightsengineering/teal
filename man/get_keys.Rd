@@ -45,7 +45,9 @@ get_keys(
 
 library(scda)
 pull_fun_adsl <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adsl}
+  function() {
+    synthetic_cdisc_data("latest")$adsl
+  }
 )
 get_keys(
   dataset_connector(

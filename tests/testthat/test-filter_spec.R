@@ -26,7 +26,8 @@ test_that("Single choice", {
     choices = choices,
     selected = choices[1],
     multiple = FALSE,
-    label = "test"))
+    label = "test"
+  ))
   expect_identical(names(f1), c(
     "vars_choices",
     "vars_selected",
@@ -68,13 +69,15 @@ test_that("Multiple vars", {
   expect_silent(f1 <- filter_spec(
     vars = c("var1", "var2"),
     choices = c("val1.1 - val2.1", "val1.1 - val2.2"),
-    sep = " - "))
+    sep = " - "
+  ))
 
   expect_silent(f2 <- filter_spec(vars = c("var1", "var2"), choices = c("val1.1 - val2.1", "val1.1 - val2.2")))
 
   expect_silent(f5 <- filter_spec(
     vars = c("var1", "var2"),
-    choices = c(`combo1` = "val1.1 - val2.1", `combo2` = "val1.1 - val2.2")))
+    choices = c(`combo1` = "val1.1 - val2.1", `combo2` = "val1.1 - val2.2")
+  ))
 
   expect_identical(f1, f2)
   expect_true(all(names(f1$choices) != names(f5$choices)))
@@ -93,7 +96,8 @@ test_that("Multiple vars", {
       choices = choices,
       selected = choices[1:2],
       multiple = TRUE,
-      sep = " - ")
+      sep = " - "
+    )
   )
 
   expect_silent(
@@ -114,14 +118,16 @@ test_that("Dropping keys attribute", {
   expect_silent(f1 <- filter_spec(
     vars = "var1",
     choices = choices,
-    selected = choices[1]))
+    selected = choices[1]
+  ))
   expect_false(f1$drop_keys)
 
   expect_silent(f2 <- filter_spec(
     vars = "var1",
     choices = choices,
     selected = choices[1],
-    drop_keys = FALSE))
+    drop_keys = FALSE
+  ))
   expect_false(f2$drop_keys)
 })
 
@@ -130,7 +136,8 @@ test_that("delayed filter_spec", {
   ADSL <- data.frame( # nolint
     USUBJID = letters[1:10],
     SEX = sample(c("F", "M", "U"), 10, replace = TRUE),
-    stringsAsFactors = FALSE)
+    stringsAsFactors = FALSE
+  )
 
   expected_spec <- filter_spec(
     vars = variable_choices(ADSL, "SEX"),
@@ -155,6 +162,24 @@ test_that("delayed filter_spec", {
   isolate(ds$set_dataset(cdisc_dataset("ADSL", ADSL)))
   result_spec <- isolate(resolve_delayed(delayed, ds))
   expect_identical(expected_spec, isolate(resolve_delayed(delayed, ds)))
+})
+
+
+test_that("filter_spec with choices_selected where all selected in choices does not throw an error", {
+  valid_cs <- choices_selected(
+    choices = stats::setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
+    selected = c("A", "B")
+  )
+  expect_error(filter_spec(vars = valid_cs), regexp = NA)
+})
+
+
+test_that("filter_spec with choices_selected where not all selected in choices throws an error", {
+  invalid_cs <- choices_selected(
+    choices = stats::setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
+    selected = c("A", "X")
+  )
+  expect_error(filter_spec(vars = invalid_cs), "all(vars_selected %in% vars_choices) is not TRUE", fixed = TRUE)
 })
 
 
@@ -202,7 +227,8 @@ test_that("delayed filter_spec works", {
   ADSL <- data.frame( # nolint
     USUBJID = letters[1:10],
     SEX = sample(c("F", "M", "U"), 10, replace = TRUE),
-    stringsAsFactors = FALSE)
+    stringsAsFactors = FALSE
+  )
 
   expected_spec <- filter_spec_internal(
     vars_choices = variable_choices(ADSL),
@@ -339,7 +365,8 @@ testthat::test_that("delayed version of filter_spec", {
   testthat::expect_equal(res_obj$selected, exp_obj$selected)
   testthat::expect_equal(
     res_obj[-match(c("choices", "selected"), names(res_obj))],
-    exp_obj[-match(c("choices", "selected"), names(exp_obj))])
+    exp_obj[-match(c("choices", "selected"), names(exp_obj))]
+  )
 
 
   # functional choices & selected
@@ -349,12 +376,14 @@ testthat::test_that("delayed version of filter_spec", {
       "ADSL",
       var_choices = "ARMCD",
       var_label = "ARM",
-      subset = function(data) levels(data$ARMCD)[1:2]),
+      subset = function(data) levels(data$ARMCD)[1:2]
+    ),
     selected = value_choices(
       "ADSL",
       var_choices = "ARMCD",
       var_label = "ARM",
-      subset = function(data) "ARM A"),
+      subset = function(data) "ARM A"
+    ),
     multiple = FALSE
   )
 
@@ -371,12 +400,14 @@ testthat::test_that("delayed version of filter_spec", {
           "ADSL",
           var_choices = "ARMCD",
           var_label = "ARM",
-          subset = function(data) levels(data$ARMCD)[1:2]),
+          subset = function(data) levels(data$ARMCD)[1:2]
+        ),
         selected = value_choices(
           "ADSL",
           var_choices = "ARMCD",
           var_label = "ARM",
-          subset = function(data) "ARM A"),
+          subset = function(data) "ARM A"
+        ),
         label = NULL,
         multiple = FALSE,
         fixed = FALSE,

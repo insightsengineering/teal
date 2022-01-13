@@ -10,6 +10,7 @@ Each \code{FilteredDataset} contains \code{filter_states} field - a \code{list} 
 Each \code{FilterStates} is responsible for one filter/subset expression applied for specific
 components of the \code{TealDataset}.
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -19,6 +20,7 @@ components of the \code{TealDataset}.
 \item \href{#method-get_call}{\code{FilteredDataset$get_call()}}
 \item \href{#method-get_data}{\code{FilteredDataset$get_data()}}
 \item \href{#method-get_data_reactive}{\code{FilteredDataset$get_data_reactive()}}
+\item \href{#method-get_filter_state}{\code{FilteredDataset$get_filter_state()}}
 \item \href{#method-get_filter_states}{\code{FilteredDataset$get_filter_states()}}
 \item \href{#method-get_dataname}{\code{FilteredDataset$get_dataname()}}
 \item \href{#method-get_dataset}{\code{FilteredDataset$get_dataset()}}
@@ -30,7 +32,6 @@ components of the \code{TealDataset}.
 \item \href{#method-get_varnames}{\code{FilteredDataset$get_varnames()}}
 \item \href{#method-get_filtered_dataname}{\code{FilteredDataset$get_filtered_dataname()}}
 \item \href{#method-get_filterable_varnames}{\code{FilteredDataset$get_filterable_varnames()}}
-\item \href{#method-set_bookmark_state}{\code{FilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui}{\code{FilteredDataset$ui()}}
 \item \href{#method-server}{\code{FilteredDataset$server()}}
 \item \href{#method-ui_add_filter_state}{\code{FilteredDataset$ui_add_filter_state()}}
@@ -141,13 +142,30 @@ Gets the reactive object which returns filtered data
 
 \subsection{Returns}{
 (\code{reactive})
+Gets the reactive values from the active \code{FilterState} objects.
+
+Get all active filters from this dataset in form of the nested list.
+The output list is a compatible input to \code{self$set_filter_state}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
+\subsection{Method \code{get_filter_state()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} with named elements corresponding to \code{FilterStates} objects
+with active filters.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_filter_states"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_states}{}}}
 \subsection{Method \code{get_filter_states()}}{
-Gets the filter states
+Gets the active \code{FilterStates} objects.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_states(id = character(0))}\if{html}{\out{</div>}}
 }
@@ -322,31 +340,6 @@ Gets variable names for the filtering.
 
 \subsection{Returns}{
 (\code{character} vector) of variable names
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
-Sets the bookmark state
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$set_bookmark_state(id, state)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{(\code{character(1)})\cr
-an ID string that corresponds with the ID used to call the module's UI function.}
-
-\item{\code{state}}{(\verb{named list})\cr
-containing values of the initial filter. Values should be relevant
-to the referred column.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{moduleServer} function.
 }
 }
 \if{html}{\out{<hr>}}

@@ -54,5 +54,4 @@ x$get_join_keys()$get("ADSL", "ADRS")
 
 mutate_join_keys(x, "ADSL", "ADRS", c("COLUMN1" = "COLUMN2"))
 x$get_join_keys()$get("ADSL", "ADRS")
-
 }

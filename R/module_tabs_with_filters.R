@@ -116,7 +116,8 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
     tags$hr(style = "margin: 7px 0;"),
     fluidRow(
       column(width = 9, teal_ui$children[[2]], id = "teal_primary_col"),
-      column(width = 3, filter_and_info_ui, id = "teal_secondary_col"))
+      column(width = 3, filter_and_info_ui, id = "teal_secondary_col")
+    )
   )
   return(teal_ui)
 }
@@ -128,7 +129,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #'   object to store filter state and filtered datasets, shared across modules. For more
 #'   details see [`FilteredData`].
 #' @return `reactive` currently selected active_module
-srv_tabs_with_filters <- function(id, datasets, modules) {
+srv_tabs_with_filters <- function(id, datasets, modules, filter) {
   stopifnot(is(datasets, "FilteredData"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
@@ -143,9 +144,12 @@ srv_tabs_with_filters <- function(id, datasets, modules) {
           "srv_tabs_with_filters@1 changing active module to: { active_module()$label }."
         )
         datasets$handle_active_datanames(datanames = active_module()$filters)
-      })
+      }
+    )
 
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
+    set_filter_state(datasets = datasets, filter = filter)
+    showNotification("Data loaded - App fully started up")
 
     logger::log_trace(
       "srv_tabs_with_filters initialized the module with datasets { paste(datasets$datanames(), collapse = ' ' )}."

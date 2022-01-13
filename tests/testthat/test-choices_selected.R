@@ -43,7 +43,8 @@ testthat::test_that("delayed version of choices_selected", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- choices_selected(
     variable_choices(adsl, subset = c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
-    selected = variable_choices(adsl, subset = c("STUDYID"), key = get_cdisc_keys("ADSL")))
+    selected = variable_choices(adsl, subset = c("STUDYID"), key = get_cdisc_keys("ADSL"))
+  )
   testthat::expect_equal(res_obj, exp_obj, check.attributes = TRUE)
 
   # functional choices and selected
@@ -70,4 +71,24 @@ testthat::test_that("all_choices is the same as selecting all choices", {
     choices_selected(choices = letters, selected = letters),
     choices_selected(choices = letters, selected = all_choices())
   )
+})
+
+testthat::test_that("choices_selected throws when selected is delayed and choices are not", {
+  delayed_selected <- structure("A", class = "delayed_data")
+  testthat::expect_error(
+    choices_selected(choices = c("A", "B"), selected = delayed_selected),
+    regexp = "If 'selected' is of class 'delayed_data', so must be 'choices'"
+  )
+})
+
+testthat::test_that("choices_selected throws when no_select_keyword is passed to it as a choice", {
+  no_select_keyword <- "-- no selection --"
+  testthat::expect_error(
+    choices_selected(choices = no_select_keyword),
+    regexp = "-- no selection -- is not a valid choice as it is used as a keyword"
+  )
+})
+
+testthat::test_that("is returns choices_selected if passed a choices selected object", {
+  testthat::expect_equal(is(choices_selected(choices = "A")), "choices_selected")
 })

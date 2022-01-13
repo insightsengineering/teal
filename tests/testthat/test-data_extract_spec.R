@@ -3,7 +3,8 @@ library(scda)
 test_that("data_extract_spec argument checking", {
   expect_error(
     data_extract_spec("toyDataset", select = c("A", "B")),
-    "select, \"select_spec\"", fixed = TRUE
+    "select, \"select_spec\"",
+    fixed = TRUE
   )
 })
 
@@ -105,11 +106,12 @@ test_that("delayed data_extract_spec works", {
   set.seed(1)
   ADSL <- data.frame( # nolint
     USUBJID = letters[1:10],
-    SEX = sample(c("F", "M", "U"), 10, replace = T),
+    SEX = sample(c("F", "M", "U"), 10, replace = TRUE),
     BMRKR1 = rnorm(10),
-    BMRKR2 = sample(c("L", "M", "H"), 10, replace = T),
-    stringsAsFactors = FALSE)
-  attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+    BMRKR2 = sample(c("L", "M", "H"), 10, replace = TRUE),
+    stringsAsFactors = FALSE
+  )
+  attr(ADSL, "keys") <- get_cdisc_keys("ADSL") # nolint
 
   filter_normal <- filter_spec(
     vars = variable_choices(ADSL, "SEX"),
@@ -251,7 +253,8 @@ testthat::test_that("delayed version of data_extract_spec", {
   exp_obj <- data_extract_spec(
     "ADSL",
     select = select_spec(variable_choices(adsl, c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
-      selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL"))),
+      selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL"))
+    ),
     filter = filter_spec(
       vars = variable_choices(adsl, subset = "ARMCD", key = get_cdisc_keys("ADSL")),
       choices = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
@@ -275,12 +278,14 @@ testthat::test_that("delayed version of data_extract_spec", {
         "ADSL",
         var_choices = "ARMCD",
         var_label = "ARM",
-        subset = function(data) c("ARM A", "ARM B")),
+        subset = function(data) c("ARM A", "ARM B")
+      ),
       selected = value_choices(
         "ADSL",
         var_choices = "ARMCD",
         var_label = "ARM",
-        subset = function(data) "ARM A"),
+        subset = function(data) "ARM A"
+      ),
       multiple = FALSE
     )
   )
@@ -289,7 +294,8 @@ testthat::test_that("delayed version of data_extract_spec", {
   exp_obj <- data_extract_spec(
     "ADSL",
     select = select_spec(variable_choices(adsl, c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
-      selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL"))),
+      selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL"))
+    ),
     filter = filter_spec(
       vars = variable_choices(adsl, subset = "ARMCD", key = get_cdisc_keys("ADSL")),
       choices = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
@@ -309,7 +315,7 @@ testthat::test_that("data_extract_spec allows both select and filter parameters 
 
 testthat::test_that("data_extract_spec returns filter_spec with multiple set to TRUE", {
   des <- data_extract_spec("ADSL")
-  testthat::expect_equal(class(des$filter[[1]]),  c("delayed_filter_spec", "filter_spec", "delayed_data"))
+  testthat::expect_equal(class(des$filter[[1]]), c("delayed_filter_spec", "filter_spec", "delayed_data"))
   testthat::expect_equal(length(des$filter), 1)
   testthat::expect_true(des$filter[[1]]$multiple)
 })
@@ -317,7 +323,7 @@ testthat::test_that("data_extract_spec returns filter_spec with multiple set to 
 testthat::test_that("data_extract_spec returns select_spec with multiple set to TRUE", {
   des <- data_extract_spec("ADSL")
   testthat::expect_equal(length(des$select), 6)
-  testthat::expect_equal(class(des$select$choices),  c("delayed_variable_choices", "delayed_data", "choices_labeled"))
+  testthat::expect_equal(class(des$select$choices), c("delayed_variable_choices", "delayed_data", "choices_labeled"))
   testthat::expect_true(des$select$multiple)
   testthat::expect_null(des$select$selected)
   testthat::expect_null(des$select$always_selected)

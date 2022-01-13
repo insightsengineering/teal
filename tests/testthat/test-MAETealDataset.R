@@ -68,7 +68,8 @@ testthat::test_that("MAETealDataset$check returns TRUE when constructed with the
     dimnames = list(sprintf("ENST00000%i", seq.int(1, 4)), c("Jack", "Jill", "Bob", "Bobby"))
   )
   exprss2 <- matrix(
-    seq(from = 5, by = 0.1, length.out = 12), ncol = 3,
+    seq(from = 5, by = 0.1, length.out = 12),
+    ncol = 3,
     dimnames = list(sprintf("ENST00000%i", seq.int(1, 4)), c("Jack", "Jane", "Bob"))
   )
   double_exp <- list("methyl 2k" = exprss1, "methyl 3k" = exprss2)
@@ -99,7 +100,8 @@ testthat::test_that("FALSE returned when executing MAETealDataset$check and code
     dimnames = list(sprintf("ENST00000%i", seq.int(1, 4)), c("Jack", "Jill", "Bob", "Bobby"))
   )
   exprss2 <- matrix(
-    seq(from = 5, by = 0.1, length.out = 12), ncol = 3,
+    seq(from = 5, by = 0.1, length.out = 12),
+    ncol = 3,
     dimnames = list(sprintf("ENST00000%i", seq.int(1, 4)), c("Jack", "Jane", "Bob"))
   )
   double_exp <- list("methyl 2k" = exprss1, "methyl 3k" = exprss2)
@@ -130,16 +132,18 @@ testthat::test_that("Error raised when executing MAETealDataset$check and code i
     dimnames = list(sprintf("ENST00000%i", seq.int(1, 4)), c("Jack", "Jill", "Bob", "Bobby"))
   )
   exprss2 <- matrix(
-    seq(from = 5, by = 0.1, length.out = 12), ncol = 3,
+    seq(from = 5, by = 0.1, length.out = 12),
+    ncol = 3,
     dimnames = list(sprintf("ENST00000%i", seq.int(1, 4)), c("Jack", "Jane", "Bob"))
   )
-  double_exp <- list("methyl 2k"  = exprss1, "methyl 3k" = exprss2)
+  double_exp <- list("methyl 2k" = exprss1, "methyl 3k" = exprss2)
   simple_mae <- MultiAssayExperiment::MultiAssayExperiment(experiments = double_exp)
 
   mae_dataset <- MAETealDataset$new(dataname = "simple_mae", x = simple_mae, code = "")
   testthat::expect_error(
     mae_dataset$check(),
-    regexp = "Cannot check preprocessing code of")
+    regexp = "Cannot check preprocessing code of"
+  )
 })
 
 testthat::test_that("MAETealDataset$check_keys doesn't throw if constructed with correct keys", {

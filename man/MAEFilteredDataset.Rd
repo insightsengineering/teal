@@ -8,6 +8,26 @@
 
 \code{MAEFilteredDataset} R6 class
 }
+\examples{
+
+## ------------------------------------------------
+## Method `MAEFilteredDataset$set_filter_state`
+## ------------------------------------------------
+
+dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+fs <- list(
+  subjects = list(
+    years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+    vital_status = list(selected = "1", keep_na = FALSE),
+    gender = list(selected = "female", keep_na = TRUE)
+  ),
+  RPPAArray = list(
+    subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+  )
+)
+dataset$set_filter_state(state = fs)
+shiny::isolate(dataset$get_filter_state())
+}
 \section{Super class}{
 \code{\link[teal:FilteredDataset]{teal::FilteredDataset}} -> \code{MAEFilteredDataset}
 }
@@ -19,7 +39,8 @@
 \item \href{#method-get_data}{\code{MAEFilteredDataset$get_data()}}
 \item \href{#method-get_filter_overview_info}{\code{MAEFilteredDataset$get_filter_overview_info()}}
 \item \href{#method-get_filterable_varnames}{\code{MAEFilteredDataset$get_filterable_varnames()}}
-\item \href{#method-set_bookmark_state}{\code{MAEFilteredDataset$set_bookmark_state()}}
+\item \href{#method-set_filter_state}{\code{MAEFilteredDataset$set_filter_state()}}
+\item \href{#method-remove_filter_state}{\code{MAEFilteredDataset$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MAEFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MAEFilteredDataset$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{MAEFilteredDataset$clone()}}
@@ -32,6 +53,7 @@
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_data_reactive">}\href{../../teal/html/FilteredDataset.html#method-get_data_reactive}{\code{teal::FilteredDataset$get_data_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_dataname}{\code{teal::FilteredDataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataset">}\href{../../teal/html/FilteredDataset.html#method-get_dataset}{\code{teal::FilteredDataset$get_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_state">}\href{../../teal/html/FilteredDataset.html#method-get_filter_state}{\code{teal::FilteredDataset$get_filter_state()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_states">}\href{../../teal/html/FilteredDataset.html#method-get_filter_states}{\code{teal::FilteredDataset$get_filter_states()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filtered_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_filtered_dataname}{\code{teal::FilteredDataset$get_filtered_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_hash">}\href{../../teal/html/FilteredDataset.html#method-get_hash}{\code{teal::FilteredDataset$get_hash()}}\out{</span>}
@@ -135,30 +157,70 @@ Gets variable names for the filtering.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
-Set bookmark state
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
+Set filter state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$set_bookmark_state(id, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$set_filter_state(state, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{(\code{character(1)})\cr
-an ID string that corresponds with the ID used to call the module's UI function.}
-
 \item{\code{state}}{(\verb{named list})\cr
 names of the list should correspond to the names of the initialized \code{FilterStates}
 kept in \code{private$filter_states}. For this object they are \code{"subjects"} and
 names of the experiments. Values of initial state should be relevant
 to the referred column.}
+
+\item{\code{...}}{ignored.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{moduleServer} function which returns \code{NULL}
+\code{NULL}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+fs <- list(
+  subjects = list(
+    years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+    vital_status = list(selected = "1", keep_na = FALSE),
+    gender = list(selected = "female", keep_na = TRUE)
+  ),
+  RPPAArray = list(
+    subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+  )
+)
+dataset$set_filter_state(state = fs)
+shiny::isolate(dataset$get_filter_state())
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
+\subsection{Method \code{remove_filter_state()}}{
+Remove one or more \code{FilterState} of a \code{MAEFilteredDataset}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$remove_filter_state(element_id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element_id}}{(\code{list})\cr
+Named list of variables to remove their \code{FilterState}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

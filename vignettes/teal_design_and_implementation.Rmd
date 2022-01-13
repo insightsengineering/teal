@@ -131,8 +131,10 @@ module. To use this module twice in an app run the following code:
 ```{r, eval = FALSE}
 shinyApp(
   ui = function() {
-    tagList(ui_example(id = "first"),
-            ui_example(id = "second"))
+    tagList(
+      ui_example(id = "first"),
+      ui_example(id = "second")
+    )
   },
   server = function(input, output, session) {
     callModule(srv_example, id = "first")
@@ -312,7 +314,7 @@ and `ADTTE`):
 # for reproducibility
 set.seed(1)
 
-ADSL <- data.frame( #nolint
+ADSL <- data.frame( # nolint
   USUBJID = paste0("id-", 1:100),
   STUDYID = "studyA",
   AGE = abs(rnorm(100, sd = 20) + 40),
@@ -320,7 +322,7 @@ ADSL <- data.frame( #nolint
   stringsAsFactors = FALSE
 )
 
-ADTTE <- data.frame( #nolint
+ADTTE <- data.frame( # nolint
   USUBJID = paste0("id-", 1:100),
   STUDYID = "studyA",
   AVAL = abs(rexp(100, rate = 1 / 20)),
@@ -352,16 +354,12 @@ Now say we want to filter out all the patients in `ADSL` except patients with `U
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
 ```{r}
-shiny::testServer(
-  datasets$set_bookmark_state,
-  args = list(
-    state = list(
-      ADSL = list(
-        USUBJID = sprintf("id-%s", 1:4)
-      )
+datasets$set_filter_state(
+  state = list(
+    ADSL = list(
+      USUBJID = sprintf("id-%s", 1:4)
     )
-  ),
-  expr = NULL
+  )
 )
 
 datasets$get_data("ADSL", filtered = TRUE)
@@ -459,7 +457,7 @@ We use the `id` argument of the `init` function for this.
 ```{r, eval=FALSE}
 library(scda)
 
-ADSL <- synthetic_cdisc_data("latest")$adsl #nolint
+ADSL <- synthetic_cdisc_data("latest")$adsl # nolint
 
 # Code to have two teal apps side-by-side or embed it in a larger application
 create_teal_app <- function(title, id) {
@@ -495,8 +493,10 @@ create_teal_app <- function(title, id) {
 app1 <- create_teal_app("Sample App1", id = "app1")
 app2 <- create_teal_app("Sample App2", id = "app2")
 shinyApp(
-  ui = fluidPage(fluidRow(column(6, app1$ui),
-                          column(6, app2$ui))),
+  ui = fluidPage(fluidRow(
+    column(6, app1$ui),
+    column(6, app2$ui)
+  )),
   server = function(input, output, session) {
     callModule(app1$server, "app1")
     callModule(app2$server, "app2")

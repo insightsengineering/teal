@@ -91,49 +91,163 @@ testthat::test_that("get_call returns a call filtering an MAE object using Range
   )
 })
 
-testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterState(s) specified by the named list", {
-  maefs <- teal:::MAEFilterStates$new(
+testthat::test_that(
+  "MAEFilterStates$set_filter_state sets filters in FilterState(s) specified by the named list",
+  code = {
+    maefs <- MAEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      years_to_birth = c(30, 50),
+      vital_status = 1,
+      gender = "female"
+    )
+    maefs$set_filter_state(state = fs, data = MultiAssayExperiment::miniACC)
+
+    testthat::expect_equal(
+      isolate(maefs$get_call()),
+      quote(
+        test_filtered <- MultiAssayExperiment::subsetByColData(
+          test,
+          y = test$years_to_birth >= 30 & test$years_to_birth <= 50 &
+            test$vital_status == "1" &
+            test$gender == "female"
+        )
+      )
+    )
+  }
+)
+
+testthat::test_that("MAEFilterStates$set_filter_state updates filter state which was set already", {
+  maefs <- MAEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",
     datalabel = character(0),
     varlabels = character(0),
     keys = character(0)
   )
-  fs <- list(
-    years_to_birth = c(30, 50),
-    vital_status = 1,
-    gender = "female"
+
+  maefs$set_filter_state(
+    state = list(
+      years_to_birth = c(30, 50),
+      vital_status = 1
+    ),
+    data = MultiAssayExperiment::miniACC
   )
-  shiny::testServer(
-    maefs$set_bookmark_state,
-    args = list(state = fs, data = MultiAssayExperiment::miniACC),
-    expr = NULL
+
+  maefs$set_filter_state(
+    state = list(
+      years_to_birth = c(31, 50),
+      gender = "female"
+    ),
+    data = MultiAssayExperiment::miniACC
   )
+
   testthat::expect_equal(
-    isolate(maefs$get_call()),
-    quote(
-      test_filtered <- MultiAssayExperiment::subsetByColData(
-        test,
-        y = test$years_to_birth >=  30 & test$years_to_birth <= 50 &
-          test$vital_status == "1" &
-          test$gender == "female"
-      )
+    isolate(maefs$get_filter_state()),
+    list(
+      years_to_birth = list(selected = c(31, 50), keep_na = FALSE, keep_inf = FALSE),
+      vital_status = list(selected = "1", keep_na = FALSE),
+      gender = list(selected = "female", keep_na = FALSE)
     )
   )
 })
-if (compareVersion(as.character(packageVersion("MultiAssayExperiment")), "1.20.0") >= 0) {
-  testthat::test_that(
-    "MultiAssayExperiment::subsetByColData returns error when variable contains NAs", {
-      # if this test fails it means that we can remove FilterState$set_na_rm which
-      # has been created after breaking change in MAE
-      library(MultiAssayExperiment)
-      data(miniACC)
-      miniACC$test <- sample(c(TRUE, NA), size = nrow(miniACC@colData), replace = TRUE)
 
-      testthat::expect_error(
-        subsetByColData(miniACC, miniACC$test),
-        "logical subscript contains NAs"
+testthat::test_that(
+  "MAEFilterStates$set_filter_state throws error when not using a named list",
+  code = {
+    maefs <- MAEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      c(30, 50),
+      vital_status = 1,
+      gender = "female"
+    )
+    testthat::expect_error(maefs$set_filter_state(state = fs, data = MultiAssayExperiment::miniACC))
+  }
+)
+
+testthat::test_that(
+  "MAEFilterStates$get_filter_state returns list identical to input",
+  code = {
+    maefs <- MAEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+      vital_status = list(selected = "1", keep_na = FALSE),
+      gender = list(selected = "female", keep_na = TRUE)
+    )
+    maefs$set_filter_state(state = fs, data = MultiAssayExperiment::miniACC)
+    testthat::expect_equal(isolate(maefs$get_filter_state()), fs)
+  }
+)
+
+testthat::test_that(
+  "MAEFilterStates$remove_filter_state removes filters in FilterState(s)",
+  code = {
+    maefs <- MAEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      years_to_birth = c(30, 50),
+      vital_status = 1,
+      gender = "female"
+    )
+    years_to_birth_remove_fs <- "years_to_birth"
+
+    maefs$set_filter_state(state = fs, data = MultiAssayExperiment::miniACC)
+    maefs$remove_filter_state(years_to_birth_remove_fs)
+
+    testthat::expect_equal(
+      isolate(maefs$get_call()),
+      quote(
+        test_filtered <- MultiAssayExperiment::subsetByColData(
+          test,
+          y = test$vital_status == "1" &
+            test$gender == "female"
+        )
       )
-    }
-  )
-}
+    )
+  }
+)
+
+testthat::test_that(
+  "MAEFilterStates$remove_filter_state throws warning when name is not in FilterStates",
+  code = {
+    suppress_logs()
+    maefs <- MAEFilterStates$new(
+      input_dataname = "test",
+      output_dataname = "test_filtered",
+      datalabel = character(0),
+      varlabels = character(0),
+      keys = character(0)
+    )
+    fs <- list(
+      years_to_birth = c(30, 50),
+      vital_status = 1,
+      gender = "female"
+    )
+    years_to_birth_remove_fs <- "years_to_birth2"
+
+    maefs$set_filter_state(state = fs, data = MultiAssayExperiment::miniACC)
+    testthat::expect_warning(maefs$remove_filter_state(years_to_birth_remove_fs))
+  }
+)

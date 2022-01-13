@@ -27,8 +27,10 @@ cc$set_code("ADSL_2$a <- baz()", "ADSL_2")
 test_that("example datasets", {
   expect_identical(
     cc$get_code("ADSL"),
-    paste0("foo <- function() {\n    1\n}\nfoo2 <- function() {\n    2\n}\n",
-           "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL$var <- 1\nADSL$a <- foo()")
+    paste0(
+      "foo <- function() {\n    1\n}\nfoo2 <- function() {\n    2\n}\n",
+      "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL$var <- 1\nADSL$a <- foo()"
+    )
   )
 })
 
@@ -42,7 +44,7 @@ test_that("example datasets deps", {
     rlang::expr(baz <- function() {
       2
     }),
-    rlang::expr(ADSL_2$a <- baz())
+    rlang::expr(ADSL_2$a <- baz()) # nolint
   ))
 })
 
@@ -63,8 +65,10 @@ x$append(x2)
 test_that("CodeClass append", {
   expect_identical(x$get_code(), paste0(c(x1$get_code(), x2$get_code()), collapse = "\n"))
   expect_identical(x$get_code(deparse = FALSE), append(x1$get_code(deparse = FALSE), x2$get_code(deparse = FALSE)))
-  expect_identical(x$get_code(c("ADSL", "ADSL_2")),
-    paste0(c(x$get_code("ADSL"), x2$get_code("ADSL_2")), collapse = "\n"))
+  expect_identical(
+    x$get_code(c("ADSL", "ADSL_2")),
+    paste0(c(x$get_code("ADSL"), x2$get_code("ADSL_2")), collapse = "\n")
+  )
 })
 
 
@@ -76,8 +80,10 @@ x$append(x3)
 test_that("CodeClass append deps", {
   expect_identical(
     x$get_code(),
-    paste0("ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL_2 <- head(ADSL, 5)\n",
-      "ADRS <- synthetic_cdisc_data(\"latest\")$adrs")
+    paste0(
+      "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL_2 <- head(ADSL, 5)\n",
+      "ADRS <- synthetic_cdisc_data(\"latest\")$adrs"
+    )
   )
 })
 
@@ -87,13 +93,15 @@ x$set_code("", "ADRS")
 test_that("CodeClass append deps", {
   expect_identical(
     x$get_code("ADRS"),
-    paste0("ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADRS <- synthetic_cdisc_data(\"latest\")$adrs\n",
-      "ADRS$x <- foo(ADSL$x)\n")
+    paste0(
+      "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADRS <- synthetic_cdisc_data(\"latest\")$adrs\n",
+      "ADRS$x <- foo(ADSL$x)\n"
+    )
   )
   expect_equal(x$get_code("ADRS", deparse = FALSE), list(
     rlang::expr(ADSL <- synthetic_cdisc_data("latest")$adsl), # nolint
     rlang::expr(ADRS <- synthetic_cdisc_data("latest")$adrs), # nolint
-    rlang::expr(ADRS$x <- foo(ADSL$x))
+    rlang::expr(ADRS$x <- foo(ADSL$x)) # nolint
   ))
   expect_identical(
     x$get_code("ADSL"),
@@ -155,7 +163,8 @@ test_that("Duplicated code is appended if it doesn't have a dataname", {
   cc1$append(cc2)
   expect_equal(
     cc1$get_code(),
-    "print(\"test\")\nprint(\"test\")")
+    "print(\"test\")\nprint(\"test\")"
+  )
 })
 
 test_that("Duplicated code is not appended if its dataname is duplicated", {
@@ -163,7 +172,8 @@ test_that("Duplicated code is not appended if its dataname is duplicated", {
   cc2 <- CodeClass$new(code = "print('test')", dataname = "test")
   expect_equal(
     cc1$get_code(),
-    "print(\"test\")")
+    "print(\"test\")"
+  )
 })
 
 test_that("Duplicated code is appended if its dataname is different", {
@@ -172,7 +182,8 @@ test_that("Duplicated code is appended if its dataname is different", {
   cc1$append(cc2)
   expect_equal(
     cc1$get_code(),
-    "print(\"test\")\nprint(\"test\")")
+    "print(\"test\")\nprint(\"test\")"
+  )
 })
 
 test_that("list_to_code_class: assigning dataname to the object name inside of the list", {
@@ -190,7 +201,8 @@ test_that("list_to_code_class: assigning dataname to the object name inside of t
   mutate_dataset(t_dc, "t_dc2 <- NULL", vars = list(t_dc2 = t_dc2))
   expect_equal(
     pretty_code_string(t_dc$get_code()),
-    c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+    c(
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
       "test_dc2 <- data.frame(head_integers = 1:6)",
       "t_dc2 <- test_dc2",
       "t_dc2 <- NULL"
@@ -202,7 +214,8 @@ test_that("list_to_code_class: assigning dataname to the object name inside of t
   mutate_dataset(t_dc, "test_dc$carb <- ds$carb", vars = list(ds = ds))
   expect_equal(
     pretty_code_string(t_dc$get_code()),
-    c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+    c(
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
       "test_dc2 <- data.frame(head_integers = 1:6)",
       "t_dc2 <- test_dc2",
       "head_mtcars <- head(mtcars)",
@@ -216,7 +229,8 @@ test_that("list_to_code_class: assigning dataname to the object name inside of t
   mutate_dataset(t_dc2, "test_dc2$Species <- head_iris$Species", vars = list(head_iris = ds2))
   expect_equal(
     pretty_code_string(t_dc2$get_code()),
-    c("test_dc2 <- data.frame(head_integers = 1:6)",
+    c(
+      "test_dc2 <- data.frame(head_integers = 1:6)",
       "head_iris <- head(iris)",
       "test_dc2$Species <- head_iris$Species"
     )

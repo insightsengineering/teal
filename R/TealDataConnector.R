@@ -64,7 +64,7 @@
 #' x$set_server(
 #'   function(id, connection, connectors) {
 #'     moduleServer(
-#'     id = id,
+#'       id = id,
 #'       module = function(input, output, session) {
 #'         # opens connection
 #'         connection$get_open_server()(id = "open_connection", connection = connection)
@@ -86,7 +86,7 @@
 #' x$launch()
 #' x$get_datasets()
 #' }
-TealDataConnector <- R6::R6Class( #nolint
+TealDataConnector <- R6::R6Class( # nolint
   classname = "TealDataConnector",
   inherit = TealDataAbstract,
 
@@ -136,7 +136,7 @@ TealDataConnector <- R6::R6Class( #nolint
       ))
       cat(sprintf(
         "%d of which is/are loaded/pulled:\n",
-        sum(vapply(private$datasets, function (x) x$is_pulled(), FUN.VALUE = logical(1)))
+        sum(vapply(private$datasets, function(x) x$is_pulled(), FUN.VALUE = logical(1)))
       ))
 
       for (i in seq_along(private$datasets)) {
@@ -170,7 +170,8 @@ TealDataConnector <- R6::R6Class( #nolint
 
       close_connection_code <- if_not_null(
         private$connection,
-        private$connection$get_close_call(deparse = TRUE, silent = TRUE))
+        private$connection$get_close_call(deparse = TRUE, silent = TRUE)
+      )
       if_not_null(close_connection_code, all_code$set_code(close_connection_code, dataname = "*close"))
 
       mutate_code_class <- private$get_mutate_code_class()
@@ -387,7 +388,6 @@ TealDataConnector <- R6::R6Class( #nolint
                   )
                 )
               )
-
             )
           )
         ),
@@ -414,7 +414,6 @@ TealDataConnector <- R6::R6Class( #nolint
                 stopApp()
               }
             })
-
           })
         }
       )
@@ -548,7 +547,6 @@ TealDataConnector <- R6::R6Class( #nolint
 #'     )
 #'   }
 #' )
-#'
 #' \dontrun{
 #' x$launch()
 #' x$get_datasets()

@@ -88,7 +88,6 @@ x$set_server(
     )
   }
 )
-
 \dontrun{
 x$launch()
 x$get_datasets()

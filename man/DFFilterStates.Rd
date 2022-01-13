@@ -15,6 +15,27 @@ single \code{ReactiveQueue} with no specified name which means that
 when calling the function associated to this class (\code{dplyr::filter}), a list of
 conditions are passed to unnamed arguments (\code{...}).
 }
+\examples{
+
+## ------------------------------------------------
+## Method `DFFilterStates$set_filter_state`
+## ------------------------------------------------
+
+dffs <- teal:::DFFilterStates$new(
+  input_dataname = "iris",
+  output_dataname = "iris_filtered",
+  datalabel = character(0),
+  varlabels = character(0),
+  keys = character(0)
+)
+fs <- list(
+  Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
+  Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+)
+dffs$set_filter_state(state = fs, data = iris)
+shiny::isolate(dffs$get_filter_state())
+
+}
 \section{Super class}{
 \code{\link[teal:FilterStates]{teal::FilterStates}} -> \code{DFFilterStates}
 }
@@ -23,7 +44,10 @@ conditions are passed to unnamed arguments (\code{...}).
 \itemize{
 \item \href{#method-new}{\code{DFFilterStates$new()}}
 \item \href{#method-get_fun}{\code{DFFilterStates$get_fun()}}
-\item \href{#method-set_bookmark_state}{\code{DFFilterStates$set_bookmark_state()}}
+\item \href{#method-server}{\code{DFFilterStates$server()}}
+\item \href{#method-get_filter_state}{\code{DFFilterStates$get_filter_state()}}
+\item \href{#method-set_filter_state}{\code{DFFilterStates$set_filter_state()}}
+\item \href{#method-remove_filter_state}{\code{DFFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{DFFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{DFFilterStates$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{DFFilterStates$clone()}}
@@ -89,12 +113,12 @@ For \code{DFFilterStates} \code{dplyr::filter} is used}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
-Set bookmark state
+\if{html}{\out{<a id="method-server"></a>}}
+\if{latex}{\out{\hypertarget{method-server}{}}}
+\subsection{Method \code{server()}}{
+Server module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$set_bookmark_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$server(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -102,19 +126,104 @@ Set bookmark state
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
 an ID string that corresponds with the ID used to call the module's UI function.}
-
-\item{\code{data}}{(\code{data.frame})\cr
-data which are supposed to be filtered}
-
-\item{\code{state}}{(\verb{named list})\cr
-should contain values which are initial selection in the \code{FilterState}.
-Names of the \code{list} element should correspond to the name of the
-column in \code{data}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 \code{moduleServer} function which returns \code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
+\subsection{Method \code{get_filter_state()}}{
+Gets the reactive values from the active \code{FilterState} objects.
+
+Get active filter state from the \code{FilterState} objects kept in \code{ReactiveQueue}.
+The output list is a compatible input to \code{self$set_filter_state}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$get_filter_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} with named elements corresponding to \code{FilterState} in the \code{ReactiveQueue}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
+Set filter state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$set_filter_state(
+  data,
+  state,
+  vars_include = get_filterable_varnames(data = data),
+  ...
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{(\code{data.frame})\cr
+data which are supposed to be filtered.}
+
+\item{\code{state}}{(\verb{named list})\cr
+should contain values which are initial selection in the \code{FilterState}.
+Names of the \code{list} element should correspond to the name of the
+column in \code{data}.}
+
+\item{\code{vars_include}}{(\code{character(n)})\cr
+optional, vector of column names to be included.}
+
+\item{\code{...}}{ignored.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{dffs <- teal:::DFFilterStates$new(
+  input_dataname = "iris",
+  output_dataname = "iris_filtered",
+  datalabel = character(0),
+  varlabels = character(0),
+  keys = character(0)
+)
+fs <- list(
+  Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
+  Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+)
+dffs$set_filter_state(state = fs, data = iris)
+shiny::isolate(dffs$get_filter_state())
+
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
+\subsection{Method \code{remove_filter_state()}}{
+Remove a \code{FilterState} from the \code{ReactiveQueue}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$remove_filter_state(element_id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element_id}}{(\code{character(1)})\cr name of \code{ReactiveQueue} element.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

@@ -2,7 +2,7 @@ library(scda)
 
 adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
 adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
-adsl  <- CDISCTealDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
+adsl <- CDISCTealDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
 adae <- CDISCTealDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
 
 testthat::test_that("TealDataConnector with TealDataConnection", {
@@ -56,9 +56,10 @@ testthat::test_that("TealDataConnector$print prints out expected output on basic
   out <- capture.output(print(data))
   testthat::expect_equal(
     out,
-    c(paste0(
-      "A currently not yet opened CDISCTealDataConnector object containing ",
-      "2 TealDataset/TealDatasetConnector object(s) as element(s)."
+    c(
+      paste0(
+        "A currently not yet opened CDISCTealDataConnector object containing ",
+        "2 TealDataset/TealDatasetConnector object(s) as element(s)."
       ),
       "0 of which is/are loaded/pulled:",
       "--> Element 1:",
@@ -67,7 +68,6 @@ testthat::test_that("TealDataConnector$print prints out expected output on basic
       "A TealDatasetConnector object, named ADAE, containing a TealDataset object that has not been loaded/pulled"
     )
   )
-
 })
 
 testthat::test_that("relational_data_connector returns a TealDataConnector object on basic input", {
@@ -81,8 +81,10 @@ testthat::test_that("relational_data_connector returns a TealDataConnector objec
 testthat::test_that("relational_data_connector has input validation", {
   testthat::expect_error(cdisc_data_connector(
     connection = 1,
-    connectors = list(adsl, adae)))
+    connectors = list(adsl, adae)
+  ))
   testthat::expect_error(cdisc_data_connector(
-    connection =  TealDataConnection$new(open_fun = CallableFunction$new(function() "open function")),
-    connectors = "a"))
+    connection = TealDataConnection$new(open_fun = CallableFunction$new(function() "open function")),
+    connectors = "a"
+  ))
 })

@@ -4,12 +4,11 @@
 #'
 #' @title A `CallablePythonCode` class of objects
 #'
-CallablePythonCode <- R6::R6Class( #nolint
+CallablePythonCode <- R6::R6Class( # nolint
 
   ## __Public Methods ====
   classname = "CallablePythonCode",
   inherit = CallableFunction,
-
   public = list(
     #' @description
     #' Create a new `CallablePythonCode` object
@@ -191,7 +190,9 @@ PythonCodeClass <- R6::R6Class( # nolint
       super$eval(envir = execution_environment)
 
       # return early if only executing and not grabbing the dataset
-      if (is.null(dataname)) return(as.environment(as.list(execution_environment)))
+      if (is.null(dataname)) {
+        return(as.environment(as.list(execution_environment)))
+      }
 
       if (!is.data.frame(execution_environment[[dataname]])) {
         out_msg <- sprintf(

@@ -9,19 +9,22 @@
 #' @examples
 #' \dontrun{
 #' stop_shiny("No data access", "You do not seem to have data access")
-#' stop_shiny("No data access", tagList(tags$h2("Hello World"), tags$p("paragraph"),
-#' tags$footer("Please contact", tags$a(href = "mailto:john@doe.com", "John Doe"))))
+#' stop_shiny("No data access", tagList(
+#'   tags$h2("Hello World"), tags$p("paragraph"),
+#'   tags$footer("Please contact", tags$a(href = "mailto:john@doe.com", "John Doe"))
+#' ))
 #' }
 stop_shiny <- function(title, body) {
   if (!is_html_like(body)) {
     body <- tags$p(body)
   }
   shinyApp(
-    ui =  fixedPage(
+    ui = fixedPage(
       div(
         class = "jumbotron",
         tags$h1(title),
-        body)
+        body
+      )
     ),
     server = function(input, output, session) {
 

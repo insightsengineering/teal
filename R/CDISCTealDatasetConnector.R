@@ -44,7 +44,7 @@
 #'   the `vars` list to preserve reproducibility. Please note that `vars`
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
-CDISCTealDatasetConnector <- R6::R6Class( #nolint
+CDISCTealDatasetConnector <- R6::R6Class( # nolint
   classname = "CDISCTealDatasetConnector",
   inherit = TealDatasetConnector,
 

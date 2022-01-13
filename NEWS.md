@@ -1,4 +1,4 @@
-# teal 0.10.0.9038
+# teal 0.10.0.9052
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
@@ -20,14 +20,17 @@
 * Added `pid` and shiny session token into footnote so app developers can identify logs for apps.
 * Added logs to the modules and sub-modules returned from `init`.
 * Added `teal.threshold_slider_vs_checkboxgroup` as an option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.
+* Extended the `FilteredData` API to allow managing filter states from outside and not only from the UI.
+* Hid the buttons to remove filters from all datasets and each dataset when there were no active filters.
 
 ### Bug fixes
-* Refactored `module_nested_tabs` to fix the issue with filter-panel not reacting on a change of nested tabs. 
+* Refactored `module_nested_tabs` to fix the issue with filter-panel not reacting on a change of nested tabs.
 * Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
 * Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
 * Added `S3 method`, `to_relational_data`, for `MultiAssayExperiment` objects.
- 
+* Fixed restoring bookmark state from filter panel.
+
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
 * Updated R version requirement to >= 4.0.
@@ -35,6 +38,7 @@
 * Updated "filter panel collapse" icon to remove warnings when using shiny version >= 1.7.
 * Renamed `Dataset` class into `TealDataset`. Applied the same logic for the rest of the dataset and data class names.
 * Added validation to `FilteredDataset::get_data` to accept logical input only.
+* Added a vignette describing the modifications to `teal` applications users can apply using `R` options.
 
 # teal 0.10.0
 

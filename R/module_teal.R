@@ -123,7 +123,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
     )
 
-    # Javascript code ----
+    # Javascript code
     if (getOption("teal_show_js_log", default = FALSE)) {
       shinyjs::showLog() # to show Javascript console logs in the R console
     }
@@ -141,12 +141,8 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       }
     )
 
-    # Shiny bookmarking ----
-    # The Shiny bookmarking functionality by default only stores inputs.
-    # We need to add `FilteredData` object to the state so we restore it as well.
-    # To test bookmarking, include the `bookmark_module`, click on the bookmark
-    # button and then get the link. Keep the Shiny app running and open the
-    # obtained link in another browser tab.
+    # bookmarking -----
+    saved_datasets_state <- reactiveVal(NULL) # set when restored because data must already be populated
     onBookmark(function(state) {
       # this function is isolated  by Shiny
       # We store the entire R6 class with reactive values in it, but set the data to NULL.
@@ -154,32 +150,33 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       # reactivity to recompute the filtered datasets, which is not needed.
       logger::log_trace(
         paste(
-          "srv_teal@2 saving active filter state for",
-          "datasets: { paste(names(datasets_reactive()$get_bookmark_state()), collapse = ' ') }."
+          "srv_init_filter_state@1 saving active filter state for",
+          "datasets: { paste(names(datasets_reactive()$get_filter_state()), collapse = ' ') }."
         )
       )
-      state$values$datasets_state <- datasets_reactive()$get_bookmark_state()
-
+      state$values$datasets_state <- datasets_reactive()$get_filter_state()
     })
-    saved_datasets_state <- reactiveVal(NULL) # set when restored because data must already be populated
     onRestore(function(state) {
       # The saved datasets mainly contains the filter states as the data
       # was set to NULL before storing. The data should have been set again
       # by the user, so we just need to set the filters.
       logger::log_trace(
         paste(
-          "srv_teal@2 restoring filter states from the bookmark for",
+          "srv_init_filter_state@2 restoring filter states from the bookmark for",
           "datasets: { paste(names(state$values$datasets_state), collapse = ' ') }."
         )
       )
       saved_datasets_state(state$values$datasets_state)
     })
 
-    # initialize datasets ------
+    # loading the data -----
+    env <- environment()
     datasets_reactive <- reactive({
-      if (is.null(raw_data())) return(NULL)
-      progress <<- shiny::Progress$new(session)
-      progress$set(0.25, message = "Setting data")
+      if (is.null(raw_data())) {
+        return(NULL)
+      }
+      env$progress <- shiny::Progress$new(session)
+      env$progress$set(0.25, message = "Setting data")
       # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
       # this is placed in the module scope so that bookmarking can be used with FilteredData object
       datasets <- filtered_data_new(raw_data())
@@ -196,9 +193,9 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     # if restored from bookmarked state, `filter` is ignored
     observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, {
       logger::log_trace("srv_teal@3 setting main ui after data was pulled")
-      on.exit(progress$close())
+      env$progress$set(0.5, message = "Setting up main UI")
+      on.exit(env$progress$close())
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
-      progress$set(0.5, message = "Setting up main UI")
       removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
       insertUI(
         selector = paste0("#", session$ns("main_ui_container")),
@@ -211,51 +208,18 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         immediate = TRUE
       )
 
-      if (!is.null(saved_datasets_state())) {
-        # actual thing to restore
-        # cannot call this directly in onRestore because the data is not set at that time
-        # for example, the data may only be loaded once a password is provided
-        # however, onRestore only runs in the first flush and not in the flush when the
-        # password was finally provided
-        tryCatch({
-          progress$set(0.75, message = "Restoring from bookmarked state")
-          filtered_data_set_filters(datasets_reactive(), saved_datasets_state())
+      # switching filter to bookmarked state
+      if (!is.null(saved_datasets_state())) filter <- saved_datasets_state()
 
-        },
-        error = function(cnd) {
-          logger::log_error("Attempt to set bookmark state failed.")
-          showModal(
-            modalDialog(
-              div(
-                p("Could not restore the session: "),
-                tags$pre(id = session$ns("error_msg"), cnd$message)
-              ),
-              title = "Error restoring the bookmarked state",
-              footer = tagList(
-                actionButton(
-                  "copy_code", "Copy to Clipboard",
-                  `data-clipboard-target` = paste0("#", session$ns("error_msg"))
-                ),
-                modalButton("Dismiss")
-              ),
-              size = "l",
-              easyClose = TRUE
-            )
-          )
-        }
-        )
-      } else {
-        progress$set(0.75, message = "Setting initial filter state")
-        logger::log_trace("srv_teal@4 setting the initial filter state.")
-        filtered_data_set_filters(datasets_reactive(), filter)
-      }
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)
       # `once = TRUE` ensures this
-      active_module <- srv_tabs_with_filters(id = "main_ui", datasets =  datasets_reactive(), modules = modules)
-
-      showNotification("Data loaded - App fully started up")
-
+      active_module <- srv_tabs_with_filters(
+        id = "main_ui",
+        datasets = datasets_reactive(),
+        modules = modules,
+        filter = filter
+      )
       return(active_module)
     })
   })

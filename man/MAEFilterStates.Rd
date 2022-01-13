@@ -19,7 +19,10 @@ Initialize \code{MAEFilterStates} object
 \itemize{
 \item \href{#method-new}{\code{MAEFilterStates$new()}}
 \item \href{#method-get_fun}{\code{MAEFilterStates$get_fun()}}
-\item \href{#method-set_bookmark_state}{\code{MAEFilterStates$set_bookmark_state()}}
+\item \href{#method-server}{\code{MAEFilterStates$server()}}
+\item \href{#method-get_filter_state}{\code{MAEFilterStates$get_filter_state()}}
+\item \href{#method-set_filter_state}{\code{MAEFilterStates$set_filter_state()}}
+\item \href{#method-remove_filter_state}{\code{MAEFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MAEFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MAEFilterStates$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{MAEFilterStates$clone()}}
@@ -92,12 +95,12 @@ For \code{MAEFilterStates}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
-Set bookmark state
+\if{html}{\out{<a id="method-server"></a>}}
+\if{latex}{\out{\hypertarget{method-server}{}}}
+\subsection{Method \code{server()}}{
+Server module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$set_bookmark_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$server(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -105,19 +108,75 @@ Set bookmark state
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
 an ID string that corresponds with the ID used to call the module's UI function.}
-
-\item{\code{data}}{(\code{MultiAssayExperiment})\cr
-data which are supposed to be filtered}
-
-\item{\code{state}}{(\verb{named list})\cr
-should contain values which are initial selection in the \code{FilterState}.
-Names of the \code{list} element should correspond to the name of the
-column in \code{colData(data)}}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 \code{moduleServer} function which returns \code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
+\subsection{Method \code{get_filter_state()}}{
+Returns active \code{FilterState} objects.
+
+Gets all active filters from this dataset in form of the nested list.
+The output list can be used as input to \code{self$set_filter_state}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$get_filter_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} with elements number equal number of \code{FilterStates}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
+Set filter state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$set_filter_state(data, state, ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{(\code{MultiAssayExperiment})\cr
+data which are supposed to be filtered.}
+
+\item{\code{state}}{(\verb{named list})\cr
+should contain values which are initial selection in the \code{FilterState}.
+Names of the \code{list} element should correspond to the name of the
+column in \code{colData(data)}.}
+
+\item{\code{...}}{ignored.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
+\subsection{Method \code{remove_filter_state()}}{
+Remove a variable from the \code{ReactiveQueue} and its corresponding UI element.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$remove_filter_state(element_id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element_id}}{(\code{character(1)})\cr name of \code{ReactiveQueue} element.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

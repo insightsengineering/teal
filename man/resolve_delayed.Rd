@@ -66,8 +66,9 @@ isolate({
 
   # nested list (arm_ref_comp)
   arm_ref_comp <- list(
-    ARMCD = list(ref = variable_choices("ADSL"),
-    comp = variable_choices("ADSL")
+    ARMCD = list(
+      ref = variable_choices("ADSL"),
+      comp = variable_choices("ADSL")
     )
   )
 

@@ -122,17 +122,6 @@ testthat::test_that("get_filtered_dataname returns <dataname>_FILTERED as defaul
   testthat::expect_equal(filtered_dataset$get_filtered_dataname(), "iris_FILTERED")
 })
 
-testthat::test_that("set_bookmark state is pure virtual", {
-  filtered_dataset <- FilteredDataset$new(
-    dataset = TealDataset$new("iris", head(iris))
-  )
-
-  testthat::expect_error(
-    shiny::testServer(filtered_dataset$set_bookmark_state, expr = NULL),
-    regex = "Pure virtual"
-  )
-})
-
 testthat::test_that("ui_add_filter_state is pure virtual", {
   filtered_dataset <- FilteredDataset$new(
     dataset = TealDataset$new("iris", head(iris))

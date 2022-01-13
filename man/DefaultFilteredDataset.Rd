@@ -8,6 +8,35 @@
 
 \code{DefaultFilteredDataset} R6 class
 }
+\examples{
+library(shiny)
+ds <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+ds$get_data(filtered = FALSE)
+
+ds$set_filter_state(
+  state = list(
+    Species = list(selected = "virginica"),
+    Petal.Length = list(selected = c(2.0, 5))
+  )
+)
+
+isolate(ds$get_filter_state())
+isolate(ds$get_filter_overview_info())
+isolate(ds$get_call())
+
+## ------------------------------------------------
+## Method `DefaultFilteredDataset$set_filter_state`
+## ------------------------------------------------
+
+dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+fs <- list(
+  Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
+  Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+)
+dataset$set_filter_state(state = fs)
+shiny::isolate(dataset$get_filter_state())
+
+}
 \section{Super class}{
 \code{\link[teal:FilteredDataset]{teal::FilteredDataset}} -> \code{DefaultFilteredDataset}
 }
@@ -16,7 +45,9 @@
 \itemize{
 \item \href{#method-new}{\code{DefaultFilteredDataset$new()}}
 \item \href{#method-get_call}{\code{DefaultFilteredDataset$get_call()}}
-\item \href{#method-set_bookmark_state}{\code{DefaultFilteredDataset$set_bookmark_state()}}
+\item \href{#method-get_filter_state}{\code{DefaultFilteredDataset$get_filter_state()}}
+\item \href{#method-set_filter_state}{\code{DefaultFilteredDataset$set_filter_state()}}
+\item \href{#method-remove_filter_state}{\code{DefaultFilteredDataset$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{DefaultFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{DefaultFilteredDataset$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{DefaultFilteredDataset$clone()}}
@@ -81,31 +112,84 @@ applies to one argument (\code{...}) in \code{dplyr::filter} call.
 
 \subsection{Returns}{
 filter \code{call} or \code{list} of filter calls
+Gets the reactive values from the active \code{FilterState} objects.
+
+Get all active filters from this dataset in form of the nested list.
+The output list is a compatible input to \code{self$set_filter_state}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
-Set bookmark state
+\if{html}{\out{<a id="method-get_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
+\subsection{Method \code{get_filter_state()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$set_bookmark_state(id, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$get_filter_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} with named elements corresponding to \code{FilterState} objects
+(active filters).
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
+Set filter state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$set_filter_state(state, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{(\code{character(1)})\cr
-an ID string that corresponds with the ID used to call the module's UI function.}
-
 \item{\code{state}}{(\verb{named list})\cr
 containing values of the initial filter. Values should be relevant
 to the referred column.}
+
+\item{\code{...}}{Additional arguments like \code{include_update} for \code{CDISCFilteredDataset}.
+Note that this is ignored for other \code{FilteredDatasets}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{moduleServer} function which returns \code{NULL}
+\code{NULL}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+fs <- list(
+  Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
+  Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+)
+dataset$set_filter_state(state = fs)
+shiny::isolate(dataset$get_filter_state())
+
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
+\subsection{Method \code{remove_filter_state()}}{
+Remove one or more \code{FilterState} of a \code{FilteredDataset}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$remove_filter_state(element_id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element_id}}{(\code{character})\cr
+Vector of character names of variables to remove their \code{FilterState}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

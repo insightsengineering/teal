@@ -49,14 +49,18 @@ load_datasets(x)
 # TealDatasetConnector ------
 library(scda)
 pull_fun_adsl <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adsl}
+  function() {
+    synthetic_cdisc_data("latest")$adsl
+  }
 )
 adsl <- dataset_connector("ADSL", pull_fun_adsl)
 load_datasets(adsl)
 get_dataset(adsl)
 
 pull_fun_adae <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adae}
+  function() {
+    synthetic_cdisc_data("latest")$adae
+  }
 )
 adae <- dataset_connector("ADAE", pull_fun_adae)
 load_datasets(adae)
@@ -64,20 +68,27 @@ load_datasets(adae)
 # TealDataConnector --------
 library(scda)
 adsl_cf <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adsl}
+  function() {
+    synthetic_cdisc_data("latest")$adsl
+  }
 )
-adsl <- cdisc_dataset_connector(dataname = "ADSL",
-                                pull_callable = adsl_cf,
-                                keys = get_cdisc_keys("ADSL"))
+adsl <- cdisc_dataset_connector(
+  dataname = "ADSL",
+  pull_callable = adsl_cf,
+  keys = get_cdisc_keys("ADSL")
+)
 adrs_cf <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adrs}
+  function() {
+    synthetic_cdisc_data("latest")$adrs
+  }
 )
-adrs <- cdisc_dataset_connector(dataname = "ADRS",
-                                pull_callable = adrs_cf,
-                                keys = get_cdisc_keys("ADRS"))
+adrs <- cdisc_dataset_connector(
+  dataname = "ADRS",
+  pull_callable = adrs_cf,
+  keys = get_cdisc_keys("ADRS")
+)
 
 rdc <- cdisc_data(adsl, adrs)
-
 \dontrun{
 load_datasets(rdc)
 }
@@ -85,26 +96,37 @@ load_datasets(rdc)
 # TealData --------
 library(scda)
 adsl_cf <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adsl}
+  function() {
+    synthetic_cdisc_data("latest")$adsl
+  }
 )
-adsl <- cdisc_dataset_connector(dataname = "ADSL",
-                                pull_callable = adsl_cf,
-                                keys = get_cdisc_keys("ADSL"))
+adsl <- cdisc_dataset_connector(
+  dataname = "ADSL",
+  pull_callable = adsl_cf,
+  keys = get_cdisc_keys("ADSL")
+)
 adlb_cf <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adlb}
+  function() {
+    synthetic_cdisc_data("latest")$adlb
+  }
 )
-adlb <- cdisc_dataset_connector(dataname = "ADLB",
-                                pull_callable = adlb_cf,
-                                keys = get_cdisc_keys("ADLB"))
+adlb <- cdisc_dataset_connector(
+  dataname = "ADLB",
+  pull_callable = adlb_cf,
+  keys = get_cdisc_keys("ADLB")
+)
 adrs_cf <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adrs}
+  function() {
+    synthetic_cdisc_data("latest")$adrs
+  }
 )
-adrs <- cdisc_dataset_connector(dataname = "ADRS",
-                                pull_callable = adrs_cf,
-                                keys = get_cdisc_keys("ADRS"))
+adrs <- cdisc_dataset_connector(
+  dataname = "ADRS",
+  pull_callable = adrs_cf,
+  keys = get_cdisc_keys("ADRS")
+)
 
-tc <-cdisc_data(adsl, adlb, adrs)
-
+tc <- cdisc_data(adsl, adlb, adrs)
 \dontrun{
 load_datasets(tc)
 }

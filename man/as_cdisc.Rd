@@ -64,7 +64,9 @@ as_cdisc(
 
 library(scda)
 pull_fun_adsl <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adsl}
+  function() {
+    synthetic_cdisc_data("latest")$adsl
+  }
 )
 as_cdisc(
   dataset_connector(
@@ -75,7 +77,9 @@ as_cdisc(
 )
 
 pull_fun_adae <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adae}
+  function() {
+    synthetic_cdisc_data("latest")$adae
+  }
 )
 as_cdisc(
   dataset_connector(
@@ -85,5 +89,4 @@ as_cdisc(
   ),
   parent = "ADSL"
 )
-
 }

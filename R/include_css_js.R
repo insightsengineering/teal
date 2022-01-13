@@ -9,7 +9,8 @@
 #' @return HTML code that includes `CSS` files
 include_css_files <- function(pattern = "*") {
   css_files <- list.files(
-    system.file("css", package = "teal", mustWork = TRUE), pattern = pattern, full.names = TRUE
+    system.file("css", package = "teal", mustWork = TRUE),
+    pattern = pattern, full.names = TRUE
   )
   return(singleton(lapply(css_files, includeCSS)))
 }

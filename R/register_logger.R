@@ -67,12 +67,13 @@ register_logger <- function(namespace = NA_character_,
 
   if (is.null(layout)) layout <- Sys.getenv("TEAL.LOG_LAYOUT")
   if (is.null(layout) || layout == "") layout <- getOption("teal.log_layout")
-  tryCatch({
-    logger::log_layout(layout_teal_glue_generator(layout), namespace = namespace)
-    logger::log_appender(logger::appender_file(nullfile()), namespace = namespace)
-    logger::log_success("Set up the logger", namespace = namespace)
-    logger::log_appender(logger::appender_stdout, namespace = namespace)
-  },
+  tryCatch(
+    expr = {
+      logger::log_layout(layout_teal_glue_generator(layout), namespace = namespace)
+      logger::log_appender(logger::appender_file(nullfile()), namespace = namespace)
+      logger::log_success("Set up the logger", namespace = namespace)
+      logger::log_appender(logger::appender_stdout, namespace = namespace)
+    },
     error = function(condition) {
       stop(paste(
         "Error setting the layout of the logger.",
@@ -119,16 +120,14 @@ log_system_info <- function() {
 
 #' Generate log layout function using common variables available via glue syntax including shiny session token
 #'
-#' @param format glue-flavored layout of the log message see [logger::layout_glue_generator()]
-#'   for more details
+#' @inheritParams register_logger
 #' @return function taking level and msg arguments - keeping the original call creating the generator
 #'   in the generator attribute that is returned when calling log_layout for the currently used layout
 #' @details this function behaves in the same way as [logger::layout_glue_generator()]
 #'   but allows the shiny session token (last 8 chars) to be included in the logging layout
 #' @noRd
-layout_teal_glue_generator <- function(
-  format = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} fun:{fn} [{level}] {msg}") {
-  force(format)
+layout_teal_glue_generator <- function(layout = getOption("teal.log_layout")) {
+  force(layout)
   structure(
     function(level, msg, namespace = NA_character_, .logcall = sys.call(), .topcall = sys.call(-1),
              .topenv = parent.frame()) {
@@ -137,14 +136,15 @@ layout_teal_glue_generator <- function(
       }
       with(logger::get_logger_meta_variables(
         log_level = level, namespace = namespace, .logcall = .logcall, .topcall = .topcall,
-        .topenv = .topenv), {
-          token <- substr(shiny::getDefaultReactiveDomain()$token, 25, 32)
-          if (length(token) == 0) {
-            token <- ""
-          }
-          glue::glue(format)
+        .topenv = .topenv
+      ), {
+        token <- substr(shiny::getDefaultReactiveDomain()$token, 25, 32)
+        if (length(token) == 0) {
+          token <- ""
         }
-      )
-    }, generator = deparse(match.call())
+        glue::glue(layout)
+      })
+    },
+    generator = deparse(match.call())
   )
 }

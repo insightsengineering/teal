@@ -60,41 +60,52 @@ input widgets that provide only a single choice.
 \examples{
 
 optionalSelectInput(inputId = "xvar", label = "x variable", choices = "A", selected = "A")
-optionalSelectInput(inputId = "xvar",
-                    label = "x variable",
-                    choices = LETTERS[1:5],
-                     selected = "A")
-optionalSelectInput(inputId = "xvar",
-                    label = "x variable",
-                    choices = c("A - value A" = "A"),
-                    selected = "A")
+optionalSelectInput(
+  inputId = "xvar",
+  label = "x variable",
+  choices = LETTERS[1:5],
+  selected = "A"
+)
+optionalSelectInput(
+  inputId = "xvar",
+  label = "x variable",
+  choices = c("A - value A" = "A"),
+  selected = "A"
+)
 
 library(scda)
 ADRS <- synthetic_cdisc_data("latest")$adrs
-optionalSelectInput(inputId = "xvar",
-                    label = "x variable",
-                    choices = choices_labeled(
-                      choices = letters,
-                      labels = LETTERS,
-                      types = sample(
-                        c("primary_key", "numeric", "factor", "Date"),
-                        length(letters),
-                        TRUE
-                      ),
-                      subset = c("a", "b", "c")
-                    ),
-                    selected = "a")
-optionalSelectInput(inputId = "xvar",
-                    label = "x variable",
-                    choices = variable_choices(data = ADRS, subset = c("AGE", "SEX", "PARAMCD")),
-                    selected = "PARAMCD")
+optionalSelectInput(
+  inputId = "xvar",
+  label = "x variable",
+  choices = choices_labeled(
+    choices = letters,
+    labels = LETTERS,
+    types = sample(
+      c("primary_key", "numeric", "factor", "Date"),
+      length(letters),
+      TRUE
+    ),
+    subset = c("a", "b", "c")
+  ),
+  selected = "a"
+)
+optionalSelectInput(
+  inputId = "xvar",
+  label = "x variable",
+  choices = variable_choices(data = ADRS, subset = c("AGE", "SEX", "PARAMCD")),
+  selected = "PARAMCD"
+)
 
 selected_value <- paste0(lapply(ADRS[1, c("PARAMCD", "AVISIT")], as.character), collapse = " - ")
-optionalSelectInput(inputId = "xvar",
-                    label = "x variable",
-                    choices = value_choices(data = ADRS,
-                                            var_choices = c("PARAMCD", "AVISIT"),
-                                            var_label = c("PARAM", "AVISIT")),
-                    selected = selected_value)
-
+optionalSelectInput(
+  inputId = "xvar",
+  label = "x variable",
+  choices = value_choices(
+    data = ADRS,
+    var_choices = c("PARAMCD", "AVISIT"),
+    var_label = c("PARAM", "AVISIT")
+  ),
+  selected = selected_value
+)
 }

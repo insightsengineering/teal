@@ -66,6 +66,12 @@ testthat::test_that("set_selected throws when the passed values are not coercibl
   )
 })
 
+
+testthat::test_that("set_selected accepts an array with two numerical elements", {
+  filter_state <- RangeFilterState$new(7, varname = "test")
+  testthat::expect_error(filter_state$set_selected(c(7, 7)), NA)
+})
+
 testthat::test_that("get_call returns a valid call after an unsuccessfull set_selected", {
   filter_state <- RangeFilterState$new(7, varname = "test")
   testthat::expect_error(suppressWarnings(
@@ -74,11 +80,6 @@ testthat::test_that("get_call returns a valid call after an unsuccessfull set_se
   ))
   test <- 7
   testthat::expect_true(all(eval(isolate(filter_state$get_call()))))
-})
-
-testthat::test_that("set_selected accepts an array with two numerical elements", {
-  filter_state <- RangeFilterState$new(7, varname = "test")
-  testthat::expect_error(filter_state$set_selected(c(7, 7)), NA)
 })
 
 testthat::test_that("get_call returns the call with values passed in set_selected", {
@@ -129,6 +130,13 @@ testthat::test_that("get_call returns a condition true for NAs and Inf values af
   testthat::expect_true(all(eval(isolate(filter_state$get_call()))))
 })
 
+testthat::test_that("get_state returns a list identical to set_state input", {
+  filter_state <- RangeFilterState$new(c(1.0, 8.0, NA_real_, Inf), varname = "test")
+  state <- list(selected = c(2.0, 7.0), keep_na = TRUE, keep_inf = TRUE)
+  filter_state$set_state(state)
+  testthat::expect_identical(isolate(filter_state$get_state()), state)
+})
+
 testthat::test_that("set_state needs a named list with selected, keep_na and keep_inf elements", {
   filter_state <- RangeFilterState$new(c(1, 8, NA_real_, Inf), varname = "test")
   testthat::expect_error(
@@ -153,4 +161,40 @@ testthat::test_that("set_state overwrites fields included in the input only", {
   testthat::expect_identical(isolate(filter_state$get_selected()), c(5, 6))
   testthat::expect_true(isolate(filter_state$get_keep_na()))
   testthat::expect_true(isolate(filter_state$get_keep_inf()))
+})
+
+testthat::test_that("set_state_reactive needs a named list with selected, keep_na and keep_inf elements", {
+  filter_state <- RangeFilterState$new(c(1, 8, NA_real_, Inf), varname = "test")
+  testthat::expect_error(
+    filter_state$set_state(list(selected = c(1, 2), keep_na = TRUE, keep_inf = TRUE)),
+    NA
+  )
+  testthat::expect_error(filter_state$set_state(list(selected = c(1, 2), unknown = TRUE)), "all\\(names\\(state\\)")
+})
+
+testthat::test_that("set_selected_reactive throws error when selection not within allowed range", {
+  filter_state <- RangeFilterState$new(c(1, 8), varname = "test")
+  testthat::expect_error(suppressWarnings(filter_state$set_selected_reactive(c(9, 10))))
+})
+
+testthat::test_that("set_keep_na_reactive accepts logical input", {
+  filter_state <- RangeFilterState$new(c(1, 8), varname = "test")
+  testthat::expect_error(filter_state$set_keep_na_reactive(TRUE), NA)
+})
+
+testthat::test_that("set_keep_na_reactive throws error if input is not logical", {
+  filter_state <- RangeFilterState$new(c(1, 8), varname = "test")
+  testthat::expect_error(filter_state$set_keep_na_reactive("TRUE"))
+  testthat::expect_error(filter_state$set_keep_na_reactive(1))
+})
+
+testthat::test_that("set_keep_inf_reactive accepts logical input", {
+  filter_state <- RangeFilterState$new(c(1, 8), varname = "test")
+  testthat::expect_error(filter_state$set_keep_inf_reactive(TRUE), NA)
+})
+
+testthat::test_that("set_keep_inf_reactive throws error if input is not logical", {
+  filter_state <- RangeFilterState$new(c(1, 8), varname = "test")
+  testthat::expect_error(filter_state$set_keep_inf_reactive("TRUE"))
+  testthat::expect_error(filter_state$set_keep_inf_reactive(1))
 })

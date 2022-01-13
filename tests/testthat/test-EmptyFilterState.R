@@ -27,3 +27,10 @@ testthat::test_that("set_state needs a named list with selected and keep_na elem
     "all\\(names\\(state\\)"
   )
 })
+
+testthat::test_that("get_state returns a list identical to set_state input", {
+  filter_state <- EmptyFilterState$new(NA_character_, varname = "test")
+  state <- list(keep_na = TRUE)
+  filter_state$set_state(state)
+  testthat::expect_identical(isolate(filter_state$get_state()), state)
+})

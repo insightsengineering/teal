@@ -21,7 +21,7 @@ labels
 \examples{
 library(scda)
 
-ADSL <-  synthetic_cdisc_data("latest")$adsl
+ADSL <- synthetic_cdisc_data("latest")$adsl
 
 get_labels(ADSL)
 }

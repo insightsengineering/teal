@@ -18,7 +18,10 @@ Initialize \code{MatrixFilterStates} object
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{MatrixFilterStates$new()}}
-\item \href{#method-set_bookmark_state}{\code{MatrixFilterStates$set_bookmark_state()}}
+\item \href{#method-server}{\code{MatrixFilterStates$server()}}
+\item \href{#method-get_filter_state}{\code{MatrixFilterStates$get_filter_state()}}
+\item \href{#method-set_filter_state}{\code{MatrixFilterStates$set_filter_state()}}
+\item \href{#method-remove_filter_state}{\code{MatrixFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MatrixFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MatrixFilterStates$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{MatrixFilterStates$clone()}}
@@ -63,12 +66,12 @@ text label value.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
-Sets a bookmarked state
+\if{html}{\out{<a id="method-server"></a>}}
+\if{latex}{\out{\hypertarget{method-server}{}}}
+\subsection{Method \code{server()}}{
+Server module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$set_bookmark_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$server(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -76,19 +79,75 @@ Sets a bookmarked state
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
 an ID string that corresponds with the ID used to call the module's UI function.}
-
-\item{\code{data}}{(\code{matrix})\cr
-data which are supposed to be filtered}
-
-\item{\code{state}}{(\verb{named list})\cr
-should contain values which are initial selection in the \code{FilterState}.
-Names of the \code{list} element should correspond to the name of the
-column in \code{data}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 \code{moduleServer} function which returns \code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
+\subsection{Method \code{get_filter_state()}}{
+Returns active \code{FilterState} objects.
+
+Gets all active filters from this dataset in form of the nested list.
+The output list can be used as input to \code{self$set_filter_state}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$get_filter_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} containing \code{list} with selected values for each \code{FilterState}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
+Sets a filter state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$set_filter_state(data, state, ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{(\code{matrix})\cr
+data which are supposed to be filtered.}
+
+\item{\code{state}}{(\verb{named list})\cr
+should contain values which are initial selection in the \code{FilterState}.
+Names of the \code{list} element should correspond to the name of the
+column in \code{data}.}
+
+\item{\code{...}}{ignored.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
+\subsection{Method \code{remove_filter_state()}}{
+Remove a variable from the \code{ReactiveQueue} and its corresponding UI element.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$remove_filter_state(element_id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element_id}}{(\code{character(1)})\cr name of \code{ReactiveQueue} element.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

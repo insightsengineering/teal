@@ -7,7 +7,7 @@
 #' @description
 #' Abstract class containing code for handling set of datasets.
 #'
-TealDataAbstract <- R6::R6Class( #nolint
+TealDataAbstract <- R6::R6Class( # nolint
   classname = "TealDataAbstract",
   ## __Public Methods ====
   public = list(
@@ -45,7 +45,7 @@ TealDataAbstract <- R6::R6Class( #nolint
       }
       private$check_result <- res
       logger::log_trace("TealDataAbstract$check executed the code to reproduce the data - result: { res }.")
-      return(res)
+      res
     },
     #' @description
     #' Execute `check()` and raise an error if it's not reproducible.
@@ -120,7 +120,6 @@ TealDataAbstract <- R6::R6Class( #nolint
       )
       logger::log_trace("TealDataAbstract$execute_mutate evaluated mutate code.")
       return(invisible(NULL))
-
     },
     #' @description
     #' Get result of reproducibility check
@@ -195,8 +194,10 @@ TealDataAbstract <- R6::R6Class( #nolint
     #' @return `list` of `TealDataset`.
     get_datasets = function() {
       if (!self$is_pulled()) {
-        stop("Not all datasets have been pulled yet.\n",
-             "- Please use `load_datasets()` to retrieve complete results.")
+        stop(
+          "Not all datasets have been pulled yet.\n",
+          "- Please use `load_datasets()` to retrieve complete results."
+        )
       }
       ulapply(self$get_items(), get_dataset)
     },
@@ -260,8 +261,8 @@ TealDataAbstract <- R6::R6Class( #nolint
       logger::log_trace(
         sprintf(
           "TealDataAbstract$mutate code (%s lines) and vars (%s) set.",
-          length(parse(text = code)),
-          paste(names(vars), collapse = ', ')
+          length(parse(text = code, keep.source = FALSE)),
+          paste(names(vars), collapse = ", ")
         )
       )
       return(invisible(self))
@@ -300,8 +301,8 @@ TealDataAbstract <- R6::R6Class( #nolint
       logger::log_trace(
         sprintf(
           "TealDataAbstract$mutate code (%s lines) and vars (%s) set for dataset: %s.",
-          length(parse(text = code)),
-          paste(names(vars), collapse = ', '),
+          length(parse(text = code, keep.source = FALSE)),
+          paste(names(vars), collapse = ", "),
           dataname
         )
       )
@@ -400,7 +401,6 @@ TealDataAbstract <- R6::R6Class( #nolint
     deep_clone = function(name, value) {
       deep_clone_r6(name, value)
     },
-
     check_combined_code = function() {
       execution_environment <- new.env(parent = parent.env(globalenv()))
       self$get_code_class(only_pull = TRUE)$eval(envir = execution_environment)

@@ -1,4 +1,4 @@
-.onLoad <- function(libname, pkgname) { #nolint
+.onLoad <- function(libname, pkgname) { # nolint
   # adapted from https://github.com/r-lib/devtools/blob/master/R/zzz.R
   teal_default_options <- list(
     teal_logging = TRUE,
@@ -15,12 +15,13 @@
   # expose default CDISC dataset names
   # copy from excel file
   default_cdisc_keys <- yaml::yaml.load_file(
-    utils.nest::get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")) #nolint
+    utils.nest::get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")
+  ) # nolint
   assign("default_cdisc_keys", default_cdisc_keys, envir = parent.env(environment()))
 
   # Set up the teal logger instance
   options(
-    teal.log_layout = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} fun:{fn} [{level}] {msg}",
+    teal.log_layout = "[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} {msg}",
     teal.log_level = logger::INFO
   )
   register_logger("teal")

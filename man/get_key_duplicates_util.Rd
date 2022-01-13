@@ -33,7 +33,6 @@ df <- as.data.frame(
 )
 res <- teal:::get_key_duplicates_util(df, keys = c("a", "b")) # duplicated keys are in rows 3 and 4
 print(res) # outputs a tibble
-
 }
 \seealso{
 \link{get_key_duplicates}

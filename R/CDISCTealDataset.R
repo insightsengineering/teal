@@ -80,7 +80,6 @@ CDISCTealDataset <- R6::R6Class( # nolint
                         code = private$code,
                         label = self$get_dataset_label(),
                         vars = list()) {
-
       res <- self$initialize(
         dataname = dataname,
         x = x,

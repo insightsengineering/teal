@@ -57,9 +57,9 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 
   stopifnot(
     is.character(choices) ||
-    is.numeric(choices) ||
-    is.logical(choices) ||
-    (length(choices) == 1 && is.na(choices))
+      is.numeric(choices) ||
+      is.logical(choices) ||
+      (length(choices) == 1 && is.na(choices))
   )
 
   if (is.factor(labels)) {
@@ -160,7 +160,8 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #' ADRS_conn <- dataset_connector(
 #'   "ADRS",
 #'   pull_callable = callable_code("radrs(cached = TRUE)"),
-#'   key = get_cdisc_keys("ADRS"))
+#'   key = get_cdisc_keys("ADRS")
+#' )
 #' variable_choices(ADRS_conn)
 #'
 #' # functional subset (with delayed data) - return only factor variables
@@ -316,9 +317,9 @@ value_choices <- function(data,
   stopifnot(is_character_vector(var_choices, min_length = 0L))
   stopifnot(
     is.null(var_label) ||
-    (is_character_vector(var_label, min_length = 0L) &&
-      length(var_choices) == length(var_label))
-    )
+      (is_character_vector(var_label, min_length = 0L) &&
+        length(var_choices) == length(var_label))
+  )
   stopifnot(is.null(subset) || is.vector(subset) || is.function(subset))
   stopifnot(is_character_single(sep))
   UseMethod("value_choices")
@@ -357,21 +358,21 @@ value_choices.data.frame <- function(data, # nolint
   df_label <- data[var_label]
 
   for (i in seq_along(var_choices)) {
-    if ("NA" %in% c(df_choices[[i]], levels(df_choices[[i]])) && any(is.na(df_choices[[i]])))
+    if ("NA" %in% c(df_choices[[i]], levels(df_choices[[i]])) && any(is.na(df_choices[[i]]))) {
       warning(paste0(
         "Missing values and the string value of 'NA' both exist in the column of ", var_choices[i],
         " either as value(s) or level(s). ",
         "This will cause the missing values to be grouped with the actual string 'NA' values in the UI widget."
-      )
-    )
+      ))
+    }
   }
 
   choices <- if (
     length(var_choices) > 1 ||
-    is.character(df_choices[[1]]) ||
-    is.factor(df_choices[[1]]) ||
-    inherits(df_choices[[1]], c("Date", "POSIXct", "POSIXlt", "POSIXt"))
-    ) {
+      is.character(df_choices[[1]]) ||
+      is.factor(df_choices[[1]]) ||
+      inherits(df_choices[[1]], c("Date", "POSIXct", "POSIXlt", "POSIXt"))
+  ) {
     df_choices <- dplyr::mutate_if(
       df_choices,
       .predicate = function(col) inherits(col, c("POSIXct", "POSIXlt", "POSIXt")),
@@ -478,14 +479,13 @@ value_choices.TealDatasetConnector <- function(data, # nolint
 #'     stringsAsFactors = FALSE
 #'   )
 #' )
-#'
 variable_types <- function(data, columns = NULL) {
   UseMethod("variable_types")
 }
 
 
 #' @export
-variable_types.default <- function(data, columns = NULL) { #nousage
+variable_types.default <- function(data, columns = NULL) {
   stopifnot(
     is.null(columns) || is_character_vector(columns, min_length = 0L)
   )
@@ -513,22 +513,22 @@ variable_types.default <- function(data, columns = NULL) { #nousage
 }
 
 #' @export
-variable_types.data.frame <- function(data, columns = NULL) { #nousage
+variable_types.data.frame <- function(data, columns = NULL) {
   variable_types.default(data, columns)
 }
 
 #' @export
-variable_types.DataTable <- function(data, columns = NULL) { #nousage
+variable_types.DataTable <- function(data, columns = NULL) {
   variable_types.default(data, columns)
 }
 
 #' @export
-variable_types.DFrame <- function(data, columns = NULL) { #nousage
+variable_types.DFrame <- function(data, columns = NULL) {
   variable_types.default(data, columns)
 }
 
 #' @export
-variable_types.matrix <- function(data, columns = NULL) { #nousage
+variable_types.matrix <- function(data, columns = NULL) {
   stopifnot(
     is.null(columns) || is_character_vector(columns, min_length = 0L)
   )

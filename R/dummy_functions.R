@@ -7,9 +7,9 @@
 #'
 #' @param data (`TealData`)
 #' @return dummy filter states
-get_dummy_filter <- function(data) { # nousage # nolint
-  ADSL <- get_raw_data(x = data, dataname = "ADSL") #nolint
-  ADLB <- get_raw_data(x = data, dataname = "ADLB") #nolint
+get_dummy_filter <- function(data) { # nolint
+  ADSL <- get_raw_data(x = data, dataname = "ADSL") # nolint
+  ADLB <- get_raw_data(x = data, dataname = "ADLB") # nolint
 
   res <- list(
     ADSL = list(
@@ -50,15 +50,15 @@ get_dummy_filter <- function(data) { # nousage # nolint
 #' Some NAs are also introduced to stress test.
 #'
 #' @return `cdisc_data`
-get_dummy_cdisc_data <- function() { # nousage # nolint
+get_dummy_cdisc_data <- function() { # nolint
   teal_with_pkg("scda", code = {
     ADSL <- scda::synthetic_cdisc_data("latest")$adsl # nolint
     ADAE <- scda::synthetic_cdisc_data("latest")$adae # nolint
     ADLB <- scda::synthetic_cdisc_data("latest")$adlb # nolint
   })
 
-  ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
-  ADSL$SEX[1:150] <- NA
+  ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE) # nolint
+  ADSL$SEX[1:150] <- NA # nolint
 
   res <- cdisc_data(
     cdisc_dataset(dataname = "ADSL", x = ADSL),
@@ -68,7 +68,8 @@ get_dummy_cdisc_data <- function() { # nousage # nolint
       ADSL <- synthetic_cdisc_data(\"latest\")$adsl
       ADAE <- synthetic_cdisc_data(\"latest\")$adae
       ADLB <- synthetic_cdisc_data(\"latest\")$adlb
-    ")
+    "
+  )
   return(res)
 }
 
@@ -76,7 +77,7 @@ get_dummy_cdisc_data <- function() { # nousage # nolint
 #'
 #' Returns a new `R6` object on each invocation, not a singleton.
 #' @return `FilteredData` with `ADSL` set
-get_dummy_datasets <- function() { # nousage # nolint
+get_dummy_datasets <- function() { # nolint
   dummy_cdisc_data <- get_dummy_cdisc_data()
   datasets <- filtered_data_new(dummy_cdisc_data)
   isolate({
@@ -92,7 +93,7 @@ get_dummy_datasets <- function() { # nousage # nolint
 #'
 #' @return `teal_modules`
 #'
-get_dummy_modules <- function() { # nousage
+get_dummy_modules <- function() {
   create_mod <- function(module_name) {
     module(
       module_name,

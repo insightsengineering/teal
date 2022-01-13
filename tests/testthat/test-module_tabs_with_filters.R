@@ -4,13 +4,13 @@ filtered_data$set_dataset(dataset(dataname = "mtcars", x = head(mtcars)))
 
 test_module1 <- module(
   label = "iris_tab",
-  ui =  function(id, ...) NULL,
+  ui = function(id, ...) NULL,
   server = function(id, datasets) moduleServer(id, function(input, output, session) NULL),
   filters = "iris"
 )
 test_module2 <- module(
   label = "mtcars_tab",
-  ui =  function(id, ...) NULL,
+  ui = function(id, ...) NULL,
   server = function(id, datasets) moduleServer(id, function(input, output, session) NULL),
   filters = "mtcars"
 )
@@ -21,7 +21,8 @@ testthat::test_that("active_datanames() returns dataname from single tab", {
     args = list(
       id = "test",
       datasets = filtered_data,
-      modules = root_modules(test_module1)
+      modules = root_modules(test_module1),
+      filter = list()
     ),
     expr = {
       testthat::expect_identical(active_datanames(), "iris")
@@ -35,7 +36,8 @@ testthat::test_that("active_datanames() returns dataname from active tab after c
     args = list(
       id = "test",
       datasets = filtered_data,
-      modules = root_modules(test_module1, test_module2)
+      modules = root_modules(test_module1, test_module2),
+      filter = list()
     ),
     expr = {
       testthat::expect_error(active_datanames()) # to trigger active_module

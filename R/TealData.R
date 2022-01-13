@@ -67,7 +67,6 @@ TealData <- R6::R6Class( # nolint
     initialize = function(..., check = FALSE, join_keys) {
       dot_args <- list(...)
       allowed_classes <- c("TealDataConnector", "TealDataset", "TealDatasetConnector")
-
       is_teal_data <- is_any_class_list(dot_args, allowed_classes)
       if (!all(is_teal_data)) {
         stop("All elements should be of TealDataset(Connector) or TealDataConnector class")
@@ -295,7 +294,6 @@ TealData <- R6::R6Class( # nolint
           dat <- self$get_server()(id = "main_app")
 
           observeEvent(dat(), {
-
             if (self$is_pulled()) {
               shinyjs::show("data_loaded")
               stopApp()
@@ -407,7 +405,6 @@ TealData <- R6::R6Class( # nolint
                             p(icon("check"), "Ready to Load")
                           )
                         )
-
                       } else if (is(x, class2 = "TealDatasetConnector")) {
                         if_null(
                           x$get_ui(id = ns(paste0(x$get_datanames(), collapse = "_"))),
@@ -451,7 +448,6 @@ TealData <- R6::R6Class( # nolint
               connection = dc$get_connection(),
               connectors = dc$get_items()
             )
-
           } else if (is(dc, class2 = "TealDatasetConnector")) {
             dc$get_server()(id = dc$get_dataname())
           }

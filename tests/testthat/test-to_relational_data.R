@@ -103,7 +103,8 @@ test_that("to_relational_data throws error with a function returning a non-named
 
   testthat::expect_error(
     to_relational_data_wrapper(fun()),
-    "Unnamed lists shouldn't be provided as input for data. Please use a named list.")
+    "Unnamed lists shouldn't be provided as input for data. Please use a named list."
+  )
 })
 
 test_that("to_relational_data throws error with a function returning a semi-named list", {
@@ -111,7 +112,8 @@ test_that("to_relational_data throws error with a function returning a semi-name
 
   testthat::expect_error(
     to_relational_data_wrapper(fun()),
-    "Unnamed lists shouldn't be provided as input for data. Please use a named list.")
+    "Unnamed lists shouldn't be provided as input for data. Please use a named list."
+  )
 })
 
 test_that("to_relational_data throws error with a multiple functions returning data.frame", {
@@ -120,5 +122,6 @@ test_that("to_relational_data throws error with a multiple functions returning d
 
   testthat::expect_error(
     to_relational_data_wrapper(setNames(nm = c("AA"), list(fun_iris(), fun_mtcars()))),
-    "Unnamed lists shouldn't be provided as input for data. Please use a named list.")
+    "Unnamed lists shouldn't be provided as input for data. Please use a named list."
+  )
 })

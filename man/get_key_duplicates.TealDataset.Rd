@@ -32,7 +32,6 @@ adsl <- synthetic_cdisc_data("latest")$adsl
 # is in the recognized ADAM nomenclature ("ADSL")
 rel_adsl <- cdisc_dataset("ADSL", adsl)
 get_key_duplicates(rel_adsl)
-
 }
 \seealso{
 \link{get_key_duplicates} \link{get_key_duplicates_util}

@@ -44,14 +44,18 @@ load_dataset(ADSL_dataset)
 # TealDatasetConnector --------
 library(scda)
 pull_fun_adsl <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adsl}
+  function() {
+    synthetic_cdisc_data("latest")$adsl
+  }
 )
 adsl <- dataset_connector("ADSL", pull_fun_adsl)
 load_dataset(adsl)
 get_dataset(adsl)
 
 pull_fun_adae <- callable_function(
-  function() {synthetic_cdisc_data("latest")$adae}
+  function() {
+    synthetic_cdisc_data("latest")$adae
+  }
 )
 adae <- dataset_connector("ADAE", pull_fun_adae)
 load_dataset(adae)

@@ -11,26 +11,100 @@ testthat::test_that("get_call returns a list of calls", {
   testthat::expect_true(is_class_list("language")(filtered_dataset$get_call()))
 })
 
-testthat::test_that("DefaultFilteredDataset$set_bookmark_state sets filters in FilterStates specified by list names", {
-  dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
-  fs <- list(
-    Sepal.Length = c(5.1, 6.4),
-    Species = c("setosa", "versicolor")
-  )
-  shiny::testServer(dataset$set_bookmark_state, args = list(state = fs), expr = NULL)
-  testthat::expect_equal(
-    isolate(dataset$get_call()),
-    list(
-      filter = quote(
-        iris_FILTERED <- dplyr::filter( # nolint
-          iris,
-          Sepal.Length >= 5.1 & Sepal.Length <= 6.4 &
-            Species %in% c("setosa", "versicolor")
+testthat::test_that(
+  "DefaultFilteredDataset$set_filter_state sets filters specified by list names",
+  code = {
+    dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
+
+    fs <- list(
+      Sepal.Length = c(5.1, 6.4),
+      Species = c("setosa", "versicolor")
+    )
+    dataset$set_filter_state(state = fs)
+    testthat::expect_equal(
+      isolate(dataset$get_call()),
+      list(
+        filter = quote(
+          iris_FILTERED <- dplyr::filter( # nolint
+            iris,
+            Sepal.Length >= 5.1 & Sepal.Length <= 6.4 &
+              Species %in% c("setosa", "versicolor")
+          )
         )
       )
     )
-  )
-})
+  }
+)
+
+testthat::test_that(
+  "DefaultFilteredDataset$set_filter_state throws error when list is not named",
+  code = {
+    dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
+    fs <- list(
+      c(5.1, 6.4),
+      Species = c("setosa", "versicolor")
+    )
+    testthat::expect_error(dataset$set_filter_state(state = fs))
+  }
+)
+
+testthat::test_that(
+  "DefaultFilteredDataset$remove_filter_state removes desired filter",
+  code = {
+    dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
+    fs <- list(
+      Sepal.Length = c(5.1, 6.4),
+      Species = c("setosa", "versicolor")
+    )
+    dataset$set_filter_state(state = fs)
+    dataset$remove_filter_state("Species")
+
+    testthat::expect_equal(
+      isolate(dataset$get_call()),
+      list(
+        filter = quote(
+          iris_FILTERED <- dplyr::filter( # nolint
+            iris,
+            Sepal.Length >= 5.1 & Sepal.Length <= 6.4
+          )
+        )
+      )
+    )
+  }
+)
+
+testthat::test_that(
+  "DefaultFilteredDataset$get_filter_state returns list identical to input",
+  code = {
+    dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
+    fs <- list(
+      Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
+      Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+    )
+    dataset$set_filter_state(state = fs)
+    testthat::expect_identical(isolate(dataset$get_filter_state()), fs)
+  }
+)
+
+testthat::test_that(
+  "DefaultFilteredDataset$remove_filter_state removes more than one filter",
+  code = {
+    dataset <- DefaultFilteredDataset$new(dataset("iris", iris))
+    fs <- list(
+      Sepal.Length = c(5.1, 6.4),
+      Species = c("setosa", "versicolor")
+    )
+    dataset$set_filter_state(state = fs)
+    dataset$remove_filter_state(c("Species", "Sepal.Length"))
+
+    testthat::expect_equal(
+      isolate(dataset$get_call()),
+      list(
+        filter = quote(iris_FILTERED <- iris) # nolint
+      )
+    )
+  }
+)
 
 testthat::test_that("get_filter_overview_info returns overview matrix for DefaultFilteredDataset without filtering", {
   testthat::expect_equal(

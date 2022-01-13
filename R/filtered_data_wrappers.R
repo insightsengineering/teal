@@ -12,12 +12,12 @@ filtered_data_new <- function(x) {
 }
 
 #' @export
-filtered_data_new.TealData <- function(x) { # nolintr # nousage
+filtered_data_new.TealData <- function(x) { # nolintr
   FilteredData$new()
 }
 
 #' @export
-filtered_data_new.CDISCTealData <- function(x) { # nolintr # nousage
+filtered_data_new.CDISCTealData <- function(x) { # nolintr
   CDISCFilteredData$new()
 }
 
@@ -31,12 +31,12 @@ filtered_data_new.CDISCTealData <- function(x) { # nolintr # nousage
 #' @return modified `FilteredData` object
 #'
 #' @noRd
-filtered_data_set <- function(data, datasets) { # nolintr # nousage
+filtered_data_set <- function(data, datasets) { # nolintr
   UseMethod("filtered_data_set", data)
 }
 
 #' @export
-filtered_data_set.TealData <- function(data, datasets) { # nolintr # nousage
+filtered_data_set.TealData <- function(data, datasets) { # nolintr
   datasets$set_code(data$get_code_class())
   for (dataset in data$get_datasets()) {
     datasets$set_dataset(dataset)
@@ -45,26 +45,103 @@ filtered_data_set.TealData <- function(data, datasets) { # nolintr # nousage
   return(invisible(NULL))
 }
 
-
-#' Set up `FilteredData` filters
+#' Managing `FilteredData` states
 #'
-#' @param datasets an object that inherits from `FilteredData`
-#' @param filter (named `list`) of filter entries
+#' Set, get and remove filter states of `FilteredData` object
 #'
-#' @noRd
-filtered_data_set_filters <- function(datasets, filter) {
-  stopifnot(
-    is(datasets, "FilteredData"),
-    is_fully_named_list(filter),
-    all(names(filter) %in% datasets$datanames())
-  )
+#' @name filter_state_api
+#' @inheritParams srv_tabs_with_filters
+#' @inheritParams init
+#'
+#' @return
+#' - set, remove and clear returns `NULL`
+#' - get returns named `list` of the same structure as described in `filter` argument.
+#'
+#' @examples
+#' datasets <- teal:::FilteredData$new()
+#' datasets$set_dataset(dataset("iris", iris))
+#' datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
+#' fs <- list(
+#'   iris = list(
+#'     Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),
+#'     Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
+#'   ),
+#'   mae = list(
+#'     subjects = list(
+#'       years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+#'       vital_status = list(selected = "1", keep_na = FALSE),
+#'       gender = list(selected = "female", keep_na = TRUE)
+#'     ),
+#'     RPPAArray = list(
+#'       subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+#'     )
+#'   )
+#' )
+#'
+#' # set initial filter state
+#' set_filter_state(datasets, filter = fs)
+#'
+#' # get filter state
+#' get_filter_state(datasets)
+#'
+#' # modify filter state 
+#' set_filter_state(
+#'   datasets,
+#'   filter = list(iris = list(Species = list(selected = "setosa", keep_na = TRUE)))
+#' )
+#'
+#' # remove specific filters
+#' remove_filter_state(datasets,
+#'   filter = list(
+#'     iris = "Species",
+#'     mae = list(
+#'       subjects = c("years_to_birth", "vital_status")
+#'     )
+#'   )
+#' )
+#'
+#' # remove all states
+#' clear_filter_states(datasets)
+#'
+NULL
 
+#' @rdname filter_state_api
+#' @export
+set_filter_state <- function(datasets, filter) {
+  checkmate::assert_class(datasets, "FilteredData")
+  checkmate::assert_list(filter, min.len = 0, null.ok = TRUE)
   if (length(filter) > 0) {
-    # preceeded by main_ui to adjust htmlid of filterstate added by bookmark
-    # to htmlid of element added by selecting in the app
-    datasets$set_bookmark_state("main_ui-filter_panel", filter)
+    datasets$set_filter_state(filter)
   }
+  invisible(NULL)
+}
 
+#' @rdname filter_state_api
+#' @export
+get_filter_state <- function(datasets) {
+  checkmate::assert_class(datasets, "FilteredData")
+  if (shiny::isRunning()) {
+    datasets$get_filter_state()
+  } else {
+    isolate(datasets$get_filter_state())
+  }
+}
 
-  return(invisible(NULL))
+#' @rdname filter_state_api
+#' @export
+remove_filter_state <- function(datasets, filter) {
+  checkmate::assert_class(datasets, "FilteredData")
+  checkmate::assert_list(filter, min.len = 0, null.ok = TRUE)
+  if (length(filter) > 0) {
+    datasets$remove_filter_state(filter)
+  }
+  invisible(NULL)
+}
+
+#' @rdname filter_state_api
+#' @export
+clear_filter_states <- function(datasets) {
+  checkmate::assert_class(datasets, "FilteredData")
+  datasets$remove_all_filter_states()
+  invisible(NULL)
 }

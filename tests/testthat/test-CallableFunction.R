@@ -93,7 +93,8 @@ testthat::test_that("CallableFunction returns the correct name if passed a funct
 })
 
 testthat::test_that(
-  "CallableFunction throws an error if passed a namespace function via a binding in the parent frame", {
+  "CallableFunction throws an error if passed a namespace function via a binding in the parent frame",
+  code = {
     x <- print
     testthat::expect_error(callable_function("x")$get_call(), "object 'x' of mode 'function' was not found")
   }
@@ -154,7 +155,8 @@ testthat::test_that("Test callable", {
     x_fun$get_args(),
     list(
       x = c(1.0, 2.0, NA_real_),
-      na.rm = TRUE)
+      na.rm = TRUE
+    )
   )
 
   # get_call doesn't change args persistently
@@ -170,7 +172,8 @@ testthat::test_that("Test callable", {
     x_fun$get_args(),
     list(
       x = c(1.0, 2.0, NA_real_),
-      na.rm = TRUE)
+      na.rm = TRUE
+    )
   )
 
   testthat::expect_identical(
@@ -267,10 +270,12 @@ testthat::test_that("test callable errors", {
     mean(y = 2, x = 1, na.rm = TRUE)
   )
 
-  testthat::expect_equal({
-    x <- callable_function(base::all.equal)
-    x$set_args(list(target = c("abc"), current = c("abc")))
-    x$run()},
+  testthat::expect_equal(
+    object = {
+      x <- callable_function(base::all.equal)
+      x$set_args(list(target = c("abc"), current = c("abc")))
+      x$run()
+    },
     TRUE
   )
 

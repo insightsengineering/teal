@@ -18,7 +18,10 @@ Initialize \code{SEFilterStates} object
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{SEFilterStates$new()}}
-\item \href{#method-set_bookmark_state}{\code{SEFilterStates$set_bookmark_state()}}
+\item \href{#method-server}{\code{SEFilterStates$server()}}
+\item \href{#method-get_filter_state}{\code{SEFilterStates$get_filter_state()}}
+\item \href{#method-set_filter_state}{\code{SEFilterStates$set_filter_state()}}
+\item \href{#method-remove_filter_state}{\code{SEFilterStates$remove_filter_state()}}
 \item \href{#method-ui_add_filter_state}{\code{SEFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{SEFilterStates$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{SEFilterStates$clone()}}
@@ -63,12 +66,12 @@ text label value.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
-\subsection{Method \code{set_bookmark_state()}}{
-Set bookmark state
+\if{html}{\out{<a id="method-server"></a>}}
+\if{latex}{\out{\hypertarget{method-server}{}}}
+\subsection{Method \code{server()}}{
+Server module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$set_bookmark_state(id, data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$server(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -76,20 +79,78 @@ Set bookmark state
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
 an ID string that corresponds with the ID used to call the module's UI function.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{moduleServer} function which returns \code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
+\subsection{Method \code{get_filter_state()}}{
+Gets the reactive values from the active \code{FilterState} objects.
 
+Gets all active filters from this dataset in form of the nested list.
+The output list is a compatible input to \code{self$set_filter_state}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$get_filter_state()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} containing one or two lists  depending on the number of
+\code{ReactiveQueue} object (I.e. if \code{rowData} and \code{colData} exist). Each
+\code{list} contains elements number equal to number of active filter variables.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
+\subsection{Method \code{set_filter_state()}}{
+Set filter state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$set_filter_state(data, state, ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
 \item{\code{data}}{(\code{SummarizedExperiment})\cr
-data which are supposed to be filtered}
+data which are supposed to be filtered.}
 
 \item{\code{state}}{(\verb{named list})\cr
 this list should contain \code{subset} and \code{select} element where
 each should be a named list containing values as a selection in the \code{FilterState}.
 Names of each the \code{list} element in \code{subset} and \code{select} should correspond to
 the name of the column in \code{rowData(data)} and \code{colData(data)}.}
+
+\item{\code{...}}{ignored.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{moduleServer} function which returns \code{NULL}
+\code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_filter_state}{}}}
+\subsection{Method \code{remove_filter_state()}}{
+Remove a variable from the \code{ReactiveQueue} and its corresponding UI element.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$remove_filter_state(element_id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element_id}}{(\code{character(1)})\cr name of \code{ReactiveQueue} element.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}
