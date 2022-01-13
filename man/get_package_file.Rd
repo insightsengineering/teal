@@ -21,7 +21,7 @@ The path to the file
 Function to get a file out of a package
 }
 \examples{
-get_package_file("teal", "WORDLIST")
-get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")
+teal:::get_package_file("teal", "WORDLIST")
+teal:::get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")
 }
 \keyword{internal}

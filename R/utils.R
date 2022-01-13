@@ -548,8 +548,8 @@ get_key_duplicates_util <- function(dataframe, keys) {
 #' @return The path to the file
 #' @keywords internal
 #' @examples
-#' get_package_file("teal", "WORDLIST")
-#' get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")
+#' teal:::get_package_file("teal", "WORDLIST")
+#' teal:::get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")
 get_package_file <- function(pkg = NULL, file_name = NULL) {
   checkmate::assert_string(pkg)
   checkmate::assert_string(file_name)
