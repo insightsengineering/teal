@@ -307,7 +307,7 @@ FilterStates <- R6::R6Class( # nolint
     #' @return `list` of `FilterState` objects
     queue_get = function(queue_index, element_id = character(0)) {
       private$validate_queue_exists(queue_index)
-      checkmate::assert_character(element_id, max.len = 1, null.ok = TRUE)
+      checkmate::assert_character(element_id, max.len = 1, null.ok = TRUE, any.missing = FALSE)
 
       if (length(element_id) == 0) {
         private$queue[[queue_index]]$get()

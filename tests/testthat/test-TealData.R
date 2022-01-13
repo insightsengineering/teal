@@ -604,7 +604,7 @@ testthat::test_that("TealData$get_items throws an error if there is no dataset f
 })
 
 testthat::test_that("TealData$new throws if dataname is set to invalid R object name", {
-  testthat::expect_error(TealDataset$new("", head(mtcars)), "Assertion on 'dataname' failed: Must comply to pattern")
+  testthat::expect_error(TealDataset$new("", head(mtcars)), "name '' must only contain alphanumeric characters")
 })
 
 testthat::test_that("TealData$new throws if passed two datasets with the same name", {

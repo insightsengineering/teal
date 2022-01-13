@@ -108,7 +108,7 @@ cdisc_dataset_connector <- function(dataname,
   stopifnot(is(pull_callable, "Callable"))
   checkmate::assert_character(keys, any.missing = FALSE)
   checkmate::assert_character(parent, max.len = 1, any.missing = FALSE)
-  checkmate::assert_character(code, any.missing = FALSE)
+  checkmate::assert_character(code, max.len = 1, any.missing = FALSE)
   checkmate::assert_character(label, max.len = 1, any.missing = FALSE)
 
   x <- CDISCTealDatasetConnector$new(
@@ -1248,6 +1248,7 @@ python_dataset_connector <- function(dataname,
   if (!xor(missing(code), missing(file))) stop("Exactly one of 'code' and 'script' is required")
 
   if (!missing(file)) {
+    checkmate::assert_string(file)
     checkmate::assert_file_exists(file, extension = "py")
     x_fun <- CallablePythonCode$new("py_run_file") # nolint
     x_fun$set_args(list(file = file, local = TRUE))

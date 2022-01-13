@@ -244,12 +244,10 @@ variable_type_icons <- function(var_type) {
     FUN = function(class) {
       if (class == "") {
         class
+      } else if (is.null(class_to_icon[[class]])) {
+        class_to_icon[["unknown"]]
       } else {
-        if (is.null(class_to_icon[[class]])) {
-          class_to_icon[["unknown"]]
-        } else {
-          class_to_icon[[class]]
-        }
+        class_to_icon[[class]]
       }
     }
   ))

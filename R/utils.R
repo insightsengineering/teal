@@ -91,16 +91,14 @@ check_simple_name <- function(name) {
   checkmate::assert_character(name, min.len = 1, any.missing = FALSE)
   if (!grepl("^[[:alpha:]][a-zA-Z0-9_]*$", name, perl = TRUE)) {
     stop(
-      paste0(
-        "name '",
-        name,
-        "' must only contain alphanumeric characters (with underscores)",
-        " and the first character must be an alphabetic character"
-      )
+      "name '",
+      name,
+      "' must only contain alphanumeric characters (with underscores)",
+      " and the first character must be an alphabetic character"
     )
   }
   if (grepl("_FILTERED$", name, perl = TRUE)) {
-    stop(paste0("name '", name, "' cannot end with the special string '_FILTERED'"))
+    stop("name '", name, "' cannot end with the special string '_FILTERED'")
   }
 }
 

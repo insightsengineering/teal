@@ -784,7 +784,7 @@ TealDataset <- R6::R6Class( # nolint
     # @param dataname (`character`) the new name
     # @return self invisibly for chaining
     set_dataname = function(dataname) {
-      checkmate::assert_string(dataname, pattern = "\\w")
+      check_simple_name(dataname)
       private$dataname <- dataname
       return(invisible(self))
     },
