@@ -557,7 +557,7 @@ FilterState <- R6::R6Class( # nolint
           deparse1(private$input_dataname),
           deparse1(self$get_varname()),
           paste(state$selected, collapse = " "),
-          deprase1(state$keep_na)
+          deparse1(state$keep_na)
         )
       )
       stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na")))
