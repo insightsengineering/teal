@@ -216,17 +216,17 @@ test_that("call_condition_range works only with numeric(2)", {
 
   expect_error(
     call_condition_range("var", range = c(2.1, -1.2)),
-    "range"
+    "Assertion on 'range' failed.+sorted"
   )
 
   expect_error(
     call_condition_range("var", range = c("a", "b")),
-    "is.numeric\\(range\\)"
+    "Assertion on 'range' failed.+type"
   )
 
   expect_error(
     call_condition_range("var", range = 1),
-    "is.numeric\\(range\\)"
+    "Assertion on 'range' failed.+length"
   )
 })
 
