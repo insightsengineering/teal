@@ -783,10 +783,7 @@ TealDataset <- R6::R6Class( # nolint
     # @param dataname (`character`) the new name
     # @return self invisibly for chaining
     set_dataname = function(dataname) {
-      checkmate::assert_string(dataname)
-      if (make.names(dataname) != dataname) {
-        stop(dataname, " is not valid R object name.")
-      }
+      checkmate::assert_string(dataname, pattern = "\\w")
       private$dataname <- dataname
       return(invisible(self))
     },

@@ -267,14 +267,14 @@ print.delayed_data_extract_spec <- function(x, indent = 0L, ...) {
 }
 
 indent_msg <- function(n, msg) {
-  checkmate::assert_int(n)
+  checkmate::assert_integer(n, len = 1, lower = 0, any.missing = FALSE)
   checkmate::assert_character(msg, min.len = 1, any.missing = FALSE)
   indent <- paste(rep("  ", n), collapse = "")
   return(paste0(indent, msg))
 }
 
 print_delayed_list <- function(obj, n = 0L) {
-  checkmate::assert_integer(n, len = 1, any.missing = FALSE)
+  checkmate::assert_integer(n, len = 1, lower = 0, any.missing = FALSE)
   stopifnot(is.list(obj))
 
   for (idx in seq_along(obj)) {

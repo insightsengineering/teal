@@ -375,7 +375,6 @@ FilterStates <- R6::R6Class( # nolint
         checkmate::check_string(queue_index),
         checkmate::check_int(queue_index)
       )
-      checkmate::assert_string(element_id)
 
       filters <- self$queue_get(queue_index = queue_index, element_id = element_id)
       private$queue[[queue_index]]$remove(filters)

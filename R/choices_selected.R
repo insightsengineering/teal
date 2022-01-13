@@ -221,7 +221,7 @@ no_selected_as_NULL <- function(x) { # nolint
 ## Modify vectors and keep attributes
 vector_reorder <- function(vec, idx) {
   stopifnot(is.atomic(vec))
-  checkmate::assert_integer(idx, min.len = 1, any.missing = FALSE)
+  checkmate::assert_integer(idx, min.len = 1, lower = 1, any.missing = FALSE)
   stopifnot(length(vec) == length(idx))
 
   vec_attrs <- attributes(vec)
@@ -241,7 +241,7 @@ vector_reorder <- function(vec, idx) {
 
 vector_pop <- function(vec, idx) {
   stopifnot(is.atomic(vec))
-  checkmate::assert_integer(idx, any.missing = FALSE)
+  checkmate::assert_integer(idx, lower = 1, any.missing = FALSE)
 
   if (length(idx) == 0) {
     return(vec)
