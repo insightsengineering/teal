@@ -3,6 +3,7 @@
 #' Checks `varname` type and parse if it's a `character`
 #' @param varname (`name`, `call` or `character(1)`)\cr
 #'   name of the variable
+#' @keywords internal
 call_check_parse_varname <- function(varname) {
   checkmate::assert(
     checkmate::check_string(varname),
@@ -367,8 +368,12 @@ call_extract_list <- function(dataname, varname, dollar = TRUE) {
   checkmate::assert_flag(dollar)
   checkmate::assert(
     checkmate::check_string(varname),
-    checkmate::check_class(varname, "call"),
-    checkmate::check_class(varname, "name")
+    checkmate::check_class(varname, "name"),
+    checkmate::assert(
+      combine = "and",
+      checkmate::check_class(varname, "call"),
+      checkmate::check_false(dollar)
+    )
   )
 
   dataname <- call_check_parse_varname(dataname)
