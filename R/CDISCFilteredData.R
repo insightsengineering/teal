@@ -126,7 +126,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
       filtered_dataname <- private$filtered_dataname(dataname)
       parent_dataname <- self$get_parentname(dataname)
 
-      if (is_empty(parent_dataname)) {
+      if (length(parent_dataname) == 0) {
         super$get_call(dataname)
       } else {
         self$get_filtered_dataset(dataname)$get_call()
@@ -141,7 +141,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
     get_filterable_datanames = function(dataname) {
       parents <- character(0)
       for (i in dataname) {
-        while (!is_empty(i)) {
+        while (length(i) > 0) {
           parent_i <- self$get_parentname(i)
           parents <- c(parents, parent_i)
           i <- parent_i
@@ -191,7 +191,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
       dataname <- get_dataname(dataset)
       parent_dataname <- self$get_parentname(dataname)
 
-      if (!is_empty(parent_dataname)) {
+      if (length(parent_dataname) > 0) {
         parent_dataset <- self$get_filtered_dataset(parent_dataname)
         fdataset <- self$get_filtered_dataset(dataname)
         fdataset$add_to_eval_env(

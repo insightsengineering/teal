@@ -96,7 +96,7 @@ TealData <- R6::R6Class( # nolint
         }
       }
       for (dat_name in names(self$get_items())) {
-        if (is_empty(join_keys$get(dat_name, dat_name))) {
+        if (length(join_keys$get(dat_name, dat_name)) == 0) {
           self$mutate_join_keys(dat_name, dat_name, get_keys(self$get_items(dat_name)))
         }
       }

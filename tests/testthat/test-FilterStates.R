@@ -279,7 +279,7 @@ testthat::test_that("FilterStates' queue is empty after pushing and removing an 
   filter_state <- FilterState$new("test", varname = "test")
   filter_states$queue_push(x = filter_state, queue_index = 1, element_id = "test")
   filter_states$queue_remove(queue_index = 1, element_id = "test")
-  testthat::expect_true(is_empty(filter_states$queue_get(1)))
+  testthat::expect_length(filter_states$queue_get(1), 0)
 })
 
 testthat::test_that("FilterStates' queue is empty after queue_empty", {
@@ -288,7 +288,7 @@ testthat::test_that("FilterStates' queue is empty after queue_empty", {
   filter_state <- FilterState$new("test", varname = "test")
   filter_states$queue_push(x = filter_state, queue_index = 1, element_id = "test")
   filter_states$queue_empty()
-  testthat::expect_true(is_empty(filter_states$queue_get(1)))
+  testthat::expect_length(filter_states$queue_get(1), 0)
 })
 
 testthat::test_that("data_choices_labeled returns an empty character array if choices are an empty array", {

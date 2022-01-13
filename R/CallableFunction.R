@@ -61,7 +61,7 @@ CallableFunction <- R6::R6Class( # nolint
     #' @return \code{call} or \code{character} depending on \code{deparse} argument
     get_call = function(deparse = TRUE, args = NULL) {
       checkmate::assert_flag(deparse)
-      stopifnot(is_empty(args) || is_fully_named_list(args))
+      checkmate::assert_list(args, names = "strict", min.len = 0, null.ok = TRUE)
 
       old_args <- private$args
       if_not_empty(args, self$set_args(args))
@@ -73,7 +73,7 @@ CallableFunction <- R6::R6Class( # nolint
       }
 
       # set args back to default
-      if (!is_empty(args)) {
+      if (length(args) > 0) {
         lapply(names(args), self$set_arg_value, NULL)
         self$set_args(old_args)
       }
@@ -91,7 +91,7 @@ CallableFunction <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining.
     set_args = function(args) {
       # remove args if empty
-      if (is_empty(args)) {
+      if (length(args) == 0) {
         private$args <- NULL
         private$refresh()
         return(invisible(self))
@@ -122,7 +122,7 @@ CallableFunction <- R6::R6Class( # nolint
       arg_names <- names(formals(eval(str2lang(private$fun_name))))
       stopifnot(name %in% arg_names || "..." %in% arg_names || is.null(arg_names))
 
-      if (is_empty(private$args)) {
+      if (length(private$args) == 0) {
         private$args <- list()
       }
       private$args[[name]] <- value
@@ -267,9 +267,8 @@ get_binding_name <- function(object, envir) {
     FUN.VALUE = logical(1),
     USE.NAMES = FALSE
   )
-  stop_if_not(list(
-    !is_empty(bindings_names[identical_binding_mask]),
-    "Object not found in the environment"
-  ))
+  if (length(bindings_names[identical_binding_mask]) == 0) {
+    stop("Object not found in the environment")
+  }
   bindings_names[identical_binding_mask]
 }

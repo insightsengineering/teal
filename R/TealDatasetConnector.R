@@ -66,7 +66,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       self$set_dataset_label(label)
       self$set_keys(keys)
 
-      if (!is_empty(code)) {
+      if (length(code) > 0) {
         # just needs a dummy TealDataset object to store mutate code, hence col = 1
         private$dataset <- TealDataset$new(dataname = self$get_dataname(), x = data.frame(col = 1))
         private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
@@ -567,7 +567,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
           withProgress(value = 1, message = paste("Pulling", self$get_dataname()), {
             # set args to save them - args set will be returned in the call
             dataset_args <- if_not_null(private$ui_input, reactiveValuesToList(input))
-            if (!is_empty(dataset_args)) {
+            if (length(dataset_args) > 0) {
               self$set_args(args = dataset_args)
             }
 
@@ -627,7 +627,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     },
     pull_internal = function(args = NULL, try = FALSE) {
       # include objects CallableFunction environment
-      if (!is_empty(private$pull_vars)) {
+      if (length(private$pull_vars) > 0) {
         for (var_idx in seq_along(private$pull_vars)) {
           var_name <- names(private$pull_vars)[[var_idx]]
           var_value <- private$pull_vars[[var_idx]]

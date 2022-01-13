@@ -434,7 +434,7 @@ TealDataset <- R6::R6Class( # nolint
     #' Whether mutate code has delayed evaluation.
     #' @return `logical`
     is_mutate_delayed = function() {
-      return(!is_empty(private$mutate_code))
+      return(length(private$mutate_code) > 0)
     },
 
     # ___ mutate ====
@@ -538,7 +538,7 @@ TealDataset <- R6::R6Class( # nolint
     #'
     #' @return `TRUE` if dataset has been already pulled, else `FALSE`
     check_keys = function(keys = private$.keys) {
-      if (!is_empty(keys)) {
+      if (length(keys) > 0) {
         stop_if_not(list(
           all(keys %in% self$get_colnames()),
           paste("Primary keys specifed for", self$get_dataname(), "do not exist in the data.")

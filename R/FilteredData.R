@@ -153,7 +153,7 @@ FilteredData <- R6::R6Class( # nolint
     #'  name of the dataset.
     #' @return `FilteredDataset` object or list of `FilteredDataset`
     get_filtered_dataset = function(dataname = character(0)) {
-      if (is_empty(dataname)) {
+      if (length(dataname) == 0) {
         private$filtered_datasets
       } else {
         private$filtered_datasets[[dataname]]
@@ -211,7 +211,7 @@ FilteredData <- R6::R6Class( # nolint
         names(res_list) <- self$datanames()
         res_list
       }
-      if (is_empty(res)) {
+      if (length(res) == 0) {
         return(character(0))
       }
 

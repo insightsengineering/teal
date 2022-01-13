@@ -123,7 +123,7 @@ JoinKeys <- R6::R6Class( # nolint
     #' to be specified once
     #' @return (`self`) invisibly for chaining
     set = function(x) {
-      if (!is_empty(private$.keys)) {
+      if (length(private$.keys) > 0) {
         stop("Keys already set, please use JoinKeys$mutate() to change them")
       }
       if (!is_class_list("JoinKeySet")(x)) {
@@ -192,11 +192,11 @@ JoinKeys <- R6::R6Class( # nolint
       if (join_key_1$dataset_1 == join_key_2$dataset_2 && join_key_1$dataset_2 == join_key_2$dataset_1) {
 
         # have to handle empty case differently as names(character(0)) is NULL
-        if (is_empty(join_key_1$keys) && is_empty(join_key_2$keys)) {
+        if (length(join_key_1$keys) == 0 && length(join_key_2$keys) == 0) {
           return(TRUE)
         }
 
-        if (xor(is_empty(join_key_1$keys), is_empty(join_key_2$keys)) ||
+        if (xor(length(join_key_1$keys) == 0, length(join_key_2$keys) == 0) ||
           !identical(sort(join_key_1$keys), sort(setNames(names(join_key_2$keys), join_key_2$keys)))) {
           error_message(join_key_1$dataset_1, join_key_1$dataset_2)
         }
@@ -234,7 +234,7 @@ JoinKeys <- R6::R6Class( # nolint
 join_keys <- function(...) {
   x <- list(...)
   res <- JoinKeys$new()
-  if (!is_empty(x)) {
+  if (length(x) > 0) {
     res$set(x)
   }
   res
@@ -319,7 +319,7 @@ join_key <- function(dataset_1, dataset_2, keys) {
   checkmate::assert_string(dataset_2)
   checkmate::assert_character(keys, any.missing = FALSE)
 
-  if (!is_empty(keys)) {
+  if (length(keys) > 0) {
     if (is.null(names(keys))) {
       names(keys) <- keys
     }

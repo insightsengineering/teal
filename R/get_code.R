@@ -82,7 +82,7 @@ get_code.TealDataset <- function(x, deparse = TRUE, ...) {
 #' get_code(rd, "XYZ")
 get_code.TealDataAbstract <- function(x, dataname = character(0), deparse = TRUE, ...) { # nolint
   check_ellipsis(...)
-  if (!is_empty(dataname)) {
+  if (length(dataname) > 0) {
     if (any(!(dataname %in% x$get_datanames()))) {
       stop("The dataname provided does not exist")
     }

@@ -79,7 +79,7 @@ CodeClass <- R6::R6Class( # nolint
     #' @return changed `CodeClass` object
     append = function(x) {
       stopifnot(is(x, "CodeClass"))
-      if (!is_empty(x$code)) {
+      if (length(x$code) > 0) {
         for (code_i in x$code) {
           private$set_code_single(code_i)
         }
@@ -188,11 +188,14 @@ CodeClass <- R6::R6Class( # nolint
         # line of code is one we want if it is not empty and
         # has any dataname attribute in the vector datanames or dataname starts with * or is global code and
         # already have some lines of code selected
-        if ((
-          any(datanames %in% attr(code_entry, "dataname")) ||
+        if (
+          (
+            any(datanames %in% attr(code_entry, "dataname")) ||
             any(grepl("^[*]", attr(code_entry, "dataname"))) ||
-            (!is_empty(res) && is_empty(attr(code_entry, "dataname")))) &&
-          !is_empty(code_entry)) {
+            (length(res) > 0 && length(attr(code_entry, "dataname")) == 0)
+          ) &&
+          length(code_entry) > 0
+        ) {
 
           # append to index of code we want
           res <- c(idx, res)
@@ -236,7 +239,7 @@ list_to_code_class <- function(x) {
 
   res <- CodeClass$new()
 
-  if (!is_empty(x)) {
+  if (length(x) > 0) {
     for (var_idx in seq_along(x)) {
       var_value <- x[[var_idx]]
       var_name <- names(x)[[var_idx]]
@@ -264,7 +267,7 @@ list_to_code_class <- function(x) {
 #' @return (`call`) object.
 text_to_call <- function(x) {
   parsed <- parse(text = x, keep.source = FALSE)
-  if (is_empty(parsed)) {
+  if (length(parsed) == 0) {
     return(NULL)
   } else {
     return(as.list(as.call(parsed))[[1]])
@@ -282,7 +285,7 @@ pretty_code_string <- function(code_vector) {
   unlist(lapply(
     code_vector,
     function(code_single) {
-      if (is_empty(parse(text = code_single, keep.source = FALSE))) {
+      if (length(parse(text = code_single, keep.source = FALSE)) == 0) {
         # if string code cannot be passed into expression (e.g. code comment) then pass on the string
         code_single
       } else {

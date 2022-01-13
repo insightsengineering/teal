@@ -270,7 +270,7 @@ PythonCodeClass <- R6::R6Class( # nolint
 python_code <- function(code = character(0), script = character(0)) {
   if (!xor(missing(code), missing(script))) stop("Exactly one of 'code' and 'script' is required")
 
-  if (!is_empty(script)) {
+  if (length(script) > 0) {
     code <- deparse(call("py_run_file", script))
   } else {
     code <- deparse(call("py_run_string", code))

@@ -29,7 +29,7 @@ TealDataAbstract <- R6::R6Class( # nolint
       res <- if (isFALSE(private$.check)) {
         NULL
       } else {
-        if (!is_empty(private$pull_code$code)) {
+        if (length(private$pull_code$code) > 0) {
           private$check_combined_code()
         } else {
           all(vapply(
@@ -65,7 +65,7 @@ TealDataAbstract <- R6::R6Class( # nolint
     execute_mutate = function() {
       logger::log_trace("TealDataAbstract$execute_mutate evaluating mutate code...")
       # this will be pulled already! - not needed?
-      if (is_empty(private$mutate_code$code)) {
+      if (length(private$mutate_code$code) == 0) {
         res <- unlist(lapply(
           private$datasets,
           function(x) {
@@ -470,7 +470,7 @@ TealDataAbstract <- R6::R6Class( # nolint
       return(invisible(self))
     },
     check_names = function(x) {
-      if (any(vapply(x, is_empty_string, logical(1)))) {
+      if (any(vapply(x, identical, logical(1), y = ""))) {
         stop("Cannot extract some dataset names")
       }
       if (any(duplicated(x))) {

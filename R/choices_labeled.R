@@ -90,7 +90,7 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
   types <- types[!is_dupl]
   labels[is.na(labels)] <- "Label Missing"
   raw_labels <- labels
-  combined_labels <- if (!is_empty(choices)) {
+  combined_labels <- if (length(choices) > 0) {
     paste0(choices, ": ", labels)
   } else {
     character(0)
@@ -197,7 +197,7 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE, key =
     subset <- resolve_delayed_expr(subset, ds = data, is_value_choices = FALSE)
   }
 
-  if (is_empty(subset)) {
+  if (length(subset) == 0) {
     subset <- names(data)
   }
   stopifnot(all(subset %in% c("", names(data))))

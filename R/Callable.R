@@ -64,7 +64,7 @@ Callable <- R6::R6Class( # nolint
     #' when \code{try = TRUE} or will stop if \code{try = FALSE}.
     run = function(return = TRUE, args = NULL, try = FALSE) {
       checkmate::assert_flag(return)
-      stopifnot(is_empty(args) || is_fully_named_list(args))
+      checkmate::assert_list(args, names = "unique", min.len = 0, null.ok = TRUE)
       checkmate::assert_flag(try)
 
       # args are "dynamic" are used only to evaluate this call

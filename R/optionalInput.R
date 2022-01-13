@@ -266,10 +266,10 @@ variable_type_icons <- function(var_type) {
 #'   var_type = c("factor", "numeric")
 #' )
 picker_options_content <- function(var_name, var_label, var_type) {
-  if (utils.nest::is_empty(var_name)) {
+  if (length(var_name) == 0) {
     return(character(0))
   }
-  if (utils.nest::is_empty(var_type) && utils.nest::is_empty(var_label)) {
+  if (length(var_type) == 0 && length(var_label) == 0) {
     return(var_name)
   }
 

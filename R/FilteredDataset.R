@@ -224,7 +224,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'   the id of the `private$filter_states` list element where `FilterStates` is kept.
     #' @return `FilterStates` or `list` of `FilterStates` objects.
     get_filter_states = function(id = character(0)) {
-      if (is_empty(id)) {
+      if (length(id) == 0) {
         private$filter_states
       } else {
         private$filter_states[[id]]
@@ -714,7 +714,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     #' with other `data.frame` which is a parent.
     #' @return filter `call` or `list` of filter calls
     get_call = function() {
-      if (is_empty(self$get_dataset()$get_parent())) {
+      if (length(self$get_dataset()$get_parent()) == 0) {
         super$get_call()
       } else {
         parent_dataname <- self$get_dataset()$get_parent()
@@ -740,7 +740,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
           call_with_colon(
             "dplyr::inner_join",
             x = as.name(filtered_dataname_alone),
-            y = if (is_empty(parent_keys)) {
+            y = if (length(parent_keys) == 0) {
               as.name(filtered_parentname)
             } else {
               utils.nest::call_extract_array(
@@ -749,7 +749,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
                 aisle = call("=", as.name("drop"), FALSE)
               )
             },
-            unlist_args = if (is_empty(parent_keys) || is_empty(dataset_keys)) {
+            unlist_args = if (length(parent_keys) == 0 || length(dataset_keys) == 0) {
               list()
             } else if (identical(parent_keys, dataset_keys)) {
               list(by = parent_keys)
@@ -780,19 +780,19 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     # Gets filter overview subjects number and returns a list
     # of the number of subjects of filtered/non-filtered datasets
     get_filter_overview_nsubjs = function() {
-      subject_keys <- if (!is_empty(self$get_dataset()$get_parent())) {
+      subject_keys <- if (length(self$get_dataset()$get_parent()) > 0) {
         self$get_join_keys()[[self$get_dataset()$get_parent()]]
       } else {
         self$get_keys()
       }
 
-      f_rows <- if (is_empty(subject_keys)) {
+      f_rows <- if (length(subject_keys) == 0) {
         dplyr::n_distinct(self$get_data(filtered = TRUE))
       } else {
         dplyr::n_distinct(self$get_data(filtered = TRUE)[subject_keys])
       }
 
-      nf_rows <- if (is_empty(subject_keys)) {
+      nf_rows <- if (length(subject_keys) == 0) {
         dplyr::n_distinct(self$get_data(filtered = FALSE))
       } else {
         dplyr::n_distinct(self$get_data(filtered = FALSE)[subject_keys])

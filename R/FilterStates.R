@@ -309,7 +309,7 @@ FilterStates <- R6::R6Class( # nolint
       private$validate_queue_exists(queue_index)
       checkmate::assert_character(element_id, max.len = 1, null.ok = TRUE)
 
-      if (is_empty(element_id)) {
+      if (length(element_id) == 0) {
         private$queue[[queue_index]]$get()
       } else {
         private$queue[[queue_index]]$get()[element_id]
@@ -2216,7 +2216,7 @@ get_filterable_varnames.matrix <- function(data) { # nolint
 #' @return `character(0)` if choices are empty; a `choices_labeled` object otherwise
 #' @noRd
 data_choices_labeled <- function(data, choices, varlabels = character(0), keys = character(0)) {
-  if (is_empty(choices)) {
+  if (length(choices) == 0) {
     return(character(0))
   }
 
