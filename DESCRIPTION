@@ -26,6 +26,7 @@ Depends:
     R (>= 4.0),
     shiny
 Imports:
+    checkmate,
     digest,
     dplyr,
     ggplot2,
