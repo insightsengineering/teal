@@ -193,8 +193,12 @@ TealDataConnection <- R6::R6Class( # nolint
           if (private$if_conn_obj && !is.null(open_res)) {
             private$conn <- open_res
 
-            if_not_null(private$close_fun, private$close_fun$assign_to_env("conn", private$conn))
-            if_not_null(private$ping_fun, private$ping_fun$assign_to_env("conn", private$conn))
+            if (!is.null(private$close_fun)) {
+              private$close_fun$assign_to_env("conn", private$conn)
+            }
+            if (!is.null(private$close_fun)) {
+              private$ping_fun$assign_to_env("conn", private$conn)
+            }
           }
           logger::log_trace("TealDataConnection$open connection opened.")
         } else {

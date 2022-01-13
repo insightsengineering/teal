@@ -514,9 +514,6 @@ get_package_file <- function(pkg = NULL, file_name = NULL) {
     stop(paste("There is no such file:", file_name, "or package:", pkg))
   }
 }
-© 2022 GitHub, Inc.
-Terms
-
 
 # Function to be used while trying to load the object of specific class from the script.
 object_file <- function(path, class) {

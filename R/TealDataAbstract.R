@@ -78,7 +78,9 @@ TealDataAbstract <- R6::R6Class( # nolint
         ))
         # exit early if mutate isn't required
         logger::log_trace("TealDataAbstract$execute_mutate no code to evaluate.")
-        return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
+        if (!is.null(res)) {
+          setNames(res, vapply(res, get_dataname, character(1)))
+        }
       }
 
 

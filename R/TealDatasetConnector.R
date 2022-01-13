@@ -462,7 +462,9 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #' @return shiny UI in given namespace id
     get_ui = function(id) {
       checkmate::assert_string(id)
-      return(if_not_null(private$ui, private$ui(id)))
+      if (!is.null(private$ui)) {
+        private$ui(id)
+      }
     },
     #' @description
     #' Get shiny server function
@@ -526,7 +528,11 @@ TealDatasetConnector <- R6::R6Class( # nolint
     ui = function(id) {
       ns <- NS(id)
       # add namespace to input ids
-      ui <- if_not_null(private$ui_input, do.call(private$ui_input, list(ns = ns)))
+      ui <- if (!is.null(private$ui_input)) {
+        do.call(private$ui_input, list(ns = ns))
+      } else {
+        NULL
+      }
       # check ui inputs
       if (!is.null(ui)) {
         stopifnot(is.list(ui))
@@ -549,8 +555,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
         )
       }
       # create ui
-      if_not_null(
-        ui,
+      if (!is.null(ui)) {
         tags$div(
           tags$div(
             id = ns("inputs"),
@@ -558,7 +563,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
             ui
           )
         )
-      )
+      }
     },
     server = function(id, data_args = NULL) {
       moduleServer(
@@ -566,7 +571,11 @@ TealDatasetConnector <- R6::R6Class( # nolint
         function(input, output, session) {
           withProgress(value = 1, message = paste("Pulling", self$get_dataname()), {
             # set args to save them - args set will be returned in the call
-            dataset_args <- if_not_null(private$ui_input, reactiveValuesToList(input))
+            dataset_args <- if (!is.null(private$ui_input)) {
+              reactiveValuesToList(input)
+            } else {
+              NULL
+            }
             if (length(dataset_args) > 0) {
               self$set_args(args = dataset_args)
             }
@@ -700,7 +709,11 @@ TealDatasetConnector <- R6::R6Class( # nolint
       private$ui <- function(id) {
         ns <- NS(id)
         # add namespace to input ids
-        ui <- if_not_null(ui_args, do.call(ui_args, list(ns = ns)))
+        ui <- if (!is.null(ui_args)) {
+          do.call(ui_args, list(ns = ns))
+        } else {
+          NULL
+        }
         # check ui inputs
         if (!is.null(ui)) {
           stopifnot(is.list(ui))
@@ -723,8 +736,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
           )
         }
         # create ui
-        if_not_null(
-          ui,
+        if (!is.null(ui)) {
           tags$div(
             tags$div(
               id = ns("inputs"),
@@ -732,7 +744,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
               ui
             )
           )
-        )
+        }
       }
       return(invisible(self))
     }
