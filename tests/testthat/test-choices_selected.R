@@ -111,13 +111,6 @@ testthat::test_that("choices_selected remove duplicates", {
 
   testthat::expect_equal(
     choices_selected(
-      choices = c("name for A" = "A", "name for A" = "A",
-                  "Name for nothing" = "", "name for b" = "B", "name for C" = "C"),
-      selected = "A")$choices,
-    c(`name for A` = "A", `Name for nothing` = "", `name for b` = "B", `name for C` = "C")
-  )
-  testthat::expect_equal(
-    choices_selected(
       structure(c(`STUDYID: Study Identifier` = "STUDYID", `STUDYID: Study Identifier` = "STUDYID"),
                 raw_labels = c(STUDYID = "Study Identifier", STUDYID = "Study Identifier"),
                 combined_labels = c("STUDYID: Study Identifier", "STUDYID: Study Identifier"),
