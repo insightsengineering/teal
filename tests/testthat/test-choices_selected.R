@@ -103,7 +103,31 @@ testthat::test_that("choices_selected remove duplicates", {
     choices_selected(
       choices = c("name for A" = "A", "name for A" = "A",
                   "Name for nothing" = "", "name for b" = "B", "name for C" = "C"),
+      selected = c("A", "A")),
+    structure(list(choices = c(`name for A` = "A", `Name for nothing` = "", `name for b` = "B", `name for C` = "C"),
+                   selected = "A", fixed = FALSE),
+              class = "choices_selected")
+  )
+
+  testthat::expect_equal(
+    choices_selected(
+      choices = c("name for A" = "A", "name for A" = "A",
+                  "Name for nothing" = "", "name for b" = "B", "name for C" = "C"),
       selected = "A")$choices,
     c(`name for A` = "A", `Name for nothing` = "", `name for b` = "B", `name for C` = "C")
+  )
+  testthat::expect_equal(
+    choices_selected(
+      structure(c(`STUDYID: Study Identifier` = "STUDYID", `STUDYID: Study Identifier` = "STUDYID"),
+                raw_labels = c(STUDYID = "Study Identifier", STUDYID = "Study Identifier"),
+                combined_labels = c("STUDYID: Study Identifier", "STUDYID: Study Identifier"),
+                class = c("choices_labeled", "character"))
+    ),
+    structure(list(choices = structure(c(`STUDYID: Study Identifier` = "STUDYID"),
+                                       raw_labels = c(STUDYID = "Study Identifier"),
+                                       combined_labels = "STUDYID: Study Identifier",
+                                       class = c("choices_labeled", "character")),
+                   selected = c(`STUDYID: Study Identifier` = "STUDYID"),
+                   fixed = FALSE), class = "choices_selected")
   )
 })
