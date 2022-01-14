@@ -258,9 +258,7 @@ vector_pop <- function(vec, idx) {
   }
 
   vec <- vec[-idx]
-
   attributes(vec) <- vec_attrs
-
   return(vec)
 }
 
