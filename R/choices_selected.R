@@ -149,10 +149,11 @@ choices_selected <- function(choices,
   choices <- vector_remove_dups(choices)
   selected <- vector_remove_dups(selected)
 
-  if (!keep_order) {
+  if (!keep_order && length(choices) > 0) {
+    choices_in_selected <- which(choices %in% selected)
     choices <- vector_reorder(
       choices,
-      c(which(choices %in% selected), setdiff(seq_along(choices), which(choices %in% selected)))
+      c(choices_in_selected, setdiff(seq_along(choices), choices_in_selected))
     )
   }
 
@@ -248,12 +249,17 @@ vector_pop <- function(vec, idx) {
   }
 
   vec_attrs <- attributes(vec)
+  names_vec_attrs <- names(vec_attrs)
 
   for (vec_attrs_idx in seq_along(vec_attrs)) {
-    if (length(vec_attrs[[vec_attrs_idx]]) == length(vec)) {
+    if (length(vec_attrs[[vec_attrs_idx]]) == length(vec) && names_vec_attrs[vec_attrs_idx] != "class") {
       vec_attrs[[vec_attrs_idx]] <- vec_attrs[[vec_attrs_idx]][-idx]
     }
   }
+
+  vec <- vec[-idx]
+  attributes(vec) <- vec_attrs
+  return(vec)
 }
 
 vector_remove_dups <- function(vec) {
@@ -263,6 +269,10 @@ vector_remove_dups <- function(vec) {
 
   if (length(idx) == 0) {
     return(vec)
+  } else if (is.null(attributes(vec))) {
+    return(unique(vec))
+  } else if (identical(names(attributes(vec)), "names")) {
+    return(vec[-idx])
   } else {
     return(vector_pop(vec, idx))
   }

@@ -30,6 +30,7 @@
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
 * Added `S3 method`, `to_relational_data`, for `MultiAssayExperiment` objects.
 * Fixed restoring bookmark state from filter panel.
+* `choices_selected` removes duplicates from the `choices` input.
 
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
