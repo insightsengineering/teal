@@ -155,7 +155,7 @@ CodeClass <- R6::R6Class( # nolint
     ## __Private Methods ====
     set_code_single = function(code,
                                dataname = attr(code, "dataname"),
-                               deps =  attr(code, "deps"),
+                               deps = attr(code, "deps"),
                                id = attr(code, "id")) {
       if (is.null(dataname)) dataname <- character(0)
       if (is.null(deps)) deps <- character(0)
@@ -164,11 +164,11 @@ CodeClass <- R6::R6Class( # nolint
       # as a line already present in an object of CodeClass
       if (
         !id %in% unlist(lapply(private$.code, "attr", "id")) ||
-        all(
-          vapply(dataname, FUN.VALUE = logical(1), FUN = function(x) {
-            !x %in% unlist(lapply(private$.code, "attr", "dataname"))
-          })
-        )
+          all(
+            vapply(dataname, FUN.VALUE = logical(1), FUN = function(x) {
+              !x %in% unlist(lapply(private$.code, "attr", "dataname"))
+            })
+          )
       ) {
         attr(code, "dataname") <- dataname
         attr(code, "deps") <- deps
@@ -197,10 +197,10 @@ CodeClass <- R6::R6Class( # nolint
         if (
           (
             any(datanames %in% attr(code_entry, "dataname")) ||
-            any(grepl("^[*]", attr(code_entry, "dataname"))) ||
-            (length(res) > 0 && length(attr(code_entry, "dataname")) == 0)
+              any(grepl("^[*]", attr(code_entry, "dataname"))) ||
+              (length(res) > 0 && length(attr(code_entry, "dataname")) == 0)
           ) &&
-          length(code_entry) > 0
+            length(code_entry) > 0
         ) {
 
           # append to index of code we want

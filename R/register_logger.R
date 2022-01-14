@@ -69,7 +69,7 @@ register_logger <- function(namespace = NA_character_,
   if (is.null(layout) || layout == "") {
     layout <- getOption(
       "teal.log_layout",
-      default = "[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} {msg}"
+      default = "[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:[{token}] {ans} {msg}"
     )
   }
   tryCatch(
@@ -131,7 +131,7 @@ log_system_info <- function() {
 #' @details this function behaves in the same way as [logger::layout_glue_generator()]
 #'   but allows the shiny session token (last 8 chars) to be included in the logging layout
 #' @noRd
-layout_teal_glue_generator <- function(layout = getOption("teal.log_layout")) {
+layout_teal_glue_generator <- function(layout) {
   force(layout)
   structure(
     function(level, msg, namespace = NA_character_, .logcall = sys.call(), .topcall = sys.call(-1),
