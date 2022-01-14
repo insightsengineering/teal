@@ -250,14 +250,14 @@ vector_pop <- function(vec, idx) {
 
   vec_attrs <- attributes(vec)
   names_vec_attrs <- names(vec_attrs)
-  len_vec <- length(vec)
-  vec <- vec[-idx]
 
   for (vec_attrs_idx in seq_along(vec_attrs)) {
-    if (length(vec_attrs[[vec_attrs_idx]]) == len_vec && (names_vec_attrs[vec_attrs_idx] != "class")) {
+    if (length(vec_attrs[[vec_attrs_idx]]) == length(vec) && names_vec_attrs[vec_attrs_idx] != "class") {
       vec_attrs[[vec_attrs_idx]] <- vec_attrs[[vec_attrs_idx]][-idx]
     }
   }
+
+  vec <- vec[-idx]
 
   attributes(vec) <- vec_attrs
 
