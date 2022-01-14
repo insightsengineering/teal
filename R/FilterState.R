@@ -2462,7 +2462,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
             )
             logger::log_trace(sprintf(
               "DatetimeFilterState$server@3 reset end date of variable %s, dataname: %s",
-               deparse1(self$get_varname()),
+              deparse1(self$get_varname()),
               deparse1(private$input_dataname)
             ))
           })

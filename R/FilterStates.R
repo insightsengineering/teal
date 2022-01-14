@@ -530,7 +530,7 @@ FilterStates <- R6::R6Class( # nolint
                           class = "filter_panel_varname"
                         ),
                         if (checkmate::test_character(filter_state$get_varlabel(), min.len = 1) &&
-                            tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
+                          tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
                           tags$span(filter_state$get_varlabel(), class = "filter_panel_varlabel")
                         }
                       )
@@ -575,8 +575,8 @@ FilterStates <- R6::R6Class( # nolint
               class(self)[1],
               element_id,
               deparse1(private$input_dataname)
-              )
             )
+          )
           NULL
         }
       )
@@ -1598,7 +1598,6 @@ SEFilterStates <- R6::R6Class( # nolint
             element_id = varname
           )
         }
-
       }
       logger::log_trace(paste(
         "SEFilterState$set_filter_state initialized,",
@@ -1871,7 +1870,8 @@ SEFilterStates <- R6::R6Class( # nolint
                   "SEFilterStates$srv_add_filter_state@3 added FilterState of column %s to col data, dataname: %s",
                   deparse1(input$col_to_add),
                   deparse1(private$input_dataname)
-              ))
+                )
+              )
             }
           )
 

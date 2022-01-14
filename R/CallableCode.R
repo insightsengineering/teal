@@ -23,7 +23,7 @@ CallableCode <- R6::R6Class( # nolint
     #'
     #' @return new \code{CallableCode} object
     initialize = function(code, env = new.env(parent = parent.env(globalenv()))) {
-      if(!checkmate::test_string(code)) {
+      if (!checkmate::test_string(code)) {
         stop("A string of length one containing the code needed to produce the object must be provided.")
       }
 

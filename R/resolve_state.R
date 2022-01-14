@@ -4,7 +4,7 @@
 #' Resolves the state values for `FilterState$set_state()` or
 #' `FilterState$set_state_reactive()`, which accept only a list with `selected`,
 #' `keep_na` and `keep_inf` fields. In case of the `default_filter` function, it
-#' returns `NULL` as during the initialization of `FilterState` values are set to 
+#' returns `NULL` as during the initialization of `FilterState` values are set to
 #' default.
 #'
 #' @param x (`list`,`vector`, `default_filter`)\cr

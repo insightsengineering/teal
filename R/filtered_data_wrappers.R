@@ -84,7 +84,7 @@ filtered_data_set.TealData <- function(data, datasets) { # nolintr
 #' # get filter state
 #' get_filter_state(datasets)
 #'
-#' # modify filter state 
+#' # modify filter state
 #' set_filter_state(
 #'   datasets,
 #'   filter = list(iris = list(Species = list(selected = "setosa", keep_na = TRUE)))

@@ -25,7 +25,7 @@ Registers a logger instance in a given logging namespace.
 }
 \details{
 Creates a new logging namespace specified by the \code{namespace} argument.
-When the \code{layout} and \code{level} arguments are set to \code{NULL} (default), the functions
+When the \code{layout} and \code{level} arguments are set to \code{NULL} (default), the function
 gets the values for them from system variables or R options.
 When deciding what to use (either argument, an R option or system variable), the function
 picks the first non \code{NULL} value, checking in order:
@@ -35,13 +35,13 @@ picks the first non \code{NULL} value, checking in order:
 \item R option.
 }
 
-\code{layout} and \code{level} can also be set as system environment variables, respectively:
+\code{layout} and \code{level} can be set as system environment variables, respectively:
 \itemize{
 \item \code{teal.log_layout} as \code{TEAL.LOG_LAYOUT},
 \item \code{teal.log_level} as \code{TEAL.LOG_LEVEL}.
 }
 
-The function uses the following R options:
+If neither the argument nor the environment variable is set the function uses the following R options:
 \itemize{
 \item \code{options(teal.log_layout)}, which is passed to
 \code{\link[logger:layout_glue_generator]{logger::layout_glue_generator}},
@@ -57,7 +57,7 @@ It's a thin wrapper around the \code{logger} package.
 }
 \examples{
 options(teal.log_layout = "{msg}")
-options(teal.log_level = logger::INFO)
+options(teal.log_level = "ERROR")
 register_logger(namespace = "new_namespace")
 \dontrun{
 logger::log_info("Hello from new_namespace", namespace = "new_namespace")
