@@ -33,7 +33,7 @@ data_label <- function(data) {
 #' data_label(x)
 `data_label<-` <- function(x, value) { # nolint
   stopifnot(is.data.frame(x))
-  stopifnot(is_character_single(value))
+  checkmate::assert_string(value)
 
   attr(x, "label") <- value
   x
@@ -52,7 +52,7 @@ data_label <- function(data) {
 #' @examples
 #' get_cdisc_keys("ADSL")
 get_cdisc_keys <- function(dataname) {
-  stopifnot(is_character_single(dataname))
+  checkmate::assert_string(dataname)
 
   if (!(dataname %in% names(default_cdisc_keys))) {
     stop(sprintf(
@@ -86,7 +86,7 @@ get_cdisc_keys <- function(dataname) {
 #' get_labels(ADSL)
 get_labels <- function(data, fill = TRUE) {
   stopifnot(is.data.frame(data))
-  stopifnot(is_logical_single(fill))
+  checkmate::assert_flag(fill)
 
   cdisc_labels <- list(
     "dataset_label" = data_label(data),
@@ -121,13 +121,18 @@ get_labels <- function(data, fill = TRUE) {
 #' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"), fill = FALSE)
 get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
   stopifnot(is.data.frame(data))
-  stopifnot(is.null(columns) || is_character_vector(columns))
-  stopifnot(is_logical_single(fill))
-
-  columns <- if_null(columns, colnames(data))
+  checkmate::assert_character(columns, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+  checkmate::assert_flag(fill)
+  if (is.null(columns)) {
+    columns <- colnames(data)
+  }
   labels <- as.list(get_labels(data, fill = fill)$column_labels)
   # convert NULL into NA_character for not-existing column
-  res <- vapply(columns, function(x) if_null(labels[[x]], NA_character_), character(1))
-
-  return(res)
+  vapply(columns, FUN.VALUE = character(1), FUN = function(x) {
+    if (is.null(labels[[x]])) {
+      NA_character_
+    } else {
+      labels[[x]]
+    }
+  })
 }

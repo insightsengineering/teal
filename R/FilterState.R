@@ -57,13 +57,17 @@ label_keep_na_count <- function(na_count) {
 #' @return `FilterState` object
 init_filter_state <- function(x,
                               varname,
-                              varlabel = if_null(attr(x, "label"), character(0)),
+                              varlabel = attr(x, "label"),
                               input_dataname = NULL,
                               extract_type = character(0)) {
-  stopifnot(is_character_single(varname) || is.name(varname))
-  stopifnot(is_character_vector(varlabel, min_length = 0, max_length = 1))
+  if (is.null(varlabel)) varlabel <- character(0)
+  checkmate::assert(
+    checkmate::check_string(varname),
+    checkmate::check_class(varname, "name")
+  )
+  checkmate::assert_character(varlabel, max.len = 1, any.missing = FALSE)
   stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
-  stopifnot(is_character_vector(extract_type, min_length = 0, max_length = 1))
+  checkmate::assert_character(extract_type, max.len = 1, any.missing = FALSE)
   stopifnot(
     length(extract_type) == 0 ||
       length(extract_type) == 1 && !is.null(input_dataname)
@@ -87,9 +91,10 @@ init_filter_state <- function(x,
 #' @export
 init_filter_state.default <- function(x,
                                       varname,
-                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      varlabel = attr(x, "label"),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   FilterState$new(
     x = x,
     varname = varname,
@@ -102,9 +107,10 @@ init_filter_state.default <- function(x,
 #' @export
 init_filter_state.logical <- function(x,
                                       varname,
-                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      varlabel = attr(x, "label"),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   LogicalFilterState$new(
     x = x,
     varname = varname,
@@ -117,9 +123,10 @@ init_filter_state.logical <- function(x,
 #' @export
 init_filter_state.numeric <- function(x,
                                       varname,
-                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      varlabel = attr(x, "label"),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   if (length(unique(x[!is.na(x)])) < getOption("teal.threshold_slider_vs_checkboxgroup")) {
     ChoicesFilterState$new(
       x = x,
@@ -142,9 +149,10 @@ init_filter_state.numeric <- function(x,
 #' @export
 init_filter_state.factor <- function(x,
                                      varname,
-                                     varlabel = if_null(attr(x, "label"), character(0)),
+                                     varlabel = attr(x, "label"),
                                      input_dataname = NULL,
                                      extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   ChoicesFilterState$new(
     x = x,
     varname = varname,
@@ -157,9 +165,10 @@ init_filter_state.factor <- function(x,
 #' @export
 init_filter_state.character <- function(x,
                                         varname,
-                                        varlabel = if_null(attr(x, "label"), character(0)),
+                                        varlabel = attr(x, "label"),
                                         input_dataname = NULL,
                                         extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   ChoicesFilterState$new(
     x = x,
     varname = varname,
@@ -172,9 +181,10 @@ init_filter_state.character <- function(x,
 #' @export
 init_filter_state.Date <- function(x,
                                    varname,
-                                   varlabel = if_null(attr(x, "label"), character(0)),
+                                   varlabel = attr(x, "label"),
                                    input_dataname = NULL,
                                    extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   DateFilterState$new(
     x = x,
     varname = varname,
@@ -187,9 +197,10 @@ init_filter_state.Date <- function(x,
 #' @export
 init_filter_state.POSIXct <- function(x,
                                       varname,
-                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      varlabel = attr(x, "label"),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   DatetimeFilterState$new(
     x = x,
     varname = varname,
@@ -202,9 +213,10 @@ init_filter_state.POSIXct <- function(x,
 #' @export
 init_filter_state.POSIXlt <- function(x,
                                       varname,
-                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      varlabel = attr(x, "label"),
                                       input_dataname = NULL,
                                       extract_type = character(0)) {
+  if (is.null(varlabel)) varlabel <- character(0)
   DatetimeFilterState$new(
     x = x,
     varname = varname,
@@ -284,10 +296,14 @@ FilterState <- R6::R6Class( # nolint
                           varlabel = character(0),
                           input_dataname = NULL,
                           extract_type = character(0)) {
-      stopifnot(is.name(varname) || is.call(varname) || is_character_single(varname))
-      stopifnot(is_character_vector(varlabel, min_length = 0, max_length = 1))
+      checkmate::assert(
+        checkmate::check_class(varname, "name"),
+        checkmate::check_class(varname, "call"),
+        checkmate::check_string(varname)
+      )
+      checkmate::assert_character(varlabel, max.len = 1, any.missing = FALSE)
       stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
-      stopifnot(is_character_vector(extract_type, min_length = 0, max_length = 1))
+      checkmate::assert_character(extract_type, max.len = 1, any.missing = FALSE)
       stopifnot(
         length(extract_type) == 0 ||
           length(extract_type) == 1 && !is.null(input_dataname)
@@ -313,7 +329,12 @@ FilterState <- R6::R6Class( # nolint
       private$keep_na_reactive <- reactiveVal(FALSE)
 
       logger::log_trace(
-        "Instantiated { class(self)[1] }, dataname: { deparse1(private$input_dataname, collapse = \"\n\") }"
+        sprintf(
+          "Instantiated %s with variable %s, dataname: %s",
+          class(self)[1],
+          deparse1(varname),
+          deparse1(private$input_dataname)
+        )
       )
       invisible(self)
     },
@@ -402,9 +423,16 @@ FilterState <- R6::R6Class( # nolint
     #'  modules after selecting check-box-input in the shiny interface. Values are set to
     #'  `private$keep_na` which is reactive.
     set_keep_na = function(value) {
-      stopifnot(is_logical_single(value))
+      checkmate::assert_flag(value)
       private$keep_na(value)
-      logger::log_trace("{ class(self)[1] }$set_keep_na set to { private$keep_na() }")
+      logger::log_trace(
+        sprintf(
+          "%s$set_keep_na set for variable %s to %s.",
+          class(self)[1],
+          deparse1(self$get_varname()),
+          value
+        )
+      )
       invisible(NULL)
     },
 
@@ -415,9 +443,14 @@ FilterState <- R6::R6Class( # nolint
     #'  modules when using `set_filter_state` instead of the shiny interface. Values are set to
     #'  `private$keep_na_reactive` which is reactive.
     set_keep_na_reactive = function(value) {
-      stopifnot(is_logical_single(value))
+      checkmate::assert_flag(value)
       private$keep_na_reactive(value)
-      logger::log_trace("{ class(self)[1] }$set_keep_na_reactive set to { private$keep_na_reactive() }")
+      sprintf(
+        "%s$set_keep_na_reactive set for variable %s to %s.",
+        class(self)[1],
+        deparse1(self$get_varname()),
+        value
+      )
       invisible(NULL)
     },
 
@@ -428,7 +461,7 @@ FilterState <- R6::R6Class( # nolint
     #' @param value (`logical(1)`) when `TRUE`, `FilterState$get_call` appends an expression
     #'  removing `NA` values to the filter expression returned by `get_call`
     set_na_rm = function(value) {
-      stopifnot(is_logical_single(value))
+      checkmate::assert_flag(value)
       private$na_rm <- value
       invisible(NULL)
     },
@@ -442,15 +475,23 @@ FilterState <- R6::R6Class( # nolint
     #'  same as `private$choices`.
     set_selected = function(value) {
       logger::log_trace(
-        "{ class(self)[1] }$set_selected setting selection, dataname: { deparse1(private$input_dataname) }"
+        sprintf(
+          "%s$set_selected setting selection of variable %s, dataname: %s.",
+          class(self)[1],
+          deparse1(self$get_varname()),
+          deparse1(private$input_dataname)
+        )
       )
       value <- private$cast_and_validate(value)
       value <- private$remove_out_of_bound_values(value)
       private$validate_selection(value)
       private$selected(value)
-      logger::log_trace(
-        "{ class(self)[1] }$set_selected selection set, dataname: { deparse1(private$input_dataname) }"
-      )
+      logger::log_trace(sprintf(
+        "%s$set_selected selection of variable %s set, dataname: %s",
+        class(self)[1],
+        deparse1(self$get_varname()),
+        deparse1(private$input_dataname)
+      ))
       invisible(NULL)
     },
 
@@ -463,8 +504,14 @@ FilterState <- R6::R6Class( # nolint
     #'  same as `private$choices`.
     set_selected_reactive = function(value) {
       logger::log_trace(
-        "{ class(self)[1] }$set_selected_reactive setting selection, dataname: { deparse1(private$input_dataname) }"
+        sprintf(
+          "%s$set_selected_reactive setting selection of variable %s, dataname: %s.",
+          class(self)[1],
+          deparse1(self$get_varname()),
+          deparse1(private$input_dataname)
+        )
       )
+
       value <- private$cast_and_validate(value)
       value <- private$remove_out_of_bound_values(value)
       private$validate_selection(value)
@@ -484,9 +531,13 @@ FilterState <- R6::R6Class( # nolint
     #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
     #' }
     set_state = function(state) {
-      logger::log_trace(paste(
-        "{ class(self)[1] }$set_state, dataname: { deparse1(private$input_dataname) }",
-        "setting state to: selected={ state$selected }, keep_na={ state$keep_na }"
+      logger::log_trace(sprintf(
+        "%s$set_state, dataname: %s setting state of variable %s to: selected=%s, keep_na=%s",
+        class(self)[1],
+        deparse1(private$input_dataname),
+        deparse1(self$get_varname()),
+        paste(state$selected, collapse = " "),
+        state$keep_na
       ))
       stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na")))
       if (!is.null(state$keep_na)) {
@@ -495,10 +546,14 @@ FilterState <- R6::R6Class( # nolint
       if (!is.null(state$selected)) {
         self$set_selected(state$selected)
       }
-      logger::log_trace(paste(
-        "{ class(self)[1] }$set_state, dataname: { deparse1(private$input_dataname) }",
-        "done setting state"
-      ))
+      logger::log_trace(
+        sprintf(
+          "%s$set_state, dataname: %s done setting state for variable %s",
+          class(self)[1],
+          deparse1(private$input_dataname),
+          deparse1(self$get_varname())
+        )
+      )
       invisible(NULL)
     },
 
@@ -512,10 +567,13 @@ FilterState <- R6::R6Class( # nolint
     #' }
     set_state_reactive = function(state) {
       logger::log_trace(
-        paste(
-          "{ class(self)[1] }$set_state_reactive, dataname: { deparse1(private$input_dataname) }",
-          "setting state to: selected={ state$selected },",
-          "keep_na={ if(is.null(state$keep_na)) 'NULL' else state$keep_na }"
+        sprintf(
+          "%s$set_state_reactive, dataname: %s setting state of variable %s to: selected=%s, keep_na=%s",
+          class(self)[1],
+          deparse1(private$input_dataname),
+          deparse1(self$get_varname()),
+          paste(state$selected, collapse = " "),
+          deparse1(state$keep_na)
         )
       )
       stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na")))
@@ -525,9 +583,11 @@ FilterState <- R6::R6Class( # nolint
       if (!is.null(state$selected)) {
         self$set_selected_reactive(state$selected)
       }
-      logger::log_trace(paste(
-        "{ class(self)[1] }$set_state_reactive, dataname: { deparse1(private$input_dataname) }",
-        "done setting state"
+      logger::log_trace(sprintf(
+        "%s$set_state_reactive, dataname: %s done setting state for variable %s.",
+        class(self)[1],
+        deparse1(private$input_dataname),
+        deparse1(self$get_varname())
       ))
       invisible(NULL)
     },
@@ -602,9 +662,9 @@ FilterState <- R6::R6Class( # nolint
     #' return (`name` or `call`)
     get_varname_prefixed = function() {
       if (isTRUE(private$extract_type == "list")) {
-        utils.nest::call_extract_list(private$input_dataname, private$varname)
+        call_extract_list(private$input_dataname, private$varname)
       } else if (isTRUE(private$extract_type == "matrix")) {
-        utils.nest::call_extract_matrix(dataname = private$input_dataname, column = as.character(private$varname))
+        call_extract_matrix(dataname = private$input_dataname, column = as.character(private$varname))
       } else {
         private$varname
       }
@@ -619,9 +679,20 @@ FilterState <- R6::R6Class( # nolint
         ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
         eventExpr = input$keep_na,
         handlerExpr = {
-          self$set_keep_na(if_null(input$keep_na, FALSE))
+          keep_na <- if (is.null(input$keep_na)) {
+            FALSE
+          } else {
+            input$keep_na
+          }
+          self$set_keep_na(keep_na)
           logger::log_trace(
-            "{ class(self)[1] }$server keep_na set to: { input$keep_na }, dataname: { private$input_dataname }"
+            sprintf(
+              "%s$server keep_na of variable %s set to: %s, dataname: %s",
+              class(self)[1],
+              deparse1(self$get_varname()),
+              deparse1(input$keep_na),
+              deparse1(private$input_dataname)
+            )
           )
         }
       )
@@ -643,7 +714,13 @@ FilterState <- R6::R6Class( # nolint
           )
           private$keep_na_reactive(NULL)
           logger::log_trace(
-            "{ class(self)[1] }$server keep_inf set to: { value }, dataname: { private$input_dataname }"
+            sprintf(
+              "%s$server keep_na of variable %s set to: %s, dataname: %s",
+              class(self)[1],
+              deparse1(self$get_varname()),
+              deparse1(value),
+              deparse1(private$input_dataname)
+            )
           )
         }
       )
@@ -910,7 +987,7 @@ LogicalFilterState <- R6::R6Class( # nolint
     #' For `LogicalFilterState` it's a `!<varname>` or `<varname>` and optionally
     #' `is.na(<varname>)`
     get_call = function() {
-      filter_call <- utils.nest::call_condition_logical(
+      filter_call <- call_condition_logical(
         varname = private$get_varname_prefixed(),
         choice = self$get_selected()
       )
@@ -1001,9 +1078,11 @@ LogicalFilterState <- R6::R6Class( # nolint
                 inputId = "selection",
                 selected =  private$selected_reactive()
               )
-              logger::log_trace(
-                "LogicalFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
-              )
+              logger::log_trace(sprintf(
+                "LogicalFilterState$server@1 selection of variable %s changed, dataname: %s",
+                deparse1(self$get_varname()),
+                deparse1(private$input_dataname)
+              ))
               private$selected_reactive(NULL)
             }
           )
@@ -1014,10 +1093,17 @@ LogicalFilterState <- R6::R6Class( # nolint
             ignoreInit = TRUE,
             eventExpr = input$selection,
             handlerExpr = {
-              selection_state <- input$selection
-              self$set_selected(if_null(as.logical(selection_state), logical(0)))
+              selection_state <- as.logical(input$selection)
+              if (is.null(selection_state)) {
+                selection_state <- logical(0)
+              }
+              self$set_selected(selection_state)
               logger::log_trace(
-                "LogicalFilterState$server@2 selection changed, dataname: { deparse1(private$input_dataname) }"
+                sprintf(
+                  "LogicalFilterState$server@2 selection of variable %s changed, dataname: %s",
+                  deparse1(self$get_varname()),
+                  deparse1(private$input_dataname)
+                )
               )
             }
           )
@@ -1051,7 +1137,7 @@ LogicalFilterState <- R6::R6Class( # nolint
   private = list(
     histogram_data = data.frame(),
     validate_selection = function(value) {
-      if (!(is_logical_empty(value) || is_logical_single(value))) {
+      if (!(checkmate::test_logical(value, max.len = 1, any.missing = FALSE))) {
         stop(
           sprintf(
             "value of the selection for `%s` in `%s` should be a logical scalar (TRUE or FALSE)",
@@ -1158,7 +1244,7 @@ RangeFilterState <- R6::R6Class( # nolint
     #' optional `is.na(<varname>)` and `is.finite(<varname>)`.
     #' @return (`call`)
     get_call = function() {
-      filter_call <- utils.nest::call_condition_range(
+      filter_call <- call_condition_range(
         varname = private$get_varname_prefixed(),
         range = self$get_selected()
       )
@@ -1281,9 +1367,11 @@ RangeFilterState <- R6::R6Class( # nolint
                 value = private$selected_reactive()
               )
               private$selected_reactive(NULL)
-              logger::log_trace(
-                "RangeFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
-              )
+              logger::log_trace(sprintf(
+                "RangeFilterState$server@1 selection of variable %s changed, dataname: %s",
+                deparse1(self$get_varname()),
+                deparse1(private$input_dataname)
+              ))
             }
           )
           private$observe_keep_na_reactive(private$keep_na_reactive())
@@ -1297,9 +1385,11 @@ RangeFilterState <- R6::R6Class( # nolint
                 inputId = "keep_inf",
                 value =  private$keep_inf_reactive()
               )
-              logger::log_trace(paste(
-                "RangeFilterState$server@2 keep_inf set to:",
-                "{ private$keep_inf_reactive() }, dataname: { private$input_dataname }"
+              logger::log_trace(sprintf(
+                "RangeFilterState$server@2 keep_inf of variable %s set to: %s, dataname: %s",
+                deparse1(self$get_varname()),
+                private$keep_inf_reactive(),
+                deparse1(private$input_dataname)
               ))
               private$keep_inf_reactive(NULL)
             }
@@ -1311,7 +1401,9 @@ RangeFilterState <- R6::R6Class( # nolint
             eventExpr = input$selection,
             handlerExpr = {
               # because we extended real range into rounded one we need to apply intersect(range_input, range_real)
-              selection_state <- c(max(input$selection[1], private$choices[1]), min(input$selection[2], private$choices[2]))
+              selection_state <- as.numeric(
+                c(max(input$selection[1], private$choices[1]), min(input$selection[2], private$choices[2]))
+              )
               if (!setequal(selection_state, self$get_selected())) {
                 validate(
                   need(
@@ -1319,9 +1411,15 @@ RangeFilterState <- R6::R6Class( # nolint
                     "Left range boundary should be lower than right"
                   )
                 )
-                self$set_selected(if_null(selection_state, numeric(0)))
+                self$set_selected(selection_state)
               }
-              logger::log_trace("RangeFilterState$server@3 selection changed, dataname: { deparse1(private$input_dataname) }")
+              logger::log_trace(
+                sprintf(
+                  "RangeFilterState$server@3 selection of variable %s changed, dataname: %s",
+                  deparse1(self$get_varname()),
+                  deparse1(private$input_dataname)
+                )
+              )
             }
           )
 
@@ -1332,9 +1430,15 @@ RangeFilterState <- R6::R6Class( # nolint
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
             eventExpr = input$keep_inf,
             handlerExpr = {
-              self$set_keep_inf(if_null(input$keep_inf, FALSE))
+              keep_inf <- if (is.null(input$keep_inf)) FALSE else input$keep_inf
+              self$set_keep_inf(keep_inf)
               logger::log_trace(
-                "RangeFilterState$server@4 keep_inf set to: { input$keep_inf }, dataname: { private$input_dataname }"
+                sprintf(
+                  "RangeFilterState$server@4 keep_inf of variable %s set to: %s, dataname: %s",
+                  deparse1(self$get_varname()),
+                  deparse1(input$keep_inf),
+                  deparse1(private$input_dataname)
+                )
               )
             }
           )
@@ -1351,9 +1455,17 @@ RangeFilterState <- R6::R6Class( # nolint
     #'  modules after selecting check-box-input in the shiny interface. Values are set to
     #'  `private$keep_inf` which is reactive.
     set_keep_inf = function(value) {
-      stopifnot(is_logical_single(value))
+      checkmate::assert_flag(value)
       private$keep_inf(value)
-      logger::log_trace("{ class(self)[1] }$set_keep_inf set to { value }")
+      logger::log_trace(
+        sprintf(
+          "%s$set_keep_inf of variable %s set to %s, dataname: %s.",
+          class(self)[1],
+          deparse1(self$get_varname()),
+          value,
+          deparse1(private$input_dataname)
+        )
+      )
     },
 
     #' @description
@@ -1363,9 +1475,17 @@ RangeFilterState <- R6::R6Class( # nolint
     #'  modules after setting the filters using `set_filter_state`. Values are set to
     #'  `private$keep_inf_reactive` which is reactive.
     set_keep_inf_reactive = function(value) {
-      stopifnot(is_logical_single(value))
+      checkmate::assert_flag(value)
       private$keep_inf_reactive(value)
-      logger::log_trace("{ class(self)[1] }$set_keep_inf_reactive set to { value }")
+      logger::log_trace(
+        sprintf(
+          "%s$set_keep_inf_reactive of variable %s set to %s, dataname: %s.",
+          class(self)[1],
+          deparse1(self$get_varname()),
+          value,
+          deparse1(private$input_dataname)
+        )
+      )
     },
 
     #' @description
@@ -1587,7 +1707,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' optional `is.na(<varname>)`.
     #' @return (`call`)
     get_call = function() {
-      filter_call <- utils.nest::call_condition_choice(
+      filter_call <- call_condition_choice(
         varname = private$get_varname_prefixed(),
         choice = self$get_selected()
       )
@@ -1692,9 +1812,12 @@ ChoicesFilterState <- R6::R6Class( # nolint
                 inputId = "selection",
                 value =  private$selected_reactive()
               )
-              logger::log_trace(
-                "ChoicesFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
-              )
+
+              logger::log_trace(sprintf(
+                "ChoicesFilterState$server@1 selection of variable %s changed, dataname: %s",
+                deparse1(self$get_varname()),
+                deparse1(private$input_dataname)
+              ))
               private$selected_reactive(NULL)
             }
           )
@@ -1705,10 +1828,13 @@ ChoicesFilterState <- R6::R6Class( # nolint
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
             eventExpr = input$selection,
             handlerExpr = {
-              self$set_selected(if_null(input$selection, character(0)))
-              logger::log_trace(
-                "ChoicesFilterState$server@2 selection changed, dataname: { deparse1(private$input_dataname) }"
-              )
+              selection <- if (is.null(input$selection)) character(0) else input$selection
+              self$set_selected(selection)
+              logger::log_trace(sprintf(
+                "ChoicesFilterState$server@2 selection of variable %s changed, dataname: %s",
+                deparse1(self$get_varname()),
+                deparse1(private$input_dataname)
+              ))
             }
           )
           private$observe_keep_na(input)
@@ -1874,7 +2000,7 @@ DateFilterState <- R6::R6Class( # nolint
     #' optional `is.na(<varname>)`.
     #' @return (`call`)
     get_call = function() {
-      filter_call <- utils.nest::call_condition_range_date(
+      filter_call <- call_condition_range_date(
         varname = private$get_varname_prefixed(),
         range = self$get_selected()
       )
@@ -1951,9 +2077,11 @@ DateFilterState <- R6::R6Class( # nolint
                 start = private$selected_reactive()[1],
                 end = private$selected_reactive()[2]
               )
-              logger::log_trace(
-                "DateFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
-              )
+              logger::log_trace(sprintf(
+                "DateFilterState$server@1 selection of variable %s changed, dataname: %s",
+                deparse1(self$get_varname()),
+                deparse1(private$input_dataname)
+              ))
               private$selected_reactive(NULL)
             }
           )
@@ -1968,9 +2096,11 @@ DateFilterState <- R6::R6Class( # nolint
               end_date <- input$selection[2]
 
               self$set_selected(c(start_date, end_date))
-              logger::log_trace(
-                "DateFilterState$server@2 selection changed, dataname: { deparse1(private$input_dataname) }"
-              )
+              logger::log_trace(sprintf(
+                "DateFilterState$server@2 selection of variable %s changed, dataname: %s",
+                deparse1(self$get_varname()),
+                deparse1(private$input_dataname)
+              ))
             }
           )
 
@@ -1982,9 +2112,11 @@ DateFilterState <- R6::R6Class( # nolint
               inputId = "selection",
               start = private$choices[1]
             )
-            logger::log_trace(
-              "DateFilterState$server@3 reset start date, dataname: { deparse1(private$input_dataname) }"
-            )
+            logger::log_trace(sprintf(
+              "DateFilterState$server@3 reset start date of variable %s, dataname: %s",
+              deparse1(self$get_varname()),
+              deparse1(private$input_dataname)
+            ))
           })
 
           private$observers$reset2 <- observeEvent(input$end_date_reset, {
@@ -1993,7 +2125,11 @@ DateFilterState <- R6::R6Class( # nolint
               inputId = "selection",
               end = private$choices[2]
             )
-            logger::log_trace("DateFilterState$server@4 reset end date, dataname: { deparse1(private$input_dataname) }")
+            logger::log_trace(sprintf(
+              "DateFilterState$server@4 reset end date of variable %s, dataname: %s",
+              deparse1(self$get_varname()),
+              deparse1(private$input_dataname)
+            ))
           })
           logger::log_trace("DateFilterState$server initialized, dataname: { deparse1(private$input_dataname) }")
           NULL
@@ -2148,7 +2284,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #' `<varname> >= as.POSIXct(<min>, tz = <timezone>) & <varname> <= <max>, tz = <timezone>)`
     #' with optional `is.na(<varname>)`.
     get_call = function() {
-      filter_call <- utils.nest::call_condition_range_posixct(
+      filter_call <- call_condition_range_posixct(
         varname = private$get_varname_prefixed(),
         range = self$get_selected(),
         timezone = private$timezone
@@ -2265,9 +2401,11 @@ DatetimeFilterState <- R6::R6Class( # nolint
                 inputId = "selection_end",
                 value = private$selected_reactive()[2]
               )
-              logger::log_trace(
-                "DatetimeFilterState$server@1 selection changed, dataname: { deparse1(private$input_dataname) }"
-              )
+              logger::log_trace(sprintf(
+                "DatetimeFilterState$server@1 selection of variable %s changed, dataname: %s",
+                deparse1(self$get_varname()),
+                deparse1(private$input_dataname)
+              ))
               private$selected_reactive(NULL)
             }
           )
@@ -2294,12 +2432,13 @@ DatetimeFilterState <- R6::R6Class( # nolint
 
 
               self$set_selected(c(start_date, end_date))
-              logger::log_trace(
-                "DatetimeFilterState$server@2 selection changed, dataname: { deparse1(private$input_dataname) }"
-              )
+              logger::log_trace(sprintf(
+                "DatetimeFilterState$server@2 selection of variable %s changed, dataname: %s",
+                deparse1(self$get_varname()),
+                deparse1(private$input_dataname)
+              ))
             }
           )
-
 
           private$observe_keep_na(input)
 
@@ -2309,7 +2448,11 @@ DatetimeFilterState <- R6::R6Class( # nolint
               inputId = "selection_start",
               value = private$choices[1]
             )
-            logger::log_trace("DatetimeFilterState$server@2 reset start date, dataname: { private$input_dataname }")
+            logger::log_trace(sprintf(
+              "DatetimeFilterState$server@2 reset start date of variable %s, dataname: %s",
+              deparse1(self$get_varname()),
+              deparse1(private$input_dataname)
+            ))
           })
           private$observers$reset2 <- observeEvent(input$end_date_reset, {
             shinyWidgets::updateAirDateInput(
@@ -2317,7 +2460,11 @@ DatetimeFilterState <- R6::R6Class( # nolint
               inputId = "selection_end",
               value = private$choices[2]
             )
-            logger::log_trace("DatetimeFilterState$server@3 reset end date, dataname: { private$input_dataname }")
+            logger::log_trace(sprintf(
+              "DatetimeFilterState$server@3 reset end date of variable %s, dataname: %s",
+               deparse1(self$get_varname()),
+              deparse1(private$input_dataname)
+            ))
           })
           logger::log_trace("DatetimeFilterState$server initialized, dataname: { private$input_dataname }")
           NULL

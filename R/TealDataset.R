@@ -50,12 +50,15 @@ TealDataset <- R6::R6Class( # nolint
                           code = character(0),
                           label = character(0),
                           vars = list()) {
-      stopifnot(is_character_single(dataname))
+      checkmate::assert_string(dataname)
       stopifnot(is.data.frame(x))
-      stopifnot(is_character_vector(keys, min_length = 0))
-      stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
+      checkmate::assert_character(keys, any.missing = FALSE)
+      checkmate::assert(
+        checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+        checkmate::check_class(code, "CodeClass")
+      )
       # label might be NULL also because of taking label attribute from data.frame - missing attr is NULL
-      stopifnot(is.null(label) || is_character_vector(label, min_length = 0, max_length = 1))
+      checkmate::assert_character(label, max.len = 1, null.ok = TRUE, any.missing = FALSE)
       stopifnot(is.list(vars))
 
 
@@ -271,7 +274,7 @@ TealDataset <- R6::R6Class( # nolint
     #' )
     #'
     reassign_datasets_vars = function(datasets) {
-      stopifnot(is_fully_named_list(datasets))
+      checkmate::assert_list(datasets, min.len = 0, names = "unique")
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))
       private$var_r6[common_var_r6] <- datasets[common_var_r6]
@@ -292,7 +295,7 @@ TealDataset <- R6::R6Class( # nolint
       if (is.null(label)) {
         label <- character(0)
       }
-      stopifnot(is_character_vector(label, min_length = 0, max_length = 1))
+      checkmate::assert_character(label, max.len = 1, any.missing = FALSE)
       private$dataset_label <- label
 
       logger::log_trace("TealDataset$set_dataset_label dataset_label set for dataset: { self$get_dataname() }.")
@@ -302,9 +305,13 @@ TealDataset <- R6::R6Class( # nolint
     #' Set new keys
     #' @return (`self`) invisibly for chaining.
     set_keys = function(keys) {
-      stopifnot(is_character_vector(keys, min_length = 0))
+      checkmate::assert_character(keys, any.missing = FALSE)
       private$.keys <- keys
-      logger::log_trace("TealDataset$set_keys keys set for dataset: { self$get_dataname() }.")
+      logger::log_trace(sprintf(
+        "TealDataset$set_keys set the keys %s for dataset: %s",
+        paste(keys, collapse = ", "),
+        self$get_dataname()
+      ))
       return(invisible(self))
     },
     #' @description
@@ -355,7 +362,7 @@ TealDataset <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining
     set_code = function(code) {
-      stopifnot(is_character_vector(code, 0, 1))
+      checkmate::assert_character(code, max.len = 1, any.missing = FALSE)
 
       if (length(code) > 0 && code != "") {
         private$code$set_code(
@@ -376,7 +383,7 @@ TealDataset <- R6::R6Class( # nolint
     #'
     #' @return optionally deparsed `call` object
     get_code = function(deparse = TRUE) {
-      stopifnot(is_logical_single(deparse))
+      checkmate::assert_flag(deparse)
       res <- self$get_code_class()$get_code(deparse = deparse)
       return(res)
     },
@@ -431,7 +438,7 @@ TealDataset <- R6::R6Class( # nolint
     #' Whether mutate code has delayed evaluation.
     #' @return `logical`
     is_mutate_delayed = function() {
-      return(!is_empty(private$mutate_code))
+      return(length(private$mutate_code) > 0)
     },
 
     # ___ mutate ====
@@ -455,9 +462,12 @@ TealDataset <- R6::R6Class( # nolint
         )
       )
 
-      stopifnot(is_logical_single(force_delay))
-      stopifnot(is_fully_named_list(vars))
-      stopifnot(is_character_single(code) || is(code, "CodeClass"))
+      checkmate::assert_flag(force_delay)
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
+      checkmate::assert(
+        checkmate::check_string(code),
+        checkmate::check_class(code, "CodeClass")
+      )
 
       if (inherits(code, "PythonCodeClass")) {
         self$set_vars(vars)
@@ -496,7 +506,7 @@ TealDataset <- R6::R6Class( # nolint
     #' `get_code()` code is identical to the raw data, else `FALSE`.
     check = function() {
       logger::log_trace("TealDataset$check executing the code to reproduce dataset: { self$get_dataname() }...")
-      if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
+      if (!checkmate::test_character(self$get_code(), len = 1, pattern = "\\w+")) {
         stop(
           sprintf(
             "Cannot check preprocessing code of '%s' - code is empty.",
@@ -532,11 +542,10 @@ TealDataset <- R6::R6Class( # nolint
     #'
     #' @return `TRUE` if dataset has been already pulled, else `FALSE`
     check_keys = function(keys = private$.keys) {
-      if (!is_empty(keys)) {
-        stop_if_not(list(
-          all(keys %in% self$get_colnames()),
-          paste("Primary keys specifed for", self$get_dataname(), "do not exist in the data.")
-        ))
+      if (length(keys) > 0) {
+        if (!all(keys %in% self$get_colnames())) {
+          stop("Primary keys specifed for ", self$get_dataname(), " do not exist in the data.")
+        }
 
         duplicates <- get_key_duplicates(self$get_raw_data(), keys)
         if (nrow(duplicates) > 0) {
@@ -632,7 +641,7 @@ TealDataset <- R6::R6Class( # nolint
       deep_clone_r6(name, value)
     },
     get_class_colnames = function(class_type = "character") {
-      stopifnot(is_character_single(class_type))
+      checkmate::assert_string(class_type)
 
       return_cols <- private$.colnames[which(vapply(
         lapply(private$.raw_data, class),
@@ -674,6 +683,7 @@ TealDataset <- R6::R6Class( # nolint
     is_any_dependency_delayed = function(vars = list()) {
       any(vapply(
         c(list(), private$var_r6, vars),
+        FUN.VALUE = logical(1),
         FUN = function(var) {
           if (is(var, "TealDatasetConnector")) {
             !var$is_pulled() || var$is_mutate_delayed()
@@ -682,8 +692,7 @@ TealDataset <- R6::R6Class( # nolint
           } else {
             FALSE
           }
-        },
-        FUN.VALUE = logical(1)
+        }
       ))
     },
 
@@ -691,19 +700,20 @@ TealDataset <- R6::R6Class( # nolint
     # @param vars (`named list`) contains any R object which code depends on
     # @param is_mutate_vars (`logical(1)`) whether this var is used in mutate code
     set_vars_internal = function(vars, is_mutate_vars = FALSE) {
-      stopifnot(is_logical_single(is_mutate_vars))
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_flag(is_mutate_vars)
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
 
       total_vars <- c(list(), private$vars, private$mutate_vars)
 
       if (length(vars) > 0) {
         # not allowing overriding variable names
         over_rides <- names(vars)[vapply(
-          names(vars), function(var_name) {
+          names(vars),
+          FUN.VALUE = logical(1),
+          FUN = function(var_name) {
             var_name %in% names(total_vars) &&
               !identical(total_vars[[var_name]], vars[[var_name]])
-          },
-          FUN.VALUE = logical(1)
+          }
         )]
         if (length(over_rides) > 0) {
           stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
@@ -732,7 +742,7 @@ TealDataset <- R6::R6Class( # nolint
     # @return (`environment`) which stores modified `x`
     execute_code = function(code, vars = list()) {
       stopifnot(is(code, "CodeClass"))
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
 
       execution_environment <- new.env(parent = parent.env(globalenv()))
 
@@ -778,13 +788,12 @@ TealDataset <- R6::R6Class( # nolint
     # @param dataname (`character`) the new name
     # @return self invisibly for chaining
     set_dataname = function(dataname) {
-      stopifnot(is_character_single(dataname))
-      stopifnot(!grepl("\\s", dataname))
+      check_simple_name(dataname)
       private$dataname <- dataname
       return(invisible(self))
     },
     set_var_r6 = function(vars) {
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
       for (varname in names(vars)) {
         var <- vars[[varname]]
 
@@ -917,10 +926,13 @@ dataset.data.frame <- function(dataname,
                                label = data_label(x),
                                code = character(0),
                                vars = list()) {
-  stopifnot(is_character_single(dataname))
+  checkmate::assert_string(dataname)
   stopifnot(is.data.frame(x))
-  stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
-  stopifnot(identical(vars, list()) || is_fully_named_list(vars))
+  checkmate::assert(
+    checkmate::check_character(code, max.len = 1, any.missing = FALSE),
+    checkmate::check_class(code, "CodeClass")
+  )
+  checkmate::assert_list(vars, min.len = 0, names = "unique")
 
   TealDataset$new(
     dataname = dataname,

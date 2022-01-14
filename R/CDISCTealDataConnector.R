@@ -90,7 +90,6 @@ CDISCTealDataConnector <- R6::R6Class( # nolint
 #' @export
 cdisc_data_connector <- function(connection, connectors) {
   stopifnot(is(connection, "TealDataConnection"))
-  stopifnot(utils.nest::is_class_list("TealDatasetConnector")(connectors))
-
+  checkmate::assert_list(connectors, types = "TealDatasetConnector", min.len = 1)
   CDISCTealDataConnector$new(connection, connectors)
 }

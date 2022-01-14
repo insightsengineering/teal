@@ -152,7 +152,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @param value object value
     #' @return invisibly this `FilteredDataset`
     add_to_eval_env = function(name, value) {
-      stopifnot(is_character_single(name))
+      checkmate::assert_string(name)
       private$eval_env <- c(private$eval_env, setNames(value, name))
       invisible(self)
     },
@@ -224,7 +224,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'   the id of the `private$filter_states` list element where `FilterStates` is kept.
     #' @return `FilterStates` or `list` of `FilterStates` objects.
     get_filter_states = function(id = character(0)) {
-      if (is_empty(id)) {
+      if (length(id) == 0) {
         private$filter_states
       } else {
         private$filter_states[[id]]
@@ -291,7 +291,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @return (`character` or `NULL`) variable labels, `NULL` if `column_labels`
     #'   attribute does not exist for the data
     get_varlabels = function(variables = NULL) {
-      stopifnot(is.null(variables) || is_character_vector(variables, min_length = 0L))
+      checkmate::assert_character(variables, null.ok = TRUE, any.missing = FALSE)
 
       labels <- self$get_dataset()$get_column_labels()
       if (is.null(labels)) {
@@ -339,9 +339,8 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @return function - shiny UI module
     ui = function(id) {
       dataname <- self$get_dataname()
-      stopifnot(
-        is_character_single(dataname)
-      )
+      checkmate::assert_string(dataname)
+
       ns <- NS(id)
       if_multiple_filter_states <- length(self$get_filter_states()) > 1
       span(
@@ -394,7 +393,7 @@ FilteredDataset <- R6::R6Class( # nolint
         function(input, output, session) {
           dataname <- self$get_dataname()
           logger::log_trace("FilteredDataset$server initializing, dataname: { dataname }")
-          stopifnot(is_character_single(dataname))
+          checkmate::assert_string(dataname)
           shiny::setBookmarkExclude("remove_filters")
           lapply(
             names(self$get_filter_states()),
@@ -469,7 +468,7 @@ FilteredDataset <- R6::R6Class( # nolint
     # @param id (`character(1)`)
     add_filter_states = function(filter_states, id) {
       stopifnot(is(filter_states, "FilterStates"))
-      stopifnot(is_character_single(id))
+      checkmate::assert_string(id)
 
       x <- setNames(list(filter_states), id)
       private$filter_states <- c(self$get_filter_states(), x)
@@ -484,7 +483,7 @@ FilteredDataset <- R6::R6Class( # nolint
     # @param varname (`character`) column within the dataset;
     #   if `NULL`, this check is not performed
     check_data_varname_exists = function(varname = NULL) {
-      stopifnot(is.null(varname) || is_character_single(varname))
+      checkmate::assert_string(varname, null.ok = TRUE)
 
       isolate({
         if (!is.null(varname) && !(varname %in% self$get_varnames())) {
@@ -595,14 +594,22 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     set_filter_state = function(state, ...) {
       checkmate::assert_list(state)
       logger::log_trace(
-        "DefaultFilteredDataset$set_filter_state setting up filters in : { self$get_dataname() }"
+        sprintf(
+          "DefaultFilteredDataset$set_filter_state setting up filters of variables %s, dataname: %s",
+          paste(names(state), collapse = ", "),
+          self$get_dataname()
+        )
       )
 
       data <- self$get_data(filtered = FALSE)
       fs <- self$get_filter_states()[[1]]
       fs$set_filter_state(state = state, data = data, ...)
       logger::log_trace(
-        "DefaultFilteredDataset$set_filter_state done setting up filters in : { self$get_dataname() }"
+        sprintf(
+          "DefaultFilteredDataset$set_filter_state done setting up filters of variables %s, dataname: %s",
+          paste(names(state), collapse = ", "),
+          self$get_dataname()
+        )
       )
       NULL
     },
@@ -615,7 +622,11 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' @return `NULL`
     remove_filter_state = function(element_id) {
       logger::log_trace(
-        "DefaultFilteredDataset$remove_filter_state removing filters, dataname: { self$get_dataname() }"
+        sprintf(
+          "DefaultFilteredDataset$remove_filter_state removing filters of variable %s, dataname: %s",
+          element_id,
+          self$get_dataname()
+        )
       )
 
       fdata_filter_state <- self$get_filter_states()[[1]]
@@ -623,7 +634,11 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
         fdata_filter_state$remove_filter_state(element)
       }
       logger::log_trace(
-        "DefaultFilteredDataset$remove_filter_state done removing filters, dataname: { self$get_dataname() }"
+        sprintf(
+          "DefaultFilteredDataset$remove_filter_state done removing filters of variable %s, dataname: %s",
+          element_id,
+          self$get_dataname()
+        )
       )
       invisible(NULL)
     },
@@ -715,7 +730,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     #' with other `data.frame` which is a parent.
     #' @return filter `call` or `list` of filter calls
     get_call = function() {
-      if (is_empty(self$get_dataset()$get_parent())) {
+      if (length(self$get_dataset()$get_parent()) == 0) {
         super$get_call()
       } else {
         parent_dataname <- self$get_dataset()$get_parent()
@@ -741,16 +756,16 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
           call_with_colon(
             "dplyr::inner_join",
             x = as.name(filtered_dataname_alone),
-            y = if (is_empty(parent_keys)) {
+            y = if (length(parent_keys) == 0) {
               as.name(filtered_parentname)
             } else {
-              utils.nest::call_extract_array(
+              call_extract_array(
                 dataname = filtered_parentname,
                 column = parent_keys,
                 aisle = call("=", as.name("drop"), FALSE)
               )
             },
-            unlist_args = if (is_empty(parent_keys) || is_empty(dataset_keys)) {
+            unlist_args = if (length(parent_keys) == 0 || length(dataset_keys) == 0) {
               list()
             } else if (identical(parent_keys, dataset_keys)) {
               list(by = parent_keys)
@@ -781,19 +796,19 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     # Gets filter overview subjects number and returns a list
     # of the number of subjects of filtered/non-filtered datasets
     get_filter_overview_nsubjs = function() {
-      subject_keys <- if (!is_empty(self$get_dataset()$get_parent())) {
+      subject_keys <- if (length(self$get_dataset()$get_parent()) > 0) {
         self$get_join_keys()[[self$get_dataset()$get_parent()]]
       } else {
         self$get_keys()
       }
 
-      f_rows <- if (is_empty(subject_keys)) {
+      f_rows <- if (length(subject_keys) == 0) {
         dplyr::n_distinct(self$get_data(filtered = TRUE))
       } else {
         dplyr::n_distinct(self$get_data(filtered = TRUE)[subject_keys])
       }
 
-      nf_rows <- if (is_empty(subject_keys)) {
+      nf_rows <- if (length(subject_keys) == 0) {
         dplyr::n_distinct(self$get_data(filtered = FALSE))
       } else {
         dplyr::n_distinct(self$get_data(filtered = FALSE)[subject_keys])
@@ -844,7 +859,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       lapply(
         experiment_names,
         function(experiment_name) {
-          input_dataname <- utils.nest::call_extract_list(
+          input_dataname <- call_extract_list(
             sprintf("%s_FILTERED", dataname),
             experiment_name,
             dollar = FALSE
@@ -969,7 +984,13 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       checkmate::assert_list(state)
       checkmate::assert_subset(names(state), c(names(self$get_filter_states())))
 
-      logger::log_trace("MAEFilteredDataset$set_filter_state setting up filters: { self$get_dataname() }")
+      logger::log_trace(
+        sprintf(
+          "MAEFilteredDataset$set_filter_state setting up filters of variable %s, dataname: %s",
+          paste(names(state), collapse = ", "),
+          self$get_dataname()
+        )
+      )
       data <- self$get_data(filtered = FALSE)
       for (fs_name in names(state)) {
         fs <- self$get_filter_states()[[fs_name]]
@@ -980,7 +1001,11 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       }
 
       logger::log_trace(
-        "MAEFilteredDataset$set_filter_state done setting filters: { self$get_dataname() }"
+        sprintf(
+          "MAEFilteredDataset$set_filter_state done setting filters of variable %s, dataname: %s",
+          paste(names(state), collapse = ", "),
+          self$get_dataname()
+        )
       )
       NULL
     },
@@ -996,7 +1021,13 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       checkmate::assert_list(element_id, names = "unique")
       checkmate::assert_subset(names(element_id), c(names(self$get_filter_states())))
 
-      logger::log_trace("MAEFilteredDataset$remove_filter_state removing filters: { self$get_dataname() }")
+      logger::log_trace(
+        sprintf(
+          "MAEFilteredDataset$remove_filter_state removing filters of variable %s, dataname: %s",
+          element_id,
+          self$get_dataname()
+        )
+      )
 
       for (fs_name in names(element_id)) {
         fdata_filter_state <- self$get_filter_states()[[fs_name]]
@@ -1004,7 +1035,13 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           `if`(fs_name == "subjects", element_id[[fs_name]][[1]], element_id[[fs_name]])
         )
       }
-      logger::log_trace("MAEFilteredDataset$remove_filter_state done removing filters: { self$get_dataname() }")
+      logger::log_trace(
+        sprintf(
+          "MAEFilteredDataset$remove_filter_state done removing filters of variable %s, dataname: %s",
+          element_id,
+          self$get_dataname()
+        )
+      )
       invisible(NULL)
     },
 

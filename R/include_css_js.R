@@ -26,7 +26,7 @@ include_css_files <- function(pattern = "*") {
 #'
 #' @return HTML code that includes `JS` files
 include_js_files <- function(pattern = "*", except = NULL) {
-  stopifnot(is.null(except) || is_character_vector(except))
+  checkmate::assert_character(except, min.len = 1, any.missing = FALSE, null.ok = TRUE)
 
   js_files <- list.files(system.file("js", package = "teal", mustWork = TRUE), pattern = pattern, full.names = TRUE)
   js_files <- js_files[!(basename(js_files) %in% except)] # no-op if except is NULL
@@ -47,7 +47,7 @@ include_js_files <- function(pattern = "*", except = NULL) {
 #'
 #' @param files (`character`) vector of filenames
 run_js_files <- function(files) {
-  stopifnot(is_character_vector(files))
+  checkmate::assert_character(files, min.len = 1, any.missing = FALSE)
 
   lapply(files, function(file) {
     shinyjs::runjs(paste0(readLines(system.file("js", file, package = "teal", mustWork = TRUE)), collapse = "\n"))

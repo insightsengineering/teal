@@ -66,7 +66,7 @@ CDISCTealData <- R6::R6Class( # nolint
         d1_pk <- get_keys(self$get_items(d1))
         d1_parent <- self$get_parent()[[d1]]
         for (d2 in datanames) {
-          if (is_empty(self$get_join_keys()$get(d1, d2))) {
+          if (length(self$get_join_keys()$get(d1, d2)) == 0) {
             d2_parent <- self$get_parent()[[d2]]
             d2_pk <- get_keys(self$get_items(d2))
 
@@ -76,7 +76,7 @@ CDISCTealData <- R6::R6Class( # nolint
             } else if (identical(d1_parent, d2)) {
               # second is parent of first -> parent keys -> second keys
               d2_pk
-            } else if (identical(d1_parent, d2_parent) && !is_empty(d1_parent)) {
+            } else if (identical(d1_parent, d2_parent) && length(d1_parent) > 0) {
               # both has the same parent -> parent keys
               get_keys(self$get_items(d1_parent))
             } else {
@@ -116,13 +116,13 @@ CDISCTealData <- R6::R6Class( # nolint
           keys_from <- self$get_join_keys()$get(name_from, name_to)
           keys_to <- self$get_join_keys()$get(name_to, name_from)
 
-          if (is_empty(keys_from) && is_empty(keys_to)) {
+          if (length(keys_from) == 0 && length(keys_to) == 0) {
             stop(sprintf("No join keys from %s to its parent (%s) and vice versa", name_from, name_to))
           }
-          if (is_empty(keys_from)) {
+          if (length(keys_from) == 0) {
             stop(sprintf("No join keys from %s to its parent (%s)", name_from, name_to))
           }
-          if (is_empty(keys_to)) {
+          if (length(keys_to) == 0) {
             stop(sprintf("No join keys from %s parent name (%s) to %s", name_from, name_to, name_from))
           }
         }

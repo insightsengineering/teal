@@ -153,7 +153,7 @@ FilteredData <- R6::R6Class( # nolint
     #'  name of the dataset.
     #' @return `FilteredDataset` object or list of `FilteredDataset`
     get_filtered_dataset = function(dataname = character(0)) {
-      if (is_empty(dataname)) {
+      if (length(dataname) == 0) {
         private$filtered_datasets
       } else {
         private$filtered_datasets[[dataname]]
@@ -170,7 +170,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param filtered (`logical`) whether to return a filtered or unfiltered dataset
     get_data = function(dataname, filtered = TRUE) {
       private$check_data_varname_exists(dataname)
-      stopifnot(is_logical_single(filtered))
+      checkmate::assert_flag(filtered)
 
       self$get_filtered_dataset(dataname)$get_data(filtered = filtered)
     },
@@ -186,7 +186,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @return value of attribute, may be `NULL` if it does not exist
     get_data_attr = function(dataname, attr) {
       private$check_data_varname_exists(dataname)
-      stopifnot(is_character_single(attr))
+      checkmate::assert_string(attr)
       get_attrs(self$get_filtered_dataset(dataname)$get_dataset())[[attr]]
     },
 
@@ -211,7 +211,7 @@ FilteredData <- R6::R6Class( # nolint
         names(res_list) <- self$datanames()
         res_list
       }
-      if (is_empty(res)) {
+      if (length(res) == 0) {
         return(character(0))
       }
 
@@ -852,8 +852,8 @@ FilteredData <- R6::R6Class( # nolint
     # @param varname (`character`) column within the dataset;
     #   if `NULL`, this check is not performed
     check_data_varname_exists = function(dataname, varname = NULL) {
-      stopifnot(is_character_single(dataname))
-      stopifnot(is.null(varname) || is_character_single(varname))
+      checkmate::assert_string(dataname)
+      checkmate::assert_string(varname, null.ok = TRUE)
 
       isolate({
         # we isolate everything because we don't want to trigger again when datanames
@@ -870,7 +870,7 @@ FilteredData <- R6::R6Class( # nolint
       return(invisible(NULL))
     },
     filtered_dataname = function(dataname) {
-      stopifnot(is_character_single(dataname))
+      checkmate::assert_string(dataname)
       sprintf("%s_FILTERED", dataname)
     }
   )
@@ -914,19 +914,19 @@ print.default_filter <- function(x, ...) {
 #'
 #' @return (`expression`)
 get_filter_expr <- function(datasets, datanames = datasets$datanames()) {
+  checkmate::assert_character(datanames, min.len = 1, any.missing = FALSE)
   stopifnot(
     is(datasets, "FilteredData"),
-    is_character_vector(datanames),
     all(datanames %in% datasets$datanames())
   )
 
   paste(
-    utils.nest::ulapply(
+    unlist(lapply(
       datanames,
       function(dataname) {
         datasets$get_call(dataname)
       }
-    ),
+    )),
     collapse = "\n"
   )
 }

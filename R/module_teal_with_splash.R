@@ -66,7 +66,9 @@ srv_teal_with_splash <- function(id, data, modules, filter = list()) {
       raw_data <- reactiveVal(data) # will trigger by setting it
     } else {
       raw_data <- data$get_server()(id = "startapp_module")
-      stop_if_not(list(is.reactive(raw_data), "The delayed loading module has to return a reactive object."))
+      if (!is.reactive(raw_data)) {
+        stop("The delayed loading module has to return a reactive object.")
+      }
     }
 
     res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)

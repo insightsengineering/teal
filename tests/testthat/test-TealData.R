@@ -603,9 +603,8 @@ testthat::test_that("TealData$get_items throws an error if there is no dataset f
   testthat::expect_error(data$get_items("iris"), "dataset iris not found")
 })
 
-testthat::test_that("TealData$new throws if passed a dataset with an empty name", {
-  mtcars_ds <- TealDataset$new("", head(mtcars))
-  testthat::expect_error(TealData$new(mtcars_ds, check = TRUE), "Cannot extract some dataset names")
+testthat::test_that("TealData$new throws if dataname is set to invalid R object name", {
+  testthat::expect_error(TealDataset$new("", head(mtcars)), "name '' must only contain alphanumeric characters")
 })
 
 testthat::test_that("TealData$new throws if passed two datasets with the same name", {

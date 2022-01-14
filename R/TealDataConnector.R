@@ -95,7 +95,7 @@ TealDataConnector <- R6::R6Class( # nolint
     #' @description
     #' Create a new `TealDataConnector` object
     initialize = function(connection, connectors) {
-      stopifnot(is_class_list("TealDatasetConnector")(connectors))
+      checkmate::assert_list(connectors, types = "TealDatasetConnector", min.len = 1)
 
       connectors_names <- vapply(connectors, get_dataname, character(1))
       connectors <- setNames(connectors, connectors_names)
@@ -162,17 +162,27 @@ TealDataConnector <- R6::R6Class( # nolint
     get_code_class = function() {
       all_code <- CodeClass$new()
 
-      open_connection_code <- if_not_null(private$connection, private$connection$get_open_call(deparse = TRUE))
-      if_not_null(open_connection_code, all_code$set_code(open_connection_code, dataname = "*open"))
+      open_connection_code <- if (!is.null(private$connection)) {
+        private$connection$get_open_call(deparse = TRUE)
+      } else {
+        NULL
+      }
 
+      if (!is.null(open_connection_code)) {
+        all_code$set_code(open_connection_code, dataname = "*open")
+      }
       datasets_code_class <- private$get_datasets_code_class()
       all_code$append(datasets_code_class)
 
-      close_connection_code <- if_not_null(
-        private$connection,
+      close_connection_code <- if (!is.null(private$connection)) {
         private$connection$get_close_call(deparse = TRUE, silent = TRUE)
-      )
-      if_not_null(close_connection_code, all_code$set_code(close_connection_code, dataname = "*close"))
+      } else {
+        NULL
+      }
+
+      if (!is.null(close_connection_code)) {
+        all_code$set_code(close_connection_code, dataname = "*close")
+      }
 
       mutate_code_class <- private$get_mutate_code_class()
       all_code$append(mutate_code_class)
@@ -207,15 +217,14 @@ TealDataConnector <- R6::R6Class( # nolint
     #' @return the `server` function
     get_preopen_server = function() {
       function(id, connection = private$connection) {
-        if_not_null(
-          private$preopen_server,
+        if (!is.null(private$preopen_server)) {
           moduleServer(
             id = id,
             module = function(input, output, session) {
               private$preopen_server(id = "data_input", connection = connection)
             }
           )
-        )
+        }
       }
     },
     #' @description
@@ -346,7 +355,7 @@ TealDataConnector <- R6::R6Class( # nolint
       }
 
       # close connection
-      if_not_null(private$connection, private$connection$close(silent = TRUE))
+      if (!is.null(private$connection)) private$connection$close(silent = TRUE)
 
       logger::log_trace("TealDataConnector$pull data pulled.")
 
@@ -458,9 +467,9 @@ TealDataConnector <- R6::R6Class( # nolint
           try(
             dataset$set_code(code = paste(
               c(
-                if_not_null(private$connection, private$connection$get_open_call(deparse = TRUE)),
+                if (!is.null(private$connection)) private$connection$get_open_call(deparse = TRUE),
                 get_code(dataset, deparse = TRUE, FUN.VALUE = character(1)),
-                if_not_null(private$connection, private$connection$get_close_call(deparse = TRUE, silent = TRUE))
+                if (!is.null(private$connection)) private$connection$get_close_call(deparse = TRUE, silent = TRUE)
               ),
               collapse = "\n"
             ))
@@ -556,7 +565,6 @@ TealDataConnector <- R6::R6Class( # nolint
 #' @export
 relational_data_connector <- function(connection, connectors) {
   stopifnot(is(connection, "TealDataConnection"))
-  stopifnot(utils.nest::is_class_list("TealDatasetConnector")(connectors))
-
+  checkmate::assert_list(connectors, types = "TealDatasetConnector", min.len = 1)
   TealDataConnector$new(connection, connectors)
 }

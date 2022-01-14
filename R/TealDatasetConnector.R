@@ -66,7 +66,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       self$set_dataset_label(label)
       self$set_keys(keys)
 
-      if (!is_empty(code)) {
+      if (length(code) > 0) {
         # just needs a dummy TealDataset object to store mutate code, hence col = 1
         private$dataset <- TealDataset$new(dataname = self$get_dataname(), x = data.frame(col = 1))
         private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
@@ -143,7 +143,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #'
     #' @return optionally deparsed `call` object
     get_code = function(deparse = TRUE) {
-      stopifnot(is_logical_single(deparse))
+      checkmate::assert_flag(deparse)
       return(self$get_code_class()$get_code(deparse = deparse))
     },
     #' @description
@@ -225,7 +225,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #' @return NULL invisible
     reassign_datasets_vars = function(datasets) {
       logger::log_trace("TealDatasetConnector$reassign_datasets_vars reassigning vars in dataset: { self$get_dataname() }.")
-      stopifnot(is_fully_named_list(datasets))
+      checkmate::assert_list(datasets, min.len = 0, names = "unique")
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))
       private$var_r6[common_var_r6] <- datasets[common_var_r6]
@@ -248,7 +248,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       if (is.null(label)) {
         label <- character(0)
       }
-      stopifnot(is_character_vector(label, min_length = 0, max_length = 1))
+      checkmate::assert_character(label, max.len = 1, any.missing = FALSE)
       private$dataset_label <- label
       if (self$is_pulled()) {
         private$dataset$set_dataset_label(label)
@@ -261,7 +261,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #' Set new keys
     #' @return (`self`) invisibly for chaining.
     set_keys = function(keys) {
-      stopifnot(is_character_vector(keys, min_length = 0))
+      checkmate::assert_character(keys, any.missing = FALSE)
       if (isTRUE(self$is_pulled())) {
         set_keys(private$dataset, keys)
       }
@@ -365,7 +365,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining.
     mutate = function(code, vars = list()) {
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
 
       if (is.null(private$dataset)) {
         # just needs a dummy TealDataset object to store mutate code, hence col = 1
@@ -447,10 +447,9 @@ TealDatasetConnector <- R6::R6Class( # nolint
     set_ui_input = function(inputs = NULL) {
       stopifnot(is.null(inputs) || is.function(inputs))
       if (is.function(inputs)) {
-        stop_if_not(list(
-          length(formals(inputs)) == 1 && names(formals(inputs)) == "ns",
-          "'inputs' must be a function of a single argument called 'ns'"
-        ))
+        if (!identical(names(formals(inputs)), "ns")) {
+          stop("'inputs' must be a function of a single argument called 'ns'")
+        }
       }
       private$ui_input <- inputs
       logger::log_trace("TealDatasetConnector$set_ui_input ui_input set for dataset: { self$get_dataname() }.")
@@ -461,8 +460,10 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #' @param id (`character`) namespace id
     #' @return shiny UI in given namespace id
     get_ui = function(id) {
-      stopifnot(is_character_single(id))
-      return(if_not_null(private$ui, private$ui(id)))
+      checkmate::assert_string(id)
+      if (!is.null(private$ui)) {
+        private$ui(id)
+      }
     },
     #' @description
     #' Get shiny server function
@@ -526,31 +527,21 @@ TealDatasetConnector <- R6::R6Class( # nolint
     ui = function(id) {
       ns <- NS(id)
       # add namespace to input ids
-      ui <- if_not_null(private$ui_input, do.call(private$ui_input, list(ns = ns)))
+      ui <- if (!is.null(private$ui_input)) {
+        do.call(private$ui_input, list(ns = ns))
+      } else {
+        NULL
+      }
       # check ui inputs
       if (!is.null(ui)) {
-        stopifnot(is.list(ui))
-        stop_if_not(
-          list(
-            all(vapply(ui, is, logical(1), class2 = "shiny.tag")),
-            "All elements must be of class shiny.tag"
-          )
-        )
-        stop_if_not(
-          list(
-            all(
-              grepl(
-                "shiny-input-container",
-                vapply(lapply(ui, "[[", i = "attribs"), "[[", character(1), i = "class")
-              )
-            ),
-            "All elements must be shiny inputs"
-          )
-        )
+        checkmate::assert_list(ui, types = "shiny.tag")
+        attr_class <- vapply(lapply(ui, "[[", i = "attribs"), "[[", character(1), i = "class")
+        if (!all(grepl("shiny-input-container", attr_class))) {
+          stop("All elements must be shiny inputs")
+        }
       }
       # create ui
-      if_not_null(
-        ui,
+      if (!is.null(ui)) {
         tags$div(
           tags$div(
             id = ns("inputs"),
@@ -558,7 +549,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
             ui
           )
         )
-      )
+      }
     },
     server = function(id, data_args = NULL) {
       moduleServer(
@@ -566,8 +557,12 @@ TealDatasetConnector <- R6::R6Class( # nolint
         function(input, output, session) {
           withProgress(value = 1, message = paste("Pulling", self$get_dataname()), {
             # set args to save them - args set will be returned in the call
-            dataset_args <- if_not_null(private$ui_input, reactiveValuesToList(input))
-            if (!is_empty(dataset_args)) {
+            dataset_args <- if (!is.null(private$ui_input)) {
+              reactiveValuesToList(input)
+            } else {
+              NULL
+            }
+            if (length(dataset_args) > 0) {
               self$set_args(args = dataset_args)
             }
 
@@ -621,13 +616,13 @@ TealDatasetConnector <- R6::R6Class( # nolint
       return(invisible(self))
     },
     set_pull_vars = function(pull_vars) {
-      stopifnot(is_fully_named_list(pull_vars))
+      checkmate::assert_list(pull_vars, min.len = 0, names = "unique")
       private$pull_vars <- pull_vars
       return(invisible(self))
     },
     pull_internal = function(args = NULL, try = FALSE) {
       # include objects CallableFunction environment
-      if (!is_empty(private$pull_vars)) {
+      if (length(private$pull_vars) > 0) {
         for (var_idx in seq_along(private$pull_vars)) {
           var_name <- names(private$pull_vars)[[var_idx]]
           var_value <- private$pull_vars[[var_idx]]
@@ -672,7 +667,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       return(NULL)
     },
     set_var_r6 = function(vars) {
-      stopifnot(is_fully_named_list(vars))
+      checkmate::assert_list(vars, min.len = 0, names = "unique")
       for (varname in names(vars)) {
         var <- vars[[varname]]
 
@@ -691,7 +686,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       return(invisible(self))
     },
     set_dataname = function(dataname) {
-      stopifnot(is_character_single(dataname))
+      checkmate::assert_string(dataname)
       stopifnot(!grepl("\\s", dataname))
       private$dataname <- dataname
       return(invisible(self))
@@ -700,31 +695,21 @@ TealDatasetConnector <- R6::R6Class( # nolint
       private$ui <- function(id) {
         ns <- NS(id)
         # add namespace to input ids
-        ui <- if_not_null(ui_args, do.call(ui_args, list(ns = ns)))
+        ui <- if (!is.null(ui_args)) {
+          do.call(ui_args, list(ns = ns))
+        } else {
+          NULL
+        }
         # check ui inputs
         if (!is.null(ui)) {
-          stopifnot(is.list(ui))
-          stop_if_not(
-            list(
-              all(vapply(ui, is, logical(1), class2 = "shiny.tag")),
-              "All elements must be of class shiny.tag"
-            )
-          )
-          stop_if_not(
-            list(
-              all(
-                grepl(
-                  "shiny-input-container",
-                  vapply(lapply(ui, "[[", i = "attribs"), "[[", character(1), i = "class")
-                )
-              ),
-              "All elements must be shiny inputs"
-            )
-          )
+          checkmate::assert_list(ui, types = "shiny.tag")
+          attr_class <- vapply(lapply(ui, "[[", i = "attribs"), "[[", character(1), i = "class")
+          if (!all(grepl("shiny-input-container", attr_class))) {
+            stop("All elements must be shiny inputs")
+          }
         }
         # create ui
-        if_not_null(
-          ui,
+        if (!is.null(ui)) {
           tags$div(
             tags$div(
               id = ns("inputs"),
@@ -732,7 +717,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
               ui
             )
           )
-        )
+        }
       }
       return(invisible(self))
     }

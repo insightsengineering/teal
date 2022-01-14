@@ -40,8 +40,8 @@
 #' shinyApp(app$ui, app$server)
 #' }
 filter_calls_module <- function(label = "Filter Calls Module", active_datanames = "all") { # nolint
-  stopifnot(is_character_single(label))
-  stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
+  checkmate::assert_string(label)
+  checkmate::check_character(active_datanames, min.len = 1, any.missing = FALSE)
 
   module(
     label = label,
@@ -71,7 +71,7 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
 #'
 #' @inheritParams filter_calls_module
 bookmark_module <- function(label = "Bookmark Module") { # nolint
-  stopifnot(is_character_single(label))
+  checkmate::assert_string(label)
 
   module(
     label = label,
@@ -123,7 +123,7 @@ bookmark_module <- function(label = "Bookmark Module") { # nolint
 #'
 #' @inheritParams filter_calls_module
 debug_browser_module <- function(label = "Browser Debug Module") { # nolint
-  stopifnot(is_character_single(label))
+  checkmate::assert_string(label)
 
   module(
     label = label,
@@ -162,8 +162,8 @@ debug_browser_module <- function(label = "Browser Debug Module") { # nolint
 #'
 #' @inheritParams filter_calls_module
 reset_filters_module <- function(label = "Reset Filters Module", active_datanames = "all") { # nolint
-  stopifnot(is_character_single(label))
-  stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
+  checkmate::assert_string(label)
+  checkmate::assert_character(active_datanames, min.len = 1, any.missing = FALSE)
 
   module(
     label = label,
@@ -270,10 +270,8 @@ trigger_after_first_cycle <- function(expr) { # nolint
 #' @inheritParams init
 #'
 predefined_filters_module <- function(label = "Apply filters", filter) { # nolint
-  stopifnot(
-    is_character_single(label),
-    is_fully_named_list(filter)
-  )
+  checkmate::assert_string(label)
+  checkmate::assert_list(filter, min.len = 0, names = "unique")
   module(
     label = label,
     server = function(input, output, session, datasets) {

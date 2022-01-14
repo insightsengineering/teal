@@ -118,7 +118,7 @@ CDISCTealDatasetConnector <- R6::R6Class( # nolint
 
     ## __Private Methods ====
     set_parent = function(parent) {
-      stopifnot(is_character_empty(parent) || is_character_single(parent))
+      checkmate::assert_character(parent, max.len = 1, any.missing = FALSE)
       private$parent <- parent
       return(invisible(self))
     }
