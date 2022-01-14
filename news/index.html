@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9052</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9055</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -82,9 +73,9 @@ Other releases
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.10.0.9052" id="teal-01009052">teal 0.10.0.9052<a class="anchor" aria-label="anchor" href="#teal-01009052"></a></h2>
+<h2 class="page-header" data-toc-text="0.10.0.9055" id="teal-01009055">teal 0.10.0.9055<a class="anchor" aria-label="anchor" href="#teal-01009055"></a></h2>
 <div class="section level4">
-<h4 id="breaking-changes-0-10-0-9052">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-0-9052"></a></h4>
+<h4 id="breaking-changes-0-10-0-9055">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-0-9055"></a></h4>
 <ul><li>Replaced <code>rcd_dataset_connector</code> and <code>rcd_cdisc_dataset_connector</code> with <code>scda_dataset_connector</code> and <code>scda_cdisc_dataset_connector</code> respectively.</li>
 <li>Removed <code>rcd_connection</code> and <code>rcd_data</code>; <code>scda_dataset_connectors</code> can be passed into <code>cdisc_data</code> and <code>teal_data</code> directly.</li>
 <li>Removed <code>raw_dataset</code>, <code>raw_dataset_connector</code>, <code>named_dataset</code>, <code>named_dataset_file</code>, <code>named_dataset_connector</code>, <code>relational_dataset</code>, <code>relational_dataset_file</code>, <code>relational_dataset_connector</code>, <code>key</code>, <code>as_cdisc</code>, <code>as_cdisc_relational</code>.</li>
@@ -94,7 +85,7 @@ Other releases
 <li>Change of the <code>html-id</code> of the modules. Each tabs-set in the app is now a new <code>shiny</code> namespace.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="new-features-0-10-0-9052">New features<a class="anchor" aria-label="anchor" href="#new-features-0-10-0-9052"></a></h4>
+<h4 id="new-features-0-10-0-9055">New features<a class="anchor" aria-label="anchor" href="#new-features-0-10-0-9055"></a></h4>
 <ul><li>Added print methods to the <code>DatasetConnector</code>, <code>RelationalData</code>, and <code>RelationalDataconnector</code> classes and added input validation to the implementation of the print method that was already in the <code>Dataset</code> object.</li>
 <li>Added public facing constructor functions for <code>CDISCDataConnector</code>, <code>RelationalDataConnector</code>, and <code>DataConnection</code> classes.</li>
 <li>Modified <code>data_extract_spec</code> to allow both the <code>filter</code> and <code>select</code> parameters to be <code>NULL</code>, which results in the <code>data_extract_ui</code> acting as if a <code>filter_spec</code> with all variables as possible choices had been supplied as the <code>filter</code> argument and a <code>select_spec</code> with the <code>multiple</code> parameter set to <code>TRUE</code> had been supplied as the <code>select</code> argument.</li>
@@ -109,7 +100,7 @@ Other releases
 <li>Hid the buttons to remove filters from all datasets and each dataset when there were no active filters.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="bug-fixes-0-10-0-9052">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-0-9052"></a></h4>
+<h4 id="bug-fixes-0-10-0-9055">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-0-9055"></a></h4>
 <ul><li>Refactored <code>module_nested_tabs</code> to fix the issue with filter-panel not reacting on a change of nested tabs.</li>
 <li>Fixed data loading of <code>DatasetConnector</code> being dependent on other <code>Dataset</code> or <code>DatasetConnector</code> objects.</li>
 <li>Fixed call returned by <code>FilterState</code> in case of using <code><a href="http://waldronlab.io/MultiAssayExperiment/reference/subsetBy.html" class="external-link">MultiAssayExperiment::subsetByColData</a></code>. Now single condition for variable containing <code>NA</code> values is <code>!is.na(var) &amp; var == &lt;condition&gt;</code>.</li>
@@ -117,9 +108,11 @@ Other releases
 <code>updateOptionalSelectInput</code> no longer sets input to <code>NULL</code> when <code>logical</code> value is passed to <code>selected</code>.</li>
 <li>Added <code>S3 method</code>, <code>to_relational_data</code>, for <code>MultiAssayExperiment</code> objects.</li>
 <li>Fixed restoring bookmark state from filter panel.</li>
+<li>
+<code>choices_selected</code> removes duplicates from the <code>choices</code> input.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="miscellaneous-0-10-0-9052">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-0-9052"></a></h4>
+<h4 id="miscellaneous-0-10-0-9055">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-0-9055"></a></h4>
 <ul><li>Replaced the servers from <code>DataConnection</code>, <code>RelationalDataConnector</code>, <code>DatasetConnector</code>, and <code>RelationalData</code> with <code>moduleServer</code>.</li>
 <li>Updated R version requirement to &gt;= 4.0.</li>
 <li>Changed references to outdated functions of <code>teal.devel</code> in the documentation.</li>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9052</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9055</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -110,15 +101,15 @@ See <code><a href="https://daroczig.github.io/logger/reference/log_threshold.htm
     <div id="details">
     <h2>Details</h2>
     <p>Creates a new logging namespace specified by the <code>namespace</code> argument.
-When the <code>layout</code> and <code>level</code> arguments are set to <code>NULL</code> (default), the functions
+When the <code>layout</code> and <code>level</code> arguments are set to <code>NULL</code> (default), the function
 gets the values for them from system variables or R options.
 When deciding what to use (either argument, an R option or system variable), the function
 picks the first non <code>NULL</code> value, checking in order:</p><ol><li><p>Function argument.</p></li>
 <li><p>System variable.</p></li>
 <li><p>R option.</p></li>
-</ol><p><code>layout</code> and <code>level</code> can also be set as system environment variables, respectively:</p><ul><li><p><code>teal.log_layout</code> as <code>TEAL.LOG_LAYOUT</code>,</p></li>
+</ol><p><code>layout</code> and <code>level</code> can be set as system environment variables, respectively:</p><ul><li><p><code>teal.log_layout</code> as <code>TEAL.LOG_LAYOUT</code>,</p></li>
 <li><p><code>teal.log_level</code> as <code>TEAL.LOG_LEVEL</code>.</p></li>
-</ul><p>The function uses the following R options:</p><ul><li><p><code>options(teal.log_layout)</code>, which is passed to
+</ul><p>If neither the argument nor the environment variable is set the function uses the following R options:</p><ul><li><p><code>options(teal.log_layout)</code>, which is passed to
 <code><a href="https://daroczig.github.io/logger/reference/layout_glue_generator.html" class="external-link">logger::layout_glue_generator</a></code>,</p></li>
 <li><p><code>options(teal.log_level)</code>, which is passed to
 <code><a href="https://daroczig.github.io/logger/reference/log_threshold.html" class="external-link">logger::log_threshold</a></code>.</p></li>
@@ -133,7 +124,7 @@ about layouts and how to use <code>logger</code>.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>teal.log_layout <span class="op">=</span> <span class="st">"{msg}"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>teal.log_level <span class="op">=</span> <span class="fu">logger</span><span class="fu">::</span><span class="va"><a href="https://daroczig.github.io/logger/reference/log_levels.html" class="external-link">INFO</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>teal.log_level <span class="op">=</span> <span class="st">"ERROR"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">register_logger</span><span class="op">(</span>namespace <span class="op">=</span> <span class="st">"new_namespace"</span><span class="op">)</span></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_info</a></span><span class="op">(</span><span class="st">"Hello from new_namespace"</span>, namespace <span class="op">=</span> <span class="st">"new_namespace"</span><span class="op">)</span></span>
