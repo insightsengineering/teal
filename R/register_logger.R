@@ -3,7 +3,7 @@
 #' @note It's a thin wrapper around the `logger` package.
 #'
 #' @details Creates a new logging namespace specified by the `namespace` argument.
-#' When the `layout` and `level` arguments are set to `NULL` (default), the functions
+#' When the `layout` and `level` arguments are set to `NULL` (default), the function
 #' gets the values for them from system variables or R options.
 #' When deciding what to use (either argument, an R option or system variable), the function
 #' picks the first non `NULL` value, checking in order:
@@ -11,11 +11,11 @@
 #' 2. System variable.
 #' 3. R option.
 #'
-#' `layout` and `level` can also be set as system environment variables, respectively:
+#' `layout` and `level` can be set as system environment variables, respectively:
 #' * `teal.log_layout` as `TEAL.LOG_LAYOUT`,
 #' * `teal.log_level` as `TEAL.LOG_LEVEL`.
 #'
-#' The function uses the following R options:
+#' If neither the argument nor the environment variable is set the function uses the following R options:
 #' * `options(teal.log_layout)`, which is passed to
 #' \code{\link[logger:layout_glue_generator]{logger::layout_glue_generator}},
 #' * `options(teal.log_level)`, which is passed to
@@ -39,7 +39,7 @@
 #'
 #' @examples
 #' options(teal.log_layout = "{msg}")
-#' options(teal.log_level = logger::INFO)
+#' options(teal.log_level = "ERROR")
 #' register_logger(namespace = "new_namespace")
 #' \dontrun{
 #' logger::log_info("Hello from new_namespace", namespace = "new_namespace")
@@ -53,7 +53,7 @@ register_logger <- function(namespace = NA_character_,
   }
 
   if (is.null(level)) level <- Sys.getenv("TEAL.LOG_LEVEL")
-  if (is.null(level) || level == "") level <- getOption("teal.log_level")
+  if (is.null(level) || level == "") level <- getOption("teal.log_level", default = "INFO")
   tryCatch(
     logger::log_threshold(level, namespace = namespace),
     error = function(condition) {
@@ -66,7 +66,12 @@ register_logger <- function(namespace = NA_character_,
   )
 
   if (is.null(layout)) layout <- Sys.getenv("TEAL.LOG_LAYOUT")
-  if (is.null(layout) || layout == "") layout <- getOption("teal.log_layout")
+  if (is.null(layout) || layout == "") {
+    layout <- getOption(
+      "teal.log_layout",
+      default = "[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:[{token}] {ans} {msg}"
+    )
+  }
   tryCatch(
     expr = {
       logger::log_layout(layout_teal_glue_generator(layout), namespace = namespace)
@@ -126,7 +131,7 @@ log_system_info <- function() {
 #' @details this function behaves in the same way as [logger::layout_glue_generator()]
 #'   but allows the shiny session token (last 8 chars) to be included in the logging layout
 #' @noRd
-layout_teal_glue_generator <- function(layout = getOption("teal.log_layout")) {
+layout_teal_glue_generator <- function(layout) {
   force(layout)
   structure(
     function(level, msg, namespace = NA_character_, .logcall = sys.call(), .topcall = sys.call(-1),
