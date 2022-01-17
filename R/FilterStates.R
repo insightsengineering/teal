@@ -843,7 +843,8 @@ DFFilterStates <- R6::R6Class( # nolint
 
       if (!element_id %in% names(self$queue_get(1L))) {
         warning(paste(
-          "Variable:", element_id, "is not present in the actual active filters of dataset: { deparse1(private$input_dataname) }",
+          "Variable:", element_id,
+          "is not present in the actual active filters of dataset: { deparse1(private$input_dataname) }",
           "therefore no changes are applied."
         ))
         logger::log_warn(
