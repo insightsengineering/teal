@@ -620,7 +620,7 @@ FilterState <- R6::R6Class( # nolint
     keep_na = NULL, # reactiveVal logical()
     keep_na_reactive = NULL, # reactiveVal logical()
     na_count = integer(0),
-    na_rm = FALSE, # logical(1)
+    na_rm = FALSE, # it's logical(1)
     observers = NULL, # here observers are stored
     selected = NULL, # because it holds reactiveVal and each class has different choices type
     selected_reactive = NULL, # because it holds reactiveVal and each class has different choices type
@@ -1153,7 +1153,7 @@ LogicalFilterState <- R6::R6Class( # nolint
     },
     cast_and_validate = function(values) {
       tryCatch(
-        {
+        expr = {
           values_logical <- as.logical(values)
           if (any(is.na(values_logical))) stop()
         },
@@ -1392,7 +1392,7 @@ RangeFilterState <- R6::R6Class( # nolint
           )
 
           private$observers$selection <- observeEvent(
-            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in `selectInput`,
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
             eventExpr = input$selection,
             handlerExpr = {
@@ -1422,7 +1422,7 @@ RangeFilterState <- R6::R6Class( # nolint
           private$observe_keep_na(input)
 
           private$observers$keep_inf <- observeEvent(
-            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
             eventExpr = input$keep_inf,
             handlerExpr = {
@@ -1591,7 +1591,7 @@ RangeFilterState <- R6::R6Class( # nolint
     },
     cast_and_validate = function(values) {
       tryCatch(
-        {
+        expr = {
           values <- as.numeric(values)
           if (any(is.na(values))) stop()
         },
@@ -1819,7 +1819,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
           private$observe_keep_na_reactive(private$keep_na_reactive())
 
           private$observers$selection <- observeEvent(
-            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in `selectInput`
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
             eventExpr = input$selection,
             handlerExpr = {
@@ -1911,7 +1911,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
     },
     cast_and_validate = function(values) {
       tryCatch(
-        {
+        expr = {
           values <- as.character(values)
           if (any(is.na(values))) stop()
         },
@@ -2082,7 +2082,7 @@ DateFilterState <- R6::R6Class( # nolint
           private$observe_keep_na_reactive(private$keep_na_reactive())
 
           private$observers$selection <- observeEvent(
-            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in `selectInput`,
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
             eventExpr = input$selection,
             handlerExpr = {
@@ -2173,7 +2173,7 @@ DateFilterState <- R6::R6Class( # nolint
     },
     cast_and_validate = function(values) {
       tryCatch(
-        {
+        expr = {
           values <- as.Date(values)
           if (any(is.na(values))) stop()
         },
@@ -2313,47 +2313,41 @@ DatetimeFilterState <- R6::R6Class( # nolint
           div(
             class = "input-daterange input-group",
             style = "margin: auto; width: 80%;",
-            div(
-              style = "float: left; width: 100%;",
-              {
-                x <- shinyWidgets::airDatepickerInput(
-                  inputId = ns("selection_start"),
-                  value = isolate(self$get_selected())[1],
-                  startView = isolate(self$get_selected())[1],
-                  timepicker = TRUE,
-                  minDate = private$choices[1],
-                  maxDate = private$choices[2],
-                  update_on = "close",
-                  addon = "none",
-                  position = "bottom right"
-                )
-                x$children[[2]]$attribs <- c(x$children[[2]]$attribs, list(class = " input-sm"))
-                x
-              }
-            ),
+            div(style = "float: left; width: 100%;", {
+              x <- shinyWidgets::airDatepickerInput(
+                inputId = ns("selection_start"),
+                value = isolate(self$get_selected())[1],
+                startView = isolate(self$get_selected())[1],
+                timepicker = TRUE,
+                minDate = private$choices[1],
+                maxDate = private$choices[2],
+                update_on = "close",
+                addon = "none",
+                position = "bottom right"
+              )
+              x$children[[2]]$attribs <- c(x$children[[2]]$attribs, list(class = " input-sm"))
+              x
+            }),
             span(
               class = "input-group-addon",
               "to",
               title = "Times are displayed in the local timezone and are converted to UTC in the analysis"
             ),
-            div(
-              style = "float: right; width: 100%;",
-              {
-                x <- shinyWidgets::airDatepickerInput(
-                  inputId = ns("selection_end"),
-                  value = isolate(self$get_selected())[2],
-                  startView = isolate(self$get_selected())[2],
-                  timepicker = TRUE,
-                  minDate = private$choices[1],
-                  maxDate = private$choices[2],
-                  update_on = "close",
-                  addon = "none",
-                  position = "bottom right"
-                )
-                x$children[[2]]$attribs <- c(x$children[[2]]$attribs, list(class = " input-sm"))
-                x
-              }
-            )
+            div(style = "float: right; width: 100%;", {
+              x <- shinyWidgets::airDatepickerInput(
+                inputId = ns("selection_end"),
+                value = isolate(self$get_selected())[2],
+                startView = isolate(self$get_selected())[2],
+                timepicker = TRUE,
+                minDate = private$choices[1],
+                maxDate = private$choices[2],
+                update_on = "close",
+                addon = "none",
+                position = "bottom right"
+              )
+              x$children[[2]]$attribs <- c(x$children[[2]]$attribs, list(class = " input-sm"))
+              x
+            })
           )
         ),
         if (private$na_count > 0) {
@@ -2405,7 +2399,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
           private$observe_keep_na_reactive(private$keep_na_reactive())
 
           private$observers$selection <- observeEvent(
-            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in `selectInput`,
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
             eventExpr = {
               input$selection_start
@@ -2509,7 +2503,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
     },
     cast_and_validate = function(values) {
       tryCatch(
-        {
+        expr = {
           values <- as.POSIXct(values)
           if (any(is.na(values))) stop()
         },

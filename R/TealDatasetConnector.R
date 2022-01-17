@@ -223,7 +223,9 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #'   objects with valid pointers.
     #' @return NULL invisible
     reassign_datasets_vars = function(datasets) {
-      logger::log_trace("TealDatasetConnector$reassign_datasets_vars reassigning vars in dataset: { self$get_dataname() }.")
+      logger::log_trace(
+        "TealDatasetConnector$reassign_datasets_vars reassigning vars in dataset: { self$get_dataname() }."
+      )
       checkmate::assert_list(datasets, min.len = 0, names = "unique")
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))
@@ -235,7 +237,9 @@ TealDatasetConnector <- R6::R6Class( # nolint
       if (!is.null(private$dataset)) {
         private$dataset$reassign_datasets_vars(datasets)
       }
-      logger::log_trace("TealDatasetConnector$reassign_datasets_vars reassigned vars in dataset: { self$get_dataname() }.")
+      logger::log_trace(
+        "TealDatasetConnector$reassign_datasets_vars reassigned vars in dataset: { self$get_dataname() }."
+      )
 
       invisible(NULL)
     },
@@ -642,9 +646,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       }
       # eval CallableFunction with dynamic args
       tryCatch(
-        {
-          private$pull_callable$run(args = args, try = try)
-        },
+        expr = private$pull_callable$run(args = args, try = try),
         error = function(e) {
           if (grepl("object 'conn' not found", e$message)) {
             output_message <- "This dataset connector requires connection object (conn) to be provided."

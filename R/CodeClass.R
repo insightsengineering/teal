@@ -131,7 +131,9 @@ CodeClass <- R6::R6Class( # nolint
         )
 
         if (is(out, "error")) {
-          error_msg <- sprintf("%s\n\nEvaluation of the code failed:\n %s", deparse1(x, collapse = "\n"), conditionMessage(out))
+          error_msg <- sprintf(
+            "%s\n\nEvaluation of the code failed:\n %s", deparse1(x, collapse = "\n"), conditionMessage(out)
+          )
 
           rlang::with_options(
             stop(error_msg, call. = FALSE),
