@@ -28,7 +28,7 @@ modules <- function(label, ...) {
     ))
   }
 
-  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
+  labels <- vapply(submodules, function(submodule) gsub("[^[:alnum:]]", "_", tolower(submodule$label)), character(1))
   if (any(duplicated(labels))) {
     stop("Please choose unique labels for each tab. Currently, they are ", toString(labels))
   }
