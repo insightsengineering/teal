@@ -273,7 +273,7 @@ topological_sort <- function(graph) {
   }
 }
 
-#' Checks whether a graph is a Directed Acyclic Graph
+#' Checks whether a graph is a `Directed Acyclic Graph (DAG)`
 #'
 #' @inheritParams topological_sort
 #' @return `logical(1)` `TRUE` if the graph is a `DAG`; `FALSE` otherwise
