@@ -28,18 +28,13 @@ modules <- function(label, ...) {
     ))
   }
 
-  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  if (any(duplicated(labels))) {
-    stop("Please choose unique labels for each tab. Currently, they are ", toString(labels))
-  }
-
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
-  submodules <- setNames(submodules, labels)
+  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
+  names(submodules) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)))
   structure(
     list(
       label = label,
-      id = gsub("[^[:alnum:]]", "_", tolower(label)),
       children = submodules
     ),
     class = "teal_modules"
@@ -99,11 +94,11 @@ root_modules <- function(...) {
 #'
 module <- function(label, server, ui, filters, server_args = NULL, ui_args = NULL) {
   checkmate::assert_string(label)
-  stopifnot(is.function(server))
-  stopifnot(is.function(ui))
+  checkmate::assert_function(server)
+  checkmate::assert_function(ui)
   checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = TRUE)
-  stopifnot(is.null(server_args) || is.list(server_args))
-  stopifnot(is.null(ui_args) || is.list(ui_args))
+  checkmate::assert_list(server_args, null.ok = TRUE)
+  checkmate::assert_list(ui_args, null.ok = TRUE)
 
   server_main_args <- names(formals(server))
   if (!(identical(server_main_args[1:4], c("input", "output", "session", "datasets")) ||
@@ -123,7 +118,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 
   structure(
     list(
-      label = label, id = gsub("[^[:alnum:]]", "_", tolower(label)),
+      label = label,
       server = server, ui = ui, filters = filters,
       server_args = server_args, ui_args = ui_args
     ),
