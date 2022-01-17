@@ -15,7 +15,10 @@
 #'
 #' @export
 #'
-#' @return object of class \code{teal_modules}
+#' @return object of class \code{teal_modules}. Object contains following fields
+#' - label: taken from `label` argument
+#' - children: list containing objects passed in `...`. List elements are named after
+#' their `label` attribute converted to valid `shiny` id.
 #'
 modules <- function(label, ...) {
   checkmate::assert_string(label)
@@ -90,6 +93,7 @@ root_modules <- function(...) {
 #' @param ui_args (\code{list}) Named list with additional arguments passed on to the
 #'   ui function.
 #'
+#' @return object of class `teal_module`.
 #' @export
 #'
 module <- function(label, server, ui, filters, server_args = NULL, ui_args = NULL) {
