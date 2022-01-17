@@ -1,6 +1,6 @@
 #' Get dataset label attribute
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param data \code{data.frame} from which attribute is extracted
 #'
@@ -17,7 +17,7 @@ data_label <- function(data) {
 
 #' Set dataset label attribute
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param x \code{data.frame} for which attribute is set
 #' @param value (\code{character}) label
@@ -41,7 +41,7 @@ data_label <- function(data) {
 
 #' Function that returns the default keys for a `CDISC` dataset by name
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param dataname name of the `CDISC` dataset
 #'
@@ -68,7 +68,7 @@ get_cdisc_keys <- function(dataname) {
 
 #' Function that extract labels from CDISC dataset
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param data (\code{data.frame}) table to extract the labels from
 #' @inheritParams rtables::var_labels
@@ -97,7 +97,7 @@ get_labels <- function(data, fill = TRUE) {
 
 #' Function that extract column labels from CDISC dataset
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param data (\code{data.frame}) any CDISC data set
 #' @param columns optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all

@@ -1,7 +1,5 @@
 ## CDISCTealDatasetConnector ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title A `CDISCTealDatasetConnector` class of objects
 #'
 #' Objects of this class store the connection function to fetch a single dataset.

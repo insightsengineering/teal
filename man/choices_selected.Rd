@@ -31,7 +31,7 @@ Object of class \code{choices_selected} and of type list which contains the spec
 \code{choices}, \code{selected}, \code{keep_order} and \code{fixed}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Construct a single list containing available choices, the default selected value, and
 additional settings such as to order the choices with the selected elements appearing first
 or whether to block the user from making selections. Can be used in \code{ui} input elements

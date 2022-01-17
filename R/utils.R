@@ -127,7 +127,7 @@ deep_clone_r6 <- function(name, value) {
 # also returns a list if only a single element
 #' Split by separator
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param x (`character`) Character (single)
 #' @param sep (`character`) Separator
@@ -143,7 +143,7 @@ split_by_sep <- function(x, sep) {
 
 #' List element in other list
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' Checks if `x` element matches any of `y` element. If one of the arguments is a list then list elements
 #' are treated as whole - in this case list elements can be a vector, so it looks
 #' for equal element in second vector to be matched.
@@ -353,7 +353,7 @@ code_from_script <- function(code, script, dataname = NULL) {
 
 #' Read .R file into character
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' Comments will be excluded
 #'
 #' @param file (`character`) File to be parsed into code
@@ -377,7 +377,7 @@ read_script <- function(file, dataname = NULL) {
 
 #' S3 generic for creating an information summary about the duplicate key values in a dataset
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @details The information summary provides row numbers and number of duplicates
 #' for each duplicated key value.
@@ -419,7 +419,6 @@ get_key_duplicates <- function(dataset, keys = NULL) {
 
 #' Creates a short information summary about the duplicate primary key values in a dataset
 #'
-#' @description `r lifecycle::badge("experimental")`
 #' @details S3 method for get_key_duplicates. Uses the public API of
 #' `TealDataset` to read the primary key and the raw data.
 #'
@@ -453,7 +452,6 @@ get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { # nolint
 
 #' Creates a short information summary about the duplicate key values in a dataset.
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @details
 #' When the key argument is provided the function uses it to generate the summary, otherwise
@@ -483,7 +481,6 @@ get_key_duplicates.data.frame <- function(dataset, keys = NULL) { # nolint
 
 #' Creates a duplicate keys information summary.
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @details
 #' Accepts a list of variable names - `keys`, which are treated as the

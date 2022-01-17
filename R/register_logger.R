@@ -1,5 +1,7 @@
 #' Registers a logger instance in a given logging namespace.
 #'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @note It's a thin wrapper around the `logger` package.
 #'
 #' @details Creates a new logging namespace specified by the `namespace` argument.

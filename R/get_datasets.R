@@ -1,6 +1,6 @@
 #' Get a [`TealDataset`] objects.
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param x ([`TealData`])\cr
 #'  object containing datasets.

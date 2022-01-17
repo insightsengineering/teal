@@ -4,7 +4,9 @@
 \alias{CodeClass}
 \title{Code Class}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Code Class
+
+Code Class
 }
 \examples{
 cc <- teal:::CodeClass$new()
@@ -25,9 +27,6 @@ cc$get_code()
 cc$get_code("ADSL")
 cc$get_code("ADAE")
 
-#########################################
-#########################################
-#########################################
 
 x1 <- teal:::CodeClass$new()
 x1$set_code("ADSL <- radsl(cached = TRUE)", "ADSL")

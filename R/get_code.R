@@ -1,6 +1,6 @@
 #' Get code
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #' Reads code from specified files or an R6 object.
 #'
 #' \itemize{

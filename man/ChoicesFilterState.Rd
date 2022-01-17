@@ -5,7 +5,9 @@
 \alias{ChoicesFilterState}
 \title{\code{FilterState} object for factor or character variable}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\code{FilterState} object for factor or character variable
+
+\code{FilterState} object for factor or character variable
 }
 \note{
 Casts the passed object to \code{character} before validating the input

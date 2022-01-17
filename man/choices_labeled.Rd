@@ -23,7 +23,7 @@ icons to the \link{choices_selected} drop down box}
 a named character vector
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 This is often useful for \link{choices_selected} as it marks up the dropdown boxes
 for \code{\link[shiny:selectInput]{shiny::selectInput()}}.
 }

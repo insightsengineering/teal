@@ -5,7 +5,9 @@
 \alias{CDISCFilteredData}
 \title{Class to encapsulate relational filtered datasets with its parents.}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Class to encapsulate relational filtered datasets with its parents.
+
+Class to encapsulate relational filtered datasets with its parents.
 }
 \details{
 The \code{CDISCFilteredData} class implements logic to filter a relational

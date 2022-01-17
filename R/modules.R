@@ -4,7 +4,7 @@
 
 #' Create a collection of `module` and `modules` object
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' Modules collects a tree of [module()] and [modules()]
 #' objects. This is useful to define the navigation structure of a teal app.
 #'
@@ -49,7 +49,7 @@ modules <- function(label, ...) {
 
 #' Create the root modules container
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' To be used with [init()] in the `modules` argument.
 #'
 #' @details
@@ -74,7 +74,7 @@ root_modules <- function(...) {
 
 #' Create a module with a new shiny page
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' Tab items allows you to add a shiny module to the teal app
 #'
 #' @param label (\code{character}) Label shown in the navigation item for the module.

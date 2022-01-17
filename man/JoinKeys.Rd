@@ -4,8 +4,6 @@
 \alias{JoinKeys}
 \title{R6 Class to store relationships for joining datasets}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
 This class stores symmetric links between pairs of key-values
 (e.g. column A of dataset X can be joined with column B of dataset Y). This relationship
 is more general than the SQL foreign key relationship which also imposes constraints on the values

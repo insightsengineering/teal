@@ -1,7 +1,5 @@
 ## CodeClass ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title Code Class
 #'
 #'
@@ -24,9 +22,6 @@
 #' cc$get_code("ADSL")
 #' cc$get_code("ADAE")
 #'
-#' #########################################
-#' #########################################
-#' #########################################
 #'
 #' x1 <- teal:::CodeClass$new()
 #' x1$set_code("ADSL <- radsl(cached = TRUE)", "ADSL")

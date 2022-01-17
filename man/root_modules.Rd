@@ -11,7 +11,7 @@ root_modules(...)
 see \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}} for more details}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 To be used with \code{\link[=init]{init()}} in the \code{modules} argument.
 }
 \details{

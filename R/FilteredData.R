@@ -1,8 +1,6 @@
 #' @name FilteredData
 #' @docType class
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title Class to encapsulate filtered datasets
 #'
 #' @details
@@ -880,7 +878,7 @@ FilteredData <- R6::R6Class( # nolint
 
 #' Refers the default filter state
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' You can use it to refer to the variable's default filter state,
 #' which will be set when `FilteredData$set_data` is called.
 #' It can be used together with `teal::init`.
@@ -905,6 +903,7 @@ print.default_filter <- function(x, ...) {
 
 #' Gets filter expression for multiple datanames taking into account its order.
 #'
+#' @description `r lifecycle::badge("stable")`
 #' To be used in show R code button.
 #'
 #' @param datasets (`FilteredData`)

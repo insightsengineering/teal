@@ -2,7 +2,7 @@
 
 #' Resolve delayed inputs by evaluating the code within the provided datasets
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param x Object of class `delayed_data` to resolve.
 #' @param datasets Object of class `FilteredData` to use for evaluation.
@@ -157,7 +157,6 @@ resolve_delayed.default <- function(x, datasets) {
 
 #' Resolve expression after delayed data are loaded
 #'
-#' @description `r lifecycle::badge("maturing")`
 #'
 #' @param x (`function`) Function that is applied on dataset.
 #' It must take only a single argument "data" and return character vector with columns / values.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnector.R
 \name{relational_data_connector}
 \alias{relational_data_connector}
-\title{Public facing object constructor for \code{TealDataConnector} class.}
+\title{The constructor for \code{TealDataConnector} class.}
 \usage{
 relational_data_connector(connection, connectors)
 }
@@ -17,7 +17,7 @@ list with dataset connectors}
 \code{TealDataConnector} object
 }
 \description{
-Public facing object constructor for \code{TealDataConnector} class.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 

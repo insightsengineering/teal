@@ -1,7 +1,5 @@
 #' Create a new `FilteredData` object
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @param x an object that inherits from `TealData`
 #'
 #' @return a (`CDISCTealDataset`, `CDISCTealDatasetConnector`) object
@@ -22,8 +20,6 @@ filtered_data_new.CDISCTealData <- function(x) { # nolintr
 }
 
 #' Set `FilteredData` with data from `TealData`
-#'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @param data an object that inherits from `TealData`
 #' @param datasets an object that inherits from `FilteredData`
@@ -47,6 +43,7 @@ filtered_data_set.TealData <- function(data, datasets) { # nolintr
 
 #' Managing `FilteredData` states
 #'
+#' @description `r lifecycle::badge("experimental")`
 #' Set, get and remove filter states of `FilteredData` object
 #'
 #' @name filter_state_api

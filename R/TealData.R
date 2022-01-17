@@ -1,6 +1,5 @@
 ## TealData ====
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @title Manage multiple `TealDataConnector`, `TealDatasetConnector` and `TealDataset` objects.
 #'

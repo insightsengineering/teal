@@ -4,8 +4,6 @@
 \alias{CDISCTealData}
 \title{Manage multiple \code{CDISCTealDataConnector}, \code{CDISCTealDatasetConnector} and \code{CDISCTealDataset} objects.}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
 Class manages \code{CDISCTealDataConnector}, \code{CDISCTealDatasetConnector} and
 \code{CDISCTealDataset} objects and aggregate them in one collection.
 Class also decides whether to launch app before initialize teal application.

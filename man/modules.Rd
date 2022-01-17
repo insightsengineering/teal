@@ -17,7 +17,7 @@ see \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}} for mo
 object of class \code{teal_modules}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Modules collects a tree of \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}}
 objects. This is useful to define the navigation structure of a teal app.
 }

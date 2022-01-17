@@ -1,7 +1,5 @@
 ## CDISCTealData ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title Manage multiple `CDISCTealDataConnector`, `CDISCTealDatasetConnector` and `CDISCTealDataset` objects.
 #'
 #' @description

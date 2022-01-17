@@ -1,6 +1,6 @@
 #' Hide, Show Label only or display a \code{pickerInput}
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' Hidden input widgets are useful to have the \code{input[[inputId]]} variable
 #' on available in the server function but no corresponding visual clutter from
 #' input widgets that provide only a single choice.
@@ -178,7 +178,7 @@ optionalSelectInput <- function(inputId, # nolint
 
 #' Update \code{optionalSelectInput}
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @inheritParams shinyWidgets::updatePickerInput
 #'
@@ -355,7 +355,7 @@ extract_raw_choices <- function(choices, sep) {
 
 #' if min or max are \code{NA} then the slider widget will be hidden
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' Hidden input widgets are useful to have the \code{input[[inputId]]} variable
 #' on available in the server function but no corresponding visual clutter from
 #' input widgets that provide only a single choice.
@@ -398,7 +398,7 @@ optionalSliderInput <- function(inputId, label, min, max, value, label_help = NU
 #' For teal modules we parameterize an \code{optionalSliderInput} with one argument
 #' \code{value_min_max}
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' The \code{\link{optionalSliderInput}} function needs three arguments to decided
 #' whether to hide the \code{sliderInput} widget or not. For teal modules we specify an
 #' optional slider input with one argument here called \code{value_min_max}.

@@ -1,6 +1,5 @@
 ## TealDataConnection ====
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @title A `TealDataConnection` class of objects
 #'
@@ -681,7 +680,9 @@ TealDataConnection <- R6::R6Class( # nolint
   )
 )
 
-#' Public facing object constructor for `TealDataConnection` class.
+#' The constructor for `TealDataConnection` class.
+#'
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param open_fun (`CallableFunction`) function to open connection
 #' @param close_fun (`CallableFunction`) function to close connection
@@ -725,7 +726,7 @@ data_connection <- function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, 
 # TealDataConnection wrappers ----
 #' Open connection to `entimICE` via `rice`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' @param open_args optional, named (`list`) of additional parameters for the connection's
 #'   `rice_session_open` open function. Please note that the `password` argument will be
@@ -750,7 +751,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 
 #' Open connection to `entimICE` via `ricepass`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' @return (`TealDataConnection`) type of object
 #'
@@ -813,7 +814,7 @@ ricepass_connection <- function() {
 
 #' Open connection to `Teradata`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' @param open_args optional, named (`list`) of additional parameters for the connection's
 #'   `RocheTeradata::connect_teradata` open function. Please note that the `type`
@@ -836,7 +837,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
 
 #' Helper function to connect to `Snowflake`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' This is used by `snowflake_connection` and does not need to be called directly
 #' @param username the username used to collect the auth token to connect to snowflake.
@@ -869,7 +870,7 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
 
 #' Open connection to `Snowflake`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' @param open_args optional, named (`list`) of additional parameters for the connection's
 #'   `teal::snowflake_connection_function` open function.
@@ -891,7 +892,7 @@ snowflake_connection <- function(open_args = list(), close_args = list(), ping_a
 
 #' Open connection to `CDSE`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' @param env optional, `CDSE` environment name.
 #'
@@ -908,7 +909,7 @@ cdse_connection <- function(env = "prod") {
 
 #' Open connection to `DataSetDB`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' @return (`TealDataConnection`) type of object
 #'

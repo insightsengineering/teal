@@ -8,7 +8,9 @@
 invisibly \code{NULL}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\code{FilterState} object for numeric variable
+
+\code{FilterState} object for numeric variable
 }
 \note{
 Casts the passed object to \code{numeric} before validating the input

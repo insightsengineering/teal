@@ -10,7 +10,21 @@ The difference compared to the inherited class is a parent field that
 indicates name of the parent dataset. Note that the parent field might
 be empty (i.e. \code{character(0)}).}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+A \code{CDISCTealDatasetConnector} class of objects
+
+Objects of this class store the connection function to fetch a single dataset.
+
+The difference compared to the inherited class is a parent field that
+indicates name of the parent dataset. Note that the parent field might
+be empty (i.e. \code{character(0)}).
+
+A \code{CDISCTealDatasetConnector} class of objects
+
+Objects of this class store the connection function to fetch a single dataset.
+
+The difference compared to the inherited class is a parent field that
+indicates name of the parent dataset. Note that the parent field might
+be empty (i.e. \code{character(0)}).
 }
 \section{Super class}{
 \code{\link[teal:TealDatasetConnector]{teal::TealDatasetConnector}} -> \code{CDISCTealDatasetConnector}

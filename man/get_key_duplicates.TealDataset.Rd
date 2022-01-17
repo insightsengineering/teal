@@ -15,7 +15,7 @@ or \code{keys} object, which does have a \code{primary} element with a vector of
 names in \code{dataset} consisting the key. Optional, default: NULL}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Creates a short information summary about the duplicate primary key values in a dataset
 }
 \details{
 S3 method for get_key_duplicates. Uses the public API of

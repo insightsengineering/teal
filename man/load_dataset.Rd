@@ -28,7 +28,7 @@ additional dynamic arguments passed to function which loads the data.}
 \code{x} with loaded \code{dataset} object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Load data from connection. Function used on \code{\link{TealDatasetConnector}} and
 \code{\link{TealDataset}} to obtain data from connection.
 }

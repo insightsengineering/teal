@@ -4,8 +4,6 @@
 \alias{TealDataConnector}
 \title{Manage multiple and \code{TealDatasetConnector} of the same type.}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
 Class manages \code{TealDatasetConnector} to specify additional dynamic arguments and to
 open/close connection.
 }

@@ -1,7 +1,5 @@
 ## CDISCTealDataset ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title R6 Class representing a dataset with parent attribute
 #'
 #' @description
@@ -132,7 +130,7 @@ CDISCTealDataset <- R6::R6Class( # nolint
 # constructors ====
 #' Create a new object of `CDISCTealDataset` class
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #' Function that creates `CDISCTealDataset` object
 #'
 #' @inheritParams dataset

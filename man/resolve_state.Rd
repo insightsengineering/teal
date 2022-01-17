@@ -31,7 +31,6 @@ adding \code{NA} and \code{Inf} to the selection vector.}
 \code{list} containing \code{selected}, \code{keep_na} and \code{keep_inf}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Resolves the state values for \code{FilterState$set_state()} or
 \code{FilterState$set_state_reactive()}, which accept only a list with \code{selected},
 \code{keep_na} and \code{keep_inf} fields. In case of the \code{default_filter} function, it

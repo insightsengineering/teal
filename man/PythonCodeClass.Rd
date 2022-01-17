@@ -4,7 +4,9 @@
 \alias{PythonCodeClass}
 \title{A \code{CallablePythonCode} class of objects}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+A \code{CallablePythonCode} class of objects
+
+A \code{CallablePythonCode} class of objects
 }
 \section{Super class}{
 \code{\link[teal:CodeClass]{teal::CodeClass}} -> \code{PythonCodeClass}

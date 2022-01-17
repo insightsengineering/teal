@@ -230,7 +230,6 @@ init_filter_state.POSIXlt <- function(x,
 #' @name FilterState
 #' @docType class
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @title Abstract class to encapsulate filter states
 #'
@@ -776,7 +775,6 @@ FilterState <- R6::R6Class( # nolint
 #' @title `FilterState` object for empty variable
 #' @docType class
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @examples
 #' filter_state <- teal:::EmptyFilterState$new(
@@ -915,7 +913,6 @@ EmptyFilterState <- R6::R6Class( # nolint
 #' @title `FilterState` object for logical variable
 #' @docType class
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @examples
 #' filter_state <- teal:::LogicalFilterState$new(
@@ -1172,7 +1169,6 @@ LogicalFilterState <- R6::R6Class( # nolint
 #' @title `FilterState` object for numeric variable
 #' @docType class
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @examples
 #' filter_state <- teal:::RangeFilterState$new(
@@ -1630,7 +1626,6 @@ RangeFilterState <- R6::R6Class( # nolint
 #' @title `FilterState` object for factor or character variable
 #' @docType class
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @examples
 #' filter_state <- teal:::init_filter_state(
@@ -1942,7 +1937,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
 #' @title `FilterState` object for Date variable
 #' @docType class
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @examples
 #' filter_state <- teal:::DateFilterState$new(
@@ -2214,7 +2208,6 @@ DateFilterState <- R6::R6Class( # nolint
 #' @title `FilterState` object for `POSIXct` variable
 #' @docType class
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @examples
 #' filter_state <- teal:::init_filter_state(

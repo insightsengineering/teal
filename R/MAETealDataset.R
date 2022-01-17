@@ -1,7 +1,5 @@
 ## MAETealDataset ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title  R6 Class representing a `MultiAssayExperiment` object with its attributes
 #'
 #' @description
@@ -259,7 +257,9 @@ dataset.MultiAssayExperiment <- function(dataname,
   )
 }
 
-#' Public facing constructor for `MAETealDataset`
+#' The constructor of `MAETealDataset`
+#'
+#' @description `r lifecycle::badge("experimental")`
 #'
 #' @inheritParams dataset
 #' @param x (`MultiAssayExperiment`)

@@ -1,7 +1,5 @@
 ## CallablePythonCode ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title A `CallablePythonCode` class of objects
 #'
 CallablePythonCode <- R6::R6Class( # nolint
@@ -127,8 +125,6 @@ CallablePythonCode <- R6::R6Class( # nolint
   )
 )
 ## PythonCodeClass ====
-#'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @title A `CallablePythonCode` class of objects
 #'

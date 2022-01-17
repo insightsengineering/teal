@@ -1,6 +1,5 @@
 ## TealDataAbstract ====
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @title `TealDataAbstract` class
 #'

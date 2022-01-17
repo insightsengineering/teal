@@ -65,7 +65,7 @@ It contains all input values.
 If \code{select_spec}, then the function double checks the \code{choices} and \code{selected} inputs.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 \code{select_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
 that will select columns from a dataset.
 }

@@ -1,6 +1,7 @@
 # Queue ====
-#'
 #' @title  R6 Class - A First-In-First-Out Abstract Data Type
+#'
+#' @description `r lifecycle::badge("experimental")`
 #'
 #' @description
 #' Implements the queue abstract data type. The last element added to this queue is

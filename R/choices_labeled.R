@@ -1,6 +1,6 @@
 #' Set "`<choice>:<label>`" type of Names
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' This is often useful for [choices_selected] as it marks up the dropdown boxes
 #' for [shiny::selectInput()].
 #'
@@ -120,7 +120,7 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 
 #' Wrapper on [choices_labeled] to label variables basing on existing labels in data
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param data (`data.frame`, `character`, `TealDataset`, `TealDatasetConnector`)
 #' If `data.frame`, then data to extract labels from
@@ -275,7 +275,7 @@ variable_choices.TealDatasetConnector <- function(data, # nolint
 
 #' Wrapper on [choices_labeled] to label variable values basing on other variable values
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param data (`data.frame`, `character`, `TealDataset`, `TealDatasetConnector`)
 #' If `data.frame`, then data to extract labels from

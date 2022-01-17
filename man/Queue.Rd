@@ -4,6 +4,8 @@
 \alias{Queue}
 \title{R6 Class - A First-In-First-Out Abstract Data Type}
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Implements the queue abstract data type. The last element added to this queue is
 the last one to be returned from it.
 }

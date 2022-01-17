@@ -1,6 +1,5 @@
 ## TealDataset ====
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @title  R6 Class representing a dataset with its attributes
 #'
@@ -857,7 +856,7 @@ TealDataset <- R6::R6Class( # nolint
 
 #' Constructor for [`TealDataset`] class
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param dataname (`character`)\cr
 #'  A given name for the dataset it may not contain spaces

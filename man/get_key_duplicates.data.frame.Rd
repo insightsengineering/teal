@@ -17,7 +17,7 @@ names in \code{dataset} consisting the key. Optional, default: NULL}
 a \code{tibble} with a short information summary
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Creates a short information summary about the duplicate key values in a dataset.
 }
 \details{
 When the key argument is provided the function uses it to generate the summary, otherwise

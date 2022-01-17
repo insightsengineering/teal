@@ -1,8 +1,6 @@
 #' @name CDISCFilteredData
 #' @docType class
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title Class to encapsulate relational filtered datasets with its parents.
 #'
 #' @details
@@ -275,6 +273,11 @@ topological_sort <- function(graph) {
   }
 }
 
+#' Checks whether a graph is a Directed Acyclic Graph
+#'
+#' @inheritParams topological_sort
+#' @return `logical(1)` `TRUE` if the graph is a `DAG`; `FALSE` otherwise
+#' @keywords internal
 is_dag <- function(graph) {
   is(try(topological_sort(graph), silent = TRUE), "try-error")
 }

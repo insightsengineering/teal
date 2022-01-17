@@ -11,7 +11,23 @@ Data can be pulled via the \code{pull} method and accessed directly
 through the \code{dataset} active binding.
 Pulled data inherits from the class \code{\link{TealDataset}}}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+A \code{TealDatasetConnector} class of objects
+
+Objects of this class store the connection function to fetch a single dataset.
+Note that for some specific connection types,
+an object of class \code{TealDataConnection} must be provided.
+Data can be pulled via the \code{pull} method and accessed directly
+through the \code{dataset} active binding.
+Pulled data inherits from the class \code{\link{TealDataset}}
+
+A \code{TealDatasetConnector} class of objects
+
+Objects of this class store the connection function to fetch a single dataset.
+Note that for some specific connection types,
+an object of class \code{TealDataConnection} must be provided.
+Data can be pulled via the \code{pull} method and accessed directly
+through the \code{dataset} active binding.
+Pulled data inherits from the class \code{\link{TealDataset}}
 }
 \examples{
 
