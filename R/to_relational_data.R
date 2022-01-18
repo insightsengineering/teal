@@ -2,9 +2,10 @@
 #'
 #' Takes the input of data argument and translates them to relational data objects.
 #'
-#' @param data `TealDataset`, `TealDatasetConnector`, `data.frame`, `list` or `function` returning a named list.
+#' @param data `TealDataset`, `TealDatasetConnector`, `data.frame`, `MultiAssayExperiment`,  `list`
+#' or `function` returning a named list.
 #'
-#' @return list of `TealData` objects
+#' @return `TealData` object
 #'
 #' @note `to_relational_data` should only be used inside `init` call to guarantee correct behavior.
 #'
@@ -54,10 +55,7 @@ to_relational_data.list <- function(data) {
     (
       length(list_names) == 0 &&
         length(parsed_names) == 0 &&
-        (
-          any(sapply(data, function(x) inherits(x, "dataset"))) ||
-            any(sapply(data, function(x) inherits(x, "data.frame")))
-        )
+        any(sapply(data, function(x) inherits(x, c("dataset", "data.frame", "MultiAssayExperiment"))))
     ) ||
       (any(list_names == "") && length(parsed_names) == 0) ||
       (any(is.na(list_names)))
@@ -68,14 +66,16 @@ to_relational_data.list <- function(data) {
   datasets_list <- lapply(
     seq_along(data),
     function(idx) {
-      if (is.data.frame(data[[idx]])) {
+      if (is.data.frame(data[[idx]]) || methods::is(data[[idx]], "MultiAssayExperiment")) {
         dataname <- if (length(list_names) == 0 || list_names[[idx]] == "") {
           parsed_names[[idx]]
         } else {
           list_names[[idx]]
         }
 
-        if (dataname %in% names(default_cdisc_keys)) {
+        if (methods::is(data[[idx]], "MultiAssayExperiment")) {
+          mae_dataset(dataname, data[[idx]])
+        } else if (dataname %in% names(default_cdisc_keys)) {
           cdisc_dataset(dataname, data[[idx]])
         } else {
           dataset(dataname, data[[idx]])

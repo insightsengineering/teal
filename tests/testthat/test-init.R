@@ -69,6 +69,11 @@ testthat::test_that("init data accepts a list of a TealDataset and a dataframe w
   testthat::expect_error(init(data = list(dataset_1, adsl_df), modules = mods), NA)
 })
 
+testthat::test_that("init data accepts MultiAssayExperiment object", {
+  mae <- MultiAssayExperiment::miniACC
+  testthat::expect_error(init(data = mae, modules = mods), NA)
+})
+
 testthat::test_that("init data accepts a list of a TealDataset and a dataframe with renaming", {
   testthat::expect_error(init(
     data = list(
