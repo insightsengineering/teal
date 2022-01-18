@@ -95,7 +95,7 @@ MAETealDataset <- R6::R6Class( # nolint
         private$code$append(code)
       }
 
-      logger::log_trace("MAETealDataset$initialize initialized dataset: { self$get_dataname() }.")
+      logger::log_trace("MAETealDataset$initialize initialized dataset: { deparse1(self$get_dataname()) }.")
 
       return(invisible(self))
     },
@@ -106,7 +106,7 @@ MAETealDataset <- R6::R6Class( # nolint
     #' `TRUE` if the dataset generated from evaluating the
     #' `get_code()` code is identical to the raw data, else `FALSE`.
     check = function() {
-      logger::log_trace("TealDataset$check executing the code to reproduce dataset: { self$get_dataname() }...")
+      logger::log_trace("TealDataset$check executing the code to reproduce dataset: { deparse1(self$get_dataname()) }...")
       if (!checkmate::test_character(self$get_code(), len = 1, pattern = "\\w+")) {
         stop(
           sprintf(
@@ -128,7 +128,7 @@ MAETealDataset <- R6::R6Class( # nolint
           FALSE
         }
       )
-      logger::log_trace("TealDataset$check { self$get_dataname() } reproducibility result: { res_check }.")
+      logger::log_trace("TealDataset$check { deparse1(self$get_dataname()) } reproducibility result: { res_check }.")
 
       return(res_check)
     },

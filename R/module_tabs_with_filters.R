@@ -134,7 +134,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, filter) {
   stopifnot(is(datasets, "FilteredData"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
-      "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ' )}."
+      "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
     )
     id_from_label <- gsub("[^[:alnum:]]", "_", modules$label)
     active_module <- srv_nested_tabs(id = id_from_label, datasets = datasets, modules = modules)
@@ -143,7 +143,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, filter) {
       eventExpr = active_module(),
       valueExpr = {
         logger::log_trace(
-          "srv_tabs_with_filters@1 changing active module to: { active_module()$label }."
+          "srv_tabs_with_filters@1 changing active module to: { deparse1(active_module()$label) }."
         )
         datasets$handle_active_datanames(datanames = active_module()$filters)
       }
@@ -154,7 +154,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, filter) {
     showNotification("Data loaded - App fully started up")
 
     logger::log_trace(
-      "srv_tabs_with_filters initialized the module with datasets { paste(datasets$datanames(), collapse = ' ' )}."
+      "srv_tabs_with_filters initialized the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
     )
     return(active_module)
   })

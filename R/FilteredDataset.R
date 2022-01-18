@@ -121,7 +121,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'  single dataset for which filters are rendered
     initialize = function(dataset) {
       stopifnot(is(dataset, "TealDataset"))
-      logger::log_trace("Instantiating { class(self)[1] }, dataname: { dataset$get_dataname() }")
+      logger::log_trace("Instantiating { class(self)[1] }, dataname: { deparse1(dataset$get_dataname()) }")
       private$dataset <- dataset
 
       dataname <- self$get_dataname()
@@ -159,12 +159,12 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Removes all active filter items applied to this dataset
     #' @return NULL
     queues_empty = function() {
-      logger::log_trace("Removing all filters from FilteredDataset: { self$get_dataname() }")
+      logger::log_trace("Removing all filters from FilteredDataset: { deparse1(self$get_dataname()) }")
       lapply(
         self$get_filter_states(),
         function(queue) queue$queue_empty()
       )
-      logger::log_trace("Removed all filters from FilteredDataset: { self$get_dataname() }")
+      logger::log_trace("Removed all filters from FilteredDataset: { deparse1(self$get_dataname()) }")
       NULL
     },
     # managing filter states -----
@@ -389,7 +389,7 @@ FilteredDataset <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           dataname <- self$get_dataname()
-          logger::log_trace("FilteredDataset$server initializing, dataname: { dataname }")
+          logger::log_trace("FilteredDataset$server initializing, dataname: { deparse1(dataname) }")
           checkmate::assert_string(dataname)
           shiny::setBookmarkExclude("remove_filters")
           lapply(
@@ -408,15 +408,15 @@ FilteredDataset <- R6::R6Class( # nolint
           })
 
           observeEvent(input$remove_filters, {
-            logger::log_trace("FilteredDataset$server@1 removing filters, dataname: { dataname }")
+            logger::log_trace("FilteredDataset$server@1 removing filters, dataname: { deparse1(dataname) }")
             lapply(
               self$get_filter_states(),
               function(x) x$queue_empty()
             )
-            logger::log_trace("FilteredDataset$server@1 removed filters, dataname: { dataname }")
+            logger::log_trace("FilteredDataset$server@1 removed filters, dataname: { deparse1(dataname) }")
           })
 
-          logger::log_trace("FilteredDataset$initialized, dataname: { dataname }")
+          logger::log_trace("FilteredDataset$initialized, dataname: { deparse1(dataname) }")
           NULL
         }
       )
@@ -678,7 +678,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           logger::log_trace(
-            "DefaultFilteredDataset$srv_add_filter_state initializing, dataname: { self$get_dataname() }"
+            "DefaultFilteredDataset$srv_add_filter_state initializing, dataname: { deparse1(self$get_dataname()) }"
           )
           data <- get_raw_data(self$get_dataset())
           self$get_filter_states(id = "filter")$srv_add_filter_state(
@@ -687,7 +687,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
             ...
           )
           logger::log_trace(
-            "DefaultFilteredDataset$srv_add_filter_state initialized, dataname: { self$get_dataname() }"
+            "DefaultFilteredDataset$srv_add_filter_state initialized, dataname: { deparse1(self$get_dataname()) }"
           )
           NULL
         }
@@ -1099,7 +1099,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          logger::log_trace("MAEFilteredDataset$srv_add_filter_state initializing, dataname: { self$get_dataname() }")
+          logger::log_trace(paste(
+            "MAEFilteredDataset$srv_add_filter_state initializing,",
+            "dataname: { deparse1(self$get_dataname()) }"
+          ))
           data <- get_raw_data(self$get_dataset())
           self$get_filter_states("subjects")$srv_add_filter_state(
             id = "subjects",
@@ -1118,7 +1121,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
               )
             }
           )
-          logger::log_trace("MAEFilteredDataset$srv_add_filter_state initialized, dataname: { self$get_dataname() }")
+          logger::log_trace(paste(
+            "MAEFilteredDataset$srv_add_filter_state initialized,",
+            "dataname: { deparse1(self$get_dataname()) }"
+          ))
           NULL
         }
       )
