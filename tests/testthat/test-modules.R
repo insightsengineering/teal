@@ -154,12 +154,12 @@ testthat::test_that("module requires filters argument to be a character", {
     filters = NULL
   ), NA)
 
-    testthat::expect_error(module(
-      label = "label",
-      server = function(input, output, session, datasets) NULL,
-      ui = function(id, ...) NULL,
-      filters = NA_character_
-    ), "Contains missing values")
+  testthat::expect_error(module(
+    label = "label",
+    server = function(input, output, session, datasets) NULL,
+    ui = function(id, ...) NULL,
+    filters = NA_character_
+  ), "Contains missing values")
 })
 
 testthat::test_that("module requires server_args argument to be a list", {
