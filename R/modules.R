@@ -15,7 +15,10 @@
 #'
 #' @export
 #'
-#' @return object of class \code{teal_modules}
+#' @return object of class \code{teal_modules}. Object contains following fields
+#' - label: taken from `label` argument
+#' - children: list containing objects passed in `...`. List elements are named after
+#' their `label` attribute converted to valid `shiny` id.
 #'
 modules <- function(label, ...) {
   checkmate::assert_string(label)
@@ -28,18 +31,13 @@ modules <- function(label, ...) {
     ))
   }
 
-  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  if (any(duplicated(labels))) {
-    stop("Please choose unique labels for each tab. Currently, they are ", toString(labels))
-  }
-
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
-  submodules <- setNames(submodules, labels)
+  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
+  names(submodules) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
   structure(
     list(
       label = label,
-      id = gsub("[^[:alnum:]]", "_", tolower(label)),
       children = submodules
     ),
     class = "teal_modules"
@@ -95,35 +93,39 @@ root_modules <- function(...) {
 #' @param ui_args (\code{list}) Named list with additional arguments passed on to the
 #'   ui function.
 #'
+#' @return object of class `teal_module`.
 #' @export
 #'
 module <- function(label, server, ui, filters, server_args = NULL, ui_args = NULL) {
   checkmate::assert_string(label)
-  stopifnot(is.function(server))
-  stopifnot(is.function(ui))
-  checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = TRUE)
-  stopifnot(is.null(server_args) || is.list(server_args))
-  stopifnot(is.null(ui_args) || is.list(ui_args))
+  checkmate::assert_function(server)
+  checkmate::assert_function(ui)
+  checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+  checkmate::assert_list(server_args, null.ok = TRUE)
+  checkmate::assert_list(ui_args, null.ok = TRUE)
 
   server_main_args <- names(formals(server))
   if (!(identical(server_main_args[1:4], c("input", "output", "session", "datasets")) ||
     identical(server_main_args[1:2], c("id", "datasets")))) {
     stop(paste(
-      "teal modules server functions need ordered arguments ",
+      "module() server argument requires a function with ordered arguments:",
       "\ninput, output, session, and datasets (callModule) or id and datasets (moduleServer)"
     ))
   }
 
-  if (!identical(names(formals(ui))[[1]], "id")) {
-    stop("teal modules need 'id' argument as a first argument in their ui function")
-  }
-  if (!identical(names(formals(ui))[[2]], "datasets") && !identical(names(formals(ui))[[2]], "...")) {
-    stop("teal modules need 'datasets' or '...' argument as a second argument in their ui function")
+  if (length(formals(ui)) < 2 ||
+    !identical(names(formals(ui))[[1]], "id") ||
+    !identical(names(formals(ui))[[2]], "datasets") && !identical(names(formals(ui))[[2]], "...")
+  ) {
+    stop(
+      "module() ui argument requires a function with two ordered arguments:",
+      "\n- 'id'\n- 'datasets' or '...'"
+    )
   }
 
   structure(
     list(
-      label = label, id = gsub("[^[:alnum:]]", "_", tolower(label)),
+      label = label,
       server = server, ui = ui, filters = filters,
       server_args = server_args, ui_args = ui_args
     ),
@@ -165,7 +167,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   ),
 #'   create_mod("ccc")
 #' )
-#' stopifnot(teal:::modules_depth(mods) == 3)
+#' stopifnot(teal:::modules_depth(mods) == 3L)
 #'
 #' mods <- modules(
 #'   "a",
@@ -174,12 +176,16 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   ),
 #'   create_mod("b2")
 #' )
-#' stopifnot(teal:::modules_depth(mods) == 2)
-modules_depth <- function(modules, depth = 0) {
-  if (is(modules, "teal_modules")) {
-    max(vapply(modules$children, modules_depth, numeric(1), depth = depth + 1))
+#' stopifnot(teal:::modules_depth(mods) == 2L)
+modules_depth <- function(modules, depth = 0L) {
+  checkmate::assert(
+    checkmate::check_class(modules, "teal_module"),
+    checkmate::check_class(modules, "teal_modules")
+  )
+  checkmate::assert_int(depth, lower = 0)
+  if (inherits(modules, "teal_modules")) {
+    max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
   } else {
-    stopifnot(is(modules, "teal_module"))
     depth
   }
 }

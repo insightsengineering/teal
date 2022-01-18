@@ -102,7 +102,6 @@ filtered_data_set.TealData <- function(data, datasets) { # nolintr
 #'
 #' # remove all states
 #' clear_filter_states(datasets)
-#'
 NULL
 
 #' @rdname filter_state_api
