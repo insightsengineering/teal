@@ -132,5 +132,4 @@ remove_filter_state(datasets,
 
 # remove all states
 clear_filter_states(datasets)
-
 }
