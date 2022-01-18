@@ -3,7 +3,7 @@
 #'
 #' @title Manage multiple and `TealDatasetConnector` of the same type.
 #'
-#' @description
+#' @description `r lifecycle::badge("stable")`
 #' Class manages `TealDatasetConnector` to specify additional dynamic arguments and to
 #' open/close connection.
 #'

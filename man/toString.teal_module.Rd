@@ -15,5 +15,5 @@ each submodule is indented one level more}
 \item{...}{ignored}
 }
 \description{
-Convert \code{teal_module} to a string
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }

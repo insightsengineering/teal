@@ -1,5 +1,3 @@
-# resolve function and methods ------------
-
 #' Resolve delayed inputs by evaluating the code within the provided datasets
 #'
 #' @description `r lifecycle::badge("stable")`
@@ -164,6 +162,7 @@ resolve_delayed.default <- function(x, datasets) {
 #' @param is_value_choices (`logical`) Determines which check of the returned value will be applied.
 #'
 #' @return Character vector - result of calling function `x` on dataset `ds`.
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{
@@ -205,10 +204,7 @@ resolve_delayed_expr <- function(x, ds, is_value_choices) {
   return(res)
 }
 
-
-
-# print methods --------
-
+#' @keywords internal
 #' @export
 print.delayed_variable_choices <- function(x, indent = 0L, ...) {
   cat(indent_msg(indent, paste("variable_choices with delayed data:", x$data)))
@@ -217,6 +213,7 @@ print.delayed_variable_choices <- function(x, indent = 0L, ...) {
   return(invisible(NULL))
 }
 
+#' @keywords internal
 #' @export
 print.delayed_value_choices <- function(x, indent = 0L, ...) {
   cat(indent_msg(indent, paste("value_choices with delayed data: ", x$data)))
@@ -225,6 +222,7 @@ print.delayed_value_choices <- function(x, indent = 0L, ...) {
   return(invisible(NULL))
 }
 
+#' @keywords internal
 #' @export
 print.delayed_choices_selected <- function(x, indent = 0L, ...) {
   cat(indent_msg(indent, paste("choices_selected with delayed data: ", x$choices$data)))
@@ -233,6 +231,7 @@ print.delayed_choices_selected <- function(x, indent = 0L, ...) {
   return(invisible(NULL))
 }
 
+#' @keywords internal
 #' @export
 print.delayed_select_spec <- function(x, indent = 0L, ...) {
   cat(indent_msg(indent, paste("select_spec with delayed data:", x$choices$data)))
@@ -241,6 +240,7 @@ print.delayed_select_spec <- function(x, indent = 0L, ...) {
   return(invisible(NULL))
 }
 
+#' @keywords internal
 #' @export
 print.filter_spec <- function(x, indent = 0L, ...) {
   cat(indent_msg(indent, "filter_spec with delayed data:"))
@@ -249,6 +249,7 @@ print.filter_spec <- function(x, indent = 0L, ...) {
   return(invisible(NULL))
 }
 
+#' @keywords internal
 #' @export
 print.delayed_filter_spec <- function(x, indent = 0L, ...) {
   cat(indent_msg(indent, "filter_spec with delayed data:"))
@@ -257,6 +258,7 @@ print.delayed_filter_spec <- function(x, indent = 0L, ...) {
   return(invisible(NULL))
 }
 
+#' @keywords internal
 #' @export
 print.delayed_data_extract_spec <- function(x, indent = 0L, ...) {
   cat(paste("data_extract_spec with delayed data:", x$dataname))

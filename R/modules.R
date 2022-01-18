@@ -141,6 +141,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' @param depth optional, integer determining current depth level
 #'
 #' @return depth level for given module
+#' @keywords internal
 #'
 #' @examples
 #' create_mod <- function(module_name) {
@@ -186,6 +187,7 @@ modules_depth <- function(modules, depth = 0) {
 
 #' Convert `teal_modules` to a string
 #'
+#' @description `r lifecycle::badge("stable")`
 #' The first line prints the `modules` label.
 #' The consecutive lines recursively list each submodule.
 #'
@@ -204,6 +206,7 @@ toString.teal_modules <- function(x, indent = 0, ...) { # nolint
 }
 
 #' Convert `teal_module` to a string
+#' @description `r lifecycle::badge("stable")`
 #' @param x `teal_module`
 #' @inheritParams toString.teal_modules
 #' @param ... ignored
@@ -213,6 +216,7 @@ toString.teal_module <- function(x, indent = 0, ...) { # nolint
 }
 
 #' Print `teal_modules`
+#' @description `r lifecycle::badge("stable")`
 #' @param x `teal_modules`
 #' @param ... parameters passed to `toString`
 #' @export
@@ -223,6 +227,7 @@ print.teal_modules <- function(x, ...) {
 }
 
 #' Print `teal_module`
+#' @description `r lifecycle::badge("stable")`
 #' @param x `teal_module`
 #' @param ... parameters passed to `toString`
 #' @export

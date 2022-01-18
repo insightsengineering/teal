@@ -6,6 +6,7 @@
 \description{
 Abstract class containing code for handling set of datasets.
 }
+\keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{

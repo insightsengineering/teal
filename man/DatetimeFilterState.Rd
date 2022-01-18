@@ -37,6 +37,7 @@ filter <- teal:::DatetimeFilterState$new(
 )
 filter$set_selected(c(date + 1, date + 2))
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{DatetimeFilterState}
 }

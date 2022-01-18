@@ -28,3 +28,4 @@ teal:::picker_options_content(
   var_type = c("factor", "numeric")
 )
 }
+\keyword{internal}

@@ -39,7 +39,7 @@ snowflake_connection_function(
 \item{token_provider}{location of the auth token provider needed to access \code{Snowflake}.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 
 This is used by \code{snowflake_connection} and does not need to be called directly
 }

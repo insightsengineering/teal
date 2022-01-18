@@ -26,6 +26,7 @@ label_keep_na_count <- function(na_count) {
 #' \item{`"list"`}{ `varname` in the condition call will be returned as `<input_dataname>$<varname>`}
 #' \item{`"matrix"`}{ `varname` in the condition call will be returned as `<input_dataname>[, <varname>]`}
 #' }
+#' @keywords internal
 #'
 #' @examples
 #' filter_state <- teal:::RangeFilterState$new(
@@ -88,6 +89,7 @@ init_filter_state <- function(x,
   UseMethod("init_filter_state")
 }
 
+#' @keywords internal
 #' @export
 init_filter_state.default <- function(x,
                                       varname,
@@ -104,6 +106,7 @@ init_filter_state.default <- function(x,
   )
 }
 
+#' @keywords internal
 #' @export
 init_filter_state.logical <- function(x,
                                       varname,
@@ -120,6 +123,7 @@ init_filter_state.logical <- function(x,
   )
 }
 
+#' @keywords internal
 #' @export
 init_filter_state.numeric <- function(x,
                                       varname,
@@ -146,6 +150,7 @@ init_filter_state.numeric <- function(x,
   }
 }
 
+#' @keywords internal
 #' @export
 init_filter_state.factor <- function(x,
                                      varname,
@@ -162,6 +167,7 @@ init_filter_state.factor <- function(x,
   )
 }
 
+#' @keywords internal
 #' @export
 init_filter_state.character <- function(x,
                                         varname,
@@ -178,6 +184,7 @@ init_filter_state.character <- function(x,
   )
 }
 
+#' @keywords internal
 #' @export
 init_filter_state.Date <- function(x,
                                    varname,
@@ -194,6 +201,7 @@ init_filter_state.Date <- function(x,
   )
 }
 
+#' @keywords internal
 #' @export
 init_filter_state.POSIXct <- function(x,
                                       varname,
@@ -210,6 +218,7 @@ init_filter_state.POSIXct <- function(x,
   )
 }
 
+#' @keywords internal
 #' @export
 init_filter_state.POSIXlt <- function(x,
                                       varname,
@@ -774,6 +783,7 @@ FilterState <- R6::R6Class( # nolint
 #' @name EmptyFilterState
 #' @title `FilterState` object for empty variable
 #' @docType class
+#' @keywords internal
 #'
 #'
 #' @examples
@@ -912,6 +922,7 @@ EmptyFilterState <- R6::R6Class( # nolint
 #' @name LogicalFilterState
 #' @title `FilterState` object for logical variable
 #' @docType class
+#' @keywords internal
 #'
 #'
 #' @examples
@@ -1168,6 +1179,7 @@ LogicalFilterState <- R6::R6Class( # nolint
 #' @name RangeFilterState
 #' @title `FilterState` object for numeric variable
 #' @docType class
+#' @keywords internal
 #'
 #'
 #' @examples
@@ -1625,6 +1637,7 @@ RangeFilterState <- R6::R6Class( # nolint
 #' @name ChoicesFilterState
 #' @title `FilterState` object for factor or character variable
 #' @docType class
+#' @keywords internal
 #'
 #'
 #' @examples
@@ -1936,6 +1949,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
 #' @name DateFilterState
 #' @title `FilterState` object for Date variable
 #' @docType class
+#' @keywords internal
 #'
 #'
 #' @examples
@@ -2207,6 +2221,7 @@ DateFilterState <- R6::R6Class( # nolint
 #' @rdname DatetimeFilterState
 #' @title `FilterState` object for `POSIXct` variable
 #' @docType class
+#' @keywords internal
 #'
 #'
 #' @examples

@@ -215,6 +215,7 @@ updateOptionalSelectInput <- function(session, # nolint
 #'
 #' @return (atomic vector of \code{character}) vector of HTML icons corresponding to
 #'   data type in each column.
+#' @keywords internal
 #'
 #' @examples
 #' teal:::variable_type_icons(c(
@@ -266,6 +267,7 @@ variable_type_icons <- function(var_type) {
 #' class of the variable.
 #'
 #' @return (atomic vector of \code{character}) HTML contents with all elements combined
+#' @keywords internal
 #'
 #' @examples
 #' teal:::picker_options_content(
@@ -308,6 +310,7 @@ picker_options_content <- function(var_name, var_label, var_type) {
 #' @param choices (\code{choices_labeled} or \code{character} vector) choices vector
 #'
 #' @return (\code{list}) to be passed as \code{choicesOpt} argument
+#' @keywords internal
 picker_options <- function(choices) {
   if (is(choices, "choices_labeled")) {
     raw_choices <- extract_raw_choices(choices, sep = attr(choices, "sep"))
@@ -340,6 +343,7 @@ picker_options <- function(choices) {
 #' @param sep (\code{character}) A separator string to split the \code{choices} or
 #'   \code{selected} inputs into the values of the different columns
 #' @return choices simplified
+#' @keywords internal
 extract_raw_choices <- function(choices, sep) {
   if (!is.null(sep)) {
     vapply(choices, paste, collapse = sep, character(1))
@@ -349,9 +353,6 @@ extract_raw_choices <- function(choices, sep) {
     choices
   }
 }
-
-
-
 
 #' if min or max are \code{NA} then the slider widget will be hidden
 #'
@@ -392,8 +393,6 @@ optionalSliderInput <- function(inputId, label, min, max, value, label_help = NU
     slider
   }
 }
-
-
 
 #' For teal modules we parameterize an \code{optionalSliderInput} with one argument
 #' \code{value_min_max}

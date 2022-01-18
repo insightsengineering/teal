@@ -3,7 +3,7 @@
 #'
 #' @title  R6 Class representing a dataset with its attributes
 #'
-#' @description
+#' @description `r lifecycle::badge("stable")`
 #' Any `data.frame` object can be stored inside this object.
 #' Some attributes like colnames, dimension or column names for a specific type will
 #' be automatically derived.

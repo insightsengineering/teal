@@ -12,3 +12,4 @@ get_dummy_datasets()
 \description{
 Returns a new \code{R6} object on each invocation, not a singleton.
 }
+\keyword{internal}

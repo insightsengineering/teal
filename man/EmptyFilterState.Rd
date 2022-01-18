@@ -21,6 +21,7 @@ isolate(filter_state$set_selected(TRUE))
 isolate(filter_state$set_keep_na(TRUE))
 isolate(filter_state$get_call())
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{EmptyFilterState}
 }

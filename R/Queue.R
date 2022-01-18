@@ -125,6 +125,7 @@ Queue <- R6::R6Class( # nolint
 #' @description
 #' Implements the queue abstract data type. The last element added to this queue is
 #' the last one to be returned from it.
+#' @keywords internal
 #'
 ReactiveQueue <- R6::R6Class( # nolint
   classname = "ReactiveQueue",

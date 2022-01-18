@@ -593,7 +593,7 @@ code_cdisc_dataset_connector <- function(dataname,
 # RICE ====
 #' Rice `TealDatasetConnector`
 #'
-#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("superseded")`
 #'
 #' Create a `TealDatasetConnector` from `RICE`.
 #'
@@ -625,7 +625,7 @@ rice_dataset_connector <- function(dataname,
 
 #' Rice `CDISCTealDatasetConnector`
 #'
-#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("superseded")`
 #'
 #' Create a `CDISCTealDatasetConnector` from `RICE` dataset with keys and parent name assigned
 #' automatically by `dataname`.
@@ -655,7 +655,7 @@ rice_cdisc_dataset_connector <- function(dataname,
 # TERADATA ====
 #' `Teradata` `TealDatasetConnector`
 #'
-#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("superseded")`
 #'
 #' Create a `TealDatasetConnector` from `Teradata`.
 #'
@@ -682,7 +682,7 @@ teradata_dataset_connector <- function(dataname,
 
 #' `Teradata` `CDISCTealDatasetConnector`
 #'
-#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("superseded")`
 #'
 #' Create a `CDISCTealDatasetConnector` from `Teradata` with keys and parent name assigned
 #' automatically by `dataname`.
@@ -712,7 +712,7 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
 # SNOWFLAKE ====
 #' `Snowflake` `TealDatasetConnector`
 #'
-#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("superseded")`
 #'
 #' Create a `TealDatasetConnector` from `Snowflake`.
 #'
@@ -739,7 +739,7 @@ snowflake_dataset_connector <- function(dataname,
 
 #' `Snowflake` `CDISCTealDatasetConnector`
 #'
-#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("superseded")`
 #'
 #' Create a `CDISCTealDatasetConnector` from `Snowflake` with keys and parent name assigned
 #' automatically by `dataname`.
@@ -769,7 +769,7 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
 # CDSE ====
 #' `CDSE` `TealDatasetConnector`
 #'
-#' @description `r lifecycle::badge("deprecated")`
+#' @description `r lifecycle::badge("superseded")`
 #'
 #' Create a `TealDatasetConnector` from `CDSE`.
 #'
@@ -796,7 +796,7 @@ cdse_dataset_connector <- function(dataname,
 
 #' `CDSE` `CDISCTealDatasetConnector`
 #'
-#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("superseded")`
 #'
 #' Create a `CDISCTealDatasetConnector` from `CDSE` with keys and parent name assigned
 #' automatically by `dataname`.
@@ -937,7 +937,7 @@ csv_cdisc_dataset_connector <- function(dataname,
 # DataSetDB ====
 #' `DataSetDB` `TealDatasetConnector`
 #'
-#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("superseded")`
 #'
 #' Create a `TealDatasetConnector` from `DataSetDB`.
 #'

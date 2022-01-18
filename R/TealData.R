@@ -1,9 +1,7 @@
 ## TealData ====
-#'
-#'
 #' @title Manage multiple `TealDataConnector`, `TealDatasetConnector` and `TealDataset` objects.
 #'
-#' @description
+#' @description `r lifecycle::badge("experimental")`
 #' Class manages `TealDataConnector`, `TealDatasetConnector` and
 #' `TealDataset` objects and aggregate them in one collection.
 #' Class also decides whether to launch app before initialize teal application.
@@ -483,7 +481,6 @@ TealData <- R6::R6Class( # nolint
   )
 )
 
-## Functions ====
 is_any_class_list <- function(x, class) {
   vapply(
     x,

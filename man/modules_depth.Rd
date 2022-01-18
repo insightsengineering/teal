@@ -54,3 +54,4 @@ mods <- modules(
 )
 stopifnot(teal:::modules_depth(mods) == 2)
 }
+\keyword{internal}

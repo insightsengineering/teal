@@ -2,26 +2,9 @@
 % Please edit documentation in R/TealDatasetConnector.R
 \name{TealDatasetConnector}
 \alias{TealDatasetConnector}
-\title{A \code{TealDatasetConnector} class of objects
-
-Objects of this class store the connection function to fetch a single dataset.
-Note that for some specific connection types,
-an object of class \code{TealDataConnection} must be provided.
-Data can be pulled via the \code{pull} method and accessed directly
-through the \code{dataset} active binding.
-Pulled data inherits from the class \code{\link{TealDataset}}}
+\title{A \code{TealDatasetConnector} class of objects}
 \description{
-A \code{TealDatasetConnector} class of objects
-
-Objects of this class store the connection function to fetch a single dataset.
-Note that for some specific connection types,
-an object of class \code{TealDataConnection} must be provided.
-Data can be pulled via the \code{pull} method and accessed directly
-through the \code{dataset} active binding.
-Pulled data inherits from the class \code{\link{TealDataset}}
-
-A \code{TealDatasetConnector} class of objects
-
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Objects of this class store the connection function to fetch a single dataset.
 Note that for some specific connection types,
 an object of class \code{TealDataConnection} must be provided.

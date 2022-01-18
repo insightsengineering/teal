@@ -1,7 +1,7 @@
 ## CodeClass ====
 #'
 #' @title Code Class
-#'
+#' @keywords internal
 #'
 #' @examples
 #' cc <- teal:::CodeClass$new()
@@ -268,6 +268,7 @@ list_to_code_class <- function(x) {
 #' @param x (`character`) string containing the code.
 #'
 #' @return (`call`) object.
+#' @keywords internal
 text_to_call <- function(x) {
   parsed <- parse(text = x, keep.source = FALSE)
   if (length(parsed) == 0) {
@@ -283,6 +284,7 @@ text_to_call <- function(x) {
 #'   code to format into a string.
 #'
 #' @return (`character`) string containing the formatted code.
+#' @keywords internal
 pretty_code_string <- function(code_vector) {
   # in order to remove bad formatting: text -> code -> text
   unlist(lapply(

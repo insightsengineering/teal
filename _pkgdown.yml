@@ -19,6 +19,8 @@ reference:
     - root_modules
     - toString.teal_module
     - toString.teal_modules
+    - srv_teal_with_splash
+    - ui_teal_with_splash
   - title: Teal Filtering and Selecting
     desc: Functions used to filter observations and select variables from dataset.
     contents:
@@ -56,7 +58,7 @@ reference:
     - dataset_file
     - mae_dataset
   - title: Delayed Dataset Connectors Constructors
-    desc: For creating delayed dataset objects.
+    desc: For creating delayed dataset connector objects.
     contents:
     - cdisc_data_connector
     - cdisc_dataset_connector
@@ -67,7 +69,6 @@ reference:
     - csv_cdisc_dataset_connector
     - csv_dataset_connector
     - data_connection
-    - datasetdb_dataset_connector
     - dataset_connector
     - dataset_connector_file
     - fun_cdisc_dataset_connector
@@ -77,37 +78,22 @@ reference:
     - rds_cdisc_dataset_connector
     - rds_dataset_connector
     - relational_data_connector
-    - rice_cdisc_dataset_connector
-    - rice_dataset_connector
     - scda_cdisc_dataset_connector
     - scda_dataset_connector
     - script_cdisc_dataset_connector
     - script_dataset_connector
-    - snowflake_dataset_connector
-    - teradata_cdisc_dataset_connector
-    - teradata_dataset_connector
   - title: Delayed Data Connection Constructors
-    desc: For creating delayed dataset objects.
+    desc: For creating delayed data connection objects.
     contents:
     - cdse_connection
-    - datasetdb_connection
-    - rice_connection
-    - ricepass_connection
-    - snowflake_connection
-    - snowflake_connection_function
-    - teradata_connection
   - title: Delayed Data Constructors
     desc: For creating delayed data objects.
     contents:
     - cdisc_data
     - cdisc_data_file
     - cdse_data
-    - datasetdb_data
-    - rice_data
-    - snowflake_data
     - teal_data
     - teal_data_file
-    - teradata_data
   - title: Delayed Dataset Functions
     desc: For loading and modifying delayed data objects.
     contents:
@@ -137,55 +123,33 @@ reference:
     desc: Other useful functions for users and developers.
     contents:
     - bookmarkableShinyApp
-    - bookmark_module
     - data_label
     - data_label<-
-    - debug_browser_module
-    - deep_clone_r6
     - default_filter
-    - execute_in_next_cycle
-    - filter_calls_module
-    - filter_spec_internal
-    - get_binding_name
-    - get_dummy_cdisc_data
-    - get_dummy_datasets
-    - get_dummy_filter
-    - get_dummy_modules
-    - get_filterable_varnames
     - get_filter_expr
     - get_key_duplicates
     - get_key_duplicates.data.frame
     - get_key_duplicates.TealDataset
-    - get_key_duplicates_util
     - get_labels
-    - init_filtered_dataset
-    - init_filter_state
-    - init_filter_states
     - join_key
     - join_keys
     - log_app_usage
     - no_selected_as_NULL
-    - predefined_filters_module
     - print.choices_labeled
     - print.teal_module
     - print.teal_modules
     - python_code
     - read_script
     - register_logger
-    - reset_filters_module
-    - run_js_files
     - split_by_sep
     - stop_shiny
-    - trigger_after_first_cycle
     - "%>%"
     - "%is_in%"
   - title: For Developers
-  - subtitle: R6 Classes
+    subtitle: R6 Classes
     desc: Abstract and concrete classes used to build teal functionality.
     contents:
-    - Callable
     - CallableCode
-    - CallableFunction
     - CallablePythonCode
     - CDISCTealData
     - CDISCTealDataConnector
@@ -194,7 +158,6 @@ reference:
     - CDISCFilteredData
     - CDISCFilteredDataset
     - ChoicesFilterState
-    - CodeClass
     - dataset.MultiAssayExperiment
     - DateFilterState
     - DatetimeFilterState
@@ -214,47 +177,27 @@ reference:
     - PythonCodeClass
     - Queue
     - RangeFilterState
-    - ReactiveQueue
     - SEFilterStates
     - TealData
-    - TealDataAbstract
     - TealDataConnection
     - TealDataConnector
     - TealDataset
     - TealDatasetConnector
-    - srv_teal_with_splash
-    - ui_teal_with_splash
-  - subtitle: Unexported Functions
-    desc: These functions are useful for teal developers.
+  - title: Superseded
     contents:
-    - check_in_range
-    - check_in_subset
-    - check_pkg_quietly
-    - code_exclude
-    - code_from_script
-    - enclosed_with
-    - enclosed_with_dataname
-    - extract_choices_labels
-    - extract_raw_choices
-    - find_source_code
-    - get_client_timezone
-    - get_code_single
-    - include_css_files
-    - include_js_files
-    - include_source_code
-    - include_teal_css_js
-    - modules_depth
-    - picker_options
-    - picker_options_content
-    - pretty_code_string
-    - srv_nested_tabs
-    - srv_tabs_with_filters
-    - srv_teal
-    - text_to_call
-    - topological_sort
-    - to_relational_data
-    - ui_nested_tabs
-    - ui_tabs_with_filters
-    - ui_teal
-    - variable_type_icons
-    - variable_types
+    - datasetdb_data
+    - datasetdb_connection
+    - datasetdb_dataset_connector
+    - ricepass_connection
+    - rice_connection
+    - rice_cdisc_dataset_connector
+    - rice_data
+    - rice_dataset_connector
+    - snowflake_connection
+    - snowflake_connection_function
+    - snowflake_data
+    - snowflake_dataset_connector
+    - teradata_cdisc_dataset_connector
+    - teradata_connection
+    - teradata_data
+    - teradata_dataset_connector

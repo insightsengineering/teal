@@ -3,6 +3,7 @@
 #'
 #' @title A `TealDatasetConnector` class of objects
 #'
+#' @description `r lifecycle::badge("stable")`
 #' Objects of this class store the connection function to fetch a single dataset.
 #' Note that for some specific connection types,
 #' an object of class `TealDataConnection` must be provided.

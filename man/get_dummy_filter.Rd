@@ -15,3 +15,4 @@ dummy filter states
 \description{
 This can be used for the argument \code{filter} in \code{\link{srv_teal}}.
 }
+\keyword{internal}

@@ -15,3 +15,4 @@ text_to_call(x)
 \description{
 Create call from string
 }
+\keyword{internal}

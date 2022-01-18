@@ -32,6 +32,7 @@ isolate(filter_state$get_call())
 filter <- teal:::ChoicesFilterState$new(c("a", "b", "c"), varname = "name")
 filter$set_selected(c("c", "a"))
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{ChoicesFilterState}
 }

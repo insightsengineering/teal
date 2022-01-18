@@ -96,8 +96,7 @@ register_logger <- function(namespace = NA_character_,
 #' Logs the basic information about the session.
 #'
 #' @return `invisible(NULL)`
-#'
-#' @noRd
+#' @keywords internal
 #'
 log_system_info <- function() {
   paste_pkgs_name_with_version <- function(names) {
@@ -132,7 +131,7 @@ log_system_info <- function() {
 #'   in the generator attribute that is returned when calling log_layout for the currently used layout
 #' @details this function behaves in the same way as [logger::layout_glue_generator()]
 #'   but allows the shiny session token (last 8 chars) to be included in the logging layout
-#' @noRd
+#' @keywords internal
 layout_teal_glue_generator <- function(layout) {
   force(layout)
   structure(

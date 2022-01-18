@@ -3,17 +3,20 @@
 #' @param x an object that inherits from `TealData`
 #'
 #' @return a (`CDISCTealDataset`, `CDISCTealDatasetConnector`) object
+#' @keywords internal
 #'
 #' @noRd
 filtered_data_new <- function(x) {
   UseMethod("filtered_data_new")
 }
 
+#' @keywords internal
 #' @export
 filtered_data_new.TealData <- function(x) { # nolintr
   FilteredData$new()
 }
 
+#' @keywords internal
 #' @export
 filtered_data_new.CDISCTealData <- function(x) { # nolintr
   CDISCFilteredData$new()
@@ -25,12 +28,14 @@ filtered_data_new.CDISCTealData <- function(x) { # nolintr
 #' @param datasets an object that inherits from `FilteredData`
 #'
 #' @return modified `FilteredData` object
+#' @keywords internal
 #'
 #' @noRd
 filtered_data_set <- function(data, datasets) { # nolintr
   UseMethod("filtered_data_set", data)
 }
 
+#' @keywords internal
 #' @export
 filtered_data_set.TealData <- function(data, datasets) { # nolintr
   datasets$set_code(data$get_code_class())

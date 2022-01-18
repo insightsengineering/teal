@@ -18,6 +18,7 @@ each submodule is indented one level more}
 (\code{character} value)
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 The first line prints the \code{modules} label.
 The consecutive lines recursively list each submodule.
 }

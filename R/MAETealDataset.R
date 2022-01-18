@@ -2,7 +2,7 @@
 #'
 #' @title  R6 Class representing a `MultiAssayExperiment` object with its attributes
 #'
-#' @description
+#' @description `r lifecycle::badge("experimental")`
 #' Any `MultiAssayExperiment` object can be stored inside this `MAETealDataset`.
 #' Some attributes like colnames, dimension or column names for a specific type will
 #' be automatically derived.

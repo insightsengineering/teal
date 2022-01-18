@@ -36,6 +36,7 @@ isolate(filter_state$get_call())
 filter <- teal:::LogicalFilterState$new(c(TRUE), varname = "name")
 filter$set_selected(TRUE)
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{LogicalFilterState}
 }

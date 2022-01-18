@@ -140,7 +140,7 @@ CDISCTealData <- R6::R6Class( # nolint
 # CONSTRUCTORS ====
 #' Data input for teal app
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 #'
 #' @note This function does not automatically assign keys to `TealDataset`

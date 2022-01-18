@@ -37,6 +37,7 @@ filter <- teal:::RangeFilterState$new(c(1, 2, 3, 4), varname = "name")
 filter$set_selected(c(2, 3))
 
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{RangeFilterState}
 }

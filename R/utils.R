@@ -71,6 +71,7 @@ check_ellipsis <- function(..., stop = FALSE, allowed_args = character(0)) {
 #'   allowed in the dataset name.
 #'
 #' @param name `character, single or vector` name to check
+#' @keywords internal
 #'
 #' @examples
 #' teal:::check_simple_name("aas2df")
@@ -86,7 +87,6 @@ check_ellipsis <- function(..., stop = FALSE, allowed_args = character(0)) {
 #' teal:::check_simple_name("a1...")
 #' teal:::check_simple_name("ADSL_FILTERED")
 #' }
-#' @keywords internal
 check_simple_name <- function(name) {
   checkmate::assert_character(name, min.len = 1, any.missing = FALSE)
   if (!grepl("^[[:alpha:]][a-zA-Z0-9_]*$", name, perl = TRUE)) {
@@ -110,6 +110,7 @@ check_simple_name <- function(name) {
 #'
 #' @param name (`character`) argument passed by `deep_clone` function.
 #' @param value (any `R` object) argument passed by `deep_clone` function.
+#' @keywords internal
 deep_clone_r6 <- function(name, value) {
   if (checkmate::test_list(value, types = "R6")) {
     lapply(value, function(x) x$clone(deep = TRUE))
@@ -169,6 +170,7 @@ split_by_sep <- function(x, sep) {
 #' @param values optional, choices subset for which labels should be extracted, `NULL` for all choices
 #'
 #' @return (`character`) vector with labels
+#' @keywords internal
 extract_choices_labels <- function(choices, values = NULL) {
   res <- if (is(choices, "choices_labeled")) {
     attr(choices, "raw_labels")
@@ -198,7 +200,7 @@ extract_choices_labels <- function(choices, values = NULL) {
 #'
 #' @return (`Shiny`) input variable accessible with `input$tz` which is a (`character`)
 #'  string containing the timezone of the browser/client.
-#'
+#' @keywords internal
 get_client_timezone <- function(ns) {
   script <- sprintf(
     "Shiny.setInputValue(`%s`, Intl.DateTimeFormat().resolvedOptions().timeZone)",
@@ -214,7 +216,7 @@ get_client_timezone <- function(ns) {
 #' @param msg `character` error message to display if package is not available.
 #'
 #' @return Error or invisible NULL.
-#'
+#' @keywords internal
 check_pkg_quietly <- function(pckg, msg) {
   checkmate::assert_string(pckg)
   checkmate::assert_string(msg)
@@ -235,6 +237,7 @@ check_pkg_quietly <- function(pckg, msg) {
 #'
 #' @return `NULL` if `subinterval` is a valid range or error with message
 #'   otherwise.
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{
@@ -284,6 +287,7 @@ check_in_range <- function(subinterval, range, pre_msg = "") {
 #' @param subset `collection-like` should be a subset of `choices`
 #' @param choices `collection-like` superset
 #' @param pre_msg `character` message to print before
+#' @keywords internal
 #'
 #' @examples
 #' check_in_subset <- teal:::check_in_subset
@@ -329,6 +333,7 @@ teal_with_pkg <- function(pkg, code) {
 #'   an R code to be evaluated or a `PythonCodeClass` created using [python_code].
 #' @inheritParams dataset_connector
 #' @return code (`character`)
+#' @keywords internal
 code_from_script <- function(code, script, dataname = NULL) {
   checkmate::assert(
     checkmate::check_character(code, max.len = 1, any.missing = FALSE),
@@ -498,6 +503,7 @@ get_key_duplicates.data.frame <- function(dataset, keys = NULL) { # nolint
 #' @return `tibble` with a duplicate keys information summary
 #'
 #' @importFrom rlang .data
+#' @keywords internal
 #'
 #' @examples
 #' df <- as.data.frame(

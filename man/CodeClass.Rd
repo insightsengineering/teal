@@ -56,6 +56,7 @@ x$get_code("ADRS")
 x$set_code("ADRS$x <- foo(ADSL$x)", "ADRS", deps = "ADSL")
 x$get_code("ADRS")
 }
+\keyword{internal}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{

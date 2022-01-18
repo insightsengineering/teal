@@ -14,6 +14,7 @@ A \code{CallableFunction} class of objects
 
 Object that stores function name with its arguments. Methods to get call and run it.
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:Callable]{teal::Callable}} -> \code{CallableFunction}
 }

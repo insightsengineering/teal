@@ -459,7 +459,7 @@ value_choices.TealDatasetConnector <- function(data, # nolint
 #'   `NULL` for all data columns
 #'
 #' @return (atomic vector of `character`) classes of `columns` from provided `data`
-#'
+#' @keywords internal
 #' @examples
 #' teal:::variable_types(
 #'   data.frame(

@@ -4,6 +4,8 @@
 #'
 #' Object that stores function name with its arguments. Methods to get call and run it.
 #'
+#' @keywords internal
+#'
 CallableFunction <- R6::R6Class( # nolint
   "CallableFunction",
   inherit = Callable,
@@ -252,6 +254,7 @@ callable_function <- function(fun) {
 #'  if origin of the object is known then should be provided for
 #'  more precise search
 #' @return character
+#' @keywords internal
 #'
 get_binding_name <- function(object, envir) {
   bindings_names <- ls(envir)

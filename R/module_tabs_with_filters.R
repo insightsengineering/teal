@@ -21,8 +21,8 @@
 #'
 #' @return A `tagList` of The main menu, place holders for filters and
 #'   place holders for the teal modules
+#' @keywords internal
 #'
-#' @import shiny
 #' @examples
 #' mods <- teal:::get_dummy_modules()
 #' datasets <- teal:::get_dummy_datasets()
@@ -129,6 +129,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #'   object to store filter state and filtered datasets, shared across modules. For more
 #'   details see [`FilteredData`].
 #' @return `reactive` currently selected active_module
+#' @keywords internal
 srv_tabs_with_filters <- function(id, datasets, modules, filter) {
   stopifnot(is(datasets, "FilteredData"))
   moduleServer(id, function(input, output, session) {

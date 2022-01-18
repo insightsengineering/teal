@@ -221,6 +221,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
 #' Implementation of Kahn algorithm with a modification to maintain the order of input elements.
 #'
 #' @param graph (named `list`) list with node vector elements
+#' @keywords internal
 #'
 #' @examples
 #' teal:::topological_sort(list(A = c(), B = c("A"), C = c("B"), D = c("A")))

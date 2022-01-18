@@ -150,6 +150,7 @@ get_code.default <- function(x,
 #' @inheritParams get_code
 #'
 #' @return lines (`character`) of preprocessing code
+#' @keywords internal
 get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", file_path)) {
   checkmate::assert_string(file_path)
   if (!if_url) {
@@ -177,6 +178,7 @@ get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", 
 #' @param lines (`character`) of preprocessing code.
 #' @return (`character`) subset of lines which start and end with preprocessing
 #'   start and stop tags.
+#' @keywords internal
 enclosed_with <- function(lines) {
   checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
 
@@ -213,6 +215,7 @@ enclosed_with <- function(lines) {
 #' @inheritParams enclosed_with
 #' @param dataname (`character`) metadata for returned lines
 #' @return  (`list`) list of lines and their numbers from certain chunks of code at the specific file.
+#' @keywords internal
 enclosed_with_dataname <- function(lines, dataname = NULL) {
   checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
   if (!checkmate::test_character(dataname, min.len = 1, any.missing = FALSE)) {
@@ -273,6 +276,7 @@ enclosed_with_dataname <- function(lines, dataname = NULL) {
 #' @inheritParams enclosed_with
 #' @inheritParams get_code
 #' @inheritParams get_code_single
+#' @keywords internal
 code_exclude <- function(lines, exclude_comments, file_path) {
   checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
   checkmate::assert_flag(exclude_comments)
@@ -308,6 +312,7 @@ code_exclude <- function(lines, exclude_comments, file_path) {
 #'
 #' Finds lines in preprocessing code where `source()` call is located
 #' @inheritParams enclosed_with
+#' @keywords internal
 find_source_code <- function(lines) {
   checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
   idx <- grep("^[^#]*source\\([\'\"]([A-Za-z0-9_/.]).*\\.R[\'\"].*\\).*$", lines)
@@ -332,6 +337,7 @@ find_source_code <- function(lines) {
 #' @inheritParams enclosed_with
 #' @param dir of the file where source is called from.
 #' @return lines of code with source text included
+#' @keywords internal
 include_source_code <- function(lines, dir = NULL) {
   checkmate::assert_character(lines, min.len = 1, any.missing = FALSE)
   stopifnot(is.null(dir) || dir.exists(dir))

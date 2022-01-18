@@ -5,10 +5,12 @@
 \alias{TealDataset}
 \title{R6 Class representing a \code{MultiAssayExperiment} object with its attributes}
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Any \code{MultiAssayExperiment} object can be stored inside this \code{MAETealDataset}.
 Some attributes like colnames, dimension or column names for a specific type will
 be automatically derived.
 
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Any \code{data.frame} object can be stored inside this object.
 Some attributes like colnames, dimension or column names for a specific type will
 be automatically derived.

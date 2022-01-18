@@ -278,6 +278,7 @@ filter_spec <- function(vars,
 #'   TRUE if this filter was already consumed by the server function; FALSE otherwise.
 #'
 #' @return `filter_spec` or `delayed_filter_spec` S3-class object.
+#' @keywords internal
 #'
 #' @seealso filter_spec
 #'

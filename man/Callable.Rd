@@ -8,6 +8,7 @@ Object that stores function name with its arguments. Methods to get call and run
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

@@ -96,3 +96,4 @@ shinyApp(
 )
 }
 }
+\keyword{internal}

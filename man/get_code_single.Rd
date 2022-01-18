@@ -20,3 +20,4 @@ lines (\code{character}) of preprocessing code
 \description{
 Get code from specified file.
 }
+\keyword{internal}
