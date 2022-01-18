@@ -19,35 +19,35 @@ ui_fun2 <- function(id, datasets) {
 testthat::test_that("module requires label argument to be a string", {
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   ), NA)
 
   testthat::expect_error(module(
     label = NULL,
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   ), "Assertion on 'label' failed.+'NULL'")
 
   testthat::expect_error(module(
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   ), "is missing, with no default")
 
   testthat::expect_error(module(
     label = c("label", "label"),
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   ), "Assertion on 'label' failed: Must have length 1.")
 
   testthat::expect_error(module(
     label = 1L,
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   ), "Assertion on 'label' failed.+not 'integer'")
 })
@@ -55,28 +55,28 @@ testthat::test_that("module requires label argument to be a string", {
 testthat::test_that("module expects server being a shiny server module with datasets argument", {
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   ), NA)
   testthat::expect_error(module(
     label = "label",
     server = function(id, datasets) NULL,
-    ui = function(id, ...) NULL,
+    ui = ui_fun1,
     filters = ""
   ), NA)
 
   testthat::expect_error(module(
     label = "label",
     server = function(input, output, session, ...) NULL,
-    ui = function(id, ...) NULL,
+    ui = ui_fun1,
     filter = ""
   ), "module\\(\\) server.+input, output, session, and datasets \\(callModule\\)")
 
   testthat::expect_error(module(
     label = "label",
-    server = function(id, ...) NULL,
-    ui = function(id, ...) NULL,
+    server = ui_fun1,
+    ui = ui_fun1,
     filter = ""
   ), "module\\(\\) server.+id and datasets \\(moduleServer\\)")
 })
@@ -92,7 +92,7 @@ testthat::test_that("module expects ui being a shiny ui module with id and datas
   testthat::expect_error(module(
     label = "label",
     server = function(id, datasets) NULL,
-    ui = function(id, ...) NULL,
+    ui = ui_fun1,
     filters = ""
   ), NA)
 
@@ -135,29 +135,29 @@ testthat::test_that("module expects ui being a shiny ui module with id and datas
 testthat::test_that("module requires filters argument to be a character", {
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = "all"
   ), NA)
 
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   ), NA)
 
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = NULL
   ), NA)
 
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = NA_character_
   ), "Contains missing values")
 })
@@ -165,39 +165,39 @@ testthat::test_that("module requires filters argument to be a character", {
 testthat::test_that("module requires server_args argument to be a list", {
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = "",
     server_args = list(a = 1)
   ), NA)
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = "",
     server_args = list()
   ), NA)
 
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = "",
     server_args = NULL
   ), NA)
 
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = "",
     server_args = ""
   ), "Assertion on 'server_args' failed.+'list'")
 
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = "",
     server_args = list(1, 2, 3)
   ), NA)
@@ -206,39 +206,39 @@ testthat::test_that("module requires server_args argument to be a list", {
 testthat::test_that("module requires ui_args argument to be a list", {
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = "",
     ui_args = list(a = 1)
   ), NA)
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = "",
     ui_args = list()
   ), NA)
 
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = "",
     ui_args = NULL
   ), NA)
 
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = "",
     ui_args = ""
   ), "Assertion on 'ui_args' failed.+'list'")
 
   testthat::expect_error(module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = "",
     ui_args = list(1, 2, 3)
   ), NA)
@@ -266,8 +266,8 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
 testthat::test_that("modules requires label argument to be a string ", {
   test_module <- module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   )
 
@@ -282,8 +282,8 @@ testthat::test_that("modules requires label argument to be a string ", {
 testthat::test_that("modules accept teal_module in ...", {
   test_module <- module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   )
 
@@ -293,8 +293,8 @@ testthat::test_that("modules accept teal_module in ...", {
 testthat::test_that("modules accept multiple teal_module objects in ...", {
   test_module <- module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   )
 
@@ -304,8 +304,8 @@ testthat::test_that("modules accept multiple teal_module objects in ...", {
 testthat::test_that("modules accept multiple teal_module and teal_modules objects in ...", {
   test_module <- module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   )
   test_modules <- modules("label", test_module)
@@ -323,8 +323,8 @@ testthat::test_that("modules does not accept objects other than teal_module(s) i
 testthat::test_that("modules returns teal_modules object with label and children slot", {
   test_module <- module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   )
   out <- modules("label2", test_module)
@@ -335,8 +335,8 @@ testthat::test_that("modules returns teal_modules object with label and children
 testthat::test_that("modules returns children as list with list named after label attributes", {
   test_module <- module(
     label = "module",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   )
   test_modules <- modules("modules", test_module)
@@ -349,8 +349,8 @@ testthat::test_that("modules returns children as list with list named after labe
 testthat::test_that("modules returns children as list with unique names if labels are duplicated", {
   test_module <- module(
     label = "module",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   )
   test_modules <- modules("module", test_module)
@@ -368,8 +368,8 @@ testthat::test_that("root_modules needs at least one argument", {
 testthat::test_that("root_modules returns teal_modules object with label='root'", {
   test_module <- module(
     label = "label",
-    server = function(input, output, session, datasets) NULL,
-    ui = function(id, ...) NULL,
+    server = module_server_fun,
+    ui = ui_fun1,
     filters = ""
   )
   out <- root_modules(test_module)
