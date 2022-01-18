@@ -377,3 +377,124 @@ testthat::test_that("root_modules returns teal_modules object with label='root'"
   testthat::expect_named(out, c("label", "children"))
   testthat::expect_identical(out$label, "root")
 })
+
+testthat::test_that("modules_depth accepts depth as integer", {
+  testthat::expect_error(
+    modules_depth(
+      module(
+        label = "label",
+        server = module_server_fun,
+        ui = ui_fun1,
+        filters = ""
+      ),
+      depth = 3L
+    ),
+    NA
+  )
+
+  testthat::expect_error(
+    modules_depth(
+      module(
+        label = "label",
+        server = module_server_fun,
+        ui = ui_fun1,
+        filters = ""
+      ),
+      depth = "1"
+    ),
+    "Assertion on 'depth' failed.+'character'"
+  )
+})
+
+testthat::test_that("modules_depth returns depth=0 by default", {
+  testthat::expect_identical(
+    modules_depth(
+      module(
+        label = "label",
+        server = module_server_fun,
+        ui = ui_fun1,
+        filters = ""
+      )
+    ),
+    0L
+  )
+})
+
+testthat::test_that("modules_depth accepts modules to be teal_module or teal_modules", {
+  testthat::expect_error(
+    modules_depth(
+      module(
+        label = "label",
+        server = module_server_fun,
+        ui = ui_fun1,
+        filters = ""
+      )
+    ),
+    NA
+  )
+  testthat::expect_error(
+    modules_depth(
+      modules(
+        label = "tabs",
+        module(
+          label = "label",
+          server = module_server_fun,
+          ui = ui_fun1,
+          filters = ""
+        )
+      )
+    ),
+    NA
+  )
+})
+
+testthat::test_that("modules_depth returns depth same as input for teal_module", {
+  testthat::expect_identical(
+    modules_depth(
+      module(
+        label = "label",
+        server = module_server_fun,
+        ui = ui_fun1,
+        filters = ""
+      )
+    ),
+    0L
+  )
+})
+
+testthat::test_that("modules_depth increases depth by 1 for each teal_modules", {
+  testthat::expect_identical(
+    modules_depth(
+      modules(
+        label = "tabs",
+        module(
+          label = "label",
+          server = module_server_fun,
+          ui = ui_fun1,
+          filters = ""
+        )
+      ),
+      depth = 1L
+    ),
+    2L
+  )
+
+  testthat::expect_identical(
+    modules_depth(
+      modules(
+        label = "tabs",
+        modules(
+          label = "tabs",
+          module(
+            label = "label",
+            server = module_server_fun,
+            ui = ui_fun1,
+            filters = ""
+          )
+        )
+      ),
+      depth = 1L
+    ),
+    3L
+  )
+})

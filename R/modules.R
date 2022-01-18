@@ -167,7 +167,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   ),
 #'   create_mod("ccc")
 #' )
-#' stopifnot(teal:::modules_depth(mods) == 3)
+#' stopifnot(teal:::modules_depth(mods) == 3L)
 #'
 #' mods <- modules(
 #'   "a",
@@ -176,12 +176,16 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   ),
 #'   create_mod("b2")
 #' )
-#' stopifnot(teal:::modules_depth(mods) == 2)
-modules_depth <- function(modules, depth = 0) {
-  if (is(modules, "teal_modules")) {
-    max(vapply(modules$children, modules_depth, numeric(1), depth = depth + 1))
+#' stopifnot(teal:::modules_depth(mods) == 2L)
+modules_depth <- function(modules, depth = 0L) {
+  checkmate::assert(
+    checkmate::check_class(modules, "teal_module"),
+    checkmate::check_class(modules, "teal_modules")
+  )
+  checkmate::assert_int(depth, lower = 0)
+  if (inherits(modules, "teal_modules")) {
+    max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
   } else {
-    stopifnot(is(modules, "teal_module"))
     depth
   }
 }
