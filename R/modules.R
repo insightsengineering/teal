@@ -34,7 +34,7 @@ modules <- function(label, ...) {
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
   labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  names(submodules) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)))
+  names(submodules) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
   structure(
     list(
       label = label,
@@ -100,7 +100,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
   checkmate::assert_string(label)
   checkmate::assert_function(server)
   checkmate::assert_function(ui)
-  checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = TRUE)
+  checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
   checkmate::assert_list(server_args, null.ok = TRUE)
   checkmate::assert_list(ui_args, null.ok = TRUE)
 
@@ -108,16 +108,19 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
   if (!(identical(server_main_args[1:4], c("input", "output", "session", "datasets")) ||
     identical(server_main_args[1:2], c("id", "datasets")))) {
     stop(paste(
-      "teal modules server functions need ordered arguments ",
+      "module() server argument requires a function with ordered arguments:",
       "\ninput, output, session, and datasets (callModule) or id and datasets (moduleServer)"
     ))
   }
 
-  if (!identical(names(formals(ui))[[1]], "id")) {
-    stop("teal modules need 'id' argument as a first argument in their ui function")
-  }
-  if (!identical(names(formals(ui))[[2]], "datasets") && !identical(names(formals(ui))[[2]], "...")) {
-    stop("teal modules need 'datasets' or '...' argument as a second argument in their ui function")
+  if (length(formals(ui)) < 2 ||
+    !identical(names(formals(ui))[[1]], "id") ||
+    !identical(names(formals(ui))[[2]], "datasets") && !identical(names(formals(ui))[[2]], "...")
+  ) {
+    stop(
+      "module() ui argument requires a function with two ordered arguments:",
+      "\n- 'id'\n- 'datasets' or '...'"
+    )
   }
 
   structure(
