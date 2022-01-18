@@ -12,7 +12,7 @@ provided by the \code{logging} package (e.g. \code{pid}) the \code{token} variab
 write the last 8 characters of the shiny session token to the log.}
 }
 \value{
-function taking level and msg arguments - keeping the original call creating the generator
+function taking \code{level} and \code{msg} arguments - keeping the original call creating the generator
 in the generator attribute that is returned when calling log_layout for the currently used layout
 }
 \description{

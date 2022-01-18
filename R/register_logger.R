@@ -127,7 +127,7 @@ log_system_info <- function() {
 #' Generate log layout function using common variables available via glue syntax including shiny session token
 #'
 #' @inheritParams register_logger
-#' @return function taking level and msg arguments - keeping the original call creating the generator
+#' @return function taking `level` and `msg` arguments - keeping the original call creating the generator
 #'   in the generator attribute that is returned when calling log_layout for the currently used layout
 #' @details this function behaves in the same way as [logger::layout_glue_generator()]
 #'   but allows the shiny session token (last 8 chars) to be included in the logging layout
