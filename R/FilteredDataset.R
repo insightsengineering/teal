@@ -5,6 +5,7 @@
 #' # DefaultFilteredDataset example
 #' iris_d <- dataset("iris", iris)
 #' iris_fd <- teal:::init_filtered_dataset(iris_d)
+#'
 #' \dontrun{
 #' shinyApp(
 #'   ui = fluidPage(
@@ -33,6 +34,7 @@
 #' library(scda)
 #' adsl_d <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
 #' adsl_fd <- teal:::init_filtered_dataset(adsl_d)
+#'
 #' \dontrun{
 #' shinyApp(
 #'   ui = fluidPage(
@@ -61,6 +63,7 @@
 #' library(MultiAssayExperiment)
 #' MAE_d <- dataset("MAE", miniACC)
 #' MAE_fd <- teal:::init_filtered_dataset(MAE_d)
+#'
 #' \dontrun{
 #' shinyApp(
 #'   ui = fluidPage(

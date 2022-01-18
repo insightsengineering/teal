@@ -30,9 +30,6 @@ automatically passed to the server function as arguments \code{datasets}.}
 \item{ui_args}{(\code{list}) Named list with additional arguments passed on to the
 ui function.}
 }
-\value{
-object of class \code{teal_module}.
-}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 Tab items allows you to add a shiny module to the teal app

@@ -91,8 +91,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
   filter_and_info_ui <- datasets$ui_filter_panel(ns("filter_panel"))
 
   # modules must be teal_modules, not teal_module; otherwise we will get the UI and not a tabsetPanel of UIs
-  id_from_label <- gsub("[^[:alnum:]]", "_", modules$label)
-  teal_ui <- ui_nested_tabs(ns(id_from_label), modules = modules, datasets)
+  teal_ui <- ui_nested_tabs(ns(modules$id), modules = modules, datasets)
 
   filter_panel_btn <- tags$li(
     style = "flex-grow : 1;",
@@ -136,8 +135,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, filter) {
     logger::log_trace(
       "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ' )}."
     )
-    id_from_label <- gsub("[^[:alnum:]]", "_", modules$label)
-    active_module <- srv_nested_tabs(id = id_from_label, datasets = datasets, modules = modules)
+    active_module <- srv_nested_tabs(id = modules$id, datasets = datasets, modules = modules)
 
     active_datanames <- eventReactive(
       eventExpr = active_module(),

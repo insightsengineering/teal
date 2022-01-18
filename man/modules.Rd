@@ -14,12 +14,7 @@ label of modules collection}
 see \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}} for more details}
 }
 \value{
-object of class \code{teal_modules}. Object contains following fields
-\itemize{
-\item label: taken from \code{label} argument
-\item children: list containing objects passed in \code{...}. List elements are named after
-their \code{label} attribute converted to valid \code{shiny} id.
-}
+object of class \code{teal_modules}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}

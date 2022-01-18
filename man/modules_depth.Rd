@@ -4,7 +4,7 @@
 \alias{modules_depth}
 \title{Get module depth}
 \usage{
-modules_depth(modules, depth = 0L)
+modules_depth(modules, depth = 0)
 }
 \arguments{
 \item{modules}{(\code{list} or \code{teal_modules})\cr
@@ -43,7 +43,7 @@ mods <- modules(
   ),
   create_mod("ccc")
 )
-stopifnot(teal:::modules_depth(mods) == 3L)
+stopifnot(teal:::modules_depth(mods) == 3)
 
 mods <- modules(
   "a",
@@ -52,5 +52,5 @@ mods <- modules(
   ),
   create_mod("b2")
 )
-stopifnot(teal:::modules_depth(mods) == 2L)
+stopifnot(teal:::modules_depth(mods) == 2)
 }
