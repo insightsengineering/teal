@@ -18,7 +18,7 @@ Nesting it increases overall depth by 1."><!-- mathjax --><script src="https://c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9055</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
       </span>
     </div>
 
@@ -54,15 +54,6 @@ Nesting it increases overall depth by 1."><!-- mathjax --><script src="https://c
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -89,7 +80,7 @@ Nesting it increases overall depth by 1.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">modules_depth</span><span class="op">(</span><span class="va">modules</span>, depth <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">modules_depth</span><span class="op">(</span><span class="va">modules</span>, depth <span class="op">=</span> <span class="fl">0L</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -130,7 +121,7 @@ more details.</p></dd>
 <span class="r-in">  <span class="op">)</span>,</span>
 <span class="r-in">  <span class="fu">create_mod</span><span class="op">(</span><span class="st">"ccc"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu">teal</span><span class="fu">:::</span><span class="fu">modules_depth</span><span class="op">(</span><span class="va">mods</span><span class="op">)</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu">teal</span><span class="fu">:::</span><span class="fu">modules_depth</span><span class="op">(</span><span class="va">mods</span><span class="op">)</span> <span class="op">==</span> <span class="fl">3L</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu"><a href="modules.html">modules</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="st">"a"</span>,</span>
@@ -139,7 +130,7 @@ more details.</p></dd>
 <span class="r-in">  <span class="op">)</span>,</span>
 <span class="r-in">  <span class="fu">create_mod</span><span class="op">(</span><span class="st">"b2"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu">teal</span><span class="fu">:::</span><span class="fu">modules_depth</span><span class="op">(</span><span class="va">mods</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu">teal</span><span class="fu">:::</span><span class="fu">modules_depth</span><span class="op">(</span><span class="va">mods</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2L</span><span class="op">)</span></span>
 </code></pre></div>
     </div>
   </div>
