@@ -2,7 +2,7 @@
 % Please edit documentation in R/CDISCFilteredData.R
 \name{is_dag}
 \alias{is_dag}
-\title{Checks whether a graph is a Directed Acyclic Graph}
+\title{Checks whether a graph is a \verb{Directed Acyclic Graph (DAG)}}
 \usage{
 is_dag(graph)
 }
@@ -13,6 +13,6 @@ is_dag(graph)
 \code{logical(1)} \code{TRUE} if the graph is a \code{DAG}; \code{FALSE} otherwise
 }
 \description{
-Checks whether a graph is a Directed Acyclic Graph
+Checks whether a graph is a \verb{Directed Acyclic Graph (DAG)}
 }
 \keyword{internal}
