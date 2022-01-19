@@ -35,13 +35,17 @@ testthat::test_that("Single scda dataset connector", {
 })
 
 testthat::test_that("TealDatasetConnector$print prints out expected output of class and content", {
+  fun <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
+  adsl <- cdisc_dataset_connector(
+    dataname = "ADSL",
+    pull_callable = fun,
+    keys = get_cdisc_keys("ADSL")
+  )
+
   testthat::expect_identical(
     capture.output(print(adsl)),
     c(
-      "A CDISCTealDatasetConnector object, named ADSL, containing a TealDataset object that has been loaded/pulled:",
-      "A CDISCTealDataset object containing the following data.frame (1 rows and 2 columns):",
-      "  STUDYID USUBJID",
-      "1 STUDYID USUBJID"
+      "A CDISCTealDatasetConnector object, named ADSL, containing a TealDataset object that has not been loaded/pulled"
     )
   )
 
