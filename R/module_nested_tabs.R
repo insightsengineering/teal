@@ -64,18 +64,18 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
       # by giving an id, we can reactively respond to tab changes
       list(
         id = ns("Active_tab"),
-        type = if (modules$id == "root") "pills" else "tabs"
+        type = if (modules$label == "root") "pills" else "tabs"
       ),
-      unname(lapply(
-        modules$children,
-        function(submodules) {
+      lapply(
+        names(modules$children),
+        function(id) {
           tabPanel(
-            title = submodules$label, # also acts as value of input$tabsetId that this tabPanel is embedded in
-            value = submodules$id, # when clicked this tab value changes input$<tabset panel id>
-            ui_nested_tabs(id = ns(submodules$id), modules = submodules, datasets, depth = depth + 1L)
+            title = modules$children[[id]]$label,
+            value = id, # when clicked this tab value changes input$<tabset panel id>
+            ui_nested_tabs(id = ns(id), modules = modules$children[[id]], datasets, depth = depth + 1L)
           )
         }
-      ))
+      )
     )
   )
 }
@@ -146,8 +146,8 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules) {
         "module { deparse1(modules$label) }."
       )
     )
-    modules_reactive <- lapply(modules$children, function(child) {
-      srv_nested_tabs(id = child$id, datasets = datasets, modules = child)
+    modules_reactive <- sapply(names(modules$children), USE.NAMES = TRUE, function(id) {
+      srv_nested_tabs(id = id, datasets = datasets, modules = modules$children[[id]])
     })
 
     get_active_module <- reactive({
@@ -157,7 +157,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules) {
       } else {
         # switch to active tab
         req(input$Active_tab)
-        lapply(modules_reactive, function(child) child())[[input$Active_tab]]
+        modules_reactive[[input$Active_tab]]()
       }
     })
 
