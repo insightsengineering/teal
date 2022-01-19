@@ -2,7 +2,7 @@
 #'
 #' @title Manage multiple `CDISCTealDataConnector`, `CDISCTealDatasetConnector` and `CDISCTealDataset` objects.
 #'
-#' @description
+#' @description `r lifecycle::badge("stable")`
 #' Class manages `CDISCTealDataConnector`, `CDISCTealDatasetConnector` and
 #' `CDISCTealDataset` objects and aggregate them in one collection.
 #' Class also decides whether to launch app before initialize teal application.

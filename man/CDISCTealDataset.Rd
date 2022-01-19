@@ -4,6 +4,7 @@
 \alias{CDISCTealDataset}
 \title{R6 Class representing a dataset with parent attribute}
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Any \code{data.frame} object can be stored inside this object.
 
 The difference compared to the inherited class is a parent field that

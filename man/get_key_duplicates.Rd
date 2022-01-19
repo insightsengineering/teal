@@ -2,9 +2,15 @@
 % Please edit documentation in R/utils.R
 \name{get_key_duplicates}
 \alias{get_key_duplicates}
+\alias{get_key_duplicates.TealDataset}
+\alias{get_key_duplicates.data.frame}
 \title{S3 generic for creating an information summary about the duplicate key values in a dataset}
 \usage{
 get_key_duplicates(dataset, keys = NULL)
+
+\method{get_key_duplicates}{TealDataset}(dataset, keys = NULL)
+
+\method{get_key_duplicates}{data.frame}(dataset, keys = NULL)
 }
 \arguments{
 \item{dataset}{\code{TealDataset} or \code{data.frame} a dataset, which will be tested}
@@ -23,6 +29,9 @@ a \code{tibble} with variables consisting the key and \code{row_no} and \code{du
 The information summary provides row numbers and number of duplicates
 for each duplicated key value.
 }
+\note{
+Raises an exception when this function cannot determine the primary key columns of the tested object.
+}
 \examples{
 library(scda)
 
@@ -40,11 +49,4 @@ print(res) # prints a tibble
 get_key_duplicates(df) # raises an exception, because keys are missing with no default
 }
 
-}
-\seealso{
-\itemize{
-\item{\link{get_key_duplicates_util}}
-\item{\link{get_key_duplicates.TealDataset}}
-\item{\link{get_key_duplicates.data.frame}}
-}
 }

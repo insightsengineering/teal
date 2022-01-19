@@ -284,7 +284,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     set_join_keys = function(x) {
       self$get_join_keys()$set(x)
       logger::log_trace(paste(
-        "TealDatasetConnector$set_join_keys join_keys set for dataset:"
+        "TealDatasetConnector$set_join_keys join_keys set for dataset:",
         "{ deparse1(self$get_dataname()) }."
       ))
 

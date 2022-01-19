@@ -8,6 +8,7 @@ A \code{CallablePythonCode} class of objects
 
 A \code{CallablePythonCode} class of objects
 }
+\keyword{internal}
 \section{Super classes}{
 \code{\link[teal:Callable]{teal::Callable}} -> \code{\link[teal:CallableFunction]{teal::CallableFunction}} -> \code{CallablePythonCode}
 }

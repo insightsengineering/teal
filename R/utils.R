@@ -394,6 +394,8 @@ read_script <- function(file, dataname = NULL) {
 #'
 #' @return a `tibble` with variables consisting the key and `row_no` and `duplicates_count` columns
 #'
+#' @note Raises an exception when this function cannot determine the primary key columns of the tested object.
+#'
 #' @examples
 #' library(scda)
 #'
@@ -411,39 +413,12 @@ read_script <- function(file, dataname = NULL) {
 #' get_key_duplicates(df) # raises an exception, because keys are missing with no default
 #' }
 #'
-#' @seealso \itemize{
-#' \item{[get_key_duplicates_util]}
-#' \item{[get_key_duplicates.TealDataset]}
-#' \item{[get_key_duplicates.data.frame]}
-#' }
-#'
 #' @export
 get_key_duplicates <- function(dataset, keys = NULL) {
   UseMethod("get_key_duplicates", dataset)
 }
 
-#' Creates a short information summary about the duplicate primary key values in a dataset
-#'
-#' @details S3 method for get_key_duplicates. Uses the public API of
-#' `TealDataset` to read the primary key and the raw data.
-#'
-#' If `keys` argument is provided, then checks against that, if it's `NULL`, then checks
-#' against the `get_keys()$primary` method of the `dataset` argument.
-#'
-#' @inheritParams get_key_duplicates
-#' @param dataset a `TealDataset` object, which will be used to detect duplicated
-#' primary keys
-#'
-#' @examples
-#' library(scda)
-#'
-#' adsl <- synthetic_cdisc_data("latest")$adsl
-#' # Keys are automatically assigned, because the name
-#' # is in the recognized ADAM nomenclature ("ADSL")
-#' rel_adsl <- cdisc_dataset("ADSL", adsl)
-#' get_key_duplicates(rel_adsl)
-#' @seealso [get_key_duplicates] [get_key_duplicates_util]
-#'
+#' @rdname get_key_duplicates
 #' @export
 get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { # nolint
   df <- get_raw_data(dataset)
@@ -455,26 +430,7 @@ get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { # nolint
   get_key_duplicates_util(df, keys)
 }
 
-#' Creates a short information summary about the duplicate key values in a dataset.
-#'
-#'
-#' @details
-#' When the key argument is provided the function uses it to generate the summary, otherwise
-#' looks for `primary_key` attribute of the `dataset`. If neither are provided raises an exception.
-#'
-#' @inheritParams get_key_duplicates
-#' @param dataset `data.frame` object
-#'
-#' @return a `tibble` with a short information summary
-#'
-#' @examples
-#' df <- as.data.frame(
-#'   list(a = c("a", "a", "b", "b", "c"), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
-#' )
-#' res <- get_key_duplicates(df, keys = c("a", "b")) # duplicated keys are in rows 3 and 4
-#' print(res) # outputs a tibble
-#' @seealso [get_key_duplicates] [get_key_duplicates_util]
-#'
+#' @rdname get_key_duplicates
 #' @export
 get_key_duplicates.data.frame <- function(dataset, keys = NULL) { # nolint
   if (is.null(keys)) {
@@ -485,7 +441,6 @@ get_key_duplicates.data.frame <- function(dataset, keys = NULL) { # nolint
 }
 
 #' Creates a duplicate keys information summary.
-#'
 #'
 #' @details
 #' Accepts a list of variable names - `keys`, which are treated as the

@@ -223,8 +223,7 @@ MAETealDataset <- R6::R6Class( # nolint
 
 #' S3 method to construct an `MAETealDataset` object from `MultiAssayExperiment`
 #'
-#' @inheritParams dataset
-#' @param x (`MultiAssayExperiment`)
+#' @rdname dataset
 #'
 #' @examples
 #' # Simple example

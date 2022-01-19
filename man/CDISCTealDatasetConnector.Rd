@@ -2,24 +2,9 @@
 % Please edit documentation in R/CDISCTealDatasetConnector.R
 \name{CDISCTealDatasetConnector}
 \alias{CDISCTealDatasetConnector}
-\title{A \code{CDISCTealDatasetConnector} class of objects
-
-Objects of this class store the connection function to fetch a single dataset.
-
-The difference compared to the inherited class is a parent field that
-indicates name of the parent dataset. Note that the parent field might
-be empty (i.e. \code{character(0)}).}
+\title{A \code{CDISCTealDatasetConnector} class of objects}
 \description{
-A \code{CDISCTealDatasetConnector} class of objects
-
-Objects of this class store the connection function to fetch a single dataset.
-
-The difference compared to the inherited class is a parent field that
-indicates name of the parent dataset. Note that the parent field might
-be empty (i.e. \code{character(0)}).
-
-A \code{CDISCTealDatasetConnector} class of objects
-
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Objects of this class store the connection function to fetch a single dataset.
 
 The difference compared to the inherited class is a parent field that

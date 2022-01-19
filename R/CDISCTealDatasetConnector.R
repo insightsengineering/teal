@@ -2,6 +2,7 @@
 #'
 #' @title A `CDISCTealDatasetConnector` class of objects
 #'
+#' @description `r lifecycle::badge("stable")`
 #' Objects of this class store the connection function to fetch a single dataset.
 #'
 #' The difference compared to the inherited class is a parent field that

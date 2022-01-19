@@ -82,10 +82,6 @@ reference:
     - scda_dataset_connector
     - script_cdisc_dataset_connector
     - script_dataset_connector
-  - title: Delayed Data Connection Constructors
-    desc: For creating delayed data connection objects.
-    contents:
-    - cdse_connection
   - title: Delayed Data Constructors
     desc: For creating delayed data objects.
     contents:
@@ -116,7 +112,6 @@ reference:
     - mutate_dataset
     - mutate_join_keys
     - resolve_delayed
-    - resolve_delayed_expr
     - set_args
     - set_keys
   - title: Helpers
@@ -143,7 +138,6 @@ reference:
     - register_logger
     - split_by_sep
     - stop_shiny
-    - "%>%"
     - "%is_in%"
   - title: For Developers
     subtitle: R6 Classes
@@ -157,27 +151,14 @@ reference:
     - CDISCTealDatasetConnector
     - CDISCFilteredData
     - CDISCFilteredDataset
-    - ChoicesFilterState
-    - dataset.MultiAssayExperiment
-    - DateFilterState
-    - DatetimeFilterState
     - DefaultFilteredDataset
-    - DFFilterStates
-    - EmptyFilterState
     - FilteredData
     - FilteredDataset
-    - FilterState
-    - FilterStates
     - JoinKeys
-    - LogicalFilterState
     - MAEFilteredDataset
-    - MAEFilterStates
     - MAETealDataset
-    - MatrixFilterStates
     - PythonCodeClass
     - Queue
-    - RangeFilterState
-    - SEFilterStates
     - TealData
     - TealDataConnection
     - TealDataConnector
@@ -185,6 +166,7 @@ reference:
     - TealDatasetConnector
   - title: Superseded
     contents:
+    - cdse_connection
     - datasetdb_data
     - datasetdb_connection
     - datasetdb_dataset_connector

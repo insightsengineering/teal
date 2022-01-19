@@ -2,7 +2,7 @@
 #' @docType class
 #'
 #' @title Class to encapsulate relational filtered datasets with its parents.
-#'
+#' @description `r lifecycle::badge("stable")`
 #' @details
 #' The `CDISCFilteredData` class implements logic to filter a relational
 #' dataset by inheriting from `FilteredData`.

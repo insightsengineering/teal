@@ -2,9 +2,12 @@
 % Please edit documentation in R/choices_labeled.R
 \name{choices_labeled}
 \alias{choices_labeled}
+\alias{print.choices_labeled}
 \title{Set "\verb{<choice>:<label>}" type of Names}
 \usage{
 choices_labeled(choices, labels, subset = NULL, types = NULL)
+
+\method{print}{choices_labeled}(x, ...)
 }
 \arguments{
 \item{choices}{a character / numeric / logical vector}
@@ -18,6 +21,10 @@ match its order.}
 
 \item{types}{vector containing the types of the columns to be used for applying the appropriate
 icons to the \link{choices_selected} drop down box}
+
+\item{x}{an object used to select a method.}
+
+\item{...}{further arguments passed to or from other methods.}
 }
 \value{
 a named character vector
@@ -26,6 +33,8 @@ a named character vector
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 This is often useful for \link{choices_selected} as it marks up the dropdown boxes
 for \code{\link[shiny:selectInput]{shiny::selectInput()}}.
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \details{
 If either \code{choices} or \code{labels} are factors, they are coerced to character.
