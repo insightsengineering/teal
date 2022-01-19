@@ -391,7 +391,13 @@ app <- init(
     cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- rcd_2021_07_07$adlb")
   ),
   modules = root_modules(
-    teal::module("test", server = function(input, output, session, datasets){}, ui = function(id, ...) tags$p("test"), filters = "all")
+    teal::module(
+      "test",
+      server = function(input, output, session, datasets) {
+      },
+      ui = function(id, ...) tags$p("test"),
+      filters = "all"
+    )
   ),
   header = "Raw App",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
@@ -418,7 +424,13 @@ app <- init(
     dataset("mtcars", mtcars_d, "rowname")
   ),
   modules = root_modules(
-    teal::module("test", server = function(input, output, session, datasets){}, ui = function(id, ...) tags$p("test"), filters = "all")
+    teal::module(
+      "test",
+      server = function(input, output, session, datasets) {
+      },
+      ui = function(id, ...) tags$p("test"),
+      filters = "all"
+    )
   ),
   header = "Mixed Independent and Dependent Data",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
