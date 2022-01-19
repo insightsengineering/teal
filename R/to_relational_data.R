@@ -47,6 +47,11 @@ to_relational_data.TealDatasetConnector <- function(data) { # nolint
 
 #' @export
 to_relational_data.list <- function(data) {
+  checkmate::assert_list(
+    data,
+    types = c("dataset", "data.frame", "MultiAssayExperiment", "TealDataset", "TealDatasetConnector")
+  )
+
   call <- substitute(data, parent.frame())
   list_names <- names(data)
   parsed_names <- as.character(call)[-1]
@@ -73,9 +78,7 @@ to_relational_data.list <- function(data) {
           list_names[[idx]]
         }
 
-        if (methods::is(data[[idx]], "MultiAssayExperiment")) {
-          mae_dataset(dataname, data[[idx]])
-        } else if (dataname %in% names(default_cdisc_keys)) {
+        if (dataname %in% names(default_cdisc_keys)) {
           cdisc_dataset(dataname, data[[idx]])
         } else {
           dataset(dataname, data[[idx]])
