@@ -34,26 +34,25 @@ testthat::test_that("Single scda dataset connector", {
   testthat::expect_equal(adsl$get_code(), 'ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")')
 })
 
-testthat::test_that("TealDatasetConnect$print prints correct class and content", {
-  test_ds1 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  pull_fun <- callable_function(data.frame)
-  pull_fun$set_args(args = list(head_letters = head(letters)))
-  t_dc <- dataset_connector("test_dc", pull_fun, vars = list(test_ds1 = test_ds1))
-  t_dc$pull()
-  out <- capture.output(print(t_dc))
-
-  testthat::expect_equal(
-    out,
+testthat::test_that("TealDatasetConnector$print prints out expected output of class and content", {
+  testthat::expect_identical(
+    capture.output(print(adsl)),
     c(
-      "A TealDatasetConnector object, named test_dc, containing a TealDataset object that has been loaded/pulled:",
-      "A TealDataset object containing the following data.frame (6 rows and 1 columns):",
-      "  head_letters",
-      "1            a",
-      "2            b",
-      "3            c",
-      "4            d",
-      "5            e",
-      "6            f"
+      "A CDISCTealDatasetConnector object, named ADSL, containing a TealDataset object that has been loaded/pulled:",
+      "A CDISCTealDataset object containing the following data.frame (1 rows and 2 columns):",
+      "  STUDYID USUBJID",
+      "1 STUDYID USUBJID"
+    )
+  )
+
+  adsl$pull()
+  testthat::expect_identical(
+    capture.output(print(adsl)),
+    c(
+      "A CDISCTealDatasetConnector object, named ADSL, containing a TealDataset object that has been loaded/pulled:",
+      "A CDISCTealDataset object containing the following data.frame (1 rows and 2 columns):",
+      "  STUDYID USUBJID",
+      "1 STUDYID USUBJID"
     )
   )
 })
