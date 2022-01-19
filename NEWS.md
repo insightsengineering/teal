@@ -23,14 +23,13 @@
 * Added `teal.threshold_slider_vs_checkboxgroup` as an R option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.
 * Extended the `FilteredData` API to allow managing filter states programmatically and not only from the UI of a `teal` application.
 * Hid the buttons to remove filters from all datasets and each dataset when there are no active filters.
-* Updated `init` to accept `RelationalData`, `data.frame`, `Dataset`, `DatasetConnector`, `list` or a function returning a named list as data input.
+* Updated `init` to accept `RelationalData`, `data.frame`, `MultiAssayExperiment`, `Dataset`, `DatasetConnector`, `list` or a function returning a named list as data input.
 
 ### Bug fixes
-* Added `S3 method`, `to_relational_data`, for `MultiAssayExperiment` objects.
 * `choices_selected` now correctly removes duplicates from the array passed to its `choices` parameter.
 * Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
 * Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
-* Fixed restoring a bookmarked state of `teal` application.
+* Fixed restoring a bookmarked filter state of `teal` application.
 * Refactored `module_nested_tabs` to fix the issue with the filter panel not reacting to an input change in a nested module.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
 
