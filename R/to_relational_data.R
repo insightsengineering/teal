@@ -55,7 +55,7 @@ to_relational_data.list <- function(data) {
     (
       length(list_names) == 0 &&
         length(parsed_names) == 0 &&
-        any(sapply(data, function(x) inherits(x, c("dataset", "data.frame", "MultiAssayExperiment"))))
+        any(sapply(data, inherits, c("dataset", "data.frame", "MultiAssayExperiment")))
     ) ||
       (any(list_names == "") && length(parsed_names) == 0) ||
       (any(is.na(list_names)))
