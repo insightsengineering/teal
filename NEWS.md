@@ -8,6 +8,7 @@
 * Running `teal` application via `ui_teal_with_splash` and `srv_teal_with_splash` is now no longer recommended because it doesn't support some new features (e.g. logging, bookmarking). Use `init` instead.
 * Updated `init` to accept `RelationalData`, `data.frame`, `Dataset`, `DatasetConnector`, `list` or a function returning a named list as data input.
 * Change of the `html-id` of the modules. Each tabs-set in the app is now a new `shiny` namespace.
+* Rename `teal_show_js_log` option into `teal.show_js_log` to match options naming convention.
 
 ### New features
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
