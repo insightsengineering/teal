@@ -142,8 +142,8 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules) {
     logger::log_trace(
       paste(
         "srv_nested_tabs.teal_modules initializing the module with:",
-        "datasets { paste(datasets$datanames(), collapse = ' ' )};",
-        "module { modules$label }."
+        "datasets { paste(datasets$datanames(), collapse = ' ') };",
+        "module { deparse1(modules$label) }."
       )
     )
     modules_reactive <- sapply(names(modules$children), USE.NAMES = TRUE, function(id) {
@@ -172,8 +172,8 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules) {
   logger::log_trace(
     paste(
       "srv_nested_tabs.teal_module initializing the module with:",
-      "datasets { paste(datasets$datanames(), collapse = ' ' )};",
-      "module { modules$label }."
+      "datasets { paste(datasets$datanames(), collapse = ' ') };",
+      "module { deparse1(modules$label) }."
     )
   )
 

@@ -7,10 +7,11 @@
 to_relational_data(data)
 }
 \arguments{
-\item{data}{\code{TealDataset}, \code{TealDatasetConnector}, \code{data.frame}, \code{list} or \code{function} returning a named list.}
+\item{data}{\code{TealDataset}, \code{TealDatasetConnector}, \code{data.frame}, \code{MultiAssayExperiment},  \code{list}
+or \code{function} returning a named list.}
 }
 \value{
-list of \code{TealData} objects
+\code{TealData} object
 }
 \description{
 Takes the input of data argument and translates them to relational data objects.

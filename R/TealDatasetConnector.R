@@ -72,7 +72,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
         private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
       }
 
-      logger::log_trace("TealDatasetConnector initialized for dataset: { self$get_dataname() }.")
+      logger::log_trace("TealDatasetConnector initialized for dataset: { deparse1(self$get_dataname()) }.")
 
       return(invisible(self))
     },
@@ -257,7 +257,9 @@ TealDatasetConnector <- R6::R6Class( # nolint
       if (self$is_pulled()) {
         private$dataset$set_dataset_label(label)
       }
-      logger::log_trace("TealDatasetConnector$set_dataset_label label set for dataset: { self$get_dataname() }.")
+      logger::log_trace(
+        "TealDatasetConnector$set_dataset_label label set for dataset: { deparse1(self$get_dataname()) }."
+      )
 
       return(invisible(self))
     },
@@ -270,7 +272,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
         set_keys(private$dataset, keys)
       }
       private$keys <- keys
-      logger::log_trace("TealDatasetConnector$set_keys keys set for dataset: { self$get_dataname() }.")
+      logger::log_trace("TealDatasetConnector$set_keys keys set for dataset: { deparse1(self$get_dataname()) }.")
 
       return(invisible(self))
     },
@@ -281,7 +283,10 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining
     set_join_keys = function(x) {
       self$get_join_keys()$set(x)
-      logger::log_trace("TealDatasetConnector$set_join_keys join_keys set for dataset: { self$get_dataname() }.")
+      logger::log_trace(paste(
+        "TealDatasetConnector$set_join_keys join_keys set for dataset:"
+        "{ deparse1(self$get_dataname()) }."
+      ))
 
       return(invisible(self))
     },
@@ -294,7 +299,8 @@ TealDatasetConnector <- R6::R6Class( # nolint
     mutate_join_keys = function(dataset, val) {
       self$get_join_keys()$mutate(private$dataname, dataset, val)
       logger::log_trace(
-        "TealDatasetConnector$mutate_join_keys join_keys modified keys of { self$get_dataname() } against { dataset }."
+        "TealDatasetConnector$mutate_join_keys join_keys modified keys of
+        { deparse1(self$get_dataname()) } against { dataset }."
       )
 
       return(invisible(self))
@@ -456,7 +462,9 @@ TealDatasetConnector <- R6::R6Class( # nolint
         }
       }
       private$ui_input <- inputs
-      logger::log_trace("TealDatasetConnector$set_ui_input ui_input set for dataset: { self$get_dataname() }.")
+      logger::log_trace(
+        "TealDatasetConnector$set_ui_input ui_input set for dataset: { deparse1(self$get_dataname()) }."
+      )
       return(invisible(self))
     },
     #' @description

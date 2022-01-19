@@ -309,7 +309,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @return (`self`) invisibly this `FilteredTealData`
     set_dataset = function(dataset) {
       stopifnot(is(dataset, "TealDataset") || is(dataset, "TealDatasetConnector"))
-      logger::log_trace("FilteredData$set_dataset setting dataset, name; { get_dataname(dataset) }")
+      logger::log_trace("FilteredData$set_dataset setting dataset, name; { deparse1(get_dataname(dataset)) }")
       dataname <- get_dataname(dataset)
       # to include it nicely in the Show R Code; the UI also uses datanames in ids, so no whitespaces allowed
       check_simple_name(dataname)
@@ -375,7 +375,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @return `NULL`
     set_filter_state = function(state) {
       checkmate::assert_subset(names(state), self$datanames())
-      logger::log_trace("FilteredData$set_filter_state initializing, dataname: { names(state) }")
+      logger::log_trace("FilteredData$set_filter_state initializing, dataname: { paste(names(state), collapse = ' ') }")
       for (dataname in names(state)) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)
         dataset_state <- state[[dataname]]
@@ -385,7 +385,7 @@ FilteredData <- R6::R6Class( # nolint
           vars_include = self$get_filterable_varnames(dataname)
         )
       }
-      logger::log_trace("FilteredData$set_filter_state initialized, dataname: { names(state) }")
+      logger::log_trace("FilteredData$set_filter_state initialized, dataname: { paste(names(state), collapse = ' ') }")
       invisible(NULL)
     },
 
@@ -396,14 +396,14 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @return `NULL`
     remove_filter_state = function(state) {
-      logger::log_trace("FilteredData$remove_filter_state called, dataname: { names(state) }")
+      logger::log_trace("FilteredData$remove_filter_state called, dataname: { paste(names(state), collapse = ' ') }")
 
       for (dataname in names(state)) {
         fdataset <- self$get_filtered_dataset(dataname = dataname)
         fdataset$remove_filter_state(element_id = state[[dataname]])
       }
 
-      logger::log_trace("FilteredData$remove_filter_state done, dataname: { names(state) }")
+      logger::log_trace("FilteredData$remove_filter_state done, dataname: { paste(names(state), collapse = ' ') }")
       invisible(NULL)
     },
 

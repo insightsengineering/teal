@@ -1450,7 +1450,7 @@ RangeFilterState <- R6::R6Class( # nolint
               )
             }
           )
-          logger::log_trace("RangeFilterState$server initialized, dataname: { private$input_dataname }")
+          logger::log_trace("RangeFilterState$server initialized, dataname: { deparse1(private$input_dataname) }")
           NULL
         }
       )
@@ -2468,7 +2468,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
               deparse1(private$input_dataname)
             ))
           })
-          logger::log_trace("DatetimeFilterState$server initialized, dataname: { private$input_dataname }")
+          logger::log_trace("DatetimeFilterState$server initialized, dataname: { deparse1(private$input_dataname) }")
           NULL
         }
       )

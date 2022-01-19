@@ -5,7 +5,7 @@
 \title{A \code{TealDataConnection} class of objects
 
 Objects of this class store the connection to a data source.
-It can be a database or server (\code{RICE}) connection.}
+It can be a database or server connection.}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }

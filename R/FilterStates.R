@@ -848,13 +848,14 @@ DFFilterStates <- R6::R6Class( # nolint
 
       if (!element_id %in% names(self$queue_get(1L))) {
         warning(paste(
-          "Variable:", element_id, "is not present in the actual active filters of dataset: { private$input_dataname }",
+          "Variable:", element_id,
+          "is not present in the actual active filters of dataset: { deparse1(private$input_dataname) }",
           "therefore no changes are applied."
         ))
         logger::log_warn(
           paste(
             "Variable:", element_id, "is not present in the actual active filters of dataset:",
-            "{ private$input_dataname } therefore no changes are applied."
+            "{ deparse1(private$input_dataname) } therefore no changes are applied."
           )
         )
       } else {
@@ -1200,13 +1201,13 @@ MAEFilterStates <- R6::R6Class( # nolint
       if (!element_id %in% names(self$queue_get("y"))) {
         warning(paste(
           "Variable:", element_id,
-          "is not present in the actual active filters of dataset: { private$input_dataname }",
+          "is not present in the actual active filters of dataset: { deparse1(private$input_dataname) }",
           "therefore no changes are applied."
         ))
         logger::log_warn(
           paste(
             "Variable:", element_id, "is not present in the actual active filters of dataset:",
-            "{ private$input_dataname } therefore no changes are applied."
+            "{ deparse1(private$input_dataname) } therefore no changes are applied."
           )
         )
       } else {
@@ -1634,12 +1635,12 @@ SEFilterStates <- R6::R6Class( # nolint
         if (!all(unlist(element_id$subset) %in% names(self$queue_get("subset")))) {
           warning(paste(
             "Variable:", element_id, "is not present in the actual active subset filters of dataset:",
-            "{ deparse(private$input_dataname) } therefore no changes are applied."
+            "{ deparse1(private$input_dataname) } therefore no changes are applied."
           ))
           logger::log_warn(
             paste(
               "Variable:", element_id, "is not present in the actual active subset filters of dataset:",
-              "{ deparse(private$input_dataname) } therefore no changes are applied."
+              "{ deparse1(private$input_dataname) } therefore no changes are applied."
             )
           )
         } else {
@@ -1659,12 +1660,12 @@ SEFilterStates <- R6::R6Class( # nolint
         if (!all(unlist(element_id$select) %in% names(self$queue_get("select")))) {
           warning(paste(
             "Variable:", element_id, "is not present in the actual active select filters of dataset:",
-            "{ private$input_dataname } therefore no changes are applied."
+            "{ deparse1(private$input_dataname) } therefore no changes are applied."
           ))
           logger::log_warn(
             paste(
               "Variable:", element_id, "is not present in the actual active select filters of dataset:",
-              "{ private$input_dataname } therefore no changes are applied."
+              "{ deparse1(private$input_dataname) } therefore no changes are applied."
             )
           )
         } else {
@@ -2080,12 +2081,12 @@ MatrixFilterStates <- R6::R6Class( # nolint
       if (!element_id %in% names(self$queue_get("subset"))) {
         warning(paste(
           "Variable:", element_id, "is not present in the actual active filters of dataset:",
-          "{ private$input_dataname } therefore no changes are applied."
+          "{ deparse1(private$input_dataname) } therefore no changes are applied."
         ))
         logger::log_warn(
           paste(
             "Variable:", element_id, "is not present in the actual active filters of dataset:",
-            "{ deparse(private$input_dataname) } therefore no changes are applied."
+            "{ deparse1(private$input_dataname) } therefore no changes are applied."
           )
         )
       } else {

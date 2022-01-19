@@ -4,7 +4,7 @@
 #' @title A `TealDataConnection` class of objects
 #'
 #' Objects of this class store the connection to a data source.
-#' It can be a database or server (`RICE`) connection.
+#' It can be a database or server connection.
 #'
 #' @examples
 #' open_fun <- callable_function(data.frame) # define opening function

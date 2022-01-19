@@ -14,10 +14,11 @@
 #' This is a wrapper function around the `module_teal.R` functions. Unless you are
 #' an end-user, don't use this function, but instead this module.
 #'
-#' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`)\cr
+#' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
+#' or `MultiAssayExperiment`)\cr
 #' `R6` object as returned by [cdisc_data()], [teal_data()], [cdisc_dataset()], [dataset()],
-#' [dataset_connector()] or [cdisc_dataset_connector()] or a single `data.frame` or a list of
-#' the previous objects or function returning a named list.
+#' [dataset_connector()] or [cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`
+#' or a list of the previous objects or function returning a named list.
 #' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 #' do not match the original object names. To ensure reproducibility please use [teal_data()]
 #' or [cdisc_data()] with `check = TRUE` enabled.
@@ -161,7 +162,7 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  if (!is(data, "TealData")) {
+  if (!methods::is(data, "TealData")) {
     data <- to_relational_data(data = data)
   }
   checkmate::assert_string(title, null.ok = TRUE)

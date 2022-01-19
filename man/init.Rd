@@ -15,10 +15,11 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame})\cr
+\item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
+or \code{MultiAssayExperiment})\cr
 \code{R6} object as returned by \code{\link[=cdisc_data]{cdisc_data()}}, \code{\link[=teal_data]{teal_data()}}, \code{\link[=cdisc_dataset]{cdisc_dataset()}}, \code{\link[=dataset]{dataset()}},
-\code{\link[=dataset_connector]{dataset_connector()}} or \code{\link[=cdisc_dataset_connector]{cdisc_dataset_connector()}} or a single \code{data.frame} or a list of
-the previous objects or function returning a named list.
+\code{\link[=dataset_connector]{dataset_connector()}} or \code{\link[=cdisc_dataset_connector]{cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
+or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 do not match the original object names. To ensure reproducibility please use \code{\link[=teal_data]{teal_data()}}
 or \code{\link[=cdisc_data]{cdisc_data()}} with \code{check = TRUE} enabled.}

@@ -35,7 +35,7 @@ CallableFunction <- R6::R6Class( # nolint
 
       private$refresh()
 
-      logger::log_trace("CallableFunction initialized with function: { private$fun_name }.")
+      logger::log_trace("CallableFunction initialized with function: { deparse1(private$fun_name) }.")
 
       return(invisible(self))
     },
@@ -125,7 +125,7 @@ CallableFunction <- R6::R6Class( # nolint
       private$args[[name]] <- value
 
       private$refresh()
-      logger::log_trace("CallableFunction$set_arg_value args values set for arg: { name }.")
+      logger::log_trace("CallableFunction$set_arg_value args values set for arg: { deparse1(name) }.")
 
       return(invisible(self))
     }

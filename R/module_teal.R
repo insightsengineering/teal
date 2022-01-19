@@ -162,7 +162,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       # reactivity to recompute the filtered datasets, which is not needed.
       logger::log_trace(
         paste(
-          "srv_init_filter_state@1 saving active filter state for",
+          "srv_teal@2 saving active filter state for",
           "datasets: { paste(names(datasets_reactive()$get_filter_state()), collapse = ' ') }."
         )
       )
@@ -174,7 +174,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       # by the user, so we just need to set the filters.
       logger::log_trace(
         paste(
-          "srv_init_filter_state@2 restoring filter states from the bookmark for",
+          "srv_teal@3 restoring filter states from the bookmark for",
           "datasets: { paste(names(state$values$datasets_state), collapse = ' ') }."
         )
       )
@@ -194,7 +194,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       datasets <- filtered_data_new(raw_data())
       # transfer the datasets from raw_data() into the FilteredData object
       filtered_data_set(raw_data(), datasets)
-      logger::log_trace("Raw Data transferred to FilteredData.")
+      logger::log_trace("srv_teal@4 Raw Data transferred to FilteredData.")
       datasets
     })
 
@@ -204,7 +204,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     # usually not change afterwards
     # if restored from bookmarked state, `filter` is ignored
     observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, {
-      logger::log_trace("srv_teal@3 setting main ui after data was pulled")
+      logger::log_trace("srv_teal@5 setting main ui after data was pulled")
       env$progress$set(0.5, message = "Setting up main UI")
       on.exit(env$progress$close())
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
