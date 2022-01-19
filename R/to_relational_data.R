@@ -2,9 +2,10 @@
 #'
 #' Takes the input of data argument and translates them to relational data objects.
 #'
-#' @param data `TealDataset`, `TealDatasetConnector`, `data.frame`, `list` or `function` returning a named list.
+#' @param data `TealDataset`, `TealDatasetConnector`, `data.frame`, `MultiAssayExperiment`,  `list`
+#' or `function` returning a named list.
 #'
-#' @return list of `TealData` objects
+#' @return `TealData` object
 #'
 #' @note `to_relational_data` should only be used inside `init` call to guarantee correct behavior.
 #'
@@ -46,6 +47,11 @@ to_relational_data.TealDatasetConnector <- function(data) { # nolint
 
 #' @export
 to_relational_data.list <- function(data) {
+  checkmate::assert_list(
+    data,
+    types = c("dataset", "data.frame", "MultiAssayExperiment", "TealDataset", "TealDatasetConnector")
+  )
+
   call <- substitute(data, parent.frame())
   list_names <- names(data)
   parsed_names <- as.character(call)[-1]
@@ -54,10 +60,7 @@ to_relational_data.list <- function(data) {
     (
       length(list_names) == 0 &&
         length(parsed_names) == 0 &&
-        (
-          any(sapply(data, function(x) inherits(x, "dataset"))) ||
-            any(sapply(data, function(x) inherits(x, "data.frame")))
-        )
+        any(sapply(data, inherits, c("dataset", "data.frame", "MultiAssayExperiment")))
     ) ||
       (any(list_names == "") && length(parsed_names) == 0) ||
       (any(is.na(list_names)))
@@ -68,7 +71,7 @@ to_relational_data.list <- function(data) {
   datasets_list <- lapply(
     seq_along(data),
     function(idx) {
-      if (is.data.frame(data[[idx]])) {
+      if (is.data.frame(data[[idx]]) || methods::is(data[[idx]], "MultiAssayExperiment")) {
         dataname <- if (length(list_names) == 0 || list_names[[idx]] == "") {
           parsed_names[[idx]]
         } else {

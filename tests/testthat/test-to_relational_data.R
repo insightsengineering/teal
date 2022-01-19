@@ -99,6 +99,21 @@ test_that("to_relational_data accepts a function returning a TealDataset as inpu
   testthat::expect_identical(output_dataset_fun$get_datanames(), "ADSL")
 })
 
+test_that("to_relational_data accepts a MultiAssayExperiment as input", {
+  mae <- MultiAssayExperiment::miniACC
+  output_dataset <- to_relational_data(mae)
+  testthat::expect_is(output_dataset, "TealData")
+  testthat::expect_identical(output_dataset$get_datanames(), "MAE")
+})
+
+
+test_that("to_relational_data accepts a list containing a named MultiAssayExperiment as input", {
+  mae <- MultiAssayExperiment::miniACC
+  output_dataset <- to_relational_data(list(aa = mae))
+  testthat::expect_is(output_dataset, "TealData")
+  testthat::expect_identical(output_dataset$get_datanames(), "aa")
+})
+
 test_that("to_relational_data throws error with a function returning a non-named list", {
   fun <- function() list(iris, mtcars)
 
