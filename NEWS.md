@@ -41,6 +41,7 @@
 * Added validation to `FilteredDataset::get_data` to accept logical input only.
 * Added a vignette describing the modifications to `teal` applications users can apply using `R` options.
 * Removed dependency on `utils.nest` and replaced those function with equivalents from the `checkmate` package.
+* Added default labels to the `select_spec` and `filter_spec` of `data_extract_spec` when both are `NULL`.
 
 # teal 0.10.0
 
