@@ -162,3 +162,26 @@ testthat::test_that("cdisc_data_connector validates the 'connection' and 'connec
     connectors = "a"
   ))
 })
+
+testthat::test_that("TealDataConnector$print prints out expected output of class and content", {
+  testthat::expect_identical(
+    capture.output(print(adsl)),
+    c(
+      "A CDISCTealDatasetConnector object, named ADSL, containing a TealDataset object that has been loaded/pulled:",
+      "A CDISCTealDataset object containing the following data.frame (1 rows and 2 columns):",
+      "  STUDYID USUBJID",
+      "1 STUDYID USUBJID"
+    )
+  )
+
+  adsl$pull()
+  testthat::expect_identical(
+    capture.output(print(adsl)),
+    c(
+      "A CDISCTealDatasetConnector object, named ADSL, containing a TealDataset object that has been loaded/pulled:",
+      "A CDISCTealDataset object containing the following data.frame (1 rows and 2 columns):",
+      "  STUDYID USUBJID",
+      "1 STUDYID USUBJID"
+    )
+  )
+})

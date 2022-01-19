@@ -460,13 +460,13 @@ testthat::test_that("TealData$print prints out expected output on basic input", 
     c(
       "A CDISCTealData object containing 2 TealDataset/TealDatasetConnector object(s) as element(s):",
       "--> Element 1:",
-      "A TealDataset object containing the following data.frame (3 rows and 2 columns):",
+      "A CDISCTealDataset object containing the following data.frame (3 rows and 2 columns):",
       "  STUDYID USUBJID",
       "1       1       a",
       "2       2       b",
       "3       3       c",
       "--> Element 2:",
-      "A TealDataset object containing the following data.frame (1 rows and 3 columns):",
+      "A CDISCTealDataset object containing the following data.frame (1 rows and 3 columns):",
       "  STUDYID USUBJID PARAMCD",
       "1 STUDYID USUBJID PARAMCD"
     )
