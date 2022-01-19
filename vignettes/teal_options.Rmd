@@ -42,7 +42,7 @@ Default: `"INFO"`.
 Deprecated.
 
 ### `teal_show_js_log`
-Deprecated in favour of `teal.show_js_log` (see below).
+Deprecated in favor of `teal.show_js_log` (see below).
 
 ### `teal.show_js_log` (`logical`)
 This indicates whether to print the `Javascript` console logs to the `R` console. If set to `TRUE`, the logs will be printed; otherwise, they won't.
