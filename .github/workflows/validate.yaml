@@ -5,7 +5,10 @@ on:
   push:
     branches:
       - pre-release
-
+      
+  pull_request:
+    branches:
+      - pre-release
 jobs:
   validation:
     name: R Package Validation report 📃
