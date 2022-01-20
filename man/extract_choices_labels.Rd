@@ -17,3 +17,4 @@ extract_choices_labels(choices, values = NULL)
 \description{
 Extract labels from choices basing on attributes and names
 }
+\keyword{internal}

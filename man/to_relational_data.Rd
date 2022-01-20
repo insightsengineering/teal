@@ -19,3 +19,4 @@ Takes the input of data argument and translates them to relational data objects.
 \note{
 \code{to_relational_data} should only be used inside \code{init} call to guarantee correct behavior.
 }
+\keyword{internal}

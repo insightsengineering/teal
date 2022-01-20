@@ -27,3 +27,4 @@ df <- data.frame(
 )
 teal:::get_filterable_varnames(df)
 }
+\keyword{internal}

@@ -5,7 +5,7 @@
 #' @param dataname (`character`)\cr
 #'  Name of dataset to return raw data for.
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @return `data.frame` with the raw data inserted into the R6 objects. In case of
 #' `TealDataAbstract`, `list` of `data.frame` can be returned

@@ -25,3 +25,4 @@ debug it.
 Currently not supported, but a good idea is to provide an argument that contains
 code that is executed before \code{browser()} is called.
 }
+\keyword{internal}

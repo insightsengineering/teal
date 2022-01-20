@@ -1,6 +1,6 @@
 #' Is pulled
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'   S3 method to determine if dataset is pulled (loaded).
 #'
 #' @param x ([`TealDatasetConnector`], [`TealDataset`] or [`TealDataAbstract`])

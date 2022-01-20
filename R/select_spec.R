@@ -1,6 +1,6 @@
 #' Column selection input specification
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' \code{select_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
 #' that will select columns from a dataset.
 #'

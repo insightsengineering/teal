@@ -1,6 +1,6 @@
 #' Get dataset attributes
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #' Get dataset attributes in form of named list.
 #'
 #' @param x an object of (`TealDataset`) class

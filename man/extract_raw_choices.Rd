@@ -18,3 +18,4 @@ choices simplified
 \description{
 Extract raw values from choices
 }
+\keyword{internal}

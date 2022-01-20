@@ -26,6 +26,7 @@
 #' @inheritParams ui_teal_with_splash
 #'
 #' @return `HTML` for Shiny module UI
+#' @keywords internal
 #'
 #' @examples
 #' mods <- teal:::get_dummy_modules()
@@ -124,6 +125,7 @@ ui_teal <- function(id,
 #'   returns the `TealData`, only evaluated once, `NULL` value is ignored
 #'
 #' @return `reactive` which returns the currently active module
+#' @keywords internal
 srv_teal <- function(id, modules, raw_data, filter = list()) {
   stopifnot(is.reactive(raw_data))
   moduleServer(id, function(input, output, session) {

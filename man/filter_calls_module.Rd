@@ -45,3 +45,4 @@ app <- init(
 shinyApp(app$ui, app$server)
 }
 }
+\keyword{internal}

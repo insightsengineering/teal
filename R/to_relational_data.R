@@ -8,11 +8,13 @@
 #' @return `TealData` object
 #'
 #' @note `to_relational_data` should only be used inside `init` call to guarantee correct behavior.
+#' @keywords internal
 #'
 to_relational_data <- function(data) {
   UseMethod("to_relational_data")
 }
 
+#' @keywords internal
 #' @export
 to_relational_data.data.frame <- function(data) { # nolint
   dataname <- deparse(substitute(data, parent.frame()), width.cutoff = 500L)
@@ -29,6 +31,7 @@ to_relational_data.data.frame <- function(data) { # nolint
   }
 }
 
+#' @keywords internal
 #' @export
 to_relational_data.TealDataset <- function(data) {
   dataname <- get_dataname(data)
@@ -40,11 +43,13 @@ to_relational_data.TealDataset <- function(data) {
   }
 }
 
+#' @keywords internal
 #' @export
 to_relational_data.TealDatasetConnector <- function(data) { # nolint
   to_relational_data.TealDataset(data)
 }
 
+#' @keywords internal
 #' @export
 to_relational_data.list <- function(data) {
   checkmate::assert_list(
@@ -98,6 +103,7 @@ to_relational_data.list <- function(data) {
   }
 }
 
+#' @keywords internal
 #' @export
 to_relational_data.MultiAssayExperiment <- function(data) { # nolint
   teal_data(mae_dataset("MAE", data))

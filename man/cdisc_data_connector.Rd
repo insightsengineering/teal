@@ -2,7 +2,7 @@
 % Please edit documentation in R/CDISCTealDataConnector.R
 \name{cdisc_data_connector}
 \alias{cdisc_data_connector}
-\title{Public facing object constructor for \code{CDISCTealDataConnector} class.}
+\title{The constructor of \code{CDISCTealDataConnector} objects.}
 \usage{
 cdisc_data_connector(connection, connectors)
 }
@@ -17,7 +17,7 @@ list with dataset connectors}
 \code{CDISCTealDataConnector} object
 }
 \description{
-Public facing object constructor for \code{CDISCTealDataConnector} class.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{

@@ -1,6 +1,6 @@
 #' Teal data
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #' Universal function to pass data to teal application
 #'
 #' @param ... (`TealDataConnector`, `TealDataset`, `TealDatasetConnector`)\cr

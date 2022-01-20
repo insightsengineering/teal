@@ -5,7 +5,9 @@
 \alias{FilteredData}
 \title{Class to encapsulate filtered datasets}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Class to encapsulate filtered datasets
+
+Class to encapsulate filtered datasets
 }
 \details{
 The main purpose of this class is to provide a collection of reactive datasets,
