@@ -13,12 +13,11 @@ reference:
   - title: Teal Core Functions
     desc:  These are the main functions needed to build a teal app.
     contents:
+    - bookmarkableShinyApp
     - init
     - module
     - modules
     - root_modules
-    - toString.teal_module
-    - toString.teal_modules
     - srv_teal_with_splash
     - ui_teal_with_splash
   - title: Teal Filtering and Selecting
@@ -31,7 +30,6 @@ reference:
     - data_extract_spec
     - filter_spec
     - get_variable_labels
-    - is.choices_selected
     - select_spec
     - value_choices
     - variable_choices
@@ -63,7 +61,6 @@ reference:
     - cdisc_data_connector
     - cdisc_dataset_connector
     - cdisc_dataset_connector_file
-    - cdse_dataset_connector
     - code_cdisc_dataset_connector
     - code_dataset_connector
     - csv_cdisc_dataset_connector
@@ -117,7 +114,6 @@ reference:
   - title: Helpers
     desc: Other useful functions for users and developers.
     contents:
-    - bookmarkableShinyApp
     - data_label
     - data_label<-
     - default_filter
@@ -130,12 +126,8 @@ reference:
     - join_keys
     - log_app_usage
     - no_selected_as_NULL
-    - print.choices_labeled
-    - print.teal_module
-    - print.teal_modules
     - python_code
     - read_script
-    - register_logger
     - split_by_sep
     - stop_shiny
     - "%is_in%"
@@ -164,9 +156,14 @@ reference:
     - TealDataConnector
     - TealDataset
     - TealDatasetConnector
+  - title: Logging
+    subtitle: Support for logging in a `teal` application
+    contents:
+    - register_logger
   - title: Superseded
     contents:
     - cdse_connection
+    - cdse_dataset_connector
     - datasetdb_data
     - datasetdb_connection
     - datasetdb_dataset_connector

@@ -120,8 +120,6 @@ init_filter_states.SummarizedExperiment <- function(data, # nolint
 }
 
 
-# FilterStates -----
-#'
 #' @title `FilterStates` R6 class
 #'
 #' @description
@@ -642,7 +640,9 @@ FilterStates <- R6::R6Class( # nolint
   )
 )
 
-# DFFilterStates -----
+#' Specialization of `FilterStates` for a base `data.frame`.
+#'
+#' @keywords internal
 DFFilterStates <- R6::R6Class( # nolint
   classname = "DFFilterStates",
   inherit = FilterStates,
@@ -1032,7 +1032,8 @@ DFFilterStates <- R6::R6Class( # nolint
 )
 
 
-# MAEFilterStates -----
+#' Specialization of `FilterStates` for `MultiAssayExperiment`.
+#' @keywords internal
 MAEFilterStates <- R6::R6Class( # nolint
   classname = "MAEFilterStates",
   inherit = FilterStates,
@@ -1389,7 +1390,8 @@ MAEFilterStates <- R6::R6Class( # nolint
   )
 )
 
-# SEFilterStates -----
+#' Specialization of `FilterStates` for `SummaryExperiment`.
+#' @keywords internal
 SEFilterStates <- R6::R6Class( # nolint
   classname = "SEFilterStates",
   inherit = FilterStates,
@@ -1920,7 +1922,8 @@ SEFilterStates <- R6::R6Class( # nolint
   )
 )
 
-# MatrixFilterStates -----
+#' Specialization of `FilterStates` for a base matrix.
+#' @keywords internal
 MatrixFilterStates <- R6::R6Class( # nolint
   classname = "MatrixFilterStates",
   inherit = FilterStates,

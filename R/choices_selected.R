@@ -172,6 +172,7 @@ choices_selected <- function(choices,
 #' @description `r lifecycle::badge("stable")`
 #'
 #' @param x object to check
+#' @rdname choices_selected
 #' @export
 is.choices_selected <- function(x) { # nolint
   is(x, "choices_selected")

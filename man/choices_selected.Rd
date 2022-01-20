@@ -2,6 +2,7 @@
 % Please edit documentation in R/choices_selected.R
 \name{choices_selected}
 \alias{choices_selected}
+\alias{is.choices_selected}
 \title{Choices Selected}
 \usage{
 choices_selected(
@@ -10,6 +11,8 @@ choices_selected(
   keep_order = FALSE,
   fixed = FALSE
 )
+
+is.choices_selected(x)
 }
 \arguments{
 \item{choices}{(\code{character}) vector of possible choices or \code{delayed_data} object\cr
@@ -25,6 +28,8 @@ In case of \code{FALSE} the selected variables will be on top of the drop-down f
 
 \item{fixed}{optional, (\code{logical})\cr
 Whether to block user to select choices}
+
+\item{x}{object to check}
 }
 \value{
 Object of class \code{choices_selected} and of type list which contains the specified
@@ -36,6 +41,8 @@ Construct a single list containing available choices, the default selected value
 additional settings such as to order the choices with the selected elements appearing first
 or whether to block the user from making selections. Can be used in \code{ui} input elements
 such as \code{\link{optionalSelectInput}}
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \details{
 Please note that the order of selected will always follow the order of choices. The \code{keep_order}
