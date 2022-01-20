@@ -1227,7 +1227,7 @@ fun_cdisc_dataset_connector <- function(dataname,
 #' x <- python_dataset_connector(
 #'   "ADSL",
 #'   code = "import pandas as pd
-#'   data = pd.DataFrame({'STUDYID':  [r.y], 'USUBJID': [r.y]})",
+#' data = pd.DataFrame({'STUDYID':  [r.y], 'USUBJID': [r.y]})",
 #'   object = "data",
 #'   vars = list(y = y)
 #' )
