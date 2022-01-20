@@ -39,7 +39,6 @@ if (load_dev_teal) {
 
 # Don't remove these options, the developer may activate them as needed
 options(shiny.fullstacktrace = TRUE) # to show a detailed stack trace, see `?getShinyOption()`
-options(teal_logging = TRUE) # to log to console
 # where to open app (new window or within RStudio)
 # options("shiny.launch.browser" = TRUE) # to open a new window #nolint
 # to open in RStudio Viewer pane, only available in RStudio, so it won't go through `CI` if enabled

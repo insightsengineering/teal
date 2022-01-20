@@ -144,6 +144,19 @@ testthat::test_that("The hashes of TealDatasets objects are correct after mutati
   testthat::expect_equal(rd$get_dataset("iris")$get_hash(), mutated_iris_hash)
 })
 
+testthat::test_that("execute_mutate returns current datasets if no mutate_code", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector("test_dc", pull_fun)
+  t_ds <- dataset("head_rock", head(rock), code = "head_rock <- head(rock)") %>%
+    mutate_dataset("head_rock$head_letters <- test_dc$head_letters", vars = list(test_dc = t_dc))
+  data <- teal_data(t_dc, t_ds)
+  testthat::expect_identical(
+    data$execute_mutate(),
+    list(head_rock = t_ds)
+  )
+})
+
 # Multiple connectors ----
 testthat::test_that("Multiple connectors wrapped in cdisc_data", {
   example_data_connector <- function(...) {
