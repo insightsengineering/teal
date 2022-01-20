@@ -5,7 +5,9 @@
 \alias{ChoicesFilterState}
 \title{\code{FilterState} object for factor or character variable}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\code{FilterState} object for factor or character variable
+
+\code{FilterState} object for factor or character variable
 }
 \note{
 Casts the passed object to \code{character} before validating the input
@@ -30,6 +32,7 @@ isolate(filter_state$get_call())
 filter <- teal:::ChoicesFilterState$new(c("a", "b", "c"), varname = "name")
 filter$set_selected(c("c", "a"))
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{ChoicesFilterState}
 }

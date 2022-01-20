@@ -2,15 +2,16 @@
 % Please edit documentation in R/FilterStates.R
 \name{MAEFilterStates}
 \alias{MAEFilterStates}
-\title{Initialize \code{MAEFilterStates} object}
+\title{Specialization of \code{FilterStates} for \code{MultiAssayExperiment}.}
 \description{
-Initialize \code{MAEFilterStates} object
+Specialization of \code{FilterStates} for \code{MultiAssayExperiment}.
 
-Initialize \code{MAEFilterStates} object
+Specialization of \code{FilterStates} for \code{MultiAssayExperiment}.
 }
-\details{
-Initialize \code{MAEFilterStates} object
-}
+\keyword{Initialize}
+\keyword{`MAEFilterStates`}
+\keyword{internal}
+\keyword{object}
 \section{Super class}{
 \code{\link[teal:FilterStates]{teal::FilterStates}} -> \code{MAEFilterStates}
 }

@@ -2,7 +2,7 @@
 #'
 #' Convert a `TealDataset(Connector)` object to a `CDISCTealDataset(Connector)` object
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @note If passed a `CDISC`-flavored object it returns the unmodified object.
 #'

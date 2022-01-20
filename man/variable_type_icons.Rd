@@ -22,3 +22,4 @@ teal:::variable_type_icons(c(
   "factor", "character", "unknown", ""
 ))
 }
+\keyword{internal}

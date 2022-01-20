@@ -90,3 +90,4 @@ app <- shinyApp(
 runApp(app)
 }
 }
+\keyword{internal}

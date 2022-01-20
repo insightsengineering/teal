@@ -1,6 +1,6 @@
 #' Data extract filter specification
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' It consists in choices and additionally the variable names for the choices
 #'
 #' @export
@@ -253,7 +253,6 @@ filter_spec <- function(vars,
 
 #' Data extract dynamic filter specification
 #'
-#' @description `r lifecycle::badge("experimental")`
 #' This function returns a configuration for the \code{data_extract_ui} module. This function covers
 #' the configuration of filtering datasets (so called `filter_spec`), which then is used to build
 #' the UI element in the `teal` app.
@@ -279,6 +278,7 @@ filter_spec <- function(vars,
 #'   TRUE if this filter was already consumed by the server function; FALSE otherwise.
 #'
 #' @return `filter_spec` or `delayed_filter_spec` S3-class object.
+#' @keywords internal
 #'
 #' @seealso filter_spec
 #'

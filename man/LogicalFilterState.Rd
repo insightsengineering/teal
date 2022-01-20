@@ -8,7 +8,9 @@
 invisibly \code{NULL}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\code{FilterState} object for logical variable
+
+\code{FilterState} object for logical variable
 }
 \note{
 Casts the passed object to \code{logical} before validating the input
@@ -34,6 +36,7 @@ isolate(filter_state$get_call())
 filter <- teal:::LogicalFilterState$new(c(TRUE), varname = "name")
 filter$set_selected(TRUE)
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{LogicalFilterState}
 }

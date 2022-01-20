@@ -1,5 +1,7 @@
 #' Registers a logger instance in a given logging namespace.
 #'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @note It's a thin wrapper around the `logger` package.
 #'
 #' @details Creates a new logging namespace specified by the `namespace` argument.
@@ -94,8 +96,7 @@ register_logger <- function(namespace = NA_character_,
 #' Logs the basic information about the session.
 #'
 #' @return `invisible(NULL)`
-#'
-#' @noRd
+#' @keywords internal
 #'
 log_system_info <- function() {
   paste_pkgs_name_with_version <- function(names) {
@@ -126,11 +127,11 @@ log_system_info <- function() {
 #' Generate log layout function using common variables available via glue syntax including shiny session token
 #'
 #' @inheritParams register_logger
-#' @return function taking level and msg arguments - keeping the original call creating the generator
+#' @return function taking `level` and `msg` arguments - keeping the original call creating the generator
 #'   in the generator attribute that is returned when calling log_layout for the currently used layout
 #' @details this function behaves in the same way as [logger::layout_glue_generator()]
 #'   but allows the shiny session token (last 8 chars) to be included in the logging layout
-#' @noRd
+#' @keywords internal
 layout_teal_glue_generator <- function(layout) {
   force(layout)
   structure(

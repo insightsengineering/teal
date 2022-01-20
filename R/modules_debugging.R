@@ -14,6 +14,7 @@
 #' @param label `character` label of module
 #' @param active_datanames `character vector` datanames shown in filter panel;
 #'   can be `"all"` to mean all available datasets
+#' @keywords internal
 #'
 #' @examples
 #' library(scda)

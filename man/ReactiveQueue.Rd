@@ -7,6 +7,7 @@
 Implements the queue abstract data type. The last element added to this queue is
 the last one to be returned from it.
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:Queue]{teal::Queue}} -> \code{ReactiveQueue}
 }

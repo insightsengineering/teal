@@ -1,10 +1,8 @@
 # CDISCTealDataConnector ------
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title Manage multiple and `TealDatasetConnector` of the same type.
 #'
-#' @description
+#' @description `r lifecycle::badge("stable")`
 #' Class manages `TealDatasetConnector` to specify additional dynamic arguments and to
 #' open/close connection.
 #'
@@ -58,7 +56,9 @@ CDISCTealDataConnector <- R6::R6Class( # nolint
   )
 )
 
-#' Public facing object constructor for `CDISCTealDataConnector` class.
+#' The constructor of `CDISCTealDataConnector` objects.
+#'
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param connection (`TealDataConnection`)\cr
 #'   connection to data source

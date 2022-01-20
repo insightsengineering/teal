@@ -1,6 +1,6 @@
 #' Get dataset from `TealDatasetConnector`
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' Get dataset from `TealDatasetConnector`
 #' @param x (`TealDatasetConnector` or `TealDatasetConnector` or `TealDataAbstract`)
