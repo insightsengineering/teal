@@ -2,15 +2,16 @@
 % Please edit documentation in R/FilterStates.R
 \name{MatrixFilterStates}
 \alias{MatrixFilterStates}
-\title{Initialize \code{MatrixFilterStates} object}
+\title{Specialization of \code{FilterStates} for a base matrix.}
 \description{
-Initialize \code{MatrixFilterStates} object
+Specialization of \code{FilterStates} for a base matrix.
 
-Initialize \code{MatrixFilterStates} object
+Specialization of \code{FilterStates} for a base matrix.
 }
-\details{
-Initialize \code{MatrixFilterStates} object
-}
+\keyword{Initialize}
+\keyword{`MatrixFilterStates`}
+\keyword{internal}
+\keyword{object}
 \section{Super class}{
 \code{\link[teal:FilterStates]{teal::FilterStates}} -> \code{MatrixFilterStates}
 }

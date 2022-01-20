@@ -24,3 +24,4 @@ code (\code{character})
 Get code from script. Switches between \code{code} and \code{script} arguments
 to return non-empty one to pass it further to constructors.
 }
+\keyword{internal}

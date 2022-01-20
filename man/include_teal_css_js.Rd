@@ -22,3 +22,4 @@ shiny_ui <- tagList(
   p("Hello")
 )
 }
+\keyword{internal}

@@ -1,9 +1,7 @@
 ## CodeClass ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title Code Class
-#'
+#' @keywords internal
 #'
 #' @examples
 #' cc <- teal:::CodeClass$new()
@@ -24,9 +22,6 @@
 #' cc$get_code("ADSL")
 #' cc$get_code("ADAE")
 #'
-#' #########################################
-#' #########################################
-#' #########################################
 #'
 #' x1 <- teal:::CodeClass$new()
 #' x1$set_code("ADSL <- radsl(cached = TRUE)", "ADSL")
@@ -136,7 +131,9 @@ CodeClass <- R6::R6Class( # nolint
         )
 
         if (is(out, "error")) {
-          error_msg <- sprintf("%s\n\nEvaluation of the code failed:\n %s", deparse1(x, collapse = "\n"), conditionMessage(out))
+          error_msg <- sprintf(
+            "%s\n\nEvaluation of the code failed:\n %s", deparse1(x, collapse = "\n"), conditionMessage(out)
+          )
 
           rlang::with_options(
             stop(error_msg, call. = FALSE),
@@ -271,6 +268,7 @@ list_to_code_class <- function(x) {
 #' @param x (`character`) string containing the code.
 #'
 #' @return (`call`) object.
+#' @keywords internal
 text_to_call <- function(x) {
   parsed <- parse(text = x, keep.source = FALSE)
   if (length(parsed) == 0) {
@@ -286,6 +284,7 @@ text_to_call <- function(x) {
 #'   code to format into a string.
 #'
 #' @return (`character`) string containing the formatted code.
+#' @keywords internal
 pretty_code_string <- function(code_vector) {
   # in order to remove bad formatting: text -> code -> text
   unlist(lapply(

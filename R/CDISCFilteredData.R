@@ -1,10 +1,8 @@
 #' @name CDISCFilteredData
 #' @docType class
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title Class to encapsulate relational filtered datasets with its parents.
-#'
+#' @description `r lifecycle::badge("stable")`
 #' @details
 #' The `CDISCFilteredData` class implements logic to filter a relational
 #' dataset by inheriting from `FilteredData`.
@@ -223,6 +221,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
 #' Implementation of Kahn algorithm with a modification to maintain the order of input elements.
 #'
 #' @param graph (named `list`) list with node vector elements
+#' @keywords internal
 #'
 #' @examples
 #' teal:::topological_sort(list(A = c(), B = c("A"), C = c("B"), D = c("A")))
@@ -275,6 +274,11 @@ topological_sort <- function(graph) {
   }
 }
 
+#' Checks whether a graph is a `Directed Acyclic Graph (DAG)`
+#'
+#' @inheritParams topological_sort
+#' @return `logical(1)` `TRUE` if the graph is a `DAG`; `FALSE` otherwise
+#' @keywords internal
 is_dag <- function(graph) {
   is(try(topological_sort(graph), silent = TRUE), "try-error")
 }

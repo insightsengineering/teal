@@ -15,7 +15,7 @@ get_key_duplicates_util(dataframe, keys)
 \code{tibble} with a duplicate keys information summary
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Creates a duplicate keys information summary.
 }
 \details{
 Accepts a list of variable names - \code{keys}, which are treated as the
@@ -37,3 +37,4 @@ print(res) # outputs a tibble
 \seealso{
 \link{get_key_duplicates}
 }
+\keyword{internal}

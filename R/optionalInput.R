@@ -1,6 +1,6 @@
 #' Hide, Show Label only or display a \code{pickerInput}
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' Hidden input widgets are useful to have the \code{input[[inputId]]} variable
 #' on available in the server function but no corresponding visual clutter from
 #' input widgets that provide only a single choice.
@@ -178,7 +178,7 @@ optionalSelectInput <- function(inputId, # nolint
 
 #' Update \code{optionalSelectInput}
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @inheritParams shinyWidgets::updatePickerInput
 #'
@@ -215,6 +215,7 @@ updateOptionalSelectInput <- function(session, # nolint
 #'
 #' @return (atomic vector of \code{character}) vector of HTML icons corresponding to
 #'   data type in each column.
+#' @keywords internal
 #'
 #' @examples
 #' teal:::variable_type_icons(c(
@@ -266,6 +267,7 @@ variable_type_icons <- function(var_type) {
 #' class of the variable.
 #'
 #' @return (atomic vector of \code{character}) HTML contents with all elements combined
+#' @keywords internal
 #'
 #' @examples
 #' teal:::picker_options_content(
@@ -308,6 +310,7 @@ picker_options_content <- function(var_name, var_label, var_type) {
 #' @param choices (\code{choices_labeled} or \code{character} vector) choices vector
 #'
 #' @return (\code{list}) to be passed as \code{choicesOpt} argument
+#' @keywords internal
 picker_options <- function(choices) {
   if (is(choices, "choices_labeled")) {
     raw_choices <- extract_raw_choices(choices, sep = attr(choices, "sep"))
@@ -340,6 +343,7 @@ picker_options <- function(choices) {
 #' @param sep (\code{character}) A separator string to split the \code{choices} or
 #'   \code{selected} inputs into the values of the different columns
 #' @return choices simplified
+#' @keywords internal
 extract_raw_choices <- function(choices, sep) {
   if (!is.null(sep)) {
     vapply(choices, paste, collapse = sep, character(1))
@@ -350,12 +354,9 @@ extract_raw_choices <- function(choices, sep) {
   }
 }
 
-
-
-
 #' if min or max are \code{NA} then the slider widget will be hidden
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' Hidden input widgets are useful to have the \code{input[[inputId]]} variable
 #' on available in the server function but no corresponding visual clutter from
 #' input widgets that provide only a single choice.
@@ -393,12 +394,10 @@ optionalSliderInput <- function(inputId, label, min, max, value, label_help = NU
   }
 }
 
-
-
 #' For teal modules we parameterize an \code{optionalSliderInput} with one argument
 #' \code{value_min_max}
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' The \code{\link{optionalSliderInput}} function needs three arguments to decided
 #' whether to hide the \code{sliderInput} widget or not. For teal modules we specify an
 #' optional slider input with one argument here called \code{value_min_max}.

@@ -7,7 +7,7 @@
 Object that stores code to reproduce an object. It includes methods to
 get or run the code and return the object.}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \section{Super class}{
 \code{\link[teal:Callable]{teal::Callable}} -> \code{CallableCode}

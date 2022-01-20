@@ -28,3 +28,4 @@ environment.\cr
 \note{
 Raises an error if the object is not found in the environment.
 }
+\keyword{internal}

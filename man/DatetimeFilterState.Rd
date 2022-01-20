@@ -5,7 +5,9 @@
 \alias{DatetimeFilterState}
 \title{\code{FilterState} object for \code{POSIXct} variable}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\code{FilterState} object for \code{POSIXct} variable
+
+\code{FilterState} object for \code{POSIXct} variable
 }
 \note{
 Casts the passed object to \code{POSIXct} before validating the input
@@ -35,6 +37,7 @@ filter <- teal:::DatetimeFilterState$new(
 )
 filter$set_selected(c(date + 1, date + 2))
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{DatetimeFilterState}
 }

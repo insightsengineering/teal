@@ -2,18 +2,11 @@
 % Please edit documentation in R/FilterStates.R
 \name{DFFilterStates}
 \alias{DFFilterStates}
-\title{Initializes \code{DFFilterStates} object}
+\title{Specialization of \code{FilterStates} for a base \code{data.frame}.}
 \description{
-Initializes \code{DFFilterStates} object
+Specialization of \code{FilterStates} for a base \code{data.frame}.
 
-Initializes \code{DFFilterStates} object
-}
-\details{
-Initializes \code{DFFilterStates} object by setting \code{input_dataname},
-\code{output_dataname} and initializing \code{ReactiveQueue}. This class contains a
-single \code{ReactiveQueue} with no specified name which means that
-when calling the function associated to this class (\code{dplyr::filter}), a list of
-conditions are passed to unnamed arguments (\code{...}).
+Specialization of \code{FilterStates} for a base \code{data.frame}.
 }
 \examples{
 
@@ -36,6 +29,46 @@ dffs$set_filter_state(state = fs, data = iris)
 shiny::isolate(dffs$get_filter_state())
 
 }
+\keyword{(`...`).}
+\keyword{(`dplyr::filter`),}
+\keyword{Initializes}
+\keyword{This}
+\keyword{`DFFilterStates`}
+\keyword{`ReactiveQueue`}
+\keyword{`ReactiveQueue`.}
+\keyword{`input_dataname`,}
+\keyword{`output_dataname`}
+\keyword{a}
+\keyword{and}
+\keyword{are}
+\keyword{arguments}
+\keyword{associated}
+\keyword{by}
+\keyword{calling}
+\keyword{class}
+\keyword{conditions}
+\keyword{contains}
+\keyword{function}
+\keyword{initializing}
+\keyword{internal}
+\keyword{list}
+\keyword{means}
+\keyword{name}
+\keyword{no}
+\keyword{object}
+\keyword{of}
+\keyword{passed}
+\keyword{setting}
+\keyword{single}
+\keyword{specified}
+\keyword{that}
+\keyword{the}
+\keyword{this}
+\keyword{to}
+\keyword{unnamed}
+\keyword{when}
+\keyword{which}
+\keyword{with}
 \section{Super class}{
 \code{\link[teal:FilterStates]{teal::FilterStates}} -> \code{DFFilterStates}
 }

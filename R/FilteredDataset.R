@@ -1,6 +1,7 @@
 #' Initializes `FilteredDataset`
 #'
 #' `FilteredDataset` contains `TealDataset`
+#' @keywords internal
 #' @examples
 #' # DefaultFilteredDataset example
 #' iris_d <- dataset("iris", iris)
@@ -86,16 +87,19 @@ init_filtered_dataset <- function(dataset) { # nolint
   UseMethod("init_filtered_dataset")
 }
 
+#' @keywords internal
 #' @export
 init_filtered_dataset.TealDataset <- function(dataset) { # nolint
   DefaultFilteredDataset$new(dataset)
 }
 
+#' @keywords internal
 #' @export
 init_filtered_dataset.CDISCTealDataset <- function(dataset) { # nolint
   CDISCFilteredDataset$new(dataset)
 }
 
+#' @keywords internal
 #' @export
 init_filtered_dataset.MAETealDataset <- function(dataset) { # nolint
   MAEFilteredDataset$new(dataset)
@@ -497,6 +501,7 @@ FilteredDataset <- R6::R6Class( # nolint
 
 # DefaultFilteredDataset ------
 #' @title `DefaultFilteredDataset` R6 class
+#' @keywords internal
 #' @examples
 #' library(shiny)
 #' ds <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
@@ -709,6 +714,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
 
 
 # CDISCFilteredDataset ------
+#' @keywords internal
 #' @title `CDISCFilteredDataset` R6 class
 CDISCFilteredDataset <- R6::R6Class( # nolint
   classname = "CDISCFilteredDataset",
@@ -818,6 +824,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
 
 
 # MAEFilteredDataset ------
+#' @keywords internal
 #' @title `MAEFilteredDataset` R6 class
 MAEFilteredDataset <- R6::R6Class( # nolint
   classname = "MAEFilteredDataset",

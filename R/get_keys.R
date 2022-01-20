@@ -1,6 +1,6 @@
 #' Get dataset primary keys
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #' Get dataset primary keys
 #'
 #' @param x an object of `TealDataset` or `TealDatasetConnector` class
@@ -77,7 +77,7 @@ get_keys.TealDataAbstract <- function(x, dataname, ...) {
 
 #' Set dataset primary keys
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #' Set dataset primary keys
 #'
 #' @param x an object of `TealDataset` or `TealDatasetConnector` class

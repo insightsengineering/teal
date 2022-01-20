@@ -13,3 +13,4 @@ get_dummy_modules()
 Create an example hierarchy of \code{teal_modules} from which
 a teal app can be created.
 }
+\keyword{internal}

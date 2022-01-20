@@ -18,3 +18,4 @@ should be ended with \verb{# nocode}. For multiple line exclusions one should en
 \description{
 Excludes lines from code. It is possible to exclude one line ended by \verb{# nocode}
 }
+\keyword{internal}

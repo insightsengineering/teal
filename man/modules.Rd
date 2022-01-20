@@ -2,16 +2,26 @@
 % Please edit documentation in R/modules.R
 \name{modules}
 \alias{modules}
+\alias{toString.teal_modules}
+\alias{print.teal_modules}
 \title{Create a collection of \code{module} and \code{modules} object}
 \usage{
 modules(label, ...)
+
+\method{toString}{teal_modules}(x, indent = 0, ...)
+
+\method{print}{teal_modules}(x, ...)
 }
 \arguments{
 \item{label}{(\code{character(1)})\cr
 label of modules collection}
 
-\item{...}{(\code{teal_module} or \code{teal_modules})\cr
-see \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}} for more details}
+\item{...}{parameters passed to \code{toString}}
+
+\item{x}{\code{teal_modules}}
+
+\item{indent}{(\code{integer}) indent level;
+each submodule is indented one level more}
 }
 \value{
 object of class \code{teal_modules}. Object contains following fields
@@ -20,9 +30,11 @@ object of class \code{teal_modules}. Object contains following fields
 \item children: list containing objects passed in \code{...}. List elements are named after
 their \code{label} attribute converted to valid \code{shiny} id.
 }
+
+(\code{character})
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Modules collects a tree of \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}}
 objects. This is useful to define the navigation structure of a teal app.
 }

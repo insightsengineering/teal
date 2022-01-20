@@ -17,3 +17,4 @@ Error or invisible NULL.
 \description{
 Check if package can be loaded
 }
+\keyword{internal}

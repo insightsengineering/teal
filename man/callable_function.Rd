@@ -14,7 +14,7 @@ any R function, directly by name or \code{character} string.}
 \code{CallableFunction} object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Create \code{\link{CallableFunction}} object to execute specific function and get reproducible
 call.
 }

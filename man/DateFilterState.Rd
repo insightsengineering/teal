@@ -5,7 +5,9 @@
 \alias{DateFilterState}
 \title{\code{FilterState} object for Date variable}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\code{FilterState} object for Date variable
+
+\code{FilterState} object for Date variable
 }
 \note{
 Casts the passed object to \code{Date} before validating the input
@@ -35,6 +37,7 @@ filter <- teal:::DateFilterState$new(
 )
 filter$set_selected(c(date + 1, date + 2))
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{DateFilterState}
 }

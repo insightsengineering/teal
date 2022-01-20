@@ -17,3 +17,4 @@ lines of code with source text included
 \description{
 Includes source in preprocessing code lines
 }
+\keyword{internal}

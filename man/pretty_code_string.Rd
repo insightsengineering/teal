@@ -16,3 +16,4 @@ code to format into a string.}
 \description{
 Format a vector of code into a string
 }
+\keyword{internal}
