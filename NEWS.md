@@ -1,4 +1,4 @@
-# teal 0.10.0.9056.6
+# teal 0.10.0.9056.7
 
 ### Breaking changes
 * Changed the `HTML` identifiers of `teal` modules - now each nested module receives its own `shiny` namespace.
@@ -6,6 +6,7 @@
 * Removed `raw_dataset`, `raw_dataset_connector`, `named_dataset`, `named_dataset_file`, `named_dataset_connector`, `relational_dataset`, `relational_dataset_file`, `relational_dataset_connector`, `key`, `as_cdisc`, `as_cdisc_relational`.
 * Removed `rcd_connection` and `rcd_data`; `scda_dataset_connectors` can be passed into `cdisc_data` and `teal_data` directly.
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
+* Renamed `teal_show_js_log` option into `teal.show_js_log` to match options naming convention.
 
 ### New features
 ### Logging
