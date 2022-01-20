@@ -7,6 +7,7 @@
 #'
 #' @param data (`TealData`)
 #' @return dummy filter states
+#' @keywords internal
 get_dummy_filter <- function(data) { # nolint
   ADSL <- get_raw_data(x = data, dataname = "ADSL") # nolint
   ADLB <- get_raw_data(x = data, dataname = "ADLB") # nolint
@@ -50,6 +51,7 @@ get_dummy_filter <- function(data) { # nolint
 #' Some NAs are also introduced to stress test.
 #'
 #' @return `cdisc_data`
+#' @keywords internal
 get_dummy_cdisc_data <- function() { # nolint
   teal_with_pkg("scda", code = {
     ADSL <- scda::synthetic_cdisc_data("latest")$adsl # nolint
@@ -77,6 +79,7 @@ get_dummy_cdisc_data <- function() { # nolint
 #'
 #' Returns a new `R6` object on each invocation, not a singleton.
 #' @return `FilteredData` with `ADSL` set
+#' @keywords internal
 get_dummy_datasets <- function() { # nolint
   dummy_cdisc_data <- get_dummy_cdisc_data()
   datasets <- filtered_data_new(dummy_cdisc_data)
@@ -92,7 +95,7 @@ get_dummy_datasets <- function() { # nolint
 #' a teal app can be created.
 #'
 #' @return `teal_modules`
-#'
+#' @keywords internal
 get_dummy_modules <- function() {
   create_mod <- function(module_name) {
     module(

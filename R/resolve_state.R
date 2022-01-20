@@ -1,6 +1,5 @@
 #' Resolve list of filter states
 #'
-#' @description `r lifecycle::badge("experimental")`
 #' Resolves the state values for `FilterState$set_state()` or
 #' `FilterState$set_state_reactive()`, which accept only a list with `selected`,
 #' `keep_na` and `keep_inf` fields. In case of the `default_filter` function, it

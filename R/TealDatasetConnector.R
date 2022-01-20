@@ -1,9 +1,9 @@
 ## TealDatasetConnector ====
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @title A `TealDatasetConnector` class of objects
 #'
+#' @description `r lifecycle::badge("stable")`
 #' Objects of this class store the connection function to fetch a single dataset.
 #' Note that for some specific connection types,
 #' an object of class `TealDataConnection` must be provided.
@@ -225,7 +225,9 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #'   objects with valid pointers.
     #' @return NULL invisible
     reassign_datasets_vars = function(datasets) {
-      logger::log_trace("TealDatasetConnector$reassign_datasets_vars reassigning vars in dataset: { deparse1(self$get_dataname()) }.")
+      logger::log_trace(
+        "TealDatasetConnector$reassign_datasets_vars reassigning vars in dataset: { self$get_dataname() }."
+      )
       checkmate::assert_list(datasets, min.len = 0, names = "unique")
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))
@@ -237,7 +239,9 @@ TealDatasetConnector <- R6::R6Class( # nolint
       if (!is.null(private$dataset)) {
         private$dataset$reassign_datasets_vars(datasets)
       }
-      logger::log_trace("TealDatasetConnector$reassign_datasets_vars reassigned vars in dataset: { deparse1(self$get_dataname()) }.")
+      logger::log_trace(
+        "TealDatasetConnector$reassign_datasets_vars reassigned vars in dataset: { self$get_dataname() }."
+      )
 
       invisible(NULL)
     },
@@ -254,7 +258,9 @@ TealDatasetConnector <- R6::R6Class( # nolint
       if (self$is_pulled()) {
         private$dataset$set_dataset_label(label)
       }
-      logger::log_trace("TealDatasetConnector$set_dataset_label label set for dataset: { deparse1(self$get_dataname()) }.")
+      logger::log_trace(
+        "TealDatasetConnector$set_dataset_label label set for dataset: { deparse1(self$get_dataname()) }."
+      )
 
       return(invisible(self))
     },
@@ -278,7 +284,10 @@ TealDatasetConnector <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining
     set_join_keys = function(x) {
       self$get_join_keys()$set(x)
-      logger::log_trace("TealDatasetConnector$set_join_keys join_keys set for dataset: { deparse1(self$get_dataname()) }.")
+      logger::log_trace(paste(
+        "TealDatasetConnector$set_join_keys join_keys set for dataset:",
+        "{ deparse1(self$get_dataname()) }."
+      ))
 
       return(invisible(self))
     },
@@ -291,7 +300,8 @@ TealDatasetConnector <- R6::R6Class( # nolint
     mutate_join_keys = function(dataset, val) {
       self$get_join_keys()$mutate(private$dataname, dataset, val)
       logger::log_trace(
-        "TealDatasetConnector$mutate_join_keys join_keys modified keys of { deparse1(self$get_dataname()) } against { dataset }."
+        "TealDatasetConnector$mutate_join_keys join_keys modified keys of
+        { deparse1(self$get_dataname()) } against { dataset }."
       )
 
       return(invisible(self))
@@ -453,7 +463,9 @@ TealDatasetConnector <- R6::R6Class( # nolint
         }
       }
       private$ui_input <- inputs
-      logger::log_trace("TealDatasetConnector$set_ui_input ui_input set for dataset: { deparse1(self$get_dataname()) }.")
+      logger::log_trace(
+        "TealDatasetConnector$set_ui_input ui_input set for dataset: { deparse1(self$get_dataname()) }."
+      )
       return(invisible(self))
     },
     #' @description
@@ -644,9 +656,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       }
       # eval CallableFunction with dynamic args
       tryCatch(
-        {
-          private$pull_callable$run(args = args, try = try)
-        },
+        expr = private$pull_callable$run(args = args, try = try),
         error = function(e) {
           if (grepl("object 'conn' not found", e$message)) {
             output_message <- "This dataset connector requires connection object (conn) to be provided."

@@ -1,10 +1,7 @@
 ## TealData ====
-#'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title Manage multiple `TealDataConnector`, `TealDatasetConnector` and `TealDataset` objects.
 #'
-#' @description
+#' @description `r lifecycle::badge("experimental")`
 #' Class manages `TealDataConnector`, `TealDatasetConnector` and
 #' `TealDataset` objects and aggregate them in one collection.
 #' Class also decides whether to launch app before initialize teal application.
@@ -66,7 +63,10 @@ TealData <- R6::R6Class( # nolint
     #' Create a new object of `TealData` class
     initialize = function(..., check = FALSE, join_keys) {
       dot_args <- list(...)
-      is_teal_data <- checkmate::test_list(dot_args, types = c("TealDataConnector", "TealDataset", "TealDatasetConnector"))
+      is_teal_data <- checkmate::test_list(
+        dot_args,
+        types = c("TealDataConnector", "TealDataset", "TealDatasetConnector")
+      )
       if (!all(is_teal_data)) {
         stop("All elements should be of TealDataset(Connector) or TealDataConnector class")
       }
@@ -481,7 +481,6 @@ TealData <- R6::R6Class( # nolint
   )
 )
 
-## Functions ====
 is_any_class_list <- function(x, class) {
   vapply(
     x,

@@ -13,3 +13,4 @@ get_dummy_cdisc_data()
 Get dummy CDISC data including \code{ADSL}, \code{ADAE} and \code{ADLB}.
 Some NAs are also introduced to stress test.
 }
+\keyword{internal}

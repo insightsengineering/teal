@@ -2,7 +2,7 @@
 % Please edit documentation in R/MAETealDataset.R
 \name{mae_dataset}
 \alias{mae_dataset}
-\title{Public facing constructor for \code{MAETealDataset}}
+\title{The constructor of \code{MAETealDataset}}
 \usage{
 mae_dataset(
   dataname,
@@ -35,7 +35,7 @@ are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
 }
 \description{
-Public facing constructor for \code{MAETealDataset}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 # Simple example

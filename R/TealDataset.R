@@ -1,10 +1,9 @@
 ## TealDataset ====
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @title  R6 Class representing a dataset with its attributes
 #'
-#' @description
+#' @description `r lifecycle::badge("stable")`
 #' Any `data.frame` object can be stored inside this object.
 #' Some attributes like colnames, dimension or column names for a specific type will
 #' be automatically derived.
@@ -858,7 +857,7 @@ TealDataset <- R6::R6Class( # nolint
 
 #' Constructor for [`TealDataset`] class
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param dataname (`character`)\cr
 #'  A given name for the dataset it may not contain spaces

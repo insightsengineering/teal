@@ -15,6 +15,7 @@
 #' @param label `character` label of module
 #' @param active_datanames `character vector` datanames shown in filter panel;
 #'   can be `"all"` to mean all available datasets
+#' @keywords internal
 #'
 #' @examples
 #' library(scda)
@@ -70,6 +71,7 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
 #' The module also prints a nice error message if bookmarking is not enabled.
 #'
 #' @inheritParams filter_calls_module
+#' @keywords internal
 bookmark_module <- function(label = "Bookmark Module") { # nolint
   checkmate::assert_string(label)
 
@@ -122,6 +124,7 @@ bookmark_module <- function(label = "Bookmark Module") { # nolint
 #' code that is executed before `browser()` is called.
 #'
 #' @inheritParams filter_calls_module
+#' @keywords internal
 debug_browser_module <- function(label = "Browser Debug Module") { # nolint
   checkmate::assert_string(label)
 
@@ -161,6 +164,7 @@ debug_browser_module <- function(label = "Browser Debug Module") { # nolint
 #' all filters.
 #'
 #' @inheritParams filter_calls_module
+#' @keywords internal
 reset_filters_module <- function(label = "Reset Filters Module", active_datanames = "all") { # nolint
   checkmate::assert_string(label)
   checkmate::assert_character(active_datanames, min.len = 1, any.missing = FALSE)
@@ -228,7 +232,7 @@ reset_filters_module <- function(label = "Reset Filters Module", active_dataname
 #'
 #' @param expr `function or reactive`
 #' @return `reactive`
-# sodo1: do you like this code? I don't.
+#' @keywords internal
 trigger_after_first_cycle <- function(expr) { # nolint
   stopifnot(is.function(expr))
   trigger_now <- FALSE
@@ -257,7 +261,7 @@ trigger_after_first_cycle <- function(expr) { # nolint
 #' There is a checkbox option to not reset variables that are currently filtered
 #' (but they must still appear in the `filter`, otherwise they are removed).
 #'
-#' **Note:**
+#' @note
 #' The filters of all datasets are set, not just the active datanames
 #' in the module's tab. Some datasets may be hidden from filtering, but the
 #' filter state is still changed. However, the dataset is not immediately
@@ -268,7 +272,7 @@ trigger_after_first_cycle <- function(expr) { # nolint
 #'
 #' @inheritParams filter_calls_module
 #' @inheritParams init
-#'
+#' @keywords internal
 predefined_filters_module <- function(label = "Apply filters", filter) { # nolint
   checkmate::assert_string(label)
   checkmate::assert_list(filter, min.len = 0, names = "unique")
@@ -428,6 +432,7 @@ predefined_filters_module <- function(label = "Apply filters", filter) { # nolin
 #'
 #' @param f `function` function / reactive to evaluate
 #' @return `function` that returns a trigger to make it active
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' smth_next_cycle <- execute_in_next_cycle(reactive(input$smth))

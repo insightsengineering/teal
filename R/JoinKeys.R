@@ -1,10 +1,9 @@
 ## JoinKeys ====
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
 #' @title R6 Class to store relationships for joining datasets
 #'
-#' @description
+#' @description `r lifecycle::badge("stable")`
 #' This class stores symmetric links between pairs of key-values
 #' (e.g. column A of dataset X can be joined with column B of dataset Y). This relationship
 #' is more general than the SQL foreign key relationship which also imposes constraints on the values
@@ -217,7 +216,7 @@ JoinKeys <- R6::R6Class( # nolint
 
 #' Create a `JoinKeys` out of a list of `JoinKeySet` objects
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param ... optional, a `JoinKeySet` objects created using the `join_key` function.
 #' @details Note that join keys are symmetric although the relationship only needs
@@ -306,7 +305,7 @@ mutate_join_keys.TealData <- function(x, dataset_1, dataset_2, val) { # nolint
 
 #' Create a relationship between a pair of datasets
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @inheritParams mutate_join_keys
 #' @param keys (optionally named `character`) where `names(keys)` are columns in `dataset_1`

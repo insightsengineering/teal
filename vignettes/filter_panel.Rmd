@@ -39,7 +39,7 @@ knitr::include_graphics("./images/filter_panel/filtered_data_init.jpg")
 `FilteredData` is dispatched on type of `TealData`, and if DDL is `CDISCTealData` then
 `CDISCFilteredData` is initialized. Each `TealDataset` from `CDISCTealData` determines the type of the
 `FilteredDataset`. In above diagram `CDISCTealDataset` initializes `CDISCFilteredDataset` and
-`MAETealDataset` initializes `MAEFilteredDataset`.  
+`MAETealDataset` initializes `MAEFilteredDataset`.
 Most complicated concept in the new filter panel is `FilterStates`, which are initialized in
 `FilteredDataset`. The type and number of `FilterStates` depends on the data kept in the
 `FilteredDataset`. You can imagine `FilterStates` as one `subset` call. In case of
@@ -48,7 +48,7 @@ is sufficient to subset data rows. Consider `MultiAssayExperiment` object which 
 data in `@colData` and multiple experiments in `@ExperimentList`. Because `MultiAssayExperiment`
 contains multiple objects and each must be filtered by separate call, this is why multiple
 `FilterStates` objects are required for `MAEFilteredDataset`. `ReactiveQueue` are created within
-`FilterStates` and their number also depends on the `FilterStates` type.  
+`FilterStates` and their number also depends on the `FilterStates` type.
 Described objects are created instantly when data is loaded and they remain unchanged, whereas
 `FilterState` is initialized each time when the new filter is added. Values of the `FilterState` can
 change and also it can be removed and added once again.
@@ -227,41 +227,41 @@ and `rowData` (objects attached to this experiment).
 
 ## Filter-panel API
 
-All of filter-panel classes have dedicated methods to set and get current filter state. 
+All of filter-panel classes have dedicated methods to set and get current filter state.
 These methods include:
 - `get_filter_state`
 - `set_filter_state`
 - `remove_filter_state`
 - `clear_filter_states`
 
-Setting and getting filter-panel states are done through a nested list which follows a 
+Setting and getting filter-panel states are done through a nested list which follows a
 specific pattern. The structure of the list should reflect address of `FilterState`(s) object.
 By default (`data.frame`), the structure will follow the pattern shown in the code below,
-with a list element for each variable from each dataset. In case of `MultiAssayExperiment` 
-objects, the situation looks different, because these datasets have a multiple objects inside, 
+with a list element for each variable from each dataset. In case of `MultiAssayExperiment`
+objects, the situation looks different, because these datasets have a multiple objects inside,
 so the list needs to refer to the object one wants to set/get filter from.
 
 ```
 dataset-1: #data.frame
-  variable-1: 
+  variable-1:
     selected: [<selected>]
     keep_na: <keep_na>
   ...
 
 dataset-n: # MAE
   subjects:
-    variable-1: 
+    variable-1:
       selected: [<selected>]
       keep_na: <keep_na>
     ...
   experiment-1:
     subset:
-      variable-1: 
+      variable-1:
         selected: [<selected>]
         keep_na: <keep_na>
       ...
     select:
-      variable-2: 
+      variable-2:
         selected: [<selected>]
         keep_na: <keep_na>
       ...
@@ -334,13 +334,11 @@ app <- teal::init(
       filters = "all",
       ui = function(id, ...) {
         ns <- NS(id)
-        teal.devel::standard_layout(
-          output = teal.devel::white_small_well(verbatimTextOutput(ns("filter_state"))),
-          encoding = div(
-            actionButton(ns("add_species_filter"), "Set iris$Species filter"),
-            actionButton(ns("remove_species_filter"), "Remove iris$Species filter"),
-            actionButton(ns("remove_all_filters"), "Remove all filters")
-          )
+        shiny::tagList(
+          verbatimTextOutput(ns("filter_state")),
+          actionButton(ns("add_species_filter"), "Set iris$Species filter"),
+          actionButton(ns("remove_species_filter"), "Remove iris$Species filter"),
+          actionButton(ns("remove_all_filters"), "Remove all filters")
         )
       },
       server = function(input, output, session, datasets) {

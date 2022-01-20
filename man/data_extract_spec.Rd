@@ -25,7 +25,7 @@ variables as possible choices and a select spec with multiple set to TRUE.}
 with multiple keys selected in filter part.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 The Data Extract input can be used to filter and select columns from a data
 set. This function enables such an input in teal.
@@ -36,8 +36,7 @@ Note that no checks based on columns can be done because the data is only referr
 \section{Module Development}{
 
 \describe{
-From this function's output a \code{\link[teal.devel:data_extract_ui]{teal.devel::data_extract_ui()}} can be constructed.
-This input can be read by a \code{\link[teal.devel:data_extract_srv]{teal.devel::data_extract_srv()}} module.
+\code{teal.devel} uses this object to construct a UI element in a module.
 }
 }
 

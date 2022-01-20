@@ -1,6 +1,6 @@
 #' `TealDataConnector` connector for `RICE`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("superseded")`
 #' Build data connector for `RICE` datasets
 #'
 #' @export
@@ -23,7 +23,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
 
 #' `TealDataConnector` connector for `TERADATA`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("superseded")`
 #' Build data connector for `TERADATA` functions or datasets
 #'
 #' @export
@@ -42,7 +42,7 @@ teradata_data <- function(..., connection = teradata_connection()) {
 
 #' `TealDataConnector` connector for `SNOWFLAKE`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("superseded")`
 #' Build data connector for `SNOWFLAKE` functions or datasets
 #'
 #' @export
@@ -65,7 +65,7 @@ snowflake_data <- function(..., connection) {
 
 #' `TealDataConnector` connector for `CDSE`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("superseded")`
 #' Build data connector for `CDSE` datasets
 #'
 #' @export
@@ -85,7 +85,7 @@ cdse_data <- function(..., connection = cdse_connection()) {
 
 #' `TealDataConnector` connector for `DataSetDB`
 #'
-#' @description `r lifecycle::badge("defunct")`
+#' @description `r lifecycle::badge("superseded")`
 #' Build data connector for `DataSetDB` datasets
 #'
 #' @export

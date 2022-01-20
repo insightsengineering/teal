@@ -15,3 +15,4 @@ Note that Shiny does not bookmark uploaded files except when
 \code{enableBookmarking} is set to \code{server}.
 The module also prints a nice error message if bookmarking is not enabled.
 }
+\keyword{internal}

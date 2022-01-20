@@ -1,12 +1,9 @@
 ## TealDataAbstract ====
-#'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title `TealDataAbstract` class
 #'
 #' @description
 #' Abstract class containing code for handling set of datasets.
-#'
+#' @keywords internal
 TealDataAbstract <- R6::R6Class( # nolint
   classname = "TealDataAbstract",
   ## __Public Methods ====

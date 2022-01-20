@@ -15,3 +15,4 @@ picker_options(choices)
 \description{
 Create \code{choicesOpt} for \code{pickerInput}
 }
+\keyword{internal}
