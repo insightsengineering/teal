@@ -31,7 +31,7 @@ parent dataset name}
 (\code{CDISCTealDataset} or \code{CDISCTealDatasetConnector}) object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \details{
 Convert a \code{TealDataset(Connector)} object to a \code{CDISCTealDataset(Connector)} object

@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{data_connection}
 \alias{data_connection}
-\title{Public facing object constructor for \code{TealDataConnection} class.}
+\title{The constructor for \code{TealDataConnection} class.}
 \usage{
 data_connection(
   open_fun = NULL,
@@ -24,7 +24,7 @@ data_connection(
 \code{TealDataConnection} object
 }
 \description{
-Public facing object constructor for \code{TealDataConnection} class.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 open_fun <- callable_function(data.frame) # define opening function

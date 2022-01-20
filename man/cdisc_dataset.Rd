@@ -46,7 +46,7 @@ within another dataset.}
 (\code{CDISCTealDataset}) a dataset with connected metadata
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Function that creates \code{CDISCTealDataset} object
 }
 \examples{

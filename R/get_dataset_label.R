@@ -1,7 +1,7 @@
 #' S3 method for getting a label of
 #' (`TealDatasetConnector` or `TealDataset`) R6 object
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param x (`TealDatasetConnector` or `TealDataset`) R6 object
 #'

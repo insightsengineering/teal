@@ -69,7 +69,7 @@ log_app_usage <- function(ta,
 
 #' app usage data fields to add to log file
 #'
-#' @noRd
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' teal.utils:::line_usage_log("Oncology", "Tecentriq", "NSCLC", "Exploratory")
@@ -94,7 +94,7 @@ line_usage_log <- function(...) {
 #'
 #' Metadata included in logs relates to loaded NEST packages
 #' @param fields package metadata to be retrieved
-#' @noRd
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{

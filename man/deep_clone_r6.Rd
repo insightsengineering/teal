@@ -16,3 +16,4 @@ When cloning an R6 object the private function
 \code{deep_clone} is automatically used. To ensure a complete
 clone the private function should call this function
 }
+\keyword{internal}

@@ -11,8 +11,7 @@ all_choices()
 \code{all_choices} object
 }
 \description{
-An S3 structure representing the selection of all
-possible choices in a \code{filter_spec}, \code{select_spec} or \code{choices_selected} object.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 # Both structures are semantically identical

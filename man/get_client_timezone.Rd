@@ -20,3 +20,4 @@ Local timezone in the browser may differ from the system timezone from the serve
 This script can be run to register a shiny input which contains information about
 the timezone in the browser.
 }
+\keyword{internal}

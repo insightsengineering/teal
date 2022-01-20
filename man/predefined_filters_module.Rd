@@ -75,8 +75,8 @@ There is a checkbox option to not reset those datanames that don't appear
 in \code{filter}.
 There is a checkbox option to not reset variables that are currently filtered
 (but they must still appear in the \code{filter}, otherwise they are removed).
-
-\strong{Note:}
+}
+\note{
 The filters of all datasets are set, not just the active datanames
 in the module's tab. Some datasets may be hidden from filtering, but the
 filter state is still changed. However, the dataset is not immediately
@@ -85,3 +85,4 @@ A drawback with the current approach is that the module computes on the full
 dataset immediately after reset (which may take a lot of time) and the new
 filter state is only applied in the next reactive cycle.
 }
+\keyword{internal}

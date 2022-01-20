@@ -1,6 +1,11 @@
 .log_depth <- 0
 
-# Teal Internally Used Logger functions
+#' A logging function
+#'
+#' Superseded by [register_logger].
+#'
+#' @description `r lifecycle::badge("superseded")`
+#' @keywords internal
 #' @export
 .log <- function(..., sep = " ", type = "debug") {
   lifecycle::deprecate_soft(

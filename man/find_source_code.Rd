@@ -12,3 +12,4 @@ find_source_code(lines)
 \description{
 Finds lines in preprocessing code where \code{source()} call is located
 }
+\keyword{internal}

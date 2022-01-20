@@ -17,3 +17,4 @@ enclosed_with_dataname(lines, dataname = NULL)
 \description{
 Extracts lines from code which are enclosed within regexp starts_at and stops_at
 }
+\keyword{internal}

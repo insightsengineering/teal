@@ -16,3 +16,4 @@ can be \code{"all"} to mean all available datasets}
 The module presents a group of checkboxes to select the datasets for which to reset
 all filters.
 }
+\keyword{internal}

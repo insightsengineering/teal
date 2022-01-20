@@ -1,10 +1,9 @@
 ## Callable ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title A \code{Callable} class of objects
 #'
 #' Object that stores function name with its arguments. Methods to get call and run it.
+#' @keywords internal
 #'
 Callable <- R6::R6Class( # nolint
   "Callable",

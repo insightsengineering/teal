@@ -23,4 +23,5 @@ NULL
 #' @importFrom lifecycle deprecate_stop
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom SummarizedExperiment colData
+#' @importFrom magrittr %>%
 NULL
