@@ -243,10 +243,6 @@ are in the [teal repository][tealgithub] in the following files:
 - `R/FilteredData.R`, `R/FilteredDataset.R`, `R/FilterStates.R`, `R/FilterState.R`
 - `R/init.R`,
 
-We have also a logging facility with the `.log` function with the corresponding
-code saved in `R/logging.R`. Logging to the prompt can be disabled with
-`options(teal_logging = FALSE)`.
-
 We now discuss each of the three core components in detail. This would be a good
 time to browse through the just mentioned `.R` files and see how much of what
 has just been said/written can be spotted in the code without further
@@ -339,7 +335,6 @@ that is passed an argument to the `server` function is created by `teal` as foll
 
 ```{r}
 library(teal)
-options(teal_logging = FALSE)
 
 datasets <- teal:::CDISCFilteredData$new()
 # the `datasets` object contains reactives
