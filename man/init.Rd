@@ -118,8 +118,6 @@ library(scda)
 
 ADSL <- synthetic_cdisc_data("latest")$adsl
 
-options(teal_logging = FALSE)
-
 app <- init(
   data = cdisc_data(
     cdisc_dataset("ADSL", ADSL),

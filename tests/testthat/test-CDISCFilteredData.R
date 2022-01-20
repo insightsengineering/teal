@@ -1,5 +1,3 @@
-options(teal_logging = FALSE)
-
 ds <- CDISCFilteredData$new()
 
 test_that("datanames() returns an empty character array after initialization", {
