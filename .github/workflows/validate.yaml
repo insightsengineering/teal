@@ -9,6 +9,6 @@ on:
 jobs:
   validation:
     name: R Package Validation report 📃
-    uses: insightsengineering/r.pkg.template/.github/workflows/validation.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/validation.yaml@val-fix
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
