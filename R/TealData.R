@@ -71,14 +71,6 @@ TealData <- R6::R6Class( # nolint
         stop("All elements should be of TealDataset(Connector) or TealDataConnector class")
       }
 
-      if (missing(join_keys)) {
-        join_keys <- teal::join_keys()
-      }
-      if (is(join_keys, "JoinKeySet")) {
-        join_keys <- teal::join_keys(join_keys)
-      }
-      stopifnot(is(join_keys, "JoinKeys"))
-
       datanames <- unlist(lapply(dot_args, get_dataname))
       private$check_names(datanames)
 
@@ -88,6 +80,13 @@ TealData <- R6::R6Class( # nolint
 
       private$pull_code <- CodeClass$new()
       private$mutate_code <- CodeClass$new()
+
+      if (missing(join_keys)) {
+        join_keys <- teal::join_keys()
+      } else if (inherits(join_keys, "JoinKeySet")) {
+        join_keys <- teal::join_keys(join_keys)
+      }
+      checkmate::assert_class(join_keys, "JoinKeys")
 
       for (dataset_1 in names(join_keys$get())) {
         for (dataset_2 in names(join_keys$get()[[dataset_1]])) {
@@ -99,7 +98,6 @@ TealData <- R6::R6Class( # nolint
           self$mutate_join_keys(dat_name, dat_name, get_keys(self$get_items(dat_name)))
         }
       }
-
 
       self$id <- sample.int(1e11, 1, useHash = TRUE)
 
@@ -156,7 +154,6 @@ TealData <- R6::R6Class( # nolint
     #' @return (`JoinKeys`)
     get_join_keys = function() {
       res <- join_keys()
-
       for (dat_obj in self$get_items()) {
         list_keys <- dat_obj$get_join_keys()$get()[[1]]
         for (dat_name in names(list_keys)) {
@@ -321,10 +318,14 @@ TealData <- R6::R6Class( # nolint
       }
 
       data_obj_1 <- self$get_items()[[dataset_1]]
-      data_obj_2 <- self$get_items()[[dataset_2]]
-
       data_obj_1$mutate_join_keys(dataset_2, val)
-      data_obj_2$mutate_join_keys(dataset_1, val)
+      if (dataset_1 != dataset_2) {
+        data_obj_2 <- self$get_items()[[dataset_2]]
+        contrary_keys <- if (is.null(names(val))) {
+          val <- setNames(val, val)
+        }
+        data_obj_2$mutate_join_keys(dataset_1, setNames(names(val), unname(val))) # contrary keys
+      }
 
       logger::log_trace(
         "TealData$mutate_join_keys modified the join keys between { dataset_1 } and { dataset_2 }"
@@ -476,8 +477,7 @@ TealData <- R6::R6Class( # nolint
         }
       })
       return(rv)
-    },
-    join_keys = NULL # JoinKeys after initialization
+    }
   )
 )
 

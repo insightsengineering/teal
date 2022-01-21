@@ -625,3 +625,93 @@ testthat::test_that("TealData$new throws if passed two datasets with the same na
   mtcars_ds2 <- TealDataset$new("cars", head(mtcars))
   testthat::expect_error(TealData$new(mtcars_ds, mtcars_ds2), "TealDatasets names should be unique")
 })
+
+testthat::test_that("TealData$new sets join_keys datasets based on the primary keys", {
+  df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
+  df2 <- data.frame(df2_id = c("A", "B"), fk = c("A", "B"), b = c(1L, 2L))
+
+  DF1 <- dataset("DF1", df1, keys = "id")
+  DF2 <- dataset("DF2", df2, keys = "df2_id")
+
+  data <- TealData$new(DF1, DF2)
+  testthat::expect_equal(
+    data$get_join_keys(),
+    join_keys(join_key("DF1", "DF1", "id"), join_key("DF2", "DF2", "df2_id"))
+  )
+})
+
+testthat::test_that("TealData$new sets passes join_keys to datasets correctly", {
+  df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
+  df2 <- data.frame(df2_id = c("A", "B"), id = c("A", "B"), b = c(1L, 2L))
+
+  DF1 <- dataset("DF1", df1, keys = "id")
+  DF2 <- dataset("DF2", df2, keys = "df2_id")
+
+  jk <- join_keys(join_key("DF1", "DF2", "id"))
+  data <- teal_data(DF1, DF2, join_keys = jk, check = FALSE)
+
+  testthat::expect_equal(
+    data$get_join_keys(),
+    join_keys(
+      join_key("DF1", "DF2", "id"),
+      join_key("DF1", "DF1", "id"),
+      join_key("DF2", "DF2", "df2_id")
+    )
+  )
+})
+
+testthat::test_that("TealData$new sets passes JoinKeys to datasets correctly when key names differ", {
+  df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
+  df2 <- data.frame(df2_id = c("A", "B"), fk = c("A", "B"), b = c(1L, 2L))
+  DF1 <- dataset("DF1", df1, keys = "id")
+  DF2 <- dataset("DF2", df2, keys = "df2_id")
+  jk <- join_keys(join_key("DF1", "DF2", c(id = "fk")))
+  data <- teal_data(DF1, DF2, join_keys = jk, check = FALSE)
+
+  testthat::expect_equal(
+    data$get_join_keys(),
+    join_keys(
+      join_key("DF1", "DF2", c(id = "fk")),
+      join_key("DF1", "DF1", "id"),
+      join_key("DF2", "DF1", c(fk = "id")),
+      join_key("DF2", "DF2", "df2_id")
+    )
+  )
+})
+
+testthat::test_that("TealData$mutate_join_keys changes keys for both datasets (same key in both)", {
+  df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
+  df2 <- data.frame(df2_id = c("A", "B"), id = c("A", "B"), b = c(1L, 2L))
+  DF1 <- dataset("DF1", df1, keys = "id")
+  DF2 <- dataset("DF2", df2, keys = "df2_id")
+  data <- teal_data(DF1, DF2, check = FALSE)
+  data$mutate_join_keys("DF1", "DF2", "id")
+
+  testthat::expect_equal(
+    data$get_join_keys(),
+    join_keys(
+      join_key("DF1", "DF1", "id"),
+      join_key("DF1", "DF2", "id"),
+      join_key("DF2", "DF2", "df2_id")
+    )
+  )
+})
+
+testthat::test_that("TealData$new sets passes JoinKeys to datasets correctly when key names differ", {
+  df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
+  df2 <- data.frame(df2_id = c("A", "B"), fk = c("A", "B"), b = c(1L, 2L))
+  DF1 <- dataset("DF1", df1, keys = "id")
+  DF2 <- dataset("DF2", df2, keys = "df2_id")
+  data <- teal_data(DF1, DF2, check = FALSE)
+  data$mutate_join_keys("DF1", "DF2", c(id = "fk"))
+
+  testthat::expect_equal(
+    data$get_join_keys(),
+    join_keys(
+      join_key("DF1", "DF1", "id"),
+      join_key("DF1", "DF2", c(id = "fk")),
+      join_key("DF2", "DF2", "df2_id"),
+      join_key("DF2", "DF1", c(fk = "id"))
+    )
+  )
+})
