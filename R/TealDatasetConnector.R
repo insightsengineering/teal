@@ -85,7 +85,8 @@ TealDatasetConnector <- R6::R6Class( # nolint
       check_ellipsis(...)
 
       cat(sprintf(
-        "A TealDatasetConnector object, named %s, containing a TealDataset object that has %sbeen loaded/pulled%s\n",
+        "A %s object, named %s, containing a TealDataset object that has %sbeen loaded/pulled%s\n",
+        class(self)[1],
         self$get_dataname(),
         ifelse(self$is_pulled(), "", "not "),
         ifelse(self$is_pulled(), ":", "")

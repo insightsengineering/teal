@@ -117,7 +117,8 @@ TealDataset <- R6::R6Class( # nolint
     print = function(...) {
       check_ellipsis(...)
       cat(sprintf(
-        "A TealDataset object containing the following data.frame (%s rows and %s columns):\n",
+        "A %s object containing the following data.frame (%s rows and %s columns):\n",
+        class(self)[1],
         private$.nrow,
         private$.ncol
       ))
