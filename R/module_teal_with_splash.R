@@ -57,8 +57,12 @@ srv_teal_with_splash <- function(id, data, modules, filter = list()) {
     logger::log_trace(
       "srv_teal_with_splash initializing module with data { paste(data$get_datanames(), collapse = ' ')}."
     )
+    
+    if (getOption("teal.show_js_log", default = FALSE)) {
+      shinyjs::showLog() # to show Javascript console logs in the R console
+    }
+    
     is_pulled_data <- is_pulled(data)
-
     # raw_data contains TealDataAbstract, i.e. R6 object and container for data
     # reactive to get data through delayed loading
     # we must leave it inside the server because of callModule which needs to pick up the right session
