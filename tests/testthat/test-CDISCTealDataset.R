@@ -28,6 +28,25 @@ testthat::test_that("CDISCTealDataset basics", {
   )
 })
 
+testthat::test_that("CDISCTealDataset print method returns correct class name and content", {
+  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
+  test_ds <- CDISCTealDataset$new(
+    dataname = "testds",
+    x = x,
+    keys = "x",
+    parent = "testds2"
+  )
+  testthat::expect_identical(
+    capture.output(print(test_ds)),
+    c(
+      "A CDISCTealDataset object containing the following data.frame (2 rows and 2 columns):",
+      "  x y",
+      "1 1 a",
+      "2 2 b"
+    )
+  )
+})
+
 testthat::test_that("data returns the data passed in the constructor", {
   adsl_raw <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"), object = list(1:3, letters[1:3]))))
   adsl <- CDISCTealDataset$new("ADSL", adsl_raw, parent = character(0), keys = get_cdisc_keys("ADSL"))
