@@ -16,7 +16,7 @@
 * Added `pid` and shiny session token into footnote so app developers can identify logs for apps.
 
 ### Other
-* Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
+* Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector`, `JoinKeys` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
 * Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
 * Modified `data_extract_spec` to allow both the `filter` and `select` parameters to be `NULL`, which results in the `data_extract_ui` acting as if a `filter_spec` with all variables as possible choices had been supplied as the `filter` argument and a `select_spec` with the `multiple` parameter set to `TRUE` had been supplied as the `select` argument.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.

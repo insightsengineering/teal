@@ -146,6 +146,25 @@ JoinKeys <- R6::R6Class( # nolint
 
       logger::log_trace("JoinKeys$set keys are set.")
       return(invisible(self))
+    },
+    #' @description
+    #' Prints this `JoinKeys`.
+    #'
+    #' @param ... additional arguments to the printing method
+    #' @return invisibly self
+    print = function(...) {
+      check_ellipsis(...)
+      keys_list <- self$get()
+      if (length(keys_list) > 0) {
+        cat(sprintf(
+          "A JoinKeys object containing foreign keys between %s datasets:\n",
+          length(keys_list)
+        ))
+        print(keys_list)
+      } else {
+        cat("An empty JoinKeys object.")
+      }
+      invisible(self)
     }
   ),
   ## __Private Fields ====
