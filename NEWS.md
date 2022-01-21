@@ -43,7 +43,8 @@
 * Replaced the old `shiny` server functions of `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with the `shiny::moduleServer` equivalents.
 * Running a `teal` application via `ui_teal_with_splash` and `srv_teal_with_splash` is now no longer recommended because it doesn't support new features (e.g. logging, bookmarking). Use `init` instead.
 * Updated the R version requirement to >= 4.0.
-* Updated the "filter panel collapse" icon to remove warnings when using shiny version >= 1.7.
+* Updated the "filter panel collapse" icon to remove warnings when using `shiny` version >= 1.7.
+* Remove some of the non-exported, debugging modules.
 
 # teal 0.10.0
 
