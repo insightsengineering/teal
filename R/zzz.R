@@ -1,8 +1,7 @@
 .onLoad <- function(libname, pkgname) { # nolint
   # adapted from https://github.com/r-lib/devtools/blob/master/R/zzz.R
   teal_default_options <- list(
-    teal_logging = TRUE,
-    teal_show_js_log = FALSE,
+    teal.show_js_log = FALSE,
     teal.threshold_slider_vs_checkboxgroup = 5
   )
 
