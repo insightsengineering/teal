@@ -319,12 +319,16 @@ TealData <- R6::R6Class( # nolint
 
       data_obj_1 <- self$get_items()[[dataset_1]]
       data_obj_1$mutate_join_keys(dataset_2, val)
+
       if (dataset_1 != dataset_2) {
         data_obj_2 <- self$get_items()[[dataset_2]]
-        contrary_keys <- if (is.null(names(val))) {
-          val <- setNames(val, val)
+        contrary_keys <- if (!is.null(names(val))) {
+          # swap names with values to obtain data1 <- data2 relation
+          setNames(names(val), unname(val))
+        } else {
+          setNames(val, val)
         }
-        data_obj_2$mutate_join_keys(dataset_1, setNames(names(val), unname(val))) # contrary keys
+        data_obj_2$mutate_join_keys(dataset_1, contrary_keys)
       }
 
       logger::log_trace(
