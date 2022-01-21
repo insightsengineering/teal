@@ -33,6 +33,7 @@
 * Fixed restoring a bookmarked filter state of `teal` application.
 * Refactored `module_nested_tabs` to fix the issue with the filter panel not reacting to an input change in a nested module.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
+* Fixed the lack of print of the `Javascript` console logs to the `R` console when the `teal.show_js_log` options variable is set to `TRUE`.
 
 ### Miscellaneous
 * Added a vignette describing the modifications to `teal` applications users can apply using `R` options.
