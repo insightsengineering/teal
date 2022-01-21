@@ -99,6 +99,7 @@ CallablePythonCode <- R6::R6Class( # nolint
       if (is.null(res)) {
         stop("The specified python object returned NULL or does not exist in the python code")
       }
+      res
     }
   ),
 
