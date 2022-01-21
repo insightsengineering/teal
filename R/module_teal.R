@@ -136,9 +136,6 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     )
 
     # Javascript code
-    if (getOption("teal.show_js_log", default = FALSE)) {
-      shinyjs::showLog() # to show Javascript console logs in the R console
-    }
     run_js_files(files = "init.js") # Javascript code to make the clipboard accessible
     # set timezone in shiny app
     # timezone is set in the early beginning so it will be available also
