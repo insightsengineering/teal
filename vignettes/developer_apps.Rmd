@@ -39,7 +39,6 @@ if (load_dev_teal) {
 
 # Don't remove these options, the developer may activate them as needed
 options(shiny.fullstacktrace = TRUE) # to show a detailed stack trace, see `?getShinyOption()`
-options(teal_logging = TRUE) # to log to console
 # where to open app (new window or within RStudio)
 # options("shiny.launch.browser" = TRUE) # to open a new window #nolint
 # to open in RStudio Viewer pane, only available in RStudio, so it won't go through `CI` if enabled
@@ -149,8 +148,6 @@ app <- init(
   ),
   modules = root_modules(
     teal:::filter_calls_module(),
-    teal:::bookmark_module(),
-    teal:::debug_browser_module(),
     teal:::reset_filters_module("Reset", active_datanames = c("ADSL", "ADLB"))
   ),
   filter = list(
@@ -175,9 +172,7 @@ app <- init(
   modules = root_modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
     teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
-    teal:::filter_calls_module("ADLB", active_datanames = c("ADLB")),
-    teal:::bookmark_module(),
-    teal:::debug_browser_module()
+    teal:::filter_calls_module("ADLB", active_datanames = c("ADLB"))
   ),
   filter = list(
     ADSL = list(
@@ -202,9 +197,7 @@ app <- init(
     code_cdisc_dataset_connector("ADSL", code = adsl_code)
   ),
   modules = root_modules(
-    teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
-    teal:::bookmark_module(),
-    teal:::debug_browser_module()
+    teal:::filter_calls_module("ADSL", active_datanames = c("ADSL"))
   ),
   filter = list(
     ADSL = list(
@@ -309,8 +302,7 @@ app <- init(
   ),
   modules = root_modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
-    teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
-    teal:::debug_browser_module()
+    teal:::filter_calls_module("ADSL", active_datanames = c("ADSL"))
   ),
   header = "Missing ADAE Dataset Raises Warning",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
@@ -398,7 +390,13 @@ app <- init(
     cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- rcd_2021_07_07$adlb")
   ),
   modules = root_modules(
-    teal:::debug_browser_module()
+    teal::module(
+      "test",
+      server = function(input, output, session, datasets) {
+      },
+      ui = function(id, ...) tags$p("test"),
+      filters = "all"
+    )
   ),
   header = "Raw App",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
@@ -425,7 +423,13 @@ app <- init(
     dataset("mtcars", mtcars_d, "rowname")
   ),
   modules = root_modules(
-    teal:::debug_browser_module()
+    teal::module(
+      "test",
+      server = function(input, output, session, datasets) {
+      },
+      ui = function(id, ...) tags$p("test"),
+      filters = "all"
+    )
   ),
   header = "Mixed Independent and Dependent Data",
   footer = tags$p(class = "text-muted", "Source: agile-R website")

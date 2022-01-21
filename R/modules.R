@@ -4,7 +4,7 @@
 
 #' Create a collection of `module` and `modules` object
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' Modules collects a tree of [module()] and [modules()]
 #' objects. This is useful to define the navigation structure of a teal app.
 #'
@@ -45,9 +45,9 @@ modules <- function(label, ...) {
 }
 
 
-#' Create the root modules container
+#' Creates the root modules container
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' To be used with [init()] in the `modules` argument.
 #'
 #' @details
@@ -70,10 +70,10 @@ root_modules <- function(...) {
 }
 
 
-#' Create a module with a new shiny page
+#' Creates a module with a new shiny page
 #'
-#' @description `r lifecycle::badge("maturing")`
-#' Tab items allows you to add a shiny module to the teal app
+#' @description `r lifecycle::badge("stable")`
+#' This function embeds a `shiny` application inside a `teal` application.
 #'
 #' @param label (\code{character}) Label shown in the navigation item for the module.
 #' @param server (\code{function}) Shiny server module function
@@ -143,6 +143,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' @param depth optional, integer determining current depth level
 #'
 #' @return depth level for given module
+#' @keywords internal
 #'
 #' @examples
 #' create_mod <- function(module_name) {
@@ -190,17 +191,15 @@ modules_depth <- function(modules, depth = 0L) {
   }
 }
 
-#' Convert `teal_modules` to a string
-#'
-#' The first line prints the `modules` label.
-#' The consecutive lines recursively list each submodule.
+#' Converts `teal_modules` to a string
 #'
 #' @param x (`teal_modules`) to print
 #' @param indent (`integer`) indent level;
 #'   each submodule is indented one level more
 #' @param ... (optional) additional parameters to pass to recursive calls of `toString`
-#' @return (`character` value)
+#' @return (`character`)
 #' @export
+#' @rdname modules
 toString.teal_modules <- function(x, indent = 0, ...) { # nolint
   # argument must be `x` to be consistent with base method
   paste(c(
@@ -209,27 +208,31 @@ toString.teal_modules <- function(x, indent = 0, ...) { # nolint
   ), collapse = "\n")
 }
 
-#' Convert `teal_module` to a string
-#' @param x `teal_module`
+#' Converts `teal_module` to a string
+#'
 #' @inheritParams toString.teal_modules
+#' @param x `teal_module`
 #' @param ... ignored
 #' @export
+#' @rdname module
 toString.teal_module <- function(x, indent = 0, ...) { # nolint
   paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, collapse = "")
 }
 
-#' Print `teal_modules`
+#' Prints `teal_modules`
 #' @param x `teal_modules`
 #' @param ... parameters passed to `toString`
 #' @export
+#' @rdname modules
 print.teal_modules <- function(x, ...) {
   s <- toString(x, ...)
   cat(s)
   return(invisible(s))
 }
 
-#' Print `teal_module`
+#' Prints `teal_module`
 #' @param x `teal_module`
 #' @param ... parameters passed to `toString`
 #' @export
+#' @rdname module
 print.teal_module <- print.teal_modules

@@ -1,6 +1,6 @@
 #' Set "`<choice>:<label>`" type of Names
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' This is often useful for [choices_selected] as it marks up the dropdown boxes
 #' for [shiny::selectInput()].
 #'
@@ -120,7 +120,7 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 
 #' Wrapper on [choices_labeled] to label variables basing on existing labels in data
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param data (`data.frame`, `character`, `TealDataset`, `TealDatasetConnector`)
 #' If `data.frame`, then data to extract labels from
@@ -275,7 +275,7 @@ variable_choices.TealDatasetConnector <- function(data, # nolint
 
 #' Wrapper on [choices_labeled] to label variable values basing on other variable values
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param data (`data.frame`, `character`, `TealDataset`, `TealDatasetConnector`)
 #' If `data.frame`, then data to extract labels from
@@ -459,7 +459,7 @@ value_choices.TealDatasetConnector <- function(data, # nolint
 #'   `NULL` for all data columns
 #'
 #' @return (atomic vector of `character`) classes of `columns` from provided `data`
-#'
+#' @keywords internal
 #' @examples
 #' teal:::variable_types(
 #'   data.frame(
@@ -560,6 +560,8 @@ variable_types.matrix <- function(data, columns = NULL) {
 }
 
 #' Print choices_labeled object
+#' @description `r lifecycle::badge("stable")`
+#' @rdname choices_labeled
 #' @param x an object used to select a method.
 #' @param ... further arguments passed to or from other methods.
 #' @export

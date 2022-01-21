@@ -1,10 +1,8 @@
 ## MAETealDataset ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title  R6 Class representing a `MultiAssayExperiment` object with its attributes
 #'
-#' @description
+#' @description `r lifecycle::badge("experimental")`
 #' Any `MultiAssayExperiment` object can be stored inside this `MAETealDataset`.
 #' Some attributes like colnames, dimension or column names for a specific type will
 #' be automatically derived.
@@ -159,7 +157,8 @@ MAETealDataset <- R6::R6Class( # nolint
     #'
     #' @return invisibly self
     print = function(...) {
-      cat(sprintf("A MAETealDataset object containing data of %d subjects.", private$.nrow))
+      cat(sprintf("A MAETealDataset object containing data of %d subjects.\n", private$.nrow))
+      print(experiments(private$.raw_data))
       invisible(self)
     }
   ),
@@ -225,8 +224,7 @@ MAETealDataset <- R6::R6Class( # nolint
 
 #' S3 method to construct an `MAETealDataset` object from `MultiAssayExperiment`
 #'
-#' @inheritParams dataset
-#' @param x (`MultiAssayExperiment`)
+#' @rdname dataset
 #'
 #' @examples
 #' # Simple example
@@ -259,7 +257,9 @@ dataset.MultiAssayExperiment <- function(dataname,
   )
 }
 
-#' Public facing constructor for `MAETealDataset`
+#' The constructor of `MAETealDataset`
+#'
+#' @description `r lifecycle::badge("experimental")`
 #'
 #' @inheritParams dataset
 #' @param x (`MultiAssayExperiment`)

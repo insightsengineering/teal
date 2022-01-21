@@ -1,8 +1,7 @@
 ## CallablePythonCode ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title A `CallablePythonCode` class of objects
+#' @keywords internal
 #'
 CallablePythonCode <- R6::R6Class( # nolint
 
@@ -100,6 +99,7 @@ CallablePythonCode <- R6::R6Class( # nolint
       if (is.null(res)) {
         stop("The specified python object returned NULL or does not exist in the python code")
       }
+      res
     }
   ),
 
@@ -128,9 +128,8 @@ CallablePythonCode <- R6::R6Class( # nolint
 )
 ## PythonCodeClass ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title A `CallablePythonCode` class of objects
+#' @description `r lifecycle::badge("experimental")`
 #'
 PythonCodeClass <- R6::R6Class( # nolint
   classname = "PythonCodeClass",

@@ -2,7 +2,7 @@
 #' (`TealDataAbstract`, (`TealDatasetConnector` or
 #' `TealDataset`) R6 object
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param x (`TealDataAbstract`, `TealDatasetConnector` or
 #' `TealDataset`) object

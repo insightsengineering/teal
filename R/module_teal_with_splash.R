@@ -2,7 +2,7 @@
 
 #' UI to show a splash screen in the beginning, then delegate to [`srv_teal`]
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' The splash screen could be used to query for a password to fetch the data.
 #' [`init`] is a very thin wrapper around this module useful for end-users which
 #' assumes that it is a top-level module and cannot be embedded.
@@ -44,7 +44,7 @@ ui_teal_with_splash <- function(id,
 #' Server function that loads the data through reactive loading and then delegates
 #' to [`srv_teal`].
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' Please also refer to the doc of [`init`].
 #'
 #' @inheritParams init
@@ -57,8 +57,12 @@ srv_teal_with_splash <- function(id, data, modules, filter = list()) {
     logger::log_trace(
       "srv_teal_with_splash initializing module with data { paste(data$get_datanames(), collapse = ' ')}."
     )
-    is_pulled_data <- is_pulled(data)
 
+    if (getOption("teal.show_js_log", default = FALSE)) {
+      shinyjs::showLog()
+    }
+
+    is_pulled_data <- is_pulled(data)
     # raw_data contains TealDataAbstract, i.e. R6 object and container for data
     # reactive to get data through delayed loading
     # we must leave it inside the server because of callModule which needs to pick up the right session

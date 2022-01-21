@@ -21,7 +21,7 @@ See \code{\link[logger:log_threshold]{logger::log_threshold}} for more informati
 \code{invisible(NULL)}
 }
 \description{
-Registers a logger instance in a given logging namespace.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 Creates a new logging namespace specified by the \code{namespace} argument.

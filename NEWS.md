@@ -1,4 +1,4 @@
-# teal 0.10.0.9056.4
+# teal 0.10.0.9056.9
 
 ### Breaking changes
 * Changed the `HTML` identifiers of `teal` modules - now each nested module receives its own `shiny` namespace.
@@ -6,6 +6,7 @@
 * Removed `raw_dataset`, `raw_dataset_connector`, `named_dataset`, `named_dataset_file`, `named_dataset_connector`, `relational_dataset`, `relational_dataset_file`, `relational_dataset_connector`, `key`, `as_cdisc`, `as_cdisc_relational`.
 * Removed `rcd_connection` and `rcd_data`; `scda_dataset_connectors` can be passed into `cdisc_data` and `teal_data` directly.
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
+* Renamed `teal_show_js_log` option into `teal.show_js_log` to match options naming convention.
 
 ### New features
 ### Logging
@@ -32,6 +33,7 @@
 * Fixed restoring a bookmarked filter state of `teal` application.
 * Refactored `module_nested_tabs` to fix the issue with the filter panel not reacting to an input change in a nested module.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
+* Fixed printing of the `JavaScript` console logs to the `R` console when `teal.show_js_log = TRUE`.
 
 ### Miscellaneous
 * Added a vignette describing the modifications to `teal` applications users can apply using `R` options.
@@ -42,7 +44,8 @@
 * Replaced the old `shiny` server functions of `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with the `shiny::moduleServer` equivalents.
 * Running a `teal` application via `ui_teal_with_splash` and `srv_teal_with_splash` is now no longer recommended because it doesn't support new features (e.g. logging, bookmarking). Use `init` instead.
 * Updated the R version requirement to >= 4.0.
-* Updated the "filter panel collapse" icon to remove warnings when using shiny version >= 1.7.
+* Updated the "filter panel collapse" icon to remove warnings when using `shiny` version >= 1.7.
+* Remove some of the non-exported, debugging modules.
 
 # teal 0.10.0
 

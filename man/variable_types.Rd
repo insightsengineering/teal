@@ -42,3 +42,4 @@ teal:::variable_types(
   )
 )
 }
+\keyword{internal}

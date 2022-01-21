@@ -41,6 +41,9 @@ Default: `"INFO"`.
 ### `teal_logging`
 Deprecated.
 
+### `teal_show_js_log`
+Deprecated in favor of `teal.show_js_log` (see below).
+
 ### `teal.show_js_log` (`logical`)
 This indicates whether to print the `Javascript` console logs to the `R` console. If set to `TRUE`, the logs will be printed; otherwise, they won't.
 
@@ -55,7 +58,7 @@ Default: 5.
 ### `teal.basic_table_args` (`basic_table_args` object)
 This specifies the list of arguments passed to every call to `rtables::basic_table` made in a `teal` application. This can be used to format `rtables` without making any changes to the application code. See the documentation of `teal.devel::basic_table_args` for more information.
 
-Default: `teal.devel::basic_table_args()`.
+Default: `teal.devel::basic_table_args ()`.
 
 ### `teal.load_nest_code` (`character`)
 The value of this option is appended to the top of the code rendered when using the `Show R Code` modal button. See the documentation of `teal.devel::get_rcode` for more information.
@@ -65,4 +68,4 @@ Default: `"# Add any code to install/load your NEST environment here"`.
 ### `teal.ggplot2_args`
 This option allows modifying labels and themes of all `ggplot2` plots in a `teal` application. See the documentation of `teal.devel::ggplot2_args` for more information.
 
-Default: `teal.devel::ggplot2_args()`.
+Default: `teal.devel::ggplot2_args ()`.

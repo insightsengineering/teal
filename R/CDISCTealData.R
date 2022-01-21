@@ -1,10 +1,8 @@
 ## CDISCTealData ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title Manage multiple `CDISCTealDataConnector`, `CDISCTealDatasetConnector` and `CDISCTealDataset` objects.
 #'
-#' @description
+#' @description `r lifecycle::badge("stable")`
 #' Class manages `CDISCTealDataConnector`, `CDISCTealDatasetConnector` and
 #' `CDISCTealDataset` objects and aggregate them in one collection.
 #' Class also decides whether to launch app before initialize teal application.
@@ -142,7 +140,7 @@ CDISCTealData <- R6::R6Class( # nolint
 # CONSTRUCTORS ====
 #' Data input for teal app
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 #'
 #' @note This function does not automatically assign keys to `TealDataset`
