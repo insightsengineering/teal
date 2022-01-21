@@ -63,9 +63,9 @@ testthat::test_that("TealDataConnector$print prints out expected output on basic
       ),
       "0 of which is/are loaded/pulled:",
       "--> Element 1:",
-      "A TealDatasetConnector object, named ADSL, containing a TealDataset object that has not been loaded/pulled",
+      "A CDISCTealDatasetConnector object, named ADSL, containing a TealDataset object that has not been loaded/pulled",
       "--> Element 2:",
-      "A TealDatasetConnector object, named ADAE, containing a TealDataset object that has not been loaded/pulled"
+      "A CDISCTealDatasetConnector object, named ADAE, containing a TealDataset object that has not been loaded/pulled"
     )
   )
 })

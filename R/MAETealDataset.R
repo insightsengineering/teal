@@ -157,7 +157,8 @@ MAETealDataset <- R6::R6Class( # nolint
     #'
     #' @return invisibly self
     print = function(...) {
-      cat(sprintf("A MAETealDataset object containing data of %d subjects.", private$.nrow))
+      cat(sprintf("A MAETealDataset object containing data of %d subjects.\n", private$.nrow))
+      print(experiments(private$.raw_data))
       invisible(self)
     }
   ),
