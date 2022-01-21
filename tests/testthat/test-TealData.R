@@ -697,21 +697,21 @@ testthat::test_that("TealData$mutate_join_keys changes keys for both datasets (s
   )
 })
 
-testthat::test_that("TealData$new sets passes JoinKeys to datasets correctly when key names differ", {
-  df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
-  df2 <- data.frame(df2_id = c("A", "B"), fk = c("A", "B"), b = c(1L, 2L))
+testthat::test_that("TealData$new sets passes JoinKeys to datasets correctly when key names differ (multiple keys)", {
+  df1 <- data.frame(id = c("A", "B"), id2 = c("A", "B"), a = c(1L, 2L))
+  df2 <- data.frame(df2_id = c("A", "B"), fk = c("A", "B"), fk2 = c("A", "B"), b = c(1L, 2L))
   df1 <- dataset("df1", df1, keys = "id")
   df2 <- dataset("df2", df2, keys = "df2_id")
   data <- teal_data(df1, df2, check = FALSE)
-  data$mutate_join_keys("df1", "df2", c(id = "fk"))
+  data$mutate_join_keys("df1", "df2", c(id = "fk", id2 = "fk2"))
 
   testthat::expect_equal(
     data$get_join_keys(),
     join_keys(
       join_key("df1", "df1", "id"),
-      join_key("df1", "df2", c(id = "fk")),
+      join_key("df1", "df2", c(id = "fk", id2 = "fk2")),
       join_key("df2", "df2", "df2_id"),
-      join_key("df2", "df1", c(fk = "id"))
+      join_key("df2", "df1", c(fk = "id", fk2 = "id2"))
     )
   )
 })
