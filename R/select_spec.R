@@ -26,8 +26,8 @@
 #' @param always_selected (\code{character}) Additional column names from the data set that should
 #'   always be selected
 #'
-#' @param label optional (\code{character}). Define a label
-#' on top of this specific shiny \code{\link[shiny]{selectInput}}.
+#' @param label optional (\code{character}). Define a label on top of this specific
+#' shiny \code{\link[shiny]{selectInput}}. The default value is \code{"Select"}.
 #'
 #' @return A \code{select_spec}-S3 class object or \code{delayed_select_spec}-S3-class object.
 #' It contains all input values.
@@ -136,7 +136,7 @@ select_spec <- function(choices,
                         multiple = length(selected) > 1 || is(selected, "all_choices"),
                         fixed = FALSE,
                         always_selected = NULL,
-                        label = NULL) {
+                        label = "Select") {
   checkmate::assert_flag(multiple)
   checkmate::assert_flag(fixed)
   checkmate::assert_character(always_selected, min.len = 1, null.ok = TRUE, any.missing = FALSE)

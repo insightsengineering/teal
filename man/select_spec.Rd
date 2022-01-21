@@ -12,7 +12,7 @@ select_spec(
   multiple = length(selected) > 1 || is(selected, "all_choices"),
   fixed = FALSE,
   always_selected = NULL,
-  label = NULL
+  label = "Select"
 )
 
 select_spec.delayed_data(
@@ -56,8 +56,8 @@ columns in the dataset that is defined by the developer of the app.}
 \item{always_selected}{(\code{character}) Additional column names from the data set that should
 always be selected}
 
-\item{label}{optional (\code{character}). Define a label
-on top of this specific shiny \code{\link[shiny]{selectInput}}.}
+\item{label}{optional (\code{character}). Define a label on top of this specific
+shiny \code{\link[shiny]{selectInput}}. The default value is \code{"Select"}.}
 }
 \value{
 A \code{select_spec}-S3 class object or \code{delayed_select_spec}-S3-class object.
