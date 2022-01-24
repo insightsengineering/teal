@@ -39,6 +39,7 @@
 
 ### Miscellaneous
 * Added a vignette describing the modifications to `teal` applications users can apply using `R` options.
+* Added default values to the `label` argument of `select_spec` and `filter_spec`.
 * Added validation to `FilteredDataset::get_data` to accept logical input only.
 * Changed references to outdated functions of `teal.devel` in the documentation.
 * Introduced a `Teal` prefix to all public `R6` classes to avoid name collisions with other packages.

@@ -9,7 +9,7 @@ filter_spec(
   choices = NULL,
   selected = if (is(choices, "delayed_data")) NULL else choices[1],
   multiple = length(selected) > 1 || is(selected, "all_choices"),
-  label = NULL,
+  label = "Filter by",
   sep = attr(choices, "sep"),
   drop_keys = FALSE
 )
@@ -48,14 +48,14 @@ all possible choices.}
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
 shiny \code{\link[shiny]{selectInput}}.}
 
-\item{label}{optional (\code{character}). Define a label
-on top of this specific shiny \code{\link[shiny]{selectInput}}.}
+\item{label}{optional (\code{character}). Define a label on top of this specific
+shiny \code{\link[shiny]{selectInput}}. The default value is \code{"Filter by"}.}
 
 \item{sep}{(\code{character}) A separator string to split the \code{choices} or
 \code{selected} inputs into the values of the different columns}
 
 \item{drop_keys}{optional, (\code{logical}) whether to drop filter column from the dataset keys,
-\code{TRUE} on default}
+\code{TRUE} on default.}
 }
 \value{
 \code{filter_spec}-S3-class object or \code{delayed_filter_spec}-S3-class object.

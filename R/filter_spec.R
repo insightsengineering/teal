@@ -39,7 +39,10 @@
 #'  all possible choices.
 #'
 #' @param drop_keys optional, (\code{logical}) whether to drop filter column from the dataset keys,
-#'   \code{TRUE} on default
+#'   \code{TRUE} on default.
+#'
+#' @param label optional (\code{character}). Define a label on top of this specific
+#' shiny \code{\link[shiny]{selectInput}}. The default value is \code{"Filter by"}.
 #'
 #' @return \code{filter_spec}-S3-class object or \code{delayed_filter_spec}-S3-class object.
 #'
@@ -184,7 +187,7 @@ filter_spec <- function(vars,
                         choices = NULL,
                         selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
                         multiple = length(selected) > 1 || is(selected, "all_choices"),
-                        label = NULL,
+                        label = "Filter by",
                         sep = attr(choices, "sep"),
                         drop_keys = FALSE) {
   if (is.null(sep)) sep <- " - "
