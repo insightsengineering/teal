@@ -130,7 +130,6 @@ Collate:
     'resolve_state.R'
     'select_spec.R'
     'set_args.R'
-    'stop_shiny.R'
     'teal.R'
     'teal_data.R'
     'to_relational_data.R'

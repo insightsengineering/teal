@@ -7,6 +7,7 @@
 * Removed `rcd_connection` and `rcd_data`; `scda_dataset_connectors` can be passed into `cdisc_data` and `teal_data` directly.
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
 * Renamed `teal_show_js_log` option into `teal.show_js_log` to match options naming convention.
+* Removed `%is_in%` and `stop_shiny` internal utility functions.
 
 ### New features
 ### Logging
@@ -38,6 +39,7 @@
 * Fixed printing of the `JavaScript` console logs to the `R` console when `teal.show_js_log = TRUE`.
 
 ### Miscellaneous
+* Soft-deprecate `mae_dataset()` in favor of more general `dataset()` constructor.
 * Added a vignette describing the modifications to `teal` applications users can apply using `R` options.
 * Added default values to the `label` argument of `select_spec` and `filter_spec`.
 * Added validation to `FilteredDataset::get_data` to accept logical input only.
