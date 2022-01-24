@@ -88,9 +88,15 @@ TealData <- R6::R6Class( # nolint
       }
       checkmate::assert_class(join_keys, "JoinKeys")
 
-      for (dataset_1 in names(join_keys$get())) {
-        for (dataset_2 in names(join_keys$get()[[dataset_1]])) {
-          self$mutate_join_keys(dataset_1, dataset_2, join_keys$get()[[dataset_1]][[dataset_2]])
+      for (i in seq_along(join_keys$get())) {
+        # setting A->B and B->A is a duplicate as mutate_join_keys sets keys mutually
+        for (j in seq(i, length(join_keys$get()))) {
+          dataset_1 <- names(join_keys$get())[[i]]
+          dataset_2 <- names(join_keys$get())[[j]]
+          keys <- join_keys$get()[[dataset_1]][[dataset_2]]
+          if (!is.null(keys)) {
+            self$mutate_join_keys(dataset_1, dataset_2, keys)
+          }
         }
       }
       for (dat_name in names(self$get_items())) {
@@ -98,7 +104,6 @@ TealData <- R6::R6Class( # nolint
           self$mutate_join_keys(dat_name, dat_name, get_keys(self$get_items(dat_name)))
         }
       }
-
       self$id <- sample.int(1e11, 1, useHash = TRUE)
 
       logger::log_trace(
