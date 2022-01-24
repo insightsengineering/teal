@@ -51,6 +51,7 @@
 * Updated the R version requirement to >= 4.0.
 * Updated the "filter panel collapse" icon to remove warnings when using `shiny` version >= 1.7.
 * Remove some of the non-exported, debugging modules.
+* Update the footer tag style to be less visible.
 
 # teal 0.10.0
 
