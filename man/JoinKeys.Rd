@@ -31,6 +31,7 @@ x$get("dataset_A", "dataset_B")
 \item \href{#method-get}{\code{JoinKeys$get()}}
 \item \href{#method-mutate}{\code{JoinKeys$mutate()}}
 \item \href{#method-set}{\code{JoinKeys$set()}}
+\item \href{#method-print}{\code{JoinKeys$print()}}
 \item \href{#method-clone}{\code{JoinKeys$clone()}}
 }
 }
@@ -158,6 +159,26 @@ to be specified once
 
 \subsection{Returns}{
 (\code{self}) invisibly for chaining
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
+\subsection{Method \code{print()}}{
+Prints this \code{JoinKeys}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{JoinKeys$print(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{additional arguments to the printing method}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+invisibly self
 }
 }
 \if{html}{\out{<hr>}}
