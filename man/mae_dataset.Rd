@@ -35,11 +35,11 @@ are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
 # Simple example
-mae_d <- mae_dataset("MAE", MultiAssayExperiment::miniACC)
+mae_d <- dataset("MAE", MultiAssayExperiment::miniACC)
 mae_d$get_dataname()
 mae_d$get_dataset_label()
 mae_d$get_code()

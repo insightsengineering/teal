@@ -142,28 +142,6 @@ split_by_sep <- function(x, sep) {
   }
 }
 
-#' List element in other list
-#'
-#' @description `r lifecycle::badge("stable")`
-#' Checks if `x` element matches any of `y` element. If one of the arguments is a list then list elements
-#' are treated as whole - in this case list elements can be a vector, so it looks
-#' for equal element in second vector to be matched.
-#'
-#' @param x `list` to be matched.
-#' @param y `list` to be matched against.
-#' @return `logical` vector length of `x` denoting if element was found in second list.
-#' @export
-`%is_in%` <- function(x, y) {
-  if (!is.list(x) & is.list(y)) {
-    x <- list(x)
-  } else if (!is.list(y) & is.list(x)) {
-    y <- list(y)
-  }
-  vapply(x, function(x1) {
-    any(vapply(y, function(y1) isTRUE(all.equal(y1, x1)), logical(1), USE.NAMES = FALSE))
-  }, logical(1), USE.NAMES = FALSE)
-}
-
 #' Extract labels from choices basing on attributes and names
 #'
 #' @param choices (`list` or `vector`) select choices

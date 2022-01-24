@@ -259,14 +259,14 @@ dataset.MultiAssayExperiment <- function(dataname,
 
 #' The constructor of `MAETealDataset`
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' @inheritParams dataset
 #' @param x (`MultiAssayExperiment`)
 #'
 #' @examples
 #' # Simple example
-#' mae_d <- mae_dataset("MAE", MultiAssayExperiment::miniACC)
+#' mae_d <- dataset("MAE", MultiAssayExperiment::miniACC)
 #' mae_d$get_dataname()
 #' mae_d$get_dataset_label()
 #' mae_d$get_code()
@@ -277,6 +277,12 @@ mae_dataset <- function(dataname,
                         label = data_label(x),
                         code = character(0),
                         vars = list()) {
+  lifecycle::deprecate_soft(
+    when = "0.10.1",
+    what = "teal::mae_dataset()",
+    with = "teal::dataset()"
+  )
+  
   if (!is(x, "MultiAssayExperiment")) {
     stop("Argument x must be a MultiAssayExperiment object")
   }

@@ -180,16 +180,12 @@ testthat::test_that("Error raised executing MAETealDataset$check_keys and duplic
   )
 })
 
+testthat::test_that("dataset() does not throw when passed a MultiAssayExperiment object", {
+  testthat::expect_error(dataset("mae", MultiAssayExperiment::miniACC), NA)
+})
+
 testthat::test_that("dataset() constructor returns the same as MAETealDataset$new()", {
   mae1 <- dataset("mae", MultiAssayExperiment::miniACC)
   mae2 <- MAETealDataset$new("mae", MultiAssayExperiment::miniACC)
   testthat::expect_equal(mae1, mae2)
-})
-
-testthat::test_that("mae_dataset() does not throw when passed a MultiAssayExperiment object", {
-  testthat::expect_error(mae_dataset("mae", MultiAssayExperiment::miniACC), NA)
-})
-
-testthat::test_that("mae_dataset() constructor throws error when x is not a MultiAssayExperiment object", {
-  testthat::expect_error(mae_dataset("mae", mtcars), "Argument x must be a MultiAssayExperiment object")
 })

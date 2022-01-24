@@ -129,8 +129,6 @@ reference:
     - python_code
     - read_script
     - split_by_sep
-    - stop_shiny
-    - "%is_in%"
   - title: For Developers
     subtitle: R6 Classes
     desc: Abstract and concrete classes used to build teal functionality.
