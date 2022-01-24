@@ -98,8 +98,8 @@ values of a shiny \code{\link[shiny]{selectInput}} (default values). This value 
 be displayed inside the shiny app upon start. The \code{all_choices} object indicates selecting
 all possible choices.}
 
-\item{label}{optional (\code{character}). Define a label
-on top of this specific shiny \code{\link[shiny]{selectInput}}.}
+\item{label}{optional (\code{character}). Define a label on top of this specific
+shiny \code{\link[shiny]{selectInput}}. The default value is \code{"Filter by"}.}
 
 \item{fixed}{(\code{logical})\cr
 if true allow to change the initially selected values of the variables; otherwise, do not allow.}
@@ -111,7 +111,7 @@ shiny \code{\link[shiny]{selectInput}}.}
 \code{selected} inputs into the values of the different columns}
 
 \item{drop_keys}{optional, (\code{logical}) whether to drop filter column from the dataset keys,
-\code{TRUE} on default}
+\code{TRUE} on default.}
 
 \item{dataname}{(\code{character})\cr
 the name of the dataset this filter covers. Set during the initialization of the teal application.}
