@@ -128,12 +128,10 @@ data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = 
 
   if (is.null(select) && is.null(filter)) {
     select <- select_spec(
-      label = "Select",
       choices = variable_choices(dataname),
       multiple = TRUE
     )
     filter <- filter_spec(
-      label = "Filter by",
       vars = choices_selected(variable_choices(dataname)),
       selected = all_choices()
     )
