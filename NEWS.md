@@ -16,7 +16,8 @@
 * Added `pid` and shiny session token into footnote so app developers can identify logs for apps.
 
 ### Other
-* Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
+* Added print methods to the `DatasetConnector`, `RelationalData`, `RelationalDataconnector` and `JoinKeys` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
+
 * Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
 * Modified `data_extract_spec` to allow both the `filter` and `select` parameters to be `NULL`, which results in the `data_extract_ui` acting as if a `filter_spec` with all variables as possible choices had been supplied as the `filter` argument and a `select_spec` with the `multiple` parameter set to `TRUE` had been supplied as the `select` argument.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
@@ -33,6 +34,7 @@
 * Fixed restoring a bookmarked filter state of `teal` application.
 * Refactored `module_nested_tabs` to fix the issue with the filter panel not reacting to an input change in a nested module.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
+* Fixed setting `JoinKeys` when key name between two `Dataset` object differs.
 * Fixed printing of the `JavaScript` console logs to the `R` console when `teal.show_js_log = TRUE`.
 
 ### Miscellaneous
