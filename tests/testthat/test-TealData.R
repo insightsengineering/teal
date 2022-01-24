@@ -640,7 +640,7 @@ testthat::test_that("TealData$new sets join_keys datasets based on the primary k
   )
 })
 
-testthat::test_that("TealData$new sets passes join_keys to datasets correctly", {
+testthat::test_that("TealData$new sets passed join_keys to datasets correctly", {
   df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
   df2 <- data.frame(df2_id = c("A", "B"), id = c("A", "B"), b = c(1L, 2L))
 
@@ -660,7 +660,7 @@ testthat::test_that("TealData$new sets passes join_keys to datasets correctly", 
   )
 })
 
-testthat::test_that("TealData$new sets passes JoinKeys to datasets correctly when key names differ", {
+testthat::test_that("TealData$new sets passed JoinKeys to datasets correctly when key names differ", {
   df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
   df2 <- data.frame(df2_id = c("A", "B"), fk = c("A", "B"), b = c(1L, 2L))
   df1 <- dataset("df1", df1, keys = "id")

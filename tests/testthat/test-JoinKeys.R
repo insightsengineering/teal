@@ -539,7 +539,7 @@ testthat::test_that("JoinKeys$print for empty set", {
   )
 })
 
-testthat::test_that("JoinKeys$print for non-empty set", {
+testthat::test_that("JoinKeys$print for a non-empty set", {
   jk <- JoinKeys$new()
   jk$set(list(join_key("DF1", "DF2", c("id" = "fk"))))
   testthat::expect_output(
