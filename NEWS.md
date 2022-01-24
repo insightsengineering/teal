@@ -34,6 +34,7 @@
 * Refactored `module_nested_tabs` to fix the issue with the filter panel not reacting to an input change in a nested module.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
 * Fixed setting `JoinKeys` when key name between two `Dataset` object differs.
+* Fixed printing of the `JavaScript` console logs to the `R` console when `teal.show_js_log = TRUE`.
 
 ### Miscellaneous
 * Added a vignette describing the modifications to `teal` applications users can apply using `R` options.
