@@ -45,6 +45,13 @@ a.remove_all:hover {
   color: #d40000;
 }
 
+footer {
+  text-align: right;
+  padding: 5px;
+  font-size: 0.8em;
+  color: gray;
+}
+
 /* display waiting box at bottom right corner when Shiny is computing */
 .shinybusymessage {
   position: fixed;
