@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{ricepass_connection}
 \alias{ricepass_connection}
-\title{Open connection to \code{entimICE} via \code{ricepass}}
+\title{Superseded (moved into separate package): Open connection to \code{entimICE} via \code{ricepass}}
 \usage{
 ricepass_connection()
 }

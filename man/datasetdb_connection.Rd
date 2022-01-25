@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{datasetdb_connection}
 \alias{datasetdb_connection}
-\title{Open connection to \code{DataSetDB}}
+\title{Superseded (moved into separate package): Open connection to \code{DataSetDB}}
 \usage{
 datasetdb_connection()
 }

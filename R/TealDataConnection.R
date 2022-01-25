@@ -724,7 +724,7 @@ data_connection <- function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, 
 }
 
 # TealDataConnection wrappers ----
-#' Open connection to `entimICE` via `rice`
+#' Superseded (moved into separate package): Open connection to `entimICE` via `rice`
 #'
 #' @description `r lifecycle::badge("superseded")`
 #'
@@ -749,7 +749,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 }
 
 
-#' Open connection to `entimICE` via `ricepass`
+#' Superseded (moved into separate package): Open connection to `entimICE` via `ricepass`
 #'
 #' @description `r lifecycle::badge("superseded")`
 #'
@@ -812,7 +812,7 @@ ricepass_connection <- function() {
 }
 
 
-#' Open connection to `Teradata`
+#' Superseded (moved into separate package) Open connection to `Teradata`
 #'
 #' @description `r lifecycle::badge("superseded")`
 #'
@@ -835,7 +835,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
   )
 }
 
-#' Helper function to connect to `Snowflake`
+#' Superseded (moved into separate package): Helper function to connect to `Snowflake`
 #'
 #' @description `r lifecycle::badge("superseded")`
 #'
@@ -868,7 +868,7 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
   )
 }
 
-#' Open connection to `Snowflake`
+#' Superseded (moved into separate package): Open connection to `Snowflake`
 #'
 #' @description `r lifecycle::badge("superseded")`
 #'
@@ -890,7 +890,7 @@ snowflake_connection <- function(open_args = list(), close_args = list(), ping_a
   )
 }
 
-#' Open connection to `CDSE`
+#' Superseded (moved into separate package): Open connection to `CDSE`
 #'
 #' @description `r lifecycle::badge("superseded")`
 #'
@@ -907,7 +907,7 @@ cdse_connection <- function(env = "prod") {
   )
 }
 
-#' Open connection to `DataSetDB`
+#' Superseded (moved into separate package): Open connection to `DataSetDB`
 #'
 #' @description `r lifecycle::badge("superseded")`
 #'

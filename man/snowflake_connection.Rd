@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{snowflake_connection}
 \alias{snowflake_connection}
-\title{Open connection to \code{Snowflake}}
+\title{Superseded (moved into separate package): Open connection to \code{Snowflake}}
 \usage{
 snowflake_connection(
   open_args = list(),
