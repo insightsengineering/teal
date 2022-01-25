@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnector_constructors.R
 \name{cdse_data}
 \alias{cdse_data}
-\title{\code{TealDataConnector} connector for \code{CDSE}}
+\title{Superseded (moved into separate package): \code{TealDataConnector} connector for \code{CDSE}}
 \usage{
 cdse_data(..., connection = cdse_connection())
 }

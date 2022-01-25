@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDatasetConnector_constructors.R
 \name{datasetdb_dataset_connector}
 \alias{datasetdb_dataset_connector}
-\title{\code{DataSetDB} \code{TealDatasetConnector}}
+\title{Superseded (moved into separate package): \code{DataSetDB} \code{TealDatasetConnector}}
 \usage{
 datasetdb_dataset_connector(
   dataname,

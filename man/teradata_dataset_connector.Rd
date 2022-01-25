@@ -3,7 +3,7 @@
 \name{teradata_dataset_connector}
 \alias{teradata_dataset_connector}
 \alias{teradata_cdisc_dataset_connector}
-\title{\code{Teradata} \code{TealDatasetConnector}}
+\title{Superseded (moved into separate package): \code{Teradata} \code{TealDatasetConnector}}
 \usage{
 teradata_dataset_connector(
   dataname,

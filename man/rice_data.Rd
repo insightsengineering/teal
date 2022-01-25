@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnector_constructors.R
 \name{rice_data}
 \alias{rice_data}
-\title{\code{TealDataConnector} connector for \code{RICE}}
+\title{Superseded (moved into separate package): \code{TealDataConnector} connector for \code{RICE}}
 \usage{
 rice_data(..., connection = rice_connection(), additional_ui = NULL)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{rice_connection}
 \alias{rice_connection}
-\title{Open connection to \code{entimICE} via \code{rice}}
+\title{Superseded (moved into separate package): Open connection to \code{entimICE} via \code{rice}}
 \usage{
 rice_connection(open_args = list(), close_args = list(), ping_args = list())
 }

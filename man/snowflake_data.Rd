@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnector_constructors.R
 \name{snowflake_data}
 \alias{snowflake_data}
-\title{\code{TealDataConnector} connector for \code{SNOWFLAKE}}
+\title{Superseded (moved into separate package): \code{TealDataConnector} connector for \code{SNOWFLAKE}}
 \usage{
 snowflake_data(..., connection)
 }

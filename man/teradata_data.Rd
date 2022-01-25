@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnector_constructors.R
 \name{teradata_data}
 \alias{teradata_data}
-\title{\code{TealDataConnector} connector for \code{TERADATA}}
+\title{Superseded (moved into separate package): \code{TealDataConnector} connector for \code{TERADATA}}
 \usage{
 teradata_data(..., connection = teradata_connection())
 }

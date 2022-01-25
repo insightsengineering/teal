@@ -591,7 +591,7 @@ code_cdisc_dataset_connector <- function(dataname,
 
 
 # RICE ====
-#' Rice `TealDatasetConnector`
+#' Superseded (moved into separate package): Rice `TealDatasetConnector`
 #'
 #' `r lifecycle::badge("superseded")`
 #'
@@ -623,7 +623,7 @@ rice_dataset_connector <- function(dataname,
   )
 }
 
-#' Rice `CDISCTealDatasetConnector`
+#' Superseded (moved into separate package): Rice `CDISCTealDatasetConnector`
 #'
 #' `r lifecycle::badge("superseded")`
 #'
@@ -653,7 +653,7 @@ rice_cdisc_dataset_connector <- function(dataname,
 
 
 # TERADATA ====
-#' `Teradata` `TealDatasetConnector`
+#' Superseded (moved into separate package): `Teradata` `TealDatasetConnector`
 #'
 #' `r lifecycle::badge("superseded")`
 #'
@@ -680,7 +680,7 @@ teradata_dataset_connector <- function(dataname,
   )
 }
 
-#' `Teradata` `CDISCTealDatasetConnector`
+#' Superseded (moved into separate package): `Teradata` `CDISCTealDatasetConnector`
 #'
 #' `r lifecycle::badge("superseded")`
 #'
@@ -710,7 +710,7 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
 
 
 # SNOWFLAKE ====
-#' `Snowflake` `TealDatasetConnector`
+#' Superseded (moved into separate package): `Snowflake` `TealDatasetConnector`
 #'
 #' `r lifecycle::badge("superseded")`
 #'
@@ -737,7 +737,7 @@ snowflake_dataset_connector <- function(dataname,
   )
 }
 
-#' `Snowflake` `CDISCTealDatasetConnector`
+#' Superseded (moved into separate package): `Snowflake` `CDISCTealDatasetConnector`
 #'
 #' `r lifecycle::badge("superseded")`
 #'
@@ -767,7 +767,7 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
 
 
 # CDSE ====
-#' `CDSE` `TealDatasetConnector`
+#' Superseded (moved into separate package): `CDSE` `TealDatasetConnector`
 #'
 #' @description `r lifecycle::badge("superseded")`
 #'
@@ -794,7 +794,7 @@ cdse_dataset_connector <- function(dataname,
   )
 }
 
-#' `CDSE` `CDISCTealDatasetConnector`
+#' Superseded (moved into separate package): `CDSE` `CDISCTealDatasetConnector`
 #'
 #' `r lifecycle::badge("superseded")`
 #'
@@ -935,7 +935,7 @@ csv_cdisc_dataset_connector <- function(dataname,
 
 
 # DataSetDB ====
-#' `DataSetDB` `TealDatasetConnector`
+#' Superseded (moved into separate package): `DataSetDB` `TealDatasetConnector`
 #'
 #' `r lifecycle::badge("superseded")`
 #'

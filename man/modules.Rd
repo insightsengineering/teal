@@ -38,3 +38,53 @@ their \code{label} attribute converted to valid \code{shiny} id.
 Modules collects a tree of \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}}
 objects. This is useful to define the navigation structure of a teal app.
 }
+\examples{
+library(shiny)
+
+app <- init(
+  data = teal_data(
+    dataset("iris", iris)
+  ),
+  modules = modules(
+    label = "Modules",
+    modules(
+      label = "Module",
+      module(
+        label = "Inner module",
+        server = function(id, datasets) {
+          moduleServer(
+            id,
+            module = function(input, output, session) {
+              output$data <- renderDataTable(datasets$get_data("iris"))
+            }
+          )
+        },
+        ui = function(id, datasets) {
+          ns <- NS(id)
+          tagList(dataTableOutput(ns("data")))
+        },
+        filters = "all"
+      )
+    ),
+    module(
+      label = "Another module",
+      server = function(id, datasets) {
+        moduleServer(
+          id,
+          module = function(input, output, session) {
+            output$text <- renderText("Another module")
+          }
+        )
+      },
+      ui = function(id, datasets) {
+        ns <- NS(id)
+        tagList(textOutput(ns("text")))
+      },
+      filters = NULL
+    )
+  )
+)
+\dontrun{
+runApp(app)
+}
+}

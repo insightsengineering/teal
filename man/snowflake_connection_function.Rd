@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{snowflake_connection_function}
 \alias{snowflake_connection_function}
-\title{Helper function to connect to \code{Snowflake}}
+\title{Superseded (moved into separate package): Helper function to connect to \code{Snowflake}}
 \usage{
 snowflake_connection_function(
   username = askpass::askpass("Please enter your username"),

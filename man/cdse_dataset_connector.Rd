@@ -3,7 +3,7 @@
 \name{cdse_dataset_connector}
 \alias{cdse_dataset_connector}
 \alias{cdse_cdisc_dataset_connector}
-\title{\code{CDSE} \code{TealDatasetConnector}}
+\title{Superseded (moved into separate package): \code{CDSE} \code{TealDatasetConnector}}
 \usage{
 cdse_dataset_connector(
   dataname,
