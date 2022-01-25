@@ -19,3 +19,49 @@ function is to not confuse the end-user as the label of the top-module
 will not be displayed as a tab name (because the root is only one element
 which has multiple children).
 }
+\examples{
+library(shiny)
+
+app <- init(
+  data = teal_data(
+   dataset("iris", iris)
+  ),
+ modules = root_modules(
+    module(
+      label = "Module",
+      server = function(id, datasets) {
+        moduleServer(
+          id,
+          module = function(input, output, session) {
+            output$data <- renderDataTable(datasets$get_data("iris"))
+          }
+        )
+      },
+      ui = function(id, datasets) {
+        ns <- NS(id)
+        tagList(dataTableOutput(ns("data")))
+      },
+      filters = "all"
+    ),
+    module(
+      label = "Another module",
+      server = function(id, datasets) {
+        moduleServer(
+          id,
+          module = function(input, output, session) {
+            output$text <- renderText("Another module")
+          }
+        )
+      },
+      ui = function(id, datasets) {
+        ns <- NS(id)
+        tagList(textOutput(ns("text")))
+      },
+      filters = NULL
+    )
+  )
+)
+\dontrun{
+runApp(app)
+}
+}
