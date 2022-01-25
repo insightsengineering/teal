@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{cdse_connection}
 \alias{cdse_connection}
-\title{Open connection to \code{CDSE}}
+\title{Superseded (moved into separate package): Open connection to \code{CDSE}}
 \usage{
 cdse_connection(env = "prod")
 }

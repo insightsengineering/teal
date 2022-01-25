@@ -3,7 +3,7 @@
 \name{snowflake_dataset_connector}
 \alias{snowflake_dataset_connector}
 \alias{snowflake_cdisc_dataset_connector}
-\title{\code{Snowflake} \code{TealDatasetConnector}}
+\title{Superseded (moved into separate package): \code{Snowflake} \code{TealDatasetConnector}}
 \usage{
 snowflake_dataset_connector(
   dataname,

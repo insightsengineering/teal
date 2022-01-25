@@ -3,7 +3,7 @@
 \name{rice_dataset_connector}
 \alias{rice_dataset_connector}
 \alias{rice_cdisc_dataset_connector}
-\title{Rice \code{TealDatasetConnector}}
+\title{Superseded (moved into separate package): Rice \code{TealDatasetConnector}}
 \usage{
 rice_dataset_connector(
   dataname,

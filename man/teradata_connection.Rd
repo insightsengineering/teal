@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{teradata_connection}
 \alias{teradata_connection}
-\title{Open connection to \code{Teradata}}
+\title{Superseded (moved into separate package) Open connection to \code{Teradata}}
 \usage{
 teradata_connection(
   open_args = list(),
