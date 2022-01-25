@@ -63,7 +63,7 @@ app <- init(
           ns <- NS(id)
           tagList(dataTableOutput(ns("data")))
         },
-        filters = NULL
+        filters = "all"
       )
     ),
     module(
