@@ -50,3 +50,33 @@ object of class \code{teal_module}.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 This function embeds a \code{shiny} application inside a \code{teal} application.
 }
+\examples{
+library(shiny)
+
+app <- init(
+  data = teal_data(
+    dataset("iris", iris)
+  ),
+  modules = list(
+    module(
+      label = "Module",
+      server = function(id, datasets) {
+        moduleServer(
+          id,
+          module = function(input, output, session) {
+            output$data <- renderDataTable(datasets$get_data("iris"))
+          }
+        )
+      },
+      ui = function(id, datasets) {
+        ns <- NS(id)
+        tagList(dataTableOutput(ns("data")))
+      },
+      filters = NULL
+    )
+  )
+)
+\dontrun{
+runApp(app)
+}
+}
