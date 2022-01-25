@@ -10,13 +10,13 @@
 * Removed `%is_in%` and `stop_shiny` internal utility functions.
 
 ### New features
-### Logging
+#### Logging
 * Added support for logging using the `logger` package.
 * Added a new function `register_logger`, which registers a logger in a given namespace.
 * Added trace and info levels log messages to the `teal` framework.
 * Added `pid` and shiny session token into footnote so app developers can identify logs for apps.
 
-### Other
+#### Other
 * Added print methods to the `DatasetConnector`, `RelationalData`, `RelationalDataconnector` and `JoinKeys` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
 
 * Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
@@ -50,8 +50,8 @@
 * Running a `teal` application via `ui_teal_with_splash` and `srv_teal_with_splash` is now no longer recommended because it doesn't support new features (e.g. logging, bookmarking). Use `init` instead.
 * Updated the R version requirement to >= 4.0.
 * Updated the "filter panel collapse" icon to remove warnings when using `shiny` version >= 1.7.
-* Remove some of the non-exported, debugging modules.
-* Update the footer tag style to be less visible.
+* Removed some of the non-exported, debugging modules.
+* Updated the footer tag style to be less visible.
 
 # teal 0.10.0
 
