@@ -19,7 +19,55 @@
 #' - label: taken from `label` argument
 #' - children: list containing objects passed in `...`. List elements are named after
 #' their `label` attribute converted to valid `shiny` id.
+#' @examples
+#' library(shiny)
 #'
+#' app <- init(
+#'   data = teal_data(
+#'     dataset("iris", iris)
+#'   ),
+#'   modules = modules(
+#'     label = "Modules",
+#'     modules(
+#'       label = "Module",
+#'       module(
+#'         label = "Inner module",
+#'         server = function(id, datasets) {
+#'           moduleServer(
+#'             id,
+#'             module = function(input, output, session) {
+#'               output$data <- renderDataTable(datasets$get_data("iris"))
+#'             }
+#'           )
+#'         },
+#'         ui = function(id, datasets) {
+#'           ns <- NS(id)
+#'           tagList(dataTableOutput(ns("data")))
+#'         },
+#'         filters = "all"
+#'       )
+#'     ),
+#'     module(
+#'       label = "Another module",
+#'       server = function(id, datasets) {
+#'         moduleServer(
+#'           id,
+#'           module = function(input, output, session) {
+#'             output$text <- renderText("Another module")
+#'           }
+#'         )
+#'       },
+#'       ui = function(id, datasets) {
+#'         ns <- NS(id)
+#'         tagList(textOutput(ns("text")))
+#'       },
+#'       filters = NULL
+#'     )
+#'   )
+#' )
+#' \dontrun{
+#' runApp(app)
+#' }
 modules <- function(label, ...) {
   checkmate::assert_string(label)
   submodules <- list(...)
@@ -59,7 +107,51 @@ modules <- function(label, ...) {
 #' @inheritParams modules
 #'
 #' @export
+#' @examples
+#' library(shiny)
 #'
+#' app <- init(
+#'   data = teal_data(
+#'    dataset("iris", iris)
+#'   ),
+#'  modules = root_modules(
+#'     module(
+#'       label = "Module",
+#'       server = function(id, datasets) {
+#'         moduleServer(
+#'           id,
+#'           module = function(input, output, session) {
+#'             output$data <- renderDataTable(datasets$get_data("iris"))
+#'           }
+#'         )
+#'       },
+#'       ui = function(id, datasets) {
+#'         ns <- NS(id)
+#'         tagList(dataTableOutput(ns("data")))
+#'       },
+#'       filters = "all"
+#'     ),
+#'     module(
+#'       label = "Another module",
+#'       server = function(id, datasets) {
+#'         moduleServer(
+#'           id,
+#'           module = function(input, output, session) {
+#'             output$text <- renderText("Another module")
+#'           }
+#'         )
+#'       },
+#'       ui = function(id, datasets) {
+#'         ns <- NS(id)
+#'         tagList(textOutput(ns("text")))
+#'       },
+#'       filters = NULL
+#'     )
+#'   )
+#' )
+#' \dontrun{
+#' runApp(app)
+#' }
 root_modules <- function(...) {
   if (nargs() == 0) {
     # we don't put this check at the modules level because we want to allow
@@ -95,7 +187,35 @@ root_modules <- function(...) {
 #'
 #' @return object of class `teal_module`.
 #' @export
+#' @examples
+#' library(shiny)
 #'
+#' app <- init(
+#'   data = teal_data(
+#'     dataset("iris", iris)
+#'   ),
+#'   modules = list(
+#'     module(
+#'       label = "Module",
+#'       server = function(id, datasets) {
+#'         moduleServer(
+#'           id,
+#'           module = function(input, output, session) {
+#'             output$data <- renderDataTable(datasets$get_data("iris"))
+#'           }
+#'         )
+#'       },
+#'       ui = function(id, datasets) {
+#'         ns <- NS(id)
+#'         tagList(dataTableOutput(ns("data")))
+#'       },
+#'       filters = NULL
+#'     )
+#'   )
+#' )
+#' \dontrun{
+#' runApp(app)
+#' }
 module <- function(label, server, ui, filters, server_args = NULL, ui_args = NULL) {
   checkmate::assert_string(label)
   checkmate::assert_function(server)
