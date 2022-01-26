@@ -19,6 +19,13 @@ At any time during an interactive session, you can change an option using:
 ```{r}
 options(option_to_set = "value")
 ```
+
+A way to change options for only the execution of a specific block of code is with the `withr` package like so:
+```{r}
+with_options(list(digits = 3), print(pi))
+```
+After the line above is run the option, `digits`, will go back to its value before the line was run.
+
 The function `getOption` allows to inspect the value of an option:
 ```{r}
 getOption("option_to_set")
@@ -33,10 +40,14 @@ This defines the layout of a log message used in a `teal` application. `teal` us
 
 Default: `"[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:[{token}] {ans} {msg}"`.
 
+Note that this layout is formatted by the package `glue::glue`.
+
 ### `teal.log_level` (`character`)
 This is the logging level threshold used in a `teal` application. A `teal` application will not emit logs below this level. Read the documentation of `teal::register_logger` for more information. Possible values: `"TRACE"`, `"INFO"`, `"WARNING"`, `"ERROR"`. See the documentation of `logger::TRACE` for all possible values of logging threshold and more information on what it does.
 
 Default: `"INFO"`.
+
+Note that there are two levels considered less severe than `"INFO"`: `"DEBUG"` and `"TRACE"`. In order to see the log messages for these two levels as well, change the log level from the default to `"TRACE"`, the least severe log level.
 
 ### `teal_logging`
 Deprecated.
