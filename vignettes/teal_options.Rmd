@@ -22,7 +22,7 @@ options(option_to_set = "value")
 
 A way to change options for only the execution of a specific block of code is with the `withr` package like so:
 ```{r}
-with_options(list(digits = 3), print(pi))
+withr::with_options(list(digits = 3), print(pi))
 ```
 After the line above is run the option, `digits`, will go back to its value before the line was run.
 
