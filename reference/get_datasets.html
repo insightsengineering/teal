@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -83,7 +74,7 @@ Other releases
     </div>
 
     <div class="ref-description">
-    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
+    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p>
     </div>
 
     <div id="ref-usage">
@@ -130,7 +121,7 @@ object containing datasets.</p></dd>
 <span class="r-in"><span class="va">rd</span> <span class="op">&lt;-</span> <span class="fu"><a href="cdisc_data.html">cdisc_data</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adae</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">get_datasets</span><span class="op">(</span><span class="va">rd</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ADSL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A TealDataset object containing the following data.frame (400 rows and 39 columns):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A CDISCTealDataset object containing the following data.frame (400 rows and 39 columns):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID               USUBJID SUBJID SITEID AGE SEX                      RACE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 AB12345  AB12345-CHN-3-id-128 id-128  CHN-3  32   M                     ASIAN</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 AB12345 AB12345-CHN-15-id-262 id-262 CHN-15  35   M BLACK OR AFRICAN AMERICAN</span>
@@ -226,7 +217,7 @@ object containing datasets.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 400     &lt;NA&gt; 2023-03-01            63113904</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ADAE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A TealDataset object containing the following data.frame (1934 rows and 69 columns):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A CDISCTealDataset object containing the following data.frame (1934 rows and 69 columns):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID              USUBJID SUBJID SITEID AGE SEX  RACE COUNTRY DTHFL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 AB12345 AB12345-BRA-1-id-134 id-134  BRA-1  47   M WHITE     BRA     N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 AB12345 AB12345-BRA-1-id-134 id-134  BRA-1  47   M WHITE     BRA     N</span>
@@ -429,7 +420,7 @@ object containing datasets.</p></dd>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">get_datasets</span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A TealDataset object containing the following data.frame (400 rows and 39 columns):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A CDISCTealDataset object containing the following data.frame (400 rows and 39 columns):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID               USUBJID SUBJID SITEID AGE SEX                      RACE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 AB12345  AB12345-CHN-3-id-128 id-128  CHN-3  32   M                     ASIAN</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 AB12345 AB12345-CHN-15-id-262 id-262 CHN-15  35   M BLACK OR AFRICAN AMERICAN</span>
@@ -537,7 +528,7 @@ object containing datasets.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

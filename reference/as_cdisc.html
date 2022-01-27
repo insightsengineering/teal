@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -83,7 +74,7 @@ Other releases
     </div>
 
     <div class="ref-description">
-    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
+    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p>
     </div>
 
     <div id="ref-usage">
@@ -139,7 +130,7 @@ parent dataset name</p></dd>
 <span class="r-in">    code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span></span>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A TealDataset object containing the following data.frame (400 rows and 39 columns):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A CDISCTealDataset object containing the following data.frame (400 rows and 39 columns):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID               USUBJID SUBJID SITEID AGE SEX                      RACE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 AB12345  AB12345-CHN-3-id-128 id-128  CHN-3  32   M                     ASIAN</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 AB12345 AB12345-CHN-15-id-262 id-262 CHN-15  35   M BLACK OR AFRICAN AMERICAN</span>
@@ -242,7 +233,7 @@ parent dataset name</p></dd>
 <span class="r-in">  <span class="op">)</span>,</span>
 <span class="r-in">  parent <span class="op">=</span> <span class="st">"ADSL"</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A TealDataset object containing the following data.frame (1934 rows and 69 columns):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A CDISCTealDataset object containing the following data.frame (1934 rows and 69 columns):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID              USUBJID SUBJID SITEID AGE SEX  RACE COUNTRY DTHFL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 AB12345 AB12345-BRA-1-id-134 id-134  BRA-1  47   M WHITE     BRA     N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 AB12345 AB12345-BRA-1-id-134 id-134  BRA-1  47   M WHITE     BRA     N</span>
@@ -407,7 +398,7 @@ parent dataset name</p></dd>
 <span class="r-in">    keys <span class="op">=</span> <span class="fu"><a href="get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A TealDatasetConnector object, named ADSL, containing a TealDataset object that has not been loaded/pulled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A CDISCTealDatasetConnector object, named ADSL, containing a TealDataset object that has not been loaded/pulled</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">pull_fun_adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="callable_function.html">callable_function</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
@@ -422,7 +413,7 @@ parent dataset name</p></dd>
 <span class="r-in">  <span class="op">)</span>,</span>
 <span class="r-in">  parent <span class="op">=</span> <span class="st">"ADSL"</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A TealDatasetConnector object, named ADAE, containing a TealDataset object that has not been loaded/pulled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A CDISCTealDatasetConnector object, named ADAE, containing a TealDataset object that has not been loaded/pulled</span>
 </code></pre></div>
     </div>
   </div>
@@ -437,7 +428,7 @@ parent dataset name</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

@@ -1,5 +1,5 @@
 pandoc: 2.14.0.3
-pkgdown: 2.0.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   delayed_data_loading: delayed_data_loading.html
@@ -8,7 +8,7 @@ articles:
   getting_started: getting_started.html
   teal_design_and_implementation: teal_design_and_implementation.html
   teal_options: teal_options.html
-last_built: 2022-01-18T16:31Z
+last_built: 2022-01-27T14:45Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles

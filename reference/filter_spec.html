@@ -18,7 +18,7 @@ It consists in choices and additionally the variable names for the choices"><!--
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -54,15 +54,6 @@ It consists in choices and additionally the variable names for the choices"><!--
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -84,7 +75,7 @@ Other releases
     </div>
 
     <div class="ref-description">
-    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a>
+    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a>
 It consists in choices and additionally the variable names for the choices</p>
     </div>
 
@@ -94,7 +85,7 @@ It consists in choices and additionally the variable names for the choices</p>
   choices <span class="op">=</span> <span class="cn">NULL</span>,
   selected <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/methods/is.html" class="external-link">is</a></span><span class="op">(</span><span class="va">choices</span>, <span class="st">"delayed_data"</span><span class="op">)</span><span class="op">)</span> <span class="cn">NULL</span> <span class="kw">else</span> <span class="va">choices</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
   multiple <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">selected</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/methods/is.html" class="external-link">is</a></span><span class="op">(</span><span class="va">selected</span>, <span class="st">"all_choices"</span><span class="op">)</span>,
-  label <span class="op">=</span> <span class="cn">NULL</span>,
+  label <span class="op">=</span> <span class="st">"Filter by"</span>,
   sep <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">choices</span>, <span class="st">"sep"</span><span class="op">)</span>,
   drop_keys <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
@@ -132,14 +123,14 @@ all possible choices.</p></dd>
 <dd><p>(<code>logical</code>) Whether multiple values shall be allowed in the
 shiny <code><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></code>.</p></dd>
 <dt>label</dt>
-<dd><p>optional (<code>character</code>). Define a label
-on top of this specific shiny <code><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></code>.</p></dd>
+<dd><p>optional (<code>character</code>). Define a label on top of this specific
+shiny <code><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></code>. The default value is <code>"Filter by"</code>.</p></dd>
 <dt>sep</dt>
 <dd><p>(<code>character</code>) A separator string to split the <code>choices</code> or
 <code>selected</code> inputs into the values of the different columns</p></dd>
 <dt>drop_keys</dt>
 <dd><p>optional, (<code>logical</code>) whether to drop filter column from the dataset keys,
-<code>TRUE</code> on default</p></dd>
+<code>TRUE</code> on default.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -232,7 +223,7 @@ the drop-down menu the app user will see:</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ selected</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "CRP - BASELINE"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Filter by"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ multiple</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ fixed</span>
@@ -269,7 +260,7 @@ the drop-down menu the app user will see:</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ selected</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "CRP"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Filter by"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ multiple</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ fixed</span>
@@ -332,7 +323,7 @@ the drop-down menu the app user will see:</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   function(data) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       levels(data$ARMCD)[1:2]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x563c19f11078&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x555809b4e4f0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   $ sep</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] " - "</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ selected</span>
@@ -347,11 +338,11 @@ the drop-down menu the app user will see:</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   function(data) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       levels(data$ARMCD)[1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x563c19f11078&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x555809b4e4f0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   $ sep</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] " - "</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Filter by"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ multiple</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ fixed</span>
@@ -378,7 +369,7 @@ the drop-down menu the app user will see:</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

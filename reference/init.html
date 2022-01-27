@@ -22,7 +22,7 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -58,15 +58,6 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -88,7 +79,7 @@ Other releases
     </div>
 
     <div class="ref-description">
-    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a>
+    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a>
 End-users: This is the most important function for you to start a
 teal app that is composed out of teal modules.</p>
 <p><strong>Notes for developers</strong>:
@@ -111,9 +102,10 @@ an end-user, don't use this function, but instead this module.</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
-<dd><p>(<code>TealData</code> or <code>TealDataset</code> or <code>TealDatasetConnector</code> or <code>list</code> or <code>data.frame</code>)<br><code>R6</code> object as returned by <code><a href="cdisc_data.html">cdisc_data()</a></code>, <code><a href="teal_data.html">teal_data()</a></code>, <code><a href="cdisc_dataset.html">cdisc_dataset()</a></code>, <code><a href="dataset.html">dataset()</a></code>,
-<code><a href="dataset_connector.html">dataset_connector()</a></code> or <code><a href="cdisc_dataset_connector.html">cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a list of
-the previous objects or function returning a named list.
+<dd><p>(<code>TealData</code> or <code>TealDataset</code> or <code>TealDatasetConnector</code> or <code>list</code> or <code>data.frame</code>
+or <code>MultiAssayExperiment</code>)<br><code>R6</code> object as returned by <code><a href="cdisc_data.html">cdisc_data()</a></code>, <code><a href="teal_data.html">teal_data()</a></code>, <code><a href="cdisc_dataset.html">cdisc_dataset()</a></code>, <code><a href="dataset.html">dataset()</a></code>,
+<code><a href="dataset_connector.html">dataset_connector()</a></code> or <code><a href="cdisc_dataset_connector.html">cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a <code>MultiAssayExperiment</code>
+or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 do not match the original object names. To ensure reproducibility please use <code><a href="teal_data.html">teal_data()</a></code>
 or <code><a href="cdisc_data.html">cdisc_data()</a></code> with <code>check = TRUE</code> enabled.</p></dd>
@@ -200,8 +192,6 @@ is then preferred to this function.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>teal_logging <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
 <span class="r-in"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">init</span><span class="op">(</span></span>
 <span class="r-in">  data <span class="op">=</span> <span class="fu"><a href="cdisc_data.html">cdisc_data</a></span><span class="op">(</span></span>
 <span class="r-in">    <span class="fu"><a href="cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span><span class="op">)</span>,</span>
@@ -255,7 +245,7 @@ is then preferred to this function.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

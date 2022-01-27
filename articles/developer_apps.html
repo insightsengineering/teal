@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -72,15 +72,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -135,7 +126,6 @@ Other releases
 
 <span class="co"># Don't remove these options, the developer may activate them as needed</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>shiny.fullstacktrace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># to show a detailed stack trace, see `?getShinyOption()`</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>teal_logging <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># to log to console</span>
 <span class="co"># where to open app (new window or within RStudio)</span>
 <span class="co"># options("shiny.launch.browser" = TRUE) # to open a new window #nolint</span>
 <span class="co"># to open in RStudio Viewer pane, only available in RStudio, so it won't go through `CI` if enabled</span>
@@ -215,17 +205,17 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="va">ADSL_code</span><span class="op">)</span>
 <span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="va">ADAE_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span>
 <span class="va">adlb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="va">ADLB_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="section level1">
-<h1 id="apps">Apps<a class="anchor" aria-label="anchor" href="#apps"></a>
-</h1>
+<div class="section level2">
+<h2 id="apps">Apps<a class="anchor" aria-label="anchor" href="#apps"></a>
+</h2>
 <p>Don’t forget to reload the app when you change code. The fastest is</p>
 <pre><code><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="st">"../teal"</span><span class="op">)</span></code></pre>
 <p>or the keyboard shortcut <code>^ + Shift + L</code> on a Mac.</p>
 <p>We use <code>safeBookmarkableShinyApp</code> instead of <code>shinyApp</code> to allow bookmarking. It wraps the UI function into a function with one argument for the request object. We further wrap it to only execute it when the option is enabled.</p>
 <p>You can execute these apps in any order.</p>
-<div class="section level2">
-<h2 id="main-debugging-app">Main Debugging App<a class="anchor" aria-label="anchor" href="#main-debugging-app"></a>
-</h2>
+<div class="section level3">
+<h3 id="main-debugging-app">Main Debugging App<a class="anchor" aria-label="anchor" href="#main-debugging-app"></a>
+</h3>
 <p>This is the main debugging app to check that the functionality still works after code changes:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
@@ -237,9 +227,7 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/bookmark_module.html">bookmark_module</a></span><span class="op">(</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/reset_filters_module.html">reset_filters_module</a></span><span class="op">(</span><span class="st">"Reset"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"ADLB"</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu">reset_filters_module</span><span class="op">(</span><span class="st">"Reset"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"ADLB"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span>,
   filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
@@ -250,9 +238,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="lazy-filtering-of-datasets">Lazy Filtering of Datasets<a class="anchor" aria-label="anchor" href="#lazy-filtering-of-datasets"></a>
-</h2>
+<div class="section level3">
+<h3 id="lazy-filtering-of-datasets">Lazy Filtering of Datasets<a class="anchor" aria-label="anchor" href="#lazy-filtering-of-datasets"></a>
+</h3>
 <p>The datasets are lazily filtered meaning that when they are not needed for the current tab (as specified with <code>active_datanames</code>), they will simply not be refiltered. You can check this by modifying the filters of <code>ADSL</code> in a tab without <code>ADAE</code>. Then, the console should print that <code>ADSL</code> is refiltered, but not <code>ADAE</code>. Other datasets the tab depends on like <code>ADLB</code> will be refiltered.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
@@ -262,9 +250,7 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADAE"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADLB"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADLB"</span><span class="op">)</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/bookmark_module.html">bookmark_module</a></span><span class="op">(</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADLB"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADLB"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span>,
   filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
@@ -278,9 +264,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="app-with-delayed-data">App with Delayed Data<a class="anchor" aria-label="anchor" href="#app-with-delayed-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="app-with-delayed-data">App with Delayed Data<a class="anchor" aria-label="anchor" href="#app-with-delayed-data"></a>
+</h3>
 <p>This app tests that the app works with delayed data that is not available initially and loaded after the splash screen is submitted. Then, the splash UI is replaced by the main teal UI.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
@@ -288,9 +274,7 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
     <span class="fu"><a href="../reference/code_dataset_connector.html">code_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADSL"</span>, code <span class="op">=</span> <span class="va">adsl_code</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/bookmark_module.html">bookmark_module</a></span><span class="op">(</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span>,
   filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
@@ -304,9 +288,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="nested-modules">Nested Modules<a class="anchor" aria-label="anchor" href="#nested-modules"></a>
-</h2>
+<div class="section level3">
+<h3 id="nested-modules">Nested Modules<a class="anchor" aria-label="anchor" href="#nested-modules"></a>
+</h3>
 <p>This app shows nested modules and how the filters apply to them. Check the tab hierarchy <code>A1 -&gt; B1.3</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
@@ -338,9 +322,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="different-ways-to-specify-the-initial-filter-states">Different Ways to Specify the Initial Filter States<a class="anchor" aria-label="anchor" href="#different-ways-to-specify-the-initial-filter-states"></a>
-</h2>
+<div class="section level3">
+<h3 id="different-ways-to-specify-the-initial-filter-states">Different Ways to Specify the Initial Filter States<a class="anchor" aria-label="anchor" href="#different-ways-to-specify-the-initial-filter-states"></a>
+</h3>
 <p>We show different ways of how to specify the initial filter states. To show this, we generate fake data. We implicitly also check that the code works without the usual key <code>STUDYID</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fake_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
@@ -380,9 +364,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="dataset-not-provided-but-still-referred-to">Dataset Not Provided But Still Referred To<a class="anchor" aria-label="anchor" href="#dataset-not-provided-but-still-referred-to"></a>
-</h2>
+<div class="section level3">
+<h3 id="dataset-not-provided-but-still-referred-to">Dataset Not Provided But Still Referred To<a class="anchor" aria-label="anchor" href="#dataset-not-provided-but-still-referred-to"></a>
+</h3>
 <p>This app shows what happens when a dataset, <code>ADAE</code>, is not provided, but still appears in the <code>active_datanames</code>. A warning is displayed to the console.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
@@ -392,17 +376,16 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADAE"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span>,
   header <span class="op">=</span> <span class="st">"Missing ADAE Dataset Raises Warning"</span>,
   footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"text-muted"</span>, <span class="st">"Source: agile-R website"</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="apply-several-filters-at-once">Apply several filters at once<a class="anchor" aria-label="anchor" href="#apply-several-filters-at-once"></a>
-</h2>
+<div class="section level3">
+<h3 id="apply-several-filters-at-once">Apply several filters at once<a class="anchor" aria-label="anchor" href="#apply-several-filters-at-once"></a>
+</h3>
 <p>This app checks that several filters can be applied at once. The logic is non-trivial. For instance, one can define a safety filter.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># dummy filter to show how several filters can be applied at once, not sensible</span>
@@ -417,7 +400,7 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
     <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/predefined_filters_module.html">predefined_filters_module</a></span><span class="op">(</span>filter <span class="op">=</span> <span class="va">safety_filter</span><span class="op">)</span>,
+    <span class="fu">teal</span><span class="fu">:::</span><span class="fu">predefined_filters_module</span><span class="op">(</span>filter <span class="op">=</span> <span class="va">safety_filter</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>,
   filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
@@ -435,9 +418,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="module-with-hidden-filter">Module with Hidden Filter<a class="anchor" aria-label="anchor" href="#module-with-hidden-filter"></a>
-</h2>
+<div class="section level3">
+<h3 id="module-with-hidden-filter">Module with Hidden Filter<a class="anchor" aria-label="anchor" href="#module-with-hidden-filter"></a>
+</h3>
 <p>This app tests that the right filter panel can be hidden.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">module_hidden_filters</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>
@@ -463,9 +446,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="raw-app-with-hardly-anything">Raw App with Hardly Anything<a class="anchor" aria-label="anchor" href="#raw-app-with-hardly-anything"></a>
-</h2>
+<div class="section level3">
+<h3 id="raw-app-with-hardly-anything">Raw App with Hardly Anything<a class="anchor" aria-label="anchor" href="#raw-app-with-hardly-anything"></a>
+</h3>
 <p>This app purely tests the modules, it only has one tab and two datasets. It can be used to check that all labels are preserved and shown in the UI.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
@@ -474,16 +457,22 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
     <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>
+    <span class="fu">teal</span><span class="fu">::</span><span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>
+      <span class="st">"test"</span>,
+      server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span>
+      <span class="op">}</span>,
+      ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span>,
+      filters <span class="op">=</span> <span class="st">"all"</span>
+    <span class="op">)</span>
   <span class="op">)</span>,
   header <span class="op">=</span> <span class="st">"Raw App"</span>,
   footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"text-muted"</span>, <span class="st">"Source: agile-R website"</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="fu">safeBookmarkableShinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="app-with-independent-and-non-independent-data">App with Independent and Non-Independent Data<a class="anchor" aria-label="anchor" href="#app-with-independent-and-non-independent-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="app-with-independent-and-non-independent-data">App with Independent and Non-Independent Data<a class="anchor" aria-label="anchor" href="#app-with-independent-and-non-independent-data"></a>
+</h3>
 <p>This app shows how to incorporate independent data like <code>iris</code> and <code>mtcars</code> alongside some <code>CDISC</code> datasets.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># construct a unique primary key</span>
@@ -500,7 +489,13 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
     <span class="fu"><a href="../reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"mtcars"</span>, <span class="va">mtcars_d</span>, <span class="st">"rowname"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>
+    <span class="fu">teal</span><span class="fu">::</span><span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>
+      <span class="st">"test"</span>,
+      server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span>
+      <span class="op">}</span>,
+      ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span>,
+      filters <span class="op">=</span> <span class="st">"all"</span>
+    <span class="op">)</span>
   <span class="op">)</span>,
   header <span class="op">=</span> <span class="st">"Mixed Independent and Dependent Data"</span>,
   footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"text-muted"</span>, <span class="st">"Source: agile-R website"</span><span class="op">)</span>
@@ -527,7 +522,7 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

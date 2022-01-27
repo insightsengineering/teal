@@ -20,7 +20,7 @@ input widgets that provide only a single choice."><!-- mathjax --><script src="h
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -56,15 +56,6 @@ input widgets that provide only a single choice."><!-- mathjax --><script src="h
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -86,7 +77,7 @@ Other releases
     </div>
 
     <div class="ref-description">
-    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a>
+    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a>
 Hidden input widgets are useful to have the <code>input[[inputId]]</code> variable
 on available in the server function but no corresponding visual clutter from
 input widgets that provide only a single choice.</p>
@@ -125,14 +116,14 @@ is displayed to the user.</p></dd>
 <dt>selected</dt>
 <dd><p>The initially selected value (or multiple values if <code>multiple = TRUE</code>).
 If not specified then defaults to the first value for single-select lists
- and no values for multiple select lists.</p></dd>
+and no values for multiple select lists.</p></dd>
 <dt>multiple</dt>
 <dd><p>Is selection of multiple items allowed?</p></dd>
 <dt>sep</dt>
 <dd><p>(<code>character</code>) A separator string to split the <code>choices</code> or
 <code>selected</code> inputs into the values of the different columns</p></dd>
 <dt>options</dt>
-<dd><p>List of options, see <a href="https://rdrr.io/pkg/shinyWidgets/man/pickerOptions.html" class="external-link">pickerOptions</a> for all available options.
+<dd><p>List of options, see <a href="https://dreamrs.github.io/shinyWidgets/reference/pickerOptions.html" class="external-link">pickerOptions</a> for all available options.
 To limit the number of selection possible, see example below.</p></dd>
 <dt>label_help</dt>
 <dd><p>optional an object of class <code>shiny.tag</code>. E.g. an object
@@ -197,9 +188,9 @@ e.g. 'auto', 'fit', '100px' or '75%'</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="a" data-content="&amp;lt;i class=&amp;quot;fa fa-sort-numeric-up&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;sort-numeric-up icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; a &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;A&amp;lt;/small&amp;gt;" selected="selected"&gt;a&lt;/option&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="b" data-content="&amp;lt;i class=&amp;quot;fa fa-chart-bar&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;chart-bar icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; b &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;B&amp;lt;/small&amp;gt;"&gt;b&lt;/option&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="c" data-content="&amp;lt;i class=&amp;quot;fa fa-key&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;key icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; c &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;C&amp;lt;/small&amp;gt;"&gt;c&lt;/option&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="a" data-content="&amp;lt;i class=&amp;quot;fa fa-key&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;key icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; a &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;A&amp;lt;/small&amp;gt;" selected="selected"&gt;a&lt;/option&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="b" data-content="&amp;lt;i class=&amp;quot;fa fa-calendar&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;calendar icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; b &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;B&amp;lt;/small&amp;gt;"&gt;b&lt;/option&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;option value="c" data-content="&amp;lt;i class=&amp;quot;fa fa-calendar&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;calendar icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; c &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;C&amp;lt;/small&amp;gt;"&gt;c&lt;/option&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/select&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
 <span class="r-in"><span class="fu">optionalSelectInput</span><span class="op">(</span></span>
@@ -259,7 +250,7 @@ e.g. 'auto', 'fit', '100px' or '75%'</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

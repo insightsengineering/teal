@@ -157,9 +157,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/as_cdisc.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/bookmark_module.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/bookmarkableShinyApp.html</loc>
   </url>
   <url>
@@ -262,6 +259,9 @@
     <loc>https://insightsengineering.github.io/teal/reference/csv_dataset_connector.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/data_choices_labeled.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/data_connection.html</loc>
   </url>
   <url>
@@ -272,9 +272,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/data_label.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/dataset.MultiAssayExperiment.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/dataset.html</loc>
@@ -301,22 +298,19 @@
     <loc>https://insightsengineering.github.io/teal/reference/datasetdb_dataset_connector.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/debug_browser_module.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/deep_clone_r6.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/default_filter.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/dot-log.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/enclosed_with.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/enclosed_with_dataname.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/execute_in_next_cycle.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/extract_choices_labels.html</loc>
@@ -391,12 +385,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/get_filterable_varnames.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.TealDataset.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.data.frame.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.html</loc>
   </url>
   <url>
@@ -416,9 +404,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_variable_labels.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/grapes-is_in-grapes.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/include_css_files.html</loc>
@@ -448,7 +433,7 @@
     <loc>https://insightsengineering.github.io/teal/reference/init_filtered_dataset.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/is.choices_selected.html</loc>
+    <loc>https://insightsengineering.github.io/teal/reference/is_dag.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/is_pulled.html</loc>
@@ -460,6 +445,15 @@
     <loc>https://insightsengineering.github.io/teal/reference/join_keys.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/layout_teal_glue_generator.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/line_pkg_log.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/line_usage_log.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/load_dataset.html</loc>
   </url>
   <url>
@@ -467,6 +461,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/log_app_usage.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/log_system_info.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/mae_dataset.html</loc>
@@ -508,22 +505,7 @@
     <loc>https://insightsengineering.github.io/teal/reference/picker_options_content.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/predefined_filters_module.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/pretty_code_string.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/print.choices_labeled.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/print.teal_module.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/print.teal_modules.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/python_code.html</loc>
@@ -538,13 +520,13 @@
     <loc>https://insightsengineering.github.io/teal/reference/read_script.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/reexports.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/register_logger.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/relational_data_connector.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/reset_filters_module.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/resolve_delayed.html</loc>
@@ -619,9 +601,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/srv_teal_with_splash.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/stop_shiny.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/teal-package.html</loc>
   </url>
   <url>
@@ -643,19 +622,10 @@
     <loc>https://insightsengineering.github.io/teal/reference/text_to_call.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/toString.teal_module.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/toString.teal_modules.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/to_relational_data.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/topological_sort.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/trigger_after_first_cycle.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/ui_nested_tabs.html</loc>

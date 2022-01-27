@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -72,15 +72,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -125,9 +116,7 @@ Other releases
 <h2 id="initialization">Initialization<a class="anchor" aria-label="anchor" href="#initialization"></a>
 </h2>
 <p><img src="images/filter_panel/filtered_data_init.jpg" width="100%"></p>
-<p><code>FilteredData</code> is initialized in <code>srv_teal</code> when <code>TealData$is_pulled()</code> returns <code>TRUE</code>. <code>FilteredData</code> is dispatched on type of <code>TealData</code>, and if DDL is <code>CDISCTealData</code> then <code>CDISCFilteredData</code> is initialized. Each <code>TealDataset</code> from <code>CDISCTealData</code> determines the type of the <code>FilteredDataset</code>. In above diagram <code>CDISCTealDataset</code> initializes <code>CDISCFilteredDataset</code> and <code>MAETealDataset</code> initializes <code>MAEFilteredDataset</code>.<br>
-Most complicated concept in the new filter panel is <code>FilterStates</code>, which are initialized in <code>FilteredDataset</code>. The type and number of <code>FilterStates</code> depends on the data kept in the <code>FilteredDataset</code>. You can imagine <code>FilterStates</code> as one <code>subset</code> call. In case of <code>data.frame</code> (<code>DFFilteredDataset</code>) case is simple, because we know that single <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter</a></code> call is sufficient to subset data rows. Consider <code>MultiAssayExperiment</code> object which contains patients data in <code>@colData</code> and multiple experiments in <code>@ExperimentList</code>. Because <code>MultiAssayExperiment</code> contains multiple objects and each must be filtered by separate call, this is why multiple <code>FilterStates</code> objects are required for <code>MAEFilteredDataset</code>. <code>ReactiveQueue</code> are created within <code>FilterStates</code> and their number also depends on the <code>FilterStates</code> type.<br>
-Described objects are created instantly when data is loaded and they remain unchanged, whereas <code>FilterState</code> is initialized each time when the new filter is added. Values of the <code>FilterState</code> can change and also it can be removed and added once again.</p>
+<p><code>FilteredData</code> is initialized in <code>srv_teal</code> when <code>TealData$is_pulled()</code> returns <code>TRUE</code>. <code>FilteredData</code> is dispatched on type of <code>TealData</code>, and if DDL is <code>CDISCTealData</code> then <code>CDISCFilteredData</code> is initialized. Each <code>TealDataset</code> from <code>CDISCTealData</code> determines the type of the <code>FilteredDataset</code>. In above diagram <code>CDISCTealDataset</code> initializes <code>CDISCFilteredDataset</code> and <code>MAETealDataset</code> initializes <code>MAEFilteredDataset</code>. Most complicated concept in the new filter panel is <code>FilterStates</code>, which are initialized in <code>FilteredDataset</code>. The type and number of <code>FilterStates</code> depends on the data kept in the <code>FilteredDataset</code>. You can imagine <code>FilterStates</code> as one <code>subset</code> call. In case of <code>data.frame</code> (<code>DFFilteredDataset</code>) case is simple, because we know that single <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter</a></code> call is sufficient to subset data rows. Consider <code>MultiAssayExperiment</code> object which contains patients data in <code>@colData</code> and multiple experiments in <code>@ExperimentList</code>. Because <code>MultiAssayExperiment</code> contains multiple objects and each must be filtered by separate call, this is why multiple <code>FilterStates</code> objects are required for <code>MAEFilteredDataset</code>. <code>ReactiveQueue</code> are created within <code>FilterStates</code> and their number also depends on the <code>FilterStates</code> type. Described objects are created instantly when data is loaded and they remain unchanged, whereas <code>FilterState</code> is initialized each time when the new filter is added. Values of the <code>FilterState</code> can change and also it can be removed and added once again.</p>
 </div>
 <div class="section level2">
 <h2 id="classes-description">Classes description<a class="anchor" aria-label="anchor" href="#classes-description"></a>
@@ -247,25 +236,25 @@ Described objects are created instantly when data is loaded and they remain unch
 <p>All of filter-panel classes have dedicated methods to set and get current filter state. These methods include: - <code>get_filter_state</code> - <code>set_filter_state</code> - <code>remove_filter_state</code> - <code>clear_filter_states</code></p>
 <p>Setting and getting filter-panel states are done through a nested list which follows a specific pattern. The structure of the list should reflect address of <code>FilterState</code>(s) object. By default (<code>data.frame</code>), the structure will follow the pattern shown in the code below, with a list element for each variable from each dataset. In case of <code>MultiAssayExperiment</code> objects, the situation looks different, because these datasets have a multiple objects inside, so the list needs to refer to the object one wants to set/get filter from.</p>
 <pre><code>dataset-1: #data.frame
-  variable-1: 
+  variable-1:
     selected: [&lt;selected&gt;]
     keep_na: &lt;keep_na&gt;
   ...
 
 dataset-n: # MAE
   subjects:
-    variable-1: 
+    variable-1:
       selected: [&lt;selected&gt;]
       keep_na: &lt;keep_na&gt;
     ...
   experiment-1:
     subset:
-      variable-1: 
+      variable-1:
         selected: [&lt;selected&gt;]
         keep_na: &lt;keep_na&gt;
       ...
     select:
-      variable-2: 
+      variable-2:
         selected: [&lt;selected&gt;]
         keep_na: &lt;keep_na&gt;
       ...
@@ -352,13 +341,11 @@ dataset-n: # MAE
       filters <span class="op">=</span> <span class="st">"all"</span>,
       ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
         <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>
-        <span class="fu">teal.devel</span><span class="fu">::</span><span class="fu">standard_layout</span><span class="op">(</span>
-          output <span class="op">=</span> <span class="fu">teal.devel</span><span class="fu">::</span><span class="fu">white_small_well</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"filter_state"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-          encoding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span>
-            <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"add_species_filter"</span><span class="op">)</span>, <span class="st">"Set iris$Species filter"</span><span class="op">)</span>,
-            <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"remove_species_filter"</span><span class="op">)</span>, <span class="st">"Remove iris$Species filter"</span><span class="op">)</span>,
-            <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"remove_all_filters"</span><span class="op">)</span>, <span class="st">"Remove all filters"</span><span class="op">)</span>
-          <span class="op">)</span>
+        <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span>
+          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"filter_state"</span><span class="op">)</span><span class="op">)</span>,
+          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"add_species_filter"</span><span class="op">)</span>, <span class="st">"Set iris$Species filter"</span><span class="op">)</span>,
+          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"remove_species_filter"</span><span class="op">)</span>, <span class="st">"Remove iris$Species filter"</span><span class="op">)</span>,
+          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"remove_all_filters"</span><span class="op">)</span>, <span class="st">"Remove all filters"</span><span class="op">)</span>
         <span class="op">)</span>
       <span class="op">}</span>,
       server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span>
@@ -403,7 +390,7 @@ dataset-n: # MAE
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

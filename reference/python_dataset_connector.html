@@ -20,7 +20,7 @@ Create a CDISCTealDatasetConnector from .py file or through python code supplied
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -56,15 +56,6 @@ Create a CDISCTealDatasetConnector from .py file or through python code supplied
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -167,7 +158,7 @@ parent dataset name</p></dd>
     <p>Note that in addition to the <code>reticulate</code> package, support for python requires an
 existing python installation. By default, <code>reticulate</code> will attempt to use the
 location <code>Sys.which("python")</code>, however the path to the python installation can be
-supplied directly via <code><a href="https://rdrr.io/pkg/reticulate/man/use_python.html" class="external-link">reticulate::use_python</a></code>.</p>
+supplied directly via <code><a href="https://rstudio.github.io/reticulate/reference/use_python.html" class="external-link">reticulate::use_python</a></code>.</p>
 <p>The <code>teal</code> API for delayed data requires the python code or script to return a
 data.frame object. For this, the <code>pandas</code> package is required. This can be installed
 using <code>reticulate::py_install("pandas")</code>.</p>
@@ -207,7 +198,7 @@ features and current limitations.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/reticulate" class="external-link">reticulate</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a></span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># supply python code directly in R</span></span>
 <span class="r-in"></span>
@@ -245,7 +236,7 @@ features and current limitations.</p>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">python_dataset_connector</span><span class="op">(</span></span>
 <span class="r-in">  <span class="st">"ADSL"</span>,</span>
 <span class="r-in">  code <span class="op">=</span> <span class="st">"import pandas as pd</span>
-<span class="r-in">  data = pd.DataFrame({'STUDYID':  [r.y], 'USUBJID': [r.y]})"</span>,</span>
+<span class="r-in">data = pd.DataFrame({'STUDYID':  [r.y], 'USUBJID': [r.y]})"</span>,</span>
 <span class="r-in">  object <span class="op">=</span> <span class="st">"data"</span>,</span>
 <span class="r-in">  vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
@@ -267,7 +258,7 @@ features and current limitations.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

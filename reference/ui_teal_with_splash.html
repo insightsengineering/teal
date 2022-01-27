@@ -24,7 +24,7 @@ Please also refer to the doc of init()."><!-- mathjax --><script src="https://cd
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -60,15 +60,6 @@ Please also refer to the doc of init()."><!-- mathjax --><script src="https://cd
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -90,7 +81,7 @@ Other releases
     </div>
 
     <div class="ref-description">
-    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a>
+    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a>
 The splash screen could be used to query for a password to fetch the data.
 <code><a href="init.html">init</a></code> is a very thin wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.
@@ -116,9 +107,10 @@ a default splash screen is shown.</p>
 <dd><p>(<code>character(1)</code>)<br>
 module id</p></dd>
 <dt>data</dt>
-<dd><p>(<code>TealData</code> or <code>TealDataset</code> or <code>TealDatasetConnector</code> or <code>list</code> or <code>data.frame</code>)<br><code>R6</code> object as returned by <code><a href="cdisc_data.html">cdisc_data()</a></code>, <code><a href="teal_data.html">teal_data()</a></code>, <code><a href="cdisc_dataset.html">cdisc_dataset()</a></code>, <code><a href="dataset.html">dataset()</a></code>,
-<code><a href="dataset_connector.html">dataset_connector()</a></code> or <code><a href="cdisc_dataset_connector.html">cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a list of
-the previous objects or function returning a named list.
+<dd><p>(<code>TealData</code> or <code>TealDataset</code> or <code>TealDatasetConnector</code> or <code>list</code> or <code>data.frame</code>
+or <code>MultiAssayExperiment</code>)<br><code>R6</code> object as returned by <code><a href="cdisc_data.html">cdisc_data()</a></code>, <code><a href="teal_data.html">teal_data()</a></code>, <code><a href="cdisc_dataset.html">cdisc_dataset()</a></code>, <code><a href="dataset.html">dataset()</a></code>,
+<code><a href="dataset_connector.html">dataset_connector()</a></code> or <code><a href="cdisc_dataset_connector.html">cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a <code>MultiAssayExperiment</code>
+or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 do not match the original object names. To ensure reproducibility please use <code><a href="teal_data.html">teal_data()</a></code>
 or <code><a href="cdisc_data.html">cdisc_data()</a></code> with <code>check = TRUE</code> enabled.</p></dd>
@@ -147,7 +139,7 @@ the footer of the app</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

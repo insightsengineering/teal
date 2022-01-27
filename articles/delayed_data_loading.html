@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -72,15 +72,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -105,7 +96,7 @@ Other releases
       <h1 data-toc-skip>Delayed Data Loading</h1>
                         <h4 data-toc-skip class="author">Dawid Kałędkowski</h4>
             
-            <h4 data-toc-skip class="date">2022-01-18</h4>
+            <h4 data-toc-skip class="date">2022-01-27</h4>
       
       
       <div class="hidden name"><code>delayed_data_loading.Rmd</code></div>
@@ -149,7 +140,7 @@ Other releases
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: shiny</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; You are using teal version 0.10.0.9056</span>
+<span class="co">#&gt; You are using teal version 0.10.1</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 
@@ -298,7 +289,7 @@ Other releases
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span>
 
-<span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span> <span class="co"># nolint</span>
+<span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span> <span class="co"># nolint</span>
 
 <span class="va">adsl_dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
@@ -347,7 +338,7 @@ Other releases
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">adsl_conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_connector.html">dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
-  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span><span class="st">"synthetic_cdisc_dataset"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span><span class="st">"synthetic_cdisc_dataset"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
     <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span><span class="op">)</span>,
   keys <span class="op">=</span> <span class="fu"><a href="../reference/get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
   label <span class="op">=</span> <span class="st">"Subject-Level Analysis Dataset"</span>
@@ -389,7 +380,7 @@ Other releases
 <span class="co"># there is also a cdisc_dataset_connector function which pulls an object of type CDISCTealDataset</span>
 <span class="va">adsl_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_connector.html">dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL_2"</span>,
-  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> <span class="va">ADSL_2</span> <span class="op">&lt;-</span> <span class="va">ADSL</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># nolint</span>
+  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> <span class="va">ADSL_2</span> <span class="op">&lt;-</span> <span class="va">ADSL</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># nolint</span>
     <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
   keys <span class="op">=</span> <span class="fu"><a href="../reference/get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
   label <span class="op">=</span> <span class="st">"Example label"</span>,
@@ -401,7 +392,7 @@ Other releases
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">adsl_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_connector.html">dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL_3"</span>,
-  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span> <span class="va">ADSL_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># nolint</span>
+  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span> <span class="va">ADSL_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># nolint</span>
     <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
   keys <span class="op">=</span> <span class="fu"><a href="../reference/get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
   label <span class="op">=</span> <span class="st">"Example label"</span>,
@@ -494,7 +485,7 @@ Other releases
 <code class="sourceCode R"><span class="co"># create TealDatasetConnectors</span>
 <span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_connector.html">dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
-  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span><span class="st">"synthetic_cdisc_dataset"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span><span class="st">"synthetic_cdisc_dataset"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
     <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span><span class="op">)</span>,
   keys <span class="op">=</span> <span class="fu"><a href="../reference/get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
   label <span class="op">=</span> <span class="st">"Subject-Level Analysis Dataset"</span>
@@ -502,7 +493,7 @@ Other releases
 
 <span class="va">adsl_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_connector.html">dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL_3"</span>,
-  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">name</span>, <span class="va">n</span> <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="va">ADSL_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># nolint</span>
+  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">name</span>, <span class="va">n</span> <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="va">ADSL_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># nolint</span>
     <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
   keys <span class="op">=</span> <span class="fu"><a href="../reference/get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
   label <span class="op">=</span> <span class="st">"Example label"</span>,
@@ -651,13 +642,13 @@ Other releases
   dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
   <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span>,
   code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"</span>
-<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+<span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADSL$x1 &lt;- 1"</span><span class="op">)</span>
 
 
 <span class="va">adtte</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scda_dataset_connector.html">scda_cdisc_dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADTTE"</span>, <span class="st">"adtte"</span>
-<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+<span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADTTE$x2 &lt;- 2"</span><span class="op">)</span></code></pre></div>
 <p><code><a href="../reference/get_code.html">get_code()</a></code> function returns loading code from <code>CallableFunction</code> and mutation code as provided in using <code>mutate_dataset</code>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
@@ -669,7 +660,7 @@ Other releases
 <span class="co">#&gt; ADTTE$x2 &lt;- 2</span></code></pre></div>
 <p><code>mutate_dataset</code> can also be used on <code>TealData</code> objects which applies the <code>code</code> to the dataset specified in <code>dataname</code>. This is important, as <code>TealData</code> can track each call which affects this particular dataset. Check the code below, where we create data containing two datasets using the <code>cdisc_data</code> function. We can still use <code>mutate_dataset</code> on the object which contains multiple datasets, with one requirement - one needs to specify <code>dataname</code>. Afterwards, one can extract reproducible code from data which affects this particular <code>dataname</code>.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adtte</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adtte</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADSL$x3 &lt;- 3"</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
 
 <span class="co"># get reproducible code of all datasets</span>
@@ -687,7 +678,7 @@ Other releases
 <span class="co">#&gt; ADSL$x3 &lt;- 3</span></code></pre></div>
 <p>One can also combine multiple <code>mutate_dataset</code> calls applied interchangeably to all datasets.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span><span class="va">data</span>, code <span class="op">=</span> <span class="st">"ADTTE$x4 &lt;- 4"</span>, dataname <span class="op">=</span> <span class="st">"ADTTE"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span><span class="va">data</span>, code <span class="op">=</span> <span class="st">"ADTTE$x4 &lt;- 4"</span>, dataname <span class="op">=</span> <span class="st">"ADTTE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADSL &lt;- dplyr::filter(ADSL, SEX == 'F')"</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>
@@ -706,7 +697,7 @@ Other releases
   code <span class="op">=</span> <span class="st">"ADTTE &lt;- filter(ADTTE, USUBJID %in% ADSL$USUBJID)"</span>,
   dataname <span class="op">=</span> <span class="st">"ADTTE"</span>,
   vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span> <span class="co"># vars = list(&lt;DATANAME&gt; = &lt;dataset name&gt;))</span>
-<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+<span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span><span class="st">"ADSL$var_created_after &lt;- NA"</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
 
 
@@ -944,7 +935,7 @@ Other releases
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

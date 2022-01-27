@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -72,15 +72,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -114,9 +105,9 @@ Other releases
 
     
     
-<div class="section level1">
-<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h1>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>This vignette describes the core design of <code>teal</code> and explains some of <code>teal</code>’s implementation details.</p>
 <p><code>teal</code> is a framework built on top of <code>Shiny</code> that adds:</p>
 <ul>
@@ -126,9 +117,9 @@ Other releases
 </ul>
 <p><code>teal</code> modules are <code>Shiny</code> modules with an additional <code>datasets</code> argument for the <code>server</code> function that provides an access to the filtered data.</p>
 </div>
-<div class="section level1">
-<h1 id="shiny-basics">Shiny Basics<a class="anchor" aria-label="anchor" href="#shiny-basics"></a>
-</h1>
+<div class="section level2">
+<h2 id="shiny-basics">Shiny Basics<a class="anchor" aria-label="anchor" href="#shiny-basics"></a>
+</h2>
 <p>Shiny apps have the following two main components: the <code>server</code> function and an <code>ui</code> object. The <code>ui</code> object is a representation of the <code>HTML</code> for the webpage and the <code>server</code> function provides the logic to modify the HTML code. Hence, a minimal Shiny app with no server logic is as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span>
@@ -212,9 +203,9 @@ Other releases
 <p>This modularized construction of Shiny apps is one of the foundations of <code>teal</code>. Modularizing code also makes it easier to build a company wide standard for creating and sharing Shiny code and also for creating project specific applications quickly.</p>
 <p>Finally, the user interface layout in the version of Shiny we currently support is based on <a href="http://bootstrapdocs.com/v3.0.3/docs/" class="external-link">Bootstrap 3</a> when using the <code>fluidPage</code> and <code>fixedPage</code> layout functions (which we do for <code>teal</code>). Understanding the bootstrap framework for layout, class and css association is useful for creating clean user interfaces.</p>
 </div>
-<div class="section level1">
-<h1 id="the-teal-overall-design">The Teal Overall Design<a class="anchor" aria-label="anchor" href="#the-teal-overall-design"></a>
-</h1>
+<div class="section level2">
+<h2 id="the-teal-overall-design">The Teal Overall Design<a class="anchor" aria-label="anchor" href="#the-teal-overall-design"></a>
+</h2>
 <p>The general <code>teal</code> workflow is as follows:</p>
 <ol style="list-style-type: decimal">
 <li><p>pass a collection of data sets and a collection of configured teal modules to the <code><a href="../reference/init.html">teal::init</a></code> function.</p></li>
@@ -267,31 +258,30 @@ Other releases
 <li>
 <code>R/init.R</code>,</li>
 </ul>
-<p>We have also a logging facility with the <code>.log</code> function with the corresponding code saved in <code>R/logging.R</code>. Logging to the prompt can be disabled with <code>options(teal_logging = FALSE)</code>.</p>
 <p>We now discuss each of the three core components in detail. This would be a good time to browse through the just mentioned <code>.R</code> files and see how much of what has just been said/written can be spotted in the code without further explanation.</p>
-<div class="section level2">
-<h2 id="filtereddata">
+<div class="section level3">
+<h3 id="filtereddata">
 <code>FilteredData</code><a class="anchor" aria-label="anchor" href="#filtereddata"></a>
-</h2>
+</h3>
 <p>The <code>FilteredData</code> class is an <a href="https://r6.r-lib.org/articles/Introduction.html" class="external-link"><code>R6</code></a> reference class to handle the datasets and the filtering state. In general, every dataset can be filtered based on values of its variables.</p>
 <ul>
 <li><p>if a variable <code>xi</code> is continuous or date/date time then the filtering is based on a range: <code>xi in [a,b]</code> where <code>min(xi)&lt;=a&lt;b&lt;=max(xi)</code></p></li>
 <li><p>if a variable <code>xi</code> is categorical then the filtering is based on a set: <code>xi in A</code> where <code>A</code> is a subset of the elements in <code>xi</code>.</p></li>
 </ul>
 <p>When filtering a dataset, say <code>ADSL</code>, with <code>10</code> of its variables then the <code>10</code> subsetting conditions are combined with an logical AND (<code>&amp;</code>). If a more complicated subsetting is needed then it is easiest to add a new variable to the analysis dataset that contains the desired logic which then in turn can be combined via <code>&amp;</code> logic with other variable based subsetting conditions.</p>
-<div class="section level3">
-<h3 id="clinical-trials-data">Clinical Trials Data<a class="anchor" aria-label="anchor" href="#clinical-trials-data"></a>
-</h3>
+<div class="section level4">
+<h4 id="clinical-trials-data">Clinical Trials Data<a class="anchor" aria-label="anchor" href="#clinical-trials-data"></a>
+</h4>
 <p>In order to understand the current implementation of the <code>FilteredData</code> class it is useful to have some background of the data standards used in clinical trials.</p>
 <p>For clinical trials the datasets are standardized following the <a href="https://www.cdisc.org" class="external-link">CDISC</a> standards <a href="https://www.cdisc.org/standards/foundational/sdtm" class="external-link">SDTM</a> and <a href="https://www.cdisc.org/standards/foundational/adam" class="external-link">ADaM</a>. Both SDTM and ADaM are based on rectangular data structures and a simplified generalization is that SDTM contains observed raw data and ADaM adds metadata and derives new data so that an output (table/graph) can be computed directly from a single ADaM data set. Here is a diagram of some SDTM datasets:</p>
 <p><img src="images/sdtm_overview.png" width="80%"></p>
 <p>The names of ADaM datasets often prefix a <code>AD</code> or <code>A</code> to their corresponding <code>SDTM</code> dataset names.</p>
 <p>There is one particularly important dataset called <code>ADSL</code> or <code>ADLS</code> that contains patient information (e.g. Unique Subject Identifier <code>USUBJID</code>, <code>ARM</code>, <code>SEX</code>, <code>Age</code>, randomization date, etc.) with one row per patient. Often this dataset is merged to all other <code>ADaM</code> datasets as its information is frequently used for most outputs (e.g. <code>ARM</code>). The key for merging <code>ADSL</code> and any other analysis dataset is the <code>USUBJID</code> and <code>STUDYID</code> variable (if not specified otherwise).</p>
 </div>
-<div class="section level3">
-<h3 id="filtereddata-class-for-clinical-trials-data">
+<div class="section level4">
+<h4 id="filtereddata-class-for-clinical-trials-data">
 <code>FilteredData</code> Class for Clinical Trials Data<a class="anchor" aria-label="anchor" href="#filtereddata-class-for-clinical-trials-data"></a>
-</h3>
+</h4>
 <p><code>teal</code> supports both general relational data (using <code>teal_data</code> function output as <code>data</code> argument to <code><a href="../reference/init.html">teal::init</a></code>) and CDISC specific data (using <code>cdisc_data</code> function instead)</p>
 <p>When using CDISC specific data, the filtering mechanism makes use of <code>ADSL</code> being a “special” dataset as described below.</p>
 <p><img src="images/design_cdisc_filtered_datasets.png" width="100%"></p>
@@ -322,11 +312,9 @@ Other releases
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## </span>
-<span class="co">## You are using teal version 0.10.0.9056</span></code></pre>
+<span class="co">## You are using teal version 0.10.1</span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>teal_logging <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va"><a href="../reference/CDISCFilteredData.html">CDISCFilteredData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va"><a href="../reference/CDISCFilteredData.html">CDISCFilteredData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
 <span class="co"># the `datasets` object contains reactives</span>
 <span class="co"># we activate this option, so we don't need to wrap all reactives in isolate calls</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>shiny.suppressMissingContextError <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -366,10 +354,10 @@ Other releases
 <pre><code><span class="co">## ADTTE_FILTERED_ALONE &lt;- ADTTE</span>
 <span class="co">## ADTTE_FILTERED &lt;- dplyr::inner_join(x = ADTTE_FILTERED_ALONE, y = ADSL_FILTERED)</span></code></pre>
 </div>
-<div class="section level3">
-<h3 id="filtereddata-for-general-relational-data">
+<div class="section level4">
+<h4 id="filtereddata-for-general-relational-data">
 <code>FilteredData</code> for general relational data<a class="anchor" aria-label="anchor" href="#filtereddata-for-general-relational-data"></a>
-</h3>
+</h4>
 <p>The CDISC filtering mechanism which we have introduced in the previous section can be abstracted with the following diagram:</p>
 <p><img src="images/design_cdisc_filtered_data.png" width="213"></p>
 <p>This is, however, a very particular filtering setup that has not much use besides analyzing clinical trials data that follows CDISC standards. A more general filtering is to have variable based filtering for an arbitrary dataset:</p>
@@ -383,9 +371,9 @@ Other releases
 <p>In terms of refactoring <code>teal</code> this means changes to the <code>FilteredData</code> class hierarchy</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="composition-of-the-ui-and-server-functions-with-tealinit">Composition of the ui and server functions with <code>teal::init</code><a class="anchor" aria-label="anchor" href="#composition-of-the-ui-and-server-functions-with-tealinit"></a>
-</h2>
+<div class="section level3">
+<h3 id="composition-of-the-ui-and-server-functions-with-tealinit">Composition of the ui and server functions with <code>teal::init</code><a class="anchor" aria-label="anchor" href="#composition-of-the-ui-and-server-functions-with-tealinit"></a>
+</h3>
 <p>In this section we discuss the code in <code>R/init.R</code>. The <code>init</code> function composes the <code>ui</code> object and the <code>server</code> function which are returned and then passed to <code>shinyApp</code> to start the web app.</p>
 <p>The datasets passed to the <code>data</code> arguments get encapsulated within the <code>init</code> function into a local instance of <code>FilteredData</code> or <code>CDISCFilteredData</code> (i.e. the <code>datasets</code> object).</p>
 <p>Next, the <code>ui</code> object is created. The composition of ui and server happens entirely with the object passed via <code>modules</code>, <code>header</code>, and <code>footers</code> arguments. The <code>modules</code> object is a tree of <code><a href="../reference/modules.html">modules()</a></code> (nested lists) with currently a constrained depth of 2. The composition of the ui functions defined in <code>modules</code> happens recursively via the <code>create_ui</code> function. Note that the <code>create_ui</code> function call happens in a local environment as we modify the returned object structure to add the filter panel on the right hand side (this improves the UI as it places the filter panel below the <code>tabsetPanel</code> menu).</p>
@@ -393,9 +381,9 @@ Other releases
 <p>Next: the creation of the server function. The easy part is the composition of the module server functions which happens with the <code>call_modules</code> function call.</p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="embed-teal-into-other-applications">Embed teal into other applications<a class="anchor" aria-label="anchor" href="#embed-teal-into-other-applications"></a>
-</h1>
+<div class="section level2">
+<h2 id="embed-teal-into-other-applications">Embed teal into other applications<a class="anchor" aria-label="anchor" href="#embed-teal-into-other-applications"></a>
+</h2>
 <p>Here is an example of an app with two independent teal applications side-by-side. The same idea can be used to embed it into other Shiny modules. We use the <code>id</code> argument of the <code>init</code> function for this.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span>
@@ -465,7 +453,7 @@ Other releases
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

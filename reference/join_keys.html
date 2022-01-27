@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -83,7 +74,7 @@ Other releases
     </div>
 
     <div class="ref-description">
-    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
+    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p>
     </div>
 
     <div id="ref-usage">
@@ -108,52 +99,50 @@ to be specified once.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">join_keys</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;JoinKeys&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Public:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     clone: function (deep = FALSE) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     get: function (dataset_1, dataset_2) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function () </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     merge: function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     mutate: function (dataset_1, dataset_2, val) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     set: function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     split: function () </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Private:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     .keys: list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     check_compatible_keys: function (join_key_1, join_key_2) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     join_pair: function (join_key) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> An empty JoinKeys object.</span>
 <span class="r-in"><span class="fu">join_keys</span><span class="op">(</span></span>
 <span class="r-in">  <span class="fu"><a href="join_key.html">join_key</a></span><span class="op">(</span><span class="st">"dataset_A"</span>, <span class="st">"dataset_B"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"col_1"</span> <span class="op">=</span> <span class="st">"col_a"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span class="r-in">  <span class="fu"><a href="join_key.html">join_key</a></span><span class="op">(</span><span class="st">"dataset_A"</span>, <span class="st">"dataset_C"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"col_2"</span> <span class="op">=</span> <span class="st">"col_x"</span>, <span class="st">"col_3"</span> <span class="op">=</span> <span class="st">"col_y"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;JoinKeys&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Public:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     clone: function (deep = FALSE) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     get: function (dataset_1, dataset_2) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function () </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     merge: function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     mutate: function (dataset_1, dataset_2, val) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     set: function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     split: function () </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Private:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     .keys: list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     check_compatible_keys: function (join_key_1, join_key_2) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     join_pair: function (join_key) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A JoinKeys object containing foreign keys between 3 datasets:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dataset_A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dataset_A$dataset_B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   col_1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "col_a" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dataset_A$dataset_C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   col_2   col_3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "col_x" "col_y" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dataset_B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dataset_B$dataset_A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   col_a </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "col_1" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dataset_C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dataset_C$dataset_A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   col_x   col_y </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "col_2" "col_3" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span class="fu">join_keys</span><span class="op">(</span></span>
 <span class="r-in">  <span class="fu"><a href="join_key.html">join_key</a></span><span class="op">(</span><span class="st">"dataset_A"</span>, <span class="st">"dataset_B"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"col_1"</span> <span class="op">=</span> <span class="st">"col_a"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;JoinKeys&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Public:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     clone: function (deep = FALSE) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     get: function (dataset_1, dataset_2) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function () </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     merge: function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     mutate: function (dataset_1, dataset_2, val) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     set: function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     split: function () </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Private:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     .keys: list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     check_compatible_keys: function (join_key_1, join_key_2) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     join_pair: function (join_key) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A JoinKeys object containing foreign keys between 2 datasets:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dataset_A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dataset_A$dataset_B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   col_1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "col_a" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dataset_B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dataset_B$dataset_A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   col_a </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "col_1" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </div>
@@ -168,7 +157,7 @@ to be specified once.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>
