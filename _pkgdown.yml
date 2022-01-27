@@ -160,7 +160,7 @@ reference:
       - TealDataset
       - TealDatasetConnector
   - title: Logging
-    subtitle: Support for logging in a `teal` application
+    desc: Support for logging in a `teal` application
     contents:
       - register_logger
   - title: Superseded
