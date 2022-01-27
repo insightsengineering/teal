@@ -1,9 +1,8 @@
 ## CDISCTealDatasetConnector ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title A `CDISCTealDatasetConnector` class of objects
 #'
+#' @description `r lifecycle::badge("stable")`
 #' Objects of this class store the connection function to fetch a single dataset.
 #'
 #' The difference compared to the inherited class is a parent field that
@@ -69,7 +68,7 @@ CDISCTealDatasetConnector <- R6::R6Class( # nolint
         vars = vars
       )
       private$set_parent(parent)
-      logger::log_trace("CDISCTealDatasetConnector initialized for dataset: { self$get_dataname() }")
+      logger::log_trace("CDISCTealDatasetConnector initialized for dataset: { deparse1(self$get_dataname()) }")
 
       return(invisible(self))
     },
@@ -96,7 +95,7 @@ CDISCTealDatasetConnector <- R6::R6Class( # nolint
     #'
     #' @return `self` invisibly for chaining.
     pull = function(args = NULL, try = FALSE) {
-      logger::log_trace("CDISCTealDatasetConnector$pull pulling dataset: { self$get_dataname() }.")
+      logger::log_trace("CDISCTealDatasetConnector$pull pulling dataset: { deparse1(self$get_dataname()) }.")
       super$pull(args = args, try = try)
 
       if (!self$is_failed()) {
@@ -104,9 +103,9 @@ CDISCTealDatasetConnector <- R6::R6Class( # nolint
           private$dataset,
           parent = self$get_parent()
         )
-        logger::log_trace("CDISCTealDatasetConnector$pull pulled dataset: { self$get_dataname() }.")
+        logger::log_trace("CDISCTealDatasetConnector$pull pulled dataset: { deparse1(self$get_dataname()) }.")
       } else {
-        logger::log_error("CDISCTealDatasetConnector$pull failed to pull dataset: { self$get_dataname() }.")
+        logger::log_error("CDISCTealDatasetConnector$pull failed to pull dataset: { deparse1(self$get_dataname()) }.")
       }
       return(invisible(self))
     }

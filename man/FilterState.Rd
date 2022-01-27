@@ -5,7 +5,9 @@
 \alias{FilterState}
 \title{Abstract class to encapsulate filter states}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Abstract class to encapsulate filter states
+
+Abstract class to encapsulate filter states
 }
 \details{
 This class is responsible for managing single filter item within

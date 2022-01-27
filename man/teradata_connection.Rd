@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{teradata_connection}
 \alias{teradata_connection}
-\title{Open connection to \code{Teradata}}
+\title{Superseded (moved into separate package) Open connection to \code{Teradata}}
 \usage{
 teradata_connection(
   open_args = list(),
@@ -25,5 +25,5 @@ argument will be overwritten with \code{ODBC}.}
 (\code{TealDataConnection}) type of object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 }

@@ -144,6 +144,19 @@ testthat::test_that("The hashes of TealDatasets objects are correct after mutati
   testthat::expect_equal(rd$get_dataset("iris")$get_hash(), mutated_iris_hash)
 })
 
+testthat::test_that("execute_mutate returns current datasets if no mutate_code", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector("test_dc", pull_fun)
+  t_ds <- dataset("head_rock", head(rock), code = "head_rock <- head(rock)") %>%
+    mutate_dataset("head_rock$head_letters <- test_dc$head_letters", vars = list(test_dc = t_dc))
+  data <- teal_data(t_dc, t_ds)
+  testthat::expect_identical(
+    data$execute_mutate(),
+    list(head_rock = t_ds)
+  )
+})
+
 # Multiple connectors ----
 testthat::test_that("Multiple connectors wrapped in cdisc_data", {
   example_data_connector <- function(...) {
@@ -460,13 +473,13 @@ testthat::test_that("TealData$print prints out expected output on basic input", 
     c(
       "A CDISCTealData object containing 2 TealDataset/TealDatasetConnector object(s) as element(s):",
       "--> Element 1:",
-      "A TealDataset object containing the following data.frame (3 rows and 2 columns):",
+      "A CDISCTealDataset object containing the following data.frame (3 rows and 2 columns):",
       "  STUDYID USUBJID",
       "1       1       a",
       "2       2       b",
       "3       3       c",
       "--> Element 2:",
-      "A TealDataset object containing the following data.frame (1 rows and 3 columns):",
+      "A CDISCTealDataset object containing the following data.frame (1 rows and 3 columns):",
       "  STUDYID USUBJID PARAMCD",
       "1 STUDYID USUBJID PARAMCD"
     )
@@ -611,4 +624,94 @@ testthat::test_that("TealData$new throws if passed two datasets with the same na
   mtcars_ds <- TealDataset$new("cars", head(mtcars))
   mtcars_ds2 <- TealDataset$new("cars", head(mtcars))
   testthat::expect_error(TealData$new(mtcars_ds, mtcars_ds2), "TealDatasets names should be unique")
+})
+
+testthat::test_that("TealData$new sets join_keys datasets based on the primary keys", {
+  df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
+  df2 <- data.frame(df2_id = c("A", "B"), fk = c("A", "B"), b = c(1L, 2L))
+
+  df1 <- dataset("df1", df1, keys = "id")
+  df2 <- dataset("df2", df2, keys = "df2_id")
+
+  data <- TealData$new(df1, df2)
+  testthat::expect_equal(
+    data$get_join_keys(),
+    join_keys(join_key("df1", "df1", "id"), join_key("df2", "df2", "df2_id"))
+  )
+})
+
+testthat::test_that("TealData$new sets passed join_keys to datasets correctly", {
+  df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
+  df2 <- data.frame(df2_id = c("A", "B"), id = c("A", "B"), b = c(1L, 2L))
+
+  df1 <- dataset("df1", df1, keys = "id")
+  df2 <- dataset("df2", df2, keys = "df2_id")
+
+  jk <- join_keys(join_key("df1", "df2", "id"))
+  data <- teal_data(df1, df2, join_keys = jk, check = FALSE)
+
+  testthat::expect_equal(
+    data$get_join_keys(),
+    join_keys(
+      join_key("df1", "df2", "id"),
+      join_key("df1", "df1", "id"),
+      join_key("df2", "df2", "df2_id")
+    )
+  )
+})
+
+testthat::test_that("TealData$new sets passed JoinKeys to datasets correctly when key names differ", {
+  df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
+  df2 <- data.frame(df2_id = c("A", "B"), fk = c("A", "B"), b = c(1L, 2L))
+  df1 <- dataset("df1", df1, keys = "id")
+  df2 <- dataset("df2", df2, keys = "df2_id")
+  jk <- join_keys(join_key("df1", "df2", c(id = "fk")))
+  data <- teal_data(df1, df2, join_keys = jk, check = FALSE)
+
+  testthat::expect_equal(
+    data$get_join_keys(),
+    join_keys(
+      join_key("df1", "df2", c(id = "fk")),
+      join_key("df1", "df1", "id"),
+      join_key("df2", "df1", c(fk = "id")),
+      join_key("df2", "df2", "df2_id")
+    )
+  )
+})
+
+testthat::test_that("TealData$mutate_join_keys changes keys for both datasets (same key in both)", {
+  df1 <- data.frame(id = c("A", "B"), a = c(1L, 2L))
+  df2 <- data.frame(df2_id = c("A", "B"), id = c("A", "B"), b = c(1L, 2L))
+  df1 <- dataset("df1", df1, keys = "id")
+  df2 <- dataset("df2", df2, keys = "df2_id")
+  data <- teal_data(df1, df2, check = FALSE)
+  data$mutate_join_keys("df1", "df2", "id")
+
+  testthat::expect_equal(
+    data$get_join_keys(),
+    join_keys(
+      join_key("df1", "df1", "id"),
+      join_key("df1", "df2", "id"),
+      join_key("df2", "df2", "df2_id")
+    )
+  )
+})
+
+testthat::test_that("TealData$new sets passes JoinKeys to datasets correctly when key names differ (multiple keys)", {
+  df1 <- data.frame(id = c("A", "B"), id2 = c("A", "B"), a = c(1L, 2L))
+  df2 <- data.frame(df2_id = c("A", "B"), fk = c("A", "B"), fk2 = c("A", "B"), b = c(1L, 2L))
+  df1 <- dataset("df1", df1, keys = "id")
+  df2 <- dataset("df2", df2, keys = "df2_id")
+  data <- teal_data(df1, df2, check = FALSE)
+  data$mutate_join_keys("df1", "df2", c(id = "fk", id2 = "fk2"))
+
+  testthat::expect_equal(
+    data$get_join_keys(),
+    join_keys(
+      join_key("df1", "df1", "id"),
+      join_key("df1", "df2", c(id = "fk", id2 = "fk2")),
+      join_key("df2", "df2", "df2_id"),
+      join_key("df2", "df1", c(fk = "id", fk2 = "id2"))
+    )
+  )
 })

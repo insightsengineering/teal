@@ -2,16 +2,15 @@
 % Please edit documentation in R/modules.R
 \name{root_modules}
 \alias{root_modules}
-\title{Create the root modules container}
+\title{Creates the root modules container}
 \usage{
 root_modules(...)
 }
 \arguments{
-\item{...}{(\code{teal_module} or \code{teal_modules})\cr
-see \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}} for more details}
+\item{...}{parameters passed to \code{toString}}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 To be used with \code{\link[=init]{init()}} in the \code{modules} argument.
 }
 \details{
@@ -19,4 +18,50 @@ The function \code{\link[=modules]{modules()}} can also be used. The purpose of 
 function is to not confuse the end-user as the label of the top-module
 will not be displayed as a tab name (because the root is only one element
 which has multiple children).
+}
+\examples{
+library(shiny)
+
+app <- init(
+  data = teal_data(
+   dataset("iris", iris)
+  ),
+ modules = root_modules(
+    module(
+      label = "Module",
+      server = function(id, datasets) {
+        moduleServer(
+          id,
+          module = function(input, output, session) {
+            output$data <- renderDataTable(datasets$get_data("iris"))
+          }
+        )
+      },
+      ui = function(id, datasets) {
+        ns <- NS(id)
+        tagList(dataTableOutput(ns("data")))
+      },
+      filters = "all"
+    ),
+    module(
+      label = "Another module",
+      server = function(id, datasets) {
+        moduleServer(
+          id,
+          module = function(input, output, session) {
+            output$text <- renderText("Another module")
+          }
+        )
+      },
+      ui = function(id, datasets) {
+        ns <- NS(id)
+        tagList(textOutput(ns("text")))
+      },
+      filters = NULL
+    )
+  )
+)
+\dontrun{
+runApp(app)
+}
 }

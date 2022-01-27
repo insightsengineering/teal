@@ -9,18 +9,19 @@
 #' @keywords internal
 "_PACKAGE"
 
-#'
-#' @import shiny
-#' @import R6
-#' @importFrom stats setNames
-#' @importFrom methods is
-NULL
+#' @importFrom magrittr %>%
+#' @export
+magrittr::`%>%`
 
 # Fix R CMD check notes
+#' @import shiny
+#' @import R6
 #' @importFrom digest digest
 #' @importFrom ggplot2 ggplot
 #' @importFrom grDevices rgb
 #' @importFrom lifecycle deprecate_stop
+#' @importFrom methods is
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom SummarizedExperiment colData
+#' @importFrom stats setNames
 NULL

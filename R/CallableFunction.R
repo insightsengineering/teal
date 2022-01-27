@@ -1,10 +1,10 @@
 ## CallableFunction ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title A \code{CallableFunction} class of objects
 #'
 #' Object that stores function name with its arguments. Methods to get call and run it.
+#'
+#' @keywords internal
 #'
 CallableFunction <- R6::R6Class( # nolint
   "CallableFunction",
@@ -35,7 +35,7 @@ CallableFunction <- R6::R6Class( # nolint
 
       private$refresh()
 
-      logger::log_trace("CallableFunction initialized with function: { private$fun_name }.")
+      logger::log_trace("CallableFunction initialized with function: { deparse1(private$fun_name) }.")
 
       return(invisible(self))
     },
@@ -125,7 +125,7 @@ CallableFunction <- R6::R6Class( # nolint
       private$args[[name]] <- value
 
       private$refresh()
-      logger::log_trace("CallableFunction$set_arg_value args values set for arg: { name }.")
+      logger::log_trace("CallableFunction$set_arg_value args values set for arg: { deparse1(name) }.")
 
       return(invisible(self))
     }
@@ -216,7 +216,7 @@ CallableFunction <- R6::R6Class( # nolint
 
 #' Create \code{CallableFunction} object
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #' Create \code{\link{CallableFunction}} object to execute specific function and get reproducible
 #' call.
 #'
@@ -254,6 +254,7 @@ callable_function <- function(fun) {
 #'  if origin of the object is known then should be provided for
 #'  more precise search
 #' @return character
+#' @keywords internal
 #'
 get_binding_name <- function(object, envir) {
   bindings_names <- ls(envir)

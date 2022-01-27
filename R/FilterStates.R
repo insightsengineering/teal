@@ -16,6 +16,7 @@
 #'
 #' @param ... (optional)
 #'   additional arguments for specific classes: keys
+#' @keywords internal
 #'
 #' @examples
 #' df <- data.frame(
@@ -58,6 +59,7 @@ init_filter_states <- function(data,
   UseMethod("init_filter_states")
 }
 
+#' @keywords internal
 #' @export
 init_filter_states.data.frame <- function(data, # nolint
                                           input_dataname,
@@ -74,6 +76,7 @@ init_filter_states.data.frame <- function(data, # nolint
   )
 }
 
+#' @keywords internal
 #' @export
 init_filter_states.matrix <- function(data, # nolint
                                       input_dataname,
@@ -86,6 +89,7 @@ init_filter_states.matrix <- function(data, # nolint
   )
 }
 
+#' @keywords internal
 #' @export
 init_filter_states.MultiAssayExperiment <- function(data, # nolint
                                                     input_dataname,
@@ -102,6 +106,7 @@ init_filter_states.MultiAssayExperiment <- function(data, # nolint
   )
 }
 
+#' @keywords internal
 #' @export
 init_filter_states.SummarizedExperiment <- function(data, # nolint
                                                     input_dataname,
@@ -115,8 +120,6 @@ init_filter_states.SummarizedExperiment <- function(data, # nolint
 }
 
 
-# FilterStates -----
-#'
 #' @title `FilterStates` R6 class
 #'
 #' @description
@@ -637,7 +640,9 @@ FilterStates <- R6::R6Class( # nolint
   )
 )
 
-# DFFilterStates -----
+#' Specialization of `FilterStates` for a base `data.frame`.
+#'
+#' @keywords internal
 DFFilterStates <- R6::R6Class( # nolint
   classname = "DFFilterStates",
   inherit = FilterStates,
@@ -843,13 +848,14 @@ DFFilterStates <- R6::R6Class( # nolint
 
       if (!element_id %in% names(self$queue_get(1L))) {
         warning(paste(
-          "Variable:", element_id, "is not present in the actual active filters of dataset: { private$input_dataname }",
+          "Variable:", element_id,
+          "is not present in the actual active filters of dataset: { deparse1(private$input_dataname) }",
           "therefore no changes are applied."
         ))
         logger::log_warn(
           paste(
             "Variable:", element_id, "is not present in the actual active filters of dataset:",
-            "{ private$input_dataname } therefore no changes are applied."
+            "{ deparse1(private$input_dataname) } therefore no changes are applied."
           )
         )
       } else {
@@ -1026,7 +1032,8 @@ DFFilterStates <- R6::R6Class( # nolint
 )
 
 
-# MAEFilterStates -----
+#' Specialization of `FilterStates` for `MultiAssayExperiment`.
+#' @keywords internal
 MAEFilterStates <- R6::R6Class( # nolint
   classname = "MAEFilterStates",
   inherit = FilterStates,
@@ -1195,13 +1202,13 @@ MAEFilterStates <- R6::R6Class( # nolint
       if (!element_id %in% names(self$queue_get("y"))) {
         warning(paste(
           "Variable:", element_id,
-          "is not present in the actual active filters of dataset: { private$input_dataname }",
+          "is not present in the actual active filters of dataset: { deparse1(private$input_dataname) }",
           "therefore no changes are applied."
         ))
         logger::log_warn(
           paste(
             "Variable:", element_id, "is not present in the actual active filters of dataset:",
-            "{ private$input_dataname } therefore no changes are applied."
+            "{ deparse1(private$input_dataname) } therefore no changes are applied."
           )
         )
       } else {
@@ -1383,7 +1390,8 @@ MAEFilterStates <- R6::R6Class( # nolint
   )
 )
 
-# SEFilterStates -----
+#' Specialization of `FilterStates` for `SummaryExperiment`.
+#' @keywords internal
 SEFilterStates <- R6::R6Class( # nolint
   classname = "SEFilterStates",
   inherit = FilterStates,
@@ -1629,12 +1637,12 @@ SEFilterStates <- R6::R6Class( # nolint
         if (!all(unlist(element_id$subset) %in% names(self$queue_get("subset")))) {
           warning(paste(
             "Variable:", element_id, "is not present in the actual active subset filters of dataset:",
-            "{ deparse(private$input_dataname) } therefore no changes are applied."
+            "{ deparse1(private$input_dataname) } therefore no changes are applied."
           ))
           logger::log_warn(
             paste(
               "Variable:", element_id, "is not present in the actual active subset filters of dataset:",
-              "{ deparse(private$input_dataname) } therefore no changes are applied."
+              "{ deparse1(private$input_dataname) } therefore no changes are applied."
             )
           )
         } else {
@@ -1654,12 +1662,12 @@ SEFilterStates <- R6::R6Class( # nolint
         if (!all(unlist(element_id$select) %in% names(self$queue_get("select")))) {
           warning(paste(
             "Variable:", element_id, "is not present in the actual active select filters of dataset:",
-            "{ private$input_dataname } therefore no changes are applied."
+            "{ deparse1(private$input_dataname) } therefore no changes are applied."
           ))
           logger::log_warn(
             paste(
               "Variable:", element_id, "is not present in the actual active select filters of dataset:",
-              "{ private$input_dataname } therefore no changes are applied."
+              "{ deparse1(private$input_dataname) } therefore no changes are applied."
             )
           )
         } else {
@@ -1914,7 +1922,8 @@ SEFilterStates <- R6::R6Class( # nolint
   )
 )
 
-# MatrixFilterStates -----
+#' Specialization of `FilterStates` for a base matrix.
+#' @keywords internal
 MatrixFilterStates <- R6::R6Class( # nolint
   classname = "MatrixFilterStates",
   inherit = FilterStates,
@@ -2075,12 +2084,12 @@ MatrixFilterStates <- R6::R6Class( # nolint
       if (!element_id %in% names(self$queue_get("subset"))) {
         warning(paste(
           "Variable:", element_id, "is not present in the actual active filters of dataset:",
-          "{ private$input_dataname } therefore no changes are applied."
+          "{ deparse1(private$input_dataname) } therefore no changes are applied."
         ))
         logger::log_warn(
           paste(
             "Variable:", element_id, "is not present in the actual active filters of dataset:",
-            "{ deparse(private$input_dataname) } therefore no changes are applied."
+            "{ deparse1(private$input_dataname) } therefore no changes are applied."
           )
         )
       } else {
@@ -2255,10 +2264,12 @@ MatrixFilterStates <- R6::R6Class( # nolint
 #' )
 #' teal:::get_filterable_varnames(df)
 #' @return `character` the array of the matched element names
+#' @keywords internal
 get_filterable_varnames <- function(data) {
   UseMethod("get_filterable_varnames")
 }
 
+#' @keywords internal
 #' @export
 get_filterable_varnames.default <- function(data) { # nolint
   is_expected_class <- vapply(
@@ -2269,6 +2280,7 @@ get_filterable_varnames.default <- function(data) { # nolint
   names(is_expected_class[is_expected_class])
 }
 
+#' @keywords internal
 #' @export
 get_filterable_varnames.matrix <- function(data) { # nolint
   # all columns are the same type in matrix
@@ -2292,7 +2304,7 @@ get_filterable_varnames.matrix <- function(data) { # nolint
 #' @param keys (`character`)\cr
 #'  the names of the key columns in data
 #' @return `character(0)` if choices are empty; a `choices_labeled` object otherwise
-#' @noRd
+#' @keywords internal
 data_choices_labeled <- function(data, choices, varlabels = character(0), keys = character(0)) {
   if (length(choices) == 0) {
     return(character(0))

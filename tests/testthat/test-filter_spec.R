@@ -111,7 +111,7 @@ test_that("Multiple vars", {
   expect_identical(f1m$selected, c("val1.1 - val2.1", "val1.1 - val2.2"))
 
   expect_true(f1m$multiple)
-  expect_identical(f1m$label, NULL)
+  expect_identical(f1m$label, "Filter by")
 })
 
 test_that("Dropping keys attribute", {
@@ -336,7 +336,7 @@ testthat::test_that("delayed version of filter_spec", {
         vars_multiple = TRUE,
         choices = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
         selected = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
-        label = NULL,
+        label = "Filter by",
         multiple = FALSE,
         fixed = FALSE,
         sep = " - ",
@@ -408,7 +408,7 @@ testthat::test_that("delayed version of filter_spec", {
           var_label = "ARM",
           subset = function(data) "ARM A"
         ),
-        label = NULL,
+        label = "Filter by",
         multiple = FALSE,
         fixed = FALSE,
         sep = " - ",

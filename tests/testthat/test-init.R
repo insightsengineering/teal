@@ -69,6 +69,26 @@ testthat::test_that("init data accepts a list of a TealDataset and a dataframe w
   testthat::expect_error(init(data = list(dataset_1, adsl_df), modules = mods), NA)
 })
 
+testthat::test_that("init data accepts a single MultiAssayExperiment object", {
+  mae <- MultiAssayExperiment::miniACC
+  testthat::expect_error(init(data = mae, modules = mods), NA)
+})
+
+testthat::test_that("init data accepts a list of a single MultiAssayExperiment object without renaming", {
+  mae <- MultiAssayExperiment::miniACC
+  testthat::expect_error(init(data = list(mae), modules = mods), NA)
+})
+
+testthat::test_that("init data accepts a list of a single MultiAssayExperiment object with renaming", {
+  mae <- MultiAssayExperiment::miniACC
+  testthat::expect_error(init(data = list(x = mae), modules = mods), NA)
+})
+
+testthat::test_that("init data acceptsa mixed list of MultiAssayExperiment object and data.frame", {
+  mae <- MultiAssayExperiment::miniACC
+  testthat::expect_error(init(data = list(x = mae, y = head(iris)), modules = mods), NA)
+})
+
 testthat::test_that("init data accepts a list of a TealDataset and a dataframe with renaming", {
   testthat::expect_error(init(
     data = list(

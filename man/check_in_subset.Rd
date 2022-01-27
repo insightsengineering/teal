@@ -26,3 +26,4 @@ check_in_subset(c("a", "b"), c("b", "c"), pre_msg = "Error: ")
 check_in_subset("a", LETTERS, pre_msg = "Error: ")
 }
 }
+\keyword{internal}

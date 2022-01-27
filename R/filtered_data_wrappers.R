@@ -1,21 +1,22 @@
 #' Create a new `FilteredData` object
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @param x an object that inherits from `TealData`
 #'
 #' @return a (`CDISCTealDataset`, `CDISCTealDatasetConnector`) object
+#' @keywords internal
 #'
 #' @noRd
 filtered_data_new <- function(x) {
   UseMethod("filtered_data_new")
 }
 
+#' @keywords internal
 #' @export
 filtered_data_new.TealData <- function(x) { # nolintr
   FilteredData$new()
 }
 
+#' @keywords internal
 #' @export
 filtered_data_new.CDISCTealData <- function(x) { # nolintr
   CDISCFilteredData$new()
@@ -23,18 +24,18 @@ filtered_data_new.CDISCTealData <- function(x) { # nolintr
 
 #' Set `FilteredData` with data from `TealData`
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @param data an object that inherits from `TealData`
 #' @param datasets an object that inherits from `FilteredData`
 #'
 #' @return modified `FilteredData` object
+#' @keywords internal
 #'
 #' @noRd
 filtered_data_set <- function(data, datasets) { # nolintr
   UseMethod("filtered_data_set", data)
 }
 
+#' @keywords internal
 #' @export
 filtered_data_set.TealData <- function(data, datasets) { # nolintr
   datasets$set_code(data$get_code_class())
@@ -47,6 +48,7 @@ filtered_data_set.TealData <- function(data, datasets) { # nolintr
 
 #' Managing `FilteredData` states
 #'
+#' @description `r lifecycle::badge("experimental")`
 #' Set, get and remove filter states of `FilteredData` object
 #'
 #' @name filter_state_api
@@ -102,7 +104,6 @@ filtered_data_set.TealData <- function(data, datasets) { # nolintr
 #'
 #' # remove all states
 #' clear_filter_states(datasets)
-#'
 NULL
 
 #' @rdname filter_state_api

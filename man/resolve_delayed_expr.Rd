@@ -18,7 +18,7 @@ It must take only a single argument "data" and return character vector with colu
 Character vector - result of calling function \code{x} on dataset \code{ds}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+Resolve expression after delayed data are loaded
 }
 \examples{
 \dontrun{
@@ -33,3 +33,4 @@ resolve_delayed_expr(
 )
 }
 }
+\keyword{internal}

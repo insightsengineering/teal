@@ -16,10 +16,11 @@ ui_teal_with_splash(
 \item{id}{(\code{character(1)})\cr
 module id}
 
-\item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame})\cr
+\item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
+or \code{MultiAssayExperiment})\cr
 \code{R6} object as returned by \code{\link[=cdisc_data]{cdisc_data()}}, \code{\link[=teal_data]{teal_data()}}, \code{\link[=cdisc_dataset]{cdisc_dataset()}}, \code{\link[=dataset]{dataset()}},
-\code{\link[=dataset_connector]{dataset_connector()}} or \code{\link[=cdisc_dataset_connector]{cdisc_dataset_connector()}} or a single \code{data.frame} or a list of
-the previous objects or function returning a named list.
+\code{\link[=dataset_connector]{dataset_connector()}} or \code{\link[=cdisc_dataset_connector]{cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
+or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 do not match the original object names. To ensure reproducibility please use \code{\link[=teal_data]{teal_data()}}
 or \code{\link[=cdisc_data]{cdisc_data()}} with \code{check = TRUE} enabled.}
@@ -36,7 +37,7 @@ argument) will be placed in the app's \code{ui} function so code which needs to 
 the footer of the app}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 The splash screen could be used to query for a password to fetch the data.
 \code{\link{init}} is a very thin wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.

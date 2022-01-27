@@ -1,12 +1,9 @@
 ## TealDataAbstract ====
-#'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title `TealDataAbstract` class
 #'
 #' @description
 #' Abstract class containing code for handling set of datasets.
-#'
+#' @keywords internal
 TealDataAbstract <- R6::R6Class( # nolint
   classname = "TealDataAbstract",
   ## __Public Methods ====
@@ -79,8 +76,9 @@ TealDataAbstract <- R6::R6Class( # nolint
         # exit early if mutate isn't required
         logger::log_trace("TealDataAbstract$execute_mutate no code to evaluate.")
         if (!is.null(res)) {
-          stats::setNames(res, vapply(res, get_dataname, character(1)))
+          res <- stats::setNames(res, vapply(res, get_dataname, character(1)))
         }
+        return(res)
       }
 
 

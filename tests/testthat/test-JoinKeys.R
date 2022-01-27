@@ -530,3 +530,20 @@ testthat::test_that("JoinKeys$merge merges mutually exclusive data", {
   testthat::expect_identical(z$get()$Z$Y, c("z" = "y"))
   testthat::expect_identical(z$get()$Y$Z, c("y" = "z"))
 })
+
+testthat::test_that("JoinKeys$print for empty set", {
+  jk <- JoinKeys$new()
+  testthat::expect_output(
+    print(jk),
+    "An empty JoinKeys object."
+  )
+})
+
+testthat::test_that("JoinKeys$print for a non-empty set", {
+  jk <- JoinKeys$new()
+  jk$set(list(join_key("DF1", "DF2", c("id" = "fk"))))
+  testthat::expect_output(
+    print(jk),
+    "A JoinKeys object containing foreign keys between 2 datasets:"
+  )
+})

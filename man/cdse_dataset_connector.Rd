@@ -3,7 +3,7 @@
 \name{cdse_dataset_connector}
 \alias{cdse_dataset_connector}
 \alias{cdse_cdisc_dataset_connector}
-\title{\code{CDSE} \code{TealDatasetConnector}}
+\title{Superseded (moved into separate package): \code{CDSE} \code{TealDatasetConnector}}
 \usage{
 cdse_dataset_connector(
   dataname,
@@ -59,11 +59,11 @@ within another dataset.}
 parent dataset name}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 
 Create a \code{TealDatasetConnector} from \code{CDSE}.
 
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 }
 \details{
 Create a \code{CDISCTealDatasetConnector} from \code{CDSE} with keys and parent name assigned

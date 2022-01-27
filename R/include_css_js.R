@@ -7,6 +7,7 @@
 #' @param pattern (`character`) pattern of files to be included
 #'
 #' @return HTML code that includes `CSS` files
+#' @keywords internal
 include_css_files <- function(pattern = "*") {
   css_files <- list.files(
     system.file("css", package = "teal", mustWork = TRUE),
@@ -25,6 +26,7 @@ include_css_files <- function(pattern = "*") {
 #' @param except (`character`) vector of basename filenames to be excluded
 #'
 #' @return HTML code that includes `JS` files
+#' @keywords internal
 include_js_files <- function(pattern = "*", except = NULL) {
   checkmate::assert_character(except, min.len = 1, any.missing = FALSE, null.ok = TRUE)
 
@@ -46,6 +48,7 @@ include_js_files <- function(pattern = "*", except = NULL) {
 #' as needed. Thus, we do not export this method
 #'
 #' @param files (`character`) vector of filenames
+#' @keywords internal
 run_js_files <- function(files) {
   checkmate::assert_character(files, min.len = 1, any.missing = FALSE)
 
@@ -69,6 +72,7 @@ run_js_files <- function(files) {
 #'   teal:::include_teal_css_js(),
 #'   p("Hello")
 #' )
+#' @keywords internal
 include_teal_css_js <- function() {
   tagList(
     shinyjs::useShinyjs(),

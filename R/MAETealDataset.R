@@ -1,10 +1,8 @@
 ## MAETealDataset ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title  R6 Class representing a `MultiAssayExperiment` object with its attributes
 #'
-#' @description
+#' @description `r lifecycle::badge("experimental")`
 #' Any `MultiAssayExperiment` object can be stored inside this `MAETealDataset`.
 #' Some attributes like colnames, dimension or column names for a specific type will
 #' be automatically derived.
@@ -95,7 +93,7 @@ MAETealDataset <- R6::R6Class( # nolint
         private$code$append(code)
       }
 
-      logger::log_trace("MAETealDataset$initialize initialized dataset: { self$get_dataname() }.")
+      logger::log_trace("MAETealDataset$initialize initialized dataset: { deparse1(self$get_dataname()) }.")
 
       return(invisible(self))
     },
@@ -106,7 +104,7 @@ MAETealDataset <- R6::R6Class( # nolint
     #' `TRUE` if the dataset generated from evaluating the
     #' `get_code()` code is identical to the raw data, else `FALSE`.
     check = function() {
-      logger::log_trace("TealDataset$check executing the code to reproduce dataset: { self$get_dataname() }...")
+      logger::log_trace("TealDataset$check executing the code to reproduce dataset: { deparse1(self$get_dataname()) }...")
       if (!checkmate::test_character(self$get_code(), len = 1, pattern = "\\w+")) {
         stop(
           sprintf(
@@ -128,7 +126,7 @@ MAETealDataset <- R6::R6Class( # nolint
           FALSE
         }
       )
-      logger::log_trace("TealDataset$check { self$get_dataname() } reproducibility result: { res_check }.")
+      logger::log_trace("TealDataset$check { deparse1(self$get_dataname()) } reproducibility result: { res_check }.")
 
       return(res_check)
     },
@@ -159,7 +157,8 @@ MAETealDataset <- R6::R6Class( # nolint
     #'
     #' @return invisibly self
     print = function(...) {
-      cat(sprintf("A MAETealDataset object containing data of %d subjects.", private$.nrow))
+      cat(sprintf("A MAETealDataset object containing data of %d subjects.\n", private$.nrow))
+      print(experiments(private$.raw_data))
       invisible(self)
     }
   ),
@@ -225,8 +224,7 @@ MAETealDataset <- R6::R6Class( # nolint
 
 #' S3 method to construct an `MAETealDataset` object from `MultiAssayExperiment`
 #'
-#' @inheritParams dataset
-#' @param x (`MultiAssayExperiment`)
+#' @rdname dataset
 #'
 #' @examples
 #' # Simple example
@@ -259,14 +257,16 @@ dataset.MultiAssayExperiment <- function(dataname,
   )
 }
 
-#' Public facing constructor for `MAETealDataset`
+#' The constructor of `MAETealDataset`
+#'
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' @inheritParams dataset
 #' @param x (`MultiAssayExperiment`)
 #'
 #' @examples
 #' # Simple example
-#' mae_d <- mae_dataset("MAE", MultiAssayExperiment::miniACC)
+#' mae_d <- dataset("MAE", MultiAssayExperiment::miniACC)
 #' mae_d$get_dataname()
 #' mae_d$get_dataset_label()
 #' mae_d$get_code()
@@ -277,6 +277,12 @@ mae_dataset <- function(dataname,
                         label = data_label(x),
                         code = character(0),
                         vars = list()) {
+  lifecycle::deprecate_soft(
+    when = "0.10.1",
+    what = "teal::mae_dataset()",
+    with = "teal::dataset()"
+  )
+  
   if (!is(x, "MultiAssayExperiment")) {
     stop("Argument x must be a MultiAssayExperiment object")
   }

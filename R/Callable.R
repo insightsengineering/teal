@@ -1,10 +1,9 @@
 ## Callable ====
 #'
-#' @description `r lifecycle::badge("experimental")`
-#'
 #' @title A \code{Callable} class of objects
 #'
 #' Object that stores function name with its arguments. Methods to get call and run it.
+#' @keywords internal
 #'
 Callable <- R6::R6Class( # nolint
   "Callable",
@@ -135,7 +134,7 @@ Callable <- R6::R6Class( # nolint
         if (try) {
           private$failed <- TRUE
           private$error_msg <- error_msg
-          logger::log_error("Callable$check_run_output { error_msg }.")
+          logger::log_error("Callable$check_run_output { deparse1(error_msg) }.")
         } else {
           stop(error_msg, call. = FALSE)
         }

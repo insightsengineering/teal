@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnector_constructors.R
 \name{snowflake_data}
 \alias{snowflake_data}
-\title{\code{TealDataConnector} connector for \code{SNOWFLAKE}}
+\title{Superseded (moved into separate package): \code{TealDataConnector} connector for \code{SNOWFLAKE}}
 \usage{
 snowflake_data(..., connection)
 }
@@ -15,7 +15,7 @@ snowflake_data(..., connection)
 An object of class \code{TealDataConnector}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 Build data connector for \code{SNOWFLAKE} functions or datasets
 }
 \details{

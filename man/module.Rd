@@ -2,9 +2,15 @@
 % Please edit documentation in R/modules.R
 \name{module}
 \alias{module}
-\title{Create a module with a new shiny page}
+\alias{toString.teal_module}
+\alias{print.teal_module}
+\title{Creates a module with a new shiny page}
 \usage{
 module(label, server, ui, filters, server_args = NULL, ui_args = NULL)
+
+\method{toString}{teal_module}(x, indent = 0, ...)
+
+\method{print}{teal_module}(x, ...)
 }
 \arguments{
 \item{label}{(\code{character}) Label shown in the navigation item for the module.}
@@ -29,8 +35,48 @@ automatically passed to the server function as arguments \code{datasets}.}
 
 \item{ui_args}{(\code{list}) Named list with additional arguments passed on to the
 ui function.}
+
+\item{x}{\code{teal_module}}
+
+\item{indent}{(\code{integer}) indent level;
+each submodule is indented one level more}
+
+\item{...}{parameters passed to \code{toString}}
+}
+\value{
+object of class \code{teal_module}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
-Tab items allows you to add a shiny module to the teal app
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+This function embeds a \code{shiny} application inside a \code{teal} application.
+}
+\examples{
+library(shiny)
+
+app <- init(
+  data = teal_data(
+    dataset("iris", iris)
+  ),
+  modules = list(
+    module(
+      label = "Module",
+      server = function(id, datasets) {
+        moduleServer(
+          id,
+          module = function(input, output, session) {
+            output$data <- renderDataTable(datasets$get_data("iris"))
+          }
+        )
+      },
+      ui = function(id, datasets) {
+        ns <- NS(id)
+        tagList(dataTableOutput(ns("data")))
+      },
+      filters = NULL
+    )
+  )
+)
+\dontrun{
+runApp(app)
+}
 }

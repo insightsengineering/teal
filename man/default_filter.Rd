@@ -10,7 +10,7 @@ default_filter()
 \code{default_filter} a default filter object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 You can use it to refer to the variable's default filter state,
 which will be set when \code{FilteredData$set_data} is called.
 It can be used together with \code{teal::init}.

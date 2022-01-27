@@ -93,3 +93,4 @@ states always take precedence over them.
 \details{
 For more doc, see \link{ui_teal}.
 }
+\keyword{internal}

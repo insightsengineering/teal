@@ -2,15 +2,16 @@
 % Please edit documentation in R/FilterStates.R
 \name{SEFilterStates}
 \alias{SEFilterStates}
-\title{Initialize \code{SEFilterStates} object}
+\title{Specialization of \code{FilterStates} for \code{SummaryExperiment}.}
 \description{
-Initialize \code{SEFilterStates} object
+Specialization of \code{FilterStates} for \code{SummaryExperiment}.
 
-Initialize \code{SEFilterStates} object
+Specialization of \code{FilterStates} for \code{SummaryExperiment}.
 }
-\details{
-Initialize \code{SEFilterStates} object
-}
+\keyword{Initialize}
+\keyword{`SEFilterStates`}
+\keyword{internal}
+\keyword{object}
 \section{Super class}{
 \code{\link[teal:FilterStates]{teal::FilterStates}} -> \code{SEFilterStates}
 }

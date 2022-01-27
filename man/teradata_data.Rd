@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnector_constructors.R
 \name{teradata_data}
 \alias{teradata_data}
-\title{\code{TealDataConnector} connector for \code{TERADATA}}
+\title{Superseded (moved into separate package): \code{TealDataConnector} connector for \code{TERADATA}}
 \usage{
 teradata_data(..., connection = teradata_connection())
 }
@@ -15,6 +15,6 @@ teradata_data(..., connection = teradata_connection())
 An object of class \code{TealDataConnector}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 Build data connector for \code{TERADATA} functions or datasets
 }

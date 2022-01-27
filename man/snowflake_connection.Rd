@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{snowflake_connection}
 \alias{snowflake_connection}
-\title{Open connection to \code{Snowflake}}
+\title{Superseded (moved into separate package): Open connection to \code{Snowflake}}
 \usage{
 snowflake_connection(
   open_args = list(),
@@ -24,5 +24,5 @@ snowflake_connection(
 (\code{TealDataConnection}) type of object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 }

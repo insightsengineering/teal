@@ -8,6 +8,7 @@
 
 \code{CDISCFilteredDataset} R6 class
 }
+\keyword{internal}
 \section{Super classes}{
 \code{\link[teal:FilteredDataset]{teal::FilteredDataset}} -> \code{\link[teal:DefaultFilteredDataset]{teal::DefaultFilteredDataset}} -> \code{CDISCFilteredDataset}
 }

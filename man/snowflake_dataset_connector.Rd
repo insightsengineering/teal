@@ -3,7 +3,7 @@
 \name{snowflake_dataset_connector}
 \alias{snowflake_dataset_connector}
 \alias{snowflake_cdisc_dataset_connector}
-\title{\code{Snowflake} \code{TealDatasetConnector}}
+\title{Superseded (moved into separate package): \code{Snowflake} \code{TealDatasetConnector}}
 \usage{
 snowflake_dataset_connector(
   dataname,
@@ -59,9 +59,9 @@ within another dataset.}
 parent dataset name}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 }
 \details{
 Create a \code{TealDatasetConnector} from \code{Snowflake}.

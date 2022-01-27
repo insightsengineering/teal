@@ -328,5 +328,5 @@ testthat::test_that("data_extract_spec returns select_spec with multiple set to 
   testthat::expect_null(des$select$selected)
   testthat::expect_null(des$select$always_selected)
   testthat::expect_false(des$select$fixed)
-  testthat::expect_null(des$select$label)
+  testthat::expect_equal(des$select$label, "Select")
 })

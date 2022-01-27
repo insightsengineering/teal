@@ -4,7 +4,7 @@
 
 #' Create a collection of `module` and `modules` object
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' Modules collects a tree of [module()] and [modules()]
 #' objects. This is useful to define the navigation structure of a teal app.
 #'
@@ -15,8 +15,59 @@
 #'
 #' @export
 #'
-#' @return object of class \code{teal_modules}
+#' @return object of class \code{teal_modules}. Object contains following fields
+#' - label: taken from `label` argument
+#' - children: list containing objects passed in `...`. List elements are named after
+#' their `label` attribute converted to valid `shiny` id.
+#' @examples
+#' library(shiny)
 #'
+#' app <- init(
+#'   data = teal_data(
+#'     dataset("iris", iris)
+#'   ),
+#'   modules = modules(
+#'     label = "Modules",
+#'     modules(
+#'       label = "Module",
+#'       module(
+#'         label = "Inner module",
+#'         server = function(id, datasets) {
+#'           moduleServer(
+#'             id,
+#'             module = function(input, output, session) {
+#'               output$data <- renderDataTable(datasets$get_data("iris"))
+#'             }
+#'           )
+#'         },
+#'         ui = function(id, datasets) {
+#'           ns <- NS(id)
+#'           tagList(dataTableOutput(ns("data")))
+#'         },
+#'         filters = "all"
+#'       )
+#'     ),
+#'     module(
+#'       label = "Another module",
+#'       server = function(id, datasets) {
+#'         moduleServer(
+#'           id,
+#'           module = function(input, output, session) {
+#'             output$text <- renderText("Another module")
+#'           }
+#'         )
+#'       },
+#'       ui = function(id, datasets) {
+#'         ns <- NS(id)
+#'         tagList(textOutput(ns("text")))
+#'       },
+#'       filters = NULL
+#'     )
+#'   )
+#' )
+#' \dontrun{
+#' runApp(app)
+#' }
 modules <- function(label, ...) {
   checkmate::assert_string(label)
   submodules <- list(...)
@@ -28,18 +79,13 @@ modules <- function(label, ...) {
     ))
   }
 
-  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  if (any(duplicated(labels))) {
-    stop("Please choose unique labels for each tab. Currently, they are ", toString(labels))
-  }
-
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
-  submodules <- setNames(submodules, labels)
+  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
+  names(submodules) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
   structure(
     list(
       label = label,
-      id = gsub("[^[:alnum:]]", "_", tolower(label)),
       children = submodules
     ),
     class = "teal_modules"
@@ -47,9 +93,9 @@ modules <- function(label, ...) {
 }
 
 
-#' Create the root modules container
+#' Creates the root modules container
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #' To be used with [init()] in the `modules` argument.
 #'
 #' @details
@@ -61,7 +107,51 @@ modules <- function(label, ...) {
 #' @inheritParams modules
 #'
 #' @export
+#' @examples
+#' library(shiny)
 #'
+#' app <- init(
+#'   data = teal_data(
+#'    dataset("iris", iris)
+#'   ),
+#'  modules = root_modules(
+#'     module(
+#'       label = "Module",
+#'       server = function(id, datasets) {
+#'         moduleServer(
+#'           id,
+#'           module = function(input, output, session) {
+#'             output$data <- renderDataTable(datasets$get_data("iris"))
+#'           }
+#'         )
+#'       },
+#'       ui = function(id, datasets) {
+#'         ns <- NS(id)
+#'         tagList(dataTableOutput(ns("data")))
+#'       },
+#'       filters = "all"
+#'     ),
+#'     module(
+#'       label = "Another module",
+#'       server = function(id, datasets) {
+#'         moduleServer(
+#'           id,
+#'           module = function(input, output, session) {
+#'             output$text <- renderText("Another module")
+#'           }
+#'         )
+#'       },
+#'       ui = function(id, datasets) {
+#'         ns <- NS(id)
+#'         tagList(textOutput(ns("text")))
+#'       },
+#'       filters = NULL
+#'     )
+#'   )
+#' )
+#' \dontrun{
+#' runApp(app)
+#' }
 root_modules <- function(...) {
   if (nargs() == 0) {
     # we don't put this check at the modules level because we want to allow
@@ -72,10 +162,10 @@ root_modules <- function(...) {
 }
 
 
-#' Create a module with a new shiny page
+#' Creates a module with a new shiny page
 #'
-#' @description `r lifecycle::badge("maturing")`
-#' Tab items allows you to add a shiny module to the teal app
+#' @description `r lifecycle::badge("stable")`
+#' This function embeds a `shiny` application inside a `teal` application.
 #'
 #' @param label (\code{character}) Label shown in the navigation item for the module.
 #' @param server (\code{function}) Shiny server module function
@@ -95,35 +185,67 @@ root_modules <- function(...) {
 #' @param ui_args (\code{list}) Named list with additional arguments passed on to the
 #'   ui function.
 #'
+#' @return object of class `teal_module`.
 #' @export
+#' @examples
+#' library(shiny)
 #'
+#' app <- init(
+#'   data = teal_data(
+#'     dataset("iris", iris)
+#'   ),
+#'   modules = list(
+#'     module(
+#'       label = "Module",
+#'       server = function(id, datasets) {
+#'         moduleServer(
+#'           id,
+#'           module = function(input, output, session) {
+#'             output$data <- renderDataTable(datasets$get_data("iris"))
+#'           }
+#'         )
+#'       },
+#'       ui = function(id, datasets) {
+#'         ns <- NS(id)
+#'         tagList(dataTableOutput(ns("data")))
+#'       },
+#'       filters = NULL
+#'     )
+#'   )
+#' )
+#' \dontrun{
+#' runApp(app)
+#' }
 module <- function(label, server, ui, filters, server_args = NULL, ui_args = NULL) {
   checkmate::assert_string(label)
-  stopifnot(is.function(server))
-  stopifnot(is.function(ui))
-  checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = TRUE)
-  stopifnot(is.null(server_args) || is.list(server_args))
-  stopifnot(is.null(ui_args) || is.list(ui_args))
+  checkmate::assert_function(server)
+  checkmate::assert_function(ui)
+  checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+  checkmate::assert_list(server_args, null.ok = TRUE)
+  checkmate::assert_list(ui_args, null.ok = TRUE)
 
   server_main_args <- names(formals(server))
   if (!(identical(server_main_args[1:4], c("input", "output", "session", "datasets")) ||
     identical(server_main_args[1:2], c("id", "datasets")))) {
     stop(paste(
-      "teal modules server functions need ordered arguments ",
+      "module() server argument requires a function with ordered arguments:",
       "\ninput, output, session, and datasets (callModule) or id and datasets (moduleServer)"
     ))
   }
 
-  if (!identical(names(formals(ui))[[1]], "id")) {
-    stop("teal modules need 'id' argument as a first argument in their ui function")
-  }
-  if (!identical(names(formals(ui))[[2]], "datasets") && !identical(names(formals(ui))[[2]], "...")) {
-    stop("teal modules need 'datasets' or '...' argument as a second argument in their ui function")
+  if (length(formals(ui)) < 2 ||
+    !identical(names(formals(ui))[[1]], "id") ||
+    !identical(names(formals(ui))[[2]], "datasets") && !identical(names(formals(ui))[[2]], "...")
+  ) {
+    stop(
+      "module() ui argument requires a function with two ordered arguments:",
+      "\n- 'id'\n- 'datasets' or '...'"
+    )
   }
 
   structure(
     list(
-      label = label, id = gsub("[^[:alnum:]]", "_", tolower(label)),
+      label = label,
       server = server, ui = ui, filters = filters,
       server_args = server_args, ui_args = ui_args
     ),
@@ -141,6 +263,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' @param depth optional, integer determining current depth level
 #'
 #' @return depth level for given module
+#' @keywords internal
 #'
 #' @examples
 #' create_mod <- function(module_name) {
@@ -165,7 +288,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   ),
 #'   create_mod("ccc")
 #' )
-#' stopifnot(teal:::modules_depth(mods) == 3)
+#' stopifnot(teal:::modules_depth(mods) == 3L)
 #'
 #' mods <- modules(
 #'   "a",
@@ -174,27 +297,29 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   ),
 #'   create_mod("b2")
 #' )
-#' stopifnot(teal:::modules_depth(mods) == 2)
-modules_depth <- function(modules, depth = 0) {
-  if (is(modules, "teal_modules")) {
-    max(vapply(modules$children, modules_depth, numeric(1), depth = depth + 1))
+#' stopifnot(teal:::modules_depth(mods) == 2L)
+modules_depth <- function(modules, depth = 0L) {
+  checkmate::assert(
+    checkmate::check_class(modules, "teal_module"),
+    checkmate::check_class(modules, "teal_modules")
+  )
+  checkmate::assert_int(depth, lower = 0)
+  if (inherits(modules, "teal_modules")) {
+    max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
   } else {
-    stopifnot(is(modules, "teal_module"))
     depth
   }
 }
 
-#' Convert `teal_modules` to a string
-#'
-#' The first line prints the `modules` label.
-#' The consecutive lines recursively list each submodule.
+#' Converts `teal_modules` to a string
 #'
 #' @param x (`teal_modules`) to print
 #' @param indent (`integer`) indent level;
 #'   each submodule is indented one level more
 #' @param ... (optional) additional parameters to pass to recursive calls of `toString`
-#' @return (`character` value)
+#' @return (`character`)
 #' @export
+#' @rdname modules
 toString.teal_modules <- function(x, indent = 0, ...) { # nolint
   # argument must be `x` to be consistent with base method
   paste(c(
@@ -203,27 +328,31 @@ toString.teal_modules <- function(x, indent = 0, ...) { # nolint
   ), collapse = "\n")
 }
 
-#' Convert `teal_module` to a string
-#' @param x `teal_module`
+#' Converts `teal_module` to a string
+#'
 #' @inheritParams toString.teal_modules
+#' @param x `teal_module`
 #' @param ... ignored
 #' @export
+#' @rdname module
 toString.teal_module <- function(x, indent = 0, ...) { # nolint
   paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, collapse = "")
 }
 
-#' Print `teal_modules`
+#' Prints `teal_modules`
 #' @param x `teal_modules`
 #' @param ... parameters passed to `toString`
 #' @export
+#' @rdname modules
 print.teal_modules <- function(x, ...) {
   s <- toString(x, ...)
   cat(s)
   return(invisible(s))
 }
 
-#' Print `teal_module`
+#' Prints `teal_module`
 #' @param x `teal_module`
 #' @param ... parameters passed to `toString`
 #' @export
+#' @rdname module
 print.teal_module <- print.teal_modules

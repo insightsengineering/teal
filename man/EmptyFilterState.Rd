@@ -5,7 +5,9 @@
 \alias{EmptyFilterState}
 \title{\code{FilterState} object for empty variable}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\code{FilterState} object for empty variable
+
+\code{FilterState} object for empty variable
 }
 \examples{
 filter_state <- teal:::EmptyFilterState$new(
@@ -19,6 +21,7 @@ isolate(filter_state$set_selected(TRUE))
 isolate(filter_state$set_keep_na(TRUE))
 isolate(filter_state$get_call())
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{EmptyFilterState}
 }

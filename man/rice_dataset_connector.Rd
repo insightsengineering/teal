@@ -3,7 +3,7 @@
 \name{rice_dataset_connector}
 \alias{rice_dataset_connector}
 \alias{rice_cdisc_dataset_connector}
-\title{Rice \code{TealDatasetConnector}}
+\title{Superseded (moved into separate package): Rice \code{TealDatasetConnector}}
 \usage{
 rice_dataset_connector(
   dataname,
@@ -56,9 +56,9 @@ additional arguments applied to pull function}
 parent dataset name}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 }
 \details{
 Create a \code{TealDatasetConnector} from \code{RICE}.

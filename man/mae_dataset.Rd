@@ -2,7 +2,7 @@
 % Please edit documentation in R/MAETealDataset.R
 \name{mae_dataset}
 \alias{mae_dataset}
-\title{Public facing constructor for \code{MAETealDataset}}
+\title{The constructor of \code{MAETealDataset}}
 \usage{
 mae_dataset(
   dataname,
@@ -35,11 +35,11 @@ are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
 }
 \description{
-Public facing constructor for \code{MAETealDataset}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
 # Simple example
-mae_d <- mae_dataset("MAE", MultiAssayExperiment::miniACC)
+mae_d <- dataset("MAE", MultiAssayExperiment::miniACC)
 mae_d$get_dataname()
 mae_d$get_dataset_label()
 mae_d$get_code()

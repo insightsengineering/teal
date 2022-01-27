@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnector_constructors.R
 \name{datasetdb_data}
 \alias{datasetdb_data}
-\title{\code{TealDataConnector} connector for \code{DataSetDB}}
+\title{Superseded (moved into separate package): \code{TealDataConnector} connector for \code{DataSetDB}}
 \usage{
 datasetdb_data(..., connection = datasetdb_connection())
 }
@@ -16,6 +16,6 @@ dataset connectors created using \link{datasetdb_dataset_connector}}
 An object of class \code{TealDataConnector}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 Build data connector for \code{DataSetDB} datasets
 }

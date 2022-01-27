@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDatasetConnector_constructors.R
 \name{datasetdb_dataset_connector}
 \alias{datasetdb_dataset_connector}
-\title{\code{DataSetDB} \code{TealDatasetConnector}}
+\title{Superseded (moved into separate package): \code{DataSetDB} \code{TealDatasetConnector}}
 \usage{
 datasetdb_dataset_connector(
   dataname,
@@ -41,7 +41,7 @@ Can't be used simultaneously with \code{script}.}
 additional arguments applied to pull function}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 }
 \details{
 Create a \code{TealDatasetConnector} from \code{DataSetDB}.

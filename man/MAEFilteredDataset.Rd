@@ -28,6 +28,7 @@ fs <- list(
 dataset$set_filter_state(state = fs)
 shiny::isolate(dataset$get_filter_state())
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[teal:FilteredDataset]{teal::FilteredDataset}} -> \code{MAEFilteredDataset}
 }

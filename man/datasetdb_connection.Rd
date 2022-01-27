@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{datasetdb_connection}
 \alias{datasetdb_connection}
-\title{Open connection to \code{DataSetDB}}
+\title{Superseded (moved into separate package): Open connection to \code{DataSetDB}}
 \usage{
 datasetdb_connection()
 }
@@ -10,5 +10,5 @@ datasetdb_connection()
 (\code{TealDataConnection}) type of object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 }

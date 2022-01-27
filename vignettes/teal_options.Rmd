@@ -6,7 +6,7 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Modifying a Teal application with R options}
   %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options:
   chunk_output_type: console
 ---
@@ -19,6 +19,13 @@ At any time during an interactive session, you can change an option using:
 ```{r}
 options(option_to_set = "value")
 ```
+
+A way to change options for only the execution of a specific block of code is with the `withr` package like so:
+```{r}
+withr::with_options(list(digits = 3), print(pi))
+```
+After the line above is run the option, `digits`, will go back to its value before the line was run.
+
 The function `getOption` allows to inspect the value of an option:
 ```{r}
 getOption("option_to_set")
@@ -31,15 +38,22 @@ Once set, the value of an option persists during a session, but it returns to th
 ### `teal.log_layout` (`character`)
 This defines the layout of a log message used in a `teal` application. `teal` uses this layout to format the emitted log messages. Read the documentation of `teal::register_logger` for more information.
 
-Default: `"{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:{token} {ans} fun:{fn} [{level}] {msg}"`.
+Default: `"[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:[{token}] {ans} {msg}"`.
+
+Note that this layout is formatted by the package `glue::glue`.
 
 ### `teal.log_level` (`character`)
 This is the logging level threshold used in a `teal` application. A `teal` application will not emit logs below this level. Read the documentation of `teal::register_logger` for more information. Possible values: `"TRACE"`, `"INFO"`, `"WARNING"`, `"ERROR"`. See the documentation of `logger::TRACE` for all possible values of logging threshold and more information on what it does.
 
 Default: `"INFO"`.
 
+Note that there are two levels considered less severe than `"INFO"`: `"DEBUG"` and `"TRACE"`. In order to see the log messages for these two levels as well, change the log level from the default to `"TRACE"`, the least severe log level.
+
 ### `teal_logging`
 Deprecated.
+
+### `teal_show_js_log`
+Deprecated in favor of `teal.show_js_log` (see below).
 
 ### `teal.show_js_log` (`logical`)
 This indicates whether to print the `Javascript` console logs to the `R` console. If set to `TRUE`, the logs will be printed; otherwise, they won't.
@@ -55,7 +69,7 @@ Default: 5.
 ### `teal.basic_table_args` (`basic_table_args` object)
 This specifies the list of arguments passed to every call to `rtables::basic_table` made in a `teal` application. This can be used to format `rtables` without making any changes to the application code. See the documentation of `teal.devel::basic_table_args` for more information.
 
-Default: `teal.devel::basic_table_args()`.
+Default: `teal.devel::basic_table_args ()`.
 
 ### `teal.load_nest_code` (`character`)
 The value of this option is appended to the top of the code rendered when using the `Show R Code` modal button. See the documentation of `teal.devel::get_rcode` for more information.
@@ -65,4 +79,4 @@ Default: `"# Add any code to install/load your NEST environment here"`.
 ### `teal.ggplot2_args`
 This option allows modifying labels and themes of all `ggplot2` plots in a `teal` application. See the documentation of `teal.devel::ggplot2_args` for more information.
 
-Default: `teal.devel::ggplot2_args()`.
+Default: `teal.devel::ggplot2_args ()`.

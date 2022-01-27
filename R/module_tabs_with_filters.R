@@ -21,8 +21,8 @@
 #'
 #' @return A `tagList` of The main menu, place holders for filters and
 #'   place holders for the teal modules
+#' @keywords internal
 #'
-#' @import shiny
 #' @examples
 #' mods <- teal:::get_dummy_modules()
 #' datasets <- teal:::get_dummy_datasets()
@@ -91,7 +91,8 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
   filter_and_info_ui <- datasets$ui_filter_panel(ns("filter_panel"))
 
   # modules must be teal_modules, not teal_module; otherwise we will get the UI and not a tabsetPanel of UIs
-  teal_ui <- ui_nested_tabs(ns(modules$id), modules = modules, datasets)
+  id_from_label <- gsub("[^[:alnum:]]", "_", modules$label)
+  teal_ui <- ui_nested_tabs(ns(id_from_label), modules = modules, datasets)
 
   filter_panel_btn <- tags$li(
     style = "flex-grow : 1;",
@@ -129,19 +130,21 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #'   object to store filter state and filtered datasets, shared across modules. For more
 #'   details see [`FilteredData`].
 #' @return `reactive` currently selected active_module
+#' @keywords internal
 srv_tabs_with_filters <- function(id, datasets, modules, filter) {
   stopifnot(is(datasets, "FilteredData"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
-      "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ' )}."
+      "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
     )
-    active_module <- srv_nested_tabs(id = modules$id, datasets = datasets, modules = modules)
+    id_from_label <- gsub("[^[:alnum:]]", "_", modules$label)
+    active_module <- srv_nested_tabs(id = id_from_label, datasets = datasets, modules = modules)
 
     active_datanames <- eventReactive(
       eventExpr = active_module(),
       valueExpr = {
         logger::log_trace(
-          "srv_tabs_with_filters@1 changing active module to: { active_module()$label }."
+          "srv_tabs_with_filters@1 changing active module to: { deparse1(active_module()$label) }."
         )
         datasets$handle_active_datanames(datanames = active_module()$filters)
       }
@@ -152,7 +155,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, filter) {
     showNotification("Data loaded - App fully started up")
 
     logger::log_trace(
-      "srv_tabs_with_filters initialized the module with datasets { paste(datasets$datanames(), collapse = ' ' )}."
+      "srv_tabs_with_filters initialized the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
     )
     return(active_module)
   })

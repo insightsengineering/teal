@@ -1,46 +1,57 @@
-# teal 0.10.0.9055
+# teal 0.10.1
 
 ### Breaking changes
-* Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
-* Removed `rcd_connection` and `rcd_data`; `scda_dataset_connectors` can be passed into `cdisc_data` and `teal_data` directly.
-* Removed `raw_dataset`, `raw_dataset_connector`, `named_dataset`, `named_dataset_file`, `named_dataset_connector`, `relational_dataset`, `relational_dataset_file`, `relational_dataset_connector`, `key`, `as_cdisc`, `as_cdisc_relational`.
+* Changed the `HTML` identifiers of `teal` modules - now each nested module receives its own `shiny` namespace.
 * Deprecated all functions related to connectors that have been moved to their own separate packages.
-* Running `teal` application via `ui_teal_with_splash` and `srv_teal_with_splash` is now no longer recommended because it doesn't support some new features (e.g. logging, bookmarking). Use `init` instead.
-* Updated `init` to accept `RelationalData`, `data.frame`, `Dataset`, `DatasetConnector`, `list` or a function returning a named list as data input.
-* Change of the `html-id` of the modules. Each tabs-set in the app is now a new `shiny` namespace.
+* Removed `raw_dataset`, `raw_dataset_connector`, `named_dataset`, `named_dataset_file`, `named_dataset_connector`, `relational_dataset`, `relational_dataset_file`, `relational_dataset_connector`, `key`, `as_cdisc`, `as_cdisc_relational`.
+* Removed `rcd_connection` and `rcd_data`; `scda_dataset_connectors` can be passed into `cdisc_data` and `teal_data` directly.
+* Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
+* Renamed `teal_show_js_log` option into `teal.show_js_log` to match options naming convention.
+* Removed `%is_in%` and `stop_shiny` internal utility functions.
 
 ### New features
-* Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
+#### Logging
+* Added support for logging using the `logger` package.
+* Added a new function `register_logger`, which registers a logger in a given namespace.
+* Added trace and info levels log messages to the `teal` framework.
+* Added `pid` and shiny session token into footnote so app developers can identify logs for apps.
+
+#### Other
+* Added print methods to the `DatasetConnector`, `RelationalData`, `RelationalDataconnector` and `JoinKeys` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
+
 * Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
 * Modified `data_extract_spec` to allow both the `filter` and `select` parameters to be `NULL`, which results in the `data_extract_ui` acting as if a `filter_spec` with all variables as possible choices had been supplied as the `filter` argument and a `select_spec` with the `multiple` parameter set to `TRUE` had been supplied as the `select` argument.
-* Added support for logging using the `logger` package. Added a new function `register_logger`, which registers a logger in a given namespace.
-* Added logging at the info and trace level to the filter panel.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
 * Added support for `shiny::moduleServer` passed to the `server` parameter of `teal::module`.
-* Added `pid` and shiny session token into footnote so app developers can identify logs for apps.
-* Added logs to the modules and sub-modules returned from `init`.
-* Added `teal.threshold_slider_vs_checkboxgroup` as an option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.
-* Extended the `FilteredData` API to allow managing filter states from outside and not only from the UI.
-* Hid the buttons to remove filters from all datasets and each dataset when there were no active filters.
+* Added `teal.threshold_slider_vs_checkboxgroup` as an R option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.
+* Extended the `FilteredData` API to allow managing filter states programmatically and not only from the UI of a `teal` application.
+* Hid the buttons to remove filters from all datasets and each dataset when there are no active filters.
+* Updated `init` to accept `RelationalData`, `data.frame`, `MultiAssayExperiment`, `Dataset`, `DatasetConnector`, `list` or a function returning a named list as data input.
 
 ### Bug fixes
-* Refactored `module_nested_tabs` to fix the issue with filter-panel not reacting on a change of nested tabs.
-* Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
+* `choices_selected` now correctly removes duplicates from the array passed to its `choices` parameter.
 * Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
+* Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
+* Fixed restoring a bookmarked filter state of `teal` application.
+* Refactored `module_nested_tabs` to fix the issue with the filter panel not reacting to an input change in a nested module.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
-* Added `S3 method`, `to_relational_data`, for `MultiAssayExperiment` objects.
-* Fixed restoring bookmark state from filter panel.
-* `choices_selected` removes duplicates from the `choices` input.
+* Fixed setting `JoinKeys` when key name between two `Dataset` object differs.
+* Fixed printing of the `JavaScript` console logs to the `R` console when `teal.show_js_log = TRUE`.
 
 ### Miscellaneous
-* Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
-* Updated R version requirement to >= 4.0.
-* Changed references to outdated functions of `teal.devel` in the documentation.
-* Updated "filter panel collapse" icon to remove warnings when using shiny version >= 1.7.
-* Renamed `Dataset` class into `TealDataset`. Applied the same logic for the rest of the dataset and data class names.
-* Added validation to `FilteredDataset::get_data` to accept logical input only.
+* Soft-deprecate `mae_dataset()` in favor of more general `dataset()` constructor.
 * Added a vignette describing the modifications to `teal` applications users can apply using `R` options.
-* Removed dependency on `utils.nest` and replaced those function with equivalents from the `checkmate` package.
+* Added default values to the `label` argument of `select_spec` and `filter_spec`.
+* Added validation to `FilteredDataset::get_data` to accept logical input only.
+* Changed references to outdated functions of `teal.devel` in the documentation.
+* Introduced a `Teal` prefix to all public `R6` classes to avoid name collisions with other packages.
+* Removed dependency on `utils.nest` and replaced its functionality in `teal` with equivalents from the `checkmate` package and base `R`.
+* Replaced the old `shiny` server functions of `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with the `shiny::moduleServer` equivalents.
+* Running a `teal` application via `ui_teal_with_splash` and `srv_teal_with_splash` is now no longer recommended because it doesn't support new features (e.g. logging, bookmarking). Use `init` instead.
+* Updated the R version requirement to >= 4.0.
+* Updated the "filter panel collapse" icon to remove warnings when using `shiny` version >= 1.7.
+* Removed some of the non-exported, debugging modules.
+* Updated the footer tag style to be less visible.
 
 # teal 0.10.0
 

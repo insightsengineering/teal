@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnection.R
 \name{snowflake_connection_function}
 \alias{snowflake_connection_function}
-\title{Helper function to connect to \code{Snowflake}}
+\title{Superseded (moved into separate package): Helper function to connect to \code{Snowflake}}
 \usage{
 snowflake_connection_function(
   username = askpass::askpass("Please enter your username"),
@@ -39,7 +39,7 @@ snowflake_connection_function(
 \item{token_provider}{location of the auth token provider needed to access \code{Snowflake}.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 
 This is used by \code{snowflake_connection} and does not need to be called directly
 }

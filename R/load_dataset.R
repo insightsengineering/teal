@@ -1,6 +1,6 @@
 #' Load data from connection
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #' Load data from connection. Function used on [`TealDatasetConnector`] and
 #' [`TealDataset`] to obtain data from connection.
 #'
@@ -72,7 +72,7 @@ load_dataset.TealDatasetConnector <- function(x, args = NULL, try = FALSE, conn 
 
 #' Load datasets
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param x ([`TealData`], [`TealDataset`] or [`TealDatasetConnector`])
 #' @param args (`NULL` or named `list`)\cr

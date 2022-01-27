@@ -1,6 +1,6 @@
 #' Set arguments of a `CallableFunction`
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("stable")`
 #' Set arguments of a `CallableFunction`
 #'
 #' @param x `CallableFunction` or `TealDatasetConnector`)

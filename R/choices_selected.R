@@ -2,7 +2,7 @@ no_select_keyword <- "-- no selection --"
 
 #' Choices Selected
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'   Construct a single list containing available choices, the default selected value, and
 #'   additional settings such as to order the choices with the selected elements appearing first
 #'   or whether to block the user from making selections. Can be used in `ui` input elements
@@ -169,9 +169,10 @@ choices_selected <- function(choices,
 
 #' Check if an object is a choices_selected class.
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param x object to check
+#' @rdname choices_selected
 #' @export
 is.choices_selected <- function(x) { # nolint
   is(x, "choices_selected")
@@ -179,7 +180,7 @@ is.choices_selected <- function(x) { # nolint
 
 #' Add empty choice to choices selected
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param x (\code{choices_selected}) output
 #' @param multiple (\code{logical}) whether multiple selections are allowed or not
@@ -202,7 +203,7 @@ add_no_selected_choices <- function(x, multiple = FALSE) {
 
 #' Check select choices for no choice made
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("stable")`
 #'
 #' @param x (\code{character}) Word that shall be checked for
 #'   NULL, empty, "--no-selection"

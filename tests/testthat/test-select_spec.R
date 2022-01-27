@@ -46,7 +46,7 @@ test_that("Single choice", {
   expect_identical(c3$selected, setNames("AVAL", "AVAL"))
   expect_false(c3$multiple)
   expect_false(c3$fixed)
-  expect_identical(c3$label, NULL)
+  expect_identical(c3$label, "Select")
 })
 
 test_that("Multiple choices", {
@@ -64,7 +64,7 @@ test_that("Multiple choices", {
 
   expect_true(c1$multiple)
   expect_false(c1$fixed)
-  expect_identical(c1$label, NULL)
+  expect_identical(c1$label, "Select")
 })
 
 test_that("resolve_delayed select_spec works", {
@@ -145,7 +145,7 @@ testthat::test_that("delayed version of select_spec", {
         choices = vc_hard_exp,
         selected = vc_hard_short_exp,
         always_selected = NULL,
-        multiple = FALSE, fixed = FALSE, label = NULL
+        multiple = FALSE, fixed = FALSE, label = "Select"
       ),
       class = c("delayed_select_spec", "delayed_data", "select_spec")
     )
@@ -167,7 +167,7 @@ testthat::test_that("delayed version of select_spec", {
         choices = vc_fun_exp,
         selected = vc_fun_short,
         always_selected = NULL,
-        multiple = FALSE, fixed = FALSE, label = NULL
+        multiple = FALSE, fixed = FALSE, label = "Select"
       ),
       class = c("delayed_select_spec", "delayed_data", "select_spec")
     )

@@ -2,7 +2,7 @@
 % Please edit documentation in R/TealDataConnector_constructors.R
 \name{cdse_data}
 \alias{cdse_data}
-\title{\code{TealDataConnector} connector for \code{CDSE}}
+\title{Superseded (moved into separate package): \code{TealDataConnector} connector for \code{CDSE}}
 \usage{
 cdse_data(..., connection = cdse_connection())
 }
@@ -16,6 +16,6 @@ dataset connectors created using \link{cdse_dataset_connector}}
 An object of class \code{TealDataConnector}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 Build data connector for \code{CDSE} datasets
 }
