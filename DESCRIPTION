@@ -33,7 +33,7 @@ Imports:
     glue,
     grDevices,
     lifecycle,
-    logger,
+    logger (>= 0.2.2),
     magrittr,
     methods,
     MultiAssayExperiment,
