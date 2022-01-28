@@ -1,4 +1,4 @@
-# teal 0.10.1.9000
+# teal 0.10.1.9001
 
 ### Breaking changes
 * Changed the `HTML` identifiers of `teal` modules - now each nested module receives its own `shiny` namespace.
