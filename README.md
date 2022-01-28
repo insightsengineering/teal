@@ -1,5 +1,6 @@
 # Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications
 
+# <img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%;"/>
 
 *teal* is a shiny-based interactive exploration framework for analyzing clinical trials data. `teal` currently provides a dynamic filtering facility and diverse data viewers. `teal` shiny applications are built using standard [shiny modules](https://shiny.rstudio.com/articles/modules.html).
 
