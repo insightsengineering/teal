@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9000</span>
       </span>
     </div>
 
@@ -75,15 +75,6 @@
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="index.html">latest</a></li>
-   <li><a href="/index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -104,63 +95,61 @@ Other releases
 
       </header><div class="row">
   <div class="contents col-md-9">
-
 <div class="section level1">
-<div class="page-header"><h1 id="teal-interactive-exploratory-data-analysis-with-shiny-web-applications">Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications<a class="anchor" aria-label="anchor" href="#teal-interactive-exploratory-data-analysis-with-shiny-web-applications"></a>
+<div class="page-header"><h1 id="teal-interactive-exploratory-data-analysis-with-shiny-web-applications-">Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href="https://github.com/insightsengineering/teal" class="external-link"><img src="reference/figures/teal.png" align="right" height="139" style="max-width: 100%;"></a>
+<a class="anchor" aria-label="anchor" href="#teal-interactive-exploratory-data-analysis-with-shiny-web-applications-"></a>
 </h1></div>
 <p><em>teal</em> is a shiny-based interactive exploration framework for analyzing clinical trials data. <code>teal</code> currently provides a dynamic filtering facility and diverse data viewers. <code>teal</code> shiny applications are built using standard <a href="https://shiny.rstudio.com/articles/modules.html" class="external-link">shiny modules</a>.</p>
-</div>
-<div class="section level1">
-<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h1>
 <div class="section level2">
-<h2 id="clone-and-install-manually">Clone and install manually<a class="anchor" aria-label="anchor" href="#clone-and-install-manually"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<ol style="list-style-type: decimal">
-<li>
-<p>Clone the repository</p>
-<p>The repository can be downloaded directly from the <code>github.com</code> site as an archive (see <a href="https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository" class="external-link">Github tutorial on cloning to learn more</a>). Alternatively, Git command line tools offer the same functionality, without the need for manual downloading and unpacking the archive, but require to authenticate to Github. You can authenticate using a key pair or a Personal Access Token (PAT). Please refer to excellent Github tutorials on <a href="https://docs.github.com/en/github/authenticating-to-github" class="external-link">connecting to Github using SSH</a> or <a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token" class="external-link">creating and using PAT</a>.</p>
+<div class="section level3">
+<h3 id="clone-and-install-manually">Clone and install manually<a class="anchor" aria-label="anchor" href="#clone-and-install-manually"></a>
+</h3>
+<div class="section level4">
+<h4 id="1-clone-the-repository">1. Clone the repository<a class="anchor" aria-label="anchor" href="#1-clone-the-repository"></a>
+</h4>
+<p>The repository can be downloaded directly from the <code>github.com</code> site as an archive (see <a href="https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository" class="external-link">Github tutorial on cloning to learn more</a>). Alternatively, Git command line tools offer the same functionality, without the need for manual downloading and unpacking the archive, but require to authenticate to Github. You can authenticate using a key pair or a Personal Access Token (PAT). Please refer to excellent Github tutorials on <a href="https://docs.github.com/en/github/authenticating-to-github" class="external-link">connecting to Github using SSH</a> or <a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token" class="external-link">creating and using PAT</a>. Following commands create subdirectory <code>teal</code> containing cloned repository.</p>
 <ol style="list-style-type: decimal">
 <li>
 <p>Using PAT. Input in the Git Bash console, PowerShell or any Linux shell:</p>
-<pre><code>$ git clone https://github.com/insightsengineering/teal.git
-Username: your_username_goes_here
-Password: your_token_goes_here</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/insightsengineering/teal.git</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Username:</span> your_username_goes_here</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Password:</span> your_token_goes_here</span></code></pre></div>
 </li>
 <li>
 <p>Using SSH. If set up properly, the repository is ready to be cloned executing:</p>
-<pre><code>$ git clone https://github.com/insightsengineering/teal.git</code></pre>
-<p>This creates a subdirectory <code>teal</code> containing the cloned repository.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/insightsengineering/teal.git</span></code></pre></div>
 </li>
 </ol>
-</li>
-<li>
-<p>Build and install</p>
+</div>
+<div class="section level4">
+<h4 id="2-build-and-install">2. Build and install<a class="anchor" aria-label="anchor" href="#2-build-and-install"></a>
+</h4>
 <p>The native R tools provide a quick way to install a package. Run in PowerShell or any Linux shell:</p>
-<pre><code>$ R CMD build teal</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD build teal</span></code></pre></div>
 <p>This command builds the package and creates an archive. The name of the archive is output by the command at then of building. Then input in the shell:</p>
-<pre><code>$ Rscript -e 'install.packages("name_of_the_archive")</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'install.packages("name_of_the_archive")</span></span></code></pre></div>
 <p>Here is an example of a real command (with name_of_the_archive substituted by the output of the build command):</p>
-<pre><code>$ Rscript -e 'install.packages("teal_0.9.5.9000.tar.gz")'</code></pre>
-</li>
-</ol>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'install.packages("teal_0.9.5.9000.tar.gz")'</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="acknowledgment">Acknowledgment<a class="anchor" aria-label="anchor" href="#acknowledgment"></a>
-</h1>
+</div>
+<div class="section level2">
+<h2 id="acknowledgment">Acknowledgment<a class="anchor" aria-label="anchor" href="#acknowledgment"></a>
+</h2>
 <p>We would like to thank everyone who made <code>teal</code> a better analysis environment. Special thanks go to:</p>
 <ul>
 <li>
 <code>Doug Kelkhoff</code> for his contributions to the styling of the filter panel.</li>
 </ul>
 </div>
-<div class="section level1">
-<h1 id="notes-for-developers">Notes for Developers<a class="anchor" aria-label="anchor" href="#notes-for-developers"></a>
-</h1>
 <div class="section level2">
-<h2 id="conventions">Conventions<a class="anchor" aria-label="anchor" href="#conventions"></a>
+<h2 id="notes-for-developers">Notes for Developers<a class="anchor" aria-label="anchor" href="#notes-for-developers"></a>
 </h2>
+<div class="section level3">
+<h3 id="conventions">Conventions<a class="anchor" aria-label="anchor" href="#conventions"></a>
+</h3>
 <p>Shiny modules are implemented in files <code>&lt;module&gt;.R</code> with UI function <code>ui_&lt;module&gt;</code> and server function <code>srv_&lt;module&gt;</code>.</p>
 <p>A module with a <code>id</code> should not use the id itself (<code>ns(character(0))</code>) as this id belongs to the parent module:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -237,7 +226,7 @@ Password: your_token_goes_here</code></pre>
 <span class="op">}</span></code></pre></div>
 <p>This makes dynamic UI creation possible. If you want to remove a module added with <code>insertUI</code>, you can do so by calling <code>o$destroy()</code> on each of its observers, see the function <code>srv_filter_items</code> for an example.</p>
 <p>The difference between <code>datanames</code> and <code>active_datanames</code> is that the latter is a subset of the former.</p>
-<p>Note: Whenever you return input objects, it seems that you explicitly need to wrap them inside <code>reactive(..)</code>, e.g. <code>reactive(input$name)</code>.</p>
+<p>Note: Whenever you return input objects, it seems that you explicitly need to wrap them inside <code>reactive(..)</code>, e.g. <code>reactive(input$name)</code>.</p>
 <p>Modules should respect the argument order: <code>function(input, output, session, datasets, ...)</code>, where <code>...</code> can also include further named arguments.</p>
 <p>The idiom <code>shinyApp(ui, server) %&gt;% invisible()</code> is used with internal Shiny modules that are not exported. Printing a <code>shinyApp</code> causes it to call <code>runApp</code>, so never print a <code>shinyApp</code>. Instead do:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -270,21 +259,21 @@ Password: your_token_goes_here</code></pre>
 <span class="va">res</span> <span class="co"># put it to not be invisible</span>
 <span class="co"># or (slightly discouraged)</span>
 <span class="co">#return(res)</span></code></pre></div>
-<p>Note that for functions to be dispatched with S3, they need to be exported. This will not actually export the function with the class specifier, but only make it available for S3 method dispatch, see <a href="https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace" class="external-link uri">https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace</a></p>
+<p>Note that for functions to be dispatched with S3, they need to be exported. This will not actually export the function with the class specifier, but only make it available for S3 method dispatch, see <a href="https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace" class="external-link">stack-overflow</a></p>
 <p>While working on a PR, you can add a <code>scratch</code> directory to keep scripts to test the code that were not integrated into vignettes or examples yet. Before the PR is merged, remove this directory again. To avoid forgetting this, add a <code>todo</code> comment in the code. The <code>scratch</code> folder is also in <code>.Rbuildignore</code>.</p>
 <p>For <code>FilteredData</code>, when you work on a new module that directly changes it, you can check internal consistency in your reactive expressions through code like:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">datasets</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="fu">validate</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="section level3">
-<h3 id="systemfile">
+<div class="section level4">
+<h4 id="systemfile">
 <code>system.file</code><a class="anchor" aria-label="anchor" href="#systemfile"></a>
-</h3>
+</h4>
 <p>We recommend against exporting functions that use <code>system.file</code> to access files in other packages as this breaks encapsulation and leads to issues with <code>devtools</code> as explained below.</p>
 <p><code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">base::system.file</a></code> is only overwritten by <code>pkgload:::shim_system.file</code> if the package is loaded by <code><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">devtools::load_all()</a></code>. This is done to access files transparently, independent of whether a package was loaded using <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(pkg)</a></code> or <code>devtools::load(pkg)</code>. The <code>inst</code> folder is in different locations for each of these cases. If a package uses <code>system.file</code> without being loaded via <code>devtools</code>, it will fail when it tries to locate something in another package that is loaded with <code>devtools</code> because it still uses <code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">base::system.file</a></code>. The solution is to explicitly use <code>pkgload:::system.file</code> whenever providing a function that relies on <code>system.file</code> from another package. Or not do it at all (this is the current approach we take with <code>include_css_files</code>). We don’t directly overwrite <code>system.file</code>, this may have unexpected behavior.</p>
 </div>
 </div>
 </div>
-
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
