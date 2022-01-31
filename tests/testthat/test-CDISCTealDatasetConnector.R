@@ -31,7 +31,10 @@ testthat::test_that("Single scda dataset connector", {
   testthat::expect_s3_class(adsl$get_raw_data(), "data.frame")
 
   # check reproducible code
-  testthat::expect_equal(adsl$get_code(), 'ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")')
+  testthat::expect_equal(
+    adsl$get_code(),
+    'ADSL <- scda::synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")'
+  )
 })
 
 testthat::test_that("TealDatasetConnector$print prints out expected output of class and content", {
