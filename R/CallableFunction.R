@@ -195,6 +195,10 @@ CallableFunction <- R6::R6Class( # nolint
       fun_environment <- environment(fun)
       if (isNamespace(fun_environment)) {
         fun_name <- get_binding_name(fun, fun_environment)
+        namespace_name <- strsplit(rlang::env_name(fun_environment), ":")[[1]][2]
+        if (namespace_name != "base"){
+          fun_name <- paste(namespace_name, fun_name, sep = "::")
+        }
         fun <- str2lang(fun_name)
       }
       fun

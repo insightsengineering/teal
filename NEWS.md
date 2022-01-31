@@ -1,5 +1,8 @@
 # teal 0.10.1.9001
 
+* `get_call()` function of `CallableFunction` now returns call with namespace included.
+
+# teal 0.10.1
 ### Breaking changes
 * Changed the `HTML` identifiers of `teal` modules - now each nested module receives its own `shiny` namespace.
 * Deprecated all functions related to connectors that have been moved to their own separate packages.
