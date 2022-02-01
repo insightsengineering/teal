@@ -282,7 +282,7 @@ mae_dataset <- function(dataname,
     what = "teal::mae_dataset()",
     with = "teal::dataset()"
   )
-  
+
   if (!is(x, "MultiAssayExperiment")) {
     stop("Argument x must be a MultiAssayExperiment object")
   }

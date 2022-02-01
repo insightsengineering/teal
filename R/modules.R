@@ -112,9 +112,9 @@ modules <- function(label, ...) {
 #'
 #' app <- init(
 #'   data = teal_data(
-#'    dataset("iris", iris)
+#'     dataset("iris", iris)
 #'   ),
-#'  modules = root_modules(
+#'   modules = root_modules(
 #'     module(
 #'       label = "Module",
 #'       server = function(id, datasets) {
