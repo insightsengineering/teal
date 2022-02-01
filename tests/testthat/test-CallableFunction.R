@@ -350,3 +350,7 @@ testthat::test_that("test cloning", {
     )
   )
 })
+
+testthat::test_that("get_binding_name throws if the function could not be found in the environment", {
+  testthat::expect_error(get_binding_name("test", emptyenv()), regexp = "Object not found in the environment")
+})
