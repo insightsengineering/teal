@@ -4,7 +4,7 @@
 a dynamic filtering facility and diverse data viewers. `teal` shiny applications are built using standard
 [shiny modules](https://shiny.rstudio.com/articles/modules.html).
 
-## Installation
+## Installationn
 
 ### Clone and install manually
 
