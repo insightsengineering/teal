@@ -1,4 +1,4 @@
-# teal 0.10.1.9001
+# teal 0.10.1.9002
 
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
 
