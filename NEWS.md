@@ -1,6 +1,10 @@
 # teal 0.10.1.9002
 
+### BUG fixes
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
+
+### Miscellaneous
+* New argument `ordered` in the `select_spec()` to flag whether order of the selection should be tracked. 
 
 # teal 0.10.1
 ### Breaking changes
