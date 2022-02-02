@@ -1,13 +1,16 @@
+---
 # All available hooks: https://pre-commit.com/hooks.html
 # R specific hooks: https://github.com/lorenzwalthert/precommit
 default_stages: [commit]
-
+default_language_version:
+  python: python3
 repos:
   - repo: https://github.com/lorenzwalthert/precommit
     rev: v0.2.2.9006
     hooks:
       - id: style-files
-        args: [--style_pkg=styler, --style_fun=tidyverse_style, --cache-root=styler]
+        args: [--style_pkg=styler, --style_fun=tidyverse_style,
+          --cache-root=styler]
       - id: roxygenize
         additional_dependencies:
           - checkmate
@@ -36,34 +39,29 @@ repos:
           \.github/.*\.yaml|
           data/.*|
           tests/testthat/.*|
-          touchstone/config\.json|
           (.*/|)\.Rprofile|
           (.*/|)\.Renviron|
           (.*/|)\.gitignore|
           (.*/|)NAMESPACE|
           (.*/|)WORDLIST|
-          (.*/|)\.travis.yml|
-          (.*/|)appveyor.yml|
           (.*/|)\.Rbuildignore|
           (.*/|)\.pre-commit-.*|
           .*\.[rR]|
           .*\.Rproj|
           .*\.py|
-          .*\.feather|
           .*\.rds|
           .*\.Rds|
           .*\.sh|
           .*\.RData|
-          .*-in_tree
           )$
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.1.0
     hooks:
       - id: file-contents-sorter
-        name: Sort .Rbuildignore
-        files: "\\.Rbuildignore$"
+        name: Sort .Rbuildignore and ints/WORDLIST
+        files: "\\.Rbuildignore|inst/WORDLIST$"
   - repo: https://github.com/lorenzwalthert/gitignore-tidy
-    rev: b3eaceb0bf2df137cc80f85b3943b6684f204c48
+    rev: bb80136de68e7fe844cd0397f0088f469845d258
     hooks:
       - id: tidy-gitignore
   - repo: local
