@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9001</span>
       </span>
     </div>
 
@@ -72,15 +72,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -105,7 +96,7 @@ Other releases
       <h1 data-toc-skip>Delayed Data Loading</h1>
                         <h4 data-toc-skip class="author">Dawid Kałędkowski</h4>
             
-            <h4 data-toc-skip class="date">2022-01-28</h4>
+            <h4 data-toc-skip class="date">2022-02-02</h4>
       
       
       <div class="hidden name"><code>delayed_data_loading.Rmd</code></div>
@@ -149,7 +140,7 @@ Other releases
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: shiny</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; You are using teal version 0.10.1.9000</span>
+<span class="co">#&gt; You are using teal version 0.10.1.9001</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 
@@ -163,14 +154,14 @@ Other releases
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">fun</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 39</span></span>
-<span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> AB12345 AB12345-… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AB12345 AB12345-… id-262 CHN-15    35 M     BLACK … CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> AB12345 AB12345-… id-378 RUS-3     30 F     ASIAN   RUS     N     INV … Dr. R…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AB12345 AB12345-… id-220 CHN-11    26 F     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> AB12345 AB12345-… id-267 CHN-7     40 M     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> AB12345 AB12345-… id-201 CHN-15    49 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt;   STUDYID USUBJID     SUBJID SITEID   AGE SEX   RACE  COUNTRY DTHFL INVID INVNAM</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> AB12345 AB12345-CH… id-128 CHN-3     32 M     ASIAN CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AB12345 AB12345-CH… id-262 CHN-15    35 M     BLAC… CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> AB12345 AB12345-RU… id-378 RUS-3     30 F     ASIAN RUS     N     INV … Dr. R…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AB12345 AB12345-CH… id-220 CHN-11    26 F     ASIAN CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> AB12345 AB12345-CH… id-267 CHN-7     40 M     ASIAN CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> AB12345 AB12345-CH… id-201 CHN-15    49 M     ASIAN CHN     N     INV … Dr. C…</span>
 <span class="co">#&gt; <span style="color: #949494;"># … with 28 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span></span>
@@ -181,21 +172,21 @@ Other releases
 
 <span class="co"># check reproducible code</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">fun</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span></code></pre></div>
+<span class="co">#&gt; scda::synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span></code></pre></div>
 <p>It’s also possible to execute <code>fun$run()</code> function with arguments added on the fly in a named <code>list</code>. Dynamic arguments won’t be reflected in the reproducible code, what will have a consequences in other places - we will get back to this in later stages of the documentation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># add arguments on the fly</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">fun</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span>args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adae"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 69</span></span>
-<span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE  COUNTRY DTHFL INVID  INVNAM </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> AB12345 AB12345-… id-134 BRA-1     47 M     WHITE BRA     N     INV I… Dr. BR…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AB12345 AB12345-… id-134 BRA-1     47 M     WHITE BRA     N     INV I… Dr. BR…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> AB12345 AB12345-… id-134 BRA-1     47 M     WHITE BRA     N     INV I… Dr. BR…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AB12345 AB12345-… id-134 BRA-1     47 M     WHITE BRA     N     INV I… Dr. BR…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> AB12345 AB12345-… id-141 BRA-1     35 F     WHITE BRA     N     INV I… Dr. BR…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> AB12345 AB12345-… id-141 BRA-1     35 F     WHITE BRA     N     INV I… Dr. BR…</span>
+<span class="co">#&gt;   STUDYID USUBJID     SUBJID SITEID   AGE SEX   RACE  COUNTRY DTHFL INVID INVNAM</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> AB12345 AB12345-BR… id-134 BRA-1     47 M     WHITE BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AB12345 AB12345-BR… id-134 BRA-1     47 M     WHITE BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> AB12345 AB12345-BR… id-134 BRA-1     47 M     WHITE BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AB12345 AB12345-BR… id-134 BRA-1     47 M     WHITE BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> AB12345 AB12345-BR… id-141 BRA-1     35 F     WHITE BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> AB12345 AB12345-BR… id-141 BRA-1     35 F     WHITE BRA     N     INV … Dr. B…</span>
 <span class="co">#&gt; <span style="color: #949494;"># … with 58 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span></span>
@@ -206,7 +197,7 @@ Other releases
 
 <span class="co"># dynamic arguments not reflected in the call</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">fun</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span></code></pre></div>
+<span class="co">#&gt; scda::synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span></code></pre></div>
 <p><code>CallableFunction</code> can also depend on other R objects as the example function below depends on <code>ADSL</code>. The function can be executed in specific environment where we can copy objects needed to execute call. To include object in the function call, one has to use <code>$assign_to_env()</code> to copy object and <code>$set_args(list(ADSL = as.symbol(ADSL)))</code> to link object with function argument.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span> <span class="co"># nolint</span>
@@ -227,14 +218,14 @@ Other releases
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">fun</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 40</span></span>
-<span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> AB12345 AB12345-… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AB12345 AB12345-… id-262 CHN-15    35 M     BLACK … CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> AB12345 AB12345-… id-378 RUS-3     30 F     ASIAN   RUS     N     INV … Dr. R…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AB12345 AB12345-… id-220 CHN-11    26 F     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> AB12345 AB12345-… id-267 CHN-7     40 M     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> AB12345 AB12345-… id-201 CHN-15    49 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt;   STUDYID USUBJID     SUBJID SITEID   AGE SEX   RACE  COUNTRY DTHFL INVID INVNAM</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> AB12345 AB12345-CH… id-128 CHN-3     32 M     ASIAN CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AB12345 AB12345-CH… id-262 CHN-15    35 M     BLAC… CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> AB12345 AB12345-RU… id-378 RUS-3     30 F     ASIAN RUS     N     INV … Dr. R…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AB12345 AB12345-CH… id-220 CHN-11    26 F     ASIAN CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> AB12345 AB12345-CH… id-267 CHN-7     40 M     ASIAN CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> AB12345 AB12345-CH… id-201 CHN-15    49 M     ASIAN CHN     N     INV … Dr. C…</span>
 <span class="co">#&gt; <span style="color: #949494;"># … with 29 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span></span>
@@ -273,14 +264,14 @@ Other releases
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">code</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 51</span></span>
-<span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> AB12345 AB12345-… id-105 BRA-1     38 M     BLACK … BRA     N     INV … Dr. B…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AB12345 AB12345-… id-105 BRA-1     38 M     BLACK … BRA     N     INV … Dr. B…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> AB12345 AB12345-… id-134 BRA-1     47 M     WHITE   BRA     N     INV … Dr. B…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AB12345 AB12345-… id-134 BRA-1     47 M     WHITE   BRA     N     INV … Dr. B…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> AB12345 AB12345-… id-141 BRA-1     35 F     WHITE   BRA     N     INV … Dr. B…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> AB12345 AB12345-… id-141 BRA-1     35 F     WHITE   BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt;   STUDYID USUBJID     SUBJID SITEID   AGE SEX   RACE  COUNTRY DTHFL INVID INVNAM</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> AB12345 AB12345-BR… id-105 BRA-1     38 M     BLAC… BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AB12345 AB12345-BR… id-105 BRA-1     38 M     BLAC… BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> AB12345 AB12345-BR… id-134 BRA-1     47 M     WHITE BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AB12345 AB12345-BR… id-134 BRA-1     47 M     WHITE BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> AB12345 AB12345-BR… id-141 BRA-1     35 F     WHITE BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> AB12345 AB12345-BR… id-141 BRA-1     35 F     WHITE BRA     N     INV … Dr. B…</span>
 <span class="co">#&gt; <span style="color: #949494;"># … with 40 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span></span>
@@ -322,11 +313,11 @@ Other releases
 <span class="co"># get data.frame</span>
 <span class="fu"><a href="../reference/get_raw_data.html">get_raw_data</a></span><span class="op">(</span><span class="va">adsl_dataset</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 39</span></span>
-<span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> AB12345 AB12345-… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AB12345 AB12345-… id-262 CHN-15    35 M     BLACK … CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> AB12345 AB12345-… id-378 RUS-3     30 F     ASIAN   RUS     N     INV … Dr. R…</span>
+<span class="co">#&gt;   STUDYID USUBJID     SUBJID SITEID   AGE SEX   RACE  COUNTRY DTHFL INVID INVNAM</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> AB12345 AB12345-CH… id-128 CHN-3     32 M     ASIAN CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AB12345 AB12345-CH… id-262 CHN-15    35 M     BLAC… CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> AB12345 AB12345-RU… id-378 RUS-3     30 F     ASIAN RUS     N     INV … Dr. R…</span>
 <span class="co">#&gt; <span style="color: #949494;"># … with 28 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span></span>
@@ -356,7 +347,7 @@ Other releases
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># execution/reproducible code</span>
 <span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">adsl_conn</span><span class="op">)</span>
-<span class="co">#&gt; [1] "ADSL &lt;- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"</span>
+<span class="co">#&gt; [1] "ADSL &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"</span>
 
 <span class="co"># pull data</span>
 <span class="fu"><a href="../reference/load_dataset.html">load_dataset</a></span><span class="op">(</span><span class="va">adsl_conn</span><span class="op">)</span>
@@ -364,18 +355,18 @@ Other releases
 <span class="co"># get raw data</span>
 <span class="fu"><a href="../reference/get_raw_data.html">get_raw_data</a></span><span class="op">(</span><span class="va">adsl_conn</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 400 × 39</span></span>
-<span class="co">#&gt;    STUDYID USUBJID  SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> AB12345 AB12345… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> AB12345 AB12345… id-262 CHN-15    35 M     BLACK … CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AB12345 AB12345… id-378 RUS-3     30 F     ASIAN   RUS     N     INV … Dr. R…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> AB12345 AB12345… id-220 CHN-11    26 F     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> AB12345 AB12345… id-267 CHN-7     40 M     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> AB12345 AB12345… id-201 CHN-15    49 M     ASIAN   CHN     N     INV … Dr. C…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> AB12345 AB12345… id-45  USA-1     34 F     ASIAN   USA     N     INV … Dr. U…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> AB12345 AB12345… id-261 USA-1     32 F     ASIAN   USA     N     INV … Dr. U…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> AB12345 AB12345… id-173 NGA-11    24 F     BLACK … NGA     N     INV … Dr. N…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> AB12345 AB12345… id-307 CHN-1     24 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt;    STUDYID USUBJID    SUBJID SITEID   AGE SEX   RACE  COUNTRY DTHFL INVID INVNAM</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> AB12345 AB12345-C… id-128 CHN-3     32 M     ASIAN CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> AB12345 AB12345-C… id-262 CHN-15    35 M     BLAC… CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AB12345 AB12345-R… id-378 RUS-3     30 F     ASIAN RUS     N     INV … Dr. R…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> AB12345 AB12345-C… id-220 CHN-11    26 F     ASIAN CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> AB12345 AB12345-C… id-267 CHN-7     40 M     ASIAN CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> AB12345 AB12345-C… id-201 CHN-15    49 M     ASIAN CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> AB12345 AB12345-U… id-45  USA-1     34 F     ASIAN USA     N     INV … Dr. U…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> AB12345 AB12345-U… id-261 USA-1     32 F     ASIAN USA     N     INV … Dr. U…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> AB12345 AB12345-N… id-173 NGA-11    24 F     BLAC… NGA     N     INV … Dr. N…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> AB12345 AB12345-C… id-307 CHN-1     24 M     ASIAN CHN     N     INV … Dr. C…</span>
 <span class="co">#&gt; <span style="color: #949494;"># … with 390 more rows, and 28 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   ACTARM &lt;fct&gt;, ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   BMRKR1 &lt;dbl&gt;, BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;,</span></span>
@@ -531,7 +522,7 @@ Other releases
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; library(package = "scda")</span>
-<span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
+<span class="co">#&gt; ADSL &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL_3 &lt;- (function(ADSL, name, n = 5) ADSL_3 &lt;- head(ADSL, n))(ADSL = ADSL)</span>
 
 <span class="co"># pull ADSL and ADSL_3</span>
@@ -623,11 +614,11 @@ Other releases
 <p>Reproducible code attached to the <code>data</code> object is a combined code of all components, but one can also extract code from single dataset by specifying <code>dataname</code> argument.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
-<span class="co">#&gt; [1] "ADSL &lt;- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADAE &lt;- synthetic_cdisc_dataset(dataset_name = \"adae\", name = \"latest\")\nADVS &lt;- synthetic_cdisc_dataset(dataset_name = \"advs\", name = \"latest\")\nADTTE &lt;- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"</span>
+<span class="co">#&gt; [1] "ADSL &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADAE &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adae\", name = \"latest\")\nADVS &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"advs\", name = \"latest\")\nADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"</span>
 <span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
-<span class="co">#&gt; [1] "ADSL &lt;- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"</span>
+<span class="co">#&gt; [1] "ADSL &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"</span>
 <span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, dataname <span class="op">=</span> <span class="st">"ADTTE"</span><span class="op">)</span>
-<span class="co">#&gt; [1] "ADTTE &lt;- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"</span></code></pre></div>
+<span class="co">#&gt; [1] "ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"</span></code></pre></div>
 <p>Developers can also extract datasets and connectors included in the <code>TealData</code>.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get loaded datasets</span>
@@ -665,7 +656,7 @@ Other releases
 <span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL$x1 &lt;- 1</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">adtte</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; ADTTE &lt;- synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
+<span class="co">#&gt; ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
 <span class="co">#&gt; ADTTE$x2 &lt;- 2</span></code></pre></div>
 <p><code>mutate_dataset</code> can also be used on <code>TealData</code> objects which applies the <code>code</code> to the dataset specified in <code>dataname</code>. This is important, as <code>TealData</code> can track each call which affects this particular dataset. Check the code below, where we create data containing two datasets using the <code>cdisc_data</code> function. We can still use <code>mutate_dataset</code> on the object which contains multiple datasets, with one requirement - one needs to specify <code>dataname</code>. Afterwards, one can extract reproducible code from data which affects this particular <code>dataname</code>.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -676,7 +667,7 @@ Other releases
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL$x1 &lt;- 1</span>
-<span class="co">#&gt; ADTTE &lt;- synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
+<span class="co">#&gt; ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
 <span class="co">#&gt; ADTTE$x2 &lt;- 2</span>
 <span class="co">#&gt; ADSL$x3 &lt;- 3</span>
 
@@ -696,7 +687,7 @@ Other releases
 <span class="co">#&gt; ADSL$x3 &lt;- 3</span>
 <span class="co">#&gt; ADSL &lt;- dplyr::filter(ADSL, SEX == "F")</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"ADTTE"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; ADTTE &lt;- synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
+<span class="co">#&gt; ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
 <span class="co">#&gt; ADTTE$x2 &lt;- 2</span>
 <span class="co">#&gt; ADTTE$x4 &lt;- 4</span></code></pre></div>
 <p>Sometimes code of one object can depend on another, in this case we can link them in the same way how we link <code>TealDatasetConnector</code> objects. If object code is dependent on another, as ADTTE depends on ADSL below, <code>get_code</code> will return everything we need to be executed to reproduce this dataset.</p>
@@ -713,7 +704,7 @@ Other releases
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, dataname <span class="op">=</span> <span class="st">"ADTTE"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL$x1 &lt;- 1</span>
-<span class="co">#&gt; ADTTE &lt;- synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
+<span class="co">#&gt; ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
 <span class="co">#&gt; ADTTE$x2 &lt;- 2</span>
 <span class="co">#&gt; ADSL$x3 &lt;- 3</span>
 <span class="co">#&gt; ADTTE$x4 &lt;- 4</span>
@@ -733,7 +724,7 @@ Other releases
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL$x1 &lt;- 1</span>
-<span class="co">#&gt; ADTTE &lt;- synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
+<span class="co">#&gt; ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
 <span class="co">#&gt; ADTTE$x2 &lt;- 2</span>
 <span class="co">#&gt; ADSL$x3 &lt;- 3</span>
 <span class="co">#&gt; ADTTE$x4 &lt;- 4</span>

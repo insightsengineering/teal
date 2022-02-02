@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9001</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -82,9 +73,14 @@ Other releases
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.10.1.9000" id="teal-01019000">teal 0.10.1.9000<a class="anchor" aria-label="anchor" href="#teal-01019000"></a></h2>
+<h2 class="page-header" data-toc-text="0.10.1.9001" id="teal-01019001">teal 0.10.1.9001<a class="anchor" aria-label="anchor" href="#teal-01019001"></a></h2>
+<ul><li>
+<code>get_call()</code> function of <code>CallableFunction</code> now returns call with namespace included.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.10.1" id="teal-0101">teal 0.10.1<a class="anchor" aria-label="anchor" href="#teal-0101"></a></h2>
 <div class="section level4">
-<h4 id="breaking-changes-0-10-1-9000">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-1-9000"></a></h4>
+<h4 id="breaking-changes-0-10-1">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-1"></a></h4>
 <ul><li>Changed the <code>HTML</code> identifiers of <code>teal</code> modules - now each nested module receives its own <code>shiny</code> namespace.</li>
 <li>Deprecated all functions related to connectors that have been moved to their own separate packages.</li>
 <li>Removed <code>raw_dataset</code>, <code>raw_dataset_connector</code>, <code>named_dataset</code>, <code>named_dataset_file</code>, <code>named_dataset_connector</code>, <code>relational_dataset</code>, <code>relational_dataset_file</code>, <code>relational_dataset_connector</code>, <code>key</code>, <code>as_cdisc</code>, <code>as_cdisc_relational</code>.</li>
@@ -94,16 +90,16 @@ Other releases
 <li>Removed <code>%is_in%</code> and <code>stop_shiny</code> internal utility functions.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="new-features-0-10-1-9000">New features<a class="anchor" aria-label="anchor" href="#new-features-0-10-1-9000"></a></h4>
+<h4 id="new-features-0-10-1">New features<a class="anchor" aria-label="anchor" href="#new-features-0-10-1"></a></h4>
 <div class="section level5">
-<h5 id="logging-0-10-1-9000">Logging<a class="anchor" aria-label="anchor" href="#logging-0-10-1-9000"></a></h5>
+<h5 id="logging-0-10-1">Logging<a class="anchor" aria-label="anchor" href="#logging-0-10-1"></a></h5>
 <ul><li>Added support for logging using the <code>logger</code> package.</li>
 <li>Added a new function <code>register_logger</code>, which registers a logger in a given namespace.</li>
 <li>Added trace and info levels log messages to the <code>teal</code> framework.</li>
 <li>Added <code>pid</code> and shiny session token into footnote so app developers can identify logs for apps.</li>
 </ul></div>
 <div class="section level5">
-<h5 id="other-0-10-1-9000">Other<a class="anchor" aria-label="anchor" href="#other-0-10-1-9000"></a></h5>
+<h5 id="other-0-10-1">Other<a class="anchor" aria-label="anchor" href="#other-0-10-1"></a></h5>
 <ul><li><p>Added print methods to the <code>DatasetConnector</code>, <code>RelationalData</code>, <code>RelationalDataconnector</code> and <code>JoinKeys</code> classes and added input validation to the implementation of the print method that was already in the <code>Dataset</code> object.</p></li>
 <li><p>Added public facing constructor functions for <code>CDISCDataConnector</code>, <code>RelationalDataConnector</code>, and <code>DataConnection</code> classes.</p></li>
 <li><p>Modified <code>data_extract_spec</code> to allow both the <code>filter</code> and <code>select</code> parameters to be <code>NULL</code>, which results in the <code>data_extract_ui</code> acting as if a <code>filter_spec</code> with all variables as possible choices had been supplied as the <code>filter</code> argument and a <code>select_spec</code> with the <code>multiple</code> parameter set to <code>TRUE</code> had been supplied as the <code>select</code> argument.</p></li>
@@ -116,7 +112,7 @@ Other releases
 </ul></div>
 </div>
 <div class="section level4">
-<h4 id="bug-fixes-0-10-1-9000">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1-9000"></a></h4>
+<h4 id="bug-fixes-0-10-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1"></a></h4>
 <ul><li>
 <code>choices_selected</code> now correctly removes duplicates from the array passed to its <code>choices</code> parameter.</li>
 <li>Fixed call returned by <code>FilterState</code> in case of using <code><a href="http://waldronlab.io/MultiAssayExperiment/reference/subsetBy.html" class="external-link">MultiAssayExperiment::subsetByColData</a></code>. Now single condition for variable containing <code>NA</code> values is <code>!is.na(var) &amp; var == &lt;condition&gt;</code>.</li>
@@ -129,7 +125,7 @@ Other releases
 <li>Fixed printing of the <code>JavaScript</code> console logs to the <code>R</code> console when <code>teal.show_js_log = TRUE</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="miscellaneous-0-10-1-9000">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1-9000"></a></h4>
+<h4 id="miscellaneous-0-10-1">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1"></a></h4>
 <ul><li>Soft-deprecate <code><a href="../reference/mae_dataset.html">mae_dataset()</a></code> in favor of more general <code><a href="../reference/dataset.html">dataset()</a></code> constructor.</li>
 <li>Added a vignette describing the modifications to <code>teal</code> applications users can apply using <code>R</code> options.</li>
 <li>Added default values to the <code>label</code> argument of <code>select_spec</code> and <code>filter_spec</code>.</li>
