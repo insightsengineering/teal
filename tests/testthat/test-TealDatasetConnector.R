@@ -136,7 +136,7 @@ testthat::test_that("scda_dataset_connector", {
 
   testthat::expect_identical(
     x$.__enclos_env__$private$pull_callable$.__enclos_env__$private$fun_name,
-    "synthetic_cdisc_dataset"
+    "scda::synthetic_cdisc_dataset"
   )
 
   testthat::expect_identical(
@@ -146,7 +146,7 @@ testthat::test_that("scda_dataset_connector", {
 
   testthat::expect_equal(
     x$get_code(),
-    "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"
+    "ADSL <- scda::synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"
   )
 
   testthat::expect_silent(

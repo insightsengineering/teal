@@ -70,7 +70,7 @@ testthat::test_that("CallableFunction returns the correct name if passed a name 
 })
 
 testthat::test_that("CallableFunction returns the correct name if passed a generic from a namespace", {
-  testthat::expect_equal(callable_function(utils::head)$get_call(), "head()")
+  testthat::expect_equal(callable_function(utils::head)$get_call(), "utils::head()")
 })
 
 testthat::test_that("CallableFunction returns the correct name if passed a prefixed name of a function", {
@@ -323,7 +323,7 @@ testthat::test_that("test cloning", {
   fun$assign_to_env(x = "x2", value = 10)
   testthat::expect_identical(
     fun$get_call(),
-    "sd(x = x1:x2)"
+    "stats::sd(x = x1:x2)"
   )
 
   testthat::expect_identical(
@@ -349,4 +349,8 @@ testthat::test_that("test cloning", {
       fun_cloned_deep$.__enclos_env__$private$env
     )
   )
+})
+
+testthat::test_that("get_binding_name throws if the function could not be found in the environment", {
+  testthat::expect_error(get_binding_name("test", emptyenv()), regexp = "Object not found in the environment")
 })
