@@ -43,6 +43,7 @@ repos:
           .*\.css|
           .*\.jpg|
           .*\.js|
+          .*\.png|
           .*\.py|
           .*\.RData|
           .*\.Rds|
@@ -51,7 +52,7 @@ repos:
           .*\.sh|
           .*\.svg|
           .*\.xml|
-          (.*/|)\_pkgdown.yml
+          (.*/|)\_pkgdown.yml|
           (.*/|)\.gitignore|
           (.*/|)\.gitlab-ci\.yml|
           (.*/|)\.lintr|
@@ -66,7 +67,7 @@ repos:
           (.*/|)staged_dependencies\.yaml|
           (.*/|)WORDLIST|
           \.github/.*\.yaml|
-          data/.*|
+          data/.*
           )$
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.1.0
