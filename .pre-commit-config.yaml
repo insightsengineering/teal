@@ -39,34 +39,34 @@ repos:
         name: Check spelling with `spelling`
         exclude: >
           (?x)^(
-          \.github/.*\.yaml|
-          data/.*|
-          (.*/|)\.Rprofile|
-          (.*/|)\.Renviron|
+          .*\.[rR]|
+          .*\.css|
+          .*\.jpg|
+          .*\.js|
+          .*\.py|
+          .*\.RData|
+          .*\.Rds|
+          .*\.rds|
+          .*\.Rproj|
+          .*\.sh|
+          .*\.svg|
+          .*\.xml|
+          (.*/|)\_pkgdown.yml
           (.*/|)\.gitignore|
-          (.*/|)NAMESPACE|
+          (.*/|)\.gitlab-ci\.yml|
+          (.*/|)\.lintr|
+          (.*/|)\.pre-commit-.*|
+          (.*/|)\.Rbuildignore|
+          (.*/|)\.Renviron|
+          (.*/|)\.Rprofile|
+          (.*/|)CODEOWNERS|
           (.*/|)DESCRIPTION|
           (.*/|)LICENSE|
+          (.*/|)NAMESPACE|
           (.*/|)staged_dependencies\.yaml|
           (.*/|)WORDLIST|
-          (.*/|)\.Rbuildignore|
-          (.*/|)\.pre-commit-.*|
-          .*\.[rR]|
-          .*\.Rproj|
-          .*\.py|
-          .*\.rds|
-          .*\.Rds|
-          .*\.sh|
-          .*\.RData|
-          .*\.xml|
-          .*\.css|
-          .*\.svg|
-          .*\.js|
-          .*\.jpg|
-          (.*/|)\.gitlab-ci\.yml|
-          (.*/|)CODEOWNERS|
-          (.*/|)\.lintr|
-          (.*/|)\_pkgdown.yml
+          \.github/.*\.yaml|
+          data/.*|
           )$
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.1.0
