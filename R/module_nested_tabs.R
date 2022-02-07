@@ -63,7 +63,7 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
     c(
       # by giving an id, we can reactively respond to tab changes
       list(
-        id = ns("Active_tab"),
+        id = ns("active_tab"),
         type = if (modules$label == "root") "pills" else "tabs"
       ),
       lapply(
@@ -117,7 +117,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
 #'     + test3
 #' ```
 #' * `teal_module` returns self as a active module
-#' * `teal_modules` returns module active within self which is determined by the `input$Active_tab`.
+#' * `teal_modules` returns module active within self which is determined by the `input$active_tab`.
 #' The choice of active module is done recursively (diagram from right to left).
 #'
 #' @return `reactive` which returns the active module that corresponds to the selected tab
@@ -156,8 +156,8 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules) {
         modules_reactive[[1]]()
       } else {
         # switch to active tab
-        req(input$Active_tab)
-        modules_reactive[[input$Active_tab]]()
+        req(input$active_tab)
+        modules_reactive[[input$active_tab]]()
       }
     })
 
