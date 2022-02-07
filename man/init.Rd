@@ -123,7 +123,7 @@ app <- init(
     cdisc_dataset("ADSL", ADSL),
     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   ),
-  modules = root_modules(
+  modules = modules(
     module(
       "data source",
       server = function(input, output, session, datasets) {},

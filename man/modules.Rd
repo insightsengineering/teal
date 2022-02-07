@@ -6,17 +6,17 @@
 \alias{print.teal_modules}
 \title{Create a collection of \code{module} and \code{modules} object}
 \usage{
-modules(label, ...)
+modules(..., label = "root")
 
 \method{toString}{teal_modules}(x, indent = 0, ...)
 
 \method{print}{teal_modules}(x, ...)
 }
 \arguments{
-\item{label}{(\code{character(1)})\cr
-label of modules collection}
-
 \item{...}{parameters passed to \code{toString}}
+
+\item{label}{(\code{character(1)})\cr
+label of modules collection (default \code{"root"})}
 
 \item{x}{\code{teal_modules}}
 

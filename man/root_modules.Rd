@@ -2,7 +2,7 @@
 % Please edit documentation in R/modules.R
 \name{root_modules}
 \alias{root_modules}
-\title{Creates the root modules container}
+\title{Deprecated: Creates the root modules container}
 \usage{
 root_modules(...)
 }
@@ -10,8 +10,8 @@ root_modules(...)
 \item{...}{parameters passed to \code{toString}}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-To be used with \code{\link[=init]{init()}} in the \code{modules} argument.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+This function is deprecated, you should call \code{teal::modules} directly instead.
 }
 \details{
 The function \code{\link[=modules]{modules()}} can also be used. The purpose of this
@@ -26,7 +26,7 @@ app <- init(
   data = teal_data(
     dataset("iris", iris)
   ),
-  modules = root_modules(
+  modules = modules(
     module(
       label = "Module",
       server = function(id, datasets) {

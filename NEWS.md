@@ -1,6 +1,7 @@
 # teal 0.10.1.9003
 
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
+* Deprecated `root_modules` function, uses `modules` directly inside `init`.
 
 # teal 0.10.1
 ### Breaking changes

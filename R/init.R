@@ -118,7 +118,7 @@
 #'     cdisc_dataset("ADSL", ADSL),
 #'     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 #'   ),
-#'   modules = root_modules(
+#'   modules = modules(
 #'     module(
 #'       "data source",
 #'       server = function(input, output, session, datasets) {},
@@ -174,7 +174,7 @@ init <- function(data,
   log_system_info()
 
   if (is(modules, "list")) {
-    modules <- do.call(root_modules, modules)
+    modules <- do.call(teal_modules, modules)
   }
 
   # Note regarding case `id = character(0)`:

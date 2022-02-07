@@ -308,7 +308,7 @@ testthat::test_that("modules accept multiple teal_module and teal_modules object
     ui = ui_fun1,
     filters = ""
   )
-  test_modules <- modules("label", test_module)
+  test_modules <- modules(label = "label", test_module)
 
   testthat::expect_error(modules(label = "label", test_module, test_modules), NA)
 })
@@ -316,7 +316,7 @@ testthat::test_that("modules accept multiple teal_module and teal_modules object
 testthat::test_that("modules does not accept objects other than teal_module(s) in ...", {
   testthat::expect_error(
     modules(label = "label", "a"),
-    "not all arguments are of class teal_module or teal_modules"
+    "the following types: \\{teal_module,teal_modules\\}",
   )
 })
 
@@ -327,7 +327,7 @@ testthat::test_that("modules returns teal_modules object with label and children
     ui = ui_fun1,
     filters = ""
   )
-  out <- modules("label2", test_module)
+  out <- modules(label = "label2", test_module)
   testthat::expect_s3_class(out, "teal_modules")
   testthat::expect_named(out, c("label", "children"))
 })
@@ -339,8 +339,8 @@ testthat::test_that("modules returns children as list with list named after labe
     ui = ui_fun1,
     filters = ""
   )
-  test_modules <- modules("modules", test_module)
-  out <- modules("tabs", test_module, test_modules)$children
+  test_modules <- modules(label = "modules", test_module)
+  out <- modules(label = "tabs", test_module, test_modules)$children
   testthat::expect_named(out, c("module", "modules"))
   testthat::expect_identical(out$module, test_module)
   testthat::expect_identical(out$modules, test_modules)
@@ -353,19 +353,20 @@ testthat::test_that("modules returns children as list with unique names if label
     ui = ui_fun1,
     filters = ""
   )
-  test_modules <- modules("module", test_module)
-  out <- modules("tabs", test_module, test_modules)$children
+  test_modules <- modules(label = "module", test_module)
+  out <- modules(label = "tabs", test_module, test_modules)$children
   testthat::expect_named(out, c("module", "module_1"))
   testthat::expect_identical(out$module, test_module)
   testthat::expect_identical(out$module_1, test_modules)
 })
 
 
-testthat::test_that("root_modules needs at least one argument", {
-  expect_error(root_modules(), "You must provide at least one module.")
+testthat::test_that("root_modules is deprecated",{
+  lifecycle::expect_deprecated(root_modules())
 })
 
 testthat::test_that("root_modules returns teal_modules object with label='root'", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   test_module <- module(
     label = "label",
     server = module_server_fun,
