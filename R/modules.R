@@ -88,7 +88,7 @@ modules <- function(..., label = "root") {
 
 # wrapper function as teal::init has an argumnt called modules
 # so that teal::modules cannot be called directly from it
-teal_modules <- function(...){
+teal_modules <- function(...) {
   modules(...)
 }
 
