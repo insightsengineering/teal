@@ -283,11 +283,11 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   )
 #' }
 #' mods <- modules(
-#'   "d1",
+#'   label = "d1",
 #'   modules(
-#'     "d2",
+#'     label = "d2",
 #'     modules(
-#'       "d3",
+#'       label = "d3",
 #'       create_mod("aaa1"), create_mod("aaa2"), create_mod("aaa3")
 #'     ),
 #'     create_mod("bbb")
@@ -297,9 +297,9 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' stopifnot(teal:::modules_depth(mods) == 3L)
 #'
 #' mods <- modules(
-#'   "a",
+#'   label = "a",
 #'   modules(
-#'     "b1", create_mod("c")
+#'     label = "b1", create_mod("c")
 #'   ),
 #'   create_mod("b2")
 #' )

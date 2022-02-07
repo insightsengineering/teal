@@ -263,6 +263,11 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
   testthat::expect_identical(test_module$ui_args, NULL)
 })
 
+testthat::test_that("modules gives error if no arguments other than label are used", {
+  testthat::expect_error(modules(label = "my label"))
+  testthat::expect_error(modules()) # using default label argument
+})
+
 testthat::test_that("modules requires label argument to be a string ", {
   test_module <- module(
     label = "label",
@@ -361,8 +366,13 @@ testthat::test_that("modules returns children as list with unique names if label
 })
 
 
-testthat::test_that("root_modules is deprecated",{
-  lifecycle::expect_deprecated(root_modules())
+testthat::test_that("root_modules is deprecated", {
+  lifecycle::expect_deprecated(root_modules(test_module <- module(
+    label = "label",
+    server = module_server_fun,
+    ui = ui_fun1,
+    filters = ""
+  )))
 })
 
 testthat::test_that("root_modules returns teal_modules object with label='root'", {
