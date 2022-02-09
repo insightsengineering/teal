@@ -1,6 +1,7 @@
 # teal 0.10.1.9003
 
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
+* Minor changes to internals of `teal`: main module panel now has shiny name `root` and the active tab is named `active_tab` not `Active_tab`.
 
 # teal 0.10.1
 ### Breaking changes
