@@ -58,7 +58,7 @@ CDISCTealData <- R6::R6Class( # nolint
 
       private$parent <- new_parent
 
-      # for performance, get_join_keys should be called once outside of any loopp
+      # for performance, get_join_keys should be called once outside of any loop
       join_keys <- self$get_join_keys()
 
       # set up join keys as parent keys
