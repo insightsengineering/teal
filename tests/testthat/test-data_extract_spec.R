@@ -17,6 +17,7 @@ test_that("data_extract_spec works with valid input", {
     choices = c("SEX", "RACE"),
     selected = "SEX",
     multiple = FALSE,
+    ordered = FALSE,
     fixed = FALSE
   )
   data_extract_spec1 <- expect_silent(data_extract_spec(
@@ -44,6 +45,7 @@ test_that("data_extract_spec works with valid input", {
     choices = c("AVAL", "CNSR"),
     selected = "AVAL",
     multiple = FALSE,
+    ordered = FALSE,
     fixed = FALSE
   )
   filter_spec1 <- filter_spec(
@@ -133,14 +135,16 @@ test_that("delayed data_extract_spec works", {
     choices = variable_choices(ADSL, c("BMRKR1", "BMRKR2")),
     selected = "BMRKR1",
     multiple = FALSE,
-    fixed = FALSE
+    fixed = FALSE,
+    ordered = FALSE
   )
 
   select_delayed <- select_spec(
     choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
     selected = "BMRKR1",
     multiple = FALSE,
-    fixed = FALSE
+    fixed = FALSE,
+    ordered = FALSE
   )
 
   expected_spec <- data_extract_spec(
@@ -322,7 +326,10 @@ testthat::test_that("data_extract_spec returns filter_spec with multiple set to 
 
 testthat::test_that("data_extract_spec returns select_spec with multiple set to TRUE", {
   des <- data_extract_spec("ADSL")
-  testthat::expect_equal(length(des$select), 6)
+  testthat::expect_identical(
+    names(des$select),
+    names(formals(select_spec))
+  )
   testthat::expect_equal(class(des$select$choices), c("delayed_variable_choices", "delayed_data", "choices_labeled"))
   testthat::expect_true(des$select$multiple)
   testthat::expect_null(des$select$selected)

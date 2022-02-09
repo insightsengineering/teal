@@ -19,7 +19,7 @@ Create \code{\link{CallableFunction}} object to execute specific function and ge
 call.
 }
 \examples{
-cf <- callable_function(fun = mean)
+cf <- callable_function(fun = stats::median)
 cf$set_args(list(x = 1:10, na.rm = FALSE))
 cf$run()
 cf$get_call()

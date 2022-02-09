@@ -84,22 +84,22 @@ out <- shiny::testServer(
     })
 
     testthat::test_that("modules_reactive returns modules according to selection in the nested tabs", {
-      session$setInputs(`tab1-Active_tab` = "test2") # active tab in tab1
-      session$setInputs(`tab2-Active_tab` = "test3") # active tab in tab2
+      session$setInputs(`tab1-active_tab` = "test2") # active tab in tab1
+      session$setInputs(`tab2-active_tab` = "test3") # active tab in tab2
       nested_active_modules <- lapply(modules_reactive, function(child) child())
       expect_identical(nested_active_modules, list(tab1 = test_module2, tab2 = test_module3))
 
-      session$setInputs(`tab1-Active_tab` = "test1") # active tab in tab1
-      session$setInputs(`tab2-Active_tab` = "test4") # active tab in tab2
+      session$setInputs(`tab1-active_tab` = "test1") # active tab in tab1
+      session$setInputs(`tab2-active_tab` = "test4") # active tab in tab2
       nested_active_modules <- lapply(modules_reactive, function(child) child())
       expect_identical(nested_active_modules, list(tab1 = test_module1, tab2 = test_module4))
     })
 
     testthat::test_that("Change of this tab returns active module from this tab", {
-      session$setInputs(`Active_tab` = "tab1")
+      session$setInputs(`active_tab` = "tab1")
       expect_identical(get_active_module(), test_module1)
 
-      session$setInputs(`Active_tab` = "tab2")
+      session$setInputs(`active_tab` = "tab2")
       expect_identical(get_active_module(), test_module4)
     })
   }

@@ -58,12 +58,14 @@ test_that("Multiple choices", {
   expect_silent(c2 <- select_spec(choices = choices, selected = selected))
   expect_identical(c1, c2)
 
-  expect_identical(names(c1), c("choices", "selected", "always_selected", "multiple", "fixed", "label"))
+  expect_identical(names(c1), c("choices", "selected", "multiple", "fixed", "always_selected", "ordered", "label"))
   expect_identical(c1$choices, setNames(choices, choices))
   expect_identical(c1$selected, setNames(selected, selected))
 
   expect_true(c1$multiple)
   expect_false(c1$fixed)
+  expect_null(c1$always_selected)
+  expect_false(c1$ordered)
   expect_identical(c1$label, "Select")
 })
 
@@ -144,8 +146,11 @@ testthat::test_that("delayed version of select_spec", {
       list(
         choices = vc_hard_exp,
         selected = vc_hard_short_exp,
+        multiple = FALSE,
+        fixed = FALSE,
         always_selected = NULL,
-        multiple = FALSE, fixed = FALSE, label = "Select"
+        ordered = FALSE,
+        label = "Select"
       ),
       class = c("delayed_select_spec", "delayed_data", "select_spec")
     )
@@ -166,8 +171,11 @@ testthat::test_that("delayed version of select_spec", {
       list(
         choices = vc_fun_exp,
         selected = vc_fun_short,
+        multiple = FALSE,
+        fixed = FALSE,
         always_selected = NULL,
-        multiple = FALSE, fixed = FALSE, label = "Select"
+        ordered = FALSE,
+        label = "Select"
       ),
       class = c("delayed_select_spec", "delayed_data", "select_spec")
     )
@@ -187,4 +195,14 @@ testthat::test_that("all_choices passed to selected is the same as passing all c
 testthat::test_that("multiple is set to TRUE if all_choices is passed to selected", {
   testthat::expect_true(select_spec(choices = variable_choices("test"), selected = all_choices())$multiple)
   testthat::expect_true(select_spec(choices = variable_choices(iris), selected = all_choices())$multiple)
+})
+
+testthat::test_that("default values", {
+  test <- select_spec("a")
+  testthat::expect_identical(test$selected, c(a = "a"))
+  testthat::expect_false(test$multiple)
+  testthat::expect_false(test$fixed)
+  testthat::expect_null(test$always_selected)
+  testthat::expect_false(test$ordered)
+  testthat::expect_identical(test$label, "Select")
 })
