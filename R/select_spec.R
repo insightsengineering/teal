@@ -26,6 +26,8 @@
 #' @param always_selected (\code{character}) Additional column names from the data set that should
 #'   always be selected
 #'
+#' @param ordered (`logical(1)`) Flags whether selection order should be tracked.
+#'
 #' @param label optional (\code{character}). Define a label on top of this specific
 #' shiny \code{\link[shiny]{selectInput}}. The default value is \code{"Select"}.
 #'
@@ -136,19 +138,21 @@ select_spec <- function(choices,
                         multiple = length(selected) > 1 || is(selected, "all_choices"),
                         fixed = FALSE,
                         always_selected = NULL,
+                        ordered = FALSE,
                         label = "Select") {
   checkmate::assert_flag(multiple)
   checkmate::assert_flag(fixed)
   checkmate::assert_character(always_selected, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+  checkmate::assert_flag(ordered)
   checkmate::assert_string(label, null.ok = TRUE)
   stopifnot(multiple || !is(selected, "all_choices"))
   if (fixed) stopifnot(is.null(always_selected))
 
   if (is(selected, "all_choices")) selected <- choices
   if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
-    select_spec.delayed_data(choices, selected, multiple, fixed, always_selected, label)
+    select_spec.delayed_data(choices, selected, multiple, fixed, always_selected, ordered, label)
   } else {
-    select_spec.default(choices, selected, multiple, fixed, always_selected, label)
+    select_spec.default(choices, selected, multiple, fixed, always_selected, ordered, label)
   }
 }
 
@@ -159,6 +163,7 @@ select_spec.delayed_data <- function(choices,
                                      multiple = length(selected) > 1,
                                      fixed = FALSE,
                                      always_selected = NULL,
+                                     ordered = FALSE,
                                      label = NULL) {
   stopifnot(is.null(selected) || is.atomic(selected) || is(selected, "delayed_data"))
   stopifnot(is.null(choices) || is.atomic(choices) || is(choices, "delayed_data"))
@@ -167,9 +172,10 @@ select_spec.delayed_data <- function(choices,
     list(
       choices = choices,
       selected = selected,
-      always_selected = always_selected,
       multiple = multiple,
       fixed = fixed,
+      always_selected = always_selected,
+      ordered = ordered,
       label = label
     ),
     class = c("delayed_select_spec", "delayed_data", "select_spec")
@@ -183,6 +189,7 @@ select_spec.default <- function(choices,
                                 multiple = length(selected) > 1,
                                 fixed = FALSE,
                                 always_selected = NULL,
+                                ordered = FALSE,
                                 label = NULL) {
   stopifnot(is.null(choices) || is.atomic(choices))
   stopifnot(is.null(selected) || is.atomic(selected))
@@ -215,8 +222,8 @@ select_spec.default <- function(choices,
   }
 
   res <- list(
-    choices = choices, selected = selected, always_selected = always_selected, multiple = multiple,
-    fixed = fixed, label = label
+    choices = choices, selected = selected, multiple = multiple, fixed = fixed,
+    always_selected = always_selected, ordered = ordered, label = label
   )
   class(res) <- "select_spec"
 
