@@ -2,6 +2,7 @@
 
 ### Bug fixes
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
+* Minor changes to internals of `teal`: main module panel now has fixed shiny name `root` and the active tab is named `active_tab` not `Active_tab`.
 
 ### Miscellaneous
 * New argument `ordered` in the `select_spec()` to flag whether order of the selection should be tracked. 
