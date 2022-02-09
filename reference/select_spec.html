@@ -19,7 +19,7 @@ that will select columns from a dataset."><!-- mathjax --><script src="https://c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9003</span>
       </span>
     </div>
 
@@ -55,15 +55,6 @@ that will select columns from a dataset."><!-- mathjax --><script src="https://c
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -97,6 +88,7 @@ that will select columns from a dataset.</p>
   multiple <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">selected</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/methods/is.html" class="external-link">is</a></span><span class="op">(</span><span class="va">selected</span>, <span class="st">"all_choices"</span><span class="op">)</span>,
   fixed <span class="op">=</span> <span class="cn">FALSE</span>,
   always_selected <span class="op">=</span> <span class="cn">NULL</span>,
+  ordered <span class="op">=</span> <span class="cn">FALSE</span>,
   label <span class="op">=</span> <span class="st">"Select"</span>
 <span class="op">)</span>
 
@@ -106,6 +98,7 @@ that will select columns from a dataset.</p>
   multiple <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">selected</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span>,
   fixed <span class="op">=</span> <span class="cn">FALSE</span>,
   always_selected <span class="op">=</span> <span class="cn">NULL</span>,
+  ordered <span class="op">=</span> <span class="cn">FALSE</span>,
   label <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
@@ -115,6 +108,7 @@ that will select columns from a dataset.</p>
   multiple <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">selected</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span>,
   fixed <span class="op">=</span> <span class="cn">FALSE</span>,
   always_selected <span class="op">=</span> <span class="cn">NULL</span>,
+  ordered <span class="op">=</span> <span class="cn">FALSE</span>,
   label <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -143,6 +137,8 @@ columns in the dataset that is defined by the developer of the app.</p></dd>
 <dt>always_selected</dt>
 <dd><p>(<code>character</code>) Additional column names from the data set that should
 always be selected</p></dd>
+<dt>ordered</dt>
+<dd><p>(<code>logical(1)</code>) Flags whether selection order should be tracked.</p></dd>
 <dt>label</dt>
 <dd><p>optional (<code>character</code>). Define a label on top of this specific
 shiny <code><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></code>. The default value is <code>"Select"</code>.</p></dd>
@@ -222,7 +218,7 @@ start by a data set containing the columns <code>"AGE"</code>, <code>"AVAL"</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>     idx &lt;- vapply(data, is.factor, logical(1))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(names(data)[idx])</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x563bf6348cb0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b138da37b0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   $ key</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ selected</span>
@@ -234,14 +230,16 @@ start by a data set containing the columns <code>"AGE"</code>, <code>"AVAL"</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>     idx &lt;- vapply(data, is.factor, logical(1))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(names(data)[idx][1])</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x563bf6348cb0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b138da37b0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   $ key</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ always_selected</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ multiple</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ fixed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ always_selected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ ordered</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Select"</span>
@@ -265,11 +263,13 @@ start by a data set containing the columns <code>"AGE"</code>, <code>"AVAL"</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>   NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   $ key</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ always_selected</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ multiple</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ fixed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ always_selected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ ordered</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Select"</span>
@@ -291,11 +291,13 @@ start by a data set containing the columns <code>"AGE"</code>, <code>"AVAL"</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>   NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   $ key</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ always_selected</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ multiple</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ fixed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ always_selected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ ordered</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Select"</span>
