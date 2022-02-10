@@ -16,7 +16,9 @@ modules(..., label = "root")
 \item{...}{parameters passed to \code{toString}}
 
 \item{label}{(\code{character(1)})\cr
-label of modules collection (default \code{"root"})}
+label of modules collection (default \code{"root"}). If using the \code{label} argument
+then it must be explicitly named.
+For example \code{modules("lab", ...)} should be converted to \code{modules(label = "lab", ...)}.}
 
 \item{x}{\code{teal_modules}}
 

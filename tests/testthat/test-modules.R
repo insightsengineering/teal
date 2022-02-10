@@ -351,6 +351,18 @@ testthat::test_that("modules returns children as list with list named after labe
   testthat::expect_identical(out$modules, test_modules)
 })
 
+
+testthat::test_that("modules returns useful error message if label argument not explicitly named", {
+  test_module <- module(
+    label = "module",
+    server = module_server_fun,
+    ui = ui_fun1,
+    filters = ""
+  )
+  expect_error(modules("module", test_module), "The 'label' argument to modules\\(\\) must be named")
+})
+
+
 testthat::test_that("modules returns children as list with unique names if labels are duplicated", {
   test_module <- module(
     label = "module",

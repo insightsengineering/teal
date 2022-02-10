@@ -11,7 +11,9 @@
 #' @param ... (`teal_module` or `teal_modules`)\cr
 #'   see [module()] and [modules()] for more details
 #' @param label (`character(1)`)\cr
-#'   label of modules collection (default `"root"`)
+#'   label of modules collection (default `"root"`). If using the `label` argument
+#'   then it must be explicitly named.
+#'   For example `modules("lab", ...)` should be converted to `modules(label = "lab", ...)`.
 #'
 #' @export
 #'
@@ -71,7 +73,21 @@
 modules <- function(..., label = "root") {
   checkmate::assert_string(label)
   submodules <- list(...)
-  checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
+
+  # first check for arguments including label
+  checkmate::assert_list(submodules,
+    min.len = 1, any.missing = FALSE,
+    types = c("character", "teal_module", "teal_modules")
+  )
+
+  # next throw error if label argument is un-named.
+  if (!checkmate::test_list(submodules, types = c("teal_module", "teal_modules"))) {
+    if (label == "root") {
+      stop("The 'label' argument to modules() must be named, ",
+        "change modules('lab', ...) to modules(label = 'lab', ...)")
+    }
+    checkmate::assert_list(submodules, types = c("teal_module", "teal_modules"))
+  }
 
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
