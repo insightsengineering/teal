@@ -1,7 +1,10 @@
 # teal 0.10.1.9003
 
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
-* Deprecated `root_modules` function, uses `modules` directly inside `init`.
+* Deprecated `root_modules` function, users should use `modules` directly inside `init`.
+
+### Breaking changes
+* Due to deprecation of `root_modules` any `label` argument to `modules` must be explicitly named. For example `modules("lab", mod1, mod2)` should be replaced with `modules(label = "lab", mod1, mod2)`.
 
 # teal 0.10.1
 ### Breaking changes

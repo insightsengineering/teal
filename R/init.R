@@ -174,7 +174,7 @@ init <- function(data,
   log_system_info()
 
   if (is(modules, "list")) {
-    modules <- do.call(teal_modules, modules)
+    modules <- do.call(teal::modules, modules)
   }
 
   # Note regarding case `id = character(0)`:
