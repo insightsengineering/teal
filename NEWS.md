@@ -1,10 +1,15 @@
-# teal 0.10.1.9003
+# teal 0.10.1.9005
 
+### Bug fixes
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
 * Deprecated `root_modules` function, users should use `modules` directly inside `init`.
 
 ### Breaking changes
 * Due to deprecation of `root_modules` any `label` argument to `modules` must be explicitly named. For example `modules("lab", mod1, mod2)` should be replaced with `modules(label = "lab", mod1, mod2)`.
+
+### Miscellaneous
+* New argument `ordered` in the `select_spec()` to flag whether order of the selection should be tracked.
+* Minor changes to internals of `teal`: main module panel now has fixed shiny name `root` and the active tab is named `active_tab` not `Active_tab`. 
 
 # teal 0.10.1
 ### Breaking changes
