@@ -83,8 +83,10 @@ modules <- function(..., label = "root") {
   # next throw error if label argument is un-named.
   if (!checkmate::test_list(submodules, types = c("teal_module", "teal_modules"))) {
     if (label == "root") {
-      stop("The 'label' argument to modules() must be named, ",
-        "change modules('lab', ...) to modules(label = 'lab', ...)")
+      stop(
+        "The 'label' argument to modules() must be named, ",
+        "change modules('lab', ...) to modules(label = 'lab', ...)"
+      )
     }
     checkmate::assert_list(submodules, types = c("teal_module", "teal_modules"))
   }
