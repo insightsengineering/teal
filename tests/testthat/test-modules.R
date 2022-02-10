@@ -366,7 +366,7 @@ testthat::test_that("modules returns useful error message if label argument not 
     ui = ui_fun1,
     filters = ""
   )
-  expect_error(modules("module", test_module),  "The only character argument to modules\\(\\) must be 'label'")
+  expect_error(modules("module", test_module), "The only character argument to modules\\(\\) must be 'label'")
 })
 
 
