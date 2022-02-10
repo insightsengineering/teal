@@ -74,22 +74,14 @@ modules <- function(..., label = "root") {
   checkmate::assert_string(label)
   submodules <- list(...)
 
-  # first check for arguments including label
-  checkmate::assert_list(submodules,
-    min.len = 1, any.missing = FALSE,
-    types = c("character", "teal_module", "teal_modules")
-  )
-
-  # next throw error if label argument is un-named.
-  if (!checkmate::test_list(submodules, types = c("teal_module", "teal_modules"))) {
-    if (label == "root") {
-      stop(
-        "The 'label' argument to modules() must be named, ",
-        "change modules('lab', ...) to modules(label = 'lab', ...)"
-      )
-    }
-    checkmate::assert_list(submodules, types = c("teal_module", "teal_modules"))
+  if (any(vapply(submodules, is.character, FUN.VALUE = logical(1)))) {
+    stop(
+      "The only character argument to modules() must be 'label' and it must be named, ",
+      "change modules('lab', ...) to modules(label = 'lab', ...)"
+    )
   }
+
+  checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
 
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced

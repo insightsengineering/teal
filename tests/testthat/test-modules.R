@@ -320,8 +320,15 @@ testthat::test_that("modules accept multiple teal_module and teal_modules object
 
 testthat::test_that("modules does not accept objects other than teal_module(s) in ...", {
   testthat::expect_error(
-    modules(label = "label", "a"),
+    modules(label = "label", 5),
     "the following types: \\{teal_module,teal_modules\\}",
+  )
+})
+
+testthat::test_that("modules does not accept objects other than teal_module(s) in ...", {
+  testthat::expect_error(
+    modules(label = "label", "a"),
+    "The only character argument to modules\\(\\) must be 'label'",
   )
 })
 
@@ -359,7 +366,7 @@ testthat::test_that("modules returns useful error message if label argument not 
     ui = ui_fun1,
     filters = ""
   )
-  expect_error(modules("module", test_module), "The 'label' argument to modules\\(\\) must be named")
+  expect_error(modules("module", test_module),  "The only character argument to modules\\(\\) must be 'label'")
 })
 
 
