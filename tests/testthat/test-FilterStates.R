@@ -58,7 +58,8 @@ testthat::test_that("get_call returns a call filtering a data.frame based on a R
     datalabel = "label"
   )
   filter_states$queue_initialize(list(ReactiveQueue$new()))
-  range_filter <- RangeFilterState$new(x = c(1, 3), varname = "a")
+  range_filter <- RangeFilterState$new(x = test_dataset$a, varname = "a")
+  isolate(range_filter$set_selected(c(1, 3)))
   filter_states$queue_push(queue_index = 1, x = range_filter, element_id = "test")
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(output, test_dataset[2:4, , drop = FALSE])
@@ -73,7 +74,8 @@ testthat::test_that("get_call returns a call filtering a data.frame based on a C
     datalabel = "label"
   )
   filter_states$queue_initialize(list(ReactiveQueue$new()))
-  choices_filter <- ChoicesFilterState$new(x = c("a", "c"), varname = "choices")
+  choices_filter <- ChoicesFilterState$new(x = choices_dataset$choices, varname = "choices")
+  isolate(choices_filter$set_selected(c("a", "c")))
   filter_states$queue_push(queue_index = 1, x = choices_filter, element_id = "test")
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(choices_output, choices_dataset[c(1, 3), , drop = FALSE])
@@ -87,7 +89,8 @@ testthat::test_that("get_call returns a call filtering a data.frame based on a L
     datalabel = "label"
   )
   filter_states$queue_initialize(list(ReactiveQueue$new()))
-  logical_filter <- LogicalFilterState$new(x = c(FALSE), varname = "logical")
+  logical_filter <- LogicalFilterState$new(x = logical_dataset$logical, varname = "logical")
+  isolate(logical_filter$set_selected(FALSE))
   filter_states$queue_push(queue_index = 1, x = logical_filter, element_id = "test")
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(logical_output, logical_dataset[c(2, 3), , drop = FALSE])
@@ -101,7 +104,8 @@ testthat::test_that("get_call returns a call filtering a data.frame based on a D
     datalabel = "label"
   )
   filter_states$queue_initialize(list(ReactiveQueue$new()))
-  date_filter <- DateFilterState$new(x = as.Date(c("2021/08/25", "2021/08/26")), varname = "date")
+  date_filter <- DateFilterState$new(x = date_dataset$date, varname = "date")
+  isolate(date_filter$set_selected(c("2021/08/25", "2021/08/26")))
   filter_states$queue_push(queue_index = 1, x = date_filter, element_id = "test")
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(date_output, date_dataset[c(1, 2), , drop = FALSE])
@@ -116,32 +120,16 @@ testthat::test_that("get_call returns a call filtering a data.frame based on a D
     output_dataname = "datetime_output",
     datalabel = "label"
   )
+
   filter_states$queue_initialize(list(ReactiveQueue$new()))
-  datetime_filter <- DatetimeFilterState$new(x = ISOdate(2021, 8, 27, tz = Sys.timezone()), varname = "datetime")
+  datetime_filter <- DatetimeFilterState$new(x = datetime_dataset$datetime, varname = "datetime")
+  isolate(datetime_filter$set_selected(rep(ISOdate(2021, 8, 27, tz = Sys.timezone()), 2)))
   filter_states$queue_push(queue_index = 1, x = datetime_filter, element_id = "test")
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(datetime_output, datetime_dataset[c(3), , drop = FALSE])
 })
 
 testthat::test_that("get_call returns a call filtering a data.frame base on a combination of FilterState objects", {
-  # setting up filters
-  filter_states <- FilterStates$new(
-    input_dataname = "test_dataset",
-    output_dataname = "output",
-    datalabel = "label"
-  )
-  filter_states$queue_initialize(list(ReactiveQueue$new()))
-  range_filter <- RangeFilterState$new(x = c(1, 3), varname = "a")
-  choices_filter <- ChoicesFilterState$new(x = c("a", "c"), varname = "choices")
-  logical_filter <- LogicalFilterState$new(x = c(FALSE), varname = "logical")
-  date_filter <- DateFilterState$new(x = as.Date(c("2021/08/25", "2021/08/26")), varname = "date")
-  datetime_filter <- DatetimeFilterState$new(x = c(ISOdate(2021, 8, 25, tz = Sys.timezone())), varname = "datetime")
-  filter_states$queue_push(queue_index = 1, x = range_filter, element_id = "test")
-  filter_states$queue_push(queue_index = 1, x = choices_filter, element_id = "test")
-  filter_states$queue_push(queue_index = 1, x = logical_filter, element_id = "test")
-  filter_states$queue_push(queue_index = 1, x = date_filter, element_id = "test")
-  filter_states$queue_push(queue_index = 1, x = datetime_filter, element_id = "test")
-
   # setting up the test dataset
   test_dataset <- data.frame(
     a = c(seq(1, 5, by = 1)),
@@ -150,6 +138,32 @@ testthat::test_that("get_call returns a call filtering a data.frame base on a co
     date = seq(as.Date("2021/08/25"), by = "day", length.out = 5),
     datetime = seq(ISOdate(2021, 8, 25, tz = Sys.timezone()), by = "day", length.out = 5)
   )
+
+  # setting up filters
+  filter_states <- FilterStates$new(
+    input_dataname = "test_dataset",
+    output_dataname = "output",
+    datalabel = "label"
+  )
+  filter_states$queue_initialize(list(ReactiveQueue$new()))
+
+  range_filter <- RangeFilterState$new(x = test_dataset$a, varname = "a")
+  isolate(range_filter$set_selected(c(1, 3)))
+  choices_filter <- ChoicesFilterState$new(x = test_dataset$choices, varname = "choices")
+  isolate(choices_filter$set_selected(c("a", "c")))
+  logical_filter <- LogicalFilterState$new(x = logical_dataset$logical, varname = "logical")
+  isolate(logical_filter$set_selected(FALSE))
+  date_filter <- DateFilterState$new(x = date_dataset$date, varname = "date")
+  isolate(date_filter$set_selected(c("2021/08/25", "2021/08/26")))
+  datetime_filter <- DatetimeFilterState$new(x = datetime_dataset$datetime, varname = "datetime")
+  isolate(datetime_filter$set_selected(rep(ISOdate(2021, 8, 25, tz = Sys.timezone()), 2)))
+
+
+  filter_states$queue_push(queue_index = 1, x = range_filter, element_id = "test")
+  filter_states$queue_push(queue_index = 1, x = choices_filter, element_id = "test")
+  filter_states$queue_push(queue_index = 1, x = logical_filter, element_id = "test")
+  filter_states$queue_push(queue_index = 1, x = date_filter, element_id = "test")
+  filter_states$queue_push(queue_index = 1, x = datetime_filter, element_id = "test")
 
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(output, test_dataset[1, , drop = FALSE])

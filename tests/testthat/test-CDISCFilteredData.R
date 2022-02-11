@@ -33,7 +33,7 @@ test_that("set filter state", {
 
   expect_identical(
     isolate(queue$get_call()),
-    quote(ADSL_FILTERED <- dplyr::filter(ADSL, sex == "F")) # nolint
+    quote(ADSL_FILTERED <- ADSL) # nolint
   )
 })
 
