@@ -211,4 +211,3 @@ testthat::test_that(
     )
   }
 )
-
