@@ -221,7 +221,7 @@ FilterStates <- R6::R6Class( # nolint
         simplify = FALSE,
         function(queue) {
           items <- queue$get()
-          filtered_items <- Filter(f = functon(x) x$is_filtered() x = items)
+          filtered_items <- Filter(f = functon(x) x$is_any_filtered() x = items)
           calls <- lapply(
             filtered_items,
             function(state) {
