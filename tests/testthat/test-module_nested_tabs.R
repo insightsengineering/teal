@@ -33,7 +33,7 @@ testthat::test_that("passed shiny module is initialized", {
       args = list(
         id = "test",
         datasets = filtered_data,
-        modules = root_modules(test_module1)
+        modules = modules(test_module1)
       ),
       expr = NULL
     ),
@@ -48,9 +48,9 @@ testthat::test_that("nested teal-modules are initialized", {
       args = list(
         id = "test",
         datasets = filtered_data,
-        modules = root_modules(
-          modules("tab1", test_module1, test_module2),
-          modules("tab2", test_module3, test_module4)
+        modules = modules(
+          modules(label = "tab1", test_module1, test_module2),
+          modules(label = "tab2", test_module3, test_module4)
         )
       ),
       expr = NULL
@@ -65,9 +65,9 @@ out <- shiny::testServer(
   args = list(
     id = "test",
     datasets = filtered_data,
-    modules = root_modules(
-      modules("tab1", test_module1, test_module2),
-      modules("tab2", test_module3, test_module4)
+    modules = modules(
+      modules(label = "tab1", test_module1, test_module2),
+      modules(label = "tab2", test_module3, test_module4)
     )
   ),
   expr = {

@@ -146,7 +146,7 @@ app <- init(
     adsl, adae, adlb,
     check = TRUE
   ),
-  modules = root_modules(
+  modules = modules(
     teal:::filter_calls_module(),
     teal:::reset_filters_module("Reset", active_datanames = c("ADSL", "ADLB"))
   ),
@@ -169,7 +169,7 @@ app <- init(
   data = cdisc_data(
     adsl, adae, adlb
   ),
-  modules = root_modules(
+  modules = modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
     teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
     teal:::filter_calls_module("ADLB", active_datanames = c("ADLB"))
@@ -196,7 +196,7 @@ app <- init(
   data = cdisc_data(
     code_cdisc_dataset_connector("ADSL", code = adsl_code)
   ),
-  modules = root_modules(
+  modules = modules(
     teal:::filter_calls_module("ADSL", active_datanames = c("ADSL"))
   ),
   filter = list(
@@ -220,7 +220,7 @@ app <- init(
   data = cdisc_data(
     adsl, adae, adlb
   ),
-  modules = root_modules(
+  modules = modules(
     modules(
       label = "A1",
       teal:::filter_calls_module("B1.1", active_datanames = c("ADSL", "ADAE")),
@@ -272,7 +272,7 @@ data <- cdisc_data(
 
 app <- init(
   data = data,
-  modules = root_modules(
+  modules = modules(
     teal:::filter_calls_module()
   ),
   filter = list(
@@ -300,7 +300,7 @@ app <- init(
     cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- rcd_2021_07_07$adsl"),
     cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- rcd_2021_07_07$adlb")
   ),
-  modules = root_modules(
+  modules = modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
     teal:::filter_calls_module("ADSL", active_datanames = c("ADSL"))
   ),
@@ -327,7 +327,7 @@ app <- init(
     cdisc_dataset(dataname = "ADAE", x = ADAE, code = "ADAE <- rcd_2021_07_07$adae"),
     cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- rcd_2021_07_07$adlb")
   ),
-  modules = root_modules(
+  modules = modules(
     teal:::predefined_filters_module(filter = safety_filter),
     teal:::filter_calls_module()
   ),
@@ -368,7 +368,7 @@ app <- init(
     cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- rcd_2021_07_07$adsl"),
     cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- rcd_2021_07_07$adlb")
   ),
-  modules = root_modules(
+  modules = modules(
     module_hidden_filters,
     teal:::filter_calls_module()
   ),
@@ -389,7 +389,7 @@ app <- init(
     cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- rcd_2021_07_07$adsl"),
     cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- rcd_2021_07_07$adlb")
   ),
-  modules = root_modules(
+  modules = modules(
     teal::module(
       "test",
       server = function(input, output, session, datasets) {
@@ -422,7 +422,7 @@ app <- init(
     dataset("iris", iris_d, "rowname"),
     dataset("mtcars", mtcars_d, "rowname")
   ),
-  modules = root_modules(
+  modules = modules(
     teal::module(
       "test",
       server = function(input, output, session, datasets) {

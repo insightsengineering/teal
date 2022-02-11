@@ -806,7 +806,7 @@ teal modules to create an application.
 library(ggplot2)
 app <- init(
   data = teal_data(adsl, adrs),
-  modules = root_modules(
+  modules = modules(
     teal.modules.general::tm_g_bivariate(
       x = data_extract_x,
       y = data_extract_y,

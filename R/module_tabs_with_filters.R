@@ -136,7 +136,6 @@ srv_tabs_with_filters <- function(id, datasets, modules, filter) {
     logger::log_trace(
       "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
     )
-
     active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules)
 
     active_datanames <- eventReactive(
