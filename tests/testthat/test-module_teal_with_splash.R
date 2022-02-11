@@ -15,7 +15,7 @@ testthat::test_that("srv_teal_with_splash creates reactiveVal returning data inp
     args = list(
       id = "test",
       data = data,
-      modules = root_modules(test_module1)
+      modules = modules(test_module1)
     ),
     expr = {
       testthat::expect_is(raw_data, "reactiveVal")
@@ -32,7 +32,7 @@ testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns 
     args = list(
       id = "test",
       data = delayed_data,
-      modules = root_modules(test_module1)
+      modules = modules(test_module1)
     ),
     expr = testthat::expect_null(raw_data())
   )
@@ -47,7 +47,7 @@ testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns 
     args = list(
       id = "test",
       data = delayed_data,
-      modules = root_modules(test_module1)
+      modules = modules(test_module1)
     ),
     expr = {
       testthat::expect_null(raw_data())
@@ -64,7 +64,7 @@ testthat::test_that("srv_teal_with_splash gets observe event from srv_teal", {
     args = list(
       id = "test",
       data = data,
-      modules = root_modules(test_module1)
+      modules = modules(test_module1)
     ),
     expr = {
       testthat::expect_is(res, "Observer")

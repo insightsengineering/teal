@@ -109,11 +109,11 @@ get_dummy_modules <- function() {
     )
   }
   mods <- modules(
-    "d1",
+    label = "d1",
     modules(
-      "d2",
+      label = "d2",
       modules(
-        "d3",
+        label = "d3",
         create_mod("aaa1"), create_mod("aaa2"), create_mod("aaa3")
       ),
       create_mod("bbb")

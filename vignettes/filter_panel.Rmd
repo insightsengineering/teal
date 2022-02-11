@@ -328,7 +328,7 @@ app <- teal::init(
     iris = list(Species = "virginica"),
     mtcars = list(mpg = c(20.0, 25.0))
   ),
-  modules = root_modules(
+  modules = modules(
     module(
       label = "custom",
       filters = "all",
