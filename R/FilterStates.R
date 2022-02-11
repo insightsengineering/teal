@@ -224,7 +224,7 @@ FilterStates <- R6::R6Class( # nolint
           filtered_items <- `if`(
             length(items) == 0,
             NULL,
-            items[which(sapply(items, function(state) state$is_any_filtered()))]
+            Filter(state, functon(x) x$is_filtered())
           )
           calls <- lapply(
             filtered_items,
