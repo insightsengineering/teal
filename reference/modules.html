@@ -19,7 +19,7 @@ objects. This is useful to define the navigation structure of a teal app."><!-- 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9005</span>
       </span>
     </div>
 
@@ -55,15 +55,6 @@ objects. This is useful to define the navigation structure of a teal app."><!-- 
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -91,7 +82,7 @@ objects. This is useful to define the navigation structure of a teal app.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">modules</span><span class="op">(</span><span class="va">label</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">modules</span><span class="op">(</span><span class="va">...</span>, label <span class="op">=</span> <span class="st">"root"</span><span class="op">)</span>
 
 <span class="co"># S3 method for teal_modules</span>
 <span class="fu"><a href="https://rdrr.io/r/base/toString.html" class="external-link">toString</a></span><span class="op">(</span><span class="va">x</span>, indent <span class="op">=</span> <span class="fl">0</span>, <span class="va">...</span><span class="op">)</span>
@@ -102,11 +93,13 @@ objects. This is useful to define the navigation structure of a teal app.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>label</dt>
-<dd><p>(<code>character(1)</code>)<br>
-label of modules collection</p></dd>
-<dt>...</dt>
+    <dl><dt>...</dt>
 <dd><p>parameters passed to <code>toString</code></p></dd>
+<dt>label</dt>
+<dd><p>(<code>character(1)</code>)<br>
+label of modules collection (default <code>"root"</code>). If using the <code>label</code> argument
+then it must be explicitly named.
+For example <code>modules("lab", ...)</code> should be converted to <code>modules(label = "lab", ...)</code>.</p></dd>
 <dt>x</dt>
 <dd><p><code>teal_modules</code></p></dd>
 <dt>indent</dt>

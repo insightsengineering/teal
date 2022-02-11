@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9005</span>
       </span>
     </div>
 
@@ -72,15 +72,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -141,7 +132,7 @@ Other releases
     <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADRS"</span>, <span class="va">adrs</span>, code <span class="op">=</span> <span class="st">"ADRS &lt;- synthetic_cdisc_data(\"latest\")$adrs"</span><span class="op">)</span>,
     <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADTTE"</span>, <span class="va">adtte</span>, code <span class="op">=</span> <span class="st">"ADTTE &lt;- synthetic_cdisc_data(\"latest\")$adtte"</span><span class="op">)</span>
   <span class="op">)</span>,
-  modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
+  modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
     <span class="fu">teal.modules.general</span><span class="fu">::</span><span class="fu">tm_data_table</span><span class="op">(</span><span class="st">"Data Table"</span><span class="op">)</span>,
     <span class="fu">teal.modules.general</span><span class="fu">::</span><span class="fu">tm_variable_browser</span><span class="op">(</span><span class="st">"Variable Browser"</span><span class="op">)</span>,
     <span class="fu">teal.modules.clinical</span><span class="fu">::</span><span class="fu">tm_t_summary</span><span class="op">(</span>
@@ -194,7 +185,7 @@ Other releases
 <h3 id="navigation-tabs-application-content-shiny-modules">Navigation Tabs, Application Content, Shiny Modules<a class="anchor" aria-label="anchor" href="#navigation-tabs-application-content-shiny-modules"></a>
 </h3>
 <p>The second argument of <code><a href="../reference/init.html">teal::init</a></code> that we specified in the code listing above is the <code>modules</code> arguments. Modules define the elements displayed with tabs in the <em><code>Navbar</code></em> and their corresponding content in the <em>Tabs Content</em> box. A <code>modules</code> object can contain <code>module</code> and <code>modules</code> objects.</p>
-<p>We start the tree with the <code>root_modules</code> function which is a wrapper around <code>modules</code> that sets the <code>label</code> argument to <code>"root"</code>.</p>
+<p>We start the tree with the <code>modules</code> function without a label argument which sets the <code>label</code> argument to <code>"root"</code>.</p>
 <p>The <a href="https://shiny.rstudio.com/articles/modules.html" title="Modularizing Shiny app code" class="external-link">shiny modules</a> are specified in the <code>module</code> function with the <code>server</code> and <code>ui</code> argument. Both, <code>module</code> and <code>modules</code> are documented in the <code>teal</code> package, see <code><a href="../reference/module.html">?module</a></code> and <code><a href="../reference/modules.html">?modules</a></code>.</p>
 </div>
 </div>
