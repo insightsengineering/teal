@@ -91,3 +91,136 @@ testthat::test_that("set_keep_na_reactive throws error if input is not logical",
   testthat::expect_error(filter_state$set_keep_na_reactive("TRUE"))
   testthat::expect_error(filter_state$set_keep_na_reactive(1))
 })
+
+testthat::test_that(
+  "LogicalFilterState$is_any_filtered works properly when NA is present in data",
+  code = {
+    filter_state <- teal:::LogicalFilterState$new(
+      rep(c(TRUE, NA), 10),
+      varname = "x",
+      input_dataname = as.name("data"),
+      extract_type = character(0)
+    )
+    isolate(filter_state$set_selected(TRUE))
+
+    isolate(filter_state$set_keep_na(TRUE))
+    testthat::expect_false(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_keep_na(FALSE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+  }
+)
+
+testthat::test_that(
+  "LogicalFilterState$is_any_filtered works properly when both TRUE and FALSE are present",
+  code = {
+    filter_state <- teal:::LogicalFilterState$new(
+      rep(c(TRUE, FALSE, NA), 10),
+      varname = "x",
+      input_dataname = as.name("data"),
+      extract_type = character(0)
+    )
+    isolate(filter_state$set_selected(TRUE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(FALSE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(TRUE))
+    isolate(filter_state$set_keep_na(TRUE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(TRUE))
+    isolate(filter_state$set_keep_na(FALSE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(FALSE))
+    isolate(filter_state$set_keep_na(TRUE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(FALSE))
+    isolate(filter_state$set_keep_na(FALSE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+  }
+)
+
+testthat::test_that(
+  "LogicalFilterState$is_any_filtered works properly when only TRUE or FALSE is present",
+  code = {
+    filter_state <- teal:::LogicalFilterState$new(
+      rep(c(TRUE, NA), 10),
+      varname = "x",
+      input_dataname = as.name("data"),
+      extract_type = character(0)
+    )
+    isolate(filter_state$set_selected(TRUE))
+    isolate(filter_state$set_keep_na(TRUE))
+    testthat::expect_false(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(TRUE))
+    isolate(filter_state$set_keep_na(FALSE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(FALSE))
+    isolate(filter_state$set_keep_na(TRUE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(FALSE))
+    isolate(filter_state$set_keep_na(FALSE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    filter_state <- teal:::LogicalFilterState$new(
+      rep(c(FALSE, NA), 10),
+      varname = "x",
+      input_dataname = as.name("data"),
+      extract_type = character(0)
+    )
+    isolate(filter_state$set_selected(FALSE))
+    isolate(filter_state$set_keep_na(TRUE))
+    testthat::expect_false(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(FALSE))
+    isolate(filter_state$set_keep_na(FALSE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(TRUE))
+    isolate(filter_state$set_keep_na(TRUE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(TRUE))
+    isolate(filter_state$set_keep_na(FALSE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+  }
+)
