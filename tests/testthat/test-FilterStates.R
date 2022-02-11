@@ -151,11 +151,11 @@ testthat::test_that("get_call returns a call filtering a data.frame base on a co
   isolate(range_filter$set_selected(c(1, 3)))
   choices_filter <- ChoicesFilterState$new(x = test_dataset$choices, varname = "choices")
   isolate(choices_filter$set_selected(c("a", "c")))
-  logical_filter <- LogicalFilterState$new(x = logical_dataset$logical, varname = "logical")
+  logical_filter <- LogicalFilterState$new(x = test_dataset$logical, varname = "logical")
   isolate(logical_filter$set_selected(FALSE))
   date_filter <- DateFilterState$new(x = date_dataset$date, varname = "date")
   isolate(date_filter$set_selected(c("2021/08/25", "2021/08/26")))
-  datetime_filter <- DatetimeFilterState$new(x = datetime_dataset$datetime, varname = "datetime")
+  datetime_filter <- DatetimeFilterState$new(x = test_dataset$datetime, varname = "datetime")
   isolate(datetime_filter$set_selected(rep(ISOdate(2021, 8, 25, tz = Sys.timezone()), 2)))
 
 
