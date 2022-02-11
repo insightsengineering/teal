@@ -33,7 +33,7 @@ is displayed to the user.}
 
 \item{selected}{The initially selected value (or multiple values if \code{multiple = TRUE}).
 If not specified then defaults to the first value for single-select lists
-and no values for multiple select lists.}
+ and no values for multiple select lists.}
 
 \item{multiple}{Is selection of multiple items allowed?}
 

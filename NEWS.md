@@ -6,6 +6,7 @@
 
 ### Miscellaneous
 * New argument `ordered` in the `select_spec()` to flag whether order of the selection should be tracked. 
+* Added `is_any_filtered` method to all `FilterState` classes to detect if selected values actually filters out any data. This is used to decide if code should be added to Show R Code output. If no data is filtered out, then no code is added.
 
 # teal 0.10.1
 ### Breaking changes

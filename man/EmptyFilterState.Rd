@@ -29,6 +29,7 @@ isolate(filter_state$get_call())
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{EmptyFilterState$new()}}
+\item \href{#method-is_any_filtered}{\code{EmptyFilterState$is_any_filtered()}}
 \item \href{#method-get_call}{\code{EmptyFilterState$get_call()}}
 \item \href{#method-get_state}{\code{EmptyFilterState$get_state()}}
 \item \href{#method-ui}{\code{EmptyFilterState$ui()}}
@@ -94,6 +95,19 @@ whether condition calls should be prefixed by dataname. Possible values:
 }}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_any_filtered"></a>}}
+\if{latex}{\out{\hypertarget{method-is_any_filtered}{}}}
+\subsection{Method \code{is_any_filtered()}}{
+Answers the question of whether the current settings and values selected actually filters out any values.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{EmptyFilterState$is_any_filtered()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+logical scalar
 }
 }
 \if{html}{\out{<hr>}}

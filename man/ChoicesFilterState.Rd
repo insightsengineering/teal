@@ -14,7 +14,7 @@ Casts the passed object to \code{character} before validating the input
 making it possible to pass any object coercible to \code{character} to this method.
 }
 \examples{
-filter_state <- teal:::init_filter_state(
+filter_state <- teal:::ChoicesFilterState$new(
   c(LETTERS, NA),
   varname = "x",
   input_dataname = as.name("data"),
@@ -40,6 +40,7 @@ filter$set_selected(c("c", "a"))
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{ChoicesFilterState$new()}}
+\item \href{#method-is_any_filtered}{\code{ChoicesFilterState$is_any_filtered()}}
 \item \href{#method-get_call}{\code{ChoicesFilterState$get_call()}}
 \item \href{#method-ui}{\code{ChoicesFilterState$ui()}}
 \item \href{#method-server}{\code{ChoicesFilterState$server()}}
@@ -105,6 +106,19 @@ whether condition calls should be prefixed by dataname. Possible values:
 }}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_any_filtered"></a>}}
+\if{latex}{\out{\hypertarget{method-is_any_filtered}{}}}
+\subsection{Method \code{is_any_filtered()}}{
+Answers the question of whether the current settings and values selected actually filters out any values.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$is_any_filtered()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+logical scalar
 }
 }
 \if{html}{\out{<hr>}}

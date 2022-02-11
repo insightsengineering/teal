@@ -221,8 +221,13 @@ FilterStates <- R6::R6Class( # nolint
         simplify = FALSE,
         function(queue) {
           items <- queue$get()
+          filtered_items <- `if`(
+            length(items) == 0,
+            NULL,
+            items[which(sapply(items, function(state) state$is_any_filtered()))]
+          )
           calls <- lapply(
-            items,
+            filtered_items,
             function(state) {
               state$get_call()
             }
