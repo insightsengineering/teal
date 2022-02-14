@@ -73,8 +73,14 @@ repos:
     rev: v4.1.0
     hooks:
       - id: file-contents-sorter
-        name: Sort .Rbuildignore and inst/WORDLIST
-        files: "\\.Rbuildignore|inst/WORDLIST$"
+        name: Sort .Rbuildignore
+        files: "\\.Rbuildignore$"
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: file-contents-sorter
+        name: Sort inst/WORDLIST
+        files: "inst/WORDLIST$"
   - repo: https://github.com/lorenzwalthert/gitignore-tidy
     rev: bb80136de68e7fe844cd0397f0088f469845d258
     hooks:
