@@ -17,7 +17,7 @@ x <- teal::init(
     code = get_code("app.R", exclude_comments = TRUE),
     check = TRUE
   ),
-  modules = root_modules(
+  modules = modules(
     tm_made_up_lm(
       label = "Regression",
       dataname = c("adsl", "adtte"),

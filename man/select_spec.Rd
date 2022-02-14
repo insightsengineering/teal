@@ -12,6 +12,7 @@ select_spec(
   multiple = length(selected) > 1 || is(selected, "all_choices"),
   fixed = FALSE,
   always_selected = NULL,
+  ordered = FALSE,
   label = "Select"
 )
 
@@ -21,6 +22,7 @@ select_spec.delayed_data(
   multiple = length(selected) > 1,
   fixed = FALSE,
   always_selected = NULL,
+  ordered = FALSE,
   label = NULL
 )
 
@@ -30,6 +32,7 @@ select_spec.default(
   multiple = length(selected) > 1,
   fixed = FALSE,
   always_selected = NULL,
+  ordered = FALSE,
   label = NULL
 )
 }
@@ -55,6 +58,8 @@ columns in the dataset that is defined by the developer of the app.}
 
 \item{always_selected}{(\code{character}) Additional column names from the data set that should
 always be selected}
+
+\item{ordered}{(\code{logical(1)}) Flags whether selection order should be tracked.}
 
 \item{label}{optional (\code{character}). Define a label on top of this specific
 shiny \code{\link[shiny]{selectInput}}. The default value is \code{"Select"}.}

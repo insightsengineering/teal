@@ -50,7 +50,7 @@ Above depicts hypothetical situation in which one has module structure defined i
 }
 \itemize{
 \item \code{teal_module} returns self as a active module
-\item \code{teal_modules} returns module active within self which is determined by the \code{input$Active_tab}.
+\item \code{teal_modules} returns module active within self which is determined by the \code{input$active_tab}.
 The choice of active module is done recursively (diagram from right to left).
 }
 }

@@ -21,7 +21,7 @@ testthat::test_that("active_datanames() returns dataname from single tab", {
     args = list(
       id = "test",
       datasets = filtered_data,
-      modules = root_modules(test_module1),
+      modules = modules(test_module1),
       filter = list()
     ),
     expr = {
@@ -36,14 +36,14 @@ testthat::test_that("active_datanames() returns dataname from active tab after c
     args = list(
       id = "test",
       datasets = filtered_data,
-      modules = root_modules(test_module1, test_module2),
+      modules = modules(test_module1, test_module2),
       filter = list()
     ),
     expr = {
       testthat::expect_error(active_datanames()) # to trigger active_module
-      session$setInputs(`root-Active_tab` = "iris_tab")
+      session$setInputs(`root-active_tab` = "iris_tab")
       testthat::expect_identical(active_datanames(), "iris")
-      session$setInputs(`root-Active_tab` = "mtcars_tab")
+      session$setInputs(`root-active_tab` = "mtcars_tab")
       testthat::expect_identical(active_datanames(), "mtcars")
     }
   )

@@ -8,10 +8,12 @@
 #' Modules collects a tree of [module()] and [modules()]
 #' objects. This is useful to define the navigation structure of a teal app.
 #'
-#' @param label (`character(1)`)\cr
-#'   label of modules collection
 #' @param ... (`teal_module` or `teal_modules`)\cr
 #'   see [module()] and [modules()] for more details
+#' @param label (`character(1)`)\cr
+#'   label of modules collection (default `"root"`). If using the `label` argument
+#'   then it must be explicitly named.
+#'   For example `modules("lab", ...)` should be converted to `modules(label = "lab", ...)`.
 #'
 #' @export
 #'
@@ -68,16 +70,18 @@
 #' \dontrun{
 #' runApp(app)
 #' }
-modules <- function(label, ...) {
+modules <- function(..., label = "root") {
   checkmate::assert_string(label)
   submodules <- list(...)
-  is_right_class <- vapply(submodules, inherits, logical(1), c("teal_module", "teal_modules"))
-  if (any(!is_right_class)) {
-    stop(paste(
-      "modules: not all arguments are of class teal_module or teal_modules. Indices:",
-      toString(which(!is_right_class))
-    ))
+
+  if (any(vapply(submodules, is.character, FUN.VALUE = logical(1)))) {
+    stop(
+      "The only character argument to modules() must be 'label' and it must be named, ",
+      "change modules('lab', ...) to modules(label = 'lab', ...)"
+    )
   }
+
+  checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
 
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
@@ -93,10 +97,10 @@ modules <- function(label, ...) {
 }
 
 
-#' Creates the root modules container
+#' Deprecated: Creates the root modules container
 #'
-#' @description `r lifecycle::badge("stable")`
-#' To be used with [init()] in the `modules` argument.
+#' @description `r lifecycle::badge("deprecated")`
+#' This function is deprecated, you should call `teal::modules` directly instead.
 #'
 #' @details
 #' The function [modules()] can also be used. The purpose of this
@@ -114,7 +118,7 @@ modules <- function(label, ...) {
 #'   data = teal_data(
 #'     dataset("iris", iris)
 #'   ),
-#'   modules = root_modules(
+#'   modules = modules(
 #'     module(
 #'       label = "Module",
 #'       server = function(id, datasets) {
@@ -153,6 +157,13 @@ modules <- function(label, ...) {
 #' runApp(app)
 #' }
 root_modules <- function(...) {
+  lifecycle::deprecate_soft(
+    when = "0.10.2",
+    what = "root_modules()",
+    details =
+      "You should call teal::modules instead of teal::root_modules."
+  )
+
   if (nargs() == 0) {
     # we don't put this check at the modules level because we want to allow
     # empty modules that only have a filtering panel
@@ -277,11 +288,11 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   )
 #' }
 #' mods <- modules(
-#'   "d1",
+#'   label = "d1",
 #'   modules(
-#'     "d2",
+#'     label = "d2",
 #'     modules(
-#'       "d3",
+#'       label = "d3",
 #'       create_mod("aaa1"), create_mod("aaa2"), create_mod("aaa3")
 #'     ),
 #'     create_mod("bbb")
@@ -291,9 +302,9 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' stopifnot(teal:::modules_depth(mods) == 3L)
 #'
 #' mods <- modules(
-#'   "a",
+#'   label = "a",
 #'   modules(
-#'     "b1", create_mod("c")
+#'     label = "b1", create_mod("c")
 #'   ),
 #'   create_mod("b2")
 #' )

@@ -185,7 +185,7 @@ library(teal)
 
 app <- teal::init(
   data = teal_data(dataset("IRIS", x = iris)),
-  modules = root_modules(
+  modules = modules(
     module(
       label = "sample module",
       server = function(input, output, session, datasets) {
@@ -460,7 +460,7 @@ create_teal_app <- function(title, id) {
     data = cdisc_data(
       cdisc_dataset("ADSL", ADSL, code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl")
     ),
-    modules = root_modules(
+    modules = modules(
       module(
         "data source",
         server = function(input, output, session, datasets) NULL,

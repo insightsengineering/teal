@@ -18,7 +18,6 @@ reference:
       - init
       - module
       - modules
-      - root_modules
       - srv_teal_with_splash
       - ui_teal_with_splash
   - title: Teal Filtering and Selecting
@@ -163,6 +162,9 @@ reference:
     desc: Support for logging in a `teal` application
     contents:
       - register_logger
+  - title: Deprecated
+    contents:
+      - root_modules
   - title: Superseded
     contents:
       - cdse_connection
