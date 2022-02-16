@@ -67,8 +67,8 @@ TealDataset <- R6::R6Class( # nolint
       private$.dim <- c(private$.nrow, private$.ncol)
       private$.colnames <- colnames(x)
       private$.rownames <- rownames(x)
-      private$.col_labels <- rtables::var_labels(x)
-      private$.row_labels <- c() # not yet defined in rtables
+      private$.col_labels <- get_variable_labels(x, fill = FALSE)
+      private$.row_labels <- c()
 
       private$set_dataname(dataname)
       self$set_vars(vars)

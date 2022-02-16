@@ -38,7 +38,7 @@ test_that("set filter state", {
 })
 
 test_that("get_varlabels returns the column labels of the passed dataset", {
-  rtables::var_labels(adsl) <- colnames(adsl)
+  variable_labels(adsl) <- colnames(adsl)
   on.exit(ds$set_dataset(dataset("ADSL", adsl)))
 
   data <- adsl
@@ -46,12 +46,12 @@ test_that("get_varlabels returns the column labels of the passed dataset", {
   ds$set_dataset(dataset("ADSL", data))
   expect_equal(
     ds$get_varlabels("ADSL"),
-    rtables::var_labels(adsl)
+    get_variable_labels(adsl, fill = FALSE)
   )
   # only some variables
   expect_equal(
     ds$get_varlabels("ADSL", variables = c("sex")),
-    rtables::var_labels(adsl)[c("sex")]
+    get_variable_labels(adsl, fill = FALSE)[c("sex")]
   )
 })
 

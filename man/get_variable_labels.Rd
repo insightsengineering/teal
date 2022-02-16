@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_label.R
 \name{get_variable_labels}
 \alias{get_variable_labels}
-\title{Function that extract column labels from CDISC dataset}
+\title{Extracts column labels from CDISC dataset}
 \usage{
 get_variable_labels(data, columns = NULL, fill = TRUE)
 }
@@ -12,8 +12,8 @@ get_variable_labels(data, columns = NULL, fill = TRUE)
 \item{columns}{optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all
 columns are being used.}
 
-\item{fill}{boolean in case the \code{label} attribute does not exist if
-\code{TRUE} the variable names is returned, otherwise \code{NA}}
+\item{fill}{(\code{logical(1)}) if \code{TRUE}, the function will return variable names for columns with non-existent labels;
+otherwise will return \code{NA} for them}
 }
 \value{
 labels of the columns
