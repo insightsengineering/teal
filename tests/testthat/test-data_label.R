@@ -37,7 +37,7 @@ testthat::test_that("get_labels' column labels is a vector of column names when 
 testthat::test_that("variable_labels<- assigns the labels to the columns", {
   custom_iris <- iris
   variable_labels(custom_iris) <- colnames(custom_iris)
-  testthat::expect_equal(get_variable_labels(custom_iris, fill = FALSE), stats::setNames(nm = colnames(custom_iris)))
+  testthat::expect_equal(variable_labels(custom_iris, fill = FALSE), stats::setNames(nm = colnames(custom_iris)))
 })
 
 testthat::test_that("get_labels' column_labels is a named vector of the labels of the passed data.frame", {

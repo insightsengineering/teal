@@ -45,10 +45,10 @@ library(scda)
 
 ADSL <- synthetic_cdisc_data("latest")$adsl
 ADTTE <- synthetic_cdisc_data("latest")$adtte
-choices1 <- choices_labeled(names(ADSL), get_variable_labels(ADSL, fill = FALSE))
+choices1 <- choices_labeled(names(ADSL), variable_labels(ADSL, fill = FALSE))
 choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 # if only a subset of variables are needed, use subset argument
-choices3 <- choices_labeled(names(ADSL), get_variable_labels(ADSL, fill = FALSE), subset = c("ARMCD", "ARM"))
+choices3 <- choices_labeled(names(ADSL), variable_labels(ADSL, fill = FALSE), subset = c("ARMCD", "ARM"))
 \dontrun{
 shinyApp(
   ui = fluidPage(

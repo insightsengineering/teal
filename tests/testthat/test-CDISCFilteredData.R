@@ -46,12 +46,12 @@ test_that("get_varlabels returns the column labels of the passed dataset", {
   ds$set_dataset(dataset("ADSL", data))
   expect_equal(
     ds$get_varlabels("ADSL"),
-    get_variable_labels(adsl, fill = FALSE)
+    variable_labels(adsl, fill = FALSE)
   )
   # only some variables
   expect_equal(
     ds$get_varlabels("ADSL", variables = c("sex")),
-    get_variable_labels(adsl, fill = FALSE)[c("sex")]
+    variable_labels(adsl, fill = FALSE)[c("sex")]
   )
 })
 

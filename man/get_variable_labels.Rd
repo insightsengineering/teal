@@ -19,17 +19,5 @@ otherwise will return \code{NA} for them}
 labels of the columns
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-}
-\examples{
-library(scda)
-ADSL <- synthetic_cdisc_data("latest")$adsl
-
-get_variable_labels(ADSL)
-get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1"))
-get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "xyz"))
-
-ADSL$NEW_COL <- 1
-get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"))
-get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"), fill = FALSE)
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 }
