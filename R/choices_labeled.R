@@ -24,10 +24,10 @@
 #'
 #' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADTTE <- synthetic_cdisc_data("latest")$adtte
-#' choices1 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL))
+#' choices1 <- choices_labeled(names(ADSL), variable_labels(ADSL, fill = FALSE))
 #' choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 #' # if only a subset of variables are needed, use subset argument
-#' choices3 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL), subset = c("ARMCD", "ARM"))
+#' choices3 <- choices_labeled(names(ADSL), variable_labels(ADSL, fill = FALSE), subset = c("ARMCD", "ARM"))
 #' \dontrun{
 #' shinyApp(
 #'   ui = fluidPage(
@@ -135,7 +135,7 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #' of the `data` argument. This is an optional argument, which allows to identify variables
 #' associated with the primary key and display the appropriate icon for them in the
 #' [optionalSelectInput] widget.
-#' @inheritParams rtables::var_labels
+#' @inheritParams get_labels
 #'
 #' @return named character vector with additional attributes or `delayed_data` object
 #'
@@ -222,14 +222,14 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE, key =
   res <- if ("" %in% subset) {
     choices_labeled(
       choices = c("", names(data)),
-      labels = c("", unname(get_variable_labels(data))),
+      labels = c("", unname(variable_labels(data, fill = fill))),
       subset = subset,
       types = c("", var_types)
     )
   } else {
     choices_labeled(
       choices = names(data),
-      labels = unname(get_variable_labels(data)),
+      labels = unname(variable_labels(data, fill = fill)),
       subset = subset,
       types = var_types
     )

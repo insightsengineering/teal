@@ -340,7 +340,7 @@ testthat::test_that("csv_dataset_connector attritubes", {
     RACE = c("sth1|sth2", "sth", "sth"),
     stringsAsFactors = FALSE
   )
-  rtables::var_labels(ADSL_ns) <- letters[1:4] # nolint
+  variable_labels(ADSL_ns) <- letters[1:4] # nolint
   temp_file_csv <- tempfile(fileext = ".csv")
   write.table(ADSL_ns, file = temp_file_csv, row.names = FALSE, sep = ",")
 
@@ -357,7 +357,7 @@ testthat::test_that("csv_dataset_connector attritubes", {
   testthat::expect_null(attributes(data[[1]])$label)
 
   # we should use mutate_dataset
-  data <- (x %>% mutate_dataset("rtables::var_labels(ADSL) <- letters[1:4]"))$get_raw_data()
+  data <- (x %>% mutate_dataset("variable_labels(ADSL) <- letters[1:4]"))$get_raw_data()
   testthat::expect_identical(attributes(data[[1]])$label, "a")
 })
 
@@ -473,7 +473,7 @@ testthat::test_that("fun_cdisc_dataset_connector", {
     )
     x$w <- as.numeric(rnorm(40, 0, 1))
     x$ww <- as.numeric(rnorm(40, 0, 1))
-    rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+    variable_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
     x
   }
 
@@ -490,7 +490,7 @@ testthat::test_that("fun_cdisc_dataset_connector", {
     )
     x$w <- as.numeric(rnorm(40, 0, 1))
     x$ww <- as.numeric(rnorm(40, 0, 1))
-    rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+    variable_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
     x
   }
 
