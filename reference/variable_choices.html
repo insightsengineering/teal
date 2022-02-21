@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9006</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -116,8 +107,8 @@ If <code>function</code>, then this function is used to determine the possible c
 In this case, the function must take only single argument "data" and return a character vector.
 See examples for more details.</p></dd>
 <dt>fill</dt>
-<dd><p>boolean in case the <code>label</code> attribute does not exist if
-<code>TRUE</code> the variable names is returned, otherwise <code>NA</code></p></dd>
+<dd><p>(<code>logical(1)</code>) if <code>TRUE</code>, the function will return variable names for columns with non-existent labels;
+otherwise will return <code>NA</code> for them</p></dd>
 <dt>key</dt>
 <dd><p>(<code>character</code>) vector with names of the variables, which are part of the primary key
 of the <code>data</code> argument. This is an optional argument, which allows to identify variables
@@ -301,7 +292,7 @@ associated with the primary key and display the appropriate icon for them in the
 <span class="r-out co"><span class="r-pr">#&gt;</span>   idx &lt;- vapply(data, is.factor, logical(1))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   return(names(data)[idx])</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x563aa368f130&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558740b4e308&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ key</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 </code></pre></div>

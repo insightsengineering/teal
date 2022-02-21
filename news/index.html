@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9006</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -82,21 +73,23 @@ Other releases
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.10.1.9005" id="teal-01019005">teal 0.10.1.9005<a class="anchor" aria-label="anchor" href="#teal-01019005"></a></h2>
+<h2 class="page-header" data-toc-text="0.10.1.9006" id="teal-01019006">teal 0.10.1.9006<a class="anchor" aria-label="anchor" href="#teal-01019006"></a></h2>
 <div class="section level4">
-<h4 id="bug-fixes-0-10-1-9005">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1-9005"></a></h4>
+<h4 id="bug-fixes-0-10-1-9006">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1-9006"></a></h4>
 <ul><li>
 <code>get_call()</code> function of <code>CallableFunction</code> now returns call with namespace included.</li>
 <li>Deprecated <code>root_modules</code> function, users should use <code>modules</code> directly inside <code>init</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="breaking-changes-0-10-1-9005">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-1-9005"></a></h4>
+<h4 id="breaking-changes-0-10-1-9006">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-1-9006"></a></h4>
 <ul><li>Due to deprecation of <code>root_modules</code> any <code>label</code> argument to <code>modules</code> must be explicitly named. For example <code>modules("lab", mod1, mod2)</code> should be replaced with <code>modules(label = "lab", mod1, mod2)</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="miscellaneous-0-10-1-9005">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1-9005"></a></h4>
+<h4 id="miscellaneous-0-10-1-9006">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1-9006"></a></h4>
 <ul><li>New argument <code>ordered</code> in the <code><a href="../reference/select_spec.html">select_spec()</a></code> to flag whether order of the selection should be tracked.</li>
 <li>Minor changes to internals of <code>teal</code>: main module panel now has fixed shiny name <code>root</code> and the active tab is named <code>active_tab</code> not <code>Active_tab</code>.</li>
+<li>Replaced the deprecated <code><a href="https://roche.github.io/rtables/reference/var_labels.html" class="external-link">rtables::var_labels</a></code> calls with a new function <code><a href="../reference/variable_labels.html">teal::variable_labels</a></code>.</li>
+<li>Removed <code>rtables</code> dependency from the package.</li>
 </ul></div>
 </div>
     <div class="section level2">

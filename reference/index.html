@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9006</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -138,10 +129,6 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
           <p><code><a href="filter_spec.html">filter_spec()</a></code> </p>
         </td>
         <td><p>Data extract filter specification</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_variable_labels.html">get_variable_labels()</a></code> </p>
-        </td>
-        <td><p>Function that extract column labels from CDISC dataset</p></td>
       </tr><tr><td>
           <p><code><a href="select_spec.html">select_spec()</a></code> <code><a href="select_spec.html">select_spec.delayed_data()</a></code> <code><a href="select_spec.html">select_spec.default()</a></code> </p>
         </td>
@@ -403,9 +390,13 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
         </td>
         <td><p>S3 generic for creating an information summary about the duplicate key values in a dataset</p></td>
       </tr><tr><td>
+          <p><code><a href="get_variable_labels.html">get_variable_labels()</a></code> </p>
+        </td>
+        <td><p>Extracts column labels from a dataset</p></td>
+      </tr><tr><td>
           <p><code><a href="get_labels.html">get_labels()</a></code> </p>
         </td>
-        <td><p>Function that extract labels from CDISC dataset</p></td>
+        <td><p>Extracts dataset and variable labels from a dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="join_key.html">join_key()</a></code> </p>
         </td>
@@ -434,6 +425,14 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
           <p><code><a href="split_by_sep.html">split_by_sep()</a></code> </p>
         </td>
         <td><p>Split by separator</p></td>
+      </tr><tr><td>
+          <p><code><a href="variable_labels.html">variable_labels()</a></code> </p>
+        </td>
+        <td><p>Extracts column labels from a dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="variable_labels-set.html">`variable_labels&lt;-`()</a></code> </p>
+        </td>
+        <td><p>Sets the column labels of a <code>data.frame</code>.</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="for-developers">For Developers <a href="#for-developers" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Abstract and concrete classes used to build teal functionality.</p>
