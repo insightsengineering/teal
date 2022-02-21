@@ -11,7 +11,7 @@
 * New argument `ordered` in the `select_spec()` to flag whether order of the selection should be tracked.
 * Minor changes to internals of `teal`: main module panel now has fixed shiny name `root` and the active tab is named `active_tab` not `Active_tab`.
 * Replaced the deprecated `rtables::var_labels` calls with a new function `teal::variable_labels`.
-* Removed the `rtables` dependency from the package.
+* Removed `rtables` dependency from the package.
 
 # teal 0.10.1
 ### Breaking changes
