@@ -18,7 +18,7 @@ FilterState object for factor or character variable"><!-- mathjax --><script src
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9008</span>
       </span>
     </div>
 
@@ -54,15 +54,6 @@ FilterState object for factor or character variable"><!-- mathjax --><script src
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -105,6 +96,7 @@ making it possible to pass any object coercible to <code>character</code> to thi
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
 <ul><li><p><a href="#method-new"><code>ChoicesFilterState$new()</code></a></p></li>
+<li><p><a href="#method-is_any_filtered"><code>ChoicesFilterState$is_any_filtered()</code></a></p></li>
 <li><p><a href="#method-get_call"><code>ChoicesFilterState$get_call()</code></a></p></li>
 <li><p><a href="#method-ui"><code>ChoicesFilterState$ui()</code></a></p></li>
 <li><p><a href="#method-server"><code>ChoicesFilterState$server()</code></a></p></li>
@@ -169,18 +161,30 @@ whether condition calls should be prefixed by dataname. Possible values:</p><ul>
 </dl><p></p></div>
 </div>
 
+</div><p></p><hr><a id="method-is_any_filtered"></a><div class="section">
+<h3 id="method-is-any-filtered-">Method <code>is_any_filtered()</code><a class="anchor" aria-label="anchor" href="#method-is-any-filtered-"></a></h3>
+<p>Answers the question of whether the current settings and values selected actually filters out any values.</p><div class="section">
+<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">ChoicesFilterState</span><span class="op">$</span><span class="fu">is_any_filtered</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
+<p>logical scalar</p>
+</div>
+
 </div><p></p><hr><a id="method-get_call"></a><div class="section">
 <h3 id="method-get-call-">Method <code>get_call()</code><a class="anchor" aria-label="anchor" href="#method-get-call-"></a></h3>
 <p>Returns reproducible condition call for current selection.
 For this class returned call looks like
 <code>&lt;varname&gt; %in%  c(&lt;values selected&gt;)</code> with
 optional <code>is.na(&lt;varname&gt;)</code>.</p><div class="section">
-<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
+<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">ChoicesFilterState</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
+<h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
 <p>(<code>call</code>)</p>
 </div>
 
@@ -189,7 +193,7 @@ optional <code>is.na(&lt;varname&gt;)</code>.</p><div class="section">
 <p>UI Module for <code>ChoicesFilterState</code>.
 This UI element contains available choices selection and
 checkbox whether to keep or not keep the <code>NA</code> values.</p><div class="section">
-<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">ChoicesFilterState</span><span class="op">$</span><span class="fu">ui</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -206,7 +210,7 @@ id of shiny element</p></dd>
 </div><p></p><hr><a id="method-server"></a><div class="section">
 <h3 id="method-server-">Method <code>server()</code><a class="anchor" aria-label="anchor" href="#method-server-"></a></h3>
 <p>Server module</p><div class="section">
-<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">ChoicesFilterState</span><span class="op">$</span><span class="fu">server</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -220,14 +224,14 @@ an ID string that corresponds with the ID used to call the module's UI function.
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
+<h4 id="returns-2">Returns<a class="anchor" aria-label="anchor" href="#returns-2"></a></h4>
 <p><code>moduleServer</code> function which returns <code>NULL</code></p>
 </div>
 
 </div><p></p><hr><a id="method-set_state"></a><div class="section">
 <h3 id="method-set-state-">Method <code><a href="set_state.html">set_state()</a></code><a class="anchor" aria-label="anchor" href="#method-set-state-"></a></h3>
 <p>Set state</p><div class="section">
-<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">ChoicesFilterState</span><span class="op">$</span><span class="fu">set_state</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -246,7 +250,7 @@ contains fields relevant for a specific class</p><ul><li><p><code>selected</code
 </div><p></p><hr><a id="method-set_state_reactive"></a><div class="section">
 <h3 id="method-set-state-reactive-">Method <code>set_state_reactive()</code><a class="anchor" aria-label="anchor" href="#method-set-state-reactive-"></a></h3>
 <p>Set state when using <code>set_filter_state</code></p><div class="section">
-<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">ChoicesFilterState</span><span class="op">$</span><span class="fu">set_state_reactive</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -265,7 +269,7 @@ contains fields relevant for a specific class</p><ul><li><p><code>selected</code
 </div><p></p><hr><a id="method-set_selected"></a><div class="section">
 <h3 id="method-set-selected-">Method <code>set_selected()</code><a class="anchor" aria-label="anchor" href="#method-set-selected-"></a></h3>
 <p>Sets the selected values of this <code>ChoicesFilterState</code>.</p><div class="section">
-<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">ChoicesFilterState</span><span class="op">$</span><span class="fu">set_selected</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -279,7 +283,7 @@ Must not contain NA values.</p></dd>
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-2">Returns<a class="anchor" aria-label="anchor" href="#returns-2"></a></h4>
+<h4 id="returns-3">Returns<a class="anchor" aria-label="anchor" href="#returns-3"></a></h4>
 <p>invisibly <code>NULL</code></p>
 </div>
 <div class="section">
@@ -292,7 +296,7 @@ Must not contain NA values.</p></dd>
 </div><p></p><hr><a id="method-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">ChoicesFilterState</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -311,7 +315,7 @@ Must not contain NA values.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">filter_state</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="init_filter_state.html">init_filter_state</a></span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">filter_state</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va">ChoicesFilterState</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">LETTERS</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
 <span class="r-in">  varname <span class="op">=</span> <span class="st">"x"</span>,</span>
 <span class="r-in">  input_dataname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="st">"data"</span><span class="op">)</span>,</span>
