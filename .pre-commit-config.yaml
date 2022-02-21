@@ -6,7 +6,7 @@ default_language_version:
   python: python3
 repos:
   - repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.2.2.9006
+    rev: v0.2.2.9009
     hooks:
       - id: style-files
         name: Style code with `styler`
@@ -82,7 +82,7 @@ repos:
         name: Sort inst/WORDLIST
         files: "inst/WORDLIST$"
   - repo: https://github.com/lorenzwalthert/gitignore-tidy
-    rev: bb80136de68e7fe844cd0397f0088f469845d258
+    rev: d3e947d61fba8c6adde2707d3baa6ae36b989d5b
     hooks:
       - id: tidy-gitignore
         name: Tidy .gitignore
