@@ -2,12 +2,12 @@
 % Please edit documentation in R/data_label.R
 \name{variable_labels}
 \alias{variable_labels}
-\title{Extracts column labels from a CDISC dataset.}
+\title{Extracts column labels from a dataset.}
 \usage{
 variable_labels(data, columns = NULL, fill = TRUE)
 }
 \arguments{
-\item{data}{(\code{data.frame}) any CDISC data set}
+\item{data}{(\code{data.frame}) the dataset}
 
 \item{columns}{optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all
 columns are being used.}
@@ -21,16 +21,18 @@ labels of the columns
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
+\details{
+The variable labels are extracted from the \code{label} attribute of the columns. See the example
+to see a way to set a label in a way this function can retrieve it.
+}
 \examples{
-library(scda)
-ADSL <- synthetic_cdisc_data("latest")$adsl
+custom_iris <- iris
+variable_labels(iris)[1] <- "A test label"
+variable_labels(iris, fill = TRUE)
+variable_labels(iris, columns = colnames(custom_iris)[1:3])
 
-variable_labels(ADSL)
-variable_labels(ADSL, c("AGE", "RACE", "BMRKR1"))
-variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "xyz"))
-
-ADSL$NEW_COL <- 1
-variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"))
-variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"), fill = FALSE)
+# It's possible to set the labels manually
+attr(custom_iris[[1]], "label") <- "A new test label"
+variable_labels(custom_iris)
 
 }

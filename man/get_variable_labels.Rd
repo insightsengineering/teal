@@ -2,12 +2,12 @@
 % Please edit documentation in R/data_label.R
 \name{get_variable_labels}
 \alias{get_variable_labels}
-\title{Extracts column labels from CDISC dataset}
+\title{Extracts column labels from a dataset}
 \usage{
 get_variable_labels(data, columns = NULL, fill = TRUE)
 }
 \arguments{
-\item{data}{(\code{data.frame}) any CDISC data set}
+\item{data}{(\code{data.frame}) the dataset}
 
 \item{columns}{optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all
 columns are being used.}

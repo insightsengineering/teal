@@ -102,7 +102,7 @@ get_labels <- function(data, fill = TRUE) {
       if (!checkmate::test_string(label, na.ok = TRUE)) {
         stop("label for variable ", colname, " is not a character string")
       }
-      as.vector(label)
+      as.vector(label) # because label might be a named vector
     }
   }, data, colnames(data))
   column_labels <- unlist(column_labels, recursive = FALSE, use.names = TRUE)
@@ -110,11 +110,11 @@ get_labels <- function(data, fill = TRUE) {
   list("dataset_label" = data_label(data), "column_labels" = column_labels)
 }
 
-#' Extracts column labels from CDISC dataset
+#' Extracts column labels from a dataset
 #'
 #' @description `r lifecycle::badge("superseded")`
 #'
-#' @param data (\code{data.frame}) any CDISC data set
+#' @param data (\code{data.frame}) the dataset
 #' @param columns optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all
 #'   columns are being used.
 #' @inheritParams get_labels
@@ -130,29 +130,16 @@ get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
     with = "variable_labels()",
     details = "get_variable_labels() is superseded and will be removed in future releases."
   )
-  lifecycle::signal_stage()
-  stopifnot(is.data.frame(data))
-  checkmate::assert_character(columns, min.len = 1, null.ok = TRUE, any.missing = FALSE)
-  checkmate::assert_flag(fill)
-  if (is.null(columns)) {
-    columns <- colnames(data)
-  }
-  labels <- as.list(get_labels(data, fill = fill)$column_labels)
-  # convert NULL into NA_character for not-existing column
-  vapply(columns, FUN.VALUE = character(1), FUN = function(x) {
-    if (is.null(labels[[x]])) {
-      NA_character_
-    } else {
-      labels[[x]]
-    }
-  })
+  variable_labels(data, columns, fill)
 }
 
-#' Extracts column labels from a CDISC dataset.
+#' Extracts column labels from a dataset.
 #'
 #' @description `r lifecycle::badge("stable")`
+#' @details The variable labels are extracted from the `label` attribute of the columns. See the example
+#' to see a way to set a label in a way this function can retrieve it.
 #'
-#' @param data (\code{data.frame}) any CDISC data set
+#' @param data (\code{data.frame}) the dataset
 #' @param columns optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all
 #'   columns are being used.
 #' @inheritParams get_labels
@@ -162,19 +149,17 @@ get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
 #' @export
 #'
 #' @examples
-#' library(scda)
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
+#' custom_iris <- iris
+#' variable_labels(iris)[1] <- "A test label"
+#' variable_labels(iris, fill = TRUE)
+#' variable_labels(iris, columns = colnames(custom_iris)[1:3])
 #'
-#' variable_labels(ADSL)
-#' variable_labels(ADSL, c("AGE", "RACE", "BMRKR1"))
-#' variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "xyz"))
-#'
-#' ADSL$NEW_COL <- 1
-#' variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"))
-#' variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"), fill = FALSE)
+#' # It's possible to set the labels manually
+#' attr(custom_iris[[1]], "label") <- "A new test label"
+#' variable_labels(custom_iris)
 #'
 variable_labels <- function(data, columns = NULL, fill = TRUE) {
-  stopifnot(is.data.frame(data))
+  checkmate::assert_data_frame(data)
   checkmate::assert_character(columns, min.len = 1, null.ok = TRUE, any.missing = FALSE)
   checkmate::assert_flag(fill)
   if (is.null(columns)) {
@@ -191,7 +176,7 @@ variable_labels <- function(data, columns = NULL, fill = TRUE) {
   })
 }
 
-#' Sets column labels of a `data.frame`.
+#' Sets the column labels of a `data.frame`.
 #'
 #' @param x (`data.frame`) object with columns
 #' @param value (`charater`) labels

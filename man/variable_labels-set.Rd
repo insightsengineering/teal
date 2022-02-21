@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_label.R
 \name{variable_labels<-}
 \alias{variable_labels<-}
-\title{Sets column labels of a \code{data.frame}.}
+\title{Sets the column labels of a \code{data.frame}.}
 \usage{
 variable_labels(x) <- value
 }
@@ -15,7 +15,7 @@ variable_labels(x) <- value
 \code{x}
 }
 \description{
-Sets column labels of a \code{data.frame}.
+Sets the column labels of a \code{data.frame}.
 }
 \examples{
 variable_labels(iris) <- colnames(iris)
