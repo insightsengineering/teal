@@ -13,6 +13,7 @@
 * Minor changes to internals of `teal`: main module panel now has fixed shiny name `root` and the active tab is named `active_tab` not `Active_tab`.
 * Replaced the deprecated `rtables::var_labels` calls with a new function `teal::variable_labels`.
 * Removed `rtables` dependency from the package.
+* Added `is_any_filtered` method to all `FilterState` classes to detect if selected values actually filters out any data. This is used to decide if an explicit filter statement is added to the call.
 
 # teal 0.10.1
 ### Breaking changes

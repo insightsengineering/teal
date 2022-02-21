@@ -34,3 +34,24 @@ testthat::test_that("get_state returns a list identical to set_state input", {
   filter_state$set_state(state)
   testthat::expect_identical(isolate(filter_state$get_state()), state)
 })
+
+testthat::test_that(
+  "EmptyFilterState$is_any_filtered returns FALSE when keep_na is TRUE and returns TRUE when keep_na is FALSE",
+  code = {
+    filter_state <- teal:::EmptyFilterState$new(
+      rep(NA, 10),
+      varname = "x",
+      input_dataname = as.name("data"),
+      extract_type = character(0)
+    )
+    isolate(filter_state$set_keep_na(TRUE))
+    testthat::expect_false(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_keep_na(FALSE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+  }
+)

@@ -832,6 +832,17 @@ EmptyFilterState <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Answers the question of whether the current settings and values selected actually filters out any values.
+    #' @return logical scalar
+    is_any_filtered = function() {
+      if (isTRUE(self$get_keep_na())) {
+        FALSE
+      } else {
+        TRUE
+      }
+    },
+
+    #' @description
     #' Returns reproducible condition call for current selection relevant
     #' for selected variable type.
     #' Method is using internal reactive values which makes it reactive
@@ -978,7 +989,6 @@ LogicalFilterState <- R6::R6Class( # nolint
 
       choices <- as.logical(names(tbl))
       names(choices) <- sprintf("%s (%s)", choices, tbl)
-
       private$set_choices(as.list(choices))
       self$set_selected(unname(choices)[1])
       private$histogram_data <- data.frame(
@@ -989,6 +999,22 @@ LogicalFilterState <- R6::R6Class( # nolint
       invisible(self)
     },
 
+    #' @description
+    #' Answers the question of whether the current settings and values selected actually filters out any values.
+    #' @return logical scalar
+    is_any_filtered = function() {
+      if (!isTRUE(self$get_keep_na()) && private$na_count > 0) {
+        TRUE
+      } else if (all(private$histogram_data$y > 0)) {
+        TRUE
+      } else if (self$get_selected() == FALSE && "FALSE (0)" %in% private$histogram_data$x) {
+        TRUE
+      } else if (self$get_selected() == TRUE && "TRUE (0)" %in% private$histogram_data$x) {
+        TRUE
+      } else {
+        FALSE
+      }
+    },
 
     #' @description
     #' Returns reproducible condition call for current selection.
@@ -1243,6 +1269,21 @@ RangeFilterState <- R6::R6Class( # nolint
       private$keep_inf_reactive <- reactiveVal(FALSE)
 
       return(invisible(self))
+    },
+
+    #' @description
+    #' Answers the question of whether the current settings and values selected actually filters out any values.
+    #' @return logical scalar
+    is_any_filtered = function() {
+      if (!setequal(self$get_selected(), private$choices)) {
+        TRUE
+      } else if (!isTRUE(self$get_keep_inf()) && private$inf_count > 0) {
+        TRUE
+      } else if (!isTRUE(self$get_keep_na()) && private$na_count > 0) {
+        TRUE
+      } else {
+        FALSE
+      }
     },
 
     #' @description
@@ -1641,7 +1682,7 @@ RangeFilterState <- R6::R6Class( # nolint
 #'
 #'
 #' @examples
-#' filter_state <- teal:::init_filter_state(
+#' filter_state <- teal:::ChoicesFilterState$new(
 #'   c(LETTERS, NA),
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
@@ -1705,6 +1746,19 @@ ChoicesFilterState <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Answers the question of whether the current settings and values selected actually filters out any values.
+    #' @return logical scalar
+    is_any_filtered = function() {
+      if (!setequal(self$get_selected(), private$choices)) {
+        TRUE
+      } else if (!isTRUE(self$get_keep_na()) && private$na_count > 0) {
+        TRUE
+      } else {
+        FALSE
+      }
+    },
+
+    #' @description
     #' Returns reproducible condition call for current selection.
     #' For this class returned call looks like
     #' `<varname> %in%  c(<values selected>)` with
@@ -1720,7 +1774,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
 
       filter_call
     },
-
 
     #' @description
     #' UI Module for `ChoicesFilterState`.
@@ -1998,6 +2051,19 @@ DateFilterState <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Answers the question of whether the current settings and values selected actually filters out any values.
+    #' @return logical scalar
+    is_any_filtered = function() {
+      if (!setequal(self$get_selected(), private$choices)) {
+        TRUE
+      } else if (!isTRUE(self$get_keep_na()) && private$na_count > 0) {
+        TRUE
+      } else {
+        FALSE
+      }
+    },
+
+    #' @description
     #' Returns reproducible condition call for current selection.
     #' For this class returned call looks like
     #' `<varname> >= <min value> & <varname> <= <max value>` with
@@ -2221,7 +2287,7 @@ DateFilterState <- R6::R6Class( # nolint
 #'
 #'
 #' @examples
-#' filter_state <- teal:::init_filter_state(
+#' filter_state <- teal:::DatetimeFilterState$new(
 #'   c(Sys.time() + seq(0, by = 3600, length.out = 10), NA),
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
@@ -2280,6 +2346,19 @@ DatetimeFilterState <- R6::R6Class( # nolint
       }
 
       return(invisible(self))
+    },
+
+    #' @description
+    #' Answers the question of whether the current settings and values selected actually filters out any values.
+    #' @return logical scalar
+    is_any_filtered = function() {
+      if (!setequal(self$get_selected(), private$choices)) {
+        TRUE
+      } else if (!isTRUE(self$get_keep_na()) && private$na_count > 0) {
+        TRUE
+      } else {
+        FALSE
+      }
     },
 
     #' @description

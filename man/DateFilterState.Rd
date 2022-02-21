@@ -45,6 +45,7 @@ filter$set_selected(c(date + 1, date + 2))
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{DateFilterState$new()}}
+\item \href{#method-is_any_filtered}{\code{DateFilterState$is_any_filtered()}}
 \item \href{#method-get_call}{\code{DateFilterState$get_call()}}
 \item \href{#method-ui}{\code{DateFilterState$ui()}}
 \item \href{#method-server}{\code{DateFilterState$server()}}
@@ -110,6 +111,19 @@ whether condition calls should be prefixed by dataname. Possible values:
 }}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_any_filtered"></a>}}
+\if{latex}{\out{\hypertarget{method-is_any_filtered}{}}}
+\subsection{Method \code{is_any_filtered()}}{
+Answers the question of whether the current settings and values selected actually filters out any values.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DateFilterState$is_any_filtered()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+logical scalar
 }
 }
 \if{html}{\out{<hr>}}

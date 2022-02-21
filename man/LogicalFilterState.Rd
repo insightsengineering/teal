@@ -44,6 +44,7 @@ filter$set_selected(TRUE)
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{LogicalFilterState$new()}}
+\item \href{#method-is_any_filtered}{\code{LogicalFilterState$is_any_filtered()}}
 \item \href{#method-get_call}{\code{LogicalFilterState$get_call()}}
 \item \href{#method-ui}{\code{LogicalFilterState$ui()}}
 \item \href{#method-server}{\code{LogicalFilterState$server()}}
@@ -109,6 +110,19 @@ whether condition calls should be prefixed by dataname. Possible values:
 }}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_any_filtered"></a>}}
+\if{latex}{\out{\hypertarget{method-is_any_filtered}{}}}
+\subsection{Method \code{is_any_filtered()}}{
+Answers the question of whether the current settings and values selected actually filters out any values.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LogicalFilterState$is_any_filtered()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+logical scalar
 }
 }
 \if{html}{\out{<hr>}}

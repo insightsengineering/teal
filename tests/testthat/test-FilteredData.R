@@ -156,7 +156,7 @@ testthat::test_that(
         filter = quote(
           mtcars_FILTERED <- dplyr::filter( # nolint
             mtcars,
-            cyl %in% c("4", "6") & (disp >= 71.1 & disp <= 472)
+            cyl %in% c("4", "6")
           )
         )
       )
@@ -322,7 +322,7 @@ testthat::test_that(
         filter = quote(
           mtcars_FILTERED <- dplyr::filter( # nolint
             mtcars,
-            cyl %in% c("4", "6") & (disp >= 71.1 & disp <= 472)
+            cyl %in% c("4", "6")
           )
         )
       )

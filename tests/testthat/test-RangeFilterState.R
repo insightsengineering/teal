@@ -198,3 +198,60 @@ testthat::test_that("set_keep_inf_reactive throws error if input is not logical"
   testthat::expect_error(filter_state$set_keep_inf_reactive("TRUE"))
   testthat::expect_error(filter_state$set_keep_inf_reactive(1))
 })
+
+testthat::test_that(
+  "RangeFilterState$is_any_filtered works properly when NA and Inf are present in data",
+  code = {
+    filter_state <- teal:::RangeFilterState$new(
+      c(NA, Inf, seq(1:10)),
+      varname = "x",
+      input_dataname = as.name("data"),
+      extract_type = character(0)
+    )
+
+    isolate(filter_state$set_keep_na(FALSE))
+    isolate(filter_state$set_keep_inf(TRUE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_keep_na(FALSE))
+    isolate(filter_state$set_keep_inf(FALSE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_keep_na(TRUE))
+    isolate(filter_state$set_keep_inf(TRUE))
+    testthat::expect_false(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_keep_na(TRUE))
+    isolate(filter_state$set_keep_inf(FALSE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(c(2, 10)))
+    isolate(filter_state$set_keep_na(TRUE))
+    isolate(filter_state$set_keep_inf(TRUE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(c(1, 9)))
+    isolate(filter_state$set_keep_na(TRUE))
+    isolate(filter_state$set_keep_inf(TRUE))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_selected(c(1, 10)))
+    isolate(filter_state$set_keep_na(TRUE))
+    isolate(filter_state$set_keep_inf(TRUE))
+    testthat::expect_false(
+      isolate(filter_state$is_any_filtered())
+    )
+  }
+)
