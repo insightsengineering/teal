@@ -27,7 +27,7 @@ to see a way to set a label in a way this function can retrieve it.
 }
 \examples{
 custom_iris <- iris
-variable_labels(iris)[1] <- "A test label"
+variable_labels(iris) <- paste("Test label no", seq(from = 1, length.out = ncol(custom_iris)))
 variable_labels(iris, fill = TRUE)
 variable_labels(iris, columns = colnames(custom_iris)[1:3])
 
