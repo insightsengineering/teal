@@ -2,9 +2,6 @@ current_repo:
   repo: insightsengineering/teal
   host: https://github.com
 upstream_repos:
-  Roche/rtables:
-    repo: Roche/rtables
-    host: https://github.com
   insightsengineering/scda:
     repo: insightsengineering/scda
     host: https://github.com
