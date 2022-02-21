@@ -3,6 +3,7 @@
 ### Bug fixes
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
 * Deprecated `root_modules` function, users should use `modules` directly inside `init`.
+* Add counts to filtering categorical variables bar charts in the filtering panel in cases where they were missing. 
 
 ### Breaking changes
 * Due to deprecation of `root_modules` any `label` argument to `modules` must be explicitly named. For example `modules("lab", mod1, mod2)` should be replaced with `modules(label = "lab", mod1, mod2)`.

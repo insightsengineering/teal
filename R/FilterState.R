@@ -1685,18 +1685,14 @@ ChoicesFilterState <- R6::R6Class( # nolint
       )
       super$initialize(x, varname, varlabel, input_dataname, extract_type)
 
-      add_counts <- if (!is(x, "factor")) {
+      if (!is(x, "factor")) {
         x <- factor(x, levels = as.character(sort(unique(x))))
-        TRUE
-      } else {
-        FALSE
       }
+
       x <- droplevels(x)
       choices <- levels(x)
+      names(choices) <- sprintf("%s (%s)", choices, tabulate(x))
 
-      if (add_counts) {
-        names(choices) <- sprintf("%s (%s)", choices, tabulate(x))
-      }
 
       private$set_choices(as.list(choices))
       self$set_selected(unname(choices))
