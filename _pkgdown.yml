@@ -31,7 +31,6 @@ reference:
       - choices_selected
       - data_extract_spec
       - filter_spec
-      - get_variable_labels
       - select_spec
       - value_choices
       - variable_choices
@@ -125,6 +124,7 @@ reference:
       - get_key_duplicates
       - get_key_duplicates.data.frame
       - get_key_duplicates.TealDataset
+      - get_variable_labels
       - get_labels
       - join_key
       - join_keys
@@ -133,6 +133,8 @@ reference:
       - python_code
       - read_script
       - split_by_sep
+      - variable_labels
+      - variable_labels<-
   - title: For Developers
     subtitle: R6 Classes
     desc: Abstract and concrete classes used to build teal functionality.

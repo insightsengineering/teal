@@ -66,61 +66,100 @@ get_cdisc_keys <- function(dataname) {
   }
 }
 
-#' Function that extract labels from CDISC dataset
+#' Extracts dataset and variable labels from a dataset.
 #'
 #' @description `r lifecycle::badge("stable")`
 #'
-#' @param data (\code{data.frame}) table to extract the labels from
-#' @inheritParams rtables::var_labels
+#' @param data (`data.frame`) table to extract the labels from
+#' @param fill (`logical(1)`) if `TRUE`, the function will return variable names for columns with non-existent labels;
+#'   otherwise will return `NA` for them
 #'
-#' @return labels
+#' @return `list` with two keys: `dataset_labels` and `column_labels`
 #'
 #' @export
 #'
-#'
 #' @examples
 #' library(scda)
+#' iris_with_labels <- iris
+#' attributes(iris_with_labels)$label <- "Custom iris dataset with labels"
+#' attributes(iris_with_labels["Sepal.Length"])$label <- stats::setNames(object = "Sepal Length", "Sepal.Length")
+#' get_labels(iris_with_labels, fill = TRUE)
+#' get_labels(iris_with_labels, fill = FALSE)
 #'
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
-#'
-#' get_labels(ADSL)
 get_labels <- function(data, fill = TRUE) {
   stopifnot(is.data.frame(data))
   checkmate::assert_flag(fill)
 
-  cdisc_labels <- list(
-    "dataset_label" = data_label(data),
-    "column_labels" = rtables::var_labels(data, fill = fill)
-  )
-  return(cdisc_labels)
+  column_labels <- Map(function(col, colname) {
+    label <- attr(col, "label")
+    if (is.null(label)) {
+      if (fill) {
+        colname
+      } else {
+        NA_character_
+      }
+    } else {
+      if (!checkmate::test_string(label, na.ok = TRUE)) {
+        stop("label for variable ", colname, " is not a character string")
+      }
+      as.vector(label) # because label might be a named vector
+    }
+  }, data, colnames(data))
+  column_labels <- unlist(column_labels, recursive = FALSE, use.names = TRUE)
+
+  list("dataset_label" = data_label(data), "column_labels" = column_labels)
 }
 
-#' Function that extract column labels from CDISC dataset
+#' Extracts column labels from a dataset
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description `r lifecycle::badge("superseded")`
 #'
-#' @param data (\code{data.frame}) any CDISC data set
+#' @param data (\code{data.frame}) the dataset
 #' @param columns optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all
 #'   columns are being used.
-#' @inheritParams rtables::var_labels
+#' @inheritParams get_labels
+#'
+#' @return labels of the columns
+#'
+#' @export
+#'
+get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
+  lifecycle::deprecate_soft(
+    when = "0.10.2",
+    what = "get_variable_labels()",
+    with = "variable_labels()",
+    details = "get_variable_labels() is superseded and will be removed in future releases."
+  )
+  variable_labels(data, columns, fill)
+}
+
+#' Extracts column labels from a dataset.
+#'
+#' @description `r lifecycle::badge("stable")`
+#' @details The variable labels are extracted from the `label` attribute of the columns. See the example
+#' to see a way to set a label in a way this function can retrieve it.
+#'
+#' @param data (\code{data.frame}) the dataset
+#' @param columns optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all
+#'   columns are being used.
+#' @inheritParams get_labels
 #'
 #' @return labels of the columns
 #'
 #' @export
 #'
 #' @examples
-#' library(scda)
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
+#' custom_iris <- iris
+#' variable_labels(iris) <- paste("Test label no", seq(from = 1, length.out = ncol(custom_iris)))
+#' variable_labels(iris, fill = TRUE)
+#' variable_labels(iris, columns = colnames(custom_iris)[1:3])
 #'
-#' get_variable_labels(ADSL)
-#' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1"))
-#' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "xyz"))
+#' # It's possible to set the labels manually
+#' attr(custom_iris[[1]], "label") <- "A new test label"
+#' variable_labels(custom_iris)
 #'
-#' ADSL$NEW_COL <- 1
-#' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"))
-#' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"), fill = FALSE)
-get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
-  stopifnot(is.data.frame(data))
+variable_labels <- function(data, columns = NULL, fill = TRUE) {
+  checkmate::assert_data_frame(data)
   checkmate::assert_character(columns, min.len = 1, null.ok = TRUE, any.missing = FALSE)
   checkmate::assert_flag(fill)
   if (is.null(columns)) {
@@ -135,4 +174,26 @@ get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
       labels[[x]]
     }
   })
+}
+
+#' Sets the column labels of a `data.frame`.
+#'
+#' @param x (`data.frame`) object with columns
+#' @param value (`charater`) labels
+#' @return `x`
+#'
+#' @export
+#'
+#' @examples
+#' variable_labels(iris) <- colnames(iris)
+#'
+`variable_labels<-` <- function(x, value) {
+  checkmate::assert_data_frame(x)
+  checkmate::assert_character(value, len = ncol(x))
+
+  for (i in seq_along(x)) {
+    attr(x[[i]], "label") <- value[i]
+  }
+
+  x
 }
