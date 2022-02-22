@@ -192,7 +192,7 @@ variable_labels <- function(data, columns = NULL, fill = TRUE) {
   checkmate::assert_character(value, len = ncol(x))
 
   for (i in seq_along(x)) {
-    attr(x[[i]], "label") <- value[i]
+    if (!is.na(value[i])) attr(x[[i]], "label") <- value[i]
   }
 
   x

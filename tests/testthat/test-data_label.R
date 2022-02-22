@@ -47,3 +47,11 @@ testthat::test_that("get_labels' column_labels is a named vector of the labels o
   attr(test[[2]], "label") <- test_labels[2]
   testthat::expect_equal(get_labels(test)$column_labels, stats::setNames(object = test_labels, nm = colnames(test)))
 })
+
+testthat::test_that("variable_labels<- does not assign NA labels", {
+  test_iris <- iris
+  duplicate_test_iris <- test_iris
+
+  variable_labels(test_iris) <- variable_labels(test_iris, fill = FALSE)
+  testthat::expect_equal(test_iris, duplicate_test_iris)
+})
