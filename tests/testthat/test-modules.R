@@ -263,6 +263,11 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
   testthat::expect_identical(test_module$ui_args, NULL)
 })
 
+testthat::test_that("modules gives error if no arguments other than label are used", {
+  testthat::expect_error(modules(label = "my label"))
+  testthat::expect_error(modules()) # using default label argument
+})
+
 testthat::test_that("modules requires label argument to be a string ", {
   test_module <- module(
     label = "label",
@@ -308,15 +313,22 @@ testthat::test_that("modules accept multiple teal_module and teal_modules object
     ui = ui_fun1,
     filters = ""
   )
-  test_modules <- modules("label", test_module)
+  test_modules <- modules(label = "label", test_module)
 
   testthat::expect_error(modules(label = "label", test_module, test_modules), NA)
 })
 
 testthat::test_that("modules does not accept objects other than teal_module(s) in ...", {
   testthat::expect_error(
+    modules(label = "label", 5),
+    "the following types: \\{teal_module,teal_modules\\}",
+  )
+})
+
+testthat::test_that("modules does not accept objects other than teal_module(s) in ...", {
+  testthat::expect_error(
     modules(label = "label", "a"),
-    "not all arguments are of class teal_module or teal_modules"
+    "The only character argument to modules\\(\\) must be 'label'",
   )
 })
 
@@ -327,7 +339,7 @@ testthat::test_that("modules returns teal_modules object with label and children
     ui = ui_fun1,
     filters = ""
   )
-  out <- modules("label2", test_module)
+  out <- modules(label = "label2", test_module)
   testthat::expect_s3_class(out, "teal_modules")
   testthat::expect_named(out, c("label", "children"))
 })
@@ -339,12 +351,24 @@ testthat::test_that("modules returns children as list with list named after labe
     ui = ui_fun1,
     filters = ""
   )
-  test_modules <- modules("modules", test_module)
-  out <- modules("tabs", test_module, test_modules)$children
+  test_modules <- modules(label = "modules", test_module)
+  out <- modules(label = "tabs", test_module, test_modules)$children
   testthat::expect_named(out, c("module", "modules"))
   testthat::expect_identical(out$module, test_module)
   testthat::expect_identical(out$modules, test_modules)
 })
+
+
+testthat::test_that("modules returns useful error message if label argument not explicitly named", {
+  test_module <- module(
+    label = "module",
+    server = module_server_fun,
+    ui = ui_fun1,
+    filters = ""
+  )
+  expect_error(modules("module", test_module), "The only character argument to modules\\(\\) must be 'label'")
+})
+
 
 testthat::test_that("modules returns children as list with unique names if labels are duplicated", {
   test_module <- module(
@@ -353,19 +377,25 @@ testthat::test_that("modules returns children as list with unique names if label
     ui = ui_fun1,
     filters = ""
   )
-  test_modules <- modules("module", test_module)
-  out <- modules("tabs", test_module, test_modules)$children
+  test_modules <- modules(label = "module", test_module)
+  out <- modules(label = "tabs", test_module, test_modules)$children
   testthat::expect_named(out, c("module", "module_1"))
   testthat::expect_identical(out$module, test_module)
   testthat::expect_identical(out$module_1, test_modules)
 })
 
 
-testthat::test_that("root_modules needs at least one argument", {
-  expect_error(root_modules(), "You must provide at least one module.")
+testthat::test_that("root_modules is deprecated", {
+  lifecycle::expect_deprecated(root_modules(test_module <- module(
+    label = "label",
+    server = module_server_fun,
+    ui = ui_fun1,
+    filters = ""
+  )))
 })
 
 testthat::test_that("root_modules returns teal_modules object with label='root'", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   test_module <- module(
     label = "label",
     server = module_server_fun,

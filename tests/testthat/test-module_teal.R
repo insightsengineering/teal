@@ -22,7 +22,7 @@ testthat::test_that("srv_teal fails when raw_data is not reactive", {
       args = list(
         id = "test",
         raw_data = data,
-        modules = root_modules(test_module1)
+        modules = modules(test_module1)
       ),
       expr = NULL
     ),
@@ -36,7 +36,7 @@ testthat::test_that("srv_teal initializes the data when raw_data changes", {
     args = list(
       id = "test",
       raw_data = reactiveVal(NULL),
-      modules = root_modules(test_module1)
+      modules = modules(test_module1)
     ),
     expr = {
       testthat::expect_null(datasets_reactive())
@@ -55,7 +55,7 @@ testthat::test_that("srv_teal initialized FilteredData based on the raw_data inp
     args = list(
       id = "test",
       raw_data = reactiveVal(data),
-      modules = root_modules(test_module1)
+      modules = modules(test_module1)
     ),
     expr = {
       testthat::expect_identical(datasets_reactive()$datanames(), filtered_data$datanames())

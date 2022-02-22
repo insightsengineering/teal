@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.10.1.9005
+Version: 0.10.1.9009
 Date: 2022-01-27
 Authors@R: c(
     person("NEST", , , "basel.nestcicd@roche.com", role = c("aut", "cre")),
@@ -39,7 +39,6 @@ Imports:
     MultiAssayExperiment,
     R6,
     rlang,
-    rtables (>= 0.4.1),
     shinyjs,
     shinyWidgets (>= 0.5.0),
     stats,

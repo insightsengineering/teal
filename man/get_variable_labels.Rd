@@ -2,34 +2,22 @@
 % Please edit documentation in R/data_label.R
 \name{get_variable_labels}
 \alias{get_variable_labels}
-\title{Function that extract column labels from CDISC dataset}
+\title{Extracts column labels from a dataset}
 \usage{
 get_variable_labels(data, columns = NULL, fill = TRUE)
 }
 \arguments{
-\item{data}{(\code{data.frame}) any CDISC data set}
+\item{data}{(\code{data.frame}) the dataset}
 
 \item{columns}{optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all
 columns are being used.}
 
-\item{fill}{boolean in case the \code{label} attribute does not exist if
-\code{TRUE} the variable names is returned, otherwise \code{NA}}
+\item{fill}{(\code{logical(1)}) if \code{TRUE}, the function will return variable names for columns with non-existent labels;
+otherwise will return \code{NA} for them}
 }
 \value{
 labels of the columns
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-}
-\examples{
-library(scda)
-ADSL <- synthetic_cdisc_data("latest")$adsl
-
-get_variable_labels(ADSL)
-get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1"))
-get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "xyz"))
-
-ADSL$NEW_COL <- 1
-get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"))
-get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"), fill = FALSE)
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 }

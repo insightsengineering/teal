@@ -174,3 +174,40 @@ testthat::test_that("set_keep_na_reactive throws error if input is not logical",
   testthat::expect_error(filter_state$set_keep_na_reactive("TRUE"))
   testthat::expect_error(filter_state$set_keep_na_reactive(1))
 })
+
+testthat::test_that(
+  "DatetimeFilterState$is_any_filtered works properly when NA is present in data",
+  code = {
+    datetimes <- Sys.time() + seq(0, by = 3600, length.out = 10)
+    filter_state <- teal:::DatetimeFilterState$new(
+      c(datetimes, NA),
+      varname = "x",
+      input_dataname = as.name("data"),
+      extract_type = character(0)
+    )
+
+    isolate(filter_state$set_keep_na(FALSE))
+    isolate(filter_state$set_selected(c(datetimes[1], datetimes[10])))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_keep_na(TRUE))
+    isolate(filter_state$set_selected(c(datetimes[1], datetimes[10])))
+    testthat::expect_false(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_keep_na(TRUE))
+    isolate(filter_state$set_selected(c(datetimes[2], datetimes[10])))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+
+    isolate(filter_state$set_keep_na(TRUE))
+    isolate(filter_state$set_selected(c(datetimes[1], datetimes[9])))
+    testthat::expect_true(
+      isolate(filter_state$is_any_filtered())
+    )
+  }
+)

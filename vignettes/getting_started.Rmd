@@ -44,7 +44,7 @@ app <- teal::init(
     cdisc_dataset("ADRS", adrs, code = "ADRS <- synthetic_cdisc_data(\"latest\")$adrs"),
     cdisc_dataset("ADTTE", adtte, code = "ADTTE <- synthetic_cdisc_data(\"latest\")$adtte")
   ),
-  modules = root_modules(
+  modules = modules(
     teal.modules.general::tm_data_table("Data Table"),
     teal.modules.general::tm_variable_browser("Variable Browser"),
     teal.modules.clinical::tm_t_summary(
@@ -122,8 +122,8 @@ is the `modules` arguments. Modules define the elements displayed with tabs in
 the *`Navbar`* and their corresponding content in the *Tabs Content* box. A
 `modules` object can contain `module` and `modules` objects.
 
-We start the tree with the `root_modules` function which is a wrapper around
-`modules` that sets the `label` argument to `"root"`.
+We start the tree with the `modules` function without a label argument which sets
+the `label` argument to `"root"`.
 
 The [shiny modules][shiny_modules] are specified in the `module` function with
 the `server` and `ui` argument. Both, `module` and `modules` are documented

@@ -16,20 +16,22 @@ testthat::test_that("The constructor initializes one queue", {
 })
 
 testthat::test_that("get_call returns a call filtering a matrix with numeric values", {
+  test <- matrix(c(1, 2, 3, 4), nrow = 4, ncol = 1, dimnames = list(c(), c("a")))
+
   filter_states <- MatrixFilterStates$new(
     input_dataname = "test",
     output_dataname = "output",
     datalabel = "test"
   )
   filter_state <- RangeFilterState$new(
-    x = c(1, 2, 3),
+    x = test,
     varname = "a",
     input_dataname = as.name("test"),
     extract_type = "matrix"
   )
-  filter_states$queue_push(x = filter_state, queue_index = 1, element_id = "test")
+  isolate(filter_state$set_selected(c(1, 3)))
 
-  test <- matrix(c(1, 2, 3, 4), nrow = 4, ncol = 1, dimnames = list(c(), c("a")))
+  filter_states$queue_push(x = filter_state, queue_index = 1, element_id = "test")
 
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(output, test[1:3, 1, drop = FALSE])

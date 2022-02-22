@@ -45,6 +45,7 @@ filter$set_selected(c(2, 3))
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RangeFilterState$new()}}
+\item \href{#method-is_any_filtered}{\code{RangeFilterState$is_any_filtered()}}
 \item \href{#method-get_call}{\code{RangeFilterState$get_call()}}
 \item \href{#method-get_keep_inf}{\code{RangeFilterState$get_keep_inf()}}
 \item \href{#method-get_state}{\code{RangeFilterState$get_state()}}
@@ -113,6 +114,19 @@ whether condition calls should be prefixed by dataname. Possible values:
 }}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_any_filtered"></a>}}
+\if{latex}{\out{\hypertarget{method-is_any_filtered}{}}}
+\subsection{Method \code{is_any_filtered()}}{
+Answers the question of whether the current settings and values selected actually filters out any values.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$is_any_filtered()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+logical scalar
 }
 }
 \if{html}{\out{<hr>}}

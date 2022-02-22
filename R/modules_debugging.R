@@ -31,7 +31,7 @@
 #'     ),
 #'     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 #'   ),
-#'   modules = root_modules(
+#'   modules = modules(
 #'     teal:::filter_calls_module()
 #'   ),
 #'   header = "Simple teal app"

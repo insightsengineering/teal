@@ -55,7 +55,7 @@ testthat::test_that("get_varlabels returns an array of NAs when a TealDataset ha
 
 testthat::test_that("get_varlabels returns array's labels when a TealDataset has variable labels", {
   mock_iris <- head(iris)
-  rtables::var_labels(mock_iris) <- rep("test", ncol(mock_iris))
+  variable_labels(mock_iris) <- rep("test", ncol(mock_iris))
   filtered_data <- FilteredData$new()
   filtered_data$set_dataset(TealDataset$new("iris", mock_iris))
   testthat::expect_equal(
@@ -156,7 +156,7 @@ testthat::test_that(
         filter = quote(
           mtcars_FILTERED <- dplyr::filter( # nolint
             mtcars,
-            cyl %in% c("4", "6") & (disp >= 71.1 & disp <= 472)
+            cyl %in% c("4", "6")
           )
         )
       )
@@ -322,7 +322,7 @@ testthat::test_that(
         filter = quote(
           mtcars_FILTERED <- dplyr::filter( # nolint
             mtcars,
-            cyl %in% c("4", "6") & (disp >= 71.1 & disp <= 472)
+            cyl %in% c("4", "6")
           )
         )
       )

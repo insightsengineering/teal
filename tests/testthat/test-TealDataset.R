@@ -1,7 +1,7 @@
 ## TealDataset =====
 testthat::test_that("TealDataset basics", {
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
-  rtables::var_labels(x) <- c("X", "Y")
+  variable_labels(x) <- c("X", "Y")
 
   testthat::expect_silent({
     test_ds <- TealDataset$new(
