@@ -88,23 +88,21 @@ TealData <- R6::R6Class( # nolint
       }
       checkmate::assert_class(join_keys, "JoinKeys")
 
-      left_ds <- list()
-      right_ds <- list()
+      duplicate_pairs <- list()
       for (i in seq_along(join_keys$get())) {
         # setting A->B and B->A is a duplicate as mutate_join_keys sets keys mutually
         for (j in seq(i, length(join_keys$get()))) {
           dataset_1 <- names(join_keys$get())[[i]]
           dataset_2 <- names(join_keys$get())[[j]]
 
-          if (dataset_1 %in% right_ds && dataset_2 %in% left_ds) {
+          if (paste(dataset_2, dataset_1) %in% duplicate_pairs) {
             next
           }
 
           keys <- join_keys$get()[[dataset_1]][[dataset_2]]
           if (!is.null(keys)) {
             self$mutate_join_keys(dataset_1, dataset_2, keys)
-            left_ds <- append(left_ds, dataset_1)
-            right_ds <- append(right_ds, dataset_2)
+            duplicate_pairs <- append(duplicate_pairs, paste(dataset_1, dataset_2))
           }
         }
       }
@@ -168,17 +166,15 @@ TealData <- R6::R6Class( # nolint
     #' @return (`JoinKeys`)
     get_join_keys = function() {
       res <- join_keys()
-      left_ds <- list()
-      right_ds <- list()
+      duplicate_pairs <- list()
       for (dat_obj in self$get_items()) {
         list_keys <- dat_obj$get_join_keys()$get()[[1]]
         for (dat_name in names(list_keys)) {
-          if (dat_obj$get_dataname() %in% right_ds && dat_name %in% left_ds) {
+          if (paste(dat_name, dat_obj$get_dataname()) %in% duplicate_pairs) {
             next
           }
           res$mutate(dat_obj$get_dataname(), dat_name, list_keys[[dat_name]])
-          left_ds <- append(left_ds, dat_obj$get_dataname())
-          right_ds <- append(right_ds, dat_name)
+          duplicate_pairs <- append(duplicate_pairs, paste(dat_obj$get_dataname(), dat_name))
         }
       }
       return(res)
