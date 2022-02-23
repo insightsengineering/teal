@@ -2,17 +2,19 @@
 
 *teal* is a shiny-based interactive exploration framework for analyzing data. `teal` applications require app developers to specify:
 
-- Data, which can be:
-  - CDISC data, commonly used for clinical trial reporting
-  - Independent datasets, for example from a `data.frame`
-  - Related datasets, for example a set of `data.frames` with key columns to enable data joins
-  - `MultiAssayExperiment` objects which are R data structures for representing and analyzing multi-omics experiments
-- `teal` modules detailing the analysis the application will perform - for example exploring outliers in the data, or visualizing the data in line plots.
-  Although the modules can be created from scratch, a large number of `teal` modules have been released and we recommend starting with modules found in the following packages:
-  - [`teal.modules.general`](https://github.com/insightsengineering/teal.modules.general): general modules for exploring relational/independent/CDISC data
-  - [`teal.modules.clinical`](https://github.com/insightsengineering/teal.modules.clinical): modules specific to CDISC data and clinical trial reporting
-  - [`teal.modules.hermes`](https://github.com/insightsengineering/teal.modules.hermes): modules for analyzing `MultiAssayExperiment` objects
-
+<!-- markdownlint-disable MD007 MD030 -->
+-   Data, which can be:
+    -    CDISC data, commonly used for clinical trial reporting
+    -    Independent datasets, for example from a `data.frame`
+    -    Related datasets, for example a set of `data.frames` with key columns to enable data joins
+    -    `MultiAssayExperiment` objects which are R data structures for representing and analyzing multi-omics experiments
+-   `teal` modules:
+    -   `teal modules` are shiny modules built within the `teal` framework that provide the details of the analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although the modules can be created from scratch, a large number of `teal` modules have been released and we recommend starting with modules found in the following packages:
+        -   [`teal.modules.general`](https://github.com/insightsengineering/teal.modules.general): general modules for exploring relational/independent/CDISC data
+        -   [`teal.modules.clinical`](https://github.com/insightsengineering/teal.modules.clinical): modules specific to CDISC data and clinical trial reporting
+        -   [`teal.modules.hermes`](https://github.com/insightsengineering/teal.modules.hermes): modules for analyzing `MultiAssayExperiment` objects
+        
+<!-- markdownlint-enable MD007 MD030 -->
 With the 2 components above, the `teal` package then provides:
 
 - The ability to "pull" data into applications at runtime - for example from external data stores which require authentication
