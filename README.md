@@ -13,7 +13,7 @@
   - [`teal.modules.clinical`](https://github.com/insightsengineering/teal.modules.clinical): modules specific to CDISC data and clinical trial reporting
   - [`teal.modules.hermes`](https://github.com/insightsengineering/teal.modules.hermes): modules for analyzing `MultiAssayExperiment` objects
 
-The `teal` package then provides:
+With the 2 components above, the `teal` package then provides:
 
 - The ability to "pull" data into applications at runtime - for example from external data stores which require authentication
 - A standardized method to allow application users to filter their data before it is passed into analysis modules  
