@@ -159,10 +159,17 @@ TealData <- R6::R6Class( # nolint
     #' @return (`JoinKeys`)
     get_join_keys = function() {
       res <- join_keys()
+      left_ds <- list()
+      right_ds <- list()
       for (dat_obj in self$get_items()) {
         list_keys <- dat_obj$get_join_keys()$get()[[1]]
         for (dat_name in names(list_keys)) {
+          if (dat_obj$get_dataname() %in% right_ds && dat_name %in% left_ds) {
+            next
+          }
           res$mutate(dat_obj$get_dataname(), dat_name, list_keys[[dat_name]])
+          left_ds <- append(left_ds, dat_obj$get_dataname())
+          right_ds <- append(right_ds, dat_name)
         }
       }
       return(res)
