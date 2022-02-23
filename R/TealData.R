@@ -358,12 +358,13 @@ TealData <- R6::R6Class( # nolint
         # all the checks below required data to be already pulled
         return(invisible(TRUE))
       }
+
+      # for performance, get_join_keys should be called once outside of any loop
+      join_keys <- self$get_join_keys()
+
       for (dataset in self$get_datasets()) {
         dataname <- get_dataname(dataset)
         dataset_colnames <- dataset$get_colnames()
-
-        # for performance, get_join_keys should be called once outside of any loop
-        join_keys <- self$get_join_keys()
 
         # expected columns in this dataset from JoinKeys specification
         join_key_cols <- unique(unlist(lapply(join_keys$get(dataname), names)))
