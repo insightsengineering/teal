@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9009</span>
       </span>
     </div>
 
@@ -72,15 +72,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -103,7 +94,8 @@ Other releases
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Developer Apps</h1>
-                        <h4 data-toc-skip class="author">Maximilian Mordig</h4>
+                        <h4 data-toc-skip class="author">Maximilian
+Mordig</h4>
             
             <h4 data-toc-skip class="date">18/06/2020</h4>
       
@@ -114,8 +106,12 @@ Other releases
 
     
     
-<p>This vignette provides apps for the developer to check that functionality still works. It uses debugging modules and these should not be deleted. Eventually, Shiny tests for these modules should be developed.</p>
-<p>We load the libraries and set relevant options. Be careful to load the development version of <code>teal</code> when developing.</p>
+<p>This vignette provides apps for the developer to check that
+functionality still works. It uses debugging modules and these should
+not be deleted. Eventually, Shiny tests for these modules should be
+developed.</p>
+<p>We load the libraries and set relevant options. Be careful to load
+the development version of <code>teal</code> when developing.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># execute the vignette as if it were executed interactively</span>
 <span class="co"># when you run KnitR from RStudio, it does not run the vignette interactively</span>
@@ -217,15 +213,20 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <div class="section level2">
 <h2 id="apps">Apps<a class="anchor" aria-label="anchor" href="#apps"></a>
 </h2>
-<p>Don’t forget to reload the app when you change code. The fastest is</p>
+<p>Don’t forget to reload the app when you change code. The fastest
+is</p>
 <pre><code><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="st">"../teal"</span><span class="op">)</span></code></pre>
 <p>or the keyboard shortcut <code>^ + Shift + L</code> on a Mac.</p>
-<p>We use <code>safeBookmarkableShinyApp</code> instead of <code>shinyApp</code> to allow bookmarking. It wraps the UI function into a function with one argument for the request object. We further wrap it to only execute it when the option is enabled.</p>
+<p>We use <code>safeBookmarkableShinyApp</code> instead of
+<code>shinyApp</code> to allow bookmarking. It wraps the UI function
+into a function with one argument for the request object. We further
+wrap it to only execute it when the option is enabled.</p>
 <p>You can execute these apps in any order.</p>
 <div class="section level3">
 <h3 id="main-debugging-app">Main Debugging App<a class="anchor" aria-label="anchor" href="#main-debugging-app"></a>
 </h3>
-<p>This is the main debugging app to check that the functionality still works after code changes:</p>
+<p>This is the main debugging app to check that the functionality still
+works after code changes:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
 
@@ -250,7 +251,14 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <div class="section level3">
 <h3 id="lazy-filtering-of-datasets">Lazy Filtering of Datasets<a class="anchor" aria-label="anchor" href="#lazy-filtering-of-datasets"></a>
 </h3>
-<p>The datasets are lazily filtered meaning that when they are not needed for the current tab (as specified with <code>active_datanames</code>), they will simply not be refiltered. You can check this by modifying the filters of <code>ADSL</code> in a tab without <code>ADAE</code>. Then, the console should print that <code>ADSL</code> is refiltered, but not <code>ADAE</code>. Other datasets the tab depends on like <code>ADLB</code> will be refiltered.</p>
+<p>The datasets are lazily filtered meaning that when they are not
+needed for the current tab (as specified with
+<code>active_datanames</code>), they will simply not be refiltered. You
+can check this by modifying the filters of <code>ADSL</code> in a tab
+without <code>ADAE</code>. Then, the console should print that
+<code>ADSL</code> is refiltered, but not <code>ADAE</code>. Other
+datasets the tab depends on like <code>ADLB</code> will be
+refiltered.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
@@ -276,7 +284,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <div class="section level3">
 <h3 id="app-with-delayed-data">App with Delayed Data<a class="anchor" aria-label="anchor" href="#app-with-delayed-data"></a>
 </h3>
-<p>This app tests that the app works with delayed data that is not available initially and loaded after the splash screen is submitted. Then, the splash UI is replaced by the main teal UI.</p>
+<p>This app tests that the app works with delayed data that is not
+available initially and loaded after the splash screen is submitted.
+Then, the splash UI is replaced by the main teal UI.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
@@ -300,7 +310,8 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <div class="section level3">
 <h3 id="nested-modules">Nested Modules<a class="anchor" aria-label="anchor" href="#nested-modules"></a>
 </h3>
-<p>This app shows nested modules and how the filters apply to them. Check the tab hierarchy <code>A1 -&gt; B1.3</code>.</p>
+<p>This app shows nested modules and how the filters apply to them.
+Check the tab hierarchy <code>A1 -&gt; B1.3</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
@@ -334,7 +345,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <div class="section level3">
 <h3 id="different-ways-to-specify-the-initial-filter-states">Different Ways to Specify the Initial Filter States<a class="anchor" aria-label="anchor" href="#different-ways-to-specify-the-initial-filter-states"></a>
 </h3>
-<p>We show different ways of how to specify the initial filter states. To show this, we generate fake data. We implicitly also check that the code works without the usual key <code>STUDYID</code>.</p>
+<p>We show different ways of how to specify the initial filter states.
+To show this, we generate fake data. We implicitly also check that the
+code works without the usual key <code>STUDYID</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fake_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
   USUBJID <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">9</span>,
@@ -376,7 +389,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <div class="section level3">
 <h3 id="dataset-not-provided-but-still-referred-to">Dataset Not Provided But Still Referred To<a class="anchor" aria-label="anchor" href="#dataset-not-provided-but-still-referred-to"></a>
 </h3>
-<p>This app shows what happens when a dataset, <code>ADAE</code>, is not provided, but still appears in the <code>active_datanames</code>. A warning is displayed to the console.</p>
+<p>This app shows what happens when a dataset, <code>ADAE</code>, is not
+provided, but still appears in the <code>active_datanames</code>. A
+warning is displayed to the console.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
@@ -395,7 +410,8 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <div class="section level3">
 <h3 id="apply-several-filters-at-once">Apply several filters at once<a class="anchor" aria-label="anchor" href="#apply-several-filters-at-once"></a>
 </h3>
-<p>This app checks that several filters can be applied at once. The logic is non-trivial. For instance, one can define a safety filter.</p>
+<p>This app checks that several filters can be applied at once. The
+logic is non-trivial. For instance, one can define a safety filter.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># dummy filter to show how several filters can be applied at once, not sensible</span>
 <span class="va">safety_filter</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
@@ -458,7 +474,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <div class="section level3">
 <h3 id="raw-app-with-hardly-anything">Raw App with Hardly Anything<a class="anchor" aria-label="anchor" href="#raw-app-with-hardly-anything"></a>
 </h3>
-<p>This app purely tests the modules, it only has one tab and two datasets. It can be used to check that all labels are preserved and shown in the UI.</p>
+<p>This app purely tests the modules, it only has one tab and two
+datasets. It can be used to check that all labels are preserved and
+shown in the UI.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
@@ -482,7 +500,9 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 <div class="section level3">
 <h3 id="app-with-independent-and-non-independent-data">App with Independent and Non-Independent Data<a class="anchor" aria-label="anchor" href="#app-with-independent-and-non-independent-data"></a>
 </h3>
-<p>This app shows how to incorporate independent data like <code>iris</code> and <code>mtcars</code> alongside some <code>CDISC</code> datasets.</p>
+<p>This app shows how to incorporate independent data like
+<code>iris</code> and <code>mtcars</code> alongside some
+<code>CDISC</code> datasets.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># construct a unique primary key</span>
 <span class="va">iris_d</span> <span class="op">&lt;-</span> <span class="va">iris</span>
@@ -526,12 +546,15 @@ ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski, Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama, Nikolas Burkoff, Maciej Nasinski, Roche.</p>
+<p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski,
+Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama,
+Nikolas Burkoff, Maciej Nasinski, Roche.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>

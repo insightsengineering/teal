@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9009</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -82,87 +73,170 @@ Other releases
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.10.1.9008" id="teal-01019008">teal 0.10.1.9008<a class="anchor" aria-label="anchor" href="#teal-01019008"></a></h2>
+<h2 class="page-header" data-toc-text="0.10.1.9009" id="teal-01019009">teal 0.10.1.9009<a class="anchor" aria-label="anchor" href="#teal-01019009"></a></h2>
 <div class="section level4">
-<h4 id="bug-fixes-0-10-1-9008">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1-9008"></a></h4>
+<h4 id="bug-fixes-0-10-1-9009">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1-9009"></a></h4>
 <ul><li>
-<code>get_call()</code> function of <code>CallableFunction</code> now returns call with namespace included.</li>
-<li>Deprecated <code>root_modules</code> function, users should use <code>modules</code> directly inside <code>init</code>.</li>
-<li>Add counts to filtering categorical variables bar charts in the filtering panel in cases where they were missing.</li>
+<code>get_call()</code> function of <code>CallableFunction</code>
+now returns call with namespace included.</li>
+<li>Deprecated <code>root_modules</code> function, users should use
+<code>modules</code> directly inside <code>init</code>.</li>
+<li>Add counts to filtering categorical variables bar charts in the
+filtering panel in cases where they were missing.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="breaking-changes-0-10-1-9008">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-1-9008"></a></h4>
-<ul><li>Due to deprecation of <code>root_modules</code> any <code>label</code> argument to <code>modules</code> must be explicitly named. For example <code>modules("lab", mod1, mod2)</code> should be replaced with <code>modules(label = "lab", mod1, mod2)</code>.</li>
+<h4 id="breaking-changes-0-10-1-9009">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-1-9009"></a></h4>
+<ul><li>Due to deprecation of <code>root_modules</code> any
+<code>label</code> argument to <code>modules</code> must be explicitly
+named. For example <code>modules("lab", mod1, mod2)</code> should be
+replaced with <code>modules(label = "lab", mod1, mod2)</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="miscellaneous-0-10-1-9008">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1-9008"></a></h4>
-<ul><li>New argument <code>ordered</code> in the <code><a href="../reference/select_spec.html">select_spec()</a></code> to flag whether order of the selection should be tracked.</li>
-<li>Minor changes to internals of <code>teal</code>: main module panel now has fixed shiny name <code>root</code> and the active tab is named <code>active_tab</code> not <code>Active_tab</code>.</li>
-<li>Replaced the deprecated <code><a href="https://roche.github.io/rtables/reference/var_labels.html" class="external-link">rtables::var_labels</a></code> calls with a new function <code><a href="../reference/variable_labels.html">teal::variable_labels</a></code>.</li>
+<h4 id="miscellaneous-0-10-1-9009">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1-9009"></a></h4>
+<ul><li>New argument <code>ordered</code> in the <code><a href="../reference/select_spec.html">select_spec()</a></code>
+to flag whether order of the selection should be tracked.</li>
+<li>Minor changes to internals of <code>teal</code>: main module panel
+now has fixed shiny name <code>root</code> and the active tab is named
+<code>active_tab</code> not <code>Active_tab</code>.</li>
+<li>Replaced the deprecated <code><a href="https://roche.github.io/rtables/reference/var_labels.html" class="external-link">rtables::var_labels</a></code> calls with
+a new function <code><a href="../reference/variable_labels.html">teal::variable_labels</a></code>.</li>
 <li>Removed <code>rtables</code> dependency from the package.</li>
-<li>Added <code>is_any_filtered</code> method to all <code>FilterState</code> classes to detect if selected values actually filters out any data. This is used to decide if an explicit filter statement is added to the call.</li>
+<li>Added <code>is_any_filtered</code> method to all
+<code>FilterState</code> classes to detect if selected values actually
+filters out any data. This is used to decide if an explicit filter
+statement is added to the call.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.10.1" id="teal-0101">teal 0.10.1<a class="anchor" aria-label="anchor" href="#teal-0101"></a></h2>
 <div class="section level4">
 <h4 id="breaking-changes-0-10-1">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-1"></a></h4>
-<ul><li>Changed the <code>HTML</code> identifiers of <code>teal</code> modules - now each nested module receives its own <code>shiny</code> namespace.</li>
-<li>Deprecated all functions related to connectors that have been moved to their own separate packages.</li>
-<li>Removed <code>raw_dataset</code>, <code>raw_dataset_connector</code>, <code>named_dataset</code>, <code>named_dataset_file</code>, <code>named_dataset_connector</code>, <code>relational_dataset</code>, <code>relational_dataset_file</code>, <code>relational_dataset_connector</code>, <code>key</code>, <code>as_cdisc</code>, <code>as_cdisc_relational</code>.</li>
-<li>Removed <code>rcd_connection</code> and <code>rcd_data</code>; <code>scda_dataset_connectors</code> can be passed into <code>cdisc_data</code> and <code>teal_data</code> directly.</li>
-<li>Replaced <code>rcd_dataset_connector</code> and <code>rcd_cdisc_dataset_connector</code> with <code>scda_dataset_connector</code> and <code>scda_cdisc_dataset_connector</code> respectively.</li>
-<li>Renamed <code>teal_show_js_log</code> option into <code>teal.show_js_log</code> to match options naming convention.</li>
-<li>Removed <code>%is_in%</code> and <code>stop_shiny</code> internal utility functions.</li>
+<ul><li>Changed the <code>HTML</code> identifiers of <code>teal</code>
+modules - now each nested module receives its own <code>shiny</code>
+namespace.</li>
+<li>Deprecated all functions related to connectors that have been moved
+to their own separate packages.</li>
+<li>Removed <code>raw_dataset</code>,
+<code>raw_dataset_connector</code>, <code>named_dataset</code>,
+<code>named_dataset_file</code>, <code>named_dataset_connector</code>,
+<code>relational_dataset</code>, <code>relational_dataset_file</code>,
+<code>relational_dataset_connector</code>, <code>key</code>,
+<code>as_cdisc</code>, <code>as_cdisc_relational</code>.</li>
+<li>Removed <code>rcd_connection</code> and <code>rcd_data</code>;
+<code>scda_dataset_connectors</code> can be passed into
+<code>cdisc_data</code> and <code>teal_data</code> directly.</li>
+<li>Replaced <code>rcd_dataset_connector</code> and
+<code>rcd_cdisc_dataset_connector</code> with
+<code>scda_dataset_connector</code> and
+<code>scda_cdisc_dataset_connector</code> respectively.</li>
+<li>Renamed <code>teal_show_js_log</code> option into
+<code>teal.show_js_log</code> to match options naming convention.</li>
+<li>Removed <code>%is_in%</code> and <code>stop_shiny</code> internal
+utility functions.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="new-features-0-10-1">New features<a class="anchor" aria-label="anchor" href="#new-features-0-10-1"></a></h4>
 <div class="section level5">
 <h5 id="logging-0-10-1">Logging<a class="anchor" aria-label="anchor" href="#logging-0-10-1"></a></h5>
-<ul><li>Added support for logging using the <code>logger</code> package.</li>
-<li>Added a new function <code>register_logger</code>, which registers a logger in a given namespace.</li>
-<li>Added trace and info levels log messages to the <code>teal</code> framework.</li>
-<li>Added <code>pid</code> and shiny session token into footnote so app developers can identify logs for apps.</li>
+<ul><li>Added support for logging using the <code>logger</code>
+package.</li>
+<li>Added a new function <code>register_logger</code>, which registers a
+logger in a given namespace.</li>
+<li>Added trace and info levels log messages to the <code>teal</code>
+framework.</li>
+<li>Added <code>pid</code> and shiny session token into footnote so app
+developers can identify logs for apps.</li>
 </ul></div>
 <div class="section level5">
 <h5 id="other-0-10-1">Other<a class="anchor" aria-label="anchor" href="#other-0-10-1"></a></h5>
-<ul><li><p>Added print methods to the <code>DatasetConnector</code>, <code>RelationalData</code>, <code>RelationalDataconnector</code> and <code>JoinKeys</code> classes and added input validation to the implementation of the print method that was already in the <code>Dataset</code> object.</p></li>
-<li><p>Added public facing constructor functions for <code>CDISCDataConnector</code>, <code>RelationalDataConnector</code>, and <code>DataConnection</code> classes.</p></li>
-<li><p>Modified <code>data_extract_spec</code> to allow both the <code>filter</code> and <code>select</code> parameters to be <code>NULL</code>, which results in the <code>data_extract_ui</code> acting as if a <code>filter_spec</code> with all variables as possible choices had been supplied as the <code>filter</code> argument and a <code>select_spec</code> with the <code>multiple</code> parameter set to <code>TRUE</code> had been supplied as the <code>select</code> argument.</p></li>
-<li><p>Added support of the full screen for a <code>module</code> when the <code>filters</code> argument is equal <code>NULL</code>.</p></li>
-<li><p>Added support for <code><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">shiny::moduleServer</a></code> passed to the <code>server</code> parameter of <code><a href="../reference/module.html">teal::module</a></code>.</p></li>
-<li><p>Added <code>teal.threshold_slider_vs_checkboxgroup</code> as an R option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.</p></li>
-<li><p>Extended the <code>FilteredData</code> API to allow managing filter states programmatically and not only from the UI of a <code>teal</code> application.</p></li>
-<li><p>Hid the buttons to remove filters from all datasets and each dataset when there are no active filters.</p></li>
-<li><p>Updated <code>init</code> to accept <code>RelationalData</code>, <code>data.frame</code>, <code>MultiAssayExperiment</code>, <code>Dataset</code>, <code>DatasetConnector</code>, <code>list</code> or a function returning a named list as data input.</p></li>
+<ul><li><p>Added print methods to the <code>DatasetConnector</code>,
+<code>RelationalData</code>, <code>RelationalDataconnector</code> and
+<code>JoinKeys</code> classes and added input validation to the
+implementation of the print method that was already in the
+<code>Dataset</code> object.</p></li>
+<li><p>Added public facing constructor functions for
+<code>CDISCDataConnector</code>, <code>RelationalDataConnector</code>,
+and <code>DataConnection</code> classes.</p></li>
+<li><p>Modified <code>data_extract_spec</code> to allow both the
+<code>filter</code> and <code>select</code> parameters to be
+<code>NULL</code>, which results in the <code>data_extract_ui</code>
+acting as if a <code>filter_spec</code> with all variables as possible
+choices had been supplied as the <code>filter</code> argument and a
+<code>select_spec</code> with the <code>multiple</code> parameter set to
+<code>TRUE</code> had been supplied as the <code>select</code>
+argument.</p></li>
+<li><p>Added support of the full screen for a <code>module</code> when
+the <code>filters</code> argument is equal <code>NULL</code>.</p></li>
+<li><p>Added support for <code><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">shiny::moduleServer</a></code> passed to the
+<code>server</code> parameter of <code><a href="../reference/module.html">teal::module</a></code>.</p></li>
+<li><p>Added <code>teal.threshold_slider_vs_checkboxgroup</code> as an R
+option: if a categorical variable has more than this number of unique
+values, the filter panel uses a drop-down select input instead of a
+checkbox group.</p></li>
+<li><p>Extended the <code>FilteredData</code> API to allow managing
+filter states programmatically and not only from the UI of a
+<code>teal</code> application.</p></li>
+<li><p>Hid the buttons to remove filters from all datasets and each
+dataset when there are no active filters.</p></li>
+<li><p>Updated <code>init</code> to accept <code>RelationalData</code>,
+<code>data.frame</code>, <code>MultiAssayExperiment</code>,
+<code>Dataset</code>, <code>DatasetConnector</code>, <code>list</code>
+or a function returning a named list as data input.</p></li>
 </ul></div>
 </div>
 <div class="section level4">
 <h4 id="bug-fixes-0-10-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1"></a></h4>
 <ul><li>
-<code>choices_selected</code> now correctly removes duplicates from the array passed to its <code>choices</code> parameter.</li>
-<li>Fixed call returned by <code>FilterState</code> in case of using <code><a href="http://waldronlab.io/MultiAssayExperiment/reference/subsetBy.html" class="external-link">MultiAssayExperiment::subsetByColData</a></code>. Now single condition for variable containing <code>NA</code> values is <code>!is.na(var) &amp; var == &lt;condition&gt;</code>.</li>
-<li>Fixed data loading of <code>DatasetConnector</code> being dependent on other <code>Dataset</code> or <code>DatasetConnector</code> objects.</li>
-<li>Fixed restoring a bookmarked filter state of <code>teal</code> application.</li>
-<li>Refactored <code>module_nested_tabs</code> to fix the issue with the filter panel not reacting to an input change in a nested module.</li>
+<code>choices_selected</code> now correctly removes duplicates from
+the array passed to its <code>choices</code> parameter.</li>
+<li>Fixed call returned by <code>FilterState</code> in case of using
+<code><a href="http://waldronlab.io/MultiAssayExperiment/reference/subsetBy.html" class="external-link">MultiAssayExperiment::subsetByColData</a></code>. Now single condition
+for variable containing <code>NA</code> values is
+<code>!is.na(var) &amp; var == &lt;condition&gt;</code>.</li>
+<li>Fixed data loading of <code>DatasetConnector</code> being dependent
+on other <code>Dataset</code> or <code>DatasetConnector</code>
+objects.</li>
+<li>Fixed restoring a bookmarked filter state of <code>teal</code>
+application.</li>
+<li>Refactored <code>module_nested_tabs</code> to fix the issue with the
+filter panel not reacting to an input change in a nested module.</li>
 <li>
-<code>updateOptionalSelectInput</code> no longer sets input to <code>NULL</code> when <code>logical</code> value is passed to <code>selected</code>.</li>
-<li>Fixed setting <code>JoinKeys</code> when key name between two <code>Dataset</code> object differs.</li>
-<li>Fixed printing of the <code>JavaScript</code> console logs to the <code>R</code> console when <code>teal.show_js_log = TRUE</code>.</li>
+<code>updateOptionalSelectInput</code> no longer sets input to
+<code>NULL</code> when <code>logical</code> value is passed to
+<code>selected</code>.</li>
+<li>Fixed setting <code>JoinKeys</code> when key name between two
+<code>Dataset</code> object differs.</li>
+<li>Fixed printing of the <code>JavaScript</code> console logs to the
+<code>R</code> console when <code>teal.show_js_log = TRUE</code>.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="miscellaneous-0-10-1">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1"></a></h4>
-<ul><li>Soft-deprecate <code><a href="../reference/mae_dataset.html">mae_dataset()</a></code> in favor of more general <code><a href="../reference/dataset.html">dataset()</a></code> constructor.</li>
-<li>Added a vignette describing the modifications to <code>teal</code> applications users can apply using <code>R</code> options.</li>
-<li>Added default values to the <code>label</code> argument of <code>select_spec</code> and <code>filter_spec</code>.</li>
-<li>Added validation to <code>FilteredDataset::get_data</code> to accept logical input only.</li>
-<li>Changed references to outdated functions of <code>teal.devel</code> in the documentation.</li>
-<li>Introduced a <code>Teal</code> prefix to all public <code>R6</code> classes to avoid name collisions with other packages.</li>
-<li>Removed dependency on <code>utils.nest</code> and replaced its functionality in <code>teal</code> with equivalents from the <code>checkmate</code> package and base <code>R</code>.</li>
-<li>Replaced the old <code>shiny</code> server functions of <code>DataConnection</code>, <code>RelationalDataConnector</code>, <code>DatasetConnector</code>, and <code>RelationalData</code> with the <code><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">shiny::moduleServer</a></code> equivalents.</li>
-<li>Running a <code>teal</code> application via <code>ui_teal_with_splash</code> and <code>srv_teal_with_splash</code> is now no longer recommended because it doesn’t support new features (e.g. logging, bookmarking). Use <code>init</code> instead.</li>
+<ul><li>Soft-deprecate <code><a href="../reference/mae_dataset.html">mae_dataset()</a></code> in favor of more general
+<code><a href="../reference/dataset.html">dataset()</a></code> constructor.</li>
+<li>Added a vignette describing the modifications to <code>teal</code>
+applications users can apply using <code>R</code> options.</li>
+<li>Added default values to the <code>label</code> argument of
+<code>select_spec</code> and <code>filter_spec</code>.</li>
+<li>Added validation to <code>FilteredDataset::get_data</code> to accept
+logical input only.</li>
+<li>Changed references to outdated functions of <code>teal.devel</code>
+in the documentation.</li>
+<li>Introduced a <code>Teal</code> prefix to all public <code>R6</code>
+classes to avoid name collisions with other packages.</li>
+<li>Removed dependency on <code>utils.nest</code> and replaced its
+functionality in <code>teal</code> with equivalents from the
+<code>checkmate</code> package and base <code>R</code>.</li>
+<li>Replaced the old <code>shiny</code> server functions of
+<code>DataConnection</code>, <code>RelationalDataConnector</code>,
+<code>DatasetConnector</code>, and <code>RelationalData</code> with the
+<code><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">shiny::moduleServer</a></code> equivalents.</li>
+<li>Running a <code>teal</code> application via
+<code>ui_teal_with_splash</code> and <code>srv_teal_with_splash</code>
+is now no longer recommended because it doesn’t support new features
+(e.g. logging, bookmarking). Use <code>init</code> instead.</li>
 <li>Updated the R version requirement to &gt;= 4.0.</li>
-<li>Updated the “filter panel collapse” icon to remove warnings when using <code>shiny</code> version &gt;= 1.7.</li>
+<li>Updated the “filter panel collapse” icon to remove warnings when
+using <code>shiny</code> version &gt;= 1.7.</li>
 <li>Removed some of the non-exported, debugging modules.</li>
 <li>Updated the footer tag style to be less visible.</li>
 </ul></div>
@@ -171,65 +245,115 @@ Other releases
 <h2 class="page-header" data-toc-text="0.10.0" id="teal-0100">teal 0.10.0<a class="anchor" aria-label="anchor" href="#teal-0100"></a></h2>
 <div class="section level4">
 <h4 id="new-features-0-10-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-10-0"></a></h4>
-<ul><li>Allow passing <code>MultiAssayExperiment</code> to the <code><a href="../reference/init.html">teal::init</a></code> using <code>mae_dataset</code> function or through the connectors.</li>
-<li>Refactored filter panel to use <code>MultiAssayExperiment</code> objects. Filters can be set on a subject level (<code>colData</code> of <code>MAE</code> object) and on a experiment level (<code>colData</code> and <code>rowData</code> of an assay).</li>
-<li>Added <code>cdse_dataset_connector</code> to create delayed data objects from <code>CDSE</code>.</li>
-<li>Added <code>datasetdb_dataset_connector</code> to create delayed data objects from <code>DataSetDB</code>.</li>
-<li>Added <code>ricepass_connection</code> to create delayed data objects from <code>entimICE</code> via <code>ricepass</code>.</li>
+<ul><li>Allow passing <code>MultiAssayExperiment</code> to the
+<code><a href="../reference/init.html">teal::init</a></code> using <code>mae_dataset</code> function or
+through the connectors.</li>
+<li>Refactored filter panel to use <code>MultiAssayExperiment</code>
+objects. Filters can be set on a subject level (<code>colData</code> of
+<code>MAE</code> object) and on a experiment level (<code>colData</code>
+and <code>rowData</code> of an assay).</li>
+<li>Added <code>cdse_dataset_connector</code> to create delayed data
+objects from <code>CDSE</code>.</li>
+<li>Added <code>datasetdb_dataset_connector</code> to create delayed
+data objects from <code>DataSetDB</code>.</li>
+<li>Added <code>ricepass_connection</code> to create delayed data
+objects from <code>entimICE</code> via <code>ricepass</code>.</li>
 <li>Refactor of the filter panel:
-<ul><li>Simplified setting of initial filter state without need to specify “choices” or “range” named list element depending on the variable class.</li>
+<ul><li>Simplified setting of initial filter state without need to specify
+“choices” or “range” named list element depending on the variable
+class.</li>
 <li>
-<code>Dataset</code> type determines an appearance and a functionality of related filters and filters summary.</li>
+<code>Dataset</code> type determines an appearance and a
+functionality of related filters and filters summary.</li>
 <li>
-<code>Datasets</code> are passed (by reference) from <code>DDL</code> to <code>FilteredData</code> skipping extracting data and their attributes.</li>
-<li>Redesigned variable filter labels in “Active Filter Variables” panel.</li>
+<code>Datasets</code> are passed (by reference) from
+<code>DDL</code> to <code>FilteredData</code> skipping extracting data
+and their attributes.</li>
+<li>Redesigned variable filter labels in “Active Filter Variables”
+panel.</li>
 <li>Fully testable server functions.</li>
 </ul></li>
 </ul></div>
 <div class="section level4">
 <h4 id="bug-fixes-0-10-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-0"></a></h4>
-<ul><li>Fixed the bug caused by calling <code>mutate_dataset</code> multiple times on the same <code>DatasetConnector</code> or <code>Dataset</code> object.</li>
-<li>Fixed a bug that caused the output of <code>get_code</code> function to not reproduce its raw data set.</li>
-<li>Changed <code>filter_spec</code> to allow no variable selection upon app initialization, where the first possible value was previously selected.</li>
+<ul><li>Fixed the bug caused by calling <code>mutate_dataset</code> multiple
+times on the same <code>DatasetConnector</code> or <code>Dataset</code>
+object.</li>
+<li>Fixed a bug that caused the output of <code>get_code</code> function
+to not reproduce its raw data set.</li>
+<li>Changed <code>filter_spec</code> to allow no variable selection upon
+app initialization, where the first possible value was previously
+selected.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="enhancements-0-10-0">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-10-0"></a></h4>
 <ul><li>
-<code>modules</code> parameter of <code><a href="../reference/init.html">teal::init</a></code> function can also receive a <code>list</code> except <code>root_modules</code> function call.</li>
-<li>Added <code>split</code> and <code>merge</code> methods to the <code>JoinKeys</code> object.</li>
-<li>Added <code><a href="../reference/all_choices.html">all_choices()</a></code> as a possible argument to the <code>selected</code> parameter of <code>filter_spec</code>, <code>select_spec</code> and <code>choices_selected</code> indicating that all choices are selected.</li>
-<li>The <code>append</code> method of a <code>CodeClass</code> object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.</li>
-<li>Implemented delayed functionality to the mutate method of the <code>Dataset</code> and <code>DatasetConnector</code> objects.</li>
-<li>Modified <code>teal_data</code> to return a <code>CDISCData</code> object whenever any of its arguments is a type of <code>CDISCData</code> object.</li>
-<li>Updated filters to show both levels of a logical variable TRUE/FALSE even if one is missing from the original array.</li>
+<code>modules</code> parameter of <code><a href="../reference/init.html">teal::init</a></code> function
+can also receive a <code>list</code> except <code>root_modules</code>
+function call.</li>
+<li>Added <code>split</code> and <code>merge</code> methods to the
+<code>JoinKeys</code> object.</li>
+<li>Added <code><a href="../reference/all_choices.html">all_choices()</a></code> as a possible argument to the
+<code>selected</code> parameter of <code>filter_spec</code>,
+<code>select_spec</code> and <code>choices_selected</code> indicating
+that all choices are selected.</li>
+<li>The <code>append</code> method of a <code>CodeClass</code> object
+has been modified to print a warning message when the argument does not
+result in any code being added because it is duplicated.</li>
+<li>Implemented delayed functionality to the mutate method of the
+<code>Dataset</code> and <code>DatasetConnector</code> objects.</li>
+<li>Modified <code>teal_data</code> to return a <code>CDISCData</code>
+object whenever any of its arguments is a type of <code>CDISCData</code>
+object.</li>
+<li>Updated filters to show both levels of a logical variable TRUE/FALSE
+even if one is missing from the original array.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="miscellaneous-0-10-0">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-0"></a></h4>
-<ul><li>Updated <code>LICENCE</code> and <code>README</code> with new package references.</li>
-<li>Added a method <code>get_hash</code> to the <code>Dataset</code> class returning the MD5 hash of the object stored inside the <code>Dataset</code> object.</li>
-<li>Replaced <code>random.cdisc.data</code> with <code>scda</code> in examples and tests.</li>
-<li>Implemented functionality to store <code>JoinKeys</code> in <code>Dataset</code> and <code>DatasetConnector</code> classes.</li>
+<ul><li>Updated <code>LICENCE</code> and <code>README</code> with new
+package references.</li>
+<li>Added a method <code>get_hash</code> to the <code>Dataset</code>
+class returning the MD5 hash of the object stored inside the
+<code>Dataset</code> object.</li>
+<li>Replaced <code>random.cdisc.data</code> with <code>scda</code> in
+examples and tests.</li>
+<li>Implemented functionality to store <code>JoinKeys</code> in
+<code>Dataset</code> and <code>DatasetConnector</code> classes.</li>
 <li>Added <code>error_on_lintr: TRUE</code> to <code>.lintr</code>
 </li>
-<li>The pipe operator <code>%&gt;%</code> is now exported such that downstream code and packages can use it.</li>
-<li>Removed hyperlinks to the <code>rice</code> package from the documentation.</li>
+<li>The pipe operator <code>%&gt;%</code> is now exported such that
+downstream code and packages can use it.</li>
+<li>Removed hyperlinks to the <code>rice</code> package from the
+documentation.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9.5" id="teal-095">teal 0.9.5<a class="anchor" aria-label="anchor" href="#teal-095"></a></h2>
 <div class="section level4">
 <h4 id="enhancements-0-9-5">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-9-5"></a></h4>
-<ul><li>Added informational stop message when using <code>mutate_data</code> with <code>RelationalDataConnector</code>.</li>
-<li>Modified <code>as_cdisc</code> to behave similarly to <code>cdisc_dataset</code> when called on a <code>Dataset</code> object.</li>
-<li>Changed the displayed format of the data name and the column name in <code>data_extract_spec</code> UI elements. Both are now compressed to <code>&lt;data name&gt;.&lt;column name&gt;</code> if they don’t change during runtime of the app.</li>
-<li>Added <code>ADSAFTTE</code> to the list of recognized ADaM dataset names.</li>
-<li>Added another example to <code>data_extract_spec</code>’s doc string showcasing app users can choose a variable used for filtering in the encoding panel.</li>
+<ul><li>Added informational stop message when using <code>mutate_data</code>
+with <code>RelationalDataConnector</code>.</li>
+<li>Modified <code>as_cdisc</code> to behave similarly to
+<code>cdisc_dataset</code> when called on a <code>Dataset</code>
+object.</li>
+<li>Changed the displayed format of the data name and the column name in
+<code>data_extract_spec</code> UI elements. Both are now compressed to
+<code>&lt;data name&gt;.&lt;column name&gt;</code> if they don’t change
+during runtime of the app.</li>
+<li>Added <code>ADSAFTTE</code> to the list of recognized ADaM dataset
+names.</li>
+<li>Added another example to <code>data_extract_spec</code>’s doc string
+showcasing app users can choose a variable used for filtering in the
+encoding panel.</li>
 <li>Added CSS styling to tool tips in teal modules.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="bug-fixes-0-9-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-5"></a></h4>
-<ul><li>Fixed an edge case error when creating a filter on variable with all missing values crashed the app.</li>
-<li>Fixed a bug that crashes app whenever a <code>Date</code> or <code>datetime</code> column is selected from a <code>filter_spec</code>.</li>
+<ul><li>Fixed an edge case error when creating a filter on variable with all
+missing values crashed the app.</li>
+<li>Fixed a bug that crashes app whenever a <code>Date</code> or
+<code>datetime</code> column is selected from a
+<code>filter_spec</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -237,15 +361,26 @@ Other releases
 <div class="section level4">
 <h4 id="enhancements-0-9-4">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-9-4"></a></h4>
 <ul><li>Released <code>snowflake</code> connection and connectors.</li>
-<li>Changed ordering of datasets to be more intuitive (topologically first for CDISC datasets only and then according to input datasets order).</li>
-<li>When closing a teal app (ending a user shiny session), all <code>DataConnection</code>s will now try to close their connections.</li>
+<li>Changed ordering of datasets to be more intuitive (topologically
+first for CDISC datasets only and then according to input datasets
+order).</li>
+<li>When closing a teal app (ending a user shiny session), all
+<code>DataConnection</code>s will now try to close their
+connections.</li>
 <li>Added ADHY keys to configuration file.</li>
-<li>Extended the <code>filter_spec</code> function: the parameter <code>choices</code> is no longer mandatory (the function will take all possible choices by default) and the <code>vars</code> parameter additionally accepts the <code>choices_selected</code> and allows to change the variables for filtering using the UI elements in the encoding panel.</li>
+<li>Extended the <code>filter_spec</code> function: the parameter
+<code>choices</code> is no longer mandatory (the function will take all
+possible choices by default) and the <code>vars</code> parameter
+additionally accepts the <code>choices_selected</code> and allows to
+change the variables for filtering using the UI elements in the encoding
+panel.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="bug-fixes-0-9-4">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-4"></a></h4>
 <ul><li>Cleaned up imports in the package.</li>
-<li>Modified <code>value_choices</code> function to handle edge case when <code>"NA"</code> and <code>NA</code> values exist in the <code>character</code> column that choices are derived from.<br></li>
+<li>Modified <code>value_choices</code> function to handle edge case
+when <code>"NA"</code> and <code>NA</code> values exist in the
+<code>character</code> column that choices are derived from.<br></li>
 <li>Fixed issue with cloning <code>Callable</code> class.</li>
 </ul></div>
 </div>
@@ -253,102 +388,230 @@ Other releases
 <h2 class="page-header" data-toc-text="0.9.3" id="teal-093">teal 0.9.3<a class="anchor" aria-label="anchor" href="#teal-093"></a></h2>
 <div class="section level4">
 <h4 id="new-features-0-9-3">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-3"></a></h4>
-<ul><li>Support for data-standard independent input and filtering. That includes refactor of the all data and dataset structures together with refactor of <code>FilteredData</code> class.</li>
-<li>New <code>JoinKeys</code> class (with <code><a href="../reference/join_keys.html">join_keys()</a></code> constructors and <code><a href="../reference/join_key.html">join_key()</a></code> constructor for its elements) to store joining key columns between datasets.</li>
-<li>Refactored the most basic <code><a href="../reference/dataset.html">dataset()</a></code> constructor, added <code><a href="../reference/cdisc_dataset.html">cdisc_dataset()</a></code> constructor and <code><a href="../reference/as_cdisc.html">as_cdisc()</a></code> conversion function.</li>
-<li>Soft-deprecate removed class constructors and obsolete functions (e.g. <code>keys()</code>).</li>
-<li>Added <code><a href="../reference/get_keys.html">get_keys()</a></code> and <code><a href="../reference/set_keys.html">set_keys()</a></code> functions to extract and manipulate datasets primary keys respectively.</li>
-<li>Unexported <code>filtered_data_new</code>, <code>filtered_data_set</code> and <code>filtered_data_set_filters</code>.</li>
+<ul><li>Support for data-standard independent input and filtering. That
+includes refactor of the all data and dataset structures together with
+refactor of <code>FilteredData</code> class.</li>
+<li>New <code>JoinKeys</code> class (with <code><a href="../reference/join_keys.html">join_keys()</a></code>
+constructors and <code><a href="../reference/join_key.html">join_key()</a></code> constructor for its elements)
+to store joining key columns between datasets.</li>
+<li>Refactored the most basic <code><a href="../reference/dataset.html">dataset()</a></code> constructor, added
+<code><a href="../reference/cdisc_dataset.html">cdisc_dataset()</a></code> constructor and <code><a href="../reference/as_cdisc.html">as_cdisc()</a></code>
+conversion function.</li>
+<li>Soft-deprecate removed class constructors and obsolete functions
+(e.g. <code>keys()</code>).</li>
+<li>Added <code><a href="../reference/get_keys.html">get_keys()</a></code> and <code><a href="../reference/set_keys.html">set_keys()</a></code> functions
+to extract and manipulate datasets primary keys respectively.</li>
+<li>Unexported <code>filtered_data_new</code>,
+<code>filtered_data_set</code> and
+<code>filtered_data_set_filters</code>.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="bug-fixes-0-9-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-3"></a></h4>
-<ul><li>Duplicated lines of code passed to <code><a href="../reference/cdisc_dataset.html">teal::cdisc_dataset</a></code> and other <code>teal::RelationalDataset</code> constructors should now be shown when getting the code from <code><a href="../reference/cdisc_data.html">teal::cdisc_data</a></code> objects and other <code>teal::RelationalData</code> objects.</li>
-<li>Added ability to press “Enter” key without having to set focus to the Submit button for delayed data loading.</li>
-<li>Allow <code>variable_choices</code> to use datasets with missing labels.</li>
-<li>Fixed bug that ignores input of <code>NULL</code> to <code>selected</code> argument of <code>select_spec</code> function.</li>
+<ul><li>Duplicated lines of code passed to <code><a href="../reference/cdisc_dataset.html">teal::cdisc_dataset</a></code>
+and other <code>teal::RelationalDataset</code> constructors should now
+be shown when getting the code from <code><a href="../reference/cdisc_data.html">teal::cdisc_data</a></code>
+objects and other <code>teal::RelationalData</code> objects.</li>
+<li>Added ability to press “Enter” key without having to set focus to
+the Submit button for delayed data loading.</li>
+<li>Allow <code>variable_choices</code> to use datasets with missing
+labels.</li>
+<li>Fixed bug that ignores input of <code>NULL</code> to
+<code>selected</code> argument of <code>select_spec</code>
+function.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="enhancements-0-9-3">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-9-3"></a></h4>
-<ul><li>Added button to remove all active filters from the Filter Panel.</li>
+<ul><li>Added button to remove all active filters from the Filter
+Panel.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9.2" id="teal-092">teal 0.9.2<a class="anchor" aria-label="anchor" href="#teal-092"></a></h2>
 <div class="section level4">
 <h4 id="new-features-0-9-2">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-2"></a></h4>
-<ul><li>Added <code>python_dataset_connector</code> to create delayed data objects from python scripts or directly from python code.</li>
-<li>NOTE: <code>python_dataset_connector</code> is not yet ready to be deployed on RSConnect because it does not contain <code>numpy</code> and <code>pandas</code>, which are <code>Python</code> libraries used in <code>python_dataset_connector</code>.</li>
-<li>Added support for filtering on <code>Date</code> and <code>Datetime</code> variables in the Filter Panel.</li>
-<li>Added buttons for <code>date</code> and <code>datetime</code> filter widgets to reset the value to the original.</li>
-<li>Added new function <code>check_key_duplicates</code>, which creates a short summary about rows with duplicated primary key (row numbers and the number of duplicates)</li>
+<ul><li>Added <code>python_dataset_connector</code> to create delayed data
+objects from python scripts or directly from python code.</li>
+<li>NOTE: <code>python_dataset_connector</code> is not yet ready to be
+deployed on RSConnect because it does not contain <code>numpy</code> and
+<code>pandas</code>, which are <code>Python</code> libraries used in
+<code>python_dataset_connector</code>.</li>
+<li>Added support for filtering on <code>Date</code> and
+<code>Datetime</code> variables in the Filter Panel.</li>
+<li>Added buttons for <code>date</code> and <code>datetime</code> filter
+widgets to reset the value to the original.</li>
+<li>Added new function <code>check_key_duplicates</code>, which creates
+a short summary about rows with duplicated primary key (row numbers and
+the number of duplicates)</li>
 </ul></div>
 <div class="section level4">
 <h4 id="enhancements-0-9-2">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-9-2"></a></h4>
-<ul><li>Fixed lack of labels for <code>character</code> and <code>factor</code> variables in the Filter Panel.</li>
-<li>All variables are now displayed in <code>module_filter_panel</code>, not only those of types <code>numeric</code>, <code>logical</code>, <code>factor</code>, <code>character</code> and <code>Date</code>
+<ul><li>Fixed lack of labels for <code>character</code> and
+<code>factor</code> variables in the Filter Panel.</li>
+<li>All variables are now displayed in <code>module_filter_panel</code>,
+not only those of types <code>numeric</code>, <code>logical</code>,
+<code>factor</code>, <code>character</code> and <code>Date</code>
 </li>
-<li>Fixed <code>mutate_data</code> to accept the whole scope of objects for <code>vars</code>.</li>
-<li>Clarified <code><a href="../reference/init.html">teal::init</a></code> function documentation to state that custom css loading code with <code><a href="https://rdrr.io/pkg/htmltools/man/htmlDependency.html" class="external-link">htmltools::htmlDependency</a></code> should be included in the <code>header</code> argument rather than inside <code>ui</code> arguments of modules.</li>
-<li>Enabled empty select field inside <code>data_extract_spec</code>.</li>
-<li>Added new argument <code>drop_keys</code> to <code>filter_spec</code> to decide whether to drop or keep keys columns on single filter on those columns.</li>
-<li>Added a new optional argument <code>keys</code> to <code>variable_choices</code>. <code>keys</code> specifies the names of the variables, which should have the new key icon shown next to them in the variable drop down menus in the left-hand side encoding panels instead of the icon appropriate for their original R variable type. <code>variable_choices</code> now also works with <code>RelationalDataset</code> and <code>RelationalDatasetConnector</code> objects.</li>
+<li>Fixed <code>mutate_data</code> to accept the whole scope of objects
+for <code>vars</code>.</li>
+<li>Clarified <code><a href="../reference/init.html">teal::init</a></code> function documentation to state
+that custom css loading code with <code><a href="https://rdrr.io/pkg/htmltools/man/htmlDependency.html" class="external-link">htmltools::htmlDependency</a></code>
+should be included in the <code>header</code> argument rather than
+inside <code>ui</code> arguments of modules.</li>
+<li>Enabled empty select field inside
+<code>data_extract_spec</code>.</li>
+<li>Added new argument <code>drop_keys</code> to
+<code>filter_spec</code> to decide whether to drop or keep keys columns
+on single filter on those columns.</li>
+<li>Added a new optional argument <code>keys</code> to
+<code>variable_choices</code>. <code>keys</code> specifies the names of
+the variables, which should have the new key icon shown next to them in
+the variable drop down menus in the left-hand side encoding panels
+instead of the icon appropriate for their original R variable type.
+<code>variable_choices</code> now also works with
+<code>RelationalDataset</code> and
+<code>RelationalDatasetConnector</code> objects.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="miscellaneous-0-9-2">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-9-2"></a></h4>
-<ul><li>Removed <code>include_factors</code> option in <code>get_class_colnames</code> in <code>RawDataset</code>.</li>
+<ul><li>Removed <code>include_factors</code> option in
+<code>get_class_colnames</code> in <code>RawDataset</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9.1" id="teal-091">teal 0.9.1<a class="anchor" aria-label="anchor" href="#teal-091"></a></h2>
-<ul><li>Adds method to resolve nested lists containing delayed data objects, which can be used for <code>arm_ref_comp</code> objects.</li>
-<li>Nested tabs module now has better alignment with the filter panel on the page.</li>
-<li>Allow <code>width</code> argument in <code>optionalSelectInput</code>.</li>
+<ul><li>Adds method to resolve nested lists containing delayed data objects,
+which can be used for <code>arm_ref_comp</code> objects.</li>
+<li>Nested tabs module now has better alignment with the filter panel on
+the page.</li>
+<li>Allow <code>width</code> argument in
+<code>optionalSelectInput</code>.</li>
 <li>Added lifecycle badges to all exported functions.</li>
-<li>Added new <code>code_dataset_connector</code> and <code>code_cdisc_dataset_connector</code> functions which enable the creation of new delayed data objects given a string of code.</li>
-<li>Added new functions <code>csv_dataset_connector</code> and <code>csv_cdisc_dataset_connector</code>.</li>
-<li>Updated <code>set_ui_input</code> method of <code>RawDatasetConnector</code> and <code>NamedDatasetConnector</code> to handle user defined shiny inputs.</li>
-<li>Include <code>Keep Inf</code> checkbox for numerical filter items. <code>Keep NA</code> and <code>Keep Inf</code> checkbox doesn’t appear if there are no missing or infinite values.</li>
-<li>Replace existing <code>RelationalData</code> class with abstract class <code>RelationalDataCollection</code> and rename <code>RelationalDataList</code> class as <code>RelationalData</code>. The <code>data</code> argument to <code><a href="../reference/init.html">teal::init</a></code> is now always a <code>RelationalData</code> object.</li>
-<li>Added <code>fun_cdisc_dataset_connector</code> to enable providing a custom function which returning a dataset.</li>
-<li>Removed <code>code</code> and <code>script</code> arguments from <code>as_relational</code> wrapper. This is intended to be done with <code>mutate_dataset</code> functionality.</li>
+<li>Added new <code>code_dataset_connector</code> and
+<code>code_cdisc_dataset_connector</code> functions which enable the
+creation of new delayed data objects given a string of code.</li>
+<li>Added new functions <code>csv_dataset_connector</code> and
+<code>csv_cdisc_dataset_connector</code>.</li>
+<li>Updated <code>set_ui_input</code> method of
+<code>RawDatasetConnector</code> and <code>NamedDatasetConnector</code>
+to handle user defined shiny inputs.</li>
+<li>Include <code>Keep Inf</code> checkbox for numerical filter items.
+<code>Keep NA</code> and <code>Keep Inf</code> checkbox doesn’t appear
+if there are no missing or infinite values.</li>
+<li>Replace existing <code>RelationalData</code> class with abstract
+class <code>RelationalDataCollection</code> and rename
+<code>RelationalDataList</code> class as <code>RelationalData</code>.
+The <code>data</code> argument to <code><a href="../reference/init.html">teal::init</a></code> is now always
+a <code>RelationalData</code> object.</li>
+<li>Added <code>fun_cdisc_dataset_connector</code> to enable providing a
+custom function which returning a dataset.</li>
+<li>Removed <code>code</code> and <code>script</code> arguments from
+<code>as_relational</code> wrapper. This is intended to be done with
+<code>mutate_dataset</code> functionality.</li>
 <li>
-<code>filer</code> argument in <code>init</code> has added a validation step to ensure compatibility with the rest of the app. Variables inherited from ADSL have to be specified only for ADSL dataset.</li>
-<li>Fixes the issue with connection close code not being present in <code>get_code</code> results.</li>
-<li>Fixes the issue of occasional incorrect ordering of bar charts on the filter panel.</li>
-<li>More informative error displayed when <code>pull_fun</code> of <code>DataConnection</code> produces an error.</li>
+<code>filer</code> argument in <code>init</code> has added a
+validation step to ensure compatibility with the rest of the app.
+Variables inherited from ADSL have to be specified only for ADSL
+dataset.</li>
+<li>Fixes the issue with connection close code not being present in
+<code>get_code</code> results.</li>
+<li>Fixes the issue of occasional incorrect ordering of bar charts on
+the filter panel.</li>
+<li>More informative error displayed when <code>pull_fun</code> of
+<code>DataConnection</code> produces an error.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9.0" id="teal-090">teal 0.9.0<a class="anchor" aria-label="anchor" href="#teal-090"></a></h2>
-<ul><li><p><code>cdisc_dataset</code> and <code>dataset</code> now return R6 class objects (<code>RelationalDataset</code>).</p></li>
-<li><p>A new <code>teal_data</code> function to include datasets and connectors into teal application.</p></li>
-<li><p><code>cdisc_data</code> function to include datasets and connectors into teal application where a <code>check</code> argument still could be used and other consistency tests are performed.</p></li>
-<li><p><code>get_raw_data</code> can be used to derive raw data from R6 objects e.g. (<code>RelationalDataset</code>).</p></li>
-<li><p><code>RawDatasetConnector</code>, <code>NamedDatasetConnector</code> and <code>RelationalDatasetConnector</code> to execute custom function call in order to get data from connection.</p></li>
-<li><p><code>CodeClass</code> to manage reproducibility of the data and relationships between datasets. Not directly exposed to the public interface.</p></li>
-<li><p><code>mutate_dataset</code> allows to modify dataset or connector via <code>code</code> argument or an R script.</p></li>
-<li><p><code>mutate_data</code> allows to change any dataset in <code>RelationalData</code>, <code>RelationalDataConnector</code> or <code>RelationalDataList</code>.</p></li>
-<li><p>New wrapper functions to manipulate <code>RelationalDatasetConnector</code> and <code>RelationalDataset</code> such as <code>get_dataset</code>, <code>load_dataset</code>, <code>as_relational</code>.</p></li>
-<li><p>New wrapper functions to manipulate <code>RelationalDataConnector</code>, <code>RelationalData</code> and <code>RelationalDataList</code> such as <code>get_datasets</code>, <code>load_datasets</code>.</p></li>
-<li><p><code>choices_labeled</code>, <code>filter_spec</code>, <code>select_spec</code>, <code>data_extract_spec</code>, <code>value_choices</code>, <code>variable_choices</code> as S3 class applied on <code>data.frame</code> and also on delayed data.</p></li>
-<li><p>You can no longer modify the <code>app$datasets</code>, but must instead use argument <code>filter</code> in the <code>init</code> function.</p></li>
-<li><p>New modules were created to create a module of nested teal modules, then another one that adds the right filter pane to each tab. The <code><a href="../reference/init.html">teal::init</a></code> function stays unchanged.</p></li>
-<li><p>The <code><a href="../reference/init.html">teal::init</a></code> function now returns a <code>UI</code> function with an optional <code>id</code> argument. This allows to embed it into other applications. A split view of two teal applications side-by-side is one such example and shown in a vignette. <code><a href="../reference/init.html">teal::init</a></code> was turned into a wrapper function around <code>module_teal_with_splash.R</code> and developers that want to embed teal as a Shiny module should directly work with these functions (<code>ui_teal_with_splash</code> and <code>srv_teal_with_splash</code>) instead of <code><a href="../reference/init.html">teal::init</a></code>.</p></li>
-<li><p>The <code><a href="../reference/init.html">teal::init</a></code> function now has a title parameter to set the title of the browser window.</p></li>
-<li><p>Missing data <code>NA</code> is now explicitly addressed in the filter panel: <code>NA</code>s are excluded by default and a checkbox to include them was added.</p></li>
-<li><p>Statistics of the data are visually depicted in terms of histograms or bar charts overlayed onto the Shiny input elements.</p></li>
-<li><p>Added buttons to remove all filters applied to a dataset.</p></li>
-<li><p>Restored the functionality to hide the filter panel for a module when it was constructed with <code>filters = NULL</code>.</p></li>
-<li><p>Moved helper functions into <code>utils.nest</code> and removed unused functions <code>set_labels_df</code> and <code>get_labels_df</code>.</p></li>
-<li><p><code>optionalSelectInput</code> now allows for grouped choices.</p></li>
+<ul><li><p><code>cdisc_dataset</code> and <code>dataset</code> now return R6
+class objects (<code>RelationalDataset</code>).</p></li>
+<li><p>A new <code>teal_data</code> function to include datasets and
+connectors into teal application.</p></li>
+<li><p><code>cdisc_data</code> function to include datasets and
+connectors into teal application where a <code>check</code> argument
+still could be used and other consistency tests are performed.</p></li>
+<li><p><code>get_raw_data</code> can be used to derive raw data from R6
+objects e.g. (<code>RelationalDataset</code>).</p></li>
+<li><p><code>RawDatasetConnector</code>,
+<code>NamedDatasetConnector</code> and
+<code>RelationalDatasetConnector</code> to execute custom function call
+in order to get data from connection.</p></li>
+<li><p><code>CodeClass</code> to manage reproducibility of the data and
+relationships between datasets. Not directly exposed to the public
+interface.</p></li>
+<li><p><code>mutate_dataset</code> allows to modify dataset or connector
+via <code>code</code> argument or an R script.</p></li>
+<li><p><code>mutate_data</code> allows to change any dataset in
+<code>RelationalData</code>, <code>RelationalDataConnector</code> or
+<code>RelationalDataList</code>.</p></li>
+<li><p>New wrapper functions to manipulate
+<code>RelationalDatasetConnector</code> and
+<code>RelationalDataset</code> such as <code>get_dataset</code>,
+<code>load_dataset</code>, <code>as_relational</code>.</p></li>
+<li><p>New wrapper functions to manipulate
+<code>RelationalDataConnector</code>, <code>RelationalData</code> and
+<code>RelationalDataList</code> such as <code>get_datasets</code>,
+<code>load_datasets</code>.</p></li>
+<li><p><code>choices_labeled</code>, <code>filter_spec</code>,
+<code>select_spec</code>, <code>data_extract_spec</code>,
+<code>value_choices</code>, <code>variable_choices</code> as S3 class
+applied on <code>data.frame</code> and also on delayed data.</p></li>
+<li><p>You can no longer modify the <code>app$datasets</code>, but must
+instead use argument <code>filter</code> in the <code>init</code>
+function.</p></li>
+<li><p>New modules were created to create a module of nested teal
+modules, then another one that adds the right filter pane to each tab.
+The <code><a href="../reference/init.html">teal::init</a></code> function stays unchanged.</p></li>
+<li><p>The <code><a href="../reference/init.html">teal::init</a></code> function now returns a
+<code>UI</code> function with an optional <code>id</code> argument. This
+allows to embed it into other applications. A split view of two teal
+applications side-by-side is one such example and shown in a vignette.
+<code><a href="../reference/init.html">teal::init</a></code> was turned into a wrapper function around
+<code>module_teal_with_splash.R</code> and developers that want to embed
+teal as a Shiny module should directly work with these functions
+(<code>ui_teal_with_splash</code> and <code>srv_teal_with_splash</code>)
+instead of <code><a href="../reference/init.html">teal::init</a></code>.</p></li>
+<li><p>The <code><a href="../reference/init.html">teal::init</a></code> function now has a title parameter to
+set the title of the browser window.</p></li>
+<li><p>Missing data <code>NA</code> is now explicitly addressed in the
+filter panel: <code>NA</code>s are excluded by default and a checkbox to
+include them was added.</p></li>
+<li><p>Statistics of the data are visually depicted in terms of
+histograms or bar charts overlayed onto the Shiny input
+elements.</p></li>
+<li><p>Added buttons to remove all filters applied to a
+dataset.</p></li>
+<li><p>Restored the functionality to hide the filter panel for a module
+when it was constructed with <code>filters = NULL</code>.</p></li>
+<li><p>Moved helper functions into <code>utils.nest</code> and removed
+unused functions <code>set_labels_df</code> and
+<code>get_labels_df</code>.</p></li>
+<li><p><code>optionalSelectInput</code> now allows for grouped
+choices.</p></li>
 </ul><div class="section level3">
 <h3 id="refactor-of-filtereddata-for-developers-0-9-0">Refactor of <code>FilteredData</code> (for developers)<a class="anchor" aria-label="anchor" href="#refactor-of-filtereddata-for-developers-0-9-0"></a></h3>
 <ul><li>
-<code>FilteredData</code> is now fully reactive. Now filtered data is lazy evaluated as per need. This further opens the door to bookmarking <code>teal</code> apps (bookmarking currently works for the right filtering panel, but we will make this feature more sophisticated in a future release, each module must be reviewed and adapted if it contains <code>reactiveValues</code>).</li>
-<li>Datasets and materialized connectors are provided to <code>FilteredData</code> by <code>set_datasets_data</code> function located in <code>init_datasets.R</code> file.</li>
-<li>Renamed <code><a href="../reference/get_dataset.html">get_dataset()</a></code> method to <code>get_data()</code>.</li>
-<li>Renamed <code>get_filter_call()</code> method to <code><a href="../reference/get_filter_expr.html">get_filter_expr()</a></code>; returns an expression rather than a list.</li>
-<li>Removed argument <code>isolate</code> from <code>get_data()</code> method and similar methods. You must <code>isolate</code> it yourself as needed. If you want to temporarily deactivate Shiny errors due to missing errors, you can set <code>options(shiny.suppressMissingContextError = TRUE)</code>. In general, avoid <code>isolate</code> as this breaks reactivity.</li>
-<li>We added a development module to add several filters at once, e.g. safety filters. This is to be evaluated before it is converted into a proper module and made available to end-users.</li>
+<code>FilteredData</code> is now fully reactive. Now filtered data
+is lazy evaluated as per need. This further opens the door to
+bookmarking <code>teal</code> apps (bookmarking currently works for the
+right filtering panel, but we will make this feature more sophisticated
+in a future release, each module must be reviewed and adapted if it
+contains <code>reactiveValues</code>).</li>
+<li>Datasets and materialized connectors are provided to
+<code>FilteredData</code> by <code>set_datasets_data</code> function
+located in <code>init_datasets.R</code> file.</li>
+<li>Renamed <code><a href="../reference/get_dataset.html">get_dataset()</a></code> method to
+<code>get_data()</code>.</li>
+<li>Renamed <code>get_filter_call()</code> method to
+<code><a href="../reference/get_filter_expr.html">get_filter_expr()</a></code>; returns an expression rather than a
+list.</li>
+<li>Removed argument <code>isolate</code> from <code>get_data()</code>
+method and similar methods. You must <code>isolate</code> it yourself as
+needed. If you want to temporarily deactivate Shiny errors due to
+missing errors, you can set
+<code>options(shiny.suppressMissingContextError = TRUE)</code>. In
+general, avoid <code>isolate</code> as this breaks reactivity.</li>
+<li>We added a development module to add several filters at once,
+e.g. safety filters. This is to be evaluated before it is converted into
+a proper module and made available to end-users.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -358,63 +621,93 @@ Other releases
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.4" id="teal-084">teal 0.8.4<a class="anchor" aria-label="anchor" href="#teal-084"></a></h2>
 <ul><li>Progress bar for ui creation in delayed loading module.</li>
-<li>Change output of <code>keys</code> function to <code>keys</code> object.</li>
+<li>Change output of <code>keys</code> function to <code>keys</code>
+object.</li>
 <li>Delayed version of <code>choices_selected</code>.</li>
-<li>Fix an error in <code>choices_selected</code> when <code>selected</code> is not in <code>choices</code>.</li>
-<li>Fix <code>pickerInput</code> not to display column name as label if it’s missing.</li>
+<li>Fix an error in <code>choices_selected</code> when
+<code>selected</code> is not in <code>choices</code>.</li>
+<li>Fix <code>pickerInput</code> not to display column name as label if
+it’s missing.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.3" id="teal-083">teal 0.8.3<a class="anchor" aria-label="anchor" href="#teal-083"></a></h2>
-<ul><li>Enable <code>teal</code> app to initialize without data. The data are then loaded from within the teal app.</li>
-<li>New classes (<code>DatasetConnector</code>, <code>DataConnector</code>) to connect to various data sources, including: * connector to <code>rice</code> API - <code>rice_data</code> and <code>rice_dataset_connector</code> * connector to <code>RDS</code> files - <code>rds_data</code> and <code>rds_dataset_connector</code>
+<ul><li>Enable <code>teal</code> app to initialize without data. The data
+are then loaded from within the teal app.</li>
+<li>New classes (<code>DatasetConnector</code>,
+<code>DataConnector</code>) to connect to various data sources,
+including: * connector to <code>rice</code> API - <code>rice_data</code>
+and <code>rice_dataset_connector</code> * connector to <code>RDS</code>
+files - <code>rds_data</code> and
+<code>rds_dataset_connector</code>
 </li>
-<li>Message appears at bottom right of Shiny app when Shiny is busy to update the views.</li>
-<li>Remove <code>labels</code> argument of <code>cdisc_data</code> function. Labels should now already be present in the data passed to the <code>cdisc_data</code> function. This can be achieved using the <code>var_relabel</code> function.</li>
+<li>Message appears at bottom right of Shiny app when Shiny is busy to
+update the views.</li>
+<li>Remove <code>labels</code> argument of <code>cdisc_data</code>
+function. Labels should now already be present in the data passed to the
+<code>cdisc_data</code> function. This can be achieved using the
+<code>var_relabel</code> function.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.2" id="teal-082">teal 0.8.2<a class="anchor" aria-label="anchor" href="#teal-082"></a></h2>
-<ul><li>Fixed several BUGS in <code>optionalSelectInput</code> and improved inputs look.</li>
-<li>Added <code>get_data_labels</code> function to <code>FilteredData</code> class.</li>
-<li>Improved <code>sep</code> passing within <code>data_extract_spec</code>.</li>
+<ul><li>Fixed several BUGS in <code>optionalSelectInput</code> and improved
+inputs look.</li>
+<li>Added <code>get_data_labels</code> function to
+<code>FilteredData</code> class.</li>
+<li>Improved <code>sep</code> passing within
+<code>data_extract_spec</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.1" id="teal-081">teal 0.8.1<a class="anchor" aria-label="anchor" href="#teal-081"></a></h2>
-<ul><li>Refactor <code>choices_labeled</code> and fix bug of not showing column name in <code>data_extract_spec</code>.</li>
+<ul><li>Refactor <code>choices_labeled</code> and fix bug of not showing
+column name in <code>data_extract_spec</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.0" id="teal-080">teal 0.8.0<a class="anchor" aria-label="anchor" href="#teal-080"></a></h2>
-<ul><li>Added <code>cdisc_dataset</code> (and more general <code>dataset</code>) functions to properly handle dataset keys while merging.</li>
-<li>Possibility to load custom <code>.css</code> and <code>.js</code> files.</li>
+<ul><li>Added <code>cdisc_dataset</code> (and more general
+<code>dataset</code>) functions to properly handle dataset keys while
+merging.</li>
+<li>Possibility to load custom <code>.css</code> and <code>.js</code>
+files.</li>
 <li>Renamed <code>columns_spec</code> to <code>select_spec</code>.</li>
 <li>Show number of observations on filter panel.</li>
-<li>Add labeling functions <code>variable_choices</code> and <code>value_choices</code>.</li>
+<li>Add labeling functions <code>variable_choices</code> and
+<code>value_choices</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.7.0" id="teal-070">teal 0.7.0<a class="anchor" aria-label="anchor" href="#teal-070"></a></h2>
-<ul><li>Added functions <code>cdisc_data</code> and <code>get_code</code> to deal with preprocessing and moving a step towards data standard independent teal.</li>
-<li>Moved <code>teal.utils</code> functions to <code>teal</code>: <code>log_app_usage</code>, <code>stop_shiny</code>.</li>
+<ul><li>Added functions <code>cdisc_data</code> and <code>get_code</code> to
+deal with preprocessing and moving a step towards data standard
+independent teal.</li>
+<li>Moved <code>teal.utils</code> functions to <code>teal</code>:
+<code>log_app_usage</code>, <code>stop_shiny</code>.</li>
 <li>Added <code>*_spec</code> functions.</li>
-<li>Improvements on usage of <code>PickerInput</code> and <code>SelectInput</code>.</li>
+<li>Improvements on usage of <code>PickerInput</code> and
+<code>SelectInput</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.6.0" id="teal-060">teal 0.6.0<a class="anchor" aria-label="anchor" href="#teal-060"></a></h2>
 <ul><li>Removed deprecated functions <code>tab*</code>.</li>
-<li>Removed data generation functions including <code>generate_sample_data</code>.</li>
+<li>Removed data generation functions including
+<code>generate_sample_data</code>.</li>
 <li>Incorporate <code>shinyjs</code> package.</li>
 <li>Added “Copy R code to clipboard” button.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.5" id="teal-005">teal 0.0.5<a class="anchor" aria-label="anchor" href="#teal-005"></a></h2>
-<ul><li>Added limit to data_table with scrolling, preventing overlap of ui elements.</li>
+<ul><li>Added limit to data_table with scrolling, preventing overlap of ui
+elements.</li>
 <li>Boolean filtering.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.4" id="teal-004">teal 0.0.4<a class="anchor" aria-label="anchor" href="#teal-004"></a></h2>
-<ul><li>Bug fix where teal crashes when a filter variable gets added that has many decimal places.</li>
+<ul><li>Bug fix where teal crashes when a filter variable gets added that
+has many decimal places.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.3" id="teal-003">teal 0.0.3<a class="anchor" aria-label="anchor" href="#teal-003"></a></h2>
-<ul><li>Note version 0.0.3 is not backwards compatible. Reading the changes and studying the example app should, however, clarify most the changes.</li>
+<ul><li>Note version 0.0.3 is not backwards compatible. Reading the changes
+and studying the example app should, however, clarify most the
+changes.</li>
 </ul><div class="section level5">
 <h5 id="new-features-0-0-3">New features<a class="anchor" aria-label="anchor" href="#new-features-0-0-3"></a></h5>
 <ul><li>
@@ -424,19 +717,27 @@ Other releases
 </ul></div>
 <div class="section level5">
 <h5 id="changes-0-0-3">Changes<a class="anchor" aria-label="anchor" href="#changes-0-0-3"></a></h5>
-<ul><li>All <code>tabs</code> arguments were renamed to <code>modules</code>.</li>
+<ul><li>All <code>tabs</code> arguments were renamed to
+<code>modules</code>.</li>
 <li>
-<code>tab_item</code> function is now called <code>module</code>.</li>
+<code>tab_item</code> function is now called
+<code>module</code>.</li>
 <li>
-<code>tab_items</code> function is now called <code>modules</code>.</li>
+<code>tab_items</code> function is now called
+<code>modules</code>.</li>
 <li>
 <code>tabs</code> function was removed.</li>
 <li>
-<code>variable_browser_item</code> is now called <code>tm_variable_browser</code>.</li>
+<code>variable_browser_item</code> is now called
+<code>tm_variable_browser</code>.</li>
 <li>
-<code>data_table_item</code> is now called <code>tm_data_table</code>.</li>
+<code>data_table_item</code> is now called
+<code>tm_data_table</code>.</li>
 <li>
-<code>datasets</code> argument is automatically added to the server functions specified with <code>module</code>. Hence <code>teal_datasets</code> has been removed as a <code>server_args</code> element.</li>
+<code>datasets</code> argument is automatically added to the server
+functions specified with <code>module</code>. Hence
+<code>teal_datasets</code> has been removed as a
+<code>server_args</code> element.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -458,11 +759,14 @@ Other releases
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski, Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama, Nikolas Burkoff, Maciej Nasinski, Roche.</p>
+  <p></p><p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski,
+Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama,
+Nikolas Burkoff, Maciej Nasinski, Roche.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>

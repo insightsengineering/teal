@@ -18,7 +18,7 @@ FilterState object for Date variable"><!-- mathjax --><script src="https://cdnjs
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9009</span>
       </span>
     </div>
 
@@ -54,15 +54,6 @@ FilterState object for Date variable"><!-- mathjax --><script src="https://cdnjs
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -198,7 +189,7 @@ optional <code>is.na(&lt;varname&gt;)</code>.</p><div class="section">
 </div>
 
 </div><p></p><hr><a id="method-ui"></a><div class="section">
-<h3 id="method-ui-">Method <code>ui()</code><a class="anchor" aria-label="anchor" href="#method-ui-"></a></h3>
+<h3 id="method-ui-">Method <code><a href="https://usethis.r-lib.org/reference/ui.html" class="external-link">ui()</a></code><a class="anchor" aria-label="anchor" href="#method-ui-"></a></h3>
 <p>UI Module for <code>DateFilterState</code>.
 This UI element contains two date selections for <code>min</code> and <code>max</code>
 of the range and a checkbox whether to keep the <code>NA</code> values.</p><div class="section">
@@ -297,12 +288,12 @@ time frame. Must not contain NA values.</p></dd>
 <span class="r-in">  extract_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x &gt;= as.Date("2022-02-22") &amp; x &lt;= as.Date("2022-03-03")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> x &gt;= as.Date("2022-02-24") &amp; x &lt;= as.Date("2022-03-05")</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">set_selected</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">3L</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">8L</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">set_keep_na</span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> is.na(x) | x &gt;= as.Date("2022-02-24") &amp; x &lt;= as.Date("2022-03-01")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> is.na(x) | x &gt;= as.Date("2022-02-26") &amp; x &lt;= as.Date("2022-03-03")</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## ------------------------------------------------</span></span>
 <span class="r-in"><span class="co">## Method `DateFilterState$set_selected`</span></span>
@@ -324,11 +315,14 @@ time frame. Must not contain NA values.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski, Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama, Nikolas Burkoff, Maciej Nasinski, Roche.</p>
+  <p></p><p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski,
+Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama,
+Nikolas Burkoff, Maciej Nasinski, Roche.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>

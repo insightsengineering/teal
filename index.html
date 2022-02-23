@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9009</span>
       </span>
     </div>
 
@@ -75,15 +75,6 @@
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="index.html">latest</a></li>
-   <li><a href="/index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -105,182 +96,82 @@ Other releases
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="teal-interactive-exploratory-data-analysis-with-shiny-web-applications-">Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href="https://github.com/insightsengineering/teal" class="external-link"><img src="reference/figures/teal.png" align="right" height="139" style="max-width: 100%;"></a>
+<div class="page-header"><h1 id="teal-interactive-exploratory-data-analysis-with-shiny-web-applications-">Teal: Interactive Exploratory Data Analysis with Shiny
+Web-Applications
+<a href="https://github.com/insightsengineering/teal" class="external-link"><img src="reference/figures/teal.png" align="right" height="139" style="max-width: 100%;"></a>
 <a class="anchor" aria-label="anchor" href="#teal-interactive-exploratory-data-analysis-with-shiny-web-applications-"></a>
 </h1></div>
-<p><em>teal</em> is a shiny-based interactive exploration framework for analyzing clinical trials data. <code>teal</code> currently provides a dynamic filtering facility and diverse data viewers. <code>teal</code> shiny applications are built using standard <a href="https://shiny.rstudio.com/articles/modules.html" class="external-link">shiny modules</a>.</p>
+<p><em>teal</em> is a shiny-based interactive exploration framework for
+analyzing data. <code>teal</code> applications require app developers to
+specify:</p>
+<!-- markdownlint-disable MD007 MD030 -->
+<ul>
+<li>Data, which can be:
+<ul>
+<li>CDISC data, commonly used for clinical trial reporting</li>
+<li>Independent datasets, for example from a
+<code>data.frame</code>
+</li>
+<li>Related datasets, for example a set of <code>data.frames</code> with
+key columns to enable data joins</li>
+<li>
+<code>MultiAssayExperiment</code> objects which are R data
+structures for representing and analyzing multi-omics experiments</li>
+</ul>
+</li>
+<li>
+<code>teal</code> modules:
+<ul>
+<li>
+<code>teal modules</code> are shiny modules built within the
+<code>teal</code> framework that specify analysis to be performed. For
+example, it can be a module for exploring outliers in the data, or a
+module for visualizing the data in line plots. Although these can be
+created from scratch, lost of <code>teal</code> modules have been
+released and we recommend starting with modules found in the following
+packages:
+<ul>
+<li>
+<a href="https://github.com/insightsengineering/teal.modules.general" class="external-link"><code>teal.modules.general</code></a>:
+general modules for exploring relational/independent/CDISC data</li>
+<li>
+<a href="https://github.com/insightsengineering/teal.modules.clinical" class="external-link"><code>teal.modules.clinical</code></a>:
+modules specific to CDISC data and clinical trial reporting</li>
+<li>
+<a href="https://github.com/insightsengineering/teal.modules.hermes" class="external-link"><code>teal.modules.hermes</code></a>:
+modules for analyzing <code>MultiAssayExperiment</code> objects</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- markdownlint-enable MD007 MD030 --><p>With the 2 components above, the <code>teal</code> package then
+provides:</p>
+<ul>
+<li>The ability to “pull” data into applications at runtime - for
+example from external data stores which require authentication</li>
+<li>A standardized method to allow application users to filter their
+data before it is passed into analysis modules</li>
+</ul>
+<p>Further features which enhance the <code>teal</code> framework are
+available in the <a href="https://github.com/insightsengineering/teal.devel" class="external-link"><code>teal.devel</code></a>
+package.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="section level3">
-<h3 id="clone-and-install-manually">Clone and install manually<a class="anchor" aria-label="anchor" href="#clone-and-install-manually"></a>
-</h3>
-<div class="section level4">
-<h4 id="1-clone-the-repository">1. Clone the repository<a class="anchor" aria-label="anchor" href="#1-clone-the-repository"></a>
-</h4>
-<p>The repository can be downloaded directly from the <code>github.com</code> site as an archive (see <a href="https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository" class="external-link">Github tutorial on cloning to learn more</a>). Alternatively, Git command line tools offer the same functionality, without the need for manual downloading and unpacking the archive, but require to authenticate to Github. You can authenticate using a key pair or a Personal Access Token (PAT). Please refer to excellent Github tutorials on <a href="https://docs.github.com/en/github/authenticating-to-github" class="external-link">connecting to Github using SSH</a> or <a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token" class="external-link">creating and using PAT</a>. Following commands create subdirectory <code>teal</code> containing cloned repository.</p>
-<ol style="list-style-type: decimal">
-<li>
-<p>Using PAT. Input in the Git Bash console, PowerShell or any Linux shell:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/insightsengineering/teal.git</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Username:</span> your_username_goes_here</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Password:</span> your_token_goes_here</span></code></pre></div>
-</li>
-<li>
-<p>Using SSH. If set up properly, the repository is ready to be cloned executing:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/insightsengineering/teal.git</span></code></pre></div>
-</li>
-</ol>
-</div>
-<div class="section level4">
-<h4 id="2-build-and-install">2. Build and install<a class="anchor" aria-label="anchor" href="#2-build-and-install"></a>
-</h4>
-<p>The native R tools provide a quick way to install a package. Run in PowerShell or any Linux shell:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD build teal</span></code></pre></div>
-<p>This command builds the package and creates an archive. The name of the archive is output by the command at then of building. Then input in the shell:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'install.packages("name_of_the_archive")</span></span></code></pre></div>
-<p>Here is an example of a real command (with name_of_the_archive substituted by the output of the build command):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'install.packages("teal_0.9.5.9000.tar.gz")'</span></span></code></pre></div>
-</div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="acknowledgment">Acknowledgment<a class="anchor" aria-label="anchor" href="#acknowledgment"></a>
-</h2>
-<p>We would like to thank everyone who made <code>teal</code> a better analysis environment. Special thanks go to:</p>
-<ul>
-<li>
-<code>Doug Kelkhoff</code> for his contributions to the styling of the filter panel.</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="notes-for-developers">Notes for Developers<a class="anchor" aria-label="anchor" href="#notes-for-developers"></a>
-</h2>
-<div class="section level3">
-<h3 id="conventions">Conventions<a class="anchor" aria-label="anchor" href="#conventions"></a>
-</h3>
-<p>Shiny modules are implemented in files <code>&lt;module&gt;.R</code> with UI function <code>ui_&lt;module&gt;</code> and server function <code>srv_&lt;module&gt;</code>.</p>
-<p>A module with a <code>id</code> should not use the id itself (<code>ns(character(0))</code>) as this id belongs to the parent module:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu">NS</span><span class="op">(</span><span class="va">id</span><span class="op">)</span>
-<span class="fu">ns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># should not be used as parent module may be using it to show / hide this module</span>
-<span class="fu">ns</span><span class="op">(</span><span class="st">"whole"</span><span class="op">)</span> <span class="co"># is okay, as long as the input to ns is not character(0)</span>
-<span class="fu">ns</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="co"># empty string "" is allowed</span></code></pre></div>
-<p>HTML elements can be given CSS classes even if they are not used within this package to give the end-user the possibility to modify the look-and-feel.</p>
-<p>Here is a full example:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">child_ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu">NS</span><span class="op">(</span><span class="va">id</span><span class="op">)</span>
-  <span class="fu">div</span><span class="op">(</span>
-    id <span class="op">=</span> <span class="fu">ns</span><span class="op">(</span><span class="st">"whole"</span><span class="op">)</span>, <span class="co"># used to show / hide itself</span>
-    class <span class="op">=</span> <span class="st">"to_customize_by_end_user"</span>,
-    <span class="co"># other code here</span>
-    <span class="fu">p</span><span class="op">(</span><span class="st">"Example"</span><span class="op">)</span>
-  <span class="op">)</span>
-<span class="op">}</span>
-<span class="va">parent_ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu">NS</span><span class="op">(</span><span class="va">id</span><span class="op">)</span>
-  <span class="fu">div</span><span class="op">(</span>
-    id <span class="op">=</span> <span class="fu">ns</span><span class="op">(</span><span class="st">"whole"</span><span class="op">)</span>, <span class="co"># used to show / hide itself</span>
-    <span class="fu">div</span><span class="op">(</span>
-      id <span class="op">=</span> <span class="fu">ns</span><span class="op">(</span><span class="st">"BillyTheKid"</span><span class="op">)</span>, <span class="co"># used to show / hide the child</span>
-      <span class="fu">child_ui</span><span class="op">(</span><span class="st">"BillyTheKid"</span><span class="op">)</span> <span class="co"># this id belongs to this module, not to the child</span>
-    <span class="op">)</span>
-  <span class="op">)</span>
-<span class="op">}</span>
-<span class="fu">parent_ui</span><span class="op">(</span><span class="st">"PatrickMcCarty"</span><span class="op">)</span></code></pre></div>
-<p>Use the <code>roxygen2</code> marker <code>@md</code> to include code-style ticks with backticks. This makes it easier to read. For example:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' My function</span>
-<span class="co">#'</span>
-<span class="co">#' A special `variable` we refer to.</span>
-<span class="co">#' We link to another function `\link{another_fcn}`</span>
-<span class="co">#'</span>
-<span class="co">#' @md</span>
-<span class="co">#' @param arg1 `character` person's name</span>
-<span class="va">my_fcn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">arg1</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">arg1</span>
-<span class="op">}</span></code></pre></div>
-<p>Note that <code>\link{another_fcn}</code> links don’t work in the development version. For this, you need to install the package.</p>
-<p>To temporarily install the package, the following code is useful:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">temp_install_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">temp_install_dir</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">temp_install_dir</span>, <span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="op">?</span><span class="va">init</span> <span class="co"># look at doc</span>
-<span class="co"># restore old path once done</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>Add a summary at the top of each file to describe what it does.</p>
-<p>Shiny modules should return <code>reactives</code> along with the observers they create. An example is here:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">srv_child</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">o</span> <span class="op">&lt;-</span> <span class="fu">observeEvent</span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    values <span class="op">=</span> <span class="fu">reactive</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>,
-    observers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">o</span><span class="op">)</span>
-  <span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="va">srv_parent</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">output</span> <span class="op">&lt;-</span> <span class="fu">callModule</span><span class="op">(</span><span class="va">srv_child</span>, <span class="st">"child"</span><span class="op">)</span>
-  <span class="va">o</span> <span class="op">&lt;-</span> <span class="fu">observeEvent</span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    values <span class="op">=</span> <span class="va">output</span><span class="op">$</span><span class="va">values</span>,
-    observers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">output</span><span class="op">$</span><span class="va">observers</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">o</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
-<p>This makes dynamic UI creation possible. If you want to remove a module added with <code>insertUI</code>, you can do so by calling <code>o$destroy()</code> on each of its observers, see the function <code>srv_filter_items</code> for an example.</p>
-<p>The difference between <code>datanames</code> and <code>active_datanames</code> is that the latter is a subset of the former.</p>
-<p>Note: Whenever you return input objects, it seems that you explicitly need to wrap them inside <code>reactive(..)</code>, e.g. <code>reactive(input$name)</code>.</p>
-<p>Modules should respect the argument order: <code>function(input, output, session, datasets, ...)</code>, where <code>...</code> can also include further named arguments.</p>
-<p>The idiom <code>shinyApp(ui, server) %&gt;% invisible()</code> is used with internal Shiny modules that are not exported. Printing a <code>shinyApp</code> causes it to call <code>runApp</code>, so never print a <code>shinyApp</code>. Instead do:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' app &lt;- shinyApp(...)</span>
-<span class="co">#' \dontrun{</span>
-<span class="co">#' runApp(app)</span>
-<span class="co">#' }</span></code></pre></div>
-<p>Avoid overloading return statements. For example, refactor:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="co"># must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning</span>
-  data_md5sums <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>, <span class="va">self</span><span class="op">$</span><span class="va">get_data_attr</span>, <span class="st">"md5sum"</span><span class="op">)</span>,
-    <span class="va">self</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>
-  <span class="op">)</span>,
-  filter_states <span class="op">=</span> <span class="fu">reactiveValuesToList</span><span class="op">(</span><span class="va">private</span><span class="op">$</span><span class="va">filter_states</span><span class="op">)</span>,
-  preproc_code <span class="op">=</span> <span class="va">self</span><span class="op">$</span><span class="fu">get_preproc_code</span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Into the more easily debuggable form:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="co"># must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning</span>
-  data_md5sums <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>, <span class="va">self</span><span class="op">$</span><span class="va">get_data_attr</span>, <span class="st">"md5sum"</span><span class="op">)</span>,
-    <span class="va">self</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>
-  <span class="op">)</span>,
-  filter_states <span class="op">=</span> <span class="fu">reactiveValuesToList</span><span class="op">(</span><span class="va">private</span><span class="op">$</span><span class="va">filter_states</span><span class="op">)</span>,
-  preproc_code <span class="op">=</span> <span class="va">self</span><span class="op">$</span><span class="fu">get_preproc_code</span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="va">res</span> <span class="co"># put it to not be invisible</span>
-<span class="co"># or (slightly discouraged)</span>
-<span class="co">#return(res)</span></code></pre></div>
-<p>Note that for functions to be dispatched with S3, they need to be exported. This will not actually export the function with the class specifier, but only make it available for S3 method dispatch, see <a href="https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace" class="external-link">stack-overflow</a></p>
-<p>While working on a PR, you can add a <code>scratch</code> directory to keep scripts to test the code that were not integrated into vignettes or examples yet. Before the PR is merged, remove this directory again. To avoid forgetting this, add a <code>todo</code> comment in the code. The <code>scratch</code> folder is also in <code>.Rbuildignore</code>.</p>
-<p>For <code>FilteredData</code>, when you work on a new module that directly changes it, you can check internal consistency in your reactive expressions through code like:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">datasets</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="fu">validate</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="section level4">
-<h4 id="systemfile">
-<code>system.file</code><a class="anchor" aria-label="anchor" href="#systemfile"></a>
-</h4>
-<p>We recommend against exporting functions that use <code>system.file</code> to access files in other packages as this breaks encapsulation and leads to issues with <code>devtools</code> as explained below.</p>
-<p><code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">base::system.file</a></code> is only overwritten by <code>pkgload:::shim_system.file</code> if the package is loaded by <code><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">devtools::load_all()</a></code>. This is done to access files transparently, independent of whether a package was loaded using <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(pkg)</a></code> or <code>devtools::load(pkg)</code>. The <code>inst</code> folder is in different locations for each of these cases. If a package uses <code>system.file</code> without being loaded via <code>devtools</code>, it will fail when it tries to locate something in another package that is loaded with <code>devtools</code> because it still uses <code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">base::system.file</a></code>. The solution is to explicitly use <code>pkgload:::system.file</code> whenever providing a function that relies on <code>system.file</code> from another package. Or not do it at all (this is the current approach we take with <code>include_css_files</code>). We don’t directly overwrite <code>system.file</code>, this may have unexpected behavior.</p>
-</div>
-</div>
+<p>This repository requires a personal access token to install see here
+<a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token" class="external-link">creating
+and using PAT</a>. Once this is set up, to install the latest released
+version of the package run:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>GITHUB_PAT <span class="op">=</span> <span class="st">"your_access_token_here"</span><span class="op">)</span>
+<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://devtools.r-lib.org/" class="external-link">"devtools"</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"insightsengineering/teal@*release"</span><span class="op">)</span></code></pre></div>
+<p>In order to run many of the examples you will also need to install
+the <a href="https://github.com/insightsengineering/scda" class="external-link"><code>scda</code></a>
+package.</p>
+<p>See package vignettes <code>browseVignettes(package = "teal")</code>
+for usage of this package.</p>
 </div>
 </div>
   </div>
@@ -328,12 +219,15 @@ Other releases
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski, Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama, Nikolas Burkoff, Maciej Nasinski, Roche.</p>
+<p>Developed by NEST, Adrian Waddell, Pawel Rucki, Dawid Kaledkowski,
+Sebastian Wolf, Maximilian Mordig, Bartosz Baranowski, Ondrej Slama,
+Nikolas Burkoff, Maciej Nasinski, Roche.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
