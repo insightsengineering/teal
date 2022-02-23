@@ -65,10 +65,18 @@ JoinKeys <- R6::R6Class( # nolint
     merge = function(x) {
       if (inherits(x, "JoinKeys")) x <- list(x)
       checkmate::assert_list(x, types = "JoinKeys", min.len = 1)
+
+      left_ds <- list()
+      right_ds <- list()
       for (jk in x) {
         for (dataset_1 in names(jk$get())) {
           for (dataset_2 in names(jk$get()[[dataset_1]])) {
+            if (dataset_1 %in% right_ds && dataset_2 %in% left_ds) {
+              next
+            }
             self$mutate(dataset_1, dataset_2, jk$get()[[dataset_1]][[dataset_2]])
+            left_ds <- append(left_ds, dataset_1)
+            right_ds <- append(right_ds, dataset_2)
           }
         }
       }
