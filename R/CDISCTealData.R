@@ -63,10 +63,15 @@ CDISCTealData <- R6::R6Class( # nolint
 
       # set up join keys as parent keys
       datanames <- self$get_datanames()
+      left_ds <- list()
+      right_ds <- list()
       for (d1 in datanames) {
         d1_pk <- get_keys(self$get_items(d1))
         d1_parent <- self$get_parent()[[d1]]
         for (d2 in datanames) {
+          if (d1 %in% right_ds && d2 %in% left_ds) {
+            next
+          }
           if (length(join_keys$get(d1, d2)) == 0) {
             d2_parent <- self$get_parent()[[d2]]
             d2_pk <- get_keys(self$get_items(d2))
@@ -86,6 +91,8 @@ CDISCTealData <- R6::R6Class( # nolint
             }
 
             self$mutate_join_keys(d1, d2, fk)
+            left_ds <- append(left_ds, d1)
+            right_ds <- append(right_ds, d2)
           }
         }
       }
