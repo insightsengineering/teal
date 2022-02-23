@@ -8,7 +8,7 @@
   - Related datasets, for example a set of `data.frames` with key columns to enable data joins
   - `MultiAssayExperiment` objects which are R data structures for representing and analyzing multi-omics experiments
 - `teal` modules detailing the analysis the application will perform - for example exploring outliers in the data, or visualizing the data in line plots.
-  Although the can be created from scratch, a large number of `teal` modules have been released and we recommend starting with modules found in the following packages:
+  Although the modules can be created from scratch, a large number of `teal` modules have been released and we recommend starting with modules found in the following packages:
   - [`teal.modules.general`](https://github.com/insightsengineering/teal.modules.general): general modules for exploring relational/independent/CDISC data
   - [`teal.modules.clinical`](https://github.com/insightsengineering/teal.modules.clinical): modules specific to CDISC data and clinical trial reporting
   - [`teal.modules.hermes`](https://github.com/insightsengineering/teal.modules.hermes): modules for analyzing `MultiAssayExperiment` objects
