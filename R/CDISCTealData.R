@@ -58,13 +58,20 @@ CDISCTealData <- R6::R6Class( # nolint
 
       private$parent <- new_parent
 
+      # for performance, get_join_keys should be called once outside of any loop
+      join_keys <- self$get_join_keys()
+
       # set up join keys as parent keys
       datanames <- self$get_datanames()
+      duplicate_pairs <- list()
       for (d1 in datanames) {
         d1_pk <- get_keys(self$get_items(d1))
         d1_parent <- self$get_parent()[[d1]]
         for (d2 in datanames) {
-          if (length(self$get_join_keys()$get(d1, d2)) == 0) {
+          if (paste(d2, d1) %in% duplicate_pairs) {
+            next
+          }
+          if (length(join_keys$get(d1, d2)) == 0) {
             d2_parent <- self$get_parent()[[d2]]
             d2_pk <- get_keys(self$get_items(d2))
 
@@ -81,7 +88,9 @@ CDISCTealData <- R6::R6Class( # nolint
               # cant find connection - leave empty
               next
             }
+
             self$mutate_join_keys(d1, d2, fk)
+            duplicate_pairs <- append(duplicate_pairs, paste(d1, d2))
           }
         }
       }
@@ -107,12 +116,14 @@ CDISCTealData <- R6::R6Class( # nolint
       }
 
       super$check_metadata()
+      # for performance, get_join_keys should be called once outside of any loop
+      join_keys <- self$get_join_keys()
       for (idx1 in seq_along(private$parent)) {
         name_from <- names(private$parent)[[idx1]]
         for (idx2 in seq_along(private$parent[[idx1]])) {
           name_to <- private$parent[[idx1]][[idx2]]
-          keys_from <- self$get_join_keys()$get(name_from, name_to)
-          keys_to <- self$get_join_keys()$get(name_to, name_from)
+          keys_from <- join_keys$get(name_from, name_to)
+          keys_to <- join_keys$get(name_to, name_from)
 
           if (length(keys_from) == 0 && length(keys_to) == 0) {
             stop(sprintf("No join keys from %s to its parent (%s) and vice versa", name_from, name_to))
