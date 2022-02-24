@@ -88,14 +88,21 @@ TealData <- R6::R6Class( # nolint
       }
       checkmate::assert_class(join_keys, "JoinKeys")
 
+      duplicate_pairs <- list()
       for (i in seq_along(join_keys$get())) {
         # setting A->B and B->A is a duplicate as mutate_join_keys sets keys mutually
         for (j in seq(i, length(join_keys$get()))) {
           dataset_1 <- names(join_keys$get())[[i]]
           dataset_2 <- names(join_keys$get())[[j]]
+
+          if (paste(dataset_2, dataset_1) %in% duplicate_pairs) {
+            next
+          }
+
           keys <- join_keys$get()[[dataset_1]][[dataset_2]]
           if (!is.null(keys)) {
             self$mutate_join_keys(dataset_1, dataset_2, keys)
+            duplicate_pairs <- append(duplicate_pairs, paste(dataset_1, dataset_2))
           }
         }
       }
@@ -159,10 +166,15 @@ TealData <- R6::R6Class( # nolint
     #' @return (`JoinKeys`)
     get_join_keys = function() {
       res <- join_keys()
+      duplicate_pairs <- list()
       for (dat_obj in self$get_items()) {
         list_keys <- dat_obj$get_join_keys()$get()[[1]]
         for (dat_name in names(list_keys)) {
+          if (paste(dat_name, dat_obj$get_dataname()) %in% duplicate_pairs) {
+            next
+          }
           res$mutate(dat_obj$get_dataname(), dat_name, list_keys[[dat_name]])
+          duplicate_pairs <- append(duplicate_pairs, paste(dat_obj$get_dataname(), dat_name))
         }
       }
       return(res)
@@ -351,12 +363,16 @@ TealData <- R6::R6Class( # nolint
         # all the checks below required data to be already pulled
         return(invisible(TRUE))
       }
+
+      # for performance, get_join_keys should be called once outside of any loop
+      join_keys <- self$get_join_keys()
+
       for (dataset in self$get_datasets()) {
         dataname <- get_dataname(dataset)
         dataset_colnames <- dataset$get_colnames()
 
         # expected columns in this dataset from JoinKeys specification
-        join_key_cols <- unique(unlist(lapply(self$get_join_keys()$get(dataname), names)))
+        join_key_cols <- unique(unlist(lapply(join_keys$get(dataname), names)))
         if (!is.null(join_key_cols) && !all(join_key_cols %in% dataset_colnames)) {
           stop(
             paste(
