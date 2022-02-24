@@ -69,20 +69,3 @@ repos:
           \.github/.*\.yaml|
           data/.*
           )$
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
-    hooks:
-      - id: file-contents-sorter
-        name: Sort .Rbuildignore
-        files: "\\.Rbuildignore$"
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
-    hooks:
-      - id: file-contents-sorter
-        name: Sort inst/WORDLIST
-        files: "inst/WORDLIST$"
-  - repo: https://github.com/lorenzwalthert/gitignore-tidy
-    rev: d3e947d61fba8c6adde2707d3baa6ae36b989d5b
-    hooks:
-      - id: tidy-gitignore
-        name: Tidy .gitignore
