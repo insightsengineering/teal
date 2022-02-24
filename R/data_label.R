@@ -197,3 +197,43 @@ variable_labels <- function(data, columns = NULL, fill = TRUE) {
 
   x
 }
+
+
+#' Copy and Change Variable Labels of a `data.frame`
+#'
+#' Relabels a subset of the variables.
+#'
+#' @inheritParams var_labels<-
+#' @param ... name-value pairs, where name corresponds to a variable name in
+#'   `x` and the value to the new variable label
+#'
+#' @return a copy of `x` with changed labels according to `...`
+#'
+#' @export
+#'
+#' @examples
+#' x <- var_relabel(iris, Sepal.Length = "Sepal Length of iris flower")
+#' variable_labels(x)
+#'
+function(x, ...) {
+  stopifnot(is.data.frame(x))
+  if (missing(...)) {
+    return(x)
+  }
+  dots <- list(...)
+  varnames <- names(dots)
+  stopifnot(!is.null(varnames))
+  map_varnames <- match(varnames, colnames(x))
+  if (any(is.na(map_varnames))) {
+    stop("variables: ", paste(varnames[is.na(map_varnames)],
+      collapse = ", "
+    ), " not found")
+  }
+  if (any(vapply(dots, Negate(is.character), logical(1)))) {
+    stop("all variable labels must be of type character")
+  }
+  for (i in seq_along(map_varnames)) {
+    attr(x[[map_varnames[[i]]]], "label") <- dots[[i]]
+  }
+  x
+}
