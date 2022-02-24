@@ -1,4 +1,4 @@
-# teal 0.10.1.9009
+# teal 0.10.1.9012
 
 ### Bug fixes
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
@@ -14,6 +14,7 @@
 * Replaced the deprecated `rtables::var_labels` calls with a new function `teal::variable_labels`.
 * Removed `rtables` dependency from the package.
 * Added `is_any_filtered` method to all `FilterState` classes to detect if selected values actually filters out any data. This is used to decide if an explicit filter statement is added to the call.
+* Removed redundant calling of the `JoinKeys$mutate` method inside of `for-loops`.
 
 # teal 0.10.1
 ### Breaking changes
