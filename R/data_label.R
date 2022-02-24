@@ -215,7 +215,7 @@ variable_labels <- function(data, columns = NULL, fill = TRUE) {
 #' x <- var_relabel(iris, Sepal.Length = "Sepal Length of iris flower")
 #' variable_labels(x)
 #'
-function(x, ...) {
+var_relabel <- function(x, ...) {
   stopifnot(is.data.frame(x))
   if (missing(...)) {
     return(x)
