@@ -1,15 +1,20 @@
-# teal 0.10.1.9006
+# teal 0.10.1.9011
 
 ### Bug fixes
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
 * Deprecated `root_modules` function, users should use `modules` directly inside `init`.
+* Add counts to filtering categorical variables bar charts in the filtering panel in cases where they were missing. 
 
 ### Breaking changes
 * Due to deprecation of `root_modules` any `label` argument to `modules` must be explicitly named. For example `modules("lab", mod1, mod2)` should be replaced with `modules(label = "lab", mod1, mod2)`.
 
 ### Miscellaneous
 * New argument `ordered` in the `select_spec()` to flag whether order of the selection should be tracked.
-* Minor changes to internals of `teal`: main module panel now has fixed shiny name `root` and the active tab is named `active_tab` not `Active_tab`. 
+* Minor changes to internals of `teal`: main module panel now has fixed shiny name `root` and the active tab is named `active_tab` not `Active_tab`.
+* Replaced the deprecated `rtables::var_labels` calls with a new function `teal::variable_labels`.
+* Removed `rtables` dependency from the package.
+* Added `is_any_filtered` method to all `FilterState` classes to detect if selected values actually filters out any data. This is used to decide if an explicit filter statement is added to the call.
+* Removed redundant calling of the `JoinKeys$mutate` method inside of `for-loops`.
 
 # teal 0.10.1
 ### Breaking changes

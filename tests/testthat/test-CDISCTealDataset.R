@@ -1,7 +1,7 @@
 ## CDISCTealDataset ====
 testthat::test_that("CDISCTealDataset basics", {
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
-  rtables::var_labels(x) <- c("X", "Y")
+  variable_labels(x) <- c("X", "Y")
 
   testthat::expect_error(
     CDISCTealDataset$new(dataname = "abc", x = x)
