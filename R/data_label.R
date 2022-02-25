@@ -216,7 +216,7 @@ variable_labels <- function(data, columns = NULL, fill = TRUE) {
 #' variable_labels(x)
 #'
 var_relabel <- function(x, ...) {
-  stopifnot(is.data.frame(x))
+  checkmate::assert_data_frame(x)
   if (missing(...)) {
     return(x)
   }
