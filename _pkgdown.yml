@@ -135,6 +135,7 @@ reference:
       - split_by_sep
       - variable_labels
       - variable_labels<-
+      - var_relabel
   - title: For Developers
     subtitle: R6 Classes
     desc: Abstract and concrete classes used to build teal functionality.

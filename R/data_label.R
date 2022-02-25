@@ -192,8 +192,42 @@ variable_labels <- function(data, columns = NULL, fill = TRUE) {
   checkmate::assert_character(value, len = ncol(x))
 
   for (i in seq_along(x)) {
-    attr(x[[i]], "label") <- value[i]
+    if (!is.na(value[i])) attr(x[[i]], "label") <- value[i]
   }
 
+  x
+}
+
+
+#' Copy and Change Variable Labels of a `data.frame`
+#'
+#' Relabels a subset of the variables.
+#'
+#' @inheritParams variable_labels<-
+#' @param ... name-value pairs, where name corresponds to a variable name in
+#'   `x` and the value to the new variable label
+#'
+#' @return a copy of `x` with changed labels according to `...`
+#'
+#' @export
+#'
+#' @examples
+#' x <- var_relabel(iris, Sepal.Length = "Sepal Length of iris flower")
+#' variable_labels(x)
+#'
+var_relabel <- function(x, ...) {
+  checkmate::assert_data_frame(x)
+  if (missing(...)) {
+    return(x)
+  }
+  dots <- list(...)
+  varnames <- names(dots)
+  checkmate::assert_character(varnames, null.ok = FALSE)
+  map_varnames <- match(varnames, colnames(x))
+  checkmate::assert_integer(map_varnames, any.missing = FALSE)
+  checkmate::assert_list(dots, types = "character")
+  for (i in seq_along(map_varnames)) {
+    attr(x[[map_varnames[[i]]]], "label") <- dots[[i]]
+  }
   x
 }
