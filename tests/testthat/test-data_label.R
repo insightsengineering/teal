@@ -55,3 +55,30 @@ testthat::test_that("variable_labels<- does not assign NA labels", {
   variable_labels(test_iris) <- variable_labels(test_iris, fill = FALSE)
   testthat::expect_equal(test_iris, duplicate_test_iris)
 })
+
+testthat::test_that("var_relabel returns the unchanged data.frame if passed nothing but a data.frame", {
+  testthat::expect_equal(var_relabel(iris), iris)
+})
+
+testthat::test_that("var_relabel adds a label attribute to columns", {
+  labeled_iris <- var_relabel(iris, "Sepal.Length" = "Test")
+  testthat::expect_equal(attr(labeled_iris[["Sepal.Length"]], "label"), "Test")
+})
+
+testthat::test_that("var_relabel asserts the first argument is a data.frame", {
+  testthat::expect_error(var_relabel("test"), regexp = "Must be of type 'data\\.frame'")
+})
+
+testthat::test_that("var_relabel asserts the passed label is a character", {
+  testthat::expect_error(
+    var_relabel(iris, "Sepal.Length" = 8),
+    regexp = "May only contain the following types: \\{character\\}, but element 1 has type 'numeric'"
+  )
+})
+
+testthat::test_that("var_relabel asserts that column names are not NAs", {
+  testthat::expect_error(
+    var_relabel(iris, `NA` = "test"),
+    regexp = "Contains missing values \\(element 1\\)"
+  )
+})
