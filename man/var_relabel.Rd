@@ -7,6 +7,8 @@
 var_relabel(x, ...)
 }
 \arguments{
+\item{x}{(\code{data.frame}) object with columns}
+
 \item{...}{name-value pairs, where name corresponds to a variable name in
 \code{x} and the value to the new variable label}
 }

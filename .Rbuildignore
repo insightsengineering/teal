@@ -29,6 +29,7 @@
 ^logs$
 ^man-roxygen$
 ^outputdir$
+^\.pre-commit-config\.yaml$
 ^scratch$
 ^staged_dependencies\.yaml$
 ^stubs$

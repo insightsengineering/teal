@@ -203,7 +203,7 @@ variable_labels <- function(data, columns = NULL, fill = TRUE) {
 #'
 #' Relabels a subset of the variables.
 #'
-#' @inheritParams var_labels<-
+#' @inheritParams variable_labels<-
 #' @param ... name-value pairs, where name corresponds to a variable name in
 #'   `x` and the value to the new variable label
 #'
