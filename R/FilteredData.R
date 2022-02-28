@@ -189,6 +189,16 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Gets metadata for a given dataset
+    #'
+    #' @param dataname (`character`) name of the dataset
+    #' @return value of metadata for given data (or `NULL` if it does not exist)
+    get_metadata = function(dataname) {
+      private$check_data_varname_exists(dataname)
+      self$get_filtered_dataset(dataname)$get_metadata()
+    },
+
+    #' @description
     #' Get join keys between two datasets.
     #' @param dataset_1 (`character`) one dataset name
     #' @param dataset_2 (`character`) other dataset name

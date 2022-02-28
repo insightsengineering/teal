@@ -249,6 +249,13 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Gets the metadata for the dataset in this `FilteredDataset`
+    #' @return named `list` or `NULL`
+    get_metadata = function() {
+      self$get_dataset()$get_metadata()
+    },
+
+    #' @description
     #' Get filter overview rows of a dataset
     #'
     #' @return (`matrix`) matrix of observations and subjects
