@@ -89,7 +89,7 @@ testthat::test_that("TealDataset$get_rownames", {
   testthat::expect_equal(ds$get_rownames(), c("1", "2", "3"))
 })
 
-testthat::test_that("TealDataset active bindings amd getters", {
+testthat::test_that("TealDataset active bindings and getters", {
   df <- as.data.frame(
     list(
       num = c(1, 2, 3),
