@@ -35,6 +35,9 @@
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
 #'
+#' @param metadata (named `list` or `NULL`) \cr
+#'   Field containing metadata about the dataset. Each element of the list
+#'   should be atomic and length one.
 MAETealDataset <- R6::R6Class( # nolint
   "MAETealDataset",
   inherit = TealDataset,
@@ -48,7 +51,8 @@ MAETealDataset <- R6::R6Class( # nolint
                           keys = character(0),
                           code = character(0),
                           label = character(0),
-                          vars = list()) {
+                          vars = list(),
+                          metadata = NULL) {
       checkmate::assert_string(dataname)
       stopifnot(is(x, "MultiAssayExperiment"))
       checkmate::assert_character(keys, any.missing = FALSE)
@@ -59,26 +63,14 @@ MAETealDataset <- R6::R6Class( # nolint
       checkmate::assert_character(label, max.len = 1, null.ok = TRUE, any.missing = FALSE)
       checkmate::assert_list(vars, min.len = 0, names = "unique")
 
-      private$.raw_data <- x
-      private$.ncol <- ncol(SummarizedExperiment::colData(x))
-      private$.nrow <- nrow(SummarizedExperiment::colData(x))
-      private$.dim <- c(private$.nrow, private$.ncol)
-      private$.colnames <- colnames(SummarizedExperiment::colData(x))
-      private$.rownames <- rownames(SummarizedExperiment::colData(x))
-      private$.col_labels <- vapply(
-        X = SummarizedExperiment::colData(x),
-        FUN.VALUE = character(1),
-        FUN = function(x) {
-          label <- attr(x, "label")
-          if (length(label) != 1) {
-            NA_character_
-          } else {
-            label
-          }
-        }
-      )
-      private$.row_labels <- c()
+      # validate metadata as a list of length one atomic
+      checkmate::assert_list(metadata, any.missing = FALSE, names = "named", null.ok = TRUE)
+      lapply(names(metadata), function(name) {
+        checkmate::assert_atomic(metadata[[name]], len = 1, .var.name = name)
+      })
 
+      private$.raw_data <- x
+      private$metadata <- metadata
       private$set_dataname(dataname)
       self$set_vars(vars)
       self$set_dataset_label(label)
@@ -152,12 +144,53 @@ MAETealDataset <- R6::R6Class( # nolint
       }
     },
     #' @description
+    #' Derive the column names
+    #' @return `character` vector.
+    get_colnames = function() {
+      colnames(SummarizedExperiment::colData(private$.raw_data))
+    },
+    #' @description
+    #' Derive the column labels
+    #' @return `character` vector.
+    get_column_labels = function() {
+      vapply(
+        X = SummarizedExperiment::colData(private$.raw_data),
+        FUN.VALUE = character(1),
+        FUN = function(x) {
+          label <- attr(x, "label")
+          if (length(label) != 1) {
+            NA_character_
+          } else {
+            label
+          }
+        }
+      )
+    },
+    #' @description
+    #' Get the number of columns of the data
+    #' @return `numeric` vector
+    get_ncol = function() {
+      ncol(SummarizedExperiment::colData(private$.raw_data))
+    },
+    #' @description
+    #' Get the number of rows of the data
+    #' @return `numeric` vector
+    get_nrow = function() {
+      nrow(SummarizedExperiment::colData(private$.raw_data))
+    },
+    #' @description
+    #' Derive the row names
+    #' @return `character` vector.
+    get_rownames = function() {
+      rownames(SummarizedExperiment::colData(private$.raw_data))
+    },
+    #' @description
     #' Prints this `MAETealDataset`.
     #' @param ... additional arguments to the printing method
     #'
     #' @return invisibly self
     print = function(...) {
-      cat(sprintf("A MAETealDataset object containing data of %d subjects.\n", private$.nrow))
+      cat(sprintf("A MAETealDataset object containing data of %d subjects.\n", self$get_nrow()))
       print(experiments(private$.raw_data))
       invisible(self)
     }
@@ -239,7 +272,8 @@ dataset.MultiAssayExperiment <- function(dataname,
                                          keys = character(0),
                                          label = data_label(x),
                                          code = character(0),
-                                         vars = list()) {
+                                         vars = list(),
+                                         metadata = NULL) {
   checkmate::assert_string(dataname)
   checkmate::assert(
     checkmate::check_character(code, max.len = 1, any.missing = FALSE),
@@ -253,7 +287,8 @@ dataset.MultiAssayExperiment <- function(dataname,
     keys = keys,
     code = code,
     label = label,
-    vars = vars
+    vars = vars,
+    metadata = metadata
   )
 }
 

@@ -36,6 +36,9 @@
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
 #'
+#' @param metadata (named `list` or `NULL`) \cr
+#'   Field containing metadata about the dataset. Each element of the list
+#'   should be atomic and length one.
 TealDataset <- R6::R6Class( # nolint
   "TealDataset",
 
@@ -48,9 +51,10 @@ TealDataset <- R6::R6Class( # nolint
                           keys = character(0),
                           code = character(0),
                           label = character(0),
-                          vars = list()) {
+                          vars = list(),
+                          metadata = NULL) {
       checkmate::assert_string(dataname)
-      stopifnot(is.data.frame(x))
+      checkmate::assert_data_frame(x)
       checkmate::assert_character(keys, any.missing = FALSE)
       checkmate::assert(
         checkmate::check_character(code, max.len = 1, any.missing = FALSE),
@@ -58,17 +62,16 @@ TealDataset <- R6::R6Class( # nolint
       )
       # label might be NULL also because of taking label attribute from data.frame - missing attr is NULL
       checkmate::assert_character(label, max.len = 1, null.ok = TRUE, any.missing = FALSE)
-      stopifnot(is.list(vars))
+      checkmate::assert_list(vars, names = "named")
 
+      # validate metadata as a list of length one atomic
+      checkmate::assert_list(metadata, any.missing = FALSE, names = "named", null.ok = TRUE)
+      lapply(names(metadata), function(name) {
+        checkmate::assert_atomic(metadata[[name]], len = 1, .var.name = name)
+      })
 
       private$.raw_data <- x
-      private$.ncol <- ncol(x)
-      private$.nrow <- nrow(x)
-      private$.dim <- c(private$.nrow, private$.ncol)
-      private$.colnames <- colnames(x)
-      private$.rownames <- rownames(x)
-      private$.col_labels <- variable_labels(x, fill = FALSE)
-      private$.row_labels <- c()
+      private$metadata <- metadata
 
       private$set_dataname(dataname)
       self$set_vars(vars)
@@ -97,14 +100,16 @@ TealDataset <- R6::R6Class( # nolint
                         keys = self$get_keys(),
                         code = private$code,
                         label = self$get_dataset_label(),
-                        vars = list()) {
+                        vars = list(),
+                        metadata = self$get_metadata()) {
       res <- self$initialize(
         dataname = dataname,
         x = x,
         keys = keys,
         code = code,
         label = label,
-        vars = vars
+        vars = vars,
+        metadata = metadata
       )
       logger::log_trace("TealDataset$recreate recreated dataset: { deparse1(self$get_dataname()) }.")
       return(res)
@@ -119,13 +124,13 @@ TealDataset <- R6::R6Class( # nolint
       cat(sprintf(
         "A %s object containing the following data.frame (%s rows and %s columns):\n",
         class(self)[1],
-        private$.nrow,
-        private$.ncol
+        self$get_nrow(),
+        self$get_ncol()
       ))
-      print(head(as.data.frame(private$.raw_data)))
-      if (private$.nrow > 6) {
+      print(head(as.data.frame(self$get_raw_data())))
+      if (self$get_nrow() > 6) {
         cat("\n...\n")
-        print(tail(as.data.frame(private$.raw_data)))
+        print(tail(self$get_raw_data()))
       }
       invisible(self)
     },
@@ -184,25 +189,37 @@ TealDataset <- R6::R6Class( # nolint
     #' Derive the column names
     #' @return `character` vector.
     get_colnames = function() {
-      private$.colnames
+      colnames(private$.raw_data)
     },
     #' @description
     #' Derive the column labels
     #' @return `character` vector.
     get_column_labels = function() {
-      private$.col_labels
+      variable_labels(private$.raw_data, fill = FALSE)
+    },
+    #' @description
+    #' Get the number of columns of the data
+    #' @return `numeric` vector
+    get_ncol = function() {
+      ncol(private$.raw_data)
+    },
+    #' @description
+    #' Get the number of rows of the data
+    #' @return `numeric` vector
+    get_nrow = function() {
+      nrow(private$.raw_data)
     },
     #' @description
     #' Derive the row names
     #' @return `character` vector.
     get_rownames = function() {
-      private$.rownames
+      rownames(private$.raw_data)
     },
     #' @description
     #' Derive the row labels
     #' @return `character` vector.
     get_row_labels = function() {
-      private$.row_labels
+      c()
     },
     #' @description
     #' Derive the `name` which was formerly called `dataname`
@@ -227,6 +244,12 @@ TealDataset <- R6::R6Class( # nolint
     #' @return (`character` vector) with dataset primary keys
     get_keys = function() {
       private$.keys
+    },
+    #' @description
+    #' Get metadata of dataset
+    #' @return (named `list`)
+    get_metadata = function() {
+      private$metadata
     },
     #' @description
     #' Get `JoinKeys` object with keys used for joining.
@@ -568,14 +591,8 @@ TealDataset <- R6::R6Class( # nolint
   ),
   ## __Private Fields ====
   private = list(
-    .ncol = 0L,
-    .nrow = 0L,
-    .dim = c(0L, 0L),
     .raw_data = data.frame(),
-    .rownames = character(),
-    .colnames = character(),
-    .col_labels = character(),
-    .row_labels = character(),
+    metadata = NULL,
     dataname = character(0),
     code = NULL, # CodeClass after initialization
     vars = list(),
@@ -642,9 +659,8 @@ TealDataset <- R6::R6Class( # nolint
     },
     get_class_colnames = function(class_type = "character") {
       checkmate::assert_string(class_type)
-
-      return_cols <- private$.colnames[which(vapply(
-        lapply(private$.raw_data, class),
+      return_cols <- self$get_colnames()[which(vapply(
+        lapply(self$get_raw_data(), class),
         function(x, target_class_name) any(x %in% target_class_name),
         logical(1),
         target_class_name = class_type
@@ -814,26 +830,6 @@ TealDataset <- R6::R6Class( # nolint
   ),
   ## __Active Fields ====
   active = list(
-    #' @field ncol Number of columns
-    ncol = function() {
-      private$.ncol
-    },
-    #' @field nrow Number of rows
-    nrow = function() {
-      private$.nrow
-    },
-    #' @field dim Dimension `c(x, y)`
-    dim = function() {
-      private$.dim
-    },
-    #' @field colnames The column names of the data
-    colnames = function() {
-      private$.colnames
-    },
-    #' @field rownames The rownames of the data
-    rownames = function() {
-      private$.rownames
-    },
     #' @field raw_data The data.frame behind this R6 class
     raw_data = function() {
       private$.raw_data
@@ -844,11 +840,7 @@ TealDataset <- R6::R6Class( # nolint
     },
     #' @field var_names The column names of the data
     var_names = function() {
-      private$.colnames
-    },
-    #' @field row_labels Row labels (can have spaces)
-    row_labels = function() {
-      private$.row_labels
+      colnames(private$.raw_data)
     }
   )
 )
@@ -883,6 +875,10 @@ TealDataset <- R6::R6Class( # nolint
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
 #'
+#' @param metadata (named `list` or `NULL`) \cr
+#'   Field containing metadata about the dataset. Each element of the list
+#'   should be atomic and length one.
+#'
 #' @return [`TealDataset`] object
 #'
 #' @rdname dataset
@@ -904,7 +900,8 @@ TealDataset <- R6::R6Class( # nolint
 #'   dataname = "ADSL",
 #'   x = ADSL,
 #'   label = "AdAM subject-level dataset",
-#'   code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
+#'   code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl",
+#'   metadata = list(type = "synthetic data")
 #' )
 #'
 #' ADSL_dataset$get_dataset_label()
@@ -914,7 +911,8 @@ dataset <- function(dataname,
                     keys = character(0),
                     label = data_label(x),
                     code = character(0),
-                    vars = list()) {
+                    vars = list(),
+                    metadata = NULL) {
   UseMethod("dataset", x)
 }
 
@@ -925,9 +923,10 @@ dataset.data.frame <- function(dataname,
                                keys = character(0),
                                label = data_label(x),
                                code = character(0),
-                               vars = list()) {
+                               vars = list(),
+                               metadata = NULL) {
   checkmate::assert_string(dataname)
-  stopifnot(is.data.frame(x))
+  checkmate::assert_data_frame(x)
   checkmate::assert(
     checkmate::check_character(code, max.len = 1, any.missing = FALSE),
     checkmate::check_class(code, "CodeClass")
@@ -940,7 +939,8 @@ dataset.data.frame <- function(dataname,
     keys = keys,
     code = code,
     label = label,
-    vars = vars
+    vars = vars,
+    metadata = metadata
   )
 }
 

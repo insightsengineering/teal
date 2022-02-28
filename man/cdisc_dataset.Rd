@@ -11,7 +11,8 @@ cdisc_dataset(
   parent = if (identical(dataname, "ADSL")) character(0) else "ADSL",
   label = data_label(x),
   code = character(0),
-  vars = list()
+  vars = list(),
+  metadata = NULL
 )
 }
 \arguments{
@@ -41,6 +42,10 @@ It's recommended to include \code{TealDataset} or \code{TealDatasetConnector} ob
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{metadata}{(named \code{list} or \code{NULL}) \cr
+Field containing metadata about the dataset. Each element of the list
+should be atomic and length one.}
 }
 \value{
 (\code{CDISCTealDataset}) a dataset with connected metadata

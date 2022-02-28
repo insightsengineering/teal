@@ -18,7 +18,8 @@ x <- cdisc_dataset(
   keys = "y",
   parent = "ABC",
   code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-                            stringsAsFactors = FALSE)"
+                            stringsAsFactors = FALSE)",
+  metadata = list(type = "example")
 )
 
 x$ncol
@@ -59,8 +60,11 @@ x$get_parent()
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_hash">}\href{../../teal/html/TealDataset.html#method-get_hash}{\code{teal::TealDataset$get_hash()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_join_keys">}\href{../../teal/html/TealDataset.html#method-get_join_keys}{\code{teal::TealDataset$get_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_keys">}\href{../../teal/html/TealDataset.html#method-get_keys}{\code{teal::TealDataset$get_keys()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_metadata">}\href{../../teal/html/TealDataset.html#method-get_metadata}{\code{teal::TealDataset$get_metadata()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_mutate_code_class">}\href{../../teal/html/TealDataset.html#method-get_mutate_code_class}{\code{teal::TealDataset$get_mutate_code_class()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_mutate_vars">}\href{../../teal/html/TealDataset.html#method-get_mutate_vars}{\code{teal::TealDataset$get_mutate_vars()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_ncol">}\href{../../teal/html/TealDataset.html#method-get_ncol}{\code{teal::TealDataset$get_ncol()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_nrow">}\href{../../teal/html/TealDataset.html#method-get_nrow}{\code{teal::TealDataset$get_nrow()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_numeric_colnames">}\href{../../teal/html/TealDataset.html#method-get_numeric_colnames}{\code{teal::TealDataset$get_numeric_colnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_raw_data">}\href{../../teal/html/TealDataset.html#method-get_raw_data}{\code{teal::TealDataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_row_labels">}\href{../../teal/html/TealDataset.html#method-get_row_labels}{\code{teal::TealDataset$get_row_labels()}}\out{</span>}
@@ -95,7 +99,8 @@ Create a new object of \code{CDISCTealDataset} class
   parent,
   code = character(0),
   label = character(0),
-  vars = list()
+  vars = list(),
+  metadata = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -128,6 +133,10 @@ It's recommended to include \code{TealDataset} or \code{TealDatasetConnector} ob
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{\code{metadata}}{(named \code{list} or \code{NULL}) \cr
+Field containing metadata about the dataset. Each element of the list
+should be atomic and length one.}
 }
 \if{html}{\out{</div>}}
 }
@@ -146,7 +155,8 @@ This is useful way to have access to class initialize method basing on class obj
   parent = self$get_parent(),
   code = private$code,
   label = self$get_dataset_label(),
-  vars = list()
+  vars = list(),
+  metadata = self$get_metadata()
 )}\if{html}{\out{</div>}}
 }
 
@@ -179,6 +189,10 @@ It's recommended to include \code{TealDataset} or \code{TealDatasetConnector} ob
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{\code{metadata}}{(named \code{list} or \code{NULL}) \cr
+Field containing metadata about the dataset. Each element of the list
+should be atomic and length one.}
 }
 \if{html}{\out{</div>}}
 }

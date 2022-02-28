@@ -40,6 +40,11 @@ test_dataset$reassign_datasets_vars(
 \item \href{#method-new}{\code{MAETealDataset$new()}}
 \item \href{#method-check}{\code{MAETealDataset$check()}}
 \item \href{#method-check_keys}{\code{MAETealDataset$check_keys()}}
+\item \href{#method-get_colnames}{\code{MAETealDataset$get_colnames()}}
+\item \href{#method-get_column_labels}{\code{MAETealDataset$get_column_labels()}}
+\item \href{#method-get_ncol}{\code{MAETealDataset$get_ncol()}}
+\item \href{#method-get_nrow}{\code{MAETealDataset$get_nrow()}}
+\item \href{#method-get_rownames}{\code{MAETealDataset$get_rownames()}}
 \item \href{#method-print}{\code{MAETealDataset$print()}}
 \item \href{#method-clone}{\code{MAETealDataset$clone()}}
 }
@@ -51,8 +56,6 @@ test_dataset$reassign_datasets_vars(
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_character_colnames">}\href{../../teal/html/TealDataset.html#method-get_character_colnames}{\code{teal::TealDataset$get_character_colnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_code">}\href{../../teal/html/TealDataset.html#method-get_code}{\code{teal::TealDataset$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_code_class">}\href{../../teal/html/TealDataset.html#method-get_code_class}{\code{teal::TealDataset$get_code_class()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_colnames">}\href{../../teal/html/TealDataset.html#method-get_colnames}{\code{teal::TealDataset$get_colnames()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_column_labels">}\href{../../teal/html/TealDataset.html#method-get_column_labels}{\code{teal::TealDataset$get_column_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_dataname">}\href{../../teal/html/TealDataset.html#method-get_dataname}{\code{teal::TealDataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_datanames">}\href{../../teal/html/TealDataset.html#method-get_datanames}{\code{teal::TealDataset$get_datanames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_dataset">}\href{../../teal/html/TealDataset.html#method-get_dataset}{\code{teal::TealDataset$get_dataset()}}\out{</span>}
@@ -61,12 +64,12 @@ test_dataset$reassign_datasets_vars(
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_hash">}\href{../../teal/html/TealDataset.html#method-get_hash}{\code{teal::TealDataset$get_hash()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_join_keys">}\href{../../teal/html/TealDataset.html#method-get_join_keys}{\code{teal::TealDataset$get_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_keys">}\href{../../teal/html/TealDataset.html#method-get_keys}{\code{teal::TealDataset$get_keys()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_metadata">}\href{../../teal/html/TealDataset.html#method-get_metadata}{\code{teal::TealDataset$get_metadata()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_mutate_code_class">}\href{../../teal/html/TealDataset.html#method-get_mutate_code_class}{\code{teal::TealDataset$get_mutate_code_class()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_mutate_vars">}\href{../../teal/html/TealDataset.html#method-get_mutate_vars}{\code{teal::TealDataset$get_mutate_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_numeric_colnames">}\href{../../teal/html/TealDataset.html#method-get_numeric_colnames}{\code{teal::TealDataset$get_numeric_colnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_raw_data">}\href{../../teal/html/TealDataset.html#method-get_raw_data}{\code{teal::TealDataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_row_labels">}\href{../../teal/html/TealDataset.html#method-get_row_labels}{\code{teal::TealDataset$get_row_labels()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_rownames">}\href{../../teal/html/TealDataset.html#method-get_rownames}{\code{teal::TealDataset$get_rownames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_var_r6">}\href{../../teal/html/TealDataset.html#method-get_var_r6}{\code{teal::TealDataset$get_var_r6()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="get_vars">}\href{../../teal/html/TealDataset.html#method-get_vars}{\code{teal::TealDataset$get_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="TealDataset" data-id="is_mutate_delayed">}\href{../../teal/html/TealDataset.html#method-is_mutate_delayed}{\code{teal::TealDataset$is_mutate_delayed()}}\out{</span>}
@@ -96,7 +99,8 @@ Create a new object of \code{MAETealDataset} class
   keys = character(0),
   code = character(0),
   label = character(0),
-  vars = list()
+  vars = list(),
+  metadata = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -128,6 +132,10 @@ It's recommended to include \code{TealDataset} or \code{TealDatasetConnector} ob
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{\code{metadata}}{(named \code{list} or \code{NULL}) \cr
+Field containing metadata about the dataset. Each element of the list
+should be atomic and length one.}
 }
 \if{html}{\out{</div>}}
 }
@@ -166,6 +174,71 @@ vector with primary keys}
 }
 \subsection{Returns}{
 \code{TRUE} if dataset has been already pulled, else \code{FALSE}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_colnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_colnames}{}}}
+\subsection{Method \code{get_colnames()}}{
+Derive the column names
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAETealDataset$get_colnames()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{character} vector.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_column_labels"></a>}}
+\if{latex}{\out{\hypertarget{method-get_column_labels}{}}}
+\subsection{Method \code{get_column_labels()}}{
+Derive the column labels
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAETealDataset$get_column_labels()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{character} vector.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_ncol"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ncol}{}}}
+\subsection{Method \code{get_ncol()}}{
+Get the number of columns of the data
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAETealDataset$get_ncol()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{numeric} vector
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_nrow"></a>}}
+\if{latex}{\out{\hypertarget{method-get_nrow}{}}}
+\subsection{Method \code{get_nrow()}}{
+Get the number of rows of the data
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAETealDataset$get_nrow()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{numeric} vector
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_rownames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_rownames}{}}}
+\subsection{Method \code{get_rownames()}}{
+Derive the row names
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAETealDataset$get_rownames()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{character} vector.
 }
 }
 \if{html}{\out{<hr>}}
@@ -209,23 +282,11 @@ The objects of this class are cloneable with this method.
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{ncol}}{Number of columns}
-
-\item{\code{nrow}}{Number of rows}
-
-\item{\code{dim}}{Dimension \code{c(x, y)}}
-
-\item{\code{colnames}}{The column names of the data}
-
-\item{\code{rownames}}{The rownames of the data}
-
 \item{\code{raw_data}}{The data.frame behind this R6 class}
 
 \item{\code{data}}{The data.frame behind this R6 class}
 
 \item{\code{var_names}}{The column names of the data}
-
-\item{\code{row_labels}}{Row labels (can have spaces)}
 }
 \if{html}{\out{</div>}}
 }
@@ -243,12 +304,15 @@ The objects of this class are cloneable with this method.
 \item \href{#method-get_factor_colnames}{\code{TealDataset$get_factor_colnames()}}
 \item \href{#method-get_colnames}{\code{TealDataset$get_colnames()}}
 \item \href{#method-get_column_labels}{\code{TealDataset$get_column_labels()}}
+\item \href{#method-get_ncol}{\code{TealDataset$get_ncol()}}
+\item \href{#method-get_nrow}{\code{TealDataset$get_nrow()}}
 \item \href{#method-get_rownames}{\code{TealDataset$get_rownames()}}
 \item \href{#method-get_row_labels}{\code{TealDataset$get_row_labels()}}
 \item \href{#method-get_dataname}{\code{TealDataset$get_dataname()}}
 \item \href{#method-get_datanames}{\code{TealDataset$get_datanames()}}
 \item \href{#method-get_dataset_label}{\code{TealDataset$get_dataset_label()}}
 \item \href{#method-get_keys}{\code{TealDataset$get_keys()}}
+\item \href{#method-get_metadata}{\code{TealDataset$get_metadata()}}
 \item \href{#method-get_join_keys}{\code{TealDataset$get_join_keys()}}
 \item \href{#method-get_hash}{\code{TealDataset$get_hash()}}
 \item \href{#method-get_var_r6}{\code{TealDataset$get_var_r6()}}
@@ -285,7 +349,8 @@ Create a new object of \code{TealDataset} class
   keys = character(0),
   code = character(0),
   label = character(0),
-  vars = list()
+  vars = list(),
+  metadata = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -317,6 +382,10 @@ It's recommended to include \code{TealDataset} or \code{TealDatasetConnector} ob
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{\code{metadata}}{(named \code{list} or \code{NULL}) \cr
+Field containing metadata about the dataset. Each element of the list
+should be atomic and length one.}
 }
 \if{html}{\out{</div>}}
 }
@@ -333,7 +402,8 @@ Recreate this \code{TealDataset} with its current attributes.
   keys = self$get_keys(),
   code = private$code,
   label = self$get_dataset_label(),
-  vars = list()
+  vars = list(),
+  metadata = self$get_metadata()
 )}\if{html}{\out{</div>}}
 }
 
@@ -365,6 +435,10 @@ It's recommended to include \code{TealDataset} or \code{TealDatasetConnector} ob
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{\code{metadata}}{(named \code{list} or \code{NULL}) \cr
+Field containing metadata about the dataset. Each element of the list
+should be atomic and length one.}
 }
 \if{html}{\out{</div>}}
 }
@@ -497,6 +571,32 @@ Derive the column labels
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_ncol"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ncol}{}}}
+\subsection{Method \code{get_ncol()}}{
+Get the number of columns of the data
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealDataset$get_ncol()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{numeric} vector
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_nrow"></a>}}
+\if{latex}{\out{\hypertarget{method-get_nrow}{}}}
+\subsection{Method \code{get_nrow()}}{
+Get the number of rows of the data
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealDataset$get_nrow()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{numeric} vector
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_rownames"></a>}}
 \if{latex}{\out{\hypertarget{method-get_rownames}{}}}
 \subsection{Method \code{get_rownames()}}{
@@ -572,6 +672,19 @@ Get primary keys of dataset
 
 \subsection{Returns}{
 (\code{character} vector) with dataset primary keys
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_metadata"></a>}}
+\if{latex}{\out{\hypertarget{method-get_metadata}{}}}
+\subsection{Method \code{get_metadata()}}{
+Get metadata of dataset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealDataset$get_metadata()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(named \code{list})
 }
 }
 \if{html}{\out{<hr>}}

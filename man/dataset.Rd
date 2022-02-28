@@ -12,7 +12,8 @@
   keys = character(0),
   label = data_label(x),
   code = character(0),
-  vars = list()
+  vars = list(),
+  metadata = NULL
 )
 
 dataset(
@@ -21,7 +22,8 @@ dataset(
   keys = character(0),
   label = data_label(x),
   code = character(0),
-  vars = list()
+  vars = list(),
+  metadata = NULL
 )
 
 \method{dataset}{data.frame}(
@@ -30,7 +32,8 @@ dataset(
   keys = character(0),
   label = data_label(x),
   code = character(0),
-  vars = list()
+  vars = list(),
+  metadata = NULL
 )
 }
 \arguments{
@@ -57,6 +60,10 @@ It's recommended to include \code{TealDataset} or \code{TealDatasetConnector} ob
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{metadata}{(named \code{list} or \code{NULL}) \cr
+Field containing metadata about the dataset. Each element of the list
+should be atomic and length one.}
 }
 \value{
 \code{\link{TealDataset}} object
@@ -85,7 +92,8 @@ ADSL_dataset <- dataset(
   dataname = "ADSL",
   x = ADSL,
   label = "AdAM subject-level dataset",
-  code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
+  code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl",
+  metadata = list(type = "synthetic data")
 )
 
 ADSL_dataset$get_dataset_label()

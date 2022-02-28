@@ -89,7 +89,7 @@ testthat::test_that("TealDataset$get_rownames", {
   testthat::expect_equal(ds$get_rownames(), c("1", "2", "3"))
 })
 
-testthat::test_that("TealDataset active bindings", {
+testthat::test_that("TealDataset active bindings amd getters", {
   df <- as.data.frame(
     list(
       num = c(1, 2, 3),
@@ -101,11 +101,10 @@ testthat::test_that("TealDataset active bindings", {
   )
   ds <- TealDataset$new("ds", x = df)
 
-  testthat::expect_equal(ds$ncol, 4)
-  testthat::expect_equal(ds$nrow, 3)
-  testthat::expect_equal(ds$dim, c(3, 4))
-  testthat::expect_equal(ds$colnames, c("num", "char", "fac", "num2"))
-  testthat::expect_equal(ds$rownames, c("1", "2", "3"))
+  testthat::expect_equal(ds$get_ncol(), 4)
+  testthat::expect_equal(ds$get_nrow(), 3)
+  testthat::expect_equal(ds$get_colnames(), c("num", "char", "fac", "num2"))
+  testthat::expect_equal(ds$get_rownames(), c("1", "2", "3"))
   testthat::expect_equal(
     ds$raw_data,
     as.data.frame(
@@ -118,8 +117,8 @@ testthat::test_that("TealDataset active bindings", {
       stringsAsFactors = FALSE
     )
   )
-  testthat::expect_equal(ds$var_names, ds$colnames)
-  testthat::expect_true(is.null(ds$row_labels))
+  testthat::expect_equal(ds$var_names, ds$get_colnames())
+  testthat::expect_true(is.null(ds$get_row_labels()))
 
   # Depreciation warnings
   labs <- ds$get_column_labels()

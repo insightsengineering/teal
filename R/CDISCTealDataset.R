@@ -36,6 +36,10 @@
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
 #'
+#' @param metadata (named `list` or `NULL`) \cr
+#'   Field containing metadata about the dataset. Each element of the list
+#'   should be atomic and length one.
+#'
 #' @examples
 #' x <- cdisc_dataset(
 #'   dataname = "XYZ",
@@ -43,7 +47,8 @@
 #'   keys = "y",
 #'   parent = "ABC",
 #'   code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-#'                             stringsAsFactors = FALSE)"
+#'                             stringsAsFactors = FALSE)",
+#'   metadata = list(type = "example")
 #' )
 #'
 #' x$ncol
@@ -58,9 +63,11 @@ CDISCTealDataset <- R6::R6Class( # nolint
   public = list(
     #' @description
     #' Create a new object of `CDISCTealDataset` class
-    initialize = function(dataname, x, keys, parent, code = character(0), label = character(0), vars = list()) {
+    initialize = function(dataname, x, keys, parent, code = character(0),
+                          label = character(0), vars = list(), metadata = NULL) {
       checkmate::assert_character(parent, max.len = 1, any.missing = FALSE)
-      super$initialize(dataname = dataname, x = x, keys = keys, code = code, label = label, vars = vars)
+      super$initialize(dataname = dataname, x = x, keys = keys, code = code,
+      label = label, vars = vars, metadata = metadata)
 
       self$set_parent(parent)
       logger::log_trace("CDISCTealDataset initialized for dataset: { deparse1(self$get_dataname()) }.")
@@ -77,7 +84,8 @@ CDISCTealDataset <- R6::R6Class( # nolint
                         parent = self$get_parent(),
                         code = private$code,
                         label = self$get_dataset_label(),
-                        vars = list()) {
+                        vars = list(),
+                        metadata = self$get_metadata()) {
       res <- self$initialize(
         dataname = dataname,
         x = x,
@@ -85,7 +93,8 @@ CDISCTealDataset <- R6::R6Class( # nolint
         parent = parent,
         code = code,
         label = label,
-        vars = vars
+        vars = vars,
+        metadata = metadata
       )
       logger::log_trace("CDISCTealDataset$recreate recreated dataset: { deparse1(self$get_dataname()) }.")
       return(res)
@@ -153,7 +162,8 @@ cdisc_dataset <- function(dataname,
                           parent = `if`(identical(dataname, "ADSL"), character(0), "ADSL"),
                           label = data_label(x),
                           code = character(0),
-                          vars = list()) {
+                          vars = list(),
+                          metadata = NULL) {
   CDISCTealDataset$new(
     dataname = dataname,
     x = x,
@@ -161,7 +171,8 @@ cdisc_dataset <- function(dataname,
     parent = parent,
     label = label,
     code = code,
-    vars = vars
+    vars = vars,
+    metadata = metadata
   )
 }
 
