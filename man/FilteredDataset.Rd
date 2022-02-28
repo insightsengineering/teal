@@ -24,6 +24,7 @@ components of the \code{TealDataset}.
 \item \href{#method-get_filter_states}{\code{FilteredDataset$get_filter_states()}}
 \item \href{#method-get_dataname}{\code{FilteredDataset$get_dataname()}}
 \item \href{#method-get_dataset}{\code{FilteredDataset$get_dataset()}}
+\item \href{#method-get_metadata}{\code{FilteredDataset$get_metadata()}}
 \item \href{#method-get_filter_overview_info}{\code{FilteredDataset$get_filter_overview_info()}}
 \item \href{#method-get_hash}{\code{FilteredDataset$get_hash()}}
 \item \href{#method-get_keys}{\code{FilteredDataset$get_keys()}}
@@ -208,6 +209,19 @@ Gets the dataset in this \code{FilteredDataset}
 
 \subsection{Returns}{
 \code{TealDataset}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_metadata"></a>}}
+\if{latex}{\out{\hypertarget{method-get_metadata}{}}}
+\subsection{Method \code{get_metadata()}}{
+Gets the metadata for the dataset in this \code{FilteredDataset}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_metadata()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+named \code{list} or \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

@@ -110,6 +110,7 @@ shiny::isolate(datasets$get_filter_state())
 \item \href{#method-get_filtered_dataset}{\code{FilteredData$get_filtered_dataset()}}
 \item \href{#method-get_data}{\code{FilteredData$get_data()}}
 \item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
+\item \href{#method-get_metadata}{\code{FilteredData$get_metadata()}}
 \item \href{#method-get_join_keys}{\code{FilteredData$get_join_keys()}}
 \item \href{#method-get_filter_overview}{\code{FilteredData$get_filter_overview()}}
 \item \href{#method-get_keys}{\code{FilteredData$get_keys()}}
@@ -341,6 +342,26 @@ as attributes.
 }
 \subsection{Returns}{
 value of attribute, may be \code{NULL} if it does not exist
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_metadata"></a>}}
+\if{latex}{\out{\hypertarget{method-get_metadata}{}}}
+\subsection{Method \code{get_metadata()}}{
+Gets metadata for a given dataset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_metadata(dataname)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) name of the dataset}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+value of metadata for given data (or \code{NULL} if it does not exist)
 }
 }
 \if{html}{\out{<hr>}}
