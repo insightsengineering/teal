@@ -95,7 +95,8 @@ e.g. by reading from a function or creating it on the fly.
   keys = character(0),
   label = character(0),
   code = character(0),
-  vars = list()
+  vars = list(),
+  metadata = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -129,6 +130,11 @@ It's recommended to include \code{TealDataset} or \code{TealDatasetConnector} ob
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{\code{metadata}}{(named \code{list}, \code{NULL} or \code{CallableFunction}) \cr
+Field containing either the metadata about the dataset (each element of the list
+should be atomic and length one) or a \code{CallableFuntion} to pull the metadata
+from a connection.}
 }
 \if{html}{\out{</div>}}
 }
@@ -443,7 +449,7 @@ mutate the join_keys for a given dataset and self
 \if{html}{\out{<a id="method-pull"></a>}}
 \if{latex}{\out{\hypertarget{method-pull}{}}}
 \subsection{Method \code{pull()}}{
-Pull the data
+Pull the data (and metadata if it is a \code{Callable})
 
 Read or create data using \code{pull_callable} specified in the constructor.
 \subsection{Usage}{

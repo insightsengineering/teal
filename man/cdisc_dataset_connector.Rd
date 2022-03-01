@@ -12,7 +12,8 @@ cdisc_dataset_connector(
   label = character(0),
   code = character(0),
   script = character(0),
-  vars = list()
+  vars = list(),
+  metadata = NULL
 )
 }
 \arguments{
@@ -50,6 +51,11 @@ It's recommended to include \code{TealDataset} or \code{TealDatasetConnector} ob
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{metadata}{(named \code{list}, \code{NULL} or \code{CallableFunction}) \cr
+Field containing either the metadata about the dataset (each element of the list
+should be atomic and length one) or a \code{CallableFuntion} to pull the metadata
+from a connection.}
 }
 \value{
 new \code{CDISCTealDatasetConnector} object

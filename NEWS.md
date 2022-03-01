@@ -1,6 +1,6 @@
 # teal 0.10.1.9013
 
-* Added `metadata` field to `TealDataset` to store a named list of `metadata` items. It is available for module developers through `FilteredData$get_metadata("<<dataname>>")`.
+* Added `metadata` field to `TealDataset` to store a named list of `metadata` items. It is available for module developers through `FilteredData$get_metadata("<<dataname>>")` and can be pulled or added directly to datasets derived from `TealDatasetConnectors`.
 
 ### Bug fixes
 * `get_call()` function of `CallableFunction` now returns call with namespace included.

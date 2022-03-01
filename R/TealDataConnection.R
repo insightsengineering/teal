@@ -197,7 +197,7 @@ TealDataConnection <- R6::R6Class( # nolint
             if (!is.null(private$close_fun)) {
               private$close_fun$assign_to_env("conn", private$conn)
             }
-            if (!is.null(private$close_fun)) {
+            if (!is.null(private$ping_fun)) {
               private$ping_fun$assign_to_env("conn", private$conn)
             }
           }

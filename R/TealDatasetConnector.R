@@ -43,6 +43,10 @@
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
 #'
+#' @param metadata (named `list`, `NULL` or `CallableFunction`) \cr
+#'   Field containing either the metadata about the dataset (each element of the list
+#'   should be atomic and length one) or a `CallableFuntion` to pull the metadata
+#'   from a connection.
 TealDatasetConnector <- R6::R6Class( # nolint
 
   ## __Public Methods ====
@@ -57,12 +61,16 @@ TealDatasetConnector <- R6::R6Class( # nolint
                           keys = character(0),
                           label = character(0),
                           code = character(0),
-                          vars = list()) {
+                          vars = list(),
+                          metadata = NULL) {
+
       private$set_pull_callable(pull_callable)
       private$set_var_r6(vars)
       private$set_pull_vars(vars)
 
       private$set_dataname(dataname)
+      private$set_metadata(metadata)
+
       self$set_dataset_label(label)
       self$set_keys(keys)
 
@@ -309,7 +317,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
 
     # ___ pull ====
     #' @description
-    #' Pull the data
+    #' Pull the data (and metadata if it is a `Callable`)
     #'
     #' Read or create data using `pull_callable` specified in the constructor.
     #'
@@ -333,12 +341,27 @@ TealDatasetConnector <- R6::R6Class( # nolint
           code_in_dataset <- private$dataset$get_code_class(nodeps = TRUE)
           vars_in_dataset <- private$dataset$get_vars()
         }
+
+        if (methods::is(private$metadata, "Callable")) {
+          logger::log_trace("TealDatasetConnector$pull pulling metadata for dataset: {self$get_dataname() }.")
+          pulled_metadata <- private$metadata$run(try = TRUE)
+          if (methods::is(pulled_metadata, c("simpleError", "error"))) {
+            pulled_metadata <- NULL
+            logger::log_warn("TealDatasetConnector$pull pulling metadata failed for dataset: {self$get_dataname() }.")
+          } else {
+            logger::log_trace("TealDatasetConnector$pull pulled metadata for dataset: {self$get_dataname() }.")
+          }
+        } else {
+          pulled_metadata <- private$metadata
+        }
+
         private$dataset <- dataset(
           dataname = self$get_dataname(),
           x = data,
           keys = character(0), # keys need to be set after mutate
           label = self$get_dataset_label(),
-          code = private$get_pull_code_class()
+          code = private$get_pull_code_class(),
+          metadata = pulled_metadata
         )
 
         if (has_dataset) {
@@ -530,6 +553,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
     pull_vars = list(), # named list
     dataname = character(0),
     dataset_label = character(0),
+    metadata = NULL, # Callable or list
     keys = NULL,
     var_r6 = list(),
     ui_input = NULL, # NULL or list
@@ -626,6 +650,19 @@ TealDatasetConnector <- R6::R6Class( # nolint
     set_pull_callable = function(pull_callable) {
       stopifnot(is(pull_callable, "Callable"))
       private$pull_callable <- pull_callable
+      return(invisible(self))
+    },
+    set_metadata = function(metadata) {
+      if (methods::is(metadata, "Callable")) {
+        private$metadata <- metadata
+      } else {
+        # validate metadata as a list of length one atomic or
+        checkmate::assert_list(metadata, any.missing = FALSE, names = "named", null.ok = TRUE)
+        lapply(names(metadata), function(name) {
+          checkmate::assert_atomic(metadata[[name]], len = 1, .var.name = name)
+        })
+        private$metadata <- metadata
+      }
       return(invisible(self))
     },
     set_pull_vars = function(pull_vars) {

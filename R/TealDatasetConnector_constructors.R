@@ -36,6 +36,10 @@
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
 #'
+#' @param metadata (named `list`, `NULL` or `CallableFunction`) \cr
+#'   Field containing either the metadata about the dataset (each element of the list
+#'   should be atomic and length one) or a `CallableFuntion` to pull the metadata
+#'   from a connection.
 #' @return new `TealDatasetConnector` object
 #'
 #' @examples
@@ -65,12 +69,20 @@ dataset_connector <- function(dataname,
                               label = character(0),
                               code = character(0),
                               script = character(0),
-                              vars = list()) {
+                              vars = list(),
+                              metadata = NULL) {
   checkmate::assert_string(dataname)
   stopifnot(is(pull_callable, "Callable"))
   checkmate::assert_character(keys, any.missing = FALSE)
   checkmate::assert_character(code, any.missing = FALSE)
   checkmate::assert_character(label, any.missing = FALSE)
+
+  if (!checkmate::test_class(metadata, "Callable")) {
+    checkmate::assert_list(metadata, any.missing = FALSE, names = "named", null.ok = TRUE)
+    lapply(names(metadata), function(name) {
+      checkmate::assert_atomic(metadata[[name]], len = 1, .var.name = name)
+    })
+  }
 
   x <- TealDatasetConnector$new(
     dataname = dataname,
@@ -78,7 +90,8 @@ dataset_connector <- function(dataname,
     keys = keys,
     code = code_from_script(code, script),
     label = label,
-    vars = vars
+    vars = vars,
+    metadata = metadata
   )
 
   return(x)
@@ -103,13 +116,21 @@ cdisc_dataset_connector <- function(dataname,
                                     label = character(0),
                                     code = character(0),
                                     script = character(0),
-                                    vars = list()) {
+                                    vars = list(),
+                                    metadata = NULL) {
   checkmate::assert_string(dataname)
   stopifnot(is(pull_callable, "Callable"))
   checkmate::assert_character(keys, any.missing = FALSE)
   checkmate::assert_character(parent, max.len = 1, any.missing = FALSE)
   checkmate::assert_character(code, max.len = 1, any.missing = FALSE)
   checkmate::assert_character(label, max.len = 1, any.missing = FALSE)
+
+  if (!checkmate::test_class(metadata, "Callable")) {
+    checkmate::assert_list(metadata, any.missing = FALSE, names = "named", null.ok = TRUE)
+    lapply(names(metadata), function(name) {
+      checkmate::assert_atomic(metadata[[name]], len = 1, .var.name = name)
+    })
+  }
 
   x <- CDISCTealDatasetConnector$new(
     dataname = dataname,
@@ -118,7 +139,8 @@ cdisc_dataset_connector <- function(dataname,
     parent = parent,
     code = code_from_script(code, script),
     label = label,
-    vars = vars
+    vars = vars,
+    metadata = metadata
   )
 
   return(x)
