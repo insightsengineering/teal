@@ -903,7 +903,7 @@ TealDataset <- R6::R6Class( # nolint
 #'   code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl",
 #'   metadata = list(type = "synthetic data")
 #' )
-#'
+#' ADSL_dataset$get_metadata()
 #' ADSL_dataset$get_dataset_label()
 #' ADSL_dataset$get_code()
 dataset <- function(dataname,

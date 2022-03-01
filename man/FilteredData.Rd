@@ -47,13 +47,15 @@ library(shiny)
 datasets <- teal:::FilteredData$new()
 
 # setting the data
-datasets$set_dataset(dataset("iris", iris))
+datasets$set_dataset(dataset("iris", iris, metadata = list(type = "training")))
 datasets$set_dataset(dataset("mtcars", mtcars))
 datasets$datanames()
 
 
 df <- datasets$get_data("iris", filtered = FALSE)
 print(df)
+
+datasets$get_metadata("iris")
 
 datasets$set_filter_state(
   list(iris = list(Species = list(selected = "virginica")))

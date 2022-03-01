@@ -81,6 +81,20 @@ testthat::test_that("set_code does not throw when passed a CodeClass", {
   testthat::expect_error(filtered_data$set_code(CodeClass$new("'preprocessing code'")), NA)
 })
 
+testthat::test_that("get_metadata throws error if dataset does not exist", {
+  filtered_data <- FilteredData$new()
+  filtered_data$set_dataset(TealDataset$new("iris", head(iris)))
+  testthat::expect_error(filtered_data$get_metadata("mtcars"), "data mtcars is not available")
+})
+
+testthat::test_that("get_metadata returns metadata if dataset exists", {
+  filtered_data <- FilteredData$new()
+  filtered_data$set_dataset(TealDataset$new("iris", head(iris), metadata = list(E = TRUE)))
+  filtered_data$set_dataset(TealDataset$new("iris2", head(iris)))
+  testthat::expect_equal(filtered_data$get_metadata("iris"), list(E = TRUE))
+  testthat::expect_null(filtered_data$get_metadata("iris2"))
+})
+
 testthat::test_that("get_code return the code passed to set_code", {
   filtered_data <- FilteredData$new()
   filtered_data$set_code(CodeClass$new("'preprocessing code'"))

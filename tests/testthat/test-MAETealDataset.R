@@ -33,11 +33,15 @@ testthat::test_that("MAETealDataset$recreate updates the class fields", {
 })
 
 testthat::test_that("MAETealDataset getters and setters", {
-  mae <- MAETealDataset$new(dataname = "miniACC", x = MultiAssayExperiment::miniACC)
+  mae <- MAETealDataset$new(
+    dataname = "miniACC",
+    x = MultiAssayExperiment::miniACC,
+    metadata = list(A = 5, B = TRUE, C = "foo")
+  )
 
   testthat::expect_equal(mae$get_dataname(), "miniACC")
   testthat::expect_equal(mae$get_datanames(), mae$get_dataname())
-
+  testthat::expect_equal(mae$get_metadata(), list(A = 5, B = TRUE, C = "foo"))
   testthat::expect_equal(mae$get_raw_data(), MultiAssayExperiment::miniACC)
 
   new_label <- "new_label"

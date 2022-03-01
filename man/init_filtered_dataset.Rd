@@ -14,7 +14,7 @@ init_filtered_dataset(dataset)
 }
 \examples{
 # DefaultFilteredDataset example
-iris_d <- dataset("iris", iris)
+iris_d <- dataset("iris", iris, metadata = list(type = "teal"))
 iris_fd <- teal:::init_filtered_dataset(iris_d)
 \dontrun{
 shinyApp(
@@ -22,11 +22,16 @@ shinyApp(
     iris_fd$ui_add_filter_state(id = "add"),
     iris_fd$ui("dataset"),
     verbatimTextOutput("call"),
+    verbatimTextOutput("metadata"),
     tableOutput("tbl")
   ),
   server = function(input, output, session) {
     iris_fd$srv_add_filter_state(id = "add")
     iris_fd$server(id = "dataset")
+
+    output$metadata <- renderText({
+      paste("Type =", iris_fd$get_metadata()$type)
+    })
 
     output$call <- renderText({
       paste(
@@ -42,7 +47,7 @@ shinyApp(
 
 # CDISCFilteredDataset example
 library(scda)
-adsl_d <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
+adsl_d <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl, metadata = list(type = "cdisc"))
 adsl_fd <- teal:::init_filtered_dataset(adsl_d)
 \dontrun{
 shinyApp(
@@ -50,12 +55,15 @@ shinyApp(
     adsl_fd$ui_add_filter_state(id = "add"),
     adsl_fd$ui("dataset"),
     verbatimTextOutput("call"),
+    verbatimTextOutput("metadata"),
     tableOutput("tbl")
   ),
   server = function(input, output, session) {
     adsl_fd$srv_add_filter_state(id = "add")
     adsl_fd$server(id = "dataset")
-
+    output$metadata <- renderText({
+      paste("Type =", adsl_fd$get_metadata()$type)
+    })
     output$call <- renderText({
       paste(
         vapply(adsl_fd$get_call(), deparse1, character(1), collapse = "\n"),
@@ -70,19 +78,22 @@ shinyApp(
 
 # MAEFilteredDataset example
 library(MultiAssayExperiment)
-MAE_d <- dataset("MAE", miniACC)
+MAE_d <- dataset("MAE", miniACC, metadata = list(type = "MAE"))
 MAE_fd <- teal:::init_filtered_dataset(MAE_d)
 \dontrun{
 shinyApp(
   ui = fluidPage(
     MAE_fd$ui_add_filter_state(id = "add"),
     MAE_fd$ui("dataset"),
-    verbatimTextOutput("call")
+    verbatimTextOutput("call"),
+    verbatimTextOutput("metadata")
   ),
   server = function(input, output, session) {
     MAE_fd$srv_add_filter_state(id = "add")
     MAE_fd$server(id = "dataset")
-
+    output$metadata <- renderText({
+      paste("Type =", MAE_fd$get_metadata()$type)
+    })
     output$call <- renderText({
       paste(
         vapply(MAE_fd$get_call(), deparse1, character(1), collapse = "\n"),

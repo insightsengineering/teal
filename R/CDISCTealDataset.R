@@ -155,7 +155,7 @@ CDISCTealDataset <- R6::R6Class( # nolint
 #'
 #' ADSL <- synthetic_cdisc_data("latest")$adsl
 #'
-#' cdisc_dataset("ADSL", ADSL)
+#' cdisc_dataset("ADSL", ADSL, metadata = list(type = "scda", date = "latest"))
 cdisc_dataset <- function(dataname,
                           x,
                           keys = get_cdisc_keys(dataname),

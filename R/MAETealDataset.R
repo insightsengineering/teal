@@ -191,7 +191,7 @@ MAETealDataset <- R6::R6Class( # nolint
     #' @return invisibly self
     print = function(...) {
       cat(sprintf("A MAETealDataset object containing data of %d subjects.\n", self$get_nrow()))
-      print(experiments(private$.raw_data))
+      print(MultiAssayExperiment::experiments(self$get_raw_data()))
       invisible(self)
     }
   ),
@@ -261,9 +261,15 @@ MAETealDataset <- R6::R6Class( # nolint
 #'
 #' @examples
 #' # Simple example
-#' mae_d <- dataset("MAE", MultiAssayExperiment::miniACC, keys = c("STUDYID", "USUBJID"))
+#' mae_d <- dataset(
+#'   "MAE",
+#'   MultiAssayExperiment::miniACC,
+#'   keys = c("STUDYID", "USUBJID"),
+#'   metadata = list(type = "example")
+#' )
 #' mae_d$get_dataname()
 #' mae_d$get_dataset_label()
+#' mae_d$get_metadata()
 #' mae_d$get_code()
 #' mae_d$get_raw_data()
 #' @export

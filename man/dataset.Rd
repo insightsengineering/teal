@@ -73,9 +73,15 @@ should be atomic and length one.}
 }
 \examples{
 # Simple example
-mae_d <- dataset("MAE", MultiAssayExperiment::miniACC, keys = c("STUDYID", "USUBJID"))
+mae_d <- dataset(
+  "MAE",
+  MultiAssayExperiment::miniACC,
+  keys = c("STUDYID", "USUBJID"),
+  metadata = list(type = "example")
+)
 mae_d$get_dataname()
 mae_d$get_dataset_label()
+mae_d$get_metadata()
 mae_d$get_code()
 mae_d$get_raw_data()
 # Simple example
@@ -95,7 +101,7 @@ ADSL_dataset <- dataset(
   code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl",
   metadata = list(type = "synthetic data")
 )
-
+ADSL_dataset$get_metadata()
 ADSL_dataset$get_dataset_label()
 ADSL_dataset$get_code()
 }

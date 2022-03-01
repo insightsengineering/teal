@@ -59,5 +59,5 @@ library(scda)
 
 ADSL <- synthetic_cdisc_data("latest")$adsl
 
-cdisc_dataset("ADSL", ADSL)
+cdisc_dataset("ADSL", ADSL, metadata = list(type = "scda", date = "latest"))
 }

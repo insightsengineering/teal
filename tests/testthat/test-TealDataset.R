@@ -7,7 +7,8 @@ testthat::test_that("TealDataset basics", {
     test_ds <- TealDataset$new(
       dataname = "testds",
       x = x,
-      keys = "x"
+      keys = "x",
+      metadata = list(A = "A", B = "B")
     )
   })
 
@@ -21,6 +22,8 @@ testthat::test_that("TealDataset basics", {
     get_keys(test_ds),
     "y"
   )
+
+  testthat::expect_equal(test_ds$get_metadata(), list(A = "A", B = "B"))
 
   df <- as.data.frame(
     list(a = c("a", "a", "b", "b", "c"), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
@@ -45,6 +48,33 @@ testthat::test_that("TealDataset basics", {
   )
 })
 
+testthat::test_that("metadata not a list throws an error", {
+  testthat::expect_error(
+    dataset("x", data.frame(x = c(1, 2)), metadata = 2),
+    "Must be of type 'list'"
+  )
+})
+
+testthat::test_that("metadata not a list of length one atomics throws an error", {
+  testthat::expect_error(
+    dataset("x", data.frame(x = c(1, 2)), metadata = list(x = list())),
+    "Must be of type 'atomic', not 'list'"
+  )
+  testthat::expect_error(
+    dataset("x", data.frame(x = c(1, 2)), metadata = list(x = 1:10)),
+    "Must have length 1"
+  )
+})
+
+testthat::test_that("metadata can be NULL (the default)", {
+  testthat::expect_error(
+    ds <- dataset("x", data.frame(x = c(1, 2)), metadata = NULL),
+    NA
+  )
+  testthat::expect_equal(ds, dataset("x", data.frame(x = c(1, 2))))
+})
+
+
 testthat::test_that("TealDataset$recreate", {
   ds <- TealDataset$new(
     dataname = "mtcars",
@@ -52,7 +82,8 @@ testthat::test_that("TealDataset$recreate", {
     keys = character(0),
     code = "mtcars",
     label = character(0),
-    vars = list()
+    vars = list(),
+    metadata = list(A = "A", B = "B")
   )
   ds2 <- ds$recreate()
 

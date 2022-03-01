@@ -128,3 +128,17 @@ testthat::test_that("ui_add_filter_state is pure virtual", {
   )
   testthat::expect_error(filtered_dataset$ui_add_filter_state(), regex = "Pure virtual")
 })
+
+testthat::test_that("get_metadata returns the metadata of the data passed to the constructor", {
+  filtered_dataset <- FilteredDataset$new(
+    dataset = TealDataset$new("iris", head(iris), metadata = list(A = "A", B = TRUE, C = 5))
+  )
+  testthat::expect_equal(filtered_dataset$get_metadata(), list(A = "A", B = TRUE, C = 5))
+
+  filtered_dataset <- FilteredDataset$new(
+    dataset = TealDataset$new("iris", head(iris))
+  )
+  testthat::expect_null(filtered_dataset$get_metadata())
+})
+
+
