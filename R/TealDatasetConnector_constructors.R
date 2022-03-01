@@ -39,7 +39,8 @@
 #' @param metadata (named `list`, `NULL` or `CallableFunction`) \cr
 #'   Field containing either the metadata about the dataset (each element of the list
 #'   should be atomic and length one) or a `CallableFuntion` to pull the metadata
-#'   from a connection.
+#'   from a connection. This should return a `list` or an object which can be
+#'   converted to a list with `as.list`.
 #' @return new `TealDatasetConnector` object
 #'
 #' @examples

@@ -46,7 +46,8 @@
 #' @param metadata (named `list`, `NULL` or `CallableFunction`) \cr
 #'   Field containing either the metadata about the dataset (each element of the list
 #'   should be atomic and length one) or a `CallableFuntion` to pull the metadata
-#'   from a connection.
+#'   from a connection. This should return a `list` or an object which can be
+#'   converted to a list with `as.list`.
 TealDatasetConnector <- R6::R6Class( # nolint
 
   ## __Public Methods ====
@@ -341,13 +342,14 @@ TealDatasetConnector <- R6::R6Class( # nolint
           vars_in_dataset <- private$dataset$get_vars()
         }
 
-        if (methods::is(private$metadata, "Callable")) {
+        if (checkmate::test_class(private$metadata, "Callable")) {
           logger::log_trace("TealDatasetConnector$pull pulling metadata for dataset: {self$get_dataname() }.")
           pulled_metadata <- private$metadata$run(try = TRUE)
-          if (methods::is(pulled_metadata, c("simpleError", "error"))) {
+          if (checkmate::test_class(pulled_metadata, c("simpleError", "error"))) {
             pulled_metadata <- NULL
             logger::log_warn("TealDatasetConnector$pull pulling metadata failed for dataset: {self$get_dataname() }.")
           } else {
+            pulled_metadata <- as.list(pulled_metadata)
             logger::log_trace("TealDatasetConnector$pull pulled metadata for dataset: {self$get_dataname() }.")
           }
         } else {

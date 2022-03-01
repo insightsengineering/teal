@@ -115,7 +115,8 @@ within another dataset.}
 \item{\code{metadata}}{(named \code{list}, \code{NULL} or \code{CallableFunction}) \cr
 Field containing either the metadata about the dataset (each element of the list
 should be atomic and length one) or a \code{CallableFuntion} to pull the metadata
-from a connection.}
+from a connection. This should return a \code{list} or an object which can be
+converted to a list with \code{as.list}.}
 }
 \if{html}{\out{</div>}}
 }
