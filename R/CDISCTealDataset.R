@@ -66,8 +66,10 @@ CDISCTealDataset <- R6::R6Class( # nolint
     initialize = function(dataname, x, keys, parent, code = character(0),
                           label = character(0), vars = list(), metadata = NULL) {
       checkmate::assert_character(parent, max.len = 1, any.missing = FALSE)
-      super$initialize(dataname = dataname, x = x, keys = keys, code = code,
-      label = label, vars = vars, metadata = metadata)
+      super$initialize(
+        dataname = dataname, x = x, keys = keys, code = code,
+        label = label, vars = vars, metadata = metadata
+      )
 
       self$set_parent(parent)
       logger::log_trace("CDISCTealDataset initialized for dataset: { deparse1(self$get_dataname()) }.")

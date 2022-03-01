@@ -140,5 +140,3 @@ testthat::test_that("get_metadata returns the metadata of the data passed to the
   )
   testthat::expect_null(filtered_dataset$get_metadata())
 })
-
-
