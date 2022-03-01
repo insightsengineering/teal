@@ -51,7 +51,8 @@ as_cdisc.TealDataset <- function(x, parent = `if`(identical(get_dataname(x), "AD
       keys = get_keys(x),
       parent = parent,
       label = get_dataset_label(x),
-      code = x$get_code_class()
+      code = x$get_code_class(),
+      metadata = x$get_metadata()
     )
   } else {
     cdisc_dataset(
@@ -59,7 +60,8 @@ as_cdisc.TealDataset <- function(x, parent = `if`(identical(get_dataname(x), "AD
       x = get_raw_data(x),
       parent = parent,
       label = get_dataset_label(x),
-      code = x$get_code_class()
+      code = x$get_code_class(),
+      metadata = x$get_metadata()
     )
   }
 }
@@ -114,6 +116,7 @@ as_cdisc.TealDatasetConnector <- function(x, parent = `if`(identical(get_datanam
     keys = get_keys(x),
     parent = parent,
     label = get_dataset_label(x),
-    vars = x$.__enclos_env__$private$pull_vars
+    vars = x$.__enclos_env__$private$pull_vars,
+    metadata = x$get_metadata()
   )
 }
