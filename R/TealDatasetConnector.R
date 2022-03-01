@@ -63,7 +63,6 @@ TealDatasetConnector <- R6::R6Class( # nolint
                           code = character(0),
                           vars = list(),
                           metadata = NULL) {
-
       private$set_pull_callable(pull_callable)
       private$set_var_r6(vars)
       private$set_pull_vars(vars)

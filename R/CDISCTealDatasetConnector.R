@@ -43,6 +43,11 @@
 #'   the `vars` list to preserve reproducibility. Please note that `vars`
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
+#'
+#' @param metadata (named `list`, `NULL` or `CallableFunction`) \cr
+#'   Field containing either the metadata about the dataset (each element of the list
+#'   should be atomic and length one) or a `CallableFuntion` to pull the metadata
+#'   from a connection.
 CDISCTealDatasetConnector <- R6::R6Class( # nolint
   classname = "CDISCTealDatasetConnector",
   inherit = TealDatasetConnector,
@@ -58,14 +63,16 @@ CDISCTealDatasetConnector <- R6::R6Class( # nolint
                           keys, parent,
                           code = character(0),
                           label = character(0),
-                          vars = list()) {
+                          vars = list(),
+                          metadata = NULL) {
       super$initialize(
         dataname = dataname,
         pull_callable = pull_callable,
         keys = keys,
         code = code,
         label = label,
-        vars = vars
+        vars = vars,
+        metadata = metadata
       )
       private$set_parent(parent)
       logger::log_trace("CDISCTealDatasetConnector initialized for dataset: { deparse1(self$get_dataname()) }")
