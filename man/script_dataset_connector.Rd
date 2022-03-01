@@ -12,6 +12,7 @@ script_dataset_connector(
   label = character(0),
   code = character(0),
   script = character(0),
+  metadata = NULL,
   ...
 )
 
@@ -23,6 +24,7 @@ script_cdisc_dataset_connector(
   label = character(0),
   code = character(0),
   script = character(0),
+  metadata = metadata,
   ...
 )
 }
@@ -49,6 +51,12 @@ argument. For example if \code{dataname = ADSL} example code should contain
 \item{script}{(\code{character})\cr
 Alternatively to \code{code} - location of the file containing modification code.
 Can't be used simultaneously with \code{script}.}
+
+\item{metadata}{(named \code{list}, \code{NULL} or \code{CallableFunction}) \cr
+Field containing either the metadata about the dataset (each element of the list
+should be atomic and length one) or a \code{CallableFuntion} to pull the metadata
+from a connection. This should return a \code{list} or an object which can be
+converted to a list with \code{as.list}.}
 
 \item{...}{Additional arguments applied to pull function.
 In case when this object code depends on the \code{raw_data} from the other

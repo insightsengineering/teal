@@ -14,6 +14,7 @@ fun_dataset_connector(
   code = character(0),
   script = character(0),
   func_name = substitute(fun),
+  metadata = NULL,
   ...
 )
 
@@ -27,6 +28,7 @@ fun_cdisc_dataset_connector(
   code = character(0),
   script = character(0),
   func_name = substitute(fun),
+  metadata = NULL,
   ...
 )
 }
@@ -58,6 +60,12 @@ Can't be used simultaneously with \code{script}.}
 
 \item{func_name}{(\code{name})\cr
 for internal purposes, please keep it default}
+
+\item{metadata}{(named \code{list}, \code{NULL} or \code{CallableFunction}) \cr
+Field containing either the metadata about the dataset (each element of the list
+should be atomic and length one) or a \code{CallableFuntion} to pull the metadata
+from a connection. This should return a \code{list} or an object which can be
+converted to a list with \code{as.list}.}
 
 \item{...}{Additional arguments applied to pull function.
 In case when this object code depends on the \code{raw_data} from the other

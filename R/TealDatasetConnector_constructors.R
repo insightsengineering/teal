@@ -242,14 +242,25 @@ cdisc_dataset_connector_file <- function(path) { # nolint
 #' x$get_code()
 #' load_dataset(x)
 #' get_dataset(x)
+#' get_dataset(x)$get_metadata()
 #' x$get_raw_data()
+#'
+#' metadata_fun <- callable_function(function(a) list(type = a))
+#' metadata_fun$set_args(args = list(a = "scda"))
+#' y <- scda_dataset_connector(
+#'   dataname = "ADSL", scda_dataname = "adsl",
+#'   metadata = metadata_fun
+#' )
+#' load_dataset(y)
+#' get_dataset(y)$get_metadata()
 scda_dataset_connector <- function(dataname,
                                    scda_dataname = tolower(dataname),
                                    scda_name = "latest",
                                    keys = character(0),
                                    label = character(0),
                                    code = character(0),
-                                   script = character(0)) {
+                                   script = character(0),
+                                   metadata = list(type = "scda", version = scda_name)) {
   check_pkg_quietly("scda", "scda package not available.")
   checkmate::assert_string(scda_dataname)
   checkmate::assert_string(scda_name)
@@ -263,7 +274,8 @@ scda_dataset_connector <- function(dataname,
     fun_args = list(dataset_name = scda_dataname, name = scda_name),
     keys = keys,
     label = label,
-    code = code_from_script(code, script)
+    code = code_from_script(code, script),
+    metadata = metadata
   )
 
   return(x)
@@ -288,7 +300,8 @@ scda_cdisc_dataset_connector <- function(dataname,
                                          parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
                                          label = character(0),
                                          code = character(0),
-                                         script = character(0)) {
+                                         script = character(0),
+                                         metadata = list(type = "scda", version = scda_name)) {
   x <- scda_dataset_connector(
     dataname = dataname,
     scda_dataname = scda_dataname,
@@ -296,7 +309,8 @@ scda_cdisc_dataset_connector <- function(dataname,
     keys = keys,
     code = code,
     script = script,
-    label = label
+    label = label,
+    metadata = metadata
   )
 
   res <- as_cdisc(
@@ -342,6 +356,7 @@ rds_dataset_connector <- function(dataname,
                                   label = character(0),
                                   code = character(0),
                                   script = character(0),
+                                  metadata = list(type = "rds", file = file),
                                   ...) {
   dot_args <- list(...)
   checkmate::assert_list(dot_args, min.len = 0, names = "unique")
@@ -359,7 +374,8 @@ rds_dataset_connector <- function(dataname,
     pull_callable = x_fun,
     keys = keys,
     label = label,
-    code = code_from_script(code, script)
+    code = code_from_script(code, script),
+    metadata =  metadata
   )
 
   return(x)
@@ -385,6 +401,7 @@ rds_cdisc_dataset_connector <- function(dataname,
                                         label = character(0),
                                         code = character(0),
                                         script = character(0),
+                                        metadata = list(type = "rds", file = file),
                                         ...) {
   x <- rds_dataset_connector(
     dataname = dataname,
@@ -392,6 +409,7 @@ rds_cdisc_dataset_connector <- function(dataname,
     keys = keys,
     code = code_from_script(code, script),
     label = label,
+    metadata = metadata,
     ...
   )
 
@@ -436,6 +454,7 @@ script_dataset_connector <- function(dataname,
                                      label = character(0),
                                      code = character(0),
                                      script = character(0),
+                                     metadata = NULL,
                                      ...) {
   vars <- list(...)
   checkmate::assert_list(vars, min.len = 0, names = "unique")
@@ -453,7 +472,8 @@ script_dataset_connector <- function(dataname,
     keys = keys,
     label = label,
     code = code_from_script(code, script),
-    vars = vars
+    vars = vars,
+    metadata = metadata
   )
 
   return(x)
@@ -479,6 +499,7 @@ script_cdisc_dataset_connector <- function(dataname,
                                            label = character(0),
                                            code = character(0),
                                            script = character(0),
+                                           metadata = metadata,
                                            ...) {
   x <- script_dataset_connector(
     dataname = dataname,
@@ -487,6 +508,7 @@ script_cdisc_dataset_connector <- function(dataname,
     code = code_from_script(code, script),
     script = script,
     label = label,
+    metadata = metadata,
     ...
   )
 
@@ -555,6 +577,7 @@ code_dataset_connector <- function(dataname,
                                    label = character(0),
                                    mutate_code = character(0),
                                    mutate_script = character(0),
+                                   metadata = NULL,
                                    ...) {
   vars <- list(...)
   checkmate::assert_list(vars, min.len = 0, names = "unique")
@@ -569,7 +592,8 @@ code_dataset_connector <- function(dataname,
     keys = keys,
     label = label,
     code = code_from_script(mutate_code, mutate_script),
-    vars = vars
+    vars = vars,
+    metadata = metadata
   )
 
   return(x)
@@ -594,6 +618,7 @@ code_cdisc_dataset_connector <- function(dataname,
                                          parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
                                          label = character(0),
                                          mutate_code = character(0),
+                                         metadata = NULL,
                                          ...) {
   x <- code_dataset_connector(
     dataname = dataname,
@@ -601,6 +626,7 @@ code_cdisc_dataset_connector <- function(dataname,
     keys = keys,
     mutate_code = mutate_code,
     label = label,
+    metadata = metadata,
     ...
   )
 
@@ -884,6 +910,7 @@ csv_dataset_connector <- function(dataname,
                                   label = character(0),
                                   code = character(0),
                                   script = character(0),
+                                  metadata = list(type = "csv", file = file),
                                   ...) {
   dot_args <- list(...)
   checkmate::assert_list(dot_args, min.len = 0, names = "unique")
@@ -912,7 +939,8 @@ csv_dataset_connector <- function(dataname,
     pull_callable = x_fun,
     keys = keys,
     label = label,
-    code = code_from_script(code, script)
+    code = code_from_script(code, script),
+    metadata = metadata
   )
 
   return(x)
@@ -938,6 +966,7 @@ csv_cdisc_dataset_connector <- function(dataname,
                                         label = character(0),
                                         code = character(0),
                                         script = character(0),
+                                        metadata = list(type = "csv", file = file),
                                         ...) {
   x <- csv_dataset_connector(
     dataname = dataname,
@@ -945,6 +974,7 @@ csv_cdisc_dataset_connector <- function(dataname,
     keys = keys,
     code = code_from_script(code, script),
     label = label,
+    metadata = metadata,
     ...
   )
 
@@ -1040,6 +1070,7 @@ fun_dataset_connector <- function(dataname,
                                   code = character(0),
                                   script = character(0),
                                   func_name = substitute(fun),
+                                  metadata = NULL,
                                   ...) {
   vars <- list(...)
   checkmate::assert_list(vars, min.len = 0, names = "unique")
@@ -1094,7 +1125,8 @@ fun_dataset_connector <- function(dataname,
     keys = keys,
     code = code_from_script(code, script),
     label = label,
-    vars = vars
+    vars = vars,
+    metadata = metadata
   )
 
   return(x)
@@ -1122,6 +1154,7 @@ fun_cdisc_dataset_connector <- function(dataname,
                                         code = character(0),
                                         script = character(0),
                                         func_name = substitute(fun),
+                                        metadata = NULL,
                                         ...) {
   x <- fun_dataset_connector(
     dataname = dataname,
@@ -1132,6 +1165,7 @@ fun_cdisc_dataset_connector <- function(dataname,
     label = label,
     code = code,
     script = script,
+    metadata = metadata,
     ...
   )
 
@@ -1266,7 +1300,8 @@ python_dataset_connector <- function(dataname,
                                      label = character(0),
                                      mutate_code = character(0),
                                      mutate_script = character(0),
-                                     vars = list()) {
+                                     vars = list(),
+                                     metadata = NULL) {
   checkmate::assert_string(object)
   if (!xor(missing(code), missing(file))) stop("Exactly one of 'code' and 'script' is required")
 
@@ -1289,7 +1324,8 @@ python_dataset_connector <- function(dataname,
     keys = keys,
     label = label,
     code = code_from_script(mutate_code, mutate_script),
-    vars = vars
+    vars = vars,
+    metadata = metadata
   )
 
   return(x)
@@ -1315,7 +1351,8 @@ python_cdisc_dataset_connector <- function(dataname,
                                            mutate_code = character(0),
                                            mutate_script = character(0),
                                            label = character(0),
-                                           vars = list()) {
+                                           vars = list(),
+                                           metadata = NULL) {
   x <- python_dataset_connector(
     dataname = dataname,
     file = file,
@@ -1325,7 +1362,8 @@ python_cdisc_dataset_connector <- function(dataname,
     mutate_code = mutate_code,
     mutate_script = mutate_script,
     label = label,
-    vars = vars
+    vars = vars,
+    metadata = metadata
   )
 
   res <- as_cdisc(

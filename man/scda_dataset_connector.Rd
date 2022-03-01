@@ -12,7 +12,8 @@ scda_dataset_connector(
   keys = character(0),
   label = character(0),
   code = character(0),
-  script = character(0)
+  script = character(0),
+  metadata = list(type = "scda", version = scda_name)
 )
 
 scda_cdisc_dataset_connector(
@@ -23,7 +24,8 @@ scda_cdisc_dataset_connector(
   parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   label = character(0),
   code = character(0),
-  script = character(0)
+  script = character(0),
+  metadata = list(type = "scda", version = scda_name)
 )
 }
 \arguments{
@@ -50,6 +52,12 @@ argument. For example if \code{dataname = ADSL} example code should contain
 Alternatively to \code{code} - location of the file containing modification code.
 Can't be used simultaneously with \code{script}.}
 
+\item{metadata}{(named \code{list}, \code{NULL} or \code{CallableFunction}) \cr
+Field containing either the metadata about the dataset (each element of the list
+should be atomic and length one) or a \code{CallableFuntion} to pull the metadata
+from a connection. This should return a \code{list} or an object which can be
+converted to a list with \code{as.list}.}
+
 \item{parent}{optional, (\code{character}) \cr
 parent dataset name}
 }
@@ -71,5 +79,15 @@ x <- scda_dataset_connector(
 x$get_code()
 load_dataset(x)
 get_dataset(x)
+get_dataset(x)$get_metadata()
 x$get_raw_data()
+
+metadata_fun <- callable_function(function(a) list(type = a))
+metadata_fun$set_args(args = list(a = "scda"))
+y <- scda_dataset_connector(
+  dataname = "ADSL", scda_dataname = "adsl",
+  metadata = metadata_fun
+)
+load_dataset(y)
+get_dataset(y)$get_metadata()
 }
