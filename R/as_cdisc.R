@@ -117,6 +117,6 @@ as_cdisc.TealDatasetConnector <- function(x, parent = `if`(identical(get_datanam
     parent = parent,
     label = get_dataset_label(x),
     vars = x$.__enclos_env__$private$pull_vars,
-    metadata = x$x$.__enclos_env__$private$metadata
+    metadata = x$.__enclos_env__$private$metadata
   )
 }
