@@ -59,9 +59,10 @@
 #' }
 #'
 #' # MAEFilteredDataset example
-#' library(MultiAssayExperiment)
-#' MAE_d <- dataset("MAE", miniACC)
-#' MAE_fd <- teal:::init_filtered_dataset(MAE_d)
+#' if (require(MultiAssayExperiment)) {
+#'   MAE_d <- dataset("MAE", miniACC)
+#'   MAE_fd <- teal:::init_filtered_dataset(MAE_d)
+#' }
 #' \dontrun{
 #' shinyApp(
 #'   ui = fluidPage(
@@ -102,6 +103,9 @@ init_filtered_dataset.CDISCTealDataset <- function(dataset) { # nolint
 #' @keywords internal
 #' @export
 init_filtered_dataset.MAETealDataset <- function(dataset) { # nolint
+  if (!requireNamespace("MultiAssayExperiment")) {
+    stop("Cannot load MultiAssayExperiment - please install the package or restart you session.")
+  }
   MAEFilteredDataset$new(dataset)
 }
 
@@ -838,6 +842,9 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'  single dataset for which filters are rendered
     initialize = function(dataset) {
       stopifnot(is(dataset, "MAETealDataset"))
+      if (!requireNamespace("MultiAssayExperiment")) {
+        stop("Cannot load MultiAssayExperiment - please install the package or restart you session.")
+      }
       super$initialize(dataset)
 
       dataname <- self$get_dataname()

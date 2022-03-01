@@ -74,27 +74,30 @@ isolate(datasets$get_call("mtcars"))
 ## Method `FilteredData$set_filter_state`
 ## ------------------------------------------------
 
-datasets <- teal:::FilteredData$new()
-datasets$set_dataset(dataset("iris", iris))
-datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
-fs <- list(
-  iris = list(
-    Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),
-    Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
-  ),
-  mae = list(
-    subjects = list(
-      years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
-      vital_status = list(selected = "1", keep_na = FALSE),
-      gender = list(selected = "female", keep_na = TRUE)
+if (requireNamespace("MultiAssayExperiment")) {
+  datasets <- teal:::FilteredData$new()
+  datasets$set_dataset(dataset("iris", iris))
+  datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
+  fs <- list(
+    iris = list(
+      Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),
+      Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
     ),
-    RPPAArray = list(
-      subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+    mae = list(
+      subjects = list(
+        years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+        vital_status = list(selected = "1", keep_na = FALSE),
+        gender = list(selected = "female", keep_na = TRUE)
+      ),
+      RPPAArray = list(
+        subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+      )
     )
   )
-)
-datasets$set_filter_state(state = fs)
-shiny::isolate(datasets$get_filter_state())
+  datasets$set_filter_state(state = fs)
+  shiny::isolate(datasets$get_filter_state())
+}
+
 }
 \keyword{internal}
 \section{Methods}{
@@ -562,27 +565,30 @@ nested list of filter selections applied to datasets.}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{datasets <- teal:::FilteredData$new()
-datasets$set_dataset(dataset("iris", iris))
-datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
-fs <- list(
-  iris = list(
-    Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),
-    Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
-  ),
-  mae = list(
-    subjects = list(
-      years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
-      vital_status = list(selected = "1", keep_na = FALSE),
-      gender = list(selected = "female", keep_na = TRUE)
+\preformatted{if (requireNamespace("MultiAssayExperiment")) {
+  datasets <- teal:::FilteredData$new()
+  datasets$set_dataset(dataset("iris", iris))
+  datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
+  fs <- list(
+    iris = list(
+      Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),
+      Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
     ),
-    RPPAArray = list(
-      subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+    mae = list(
+      subjects = list(
+        years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+        vital_status = list(selected = "1", keep_na = FALSE),
+        gender = list(selected = "female", keep_na = TRUE)
+      ),
+      RPPAArray = list(
+        subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+      )
     )
   )
-)
-datasets$set_filter_state(state = fs)
-shiny::isolate(datasets$get_filter_state())
+  datasets$set_filter_state(state = fs)
+  shiny::isolate(datasets$get_filter_state())
+}
+
 }
 \if{html}{\out{</div>}}
 

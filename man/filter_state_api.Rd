@@ -88,48 +88,50 @@ in the following name.
 Set, get and remove filter states of \code{FilteredData} object
 }
 \examples{
-datasets <- teal:::FilteredData$new()
-datasets$set_dataset(dataset("iris", iris))
-datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
-fs <- list(
-  iris = list(
-    Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),
-    Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
-  ),
-  mae = list(
-    subjects = list(
-      years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
-      vital_status = list(selected = "1", keep_na = FALSE),
-      gender = list(selected = "female", keep_na = TRUE)
+if (requireNamespace("MultiAssayExperiment")) {
+  datasets <- teal:::FilteredData$new()
+  datasets$set_dataset(dataset("iris", iris))
+  datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
+  fs <- list(
+    iris = list(
+      Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),
+      Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
     ),
-    RPPAArray = list(
-      subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
-    )
-  )
-)
-
-# set initial filter state
-set_filter_state(datasets, filter = fs)
-
-# get filter state
-get_filter_state(datasets)
-
-# modify filter state
-set_filter_state(
-  datasets,
-  filter = list(iris = list(Species = list(selected = "setosa", keep_na = TRUE)))
-)
-
-# remove specific filters
-remove_filter_state(datasets,
-  filter = list(
-    iris = "Species",
     mae = list(
-      subjects = c("years_to_birth", "vital_status")
+      subjects = list(
+        years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
+        vital_status = list(selected = "1", keep_na = FALSE),
+        gender = list(selected = "female", keep_na = TRUE)
+      ),
+      RPPAArray = list(
+        subset = list(ARRAY_TYPE = list(selected = "", keep_na = TRUE))
+      )
     )
   )
-)
 
-# remove all states
-clear_filter_states(datasets)
+  # set initial filter state
+  set_filter_state(datasets, filter = fs)
+
+  # get filter state
+  get_filter_state(datasets)
+
+  # modify filter state
+  set_filter_state(
+    datasets,
+    filter = list(iris = list(Species = list(selected = "setosa", keep_na = TRUE)))
+  )
+
+  # remove specific filters
+  remove_filter_state(datasets,
+    filter = list(
+      iris = "Species",
+      mae = list(
+        subjects = c("years_to_birth", "vital_status")
+      )
+    )
+  )
+
+  # remove all states
+  clear_filter_states(datasets)
+}
 }
