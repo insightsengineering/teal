@@ -88,7 +88,7 @@ in the following name.
 Set, get and remove filter states of \code{FilteredData} object
 }
 \examples{
-if (requireNamespace("MultiAssayExperiment")) {
+if (requireNamespace("MultiAssayExperiment", quietly = TRUE)) {
   datasets <- teal:::FilteredData$new()
   datasets$set_dataset(dataset("iris", iris))
   datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))

@@ -60,7 +60,7 @@ filtered_data_set.TealData <- function(data, datasets) { # nolintr
 #' - get returns named `list` of the same structure as described in `filter` argument.
 #'
 #' @examples
-#' if (requireNamespace("MultiAssayExperiment")) {
+#' if (requireNamespace("MultiAssayExperiment", quietly = TRUE)) {
 #'   datasets <- teal:::FilteredData$new()
 #'   datasets$set_dataset(dataset("iris", iris))
 #'   datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))

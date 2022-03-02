@@ -351,7 +351,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
     #' @examples
-    #' if (requireNamespace("MultiAssayExperiment")) {
+    #' if (requireNamespace("MultiAssayExperiment", quietly = TRUE)) {
     #'   datasets <- teal:::FilteredData$new()
     #'   datasets$set_dataset(dataset("iris", iris))
     #'   datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))

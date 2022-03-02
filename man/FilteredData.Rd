@@ -74,7 +74,7 @@ isolate(datasets$get_call("mtcars"))
 ## Method `FilteredData$set_filter_state`
 ## ------------------------------------------------
 
-if (requireNamespace("MultiAssayExperiment")) {
+if (requireNamespace("MultiAssayExperiment", quietly = TRUE)) {
   datasets <- teal:::FilteredData$new()
   datasets$set_dataset(dataset("iris", iris))
   datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
@@ -565,7 +565,7 @@ nested list of filter selections applied to datasets.}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{if (requireNamespace("MultiAssayExperiment")) {
+\preformatted{if (requireNamespace("MultiAssayExperiment", quietly = TRUE)) {
   datasets <- teal:::FilteredData$new()
   datasets$set_dataset(dataset("iris", iris))
   datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))

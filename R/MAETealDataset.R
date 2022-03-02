@@ -49,7 +49,7 @@ MAETealDataset <- R6::R6Class( # nolint
                           code = character(0),
                           label = character(0),
                           vars = list()) {
-      if (!requireNamespace("MultiAssayExperiment")) {
+      if (!requireNamespace("MultiAssayExperiment", quietly = TRUE)) {
         stop("Cannot load MultiAssayExperiment - please install the package or restart you session.")
       }
       checkmate::assert_string(dataname)
@@ -243,7 +243,7 @@ dataset.MultiAssayExperiment <- function(dataname,
                                          label = data_label(x),
                                          code = character(0),
                                          vars = list()) {
-  if (!requireNamespace("MultiAssayExperiment")) {
+  if (!requireNamespace("MultiAssayExperiment", quietly = TRUE)) {
     stop("Cannot load MultiAssayExperiment - please install the package or restart you session.")
   }
   checkmate::assert_string(dataname)

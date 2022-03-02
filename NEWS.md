@@ -15,7 +15,7 @@
 * Removed `rtables` dependency from the package.
 * Added `is_any_filtered` method to all `FilterState` classes to detect if selected values actually filters out any data. This is used to decide if an explicit filter statement is added to the call.
 * Removed redundant calling of the `JoinKeys$mutate` method inside of `for-loops`.
-* `MultiAssayExperiment` and `SummarizedExperiment` are now suggested packages, not required. Changed objects dependent on `MultiAssayExperiment` to lazy-load the now suggested packages.
+* `MultiAssayExperiment` and `SummarizedExperiment` are now suggested packages, not required. Objects dependent on `MultiAssayExperiment` are changed to lazy-load these now suggested packages.
 
 # teal 0.10.1
 ### Breaking changes
