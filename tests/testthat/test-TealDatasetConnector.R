@@ -119,6 +119,29 @@ testthat::test_that("TealDatasetConnector", {
   )
 })
 
+testthat::test_that("metadata for TealDatasetConnector can be Callable, list or NULL", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(a = c(1, 2, 3)))
+  metadata_fun <- callable_function(function(a, b) list(A = a, B = b))
+  metadata_fun$set_args(args = list(a = TRUE, b = 12))
+
+  testthat::expect_error(
+    dataset_connector("test", pull_fun, metadata = list(A = TRUE)),
+    NA
+  )
+
+  testthat::expect_error(
+    dataset_connector("test", pull_fun, metadata = NULL),
+    NA
+  )
+
+  testthat::expect_error(
+    dataset_connector("test", pull_fun, metadata = metadata_fun),
+    NA
+  )
+
+})
+
 # Test conversions
 testthat::test_that("scda_dataset_connector", {
   x <- scda_cdisc_dataset_connector(
@@ -157,6 +180,12 @@ testthat::test_that("scda_dataset_connector", {
     x$get_raw_data(),
     synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")
   )
+
+  testthat::expect_equal(
+    x$get_dataset()$get_metadata(),
+    list(type = "scda", version = "latest")
+  )
+
 })
 
 testthat::test_that("rds_dataset_connector", {
@@ -1151,7 +1180,7 @@ testthat::test_that("TealDatasetConnector$get_dataset calls dataset$merge_join_k
   testthat::expect_equal(t_dc$get_dataset()$get_join_keys(), t_dc$get_join_keys())
 })
 
-testthat::test_that("TealDatasetConnect$print does not print dataset when not yet pulled", {
+testthat::test_that("TealDatasetConnector$print does not print dataset when not yet pulled", {
   test_ds1 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
   pull_fun <- callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
@@ -1165,7 +1194,7 @@ testthat::test_that("TealDatasetConnect$print does not print dataset when not ye
   )
 })
 
-testthat::test_that("TealDatasetConnect$print prints dataset when it is pulled", {
+testthat::test_that("TealDatasetConnector$print prints dataset when it is pulled", {
   test_ds1 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
   pull_fun <- callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
@@ -1286,4 +1315,48 @@ testthat::test_that("reassign_datasets_vars does not change any `vars` while
     test_ds2$.__enclos_env__$private$pull_vars$test_ds1,
     test_ds1
   )
+})
+
+
+testthat::test_that("Callable metadata is pulled when data is pulled", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(a = c(1, 2, 3)))
+  metadata_fun <- callable_function(function(a, b) list(A = a, B = b))
+  metadata_fun$set_args(args = list(a = TRUE, b = 12))
+  x <- dataset_connector("test", pull_fun, metadata = metadata_fun)
+  x$pull()
+
+  testthat::expect_equal(
+    x$get_dataset()$get_metadata(),
+    list(A = TRUE, B = 12)
+  )
+})
+
+testthat::test_that("list metadata is passed to dataset when data is pulled", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(a = c(1, 2, 3)))
+  x <- dataset_connector("test", pull_fun, metadata = list(foo = "bar"))
+  x$pull()
+
+  testthat::expect_equal(
+    x$get_dataset()$get_metadata(),
+    list(foo = "bar")
+  )
+})
+
+testthat::test_that("if pulling metadata fails, dataset is still created but metadata is NULL", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(a = c(1, 2, 3)))
+  metadata_fun <- callable_function(function(a, b) stop("An error"))
+  metadata_fun$set_args(args = list(a = TRUE, b = 12))
+  x <- dataset_connector("test", pull_fun, metadata = metadata_fun)
+
+  testthat::expect_output(
+    load_dataset(x),
+    "TealDatasetConnector\\$pull pulling metadata failed for dataset: test"
+  )
+
+  testthat::expect_null(x$get_dataset()$get_metadata())
+  testthat::expect_true(x$is_pulled())
+
 })

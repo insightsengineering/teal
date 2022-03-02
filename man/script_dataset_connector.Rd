@@ -24,7 +24,7 @@ script_cdisc_dataset_connector(
   label = character(0),
   code = character(0),
   script = character(0),
-  metadata = metadata,
+  metadata = NULL,
   ...
 )
 }
