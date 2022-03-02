@@ -78,11 +78,8 @@ dataset_connector <- function(dataname,
   checkmate::assert_character(code, any.missing = FALSE)
   checkmate::assert_character(label, any.missing = FALSE)
 
-  if (!checkmate::test_class(metadata, "Callable")) {
-    checkmate::assert_list(metadata, any.missing = FALSE, names = "named", null.ok = TRUE)
-    lapply(names(metadata), function(name) {
-      checkmate::assert_atomic(metadata[[name]], len = 1, .var.name = name)
-    })
+  if (!checkmate::test_class(metadata, "Callable", null.ok = TRUE)) {
+    validate_metadata_arg(metadata)
   }
 
   x <- TealDatasetConnector$new(
@@ -126,11 +123,8 @@ cdisc_dataset_connector <- function(dataname,
   checkmate::assert_character(code, max.len = 1, any.missing = FALSE)
   checkmate::assert_character(label, max.len = 1, any.missing = FALSE)
 
-  if (!checkmate::test_class(metadata, "Callable")) {
-    checkmate::assert_list(metadata, any.missing = FALSE, names = "named", null.ok = TRUE)
-    lapply(names(metadata), function(name) {
-      checkmate::assert_atomic(metadata[[name]], len = 1, .var.name = name)
-    })
+  if (!checkmate::test_class(metadata, "Callable", null.ok = TRUE)) {
+    validate_metadata_arg(metadata)
   }
 
   x <- CDISCTealDatasetConnector$new(
@@ -499,7 +493,7 @@ script_cdisc_dataset_connector <- function(dataname,
                                            label = character(0),
                                            code = character(0),
                                            script = character(0),
-                                           metadata = metadata,
+                                           metadata = NULL,
                                            ...) {
   x <- script_dataset_connector(
     dataname = dataname,

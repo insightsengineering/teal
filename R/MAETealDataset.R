@@ -64,10 +64,7 @@ MAETealDataset <- R6::R6Class( # nolint
       checkmate::assert_list(vars, min.len = 0, names = "unique")
 
       # validate metadata as a list of length one atomic
-      checkmate::assert_list(metadata, any.missing = FALSE, names = "named", null.ok = TRUE)
-      lapply(names(metadata), function(name) {
-        checkmate::assert_atomic(metadata[[name]], len = 1, .var.name = name)
-      })
+      validate_metadata_arg(metadata)
 
       private$.raw_data <- x
       private$metadata <- metadata
