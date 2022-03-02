@@ -17,8 +17,8 @@ CallablePythonCode <- R6::R6Class( # nolint
     #'
     #' @return new `CallablePythonCode` object
     initialize = function(fun) {
-      if (!requireNamespace("reticulate")) {
-        stop("Cannot load package reticulate - please install the package.")
+      if (!requireNamespace("reticulate", quietly = TRUE)) {
+        stop("Cannot load package 'reticulate' - please install the package.", call. = FALSE)
       }
 
       super$initialize(fun = fun)
