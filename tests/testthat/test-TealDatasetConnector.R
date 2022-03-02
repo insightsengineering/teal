@@ -1357,3 +1357,20 @@ testthat::test_that("if pulling metadata fails, dataset is still created but met
   testthat::expect_null(x$get_dataset()$get_metadata())
   testthat::expect_true(x$is_pulled())
 })
+
+
+testthat::test_that("if pulled metadata is invalid, dataset is still created but metadata is NULL", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(a = c(1, 2, 3)))
+  metadata_fun <- callable_function(function(a, b) 1:10)
+  metadata_fun$set_args(args = list(a = TRUE, b = 12))
+  x <- dataset_connector("test", pull_fun, metadata = metadata_fun)
+
+  testthat::expect_output(
+    load_dataset(x),
+    "TealDatasetConnector\\$pull invalid metadata for dataset: test"
+  )
+
+  testthat::expect_null(x$get_dataset()$get_metadata())
+  testthat::expect_true(x$is_pulled())
+})

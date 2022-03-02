@@ -342,20 +342,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
           vars_in_dataset <- private$dataset$get_vars()
         }
 
-        if (checkmate::test_class(private$metadata, "Callable")) {
-          logger::log_trace("TealDatasetConnector$pull pulling metadata for dataset: {self$get_dataname() }.")
-          pulled_metadata <- private$metadata$run(try = TRUE)
-          if (checkmate::test_class(pulled_metadata, c("simpleError", "error"))) {
-            pulled_metadata <- NULL
-            logger::log_warn("TealDatasetConnector$pull pulling metadata failed for dataset: {self$get_dataname() }.")
-          } else {
-            pulled_metadata <- as.list(pulled_metadata)
-            logger::log_trace("TealDatasetConnector$pull pulled metadata for dataset: {self$get_dataname() }.")
-          }
-        } else {
-          pulled_metadata <- private$metadata
-        }
-
+        pulled_metadata <- private$pull_metadata_internal()
         private$dataset <- dataset(
           dataname = self$get_dataname(),
           x = data,
@@ -666,6 +653,33 @@ TealDatasetConnector <- R6::R6Class( # nolint
       checkmate::assert_list(pull_vars, min.len = 0, names = "unique")
       private$pull_vars <- pull_vars
       return(invisible(self))
+    },
+    pull_metadata_internal = function() {
+      if (!checkmate::test_class(private$metadata, "Callable")) {
+        return(private$metadata)
+      }
+
+      logger::log_trace("TealDatasetConnector$pull pulling metadata for dataset: {self$get_dataname() }.")
+      pulled_metadata <- private$metadata$run(try = TRUE)
+
+      if (checkmate::test_class(pulled_metadata, c("simpleError", "error"))) {
+        logger::log_warn("TealDatasetConnector$pull pulling metadata failed for dataset: {self$get_dataname() }.")
+        return(NULL)
+      }
+
+      # metadata pulled, now lets make sure it is valid
+      tryCatch(
+        {
+          pulled_metadata <- as.list(pulled_metadata)
+          validate_metadata_arg(pulled_metadata)
+          logger::log_trace("TealDatasetConnector$pull pulled metadata for dataset: {self$get_dataname() }.")
+          return(pulled_metadata)
+        },
+        error = function(e) {
+          logger::log_warn("TealDatasetConnector$pull invalid metadata for dataset: {self$get_dataname() }.")
+          return(NULL)
+        }
+      )
     },
     pull_internal = function(args = NULL, try = FALSE) {
       # include objects CallableFunction environment
