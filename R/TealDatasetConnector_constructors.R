@@ -369,7 +369,7 @@ rds_dataset_connector <- function(dataname,
     keys = keys,
     label = label,
     code = code_from_script(code, script),
-    metadata =  metadata
+    metadata = metadata
   )
 
   return(x)

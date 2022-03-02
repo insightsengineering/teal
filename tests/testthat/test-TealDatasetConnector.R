@@ -139,7 +139,6 @@ testthat::test_that("metadata for TealDatasetConnector can be Callable, list or 
     dataset_connector("test", pull_fun, metadata = metadata_fun),
     NA
   )
-
 })
 
 # Test conversions
@@ -185,7 +184,6 @@ testthat::test_that("scda_dataset_connector", {
     x$get_dataset()$get_metadata(),
     list(type = "scda", version = "latest")
   )
-
 })
 
 testthat::test_that("rds_dataset_connector", {
@@ -1358,5 +1356,4 @@ testthat::test_that("if pulling metadata fails, dataset is still created but met
 
   testthat::expect_null(x$get_dataset()$get_metadata())
   testthat::expect_true(x$is_pulled())
-
 })
