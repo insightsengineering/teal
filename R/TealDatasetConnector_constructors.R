@@ -1244,7 +1244,6 @@ python_dataset_connector <- function(dataname,
                                      mutate_code = character(0),
                                      mutate_script = character(0),
                                      vars = list()) {
-
   if (!requireNamespace("reticulate", quietly = TRUE)) {
     stop("Cannot load package 'reticulate' - please install the package.", call. = FALSE)
   }
