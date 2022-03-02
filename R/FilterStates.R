@@ -98,7 +98,7 @@ init_filter_states.MultiAssayExperiment <- function(data, # nolint
                                                     varlabels,
                                                     keys = character(0)) {
   if (!requireNamespace("MultiAssayExperiment", quietly = TRUE)) {
-    stop("Cannot load MultiAssayExperiment - please install the package or restart you session.")
+    stop("Cannot load MultiAssayExperiment - please install the package or restart your session.")
   }
   MAEFilterStates$new(
     input_dataname = input_dataname,
@@ -116,7 +116,7 @@ init_filter_states.SummarizedExperiment <- function(data, # nolint
                                                     output_dataname = input_dataname,
                                                     datalabel = character(0)) {
   if (!requireNamespace("SummarizedExperiment", quietly = TRUE)) {
-    stop("Cannot load SummarizedExperiment - please install the package or restart you session.")
+    stop("Cannot load SummarizedExperiment - please install the package or restart your session.")
   }
   SEFilterStates$new(
     input_dataname = input_dataname,
@@ -1066,7 +1066,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #'   key columns names
     initialize = function(input_dataname, output_dataname, datalabel, varlabels, keys) {
       if (!requireNamespace("MultiAssayExperiment", quietly = TRUE)) {
-        stop("Cannot load MultiAssayExperiment - please install the package or restart you session.")
+        stop("Cannot load MultiAssayExperiment - please install the package or restart your session.")
       }
       super$initialize(input_dataname, output_dataname, datalabel)
       private$keys <- keys
@@ -1421,7 +1421,7 @@ SEFilterStates <- R6::R6Class( # nolint
     #'   text label value.
     initialize = function(input_dataname, output_dataname, datalabel) {
       if (!requireNamespace("SummarizedExperiment", quietly = TRUE)) {
-        stop("Cannot load SummarizedExperiment - please install the package or restart you session.")
+        stop("Cannot load SummarizedExperiment - please install the package or restart your session.")
       }
       super$initialize(input_dataname, output_dataname, datalabel)
       self$queue_initialize(

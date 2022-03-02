@@ -104,7 +104,7 @@ init_filtered_dataset.CDISCTealDataset <- function(dataset) { # nolint
 #' @export
 init_filtered_dataset.MAETealDataset <- function(dataset) { # nolint
   if (!requireNamespace("MultiAssayExperiment", quietly = TRUE)) {
-    stop("Cannot load MultiAssayExperiment - please install the package or restart you session.")
+    stop("Cannot load MultiAssayExperiment - please install the package or restart your session.")
   }
   MAEFilteredDataset$new(dataset)
 }
@@ -843,7 +843,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     initialize = function(dataset) {
       stopifnot(is(dataset, "MAETealDataset"))
       if (!requireNamespace("MultiAssayExperiment", quietly = TRUE)) {
-        stop("Cannot load MultiAssayExperiment - please install the package or restart you session.")
+        stop("Cannot load MultiAssayExperiment - please install the package or restart your session.")
       }
       super$initialize(dataset)
 
