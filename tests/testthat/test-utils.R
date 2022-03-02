@@ -33,42 +33,42 @@ testthat::test_that("get_key_duplicates_util function", {
   ))
 })
 
-testthat::test_that("validate_metadata_arg throws no error if metadata is NULL", {
+testthat::test_that("validate_metadata throws no error if metadata is NULL", {
   testthat::expect_error(
-    validate_metadata_arg(NULL),
+    validate_metadata(NULL),
     NA
   )
 })
 
-testthat::test_that("validate_metadata_arg throws error if metadata is not a list (or NULL)", {
+testthat::test_that("validate_metadata throws error if metadata is not a list (or NULL)", {
   testthat::expect_error(
-    validate_metadata_arg(1:10),
+    validate_metadata(1:10),
     "Must be of type 'list'"
   )
   testthat::expect_error(
-    validate_metadata_arg(character(0)),
+    validate_metadata(character(0)),
     "Must be of type 'list'"
   )
 })
 
-testthat::test_that("validate_metadata_arg throws error if metadata is not a list of length one atomics (or NULL)", {
+testthat::test_that("validate_metadata throws error if metadata is not a list of length one atomics (or NULL)", {
   testthat::expect_error(
-    validate_metadata_arg(list(x = list())),
+    validate_metadata(list(x = list())),
     "Must be of type 'atomic', not 'list'"
   )
   testthat::expect_error(
-    validate_metadata_arg(list(x = 1:10)),
+    validate_metadata(list(x = 1:10)),
     "Must have length 1"
   )
 })
 
-testthat::test_that("validate_metadata_arg throws error if metadata is not a named list (or NULL)", {
+testthat::test_that("validate_metadata throws error if metadata is not a named list (or NULL)", {
   testthat::expect_error(
-    validate_metadata_arg(list(x = 1, 5)),
+    validate_metadata(list(x = 1, 5)),
     "Must have names"
   )
   testthat::expect_error(
-    validate_metadata_arg(list("boo", "foo")),
+    validate_metadata(list("boo", "foo")),
     "Must have names"
   )
 })

@@ -563,7 +563,7 @@ set_state <- function(x, value, is_reactive = shiny::isRunning()) {
 }
 
 # validate metadata as a list of length one atomic
-validate_metadata_arg <- function(metadata) {
+validate_metadata <- function(metadata) {
   checkmate::assert_list(metadata, any.missing = FALSE, names = "named", null.ok = TRUE)
   lapply(names(metadata), function(name) {
     checkmate::assert_atomic(metadata[[name]], len = 1, .var.name = name)

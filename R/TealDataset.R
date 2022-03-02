@@ -64,7 +64,7 @@ TealDataset <- R6::R6Class( # nolint
       checkmate::assert_character(label, max.len = 1, null.ok = TRUE, any.missing = FALSE)
       checkmate::assert_list(vars, names = "named")
 
-      validate_metadata_arg(metadata)
+      validate_metadata(metadata)
 
       private$.raw_data <- x
       private$metadata <- metadata

@@ -644,7 +644,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       if (methods::is(metadata, "Callable")) {
         private$metadata <- metadata
       } else {
-        validate_metadata_arg(metadata)
+        validate_metadata(metadata)
         private$metadata <- metadata
       }
       return(invisible(self))
@@ -671,7 +671,7 @@ TealDatasetConnector <- R6::R6Class( # nolint
       tryCatch(
         {
           pulled_metadata <- as.list(pulled_metadata)
-          validate_metadata_arg(pulled_metadata)
+          validate_metadata(pulled_metadata)
           logger::log_trace("TealDatasetConnector$pull pulled metadata for dataset: {self$get_dataname() }.")
           return(pulled_metadata)
         },

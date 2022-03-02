@@ -79,7 +79,7 @@ dataset_connector <- function(dataname,
   checkmate::assert_character(label, any.missing = FALSE)
 
   if (!checkmate::test_class(metadata, "Callable", null.ok = TRUE)) {
-    validate_metadata_arg(metadata)
+    validate_metadata(metadata)
   }
 
   x <- TealDatasetConnector$new(
@@ -124,7 +124,7 @@ cdisc_dataset_connector <- function(dataname,
   checkmate::assert_character(label, max.len = 1, any.missing = FALSE)
 
   if (!checkmate::test_class(metadata, "Callable", null.ok = TRUE)) {
-    validate_metadata_arg(metadata)
+    validate_metadata(metadata)
   }
 
   x <- CDISCTealDatasetConnector$new(
