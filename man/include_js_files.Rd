@@ -4,7 +4,7 @@
 \alias{include_js_files}
 \title{Include \code{JS} files from \verb{/inst/js/} package directory to application header}
 \usage{
-include_js_files(pattern = "*", except = NULL)
+include_js_files(pattern = NULL, except = NULL)
 }
 \arguments{
 \item{pattern}{(\code{character}) pattern of files to be included, passed to \code{system.file}}
