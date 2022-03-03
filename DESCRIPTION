@@ -67,3 +67,26 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+Collate: 
+    'all_choices.R'
+    'choices_labeled.R'
+    'choices_selected.R'
+    'data_extract_spec.R'
+    'dummy_functions.R'
+    'filter_spec.R'
+    'include_css_js.R'
+    'modules.R'
+    'init.R'
+    'log_app_usage.R'
+    'logging.R'
+    'module_nested_tabs.R'
+    'module_tabs_with_filters.R'
+    'module_teal.R'
+    'module_teal_with_splash.R'
+    'modules_debugging.R'
+    'resolve_delayed.R'
+    'select_spec.R'
+    'teal.R'
+    'to_relational_data.R'
+    'utils.R'
+    'zzz.R'

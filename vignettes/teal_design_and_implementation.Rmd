@@ -240,7 +240,6 @@ These have been the three main challenges (in addition to code reproducibility)
 when designing and implementing `teal`. The relevant R-code for these main parts
 are in the [teal repository][tealgithub] in the following files:
 
-- `R/FilteredData.R`, `R/FilteredDataset.R`, `R/FilterStates.R`, `R/FilterState.R`
 - `R/init.R`,
 
 We now discuss each of the three core components in detail. This would be a good

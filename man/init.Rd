@@ -120,7 +120,7 @@ ADSL <- synthetic_cdisc_data("latest")$adsl
 
 app <- init(
   data = cdisc_data(
-    cdisc_dataset("ADSL", ADSL),
+    teal.data::cdisc_dataset("ADSL", ADSL),
     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   ),
   modules = modules(

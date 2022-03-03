@@ -30,7 +30,7 @@ ADSL$SEX[1:150] <- NA
 
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(
+    teal.data::cdisc_dataset(
       dataname = "ADSL",
       x = ADSL
     ),

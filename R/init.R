@@ -105,7 +105,6 @@
 #'
 #' @export
 #'
-#' @include FilteredData.R
 #' @include modules.R
 #'
 #' @examples
