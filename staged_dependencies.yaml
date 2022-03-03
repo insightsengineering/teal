@@ -2,6 +2,15 @@ current_repo:
   repo: insightsengineering/teal
   host: https://github.com
 upstream_repos:
+  insightsengineering/teal.widgets:
+    repo: insightsengineering/teal.widgets
+    host: https://github.com
+  insightsengineering/teal.data:
+    repo: insightsengineering/teal.data
+    host: https://github.com
+  insightsengineering/teal.slice:
+    repo: insightsengineering/teal.slice
+    host: https://github.com
   insightsengineering/scda:
     repo: insightsengineering/scda
     host: https://github.com
