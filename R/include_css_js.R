@@ -27,7 +27,7 @@ include_css_files <- function(pattern = "*") {
 #'
 #' @return HTML code that includes `JS` files
 #' @keywords internal
-include_js_files <- function(pattern = "*", except = NULL) {
+include_js_files <- function(pattern = NULL, except = NULL) {
   checkmate::assert_character(except, min.len = 1, any.missing = FALSE, null.ok = TRUE)
 
   js_files <- list.files(system.file("js", package = "teal", mustWork = TRUE), pattern = pattern, full.names = TRUE)
