@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9012</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9013</span>
       </span>
     </div>
 
@@ -53,15 +53,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -82,9 +73,9 @@ Other releases
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.10.1.9012" id="teal-01019012">teal 0.10.1.9012<a class="anchor" aria-label="anchor" href="#teal-01019012"></a></h2>
+<h2 class="page-header" data-toc-text="0.10.1.9013" id="teal-01019013">teal 0.10.1.9013<a class="anchor" aria-label="anchor" href="#teal-01019013"></a></h2>
 <div class="section level4">
-<h4 id="bug-fixes-0-10-1-9012">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1-9012"></a></h4>
+<h4 id="bug-fixes-0-10-1-9013">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1-9013"></a></h4>
 <ul><li>
 <code>get_call()</code> function of <code>CallableFunction</code>
 now returns call with namespace included.</li>
@@ -94,14 +85,14 @@ now returns call with namespace included.</li>
 filtering panel in cases where they were missing.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="breaking-changes-0-10-1-9012">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-1-9012"></a></h4>
+<h4 id="breaking-changes-0-10-1-9013">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-1-9013"></a></h4>
 <ul><li>Due to deprecation of <code>root_modules</code> any
 <code>label</code> argument to <code>modules</code> must be explicitly
 named. For example <code>modules("lab", mod1, mod2)</code> should be
 replaced with <code>modules(label = "lab", mod1, mod2)</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="miscellaneous-0-10-1-9012">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1-9012"></a></h4>
+<h4 id="miscellaneous-0-10-1-9013">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1-9013"></a></h4>
 <ul><li>New argument <code>ordered</code> in the <code><a href="../reference/select_spec.html">select_spec()</a></code>
 to flag whether order of the selection should be tracked.</li>
 <li>Minor changes to internals of <code>teal</code>: main module panel
@@ -116,6 +107,8 @@ filters out any data. This is used to decide if an explicit filter
 statement is added to the call.</li>
 <li>Removed redundant calling of the <code>JoinKeys$mutate</code> method
 inside of <code>for-loops</code>.</li>
+<li>As <code>reticulate</code> is in Suggests, added
+<code>requireNamespace</code> call whenever it is needed.</li>
 </ul></div>
 </div>
     <div class="section level2">
