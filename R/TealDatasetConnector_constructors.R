@@ -1296,6 +1296,11 @@ python_dataset_connector <- function(dataname,
                                      mutate_script = character(0),
                                      vars = list(),
                                      metadata = NULL) {
+  
+  if (!requireNamespace("reticulate", quietly = TRUE)) {
+    stop("Cannot load package 'reticulate' - please install the package.", call. = FALSE)
+  }
+  
   checkmate::assert_string(object)
   if (!xor(missing(code), missing(file))) stop("Exactly one of 'code' and 'script' is required")
 
