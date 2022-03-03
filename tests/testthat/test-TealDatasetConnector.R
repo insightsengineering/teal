@@ -2,7 +2,7 @@ library(scda)
 
 # Test TealDatasetConnector ------
 testthat::test_that("TealDatasetConnector", {
-  fun <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
+  fun <-  teal.data::callable_function(function() synthetic_cdisc_data("latest")$adsl)
 
   testthat::expect_error(
     dataset_connector(pull_callable = fun),
@@ -13,7 +13,7 @@ testthat::test_that("TealDatasetConnector", {
     x1 <- dataset_connector(
       dataname = "ADSL",
       pull_callable = fun,
-      keys = get_cdisc_keys("ADSL")
+      keys = teal.data::get_cdisc_keys("ADSL")
     )
   )
 
@@ -64,13 +64,13 @@ testthat::test_that("TealDatasetConnector", {
     x2 <- dataset_connector(
       dataname = "ADSL",
       pull_callable = fun,
-      keys = get_cdisc_keys("ADSL")
+      keys = teal.data::get_cdisc_keys("ADSL")
     )
   )
 
   testthat::expect_identical(
     get_keys(x2),
-    get_cdisc_keys("ADSL")
+    teal.data::get_cdisc_keys("ADSL")
   )
 
   testthat::expect_silent(x2$pull())
@@ -81,7 +81,7 @@ testthat::test_that("TealDatasetConnector", {
 
 
 
-  fun <- callable_function(data.frame)
+  fun <-  teal.data::callable_function(data.frame)
   fun$set_args(list(id = 1:3, marker = c(100, 1, 10), alive = TRUE))
   fun$set_args(list(new_feature = c(3, 4, 1)))
 
@@ -128,7 +128,7 @@ testthat::test_that("scda_dataset_connector", {
   x2 <- scda_dataset_connector(
     dataname = "ADSL",
     "adsl",
-    keys = get_cdisc_keys("ADSL")
+    keys = teal.data::get_cdisc_keys("ADSL")
   ) %>%
     as_cdisc()
   testthat::expect_equal(x, x2)
@@ -167,7 +167,7 @@ testthat::test_that("rds_dataset_connector", {
   x2 <- rds_dataset_connector(
     dataname = "ADSL",
     file = "./data_connectors/table.rds",
-    keys = get_cdisc_keys("ADSL")
+    keys = teal.data::get_cdisc_keys("ADSL")
   ) %>%
     as_cdisc()
 
@@ -189,14 +189,14 @@ testthat::test_that("csv_dataset_connector not expected input", {
 
   # check error if csv file doesn't exist
   testthat::expect_error(
-    csv_dataset_connector("ADSL", file = "not_exists.csv", keys = get_cdisc_keys("ADSL"))
+    csv_dataset_connector("ADSL", file = "not_exists.csv", keys = teal.data::get_cdisc_keys("ADSL"))
   )
 
   # check error if args are named
   testthat::expect_error(
     csv_dataset_connector("ADSL",
       file = temp_file_csv,
-      keys = get_cdisc_keys("ADSL"),
+      keys = teal.data::get_cdisc_keys("ADSL"),
       code = character(0),
       script = character(0),
       label = character(0),
@@ -224,7 +224,7 @@ testthat::test_that("csv_dataset_connector scda", {
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv)
   x$pull()
   testthat::expect_true(is_pulled(x))
-  testthat::expect_identical(get_dataname(x), "ADSL")
+  testthat::expect_identical(teal.data::get_dataname(x), "ADSL")
   testthat::expect_identical(
     x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
@@ -240,7 +240,7 @@ testthat::test_that("csv_dataset_connector scda", {
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "|")
   x$pull()
   testthat::expect_true(is_pulled(x))
-  testthat::expect_identical(get_dataname(x), "ADSL")
+  testthat::expect_identical(teal.data::get_dataname(x), "ADSL")
   testthat::expect_identical(
     x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"|\")")
@@ -257,7 +257,7 @@ testthat::test_that("csv_dataset_connector scda", {
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "\t")
   x$pull()
   testthat::expect_true(is_pulled(x))
-  testthat::expect_identical(get_dataname(x), "ADSL")
+  testthat::expect_identical(teal.data::get_dataname(x), "ADSL")
   testthat::expect_identical(
     x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"\\t\")")
@@ -274,7 +274,7 @@ testthat::test_that("csv_dataset_connector scda", {
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = ";")
   x$pull()
   testthat::expect_true(is_pulled(x))
-  testthat::expect_identical(get_dataname(x), "ADSL")
+  testthat::expect_identical(teal.data::get_dataname(x), "ADSL")
   testthat::expect_identical(
     x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \";\")")
@@ -303,7 +303,7 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "$")
   x$pull()
   testthat::expect_true(is_pulled(x))
-  testthat::expect_identical(get_dataname(x), "ADSL")
+  testthat::expect_identical(teal.data::get_dataname(x), "ADSL")
   testthat::expect_identical(
     x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"$\")")
@@ -316,10 +316,10 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   # next check can pass arguments to read_delim (using space ' ')
   temp_file_csv <- tempfile(fileext = ".csv")
   write.table(test_adsl, file = temp_file_csv, row.names = FALSE, sep = " ")
-  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, keys = get_cdisc_keys("ADSL"), delim = " ")
+  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, keys = teal.data::get_cdisc_keys("ADSL"), delim = " ")
   testthat::expect_warning(x$pull())
   testthat::expect_true(is_pulled(x))
-  testthat::expect_identical(get_dataname(x), "ADSL")
+  testthat::expect_identical(teal.data::get_dataname(x), "ADSL")
   testthat::expect_identical(
     x$get_code(), paste0(
       "ADSL <- readr::read_delim(file = \"",
@@ -340,7 +340,7 @@ testthat::test_that("csv_dataset_connector attritubes", {
     RACE = c("sth1|sth2", "sth", "sth"),
     stringsAsFactors = FALSE
   )
-  variable_labels(ADSL_ns) <- letters[1:4] # nolint
+  teal.data::variable_labels(ADSL_ns) <- letters[1:4] # nolint
   temp_file_csv <- tempfile(fileext = ".csv")
   write.table(ADSL_ns, file = temp_file_csv, row.names = FALSE, sep = ",")
 
@@ -348,7 +348,7 @@ testthat::test_that("csv_dataset_connector attritubes", {
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = ",")
   x$pull()
   testthat::expect_true(is_pulled(x))
-  testthat::expect_identical(get_dataname(x), "ADSL")
+  testthat::expect_identical(teal.data::get_dataname(x), "ADSL")
   testthat::expect_identical(
     x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
@@ -372,7 +372,7 @@ testthat::test_that("csv_cdisc_dataset_connector scda", {
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv)
   x$pull()
   testthat::expect_true(is_pulled(x))
-  testthat::expect_identical(get_dataname(x), "ADSL")
+  testthat::expect_identical(teal.data::get_dataname(x), "ADSL")
   testthat::expect_identical(
     x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
@@ -388,7 +388,7 @@ testthat::test_that("csv_cdisc_dataset_connector scda", {
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "|")
   x$pull()
   testthat::expect_true(is_pulled(x))
-  testthat::expect_identical(get_dataname(x), "ADSL")
+  testthat::expect_identical(teal.data::get_dataname(x), "ADSL")
   testthat::expect_identical(
     x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"|\")")
@@ -415,7 +415,7 @@ testthat::test_that("script_dataset_connector", {
   x <- script_dataset_connector(
     dataname = "ADSL",
     file = file_example,
-    keys = get_cdisc_keys("ADSL")
+    keys = teal.data::get_cdisc_keys("ADSL")
   )
 
   wrong_file <- "notexists.R"
@@ -423,7 +423,7 @@ testthat::test_that("script_dataset_connector", {
     script_dataset_connector(
       dataname = "ADSL",
       file = wrong_file,
-      keys = get_cdisc_keys("ADSL")
+      keys = teal.data::get_cdisc_keys("ADSL")
     ),
     sprintf("File %s does not exist.", wrong_file)
   )
@@ -473,7 +473,7 @@ testthat::test_that("fun_cdisc_dataset_connector", {
     )
     x$w <- as.numeric(rnorm(40, 0, 1))
     x$ww <- as.numeric(rnorm(40, 0, 1))
-    variable_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+    teal.data::variable_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
     x
   }
 
@@ -490,7 +490,7 @@ testthat::test_that("fun_cdisc_dataset_connector", {
     )
     x$w <- as.numeric(rnorm(40, 0, 1))
     x$ww <- as.numeric(rnorm(40, 0, 1))
-    variable_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+    teal.data::variable_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
     x
   }
 
@@ -588,10 +588,10 @@ testthat::test_that("code_dataset_connector - Test various inputs", {
 })
 
 testthat::test_that("code_dataset_connector - Modify vars", {
-  adsl <- cdisc_dataset(
+  adsl <- teal.data::cdisc_dataset(
     dataname = "ADSL",
     x = synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest"),
-    keys = get_cdisc_keys("ADSL"),
+    keys = teal.data::get_cdisc_keys("ADSL"),
     code = "synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")",
     label = "ADSL dataset"
   )
@@ -604,7 +604,7 @@ testthat::test_that("code_dataset_connector - Modify vars", {
         cached = TRUE
       )"
     ),
-    keys = get_cdisc_keys("ADTTE"),
+    keys = teal.data::get_cdisc_keys("ADTTE"),
     label = "ADTTE dataset",
     vars = list(ADSL = adsl)
   )
@@ -624,9 +624,9 @@ testthat::test_that("code_dataset_connector - Modify vars", {
 testthat::test_that("code_dataset_connector - library calls", {
   adsl <- dataset_connector(
     dataname = "ADSL",
-    pull_callable = callable_function(synthetic_cdisc_dataset) %>%
+    pull_callable =  teal.data::callable_function(synthetic_cdisc_dataset) %>%
       set_args(args = list(dataset_name = "adsl", name = "latest")),
-    keys = get_cdisc_keys("ADSL"),
+    keys = teal.data::get_cdisc_keys("ADSL"),
     label = "ADSL dataset"
   )
 
@@ -637,7 +637,7 @@ testthat::test_that("code_dataset_connector - library calls", {
       synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\") %>%
         filter(SEX == 'F')"
     ),
-    keys = get_cdisc_keys("ADTTE"),
+    keys = teal.data::get_cdisc_keys("ADTTE"),
     label = "ADTTE dataset"
   )
 
@@ -648,7 +648,7 @@ testthat::test_that("code_dataset_connector - library calls", {
       synthetic_cdisc_dataset(dataset_name = \"adrs\", name = \"latest\") %>%
         filter(SEX == 'F')"
     ),
-    keys = get_cdisc_keys("ADRS"),
+    keys = teal.data::get_cdisc_keys("ADRS"),
     label = "ADRS dataset"
   )
 
@@ -678,15 +678,15 @@ testthat::test_that("code_dataset_connector - library calls", {
 })
 
 testthat::test_that("TealDatasetConnector mutate method with delayed logic", {
-  test_ds1 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  test_ds2 <- TealDataset$new("head_iris", head(iris), code = "head_iris <- head(iris)")
+  test_ds1 <-teal.data:::TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds2 <-teal.data:::TealDataset$new("head_iris", head(iris), code = "head_iris <- head(iris)")
   testthat::expect_true(all(test_ds1$check(), test_ds2$check()))
 
-  pull_fun <- callable_function(data.frame)
+  pull_fun <-  teal.data::callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector("test_dc", pull_fun, vars = list(test_ds1 = test_ds1))
 
-  pull_fun2 <- callable_function(data.frame)
+  pull_fun2 <-  teal.data::callable_function(data.frame)
   pull_fun2$set_args(args = list(head_integers = 1:6))
   t_dc2 <- dataset_connector("test_dc2", pull_fun2, vars = list(test_ds2 = test_ds2))
 
@@ -778,7 +778,7 @@ testthat::test_that("TealDatasetConnector mutate method with delayed logic", {
   testthat::expect_false(t_dc$is_mutate_delayed())
 
   # multi layer dependencies
-  pull_fun3 <- callable_function(data.frame)
+  pull_fun3 <-  teal.data::callable_function(data.frame)
   pull_fun3$set_args(args = list(neg_integers = -(1:6))) # nolint
   t_dc3 <- dataset_connector("test_dc3", pull_fun3)
 
@@ -846,9 +846,9 @@ testthat::test_that("TealDatasetConnector mutate method with delayed logic", {
 
 testthat::test_that("TealDatasetConnector mutate method edge cases", {
   # edge because test_ds1 does not contain the code to recreate head_mtcars
-  test_ds1 <- TealDataset$new("head_mtcars", head(mtcars))
+  test_ds1 <-teal.data:::TealDataset$new("head_mtcars", head(mtcars))
 
-  pull_fun <- callable_function(data.frame)
+  pull_fun <-  teal.data::callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector("test_dc", pull_fun)
   load_dataset(t_dc)
@@ -861,13 +861,13 @@ testthat::test_that("TealDatasetConnector mutate method edge cases", {
 testthat::test_that("get_code_class returns the correct CodeClass object", {
   cc1 <- CodeClass$new(code = "iris <- (function() head(iris))()", dataname = "iris")
   cf1 <- CallableFunction$new(function() head(iris))
-  dc1 <- TealDatasetConnector$new("iris", cf1)
+  dc1 <- teal.data:::TealDatasetConnector$new("iris", cf1)
   testthat::expect_equal(dc1$get_code_class(), cc1)
 })
 
 testthat::test_that("Pulled TealDatasetConnector returns the same CodeClass as before pulling", {
   cf1 <- CallableFunction$new(function() head(iris))
-  dc1 <- TealDatasetConnector$new("iris", cf1)
+  dc1 <- teal.data:::TealDatasetConnector$new("iris", cf1)
   pre_pull_cc <- dc1$get_code_class()
   dc1$pull()
   post_pull_cc <- dc1$get_code_class()
@@ -876,9 +876,9 @@ testthat::test_that("Pulled TealDatasetConnector returns the same CodeClass as b
 })
 
 testthat::test_that("Pulled dependent TealDatasetConnector returns the same CodeClass as before pulling", {
-  ds <- TealDataset$new("iris", head(iris), code = "iris <- head(iris)")
+  ds <-teal.data:::TealDataset$new("iris", head(iris), code = "iris <- head(iris)")
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf, vars = list(iris = ds))
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf, vars = list(iris = ds))
   pre_pull_code_class <- dc$get_code_class()
   dc$pull()
   post_pull_code_class <- dc$get_code_class()
@@ -886,9 +886,9 @@ testthat::test_that("Pulled dependent TealDatasetConnector returns the same Code
 })
 
 testthat::test_that("Pulling twice doesn't change the returned TealDatasetConnector's CodeClass", {
-  ds <- TealDataset$new("iris", head(iris), code = "iris <- head(iris)")
+  ds <-teal.data:::TealDataset$new("iris", head(iris), code = "iris <- head(iris)")
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf, vars = list(iris = ds))
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf, vars = list(iris = ds))
   dc$pull()
   pre_pull_code_class <- dc$get_code_class()
   dc$pull()
@@ -898,7 +898,7 @@ testthat::test_that("Pulling twice doesn't change the returned TealDatasetConnec
 
 testthat::test_that("Identical mutation expressions are added to the mutation code", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf)
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf)
   dc$mutate("mtcars$test <- 1")
   dc$mutate("mtcars$test <- 1")
   testthat::expect_equal(dc$get_code(), "mtcars <- (function() head(mtcars))()\nmtcars$test <- 1\nmtcars$test <- 1")
@@ -906,7 +906,7 @@ testthat::test_that("Identical mutation expressions are added to the mutation co
 
 testthat::test_that("Identical mutation expressions are executed upon pulling the Connector object", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf)
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf)
   dc$mutate("mtcars$test <- 1")
   dc$mutate("mtcars$test <- mtcars$test * 2")
   dc$mutate("mtcars$test <- mtcars$test * 2")
@@ -916,7 +916,7 @@ testthat::test_that("Identical mutation expressions are executed upon pulling th
 
 testthat::test_that("Identical mutation expressions are shown in the returned code after pulling", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf)
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf)
   dc$mutate("mtcars$test <- 1")
   dc$mutate("mtcars$test <- mtcars$test * 2")
   dc$mutate("mtcars$test <- mtcars$test * 2")
@@ -935,27 +935,27 @@ testthat::test_that("Identical mutation expressions are shown in the returned co
 
 testthat::test_that("TealDatasetConnector$is_mutate_delayed is FALSE if not yet pulled and not mutated", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf)
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf)
   testthat::expect_false(dc$is_mutate_delayed())
 })
 
 testthat::test_that("TealDatasetConnector$is_mutate_delayed returns FALSE if pulled and not mutated", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf)
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf)
   dc$pull()
   testthat::expect_false(dc$is_mutate_delayed())
 })
 
 testthat::test_that("TealDatasetConnector$is_mutate_delayed returns TRUE if not pulled and mutated", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf)
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf)
   dc$mutate(code = "test")
   testthat::expect_true(dc$is_mutate_delayed())
 })
 
 testthat::test_that("TealDatasetConnector$is_mutate_delayed returns TRUE if mutated with no delayed objects and pulled", { # nolint
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf)
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf)
   dc$mutate(code = "")
   dc$pull()
   testthat::expect_false(dc$is_mutate_delayed())
@@ -963,7 +963,7 @@ testthat::test_that("TealDatasetConnector$is_mutate_delayed returns TRUE if muta
 
 testthat::test_that("TealDatasetConnector$is_mutate_delayed returns FALSE if mutated with no vars after pulling", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf)
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf)
   dc$pull()
   dc$mutate(code = "")
   testthat::expect_false(dc$is_mutate_delayed())
@@ -971,7 +971,7 @@ testthat::test_that("TealDatasetConnector$is_mutate_delayed returns FALSE if mut
 
 testthat::test_that("TealDatasetConnector returns the correct code when mutated with no vars after pulling", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf)
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf)
   dc$pull()
   dc$mutate(code = "1")
   testthat::expect_equal(dc$get_code_class()$get_code(), "mtcars <- (function() head(mtcars))()\n1")
@@ -980,12 +980,12 @@ testthat::test_that("TealDatasetConnector returns the correct code when mutated 
 testthat::test_that("Pulling an already pulled TealDatasetConnector after mutating it with a delayed object
   undoes any eager pre-pull mutations", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf)
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf)
   dc$pull()
   dc$mutate(code = "mtcars[1] <- NULL")
   dc$mutate(
     code = "",
-    vars = list(delayed = TealDatasetConnector$new("iris", CallableFunction$new(function() head(iris))))
+    vars = list(delayed = teal.data:::TealDatasetConnector$new("iris", CallableFunction$new(function() head(iris))))
   )
   dc$pull()
   testthat::expect_equal(dc$get_raw_data(), head(mtcars))
@@ -994,12 +994,12 @@ testthat::test_that("Pulling an already pulled TealDatasetConnector after mutati
 testthat::test_that("Pulling an already pulled TealDatasetConnector after mutating it with a delayed object
   does not change the returned code", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dc <- TealDatasetConnector$new("mtcars", cf)
+  dc <- teal.data:::TealDatasetConnector$new("mtcars", cf)
   dc$pull()
   dc$mutate(code = "mtcars[1] <- NULL")
   dc$mutate(
     code = "",
-    vars = list(delayed = TealDatasetConnector$new("iris", CallableFunction$new(function() head(iris))))
+    vars = list(delayed = teal.data:::TealDatasetConnector$new("iris", CallableFunction$new(function() head(iris))))
   )
   pre_pull_code <- dc$get_code()
   dc$pull()
@@ -1007,9 +1007,9 @@ testthat::test_that("Pulling an already pulled TealDatasetConnector after mutati
 })
 
 testthat::test_that("Initializing TealDatasetConnector with code argument works", {
-  test_ds1 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <-teal.data:::TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
 
-  pull_fun <- callable_function(data.frame)
+  pull_fun <-  teal.data::callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector(
     "test_dc",
@@ -1046,7 +1046,7 @@ testthat::test_that("Initializing TealDatasetConnector with code argument works"
 })
 
 testthat::test_that("TealDatasetConnector$get_join_keys returns an empty JoinKeys object", {
-  pull_fun <- callable_function(data.frame)
+  pull_fun <-  teal.data::callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector(
     "test_dc",
@@ -1058,7 +1058,7 @@ testthat::test_that("TealDatasetConnector$get_join_keys returns an empty JoinKey
 })
 
 testthat::test_that("TealDatasetConnector$set_join_keys works independently", {
-  pull_fun <- callable_function(data.frame)
+  pull_fun <-  teal.data::callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector(
     "test_dc",
@@ -1076,7 +1076,7 @@ testthat::test_that("TealDatasetConnector$set_join_keys works independently", {
 })
 
 testthat::test_that("TealDatasetConnector$mutate_join_keys works independently", {
-  pull_fun <- callable_function(data.frame)
+  pull_fun <-  teal.data::callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector(
     "test_dc",
@@ -1090,8 +1090,8 @@ testthat::test_that("TealDatasetConnector$mutate_join_keys works independently",
   testthat::expect_equal(length(t_dc$get_join_keys()$get()), 2)
 })
 
-testthat::test_that("TealDatasetConnector$set_join_keys works with TealDatasetConnector$mutate_join_keys", {
-  pull_fun <- callable_function(data.frame)
+testthat::test_that("TealDatasetConnector$set_join_keys works with teal.data:::TealDatasetConnector$mutate_join_keys", {
+  pull_fun <-  teal.data::callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector(
     "test_dc",
@@ -1132,7 +1132,7 @@ testthat::test_that("TealDatasetConnector$set_join_keys works with TealDatasetCo
 })
 
 testthat::test_that("TealDatasetConnector$get_dataset calls dataset$merge_join_keys before returning", {
-  pull_fun <- callable_function(data.frame)
+  pull_fun <-  teal.data::callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector(
     "test_dc",
@@ -1152,8 +1152,8 @@ testthat::test_that("TealDatasetConnector$get_dataset calls dataset$merge_join_k
 })
 
 testthat::test_that("TealDatasetConnect$print does not print dataset when not yet pulled", {
-  test_ds1 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  pull_fun <- callable_function(data.frame)
+  test_ds1 <-teal.data:::TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  pull_fun <-  teal.data::callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector("test_dc", pull_fun, vars = list(test_ds1 = test_ds1))
 
@@ -1166,8 +1166,8 @@ testthat::test_that("TealDatasetConnect$print does not print dataset when not ye
 })
 
 testthat::test_that("TealDatasetConnect$print prints dataset when it is pulled", {
-  test_ds1 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  pull_fun <- callable_function(data.frame)
+  test_ds1 <-teal.data:::TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  pull_fun <-  teal.data::callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector("test_dc", pull_fun, vars = list(test_ds1 = test_ds1))
   t_dc$pull()
@@ -1191,8 +1191,8 @@ testthat::test_that("TealDatasetConnect$print prints dataset when it is pulled",
 
 testthat::test_that("get_var_r6 returns identical objects as these passed to the vars argument in
                     the constructor", {
-  test_ds0 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  test_ds1 <- TealDatasetConnector$new(
+  test_ds0 <-teal.data:::TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- teal.data:::TealDatasetConnector$new(
     dataname = "test_dc",
     pull_callable = CallableFunction$new(data.frame),
     vars = list(test_ds0 = test_ds0)
@@ -1203,8 +1203,8 @@ testthat::test_that("get_var_r6 returns identical objects as these passed to the
 })
 
 testthat::test_that("clone(deep = TRUE) deep clones dependencies, which are TealDataset objects", {
-  test_ds0 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  test_ds1 <- TealDatasetConnector$new(
+  test_ds0 <-teal.data:::TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- teal.data:::TealDatasetConnector$new(
     dataname = "test_dc",
     pull_callable = CallableFunction$new(data.frame),
     vars = list(test_ds0 = test_ds0)
@@ -1217,8 +1217,8 @@ testthat::test_that("clone(deep = TRUE) deep clones dependencies, which are Teal
 
 testthat::test_that("reassign_datasets_vars updates the references of the vars to
                     addresses of passed objects", {
-  test_ds0 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  test_ds1 <- TealDatasetConnector$new(
+  test_ds0 <-teal.data:::TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- teal.data:::TealDatasetConnector$new(
     dataname = "test_dc",
     pull_callable = CallableFunction$new(data.frame),
     vars = list(test_ds0 = test_ds0)
@@ -1234,8 +1234,8 @@ testthat::test_that("reassign_datasets_vars updates the references of the vars t
 
 testthat::test_that("reassign_datasets_vars updates the references of the vars_r6 to
                     addresses of passed objects", {
-  test_ds0 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  test_ds1 <- TealDatasetConnector$new(
+  test_ds0 <-teal.data:::TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- teal.data:::TealDatasetConnector$new(
     dataname = "test_dc",
     pull_callable = CallableFunction$new(data.frame),
     vars = list(test_ds0 = test_ds0)
@@ -1252,10 +1252,10 @@ testthat::test_that("reassign_datasets_vars updates the references of the vars_r
 testthat::test_that("reassign_datasets_vars does not change `vars` elements of
                     class different than TealDataset and TealDatasetConnector", {
   test_ds0 <- mtcars
-  test_ds1 <- TealDataset$new("mtcars", mtcars)
-  test_ds2 <- TealDatasetConnector$new(
+  test_ds1 <-teal.data:::TealDataset$new("mtcars", mtcars)
+  test_ds2 <- teal.data:::TealDatasetConnector$new(
     dataname = "iris",
-    pull_callable = callable_function(data.frame),
+    pull_callable =  teal.data::callable_function(data.frame),
     vars = list(test_ds0 = test_ds0, test_ds1 = test_ds1)
   )
 
@@ -1269,11 +1269,11 @@ testthat::test_that("reassign_datasets_vars does not change `vars` elements of
 testthat::test_that("reassign_datasets_vars does not change any `vars` while
                     empty list is provided", {
   test_ds0 <- mtcars
-  test_ds1 <- TealDataset$new("mtcars", mtcars)
-  test_ds2 <- TealDataset$new("iris", iris)
-  test_ds2 <- TealDatasetConnector$new(
+  test_ds1 <-teal.data:::TealDataset$new("mtcars", mtcars)
+  test_ds2 <-teal.data:::TealDataset$new("iris", iris)
+  test_ds2 <- teal.data:::TealDatasetConnector$new(
     dataname = "iris",
-    pull_callable = callable_function(data.frame),
+    pull_callable =  teal.data::callable_function(data.frame),
     vars = list(test_ds0 = test_ds0, test_ds1 = test_ds1)
   )
 

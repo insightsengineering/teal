@@ -18,7 +18,7 @@ rice_dataset_connector(
 rice_cdisc_dataset_connector(
   dataname,
   path,
-  keys = get_cdisc_keys(dataname),
+  keys = teal.data::get_cdisc_keys(dataname),
   parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   label = character(0),
   code = character(0),

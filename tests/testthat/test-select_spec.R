@@ -77,7 +77,7 @@ test_that("resolve_delayed select_spec works", {
     BMRKR2 = sample(c("L", "M", "H"), 10, replace = TRUE),
     stringsAsFactors = FALSE
   )
-  attr(ADSL, "keys") <- get_cdisc_keys("ADSL") # nolint
+  attr(ADSL, "keys") <- teal.data::get_cdisc_keys("ADSL") # nolint
 
   expected_spec <- select_spec(
     choices = variable_choices(ADSL, c("BMRKR1", "BMRKR2")),
@@ -98,7 +98,7 @@ test_that("resolve_delayed select_spec works", {
   expect_equal(names(expected_spec), names(delayed_spec))
 
   ds <- teal:::CDISCFilteredData$new()
-  isolate(ds$set_dataset(dataset("ADSL", ADSL)))
+  isolate(ds$set_dataset(teal.data::dataset("ADSL", ADSL)))
   expect_identical(expected_spec, isolate(resolve_delayed(delayed_spec, ds)))
 })
 
@@ -106,8 +106,8 @@ scda_data <- synthetic_cdisc_data("latest")
 adsl <- scda_data$adsl # nolint
 adtte <- scda_data$adtte # nolint
 data <- cdisc_data(
-  cdisc_dataset("ADSL", adsl),
-  cdisc_dataset("ADTTE", adtte)
+  teal.data::cdisc_dataset("ADSL", adsl),
+  teal.data::cdisc_dataset("ADTTE", adtte)
 )
 
 ds <- teal:::CDISCFilteredData$new()
@@ -158,8 +158,8 @@ testthat::test_that("delayed version of select_spec", {
 
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- select_spec(
-    variable_choices(adsl, subset = c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
-    selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL"))
+    variable_choices(adsl, subset = c("STUDYID", "USUBJID"), key = teal.data::get_cdisc_keys("ADSL")),
+    selected = variable_choices(adsl, "STUDYID", key = teal.data::get_cdisc_keys("ADSL"))
   )
   testthat::expect_equal(res_obj, exp_obj)
 

@@ -113,7 +113,7 @@ test_that("delayed data_extract_spec works", {
     BMRKR2 = sample(c("L", "M", "H"), 10, replace = TRUE),
     stringsAsFactors = FALSE
   )
-  attr(ADSL, "keys") <- get_cdisc_keys("ADSL") # nolint
+  attr(ADSL, "keys") <- teal.data::get_cdisc_keys("ADSL") # nolint
 
   filter_normal <- filter_spec(
     vars = variable_choices(ADSL, "SEX"),
@@ -190,7 +190,7 @@ test_that("delayed data_extract_spec works", {
 
   ds <- teal:::CDISCFilteredData$new()
   isolate({
-    ds$set_dataset(cdisc_dataset("ADSL", ADSL))
+    ds$set_dataset(teal.data::cdisc_dataset("ADSL", ADSL))
     expect_identical(expected_spec, resolve_delayed(delayed_spec, ds))
     expect_identical(expected_spec, resolve_delayed(mix1, ds))
     expect_identical(expected_spec, resolve_delayed(mix2, ds))
@@ -209,8 +209,8 @@ scda_data <- synthetic_cdisc_data("latest")
 adsl <- scda_data$adsl
 adtte <- scda_data$adtte
 data <- cdisc_data(
-  cdisc_dataset("ADSL", adsl),
-  cdisc_dataset("ADTTE", adtte)
+  teal.data::cdisc_dataset("ADSL", adsl),
+  teal.data::cdisc_dataset("ADTTE", adtte)
 )
 
 ds <- teal:::CDISCFilteredData$new()
@@ -256,11 +256,11 @@ testthat::test_that("delayed version of data_extract_spec", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- data_extract_spec(
     "ADSL",
-    select = select_spec(variable_choices(adsl, c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
-      selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL"))
+    select = select_spec(variable_choices(adsl, c("STUDYID", "USUBJID"), key = teal.data::get_cdisc_keys("ADSL")),
+      selected = variable_choices(adsl, "STUDYID", key = teal.data::get_cdisc_keys("ADSL"))
     ),
     filter = filter_spec(
-      vars = variable_choices(adsl, subset = "ARMCD", key = get_cdisc_keys("ADSL")),
+      vars = variable_choices(adsl, subset = "ARMCD", key = teal.data::get_cdisc_keys("ADSL")),
       choices = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
       selected = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
       multiple = FALSE
@@ -297,11 +297,11 @@ testthat::test_that("delayed version of data_extract_spec", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- data_extract_spec(
     "ADSL",
-    select = select_spec(variable_choices(adsl, c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
-      selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL"))
+    select = select_spec(variable_choices(adsl, c("STUDYID", "USUBJID"), key = teal.data::get_cdisc_keys("ADSL")),
+      selected = variable_choices(adsl, "STUDYID", key = teal.data::get_cdisc_keys("ADSL"))
     ),
     filter = filter_spec(
-      vars = variable_choices(adsl, subset = "ARMCD", key = get_cdisc_keys("ADSL")),
+      vars = variable_choices(adsl, subset = "ARMCD", key = teal.data::get_cdisc_keys("ADSL")),
       choices = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
       selected = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
       multiple = FALSE

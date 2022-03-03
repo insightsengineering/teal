@@ -32,7 +32,7 @@ library(scda)
 f <- function(df) {
   synthetic_cdisc_data("latest")[[df]]
 }
-fun <- callable_function(f)
+fun <-  teal.data::callable_function(f)
 set_args(fun, list(df = "adsl"))
 library(scda)
 f <- function(df) {
@@ -40,6 +40,6 @@ f <- function(df) {
 }
 code <- callable_code("f()")
 set_args(code, list(df = "adsl"))
-ds <- dataset_connector("x", pull_callable = callable_function(data.frame))
+ds <- dataset_connector("x", pull_callable =  teal.data::callable_function(data.frame))
 set_args(ds, list(x = 1:5, y = letters[1:5]))
 }

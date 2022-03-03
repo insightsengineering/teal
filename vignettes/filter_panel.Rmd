@@ -275,8 +275,8 @@ Above list structure is applied in `get_filter_state`, `set_filter_state` and
 ```{r, message=FALSE, warning=FALSE}
 library(teal)
 datasets <- teal:::FilteredData$new()
-datasets$set_dataset(dataset(dataname = "iris", x = iris))
-datasets$set_dataset(dataset(dataname = "mtcars", x = mtcars))
+datasets$set_dataset(teal.data::dataset(dataname = "iris", x = iris))
+datasets$set_dataset(teal.data::dataset(dataname = "mtcars", x = mtcars))
 
 set_filter_state(
   datasets = datasets,

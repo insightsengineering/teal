@@ -23,7 +23,7 @@ label (\code{character}) Label to describe the dataset
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
-fun <- callable_function(data.frame)
+fun <-  teal.data::callable_function(data.frame)
 fun$set_args(list(c1 = seq_len(10)))
 
 x <- dataset_connector(

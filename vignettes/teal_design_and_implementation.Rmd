@@ -184,7 +184,7 @@ A simple example for a completely custom `teal` module is the following
 library(teal)
 
 app <- teal::init(
-  data = teal_data(dataset("IRIS", x = iris)),
+  data = teal_data(teal.data::dataset("IRIS", x = iris)),
   modules = modules(
     module(
       label = "sample module",
@@ -340,8 +340,8 @@ datasets <- teal:::CDISCFilteredData$new()
 # the `datasets` object contains reactives
 # we activate this option, so we don't need to wrap all reactives in isolate calls
 options(shiny.suppressMissingContextError = TRUE)
-datasets$set_dataset(cdisc_dataset("ADSL", ADSL))
-datasets$set_dataset(cdisc_dataset("ADTTE", ADTTE))
+datasets$set_dataset(teal.data::cdisc_dataset("ADSL", ADSL))
+datasets$set_dataset(teal.data::cdisc_dataset("ADTTE", ADTTE))
 shiny:::flushReact() # force evaluation outside of Shiny apps
 ```
 

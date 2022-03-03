@@ -22,9 +22,9 @@ library(scda)
 
 ds <- teal:::FilteredData$new()
 ADSL <- synthetic_cdisc_data("latest")$adsl
-attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+attr(ADSL, "keys") <- teal.data::get_cdisc_keys("ADSL")
 isolate({
-  ds$set_dataset(dataset("ADSL", ADSL))
+  ds$set_dataset(teal.data::dataset("ADSL", ADSL))
 
   # value_choices example
   v1 <- value_choices("ADSL", "SEX", "SEX")

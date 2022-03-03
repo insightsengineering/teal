@@ -53,6 +53,16 @@ get_dummy_filter <- function(data) { # nolint
 #' @return `cdisc_data`
 #' @keywords internal
 get_dummy_cdisc_data <- function() { # nolint
+  teal_with_pkg <- function(pkg, code) {
+    pkg_name <- paste0("package:", pkg)
+    if (!pkg_name %in% search()) {
+      require(pkg, character.only = TRUE)
+      on.exit(detach(pkg_name, character.only = TRUE))
+    }
+    eval.parent(code)
+    return(invisible(NULL))
+  }
+
   teal_with_pkg("scda", code = {
     ADSL <- scda::synthetic_cdisc_data("latest")$adsl # nolint
     ADAE <- scda::synthetic_cdisc_data("latest")$adae # nolint
@@ -63,9 +73,9 @@ get_dummy_cdisc_data <- function() { # nolint
   ADSL$SEX[1:150] <- NA # nolint
 
   res <- cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL),
-    cdisc_dataset(dataname = "ADAE", x = ADAE),
-    cdisc_dataset(dataname = "ADLB", x = ADLB),
+    teal.data::cdisc_dataset(dataname = "ADSL", x = ADSL),
+    teal.data::cdisc_dataset(dataname = "ADAE", x = ADAE),
+    teal.data::cdisc_dataset(dataname = "ADLB", x = ADLB),
     code = "
       ADSL <- synthetic_cdisc_data(\"latest\")$adsl
       ADAE <- synthetic_cdisc_data(\"latest\")$adae

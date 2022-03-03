@@ -14,7 +14,7 @@ library(scda)
 adsl <- scda_cdisc_dataset_connector(dataname = "ADSL", "adsl")
 adlb <- scda_cdisc_dataset_connector(dataname = "ADLB", "adlb")
 
-open_fun <- callable_function(library)
+open_fun <-  teal.data::callable_function(library)
 open_fun$set_args(list(package = "scda"))
 
 con <- data_connection(open_fun = open_fun)

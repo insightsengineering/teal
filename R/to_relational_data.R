@@ -25,9 +25,9 @@ to_relational_data.data.frame <- function(data) { # nolint
   }
 
   if (dataname %in% names(default_cdisc_keys)) {
-    cdisc_data(cdisc_dataset(dataname, data))
+    teal.data::cdisc_data(teal.data::cdisc_dataset(dataname, data))
   } else {
-    teal_data(dataset(dataname, data))
+    teal.data::teal_data(teal.data::dataset(dataname, data))
   }
 }
 
@@ -84,9 +84,9 @@ to_relational_data.list <- function(data) {
         }
 
         if (dataname %in% names(default_cdisc_keys)) {
-          cdisc_dataset(dataname, data[[idx]])
+          teal.data::cdisc_dataset(dataname, data[[idx]])
         } else {
-          dataset(dataname, data[[idx]])
+          teal.data::dataset(dataname, data[[idx]])
         }
       } else if (inherits(data[[idx]], "TealDataset") || inherits(data[[idx]], "TealDatasetConnector")) {
         data[[idx]]
@@ -106,5 +106,5 @@ to_relational_data.list <- function(data) {
 #' @keywords internal
 #' @export
 to_relational_data.MultiAssayExperiment <- function(data) { # nolint
-  teal_data(dataset("MAE", data))
+  teal_data(teal.data::dataset("MAE", data))
 }

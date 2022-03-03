@@ -1,15 +1,15 @@
 library(scda)
 
-adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
-adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
-adsl <- CDISCTealDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
-adae <- CDISCTealDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
+adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = teal.data::get_cdisc_keys("ADSL")))))
+adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = teal.data::get_cdisc_keys("ADAE")))))
+adsl <- teal.data:::CDISCTealDatasetConnector$new("ADSL", adsl_cf, keys = teal.data::get_cdisc_keys("ADSL"), parent = character(0))
+adae <- teal.data:::CDISCTealDatasetConnector$new("ADAE", adae_cf, keys = teal.data::get_cdisc_keys("ADAE"), parent = "ADSL")
 
 testthat::test_that("TealDataConnector with TealDataConnection", {
-  open_fun <- callable_function(data.frame)
+  open_fun <-  teal.data::callable_function(data.frame)
   open_fun$set_args(list(x = 1:5))
 
-  close_fun <- callable_function(data.frame)
+  close_fun <-  teal.data::callable_function(data.frame)
   set_args(x = close_fun, list(x = 1:2))
 
   con <- TealDataConnection$new(open_fun = open_fun, close_fun = close_fun)
@@ -19,11 +19,11 @@ testthat::test_that("TealDataConnector with TealDataConnection", {
   code <- "ADSL$x <- 1"
   check <- TRUE
 
-  adsl_cf <- callable_function(function(scda_name) synthetic_cdisc_data(scda_name)$adsl)
-  adlb_cf <- callable_function(function(scda_name) synthetic_cdisc_data(scda_name)$adlb)
+  adsl_cf <-  teal.data::callable_function(function(scda_name) synthetic_cdisc_data(scda_name)$adsl)
+  adlb_cf <-  teal.data::callable_function(function(scda_name) synthetic_cdisc_data(scda_name)$adlb)
 
-  scda1 <- cdisc_dataset_connector(dataname = "ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
-  scda2 <- cdisc_dataset_connector(dataname = "ADLB", adlb_cf, keys = get_cdisc_keys("ADLB"))
+  scda1 <- cdisc_dataset_connector(dataname = "ADSL", adsl_cf, keys = teal.data::get_cdisc_keys("ADSL"))
+  scda2 <- cdisc_dataset_connector(dataname = "ADLB", adlb_cf, keys = teal.data::get_cdisc_keys("ADLB"))
 
   x <- TealDataConnector$new(connection = con, connectors = list(scda1, scda2))
   testthat::expect_true(is(x, "TealDataConnector"))

@@ -1,10 +1,10 @@
 library(scda)
 
 testthat::test_that("data connection", {
-  open_fun <- callable_function(data.frame)
+  open_fun <-  teal.data::callable_function(data.frame)
   open_fun$set_args(list(x = 1:5))
 
-  close_fun <- callable_function(data.frame)
+  close_fun <-  teal.data::callable_function(data.frame)
   close_fun$set_args(list(x = 1:2))
 
   con <- TealDataConnection$new(open_fun = open_fun, close_fun = close_fun)
@@ -45,10 +45,10 @@ testthat::test_that("data connection", {
 })
 
 testthat::test_that("data_connection returns a TealDataConnection object on basic input", {
-  open_fun <- callable_function(data.frame)
+  open_fun <-  teal.data::callable_function(data.frame)
   open_fun$set_args(list(x = 1:5))
 
-  close_fun <- callable_function(data.frame)
+  close_fun <-  teal.data::callable_function(data.frame)
   close_fun$set_args(list(x = 1:2))
 
   con <- data_connection(open_fun = open_fun, close_fun = close_fun)

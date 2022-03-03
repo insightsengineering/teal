@@ -51,19 +51,19 @@ ADRS <- synthetic_cdisc_data("latest")$adrs
 variable_choices(ADRS)
 variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))
 variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"))
-variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"), key = get_cdisc_keys("ADRS"))
+variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"), key = teal.data::get_cdisc_keys("ADRS"))
 
 # delayed version
 variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
 
 # also works with TealDataset and TealDatasetConnector
-ADRS_dataset <- dataset("ADRS", ADRS, key = get_cdisc_keys("ADRS"))
+ADRS_dataset <- dataset("ADRS", ADRS, key = teal.data::get_cdisc_keys("ADRS"))
 variable_choices(ADRS_dataset)
 
 ADRS_conn <- dataset_connector(
   "ADRS",
   pull_callable = callable_code("radrs(cached = TRUE)"),
-  key = get_cdisc_keys("ADRS")
+  key = teal.data::get_cdisc_keys("ADRS")
 )
 variable_choices(ADRS_conn)
 

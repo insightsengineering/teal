@@ -37,8 +37,8 @@ writeLines(
     "library(teal)
      library(scda)
 
-     pull_callable <- callable_function(function() {synthetic_cdisc_data('latest')$adsl})
-     dataset_connector(\"ADSL\", pull_callable, get_cdisc_keys(\"ADSL\"))"
+     pull_callable <-  teal.data::callable_function(function() {synthetic_cdisc_data('latest')$adsl})
+     dataset_connector(\"ADSL\", pull_callable, teal.data::get_cdisc_keys(\"ADSL\"))"
   ),
   con = file_example
 )
@@ -51,8 +51,8 @@ writeLines(
     "library(teal)
      library(scda)
 
-     pull_callable <- callable_function(function() {synthetic_cdisc_data('latest')$adsl})
-     cdisc_dataset_connector(\"ADSL\", pull_callable, get_cdisc_keys(\"ADSL\"))"
+     pull_callable <-  teal.data::callable_function(function() {synthetic_cdisc_data('latest')$adsl})
+     cdisc_dataset_connector(\"ADSL\", pull_callable, teal.data::get_cdisc_keys(\"ADSL\"))"
   ),
   con = file_example
 )

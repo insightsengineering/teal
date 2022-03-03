@@ -24,10 +24,10 @@
 #'
 #' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADTTE <- synthetic_cdisc_data("latest")$adtte
-#' choices1 <- choices_labeled(names(ADSL), variable_labels(ADSL, fill = FALSE))
+#' choices1 <- choices_labeled(names(ADSL), teal.data::variable_labels(ADSL, fill = FALSE))
 #' choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 #' # if only a subset of variables are needed, use subset argument
-#' choices3 <- choices_labeled(names(ADSL), variable_labels(ADSL, fill = FALSE), subset = c("ARMCD", "ARM"))
+#' choices3 <- choices_labeled(names(ADSL), teal.data::variable_labels(ADSL, fill = FALSE), subset = c("ARMCD", "ARM"))
 #' \dontrun{
 #' shinyApp(
 #'   ui = fluidPage(
@@ -150,19 +150,19 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #' variable_choices(ADRS)
 #' variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))
 #' variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"))
-#' variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"), key = get_cdisc_keys("ADRS"))
+#' variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"), key = teal.data::get_cdisc_keys("ADRS"))
 #'
 #' # delayed version
 #' variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
 #'
 #' # also works with TealDataset and TealDatasetConnector
-#' ADRS_dataset <- dataset("ADRS", ADRS, key = get_cdisc_keys("ADRS"))
+#' ADRS_dataset <- teal.data::dataset("ADRS", ADRS, key = teal.data::get_cdisc_keys("ADRS"))
 #' variable_choices(ADRS_dataset)
 #'
 #' ADRS_conn <- dataset_connector(
 #'   "ADRS",
 #'   pull_callable = callable_code("radrs(cached = TRUE)"),
-#'   key = get_cdisc_keys("ADRS")
+#'   key = teal.data::get_cdisc_keys("ADRS")
 #' )
 #' variable_choices(ADRS_conn)
 #'
@@ -206,7 +206,7 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE, key =
 
   key <- intersect(subset, key)
 
-  var_types <- setNames(variable_types(data = data), names(data))
+  var_types <- setNames(teal.slice:::variable_types(data = data), names(data))
   if (length(key) != 0) {
     var_types[key] <- "primary_key"
   }
@@ -450,115 +450,6 @@ value_choices.TealDatasetConnector <- function(data, # nolint
     )
   }
 }
-
-
-#' Get classes selected columns from dataset
-#'
-#' @param data (`data.frame`) data to determine variable types from
-#' @param columns (atomic vector of `character` or `NULL`) column names chosen chosen from `data`,
-#'   `NULL` for all data columns
-#'
-#' @return (atomic vector of `character`) classes of `columns` from provided `data`
-#' @keywords internal
-#' @examples
-#' teal:::variable_types(
-#'   data.frame(
-#'     x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
-#'     stringsAsFactors = FALSE
-#'   ),
-#'   "x"
-#' )
-#'
-#' teal:::variable_types(
-#'   data.frame(
-#'     x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
-#'     stringsAsFactors = FALSE
-#'   ),
-#'   c("x", "z")
-#' )
-#'
-#' teal:::variable_types(
-#'   data.frame(
-#'     x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
-#'     stringsAsFactors = FALSE
-#'   )
-#' )
-variable_types <- function(data, columns = NULL) {
-  UseMethod("variable_types")
-}
-
-
-#' @export
-variable_types.default <- function(data, columns = NULL) {
-  checkmate::assert_character(columns, null.ok = TRUE, any.missing = FALSE)
-
-  res <- if (is.null(columns)) {
-    vapply(
-      data,
-      function(x) class(x)[[1]],
-      character(1),
-      USE.NAMES = FALSE
-    )
-  } else if (checkmate::test_character(columns, any.missing = FALSE)) {
-    stopifnot(all(columns %in% names(data) | vapply(columns, identical, logical(1L), "")))
-    vapply(
-      columns,
-      function(x) ifelse(x == "", "", class(data[[x]])[[1]]),
-      character(1),
-      USE.NAMES = FALSE
-    )
-  } else {
-    character(0)
-  }
-
-  return(res)
-}
-
-#' @export
-variable_types.data.frame <- function(data, columns = NULL) {
-  variable_types.default(data, columns)
-}
-
-#' @export
-variable_types.DataTable <- function(data, columns = NULL) {
-  variable_types.default(data, columns)
-}
-
-#' @export
-variable_types.DFrame <- function(data, columns = NULL) {
-  variable_types.default(data, columns)
-}
-
-#' @export
-variable_types.matrix <- function(data, columns = NULL) {
-  checkmate::assert_character(columns, null.ok = TRUE, any.missing = FALSE)
-
-  res <- if (is.null(columns)) {
-    apply(
-      data,
-      2,
-      function(x) class(x)[1]
-    )
-  } else if (checkmate::test_character(columns, any.missing = FALSE)) {
-    stopifnot(
-      all(
-        columns %in% colnames(data) |
-          vapply(columns, identical, logical(1L), "")
-      )
-    )
-    vapply(
-      columns,
-      function(x) ifelse(x == "", "", class(data[, x])[1]),
-      character(1),
-      USE.NAMES = FALSE
-    )
-  } else {
-    character(0)
-  }
-
-  return(res)
-}
-
 #' Print choices_labeled object
 #' @description `r lifecycle::badge("stable")`
 #' @rdname choices_labeled

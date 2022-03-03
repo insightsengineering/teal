@@ -22,18 +22,18 @@ list with dataset connectors}
 \examples{
 \dontrun{
 adsl_cf <- CallableFunction$new(
-  function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
+  function() as.data.frame(as.list(setNames(nm = teal.data::get_cdisc_keys("ADSL"))))
 )
 adae_cf <- CallableFunction$new(
-  function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE"))))
+  function() as.data.frame(as.list(setNames(nm = teal.data::get_cdisc_keys("ADAE"))))
 )
-adsl <- CDISCTealDatasetConnector$new(
+adsl <- teal.data:::CDISCTealDatasetConnector$new(
   "ADSL", adsl_cf,
-  keys = get_cdisc_keys("ADSL"), parent = character(0)
+  keys = teal.data::get_cdisc_keys("ADSL"), parent = character(0)
 )
-adae <- CDISCTealDatasetConnector$new(
+adae <- teal.data:::CDISCTealDatasetConnector$new(
   "ADAE", adae_cf,
-  keys = get_cdisc_keys("ADAE"), parent = "ADSL"
+  keys = teal.data::get_cdisc_keys("ADAE"), parent = "ADSL"
 )
 data <- cdisc_data_connector(
   connection = data_connection(open_fun = CallableFunction$new(function() "open function")),

@@ -31,7 +31,7 @@ get_attrs(x1)
 x2 <- dataset(
   "ADSL",
   x = ADSL,
-  keys = get_cdisc_keys("ADSL"),
+  keys = teal.data::get_cdisc_keys("ADSL"),
   label = "custom label"
 )
 get_attrs(x2)
@@ -43,7 +43,7 @@ ADSL <- synthetic_cdisc_data("latest")$adsl
 x3 <- cdisc_dataset(
   "ADSL",
   x = ADSL,
-  keys = get_cdisc_keys("ADSL"),
+  keys = teal.data::get_cdisc_keys("ADSL"),
   label = "custom label"
 )
 get_attrs(x3)

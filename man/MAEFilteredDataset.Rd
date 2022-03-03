@@ -14,7 +14,7 @@
 ## Method `MAEFilteredDataset$set_filter_state`
 ## ------------------------------------------------
 
-dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+dataset <- teal:::MAEFilteredDataset$new(teal.data::dataset("MAE", MultiAssayExperiment::miniACC))
 fs <- list(
   subjects = list(
     years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),
@@ -184,7 +184,7 @@ to the referred column.}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
+\preformatted{dataset <- teal:::MAEFilteredDataset$new(teal.data::dataset("MAE", MultiAssayExperiment::miniACC))
 fs <- list(
   subjects = list(
     years_to_birth = list(selected = c(30, 50), keep_na = TRUE, keep_inf = FALSE),

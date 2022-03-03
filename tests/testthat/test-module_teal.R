@@ -1,5 +1,5 @@
-iris_ds <- dataset(dataname = "iris", x = iris)
-mtcars_ds <- dataset(dataname = "mtcars", x = mtcars)
+iris_ds <- teal.data::dataset(dataname = "iris", x = iris)
+mtcars_ds <- teal.data::dataset(dataname = "mtcars", x = mtcars)
 data <- teal_data(iris_ds, mtcars_ds)
 
 test_module1 <- module(

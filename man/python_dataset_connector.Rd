@@ -22,7 +22,7 @@ python_cdisc_dataset_connector(
   file,
   code,
   object,
-  keys = get_cdisc_keys(dataname),
+  keys = teal.data::get_cdisc_keys(dataname),
   parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   mutate_code = character(0),
   mutate_script = character(0),

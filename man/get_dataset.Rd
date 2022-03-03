@@ -35,7 +35,7 @@ See \code{help(TealDataConnector)} and \code{help(TealData)} for more complex ex
 
 # TealDatasetConnector --------
 library(scda)
-pull_fun_adae <- callable_function(
+pull_fun_adae <-  teal.data::callable_function(
   function() {
     synthetic_cdisc_data("latest")$adae
   }
@@ -45,7 +45,7 @@ ADSL <- synthetic_cdisc_data("latest")$adsl
 
 dc <- dataset_connector(
   dataname = "ADAE", pull_callable = pull_fun_adae,
-  keys = get_cdisc_keys("ADSL")
+  keys = teal.data::get_cdisc_keys("ADSL")
 )
 load_dataset(dc)
 get_dataset(dc)

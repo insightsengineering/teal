@@ -10,7 +10,7 @@
 }
 \examples{
 library(shiny)
-ds <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+ds <- teal:::DefaultFilteredDataset$new(teal.data::dataset("iris", iris))
 ds$get_data(filtered = FALSE)
 
 ds$set_filter_state(
@@ -28,7 +28,7 @@ isolate(ds$get_call())
 ## Method `DefaultFilteredDataset$set_filter_state`
 ## ------------------------------------------------
 
-dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+dataset <- teal:::DefaultFilteredDataset$new(teal.data::dataset("iris", iris))
 fs <- list(
   Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
   Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)
@@ -158,7 +158,7 @@ Note that this is ignored for other \code{FilteredDatasets}.}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
+\preformatted{dataset <- teal:::DefaultFilteredDataset$new(teal.data::dataset("iris", iris))
 fs <- list(
   Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = TRUE),
   Species = list(selected = c("setosa", "versicolor"), keep_na = FALSE)

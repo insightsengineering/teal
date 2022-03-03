@@ -18,7 +18,7 @@ code_dataset_connector(
 code_cdisc_dataset_connector(
   dataname,
   code,
-  keys = get_cdisc_keys(dataname),
+  keys = teal.data::get_cdisc_keys(dataname),
   parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   label = character(0),
   mutate_code = character(0),
@@ -72,7 +72,7 @@ assigned automatically by \code{dataname}.
 library(scda)
 x <- code_dataset_connector(
   dataname = "ADSL",
-  keys = get_cdisc_keys("ADSL"),
+  keys = teal.data::get_cdisc_keys("ADSL"),
   code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl; ADSL"
 )
 
@@ -91,7 +91,7 @@ writeLines(
 
 y <- code_dataset_connector(
   dataname = "ADSL",
-  keys = get_cdisc_keys("ADSL"),
+  keys = teal.data::get_cdisc_keys("ADSL"),
   code = paste0(readLines(file_example), collapse = "\n")
 )
 }

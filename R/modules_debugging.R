@@ -25,7 +25,7 @@
 #'
 #' app <- init(
 #'   data = cdisc_data(
-#'     cdisc_dataset(
+#'     teal.data::cdisc_dataset(
 #'       dataname = "ADSL",
 #'       x = ADSL
 #'     ),

@@ -18,7 +18,7 @@ Pulled data inherits from the class \code{\link{TealDataset}}
 ## Method `TealDatasetConnector$set_ui_input`
 ## ------------------------------------------------
 
-ds <- dataset_connector("xyz", pull_callable = callable_function(data.frame))
+ds <- dataset_connector("xyz", pull_callable =  teal.data::callable_function(data.frame))
 ds$set_ui_input(
   function(ns) {
     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
@@ -33,7 +33,7 @@ ds$launch()
 ## Method `TealDatasetConnector$launch`
 ## ------------------------------------------------
 
-ds <- dataset_connector("xyz", pull_callable = callable_function(data.frame))
+ds <- dataset_connector("xyz", pull_callable =  teal.data::callable_function(data.frame))
 ds$set_ui_input(
   function(ns) {
     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
@@ -604,7 +604,7 @@ Nested lists are not allowed.}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{ds <- dataset_connector("xyz", pull_callable = callable_function(data.frame))
+\preformatted{ds <- dataset_connector("xyz", pull_callable =  teal.data::callable_function(data.frame))
 ds$set_ui_input(
   function(ns) {
     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
@@ -667,7 +667,7 @@ Shiny app
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{ds <- dataset_connector("xyz", pull_callable = callable_function(data.frame))
+\preformatted{ds <- dataset_connector("xyz", pull_callable =  teal.data::callable_function(data.frame))
 ds$set_ui_input(
   function(ns) {
     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),

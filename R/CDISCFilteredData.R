@@ -32,8 +32,8 @@
 #' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADTTE <- synthetic_cdisc_data("latest")$adtte
 #'
-#' adsl <- cdisc_dataset("ADSL", ADSL)
-#' adtte <- cdisc_dataset("ADTTE", ADTTE)
+#' adsl <- teal.data::cdisc_dataset("ADSL", ADSL)
+#' adtte <- teal.data::cdisc_dataset("ADTTE", ADTTE)
 #' data <- cdisc_data(adsl, adtte)
 #' datasets <- teal:::CDISCFilteredData$new()
 #'

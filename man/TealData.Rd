@@ -11,18 +11,18 @@ Class also decides whether to launch app before initialize teal application.
 }
 \examples{
 library(scda)
-adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
-adlb_cf <- callable_function(function() synthetic_cdisc_data("latest")$adlb)
-adrs_cf <- callable_function(function() synthetic_cdisc_data("latest")$adrs)
-adtte_cf <- callable_function(function() synthetic_cdisc_data("latest")$adtte)
-x1 <- cdisc_dataset_connector("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
-x2 <- cdisc_dataset_connector("ADRS", adrs_cf, keys = get_cdisc_keys("ADRS"))
+adsl_cf <-  teal.data::callable_function(function() synthetic_cdisc_data("latest")$adsl)
+adlb_cf <-  teal.data::callable_function(function() synthetic_cdisc_data("latest")$adlb)
+adrs_cf <-  teal.data::callable_function(function() synthetic_cdisc_data("latest")$adrs)
+adtte_cf <-  teal.data::callable_function(function() synthetic_cdisc_data("latest")$adtte)
+x1 <- cdisc_dataset_connector("ADSL", adsl_cf, keys = teal.data::get_cdisc_keys("ADSL"))
+x2 <- cdisc_dataset_connector("ADRS", adrs_cf, keys = teal.data::get_cdisc_keys("ADRS"))
 x3 <- cdisc_dataset(
   dataname = "ADAE",
   x = synthetic_cdisc_data("latest")$adae,
   code = "library(scda)\nADAE <- synthetic_cdisc_data(\"latest\")$adae"
 )
-x4 <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADTTE"))
+x4 <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = teal.data::get_cdisc_keys("ADTTE"))
 tc <- teal:::TealData$new(x1, x2, x3, x4)
 tc$get_datanames()
 \dontrun{
@@ -38,7 +38,7 @@ x <- cdisc_dataset(
   code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 )
 
-x2 <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADTTE"))
+x2 <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = teal.data::get_cdisc_keys("ADTTE"))
 tc <- teal:::TealData$new(x, x2)
 \dontrun{
 # This errors as we have not pulled the data

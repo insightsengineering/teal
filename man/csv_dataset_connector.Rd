@@ -18,7 +18,7 @@ csv_dataset_connector(
 csv_cdisc_dataset_connector(
   dataname,
   file,
-  keys = get_cdisc_keys(dataname),
+  keys = teal.data::get_cdisc_keys(dataname),
   parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   label = character(0),
   code = character(0),

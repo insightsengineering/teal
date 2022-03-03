@@ -37,14 +37,14 @@ get_keys(
   dataset(
     "ADSL",
     synthetic_cdisc_data("latest")$adsl,
-    keys = get_cdisc_keys("ADSL"),
+    keys = teal.data::get_cdisc_keys("ADSL"),
     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   )
 )
 # TealDatasetConnector --------
 
 library(scda)
-pull_fun_adsl <- callable_function(
+pull_fun_adsl <-  teal.data::callable_function(
   function() {
     synthetic_cdisc_data("latest")$adsl
   }
@@ -53,7 +53,7 @@ get_keys(
   dataset_connector(
     "ADSL",
     pull_fun_adsl,
-    keys = get_cdisc_keys("ADSL"),
+    keys = teal.data::get_cdisc_keys("ADSL"),
   )
 )
 # TealData --------

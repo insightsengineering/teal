@@ -10,13 +10,13 @@ It can be a database or server connection.}
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
-open_fun <- callable_function(data.frame) # define opening function
+open_fun <-  teal.data::callable_function(data.frame) # define opening function
 open_fun$set_args(list(x = 1:5)) # define fixed arguments to opening function
 
-close_fun <- callable_function(print) # define closing function
+close_fun <-  teal.data::callable_function(print) # define closing function
 close_fun$set_args(list(x = "Hi there")) # define fixed arguments to closing function
 
-ping_fun <- callable_function(function() TRUE)
+ping_fun <-  teal.data::callable_function(function() TRUE)
 
 x <- data_connection( # define connection
   ping_fun = ping_fun, # define ping function

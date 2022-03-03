@@ -1,10 +1,10 @@
 ## TealDataset =====
 testthat::test_that("TealDataset basics", {
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
-  variable_labels(x) <- c("X", "Y")
+  teal.data::variable_labels(x) <- c("X", "Y")
 
   testthat::expect_silent({
-    test_ds <- TealDataset$new(
+    test_ds <-teal.data:::TealDataset$new(
       dataname = "testds",
       x = x,
       keys = "x"
@@ -26,19 +26,19 @@ testthat::test_that("TealDataset basics", {
     list(a = c("a", "a", "b", "b", "c"), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
   )
   # keys checking is not immediate
-  ds1 <- dataset(dataname = "df", x = df, keys = character(0))
+  ds1 <- teal.data::dataset(dataname = "df", x = df, keys = character(0))
   testthat::expect_silent(ds1$check_keys())
 
-  ds2 <- dataset(dataname = "df", x = df, keys = character(0)) %>% set_keys(c("c"))
+  ds2 <- teal.data::dataset(dataname = "df", x = df, keys = character(0)) %>% set_keys(c("c"))
   testthat::expect_silent(ds2$check_keys())
 
-  ds3 <- dataset(dataname = "df", x = df) %>% set_keys("non_existing_col")
+  ds3 <- teal.data::dataset(dataname = "df", x = df) %>% set_keys("non_existing_col")
   testthat::expect_error(
     ds3$check_keys(),
     "Primary keys specifed for df do not exist in the data."
   )
 
-  ds4 <- dataset(dataname = "df", x = df) %>% set_keys("a")
+  ds4 <- teal.data::dataset(dataname = "df", x = df) %>% set_keys("a")
   testthat::expect_error(
     ds4$check_keys(),
     "Duplicate primary key values found in the dataset 'df'"
@@ -46,7 +46,7 @@ testthat::test_that("TealDataset basics", {
 })
 
 testthat::test_that("TealDataset$recreate", {
-  ds <- TealDataset$new(
+  ds <-teal.data:::TealDataset$new(
     dataname = "mtcars",
     x = mtcars,
     keys = character(0),
@@ -68,7 +68,7 @@ testthat::test_that("TealDataset$get_*_colnames", {
     ),
     stringsAsFactors = FALSE
   )
-  ds <- TealDataset$new("ds", x = df)
+  ds <-teal.data:::TealDataset$new("ds", x = df)
 
   testthat::expect_equal(ds$get_numeric_colnames(), c("num"))
   testthat::expect_equal(ds$get_character_colnames(), c("char"))
@@ -84,7 +84,7 @@ testthat::test_that("TealDataset$get_rownames", {
     ),
     stringsAsFactors = FALSE
   )
-  ds <- TealDataset$new("ds", x = df)
+  ds <-teal.data:::TealDataset$new("ds", x = df)
 
   testthat::expect_equal(ds$get_rownames(), c("1", "2", "3"))
 })
@@ -99,7 +99,7 @@ testthat::test_that("TealDataset active bindings", {
     ),
     stringsAsFactors = FALSE
   )
-  ds <- TealDataset$new("ds", x = df)
+  ds <-teal.data:::TealDataset$new("ds", x = df)
 
   testthat::expect_equal(ds$ncol, 4)
   testthat::expect_equal(ds$nrow, 3)
@@ -140,7 +140,7 @@ testthat::test_that("TealDataset supplementary constructors", {
       x$a2 <- 2
 
       # <code
-      dataset(dataname = \"iris_mod\", x = x)"
+      teal.data::dataset(dataname = \"iris_mod\", x = x)"
     ),
     con = file_example
   )
@@ -162,21 +162,21 @@ testthat::test_that("TealDataset supplementary constructors", {
 })
 
 testthat::test_that("TealDataset$set_vars throws an error if passed the enclosing TealDataset object directly", {
-  test_ds <- TealDataset$new("mtcars", mtcars)
+  test_ds <-teal.data:::TealDataset$new("mtcars", mtcars)
   testthat::expect_error(test_ds$set_vars(vars = list(itself = test_ds)), regexp = "Circular dependencies detected")
 })
 
 testthat::test_that("TealDataset$set_vars throws an error if passed the enclosing TealDataset object indirectly, distance 1", { # nolint
-  test_ds0 <- TealDataset$new("mtcars", mtcars)
-  test_ds1 <- TealDataset$new("iris", iris)
+  test_ds0 <-teal.data:::TealDataset$new("mtcars", mtcars)
+  test_ds1 <-teal.data:::TealDataset$new("iris", iris)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
   testthat::expect_error(test_ds0$set_vars(vars = list(test_ds1 = test_ds1)), regexp = "Circular dependencies detected")
 })
 
 testthat::test_that("TealDataset$set_vars throws an error if passed the enclosing TealDataset object indirectly, distance 2", { # nolint
-  test_ds0 <- TealDataset$new("mtcars", mtcars)
-  test_ds1 <- TealDataset$new("iris", iris)
-  test_ds2 <- TealDataset$new("rock", rock)
+  test_ds0 <-teal.data:::TealDataset$new("mtcars", mtcars)
+  test_ds1 <-teal.data:::TealDataset$new("iris", iris)
+  test_ds2 <-teal.data:::TealDataset$new("rock", rock)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
   test_ds2$set_vars(vars = list(test_ds1 = test_ds1))
 
@@ -187,9 +187,9 @@ testthat::test_that("TealDataset$set_vars throws an error if passed the enclosin
 })
 
 testthat::test_that("TealDataset$set_vars throws an error if passed the enclosing TealDatasetConnector", {
-  test_ds0 <- TealDataset$new("mtcars", mtcars)
-  test_ds1 <- TealDataset$new("iris", iris)
-  test_ds2 <- TealDataset$new("rock", rock)
+  test_ds0 <-teal.data:::TealDataset$new("mtcars", mtcars)
+  test_ds1 <-teal.data:::TealDataset$new("iris", iris)
+  test_ds2 <-teal.data:::TealDataset$new("rock", rock)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
   test_ds2$set_vars(vars = list(test_ds1 = test_ds1))
 
@@ -201,7 +201,7 @@ testthat::test_that("TealDataset$set_vars throws an error if passed the enclosin
     regexp = "Circular dependencies detected"
   )
 
-  pull_fun2 <- callable_function(data.frame)
+  pull_fun2 <-  teal.data::callable_function(data.frame)
   pull_fun2$set_args(args = list(a = c(1, 2, 3)))
   t_dc <- dataset_connector("test", pull_fun2, vars = list(test_ds0 = test_ds0))
   testthat::expect_error(test_ds0$set_vars(vars = list(t_dc = t_dc)), regexp = "Circular dependencies detected")
@@ -213,11 +213,11 @@ testthat::test_that("TealDataset$set_vars throws an error if passed the enclosin
 })
 
 testthat::test_that("TealDataset mutate method with delayed logic", {
-  test_ds0 <- TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  test_ds1 <- TealDataset$new("head_iris", head(iris), code = "head_iris <- head(iris)")
-  test_ds2 <- TealDataset$new("head_rock", head(rock), code = "head_rock <- head(rock)")
+  test_ds0 <-teal.data:::TealDataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <-teal.data:::TealDataset$new("head_iris", head(iris), code = "head_iris <- head(iris)")
+  test_ds2 <-teal.data:::TealDataset$new("head_rock", head(rock), code = "head_rock <- head(rock)")
 
-  pull_fun2 <- callable_function(data.frame)
+  pull_fun2 <-  teal.data::callable_function(data.frame)
   pull_fun2$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector("test_dc", pull_fun2, vars = list(test_ds1 = test_ds1))
 
@@ -379,16 +379,16 @@ testthat::test_that("TealDataset mutate method with delayed logic", {
 })
 
 testthat::test_that("TealDataset check method", {
-  test_ds0 <- TealDataset$new("head_mtcars", head(mtcars))
+  test_ds0 <-teal.data:::TealDataset$new("head_mtcars", head(mtcars))
   testthat::expect_error(
     test_ds0$check(),
     regex = "Cannot check preprocessing code of 'head_mtcars' - code is empty."
   )
-  test_ds1 <- TealDataset$new("head_mtcars", x = head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <-teal.data:::TealDataset$new("head_mtcars", x = head(mtcars), code = "head_mtcars <- head(mtcars)")
   testthat::expect_true(
     test_ds1$check()
   )
-  test_ds2 <- TealDataset$new("head_mtcars", x = head(mtcars), code = "head_mtcars <- mtcars[1:6, ]")
+  test_ds2 <-teal.data:::TealDataset$new("head_mtcars", x = head(mtcars), code = "head_mtcars <- mtcars[1:6, ]")
   testthat::expect_true(
     test_ds2$check()
   )
@@ -411,28 +411,28 @@ testthat::test_that("TealDataset check method", {
 })
 
 testthat::test_that("TealDataset$check returns FALSE if the passed code creates a binding with a different object", {
-  test_ds0 <- TealDataset$new("cars", head(mtcars), code = "cars <- head(iris)")
+  test_ds0 <-teal.data:::TealDataset$new("cars", head(mtcars), code = "cars <- head(iris)")
   testthat::expect_false(test_ds0$check())
 })
 
 testthat::test_that("get_hash returns the hash of the object passed to the constructor", {
   iris_hash <- digest::digest(iris, algo = "md5")
-  ds <- TealDataset$new("iris", iris)
+  ds <-teal.data:::TealDataset$new("iris", iris)
   testthat::expect_equal(ds$get_hash(), iris_hash)
 })
 
 testthat::test_that("get_code_class returns the correct CodeClass object", {
   cc1 <- CodeClass$new(code = "iris <- head(iris)", dataname = "iris")
   cc2 <- CodeClass$new(code = "mtcars <- head(mtcars)", dataname = "mtcars", deps = "iris")
-  ds1 <- TealDataset$new("iris", head(iris), code = "iris <- head(iris)")
-  ds2 <- TealDataset$new("mtcars", head(mtcars), code = "mtcars <- head(mtcars)", vars = list(iris = ds1))
+  ds1 <-teal.data:::TealDataset$new("iris", head(iris), code = "iris <- head(iris)")
+  ds2 <-teal.data:::TealDataset$new("mtcars", head(mtcars), code = "mtcars <- head(mtcars)", vars = list(iris = ds1))
   testthat::expect_equal(ds1$get_code_class(), cc1)
   testthat::expect_equal(ds2$get_code_class(), cc1$append(cc2))
 })
 
 testthat::test_that("get_code_class returns the correct CodeClass after mutating with another TealDataset", {
-  ds1 <- TealDataset$new("iris", head(iris), code = "iris <- head(iris)")
-  ds2 <- TealDataset$new("mtcars", head(mtcars), code = "mtcars <- head(mtcars)")
+  ds1 <-teal.data:::TealDataset$new("iris", head(iris), code = "iris <- head(iris)")
+  ds2 <-teal.data:::TealDataset$new("mtcars", head(mtcars), code = "mtcars <- head(mtcars)")
   cc1 <- CodeClass$new(code = "mtcars <- head(mtcars)", dataname = "mtcars")
   cc2 <- CodeClass$new(code = "iris <- head(iris)", dataname = "iris")
   cc3 <- CodeClass$new(code = "iris$test <- 1", dataname = "iris")
@@ -442,8 +442,8 @@ testthat::test_that("get_code_class returns the correct CodeClass after mutating
 
 testthat::test_that("TealDataset$recreate does not reset the mutation code", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dataset_connector1 <- TealDatasetConnector$new("mtcars", cf)
-  dataset1 <- TealDataset$new("iris", head(iris))
+  dataset_connector1 <- teal.data:::TealDatasetConnector$new("mtcars", cf)
+  dataset1 <-teal.data:::TealDataset$new("iris", head(iris))
   dataset1$mutate(code = "test", vars = list(test = dataset_connector1))
   code_before_recreating <- dataset1$get_code()
   dataset1$recreate()
@@ -453,8 +453,8 @@ testthat::test_that("TealDataset$recreate does not reset the mutation code", {
 
 testthat::test_that("TealDataset$recreate does not reset the variables needed for mutation", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dataset_connector1 <- TealDatasetConnector$new("mtcars", cf)
-  dataset1 <- TealDataset$new("iris", head(iris))
+  dataset_connector1 <- teal.data:::TealDatasetConnector$new("mtcars", cf)
+  dataset1 <-teal.data:::TealDataset$new("iris", head(iris))
   dataset1$mutate(code = "test", vars = list(test = dataset_connector1))
   mutate_vars_before_recreation <- dataset1$get_mutate_vars()
   dataset1$recreate()
@@ -463,8 +463,8 @@ testthat::test_that("TealDataset$recreate does not reset the variables needed fo
 
 testthat::test_that("TealDataset$is_mutate_delayed returns TRUE if the TealDataset's dependency is delayed", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dataset_connector1 <- TealDatasetConnector$new("mtcars", cf)
-  dataset1 <- TealDataset$new("iris", head(iris))
+  dataset_connector1 <- teal.data:::TealDatasetConnector$new("mtcars", cf)
+  dataset1 <-teal.data:::TealDataset$new("iris", head(iris))
   dataset1$mutate(code = "", vars = list(test = dataset_connector1))
   testthat::expect_true(dataset1$is_mutate_delayed())
 })
@@ -472,9 +472,9 @@ testthat::test_that("TealDataset$is_mutate_delayed returns TRUE if the TealDatas
 testthat::test_that("TealDataset$is_mutate_delayed stays FALSE if the TealDataset's
   dependency turns from not delayed to delayed", {
   cf <- CallableFunction$new(function() head(mtcars))
-  dataset_connector1 <- TealDatasetConnector$new("mtcars", cf)
-  dataset1 <- TealDataset$new("iris", head(iris))
-  dataset_dependency <- TealDataset$new("plantgrowth", head(PlantGrowth))
+  dataset_connector1 <- teal.data:::TealDatasetConnector$new("mtcars", cf)
+  dataset1 <-teal.data:::TealDataset$new("iris", head(iris))
+  dataset_dependency <-teal.data:::TealDataset$new("plantgrowth", head(PlantGrowth))
 
   dataset1$mutate(code = "", vars = list(test = dataset_dependency))
   testthat::expect_false(dataset1$is_mutate_delayed())
@@ -485,13 +485,13 @@ testthat::test_that("TealDataset$is_mutate_delayed stays FALSE if the TealDatase
 })
 
 testthat::test_that("TealDataset$get_join_keys returns an empty JoinKeys object", {
-  dataset1 <- TealDataset$new("iris", head(iris))
+  dataset1 <-teal.data:::TealDataset$new("iris", head(iris))
   testthat::expect_true(is(dataset1$get_join_keys(), "JoinKeys"))
   testthat::expect_equal(length(dataset1$get_join_keys()$get()), 0)
 })
 
 testthat::test_that("TealDataset$set_join_keys works independently", {
-  dataset1 <- TealDataset$new("iris", head(iris))
+  dataset1 <-teal.data:::TealDataset$new("iris", head(iris))
   testthat::expect_silent(
     dataset1$set_join_keys(join_key("iris", "other_dataset", c("Species" = "some_col")))
   )
@@ -503,14 +503,14 @@ testthat::test_that("TealDataset$set_join_keys works independently", {
 })
 
 testthat::test_that("TealDataset$mutate_join_keys works independently", {
-  dataset1 <- TealDataset$new("iris", head(iris))
+  dataset1 <-teal.data:::TealDataset$new("iris", head(iris))
   testthat::expect_silent(
     dataset1$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_col2"))
   )
   testthat::expect_true(is(dataset1$get_join_keys(), "JoinKeys"))
   testthat::expect_equal(length(dataset1$get_join_keys()$get()), 2)
 
-  dataset2 <- TealDataset$new("iris", head(iris))
+  dataset2 <-teal.data:::TealDataset$new("iris", head(iris))
   testthat::expect_silent(
     dataset2$mutate_join_keys("other_dataset", c("Sepal.Length"))
   )
@@ -518,8 +518,8 @@ testthat::test_that("TealDataset$mutate_join_keys works independently", {
   testthat::expect_equal(length(dataset2$get_join_keys()$get()), 2)
 })
 
-testthat::test_that("TealDataset$set_join_keys works with TealDataset$mutate_join_keys", {
-  dataset1 <- TealDataset$new("iris", head(iris))
+testthat::test_that("TealDataset$set_join_keys works withteal.data:::TealDataset$mutate_join_keys", {
+  dataset1 <-teal.data:::TealDataset$new("iris", head(iris))
   testthat::expect_silent(
     dataset1$set_join_keys(join_key("iris", "other_dataset", c("Species" = "some_col")))
   )
@@ -548,7 +548,7 @@ testthat::test_that("TealDataset$set_join_keys works with TealDataset$mutate_joi
 })
 
 testthat::test_that("Dupliated mutation code is shown via get_code()", {
-  dataset <- TealDataset$new("iris", head(iris))
+  dataset <-teal.data:::TealDataset$new("iris", head(iris))
   dataset$mutate("7")
   dataset$mutate("7")
   testthat::expect_equal(dataset$get_code(), paste("7", "7", sep = "\n"))
@@ -558,7 +558,7 @@ test_that("mutate_dataset", {
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
 
   expect_silent({
-    test_ds <- dataset(
+    test_ds <- teal.data::dataset(
       dataname = "x",
       x = x,
       code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = FALSE)"
@@ -606,7 +606,7 @@ test_that("mutate_dataset", {
   )
 
   expect_silent({
-    test_ds <- dataset(
+    test_ds <- teal.data::dataset(
       dataname = "x",
       x = x,
       keys = "x"
@@ -617,7 +617,7 @@ test_that("mutate_dataset", {
   })
 
   expect_silent({
-    test_ds <- dataset(
+    test_ds <- teal.data::dataset(
       dataname = "testds",
       x = x,
       code = "testds <- whatever",
@@ -690,7 +690,7 @@ test_that("mutate_dataset with vars argument", {
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
   var1 <- "3"
   var2 <- "4"
-  test_ds <- dataset(
+  test_ds <- teal.data::dataset(
     dataname = "x",
     x = x,
     code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = TRUE)"
@@ -708,7 +708,7 @@ test_that("mutate_dataset with vars argument", {
     mutate_dataset(x = test_ds, code = "x$zz <- var", vars = list(var = var1))
   )
 
-  pull_fun2 <- callable_function(data.frame)
+  pull_fun2 <-  teal.data::callable_function(data.frame)
   pull_fun2$set_args(args = list(a = c(1, 2, 3)))
   expect_silent({
     t <- dataset_connector("test", pull_fun2)
@@ -732,15 +732,15 @@ testthat::test_that("get_hash returns the correct hash after mutating the TealDa
   mutated_iris <- iris
   mutated_iris$test <- 1
   mutated_iris_hash <- digest::digest(mutated_iris, algo = "md5")
-  ds <- TealDataset$new("iris", iris) %>% mutate_dataset("iris$test <- 1")
+  ds <-teal.data:::TealDataset$new("iris", iris) %>% mutate_dataset("iris$test <- 1")
   testthat::expect_equal(ds$get_hash(), mutated_iris_hash)
 })
 
 testthat::test_that("dataset$merge_join_keys does not throw on basic input", {
-  dataset1 <- TealDataset$new("iris", head(iris))
+  dataset1 <-teal.data:::TealDataset$new("iris", head(iris))
   dataset1$set_join_keys(join_key("iris", "other_dataset", c("Species" = "some_col")))
 
-  dataset2 <- TealDataset$new("iris", head(iris))
+  dataset2 <-teal.data:::TealDataset$new("iris", head(iris))
   dataset2$set_join_keys(join_key("iris", "other_dataset_2", c("Sepal.Length" = "some_col2")))
 
   before_merge <- dataset1$get_join_keys()$get()
@@ -754,7 +754,7 @@ testthat::test_that("dataset$merge_join_keys does not throw on basic input", {
 
 testthat::test_that("dataset$print warns of superfluous arguments", {
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
-  test_ds <- dataset(
+  test_ds <- teal.data::dataset(
     dataname = "x",
     x = x,
     code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = FALSE)"
@@ -766,7 +766,7 @@ testthat::test_that("dataset$print warns of superfluous arguments", {
 
 testthat::test_that("dataset$print prints out all rows when less than 6", {
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
-  test_ds <- dataset(
+  test_ds <- teal.data::dataset(
     dataname = "x",
     x = x,
     code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = FALSE)"
@@ -785,7 +785,7 @@ testthat::test_that("dataset$print prints out all rows when less than 6", {
 
 testthat::test_that("dataset$print prints out both head and tail when more than 6 rows", {
   x <- head(iris, 7)
-  test_ds <- dataset(
+  test_ds <- teal.data::dataset(
     dataname = "x",
     x = x,
     code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = FALSE)"
@@ -816,8 +816,8 @@ testthat::test_that("dataset$print prints out both head and tail when more than 
 })
 
 testthat::test_that("get_var_r6 returns identical R6 objects as passed with set_vars", {
-  test_ds0 <- TealDataset$new("mtcars", mtcars)
-  test_ds1 <- TealDataset$new("iris", iris)
+  test_ds0 <-teal.data:::TealDataset$new("mtcars", mtcars)
+  test_ds1 <-teal.data:::TealDataset$new("iris", iris)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
 
   vars <- test_ds1$get_var_r6()
@@ -825,8 +825,8 @@ testthat::test_that("get_var_r6 returns identical R6 objects as passed with set_
 })
 
 testthat::test_that("clone(deep = TRUE) deep clones dependencies, which are TealDataset objects", {
-  test_ds0 <- TealDataset$new("mtcars", mtcars)
-  test_ds1 <- TealDataset$new("iris", iris)
+  test_ds0 <-teal.data:::TealDataset$new("mtcars", mtcars)
+  test_ds1 <-teal.data:::TealDataset$new("iris", iris)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
   test_ds1_cloned <- test_ds1$clone(deep = TRUE)
   testthat::expect_false(
@@ -836,8 +836,8 @@ testthat::test_that("clone(deep = TRUE) deep clones dependencies, which are Teal
 
 testthat::test_that("reassign_datasets_vars updates the references of the vars to
                     addresses of passed objects", {
-  test_ds0 <- TealDataset$new("mtcars", mtcars)
-  test_ds1 <- TealDataset$new("iris", iris)
+  test_ds0 <-teal.data:::TealDataset$new("mtcars", mtcars)
+  test_ds1 <-teal.data:::TealDataset$new("iris", iris)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
 
   # after reassignment vars_r6, vars and muatate_vars match new reference
@@ -850,8 +850,8 @@ testthat::test_that("reassign_datasets_vars updates the references of the vars t
 
 testthat::test_that("reassign_datasets_vars updates the references of the vars_r6 to
                     addresses of passed objects", {
-  test_ds0 <- TealDataset$new("mtcars", mtcars)
-  test_ds1 <- TealDataset$new("iris", iris)
+  test_ds0 <-teal.data:::TealDataset$new("mtcars", mtcars)
+  test_ds1 <-teal.data:::TealDataset$new("iris", iris)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
 
   # after reassignment vars_r6, vars and muatate_vars match new reference
@@ -865,8 +865,8 @@ testthat::test_that("reassign_datasets_vars updates the references of the vars_r
 testthat::test_that("reassign_datasets_vars does not change `vars` elements of
                     class different than TealDataset and TealDatasetConnector", {
   test_ds0 <- mtcars
-  test_ds1 <- TealDataset$new("mtcars", mtcars)
-  test_ds2 <- TealDataset$new("iris", iris)
+  test_ds1 <-teal.data:::TealDataset$new("mtcars", mtcars)
+  test_ds2 <-teal.data:::TealDataset$new("iris", iris)
   test_ds2$set_vars(vars = list(test_ds0 = test_ds0, test_ds1 = test_ds1))
 
   test_ds2$reassign_datasets_vars(list(test_ds1 = test_ds1))
@@ -876,8 +876,8 @@ testthat::test_that("reassign_datasets_vars does not change `vars` elements of
 testthat::test_that("reassign_datasets_vars does not change any `vars` while
                     empty list is provided", {
   test_ds0 <- mtcars
-  test_ds1 <- TealDataset$new("mtcars", mtcars)
-  test_ds2 <- TealDataset$new("iris", iris)
+  test_ds1 <-teal.data:::TealDataset$new("mtcars", mtcars)
+  test_ds2 <-teal.data:::TealDataset$new("iris", iris)
   test_ds2$set_vars(vars = list(test_ds0 = test_ds0, test_ds1 = test_ds1))
 
   test_ds2$reassign_datasets_vars(list())

@@ -36,7 +36,7 @@ testthat::test_that("get_labels' column labels is a vector of column names when 
 
 testthat::test_that("variable_labels<- assigns the labels to the columns", {
   custom_iris <- iris
-  variable_labels(custom_iris) <- colnames(custom_iris)
+  teal.data::variable_labels(custom_iris) <- colnames(custom_iris)
   testthat::expect_equal(variable_labels(custom_iris, fill = FALSE), stats::setNames(nm = colnames(custom_iris)))
 })
 
@@ -52,7 +52,7 @@ testthat::test_that("variable_labels<- does not assign NA labels", {
   test_iris <- iris
   duplicate_test_iris <- test_iris
 
-  variable_labels(test_iris) <- variable_labels(test_iris, fill = FALSE)
+  teal.data::variable_labels(test_iris) <- teal.data::variable_labels(test_iris, fill = FALSE)
   testthat::expect_equal(test_iris, duplicate_test_iris)
 })
 

@@ -48,7 +48,7 @@ load_datasets(x)
 
 # TealDatasetConnector ------
 library(scda)
-pull_fun_adsl <- callable_function(
+pull_fun_adsl <-  teal.data::callable_function(
   function() {
     synthetic_cdisc_data("latest")$adsl
   }
@@ -57,7 +57,7 @@ adsl <- dataset_connector("ADSL", pull_fun_adsl)
 load_datasets(adsl)
 get_dataset(adsl)
 
-pull_fun_adae <- callable_function(
+pull_fun_adae <-  teal.data::callable_function(
   function() {
     synthetic_cdisc_data("latest")$adae
   }
@@ -67,7 +67,7 @@ load_datasets(adae)
 
 # TealDataConnector --------
 library(scda)
-adsl_cf <- callable_function(
+adsl_cf <-  teal.data::callable_function(
   function() {
     synthetic_cdisc_data("latest")$adsl
   }
@@ -75,9 +75,9 @@ adsl_cf <- callable_function(
 adsl <- cdisc_dataset_connector(
   dataname = "ADSL",
   pull_callable = adsl_cf,
-  keys = get_cdisc_keys("ADSL")
+  keys = teal.data::get_cdisc_keys("ADSL")
 )
-adrs_cf <- callable_function(
+adrs_cf <-  teal.data::callable_function(
   function() {
     synthetic_cdisc_data("latest")$adrs
   }
@@ -85,7 +85,7 @@ adrs_cf <- callable_function(
 adrs <- cdisc_dataset_connector(
   dataname = "ADRS",
   pull_callable = adrs_cf,
-  keys = get_cdisc_keys("ADRS")
+  keys = teal.data::get_cdisc_keys("ADRS")
 )
 
 rdc <- cdisc_data(adsl, adrs)
@@ -95,7 +95,7 @@ load_datasets(rdc)
 
 # TealData --------
 library(scda)
-adsl_cf <- callable_function(
+adsl_cf <-  teal.data::callable_function(
   function() {
     synthetic_cdisc_data("latest")$adsl
   }
@@ -103,9 +103,9 @@ adsl_cf <- callable_function(
 adsl <- cdisc_dataset_connector(
   dataname = "ADSL",
   pull_callable = adsl_cf,
-  keys = get_cdisc_keys("ADSL")
+  keys = teal.data::get_cdisc_keys("ADSL")
 )
-adlb_cf <- callable_function(
+adlb_cf <-  teal.data::callable_function(
   function() {
     synthetic_cdisc_data("latest")$adlb
   }
@@ -113,9 +113,9 @@ adlb_cf <- callable_function(
 adlb <- cdisc_dataset_connector(
   dataname = "ADLB",
   pull_callable = adlb_cf,
-  keys = get_cdisc_keys("ADLB")
+  keys = teal.data::get_cdisc_keys("ADLB")
 )
-adrs_cf <- callable_function(
+adrs_cf <-  teal.data::callable_function(
   function() {
     synthetic_cdisc_data("latest")$adrs
   }
@@ -123,7 +123,7 @@ adrs_cf <- callable_function(
 adrs <- cdisc_dataset_connector(
   dataname = "ADRS",
   pull_callable = adrs_cf,
-  keys = get_cdisc_keys("ADRS")
+  keys = teal.data::get_cdisc_keys("ADRS")
 )
 
 tc <- cdisc_data(adsl, adlb, adrs)

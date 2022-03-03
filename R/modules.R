@@ -26,7 +26,7 @@
 #'
 #' app <- init(
 #'   data = teal_data(
-#'     dataset("iris", iris)
+#'     teal.data::dataset("iris", iris)
 #'   ),
 #'   modules = modules(
 #'     label = "Modules",
@@ -116,7 +116,7 @@ modules <- function(..., label = "root") {
 #'
 #' app <- init(
 #'   data = teal_data(
-#'     dataset("iris", iris)
+#'     teal.data::dataset("iris", iris)
 #'   ),
 #'   modules = modules(
 #'     module(
@@ -203,7 +203,7 @@ root_modules <- function(...) {
 #'
 #' app <- init(
 #'   data = teal_data(
-#'     dataset("iris", iris)
+#'     teal.data::dataset("iris", iris)
 #'   ),
 #'   modules = list(
 #'     module(

@@ -89,8 +89,8 @@ Set, get and remove filter states of \code{FilteredData} object
 }
 \examples{
 datasets <- teal:::FilteredData$new()
-datasets$set_dataset(dataset("iris", iris))
-datasets$set_dataset(dataset("mae", MultiAssayExperiment::miniACC))
+datasets$set_dataset(teal.data::dataset("iris", iris))
+datasets$set_dataset(teal.data::dataset("mae", MultiAssayExperiment::miniACC))
 fs <- list(
   iris = list(
     Sepal.Length = list(selected = c(5.1, 6.4), keep_na = TRUE, keep_inf = FALSE),

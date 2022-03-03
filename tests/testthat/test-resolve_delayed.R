@@ -3,8 +3,8 @@ scda_data <- synthetic_cdisc_data("latest")
 adsl <- scda_data$adsl # nolint
 adtte <- scda_data$adtte # nolint
 data <- cdisc_data(
-  cdisc_dataset("ADSL", adsl),
-  cdisc_dataset("ADTTE", adtte)
+  teal.data::cdisc_dataset("ADSL", adsl),
+  teal.data::cdisc_dataset("ADTTE", adtte)
 )
 
 ds <- teal:::CDISCFilteredData$new()

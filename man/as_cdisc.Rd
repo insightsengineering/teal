@@ -8,17 +8,17 @@
 \usage{
 as_cdisc(
   x,
-  parent = if (identical(get_dataname(x), "ADSL")) character(0) else "ADSL"
+  parent = if (identical(teal.data::get_dataname(x), "ADSL")) character(0) else "ADSL"
 )
 
 \method{as_cdisc}{TealDataset}(
   x,
-  parent = if (identical(get_dataname(x), "ADSL")) character(0) else "ADSL"
+  parent = if (identical(teal.data::get_dataname(x), "ADSL")) character(0) else "ADSL"
 )
 
 \method{as_cdisc}{TealDatasetConnector}(
   x,
-  parent = if (identical(get_dataname(x), "ADSL")) character(0) else "ADSL"
+  parent = if (identical(teal.data::get_dataname(x), "ADSL")) character(0) else "ADSL"
 )
 }
 \arguments{
@@ -47,7 +47,7 @@ as_cdisc(
   dataset(
     "ADSL",
     synthetic_cdisc_data("latest")$adsl,
-    keys = get_cdisc_keys("ADSL"),
+    keys = teal.data::get_cdisc_keys("ADSL"),
     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   )
 )
@@ -55,7 +55,7 @@ as_cdisc(
   dataset(
     "ADAE",
     synthetic_cdisc_data("latest")$adae,
-    keys = get_cdisc_keys("ADAE"),
+    keys = teal.data::get_cdisc_keys("ADAE"),
     code = "ADAE <- synthetic_cdisc_data(\"latest\")$adae"
   ),
   parent = "ADSL"
@@ -63,7 +63,7 @@ as_cdisc(
 # TealDatasetConnector --------
 
 library(scda)
-pull_fun_adsl <- callable_function(
+pull_fun_adsl <-  teal.data::callable_function(
   function() {
     synthetic_cdisc_data("latest")$adsl
   }
@@ -72,11 +72,11 @@ as_cdisc(
   dataset_connector(
     "ADSL",
     pull_fun_adsl,
-    keys = get_cdisc_keys("ADSL")
+    keys = teal.data::get_cdisc_keys("ADSL")
   )
 )
 
-pull_fun_adae <- callable_function(
+pull_fun_adae <-  teal.data::callable_function(
   function() {
     synthetic_cdisc_data("latest")$adae
   }
@@ -85,7 +85,7 @@ as_cdisc(
   dataset_connector(
     "ADAE",
     pull_fun_adae,
-    keys = get_cdisc_keys("ADAE")
+    keys = teal.data::get_cdisc_keys("ADAE")
   ),
   parent = "ADSL"
 )

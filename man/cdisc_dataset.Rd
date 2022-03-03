@@ -7,7 +7,7 @@
 cdisc_dataset(
   dataname,
   x,
-  keys = get_cdisc_keys(dataname),
+  keys = teal.data::get_cdisc_keys(dataname),
   parent = if (identical(dataname, "ADSL")) character(0) else "ADSL",
   label = data_label(x),
   code = character(0),

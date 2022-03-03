@@ -4,7 +4,7 @@
 \alias{callable_function}
 \title{Create \code{CallableFunction} object}
 \usage{
-callable_function(fun)
+ teal.data::callable_function(fun)
 }
 \arguments{
 \item{fun}{(\code{function})\cr
@@ -19,7 +19,7 @@ Create \code{\link{CallableFunction}} object to execute specific function and ge
 call.
 }
 \examples{
-cf <- callable_function(fun = stats::median)
+cf <-  teal.data::callable_function(fun = stats::median)
 cf$set_args(list(x = 1:10, na.rm = FALSE))
 cf$run()
 cf$get_call()
