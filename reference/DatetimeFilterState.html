@@ -18,7 +18,7 @@ FilterState object for POSIXct variable"><!-- mathjax --><script src="https://cd
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9013</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9014</span>
       </span>
     </div>
 
@@ -54,15 +54,6 @@ FilterState object for POSIXct variable"><!-- mathjax --><script src="https://cd
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -298,13 +289,13 @@ time frame. Must not contain NA values.</p></dd>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x &gt;= as.POSIXct("2022-03-03 13:15:46", tz = "Etc/UTC") &amp; x &lt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     as.POSIXct("2022-03-03 22:15:47", tz = "Etc/UTC")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> x &gt;= as.POSIXct("2022-03-03 14:38:28", tz = "Etc/UTC") &amp; x &lt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     as.POSIXct("2022-03-03 23:38:29", tz = "Etc/UTC")</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">set_selected</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">3L</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">8L</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">set_keep_na</span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="va">filter_state</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> is.na(x) | x &gt;= as.POSIXct("2022-03-03 13:15:49", tz = "Etc/UTC") &amp; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     x &lt; as.POSIXct("2022-03-03 13:15:55", tz = "Etc/UTC")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> is.na(x) | x &gt;= as.POSIXct("2022-03-03 14:38:31", tz = "Etc/UTC") &amp; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     x &lt; as.POSIXct("2022-03-03 14:38:37", tz = "Etc/UTC")</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## ------------------------------------------------</span></span>
 <span class="r-in"><span class="co">## Method `DatetimeFilterState$set_selected`</span></span>
