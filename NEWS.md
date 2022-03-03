@@ -1,4 +1,4 @@
-# teal 0.10.1.9013
+# teal 0.10.1.9015
 
 ### Bug fixes
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
@@ -16,6 +16,7 @@
 * Added `is_any_filtered` method to all `FilterState` classes to detect if selected values actually filters out any data. This is used to decide if an explicit filter statement is added to the call.
 * Removed redundant calling of the `JoinKeys$mutate` method inside of `for-loops`.
 * `MultiAssayExperiment` and `SummarizedExperiment` are now suggested packages, not required. Objects dependent on `MultiAssayExperiment` are changed to lazy-load these now suggested packages.
+* As `reticulate` is in Suggests, added `requireNamespace` call whenever it is needed. 
 
 # teal 0.10.1
 ### Breaking changes
