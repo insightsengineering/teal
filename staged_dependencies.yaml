@@ -11,6 +11,9 @@ upstream_repos:
   insightsengineering/teal.slice:
     repo: insightsengineering/teal.slice
     host: https://github.com
+  insightsengineering/teal.transform:
+    repo: insightsengineering/teal.transform
+    host: https://github.com
   insightsengineering/scda:
     repo: insightsengineering/scda
     host: https://github.com
