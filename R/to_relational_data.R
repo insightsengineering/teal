@@ -24,7 +24,7 @@ to_relational_data.data.frame <- function(data) { # nolint
          the object first or use a named list.")
   }
 
-  if (dataname %in% names(default_cdisc_keys)) {
+  if (dataname %in% names(teal.data:::default_cdisc_keys)) {
     teal.data::cdisc_data(teal.data::cdisc_dataset(dataname, data))
   } else {
     teal.data::teal_data(teal.data::dataset(dataname, data))
@@ -36,7 +36,7 @@ to_relational_data.data.frame <- function(data) { # nolint
 to_relational_data.TealDataset <- function(data) {
   dataname <- get_dataname(data)
 
-  if (dataname %in% names(default_cdisc_keys)) {
+  if (dataname %in% names(teal.data:::default_cdisc_keys)) {
     cdisc_data(data)
   } else {
     teal_data(data)
@@ -83,7 +83,7 @@ to_relational_data.list <- function(data) {
           list_names[[idx]]
         }
 
-        if (dataname %in% names(default_cdisc_keys)) {
+        if (dataname %in% names(teal.data:::default_cdisc_keys)) {
           teal.data::cdisc_dataset(dataname, data[[idx]])
         } else {
           teal.data::dataset(dataname, data[[idx]])

@@ -12,7 +12,7 @@
 #' @examples
 #' library(scda)
 #'
-#' ds <- teal:::FilteredData$new()
+#' ds <- teal.slice:::FilteredData$new()
 #' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' attr(ADSL, "keys") <- teal.data::get_cdisc_keys("ADSL")
 #' isolate({

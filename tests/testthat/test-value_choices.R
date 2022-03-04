@@ -7,8 +7,8 @@ data <- cdisc_data(
   teal.data::cdisc_dataset("ADTTE", adtte)
 )
 
-ds <- teal:::CDISCFilteredData$new()
-isolate(filtered_data_set(data, ds))
+ds <- teal.slice:::CDISCFilteredData$new()
+isolate(teal.slice:::filtered_data_set(data, ds))
 
 testthat::test_that("Will output warnings when value_choices applied on datasets with missing values and / or labels", {
   data <- data.frame(

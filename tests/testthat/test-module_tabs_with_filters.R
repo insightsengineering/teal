@@ -1,4 +1,4 @@
-filtered_data <- FilteredData$new()
+filtered_data <- teal.slice:::FilteredData$new()
 filtered_data$set_dataset(teal.data::dataset(dataname = "iris", x = head(iris)))
 filtered_data$set_dataset(teal.data::dataset(dataname = "mtcars", x = head(mtcars)))
 

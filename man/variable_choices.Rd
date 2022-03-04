@@ -30,6 +30,9 @@ If \code{function}, then this function is used to determine the possible columns
 In this case, the function must take only single argument "data" and return a character vector.
 See examples for more details.}
 
+\item{fill}{(\code{logical(1)}) if \code{TRUE}, the function will return variable names for columns with non-existent labels;
+otherwise will return \code{NA} for them}
+
 \item{key}{(\code{character}) vector with names of the variables, which are part of the primary key
 of the \code{data} argument. This is an optional argument, which allows to identify variables
 associated with the primary key and display the appropriate icon for them in the

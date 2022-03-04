@@ -30,7 +30,7 @@ test_that("to_relational_data accepts TealDataset/CDISCTealDataset as input", {
 })
 
 test_that("to_relational_data accepts TealDatasetConnector as input", {
-  dsc1 <- teal.data:::TealDatasetConnector$new("iris", CallableFunction$new(function() head(iris)))
+  dsc1 <- teal.data:::TealDatasetConnector$new("iris", teal.data:::CallableFunction$new(function() head(iris)))
   output_datasetconnector <- to_relational_data(dsc1)
   testthat::expect_error(output_datasetconnector, NA)
   testthat::expect_is(output_datasetconnector, "TealData")
@@ -68,7 +68,7 @@ test_that("to_relational_data accepts a complete named list of data.frame as inp
 
 test_that("to_relational_data accepts a mixed named list of objects as input", {
   dataset_22 <-teal.data:::TealDataset$new("iris22", head(iris))
-  dsc1 <- teal.data:::TealDatasetConnector$new("dsc1", CallableFunction$new(function() head(iris)))
+  dsc1 <- teal.data:::TealDatasetConnector$new("dsc1", teal.data:::CallableFunction$new(function() head(iris)))
 
   output_dataset_list <- to_relational_data_wrapper(list(AA = head(iris), dataset_22))
   testthat::expect_error(output_dataset_list, NA)

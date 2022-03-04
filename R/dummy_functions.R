@@ -16,12 +16,12 @@ get_dummy_filter <- function(data) { # nolint
     ADSL = list(
       filter = list(
         list(
-          SEX = init_filter_state(
+          SEX = teal.slice:::init_filter_state(
             x = ADSL$SEX,
             varname = "SEX",
             varlabel = "Sex"
           ),
-          AGE = init_filter_state(
+          AGE = teal.slice:::init_filter_state(
             x = ADSL$AGE,
             varname = "AGE",
             varlabel = "Age"
@@ -32,7 +32,7 @@ get_dummy_filter <- function(data) { # nolint
     ADLB = list(
       filter = list(
         list(
-          ASEQ = init_filter_state(
+          ASEQ = teal.slice:::init_filter_state(
             x = ADLB$ASEQ,
             varname = "ASEQ",
             varlabel = "Sequence Number"
@@ -92,9 +92,9 @@ get_dummy_cdisc_data <- function() { # nolint
 #' @keywords internal
 get_dummy_datasets <- function() { # nolint
   dummy_cdisc_data <- get_dummy_cdisc_data()
-  datasets <- filtered_data_new(dummy_cdisc_data)
+  datasets <- teal.slice:::filtered_data_new(dummy_cdisc_data)
   isolate({
-    filtered_data_set(dummy_cdisc_data, datasets)
+    teal.slice:::filtered_data_set(dummy_cdisc_data, datasets)
   })
   return(datasets)
 }

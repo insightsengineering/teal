@@ -335,7 +335,7 @@ that is passed an argument to the `server` function is created by `teal` as foll
 ```{r}
 library(teal)
 
-datasets <- teal:::CDISCFilteredData$new()
+datasets <- teal.slice:::CDISCFilteredData$new()
 # the `datasets` object contains reactives
 # we activate this option, so we don't need to wrap all reactives in isolate calls
 options(shiny.suppressMissingContextError = TRUE)

@@ -135,7 +135,8 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #' of the `data` argument. This is an optional argument, which allows to identify variables
 #' associated with the primary key and display the appropriate icon for them in the
 #' [optionalSelectInput] widget.
-#' @inheritParams get_labels
+#' @param fill (`logical(1)`) if `TRUE`, the function will return variable names for columns with non-existent labels;
+#'   otherwise will return `NA` for them
 #'
 #' @return named character vector with additional attributes or `delayed_data` object
 #'
