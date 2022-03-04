@@ -42,22 +42,6 @@ teal.data::cdisc_dataset_connector_file
 #' @export
 teal.data::cdisc_dataset_file
 
-#' @importFrom teal.data cdse_cdisc_dataset_connector
-#' @export
-teal.data::cdse_cdisc_dataset_connector
-
-#' @importFrom teal.data cdse_connection
-#' @export
-teal.data::cdse_connection
-
-#' @importFrom teal.data cdse_data
-#' @export
-teal.data::cdse_data
-
-#' @importFrom teal.data cdse_dataset_connector
-#' @export
-teal.data::cdse_dataset_connector
-
 #' @importFrom teal.data code_cdisc_dataset_connector
 #' @export
 teal.data::code_cdisc_dataset_connector
@@ -97,18 +81,6 @@ teal.data::dataset_connector_file
 #' @importFrom teal.data dataset_file
 #' @export
 teal.data::dataset_file
-
-#' @importFrom teal.data datasetdb_connection
-#' @export
-teal.data::datasetdb_connection
-
-#' @importFrom teal.data datasetdb_data
-#' @export
-teal.data::datasetdb_data
-
-#' @importFrom teal.data datasetdb_dataset_connector
-#' @export
-teal.data::datasetdb_dataset_connector
 
 #' @importFrom teal.data fun_cdisc_dataset_connector
 #' @export
@@ -222,26 +194,6 @@ teal.data::read_script
 #' @export
 teal.data::relational_data_connector
 
-#' @importFrom teal.data rice_cdisc_dataset_connector
-#' @export
-teal.data::rice_cdisc_dataset_connector
-
-#' @importFrom teal.data rice_connection
-#' @export
-teal.data::rice_connection
-
-#' @importFrom teal.data rice_data
-#' @export
-teal.data::rice_data
-
-#' @importFrom teal.data rice_dataset_connector
-#' @export
-teal.data::rice_dataset_connector
-
-#' @importFrom teal.data ricepass_connection
-#' @export
-teal.data::ricepass_connection
-
 #' @importFrom teal.data scda_cdisc_dataset_connector
 #' @export
 teal.data::scda_cdisc_dataset_connector
@@ -266,26 +218,6 @@ teal.data::set_args
 #' @export
 teal.data::set_keys
 
-#' @importFrom teal.data snowflake_cdisc_dataset_connector
-#' @export
-teal.data::snowflake_cdisc_dataset_connector
-
-#' @importFrom teal.data snowflake_connection
-#' @export
-teal.data::snowflake_connection
-
-#' @importFrom teal.data snowflake_connection_function
-#' @export
-teal.data::snowflake_connection_function
-
-#' @importFrom teal.data snowflake_data
-#' @export
-teal.data::snowflake_data
-
-#' @importFrom teal.data snowflake_dataset_connector
-#' @export
-teal.data::snowflake_dataset_connector
-
 #' @importFrom teal.data teal_data
 #' @export
 teal.data::teal_data
@@ -293,22 +225,6 @@ teal.data::teal_data
 #' @importFrom teal.data teal_data_file
 #' @export
 teal.data::teal_data_file
-
-#' @importFrom teal.data teradata_cdisc_dataset_connector
-#' @export
-teal.data::teradata_cdisc_dataset_connector
-
-#' @importFrom teal.data teradata_connection
-#' @export
-teal.data::teradata_connection
-
-#' @importFrom teal.data teradata_data
-#' @export
-teal.data::teradata_data
-
-#' @importFrom teal.data teradata_dataset_connector
-#' @export
-teal.data::teradata_dataset_connector
 
 #' @importFrom teal.data var_relabel
 #' @export

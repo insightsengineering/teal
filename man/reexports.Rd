@@ -16,10 +16,6 @@
 \alias{cdisc_dataset_connector}
 \alias{cdisc_dataset_connector_file}
 \alias{cdisc_dataset_file}
-\alias{cdse_cdisc_dataset_connector}
-\alias{cdse_connection}
-\alias{cdse_data}
-\alias{cdse_dataset_connector}
 \alias{code_cdisc_dataset_connector}
 \alias{code_dataset_connector}
 \alias{csv_cdisc_dataset_connector}
@@ -30,9 +26,6 @@
 \alias{dataset_connector}
 \alias{dataset_connector_file}
 \alias{dataset_file}
-\alias{datasetdb_connection}
-\alias{datasetdb_data}
-\alias{datasetdb_dataset_connector}
 \alias{fun_cdisc_dataset_connector}
 \alias{fun_dataset_connector}
 \alias{get_attrs}
@@ -61,28 +54,14 @@
 \alias{rds_dataset_connector}
 \alias{read_script}
 \alias{relational_data_connector}
-\alias{rice_cdisc_dataset_connector}
-\alias{rice_connection}
-\alias{rice_data}
-\alias{rice_dataset_connector}
-\alias{ricepass_connection}
 \alias{scda_cdisc_dataset_connector}
 \alias{scda_dataset_connector}
 \alias{script_cdisc_dataset_connector}
 \alias{script_dataset_connector}
 \alias{set_args}
 \alias{set_keys}
-\alias{snowflake_cdisc_dataset_connector}
-\alias{snowflake_connection}
-\alias{snowflake_connection_function}
-\alias{snowflake_data}
-\alias{snowflake_dataset_connector}
 \alias{teal_data}
 \alias{teal_data_file}
-\alias{teradata_cdisc_dataset_connector}
-\alias{teradata_connection}
-\alias{teradata_data}
-\alias{teradata_dataset_connector}
 \alias{var_relabel}
 \alias{variable_labels}
 \alias{Queue}
@@ -96,6 +75,7 @@
 \alias{optionalSliderInput}
 \alias{optionalSliderInputValMinMax}
 \alias{updateOptionalSelectInput}
+\alias{register_logger}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -105,10 +85,10 @@ below to see their documentation.
 \describe{
   \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 
-  \item{teal.data}{\code{\link[teal.data]{as_cdisc}}, \code{\link[teal.data]{callable_code}}, \code{\link[teal.data]{callable_function}}, \code{\link[teal.data]{cdisc_data}}, \code{\link[teal.data]{cdisc_data_connector}}, \code{\link[teal.data]{cdisc_data_file}}, \code{\link[teal.data]{cdisc_dataset}}, \code{\link[teal.data]{cdisc_dataset_connector}}, \code{\link[teal.data:dataset_connector_file]{cdisc_dataset_connector_file}}, \code{\link[teal.data]{cdisc_dataset_file}}, \code{\link[teal.data:cdse_dataset_connector]{cdse_cdisc_dataset_connector}}, \code{\link[teal.data]{cdse_connection}}, \code{\link[teal.data]{cdse_data}}, \code{\link[teal.data]{cdse_dataset_connector}}, \code{\link[teal.data:code_dataset_connector]{code_cdisc_dataset_connector}}, \code{\link[teal.data]{code_dataset_connector}}, \code{\link[teal.data:csv_dataset_connector]{csv_cdisc_dataset_connector}}, \code{\link[teal.data]{csv_dataset_connector}}, \code{\link[teal.data]{data_connection}}, \code{\link[teal.data]{data_label}}, \code{\link[teal.data:data_label-set]{data_label<-}}, \code{\link[teal.data]{dataset}}, \code{\link[teal.data]{dataset_connector}}, \code{\link[teal.data]{dataset_connector_file}}, \code{\link[teal.data]{dataset_file}}, \code{\link[teal.data]{datasetdb_connection}}, \code{\link[teal.data]{datasetdb_data}}, \code{\link[teal.data]{datasetdb_dataset_connector}}, \code{\link[teal.data:fun_dataset_connector]{fun_cdisc_dataset_connector}}, \code{\link[teal.data]{fun_dataset_connector}}, \code{\link[teal.data]{get_attrs}}, \code{\link[teal.data]{get_cdisc_keys}}, \code{\link[teal.data]{get_code}}, \code{\link[teal.data]{get_dataname}}, \code{\link[teal.data]{get_dataset}}, \code{\link[teal.data]{get_dataset_label}}, \code{\link[teal.data]{get_datasets}}, \code{\link[teal.data]{get_key_duplicates}}, \code{\link[teal.data]{get_keys}}, \code{\link[teal.data]{get_labels}}, \code{\link[teal.data]{get_raw_data}}, \code{\link[teal.data]{is_pulled}}, \code{\link[teal.data]{join_key}}, \code{\link[teal.data]{join_keys}}, \code{\link[teal.data]{load_dataset}}, \code{\link[teal.data]{load_datasets}}, \code{\link[teal.data]{mutate_data}}, \code{\link[teal.data]{mutate_dataset}}, \code{\link[teal.data]{mutate_join_keys}}, \code{\link[teal.data:python_dataset_connector]{python_cdisc_dataset_connector}}, \code{\link[teal.data]{python_code}}, \code{\link[teal.data]{python_dataset_connector}}, \code{\link[teal.data:rds_dataset_connector]{rds_cdisc_dataset_connector}}, \code{\link[teal.data]{rds_dataset_connector}}, \code{\link[teal.data]{read_script}}, \code{\link[teal.data]{relational_data_connector}}, \code{\link[teal.data:rice_dataset_connector]{rice_cdisc_dataset_connector}}, \code{\link[teal.data]{rice_connection}}, \code{\link[teal.data]{rice_data}}, \code{\link[teal.data]{rice_dataset_connector}}, \code{\link[teal.data]{ricepass_connection}}, \code{\link[teal.data:scda_dataset_connector]{scda_cdisc_dataset_connector}}, \code{\link[teal.data]{scda_dataset_connector}}, \code{\link[teal.data:script_dataset_connector]{script_cdisc_dataset_connector}}, \code{\link[teal.data]{script_dataset_connector}}, \code{\link[teal.data]{set_args}}, \code{\link[teal.data]{set_keys}}, \code{\link[teal.data:snowflake_dataset_connector]{snowflake_cdisc_dataset_connector}}, \code{\link[teal.data]{snowflake_connection}}, \code{\link[teal.data]{snowflake_connection_function}}, \code{\link[teal.data]{snowflake_data}}, \code{\link[teal.data]{snowflake_dataset_connector}}, \code{\link[teal.data]{teal_data}}, \code{\link[teal.data]{teal_data_file}}, \code{\link[teal.data:teradata_dataset_connector]{teradata_cdisc_dataset_connector}}, \code{\link[teal.data]{teradata_connection}}, \code{\link[teal.data]{teradata_data}}, \code{\link[teal.data]{teradata_dataset_connector}}, \code{\link[teal.data]{var_relabel}}, \code{\link[teal.data]{variable_labels}}}
+  \item{teal.data}{\code{\link[teal.data]{as_cdisc}}, \code{\link[teal.data]{callable_code}}, \code{\link[teal.data]{callable_function}}, \code{\link[teal.data]{cdisc_data}}, \code{\link[teal.data]{cdisc_data_connector}}, \code{\link[teal.data]{cdisc_data_file}}, \code{\link[teal.data]{cdisc_dataset}}, \code{\link[teal.data]{cdisc_dataset_connector}}, \code{\link[teal.data:dataset_connector_file]{cdisc_dataset_connector_file}}, \code{\link[teal.data]{cdisc_dataset_file}}, \code{\link[teal.data:code_dataset_connector]{code_cdisc_dataset_connector}}, \code{\link[teal.data]{code_dataset_connector}}, \code{\link[teal.data:csv_dataset_connector]{csv_cdisc_dataset_connector}}, \code{\link[teal.data]{csv_dataset_connector}}, \code{\link[teal.data]{data_connection}}, \code{\link[teal.data]{data_label}}, \code{\link[teal.data:data_label-set]{data_label<-}}, \code{\link[teal.data]{dataset}}, \code{\link[teal.data]{dataset_connector}}, \code{\link[teal.data]{dataset_connector_file}}, \code{\link[teal.data]{dataset_file}}, \code{\link[teal.data:fun_dataset_connector]{fun_cdisc_dataset_connector}}, \code{\link[teal.data]{fun_dataset_connector}}, \code{\link[teal.data]{get_attrs}}, \code{\link[teal.data]{get_cdisc_keys}}, \code{\link[teal.data]{get_code}}, \code{\link[teal.data]{get_dataname}}, \code{\link[teal.data]{get_dataset}}, \code{\link[teal.data]{get_dataset_label}}, \code{\link[teal.data]{get_datasets}}, \code{\link[teal.data]{get_key_duplicates}}, \code{\link[teal.data]{get_keys}}, \code{\link[teal.data]{get_labels}}, \code{\link[teal.data]{get_raw_data}}, \code{\link[teal.data]{is_pulled}}, \code{\link[teal.data]{join_key}}, \code{\link[teal.data]{join_keys}}, \code{\link[teal.data]{load_dataset}}, \code{\link[teal.data]{load_datasets}}, \code{\link[teal.data]{mutate_data}}, \code{\link[teal.data]{mutate_dataset}}, \code{\link[teal.data]{mutate_join_keys}}, \code{\link[teal.data:python_dataset_connector]{python_cdisc_dataset_connector}}, \code{\link[teal.data]{python_code}}, \code{\link[teal.data]{python_dataset_connector}}, \code{\link[teal.data:rds_dataset_connector]{rds_cdisc_dataset_connector}}, \code{\link[teal.data]{rds_dataset_connector}}, \code{\link[teal.data]{read_script}}, \code{\link[teal.data]{relational_data_connector}}, \code{\link[teal.data:scda_dataset_connector]{scda_cdisc_dataset_connector}}, \code{\link[teal.data]{scda_dataset_connector}}, \code{\link[teal.data:script_dataset_connector]{script_cdisc_dataset_connector}}, \code{\link[teal.data]{script_dataset_connector}}, \code{\link[teal.data]{set_args}}, \code{\link[teal.data]{set_keys}}, \code{\link[teal.data]{teal_data}}, \code{\link[teal.data]{teal_data_file}}, \code{\link[teal.data]{var_relabel}}, \code{\link[teal.data]{variable_labels}}}
 
   \item{teal.slice}{\code{\link[teal.slice]{Queue}}, \code{\link[teal.slice:filter_state_api]{clear_filter_states}}, \code{\link[teal.slice]{default_filter}}, \code{\link[teal.slice]{get_filter_expr}}, \code{\link[teal.slice:filter_state_api]{get_filter_state}}, \code{\link[teal.slice:filter_state_api]{remove_filter_state}}, \code{\link[teal.slice:filter_state_api]{set_filter_state}}}
 
-  \item{teal.widgets}{\code{\link[teal.widgets]{optionalSelectInput}}, \code{\link[teal.widgets]{optionalSliderInput}}, \code{\link[teal.widgets]{optionalSliderInputValMinMax}}, \code{\link[teal.widgets]{updateOptionalSelectInput}}}
+  \item{teal.widgets}{\code{\link[teal.widgets]{optionalSelectInput}}, \code{\link[teal.widgets]{optionalSliderInput}}, \code{\link[teal.widgets]{optionalSliderInputValMinMax}}, \code{\link[teal.widgets]{register_logger}}, \code{\link[teal.widgets]{updateOptionalSelectInput}}}
 }}
 
