@@ -2,6 +2,10 @@
 #' @export
 teal.data::`data_label<-`
 
+#' @importFrom teal.data `variable_labels<-`
+#' @export
+teal.data::`variable_labels<-`
+
 #' @importFrom teal.data as_cdisc
 #' @export
 teal.data::as_cdisc
