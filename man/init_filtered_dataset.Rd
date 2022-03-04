@@ -69,9 +69,10 @@ shinyApp(
 }
 
 # MAEFilteredDataset example
-library(MultiAssayExperiment)
-MAE_d <- dataset("MAE", miniACC)
-MAE_fd <- teal:::init_filtered_dataset(MAE_d)
+if (require(MultiAssayExperiment)) {
+  MAE_d <- dataset("MAE", miniACC)
+  MAE_fd <- teal:::init_filtered_dataset(MAE_d)
+}
 \dontrun{
 shinyApp(
   ui = fluidPage(

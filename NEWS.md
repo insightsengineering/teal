@@ -3,7 +3,7 @@
 ### Bug fixes
 * `get_call()` function of `CallableFunction` now returns call with namespace included.
 * Deprecated `root_modules` function, users should use `modules` directly inside `init`.
-* Add counts to filtering categorical variables bar charts in the filtering panel in cases where they were missing. 
+* Add counts to filtering categorical variables bar charts in the filtering panel in cases where they were missing.
 
 ### Breaking changes
 * Due to deprecation of `root_modules` any `label` argument to `modules` must be explicitly named. For example `modules("lab", mod1, mod2)` should be replaced with `modules(label = "lab", mod1, mod2)`.
@@ -15,6 +15,7 @@
 * Removed `rtables` dependency from the package.
 * Added `is_any_filtered` method to all `FilterState` classes to detect if selected values actually filters out any data. This is used to decide if an explicit filter statement is added to the call.
 * Removed redundant calling of the `JoinKeys$mutate` method inside of `for-loops`.
+* `MultiAssayExperiment` and `SummarizedExperiment` are now suggested packages, not required. Objects dependent on `MultiAssayExperiment` are changed to lazy-load these now suggested packages.
 * As `reticulate` is in Suggests, added `requireNamespace` call whenever it is needed. 
 
 # teal 0.10.1

@@ -372,6 +372,7 @@ FilteredData <- R6::R6Class( # nolint
     #' )
     #' datasets$set_filter_state(state = fs)
     #' shiny::isolate(datasets$get_filter_state())
+    #'
     #' @return `NULL`
     set_filter_state = function(state) {
       checkmate::assert_subset(names(state), self$datanames())

@@ -21,7 +21,5 @@ magrittr::`%>%`
 #' @importFrom grDevices rgb
 #' @importFrom lifecycle deprecate_stop
 #' @importFrom methods is
-#' @importFrom MultiAssayExperiment MultiAssayExperiment
-#' @importFrom SummarizedExperiment colData
 #' @importFrom stats setNames
 NULL

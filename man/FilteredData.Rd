@@ -95,6 +95,7 @@ fs <- list(
 )
 datasets$set_filter_state(state = fs)
 shiny::isolate(datasets$get_filter_state())
+
 }
 \keyword{internal}
 \section{Methods}{
@@ -583,6 +584,7 @@ fs <- list(
 )
 datasets$set_filter_state(state = fs)
 shiny::isolate(datasets$get_filter_state())
+
 }
 \if{html}{\out{</div>}}
 
