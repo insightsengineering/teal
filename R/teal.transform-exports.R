@@ -22,6 +22,14 @@ teal.transform::data_extract_spec
 #' @export
 teal.transform::filter_spec
 
+#' @importFrom teal.transform is.choices_selected
+#' @export
+teal.transform::is.choices_selected
+
+#' @importFrom teal.transform no_selected_as_NULL
+#' @export
+teal.transform::no_selected_as_NULL
+
 #' @importFrom teal.transform resolve_delayed
 #' @export
 teal.transform::resolve_delayed

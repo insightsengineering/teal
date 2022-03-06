@@ -78,6 +78,8 @@
 \alias{choices_selected}
 \alias{data_extract_spec}
 \alias{filter_spec}
+\alias{is.choices_selected}
+\alias{no_selected_as_NULL}
 \alias{resolve_delayed}
 \alias{select_spec}
 \alias{select_spec.default}
@@ -103,7 +105,7 @@ below to see their documentation.
 
   \item{teal.slice}{\code{\link[teal.slice]{Queue}}, \code{\link[teal.slice:filter_state_api]{clear_filter_states}}, \code{\link[teal.slice]{default_filter}}, \code{\link[teal.slice]{get_filter_expr}}, \code{\link[teal.slice:filter_state_api]{get_filter_state}}, \code{\link[teal.slice:filter_state_api]{remove_filter_state}}, \code{\link[teal.slice:filter_state_api]{set_filter_state}}}
 
-  \item{teal.transform}{\code{\link[teal.transform]{add_no_selected_choices}}, \code{\link[teal.transform]{all_choices}}, \code{\link[teal.transform]{choices_labeled}}, \code{\link[teal.transform]{choices_selected}}, \code{\link[teal.transform]{data_extract_spec}}, \code{\link[teal.transform]{filter_spec}}, \code{\link[teal.transform]{resolve_delayed}}, \code{\link[teal.transform]{select_spec}}, \code{\link[teal.transform:select_spec]{select_spec.default}}, \code{\link[teal.transform:select_spec]{select_spec.delayed_data}}, \code{\link[teal.transform]{split_by_sep}}, \code{\link[teal.transform]{value_choices}}, \code{\link[teal.transform]{variable_choices}}}
+  \item{teal.transform}{\code{\link[teal.transform]{add_no_selected_choices}}, \code{\link[teal.transform]{all_choices}}, \code{\link[teal.transform]{choices_labeled}}, \code{\link[teal.transform]{choices_selected}}, \code{\link[teal.transform]{data_extract_spec}}, \code{\link[teal.transform]{filter_spec}}, \code{\link[teal.transform:choices_selected]{is.choices_selected}}, \code{\link[teal.transform]{no_selected_as_NULL}}, \code{\link[teal.transform]{resolve_delayed}}, \code{\link[teal.transform]{select_spec}}, \code{\link[teal.transform:select_spec]{select_spec.default}}, \code{\link[teal.transform:select_spec]{select_spec.delayed_data}}, \code{\link[teal.transform]{split_by_sep}}, \code{\link[teal.transform]{value_choices}}, \code{\link[teal.transform]{variable_choices}}}
 
   \item{teal.widgets}{\code{\link[teal.widgets]{optionalSelectInput}}, \code{\link[teal.widgets]{optionalSliderInput}}, \code{\link[teal.widgets]{optionalSliderInputValMinMax}}, \code{\link[teal.widgets]{register_logger}}, \code{\link[teal.widgets]{updateOptionalSelectInput}}}
 }}
