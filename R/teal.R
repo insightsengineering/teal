@@ -19,7 +19,6 @@ magrittr::`%>%`
 #' @importFrom digest digest
 #' @importFrom ggplot2 ggplot
 #' @importFrom grDevices rgb
-#' @importFrom lifecycle deprecate_stop
 #' @importFrom methods is
 #' @importFrom stats setNames
 NULL

@@ -76,7 +76,7 @@ to_relational_data.list <- function(data) {
   datasets_list <- lapply(
     seq_along(data),
     function(idx) {
-      if (is.data.frame(data[[idx]]) || methods::is(data[[idx]], "MultiAssayExperiment")) {
+      if (is.data.frame(data[[idx]]) || inherits(data[[idx]], "MultiAssayExperiment")) {
         dataname <- if (length(list_names) == 0 || list_names[[idx]] == "") {
           parsed_names[[idx]]
         } else {

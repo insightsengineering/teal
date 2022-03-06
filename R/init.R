@@ -159,7 +159,7 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  if (!methods::is(data, "TealData")) {
+  if (!inherits(data, "TealData")) {
     data <- to_relational_data(data = data)
   }
   checkmate::assert_string(title, null.ok = TRUE)

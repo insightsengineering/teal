@@ -25,3 +25,5 @@ teal.slice::remove_filter_state
 #' @importFrom teal.slice set_filter_state
 #' @export
 teal.slice::set_filter_state
+
+variable_types <- teal.slice:::variable_types

@@ -1,3 +1,7 @@
+#' @importFrom teal.transform add_no_selected_choices
+#' @export
+teal.transform::add_no_selected_choices
+
 #' @importFrom teal.transform all_choices
 #' @export
 teal.transform::all_choices

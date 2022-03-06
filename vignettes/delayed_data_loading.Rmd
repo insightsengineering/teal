@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Delayed Data Loading}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 

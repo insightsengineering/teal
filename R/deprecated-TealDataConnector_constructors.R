@@ -11,6 +11,8 @@
 #' @param additional_ui (`shiny.tag`)\cr
 #'  additional user interface to be visible over login panel
 #'
+#' @importFrom lifecycle deprecate_stop
+#'
 #' @return An object of class `TealDataConnector`
 #'
 rice_data <- function(..., connection = rice_connection(), additional_ui = NULL) {
