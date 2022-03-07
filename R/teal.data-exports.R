@@ -158,6 +158,10 @@ teal.data::load_dataset
 #' @export
 teal.data::load_datasets
 
+#' @importFrom teal.data mae_dataset
+#' @export
+teal.data::mae_dataset
+
 #' @importFrom teal.data mutate_data
 #' @export
 teal.data::mutate_data
