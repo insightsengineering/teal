@@ -28,7 +28,7 @@ rice_dataset_connector <- function(dataname,
                                    ...) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
-    what = "teal::rice_dataset_connector()",
+    what = "rice_dataset_connector()",
     details = "Please use teal.connectors.rice::rice_dataset_connector()."
   )
 }
@@ -56,7 +56,7 @@ rice_cdisc_dataset_connector <- function(dataname,
                                          ...) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
-    what = "teal::rice_cdisc_dataset_connector()",
+    what = "rice_cdisc_dataset_connector()",
     details = "Please use teal.connectors.rice::rice_cdisc_dataset_connector()."
   )
 }
@@ -85,7 +85,7 @@ teradata_dataset_connector <- function(dataname,
                                        ...) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
-    what = "teal::teradata_dataset_connector()",
+    what = "teradata_dataset_connector()",
     details = "Please use teal.connectors.teradata::teradata_dataset_connector()."
   )
 }
@@ -113,7 +113,7 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
                                              ...) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
-    what = "teal::teradata_cdisc_dataset_connector()",
+    what = "teradata_cdisc_dataset_connector()",
     details = "Please use teal.connectors.teradata::teradata_cdisc_dataset_connector()."
   )
 }
@@ -142,7 +142,7 @@ snowflake_dataset_connector <- function(dataname,
                                         ...) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
-    what = "teal::snowflake_dataset_connector()",
+    what = "snowflake_dataset_connector()",
     details = "Please use teal.connectors.snowflake::snowflake_dataset_connector()."
   )
 }
@@ -170,7 +170,7 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
                                               ...) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
-    what = "teal::snowflake_cdisc_dataset_connector()",
+    what = "snowflake_cdisc_dataset_connector()",
     details = "Please use teal.connectors.snowflake::snowflake_cdisc_dataset_connector()."
   )
 }
@@ -199,7 +199,7 @@ cdse_dataset_connector <- function(dataname,
                                    ...) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
-    what = "teal::cdse_dataset_connector()",
+    what = "cdse_dataset_connector()",
     details = "Please use teal.connectors.cdse::cdse_dataset_connector()."
   )
 }
@@ -227,7 +227,7 @@ cdse_cdisc_dataset_connector <- function(dataname,
                                          ...) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
-    what = "teal::cdse_cdisc_dataset_connector()",
+    what = "cdse_cdisc_dataset_connector()",
     details = "Please use teal.connectors.cdse::cdse_cdisc_dataset_connector()."
   )
 }
@@ -257,7 +257,7 @@ datasetdb_dataset_connector <- function(dataname,
                                         ...) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
-    what = "teal::datasetdb_dataset_connector()",
+    what = "datasetdb_dataset_connector()",
     details = "Please use teal.connectors.datasetdb::datasetdb_dataset_connector()."
   )
 }
