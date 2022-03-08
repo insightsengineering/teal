@@ -68,11 +68,9 @@
 #'   * `character` and `factor`: `selected` should be a vector of any length
 #'   defining initial values selected to filter.
 #'   \cr
-#'   `MultiAssayExperiment` `filter` should be specified in slightly different
-#'   way. Since [MultiAssayExperiment::MultiAssayExperiment()] contains
-#'   patient data ([SummarizedExperiment::colData()]) with list of experiments
-#'   ([MultiAssayExperiment::ExperimentList()]), `filter` list should be named
-#'   in the following name.
+#'   `filter` for `MultiAssayExperiment` objects should be specified in slightly
+#'   different way. Since it contains patient data with list of experiments,
+#'   `filter` list should be created as follows:
 #'   \cr
 #'
 #'   ```

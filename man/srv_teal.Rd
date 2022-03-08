@@ -55,11 +55,9 @@ of the filter
 \item \code{character} and \code{factor}: \code{selected} should be a vector of any length
 defining initial values selected to filter.
 \cr
-\code{MultiAssayExperiment} \code{filter} should be specified in slightly different
-way. Since \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}} contains
-patient data (\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment::colData()}}) with list of experiments
-(\code{\link[MultiAssayExperiment:ExperimentList]{MultiAssayExperiment::ExperimentList()}}), \code{filter} list should be named
-in the following name.
+\code{filter} for \code{MultiAssayExperiment} objects should be specified in slightly
+different way. Since it contains patient data with list of experiments,
+\code{filter} list should be created as follows:
 \cr
 }\preformatted{list(
   <MAE dataname> = list(

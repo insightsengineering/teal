@@ -45,8 +45,8 @@ Suggests:
     rmarkdown,
     scda (>= 0.1.2),
     scda.2021 (>= 0.1.2),
-    SummarizedExperiment,
-    testthat (>= 2.0)
+    testthat (>= 2.0),
+    withr
 VignetteBuilder:
     knitr
 RdMacros:
