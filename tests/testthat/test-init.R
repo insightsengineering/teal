@@ -39,7 +39,7 @@ testthat::test_that("init data accepts a single TealDataset/CDISCTealDataset", {
 testthat::test_that("init data accepts a list of single TealDataset/CDISCTealDataset without renaming", {
   dataset_list <- list(teal.data::dataset("iris", head(iris)))
   cdisc_dataset_list <- list(
-   teal.data::cdisc_dataset("ADSL", adsl_df, parent = character(0), keys = teal.data::get_cdisc_keys("ADSL"))
+    teal.data::cdisc_dataset("ADSL", adsl_df, parent = character(0), keys = teal.data::get_cdisc_keys("ADSL"))
   )
 
   testthat::expect_error(init(data = list(teal.data::dataset("iris", head(iris))), modules = mods), NA)

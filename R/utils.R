@@ -36,4 +36,3 @@ check_pkg_quietly <- function(pckg, msg) {
 
   return(invisible(NULL))
 }
-
