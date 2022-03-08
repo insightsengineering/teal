@@ -15,7 +15,6 @@
 #'
 #' @export
 #'
-#' @importFrom lifecycle deprecate_stop
 #'
 #' @rdname rice_dataset_connector
 #'
