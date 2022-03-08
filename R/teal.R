@@ -15,10 +15,6 @@ magrittr::`%>%`
 
 # Fix R CMD check notes
 #' @import shiny
-#' @import R6
-#' @importFrom digest digest
-#' @importFrom ggplot2 ggplot
-#' @importFrom grDevices rgb
 #' @importFrom methods is
 #' @importFrom stats setNames
 NULL

@@ -27,38 +27,26 @@ Depends:
     shiny
 Imports:
     checkmate,
-    digest,
-    dplyr,
-    ggplot2,
-    glue,
-    grDevices,
     lifecycle,
     logger (>= 0.2.0),
     magrittr,
     methods,
-    R6,
-    rlang,
     shinyjs,
-    shinyWidgets (>= 0.5.0),
     stats,
     teal.data,
     teal.slice,
     teal.widgets,
     teal.transform,
-    utils,
-    yaml
+    utils
 Suggests:
     covr,
-    httr,
     knitr,
     MultiAssayExperiment,
-    readr,
     rmarkdown,
     scda (>= 0.1.2),
     scda.2021 (>= 0.1.2),
     SummarizedExperiment,
-    testthat (>= 2.0),
-    withr
+    testthat (>= 2.0)
 VignetteBuilder:
     knitr
 RdMacros:
