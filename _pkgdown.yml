@@ -35,3 +35,24 @@ reference:
       - value_choices
       - variable_choices
       - no_selected_as_NULL
+  - title: Functions moved to other packages
+    desc: These functions have been moved from teal and will be deprecated
+      - cdse_connection
+      - cdse_data
+      - cdse_dataset_connector
+      - datasetdb_connection
+      - datasetdb_data
+      - datasetdb_dataset_connector
+      - log_app_usage
+      - rice_connection
+      - rice_data
+      - rice_dataset_connector
+      - ricepass_connection
+      - root_modules
+      - snowflake_connection
+      - snowflake_connection_function
+      - snowflake_data
+      - snowflake_dataset_connector
+      - teradata_connection
+      - teradata_data
+      - teradata_dataset_connector
