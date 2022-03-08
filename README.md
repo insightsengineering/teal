@@ -18,7 +18,7 @@
 With the 2 components above, the `teal` package then provides:
 
 - The ability to "pull" data into applications at runtime - for example from external data stores which require authentication
-- A standardized method to allow application users to filter their data before it is passed into analysis modules 
+- A standardized method to allow application users to filter their data before it is passed into analysis modules
 
 Further features which enhance the `teal` framework are available in the [`teal.devel`](https://github.com/insightsengineering/teal.devel) package.
 
