@@ -408,10 +408,10 @@ connectors <- list(adsl, adsl_3)
 # create connection
 scda_open_fun <- teal.data::callable_function(fun = library)
 scda_open_fun$set_args(list(package = "scda"))
-scda_conn <- teal:::TealDataConnection$new(open_fun = scda_open_fun) # nolint
+scda_conn <- data_connection(open_fun = scda_open_fun)
 
 # create TealDataConnector
-data <- teal:::TealDataConnector$new(
+data <- relational_data_connector(
   connection = scda_conn,
   connectors = connectors
 )
