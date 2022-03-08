@@ -1,7 +1,8 @@
 dataset_1 <- teal.data::dataset("iris", head(iris))
 adsl_df <- as.data.frame(as.list(setNames(nm = teal.data::get_cdisc_keys("ADSL"))))
 adsl_dataset <- teal.data::cdisc_dataset(
-  "ADSL", adsl_df, parent = character(0), keys = teal.data::get_cdisc_keys("ADSL")
+  "ADSL", adsl_df,
+  parent = character(0), keys = teal.data::get_cdisc_keys("ADSL")
 )
 mods <- teal:::get_dummy_modules()
 
@@ -123,8 +124,8 @@ testthat::test_that("init data accepts a list of TealDatasetConnector object", {
   testthat::expect_error(init(data = dsc1, modules = mods), NA)
   testthat::expect_error(
     init(data = list(
-      teal.data::dataset_connector("iris", teal.data::callable_function(function() head(iris)))), modules = mods
-    ),
+      teal.data::dataset_connector("iris", teal.data::callable_function(function() head(iris)))
+    ), modules = mods),
     NA
   )
 })

@@ -68,7 +68,7 @@ library(teal)
 library(scda)
 
 # initialize object
-fun <-  teal.data::callable_function(fun = synthetic_cdisc_dataset)
+fun <- teal.data::callable_function(fun = synthetic_cdisc_dataset)
 
 # set arguments to function
 fun$set_args(list(dataset_name = "adsl", name = "latest"))
@@ -104,7 +104,7 @@ one has to use `$assign_to_env()` to copy object and
 ```{r}
 ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") # nolint
 
-fun <-  teal.data::callable_function(fun = function(ADSL) { # nolint
+fun <- teal.data::callable_function(fun = function(ADSL) { # nolint
   ADSL_2 <- ADSL # nolint
   ADSL_2$new_col <- TRUE # nolint
   ADSL_2
@@ -206,7 +206,7 @@ function
 ```{r}
 adsl_conn <- dataset_connector(
   dataname = "ADSL",
-  pull_callable =  teal.data::callable_function("synthetic_cdisc_dataset") %>%
+  pull_callable = teal.data::callable_function("synthetic_cdisc_dataset") %>%
     set_args(list(dataset_name = "adsl", name = "latest")),
   keys = teal.data::get_cdisc_keys("ADSL"),
   label = "Subject-Level Analysis Dataset"
@@ -242,7 +242,7 @@ element with name `ADSL`.
 # there is also a cdisc_dataset_connector function which pulls an object of type CDISCTealDataset
 adsl_2 <- dataset_connector(
   dataname = "ADSL_2",
-  pull_callable =  teal.data::callable_function(fun = function(ADSL) ADSL_2 <- ADSL) %>% # nolint
+  pull_callable = teal.data::callable_function(fun = function(ADSL) ADSL_2 <- ADSL) %>% # nolint
     set_args(list(ADSL = as.name("ADSL"))),
   keys = teal.data::get_cdisc_keys("ADSL"),
   label = "Example label",
@@ -262,7 +262,7 @@ passing ui module function, with `ns` argument (shiny namespaced ID object).
 ```{r eval=FALSE}
 adsl_3 <- dataset_connector(
   dataname = "ADSL_3",
-  pull_callable =  teal.data::callable_function(fun = function(ADSL, n) ADSL_3 <- head(ADSL, n)) %>% # nolint
+  pull_callable = teal.data::callable_function(fun = function(ADSL, n) ADSL_3 <- head(ADSL, n)) %>% # nolint
     set_args(list(ADSL = as.name("ADSL"))),
   keys = teal.data::get_cdisc_keys("ADSL"),
   label = "Example label",
@@ -289,8 +289,8 @@ functions.
 if ("rice" %in% installed.packages()) {
   eval(parse(text = "library(rice)"))
 }
-open_fun <-  teal.data::callable_function("rice::rice_session_open")
-close_fun <-  teal.data::callable_function("rice::rice_session_close")
+open_fun <- teal.data::callable_function("rice::rice_session_open")
+close_fun <- teal.data::callable_function("rice::rice_session_close")
 close_fun$set_args(list(message = FALSE))
 
 rice_conn <- teal:::TealDataConnection$new(
@@ -382,7 +382,7 @@ together in a `TealDataConnector` object.
 # create TealDatasetConnectors
 adsl <- dataset_connector(
   dataname = "ADSL",
-  pull_callable =  teal.data::callable_function("synthetic_cdisc_dataset") %>%
+  pull_callable = teal.data::callable_function("synthetic_cdisc_dataset") %>%
     set_args(list(dataset_name = "adsl", name = "latest")),
   keys = teal.data::get_cdisc_keys("ADSL"),
   label = "Subject-Level Analysis Dataset"
@@ -390,7 +390,7 @@ adsl <- dataset_connector(
 
 adsl_3 <- dataset_connector(
   dataname = "ADSL_3",
-  pull_callable =  teal.data::callable_function(fun = function(ADSL, name, n = 5) ADSL_3 <- head(ADSL, n)) %>% # nolint
+  pull_callable = teal.data::callable_function(fun = function(ADSL, name, n = 5) ADSL_3 <- head(ADSL, n)) %>% # nolint
     set_args(list(ADSL = as.name("ADSL"))),
   keys = teal.data::get_cdisc_keys("ADSL"),
   label = "Example label",
@@ -406,7 +406,7 @@ adsl_3$set_ui_input(function(ns) {
 connectors <- list(adsl, adsl_3)
 
 # create connection
-scda_open_fun <-  teal.data::callable_function(fun = library)
+scda_open_fun <- teal.data::callable_function(fun = library)
 scda_open_fun$set_args(list(package = "scda"))
 scda_conn <- teal:::TealDataConnection$new(open_fun = scda_open_fun) # nolint
 
