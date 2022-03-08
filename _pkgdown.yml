@@ -36,7 +36,8 @@ reference:
       - variable_choices
       - no_selected_as_NULL
   - title: Functions moved to other packages
-    desc: These functions have been moved from teal and will be deprecated
+    desc: These functions have been moved from teal and will be deprecated.
+    contents:
       - cdse_connection
       - cdse_data
       - cdse_dataset_connector
