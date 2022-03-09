@@ -21,13 +21,13 @@ A lot of the functionality of the `teal` framework derives from the following pa
 <!-- markdownlint-disable MD007 MD030 -->
 -   [`teal.data`](https://github.com/insightsengineering/teal.data): creating and loading the data needed for `teal` applications.
 -   [`teal.widgets`](https://github.com/insightsengineering/teal.widgets): shiny components used within `teal`.
--   [`teal.slice`](https://github.com/insightsengineering/teal.slice): provides a filtering panel to allow filtering of data. 
+-   [`teal.slice`](https://github.com/insightsengineering/teal.slice): provides a filtering panel to allow filtering of data.
 -   [`teal.code`](https://github.com/insightsengineering/teal.code): handles reproducibility of outputs.
 -   [`teal.transform`](https://github.com/insightsengineering/teal.transform): standardizes extracting and merging data.
 
 <!-- markdownlint-enable MD007 MD030 -->
 
-See these packages for more information about how to use the different parts of the `teal` framework. 
+See these packages for more information about how to use the different parts of the `teal` framework.
 
 ## Installation
 
