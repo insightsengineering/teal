@@ -230,6 +230,10 @@ teal.data::set_keys
 #' @export
 teal.data::teal_data
 
+#' @importFrom teal.data to_relational_data
+#' @export
+teal.data::to_relational_data
+
 #' @importFrom teal.data teal_data_file
 #' @export
 teal.data::teal_data_file

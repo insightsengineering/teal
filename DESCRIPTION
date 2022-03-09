@@ -76,6 +76,5 @@ Collate:
     'teal.slice-exports.R'
     'teal.transform-exports.R'
     'teal.widgets-exports.R'
-    'to_relational_data.R'
     'utils.R'
     'zzz.R'
