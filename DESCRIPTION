@@ -57,9 +57,6 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Collate:
-    'deprecated-TealDataConnection_constructors.R'
-    'deprecated-TealDataConnector_constructors.R'
-    'deprecated-TealDatasetConnector_constructors.R'
     'dummy_functions.R'
     'include_css_js.R'
     'modules.R'
