@@ -168,7 +168,7 @@ init <- function(data,
   checkmate::assert_subset(names(filter), choices = get_dataname(data))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
-  teal.widgets:::log_system_info()
+  log_system_info()
 
   if (is(modules, "list")) {
     modules <- do.call(teal::modules, modules)
