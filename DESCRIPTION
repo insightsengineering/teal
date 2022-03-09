@@ -51,7 +51,6 @@ VignetteBuilder:
     knitr
 RdMacros:
     lifecycle
-biocViews:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
