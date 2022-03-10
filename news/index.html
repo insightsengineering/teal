@@ -17,12 +17,15 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9017</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
+  <a href="../articles/teal.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -32,16 +35,16 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/data_extract_spec.html">Customizing UI with `data_extract_spec`</a>
+    </li>
+    <li>
       <a href="../articles/delayed_data_loading.html">Delayed Data Loading</a>
     </li>
     <li>
       <a href="../articles/developer_apps.html">Developer Apps</a>
     </li>
     <li>
-      <a href="../articles/filter_panel.html">Filter panel</a>
-    </li>
-    <li>
-      <a href="../articles/getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/merge.html">Merge code examples</a>
     </li>
     <li>
       <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
@@ -53,15 +56,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -82,9 +76,15 @@ Other releases
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.10.1.9015" id="teal-01019015">teal 0.10.1.9015<a class="anchor" aria-label="anchor" href="#teal-01019015"></a></h2>
-<div class="section level4">
-<h4 id="bug-fixes-0-10-1-9015">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1-9015"></a></h4>
+<h2 class="page-header" data-toc-text="0.10.1.9017" id="teal-01019017">teal 0.10.1.9017<a class="anchor" aria-label="anchor" href="#teal-01019017"></a></h2>
+<ul><li>Added <code>metadata</code> field to <code>TealDataset</code> to
+store a named list of <code>metadata</code> items. It is available for
+module developers through
+<code>FilteredData$get_metadata("&lt;&lt;dataname&gt;&gt;")</code> and
+can be pulled or added directly to datasets derived from
+<code>TealDatasetConnectors</code>.</li>
+</ul><div class="section level4">
+<h4 id="bug-fixes-0-10-1-9017">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1-9017"></a></h4>
 <ul><li>
 <code>get_call()</code> function of <code>CallableFunction</code>
 now returns call with namespace included.</li>
@@ -94,21 +94,24 @@ now returns call with namespace included.</li>
 filtering panel in cases where they were missing.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="breaking-changes-0-10-1-9015">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-1-9015"></a></h4>
+<h4 id="breaking-changes-0-10-1-9017">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-1-9017"></a></h4>
 <ul><li>Due to deprecation of <code>root_modules</code> any
 <code>label</code> argument to <code>modules</code> must be explicitly
 named. For example <code>modules("lab", mod1, mod2)</code> should be
 replaced with <code>modules(label = "lab", mod1, mod2)</code>.</li>
+<li>Minor changes to the interface of <code>TealDataset</code>, for
+example some active fields should be replaced by explicit “get”
+calls.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="miscellaneous-0-10-1-9015">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1-9015"></a></h4>
-<ul><li>New argument <code>ordered</code> in the <code><a href="../reference/select_spec.html">select_spec()</a></code>
+<h4 id="miscellaneous-0-10-1-9017">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1-9017"></a></h4>
+<ul><li>New argument <code>ordered</code> in the <code><a href="https://rdrr.io/pkg/teal.transform/man/select_spec.html" class="external-link">select_spec()</a></code>
 to flag whether order of the selection should be tracked.</li>
 <li>Minor changes to internals of <code>teal</code>: main module panel
 now has fixed shiny name <code>root</code> and the active tab is named
 <code>active_tab</code> not <code>Active_tab</code>.</li>
-<li>Replaced the deprecated <code><a href="https://roche.github.io/rtables/reference/var_labels.html" class="external-link">rtables::var_labels</a></code> calls with
-a new function <code><a href="../reference/variable_labels.html">teal::variable_labels</a></code>.</li>
+<li>Replaced the deprecated <code>rtables::var_labels</code> calls with
+a new function <code><a href="https://rdrr.io/pkg/teal.data/man/variable_labels.html" class="external-link">teal::variable_labels</a></code>.</li>
 <li>Removed <code>rtables</code> dependency from the package.</li>
 <li>Added <code>is_any_filtered</code> method to all
 <code>FilterState</code> classes to detect if selected values actually
@@ -229,8 +232,8 @@ filter panel not reacting to an input change in a nested module.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="miscellaneous-0-10-1">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1"></a></h4>
-<ul><li>Soft-deprecate <code><a href="../reference/mae_dataset.html">mae_dataset()</a></code> in favor of more general
-<code><a href="../reference/dataset.html">dataset()</a></code> constructor.</li>
+<ul><li>Soft-deprecate <code><a href="https://rdrr.io/pkg/teal.data/man/mae_dataset.html" class="external-link">mae_dataset()</a></code> in favor of more general
+<code><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset()</a></code> constructor.</li>
 <li>Added a vignette describing the modifications to <code>teal</code>
 applications users can apply using <code>R</code> options.</li>
 <li>Added default values to the <code>label</code> argument of
@@ -311,7 +314,7 @@ can also receive a <code>list</code> except <code>root_modules</code>
 function call.</li>
 <li>Added <code>split</code> and <code>merge</code> methods to the
 <code>JoinKeys</code> object.</li>
-<li>Added <code><a href="../reference/all_choices.html">all_choices()</a></code> as a possible argument to the
+<li>Added <code><a href="https://rdrr.io/pkg/teal.transform/man/all_choices.html" class="external-link">all_choices()</a></code> as a possible argument to the
 <code>selected</code> parameter of <code>filter_spec</code>,
 <code>select_spec</code> and <code>choices_selected</code> indicating
 that all choices are selected.</li>
@@ -409,15 +412,15 @@ when <code>"NA"</code> and <code>NA</code> values exist in the
 <ul><li>Support for data-standard independent input and filtering. That
 includes refactor of the all data and dataset structures together with
 refactor of <code>FilteredData</code> class.</li>
-<li>New <code>JoinKeys</code> class (with <code><a href="../reference/join_keys.html">join_keys()</a></code>
-constructors and <code><a href="../reference/join_key.html">join_key()</a></code> constructor for its elements)
+<li>New <code>JoinKeys</code> class (with <code><a href="https://rdrr.io/pkg/teal.data/man/join_keys.html" class="external-link">join_keys()</a></code>
+constructors and <code><a href="https://rdrr.io/pkg/teal.data/man/join_key.html" class="external-link">join_key()</a></code> constructor for its elements)
 to store joining key columns between datasets.</li>
-<li>Refactored the most basic <code><a href="../reference/dataset.html">dataset()</a></code> constructor, added
-<code><a href="../reference/cdisc_dataset.html">cdisc_dataset()</a></code> constructor and <code><a href="../reference/as_cdisc.html">as_cdisc()</a></code>
+<li>Refactored the most basic <code><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset()</a></code> constructor, added
+<code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset()</a></code> constructor and <code><a href="https://rdrr.io/pkg/teal.data/man/as_cdisc.html" class="external-link">as_cdisc()</a></code>
 conversion function.</li>
 <li>Soft-deprecate removed class constructors and obsolete functions
 (e.g. <code>keys()</code>).</li>
-<li>Added <code><a href="../reference/get_keys.html">get_keys()</a></code> and <code><a href="../reference/set_keys.html">set_keys()</a></code> functions
+<li>Added <code><a href="https://rdrr.io/pkg/teal.data/man/get_keys.html" class="external-link">get_keys()</a></code> and <code><a href="https://rdrr.io/pkg/teal.data/man/set_keys.html" class="external-link">set_keys()</a></code> functions
 to extract and manipulate datasets primary keys respectively.</li>
 <li>Unexported <code>filtered_data_new</code>,
 <code>filtered_data_set</code> and
@@ -425,9 +428,9 @@ to extract and manipulate datasets primary keys respectively.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="bug-fixes-0-9-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-3"></a></h4>
-<ul><li>Duplicated lines of code passed to <code><a href="../reference/cdisc_dataset.html">teal::cdisc_dataset</a></code>
+<ul><li>Duplicated lines of code passed to <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">teal::cdisc_dataset</a></code>
 and other <code>teal::RelationalDataset</code> constructors should now
-be shown when getting the code from <code><a href="../reference/cdisc_data.html">teal::cdisc_data</a></code>
+be shown when getting the code from <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">teal::cdisc_data</a></code>
 objects and other <code>teal::RelationalData</code> objects.</li>
 <li>Added ability to press “Enter” key without having to set focus to
 the Submit button for delayed data loading.</li>
@@ -616,10 +619,10 @@ contains <code>reactiveValues</code>).</li>
 <li>Datasets and materialized connectors are provided to
 <code>FilteredData</code> by <code>set_datasets_data</code> function
 located in <code>init_datasets.R</code> file.</li>
-<li>Renamed <code><a href="../reference/get_dataset.html">get_dataset()</a></code> method to
+<li>Renamed <code><a href="https://rdrr.io/pkg/teal.data/man/get_dataset.html" class="external-link">get_dataset()</a></code> method to
 <code>get_data()</code>.</li>
 <li>Renamed <code>get_filter_call()</code> method to
-<code><a href="../reference/get_filter_expr.html">get_filter_expr()</a></code>; returns an expression rather than a
+<code><a href="https://rdrr.io/pkg/teal.slice/man/get_filter_expr.html" class="external-link">get_filter_expr()</a></code>; returns an expression rather than a
 list.</li>
 <li>Removed argument <code>isolate</code> from <code>get_data()</code>
 method and similar methods. You must <code>isolate</code> it yourself as

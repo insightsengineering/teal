@@ -33,12 +33,15 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9017</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="../articles/teal.html">Get started</a>
+</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -50,16 +53,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/data_extract_spec.html">Customizing UI with `data_extract_spec`</a>
+    </li>
+    <li>
       <a href="../articles/delayed_data_loading.html">Delayed Data Loading</a>
     </li>
     <li>
       <a href="../articles/developer_apps.html">Developer Apps</a>
     </li>
     <li>
-      <a href="../articles/filter_panel.html">Filter panel</a>
-    </li>
-    <li>
-      <a href="../articles/getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/merge.html">Merge code examples</a>
     </li>
     <li>
       <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
@@ -72,15 +75,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -106,7 +100,7 @@ Other releases
                         <h4 data-toc-skip class="author">Dawid
 Kałędkowski</h4>
             
-            <h4 data-toc-skip class="date">2022-03-04</h4>
+            <h4 data-toc-skip class="date">2022-03-10</h4>
       
       
       <div class="hidden name"><code>delayed_data_loading.Rmd</code></div>
@@ -180,12 +174,12 @@ before.</p>
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: shiny</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; You are using teal version 0.10.1.9015</span>
+<span class="co">#&gt; You are using teal version 0.10.1.9017</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 
 <span class="co"># initialize object</span>
-<span class="va">fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">synthetic_cdisc_dataset</span><span class="op">)</span>
+<span class="va">fun</span> <span class="op">&lt;-</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/callable_function.html" class="external-link">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">synthetic_cdisc_dataset</span><span class="op">)</span>
 
 <span class="co"># set arguments to function</span>
 <span class="va">fun</span><span class="op">$</span><span class="fu">set_args</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span><span class="op">)</span>
@@ -252,7 +246,7 @@ function argument.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span> <span class="co"># nolint</span>
 
-<span class="va">fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> <span class="op">{</span> <span class="co"># nolint</span>
+<span class="va">fun</span> <span class="op">&lt;-</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/callable_function.html" class="external-link">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> <span class="op">{</span> <span class="co"># nolint</span>
   <span class="va">ADSL_2</span> <span class="op">&lt;-</span> <span class="va">ADSL</span> <span class="co"># nolint</span>
   <span class="va">ADSL_2</span><span class="op">$</span><span class="va">new_col</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># nolint</span>
   <span class="va">ADSL_2</span>
@@ -305,7 +299,7 @@ this independent environment can’t be modified because they are locked
 immediately. This means that in <code>CallableCode</code> created below
 it is not allowed to make any changes in <code>ADSL</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">code</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/callable_code.html">callable_code</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">code</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/callable_code.html" class="external-link">callable_code</a></span><span class="op">(</span>
   <span class="st">"ADTTE &lt;- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")
   ADTTE$x1 &lt;- 1
   ADTTE &lt;- dplyr::filter(ADTTE, PARAMCD %in% c('EFS', 'OS'))"</span>
@@ -363,7 +357,7 @@ analysis.</p>
 
 <span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span> <span class="co"># nolint</span>
 
-<span class="va">adsl_dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>
+<span class="va">adsl_dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
   x <span class="op">=</span> <span class="va">ADSL</span>,
   code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\") %&gt;% head(3)"</span>
@@ -372,19 +366,19 @@ analysis.</p>
 which can be extracted in any occasion.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># check if code is reproducible</span>
-<span class="fu"><a href="../reference/get_dataname.html">get_dataname</a></span><span class="op">(</span><span class="va">adsl_dataset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_dataname.html" class="external-link">get_dataname</a></span><span class="op">(</span><span class="va">adsl_dataset</span><span class="op">)</span>
 <span class="co">#&gt; [1] "ADSL"</span>
 
 <span class="co"># get label</span>
-<span class="fu"><a href="../reference/get_dataset_label.html">get_dataset_label</a></span><span class="op">(</span><span class="va">adsl_dataset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_dataset_label.html" class="external-link">get_dataset_label</a></span><span class="op">(</span><span class="va">adsl_dataset</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Subject Level Analysis Dataset"</span>
 
 <span class="co"># get reproducible code</span>
-<span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">adsl_dataset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">adsl_dataset</span><span class="op">)</span>
 <span class="co">#&gt; [1] "ADSL &lt;- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\") %&gt;% head(3)"</span>
 
 <span class="co"># get data.frame</span>
-<span class="fu"><a href="../reference/get_raw_data.html">get_raw_data</a></span><span class="op">(</span><span class="va">adsl_dataset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_raw_data.html" class="external-link">get_raw_data</a></span><span class="op">(</span><span class="va">adsl_dataset</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 39</span></span>
 <span class="co">#&gt;   STUDYID USUBJID     SUBJID SITEID   AGE SEX   RACE  COUNTRY DTHFL INVID INVNAM</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
@@ -414,27 +408,27 @@ keys, dataname, label and reproducible code. In the code chunk below,
 connector is created basing on <code>synthetic_cdisc_dataset</code>
 function</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adsl_conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_connector.html">dataset_connector</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">adsl_conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector.html" class="external-link">dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
-  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span><span class="st">"synthetic_cdisc_dataset"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span><span class="op">)</span>,
-  keys <span class="op">=</span> <span class="fu"><a href="../reference/get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
+  pull_callable <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/callable_function.html" class="external-link">callable_function</a></span><span class="op">(</span><span class="st">"synthetic_cdisc_dataset"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/set_args.html" class="external-link">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span><span class="op">)</span>,
+  keys <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_cdisc_keys.html" class="external-link">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
   label <span class="op">=</span> <span class="st">"Subject-Level Analysis Dataset"</span>
 <span class="op">)</span></code></pre></div>
 <p>Initially, <code>adsl_conn</code> doesn’t contain any data, but they
-can be loaded using <code><a href="../reference/load_dataset.html">load_dataset()</a></code> function. Before data
+can be loaded using <code><a href="https://rdrr.io/pkg/teal.data/man/load_dataset.html" class="external-link">load_dataset()</a></code> function. Before data
 loading, <code>adsl_conn</code> contains reproducible code which is also
 an execution code to pull the data.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># execution/reproducible code</span>
-<span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">adsl_conn</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">adsl_conn</span><span class="op">)</span>
 <span class="co">#&gt; [1] "ADSL &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"</span>
 
 <span class="co"># pull data</span>
-<span class="fu"><a href="../reference/load_dataset.html">load_dataset</a></span><span class="op">(</span><span class="va">adsl_conn</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/load_dataset.html" class="external-link">load_dataset</a></span><span class="op">(</span><span class="va">adsl_conn</span><span class="op">)</span>
 
 <span class="co"># get raw data</span>
-<span class="fu"><a href="../reference/get_raw_data.html">get_raw_data</a></span><span class="op">(</span><span class="va">adsl_conn</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_raw_data.html" class="external-link">get_raw_data</a></span><span class="op">(</span><span class="va">adsl_conn</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 400 × 39</span></span>
 <span class="co">#&gt;    STUDYID USUBJID    SUBJID SITEID   AGE SEX   RACE  COUNTRY DTHFL INVID INVNAM</span>
 <span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
@@ -469,16 +463,16 @@ should be passed to vars as a list element with name <code>ADSL</code>.
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># here we use the general dataset_connector function which pulls an object of type TealDataset</span>
 <span class="co"># there is also a cdisc_dataset_connector function which pulls an object of type CDISCTealDataset</span>
-<span class="va">adsl_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_connector.html">dataset_connector</a></span><span class="op">(</span>
+<span class="va">adsl_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector.html" class="external-link">dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL_2"</span>,
-  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> <span class="va">ADSL_2</span> <span class="op">&lt;-</span> <span class="va">ADSL</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># nolint</span>
-    <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-  keys <span class="op">=</span> <span class="fu"><a href="../reference/get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
+  pull_callable <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/callable_function.html" class="external-link">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> <span class="va">ADSL_2</span> <span class="op">&lt;-</span> <span class="va">ADSL</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># nolint</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/set_args.html" class="external-link">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+  keys <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_cdisc_keys.html" class="external-link">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
   label <span class="op">=</span> <span class="st">"Example label"</span>,
   vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">ADSL</span><span class="op">)</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="../reference/load_dataset.html">load_dataset</a></span><span class="op">(</span><span class="va">adsl_2</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/load_dataset.html" class="external-link">load_dataset</a></span><span class="op">(</span><span class="va">adsl_2</span><span class="op">)</span></code></pre></div>
 <p><code>TealDatasetConnector</code> like the other delayed data objects
 contains a <code>launch</code> method which can be used to obtain data
 using shiny application. This function can be used to check if the
@@ -488,11 +482,11 @@ specify them. To set inputs we should use <code>$set_ui_input()</code>,
 by passing ui module function, with <code>ns</code> argument (shiny
 namespaced ID object).</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adsl_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_connector.html">dataset_connector</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">adsl_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector.html" class="external-link">dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL_3"</span>,
-  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span> <span class="va">ADSL_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># nolint</span>
-    <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-  keys <span class="op">=</span> <span class="fu"><a href="../reference/get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
+  pull_callable <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/callable_function.html" class="external-link">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span> <span class="va">ADSL_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># nolint</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/set_args.html" class="external-link">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+  keys <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_cdisc_keys.html" class="external-link">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
   label <span class="op">=</span> <span class="st">"Example label"</span>,
   vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">ADSL</span><span class="op">)</span>
 <span class="op">)</span>
@@ -520,11 +514,11 @@ arguments. For example in a simplified version of
 <code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="st">"rice"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/parse.html" class="external-link">parse</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"library(rice)"</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="va">open_fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span><span class="st">"rice::rice_session_open"</span><span class="op">)</span>
-<span class="va">close_fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span><span class="st">"rice::rice_session_close"</span><span class="op">)</span>
+<span class="va">open_fun</span> <span class="op">&lt;-</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/callable_function.html" class="external-link">callable_function</a></span><span class="op">(</span><span class="st">"rice::rice_session_open"</span><span class="op">)</span>
+<span class="va">close_fun</span> <span class="op">&lt;-</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/callable_function.html" class="external-link">callable_function</a></span><span class="op">(</span><span class="st">"rice::rice_session_close"</span><span class="op">)</span>
 <span class="va">close_fun</span><span class="op">$</span><span class="fu">set_args</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>message <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">rice_conn</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va"><a href="../reference/TealDataConnection.html">TealDataConnection</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+<span class="va">rice_conn</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va">TealDataConnection</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
   open_fun <span class="op">=</span> <span class="va">open_fun</span>,
   close_fun <span class="op">=</span> <span class="va">close_fun</span>
 <span class="op">)</span></code></pre></div>
@@ -617,19 +611,19 @@ connection and to load data. Below we create two
 <code>TealDataConnector</code> object.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create TealDatasetConnectors</span>
-<span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_connector.html">dataset_connector</a></span><span class="op">(</span>
+<span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector.html" class="external-link">dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
-  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span><span class="st">"synthetic_cdisc_dataset"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span><span class="op">)</span>,
-  keys <span class="op">=</span> <span class="fu"><a href="../reference/get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
+  pull_callable <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/callable_function.html" class="external-link">callable_function</a></span><span class="op">(</span><span class="st">"synthetic_cdisc_dataset"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/set_args.html" class="external-link">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span><span class="op">)</span>,
+  keys <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_cdisc_keys.html" class="external-link">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
   label <span class="op">=</span> <span class="st">"Subject-Level Analysis Dataset"</span>
 <span class="op">)</span>
 
-<span class="va">adsl_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_connector.html">dataset_connector</a></span><span class="op">(</span>
+<span class="va">adsl_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector.html" class="external-link">dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL_3"</span>,
-  pull_callable <span class="op">=</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">name</span>, <span class="va">n</span> <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="va">ADSL_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># nolint</span>
-    <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-  keys <span class="op">=</span> <span class="fu"><a href="../reference/get_cdisc_keys.html">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
+  pull_callable <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/callable_function.html" class="external-link">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">name</span>, <span class="va">n</span> <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="va">ADSL_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># nolint</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/set_args.html" class="external-link">set_args</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+  keys <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_cdisc_keys.html" class="external-link">get_cdisc_keys</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span>,
   label <span class="op">=</span> <span class="st">"Example label"</span>,
   vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span>
 <span class="op">)</span>
@@ -643,12 +637,12 @@ connection and to load data. Below we create two
 <span class="va">connectors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adsl_3</span><span class="op">)</span>
 
 <span class="co"># create connection</span>
-<span class="va">scda_open_fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/callable_function.html">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">library</span><span class="op">)</span>
+<span class="va">scda_open_fun</span> <span class="op">&lt;-</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/callable_function.html" class="external-link">callable_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">library</span><span class="op">)</span>
 <span class="va">scda_open_fun</span><span class="op">$</span><span class="fu">set_args</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"scda"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">scda_conn</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va"><a href="../reference/TealDataConnection.html">TealDataConnection</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>open_fun <span class="op">=</span> <span class="va">scda_open_fun</span><span class="op">)</span> <span class="co"># nolint</span>
+<span class="va">scda_conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/data_connection.html" class="external-link">data_connection</a></span><span class="op">(</span>open_fun <span class="op">=</span> <span class="va">scda_open_fun</span><span class="op">)</span>
 
 <span class="co"># create TealDataConnector</span>
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va"><a href="../reference/TealDataConnector.html">TealDataConnector</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/relational_data_connector.html" class="external-link">relational_data_connector</a></span><span class="op">(</span>
   connection <span class="op">=</span> <span class="va">scda_conn</span>,
   connectors <span class="op">=</span> <span class="va">connectors</span>
 <span class="op">)</span></code></pre></div>
@@ -667,7 +661,7 @@ contains <code>CallableFunction</code> which doesn’t have
 fixed and it will ignore every arguments set with
 <code>set_pull_args</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; library(package = "scda")</span>
 <span class="co">#&gt; ADSL &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL_3 &lt;- (function(ADSL, name, n = 5) ADSL_3 &lt;- head(ADSL, n))(ADSL = ADSL)</span>
@@ -727,7 +721,7 @@ server module requires <code>connectors</code> and
 
     <span class="kw">for</span> <span class="op">(</span><span class="va">connector</span> <span class="kw">in</span> <span class="va">connectors</span><span class="op">)</span> <span class="op">{</span>
       <span class="co"># set_args before to return them in the code (fixed args)</span>
-      <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="va">connector</span>, args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">name</span><span class="op">)</span><span class="op">)</span>
+      <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/set_args.html" class="external-link">set_args</a></span><span class="op">(</span><span class="va">connector</span>, args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">name</span><span class="op">)</span><span class="op">)</span>
 
       <span class="co"># pull each dataset</span>
       <span class="va">connector</span><span class="op">$</span><span class="fu">get_server</span><span class="op">(</span><span class="op">)</span><span class="op">(</span>id <span class="op">=</span> <span class="va">connector</span><span class="op">$</span><span class="fu">get_dataname</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
@@ -757,13 +751,13 @@ creating apps to analyse CDISC data. These objects are created using
 these objects are passed as the <code>data</code> argument into
 <code><a href="../reference/init.html">teal::init</a></code>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-  <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>
     dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
     <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span>,
     code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"</span>
   <span class="op">)</span>,
-  <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>
     dataname <span class="op">=</span> <span class="st">"ADTTE"</span>,
     <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adtte"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span>,
     code <span class="op">=</span> <span class="st">"ADTTE &lt;- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"</span>
@@ -776,12 +770,12 @@ UI with shiny inputs from all objects. In the code chunk below we
 specified four dataset connectors but developers can include any number
 and any type of objects.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scda_dataset_connector.html">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"adsl"</span><span class="op">)</span>
-<span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scda_dataset_connector.html">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADAE"</span>, <span class="st">"adae"</span><span class="op">)</span>
-<span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scda_dataset_connector.html">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADVS"</span>, <span class="st">"advs"</span><span class="op">)</span>
-<span class="va">adtte</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scda_dataset_connector.html">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADTTE"</span>, <span class="st">"adtte"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/scda_dataset_connector.html" class="external-link">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"adsl"</span><span class="op">)</span>
+<span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/scda_dataset_connector.html" class="external-link">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADAE"</span>, <span class="st">"adae"</span><span class="op">)</span>
+<span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/scda_dataset_connector.html" class="external-link">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADVS"</span>, <span class="st">"advs"</span><span class="op">)</span>
+<span class="va">adtte</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/scda_dataset_connector.html" class="external-link">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADTTE"</span>, <span class="st">"adtte"</span><span class="op">)</span>
 
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adae</span>, <span class="va">advs</span>, <span class="va">adtte</span><span class="op">)</span></code></pre></div>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adae</span>, <span class="va">advs</span>, <span class="va">adtte</span><span class="op">)</span></code></pre></div>
 <p>Similar to other connectors one can use <code>launch()</code> method
 to investigate if data is set correctly. Unlike the other connectors,
 this class lacks <code>pull()</code> method.</p>
@@ -791,11 +785,11 @@ this class lacks <code>pull()</code> method.</p>
 combined code of all components, but one can also extract code from
 single dataset by specifying <code>dataname</code> argument.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
 <span class="co">#&gt; [1] "ADSL &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADAE &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adae\", name = \"latest\")\nADVS &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"advs\", name = \"latest\")\nADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"</span>
-<span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">data</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
 <span class="co">#&gt; [1] "ADSL &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"</span>
-<span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, dataname <span class="op">=</span> <span class="st">"ADTTE"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">data</span>, dataname <span class="op">=</span> <span class="st">"ADTTE"</span><span class="op">)</span>
 <span class="co">#&gt; [1] "ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"</span></code></pre></div>
 <p>Developers can also extract datasets and connectors included in the
 <code>TealData</code>.</p>
@@ -821,26 +815,26 @@ single dataset one should use <code>mutate_dataset</code> by specifying
 <code>code</code> argument with code as a single character or
 <code>script</code> with location of the script file.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
   <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_dataset.html" class="external-link">synthetic_cdisc_dataset</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, name <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span>,
   code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"</span>
 <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADSL$x1 &lt;- 1"</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/mutate_dataset.html" class="external-link">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADSL$x1 &lt;- 1"</span><span class="op">)</span>
 
 
-<span class="va">adtte</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scda_dataset_connector.html">scda_cdisc_dataset_connector</a></span><span class="op">(</span>
+<span class="va">adtte</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/scda_dataset_connector.html" class="external-link">scda_cdisc_dataset_connector</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADTTE"</span>, <span class="st">"adtte"</span>
 <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADTTE$x2 &lt;- 2"</span><span class="op">)</span></code></pre></div>
-<p><code><a href="../reference/get_code.html">get_code()</a></code> function returns loading code from
+  <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/mutate_dataset.html" class="external-link">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADTTE$x2 &lt;- 2"</span><span class="op">)</span></code></pre></div>
+<p><code><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code()</a></code> function returns loading code from
 <code>CallableFunction</code> and mutation code as provided in using
 <code>mutate_dataset</code>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL$x1 &lt;- 1</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">adtte</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">adtte</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
 <span class="co">#&gt; ADTTE$x2 &lt;- 2</span></code></pre></div>
 <p><code>mutate_dataset</code> can also be used on <code>TealData</code>
@@ -854,11 +848,11 @@ datasets, with one requirement - one needs to specify
 <code>dataname</code>. Afterwards, one can extract reproducible code
 from data which affects this particular <code>dataname</code>.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adtte</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADSL$x3 &lt;- 3"</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adtte</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/mutate_dataset.html" class="external-link">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADSL$x3 &lt;- 3"</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
 
 <span class="co"># get reproducible code of all datasets</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL$x1 &lt;- 1</span>
 <span class="co">#&gt; ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
@@ -866,22 +860,22 @@ from data which affects this particular <code>dataname</code>.</p>
 <span class="co">#&gt; ADSL$x3 &lt;- 3</span>
 
 <span class="co"># get ADSL reproducible code</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">data</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL$x1 &lt;- 1</span>
 <span class="co">#&gt; ADSL$x3 &lt;- 3</span></code></pre></div>
 <p>One can also combine multiple <code>mutate_dataset</code> calls
 applied interchangeably to all datasets.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span><span class="va">data</span>, code <span class="op">=</span> <span class="st">"ADTTE$x4 &lt;- 4"</span>, dataname <span class="op">=</span> <span class="st">"ADTTE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADSL &lt;- dplyr::filter(ADSL, SEX == 'F')"</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/mutate_dataset.html" class="external-link">mutate_dataset</a></span><span class="op">(</span><span class="va">data</span>, code <span class="op">=</span> <span class="st">"ADTTE$x4 &lt;- 4"</span>, dataname <span class="op">=</span> <span class="st">"ADTTE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/mutate_dataset.html" class="external-link">mutate_dataset</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"ADSL &lt;- dplyr::filter(ADSL, SEX == 'F')"</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL$x1 &lt;- 1</span>
 <span class="co">#&gt; ADSL$x3 &lt;- 3</span>
 <span class="co">#&gt; ADSL &lt;- dplyr::filter(ADSL, SEX == "F")</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"ADTTE"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"ADTTE"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
 <span class="co">#&gt; ADTTE$x2 &lt;- 2</span>
 <span class="co">#&gt; ADTTE$x4 &lt;- 4</span></code></pre></div>
@@ -891,16 +885,16 @@ can link them in the same way how we link
 on another, as ADTTE depends on ADSL below, <code>get_code</code> will
 return everything we need to be executed to reproduce this dataset.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/mutate_dataset.html" class="external-link">mutate_dataset</a></span><span class="op">(</span>
   <span class="va">data</span>,
   code <span class="op">=</span> <span class="st">"ADTTE &lt;- filter(ADTTE, USUBJID %in% ADSL$USUBJID)"</span>,
   dataname <span class="op">=</span> <span class="st">"ADTTE"</span>,
   vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span> <span class="co"># vars = list(&lt;DATANAME&gt; = &lt;dataset name&gt;))</span>
 <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/mutate_dataset.html">mutate_dataset</a></span><span class="op">(</span><span class="st">"ADSL$var_created_after &lt;- NA"</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/mutate_dataset.html" class="external-link">mutate_dataset</a></span><span class="op">(</span><span class="st">"ADSL$var_created_after &lt;- NA"</span>, dataname <span class="op">=</span> <span class="st">"ADSL"</span><span class="op">)</span>
 
 
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, dataname <span class="op">=</span> <span class="st">"ADTTE"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">data</span>, dataname <span class="op">=</span> <span class="st">"ADTTE"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL$x1 &lt;- 1</span>
 <span class="co">#&gt; ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
@@ -916,7 +910,7 @@ be easily subset by <code>dataname</code>, but developers can also use
 used, code for a single dataset is not possible to be subset, instead
 code of all datasets is returned.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_data.html">mutate_data</a></span><span class="op">(</span><span class="va">data</span>,
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/mutate_data.html" class="external-link">mutate_data</a></span><span class="op">(</span><span class="va">data</span>,
   code <span class="op">=</span> <span class="st">"
     ADSL$x3 &lt;- 3
     proxy_var &lt;- 4
@@ -925,7 +919,7 @@ code of all datasets is returned.</p>
 <span class="op">)</span>
 
 <span class="co"># single dataset code is not possible to obtain anymore</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ADSL &lt;- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")</span>
 <span class="co">#&gt; ADSL$x1 &lt;- 1</span>
 <span class="co">#&gt; ADTTE &lt;- scda::synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest")</span>
@@ -955,7 +949,7 @@ the code block below, the default version of
 <code>ADSL</code> object containing “physical” data.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">adsl_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span>
-<span class="fu"><a href="../reference/variable_choices.html">variable_choices</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">adsl_data</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/variable_choices.html" class="external-link">variable_choices</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">adsl_data</span><span class="op">)</span>
 <span class="co">#&gt; number of choices: 39 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; STUDYID: Study Identifier</span>
@@ -1003,7 +997,7 @@ argument, which will result in creating a
 explicitly specify a <code>subset</code> of column names regardless of
 the class of the <code>data</code>.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/variable_choices.html">variable_choices</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"ADSL"</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AVAL"</span>, <span class="st">"BMRKR1"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/variable_choices.html" class="external-link">variable_choices</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"ADSL"</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AVAL"</span>, <span class="st">"BMRKR1"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; variable_choices with delayed data: ADSL</span>
 <span class="co">#&gt; $ data</span>
 <span class="co">#&gt; [1] "ADSL"</span>
@@ -1020,7 +1014,7 @@ data is pulled.</p>
   <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span>
 <span class="op">}</span>
 
-<span class="fu"><a href="../reference/variable_choices.html">variable_choices</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"ADSL"</span>, subset <span class="op">=</span> <span class="va">get_continuous</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/variable_choices.html" class="external-link">variable_choices</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"ADSL"</span>, subset <span class="op">=</span> <span class="va">get_continuous</span><span class="op">)</span>
 <span class="co">#&gt; variable_choices with delayed data: ADSL</span>
 <span class="co">#&gt; $ data</span>
 <span class="co">#&gt; [1] "ADSL"</span>
@@ -1038,7 +1032,7 @@ multiple variables. By default <code>value_choices</code> uses a
 will be immediately constructed from this object.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ADTTE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adtte</span> <span class="co"># nolint</span>
-<span class="fu"><a href="../reference/value_choices.html">value_choices</a></span><span class="op">(</span>
+<span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/value_choices.html" class="external-link">value_choices</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="va">ADTTE</span>,
   var_choices <span class="op">=</span> <span class="st">"PARAMCD"</span>,
   var_label <span class="op">=</span> <span class="st">"PARAM"</span>,
@@ -1053,7 +1047,7 @@ will be immediately constructed from this object.</p>
 a function to <code>subset</code> choices. The <code>subset</code>
 function will be executed after data is pulled.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/value_choices.html">value_choices</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/value_choices.html" class="external-link">value_choices</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="st">"ADTTE"</span>,
   var_choices <span class="op">=</span> <span class="st">"PARAMCD"</span>,
   var_label <span class="op">=</span> <span class="st">"PARAM"</span>,
@@ -1074,8 +1068,8 @@ function will be executed after data is pulled.</p>
 used with <code>choices_selected</code>, <code>select_spec</code> or
 <code>filter_spec</code> to properly declare data extracts.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scda_dataset_connector.html">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"adsl"</span><span class="op">)</span>
-<span class="va">adrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scda_dataset_connector.html">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADRS"</span>, <span class="st">"adrs"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/scda_dataset_connector.html" class="external-link">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"adsl"</span><span class="op">)</span>
+<span class="va">adrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/scda_dataset_connector.html" class="external-link">scda_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADRS"</span>, <span class="st">"adrs"</span><span class="op">)</span>
 
 
 <span class="va">get_continuous</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
@@ -1083,15 +1077,15 @@ used with <code>choices_selected</code>, <code>select_spec</code> or
   <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span>
 <span class="op">}</span>
 
-<span class="va">data_extract_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data_extract_spec.html">data_extract_spec</a></span><span class="op">(</span>
+<span class="va">data_extract_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/data_extract_spec.html" class="external-link">data_extract_spec</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
-  select <span class="op">=</span> <span class="fu"><a href="../reference/select_spec.html">select_spec</a></span><span class="op">(</span>
-    choices <span class="op">=</span> <span class="fu"><a href="../reference/variable_choices.html">variable_choices</a></span><span class="op">(</span><span class="st">"ADSL"</span>, subset <span class="op">=</span> <span class="va">get_continuous</span><span class="op">)</span>
+  select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/select_spec.html" class="external-link">select_spec</a></span><span class="op">(</span>
+    choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/variable_choices.html" class="external-link">variable_choices</a></span><span class="op">(</span><span class="st">"ADSL"</span>, subset <span class="op">=</span> <span class="va">get_continuous</span><span class="op">)</span>
   <span class="op">)</span>,
-  filter <span class="op">=</span> <span class="fu"><a href="../reference/filter_spec.html">filter_spec</a></span><span class="op">(</span>
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/filter_spec.html" class="external-link">filter_spec</a></span><span class="op">(</span>
     label <span class="op">=</span> <span class="st">"Select endpoints:"</span>,
     vars <span class="op">=</span> <span class="st">"ARMCD"</span>, <span class="co"># variable_choices("ADSL", "ARMCD") # nolint</span>
-    choices <span class="op">=</span> <span class="fu"><a href="../reference/value_choices.html">value_choices</a></span><span class="op">(</span><span class="st">"ADSL"</span>,
+    choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/value_choices.html" class="external-link">value_choices</a></span><span class="op">(</span><span class="st">"ADSL"</span>,
       var_choices <span class="op">=</span> <span class="st">"ARMCD"</span>,
       var_label <span class="op">=</span> <span class="st">"ARM"</span>,
       subset <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">ARMCD</span><span class="op">)</span><span class="op">)</span>
@@ -1101,15 +1095,15 @@ used with <code>choices_selected</code>, <code>select_spec</code> or
   <span class="op">)</span>
 <span class="op">)</span>
 
-<span class="va">data_extract_y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data_extract_spec.html">data_extract_spec</a></span><span class="op">(</span>
+<span class="va">data_extract_y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/data_extract_spec.html" class="external-link">data_extract_spec</a></span><span class="op">(</span>
   dataname <span class="op">=</span> <span class="st">"ADRS"</span>,
-  select <span class="op">=</span> <span class="fu"><a href="../reference/select_spec.html">select_spec</a></span><span class="op">(</span>
-    choices <span class="op">=</span> <span class="fu"><a href="../reference/variable_choices.html">variable_choices</a></span><span class="op">(</span><span class="st">"ADRS"</span>, subset <span class="op">=</span> <span class="va">get_continuous</span><span class="op">)</span>
+  select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/select_spec.html" class="external-link">select_spec</a></span><span class="op">(</span>
+    choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/variable_choices.html" class="external-link">variable_choices</a></span><span class="op">(</span><span class="st">"ADRS"</span>, subset <span class="op">=</span> <span class="va">get_continuous</span><span class="op">)</span>
   <span class="op">)</span>,
-  filter <span class="op">=</span> <span class="fu"><a href="../reference/filter_spec.html">filter_spec</a></span><span class="op">(</span>
+  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/filter_spec.html" class="external-link">filter_spec</a></span><span class="op">(</span>
     label <span class="op">=</span> <span class="st">"Select endpoints:"</span>,
     vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARAMCD"</span>, <span class="st">"AVISIT"</span><span class="op">)</span>,
-    choices <span class="op">=</span> <span class="fu"><a href="../reference/value_choices.html">value_choices</a></span><span class="op">(</span>
+    choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/value_choices.html" class="external-link">value_choices</a></span><span class="op">(</span>
       data <span class="op">=</span> <span class="st">"ADRS"</span>,
       var_choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARAMCD"</span>, <span class="st">"AVISIT"</span><span class="op">)</span>,
       var_label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARAMCD"</span>, <span class="st">"AVISIT"</span><span class="op">)</span>,
@@ -1131,7 +1125,7 @@ be included in teal modules to create an application.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="fu"><a href="../reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adrs</span><span class="op">)</span>,
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">adrs</span><span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
     <span class="fu">teal.modules.general</span><span class="fu">::</span><span class="fu">tm_g_bivariate</span><span class="op">(</span>
       x <span class="op">=</span> <span class="va">data_extract_x</span>,

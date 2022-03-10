@@ -17,12 +17,15 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9017</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
+  <a href="../articles/teal.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -32,16 +35,16 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/data_extract_spec.html">Customizing UI with `data_extract_spec`</a>
+    </li>
+    <li>
       <a href="../articles/delayed_data_loading.html">Delayed Data Loading</a>
     </li>
     <li>
       <a href="../articles/developer_apps.html">Developer Apps</a>
     </li>
     <li>
-      <a href="../articles/filter_panel.html">Filter panel</a>
-    </li>
-    <li>
-      <a href="../articles/getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/merge.html">Merge code examples</a>
     </li>
     <li>
       <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
@@ -53,15 +56,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -104,528 +98,32 @@ Other releases
           <p><code><a href="srv_teal_with_splash.html">srv_teal_with_splash()</a></code> </p>
         </td>
         <td><p>Server function that loads the data through reactive loading and then delegates
-to <code>srv_teal</code>.</p></td>
+to <code><a href="../reference/srv_teal.html">srv_teal()</a></code>.</p></td>
       </tr><tr><td>
           <p><code><a href="ui_teal_with_splash.html">ui_teal_with_splash()</a></code> </p>
         </td>
-        <td><p>UI to show a splash screen in the beginning, then delegate to <code>srv_teal</code></p></td>
+        <td><p>UI to show a splash screen in the beginning, then delegate to <code><a href="../reference/srv_teal.html">srv_teal()</a></code></p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="teal-filtering-and-selecting">Teal Filtering and Selecting <a href="#teal-filtering-and-selecting" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions used to filter observations and select variables from
 dataset.</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="add_no_selected_choices.html">add_no_selected_choices()</a></code> </p>
+          <p><code><a href="reexports.html">reexports</a></code> </p>
         </td>
-        <td><p>Add empty choice to choices selected</p></td>
-      </tr><tr><td>
-          <p><code><a href="all_choices.html">all_choices()</a></code> </p>
-        </td>
-        <td><p>An S3 structure representing the selection of all
-possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <code>choices_selected</code> object.</p></td>
-      </tr><tr><td>
-          <p><code><a href="choices_labeled.html">choices_labeled()</a></code> <code><a href="choices_labeled.html">print(<i>&lt;choices_labeled&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Set "<code>&lt;choice&gt;:&lt;label&gt;</code>" type of Names</p></td>
-      </tr><tr><td>
-          <p><code><a href="choices_selected.html">choices_selected()</a></code> <code><a href="choices_selected.html">is.choices_selected()</a></code> </p>
-        </td>
-        <td><p>Choices Selected</p></td>
-      </tr><tr><td>
-          <p><code><a href="data_extract_spec.html">data_extract_spec()</a></code> </p>
-        </td>
-        <td><p>Data Extract input for teal modules</p></td>
-      </tr><tr><td>
-          <p><code><a href="filter_spec.html">filter_spec()</a></code> </p>
-        </td>
-        <td><p>Data extract filter specification</p></td>
-      </tr><tr><td>
-          <p><code><a href="select_spec.html">select_spec()</a></code> <code><a href="select_spec.html">select_spec.delayed_data()</a></code> <code><a href="select_spec.html">select_spec.default()</a></code> </p>
-        </td>
-        <td><p>Column selection input specification</p></td>
-      </tr><tr><td>
-          <p><code><a href="value_choices.html">value_choices()</a></code> </p>
-        </td>
-        <td><p>Wrapper on choices_labeled to label variable values basing on other variable values</p></td>
-      </tr><tr><td>
-          <p><code><a href="variable_choices.html">variable_choices()</a></code> </p>
-        </td>
-        <td><p>Wrapper on choices_labeled to label variables basing on existing labels in data</p></td>
+        <td><p>Objects exported from other packages</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="teal-filter-panel-api">Teal filter-panel API <a href="#teal-filter-panel-api" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions used to modify filter-panel states.</p>
+          <h2 id="functions-moved-to-other-packages">Functions moved to other packages <a href="#functions-moved-to-other-packages" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>These functions have been moved from teal and will be deprecated.</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="filter_state_api.html">set_filter_state()</a></code> <code><a href="filter_state_api.html">get_filter_state()</a></code> <code><a href="filter_state_api.html">remove_filter_state()</a></code> <code><a href="filter_state_api.html">clear_filter_states()</a></code> </p>
-        </td>
-        <td><p>Managing <code>FilteredData</code> states</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="teal-modules-ui">Teal modules UI <a href="#teal-modules-ui" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions used to filter observations and select variables from
-dataset.</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="optionalSelectInput.html">optionalSelectInput()</a></code> </p>
-        </td>
-        <td><p>Hide, Show Label only or display a <code>pickerInput</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="optionalSliderInput.html">optionalSliderInput()</a></code> </p>
-        </td>
-        <td><p>if min or max are <code>NA</code> then the slider widget will be hidden</p></td>
-      </tr><tr><td>
-          <p><code><a href="optionalSliderInputValMinMax.html">optionalSliderInputValMinMax()</a></code> </p>
-        </td>
-        <td><p>For teal modules we parameterize an <code>optionalSliderInput</code> with one argument
-<code>value_min_max</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="updateOptionalSelectInput.html">updateOptionalSelectInput()</a></code> </p>
-        </td>
-        <td><p>Update <code>optionalSelectInput</code></p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="delayed-dataset-constructors">Delayed Dataset Constructors <a href="#delayed-dataset-constructors" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>For creating delayed dataset objects.</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="cdisc_dataset.html">cdisc_dataset()</a></code> </p>
-        </td>
-        <td><p>Create a new object of <code>CDISCTealDataset</code> class</p></td>
-      </tr><tr><td>
-          <p><code><a href="cdisc_dataset_file.html">cdisc_dataset_file()</a></code> </p>
-        </td>
-        <td><p>Load <code>CDISCTealDataset</code> object from a file</p></td>
-      </tr><tr><td>
-          <p><code><a href="dataset.html">dataset()</a></code> </p>
-        </td>
-        <td><p>S3 method to construct an <code>MAETealDataset</code> object from <code>MultiAssayExperiment</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="dataset_file.html">dataset_file()</a></code> </p>
-        </td>
-        <td><p>Load <code>TealDataset</code> object from a file</p></td>
-      </tr><tr><td>
-          <p><code><a href="mae_dataset.html">mae_dataset()</a></code> </p>
-        </td>
-        <td><p>The constructor of <code>MAETealDataset</code></p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="delayed-dataset-connectors-constructors">Delayed Dataset Connectors Constructors <a href="#delayed-dataset-connectors-constructors" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>For creating delayed dataset connector objects.</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="cdisc_data_connector.html">cdisc_data_connector()</a></code> </p>
-        </td>
-        <td><p>The constructor of <code>CDISCTealDataConnector</code> objects.</p></td>
-      </tr><tr><td>
-          <p><code><a href="cdisc_dataset_connector.html">cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p>Create a new <code>CDISCTealDatasetConnector</code> object</p></td>
-      </tr><tr><td>
-          <p><code><a href="dataset_connector_file.html">dataset_connector_file()</a></code> <code><a href="dataset_connector_file.html">cdisc_dataset_connector_file()</a></code> </p>
-        </td>
-        <td><p>Load <code>TealDatasetConnector</code> object from a file</p></td>
-      </tr><tr><td>
-          <p><code><a href="code_dataset_connector.html">code_dataset_connector()</a></code> <code><a href="code_dataset_connector.html">code_cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p>Code <code>TealDatasetConnector</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="csv_dataset_connector.html">csv_dataset_connector()</a></code> <code><a href="csv_dataset_connector.html">csv_cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p><code>csv</code> <code>TealDatasetConnector</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="data_connection.html">data_connection()</a></code> </p>
-        </td>
-        <td><p>The constructor for <code>TealDataConnection</code> class.</p></td>
-      </tr><tr><td>
-          <p><code><a href="dataset_connector.html">dataset_connector()</a></code> </p>
-        </td>
-        <td><p>Create a new <code>TealDatasetConnector</code> object</p></td>
-      </tr><tr><td>
-          <p><code><a href="fun_dataset_connector.html">fun_dataset_connector()</a></code> <code><a href="fun_dataset_connector.html">fun_cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p>Function Dataset Connector</p></td>
-      </tr><tr><td>
-          <p><code><a href="python_dataset_connector.html">python_dataset_connector()</a></code> <code><a href="python_dataset_connector.html">python_cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p><code>Python</code> <code>TealDatasetConnector</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="rds_dataset_connector.html">rds_dataset_connector()</a></code> <code><a href="rds_dataset_connector.html">rds_cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p><code>RDS</code> <code>TealDatasetConnector</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="relational_data_connector.html">relational_data_connector()</a></code> </p>
-        </td>
-        <td><p>The constructor for <code>TealDataConnector</code> class.</p></td>
-      </tr><tr><td>
-          <p><code><a href="scda_dataset_connector.html">scda_dataset_connector()</a></code> <code><a href="scda_dataset_connector.html">scda_cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p><code>scda</code> <code>TealDatasetConnector</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="script_dataset_connector.html">script_dataset_connector()</a></code> <code><a href="script_dataset_connector.html">script_cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p>Script <code>TealDatasetConnector</code></p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="delayed-data-constructors">Delayed Data Constructors <a href="#delayed-data-constructors" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>For creating delayed data objects.</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="cdisc_data.html">cdisc_data()</a></code> </p>
-        </td>
-        <td><p>Data input for teal app</p></td>
-      </tr><tr><td>
-          <p><code><a href="cdisc_data_file.html">cdisc_data_file()</a></code> </p>
-        </td>
-        <td><p>Load <code>CDISCTealData</code> object from a file</p></td>
-      </tr><tr><td>
-          <p><code><a href="cdse_data.html">cdse_data()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): <code>TealDataConnector</code> connector for <code>CDSE</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="teal_data.html">teal_data()</a></code> </p>
-        </td>
-        <td><p>Teal data</p></td>
-      </tr><tr><td>
-          <p><code><a href="teal_data_file.html">teal_data_file()</a></code> </p>
-        </td>
-        <td><p>Load <code>TealData</code> object from a file</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="delayed-dataset-functions">Delayed Dataset Functions <a href="#delayed-dataset-functions" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>For loading and modifying delayed data objects.</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="as_cdisc.html">as_cdisc()</a></code> </p>
-        </td>
-        <td><p>Convert a <code>TealDataset(Connector)</code> object to a <code>CDISCTealDataset(Connector)</code> object</p></td>
-      </tr><tr><td>
-          <p><code><a href="callable_code.html">callable_code()</a></code> </p>
-        </td>
-        <td><p>Create <code>CallableCode</code> object</p></td>
-      </tr><tr><td>
-          <p><code><a href="callable_function.html">callable_function()</a></code> </p>
-        </td>
-        <td><p>Create <code>CallableFunction</code> object</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_attrs.html">get_attrs()</a></code> </p>
-        </td>
-        <td><p>Get dataset attributes</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_cdisc_keys.html">get_cdisc_keys()</a></code> </p>
-        </td>
-        <td><p>Function that returns the default keys for a <code>CDISC</code> dataset by name</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_code.html">get_code()</a></code> </p>
-        </td>
-        <td><p>Get code</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_dataname.html">get_dataname()</a></code> </p>
-        </td>
-        <td><p>S3 method for getting a dataname(s) of
-(<code>TealDataAbstract</code>, (<code>TealDatasetConnector</code> or
-<code>TealDataset</code>) R6 object</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_dataset.html">get_dataset()</a></code> </p>
-        </td>
-        <td><p>Get dataset from <code>TealDatasetConnector</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="get_dataset_label.html">get_dataset_label()</a></code> </p>
-        </td>
-        <td><p>S3 method for getting a label of
-(<code>TealDatasetConnector</code> or <code>TealDataset</code>) R6 object</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_datasets.html">get_datasets()</a></code> </p>
-        </td>
-        <td><p>Get a <code>TealDataset</code> objects.</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_keys.html">get_keys()</a></code> </p>
-        </td>
-        <td><p>Get dataset primary keys</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_raw_data.html">get_raw_data()</a></code> </p>
-        </td>
-        <td><p>Retrieve raw data</p></td>
-      </tr><tr><td>
-          <p><code><a href="is_pulled.html">is_pulled()</a></code> </p>
-        </td>
-        <td><p>Is pulled</p></td>
-      </tr><tr><td>
-          <p><code><a href="load_dataset.html">load_dataset()</a></code> </p>
-        </td>
-        <td><p>Load data from connection</p></td>
-      </tr><tr><td>
-          <p><code><a href="load_datasets.html">load_datasets()</a></code> </p>
-        </td>
-        <td><p>Load datasets</p></td>
-      </tr><tr><td>
-          <p><code><a href="mutate_data.html">mutate_data()</a></code> </p>
-        </td>
-        <td><p>Mutate data by code</p></td>
-      </tr><tr><td>
-          <p><code><a href="mutate_dataset.html">mutate_dataset()</a></code> </p>
-        </td>
-        <td><p>Mutate dataset by code</p></td>
-      </tr><tr><td>
-          <p><code><a href="mutate_join_keys.html">mutate_join_keys()</a></code> </p>
-        </td>
-        <td><p>Mutate <code>JoinKeys</code> with a new values</p></td>
-      </tr><tr><td>
-          <p><code><a href="resolve_delayed.html">resolve_delayed()</a></code> </p>
-        </td>
-        <td><p>Resolve delayed inputs by evaluating the code within the provided datasets</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_args.html">set_args()</a></code> </p>
-        </td>
-        <td><p>Set arguments of a <code>CallableFunction</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="set_keys.html">set_keys()</a></code> </p>
-        </td>
-        <td><p>Set dataset primary keys</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="helpers">Helpers <a href="#helpers" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Other useful functions for users and developers.</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="data_label.html">data_label()</a></code> </p>
-        </td>
-        <td><p>Get dataset label attribute</p></td>
-      </tr><tr><td>
-          <p><code><a href="data_label-set.html">`data_label&lt;-`()</a></code> </p>
-        </td>
-        <td><p>Set dataset label attribute</p></td>
-      </tr><tr><td>
-          <p><code><a href="default_filter.html">default_filter()</a></code> </p>
-        </td>
-        <td><p>Refers the default filter state</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_filter_expr.html">get_filter_expr()</a></code> </p>
-        </td>
-        <td><p>Gets filter expression for multiple datanames taking into account its order.</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_key_duplicates.html">get_key_duplicates()</a></code> </p>
-        </td>
-        <td><p>S3 generic for creating an information summary about the duplicate key values in a dataset</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_variable_labels.html">get_variable_labels()</a></code> </p>
-        </td>
-        <td><p>Extracts column labels from a dataset</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_labels.html">get_labels()</a></code> </p>
-        </td>
-        <td><p>Extracts dataset and variable labels from a dataset.</p></td>
-      </tr><tr><td>
-          <p><code><a href="join_key.html">join_key()</a></code> </p>
-        </td>
-        <td><p>Create a relationship between a pair of datasets</p></td>
-      </tr><tr><td>
-          <p><code><a href="join_keys.html">join_keys()</a></code> </p>
-        </td>
-        <td><p>Create a <code>JoinKeys</code> out of a list of <code>JoinKeySet</code> objects</p></td>
-      </tr><tr><td>
           <p><code><a href="log_app_usage.html">log_app_usage()</a></code> </p>
         </td>
         <td><p>Teal Application Usage Logging.</p></td>
       </tr><tr><td>
-          <p><code><a href="no_selected_as_NULL.html">no_selected_as_NULL()</a></code> </p>
-        </td>
-        <td><p>Check select choices for no choice made</p></td>
-      </tr><tr><td>
-          <p><code><a href="python_code.html">python_code()</a></code> </p>
-        </td>
-        <td><p>Python Code</p></td>
-      </tr><tr><td>
-          <p><code><a href="read_script.html">read_script()</a></code> </p>
-        </td>
-        <td><p>Read .R file into character</p></td>
-      </tr><tr><td>
-          <p><code><a href="split_by_sep.html">split_by_sep()</a></code> </p>
-        </td>
-        <td><p>Split by separator</p></td>
-      </tr><tr><td>
-          <p><code><a href="variable_labels.html">variable_labels()</a></code> </p>
-        </td>
-        <td><p>Extracts column labels from a dataset.</p></td>
-      </tr><tr><td>
-          <p><code><a href="variable_labels-set.html">`variable_labels&lt;-`()</a></code> </p>
-        </td>
-        <td><p>Sets the column labels of a <code>data.frame</code>.</p></td>
-      </tr><tr><td>
-          <p><code><a href="var_relabel.html">var_relabel()</a></code> </p>
-        </td>
-        <td><p>Copy and Change Variable Labels of a <code>data.frame</code></p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="for-developers">For Developers <a href="#for-developers" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Abstract and concrete classes used to build teal functionality.</p>
-        </th>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="r-classes">R6 Classes <a href="#r-classes" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p><p>Abstract and concrete classes used to build teal functionality.</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="CallableCode.html">CallableCode</a></code> </p>
-        </td>
-        <td><p>A <code>CallableCode</code> class of objects
-
-Object that stores code to reproduce an object. It includes methods to
-get or run the code and return the object.</p></td>
-      </tr><tr><td>
-          <p><code><a href="CallablePythonCode.html">CallablePythonCode</a></code> </p>
-        </td>
-        <td><p>A <code>CallablePythonCode</code> class of objects</p></td>
-      </tr><tr><td>
-          <p><code><a href="CDISCTealData.html">CDISCTealData</a></code> </p>
-        </td>
-        <td><p>Manage multiple <code>CDISCTealDataConnector</code>, <code>CDISCTealDatasetConnector</code> and <code>CDISCTealDataset</code> objects.</p></td>
-      </tr><tr><td>
-          <p><code><a href="CDISCTealDataConnector.html">CDISCTealDataConnector</a></code> </p>
-        </td>
-        <td><p>Manage multiple and <code>TealDatasetConnector</code> of the same type.</p></td>
-      </tr><tr><td>
-          <p><code><a href="CDISCTealDataset.html">CDISCTealDataset</a></code> </p>
-        </td>
-        <td><p>R6 Class representing a dataset with parent attribute</p></td>
-      </tr><tr><td>
-          <p><code><a href="CDISCTealDatasetConnector.html">CDISCTealDatasetConnector</a></code> </p>
-        </td>
-        <td><p>A <code>CDISCTealDatasetConnector</code> class of objects</p></td>
-      </tr><tr><td>
-          <p><code><a href="CDISCFilteredData.html">CDISCFilteredData</a></code> </p>
-        </td>
-        <td><p>Class to encapsulate relational filtered datasets with its parents.</p></td>
-      </tr><tr><td>
-          <p><code><a href="CDISCFilteredDataset.html">CDISCFilteredDataset</a></code> </p>
-        </td>
-        <td><p><code>CDISCFilteredDataset</code> R6 class</p></td>
-      </tr><tr><td>
-          <p><code><a href="DefaultFilteredDataset.html">DefaultFilteredDataset</a></code> </p>
-        </td>
-        <td><p><code>DefaultFilteredDataset</code> R6 class</p></td>
-      </tr><tr><td>
-          <p><code><a href="FilteredData.html">FilteredData</a></code> </p>
-        </td>
-        <td><p>Class to encapsulate filtered datasets</p></td>
-      </tr><tr><td>
-          <p><code><a href="FilteredDataset.html">FilteredDataset</a></code> </p>
-        </td>
-        <td><p><code>FilterStates</code> R6 class</p></td>
-      </tr><tr><td>
-          <p><code><a href="JoinKeys.html">JoinKeys</a></code> </p>
-        </td>
-        <td><p>R6 Class to store relationships for joining datasets</p></td>
-      </tr><tr><td>
-          <p><code><a href="MAEFilteredDataset.html">MAEFilteredDataset</a></code> </p>
-        </td>
-        <td><p><code>MAEFilteredDataset</code> R6 class</p></td>
-      </tr><tr><td>
-          <p><code><a href="dataset_class.html">MAETealDataset</a></code> </p>
-        </td>
-        <td><p>R6 Class representing a <code>MultiAssayExperiment</code> object with its attributes</p></td>
-      </tr><tr><td>
-          <p><code><a href="PythonCodeClass.html">PythonCodeClass</a></code> </p>
-        </td>
-        <td><p>A <code>CallablePythonCode</code> class of objects</p></td>
-      </tr><tr><td>
-          <p><code><a href="Queue.html">Queue</a></code> </p>
-        </td>
-        <td><p>R6 Class - A First-In-First-Out Abstract Data Type</p></td>
-      </tr><tr><td>
-          <p><code><a href="TealData.html">TealData</a></code> </p>
-        </td>
-        <td><p>Manage multiple <code>TealDataConnector</code>, <code>TealDatasetConnector</code> and <code>TealDataset</code> objects.</p></td>
-      </tr><tr><td>
-          <p><code><a href="TealDataConnection.html">TealDataConnection</a></code> </p>
-        </td>
-        <td><p>A <code>TealDataConnection</code> class of objects
-
-Objects of this class store the connection to a data source.
-It can be a database or server connection.</p></td>
-      </tr><tr><td>
-          <p><code><a href="TealDataConnector.html">TealDataConnector</a></code> </p>
-        </td>
-        <td><p>Manage multiple and <code>TealDatasetConnector</code> of the same type.</p></td>
-      </tr><tr><td>
-          <p><code><a href="TealDatasetConnector.html">TealDatasetConnector</a></code> </p>
-        </td>
-        <td><p>A <code>TealDatasetConnector</code> class of objects</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="logging">Logging <a href="#logging" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Support for logging in a <code>teal</code> application</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="register_logger.html">register_logger()</a></code> </p>
-        </td>
-        <td><p>Registers a logger instance in a given logging namespace.</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="deprecated">Deprecated <a href="#deprecated" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
           <p><code><a href="root_modules.html">root_modules()</a></code> </p>
         </td>
         <td><p>Deprecated: Creates the root modules container</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="superseded">Superseded <a href="#superseded" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="cdse_connection.html">cdse_connection()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): Open connection to <code>CDSE</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="cdse_dataset_connector.html">cdse_dataset_connector()</a></code> <code><a href="cdse_dataset_connector.html">cdse_cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): <code>CDSE</code> <code>TealDatasetConnector</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="datasetdb_data.html">datasetdb_data()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): <code>TealDataConnector</code> connector for <code>DataSetDB</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="datasetdb_connection.html">datasetdb_connection()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): Open connection to <code>DataSetDB</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="datasetdb_dataset_connector.html">datasetdb_dataset_connector()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): <code>DataSetDB</code> <code>TealDatasetConnector</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="ricepass_connection.html">ricepass_connection()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): Open connection to <code>entimICE</code> via <code>ricepass</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="rice_connection.html">rice_connection()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): Open connection to <code>entimICE</code> via <code>rice</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="rice_dataset_connector.html">rice_dataset_connector()</a></code> <code><a href="rice_dataset_connector.html">rice_cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): Rice <code>TealDatasetConnector</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="rice_data.html">rice_data()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): <code>TealDataConnector</code> connector for <code>RICE</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="snowflake_connection.html">snowflake_connection()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): Open connection to <code>Snowflake</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="snowflake_connection_function.html">snowflake_connection_function()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): Helper function to connect to <code>Snowflake</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="snowflake_data.html">snowflake_data()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): <code>TealDataConnector</code> connector for <code>SNOWFLAKE</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="snowflake_dataset_connector.html">snowflake_dataset_connector()</a></code> <code><a href="snowflake_dataset_connector.html">snowflake_cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): <code>Snowflake</code> <code>TealDatasetConnector</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="teradata_dataset_connector.html">teradata_dataset_connector()</a></code> <code><a href="teradata_dataset_connector.html">teradata_cdisc_dataset_connector()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): <code>Teradata</code> <code>TealDatasetConnector</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="teradata_connection.html">teradata_connection()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package) Open connection to <code>Teradata</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="teradata_data.html">teradata_data()</a></code> </p>
-        </td>
-        <td><p>Superseded (moved into separate package): <code>TealDataConnector</code> connector for <code>TERADATA</code></p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

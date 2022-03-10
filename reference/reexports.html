@@ -6,6 +6,26 @@ below to see their documentation.
 %&amp;gt;%
 
 
+  teal.data
+as_cdisc, callable_code, callable_function, cdisc_data, cdisc_data_connector, cdisc_data_file, cdisc_dataset, cdisc_dataset_connector, cdisc_dataset_connector_file, cdisc_dataset_file, code_cdisc_dataset_connector, code_dataset_connector, csv_cdisc_dataset_connector, csv_dataset_connector, data_connection, data_label, data_label&amp;lt;-, dataset, dataset_connector, dataset_connector_file, dataset_file, fun_cdisc_dataset_connector, fun_dataset_connector, get_attrs, get_cdisc_keys, get_code, get_dataname, get_dataset, get_dataset_label, get_datasets, get_key_duplicates, get_keys, get_labels, get_raw_data, is_pulled, join_key, join_keys, load_dataset, load_datasets, mae_dataset, mutate_data, mutate_dataset, mutate_join_keys, python_cdisc_dataset_connector, python_code, python_dataset_connector, rds_cdisc_dataset_connector, rds_dataset_connector, read_script, relational_data_connector, scda_cdisc_dataset_connector, scda_dataset_connector, script_cdisc_dataset_connector, script_dataset_connector, set_args, set_keys, teal_data, teal_data_file, to_relational_data, var_relabel, variable_labels, variable_labels&amp;lt;-
+
+
+  teal.logger
+register_logger
+
+
+  teal.slice
+Queue, clear_filter_states, default_filter, get_filter_expr, get_filter_state, remove_filter_state, set_filter_state
+
+
+  teal.transform
+add_no_selected_choices, all_choices, choices_labeled, choices_selected, data_extract_spec, filter_spec, is.choices_selected, no_selected_as_NULL, resolve_delayed, select_spec, select_spec.default, select_spec.delayed_data, split_by_sep, value_choices, variable_choices
+
+
+  teal.widgets
+optionalSelectInput, optionalSliderInput, optionalSliderInputValMinMax, updateOptionalSelectInput
+
+
 "><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -24,12 +44,15 @@ below to see their documentation.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9017</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
+  <a href="../articles/teal.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -39,16 +62,16 @@ below to see their documentation.
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/data_extract_spec.html">Customizing UI with `data_extract_spec`</a>
+    </li>
+    <li>
       <a href="../articles/delayed_data_loading.html">Delayed Data Loading</a>
     </li>
     <li>
       <a href="../articles/developer_apps.html">Developer Apps</a>
     </li>
     <li>
-      <a href="../articles/filter_panel.html">Filter panel</a>
-    </li>
-    <li>
-      <a href="../articles/getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/merge.html">Merge code examples</a>
     </li>
     <li>
       <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
@@ -60,15 +83,6 @@ below to see their documentation.
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -94,6 +108,26 @@ Other releases
 below to see their documentation.</p>
 <dl><dt>magrittr</dt>
 <dd><p><code>%&gt;%</code></p></dd>
+
+
+  <dt>teal.data</dt>
+<dd><p><code><a href="https://rdrr.io/pkg/teal.data/man/as_cdisc.html" class="external-link">as_cdisc</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/callable_code.html" class="external-link">callable_code</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/callable_function.html" class="external-link">callable_function</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data_connector.html" class="external-link">cdisc_data_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data_file.html" class="external-link">cdisc_data_file</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset_connector.html" class="external-link">cdisc_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector_file.html" class="external-link">cdisc_dataset_connector_file</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset_file.html" class="external-link">cdisc_dataset_file</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/code_dataset_connector.html" class="external-link">code_cdisc_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/code_dataset_connector.html" class="external-link">code_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/csv_dataset_connector.html" class="external-link">csv_cdisc_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/csv_dataset_connector.html" class="external-link">csv_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/data_connection.html" class="external-link">data_connection</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/data_label.html" class="external-link">data_label</a></code>, <code>data_label&lt;-</code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector.html" class="external-link">dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector_file.html" class="external-link">dataset_connector_file</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset_file.html" class="external-link">dataset_file</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/fun_dataset_connector.html" class="external-link">fun_cdisc_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/fun_dataset_connector.html" class="external-link">fun_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/get_attrs.html" class="external-link">get_attrs</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/get_cdisc_keys.html" class="external-link">get_cdisc_keys</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/get_dataname.html" class="external-link">get_dataname</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/get_dataset.html" class="external-link">get_dataset</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/get_dataset_label.html" class="external-link">get_dataset_label</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/get_datasets.html" class="external-link">get_datasets</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/get_key_duplicates.html" class="external-link">get_key_duplicates</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/get_keys.html" class="external-link">get_keys</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/get_labels.html" class="external-link">get_labels</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/get_raw_data.html" class="external-link">get_raw_data</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/is_pulled.html" class="external-link">is_pulled</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/join_key.html" class="external-link">join_key</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/join_keys.html" class="external-link">join_keys</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/load_dataset.html" class="external-link">load_dataset</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/load_datasets.html" class="external-link">load_datasets</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/mae_dataset.html" class="external-link">mae_dataset</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/mutate_data.html" class="external-link">mutate_data</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/mutate_dataset.html" class="external-link">mutate_dataset</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/mutate_join_keys.html" class="external-link">mutate_join_keys</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/python_dataset_connector.html" class="external-link">python_cdisc_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/python_code.html" class="external-link">python_code</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/python_dataset_connector.html" class="external-link">python_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/rds_dataset_connector.html" class="external-link">rds_cdisc_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/rds_dataset_connector.html" class="external-link">rds_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/read_script.html" class="external-link">read_script</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/relational_data_connector.html" class="external-link">relational_data_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/scda_dataset_connector.html" class="external-link">scda_cdisc_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/scda_dataset_connector.html" class="external-link">scda_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/script_dataset_connector.html" class="external-link">script_cdisc_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/script_dataset_connector.html" class="external-link">script_dataset_connector</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/set_args.html" class="external-link">set_args</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/set_keys.html" class="external-link">set_keys</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/teal_data_file.html" class="external-link">teal_data_file</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/to_relational_data.html" class="external-link">to_relational_data</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/var_relabel.html" class="external-link">var_relabel</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/variable_labels.html" class="external-link">variable_labels</a></code>, <code>variable_labels&lt;-</code></p></dd>
+
+
+  <dt>teal.logger</dt>
+<dd><p><code><a href="https://rdrr.io/pkg/teal.logger/man/register_logger.html" class="external-link">register_logger</a></code></p></dd>
+
+
+  <dt>teal.slice</dt>
+<dd><p><code><a href="https://rdrr.io/pkg/teal.slice/man/Queue.html" class="external-link">Queue</a></code>, <code><a href="https://rdrr.io/pkg/teal.slice/man/filter_state_api.html" class="external-link">clear_filter_states</a></code>, <code><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></code>, <code><a href="https://rdrr.io/pkg/teal.slice/man/get_filter_expr.html" class="external-link">get_filter_expr</a></code>, <code><a href="https://rdrr.io/pkg/teal.slice/man/filter_state_api.html" class="external-link">get_filter_state</a></code>, <code><a href="https://rdrr.io/pkg/teal.slice/man/filter_state_api.html" class="external-link">remove_filter_state</a></code>, <code><a href="https://rdrr.io/pkg/teal.slice/man/filter_state_api.html" class="external-link">set_filter_state</a></code></p></dd>
+
+
+  <dt>teal.transform</dt>
+<dd><p><code><a href="https://rdrr.io/pkg/teal.transform/man/add_no_selected_choices.html" class="external-link">add_no_selected_choices</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/all_choices.html" class="external-link">all_choices</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/choices_labeled.html" class="external-link">choices_labeled</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/choices_selected.html" class="external-link">choices_selected</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/data_extract_spec.html" class="external-link">data_extract_spec</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/filter_spec.html" class="external-link">filter_spec</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/choices_selected.html" class="external-link">is.choices_selected</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/no_selected_as_NULL.html" class="external-link">no_selected_as_NULL</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/resolve_delayed.html" class="external-link">resolve_delayed</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/select_spec.html" class="external-link">select_spec</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/select_spec.html" class="external-link">select_spec.default</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/select_spec.html" class="external-link">select_spec.delayed_data</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/split_by_sep.html" class="external-link">split_by_sep</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/value_choices.html" class="external-link">value_choices</a></code>, <code><a href="https://rdrr.io/pkg/teal.transform/man/variable_choices.html" class="external-link">variable_choices</a></code></p></dd>
+
+
+  <dt>teal.widgets</dt>
+<dd><p><code><a href="https://rdrr.io/pkg/teal.widgets/man/optionalSelectInput.html" class="external-link">optionalSelectInput</a></code>, <code><a href="https://rdrr.io/pkg/teal.widgets/man/optionalSliderInput.html" class="external-link">optionalSliderInput</a></code>, <code><a href="https://rdrr.io/pkg/teal.widgets/man/optionalSliderInputValMinMax.html" class="external-link">optionalSliderInputValMinMax</a></code>, <code><a href="https://rdrr.io/pkg/teal.widgets/man/updateOptionalSelectInput.html" class="external-link">updateOptionalSelectInput</a></code></p></dd>
 
 
 </dl></div>

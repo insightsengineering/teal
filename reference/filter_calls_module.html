@@ -18,12 +18,15 @@ it is only defined in teal.devel."><!-- mathjax --><script src="https://cdnjs.cl
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9017</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
+  <a href="../articles/teal.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -33,16 +36,16 @@ it is only defined in teal.devel."><!-- mathjax --><script src="https://cdnjs.cl
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/data_extract_spec.html">Customizing UI with `data_extract_spec`</a>
+    </li>
+    <li>
       <a href="../articles/delayed_data_loading.html">Delayed Data Loading</a>
     </li>
     <li>
       <a href="../articles/developer_apps.html">Developer Apps</a>
     </li>
     <li>
-      <a href="../articles/filter_panel.html">Filter panel</a>
-    </li>
-    <li>
-      <a href="../articles/getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/merge.html">Merge code examples</a>
     </li>
     <li>
       <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
@@ -54,15 +57,6 @@ it is only defined in teal.devel."><!-- mathjax --><script src="https://cdnjs.cl
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -110,14 +104,15 @@ and avoids session restarts!</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span></span>
 <span class="r-in"><span class="co"># by testing with NA values, we will see whether the filtering really works when</span></span>
 <span class="r-in"><span class="co"># we add and remove filters</span></span>
 <span class="r-in"><span class="va">ADSL</span><span class="op">$</span><span class="va">SEX</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">150</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="init.html">init</a></span><span class="op">(</span></span>
-<span class="r-in">  data <span class="op">=</span> <span class="fu"><a href="cdisc_data.html">cdisc_data</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span></span>
+<span class="r-in">  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span></span>
+<span class="r-in">    <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span></span>
 <span class="r-in">      dataname <span class="op">=</span> <span class="st">"ADSL"</span>,</span>
 <span class="r-in">      x <span class="op">=</span> <span class="va">ADSL</span></span>
 <span class="r-in">    <span class="op">)</span>,</span>
@@ -129,7 +124,7 @@ and avoids session restarts!</p>
 <span class="r-in">  header <span class="op">=</span> <span class="st">"Simple teal app"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">shinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>

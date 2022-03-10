@@ -33,12 +33,15 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9017</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="../articles/teal.html">Get started</a>
+</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -50,16 +53,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/data_extract_spec.html">Customizing UI with `data_extract_spec`</a>
+    </li>
+    <li>
       <a href="../articles/delayed_data_loading.html">Delayed Data Loading</a>
     </li>
     <li>
       <a href="../articles/developer_apps.html">Developer Apps</a>
     </li>
     <li>
-      <a href="../articles/filter_panel.html">Filter panel</a>
-    </li>
-    <li>
-      <a href="../articles/getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/merge.html">Merge code examples</a>
     </li>
     <li>
       <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
@@ -72,15 +75,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -216,9 +210,9 @@ ADLB$AVISIT &lt;- rep(c("SCREENING", "BASELINE", "WEEK 1 DAY 8", "WEEK 2 DAY 15"
 ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
 
 <span class="co"># nolint end</span>
-<span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="va">ADSL_code</span><span class="op">)</span>
-<span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="va">ADAE_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span>
-<span class="va">adlb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="va">ADLB_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="va">ADSL_code</span><span class="op">)</span>
+<span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="va">ADAE_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span>
+<span class="va">adlb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="va">ADLB_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="section level2">
 <h2 id="apps">Apps<a class="anchor" aria-label="anchor" href="#apps"></a>
 </h2>
@@ -240,7 +234,7 @@ works after code changes:</p>
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
 
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span>
     <span class="va">adsl</span>, <span class="va">adae</span>, <span class="va">adlb</span>,
     check <span class="op">=</span> <span class="cn">TRUE</span>
   <span class="op">)</span>,
@@ -249,7 +243,7 @@ works after code changes:</p>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu">reset_filters_module</span><span class="op">(</span><span class="st">"Reset"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"ADLB"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span>,
   filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+    ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, AGE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
     ADLB <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ASEQ <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.6</span>, <span class="fl">20</span><span class="op">)</span>, keep_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span>,
   header <span class="op">=</span> <span class="st">"App with Debugging Modules"</span>,
@@ -270,7 +264,7 @@ datasets the tab depends on like <code>ADLB</code> will be
 refiltered.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span>
     <span class="va">adsl</span>, <span class="va">adae</span>, <span class="va">adlb</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
@@ -282,7 +276,7 @@ refiltered.</p>
     ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
       COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
-      AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
+      AGE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>,
   header <span class="op">=</span> <span class="st">"Data is Lazily Filtered"</span>,
@@ -298,8 +292,8 @@ available initially and loaded after the splash screen is submitted.
 Then, the splash UI is replaced by the main teal UI.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/code_dataset_connector.html">code_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADSL"</span>, code <span class="op">=</span> <span class="va">adsl_code</span><span class="op">)</span>
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/code_dataset_connector.html" class="external-link">code_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADSL"</span>, code <span class="op">=</span> <span class="va">adsl_code</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>
@@ -308,7 +302,7 @@ Then, the splash UI is replaced by the main teal UI.</p>
     ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
       COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
-      AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
+      AGE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>,
   header <span class="op">=</span> <span class="st">"App with Delayed Data"</span>,
@@ -323,7 +317,7 @@ Then, the splash UI is replaced by the main teal UI.</p>
 Check the tab hierarchy <code>A1 -&gt; B1.3</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span>
     <span class="va">adsl</span>, <span class="va">adae</span>, <span class="va">adlb</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
@@ -343,7 +337,7 @@ Check the tab hierarchy <code>A1 -&gt; B1.3</code>.</p>
     ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
       COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
-      AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
+      AGE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>,
   header <span class="op">=</span> <span class="st">"Modules in Nested Tabs"</span>,
@@ -368,8 +362,8 @@ code works without the usual key <code>STUDYID</code>.</p>
   stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span>
 
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-  <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>
     dataname <span class="op">=</span> <span class="st">"ADSL"</span>,
     x <span class="op">=</span> <span class="va">fake_data</span>,
     keys <span class="op">=</span> <span class="st">"USUBJID"</span>
@@ -387,7 +381,7 @@ code works without the usual key <code>STUDYID</code>.</p>
       SEX2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="cn">NA</span><span class="op">)</span>,
       SEX3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span><span class="op">)</span>,
       SEX4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-      SEX5 <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
+      SEX5 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>,
   header <span class="op">=</span> <span class="st">"Different Ways to Specify Initial Filter States"</span>,
@@ -403,9 +397,9 @@ provided, but still appears in the <code>active_datanames</code>. A
 warning is displayed to the console.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADAE"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
@@ -424,14 +418,14 @@ logic is non-trivial. For instance, one can define a safety filter.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># dummy filter to show how several filters can be applied at once, not sensible</span>
 <span class="va">safety_filter</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>choices <span class="op">=</span> <span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
-  ADLB <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ASEQ <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+  ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>choices <span class="op">=</span> <span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, AGE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+  ADLB <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ASEQ <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="st">"ADAE &lt;- rcd_2021_07_07$adae"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="st">"ADAE &lt;- rcd_2021_07_07$adae"</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu">predefined_filters_module</span><span class="op">(</span>filter <span class="op">=</span> <span class="va">safety_filter</span><span class="op">)</span>,
@@ -441,10 +435,10 @@ logic is non-trivial. For instance, one can define a safety filter.</p>
     ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"M"</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
       COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="cn">NA</span><span class="op">)</span>,
-      AGE <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
+      AGE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>,
     ADAE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-      AEHLT <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span>
+      AEHLT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>,
   header <span class="op">=</span> <span class="st">"Start with Pre-defined Filters"</span>,
@@ -467,9 +461,9 @@ logic is non-trivial. For instance, one can define a safety filter.</p>
   filters <span class="op">=</span> <span class="cn">NULL</span> <span class="co"># hide filter panel</span>
 <span class="op">)</span>
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
     <span class="va">module_hidden_filters</span>,
@@ -488,9 +482,9 @@ datasets. It can be used to check that all labels are preserved and
 shown in the UI.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">::</span><span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>
@@ -520,11 +514,11 @@ shown in the UI.</p>
 <span class="va">mtcars_d</span><span class="op">[</span><span class="st">"rowname"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
 
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="fu"><a href="../reference/teal_data.html">teal_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"iris"</span>, <span class="va">iris_d</span>, <span class="st">"rowname"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"mtcars"</span>, <span class="va">mtcars_d</span>, <span class="st">"rowname"</span><span class="op">)</span>
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"iris"</span>, <span class="va">iris_d</span>, <span class="st">"rowname"</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"mtcars"</span>, <span class="va">mtcars_d</span>, <span class="st">"rowname"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">::</span><span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>

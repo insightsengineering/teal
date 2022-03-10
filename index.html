@@ -36,12 +36,15 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9017</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="articles/teal.html">Get started</a>
+</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -53,16 +56,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/data_extract_spec.html">Customizing UI with `data_extract_spec`</a>
+    </li>
+    <li>
       <a href="articles/delayed_data_loading.html">Delayed Data Loading</a>
     </li>
     <li>
       <a href="articles/developer_apps.html">Developer Apps</a>
     </li>
     <li>
-      <a href="articles/filter_panel.html">Filter panel</a>
-    </li>
-    <li>
-      <a href="articles/getting_started.html">Getting Started with Teal</a>
+      <a href="articles/merge.html">Merge code examples</a>
     </li>
     <li>
       <a href="articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
@@ -75,15 +78,6 @@
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="index.html">latest</a></li>
-   <li><a href="/index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -154,17 +148,29 @@ modules for analyzing <code>MultiAssayExperiment</code> objects</li>
 </ul>
 </li>
 </ul>
-<!-- markdownlint-enable MD007 MD030 --><p>With the 2 components above, the <code>teal</code> package then
-provides:</p>
+<!-- markdownlint-enable MD007 MD030 --><p>A lot of the functionality of the <code>teal</code> framework derives
+from the following packages:</p>
+<!-- markdownlint-disable MD007 MD030 -->
 <ul>
-<li>The ability to “pull” data into applications at runtime - for
-example from external data stores which require authentication</li>
-<li>A standardized method to allow application users to filter their
-data before it is passed into analysis modules</li>
+<li>
+<a href="https://github.com/insightsengineering/teal.data" class="external-link"><code>teal.data</code></a>:
+creating and loading the data needed for <code>teal</code>
+applications.</li>
+<li>
+<a href="https://github.com/insightsengineering/teal.widgets" class="external-link"><code>teal.widgets</code></a>:
+shiny components used within <code>teal</code>.</li>
+<li>
+<a href="https://github.com/insightsengineering/teal.slice" class="external-link"><code>teal.slice</code></a>:
+provides a filtering panel to allow filtering of data.</li>
+<li>
+<a href="https://github.com/insightsengineering/teal.code" class="external-link"><code>teal.code</code></a>:
+handles reproducibility of outputs.</li>
+<li>
+<a href="https://github.com/insightsengineering/teal.transform" class="external-link"><code>teal.transform</code></a>:
+standardizes extracting and merging data.</li>
 </ul>
-<p>Further features which enhance the <code>teal</code> framework are
-available in the <a href="https://github.com/insightsengineering/teal.devel" class="external-link"><code>teal.devel</code></a>
-package.</p>
+<!-- markdownlint-enable MD007 MD030 --><p>See these packages for more information about how to use the
+different parts of the <code>teal</code> framework.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>

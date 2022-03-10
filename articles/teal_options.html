@@ -33,12 +33,15 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9017</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="../articles/teal.html">Get started</a>
+</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -50,16 +53,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/data_extract_spec.html">Customizing UI with `data_extract_spec`</a>
+    </li>
+    <li>
       <a href="../articles/delayed_data_loading.html">Delayed Data Loading</a>
     </li>
     <li>
       <a href="../articles/developer_apps.html">Developer Apps</a>
     </li>
     <li>
-      <a href="../articles/filter_panel.html">Filter panel</a>
-    </li>
-    <li>
-      <a href="../articles/getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/merge.html">Merge code examples</a>
     </li>
     <li>
       <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
@@ -72,15 +75,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -169,7 +163,7 @@ overwrite your custom values.</p>
 <p>This defines the layout of a log message used in a <code>teal</code>
 application. <code>teal</code> uses this layout to format the emitted
 log messages. Read the documentation of
-<code><a href="../reference/register_logger.html">teal::register_logger</a></code> for more information.</p>
+<code><a href="https://rdrr.io/pkg/teal.logger/man/register_logger.html" class="external-link">teal.logger::register_logger</a></code> for more information.</p>
 <p>Default:
 <code>"[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:[{token}] {ans} {msg}"</code>.</p>
 <p>Note that this layout is formatted by the package
@@ -181,7 +175,7 @@ log messages. Read the documentation of
 </h4>
 <p>This is the logging level threshold used in a <code>teal</code>
 application. A <code>teal</code> application will not emit logs below
-this level. Read the documentation of <code><a href="../reference/register_logger.html">teal::register_logger</a></code>
+this level. Read the documentation of <code><a href="https://rdrr.io/pkg/teal.logger/man/register_logger.html" class="external-link">teal::register_logger</a></code>
 for more information. Possible values: <code>"TRACE"</code>,
 <code>"INFO"</code>, <code>"WARNING"</code>, <code>"ERROR"</code>. See
 the documentation of <code><a href="https://daroczig.github.io/logger/reference/log_levels.html" class="external-link">logger::TRACE</a></code> for all possible values

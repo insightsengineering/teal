@@ -33,12 +33,15 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9017</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="../articles/teal.html">Get started</a>
+</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -50,16 +53,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/data_extract_spec.html">Customizing UI with `data_extract_spec`</a>
+    </li>
+    <li>
       <a href="../articles/delayed_data_loading.html">Delayed Data Loading</a>
     </li>
     <li>
       <a href="../articles/developer_apps.html">Developer Apps</a>
     </li>
     <li>
-      <a href="../articles/filter_panel.html">Filter panel</a>
-    </li>
-    <li>
-      <a href="../articles/getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/merge.html">Merge code examples</a>
     </li>
     <li>
       <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
@@ -72,15 +75,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -271,7 +265,7 @@ the following</p>
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
 
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">::</span><span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="fu"><a href="../reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="fu"><a href="../reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, x <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span>,
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span><span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, x <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>
       label <span class="op">=</span> <span class="st">"sample module"</span>,
@@ -325,10 +319,6 @@ reproducibility) when designing and implementing <code>teal</code>. The
 relevant R-code for these main parts are in the <a href="https://github.com/insightsengineering/teal" class="external-link">teal repository</a>
 in the following files:</p>
 <ul>
-<li>
-<code>R/FilteredData.R</code>, <code>R/FilteredDataset.R</code>,
-<code>R/FilterStates.R</code>, <code>R/FilterState.R</code>
-</li>
 <li>
 <code>R/init.R</code>,</li>
 </ul>
@@ -428,14 +418,14 @@ follows:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## </span>
-<span class="co">## You are using teal version 0.10.1.9015</span></code></pre>
+<span class="co">## You are using teal version 0.10.1.9017</span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="va"><a href="../reference/CDISCFilteredData.html">CDISCFilteredData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu">teal.slice</span><span class="fu">:::</span><span class="va"><a href="https://rdrr.io/pkg/teal.slice/man/CDISCFilteredData.html" class="external-link">CDISCFilteredData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
 <span class="co"># the `datasets` object contains reactives</span>
 <span class="co"># we activate this option, so we don't need to wrap all reactives in isolate calls</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>shiny.suppressMissingContextError <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">datasets</span><span class="op">$</span><span class="fu">set_dataset</span><span class="op">(</span><span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span><span class="op">)</span><span class="op">)</span>
-<span class="va">datasets</span><span class="op">$</span><span class="fu">set_dataset</span><span class="op">(</span><span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADTTE"</span>, <span class="va">ADTTE</span><span class="op">)</span><span class="op">)</span>
+<span class="va">datasets</span><span class="op">$</span><span class="fu">set_dataset</span><span class="op">(</span><span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span><span class="op">)</span><span class="op">)</span>
+<span class="va">datasets</span><span class="op">$</span><span class="fu">set_dataset</span><span class="op">(</span><span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADTTE"</span>, <span class="va">ADTTE</span><span class="op">)</span><span class="op">)</span>
 <span class="fu">shiny</span><span class="fu">:::</span><span class="fu">flushReact</span><span class="op">(</span><span class="op">)</span> <span class="co"># force evaluation outside of Shiny apps</span></code></pre></div>
 <p>Now say we want to filter out all the patients in <code>ADSL</code>
 except patients with <code>USUBJID</code> equal to <code>id-1</code>,
@@ -473,7 +463,7 @@ respectively, as illustrated from the above figure. We can also get the
 <code>call</code> object that was used for the filtering:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span>
-  <span class="fu"><a href="../reference/get_filter_expr.html">get_filter_expr</a></span><span class="op">(</span><span class="va">datasets</span>, <span class="st">"ADTTE"</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/get_filter_expr.html" class="external-link">get_filter_expr</a></span><span class="op">(</span><span class="va">datasets</span>, <span class="st">"ADTTE"</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## ADTTE_FILTERED_ALONE &lt;- ADTTE</span>
 <span class="co">## ADTTE_FILTERED &lt;- dplyr::inner_join(x = ADTTE_FILTERED_ALONE, y = ADSL_FILTERED)</span></code></pre>
@@ -554,8 +544,8 @@ function for this.</p>
 <span class="co"># Code to have two teal apps side-by-side or embed it in a larger application</span>
 <span class="va">create_teal_app</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">title</span>, <span class="va">id</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
-    data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-      <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>
+    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span>
+      <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>
     <span class="op">)</span>,
     modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
       <span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>

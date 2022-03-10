@@ -22,12 +22,15 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9017</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
+  <a href="../articles/teal.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -37,16 +40,16 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/data_extract_spec.html">Customizing UI with `data_extract_spec`</a>
+    </li>
+    <li>
       <a href="../articles/delayed_data_loading.html">Delayed Data Loading</a>
     </li>
     <li>
       <a href="../articles/developer_apps.html">Developer Apps</a>
     </li>
     <li>
-      <a href="../articles/filter_panel.html">Filter panel</a>
-    </li>
-    <li>
-      <a href="../articles/getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/merge.html">Merge code examples</a>
     </li>
     <li>
       <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
@@ -58,15 +61,6 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/teal" class="external-link">
     <span class="fa fa-github"></span>
@@ -112,12 +106,12 @@ an end-user, don't use this function, but instead this module.</p>
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>(<code>TealData</code> or <code>TealDataset</code> or <code>TealDatasetConnector</code> or <code>list</code> or <code>data.frame</code>
-or <code>MultiAssayExperiment</code>)<br><code>R6</code> object as returned by <code><a href="cdisc_data.html">cdisc_data()</a></code>, <code><a href="teal_data.html">teal_data()</a></code>, <code><a href="cdisc_dataset.html">cdisc_dataset()</a></code>, <code><a href="dataset.html">dataset()</a></code>,
-<code><a href="dataset_connector.html">dataset_connector()</a></code> or <code><a href="cdisc_dataset_connector.html">cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a <code>MultiAssayExperiment</code>
+or <code>MultiAssayExperiment</code>)<br><code>R6</code> object as returned by <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">teal.data::cdisc_data()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal.data::teal_data()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">teal.data::cdisc_dataset()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">teal.data::dataset()</a></code>,
+<code><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector.html" class="external-link">teal.data::dataset_connector()</a></code> or <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset_connector.html" class="external-link">teal.data::cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a <code>MultiAssayExperiment</code>
 or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
-do not match the original object names. To ensure reproducibility please use <code><a href="teal_data.html">teal_data()</a></code>
-or <code><a href="cdisc_data.html">cdisc_data()</a></code> with <code>check = TRUE</code> enabled.</p></dd>
+do not match the original object names. To ensure reproducibility please use <code><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal.data::teal_data()</a></code>
+or <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">teal.data::cdisc_data()</a></code> with <code>check = TRUE</code> enabled.</p></dd>
 <dt>modules</dt>
 <dd><p>(<code>list</code> or <code>teal_modules</code>)<br>
 nested list of <code>teal_modules</code> or <code>module</code> objects. See <code><a href="modules.html">modules()</a></code> and <code><a href="module.html">module()</a></code> for
@@ -145,7 +139,7 @@ filtered dataset.</p><div class="sourceCode"><pre><code><span class="fu"><a href
 <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.0</span>, <span class="fl">7.0</span><span class="op">)</span>, <span class="cn">NA</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 
 <p>To initialize with specific variable filter with all values on start, one
-can use</p><div class="sourceCode"><pre><code><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="fu"><a href="../reference/default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+can use</p><div class="sourceCode"><pre><code><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 
 <p><code>filter</code> should be set with respect to the class of the column:</p><ul><li><p><code>numeric</code>: <code>selected</code> should be a two elements vector defining the range
 of the filter.</p></li>
@@ -155,11 +149,9 @@ of the filter</p></li>
 <code>datetime</code> range of the filter</p></li>
 <li><p><code>character</code> and <code>factor</code>: <code>selected</code> should be a vector of any length
 defining initial values selected to filter.
-<br><code>MultiAssayExperiment</code> <code>filter</code> should be specified in slightly different
-way. Since <code><a href="http://waldronlab.io/MultiAssayExperiment/reference/MultiAssayExperiment.html" class="external-link">MultiAssayExperiment::MultiAssayExperiment()</a></code> contains
-patient data (<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">SummarizedExperiment::colData()</a></code>) with list of experiments
-(<code><a href="http://waldronlab.io/MultiAssayExperiment/reference/ExperimentList.html" class="external-link">MultiAssayExperiment::ExperimentList()</a></code>), <code>filter</code> list should be named
-in the following name.
+<br><code>filter</code> for <code>MultiAssayExperiment</code> objects should be specified in slightly
+different way. Since it contains patient data with list of experiments,
+<code>filter</code> list should be created as follows:
 <br></p></li>
 </ul><div class="sourceCode"><pre><code>list(
   &lt;MAE dataname&gt; = list(
@@ -202,38 +194,38 @@ is then preferred to this function.</p></dd>
 <span class="r-in"><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">init</span><span class="op">(</span></span>
-<span class="r-in">  data <span class="op">=</span> <span class="fu"><a href="cdisc_data.html">cdisc_data</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span><span class="op">)</span>,</span>
+<span class="r-in">  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">cdisc_data</a></span><span class="op">(</span></span>
+<span class="r-in">    <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span><span class="op">)</span>,</span>
 <span class="r-in">    code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span></span>
 <span class="r-in">  <span class="op">)</span>,</span>
 <span class="r-in">  modules <span class="op">=</span> <span class="fu"><a href="modules.html">modules</a></span><span class="op">(</span></span>
 <span class="r-in">    <span class="fu"><a href="module.html">module</a></span><span class="op">(</span></span>
 <span class="r-in">      <span class="st">"data source"</span>,</span>
 <span class="r-in">      server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span>,</span>
-<span class="r-in">      ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">p</a></span><span class="op">(</span><span class="st">"information about data source"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span class="r-in">      ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">div</span><span class="op">(</span><span class="fu">p</span><span class="op">(</span><span class="st">"information about data source"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span class="r-in">      filters <span class="op">=</span> <span class="st">"all"</span></span>
 <span class="r-in">    <span class="op">)</span>,</span>
 <span class="r-in">    <span class="fu"><a href="module.html">module</a></span><span class="op">(</span></span>
 <span class="r-in">      <span class="st">"ADSL AGE histogram"</span>,</span>
 <span class="r-in">      server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">        <span class="va">output</span><span class="op">$</span><span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span></span>
+<span class="r-in">        <span class="va">output</span><span class="op">$</span><span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu">renderPlot</span><span class="op">(</span></span>
 <span class="r-in">          <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">$</span><span class="fu">get_data</span><span class="op">(</span><span class="st">"ADSL"</span>, filtered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">AGE</span><span class="op">)</span></span>
 <span class="r-in">        <span class="op">)</span></span>
 <span class="r-in">      <span class="op">}</span>,</span>
 <span class="r-in">      ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">        <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span class="r-in">        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"hist"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">        <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu">NS</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
+<span class="r-in">        <span class="fu">plotOutput</span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"hist"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in">      <span class="op">}</span>,</span>
 <span class="r-in">      filters <span class="op">=</span> <span class="st">"ADSL"</span></span>
 <span class="r-in">    <span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span>,</span>
 <span class="r-in">  title <span class="op">=</span> <span class="st">"App title"</span>,</span>
-<span class="r-in">  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>AGE <span class="op">=</span> <span class="fu"><a href="default_filter.html">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span class="r-in">  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>AGE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/default_filter.html" class="external-link">default_filter</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span class="r-in">  header <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">h1</span><span class="op">(</span><span class="st">"Sample App"</span><span class="op">)</span>,</span>
 <span class="r-in">  footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"Copyright 2017 - 2020"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">shinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># or: to also work with bookmarking</span></span>
 <span class="r-in"><span class="fu"><a href="bookmarkableShinyApp.html">bookmarkableShinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
