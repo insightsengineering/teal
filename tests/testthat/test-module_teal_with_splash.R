@@ -1,5 +1,5 @@
-iris_ds <- dataset(dataname = "iris", x = head(iris))
-mtcars_ds <- dataset(dataname = "mtcars", x = head(mtcars))
+iris_ds <- teal.data::dataset(dataname = "iris", x = head(iris))
+mtcars_ds <- teal.data::dataset(dataname = "mtcars", x = head(mtcars))
 data <- teal_data(iris_ds, mtcars_ds)
 
 test_module1 <- module(
@@ -39,7 +39,7 @@ testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns 
 })
 
 testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns pulled data when loaded", {
-  suppress_logs()
+  teal.logger::suppress_logs()
   x <- dataset_connector(dataname = "test_dataset", pull_callable = callable_code("iris"))
   delayed_data <- teal_data(x)
   shiny::testServer(

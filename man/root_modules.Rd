@@ -24,7 +24,7 @@ library(shiny)
 
 app <- init(
   data = teal_data(
-    dataset("iris", iris)
+    teal.data::dataset("iris", iris)
   ),
   modules = modules(
     module(

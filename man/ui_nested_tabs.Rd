@@ -25,7 +25,7 @@ more details.}
 
 \item{datasets}{(\code{FilteredData})\cr
 object to store filter state and filtered datasets, shared across modules. For more
-details see \code{\link{FilteredData}}}
+details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}}
 
 \item{depth}{(\code{integer(1)})\cr
 number which helps to determine depth of the modules nesting.}

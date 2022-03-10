@@ -1,5 +1,5 @@
-iris_ds <- dataset(dataname = "iris", x = iris)
-mtcars_ds <- dataset(dataname = "mtcars", x = mtcars)
+iris_ds <- teal.data::dataset(dataname = "iris", x = iris)
+mtcars_ds <- teal.data::dataset(dataname = "mtcars", x = mtcars)
 data <- teal_data(iris_ds, mtcars_ds)
 
 test_module1 <- module(
@@ -47,8 +47,8 @@ testthat::test_that("srv_teal initializes the data when raw_data changes", {
 })
 
 testthat::test_that("srv_teal initialized FilteredData based on the raw_data input", {
-  filtered_data <- filtered_data_new(data)
-  filtered_data_set(data, filtered_data)
+  filtered_data <- teal.slice:::filtered_data_new(data)
+  teal.slice:::filtered_data_set(data, filtered_data)
 
   shiny::testServer(
     app = srv_teal,

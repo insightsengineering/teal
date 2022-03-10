@@ -27,94 +27,40 @@ Depends:
     shiny
 Imports:
     checkmate,
-    digest,
-    dplyr,
-    ggplot2,
-    glue,
-    grDevices,
     lifecycle,
     logger (>= 0.2.0),
     magrittr,
     methods,
-    R6,
-    rlang,
     shinyjs,
-    shinyWidgets (>= 0.5.0),
     stats,
-    utils,
-    yaml
+    teal.data,
+    teal.logger,
+    teal.slice,
+    teal.transform,
+    teal.widgets,
+    utils
 Suggests:
-    askpass,
     covr,
-    httr,
     knitr,
     MultiAssayExperiment,
-    readr,
-    reticulate,
     rmarkdown,
     scda (>= 0.1.2),
     scda.2021 (>= 0.1.2),
-    SummarizedExperiment,
     testthat (>= 2.0),
     withr
 VignetteBuilder:
     knitr
 RdMacros:
     lifecycle
-biocViews:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Collate:
-    'CDISCFilteredData.R'
-    'CDISCTealData.R'
-    'CDISCTealDataConnector.R'
-    'CDISCTealDataset.R'
-    'CDISCTealDatasetConnector.R'
-    'Callable.R'
-    'CallableCode.R'
-    'CallableFunction.R'
-    'CallablePythonCode.R'
-    'CodeClass.R'
-    'FilterState.R'
-    'FilterStates.R'
-    'FilteredData.R'
-    'FilteredDataset.R'
-    'JoinKeys.R'
-    'MAETealDataset.R'
-    'Queue.R'
-    'TealData.R'
-    'TealDataAbstract.R'
-    'TealDataConnection.R'
-    'TealDataConnector.R'
-    'TealDataConnector_constructors.R'
-    'TealDataset.R'
-    'TealDatasetConnector.R'
-    'TealDatasetConnector_constructors.R'
-    'all_choices.R'
-    'as_cdisc.R'
-    'call_utils.R'
-    'choices_labeled.R'
-    'choices_selected.R'
-    'data_extract_spec.R'
-    'data_label.R'
     'dummy_functions.R'
-    'filter_spec.R'
-    'filtered_data_wrappers.R'
-    'get_attrs.R'
-    'get_code.R'
-    'get_dataname.R'
-    'get_dataset.R'
-    'get_dataset_label.R'
-    'get_datasets.R'
-    'get_keys.R'
-    'get_raw_data.R'
     'include_css_js.R'
     'modules.R'
     'init.R'
-    'is_pulled.R'
-    'load_dataset.R'
     'log_app_usage.R'
     'logging.R'
     'module_nested_tabs.R'
@@ -122,15 +68,11 @@ Collate:
     'module_teal.R'
     'module_teal_with_splash.R'
     'modules_debugging.R'
-    'mutate_dataset.R'
-    'optionalInput.R'
-    'register_logger.R'
-    'resolve_delayed.R'
-    'resolve_state.R'
-    'select_spec.R'
-    'set_args.R'
     'teal.R'
-    'teal_data.R'
-    'to_relational_data.R'
+    'teal.data-exports.R'
+    'teal.logger-exports.R'
+    'teal.slice-exports.R'
+    'teal.transform-exports.R'
+    'teal.widgets-exports.R'
     'utils.R'
     'zzz.R'

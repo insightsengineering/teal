@@ -16,12 +16,12 @@ get_dummy_filter <- function(data) { # nolint
     ADSL = list(
       filter = list(
         list(
-          SEX = init_filter_state(
+          SEX = teal.slice:::init_filter_state(
             x = ADSL$SEX,
             varname = "SEX",
             varlabel = "Sex"
           ),
-          AGE = init_filter_state(
+          AGE = teal.slice:::init_filter_state(
             x = ADSL$AGE,
             varname = "AGE",
             varlabel = "Age"
@@ -32,7 +32,7 @@ get_dummy_filter <- function(data) { # nolint
     ADLB = list(
       filter = list(
         list(
-          ASEQ = init_filter_state(
+          ASEQ = teal.slice:::init_filter_state(
             x = ADLB$ASEQ,
             varname = "ASEQ",
             varlabel = "Sequence Number"
@@ -53,6 +53,16 @@ get_dummy_filter <- function(data) { # nolint
 #' @return `cdisc_data`
 #' @keywords internal
 get_dummy_cdisc_data <- function() { # nolint
+  teal_with_pkg <- function(pkg, code) {
+    pkg_name <- paste0("package:", pkg)
+    if (!pkg_name %in% search()) {
+      require(pkg, character.only = TRUE)
+      on.exit(detach(pkg_name, character.only = TRUE))
+    }
+    eval.parent(code)
+    return(invisible(NULL))
+  }
+
   teal_with_pkg("scda", code = {
     ADSL <- scda::synthetic_cdisc_data("latest")$adsl # nolint
     ADAE <- scda::synthetic_cdisc_data("latest")$adae # nolint
@@ -63,9 +73,9 @@ get_dummy_cdisc_data <- function() { # nolint
   ADSL$SEX[1:150] <- NA # nolint
 
   res <- cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL),
-    cdisc_dataset(dataname = "ADAE", x = ADAE),
-    cdisc_dataset(dataname = "ADLB", x = ADLB),
+    teal.data::cdisc_dataset(dataname = "ADSL", x = ADSL),
+    teal.data::cdisc_dataset(dataname = "ADAE", x = ADAE),
+    teal.data::cdisc_dataset(dataname = "ADLB", x = ADLB),
     code = "
       ADSL <- synthetic_cdisc_data(\"latest\")$adsl
       ADAE <- synthetic_cdisc_data(\"latest\")$adae
@@ -82,9 +92,9 @@ get_dummy_cdisc_data <- function() { # nolint
 #' @keywords internal
 get_dummy_datasets <- function() { # nolint
   dummy_cdisc_data <- get_dummy_cdisc_data()
-  datasets <- filtered_data_new(dummy_cdisc_data)
+  datasets <- teal.slice:::filtered_data_new(dummy_cdisc_data)
   isolate({
-    filtered_data_set(dummy_cdisc_data, datasets)
+    teal.slice:::filtered_data_set(dummy_cdisc_data, datasets)
   })
   return(datasets)
 }

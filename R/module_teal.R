@@ -118,7 +118,7 @@ ui_teal <- function(id,
 #' The initially displayed filter states can be provided, bookmarked filter
 #' states always take precedence over them.
 #'
-#' For more doc, see [ui_teal].
+#' For more doc, see [ui_teal()].
 #'
 #' @inheritParams init
 #' @param raw_data (`reactive`)\cr
@@ -188,9 +188,9 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       env$progress$set(0.25, message = "Setting data")
       # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
       # this is placed in the module scope so that bookmarking can be used with FilteredData object
-      datasets <- filtered_data_new(raw_data())
+      datasets <- teal.slice:::filtered_data_new(raw_data())
       # transfer the datasets from raw_data() into the FilteredData object
-      filtered_data_set(raw_data(), datasets)
+      teal.slice:::filtered_data_set(raw_data(), datasets)
       logger::log_trace("srv_teal@4 Raw Data transferred to FilteredData.")
       datasets
     })

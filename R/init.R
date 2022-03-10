@@ -16,12 +16,12 @@
 #'
 #' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
 #' or `MultiAssayExperiment`)\cr
-#' `R6` object as returned by [cdisc_data()], [teal_data()], [cdisc_dataset()], [dataset()],
-#' [dataset_connector()] or [cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`
+#' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()], [teal.data::cdisc_dataset()], [teal.data::dataset()],
+#' [teal.data::dataset_connector()] or [teal.data::cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`
 #' or a list of the previous objects or function returning a named list.
 #' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
-#' do not match the original object names. To ensure reproducibility please use [teal_data()]
-#' or [cdisc_data()] with `check = TRUE` enabled.
+#' do not match the original object names. To ensure reproducibility please use [teal.data::teal_data()]
+#' or [teal.data::cdisc_data()] with `check = TRUE` enabled.
 #' @param modules (`list` or `teal_modules`)\cr
 #'   nested list of `teal_modules` or `module` objects. See [modules()] and [module()] for
 #'   more details.
@@ -68,11 +68,9 @@
 #'   * `character` and `factor`: `selected` should be a vector of any length
 #'   defining initial values selected to filter.
 #'   \cr
-#'   `MultiAssayExperiment` `filter` should be specified in slightly different
-#'   way. Since [MultiAssayExperiment::MultiAssayExperiment()] contains
-#'   patient data ([SummarizedExperiment::colData()]) with list of experiments
-#'   ([MultiAssayExperiment::ExperimentList()]), `filter` list should be named
-#'   in the following name.
+#'   `filter` for `MultiAssayExperiment` objects should be specified in slightly
+#'   different way. Since it contains patient data with list of experiments,
+#'   `filter` list should be created as follows:
 #'   \cr
 #'
 #'   ```
@@ -105,7 +103,6 @@
 #'
 #' @export
 #'
-#' @include FilteredData.R
 #' @include modules.R
 #'
 #' @examples
@@ -115,7 +112,7 @@
 #'
 #' app <- init(
 #'   data = cdisc_data(
-#'     cdisc_dataset("ADSL", ADSL),
+#'     teal.data::cdisc_dataset("ADSL", ADSL),
 #'     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 #'   ),
 #'   modules = modules(
@@ -160,7 +157,7 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  if (!methods::is(data, "TealData")) {
+  if (!inherits(data, "TealData")) {
     data <- to_relational_data(data = data)
   }
   checkmate::assert_string(title, null.ok = TRUE)
@@ -171,7 +168,7 @@ init <- function(data,
   checkmate::assert_subset(names(filter), choices = get_dataname(data))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
-  log_system_info()
+  teal.logger::log_system_info()
 
   if (is(modules, "list")) {
     modules <- do.call(teal::modules, modules)

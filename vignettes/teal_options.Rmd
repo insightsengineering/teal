@@ -36,7 +36,7 @@ Once set, the value of an option persists during a session, but it returns to th
 # Options used in a `teal` application
 ## `teal` package
 ### `teal.log_layout` (`character`)
-This defines the layout of a log message used in a `teal` application. `teal` uses this layout to format the emitted log messages. Read the documentation of `teal::register_logger` for more information.
+This defines the layout of a log message used in a `teal` application. `teal` uses this layout to format the emitted log messages. Read the documentation of `teal.logger::register_logger` for more information.
 
 Default: `"[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:[{token}] {ans} {msg}"`.
 

@@ -17,12 +17,12 @@ init(
 \arguments{
 \item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
 or \code{MultiAssayExperiment})\cr
-\code{R6} object as returned by \code{\link[=cdisc_data]{cdisc_data()}}, \code{\link[=teal_data]{teal_data()}}, \code{\link[=cdisc_dataset]{cdisc_dataset()}}, \code{\link[=dataset]{dataset()}},
-\code{\link[=dataset_connector]{dataset_connector()}} or \code{\link[=cdisc_dataset_connector]{cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
+\code{R6} object as returned by \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}}, \code{\link[teal.data:teal_data]{teal.data::teal_data()}}, \code{\link[teal.data:cdisc_dataset]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:dataset]{teal.data::dataset()}},
+\code{\link[teal.data:dataset_connector]{teal.data::dataset_connector()}} or \code{\link[teal.data:cdisc_dataset_connector]{teal.data::cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
 or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
-do not match the original object names. To ensure reproducibility please use \code{\link[=teal_data]{teal_data()}}
-or \code{\link[=cdisc_data]{cdisc_data()}} with \code{check = TRUE} enabled.}
+do not match the original object names. To ensure reproducibility please use \code{\link[teal.data:teal_data]{teal.data::teal_data()}}
+or \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}} with \code{check = TRUE} enabled.}
 
 \item{modules}{(\code{list} or \code{teal_modules})\cr
 nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
@@ -66,11 +66,9 @@ of the filter
 \item \code{character} and \code{factor}: \code{selected} should be a vector of any length
 defining initial values selected to filter.
 \cr
-\code{MultiAssayExperiment} \code{filter} should be specified in slightly different
-way. Since \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}} contains
-patient data (\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment::colData()}}) with list of experiments
-(\code{\link[MultiAssayExperiment:ExperimentList]{MultiAssayExperiment::ExperimentList()}}), \code{filter} list should be named
-in the following name.
+\code{filter} for \code{MultiAssayExperiment} objects should be specified in slightly
+different way. Since it contains patient data with list of experiments,
+\code{filter} list should be created as follows:
 \cr
 }\preformatted{list(
   <MAE dataname> = list(
@@ -120,7 +118,7 @@ ADSL <- synthetic_cdisc_data("latest")$adsl
 
 app <- init(
   data = cdisc_data(
-    cdisc_dataset("ADSL", ADSL),
+    teal.data::cdisc_dataset("ADSL", ADSL),
     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   ),
   modules = modules(

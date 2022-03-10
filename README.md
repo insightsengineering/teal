@@ -15,12 +15,19 @@
         -   [`teal.modules.hermes`](https://github.com/insightsengineering/teal.modules.hermes): modules for analyzing `MultiAssayExperiment` objects
 
 <!-- markdownlint-enable MD007 MD030 -->
-With the 2 components above, the `teal` package then provides:
 
-- The ability to "pull" data into applications at runtime - for example from external data stores which require authentication
-- A standardized method to allow application users to filter their data before it is passed into analysis modules  
+A lot of the functionality of the `teal` framework derives from the following packages:
 
-Further features which enhance the `teal` framework are available in the [`teal.devel`](https://github.com/insightsengineering/teal.devel) package.
+<!-- markdownlint-disable MD007 MD030 -->
+-   [`teal.data`](https://github.com/insightsengineering/teal.data): creating and loading the data needed for `teal` applications.
+-   [`teal.widgets`](https://github.com/insightsengineering/teal.widgets): shiny components used within `teal`.
+-   [`teal.slice`](https://github.com/insightsengineering/teal.slice): provides a filtering panel to allow filtering of data.
+-   [`teal.code`](https://github.com/insightsengineering/teal.code): handles reproducibility of outputs.
+-   [`teal.transform`](https://github.com/insightsengineering/teal.transform): standardizes extracting and merging data.
+
+<!-- markdownlint-enable MD007 MD030 -->
+
+See these packages for more information about how to use the different parts of the `teal` framework.
 
 ## Installation
 

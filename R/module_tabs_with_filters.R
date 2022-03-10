@@ -17,7 +17,7 @@
 #' @inheritParams init
 #' @param datasets (`FilteredData`)\cr
 #'   object to store filter state and filtered datasets, shared across modules. For more
-#'   details see [`FilteredData`]
+#'   details see [`teal.slice::FilteredData`]
 #'
 #' @return A `tagList` of The main menu, place holders for filters and
 #'   place holders for the teal modules
@@ -37,7 +37,7 @@
 #'     )
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
+#'     active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods, filter = NULL)
 #'     output$info <- renderText({
 #'       paste0("The currently active tab name is ", active_module()$label)
 #'     })
@@ -58,15 +58,15 @@
 #'       textOutput("info"),
 #'       fluidPage( # needed for nice tabs
 #'         fluidRow(
-#'           column(6, ui_tabs_with_filters("app1", modules = mods, datasets = datasets1)),
-#'           column(6, ui_tabs_with_filters("app2", modules = mods, datasets = datasets2))
+#'           column(6, teal:::ui_tabs_with_filters("app1", modules = mods, datasets = datasets1)),
+#'           column(6, teal:::ui_tabs_with_filters("app2", modules = mods, datasets = datasets2))
 #'         )
 #'       )
 #'     )
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module1 <- srv_tabs_with_filters(id = "app1", datasets = datasets1, modules = mods)
-#'     active_module2 <- srv_tabs_with_filters(id = "app2", datasets = datasets2, modules = mods)
+#'     active_module1 <- teal:::srv_tabs_with_filters(id = "app1", datasets = datasets1, modules = mods, filter = NULL)
+#'     active_module2 <- teal:::srv_tabs_with_filters(id = "app2", datasets = datasets2, modules = mods, filter = NULL)
 #'     output$info <- renderText({
 #'       paste0(
 #'         "The currently active tab names are: ",
@@ -127,7 +127,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @inheritParams srv_teal_with_splash
 #' @param datasets (`FilteredData`)\cr
 #'   object to store filter state and filtered datasets, shared across modules. For more
-#'   details see [`FilteredData`].
+#'   details see [`teal.slice::FilteredData`].
 #' @return `reactive` currently selected active_module
 #' @keywords internal
 srv_tabs_with_filters <- function(id, datasets, modules, filter) {
