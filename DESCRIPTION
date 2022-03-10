@@ -37,7 +37,7 @@ Imports:
     teal.logger,
     teal.slice,
     teal.transform,
-    teal.widgets
+    teal.widgets,
     utils
 Suggests:
     covr,
