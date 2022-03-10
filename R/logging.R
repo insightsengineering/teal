@@ -2,7 +2,7 @@
 
 #' A logging function
 #'
-#' Superseded by [register_logger].
+#' Superseded by [teal.logger::register_logger].
 #'
 #' @description `r lifecycle::badge("superseded")`
 #' @keywords internal
@@ -11,7 +11,8 @@
   lifecycle::deprecate_soft(
     when = "0.10.1",
     what = ".log()",
-    details = "teal now uses the package `logger`. Please see `teal::register_logger` for more information."
+    with = "teal.logger::register_logger()",
+    details = "teal now uses the package `logger`. Please see `teal.logger::register_logger` for more information."
   )
 
   if (!isTRUE(getOption("teal_logging"))) {

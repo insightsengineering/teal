@@ -89,6 +89,6 @@ The initially displayed filter states can be provided, bookmarked filter
 states always take precedence over them.
 }
 \details{
-For more doc, see \link{ui_teal}.
+For more doc, see \code{\link[=ui_teal]{ui_teal()}}.
 }
 \keyword{internal}

@@ -16,7 +16,7 @@ more details.}
 
 \item{datasets}{(\code{FilteredData})\cr
 object to store filter state and filtered datasets, shared across modules. For more
-details see \code{\link{FilteredData}}}
+details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}}
 }
 \value{
 A \code{tagList} of The main menu, place holders for filters and

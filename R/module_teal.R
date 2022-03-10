@@ -118,7 +118,7 @@ ui_teal <- function(id,
 #' The initially displayed filter states can be provided, bookmarked filter
 #' states always take precedence over them.
 #'
-#' For more doc, see [ui_teal].
+#' For more doc, see [ui_teal()].
 #'
 #' @inheritParams init
 #' @param raw_data (`reactive`)\cr

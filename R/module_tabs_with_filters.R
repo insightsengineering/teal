@@ -17,7 +17,7 @@
 #' @inheritParams init
 #' @param datasets (`FilteredData`)\cr
 #'   object to store filter state and filtered datasets, shared across modules. For more
-#'   details see [`FilteredData`]
+#'   details see [`teal.slice::FilteredData`]
 #'
 #' @return A `tagList` of The main menu, place holders for filters and
 #'   place holders for the teal modules
@@ -127,7 +127,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @inheritParams srv_teal_with_splash
 #' @param datasets (`FilteredData`)\cr
 #'   object to store filter state and filtered datasets, shared across modules. For more
-#'   details see [`FilteredData`].
+#'   details see [`teal.slice::FilteredData`].
 #' @return `reactive` currently selected active_module
 #' @keywords internal
 srv_tabs_with_filters <- function(id, datasets, modules, filter) {

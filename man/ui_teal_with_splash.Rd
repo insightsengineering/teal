@@ -2,7 +2,7 @@
 % Please edit documentation in R/module_teal_with_splash.R
 \name{ui_teal_with_splash}
 \alias{ui_teal_with_splash}
-\title{UI to show a splash screen in the beginning, then delegate to \code{\link{srv_teal}}}
+\title{UI to show a splash screen in the beginning, then delegate to \code{\link[=srv_teal]{srv_teal()}}}
 \usage{
 ui_teal_with_splash(
   id,
@@ -18,12 +18,12 @@ module id}
 
 \item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
 or \code{MultiAssayExperiment})\cr
-\code{R6} object as returned by \code{\link[=cdisc_data]{cdisc_data()}}, \code{\link[=teal_data]{teal_data()}}, \code{\link[=cdisc_dataset]{cdisc_dataset()}}, \code{\link[=dataset]{dataset()}},
-\code{\link[=dataset_connector]{dataset_connector()}} or \code{\link[=cdisc_dataset_connector]{cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
+\code{R6} object as returned by \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}}, \code{\link[teal.data:teal_data]{teal.data::teal_data()}}, \code{\link[teal.data:cdisc_dataset]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:dataset]{teal.data::dataset()}},
+\code{\link[teal.data:dataset_connector]{teal.data::dataset_connector()}} or \code{\link[teal.data:cdisc_dataset_connector]{teal.data::cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
 or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
-do not match the original object names. To ensure reproducibility please use \code{\link[=teal_data]{teal_data()}}
-or \code{\link[=cdisc_data]{cdisc_data()}} with \code{check = TRUE} enabled.}
+do not match the original object names. To ensure reproducibility please use \code{\link[teal.data:teal_data]{teal.data::teal_data()}}
+or \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}} with \code{check = TRUE} enabled.}
 
 \item{title}{(\code{NULL} or \code{character})\cr
 The browser window title (defaults to the host URL of the page).}
@@ -39,7 +39,7 @@ the footer of the app}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 The splash screen could be used to query for a password to fetch the data.
-\code{\link{init}} is a very thin wrapper around this module useful for end-users which
+\code{\link[=init]{init()}} is a very thin wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.
 This function instead adheres to the Shiny module conventions.
 

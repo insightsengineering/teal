@@ -3,7 +3,7 @@
 \name{srv_teal_with_splash}
 \alias{srv_teal_with_splash}
 \title{Server function that loads the data through reactive loading and then delegates
-to \code{\link{srv_teal}}.}
+to \code{\link[=srv_teal]{srv_teal()}}.}
 \usage{
 srv_teal_with_splash(id, data, modules, filter = list())
 }
@@ -16,12 +16,12 @@ is then preferred to this function.}
 
 \item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
 or \code{MultiAssayExperiment})\cr
-\code{R6} object as returned by \code{\link[=cdisc_data]{cdisc_data()}}, \code{\link[=teal_data]{teal_data()}}, \code{\link[=cdisc_dataset]{cdisc_dataset()}}, \code{\link[=dataset]{dataset()}},
-\code{\link[=dataset_connector]{dataset_connector()}} or \code{\link[=cdisc_dataset_connector]{cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
+\code{R6} object as returned by \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}}, \code{\link[teal.data:teal_data]{teal.data::teal_data()}}, \code{\link[teal.data:cdisc_dataset]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:dataset]{teal.data::dataset()}},
+\code{\link[teal.data:dataset_connector]{teal.data::dataset_connector()}} or \code{\link[teal.data:cdisc_dataset_connector]{teal.data::cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
 or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
-do not match the original object names. To ensure reproducibility please use \code{\link[=teal_data]{teal_data()}}
-or \code{\link[=cdisc_data]{cdisc_data()}} with \code{check = TRUE} enabled.}
+do not match the original object names. To ensure reproducibility please use \code{\link[teal.data:teal_data]{teal.data::teal_data()}}
+or \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}} with \code{check = TRUE} enabled.}
 
 \item{modules}{(\code{list} or \code{teal_modules})\cr
 nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
@@ -82,9 +82,9 @@ different way. Since it contains patient data with list of experiments,
 \code{filter} is ignored if the app is restored from a bookmarked state.}
 }
 \value{
-\code{reactive}, return value of \code{\link{srv_teal}}
+\code{reactive}, return value of \code{\link[=srv_teal]{srv_teal()}}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-Please also refer to the doc of \code{\link{init}}.
+Please also refer to the doc of \code{\link[=init]{init()}}.
 }

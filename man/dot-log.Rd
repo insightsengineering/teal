@@ -10,6 +10,6 @@
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 }
 \details{
-Superseded by \link{register_logger}.
+Superseded by \link[teal.logger:register_logger]{teal.logger::register_logger}.
 }
 \keyword{internal}

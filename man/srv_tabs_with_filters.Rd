@@ -15,7 +15,7 @@ is then preferred to this function.}
 
 \item{datasets}{(\code{FilteredData})\cr
 object to store filter state and filtered datasets, shared across modules. For more
-details see \code{\link{FilteredData}}.}
+details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}.}
 
 \item{modules}{(\code{list} or \code{teal_modules})\cr
 nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
