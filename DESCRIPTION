@@ -70,6 +70,7 @@ Collate:
     'modules_debugging.R'
     'teal.R'
     'teal.data-exports.R'
+    'teal.logger-exports.R'
     'teal.slice-exports.R'
     'teal.transform-exports.R'
     'teal.widgets-exports.R'
