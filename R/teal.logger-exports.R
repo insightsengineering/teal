@@ -1,3 +1,3 @@
-#' @importFrom teal.widgets register_logger
+#' @importFrom teal.logger register_logger
 #' @export
 teal.logger::register_logger
