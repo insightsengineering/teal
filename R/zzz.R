@@ -9,7 +9,7 @@
   options("shiny.sanitize.errors" = FALSE)
 
   # Set up the teal logger instance
-  teal.widgets::register_logger("teal")
+  teal.logger::register_logger("teal")
 
   invisible()
 }

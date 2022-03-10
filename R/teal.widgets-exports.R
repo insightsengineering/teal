@@ -13,7 +13,3 @@ teal.widgets::optionalSliderInputValMinMax
 #' @importFrom teal.widgets updateOptionalSelectInput
 #' @export
 teal.widgets::updateOptionalSelectInput
-
-#' @importFrom teal.widgets register_logger
-#' @export
-teal.widgets::register_logger

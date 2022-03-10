@@ -34,9 +34,10 @@ Imports:
     shinyjs,
     stats,
     teal.data,
+    teal.logger,
     teal.slice,
-    teal.widgets,
     teal.transform,
+    teal.widgets
     utils
 Suggests:
     covr,
