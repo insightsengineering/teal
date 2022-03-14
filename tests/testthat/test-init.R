@@ -76,7 +76,6 @@ testthat::test_that("init data accepts a list of a TealDataset and a dataframe w
 
 testthat::test_that("init data accepts a single MultiAssayExperiment object", {
   utils::data(miniACC, package = "MultiAssayExperiment")
-
   testthat::expect_error(init(data = miniACC, modules = mods), NA)
 })
 
