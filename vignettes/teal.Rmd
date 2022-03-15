@@ -20,7 +20,7 @@ different data viewers. `teal` shiny applications are built using standard
 
 The framework consists of a number of packages loaded by a single `library(teal)` call. Each package has a unique
 responsibility:
-* `teal`, for creating the server and the `UI` functions than can be used with `shiny` directly.
+* `teal`, for creating the server and the `UI` functions that can be used with `shiny` directly.
 * [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/), defining the customized widgets used in `teal` applications.
 * [`teal.code`](https://insightsengineering.github.io/teal.code/), containing tools to ensure all the analysis done in `teal` can be reproduced using raw code in `R`.
 * [`teal.data`](https://insightsengineering.github.io/teal.data/), making it easier to pass any data into a `teal` application.
