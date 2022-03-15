@@ -6,6 +6,9 @@ upstream_repos:
   insightsengineering/teal.widgets:
     repo: insightsengineering/teal.widgets
     host: https://github.com
+  insightsengineering/teal.code:
+    repo: insightsengineering/teal.widgets
+    host: https://github.com
   insightsengineering/teal.data:
     repo: insightsengineering/teal.data
     host: https://github.com
@@ -25,9 +28,6 @@ upstream_repos:
     repo: insightsengineering/scda.2021
     host: https://github.com
 downstream_repos:
-  insightsengineering/teal.devel:
-    repo: insightsengineering/teal.devel
-    host: https://github.com
   insightsengineering/teal.modules.general:
     repo: insightsengineering/teal.modules.general
     host: https://github.com
