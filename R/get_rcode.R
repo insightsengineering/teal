@@ -1,33 +1,33 @@
 #' Returns R Code from a teal module
 #'
 #' @description `r lifecycle::badge("stable")`
-#' Return the R-code used to create a \link[teal]{teal} module analysis. This function
+#' Return the R-code used to create a teal::teal] module analysis. This function
 #' will return all analysis code as a character string. In case of a good setup it will
 #' not only return the code used create the module analysis, but also the code used by
 #' the app author to create the app. The main feature of this function is encapsulating
 #' the R code to merge datasets by [teal.transform::merge_datasets()] and all the R code stored inside
 #' code [teal.code::chunks].
 #'
-#' @param datasets (\code{list}) list of \code{FilteredData} available inside the
-#'  server function of any \link[teal]{teal} module.
-#' @param datanames (\code{character})\cr
+#' @param datasets (`list`) list of `FilteredData` available inside the
+#'  server function of any [teal::teal] module.
+#' @param datanames (`character`)\cr
 #'  names of datasets which code should be returned for. Due to fact that
-#'  \code{teal} filter panel depending on \code{"ADSL"}, code for \code{ADSL}
+#'  `teal` filter panel depending on `"ADSL"`, code for `ADSL`
 #'  is always returned even if not specified.
-#' @param merge_expression (\code{character})\cr
+#' @param merge_expression (`character`)\cr
 #'  code to get merged analysis dataset
-#' @param chunks (\code{chunks}) \cr
-#'  object of class \code{chunks} that stores code chunks. These code
-#'  chunks are used in \code{\link[teal]{teal}} to enable reproducibility. Normally these chunks
-#'  are stored within the \code{\link[shiny]{shiny-package}} session. The default value
+#' @param chunks (`chunks`) \cr
+#'  object of class `chunks` that stores code chunks. These code
+#'  chunks are used in [teal::teal] to enable reproducibility. Normally these chunks
+#'  are stored within the [shiny::shiny-package] session. The default value
 #'  can normally be used.
-#' @param selected_chunk_ids (\code{character} vector)\cr
+#' @param selected_chunk_ids (`character` vector)\cr
 #'   vector of code chunks to be shown
 #'   in the code. If chunk id's are available this can be used to limit the
-#'   chunks that appear in the \code{"Show R-Code"} modal. Please only use this
+#'   chunks that appear in the `"Show R-Code"` modal. Please only use this
 #'   feature if all chunks were set with designated IDs.
 #'
-#' @param session (\code{environment}) shiny session
+#' @param session (`environment`) shiny session
 #'
 #' @inheritParams get_rcode_header
 #'
@@ -37,10 +37,10 @@
 #'
 #' @export
 #'
-#' @return Return the R Code needed to reproduce a teal module. The \link{get_rcode_header} part allows
+#' @return Return the R Code needed to reproduce a teal module. The [get_rcode_header()] part allows
 #'    to install the module. Additionally if the user filtered data by
 #'    teal inherited functions, the code to filter the data is included. If the teal module
-#'    is using \code{\link[teal.transform]{data_extract_srv}}\code{s} the extraction and merging
+#'    is using [teal.transform::data_extract_srv()] the extraction and merging
 #'    code will be returned, too.
 #'    If code chunks were used, these will also be used to derive module R Code.
 #'
@@ -56,7 +56,7 @@
 #'   )
 #' )
 #' }
-#' @references \link{show_rcode_modal}, \link{get_rcode_header}
+#' @references [show_rcode_modal()], [get_rcode_header()]
 get_rcode <- function(datasets = NULL,
                       datanames = `if`(is.null(datasets), datasets, datasets$datanames()),
                       merge_expression = "",
@@ -214,12 +214,12 @@ get_rcode <- function(datasets = NULL,
 #'
 #' @inheritParams get_rcode
 #' @inheritParams shiny::moduleServer
-#' @param merge_expression optional, (\code{reactive}) code to get merged analysis dataset
-#' @param modal_title optional, (\code{character}) title of the modal
-#' @param code_header optional, (\code{character}) header inside R
-#' @param disable_buttons optional, (\code{reactive})
+#' @param merge_expression optional, (`reactive`) code to get merged analysis dataset
+#' @param modal_title optional, (`character`) title of the modal
+#' @param code_header optional, (`character`) header inside R
+#' @param disable_buttons optional, (`reactive`)
 #' a shiny reactive value. Should be a single boolean value, indicating whether to disable
-#' or enable the show R code and Debug info buttons. Default: \code{reactiveVal(FALSE)}.
+#' or enable the show R code and Debug info buttons. Default: `reactiveVal(FALSE)`.
 #'
 #' @export
 #'
@@ -271,9 +271,9 @@ get_rcode_srv <- function(id,
 #' Ui part of get R code module
 #'
 #' @description `r lifecycle::badge("stable")`
-#' @param id (\code{character}) id of shiny module
+#' @param id (`character`) id of shiny module
 #'
-#' @return (\code{shiny.tag})
+#' @return (`shiny.tag`)
 #'
 #' @export
 get_rcode_ui <- function(id) {

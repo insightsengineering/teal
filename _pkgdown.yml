@@ -40,7 +40,7 @@ reference:
     contents:
       - log_app_usage
       - root_modules
-    - title: "Reproducible Modules"
+  - title: "Reproducible Modules"
     desc: >
       Functions to create a code chunk stack
     contents:
@@ -48,7 +48,6 @@ reference:
   - title: "Outputting R code"
     desc: "Functions to return R Code"
     contents:
-      - fold_lines
       - get_eval_details_srv
       - get_eval_details_ui
       - show_eval_details_modal
@@ -75,7 +74,6 @@ reference:
     desc: "Functions providing special user-interface elements"
     contents:
       - get_dt_rows
-      - get_number_in_box
       - panel_group
       - panel_item
       - plot_height_input
@@ -83,11 +81,10 @@ reference:
       - plot_with_height
       - plot_with_settings_srv
       - plot_with_settings_ui
-      - srv_dich_trich_widget
-      - teal.widgets::standard_layout
+      - standard_layout
       - table_with_settings_srv
       - table_with_settings_ui
-      - teal.widgets::white_small_well
+      - white_small_well
   - title: "Validation"
     desc: "Functions to validate variables"
     contents:

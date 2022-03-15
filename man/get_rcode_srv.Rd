@@ -19,7 +19,7 @@ get_rcode_srv(
 UI function.}
 
 \item{datasets}{(\code{list}) list of \code{FilteredData} available inside the
-server function of any \link[teal]{teal} module.}
+server function of any \link{teal} module.}
 
 \item{datanames}{(\code{character})\cr
 names of datasets which code should be returned for. Due to fact that

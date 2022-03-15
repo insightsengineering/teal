@@ -17,7 +17,7 @@ get_rcode(
 }
 \arguments{
 \item{datasets}{(\code{list}) list of \code{FilteredData} available inside the
-server function of any \link[teal]{teal} module.}
+server function of any \link{teal} module.}
 
 \item{datanames}{(\code{character})\cr
 names of datasets which code should be returned for. Due to fact that
@@ -29,8 +29,8 @@ code to get merged analysis dataset}
 
 \item{chunks}{(\code{chunks}) \cr
 object of class \code{chunks} that stores code chunks. These code
-chunks are used in \code{\link[teal]{teal}} to enable reproducibility. Normally these chunks
-are stored within the \code{\link[shiny]{shiny-package}} session. The default value
+chunks are used in \link{teal} to enable reproducibility. Normally these chunks
+are stored within the \link[shiny:shiny-package]{shiny::shiny-package} session. The default value
 can normally be used.}
 
 \item{selected_chunk_ids}{(\code{character} vector)\cr
@@ -47,16 +47,16 @@ feature if all chunks were set with designated IDs.}
 information not reflected in the title}
 }
 \value{
-Return the R Code needed to reproduce a teal module. The \link{get_rcode_header} part allows
+Return the R Code needed to reproduce a teal module. The \code{\link[=get_rcode_header]{get_rcode_header()}} part allows
 to install the module. Additionally if the user filtered data by
 teal inherited functions, the code to filter the data is included. If the teal module
-is using \code{\link[teal.transform]{data_extract_srv}}\code{s} the extraction and merging
+is using \code{\link[teal.transform:data_extract_srv]{teal.transform::data_extract_srv()}} the extraction and merging
 code will be returned, too.
 If code chunks were used, these will also be used to derive module R Code.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-Return the R-code used to create a \link[teal]{teal} module analysis. This function
+Return the R-code used to create a teal::teal] module analysis. This function
 will return all analysis code as a character string. In case of a good setup it will
 not only return the code used create the module analysis, but also the code used by
 the app author to create the app. The main feature of this function is encapsulating
@@ -81,5 +81,5 @@ show_rcode_modal(
 }
 }
 \references{
-\link{show_rcode_modal}, \link{get_rcode_header}
+\code{\link[=show_rcode_modal]{show_rcode_modal()}}, \code{\link[=get_rcode_header]{get_rcode_header()}}
 }
