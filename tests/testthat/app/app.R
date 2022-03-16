@@ -4,7 +4,7 @@
 #------------------ Module Code --------------------------------------------------------
 #---------------------------------------------------------------------------------------
 source("../helper-functions.R")
-eval(shinytest_load_pckg("teal.devel"))
+eval(shinytest_load_pckg("teal"))
 
 # Made Up Plot module
 tm_plot_xy <- function(label = "Regression Analysis",

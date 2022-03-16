@@ -4,7 +4,7 @@
 #------------------ Module Code --------------------------------------------------------
 #---------------------------------------------------------------------------------------
 source("../helper-functions.R")
-eval(shinytest_load_pckg("teal.devel"))
+eval(shinytest_load_pckg("teal"))
 
 # Made Up linear model module
 tm_made_up_lm <- function(label = "Regression Analysis",
