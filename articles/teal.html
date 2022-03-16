@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9017</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.1.9018</span>
       </span>
     </div>
 
@@ -75,15 +75,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -109,7 +100,7 @@ Other releases
                         <h4 data-toc-skip class="author">Adrian
 Waddell</h4>
             
-            <h4 data-toc-skip class="date">2019-07-31</h4>
+            <h4 data-toc-skip class="date">2022-03-14</h4>
       
       
       <div class="hidden name"><code>teal.Rmd</code></div>
@@ -122,11 +113,26 @@ Waddell</h4>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p><em>teal</em> is a shiny based interactive exploration framework for
-analyzing clinical trials data and more general relational data.
-<code>teal</code> currently provides a dynamic filtering facility and
-different data viewers. <code>teal</code> shiny applications are built
-using standard <a href="https://shiny.rstudio.com/articles/modules.html" title="Modularizing Shiny app code" class="external-link">shiny modules</a>.</p>
+<p><em>teal</em> is a <code>shiny</code> based interactive exploration
+framework for analyzing clinical trials data and more general relational
+data. <code>teal</code> currently provides a dynamic filtering facility
+and different data viewers. <code>teal</code> shiny applications are
+built using standard <a href="https://shiny.rstudio.com/articles/modules.html" title="Modularizing Shiny app code" class="external-link">shiny modules</a>.</p>
+<p>The framework consists of a number of packages loaded by a single
+<code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(teal)</a></code> call. Each package has a unique
+responsibility: * <code>teal</code>, for creating the server and the
+<code>UI</code> functions that can be used with <code>shiny</code>
+directly. * <a href="https://insightsengineering.github.io/teal.widgets/"><code>teal.widgets</code></a>,
+defining the customized widgets used in <code>teal</code> applications.
+* <a href="https://insightsengineering.github.io/teal.code/"><code>teal.code</code></a>,
+containing tools to ensure all the analysis done in <code>teal</code>
+can be reproduced using raw code in <code>R</code>. * <a href="https://insightsengineering.github.io/teal.data/"><code>teal.data</code></a>,
+making it easier to pass any data into a <code>teal</code> application.
+* <a href="https://insightsengineering.github.io/teal.slice/"><code>teal.slice</code></a>,
+supporting custom filtering, selecting and joining multiple data tables
+together. * <a href="https://insightsengineering.github.io/teal.transform/"><code>teal.transform</code></a>,
+delimiting the way <code>teal</code> users pass arguments to custom
+<code>teal</code> modules.</p>
 </div>
 <div class="section level2">
 <h2 id="initializing-a-teal-application">Initializing A Teal application<a class="anchor" aria-label="anchor" href="#initializing-a-teal-application"></a>
