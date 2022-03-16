@@ -31,8 +31,11 @@ Imports:
     logger (>= 0.2.0),
     magrittr,
     methods,
+    rlang,
     shinyjs,
     stats,
+    styler,
+    teal.code,
     teal.data,
     teal.logger,
     teal.slice,
@@ -47,7 +50,7 @@ Suggests:
     rmarkdown,
     scda (>= 0.1.2),
     scda.2021 (>= 0.1.2),
-    teal.code,
+    shinytest,
     testthat (>= 2.0),
     withr
 VignetteBuilder:
@@ -60,6 +63,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Collate:
     'dummy_functions.R'
+    'get_rcode.R'
+    'get_rcode_utils.R'
     'include_css_js.R'
     'modules.R'
     'init.R'
@@ -70,11 +75,14 @@ Collate:
     'module_teal.R'
     'module_teal_with_splash.R'
     'modules_debugging.R'
+    'show_rcode_modal.R'
     'teal.R'
+    'teal.code-exports.R'
     'teal.data-exports.R'
     'teal.logger-exports.R'
     'teal.slice-exports.R'
     'teal.transform-exports.R'
     'teal.widgets-exports.R'
     'utils.R'
+    'validations.R'
     'zzz.R'

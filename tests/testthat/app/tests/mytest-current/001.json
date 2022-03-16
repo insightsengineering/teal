@@ -1,0 +1,63 @@
+{
+  "input": {
+    "teal_add_ADTTE_filters-variables": "",
+    "teal_add_ADSL_filters-variables": "",
+    "teal_modules_root": "Qplot",
+    "teal_modules_root_Qplot-height": 600,
+    "teal_modules_root_Qplot-regressor-dataset": "ADTTE",
+    "teal_modules_root_Qplot-regressor-dataset_ADTTE_singleextract-columns": "AVALU",
+    "teal_modules_root_Qplot-regressor-dataset_ADTTE_singleextract-filter": [
+      "OS",
+      "PFS"
+    ],
+    "teal_modules_root_Qplot-regressor-dataset_ADSL_singleextract-columns": "AGE",
+    "teal_modules_root_Qplot-response-dataset": "ADTTE",
+    "teal_modules_root_Qplot-response-dataset_ADTTE_singleextract-columns": "BMRKR1",
+    "teal_modules_root_Qplot-response-dataset_ADTTE_singleextract-filter": "OS"
+  },
+  "output": {
+    "teal_add_ADTTE_filters-warning": {
+      "html": "<div style=\"display: none;\"><\/div>",
+      "deps": [
+
+      ]
+    },
+    "teal_add_ADSL_filters-warning": {
+      "html": "<div style=\"display: none;\"><\/div>",
+      "deps": [
+
+      ]
+    },
+    "teal_filters_ADTTE-uifilters": {
+      "html": "<div><\/div>",
+      "deps": [
+
+      ]
+    },
+    "teal_filters_ADSL-uifilters": {
+      "html": "<div><\/div>",
+      "deps": [
+
+      ]
+    },
+    "teal_modules_root_Qplot-outplot-out": {
+      "html": "<div id=\"teal_modules_root_Qplot-plot\" class=\"shiny-plot-output\" style=\"width: 100% ; height: 600px\"><\/div>",
+      "deps": [
+
+      ]
+    },
+    "teal_modules_root_Qplot-plot": {
+      "message": "Merging fails: Please use the same number of selections for the filtered column.",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    },
+    "teal_modules_root_Qplot-test_outtext": "ADTTE.AVALU",
+    "teal_modules_root_Qplot-test_outtext_response": "ADTTE.BMRKR1"
+  },
+  "export": {
+
+  }
+}
