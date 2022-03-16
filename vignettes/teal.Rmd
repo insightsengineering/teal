@@ -1,7 +1,7 @@
 ---
 title: "Getting Started with Teal"
 author: "Adrian Waddell"
-date: "2019-07-31"
+date: "2022-03-14"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting Started with Teal}
@@ -13,10 +13,19 @@ vignette: >
 
 ## Introduction
 
-*teal* is a shiny based interactive exploration framework for analyzing clinical
+*teal* is a `shiny` based interactive exploration framework for analyzing clinical
 trials data and more general relational data. `teal` currently provides a dynamic filtering facility and
 different data viewers. `teal` shiny applications are built using standard
 [shiny modules][shiny_modules].
+
+The framework consists of a number of packages loaded by a single `library(teal)` call. Each package has a unique
+responsibility:
+* `teal`, for creating the server and the `UI` functions that can be used with `shiny` directly.
+* [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/), defining the customized widgets used in `teal` applications.
+* [`teal.code`](https://insightsengineering.github.io/teal.code/), containing tools to ensure all the analysis done in `teal` can be reproduced using raw code in `R`.
+* [`teal.data`](https://insightsengineering.github.io/teal.data/), making it easier to pass any data into a `teal` application.
+* [`teal.slice`](https://insightsengineering.github.io/teal.slice/), supporting custom filtering, selecting and joining multiple data tables together.
+* [`teal.transform`](https://insightsengineering.github.io/teal.transform/), delimiting the way `teal` users pass arguments to custom `teal` modules.
 
 ## Initializing A Teal application
 
@@ -217,4 +226,3 @@ tags$div(tags$h1("My New Analysis Web-app"), tags$p(class = "pull-left", "Logo")
 
 [shiny_modules]: https://shiny.rstudio.com/articles/modules.html "Modularizing Shiny app code"
 [R6]: https://r6.r-lib.org/articles/Introduction.html "Introduction to R6 classes"
-[teal_git]: https://github.com/insightsengineering/teal "Teal GitHub Repository"
