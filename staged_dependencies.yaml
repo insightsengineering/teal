@@ -24,6 +24,9 @@ upstream_repos:
   insightsengineering/scda.2021:
     repo: insightsengineering/scda.2021
     host: https://github.com
+  insightsengineering/formatable:
+    repo: insightsengineering/formatable
+    host: https://github.com
 downstream_repos:
   insightsengineering/teal.devel:
     repo: insightsengineering/teal.devel

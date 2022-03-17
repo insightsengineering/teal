@@ -10,12 +10,10 @@
 ### Breaking changes
 * Due to deprecation of `root_modules` any `label` argument to `modules` must be explicitly named. For example `modules("lab", mod1, mod2)` should be replaced with `modules(label = "lab", mod1, mod2)`.
 * Minor changes to the interface of `TealDataset`, for example some active fields should be replaced by explicit "get" calls.
-* removed `teal.data::var_relabel` from reexports because it has been removed from `teal.data`.
 
 ### Miscellaneous
 * New argument `ordered` in the `select_spec()` to flag whether order of the selection should be tracked.
 * Minor changes to internals of `teal`: main module panel now has fixed shiny name `root` and the active tab is named `active_tab` not `Active_tab`.
-* Replaced the deprecated `rtables::var_labels` calls with a new function `teal::variable_labels`.
 * Removed `rtables` dependency from the package.
 * Added `is_any_filtered` method to all `FilterState` classes to detect if selected values actually filters out any data. This is used to decide if an explicit filter statement is added to the call.
 * Removed redundant calling of the `JoinKeys$mutate` method inside of `for-loops`.
