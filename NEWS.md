@@ -10,6 +10,7 @@
 ### Breaking changes
 * Due to deprecation of `root_modules` any `label` argument to `modules` must be explicitly named. For example `modules("lab", mod1, mod2)` should be replaced with `modules(label = "lab", mod1, mod2)`.
 * Minor changes to the interface of `TealDataset`, for example some active fields should be replaced by explicit "get" calls.
+* removed `teal.data::var_relabel` from reexports because it has been removed from `teal.data`.
 
 ### Miscellaneous
 * New argument `ordered` in the `select_spec()` to flag whether order of the selection should be tracked.
