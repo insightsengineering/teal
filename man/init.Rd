@@ -52,7 +52,7 @@ list(Species = c(c(5.0, 7.0), NA, Inf))
 }
 
 To initialize with specific variable filter with all values on start, one
-can use\preformatted{list(Species = teal.slice::default_filter())
+can use\preformatted{list(Species = list())
 }
 
 \code{filter} should be set with respect to the class of the column:
@@ -143,7 +143,7 @@ app <- init(
     )
   ),
   title = "App title",
-  filter = list(ADSL = list(AGE = teal.slice::default_filter())),
+  filter = list(ADSL = list(AGE = list())),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )

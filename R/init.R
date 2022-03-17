@@ -56,7 +56,7 @@
 #'   To initialize with specific variable filter with all values on start, one
 #'   can use
 #'   ```
-#'   list(Species = teal.slice::default_filter())
+#'   list(Species = list())
 #'   ```
 #'   `filter` should be set with respect to the class of the column:
 #'   * `numeric`: `selected` should be a two elements vector defining the range
@@ -137,7 +137,7 @@
 #'     )
 #'   ),
 #'   title = "App title",
-#'   filter = list(ADSL = list(AGE = teal.slice::default_filter())),
+#'   filter = list(ADSL = list(AGE = list())),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )
