@@ -238,10 +238,6 @@ teal.data::to_relational_data
 #' @export
 teal.data::teal_data_file
 
-#' @importFrom teal.data var_relabel
-#' @export
-teal.data::var_relabel
-
 #' @importFrom teal.data variable_labels
 #' @export
 teal.data::variable_labels

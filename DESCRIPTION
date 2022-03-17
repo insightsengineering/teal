@@ -27,6 +27,7 @@ Depends:
     shiny
 Imports:
     checkmate,
+    formatable,
     lifecycle,
     logger (>= 0.2.0),
     magrittr,
