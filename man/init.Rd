@@ -52,7 +52,7 @@ list(Species = c(c(5.0, 7.0), NA, Inf))
 }
 
 To initialize with specific variable filter with all values on start, one
-can use\preformatted{list(Species = default_filter())
+can use\preformatted{list(Species = teal.slice::default_filter())
 }
 
 \code{filter} should be set with respect to the class of the column:
@@ -118,7 +118,7 @@ ADSL <- synthetic_cdisc_data("latest")$adsl
 
 app <- init(
   data = cdisc_data(
-    teal.data::cdisc_dataset("ADSL", ADSL),
+    cdisc_dataset("ADSL", ADSL),
     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   ),
   modules = modules(
@@ -143,7 +143,7 @@ app <- init(
     )
   ),
   title = "App title",
-  filter = list(ADSL = list(AGE = default_filter())),
+  filter = list(ADSL = list(AGE = teal.slice::default_filter())),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )

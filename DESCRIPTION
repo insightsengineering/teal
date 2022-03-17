@@ -24,7 +24,9 @@ Description: teal is a shiny based interactive exploration framework for
 License: Apache License 2.0 | file LICENSE
 Depends:
     R (>= 4.0),
-    shiny
+    shiny,
+    teal.data,
+    teal.transform
 Imports:
     checkmate,
     lifecycle,
@@ -36,10 +38,8 @@ Imports:
     stats,
     styler,
     teal.code,
-    teal.data,
     teal.logger,
     teal.slice,
-    teal.transform,
     teal.widgets,
     utils
 Suggests:
@@ -77,12 +77,6 @@ Collate:
     'modules_debugging.R'
     'show_rcode_modal.R'
     'teal.R'
-    'teal.code-exports.R'
-    'teal.data-exports.R'
-    'teal.logger-exports.R'
-    'teal.slice-exports.R'
-    'teal.transform-exports.R'
-    'teal.widgets-exports.R'
     'utils.R'
     'validations.R'
     'zzz.R'

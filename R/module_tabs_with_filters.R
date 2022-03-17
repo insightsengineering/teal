@@ -149,7 +149,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, filter) {
     )
 
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
-    set_filter_state(datasets = datasets, filter = filter)
+    teal.slice::set_filter_state(datasets = datasets, filter = filter)
     showNotification("Data loaded - App fully started up")
 
     logger::log_trace(

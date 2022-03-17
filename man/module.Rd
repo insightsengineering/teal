@@ -54,9 +54,7 @@ This function embeds a \code{shiny} application inside a \code{teal} application
 library(shiny)
 
 app <- init(
-  data = teal_data(
-    teal.data::dataset("iris", iris)
-  ),
+  data = teal_data(dataset("iris", iris)),
   modules = list(
     module(
       label = "Module",
