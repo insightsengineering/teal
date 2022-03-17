@@ -293,7 +293,7 @@ open_fun <- teal.data::callable_function("rice::rice_session_open")
 close_fun <- teal.data::callable_function("rice::rice_session_close")
 close_fun$set_args(list(message = FALSE))
 
-rice_conn <- teal:::TealDataConnection$new(
+rice_conn <- teal.data:::TealDataConnection$new(
   open_fun = open_fun,
   close_fun = close_fun
 )
