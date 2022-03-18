@@ -14,11 +14,11 @@
 #' @examples
 #' list() # test printing
 default_filter <- function() {
-    lifecycle::deprecate_soft(
-      when = "0.10.2",
-      what = "teal::default_filter()",
-      with = "list()"
-    )
+  lifecycle::deprecate_soft(
+    when = "0.10.2",
+    what = "teal::default_filter()",
+    with = "list()"
+  )
   structure(list(), class = "default_filter")
 }
 
