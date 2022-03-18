@@ -43,7 +43,7 @@ Default: `"[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:[{t
 Note that this layout is formatted by the package `glue::glue`.
 
 ### `teal.log_level` (`character`)
-This is the logging level threshold used in a `teal` application. A `teal` application will not emit logs below this level. Read the documentation of `teal::register_logger` for more information. Possible values: `"TRACE"`, `"INFO"`, `"WARNING"`, `"ERROR"`. See the documentation of `logger::TRACE` for all possible values of logging threshold and more information on what it does.
+This is the logging level threshold used in a `teal` application. A `teal` application will not emit logs below this level. Read the documentation of `teal.logger::register_logger` for more information. Possible values: `"TRACE"`, `"INFO"`, `"WARNING"`, `"ERROR"`. See the documentation of `logger::TRACE` for all possible values of logging threshold and more information on what it does.
 
 Default: `"INFO"`.
 

@@ -85,7 +85,7 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
 #' @keywords internal
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   stopifnot(is(datasets, "FilteredData"))
-  args <- isolate(resolve_delayed(modules$ui_args, datasets))
+  args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
   tags$div(
     id = id,
     class = "teal_module",
@@ -177,7 +177,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules) {
     )
   )
 
-  modules$server_args <- resolve_delayed(modules$server_args, datasets)
+  modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
   is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
   if (is_module_server) {
     do.call(modules$server, c(list(id = id, datasets = datasets), modules$server_args))

@@ -25,9 +25,7 @@
 #' library(shiny)
 #'
 #' app <- init(
-#'   data = teal_data(
-#'     teal.data::dataset("iris", iris)
-#'   ),
+#'   data = teal_data(dataset("iris", iris)),
 #'   modules = modules(
 #'     label = "Modules",
 #'     modules(
@@ -115,9 +113,7 @@ modules <- function(..., label = "root") {
 #' library(shiny)
 #'
 #' app <- init(
-#'   data = teal_data(
-#'     teal.data::dataset("iris", iris)
-#'   ),
+#'   data = teal_data(dataset("iris", iris)),
 #'   modules = modules(
 #'     module(
 #'       label = "Module",
@@ -202,9 +198,7 @@ root_modules <- function(...) {
 #' library(shiny)
 #'
 #' app <- init(
-#'   data = teal_data(
-#'     teal.data::dataset("iris", iris)
-#'   ),
+#'   data = teal_data(dataset("iris", iris)),
 #'   modules = list(
 #'     module(
 #'       label = "Module",

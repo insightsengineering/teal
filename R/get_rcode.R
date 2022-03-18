@@ -143,7 +143,7 @@ get_rcode <- function(datasets = NULL,
       paste(collapse = "\n") %>%
       paste0("\n\n")
 
-    str_filter <- get_filter_expr(datasets, datanames)
+    str_filter <- teal.slice::get_filter_expr(datasets, datanames)
     if (str_filter != "") {
       str_filter <- paste0(str_filter, "\n\n")
     }
@@ -251,7 +251,7 @@ get_rcode_srv <- function(id,
       )
     })
 
-    get_eval_details_srv(
+    teal.code::get_eval_details_srv(
       id = "show_eval_details",
       chunks = chunks
     )
@@ -280,6 +280,6 @@ get_rcode_ui <- function(id) {
   ns <- NS(id)
   tagList(
     tags$div(actionButton(ns("show_rcode"), "Show R code", width = "100%")),
-    tags$div(get_eval_details_ui(ns("show_eval_details")))
+    tags$div(teal.code::get_eval_details_ui(ns("show_eval_details")))
   )
 }

@@ -32,10 +32,10 @@ ui_made_up_lm <- function(id, ...) {
 
   # layout
   teal.widgets::standard_layout(
-    output = white_small_well(
+    output = teal.widgets::white_small_well(
       tags$div(
         # This shall be wrapped in a teal::plot
-        plot_with_settings_ui(id = ns("outplot")),
+        teal.widgets::plot_with_settings_ui(id = ns("outplot")),
         textOutput(ns("outtext")),
         textOutput(ns("outtext_response")),
         verbatimTextOutput(ns("formula")),
@@ -43,12 +43,12 @@ ui_made_up_lm <- function(id, ...) {
       )
     ),
     encoding = div(
-      data_extract_ui(
+      teal.transform::data_extract_ui(
         id = ns("regressor"),
         label = "Regressor Variable",
         data_extract_spec = arguments$regressor
       ),
-      data_extract_ui(
+      teal.transform::data_extract_ui(
         id = ns("response"),
         label = "Response Variable",
         data_extract_spec = arguments$response
@@ -60,29 +60,29 @@ ui_made_up_lm <- function(id, ...) {
 
 srv_made_up_lm <- function(id, datasets, response, regressor, dataname) {
   moduleServer(id, function(input, output, session) {
-    init_chunks()
+    teal.code::init_chunks()
     # data_extract_srv, "response",
     # dataname AND filtering (yes/no) AND Names(Filtering-selected) AND Names(Columns-Selected)
 
-    merged_data <- data_merge_module(
+    merged_data <- teal.transform::data_merge_module(
       datasets = datasets,
       data_extract = list(regressor = regressor, response = response)
     )
 
     model <- reactive({
-      chunks_reset()
-      chunks_push_data_merge(merged_data())
+      teal.code::chunks_reset()
+      teal.code::chunks_push_data_merge(merged_data())
 
       validate_has_data(chunks_get_var("ANL"), min_nrow = 3)
 
-      chunks_push(expression = rlang::expr(5 + 5))
-      chunks_push_comment(comment = "")
-      chunks_push_comment(
+      teal.code::chunks_push(expression = rlang::expr(5 + 5))
+      teal.code::chunks_push_comment(comment = "")
+      teal.code::chunks_push_comment(
         comment = "I am testing an addition
         what can be done
         "
       ) # Just first line is shown in output.
-      chunks_push(expression = quote(3 + 3))
+      teal.code::chunks_push(expression = quote(3 + 3))
       lm(
         formula = stats::as.formula(
           paste(
@@ -101,7 +101,7 @@ srv_made_up_lm <- function(id, datasets, response, regressor, dataname) {
     plot_r <- reactive({
       plot(model(), which = 1)
     })
-    plot_with_settings_srv(id = "outplot", plot_r = plot_r)
+    teal.widgets::plot_with_settings_srv(id = "outplot", plot_r = plot_r)
 
     output$outtext <- renderText({
       merged_data()$columns_source$regressor
@@ -191,9 +191,9 @@ adsl_extracted <- data_extract_spec(
 )
 
 x <- init(
-  data = teal::cdisc_data(
-    teal::cdisc_dataset("ADSL", ADSL),
-    teal::cdisc_dataset("ADTTE", ADTTE),
+  data = cdisc_data(
+    cdisc_dataset("ADSL", ADSL),
+    cdisc_dataset("ADTTE", ADTTE),
     code = "",
     check = FALSE
   ),
@@ -210,4 +210,4 @@ x <- init(
   )
 )
 
-shinyApp(x$ui, x$server) # nolint end
+runApp(x) # nolint end

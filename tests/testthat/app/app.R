@@ -32,25 +32,25 @@ ui_plot_xy <- function(id, ...) {
 
   # layout
   teal.widgets::standard_layout(
-    output = white_small_well(
+    output = teal.widgets::white_small_well(
       tags$div(
-        plot_with_settings_ui(id = ns("outplot")),
+        teal.widgets::plot_with_settings_ui(id = ns("outplot")),
         textOutput(ns("test_outtext")),
         textOutput(ns("test_outtext_response"))
       )
     ),
     encoding = div(
-      data_extract_ui(
+      teal.transform::data_extract_ui(
         id = ns("regressor"),
         label = "Regressor Variable",
         data_extract_spec = arguments$regressor
       ),
-      data_extract_ui(
+      teal.transform::data_extract_ui(
         id = ns("response"),
         label = "Response Variable",
         data_extract_spec = arguments$response
       ),
-      data_extract_ui(
+      teal.transform::data_extract_ui(
         id = ns("facetting"),
         label = "Facetting Variable",
         data_extract_spec = arguments$facetting
@@ -67,7 +67,7 @@ srv_plot_xy <- function(id, response, regressor, facetting) {
   moduleServer(id, function(input, output, session) {
     # data_extract_srv, "response",
     # dataname AND filtering (yes/no) AND Names(Filtering-selected) AND Names(Columns-Selected)
-    merged_data <- data_merge_module(
+    merged_data <- teal.transform::data_merge_module(
       datasets = datasets,
       data_extract = list(regressor = regressor, response = response, facetting = facetting)
     )
@@ -86,7 +86,7 @@ srv_plot_xy <- function(id, response, regressor, facetting) {
         ggplot2::geom_point()
     })
 
-    plot_with_settings_srv(id = "outplot", plot_r = plot_r)
+    teal.widgets::plot_with_settings_srv(id = "outplot", plot_r = plot_r)
 
     output$test_outtext <- renderText({
       merged_data()$columns_source$regressor
@@ -160,7 +160,7 @@ adsl_extracted <- data_extract_spec(
 )
 
 x <- init(
-  data = teal::cdisc_data(teal::cdisc_dataset("ADSL", ADSL), teal::cdisc_dataset("ADTTE", ADTTE), code = "", check = FALSE),
+  data = cdisc_data(cdisc_dataset("ADSL", ADSL), cdisc_dataset("ADTTE", ADTTE), code = "", check = FALSE),
   modules = modules(
     tm_plot_xy(
       label = "Qplot",

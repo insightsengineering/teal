@@ -23,9 +23,7 @@ which has multiple children).
 library(shiny)
 
 app <- init(
-  data = teal_data(
-    teal.data::dataset("iris", iris)
-  ),
+  data = teal_data(dataset("iris", iris)),
   modules = modules(
     module(
       label = "Module",

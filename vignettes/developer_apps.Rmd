@@ -151,7 +151,7 @@ app <- init(
     teal:::reset_filters_module("Reset", active_datanames = c("ADSL", "ADLB"))
   ),
   filter = list(
-    ADSL = list(SEX = list("M", keep_na = TRUE), AGE = default_filter()),
+    ADSL = list(SEX = list("M", keep_na = TRUE), AGE = list()),
     ADLB = list(ASEQ = list(c(5.6, 20), keep_na = FALSE))
   ),
   header = "App with Debugging Modules",
@@ -178,7 +178,7 @@ app <- init(
     ADSL = list(
       SEX = list("M", keep_na = TRUE),
       COUNTRY = c("USA", NA),
-      AGE = default_filter()
+      AGE = list()
     )
   ),
   header = "Data is Lazily Filtered",
@@ -203,7 +203,7 @@ app <- init(
     ADSL = list(
       SEX = list("M", keep_na = TRUE),
       COUNTRY = c("USA", NA),
-      AGE = default_filter()
+      AGE = list()
     )
   ),
   header = "App with Delayed Data",
@@ -237,7 +237,7 @@ app <- init(
     ADSL = list(
       SEX = list("M", keep_na = TRUE),
       COUNTRY = c("USA", NA),
-      AGE = default_filter()
+      AGE = list()
     )
   ),
   header = "Modules in Nested Tabs",
@@ -281,7 +281,7 @@ app <- init(
       SEX2 = c("M", NA),
       SEX3 = list("M"),
       SEX4 = list("M", keep_na = TRUE),
-      SEX5 = default_filter()
+      SEX5 = list()
     )
   ),
   header = "Different Ways to Specify Initial Filter States",
@@ -318,8 +318,8 @@ This app checks that several filters can be applied at once. The logic is non-tr
 ```{r predefinedFiltersApp, eval=FALSE}
 # dummy filter to show how several filters can be applied at once, not sensible
 safety_filter <- list(
-  ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter()),
-  ADLB = list(ASEQ = default_filter())
+  ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = list()),
+  ADLB = list(ASEQ = list())
 )
 app <- init(
   data = cdisc_data(
@@ -335,10 +335,10 @@ app <- init(
     ADSL = list(
       SEX = list("M", keep_na = TRUE),
       COUNTRY = c("USA", NA),
-      AGE = default_filter()
+      AGE = list()
     ),
     ADAE = list(
-      AEHLT = default_filter()
+      AEHLT = list()
     )
   ),
   header = "Start with Pre-defined Filters",

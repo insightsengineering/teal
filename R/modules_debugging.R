@@ -23,7 +23,7 @@
 #'
 #' app <- init(
 #'   data = cdisc_data(
-#'     teal.data::cdisc_dataset(
+#'     cdisc_dataset(
 #'       dataname = "ADSL",
 #'       x = ADSL
 #'     ),
@@ -46,7 +46,7 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
     server = function(input, output, session, datasets) {
       output$filter_calls <- renderText({
         active_datanames <- datasets$handle_active_datanames(active_datanames)
-        get_filter_expr(datasets, datanames = active_datanames)
+        teal.slice::get_filter_expr(datasets, datanames = active_datanames)
       })
     },
     ui = function(id, ...) {
