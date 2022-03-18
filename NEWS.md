@@ -8,7 +8,7 @@
 * Add counts to filtering categorical variables bar charts in the filtering panel in cases where they were missing.
 
 ### Breaking changes
-* `default_filte` has been deprecated - use `list()` instead for a default filter.
+* `default_filter` has been deprecated - use `list()` instead for a default filter.
 * Due to deprecation of `root_modules` any `label` argument to `modules` must be explicitly named. For example `modules("lab", mod1, mod2)` should be replaced with `modules(label = "lab", mod1, mod2)`.
 * Minor changes to the interface of `TealDataset`, for example some active fields should be replaced by explicit "get" calls.
 
