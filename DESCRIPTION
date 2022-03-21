@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.10.1.9018
+Version: 0.10.1.9021
 Date: 2022-01-27
 Authors@R: c(
     person("NEST", , , "basel.nestcicd@roche.com", role = c("aut", "cre")),
@@ -24,7 +24,9 @@ Description: teal is a shiny based interactive exploration framework for
 License: Apache License 2.0 | file LICENSE
 Depends:
     R (>= 4.0),
-    shiny
+    shiny,
+    teal.data,
+    teal.transform
 Imports:
     checkmate,
     formatable,
@@ -32,21 +34,24 @@ Imports:
     logger (>= 0.2.0),
     magrittr,
     methods,
+    rlang,
     shinyjs,
     stats,
-    teal.data,
+    styler,
+    teal.code,
     teal.logger,
     teal.slice,
-    teal.transform,
     teal.widgets,
     utils
 Suggests:
     covr,
+    dplyr,
     knitr,
     MultiAssayExperiment,
     rmarkdown,
     scda (>= 0.1.2),
     scda.2021 (>= 0.1.2),
+    shinytest,
     testthat (>= 2.0),
     withr
 VignetteBuilder:
@@ -58,7 +63,10 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Collate:
+    'default_filter.R'
     'dummy_functions.R'
+    'get_rcode.R'
+    'get_rcode_utils.R'
     'include_css_js.R'
     'modules.R'
     'init.R'
@@ -69,11 +77,8 @@ Collate:
     'module_teal.R'
     'module_teal_with_splash.R'
     'modules_debugging.R'
+    'show_rcode_modal.R'
     'teal.R'
-    'teal.data-exports.R'
-    'teal.logger-exports.R'
-    'teal.slice-exports.R'
-    'teal.transform-exports.R'
-    'teal.widgets-exports.R'
     'utils.R'
+    'validations.R'
     'zzz.R'

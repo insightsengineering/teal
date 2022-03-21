@@ -8,7 +8,7 @@ mods <- teal:::get_dummy_modules()
 
 testthat::test_that("init data accepts TealData objects", {
   teal_data_object <- teal.data::teal_data(dataset_1)
-  cdisc_data_object <- cdisc_data(adsl_dataset)
+  cdisc_data_object <- teal.data::cdisc_data(adsl_dataset)
   testthat::expect_error(init(data = teal_data_object, modules = mods), NA)
   testthat::expect_error(init(data = cdisc_data_object, modules = mods), NA)
 })

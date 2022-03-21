@@ -34,20 +34,19 @@ tm_made_up_merge_pr <- function(label = "PR merge",
                                 post_output = NULL) {
   args <- as.list(environment())
 
-  args$data_extract_call <- styler::style_text(
-    strsplit(
-      # Line break after every brace
+  args$data_extract_call <- strsplit(
+    # Line break after every brace
+    gsub(
+      "\\((d|s|f)", "(\n\\1",
+      # Line break after each function input value definition
       gsub(
-        "\\((d|s|f)", "(\n\\1",
-        # Line break after each function input value definition
-        gsub(
-          "\\,\\s([^\\=]+\\s\\=\\s)", ",\n\\1",
-          paste(capture.output(match.call()$data_extract), collapse = " ")
-        )
-      ),
-      split = "\n"
-    )[[1]]
-  )
+        "\\,\\s([^\\=]+\\s\\=\\s)", ",\n\\1",
+        paste(capture.output(match.call()$data_extract), collapse = " ")
+      )
+    ),
+    split = "\n"
+  )[[1]]
+
 
   module(
     label = label,

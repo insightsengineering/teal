@@ -20,21 +20,6 @@ reference:
       - modules
       - srv_teal_with_splash
       - ui_teal_with_splash
-  - title: Teal Filtering and Selecting
-    desc: >-
-      Functions used to filter observations
-      and select variables from dataset.
-    contents:
-      - add_no_selected_choices
-      - all_choices
-      - choices_labeled
-      - choices_selected
-      - data_extract_spec
-      - filter_spec
-      - select_spec
-      - value_choices
-      - variable_choices
-      - no_selected_as_NULL
   - title: Functions moved to other packages
     desc: These functions have been moved from teal and will be deprecated.
     contents:

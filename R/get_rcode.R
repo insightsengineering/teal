@@ -1,0 +1,285 @@
+#' Returns R Code from a teal module
+#'
+#' @description `r lifecycle::badge("stable")`
+#' Return the R-code used to create a teal::teal] module analysis. This function
+#' will return all analysis code as a character string. In case of a good setup it will
+#' not only return the code used create the module analysis, but also the code used by
+#' the app author to create the app. The main feature of this function is encapsulating
+#' the R code to merge datasets by [teal.transform::merge_datasets()] and all the R code stored inside
+#' code [teal.code::chunks].
+#'
+#' @param datasets (`list`) list of `FilteredData` available inside the
+#'  server function of any [teal::teal] module.
+#' @param datanames (`character`)\cr
+#'  names of datasets which code should be returned for. Due to fact that
+#'  `teal` filter panel depending on `"ADSL"`, code for `ADSL`
+#'  is always returned even if not specified.
+#' @param merge_expression (`character`)\cr
+#'  code to get merged analysis dataset
+#' @param chunks (`chunks`) \cr
+#'  object of class `chunks` that stores code chunks. These code
+#'  chunks are used in [teal::teal] to enable reproducibility. Normally these chunks
+#'  are stored within the [shiny::shiny-package] session. The default value
+#'  can normally be used.
+#' @param selected_chunk_ids (`character` vector)\cr
+#'   vector of code chunks to be shown
+#'   in the code. If chunk id's are available this can be used to limit the
+#'   chunks that appear in the `"Show R-Code"` modal. Please only use this
+#'   feature if all chunks were set with designated IDs.
+#'
+#' @param session (`environment`) shiny session
+#'
+#' @inheritParams get_rcode_header
+#'
+#' @note
+#'  The `teal.load_nest_code` option is being used to customize the code that sets correct library paths
+#'  with all packages available. If empty (the default), a placeholder string is being used.
+#'
+#' @export
+#'
+#' @return Return the R Code needed to reproduce a teal module. The [get_rcode_header()] part allows
+#'    to install the module. Additionally if the user filtered data by
+#'    teal inherited functions, the code to filter the data is included. If the teal module
+#'    is using [teal.transform::data_extract_srv()] the extraction and merging
+#'    code will be returned, too.
+#'    If code chunks were used, these will also be used to derive module R Code.
+#'
+#' @examples
+#' \dontrun{
+#' show_rcode_modal(
+#'   title = "R Code for a Regression Plot",
+#'   rcode = get_rcode(
+#'     datasets = datasets,
+#'     merge_expression = "<to be provided>",
+#'     title = title,
+#'     description = description
+#'   )
+#' )
+#' }
+#' @references [show_rcode_modal()], [get_rcode_header()]
+get_rcode <- function(datasets = NULL,
+                      datanames = `if`(is.null(datasets), datasets, datasets$datanames()),
+                      merge_expression = "",
+                      chunks = teal.code::get_chunks_object(),
+                      selected_chunk_ids = character(0),
+                      session = getDefaultReactiveDomain(),
+                      title = NULL,
+                      description = NULL) {
+  checkmate::assert_class(datasets, "FilteredData", null.ok = TRUE)
+  checkmate::assert_string(merge_expression)
+  if (merge_expression != "") {
+    message(paste0(
+      "'merge_expression' argument of 'get_rcode()' will be deprecated.",
+      " Please use 'chunks_push_data_merge()'."
+    ))
+  }
+  if (!inherits(chunks, "chunks")) {
+    stop("No code chunks given")
+  }
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_string(description, null.ok = TRUE)
+
+  rlang::push_options(width = 120)
+
+  if (!is.null(datasets)) {
+    if (inherits(datasets, "CDISCFilteredData")) {
+      datanames <- intersect(
+        datasets$datanames(),
+        unique(c(datanames, unlist(lapply(datanames, datasets$get_parentname))))
+      )
+    }
+
+    str_header <- get_rcode_header(title = title, description = description) %>%
+      paste0(collapse = "\n") %>%
+      paste0("\n")
+
+    progress <- Progress$new()
+    progress$set(message = "Getting R Code", value = 0)
+    str_install <- get_rcode_str_install() %>%
+      paste0(collapse = "\n") %>%
+      paste0("\n")
+
+    str_libs <- get_rcode_libraries() %>%
+      paste0("\n")
+
+    str_code <- datasets$get_code(datanames)
+    if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
+      str_code <- paste0(c(
+        "#################################################################",
+        "# ___  ____ ____ ___  ____ ____ ____ ____ ____ ____ _ _  _ ____ #",
+        "# |__] |__/ |___ |__] |__/ |  | |    |___ [__  [__  | |\\ | | __ #",
+        "# |    |  \\ |___ |    |  \\ |__| |___ |___ ___] ___] | | \\| |__] #",
+        "#              _ ____    ____ _  _ ___  ___ _   _               #",
+        "#              | [__     |___ |\\/| |__]  |   \\_/                #",
+        "#              | ___]    |___ |  | |     |    |                 #",
+        "#################################################################\n"
+      ), collapse = "\n")
+    } else if (length(str_code) > 0) {
+      str_code <- paste0(str_code, "\n\n")
+    }
+    if (any(sapply(datanames, function(dataname) is.null(datasets$get_data_attr(dataname, "check"))))) {
+      check_note_string <- paste0(
+        c(
+          "## NOTE: Reproducibility of data import and preprocessing was not",
+          "## explicitly checked (argument \"check = FALSE\" is set).",
+          "## The app developer has the choice to check the reproducibility",
+          "## and might have omitted this step for some reason. Please reach",
+          "## out to the app developer for details.\n"
+        ),
+        collapse = "\n"
+      )
+      str_code <- paste0(str_code, "\n\n", check_note_string)
+    }
+
+    str_hash <- vapply(
+      datanames,
+      function(dataname) {
+        sprintf(
+          "# %s MD5 hash at the time of analysis: %s", dataname, datasets$get_filtered_dataset(dataname)$get_hash()
+        )
+      },
+      character(1)
+    ) %>%
+      paste(collapse = "\n") %>%
+      paste0("\n\n")
+
+    str_filter <- teal.slice::get_filter_expr(datasets, datanames)
+    if (str_filter != "") {
+      str_filter <- paste0(str_filter, "\n\n")
+    }
+  } else {
+    str_header <- get_rcode_header(title = title, description = description)
+    str_install <- character(0)
+    str_libs <- character(0)
+    str_code <- character(0)
+    str_hash <- character(0)
+    str_filter <- character(0)
+  }
+
+
+  str_merge <- merge_expression
+
+  str_chunks <- paste0(
+    chunks$get_rcode(chunk_ids = selected_chunk_ids),
+    collapse = "\n"
+  )
+
+  code_not_to_style <- paste(
+    c(
+      "\n",
+      str_header,
+      str_install,
+      str_libs
+    ),
+    collapse = "\n"
+  )
+
+
+  code_to_style <- paste(
+    c(
+      str_code,
+      str_hash,
+      str_filter,
+      str_merge,
+      str_chunks,
+      "\n"
+    ),
+    collapse = "\n"
+  )
+
+  # remove error with curly brace
+  code_to_style <- gsub("}\n\\s*else", "} else", code_to_style)
+
+  # return styler::style_text output - use progress in case shiny session is there
+  if (exists("session") && (!is.null(session$progressStack))) {
+    progress$set(message = "Getting R Code", value = 0.7)
+  }
+
+  code_to_style <- paste0(styler::style_text(code_to_style), collapse = "\n")
+
+  if (exists("progress")) {
+    progress$set(message = "Getting R Code", value = 1)
+    progress$close()
+  }
+
+  code <- paste(code_not_to_style, code_to_style, sep = "\n")
+  return(code)
+}
+
+
+## Module ----
+#' Server part of get R code module
+#'
+#' @description `r lifecycle::badge("stable")`
+#'
+#' @inheritParams get_rcode
+#' @inheritParams shiny::moduleServer
+#' @param merge_expression optional, (`reactive`) code to get merged analysis dataset
+#' @param modal_title optional, (`character`) title of the modal
+#' @param code_header optional, (`character`) header inside R
+#' @param disable_buttons optional, (`reactive`)
+#' a shiny reactive value. Should be a single boolean value, indicating whether to disable
+#' or enable the show R code and Debug info buttons. Default: `reactiveVal(FALSE)`.
+#'
+#' @export
+#'
+get_rcode_srv <- function(id,
+                          datasets,
+                          datanames = datasets$datanames(),
+                          merge_expression = reactive(""),
+                          modal_title = "R Code",
+                          code_header = "Automatically generated R code",
+                          disable_buttons = reactiveVal(FALSE)) {
+  checkmate::check_class(disable_buttons, c("reactive", "function"))
+  moduleServer(id, function(input, output, server) {
+    chunks <- teal.code::get_chunks_object(parent_idx = 1L)
+    observeEvent(input$show_rcode, {
+      # for backwards compatibility built-in type-check
+      if (!checkmate::test_string((merge_expression))) {
+        merge_expression <- merge_expression()
+      }
+
+      show_rcode_modal(
+        title = modal_title,
+        rcode = get_rcode(
+          datasets = datasets,
+          datanames = datanames,
+          merge_expression = merge_expression,
+          chunks = chunks,
+          title = code_header
+        )
+      )
+    })
+
+    teal.code::get_eval_details_srv(
+      id = "show_eval_details",
+      chunks = chunks
+    )
+
+    observeEvent(disable_buttons(), {
+      if (disable_buttons()) {
+        shinyjs::disable("show_rcode")
+        shinyjs::disable("show_eval_details-evaluation_details")
+      } else {
+        shinyjs::enable("show_rcode")
+        shinyjs::enable("show_eval_details-evaluation_details")
+      }
+    })
+  })
+}
+
+#' Ui part of get R code module
+#'
+#' @description `r lifecycle::badge("stable")`
+#' @param id (`character`) id of shiny module
+#'
+#' @return (`shiny.tag`)
+#'
+#' @export
+get_rcode_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    tags$div(actionButton(ns("show_rcode"), "Show R code", width = "100%")),
+    tags$div(teal.code::get_eval_details_ui(ns("show_eval_details")))
+  )
+}

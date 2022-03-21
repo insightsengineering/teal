@@ -44,9 +44,7 @@ objects. This is useful to define the navigation structure of a teal app.
 library(shiny)
 
 app <- init(
-  data = teal_data(
-    teal.data::dataset("iris", iris)
-  ),
+  data = teal_data(dataset("iris", iris)),
   modules = modules(
     label = "Modules",
     modules(

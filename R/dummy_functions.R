@@ -9,8 +9,8 @@
 #' @return dummy filter states
 #' @keywords internal
 get_dummy_filter <- function(data) { # nolint
-  ADSL <- get_raw_data(x = data, dataname = "ADSL") # nolint
-  ADLB <- get_raw_data(x = data, dataname = "ADLB") # nolint
+  ADSL <- teal.data::get_raw_data(x = data, dataname = "ADSL") # nolint
+  ADLB <- teal.data::get_raw_data(x = data, dataname = "ADLB") # nolint
 
   res <- list(
     ADSL = list(
@@ -72,7 +72,7 @@ get_dummy_cdisc_data <- function() { # nolint
   ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE) # nolint
   ADSL$SEX[1:150] <- NA # nolint
 
-  res <- cdisc_data(
+  res <- teal.data::cdisc_data(
     teal.data::cdisc_dataset(dataname = "ADSL", x = ADSL),
     teal.data::cdisc_dataset(dataname = "ADAE", x = ADAE),
     teal.data::cdisc_dataset(dataname = "ADLB", x = ADLB),

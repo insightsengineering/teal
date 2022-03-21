@@ -56,7 +56,7 @@
 #'   To initialize with specific variable filter with all values on start, one
 #'   can use
 #'   ```
-#'   list(Species = default_filter())
+#'   list(Species = list())
 #'   ```
 #'   `filter` should be set with respect to the class of the column:
 #'   * `numeric`: `selected` should be a two elements vector defining the range
@@ -112,7 +112,7 @@
 #'
 #' app <- init(
 #'   data = cdisc_data(
-#'     teal.data::cdisc_dataset("ADSL", ADSL),
+#'     cdisc_dataset("ADSL", ADSL),
 #'     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 #'   ),
 #'   modules = modules(
@@ -137,7 +137,7 @@
 #'     )
 #'   ),
 #'   title = "App title",
-#'   filter = list(ADSL = list(AGE = default_filter())),
+#'   filter = list(ADSL = list(AGE = list())),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )
@@ -157,15 +157,14 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  if (!inherits(data, "TealData")) {
-    data <- to_relational_data(data = data)
-  }
+  data <- teal.data::to_relational_data(data = data)
+
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_class(data, "TealData")
   checkmate::check_list(modules)
   checkmate::check_class(modules, "teal_modules")
   checkmate::assert_list(filter, min.len = 0, names = "unique")
-  checkmate::assert_subset(names(filter), choices = get_dataname(data))
+  checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   teal.logger::log_system_info()

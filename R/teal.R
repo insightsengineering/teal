@@ -14,7 +14,7 @@
 magrittr::`%>%`
 
 # Fix R CMD check notes
-#' @import shiny
+#' @import shiny teal.data teal.transform
 #' @importFrom methods is
 #' @importFrom stats setNames
 NULL

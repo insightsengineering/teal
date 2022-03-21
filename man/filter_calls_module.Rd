@@ -13,10 +13,6 @@ filter_calls_module(label = "Filter Calls Module", active_datanames = "all")
 can be \code{"all"} to mean all available datasets}
 }
 \description{
-The \verb{Show R Code} functionality is not available here because
-it is only defined in \code{teal.devel}.
-}
-\details{
 Please do not remove, this is useful for debugging teal without
 dependencies and simplifies \verb{\link[devtools]\{load_all\}} which otherwise fails
 and avoids session restarts!
@@ -30,7 +26,7 @@ ADSL$SEX[1:150] <- NA
 
 app <- init(
   data = cdisc_data(
-    teal.data::cdisc_dataset(
+    cdisc_dataset(
       dataname = "ADSL",
       x = ADSL
     ),

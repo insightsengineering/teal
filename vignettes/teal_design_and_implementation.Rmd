@@ -373,7 +373,7 @@ data, respectively, as illustrated from the above figure. We can also get the
 
 ```{r}
 cat(
-  get_filter_expr(datasets, "ADTTE")
+  teal.slice::get_filter_expr(datasets, "ADTTE")
 )
 ```
 

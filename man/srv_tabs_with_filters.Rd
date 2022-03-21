@@ -42,7 +42,7 @@ list(Species = c(c(5.0, 7.0), NA, Inf))
 }
 
 To initialize with specific variable filter with all values on start, one
-can use\preformatted{list(Species = default_filter())
+can use\preformatted{list(Species = list())
 }
 
 \code{filter} should be set with respect to the class of the column:

@@ -24,6 +24,7 @@ A lot of the functionality of the `teal` framework derives from the following pa
 -   [`teal.slice`](https://github.com/insightsengineering/teal.slice): provides a filtering panel to allow filtering of data.
 -   [`teal.code`](https://github.com/insightsengineering/teal.code): handles reproducibility of outputs.
 -   [`teal.transform`](https://github.com/insightsengineering/teal.transform): standardizes extracting and merging data.
+-   [`teal.logger`](https://github.com/insightsengineering/teal.logger): standardizes logging within `teal` framework.
 
 <!-- markdownlint-enable MD007 MD030 -->
 
