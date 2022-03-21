@@ -8,7 +8,7 @@ There has been a major re-organization of `teal` and `teal.devel`, splitting mos
 * `teal.transform`: standardizes extracting and merging data.
 * `teal.logger`: standardizes logging within `teal` framework.
 
-The `teal` package contains the code to create apps (`teal::init`) and define `teal modules`. 
+The `teal` package contains the code to create apps (`teal::init`), to create a module (`teal::module`) and to group modules in the app (`teal::modules`). 
 `teal` depends on `teal.transform` and `teal.data` which contain the functions that `teal` app creators are likely to need. The other package `teal` only imports from and therefore `teal` module creators should either fully specify functions from these packages when required or import them into custom packages as `library(teal)` will not load them.  
 
 
