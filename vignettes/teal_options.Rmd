@@ -12,7 +12,7 @@ editor_options:
 ---
 
 # Motivation
-Some `R` packages use `options` to modify their runtime behavior. These usually specify default values for internal functions or determine responses to users actions. For example, `testthat` uses an option `testthat.progress.max_fails` to define a default number of failed expectations before the testing functions terminate execution. While some of these adjustable values can be exposed as function parameters, some are destined to remain an option. This vignette details the options available to users of `teal`, `teal.widgets`, `teal.modules.general`, `teal.modules.clinical`.
+Some `R` packages use `options` to modify their runtime behavior. These usually specify default values for internal functions or determine responses to users actions. For example, `testthat` uses an option `testthat.progress.max_fails` to define a default number of failed expectations before the testing functions terminate execution. While some of these adjustable values can be exposed as function parameters, some are destined to remain an option. This vignette details the options available to users of `teal`, `teal.logger`, `teal.widgets`, `teal.modules.general`, `teal.modules.clinical`.
 
 # Setting an option
 At any time during an interactive session, you can change an option using:
