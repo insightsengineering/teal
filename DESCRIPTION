@@ -40,7 +40,6 @@ Imports:
     teal.code,
     teal.logger,
     teal.slice,
-    teal.widgets,
     utils
 Suggests:
     covr,
@@ -51,6 +50,7 @@ Suggests:
     scda (>= 0.1.2),
     scda.2021 (>= 0.1.2),
     shinytest,
+    teal.widgets,
     testthat (>= 2.0),
     withr
 VignetteBuilder:

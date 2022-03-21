@@ -154,4 +154,4 @@ x <- init(
   )
 )
 
-runApp(x) # nolint end
+shinyApp(x$ui, x$server) # nolint end
