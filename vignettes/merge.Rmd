@@ -22,7 +22,7 @@ Note that app is only displayed when running this code inside an R session.
 #' @param data_extract `list` of `[data_extract_spec()]` elements
 #' @param dynamic_merge_input `logical(1)` whether selectors with empty `select`
 #'   should be dropped from `[data_merge_srv()]` module call
-#' @inheritParams standard_layout
+#' @inheritParams teal.widgets::standard_layout
 #'
 #' @export
 tm_made_up_merge_pr <- function(label = "PR merge",
