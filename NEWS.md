@@ -1,26 +1,25 @@
-# teal 0.10.1.9021
+# teal 0.10.1.9023
 
-* Added `metadata` field to `TealDataset` to store a named list of `metadata` items. It is available for module developers through `FilteredData$get_metadata("<<dataname>>")` and can be pulled or added directly to datasets derived from `TealDatasetConnectors`.
+There has been a major re-organization of `teal` and `teal.devel`, splitting most of the functionality into smaller packages:
+* `teal.data`: creating and loading the data needed for `teal` applications.
+* `teal.widgets`: shiny components used within `teal`.
+* `teal.slice`: provides a filtering panel to allow filtering of data.
+* `teal.code`: handles reproducibility of outputs.
+* `teal.transform`: standardizes extracting and merging data.
+* `teal.logger`: standardizes logging within `teal` framework.
 
-### Bug fixes
-* `get_call()` function of `CallableFunction` now returns call with namespace included.
-* Deprecated `root_modules` function, users should use `modules` directly inside `init`.
-* Add counts to filtering categorical variables bar charts in the filtering panel in cases where they were missing.
+The `teal` package contains the code to create apps (`teal::init`), to create a module (`teal::module`) and to group modules in the app (`teal::modules`). 
+`teal` depends on `teal.transform` and `teal.data` which contain the functions that `teal` app creators are likely to need. The other package `teal` only imports from and therefore `teal` module creators should either fully specify functions from these packages when required or import them into custom packages as `library(teal)` will not load them.  
+
 
 ### Breaking changes
-* `default_filter` has been deprecated - use `list()` instead for a default filter.
+* `teal` package has been split into multiple smaller packages, see above.
+* Deprecated `root_modules` function, users should use `modules` directly inside `init`.
 * Due to deprecation of `root_modules` any `label` argument to `modules` must be explicitly named. For example `modules("lab", mod1, mod2)` should be replaced with `modules(label = "lab", mod1, mod2)`.
-* Minor changes to the interface of `TealDataset`, for example some active fields should be replaced by explicit "get" calls.
 
 ### Miscellaneous
-* New argument `ordered` in the `select_spec()` to flag whether order of the selection should be tracked.
 * Minor changes to internals of `teal`: main module panel now has fixed shiny name `root` and the active tab is named `active_tab` not `Active_tab`.
-* Replaced the deprecated `rtables::var_labels` calls with a new function `teal::variable_labels`.
-* Removed `rtables` dependency from the package.
-* Added `is_any_filtered` method to all `FilterState` classes to detect if selected values actually filters out any data. This is used to decide if an explicit filter statement is added to the call.
-* Removed redundant calling of the `JoinKeys$mutate` method inside of `for-loops`.
-* `MultiAssayExperiment` and `SummarizedExperiment` are now suggested packages, not required. Objects dependent on `MultiAssayExperiment` are changed to lazy-load these now suggested packages.
-* As `reticulate` is in Suggests, added `requireNamespace` call whenever it is needed.
+* `MultiAssayExperiment` is now suggested packages, not required. Objects dependent on `MultiAssayExperiment` are changed to lazy-load this now suggested package.
 
 # teal 0.10.1
 ### Breaking changes
