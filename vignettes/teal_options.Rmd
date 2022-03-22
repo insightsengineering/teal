@@ -12,7 +12,7 @@ editor_options:
 ---
 
 # Motivation
-Some `R` packages use `options` to modify their runtime behavior. These usually specify default values for internal functions or determine responses to users actions. For example, `testthat` uses an option `testthat.progress.max_fails` to define a default number of failed expectations before the testing functions terminate execution. While some of these adjustable values can be exposed as function parameters, some are destined to remain an option. This vignette details the options available to users of `teal`, `teal.widgets`, `teal.modules.general`, `teal.modules.clinical`.
+Some `R` packages use `options` to modify their runtime behavior. These usually specify default values for internal functions or determine responses to users actions. For example, `testthat` uses an option `testthat.progress.max_fails` to define a default number of failed expectations before the testing functions terminate execution. While some of these adjustable values can be exposed as function parameters, some are destined to remain an option. This vignette details the options available to users of `teal`, `teal.logger`, `teal.widgets`, `teal.modules.general`, `teal.modules.clinical`.
 
 # Setting an option
 At any time during an interactive session, you can change an option using:
@@ -34,7 +34,6 @@ getOption("option_to_set")
 Once set, the value of an option persists during a session, but it returns to the default value in a new session. Make sure to change the options after all the `teal`-related packages are loaded because some of them initialize the options themselves and will overwrite your custom values.
 
 # Options used in a `teal` application
-## `teal` package
 ### `teal.log_layout` (`character`)
 This defines the layout of a log message used in a `teal` application. `teal` uses this layout to format the emitted log messages. Read the documentation of `teal.logger::register_logger` for more information.
 
