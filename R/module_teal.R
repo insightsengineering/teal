@@ -191,6 +191,8 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       datasets <- teal.slice:::filtered_data_new(raw_data())
       # transfer the datasets from raw_data() into the FilteredData object
       teal.slice:::filtered_data_set(raw_data(), datasets)
+      # add whether the data was subject to a reproducibilty check into the FilteredData object
+      dataset$set_check(raw_data()$get_check())
       logger::log_trace("srv_teal@4 Raw Data transferred to FilteredData.")
       datasets
     })
