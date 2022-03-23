@@ -128,6 +128,7 @@ app <- init(
       ui = function(id, ...) div(p("information about data source")),
       filters = "all"
     ),
+    example_module(),
     module(
       "ADSL AGE histogram",
       server = function(input, output, session, datasets) {
