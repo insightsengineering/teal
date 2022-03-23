@@ -51,12 +51,13 @@ DETAILS HERE
 ## Where to go next
 
 To learn more about the `teal` framework we first recommend exploring some of the available
-analysis modules: see for example:
+analysis modules, for examples see:
 * [general analysis modules](https://insightsengineering.github.io/teal.modules.general/)
 * [clinical trial reporting modules](https://insightsengineering.github.io/teal.modules.clinical/)
 * [modules for analyzing `MultiAssayExperiment` objects]((https://insightsengineering.github.io/teal.modules.hermes/))
 
-The packages `teal` requires, which are of most interest when defining applications, provide more in-depth information:
+The `teal` framework relies on a set of supporting packages whose documentation provides more in-depth information.
+The packages which are of most interest when defining `teal`applications are:
 
 * [`teal.data`](https://insightsengineering.github.io/teal.data/): defining data for `teal` application.
 * [`teal.transform`](https://insightsengineering.github.io/teal.transform/): defining the way arguments are passed into `teal` modules.
