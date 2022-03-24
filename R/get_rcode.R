@@ -117,7 +117,7 @@ get_rcode <- function(datasets = NULL,
     } else if (length(str_code) > 0) {
       str_code <- paste0(str_code, "\n\n")
     }
-    if (any(sapply(datanames, function(dataname) is.null(datasets$get_data_attr(dataname, "check"))))) {
+    if (!datasets$get_check()) {
       check_note_string <- paste0(
         c(
           "## NOTE: Reproducibility of data import and preprocessing was not",

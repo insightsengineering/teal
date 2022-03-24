@@ -21,6 +21,9 @@ The `teal` package contains the code to create apps (`teal::init`), to create a 
 * Minor changes to internals of `teal`: main module panel now has fixed shiny name `root` and the active tab is named `active_tab` not `Active_tab`.
 * `MultiAssayExperiment` is now suggested packages, not required. Objects dependent on `MultiAssayExperiment` are changed to lazy-load this now suggested package.
 
+### Bugfix
+* Showing R Code no longer shows reproducibility warning message if reproducibility check has passed.
+
 # teal 0.10.1
 ### Breaking changes
 * Changed the `HTML` identifiers of `teal` modules - now each nested module receives its own `shiny` namespace.
