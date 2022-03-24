@@ -24,10 +24,7 @@ example_module <- function(label = "example teal module") {
     label,
     server = function(id, datasets) {
       moduleServer(id, function(input, output, session) {
-        output$text <- renderText({
-          text <- utils::capture.output(print(datasets$get_data(input$dataname, filtered = TRUE)))
-          paste(text, collapse = "\n")
-        })
+        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
       })
     },
     ui = function(id, datasets) {
