@@ -46,7 +46,7 @@ app <- init(
 
 if (interactive()) {
   runApp(app)
-}  
+}
 ```
 <img src="images/example_app.png" alt="Example application" style="width: 100%;"/>
 
@@ -94,7 +94,7 @@ For further details we recommend exploring the [`teal.data`](https://insightseng
 
 ### Modules
 
-The `module` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`).
+The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`).
 We recommend creating applications using pre-defined `teal` modules. See the references below for links to these modules.
 
 ### Defining filters

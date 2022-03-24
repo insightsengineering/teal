@@ -144,7 +144,7 @@ srv_histogram_example <- function(id, datasets, histogram_var) {
       teal.code::chunks_safe_eval()
     })
 
-    # shiny component to view 
+    # shiny component to view
     output$plot <- renderPlot({
       plot_code()
       teal.code::chunks_get_var(var = "p")
