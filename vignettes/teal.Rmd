@@ -26,13 +26,13 @@ CDISC clinical trial data. `teal` applications provide their users with:
 * A logging framework to facilitate debugging of applications. 
 
 More advanced users of the framework can also create new analysis modules which can be added into any teal applications.
-See the vignette [LINK TODO] for a brief introduction to creating modules.
+See the Creating Custom Modules vignette for a brief introduction to creating modules.
 
 ## Your first `teal` application:
 
 This simple application takes the `iris` and `mtcars` datasets and displays their contents in a `teal` application:
 
-```
+```{r, message=FALSE}
 library(teal)
 
 app <- init(
@@ -44,7 +44,9 @@ app <- init(
   header = "My first teal application"
 )
 
-runApp(app)
+if (interactive()) {
+  runApp(app)
+}  
 ```
 <img src="images/example_app.png" alt="Example application" style="width: 100%;"/>
 
