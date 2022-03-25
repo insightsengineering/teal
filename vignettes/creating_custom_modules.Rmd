@@ -112,7 +112,7 @@ ui_histogram_example <- function(id, datasets, histogram_var) {
 # specifying which columns of which datasets users can choose
 srv_histogram_example <- function(id, datasets, histogram_var) {
   moduleServer(id, function(input, output, session) {
-    #initialize the reproducibility part of teal (i.e. "chunks")
+    # initialize the reproducibility part of teal (i.e. "chunks")
     teal.code::init_chunks()
 
     # get the selected dataset and column from the UI
