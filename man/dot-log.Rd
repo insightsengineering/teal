@@ -7,9 +7,9 @@
 .log(..., sep = " ", type = "debug")
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \details{
-Superseded by \link[teal.logger:register_logger]{teal.logger::register_logger}.
+Deprecated. Use \link[teal.logger:register_logger]{teal.logger::register_logger}.
 }
 \keyword{internal}
