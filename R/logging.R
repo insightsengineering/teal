@@ -2,9 +2,9 @@
 
 #' A logging function
 #'
-#' Superseded by [teal.logger::register_logger].
+#' Deprecated. Use [teal.logger::register_logger].
 #'
-#' @description `r lifecycle::badge("superseded")`
+#' @description `r lifecycle::badge("deprecated")`
 #' @keywords internal
 #' @export
 .log <- function(..., sep = " ", type = "debug") {
