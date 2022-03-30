@@ -20,6 +20,10 @@ reference:
       - modules
       - srv_teal_with_splash
       - ui_teal_with_splash
+  - title: Example module
+    desc: A simple example teal module
+    contents:
+      - example_module
   - title: Functions moved to other packages
     desc: These functions have been moved from teal and will be deprecated.
     contents:
