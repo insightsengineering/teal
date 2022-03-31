@@ -2,6 +2,7 @@
 
 ### Teal is downsized
 `teal`, as well as `teal.devel`, has outsourced most of its functionality to six new packages:
+
 * `teal.data`: creating and loading the data needed for `teal` applications.
 * `teal.widgets`: shiny components used within `teal`.
 * `teal.slice`: provides a filtering panel to allow filtering of data.
