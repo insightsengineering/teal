@@ -1,4 +1,4 @@
-# teal 0.10.1.9026
+# teal 0.10.1.9027
 
 ### Teal is downsized
 `teal`, as well as `teal.devel`, has outsourced most of its functionality to six new packages:
