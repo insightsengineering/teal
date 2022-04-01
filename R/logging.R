@@ -13,7 +13,7 @@
     what = ".log()",
     with = "teal.logger::register_logger()",
     details = "teal now logs messages using `teal.logger` package.
-      See https://github.com/insightsengineering/coredev-tasks for more info"
+      See `browseVignettes('teal.logger') for more info."
   )
 
   if (!isTRUE(getOption("teal_logging"))) {
