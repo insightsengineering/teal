@@ -171,7 +171,7 @@ tm_histogram_example <- function(label, histogram_var) {
 
 An example `teal` application using this module is shown below:
 
-<img src="images/teal.jpg" alt="Teal Duck" style="width: 100%;"/>
+<img src="images/custom_app.png" alt="Teal Duck" style="width: 100%;"/>
 
 
 ```{r}
