@@ -133,7 +133,7 @@ srv_histogram_example <- function(id, datasets, histogram_var) {
       teal.code::chunks_push(
         bquote(hist(.(as.name(paste0(dataname(), "_FILTERED")))[, .(selected())]))
       )
-      
+
       # evaluate the chunks
       teal.code::chunks_safe_eval()
     })
