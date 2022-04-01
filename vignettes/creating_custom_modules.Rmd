@@ -85,7 +85,6 @@ See the package and function documentation for further details.
 
 ```{r}
 library(teal)
-library(ggplot2)
 
 # ui function for the module
 # histogram_var is a teal.transform::data_extract_spec object
@@ -132,11 +131,9 @@ srv_histogram_example <- function(id, datasets, histogram_var) {
 
       # add the code for the plot into the chunks
       teal.code::chunks_push(
-        bquote(p <- ggplot(.(as.name(paste0(dataname(), "_FILTERED"))), aes(y = .(as.name(selected())))) +
-          geom_histogram())
+        bquote(hist(.(as.name(paste0(dataname(), "_FILTERED")))[, .(selected())]))
       )
-      teal.code::chunks_push(quote(print(p)))
-
+      
       # evaluate the chunks
       teal.code::chunks_safe_eval()
     })
@@ -144,7 +141,6 @@ srv_histogram_example <- function(id, datasets, histogram_var) {
     # shiny component to view
     output$plot <- renderPlot({
       plot_code()
-      teal.code::chunks_get_var(var = "p")
     })
 
     # Show the R code when user clicks 'Show R Code' button
@@ -181,7 +177,6 @@ An example `teal` application using this module is shown below:
 ```{r}
 
 library(teal)
-library(ggplot2)
 
 app <- init(
   data = teal_data(
