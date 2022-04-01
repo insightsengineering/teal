@@ -32,7 +32,7 @@ See the Creating Custom Modules vignette for a brief introduction to creating mo
 
 This simple application takes the `iris` and `mtcars` datasets and displays their contents in a `teal` application:
 
-```{r, message=FALSE}
+```{r, eval = FALSE}
 library(teal)
 
 app <- init(
