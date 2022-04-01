@@ -34,7 +34,8 @@ log_app_usage <- function(ta,
   lifecycle::deprecate_soft(
     when = "0.10.1",
     what = "log_app_usage()",
-    details = "teal now uses a logging package `logger`. See `logger` for more information about how to use it."
+    details = "teal now logs messages using `teal.logger` package.
+      See https://github.com/insightsengineering/coredev-tasks for more info"
   )
 
   # conditionally create logs directory

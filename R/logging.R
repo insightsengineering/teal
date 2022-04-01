@@ -12,7 +12,8 @@
     when = "0.10.1",
     what = ".log()",
     with = "teal.logger::register_logger()",
-    details = "teal now uses the package `logger`. Please see `teal.logger::register_logger` for more information."
+    details = "teal now logs messages using `teal.logger` package.
+      See https://github.com/insightsengineering/coredev-tasks for more info"
   )
 
   if (!isTRUE(getOption("teal_logging"))) {
