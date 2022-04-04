@@ -1,4 +1,4 @@
-# teal 0.10.1.9025.1
+# teal 0.10.1.9025.2
 
 There has been a major re-organization of `teal` and `teal.devel`, splitting most of the functionality into smaller packages:
 * `teal.data`: creating and loading the data needed for `teal` applications.
