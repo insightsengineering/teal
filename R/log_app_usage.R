@@ -35,7 +35,7 @@ log_app_usage <- function(ta,
     when = "0.10.1",
     what = "log_app_usage()",
     details = "teal now logs messages using `teal.logger` package.
-      See `browseVignettes('teal.logger') for more info."
+      See `browseVignettes('teal.logger')` for more info."
   )
 
   # conditionally create logs directory
