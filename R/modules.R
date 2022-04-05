@@ -1,26 +1,23 @@
-# Functions to create objects of class `teal_module` and `teal_modules` and
-# related functions like depth, `toString` and `print`.
-
-
-#' Create a collection of `module` and `modules` object
+#' Creates a `teal_modules` object.
 #'
 #' @description `r lifecycle::badge("stable")`
-#' Modules collects a tree of [module()] and [modules()]
-#' objects. This is useful to define the navigation structure of a teal app.
+#' This function collects a list of `teal_modules` and `teal_module` objects and returns a `teal_modules` object
+#' containing the passed objects.
 #'
-#' @param ... (`teal_module` or `teal_modules`)\cr
-#'   see [module()] and [modules()] for more details
-#' @param label (`character(1)`)\cr
-#'   label of modules collection (default `"root"`). If using the `label` argument
-#'   then it must be explicitly named.
-#'   For example `modules("lab", ...)` should be converted to `modules(label = "lab", ...)`.
+#' This function dictates what modules are included in a `teal` application. The internal structure of `teal_modules`
+#' shapes the navigation panel of a `teal` application.
+#'
+#' @param ... (`teal_module` or `teal_modules`) see [module()] and [modules()] for more details
+#' @param label (`character(1)`) label of modules collection (default `"root"`).
+#' If using the `label` argument then it must be explicitly named.
+#' For example `modules("lab", ...)` should be converted to `modules(label = "lab", ...)`
 #'
 #' @export
 #'
 #' @return object of class \code{teal_modules}. Object contains following fields
-#' - label: taken from `label` argument
-#' - children: list containing objects passed in `...`. List elements are named after
-#' their `label` attribute converted to valid `shiny` id.
+#' - `label`: taken from the `label` argument
+#' - `children`: a list containing objects passed in `...`. List elements are named after
+#' their `label` attribute converted to a valid `shiny` id.
 #' @examples
 #' library(shiny)
 #'
@@ -156,8 +153,8 @@ root_modules <- function(...) {
   lifecycle::deprecate_soft(
     when = "0.10.2",
     what = "root_modules()",
-    details =
-      "You should call teal::modules instead of teal::root_modules."
+    details = "Use `teal::modules` instead of `teal::root_modules`. `teal::root_modules` might be removed in future
+      versions of `teal`."
   )
 
   if (nargs() == 0) {
@@ -169,10 +166,10 @@ root_modules <- function(...) {
 }
 
 
-#' Creates a module with a new shiny page
+#' Creates a `teal_modules` object.
 #'
 #' @description `r lifecycle::badge("stable")`
-#' This function embeds a `shiny` application inside a `teal` application.
+#' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.
 #'
 #' @param label (\code{character}) Label shown in the navigation item for the module.
 #' @param server (\code{function}) Shiny server module function
