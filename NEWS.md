@@ -1,4 +1,4 @@
-# teal 0.11.0
+# teal 0.11.0.9000
 
 * `teal.data`: creating and loading the data needed for `teal` applications.
 * `teal.widgets`: shiny components used within `teal`.
