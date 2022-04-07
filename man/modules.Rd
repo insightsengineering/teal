@@ -4,7 +4,7 @@
 \alias{modules}
 \alias{toString.teal_modules}
 \alias{print.teal_modules}
-\title{Create a collection of \code{module} and \code{modules} object}
+\title{Creates a \code{teal_modules} object.}
 \usage{
 modules(..., label = "root")
 
@@ -15,10 +15,9 @@ modules(..., label = "root")
 \arguments{
 \item{...}{parameters passed to \code{toString}}
 
-\item{label}{(\code{character(1)})\cr
-label of modules collection (default \code{"root"}). If using the \code{label} argument
-then it must be explicitly named.
-For example \code{modules("lab", ...)} should be converted to \code{modules(label = "lab", ...)}.}
+\item{label}{(\code{character(1)}) label of modules collection (default \code{"root"}).
+If using the \code{label} argument then it must be explicitly named.
+For example \code{modules("lab", ...)} should be converted to \code{modules(label = "lab", ...)}}
 
 \item{x}{\code{teal_modules}}
 
@@ -28,17 +27,20 @@ each submodule is indented one level more}
 \value{
 object of class \code{teal_modules}. Object contains following fields
 \itemize{
-\item label: taken from \code{label} argument
-\item children: list containing objects passed in \code{...}. List elements are named after
-their \code{label} attribute converted to valid \code{shiny} id.
+\item \code{label}: taken from the \code{label} argument
+\item \code{children}: a list containing objects passed in \code{...}. List elements are named after
+their \code{label} attribute converted to a valid \code{shiny} id.
 }
 
 (\code{character})
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-Modules collects a tree of \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}}
-objects. This is useful to define the navigation structure of a teal app.
+This function collects a list of \code{teal_modules} and \code{teal_module} objects and returns a \code{teal_modules} object
+containing the passed objects.
+
+This function dictates what modules are included in a \code{teal} application. The internal structure of \code{teal_modules}
+shapes the navigation panel of a \code{teal} application.
 }
 \examples{
 library(shiny)

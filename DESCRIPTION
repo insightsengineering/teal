@@ -64,6 +64,7 @@ RoxygenNote: 7.1.2
 Collate:
     'default_filter.R'
     'dummy_functions.R'
+    'example_module.R'
     'get_rcode.R'
     'get_rcode_utils.R'
     'include_css_js.R'

@@ -1,0 +1,203 @@
+---
+title: "Creating Custom Modules"
+author: "Nikolas Burkoff"
+date: "2022-03-24"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Creating Custom Modules}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+The `teal` framework provides a large number of analysis modules to be incorporated into `teal` applications.
+However, it is also possible to create your own modules using the `module()` function.
+
+Here is an implementation of a simple module:
+
+```{r, message=FALSE}
+library(teal)
+example_module <- function(label = "example teal module") {
+  checkmate::assert_string(label)
+  module(
+    label,
+    server = function(id, datasets) {
+      moduleServer(id, function(input, output, session) {
+        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
+      })
+    },
+    ui = function(id, datasets) {
+      ns <- NS(id)
+      teal.widgets::standard_layout(
+        output = verbatimTextOutput(ns("text")),
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
+      )
+    },
+    filters = "all"
+  )
+}
+```
+
+which can be added into `teal` apps using `example_module(label = "Label for tab")`.
+
+## Components of a module
+
+### UI function
+
+This function contains the UI required for the module. It should be a function with at least the arguments `id` and `datasets`.
+It can contain standard UI components alongside additional widgets provided by the `teal.widgets` package.
+In the example above we are using the `standard_layout` function of `teal.widgets` which generates a layout 
+including an encoding panel on the left and main output covering the rest of the module's UI.
+
+### Server function
+
+This function contains the shiny server logic for the module and should be of the form:
+
+```
+function(id, datasets, ...) {
+  moduleServer(id, function(input, output, session) {
+    # module code here
+  })
+}
+
+```
+
+The `datasets` argument is a `FilteredData` object which provides a call to extract the data after having been filtered by the filterpanel:
+`datasets$get_data(<<dataname>>, filtered = TRUE)`. For more details about the `FilteredData` object see the supporting `teal` package
+[`teal.slice`](https://insightsengineering.github.io/teal.slice/)
+
+
+## A More Complicated Example
+
+The `teal` framework also provides: 
+
+- A way to create modules which the generate the R code needed to reproduce their outputs;
+these modules use the [`teal.code`](https://insightsengineering.github.io/teal.code/) package.
+- A way extract from and merge related datasets using the 
+[`teal.transform`](https://insightsengineering.github.io/teal.transform/) package.
+- A way to allow app creators to customize your modules also using `teal.transform`.
+
+The annotated example below shows these features inside a simple histogram module where app developers can choose
+what data and which columns from them, their app users can select to be displayed as a histogram.
+
+See the package and function documentation for further details.
+
+```{r}
+library(teal)
+
+# ui function for the module
+# histogram_var is a teal.transform::data_extract_spec object
+# specifying which columns of which datasets users can choose
+ui_histogram_example <- function(id, datasets, histogram_var) {
+  ns <- NS(id)
+  teal.widgets::standard_layout(
+    output = plotOutput(ns("plot")),
+    encoding = div(
+      teal.transform::data_extract_ui(
+        id = ns("histogram_var"),
+        label = "Variable",
+        data_extract_spec = histogram_var
+      )
+    ),
+    # we have a show R code button to show the code needed
+    # to generate the histogram
+    forms = teal::get_rcode_ui(ns("rcode"))
+  )
+}
+
+# server function for the module
+# histogram_var is a teal.transform::data_extract_spec object
+# specifying which columns of which datasets users can choose
+srv_histogram_example <- function(id, datasets, histogram_var) {
+  moduleServer(id, function(input, output, session) {
+    # initialize the reproducibility part of teal (i.e. "chunks")
+    teal.code::init_chunks()
+
+    # get the selected dataset and column from the UI
+    extracted <- teal.transform::data_extract_srv("histogram_var", datasets, histogram_var)
+    dataname <- reactive(extracted()$dataname)
+    selected <- reactive(extracted()$select)
+
+    # the reactive which adds the code to plot the histogram into the chunks
+    plot_code <- reactive({
+      validate(need(length(selected) == 1, "Please select a variable"))
+
+      # take the filtered data from the datasets object and add it into the chunks environment
+      # the name of the filtered data is <<dataname>>_FILTERED
+      new_env <- new.env()
+      assign(paste0(dataname(), "_FILTERED"), datasets$get_data(dataname(), filtered = TRUE), envir = new_env)
+      teal.code::chunks_reset(envir = new_env)
+
+      # add the code for the plot into the chunks
+      teal.code::chunks_push(
+        bquote(hist(.(as.name(paste0(dataname(), "_FILTERED")))[, .(selected())]))
+      )
+
+      # evaluate the chunks
+      teal.code::chunks_safe_eval()
+    })
+
+    # shiny component to view
+    output$plot <- renderPlot({
+      plot_code()
+    })
+
+    # Show the R code when user clicks 'Show R Code' button
+    teal::get_rcode_srv(
+      id = "rcode",
+      datasets = datasets,
+      modal_title = "R code for custom plot",
+      code_header = "R code for custom plot"
+    )
+  })
+}
+
+# the function which creates the teal module for users
+tm_histogram_example <- function(label, histogram_var) {
+  checkmate::assert_character(label)
+  checkmate::assert_class(histogram_var, "data_extract_spec")
+
+  module(
+    label = label,
+    server = srv_histogram_example,
+    ui = ui_histogram_example,
+    ui_args = list(histogram_var = histogram_var),
+    server_args = list(histogram_var = histogram_var),
+    filters = "all"
+  )
+}
+```
+
+An example `teal` application using this module is shown below:
+
+<img src="images/custom_app.png" alt="Teal Duck" style="width: 100%;"/>
+
+
+```{r}
+
+library(teal)
+
+app <- init(
+  data = teal_data(
+    dataset("IRIS", iris, code = "IRIS <- iris"),
+    check = TRUE
+  ),
+  modules = modules(
+    tm_histogram_example(
+      label = "Simple Module",
+      histogram_var = data_extract_spec(
+        dataname = "IRIS",
+        select = select_spec(
+          choices = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+        )
+      )
+    )
+  ),
+  header = "Simple app with custom histogram module"
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```

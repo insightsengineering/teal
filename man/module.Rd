@@ -4,7 +4,7 @@
 \alias{module}
 \alias{toString.teal_module}
 \alias{print.teal_module}
-\title{Creates a module with a new shiny page}
+\title{Creates a \code{teal_modules} object.}
 \usage{
 module(label, server, ui, filters, server_args = NULL, ui_args = NULL)
 
@@ -48,7 +48,7 @@ object of class \code{teal_module}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-This function embeds a \code{shiny} application inside a \code{teal} application.
+This function embeds a \code{shiny} module inside a \code{teal} application. One \code{teal_module} maps to one \code{shiny} module.
 }
 \examples{
 library(shiny)
