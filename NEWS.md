@@ -1,7 +1,4 @@
-# teal 0.10.1.9027
-
-### Teal is downsized
-`teal`, as well as `teal.devel`, has outsourced most of its functionality to six new packages:
+# teal 0.11.0
 
 * `teal.data`: creating and loading the data needed for `teal` applications.
 * `teal.widgets`: shiny components used within `teal`.
@@ -10,7 +7,12 @@
 * `teal.transform`: standardizes extracting and merging data.
 * `teal.logger`: standardizes logging within `teal` framework.
 
-The `teal` package still retains the code to create apps (`teal::init`), to create a module (`teal::module`) and to grouped modules in the app (`teal::modules`). Of the six new packages, `teal` depends on `teal.transform` and `teal.data` which contain the functions that `teal` app creators are likely to need. `teal` only imports from the remaining four packages and therefore `teal` module creators should either fully specify function names from these packages when required or import them into custom packages as `library(teal)` will not load them.  
+The `teal` package contains the code to create apps (`teal::init`), to create a module (`teal::module`) and to group modules in the app (`teal::modules`). 
+`teal` depends on `teal.transform` and `teal.data` which contain the functions that `teal` app creators are likely to need. The other package `teal` only imports from and therefore `teal` module creators should either fully specify functions from these packages when required or import them into custom packages as `library(teal)` will not load them.  
+
+### New features
+* A simple new `teal` module named `example_module` has been included in the package.
+
 ### Breaking changes
 * `teal` package has been split into multiple smaller packages, see above.
 * Deprecated `root_modules` function, users should use `modules` directly inside `init`.

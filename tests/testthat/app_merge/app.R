@@ -75,17 +75,12 @@ srv_plot_xy <- function(id, datasets, response, regressor, facetting) {
     )
 
     plot_r <- reactive({
-      # qplot is not a proper ggplot function
       x <- merged_data()
-
-      ggplot2::ggplot(
-        data = x$data(),
-        ggplot2::aes_string(
-          x = x$columns_source$regressor,
-          y = x$columns_source$response
-        )
-      ) +
-        ggplot2::geom_point()
+      data <- x$data()
+      plot(
+        data[, x$columns_source$regressor] %>% dplyr::pull(),
+        data[, x$columns_source$response] %>% dplyr::pull()
+      )
     })
     teal.widgets::plot_with_settings_srv(id = "outplot", plot_r = plot_r)
 
