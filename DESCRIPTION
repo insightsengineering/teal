@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.10.2
+Version: 0.11.0
 Date: 2022-04-07
 Authors@R: c(
     person("NEST", , , "basel.nestcicd@roche.com", role = c("aut", "cre")),
@@ -47,8 +47,8 @@ Suggests:
     knitr,
     MultiAssayExperiment,
     rmarkdown,
-    scda (>= 0.1.2),
-    scda.2021 (>= 0.1.2),
+    scda (>= 0.1.3),
+    scda.2021 (>= 0.1.3),
     shinytest,
     teal.widgets,
     testthat (>= 2.0),
