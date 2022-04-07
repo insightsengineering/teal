@@ -1,6 +1,5 @@
 # teal 0.11.0
 
-There has been a major re-organization of `teal` and `teal.devel`, splitting most of the functionality into smaller packages:
 * `teal.data`: creating and loading the data needed for `teal` applications.
 * `teal.widgets`: shiny components used within `teal`.
 * `teal.slice`: provides a filtering panel to allow filtering of data.
