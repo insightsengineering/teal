@@ -2,8 +2,7 @@
 url: https://insightsengineering.github.io/teal
 
 template:
-  params:
-    bootswatch: cerulean
+  package: nesttemplate
 
 navbar:
   right:
@@ -20,6 +19,7 @@ reference:
       - modules
       - srv_teal_with_splash
       - ui_teal_with_splash
+      - default_filter
   - title: Example module
     desc: A simple example teal module
     contents:
@@ -29,3 +29,12 @@ reference:
     contents:
       - log_app_usage
       - root_modules
+  - title: Validation functions
+    contents:
+      - starts_with("validate_")
+  - title: Functions related to showing R code
+    contents:
+      - get_rcode
+      - get_rcode_srv
+      - get_rcode_ui
+      - show_rcode_modal
