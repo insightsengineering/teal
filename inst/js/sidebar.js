@@ -1,3 +1,4 @@
+// used to collapse and expand the filter panel in teal apps
 var filter_open = true;
 function toggle_sidebar() {
   if ($("#teal_secondary_col").css("display") == "none") {
