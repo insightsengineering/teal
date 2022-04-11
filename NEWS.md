@@ -1,5 +1,8 @@
 # teal 0.11.0.9000
 
+
+# teal 0.11.0
+
 * `teal.data`: creating and loading the data needed for `teal` applications.
 * `teal.widgets`: shiny components used within `teal`.
 * `teal.slice`: provides a filtering panel to allow filtering of data.
