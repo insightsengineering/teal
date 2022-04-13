@@ -1,4 +1,7 @@
-# teal 0.11.0.9000
+# teal 0.11.0.9001
+### Miscellaneous
+* Added a template to the `pkgdown` configuration.
+# teal 0.11.0
 
 * `teal.data`: creating and loading the data needed for `teal` applications.
 * `teal.widgets`: shiny components used within `teal`.
@@ -7,8 +10,8 @@
 * `teal.transform`: standardizes extracting and merging data.
 * `teal.logger`: standardizes logging within `teal` framework.
 
-The `teal` package contains the code to create apps (`teal::init`), to create a module (`teal::module`) and to group modules in the app (`teal::modules`). 
-`teal` depends on `teal.transform` and `teal.data` which contain the functions that `teal` app creators are likely to need. The other package `teal` only imports from and therefore `teal` module creators should either fully specify functions from these packages when required or import them into custom packages as `library(teal)` will not load them.  
+The `teal` package contains the code to create apps (`teal::init`), to create a module (`teal::module`) and to group modules in the app (`teal::modules`).
+`teal` depends on `teal.transform` and `teal.data` which contain the functions that `teal` app creators are likely to need. The other package `teal` only imports from and therefore `teal` module creators should either fully specify functions from these packages when required or import them into custom packages as `library(teal)` will not load them.
 
 ### New features
 * A simple new `teal` module named `example_module` has been included in the package.
@@ -22,7 +25,7 @@ The `teal` package contains the code to create apps (`teal::init`), to create a 
 * Minor changes to internals of `teal`: main module panel now has fixed shiny name `root` and the active tab is named `active_tab` not `Active_tab`.
 * `MultiAssayExperiment` is now suggested packages, not required. Objects dependent on `MultiAssayExperiment` are changed to lazy-load this now suggested package.
 
-### Bugfix
+### Bug fixes
 * Showing R Code no longer shows reproducibility warning message if reproducibility check has passed.
 
 # teal 0.10.1
