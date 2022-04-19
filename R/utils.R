@@ -19,20 +19,3 @@ get_client_timezone <- function(ns) {
   shinyjs::runjs(script) # function does not return anything
   return(invisible(NULL))
 }
-
-#' Check if package can be loaded
-#'
-#' @param pckg `character` package name.
-#' @param msg `character` error message to display if package is not available.
-#'
-#' @return Error or invisible NULL.
-#' @keywords internal
-check_pkg_quietly <- function(pckg, msg) {
-  checkmate::assert_string(pckg)
-  checkmate::assert_string(msg)
-  if (!pckg %in% utils::installed.packages()) {
-    stop(msg)
-  }
-
-  return(invisible(NULL))
-}
