@@ -1,0 +1,93 @@
+---
+title: "Input general data in a teal application"
+author: "NEST CoreDev Team"
+date: "2022-04-20"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Input general data in a teal application}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+Teal applications are not restricted to `CDISC`-standard data. Although many teal modules included with `NEST` are designed for `CDISC` data, those in the library `teal.modules.general` have been designed to work with unstructured datasets.
+
+For example this application uses the standard `iris` and `mtcars` datasets:
+
+```r
+library(teal)
+library(teal.data)
+
+app <- init(
+  data = teal_data(
+    dataset("IRIS", iris, code = "IRIS <- iris"),
+    dataset("CARS", mtcars, code = "CARS <- mtcars")
+  ),
+  modules = modules(
+    example_module()
+  )
+)
+
+shinyApp(app$ui, app$server)
+```
+
+## Delayed Data Loading (DDL)
+
+All the features of DDL are available for general datasets:
+
+```r
+library(teal.modules.general)
+library(dplyr)
+
+
+person_generator <- function() {
+  return(
+    data.frame(
+      ID = factor(1:8),
+      AGE = c(40, 23, 56, 11, 17, 71, 23, 56)
+    )
+  )
+}
+
+pet_generator <- function(){
+  return(
+    data.frame(
+      ID = factor(1:10),
+      TYPE = rep(c("CAT", "DOG"), 5),
+      COLOR = c("GINGER", rep("BROWN", 5), rep("BLACK", 4)),
+      PERSON_ID = factor(c(5, 4, 3, 3, 3, 1, 8, 1, 2, 2))
+    )
+  )
+}
+
+
+app <- init(
+  data = teal_data(
+    fun_dataset_connector("PERSON", fun = person_generator, keys = "ID") %>%
+      mutate_dataset("PERSON$SEX <- rep(c('M', 'F'), 4)"),
+    fun_dataset_connector("PETS", fun = pet_generator, keys = "ID")
+  ) %>% mutate_join_keys("PERSON", "PETS", c("ID" = "PERSON_ID")),
+  modules = modules(
+    tm_t_crosstable(
+      x = data_extract_spec(
+        dataname = "PERSON",
+        select = select_spec(
+          choices = variable_choices("PERSON", c("AGE", "SEX")),
+          selected = "SEX"
+        )
+      ),
+      y = data_extract_spec(
+        dataname = "PETS",
+        select = select_spec(
+          choices = variable_choices("PETS", c("TYPE", "COLOR")),
+          selected = "TYPE"
+        )
+      )
+    ),
+    tm_variable_browser()
+  )
+)
+
+shinyApp(app$ui, app$server)
+```
