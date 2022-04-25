@@ -11,22 +11,19 @@ vignette: >
 
 ## Introduction
 
-Teal applications are not restricted to `CDISC`-standard data. Although many teal modules included with `NEST` are designed for `CDISC` data, those in the library `teal.modules.general` have been designed to work with unstructured datasets.
+Teal applications are not restricted to `CDISC`-standard data. Although many teal modules included with `NEST` are designed for `CDISC` data, those in the library `teal.modules.general` have been designed to work with non-relational data.
 
 For example this application uses the standard `iris` and `mtcars` datasets:
 
 ```r
 library(teal)
-library(teal.data)
 
 app <- init(
   data = teal_data(
     dataset("IRIS", iris, code = "IRIS <- iris"),
     dataset("CARS", mtcars, code = "CARS <- mtcars")
   ),
-  modules = modules(
-    example_module()
-  )
+  modules = modules(example_module())
 )
 
 shinyApp(app$ui, app$server)
@@ -34,10 +31,11 @@ shinyApp(app$ui, app$server)
 
 ## Delayed Data Loading (DDL)
 
-All the features of DDL are available for general datasets:
+To learn more about DDL, visit `vignette("delayed-data-loading", package = "teal.data")`. All the features of DDL
+are available for general datasets:
 
 ```r
-library(teal.modules.general)
+library(teal)
 library(dplyr)
 
 
@@ -68,25 +66,7 @@ app <- init(
       mutate_dataset("PERSON$SEX <- rep(c('M', 'F'), 4)"),
     fun_dataset_connector("PETS", fun = pet_generator, keys = "ID")
   ) %>% mutate_join_keys("PERSON", "PETS", c("ID" = "PERSON_ID")),
-  modules = modules(
-    tm_t_crosstable(
-      x = data_extract_spec(
-        dataname = "PERSON",
-        select = select_spec(
-          choices = variable_choices("PERSON", c("AGE", "SEX")),
-          selected = "SEX"
-        )
-      ),
-      y = data_extract_spec(
-        dataname = "PETS",
-        select = select_spec(
-          choices = variable_choices("PETS", c("TYPE", "COLOR")),
-          selected = "TYPE"
-        )
-      )
-    ),
-    tm_variable_browser()
-  )
+  modules = modules(example_module())
 )
 
 shinyApp(app$ui, app$server)

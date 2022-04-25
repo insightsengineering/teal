@@ -13,8 +13,8 @@ vignette: >
 
 Each table passed into `teal` can have a set of keys that inform `teal` about its structure and relation
 to other tables. `teal` allows specifying:
-* columns consisting the primary key
-* merge keys, a concept similar to `SQL`s foreign key.
+- columns consisting the primary key
+- merge keys, a concept similar to `SQL`s foreign key.
 
 Usually, an application developer needs to specify the keys manually, but in case of datasets named according
 to the `ADaM` standard, `teal` can assign the keys on its own. Refer to `vignette("including-adam-data-in-teal")` for more information.
@@ -60,7 +60,6 @@ For example:
 
 ```r
 library(teal)
-library(teal.data)
 
 data_1 <- data.frame(X = factor(1:10), Y = 21:30, Z = 1:10)
 data_2 <- data.frame(W = factor(10:1), V = factor(5:14), M = rep(1:5, 2))

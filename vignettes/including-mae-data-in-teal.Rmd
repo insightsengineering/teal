@@ -17,7 +17,6 @@ You can read more about `MultiAssayExperiment` data [here](https://www.bioconduc
 ## Example application
 ```r
 library(teal)
-library(teal.data)
 utils::data(miniACC, package = "MultiAssayExperiment")
 
 mae_d <- dataset("MAE", miniACC, metadata = list(type = "example"))
