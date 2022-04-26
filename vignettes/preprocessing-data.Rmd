@@ -14,7 +14,7 @@ vignette: >
 1. Data import calls
 1. Data modification
 
-**<span style="color:red">NOTE:</span>** that the `library` calls are captured by `teal`. Also, code that is used to configure the teal apps but does not affect the data such as creating `choices_selected` objects, should not be included in preprocessing code.
+**NOTE:** that the `library` calls are captured by `teal`. Also, code that is used to configure the teal apps but does not affect the data such as creating `choices_selected` objects, should not be included in preprocessing code.
 
 For example, for the following app only `ADSL <- readRDS("<your data path>/adsl.rds")` is considered as preprocessing code:
 
@@ -33,8 +33,7 @@ cs_arm <- choices_selected(c("ACTARMCD", "ARMCD"), "ACTARMCD")
 
 app <- init(
   data = cdisc_data(cdisc_dataset("ADSL", ADSL)),
-  modules = modules(ex
-  )
+  modules = modules(example_module())
 )
 
 shinyApp(app$ui, app$server)
@@ -139,6 +138,6 @@ If you set `check = TRUE` in [teal.data::cdisc_data()] then the data provided to
 the data obtained by evaluating the `code` in an isolated environment. If the dataset do not match then
 [teal.data::cdisc_data()] returns an error.
 
-[teal.data::cdisc_data()] also  analyzes the arguments passed to it. Note that additional transformation within
+[teal.data::cdisc_data()] also analyzes the arguments passed to it. Note that additional transformation within
 [teal.data::cdisc_data()] call break reproducibility and are not allowed, e.g. developers shouldn't do an operation
 like `ADSL = mutate(ADSL, a = 1)` inside [teal.data::cdisc_data()].
