@@ -15,6 +15,8 @@ vignette: >
 You can read more about `MultiAssayExperiment` data [here](https://www.bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/MultiAssayExperiment.html).
 
 ## Example application
+The below present an example application including `MultiAssayExperiment` data.
+
 ```r
 library(teal)
 utils::data(miniACC, package = "MultiAssayExperiment")
@@ -31,6 +33,5 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-The filter panel supports `MAE` data out of the box, but `teal` itself does not guarantee that any module
-will work with `MAE` data the same way it works with other types of data (e.g. `ADaM`) because `MAE` has a unique
+The filter panel supports `MAE` data out of the box, but `teal` itself does not guarantee that any module will work with `MAE` data the same way it works with other types of data (e.g. `ADaM`) because `MAE` has a unique
 structure that needs to be considered when developing a module.
