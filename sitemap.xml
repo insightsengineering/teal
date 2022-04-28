@@ -7,25 +7,13 @@
     <loc>https://insightsengineering.github.io/teal/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/articles/data_extract_spec.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/delayed_data_loading.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/developer_apps.html</loc>
+    <loc>https://insightsengineering.github.io/teal/articles/creating_custom_modules.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/articles/merge.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/articles/teal.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/teal_design_and_implementation.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/articles/teal_options.html</loc>
@@ -46,13 +34,19 @@
     <loc>https://insightsengineering.github.io/teal/reference/bookmarkableShinyApp.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/check_pkg_quietly.html</loc>
+    <loc>https://insightsengineering.github.io/teal/reference/default_filter.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/dot-log.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/example_module.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/filter_calls_module.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/fold_lines.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_client_timezone.html</loc>
@@ -68,6 +62,21 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_dummy_modules.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/get_rcode.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/get_rcode_header.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/get_rcode_libraries.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/get_rcode_srv.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/get_rcode_ui.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/include_css_files.html</loc>
@@ -103,6 +112,9 @@
     <loc>https://insightsengineering.github.io/teal/reference/modules_depth.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/pad.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/reexports.html</loc>
   </url>
   <url>
@@ -110,6 +122,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/run_js_files.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/show_rcode_modal.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/srv_nested_tabs.html</loc>
@@ -137,5 +152,26 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/ui_teal_with_splash.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/validate_has_data.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/validate_has_elements.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/validate_has_variable.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/validate_in.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/validate_n_levels.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/validate_no_intersection.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/validate_one_row_per_id.html</loc>
   </url>
 </urlset>
