@@ -25,7 +25,7 @@ Using the `keys` argument to the `dataset` (or for DDL a `dataset_connector`) fu
 dataset which together uniquely identify rows in the dataset. `teal` throws an error if it finds at least two rows
 sharing all the same values of the primary key columns.
 
-```r
+```{r}
 library(teal)
 library(teal.data)
 library(dplyr)
@@ -58,7 +58,7 @@ columns are present in the parent table.
 
 For example:
 
-```r
+```{r}
 library(teal)
 
 data_1 <- data.frame(X = factor(1:10), Y = 21:30, Z = 1:10)
@@ -74,7 +74,6 @@ data <- teal_data(
     join_key("D2", "D3", c("V" = "V"))
   )
 )
-
 ```
 
 The [teal.data::join_keys()] function is used to specify keys:

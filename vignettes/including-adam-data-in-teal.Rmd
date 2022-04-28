@@ -20,8 +20,8 @@ There is an advantage to passing `CDISC` datasets that adhere to `ADaM` standard
 minimized. However, the dataset-related functions also include the flexibility to work with non-standard datasets
 provided that merge keys and the relationship between the datasets are specified.
 
-The examples below illustrate the usage of these different dataset functions for example [teal.data::cdisc_dataset()]
-and [teal.data::dataset()].
+The examples below illustrate the usage of these different dataset functions for example [teal.data::cdisc_dataset()] and [teal.data::dataset()]. For more information,
+see documentation in `teal.data`.
 
 ## Join Keys
 
@@ -31,7 +31,7 @@ Primary keys serve as unique row identifiers in individual datasets and thus nee
 and dataset connector. These can be specified on the most general dataset constructor [teal.data::dataset()] as
 shown below.
 
-```r
+```{r}
 library(teal)
 library(scda)
 
@@ -46,7 +46,6 @@ dataset("ADSL", ADSL, keys = c("STUDYID", "USUBJID"))
 # (although they can be overwritten)
 ADTTE <- synthetic_cdisc_data("latest")$adtte
 cdisc_dataset("ADTTE", ADTTE)
-
 ```
 
 When passing multiple datasets to the [teal.data::cdisc_data()] function, dataset relationship are set using
@@ -58,10 +57,7 @@ specified. Keys are automatically added if `dataname` matches one of the impleme
 [teal.data::cdisc_dataset()] function. This minimizes the code needed to allow data merges as seen in this
 example:
 
-```r
-library(scda)
-library(teal)
-
+```{r}
 ADSL <- synthetic_cdisc_data("latest")$adsl
 ADTTE <- synthetic_cdisc_data("latest")$adtte
 
@@ -71,7 +67,7 @@ cdisc_data(
 )
 
 # which is equivalent to:
-cdisc_data(
+example_data <- cdisc_data(
 	cdisc_dataset(
 		dataname = "ADSL",
 		x = ADSL,
@@ -91,6 +87,15 @@ cdisc_data(
 		join_key("ADSL", "ADTTE", c("STUDYID", "USUBJID"))
 	)
 )
+
+app <- init(
+  data = example_data,
+  modules = modules(example_module())
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 ```
 
 The [teal.data::join_keys()] function is used to specify keys:

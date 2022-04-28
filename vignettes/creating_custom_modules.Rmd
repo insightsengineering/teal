@@ -47,7 +47,7 @@ which can be added into `teal` apps using `example_module(label = "Label for tab
 
 This function contains the UI required for the module. It should be a function with at least the arguments `id` and `datasets`.
 It can contain standard UI components alongside additional widgets provided by the `teal.widgets` package.
-In the example above we are using the `standard_layout` function of `teal.widgets` which generates a layout 
+In the example above we are using the `standard_layout` function of `teal.widgets` which generates a layout
 including an encoding panel on the left and main output covering the rest of the module's UI.
 
 ### Server function
@@ -70,11 +70,11 @@ The `datasets` argument is a `FilteredData` object which provides a call to extr
 
 ## A More Complicated Example
 
-The `teal` framework also provides: 
+The `teal` framework also provides:
 
 - A way to create modules which the generate the R code needed to reproduce their outputs;
 these modules use the [`teal.code`](https://insightsengineering.github.io/teal.code/) package.
-- A way extract from and merge related datasets using the 
+- A way extract from and merge related datasets using the
 [`teal.transform`](https://insightsengineering.github.io/teal.transform/) package.
 - A way to allow app creators to customize your modules also using `teal.transform`.
 
