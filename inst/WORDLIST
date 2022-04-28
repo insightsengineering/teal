@@ -42,6 +42,7 @@ CodeClass
 coercible
 CSR
 css
+customizable
 customizations
 dataname
 Dataname
@@ -55,6 +56,7 @@ DVSEQ
 DVTERM
 enum
 EXSEQ
+filterpanel
 funder
 Github
 http
