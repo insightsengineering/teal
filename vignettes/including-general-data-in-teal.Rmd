@@ -67,7 +67,8 @@ app <- init(
     fun_dataset_connector("PERSON", fun = person_generator, keys = "ID") %>%
       mutate_dataset("PERSON$SEX <- rep(c('M', 'F'), 4)"),
     fun_dataset_connector("PETS", fun = pet_generator, keys = "ID")
-  ) %>% mutate_join_keys("PERSON", "PETS", c("ID" = "PERSON_ID")),
+  ) %>%
+    mutate_join_keys("PERSON", "PETS", c("ID" = "PERSON_ID")),
   modules = modules(example_module())
 )
 

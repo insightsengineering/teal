@@ -37,7 +37,8 @@ app <- init(
     dataset("IRIS",
       iris_with_keys,
       code = "IRIS <- iris %>% mutate(id = factor(row_number()))",
-      keys = c("id")),
+      keys = c("id")
+    ),
     dataset("CARS", mtcars, code = "CARS <- mtcars")
   ),
   modules = modules(

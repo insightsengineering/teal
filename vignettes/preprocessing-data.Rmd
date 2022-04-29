@@ -22,17 +22,17 @@ For example, for the following app only `ADSL <- readRDS("<your data path>/adsl.
 # for the purpose of example save the file to the current directory
 library(scda)
 library(teal)
-synthetic_cdisc_data('latest')$adsl
-saveRDS(synthetic_cdisc_data('latest')$adsl, "adsl.rds")
+synthetic_cdisc_data("latest")$adsl
+saveRDS(synthetic_cdisc_data("latest")$adsl, "adsl.rds")
 
 ## preprocessing -------------------
-ADSL <- readRDS("adsl.rds")
+adsl <- readRDS("adsl.rds")
 ## -------------------
 
 cs_arm <- choices_selected(c("ACTARMCD", "ARMCD"), "ACTARMCD")
 
 app <- init(
-  data = cdisc_data(cdisc_dataset("ADSL", ADSL)),
+  data = cdisc_data(cdisc_dataset("ADSL", adsl)),
   modules = modules(example_module())
 )
 
@@ -45,11 +45,11 @@ If you run the app above, the show R code button will return R code that contain
 # for the purpose of example save the file to current directory
 library(scda)
 library(teal)
-synthetic_cdisc_data('latest')$adsl
-saveRDS(synthetic_cdisc_data('latest')$adsl, "adsl.rds")
+synthetic_cdisc_data("latest")$adsl
+saveRDS(synthetic_cdisc_data("latest")$adsl, "adsl.rds")
 
 ## preprocessing -------------------
-ADSL <- readRDS("adsl.rds")
+adsl <- readRDS("adsl.rds")
 ## -------------------
 unlink("adsl.rds")
 
@@ -57,7 +57,7 @@ cs_arm <- choices_selected(c("ACTARMCD", "ARMCD"), "ACTARMCD")
 
 app <- init(
   data = cdisc_data(
-    cdisc_dataset("ADSL", ADSL),
+    cdisc_dataset("ADSL", adsl),
     code = 'ADSL <- readRDS("adsl.rds")'
   ),
   modules = modules(example_module())
@@ -85,16 +85,16 @@ To complete the above example try the code below (**<span style="color:red">NOTE
 # for the purpose of example save the file to current directory
 library(scda)
 library(teal)
-synthetic_cdisc_data('latest')$adsl
-saveRDS(synthetic_cdisc_data('latest')$adsl, "adsl.rds")
+synthetic_cdisc_data("latest")$adsl
+saveRDS(synthetic_cdisc_data("latest")$adsl, "adsl.rds")
 # code>
-ADSL <- readRDS("adsl.rds")
+adsl <- readRDS("adsl.rds")
 # <code
 
 cs_arm <- choices_selected(c("ACTARMCD", "ARMCD"), "ACTARMCD")
 
 app <- init(
-  data = cdisc_data(cdisc_dataset("ADSL", ADSL), code = get_code(file = "app.R")),
+  data = cdisc_data(cdisc_dataset("ADSL", adsl), code = get_code(file = "app.R")),
   modules = modules(example_module())
 )
 
@@ -110,10 +110,10 @@ library(scda)
 library(teal)
 
 # code>
-#data import
-ADSL <- synthetic_cdisc_data("latest")$adsl
+# data import
+adsl <- synthetic_cdisc_data("latest")$adsl
 
-excluded_obj1 <- 1:10 #nocode
+excluded_obj1 <- 1:10 # nocode
 
 # nocode>
 excluded_obj2 <- 1:10
@@ -122,12 +122,13 @@ excluded_obj2 <- 1:10
 # <code
 
 x <- init(
-  data = cdisc_data(cdisc_dataset("ADSL", ADSL),
-                    code = get_code("app.R", exclude_comments = TRUE, read_sources = TRUE),
-                    check = TRUE),
+  data = cdisc_data(cdisc_dataset("ADSL", adsl),
+    code = get_code("app.R", exclude_comments = TRUE, read_sources = TRUE),
+    check = TRUE
+  ),
   modules = modules(example_module()),
   header = "Simple app with preprocessing",
-  footer = tags$p(class="text-muted", "Source: agile-R website")
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
 )
 
 shinyApp(x$ui, x$server)
