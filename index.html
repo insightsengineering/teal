@@ -51,6 +51,11 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/creating_custom_modules.html">Creating Custom Modules</a>
+    <a class="dropdown-item" href="articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
+    <a class="dropdown-item" href="articles/including-general-data-in-teal.html">Input general data in a teal application</a>
+    <a class="dropdown-item" href="articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
+    <a class="dropdown-item" href="articles/join-keys.html">Join Keys</a>
+    <a class="dropdown-item" href="articles/preprocessing-data.html">Preprocessing data</a>
     <a class="dropdown-item" href="articles/teal_options.html">Modifying a Teal application with R options</a>
   </div>
 </li>
@@ -77,97 +82,66 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="teal-interactive-exploratory-data-analysis-with-shiny-web-applications-">Teal: Interactive Exploratory Data Analysis with Shiny
-Web-Applications
-<a href="https://github.com/insightsengineering/teal" class="external-link"><img src="reference/figures/teal.png" align="right" height="139" style="max-width: 100%;"></a>
+<div class="page-header"><h1 id="teal-interactive-exploratory-data-analysis-with-shiny-web-applications-">Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href="https://github.com/insightsengineering/teal" class="external-link"><img src="reference/figures/teal.png" align="right" height="139" style="max-width: 100%;"></a>
 <a class="anchor" aria-label="anchor" href="#teal-interactive-exploratory-data-analysis-with-shiny-web-applications-"></a>
 </h1></div>
-<p><em>teal</em> is a shiny-based interactive exploration framework for
-analyzing data. <code>teal</code> applications require app developers to
-specify:</p>
+<p><em>teal</em> is a shiny-based interactive exploration framework for analyzing data. <code>teal</code> applications require app developers to specify:</p>
 <!-- markdownlint-disable MD007 MD030 -->
 <ul>
 <li>Data, which can be:
 <ul>
 <li>CDISC data, commonly used for clinical trial reporting</li>
-<li>Independent datasets, for example from a
-<code>data.frame</code>
+<li>Independent datasets, for example from a <code>data.frame</code>
 </li>
-<li>Related datasets, for example a set of <code>data.frames</code> with
-key columns to enable data joins</li>
+<li>Related datasets, for example a set of <code>data.frames</code> with key columns to enable data joins</li>
 <li>
-<code>MultiAssayExperiment</code> objects which are R data
-structures for representing and analyzing multi-omics experiments</li>
+<code>MultiAssayExperiment</code> objects which are R data structures for representing and analyzing multi-omics experiments</li>
 </ul>
 </li>
 <li>
 <code>teal</code> modules:
 <ul>
 <li>
-<code>teal modules</code> are shiny modules built within the
-<code>teal</code> framework that specify analysis to be performed. For
-example, it can be a module for exploring outliers in the data, or a
-module for visualizing the data in line plots. Although these can be
-created from scratch, lost of <code>teal</code> modules have been
-released and we recommend starting with modules found in the following
-packages:
+<code>teal modules</code> are shiny modules built within the <code>teal</code> framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, lost of <code>teal</code> modules have been released and we recommend starting with modules found in the following packages:
 <ul>
 <li>
-<a href="https://github.com/insightsengineering/teal.modules.general" class="external-link"><code>teal.modules.general</code></a>:
-general modules for exploring relational/independent/CDISC data</li>
+<a href="https://github.com/insightsengineering/teal.modules.general" class="external-link"><code>teal.modules.general</code></a>: general modules for exploring relational/independent/CDISC data</li>
 <li>
-<a href="https://github.com/insightsengineering/teal.modules.clinical" class="external-link"><code>teal.modules.clinical</code></a>:
-modules specific to CDISC data and clinical trial reporting</li>
+<a href="https://github.com/insightsengineering/teal.modules.clinical" class="external-link"><code>teal.modules.clinical</code></a>: modules specific to CDISC data and clinical trial reporting</li>
 <li>
-<a href="https://github.com/insightsengineering/teal.modules.hermes" class="external-link"><code>teal.modules.hermes</code></a>:
-modules for analyzing <code>MultiAssayExperiment</code> objects</li>
+<a href="https://github.com/insightsengineering/teal.modules.hermes" class="external-link"><code>teal.modules.hermes</code></a>: modules for analyzing <code>MultiAssayExperiment</code> objects</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<!-- markdownlint-enable MD007 MD030 --><p>A lot of the functionality of the <code>teal</code> framework derives
-from the following packages:</p>
+<!-- markdownlint-enable MD007 MD030 --><p>A lot of the functionality of the <code>teal</code> framework derives from the following packages:</p>
 <!-- markdownlint-disable MD007 MD030 -->
 <ul>
 <li>
-<a href="https://github.com/insightsengineering/teal.data" class="external-link"><code>teal.data</code></a>:
-creating and loading the data needed for <code>teal</code>
-applications.</li>
+<a href="https://github.com/insightsengineering/teal.data" class="external-link"><code>teal.data</code></a>: creating and loading the data needed for <code>teal</code> applications.</li>
 <li>
-<a href="https://github.com/insightsengineering/teal.widgets" class="external-link"><code>teal.widgets</code></a>:
-shiny components used within <code>teal</code>.</li>
+<a href="https://github.com/insightsengineering/teal.widgets" class="external-link"><code>teal.widgets</code></a>: shiny components used within <code>teal</code>.</li>
 <li>
-<a href="https://github.com/insightsengineering/teal.slice" class="external-link"><code>teal.slice</code></a>:
-provides a filtering panel to allow filtering of data.</li>
+<a href="https://github.com/insightsengineering/teal.slice" class="external-link"><code>teal.slice</code></a>: provides a filtering panel to allow filtering of data.</li>
 <li>
-<a href="https://github.com/insightsengineering/teal.code" class="external-link"><code>teal.code</code></a>:
-handles reproducibility of outputs.</li>
+<a href="https://github.com/insightsengineering/teal.code" class="external-link"><code>teal.code</code></a>: handles reproducibility of outputs.</li>
 <li>
-<a href="https://github.com/insightsengineering/teal.transform" class="external-link"><code>teal.transform</code></a>:
-standardizes extracting and merging data.</li>
+<a href="https://github.com/insightsengineering/teal.transform" class="external-link"><code>teal.transform</code></a>: standardizes extracting and merging data.</li>
 <li>
-<a href="https://github.com/insightsengineering/teal.logger" class="external-link"><code>teal.logger</code></a>:
-standardizes logging within <code>teal</code> framework.</li>
+<a href="https://github.com/insightsengineering/teal.logger" class="external-link"><code>teal.logger</code></a>: standardizes logging within <code>teal</code> framework.</li>
 </ul>
-<!-- markdownlint-enable MD007 MD030 --><p>See these packages for more information about how to use the
-different parts of the <code>teal</code> framework.</p>
+<!-- markdownlint-enable MD007 MD030 --><p>See these packages for more information about how to use the different parts of the <code>teal</code> framework.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>This repository requires a personal access token to install see here
-<a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token" class="external-link">creating
-and using PAT</a>. Once this is set up, to install the latest released
-version of the package run:</p>
+<p>This repository requires a personal access token to install see here <a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token" class="external-link">creating and using PAT</a>. Once this is set up, to install the latest released version of the package run:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>GITHUB_PAT <span class="op">=</span> <span class="st">"your_access_token_here"</span><span class="op">)</span>
 <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://devtools.r-lib.org/" class="external-link">"devtools"</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"insightsengineering/teal@*release"</span><span class="op">)</span></code></pre></div>
-<p>In order to run many of the examples you will also need to install
-the <a href="https://github.com/insightsengineering/scda" class="external-link"><code>scda</code></a>
-package.</p>
-<p>See package vignettes <code>browseVignettes(package = "teal")</code>
-for usage of this package.</p>
+<p>In order to run many of the examples you will also need to install the <a href="https://github.com/insightsengineering/scda" class="external-link"><code>scda</code></a> package.</p>
+<p>See package vignettes <code>browseVignettes(package = "teal")</code> for usage of this package.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
