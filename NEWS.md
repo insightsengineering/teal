@@ -1,6 +1,9 @@
 # teal 0.11.0.9003
+
 ### Miscellaneous
 * Added a template to the `pkgdown` configuration.
+* Removed unneeded `shinytest` app tests.
+
 # teal 0.11.0
 
 * `teal.data`: creating and loading the data needed for `teal` applications.
