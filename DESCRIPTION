@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.11.0.9003
+Version: 0.11.0.9004
 Date: 2022-04-07
 Authors@R: c(
     person("NEST", , , "basel.nestcicd@roche.com", role = c("aut", "cre")),
@@ -21,7 +21,6 @@ Description: teal is a shiny based interactive exploration framework for
     analyzing clinical trials data. teal currently provides a dynamic
     filtering facility and different data viewers. teal shiny applications
     are built using standard shiny modules.
-Language: en-US
 License: Apache License 2.0 | file LICENSE
 Depends:
     R (>= 4.0),
@@ -59,6 +58,7 @@ RdMacros:
     lifecycle
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
+Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2

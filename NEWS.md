@@ -1,4 +1,4 @@
-# teal 0.11.0.9003
+# teal 0.11.0.9004
 
 ### Miscellaneous
 * Added a template to the `pkgdown` configuration.
