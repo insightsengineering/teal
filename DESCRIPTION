@@ -4,8 +4,8 @@ Title: Exploratory Web Apps for Analyzing Clinical Trials Data
 Version: 0.11.0.9004
 Date: 2022-04-07
 Authors@R: c(
-    person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = c("aut", "cre")),
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
+    person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
     person("Nikolas", "Burkoff", , "nikolas.burkoff@roche.com", role = "aut"),
     person("Konrad", "Pagacz", , "konrad.pagacz@contractors.roche.com", role = "aut"),
     person("Junlue", "Zhao", , "zhaoj88@gene.com", role = "aut"),

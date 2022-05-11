@@ -14,10 +14,11 @@ To learn mode about the package either read the project website at
 \url{Project Website} or read the \code{\link{init}} manual pages.
 }
 \author{
-\strong{Maintainer}: Pawel Rucki \email{pawel.rucki@roche.com}
+\strong{Maintainer}: Dawid Kaledkowski \email{dawid.kaledkowski@roche.com}
 
 Authors:
 \itemize{
+  \item Pawel Rucki \email{pawel.rucki@roche.com}
   \item Nikolas Burkoff \email{nikolas.burkoff@roche.com}
   \item Konrad Pagacz \email{konrad.pagacz@contractors.roche.com}
   \item Junlue Zhao \email{zhaoj88@gene.com}
