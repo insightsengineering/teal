@@ -7,6 +7,8 @@ Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
     person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
     person("Nikolas", "Burkoff", , "nikolas.burkoff@roche.com", role = "aut"),
+    person("Mahmoud", "Hallal", , "mahmoud.hallal@roche.com", role = "aut"),
+    person("Maciej", "Nasinski", , "maciej.nasinski@contractors.roche.com", role = "aut"),
     person("Konrad", "Pagacz", , "konrad.pagacz@contractors.roche.com", role = "aut"),
     person("Junlue", "Zhao", , "zhaoj88@gene.com", role = "aut"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
