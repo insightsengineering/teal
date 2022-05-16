@@ -13,7 +13,6 @@ reference:
   - title: Teal Core Functions
     desc: These are the main functions needed to build a teal app.
     contents:
-      - bookmarkableShinyApp
       - init
       - module
       - modules
@@ -38,3 +37,6 @@ reference:
       - get_rcode_srv
       - get_rcode_ui
       - show_rcode_modal
+  - title: Deprecated function
+    contents:
+      - bookmarkableShinyApp
