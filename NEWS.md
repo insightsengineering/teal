@@ -1,4 +1,4 @@
-# teal 0.11.0.9005
+# teal 0.11.0.9006
 
 ### Breaking changes
 * Deprecated `bookmarkableShinyApp`. In future releases the `teal` framework will stop supporting shiny bookmarking (which has not officially been supported); it may be officially supported in the future. Note the filter panel in `teal.slice` retains its ability to save and restore its state if used in a standalone `shiny` app with bookmarking. 
