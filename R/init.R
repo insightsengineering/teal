@@ -86,7 +86,6 @@
 #'     )
 #'   )
 #'   ```
-#'   `filter` is ignored if the app is restored from a bookmarked state.
 #' @param header (`character` or `shiny.tag`) \cr
 #'   the header of the app. Note shiny code placed here (and in the footer
 #'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
@@ -144,8 +143,6 @@
 #' )
 #' \dontrun{
 #' shinyApp(app$ui, app$server)
-#' # or: to also work with bookmarking
-#' bookmarkableShinyApp(app$ui, app$server)
 #' }
 #'
 #' # See the vignette for an example how to embed this app as a module
@@ -193,7 +190,9 @@ init <- function(data,
 
 #' Make a Shiny UI function bookmarkable
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("deprecated")`
+#'
+#' This function is deprecated and will be removed in a future release of `teal`.
 #'
 #' This is a customization of `shinyApp`.
 #'
@@ -231,6 +230,15 @@ init <- function(data,
 #' @return `shinyApp` value
 #' @export
 bookmarkableShinyApp <- function(ui, server, ...) { # nolint
+
+  # Note when this function is removed code to allow bookmarking in srv_teal
+  # should also be removed.
+  lifecycle::deprecate_soft(
+    when = "0.12.0",
+    what = "bookmarkableShinyApp()",
+    details = "In future releases teal will stop supporting shiny bookmarking"
+  )
+
   # ui must be a function of request to be bookmarkable
   ui_new <- function(request) {
     # we use similar logic to `shiny:::uiHttpHandler`

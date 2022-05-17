@@ -70,9 +70,7 @@ different way. Since it contains patient data with list of experiments,
     )
   )
 )
-}
-
-\code{filter} is ignored if the app is restored from a bookmarked state.}
+}}
 }
 \value{
 \code{reactive} which returns the currently active module
@@ -85,8 +83,6 @@ main teal UI that depends on the data.
 The currently active tab is tracked and the right filter panel
 updates the displayed datasets to filter for according to the active datanames
 of the tab.
-The initially displayed filter states can be provided, bookmarked filter
-states always take precedence over them.
 }
 \details{
 For more doc, see \code{\link[=ui_teal]{ui_teal()}}.

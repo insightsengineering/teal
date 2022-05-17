@@ -77,9 +77,7 @@ different way. Since it contains patient data with list of experiments,
     )
   )
 )
-}
-
-\code{filter} is ignored if the app is restored from a bookmarked state.}
+}}
 }
 \value{
 \code{reactive}, return value of \code{\link[=srv_teal]{srv_teal()}}

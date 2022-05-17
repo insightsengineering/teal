@@ -81,9 +81,7 @@ different way. Since it contains patient data with list of experiments,
     )
   )
 )
-}
-
-\code{filter} is ignored if the app is restored from a bookmarked state.}
+}}
 
 \item{header}{(\code{character} or \code{shiny.tag}) \cr
 the header of the app. Note shiny code placed here (and in the footer
@@ -150,8 +148,6 @@ app <- init(
 )
 \dontrun{
 shinyApp(app$ui, app$server)
-# or: to also work with bookmarking
-bookmarkableShinyApp(app$ui, app$server)
 }
 
 # See the vignette for an example how to embed this app as a module

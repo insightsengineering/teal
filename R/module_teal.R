@@ -15,8 +15,6 @@
 #' for non-delayed data which takes time to load into memory, avoiding
 #' Shiny session timeouts.
 #'
-#' Bookmarking is supported, i.e. the datasets filter state that this class
-#' is responsible for is stored in and restored from the bookmarked state.
 #'
 #' It is written as a Shiny module so it can be added into other apps as well.
 #'
@@ -115,8 +113,6 @@ ui_teal <- function(id,
 #' The currently active tab is tracked and the right filter panel
 #' updates the displayed datasets to filter for according to the active datanames
 #' of the tab.
-#' The initially displayed filter states can be provided, bookmarked filter
-#' states always take precedence over them.
 #'
 #' For more doc, see [ui_teal()].
 #'
@@ -151,9 +147,11 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     )
 
     # bookmarking -----
+    # Note bookmarkableShinyApp has been soft deprecated and when it has been removed completely
+    # this code should be removed.
     saved_datasets_state <- reactiveVal(NULL) # set when restored because data must already be populated
     onBookmark(function(state) {
-      # this function is isolated  by Shiny
+      # this function is isolated by Shiny
       # We store the entire R6 class with reactive values in it, but set the data to NULL.
       # Note that we cannnot directly do this on datasets as this would trigger
       # reactivity to recompute the filtered datasets, which is not needed.
