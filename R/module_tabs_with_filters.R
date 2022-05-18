@@ -136,13 +136,13 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #'   details see [`teal.slice::FilteredData`].
 #' @return `reactive` currently selected active_module
 #' @keywords internal
-srv_tabs_with_filters <- function(id, datasets, modules, filter) {
+srv_tabs_with_filters <- function(id, datasets, modules, reporter, filter) {
   stopifnot(is(datasets, "FilteredData"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
       "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
     )
-    active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules)
+    active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules, reporter = reporter)
 
     active_datanames <- eventReactive(
       eventExpr = active_module(),

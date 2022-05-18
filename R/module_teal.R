@@ -193,6 +193,13 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       datasets
     })
 
+
+    reporter <- teal.reporter::Reporter$new()
+
+    if (use_reporter(modules)) {
+      modules <- append_module(modules, reporter_previewer_module())
+    }
+
     # Replace splash / welcome screen once data is loaded ----
     # ignoreNULL to not trigger at the beginning when data is NULL
     # just handle it once because data obtained through delayed loading should
@@ -209,7 +216,11 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         where = "beforeEnd",
         # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
         # just the first item of the tagList)
-        ui = div(ui_tabs_with_filters(session$ns("main_ui"), modules = modules, datasets = datasets_reactive())),
+        ui = div(ui_tabs_with_filters(
+          session$ns("main_ui"),
+          modules = modules,
+          datasets = datasets_reactive())
+        ),
         # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
         # have any effect as they are ignored when not present, see note in `module_add_filter_variable.R`
         immediate = TRUE
@@ -218,6 +229,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       # switching filter to bookmarked state
       if (!is.null(saved_datasets_state())) filter <- saved_datasets_state()
 
+
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)
       # `once = TRUE` ensures this
@@ -225,6 +237,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         id = "main_ui",
         datasets = datasets_reactive(),
         modules = modules,
+        reporter = reporter,
         filter = filter
       )
       return(active_module)

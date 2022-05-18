@@ -4,7 +4,7 @@
 \alias{srv_tabs_with_filters}
 \title{Server function}
 \usage{
-srv_tabs_with_filters(id, datasets, modules, filter)
+srv_tabs_with_filters(id, datasets, modules, reporter, filter)
 }
 \arguments{
 \item{id}{(\code{character})\cr

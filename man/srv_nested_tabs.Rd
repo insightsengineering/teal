@@ -7,13 +7,13 @@
 \alias{srv_nested_tabs.teal_module}
 \title{Server function that returns currently active module}
 \usage{
-srv_nested_tabs(id, datasets, modules)
+srv_nested_tabs(id, datasets, modules, reporter)
 
-\method{srv_nested_tabs}{default}(id, datasets, modules)
+\method{srv_nested_tabs}{default}(id, datasets, modules, reporter)
 
-\method{srv_nested_tabs}{teal_modules}(id, datasets, modules)
+\method{srv_nested_tabs}{teal_modules}(id, datasets, modules, reporter)
 
-\method{srv_nested_tabs}{teal_module}(id, datasets, modules)
+\method{srv_nested_tabs}{teal_module}(id, datasets, modules, reporter)
 }
 \arguments{
 \item{id}{(\code{character})\cr

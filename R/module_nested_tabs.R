@@ -86,15 +86,13 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   stopifnot(is(datasets, "FilteredData"))
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
+  args <- c(list(id = id, datasets = datasets), args)
   tags$div(
     id = id,
     class = "teal_module",
     tagList(
       if (depth >= 2L) div(style = "margin-top: 1.5rem;"),
-      do.call(
-        modules$ui,
-        c(list(id = id, datasets = datasets), args)
-      )
+      do.call(modules$ui, args)
     )
   )
 }
@@ -122,22 +120,23 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
 #'
 #' @return `reactive` which returns the active module that corresponds to the selected tab
 #' @keywords internal
-srv_nested_tabs <- function(id, datasets, modules) {
+srv_nested_tabs <- function(id, datasets, modules, reporter) {
   stopifnot(inherits(datasets, "FilteredData"))
+  stopifnot(inherits(reporter, "Reporter"))
   UseMethod("srv_nested_tabs", modules)
 }
 
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.default <- function(id, datasets, modules) {
+srv_nested_tabs.default <- function(id, datasets, modules, reporter) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.teal_modules <- function(id, datasets, modules) {
+srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_trace(
       paste(
@@ -147,7 +146,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules) {
       )
     )
     modules_reactive <- sapply(names(modules$children), USE.NAMES = TRUE, function(id) {
-      srv_nested_tabs(id = id, datasets = datasets, modules = modules$children[[id]])
+      srv_nested_tabs(id = id, datasets = datasets, modules = modules$children[[id]], reporter = reporter)
     })
 
     get_active_module <- reactive({
@@ -168,7 +167,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules) {
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.teal_module <- function(id, datasets, modules) {
+srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   logger::log_trace(
     paste(
       "srv_nested_tabs.teal_module initializing the module with:",
@@ -179,16 +178,17 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules) {
 
   modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
   is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
+
+  args <- c(list(id = id, datasets = datasets), modules$server_args)
+  if (modules$use_reporter) {
+    args <- c(args, list(reporter = reporter))
+  }
+
   if (is_module_server) {
-    do.call(modules$server, c(list(id = id, datasets = datasets), modules$server_args))
+    do.call(modules$server, args)
   } else {
-    do.call(
-      callModule,
-      c(
-        list(module = modules$server, id = id, datasets = datasets),
-        modules$server_args
-      )
-    )
+    args <- c(args, list(module = modules$server))
+    do.call(callModule, args)
   }
   reactive(modules)
 }

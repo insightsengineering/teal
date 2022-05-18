@@ -92,6 +92,32 @@ modules <- function(..., label = "root") {
 }
 
 
+append_module <- function(modules, module) {
+  # TODO validation
+  modules$children <- c(modules$children, list(module))
+  labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
+  names(modules$children) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
+  modules
+}
+
+
+use_reporter <- function(modules) {
+  UseMethod("use_reporter", modules)
+}
+
+use_reporter.default <- function(modules) {
+  stop("use_reporter function not implemented for this object")
+}
+
+use_reporter.teal_modules <- function(modules) {
+  any(unlist(lapply(modules$children, function(x) use_reporter(x))))
+}
+
+use_reporter.teal_module <- function(modules) {
+  modules$use_reporter
+}
+
+
 #' Deprecated: Creates the root modules container
 #'
 #' @description `r lifecycle::badge("deprecated")`
@@ -249,7 +275,8 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
     list(
       label = label,
       server = server, ui = ui, filters = filters,
-      server_args = server_args, ui_args = ui_args
+      server_args = server_args, ui_args = ui_args,
+      use_reporter = "reporter" %in% server_main_args
     ),
     class = "teal_module"
   )
