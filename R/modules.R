@@ -114,7 +114,7 @@ use_reporter.teal_modules <- function(modules) {
 }
 
 use_reporter.teal_module <- function(modules) {
-  modules$use_reporter
+  "reporter" %in% names(formals(modules$server))
 }
 
 
@@ -275,8 +275,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
     list(
       label = label,
       server = server, ui = ui, filters = filters,
-      server_args = server_args, ui_args = ui_args,
-      use_reporter = "reporter" %in% server_main_args
+      server_args = server_args, ui_args = ui_args
     ),
     class = "teal_module"
   )

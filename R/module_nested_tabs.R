@@ -180,7 +180,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
 
   args <- c(list(id = id, datasets = datasets), modules$server_args)
-  if (modules$use_reporter) {
+  if (use_reporter(modules)) {
     args <- c(args, list(reporter = reporter))
   }
 
