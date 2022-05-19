@@ -92,27 +92,44 @@ modules <- function(..., label = "root") {
 }
 
 
+
+#' Function which appends a teal_module onto the children of a teal_modules object
+#' @keywords internal
+#' @param modules `teal_modules`
+#' @param module `teal_module` object to be appended onto the children of `modules`
+#' @return `teal_modules` object with `module` appended
 append_module <- function(modules, module) {
-  # TODO validation
+  checkmate::assert_choice(modules, "teal_modules")
+  checkmate::assert_choice(module, "teal_module")
   modules$children <- c(modules$children, list(module))
   labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
   names(modules$children) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
   modules
 }
 
-
+#' Does the object make use of `teal.reporter` reporting
+#' @param modules `teal_module` or `teal_modules` object
+#' @return `logical` whether the object makes use of `teal.reporter` reporting
+#' @rdname use_reporter
+#' @keywords internal
 use_reporter <- function(modules) {
   UseMethod("use_reporter", modules)
 }
 
+#' @rdname use_reporter
+#' @keywords internal
 use_reporter.default <- function(modules) {
   stop("use_reporter function not implemented for this object")
 }
 
+#' @rdname use_reporter
+#' @keywords internal
 use_reporter.teal_modules <- function(modules) {
   any(unlist(lapply(modules$children, function(x) use_reporter(x))))
 }
 
+#' @rdname use_reporter
+#' @keywords internal
 use_reporter.teal_module <- function(modules) {
   "reporter" %in% names(formals(modules$server))
 }

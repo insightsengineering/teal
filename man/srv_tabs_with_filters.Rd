@@ -21,6 +21,8 @@ details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}.}
 nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
+\item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
+
 \item{filter}{(\code{list})\cr
 You can define filters that show when the app starts. List names should be
 named according to datanames passed to the \code{data} argument.

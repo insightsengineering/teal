@@ -29,6 +29,8 @@ details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}.}
 \item{modules}{(\code{list} or \code{teal_modules})\cr
 nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
+
+\item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
 }
 \value{
 \code{reactive} which returns the active module that corresponds to the selected tab

@@ -134,10 +134,12 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @param datasets (`FilteredData`)\cr
 #'   object to store filter state and filtered datasets, shared across modules. For more
 #'   details see [`teal.slice::FilteredData`].
+#' @param reporter (`Reporter`) object from `teal.reporter`
 #' @return `reactive` currently selected active_module
 #' @keywords internal
 srv_tabs_with_filters <- function(id, datasets, modules, reporter, filter) {
   stopifnot(is(datasets, "FilteredData"))
+  stopifnot(is(reporter, "Reporter"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
       "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
