@@ -99,8 +99,8 @@ modules <- function(..., label = "root") {
 #' @param module `teal_module` object to be appended onto the children of `modules`
 #' @return `teal_modules` object with `module` appended
 append_module <- function(modules, module) {
-  checkmate::assert_choice(modules, "teal_modules")
-  checkmate::assert_choice(module, "teal_module")
+  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_class(module, "teal_module")
   modules$children <- c(modules$children, list(module))
   labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
   names(modules$children) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
