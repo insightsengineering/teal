@@ -531,3 +531,103 @@ testthat::test_that("modules_depth increases depth by 1 for each teal_modules", 
     3L
   )
 })
+
+
+# is_reporter_used -----
+testthat::test_that("is_reporter_used throws error if object is not teal_module or teal_modules", {
+  testthat::expect_error(is_reporter_used(5), "no applicable method for 'is_reporter_used'")
+  testthat::expect_error(is_reporter_used(list()), "no applicable method for 'is_reporter_used'")
+})
+
+testthat::test_that("is_reporter_used returns true if teal_module has reporter in server function args", {
+  server_fun <- function(id, datasets) {
+  }
+
+  ui_fun <- function(id, ...) {
+    tags$p(paste0("id: ", id))
+  }
+
+  mod <- module(
+    label = "label",
+    server = server_fun,
+    ui = ui_fun,
+    filters = ""
+  )
+  testthat::expect_false(is_reporter_used(mod))
+})
+
+testthat::test_that("is_reporter_used returns false if teal_module does not reporter in server function args", {
+  server_fun <- function(id, datasets, reporter) {
+  }
+
+  ui_fun <- function(id, ...) {
+    tags$p(paste0("id: ", id))
+  }
+
+  mod <- module(
+    label = "label",
+    server = server_fun,
+    ui = ui_fun,
+    filters = ""
+  )
+  testthat::expect_true(is_reporter_used(mod))
+})
+
+
+testthat::test_that("is_reporter_used returns false if teal_modules has no chidren using reporter", {
+  server_fun <- function(id, datasets) {
+  }
+
+  ui_fun <- function(id, ...) {
+    tags$p(paste0("id: ", id))
+  }
+
+  mod <- module(
+    label = "label",
+    server = server_fun,
+    ui = ui_fun,
+    filters = ""
+  )
+
+  mods <- modules(label = "lab", mod, mod)
+  testthat::expect_false(is_reporter_used(mods))
+
+  mods <- modules(label = "lab", mods, mod, mod)
+  testthat::expect_false(is_reporter_used(mods))
+})
+
+testthat::test_that("is_reporter_used returns true if teal_modules has at least one child using reporter", {
+  server_fun <- function(id, datasets) {
+  }
+
+  server_fun_with_reporter <- function(id, datasets, reporter) {
+
+  }
+
+  ui_fun <- function(id, ...) {
+    tags$p(paste0("id: ", id))
+  }
+
+  mod <- module(
+    label = "label",
+    server = server_fun,
+    ui = ui_fun,
+    filters = ""
+  )
+
+  mod_with_reporter <- module(
+    label = "label",
+    server = server_fun_with_reporter,
+    ui = ui_fun,
+    filters = ""
+  )
+
+  mods <- modules(label = "lab", mod, mod_with_reporter)
+  testthat::expect_true(is_reporter_used(mods))
+
+  mods_2 <- modules(label = "lab", mods, mod, mod)
+  testthat::expect_true(is_reporter_used(mods_2))
+
+  mods_3 <- modules(label = "lab", modules(label = "lab", mod, mod), mod_with_reporter, mod)
+  testthat::expect_true(is_reporter_used(mods_3))
+})

@@ -123,12 +123,14 @@ is_reporter_used.default <- function(modules) {
 }
 
 #' @rdname is_reporter_used
+#' @export
 #' @keywords internal
 is_reporter_used.teal_modules <- function(modules) {
   any(unlist(lapply(modules$children, function(x) is_reporter_used(x))))
 }
 
 #' @rdname is_reporter_used
+#' @export
 #' @keywords internal
 is_reporter_used.teal_module <- function(modules) {
   "reporter" %in% names(formals(modules$server))
