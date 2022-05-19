@@ -43,3 +43,7 @@ devtools::install_github("insightsengineering/teal@*release")
 In order to run many of the examples you will also need to install the [`scda`](https://github.com/insightsengineering/scda) package.
 
 See package vignettes `browseVignettes(package = "teal")` for usage of this package.
+
+## Acknowledgment
+
+This package is a result of a joint efforts by many developers and stakeholders. We would like to thank everyone who contributed so far!

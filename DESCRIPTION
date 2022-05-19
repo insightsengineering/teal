@@ -4,18 +4,15 @@ Title: Exploratory Web Apps for Analyzing Clinical Trials Data
 Version: 0.11.0.9006
 Date: 2022-04-07
 Authors@R: c(
-    person("NEST", , , "basel.nestcicd@roche.com", role = c("aut", "cre")),
-    person("Adrian", "Waddell", , "adrian.waddell@roche.com", role = "aut"),
-    person("Tadeusz", "Lewandowski", , "tadeusz.lewandowski@roche.com", role = "ctb"),
-    person("Pawel", "Rucki", , "pawel.rucki@contractors.roche.com", role = "aut"),
-    person("Dawid", "Kaledkowski", , "dawid.kaledkowski@contractors.roche.com", role = "aut"),
-    person("Sebastian", "Wolf", , "sebastian.wolf.sw1@roche.com", role = "aut"),
-    person("Maximilian", "Mordig", , "maximilian_oliver.mordig@roche.com", role = "aut"),
-    person("Bartosz", "Baranowski", , "bartosz.baranowski@roche.com", role = "aut"),
-    person("Ondrej", "Slama", , "ondrej.slama@roche.com", role = "aut"),
+    person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
+    person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
     person("Nikolas", "Burkoff", , "nikolas.burkoff@roche.com", role = "aut"),
+    person("Mahmoud", "Hallal", , "mahmoud.hallal@roche.com", role = "aut"),
     person("Maciej", "Nasinski", , "maciej.nasinski@contractors.roche.com", role = "aut"),
-    person("Roche", role = c("cph", "fnd"))
+    person("Konrad", "Pagacz", , "konrad.pagacz@contractors.roche.com", role = "aut"),
+    person("Junlue", "Zhao", , "zhaoj88@gene.com", role = "aut"),
+    person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
+    person("Maximilian", "Mordig", role = "ctb")
   )
 Description: teal is a shiny based interactive exploration framework for
     analyzing clinical trials data. teal currently provides a dynamic
