@@ -180,15 +180,14 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
 
   args <- c(list(id = id, datasets = datasets), modules$server_args)
-  if (use_reporter(modules)) {
+  if (is_reporter_used(modules)) {
     args <- c(args, list(reporter = reporter))
   }
 
   if (is_module_server) {
     do.call(modules$server, args)
   } else {
-    args <- c(args, list(module = modules$server))
-    do.call(callModule, args)
+    do.call(callModule, c(args, list(module = modules$server)))
   }
   reactive(modules)
 }

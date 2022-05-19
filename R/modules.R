@@ -110,27 +110,27 @@ append_module <- function(modules, module) {
 #' Does the object make use of `teal.reporter` reporting
 #' @param modules `teal_module` or `teal_modules` object
 #' @return `logical` whether the object makes use of `teal.reporter` reporting
-#' @rdname use_reporter
+#' @rdname is_reporter_used
 #' @keywords internal
-use_reporter <- function(modules) {
-  UseMethod("use_reporter", modules)
+is_reporter_used <- function(modules) {
+  UseMethod("is_reporter_used", modules)
 }
 
-#' @rdname use_reporter
+#' @rdname is_reporter_used
 #' @keywords internal
-use_reporter.default <- function(modules) {
-  stop("use_reporter function not implemented for this object")
+is_reporter_used.default <- function(modules) {
+  stop("is_reporter_used function not implemented for this object")
 }
 
-#' @rdname use_reporter
+#' @rdname is_reporter_used
 #' @keywords internal
-use_reporter.teal_modules <- function(modules) {
-  any(unlist(lapply(modules$children, function(x) use_reporter(x))))
+is_reporter_used.teal_modules <- function(modules) {
+  any(unlist(lapply(modules$children, function(x) is_reporter_used(x))))
 }
 
-#' @rdname use_reporter
+#' @rdname is_reporter_used
 #' @keywords internal
-use_reporter.teal_module <- function(modules) {
+is_reporter_used.teal_module <- function(modules) {
   "reporter" %in% names(formals(modules$server))
 }
 

@@ -196,7 +196,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
 
     reporter <- teal.reporter::Reporter$new()
 
-    if (use_reporter(modules)) {
+    if (is_reporter_used(modules)) {
       modules <- append_module(modules, reporter_previewer_module())
     }
 
