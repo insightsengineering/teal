@@ -25,7 +25,7 @@ A lot of the functionality of the `teal` framework derives from the following pa
 -   [`teal.code`](https://github.com/insightsengineering/teal.code): handles reproducibility of outputs.
 -   [`teal.transform`](https://github.com/insightsengineering/teal.transform): standardizes extracting and merging data.
 -   [`teal.logger`](https://github.com/insightsengineering/teal.logger): standardizes logging within `teal` framework.
--   [`teal.reporter`](https://github.com/insightsengineering/teal.reporter): allows `teal` applications to generate reports
+-   [`teal.reporter`](https://github.com/insightsengineering/teal.reporter): allows `teal` applications to generate reports.
 
 <!-- markdownlint-enable MD007 MD030 -->
 
