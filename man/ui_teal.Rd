@@ -49,9 +49,6 @@ The splash screen functionality can also be used
 for non-delayed data which takes time to load into memory, avoiding
 Shiny session timeouts.
 
-Bookmarking is supported, i.e. the datasets filter state that this class
-is responsible for is stored in and restored from the bookmarked state.
-
 It is written as a Shiny module so it can be added into other apps as well.
 }
 \examples{
