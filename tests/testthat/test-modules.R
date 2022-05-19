@@ -535,8 +535,8 @@ testthat::test_that("modules_depth increases depth by 1 for each teal_modules", 
 
 # is_reporter_used -----
 testthat::test_that("is_reporter_used throws error if object is not teal_module or teal_modules", {
-  testthat::expect_error(is_reporter_used(5), "no applicable method for 'is_reporter_used'")
-  testthat::expect_error(is_reporter_used(list()), "no applicable method for 'is_reporter_used'")
+  testthat::expect_error(is_reporter_used(5), "is_reporter_used function not implemented for this object")
+  testthat::expect_error(is_reporter_used(list()), "is_reporter_used function not implemented for this object")
 })
 
 testthat::test_that("is_reporter_used returns true if teal_module has reporter in server function args", {
