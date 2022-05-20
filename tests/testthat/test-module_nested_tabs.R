@@ -25,6 +25,13 @@ test_module4 <- module(
   filters = NULL
 )
 
+testthat::test_that("srv_nested_tabs throws error if reporter is not inherited from class Reporter", {
+  testthat::expect_error(
+    srv_nested_tabs(id, datasets = filtered_data, modules = modules(test_module1), reporter = list()),
+    "inherits\\(reporter, \"Reporter\"\\) is not TRUE"
+  )
+})
+
 # server -------
 testthat::test_that("passed shiny module is initialized", {
   testthat::expect_message(

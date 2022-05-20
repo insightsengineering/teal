@@ -138,8 +138,8 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @return `reactive` currently selected active_module
 #' @keywords internal
 srv_tabs_with_filters <- function(id, datasets, modules, reporter, filter) {
-  stopifnot(is(datasets, "FilteredData"))
-  stopifnot(is(reporter, "Reporter"))
+  checkmate::assert_class(datasets, "FilteredData")
+  checkmate::assert_class(reporter, "Reporter")
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
       "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ') }."

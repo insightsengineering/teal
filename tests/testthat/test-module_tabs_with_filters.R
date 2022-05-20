@@ -15,6 +15,13 @@ test_module2 <- module(
   filters = "mtcars"
 )
 
+testthat::test_that("srv_tabs_with_filters throws error if reporter is not of class Reporter", {
+  testthat::expect_error(
+    srv_tabs_with_filters(id, datasets = filtered_data, modules = modules(test_module1), reporter = list()),
+    "Assertion on 'reporter' failed"
+  )
+})
+
 testthat::test_that("active_datanames() returns dataname from single tab", {
   shiny::testServer(
     app = srv_tabs_with_filters,
