@@ -631,3 +631,83 @@ testthat::test_that("is_reporter_used returns true if teal_modules has at least 
   mods_3 <- modules(label = "lab", modules(label = "lab", mod, mod), mod_with_reporter, mod)
   testthat::expect_true(is_reporter_used(mods_3))
 })
+
+# ---- append_module
+create_mod <- function(label = "label") {
+  server_fun <- function(id, datasets) {
+  }
+
+  ui_fun <- function(id, ...) {
+    tags$p(paste0("id: ", id))
+  }
+
+  mod <- module(
+    label = label,
+    server = server_fun,
+    ui = ui_fun,
+    filters = ""
+  )
+}
+
+
+testthat::test_that("append_module throws error is modules is not inherited from teal_modules", {
+  mod <- create_mod()
+
+  testthat::expect_error(
+    append_module(mod, mod),
+    "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
+  )
+
+  testthat::expect_error(
+    append_module(mod, list(mod)),
+    "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
+  )
+})
+
+testthat::test_that("append_module throws error is module is not inherited from teal_module", {
+  mod <- create_mod()
+  mods <- modules(label = "A", mod)
+
+  testthat::expect_error(
+    append_module(mods, mods),
+    "Assertion on 'module' failed: Must inherit from class 'teal_module'"
+  )
+
+  testthat::expect_error(
+    append_module(mods, list(mod)),
+    "Assertion on 'module' failed: Must inherit from class 'teal_module'"
+  )
+})
+
+testthat::test_that("append_module appends a module to children of not nested teal_modules", {
+  mod <- create_mod(label = "a")
+  mod2 <- create_mod(label = "b")
+  mods <- modules(label = "c", mod, mod2)
+  mod3 <- create_mod(label = "d")
+
+  appended_mods <- append_module(mods, mod3)
+  testthat::expect_equal(appended_mods$children, list(a = mod, b = mod2, d = mod3))
+})
+
+
+testthat::test_that("append_module appends a module to children of nested teal_modules", {
+  mod <- create_mod(label = "a")
+  mod2 <- create_mod(label = "b")
+  mods <- modules(label = "c", mod)
+  mods2 <- modules(label = "e", mods, mod2)
+  mod3 <- create_mod(label = "d")
+
+  appended_mods <- append_module(mods2, mod3)
+  testthat::expect_equal(appended_mods$children, list(c = mods, b = mod2, d = mod3))
+})
+
+testthat::test_that("append_module produces teal_modules with unique named children", {
+  mod <- create_mod(label = "a")
+  mod2 <- create_mod(label = "c")
+  mods <- modules(label = "c", mod, mod2)
+  mod3 <- create_mod(label = "c")
+
+  appended_mods <- append_module(mods, mod3)
+  mod_names <- names(appended_mods$children)
+  testthat::expect_equal(mod_names, unique(mod_names))
+})
