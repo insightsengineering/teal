@@ -177,6 +177,8 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules) {
     )
   )
 
+  # The callable is needed to persist the proper namespace
+  # We want to run the module server once when its tabPanel is clicked
   module_run_callable <- function() {
       modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
       if (isTRUE("id" %in% names(formals(modules$server)))) {
