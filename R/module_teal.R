@@ -41,7 +41,6 @@
 #' runApp(app)
 #' }
 ui_teal <- function(id,
-                    splash_ui = tags$h2("Starting the Teal App"),
                     title = NULL,
                     header = tags$p(""),
                     footer = tags$p("")) {
@@ -51,11 +50,6 @@ ui_teal <- function(id,
   if (checkmate::test_string(footer)) {
     footer <- tags$p(footer)
   }
-  checkmate::assert(
-    checkmate::check_class(splash_ui, "shiny.tag"),
-    checkmate::check_class(splash_ui, "shiny.tag.list"),
-    checkmate::check_class(splash_ui, "html")
-  )
   checkmate::assert(
     checkmate::check_class(header, "shiny.tag"),
     checkmate::check_class(header, "shiny.tag.list"),
@@ -71,10 +65,7 @@ ui_teal <- function(id,
   # Once the data is loaded, we will remove this element and add the real teal UI instead
   splash_ui <- div(
     # id so we can remove the splash screen once ready, which is the first child of this container
-    id = ns("main_ui_container"),
-    # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
-    # just the first item of the tagList)
-    div(splash_ui)
+    id = ns("main_ui_container")
   )
 
   # show busy icon when shiny session is busy computing stuff
