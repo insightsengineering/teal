@@ -177,24 +177,18 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules) {
     )
   )
 
-  callable_run <- function() {
-    modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
-    is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
-    if (is_module_server) {
-      do.call(modules$server, c(list(id = id, datasets = datasets), modules$server_args))
-    } else {
-      do.call(
-        callModule,
-        c(
-          list(module = modules$server, id = id, datasets = datasets),
-          modules$server_args
-        )
+  modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
+  is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
+  if (is_module_server) {
+    do.call(modules$server, c(list(id = id, datasets = datasets), modules$server_args))
+  } else {
+    do.call(
+      callModule,
+      c(
+        list(module = modules$server, id = id, datasets = datasets),
+        modules$server_args
       )
-    }
+    )
   }
-
-  reactive({
-    callable_run()
-    modules
-  })
+  reactive(modules)
 }

@@ -176,45 +176,11 @@ init <- function(data,
   # the `ui` and `server` with `id = character(0)` and calling the server function directly
   # rather than through `callModule`
   res <- list(
-    ui = function(id, ...) {
-      # Only main app
-      ui_teal(id = "teal", title = title, header = header, footer = footer)
-    },
+    ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-
       # copy object so that load won't be shared between the session
       data <- data$copy(deep = TRUE)
-
-      is_pulled_data <- teal.data::is_pulled(data)
-
-      if (!is_pulled_data) {
-        #build Modal
-        dataModal <- function(failed = FALSE) {
-          modalDialog(
-            data$get_ui("startapp_module"),
-            if (failed)
-              div(tags$b("Invalid name of data object", style = "color: red;")),
-
-            footer = tagList(
-              modalButton("Cancel"),
-              actionButton("ok", "OK")
-            )
-          )
-        }
-        #Show modal
-        showModal(dataModal())
-        # event reactive return raw_data
-
-        raw_data <- eventReactive(input$ok, {
-          data$get_server()(id = "startapp_module")
-        })
-
-      } else {
-        raw_data <- reactiveVal(data) # will trigger by setting it
-      }
-
-      srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
-
+      srv_teal_with_splash(id = id, data = data, modules = modules, filter = filter)
     }
   )
   logger::log_trace("init teal app has been initialized.")
