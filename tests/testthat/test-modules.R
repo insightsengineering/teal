@@ -636,12 +636,7 @@ create_mod <- function(label = "label") {
     tags$p(paste0("id: ", id))
   }
 
-  mod <- module(
-    label = label,
-    server = server_fun,
-    ui = ui_fun,
-    filters = ""
-  )
+  mod <- module(label = label, server = server_fun, ui = ui_fun, filters = "")
 }
 
 
