@@ -89,17 +89,15 @@ ui_teal <- function(id,
     )
   )
 
-  res <- shinyUI(
-    fluidPage(
-      title = title,
-      include_teal_css_js(),
-      tags$header(header),
-      tags$hr(style = "margin: 7px 0;"),
-      shiny_busy_message_panel,
-      splash_ui,
-      tags$hr(),
-      tags$footer(div(footer, textOutput(ns("identifier"))))
-    )
+  res <- fluidPage(
+    title = title,
+    include_teal_css_js(),
+    tags$header(header),
+    tags$hr(style = "margin: 7px 0;"),
+    shiny_busy_message_panel,
+    splash_ui,
+    tags$hr(),
+    tags$footer(div(footer, textOutput(ns("identifier"))))
   )
   return(res)
 }
