@@ -36,6 +36,7 @@ Imports:
     styler,
     teal.code,
     teal.logger,
+    teal.reporter,
     teal.slice,
     utils
 Suggests:
@@ -75,6 +76,7 @@ Collate:
     'module_teal.R'
     'module_teal_with_splash.R'
     'modules_debugging.R'
+    'reporter_previewer_module.R'
     'show_rcode_modal.R'
     'teal.R'
     'utils.R'

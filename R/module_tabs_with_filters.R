@@ -134,15 +134,17 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @param datasets (`FilteredData`)\cr
 #'   object to store filter state and filtered datasets, shared across modules. For more
 #'   details see [`teal.slice::FilteredData`].
+#' @param reporter (`Reporter`) object from `teal.reporter`
 #' @return `reactive` currently selected active_module
 #' @keywords internal
-srv_tabs_with_filters <- function(id, datasets, modules, filter) {
-  stopifnot(is(datasets, "FilteredData"))
+srv_tabs_with_filters <- function(id, datasets, modules, reporter, filter) {
+  checkmate::assert_class(datasets, "FilteredData")
+  checkmate::assert_class(reporter, "Reporter")
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
       "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
     )
-    active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules)
+    active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules, reporter = reporter)
 
     active_datanames <- eventReactive(
       eventExpr = active_module(),

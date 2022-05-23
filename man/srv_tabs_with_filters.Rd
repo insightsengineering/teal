@@ -4,7 +4,7 @@
 \alias{srv_tabs_with_filters}
 \title{Server function}
 \usage{
-srv_tabs_with_filters(id, datasets, modules, filter)
+srv_tabs_with_filters(id, datasets, modules, reporter, filter)
 }
 \arguments{
 \item{id}{(\code{character})\cr
@@ -20,6 +20,8 @@ details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}.}
 \item{modules}{(\code{list} or \code{teal_modules})\cr
 nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
+
+\item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
 
 \item{filter}{(\code{list})\cr
 You can define filters that show when the app starts. List names should be
