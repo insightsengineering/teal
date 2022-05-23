@@ -640,7 +640,7 @@ create_mod <- function(label = "label") {
 }
 
 
-testthat::test_that("append_module throws error is modules is not inherited from teal_modules", {
+testthat::test_that("append_module throws error when modules is not inherited from teal_modules", {
   mod <- create_mod()
 
   testthat::expect_error(
