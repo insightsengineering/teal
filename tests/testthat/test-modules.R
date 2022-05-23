@@ -554,26 +554,11 @@ testthat::test_that("is_reporter_used throws error if object is not teal_module 
 })
 
 testthat::test_that("is_reporter_used returns true if teal_module has reporter in server function args", {
-  srv_and_ui <- get_srv_and_ui()
-
-  mod <- module(
-    label = "label",
-    server = srv_and_ui$server_fun,
-    ui = srv_and_ui$ui_fun,
-    filters = ""
-  )
-  testthat::expect_false(is_reporter_used(mod))
+  testthat::expect_false(is_reporter_used(create_mod()))
 })
 
 testthat::test_that("is_reporter_used returns false if teal_module does not have reporter in server function args", {
-  srv_and_ui <- get_srv_and_ui()
-  mod <- module(
-    label = "label",
-    server = srv_and_ui$server_fun,
-    ui = srv_and_ui$ui_fun,
-    filters = ""
-  )
-  testthat::expect_false(is_reporter_used(mod))
+  testthat::expect_false(is_reporter_used(create_mod()))
 })
 
 
