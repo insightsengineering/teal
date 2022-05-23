@@ -536,7 +536,7 @@ testthat::test_that("modules_depth increases depth by 1 for each teal_modules", 
 # is_reporter_used -----
 get_srv_and_ui <- function() {
   return(list(
-    server_fun = function(id, datasets) {}, #nolint
+    server_fun = function(id, datasets) {}, # nolint
     ui_fun = function(id, ...) {
       tags$p(paste0("id: ", id))
     }
@@ -595,13 +595,13 @@ testthat::test_that("is_reporter_used returns false if teal_modules has no child
 })
 
 testthat::test_that("is_reporter_used returns true if teal_modules has at least one child using reporter", {
-  server_fun_with_reporter <- function(id, datasets, reporter) {} #nolint
+  server_fun_with_reporter <- function(id, datasets, reporter) {} # nolint
 
   srv_and_ui <- get_srv_and_ui()
 
-  mod <- module(label = "label", server =  srv_and_ui$server_fun, ui =  srv_and_ui$ui_fun, filters = "")
+  mod <- module(label = "label", server = srv_and_ui$server_fun, ui = srv_and_ui$ui_fun, filters = "")
 
-  mod_with_reporter <- module(label = "label", server = server_fun_with_reporter, ui =  srv_and_ui$ui_fun, filters = "")
+  mod_with_reporter <- module(label = "label", server = server_fun_with_reporter, ui = srv_and_ui$ui_fun, filters = "")
 
   mods <- modules(label = "lab", mod, mod_with_reporter)
   testthat::expect_true(is_reporter_used(mods))
