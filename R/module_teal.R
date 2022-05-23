@@ -218,7 +218,6 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
 
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)
-      # `once = TRUE` ensures this
       active_module <- srv_tabs_with_filters(
         id = "main_ui",
         datasets = datasets_reactive(),
