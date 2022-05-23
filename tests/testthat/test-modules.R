@@ -556,7 +556,7 @@ testthat::test_that("is_reporter_used returns true if teal_module has reporter i
   testthat::expect_false(is_reporter_used(mod))
 })
 
-testthat::test_that("is_reporter_used returns false if teal_module does not reporter in server function args", {
+testthat::test_that("is_reporter_used returns false if teal_module does not have reporter in server function args", {
   server_fun <- function(id, datasets, reporter) {
   }
 
