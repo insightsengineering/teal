@@ -608,12 +608,7 @@ testthat::test_that("is_reporter_used returns true if teal_modules has at least 
     tags$p(paste0("id: ", id))
   }
 
-  mod <- module(
-    label = "label",
-    server = server_fun,
-    ui = ui_fun,
-    filters = ""
-  )
+  mod <- module(label = "label", server = server_fun, ui = ui_fun, filters = "")
 
   mod_with_reporter <- module(
     label = "label",
