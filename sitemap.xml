@@ -46,6 +46,9 @@
     <loc>https://insightsengineering.github.io/teal/pull_request_template.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/append_module.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/bookmarkableShinyApp.html</loc>
   </url>
   <url>
@@ -109,6 +112,9 @@
     <loc>https://insightsengineering.github.io/teal/reference/init.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/is_reporter_used.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/line_pkg_log.html</loc>
   </url>
   <url>
@@ -131,6 +137,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/reexports.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/reporter_previewer_module.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/root_modules.html</loc>
