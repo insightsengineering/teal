@@ -225,7 +225,7 @@ below:
 ```{r}
 CustomReportCard <- R6::R6Class(
   classname = "CustomReportCard",
-  inheit = teal.reporter::ReportCard
+  inherit = teal.reporter::ReportCard
 )
 
 custom_function <- function(card = CustomReportCard$new()) {
