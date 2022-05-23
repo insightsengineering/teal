@@ -209,7 +209,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         # just the first item of the tagList)
         ui = div(ui_tabs_with_filters(session$ns("main_ui"), modules = modules, datasets = datasets_reactive())),
         # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
-        # have any effect as they are ignored when not present, see note in `module_add_filter_variable.R`
+        # have any effect as they are ignored when not present
         immediate = TRUE
       )
 
