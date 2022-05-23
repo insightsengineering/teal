@@ -1,4 +1,9 @@
-# teal 0.11.0.9007
+# teal 0.11.0.9008
+
+### Enhancements
+
+* Added new function `reporter_previewer_module` to wrap the `teal.reporter` package previewer functionality as a `teal` module.
+* `teal` now supports `modules` which include reporting. If any `module` which supports reporting is included then a `reporter_previewer_module` is included.
 
 ### Enhancements
 

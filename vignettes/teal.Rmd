@@ -105,7 +105,7 @@ See the documentation for `init` for further details.
 
 If any of the `modules` in your `teal` application support reporting
 (see [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) for more details) then users of your application
-can add these outputs to a report. This report can be downloaded and a special "Report Previewer" module will be added to your application
+can add these outputs to a report. This report can be downloaded and a special "Report Previewer" module will be added to your application as an additional tab
 so your users can view and configure their reports before downloading them.
 
 ## Where to go next
