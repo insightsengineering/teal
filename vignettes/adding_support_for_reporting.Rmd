@@ -17,7 +17,7 @@ This article explains how to enhance a custom `teal` module with an automatic re
 allows users to add snapshots of the module outputs to a report and review it in another module that is automatically
 provided by `teal` and designed to let users interact with the report.
 
-The reponsibilities of a module developer include: adding the support for reporting to their module and specifying
+The responsibilities of a module developer include: adding the support for reporting to their module and specifying
 outputs that go into a snapshot of their module. The lifecycle of objects involved in creation of the report and
 setting up the module to preview the report is handled by `teal`.
 
@@ -25,7 +25,7 @@ setting up the module to preview the report is handled by `teal`.
 Let us consider the example module from `teal`:
 ```{r}
 library(teal)
-teal_example_module <- function (label = "example teal module") {
+teal_example_module <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
@@ -38,7 +38,7 @@ teal_example_module <- function (label = "example teal module") {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"),  "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
       )
     },
     filters = "all"
@@ -64,7 +64,7 @@ if (interactive()) shinyApp(app$ui, app$server)
 The first step is to add another argument to the server function declaration - `reporter`. This needs to be the third
 argument to the server function inside the `teal.module` call. See below:
 ```{r}
-example_module_with_reporting <- function (label = "example teal module") {
+example_module_with_reporting <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
@@ -77,7 +77,7 @@ example_module_with_reporting <- function (label = "example teal module") {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"),  "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
       )
     },
     filters = "all"
@@ -106,7 +106,7 @@ Thankfully, `teal.report` provides `ui` and `server` objects that support that.
 We will use `teal.reporter::simple_reporter_ui()` and `teal.reporter::simple_reporter_srv()` to set up the `UI` and
 the `shiny` module that allow users to add content from `example_module_with_reporting` to the report.
 ```{r}
-example_module_with_reporting <- function (label = "example teal module") {
+example_module_with_reporting <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
@@ -120,10 +120,10 @@ example_module_with_reporting <- function (label = "example teal module") {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = tagList(
-          teal.reporter::simple_reporter_ui("reporter"),
+          teal.reporter::simple_reporter_ui(ns("reporter")),
           verbatimTextOutput(ns("text"))
         ),
-        encoding = selectInput(ns("dataname"),  "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
       )
     },
     filters = "all"
@@ -158,13 +158,13 @@ documentation.
 We will add simple text to the card by modifying the `card_fun` argument passed to `teal.reporter::simple_reporter_srv`.
 Make sure to return the `card` object from the passed function, otherwise `teal` might encounter errors.
 ```{r}
-example_module_with_reporting <- function (label = "example teal module") {
+example_module_with_reporting <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
     server = function(id, datasets, reporter) {
       moduleServer(id, function(input, output, session) {
-        custom_function <- function(card) {
+        custom_function <- function(card = teal.reporter::ReportCard$new()) {
           card$append_text("This is content from a custom teal module!")
           card
         }
@@ -176,10 +176,10 @@ example_module_with_reporting <- function (label = "example teal module") {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = tagList(
-          teal.reporter::simple_reporter_ui("simpleReporter"),
+          teal.reporter::simple_reporter_ui(ns("simpleReporter")),
           verbatimTextOutput(ns("text"))
         ),
-        encoding = selectInput(ns("dataname"),  "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
       )
     },
     filters = "all"
@@ -197,4 +197,38 @@ app <- init(
 )
 
 if (interactive()) shinyApp(app$ui, app$server)
+```
+
+### Add non-text content to the card
+Explore the API of `teal.reporter::ReportCard` to learn what types of content are supported.
+
+### `TealReportCard`
+`teal.reporter` exports a `teal`-specific `ReportCard` class that has a number of convenience methods built into it
+to make working with `teal` objects like the filter panel or source code easier. Check out its documentation to learn
+more at `teal.reporter::TealReportCard`.
+
+To support `TealReportCard`, the function that is passed to `teal.reporter::simple_reporter_srv()` needs to define
+a default value for the card, like below:
+```{r}
+custom_fun <- function(card = teal.reporter::TealReportCard$new()) {
+  card
+}
+```
+
+Otherwise, the API of `TealReportCard` will not be available inside the function.
+
+### Use a child class of `ReportCard` inside the module
+`teal.reporter` allows using a child of `ReportCard` inside the function passed to
+`teal.reporter::simple_reporter_srv()`. To properly support this, an instance of the child class must be passed
+as the default value of the `card` argument in the function passed to `teal.reporter::simple_reporter_srv()`. See
+below:
+```{r}
+CustomReportCard <- R6::R6Class(
+  classname = "CustomReportCard",
+  inheit = teal.reporter::ReportCard
+)
+
+custom_function <- function(card = CustomReportCard$new()) {
+  card
+}
 ```
