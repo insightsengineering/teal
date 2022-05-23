@@ -610,12 +610,7 @@ testthat::test_that("is_reporter_used returns true if teal_modules has at least 
 
   mod <- module(label = "label", server = server_fun, ui = ui_fun, filters = "")
 
-  mod_with_reporter <- module(
-    label = "label",
-    server = server_fun_with_reporter,
-    ui = ui_fun,
-    filters = ""
-  )
+  mod_with_reporter <- module(label = "label", server = server_fun_with_reporter, ui = ui_fun, filters = "")
 
   mods <- modules(label = "lab", mod, mod_with_reporter)
   testthat::expect_true(is_reporter_used(mods))
