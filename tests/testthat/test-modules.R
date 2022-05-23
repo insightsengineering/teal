@@ -574,7 +574,7 @@ testthat::test_that("is_reporter_used returns false if teal_module does not have
 })
 
 
-testthat::test_that("is_reporter_used returns false if teal_modules has no chidren using reporter", {
+testthat::test_that("is_reporter_used returns false if teal_modules has no children using reporter", {
   server_fun <- function(id, datasets) {
   }
 
