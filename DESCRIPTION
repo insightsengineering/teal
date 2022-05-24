@@ -45,6 +45,7 @@ Suggests:
     knitr,
     MultiAssayExperiment,
     rmarkdown,
+    R6,
     scda (>= 0.1.3),
     scda.2021 (>= 0.1.3),
     teal.widgets,

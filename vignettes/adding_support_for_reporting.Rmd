@@ -13,13 +13,16 @@ vignette: >
 `teal` supports an in-built reporting feature using the `vignette("teal.reporter")` package. Head to its documentation
 if you want to know more about the reporting itself.
 
-This article explains how to enhance a custom `teal` module with an automatic reporting feature. The enhancement
-allows users to add snapshots of the module outputs to a report and review it in another module that is automatically
-provided by `teal` and designed to let users interact with the report.
+This article is targeted to module developers and explains how to enhance a custom `teal` module with an automatic
+reporting feature. The enhancement allows users to add snapshots of the module outputs to a report and review it in
+another module that is automatically provided by `teal` and designed to let users interact with the report.
 
-The responsibilities of a module developer include: adding the support for reporting to their module and specifying
-outputs that go into a snapshot of their module. The lifecycle of objects involved in creation of the report and
-setting up the module to preview the report is handled by `teal`.
+The responsibilities of a module developer include:
+- adding the support for reporting to their module
+- specifying outputs that go into a snapshot of their module.
+
+The lifecycle of objects involved in creation of the report and setting up the module to preview the report is
+handled by `teal`.
 
 ## Custom module
 Let us consider the example module from `teal`:
@@ -98,9 +101,9 @@ app <- init(
 if (interactive()) shinyApp(app$ui, app$server)
 ```
 
-`teal` added another tab to the application titled `Report previer` but besides that there appears to be no change in
+`teal` added another tab to the application titled `Report previewer` but besides that there appears to be no change in
 how the module works and what it looks like. User cannot interact with it to add to the report from this module yet.
-Thankfully, `teal.report` provides `ui` and `server` objects that support that.
+Thankfully, `teal.reporter` provides `ui` and `server` objects that support that.
 
 ### Introduce the new `UI` and the supporting `shiny` modules
 We will use `teal.reporter::simple_reporter_ui()` and `teal.reporter::simple_reporter_srv()` to set up the `UI` and
@@ -112,7 +115,11 @@ example_module_with_reporting <- function(label = "example teal module") {
     label,
     server = function(id, datasets, reporter) {
       moduleServer(id, function(input, output, session) {
-        teal.reporter::simple_reporter_srv(id = "reporter", reporter = reporter, card_fun = function(card) card)
+        teal.reporter::simple_reporter_srv(
+          id = "reporter",
+          reporter = reporter,
+          card_fun = function(card) card
+        )
         output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
       })
     },
@@ -144,13 +151,14 @@ app <- init(
 if (interactive()) shinyApp(app$ui, app$server)
 ```
 
-The new `UI` is visible and the buttons are clickable, but the application does not do anything when clicking the
-`Add Card` button because our module does not add any content to the card.
+The new `UI` is visible and the buttons are clickable. An application user can review the card in the `Report previewer`
+module and it will appear empty because, as a module developer, we have not yet added any content to the card
+of our module.
 
 ### Add content to the card
 We will use the public API exposed by the `teal.reporter::ReportCard` and `teal.reporter::TealReportCard` classes
 to add content to a card. The `teal.reporter::simple_reporter_srv` module accepts the `card_fun` argument that
-dictates the way the output from our custom module will look like. `ReportCard` and its derivatives adds
+dictates the way the output from our custom module will look like. `ReportCard` and its derivatives add
 the content sequentially according to the order of the calls to its methods. The content itself can be explored
 by calling the `$get_content()` method. If you want to learn more, check out `teal.reporter::ReportCard`'s
 documentation.
@@ -158,16 +166,17 @@ documentation.
 We will add simple text to the card by modifying the `card_fun` argument passed to `teal.reporter::simple_reporter_srv`.
 Make sure to return the `card` object from the passed function, otherwise `teal` might encounter errors.
 ```{r}
+custom_function <- function(card = teal.reporter::ReportCard$new()) {
+  card$append_text("This is content from a custom teal module!")
+  card
+}
+
 example_module_with_reporting <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
     server = function(id, datasets, reporter) {
       moduleServer(id, function(input, output, session) {
-        custom_function <- function(card = teal.reporter::ReportCard$new()) {
-          card$append_text("This is content from a custom teal module!")
-          card
-        }
         teal.reporter::simple_reporter_srv(id = "simpleReporter", reporter = reporter, card_fun = custom_function)
         output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
       })
@@ -199,8 +208,11 @@ app <- init(
 if (interactive()) shinyApp(app$ui, app$server)
 ```
 
+Now, an application user can see the text added by `custom_function` in the `Report previewer` module.
+
 ### Add non-text content to the card
-Explore the API of `teal.reporter::ReportCard` to learn what types of content are supported.
+`teal.reporter` supports adding tables, charts and more. Explore the API of `teal.reporter::ReportCard` to learn what
+types of content are supported.
 
 ### `TealReportCard`
 `teal.reporter` exports a `teal`-specific `ReportCard` class that has a number of convenience methods built into it
@@ -220,10 +232,10 @@ Otherwise, the API of `TealReportCard` will not be available inside the function
 ### Use a child class of `ReportCard` inside the module
 `teal.reporter` allows using a child of `ReportCard` inside the function passed to
 `teal.reporter::simple_reporter_srv()`. To properly support this, an instance of the child class must be passed
-as the default value of the `card` argument in the function passed to `teal.reporter::simple_reporter_srv()`. See
+as the default value of the `card` argument in the function handed to `teal.reporter::simple_reporter_srv()`. See
 below:
 ```{r}
-CustomReportCard <- R6::R6Class(
+CustomReportCard <- R6::R6Class( # nolint: object_name_linter.
   classname = "CustomReportCard",
   inherit = teal.reporter::ReportCard
 )
