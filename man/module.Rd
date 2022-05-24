@@ -8,10 +8,15 @@
 \usage{
 module(
   label = "module",
-  server = function(id, ...) {     moduleServer(id, function(input, output, session) { 
-       }) },
-  ui = function(id, ...) {     tags$p(paste0("This module has no UI (id: ", id, " )"))
-    },
+  server = function(id, ...) {
+     moduleServer(id, function(input, output, session)
+    {
+     })
+ },
+  ui = function(id, ...) {
+     tags$p(paste0("This module has no UI (id: ", id,
+    " )"))
+ },
   filters = "all",
   server_args = NULL,
   ui_args = NULL
