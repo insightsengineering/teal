@@ -18,6 +18,7 @@ reporting feature. The enhancement allows users to add snapshots of the module o
 another module that is automatically provided by `teal` and designed to let users interact with the report.
 
 The responsibilities of a module developer include:
+
 - adding the support for reporting to their module
 - specifying outputs that go into a snapshot of their module.
 
@@ -102,7 +103,7 @@ if (interactive()) shinyApp(app$ui, app$server)
 ```
 
 `teal` added another tab to the application titled `Report previewer` but besides that there appears to be no change in
-how the module works and what it looks like. User cannot interact with it to add to the report from this module yet.
+how the module works and what it looks like. Users cannot interact with it to add to the report from this module yet.
 Thankfully, `teal.reporter` provides `ui` and `server` objects that support that.
 
 ### Introduce the new `UI` and the supporting `shiny` modules
@@ -158,7 +159,7 @@ of our module.
 ### Add content to the card
 We will use the public API exposed by the `teal.reporter::ReportCard` and `teal.reporter::TealReportCard` classes
 to add content to a card. The `teal.reporter::simple_reporter_srv` module accepts the `card_fun` argument that
-dictates the way the output from our custom module will look like. `ReportCard` and its derivatives add
+dictates the way the output from our custom module will look. `ReportCard` and its derivatives add
 the content sequentially according to the order of the calls to its methods. The content itself can be explored
 by calling the `$get_content()` method. If you want to learn more, check out `teal.reporter::ReportCard`'s
 documentation.
