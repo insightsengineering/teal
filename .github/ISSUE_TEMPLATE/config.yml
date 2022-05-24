@@ -1,0 +1,10 @@
+---
+blank_issues_enabled: false
+
+contact_links:
+  - name: We are hiring!
+    url: https://careers.gene.com/
+    about: Genentech and Roche are hiring!
+  - name: Pharmaverse
+    url: https://pharmaverse.org/
+    about: Related projects @ Pharmaverse.org
