@@ -92,6 +92,51 @@ modules <- function(..., label = "root") {
 }
 
 
+
+#' Function which appends a teal_module onto the children of a teal_modules object
+#' @keywords internal
+#' @param modules `teal_modules`
+#' @param module `teal_module` object to be appended onto the children of `modules`
+#' @return `teal_modules` object with `module` appended
+append_module <- function(modules, module) {
+  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_class(module, "teal_module")
+  modules$children <- c(modules$children, list(module))
+  labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
+  names(modules$children) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
+  modules
+}
+
+#' Does the object make use of `teal.reporter` reporting
+#' @param modules `teal_module` or `teal_modules` object
+#' @return `logical` whether the object makes use of `teal.reporter` reporting
+#' @rdname is_reporter_used
+#' @keywords internal
+is_reporter_used <- function(modules) {
+  UseMethod("is_reporter_used", modules)
+}
+
+#' @rdname is_reporter_used
+#' @keywords internal
+is_reporter_used.default <- function(modules) {
+  stop("is_reporter_used function not implemented for this object")
+}
+
+#' @rdname is_reporter_used
+#' @export
+#' @keywords internal
+is_reporter_used.teal_modules <- function(modules) {
+  any(unlist(lapply(modules$children, function(x) is_reporter_used(x))))
+}
+
+#' @rdname is_reporter_used
+#' @export
+#' @keywords internal
+is_reporter_used.teal_module <- function(modules) {
+  "reporter" %in% names(formals(modules$server))
+}
+
+
 #' Deprecated: Creates the root modules container
 #'
 #' @description `r lifecycle::badge("deprecated")`

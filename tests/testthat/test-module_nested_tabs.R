@@ -25,6 +25,13 @@ test_module4 <- module(
   filters = NULL
 )
 
+testthat::test_that("srv_nested_tabs throws error if reporter is not inherited from class Reporter", {
+  testthat::expect_error(
+    srv_nested_tabs(id, datasets = filtered_data, modules = modules(test_module1), reporter = list()),
+    "inherits\\(reporter, \"Reporter\"\\) is not TRUE"
+  )
+})
+
 # server -------
 testthat::test_that("passed shiny module is initialized", {
   testthat::expect_message(
@@ -33,7 +40,8 @@ testthat::test_that("passed shiny module is initialized", {
       args = list(
         id = "test",
         datasets = filtered_data,
-        modules = modules(test_module1)
+        modules = modules(test_module1),
+        reporter = teal.reporter::Reporter$new()
       ),
       expr = NULL
     ),
@@ -51,7 +59,8 @@ testthat::test_that("nested teal-modules are initialized", {
         modules = modules(
           modules(label = "tab1", test_module1, test_module2),
           modules(label = "tab2", test_module3, test_module4)
-        )
+        ),
+        reporter = teal.reporter::Reporter$new()
       ),
       expr = NULL
     )
@@ -68,7 +77,8 @@ out <- shiny::testServer(
     modules = modules(
       modules(label = "tab1", test_module1, test_module2),
       modules(label = "tab2", test_module3, test_module4)
-    )
+    ),
+    reporter = teal.reporter::Reporter$new()
   ),
   expr = {
     # to adjust input modules to the active modules (server_args is dropped when NULL)

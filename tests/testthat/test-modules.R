@@ -531,3 +531,132 @@ testthat::test_that("modules_depth increases depth by 1 for each teal_modules", 
     3L
   )
 })
+
+
+# is_reporter_used -----
+get_srv_and_ui <- function() {
+  return(list(
+    server_fun = function(id, datasets) {}, # nolint
+    ui_fun = function(id, ...) {
+      tags$p(paste0("id: ", id))
+    }
+  ))
+}
+
+create_mod <- function(label = "label") {
+  srv_and_ui <- get_srv_and_ui()
+  mod <- module(label = label, server = srv_and_ui$server_fun, ui = srv_and_ui$ui_fun, filters = "")
+}
+
+testthat::test_that("is_reporter_used throws error if object is not teal_module or teal_modules", {
+  testthat::expect_error(is_reporter_used(5), "is_reporter_used function not implemented for this object")
+  testthat::expect_error(is_reporter_used(list()), "is_reporter_used function not implemented for this object")
+})
+
+testthat::test_that("is_reporter_used returns true if teal_module has reporter in server function args", {
+  testthat::expect_false(is_reporter_used(create_mod()))
+})
+
+testthat::test_that("is_reporter_used returns false if teal_module does not have reporter in server function args", {
+  testthat::expect_false(is_reporter_used(create_mod()))
+})
+
+
+testthat::test_that("is_reporter_used returns false if teal_modules has no children using reporter", {
+  srv_and_ui <- get_srv_and_ui()
+
+  mod <- module(
+    label = "label",
+    server = srv_and_ui$server_fun,
+    ui = srv_and_ui$ui_fun,
+    filters = ""
+  )
+
+  mods <- modules(label = "lab", mod, mod)
+  testthat::expect_false(is_reporter_used(mods))
+
+  mods <- modules(label = "lab", mods, mod, mod)
+  testthat::expect_false(is_reporter_used(mods))
+})
+
+testthat::test_that("is_reporter_used returns true if teal_modules has at least one child using reporter", {
+  server_fun_with_reporter <- function(id, datasets, reporter) {} # nolint
+
+  srv_and_ui <- get_srv_and_ui()
+
+  mod <- module(label = "label", server = srv_and_ui$server_fun, ui = srv_and_ui$ui_fun, filters = "")
+
+  mod_with_reporter <- module(label = "label", server = server_fun_with_reporter, ui = srv_and_ui$ui_fun, filters = "")
+
+  mods <- modules(label = "lab", mod, mod_with_reporter)
+  testthat::expect_true(is_reporter_used(mods))
+
+  mods_2 <- modules(label = "lab", mods, mod, mod)
+  testthat::expect_true(is_reporter_used(mods_2))
+
+  mods_3 <- modules(label = "lab", modules(label = "lab", mod, mod), mod_with_reporter, mod)
+  testthat::expect_true(is_reporter_used(mods_3))
+})
+
+# ---- append_module
+testthat::test_that("append_module throws error when modules is not inherited from teal_modules", {
+  mod <- create_mod()
+
+  testthat::expect_error(
+    append_module(mod, mod),
+    "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
+  )
+
+  testthat::expect_error(
+    append_module(mod, list(mod)),
+    "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
+  )
+})
+
+testthat::test_that("append_module throws error is module is not inherited from teal_module", {
+  mod <- create_mod()
+  mods <- modules(label = "A", mod)
+
+  testthat::expect_error(
+    append_module(mods, mods),
+    "Assertion on 'module' failed: Must inherit from class 'teal_module'"
+  )
+
+  testthat::expect_error(
+    append_module(mods, list(mod)),
+    "Assertion on 'module' failed: Must inherit from class 'teal_module'"
+  )
+})
+
+testthat::test_that("append_module appends a module to children of not nested teal_modules", {
+  mod <- create_mod(label = "a")
+  mod2 <- create_mod(label = "b")
+  mods <- modules(label = "c", mod, mod2)
+  mod3 <- create_mod(label = "d")
+
+  appended_mods <- append_module(mods, mod3)
+  testthat::expect_equal(appended_mods$children, list(a = mod, b = mod2, d = mod3))
+})
+
+
+testthat::test_that("append_module appends a module to children of nested teal_modules", {
+  mod <- create_mod(label = "a")
+  mod2 <- create_mod(label = "b")
+  mods <- modules(label = "c", mod)
+  mods2 <- modules(label = "e", mods, mod2)
+  mod3 <- create_mod(label = "d")
+
+  appended_mods <- append_module(mods2, mod3)
+  testthat::expect_equal(appended_mods$children, list(c = mods, b = mod2, d = mod3))
+})
+
+testthat::test_that("append_module produces teal_modules with unique named children", {
+  mod <- create_mod(label = "a")
+  mod2 <- create_mod(label = "c")
+  mods <- modules(label = "c", mod, mod2)
+  mod3 <- create_mod(label = "c")
+
+  appended_mods <- append_module(mods, mod3)
+  mod_names <- names(appended_mods$children)
+  testthat::expect_equal(mod_names, unique(mod_names))
+})

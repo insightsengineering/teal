@@ -23,6 +23,9 @@ reference:
     desc: A simple example teal module
     contents:
       - example_module
+  - title: Report previewer module
+    contents:
+      - reporter_previewer_module
   - title: Functions moved to other packages
     desc: These functions have been moved from teal and will be deprecated.
     contents:
