@@ -1,5 +1,6 @@
 filtered_data <- teal.slice:::FilteredData$new()
 filtered_data$set_dataset(teal.data::dataset(dataname = "iris", x = head(iris)))
+
 test_module1 <- module(
   label = "test1",
   ui = function(id, ...) NULL,
