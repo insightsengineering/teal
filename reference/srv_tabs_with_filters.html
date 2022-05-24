@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9008</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 30px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,6 +27,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/adding_support_for_reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/creating_custom_modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
@@ -39,15 +40,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -100,24 +92,17 @@ more details.</p></dd>
 <dd><p>(<code>list</code>)<br>
 You can define filters that show when the app starts. List names should be
 named according to datanames passed to the <code>data</code> argument.
-In case of  data.frame` the list should be composed as follows:</p><div class="sourceCode"><pre><code>list(&lt;dataname1&gt; = list(&lt;varname1&gt; = ..., &lt;varname2&gt; = ...),
-     &lt;dataname2&gt; = list(...),
-     ...)
-
-</code></pre></div>
-
+In case of  data.frame` the list should be composed as follows:</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
 <p>For example, filters for variable <code>Sepal.Length</code> in <code>iris</code> can be specified as
-follows:</p><div class="sourceCode"><pre><code><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Sepal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.0</span>, <span class="fl">7.0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># or</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Sepal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.0</span>, <span class="fl">7.0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-
+follows:</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
 <p>In case developer would like to include <code>NA</code> and <code>Inf</code> values in  the
-filtered dataset.</p><div class="sourceCode"><pre><code><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.0</span>, <span class="fl">7.0</span><span class="op">)</span>, keep_na <span class="op">=</span> <span class="cn">TRUE</span>, keep_inf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.0</span>, <span class="fl">7.0</span><span class="op">)</span>, <span class="cn">NA</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-
+filtered dataset.</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
 <p>To initialize with specific variable filter with all values on start, one
-can use</p><div class="sourceCode"><pre><code><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-
+can use</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
 <p><code>filter</code> should be set with respect to the class of the column:</p><ul><li><p><code>numeric</code>: <code>selected</code> should be a two elements vector defining the range
 of the filter.</p></li>
 <li><p><code>Date</code>: <code>selected</code> should be a two elements vector defining the date-range
@@ -130,18 +115,7 @@ defining initial values selected to filter.
 different way. Since it contains patient data with list of experiments,
 <code>filter</code> list should be created as follows:
 <br></p></li>
-</ul><div class="sourceCode"><pre><code>list(
-  &lt;MAE dataname&gt; = list(
-    subjects = list(&lt;column in colData&gt; = ..., &lt;column in colData&gt; = ...),
-    &lt;experiment name&gt; = list(
-      subset = list(&lt;column in rowData of experiment&gt; = ...,
-                    &lt;column in rowData of experiment&gt; = ...),
-      select = list(&lt;column in colData of experiment&gt; = ...,
-                    &lt;column in colData of experiment&gt; = ...)
-    )
-  )
-)
-</code></pre></div></dd>
+</ul><p></p><div class="sourceCode"><pre><code></code></pre><p></p></div></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

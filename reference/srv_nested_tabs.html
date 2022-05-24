@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9008</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 30px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,6 +27,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/adding_support_for_reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/creating_custom_modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
@@ -39,15 +40,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -116,13 +108,8 @@ more details.</p></dd>
 is currently active. To determine which module is active see the diagram.
 <img src="figures/uml_nested_tabs.jpg" width="75%" alt="Figure: uml_nested_tabs.jpg">
 
-Above depicts hypothetical situation in which one has module structure defined in following way:</p><div class="sourceCode"><pre><code><span class="op">+</span> <span class="va">root</span>
-  <span class="op">+</span> <span class="va">tab1</span>
-    <span class="op">+</span> <span class="va">test1</span>
-    <span class="op">+</span> <span class="va">test2</span>
-  <span class="op">+</span> <span class="va">tab2</span>
-    <span class="op">+</span> <span class="va">test3</span></code></pre></div>
-<ul><li><p><code>teal_module</code> returns self as a active module</p></li>
+Above depicts hypothetical situation in which one has module structure defined in following way:</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div><ul><li><p><code>teal_module</code> returns self as a active module</p></li>
 <li><p><code>teal_modules</code> returns module active within self which is determined by the <code>input$active_tab</code>.
 The choice of active module is done recursively (diagram from right to left).</p></li>
 </ul></div>

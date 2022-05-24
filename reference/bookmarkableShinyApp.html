@@ -4,12 +4,12 @@ This function is deprecated and will be removed in a future release of teal.
 This is a customization of shinyApp.
 To be bookmarkable, the Shiny UI function must have an
 argument request. This function ensures this.
-When ui is a function, it passes the following to shinyAppapp &amp;lt;- teal::init(....)
+When ui is a function, it passes the following to shinyApp
+app &amp;lt;- teal::init(....)
 ui &amp;lt;- app$ui
 ui_new &amp;lt;- function(request) {
   ui() # or just `ui` when ui is already evaluated, e.g. `shiny.tag`
 }
-
 
 If no bookmarking is needed for teal apps, then you can also call
 shinyApp(ui = app$ui, server = app$server), where app is returned
@@ -26,12 +26,12 @@ This function is deprecated and will be removed in a future release of teal.
 This is a customization of shinyApp.
 To be bookmarkable, the Shiny UI function must have an
 argument request. This function ensures this.
-When ui is a function, it passes the following to shinyAppapp &amp;lt;- teal::init(....)
+When ui is a function, it passes the following to shinyApp
+app &amp;lt;- teal::init(....)
 ui &amp;lt;- app$ui
 ui_new &amp;lt;- function(request) {
   ui() # or just `ui` when ui is already evaluated, e.g. `shiny.tag`
 }
-
 
 If no bookmarking is needed for teal apps, then you can also call
 shinyApp(ui = app$ui, server = app$server), where app is returned
@@ -54,7 +54,7 @@ by a call to this function without any changes."><!-- mathjax --><script src="ht
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9008</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 30px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,6 +71,7 @@ by a call to this function without any changes."><!-- mathjax --><script src="ht
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/adding_support_for_reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/creating_custom_modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
@@ -83,15 +84,6 @@ by a call to this function without any changes."><!-- mathjax --><script src="ht
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -119,12 +111,8 @@ Other releases
 <p>This is a customization of <code>shinyApp</code>.</p>
 <p>To be bookmarkable, the Shiny UI function must have an
 argument <code>request</code>. This function ensures this.</p>
-<p>When <code>ui</code> is a function, it passes the following to <code>shinyApp</code></p><div class="sourceCode"><pre><code><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">::</span><span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span><span class="va">....</span><span class="op">)</span>
-<span class="va">ui</span> <span class="op">&lt;-</span> <span class="va">app</span><span class="op">$</span><span class="va">ui</span>
-<span class="va">ui_new</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">request</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://usethis.r-lib.org/reference/ui.html" class="external-link">ui</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># or just `ui` when ui is already evaluated, e.g. `shiny.tag`</span>
-<span class="op">}</span></code></pre></div>
-
+<p>When <code>ui</code> is a function, it passes the following to <code>shinyApp</code></p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
 <p>If no bookmarking is needed for teal apps, then you can also call
 <code>shinyApp(ui = app$ui, server = app$server)</code>, where <code>app</code> is returned
 by <code><a href="init.html">init()</a></code>.</p>
