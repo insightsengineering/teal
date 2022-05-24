@@ -6,7 +6,15 @@
 \alias{print.teal_module}
 \title{Creates a \code{teal_modules} object.}
 \usage{
-module(label, server, ui, filters, server_args = NULL, ui_args = NULL)
+module(
+  label = "module",
+  server = function(id, ...) {     moduleServer(id, function(input, output, session) { 
+       }) },
+  ui = function(id, ...) {     p("This module has no ui") },
+  filters = "all",
+  server_args = NULL,
+  ui_args = NULL
+)
 
 \method{toString}{teal_module}(x, indent = 0, ...)
 

@@ -19,6 +19,10 @@ ui_fun2 <- function(id, datasets) {
   tags$p(paste0("id: ", id))
 }
 
+testthat::test_that("a module is created using module(), i.e. specifying no parameters", {
+  testthat::expect_error(module(), NA)
+})
+
 testthat::test_that("module requires label argument to be a string", {
   testthat::expect_error(module(
     label = "label",
@@ -33,12 +37,6 @@ testthat::test_that("module requires label argument to be a string", {
     ui = ui_fun1,
     filters = ""
   ), "Assertion on 'label' failed.+'NULL'")
-
-  testthat::expect_error(module(
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = ""
-  ), "is missing, with no default")
 
   testthat::expect_error(module(
     label = c("label", "label"),
@@ -78,10 +76,10 @@ testthat::test_that("module expects server being a shiny server module with data
 
   testthat::expect_error(module(
     label = "label",
-    server = ui_fun1,
+    server = function(id, reporter) NULL,
     ui = ui_fun1,
     filter = ""
-  ), "module\\(\\) server.+id and datasets \\(moduleServer\\)")
+  ), "module\\(\\) server.+id and \\[datasets or '...'\\] \\(moduleServer\\)")
 })
 
 testthat::test_that("module expects ui being a shiny ui module with id and datasets or ... arguments", {

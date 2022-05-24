@@ -263,7 +263,12 @@ root_modules <- function(...) {
 #' \dontrun{
 #' runApp(app)
 #' }
-module <- function(label, server, ui, filters, server_args = NULL, ui_args = NULL) {
+module <- function(label = "module",
+                   server =  function(id, ...) { moduleServer(id, function(input, output, session) {}) }, # nolint
+                   ui = function(id, ...) { p("This module has no ui") }, # nolint
+                   filters = "all",
+                   server_args = NULL,
+                   ui_args = NULL) {
   checkmate::assert_string(label)
   checkmate::assert_function(server)
   checkmate::assert_function(ui)
@@ -273,10 +278,10 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 
   server_main_args <- names(formals(server))
   if (!(identical(server_main_args[1:4], c("input", "output", "session", "datasets")) ||
-    identical(server_main_args[1:2], c("id", "datasets")))) {
+    identical(server_main_args[1:2], c("id", "datasets")) || identical(server_main_args[1:2], c("id", "...")))) {
     stop(paste(
       "module() server argument requires a function with ordered arguments:",
-      "\ninput, output, session, and datasets (callModule) or id and datasets (moduleServer)"
+      "\ninput, output, session, and datasets (callModule) or id and [datasets or '...'] (moduleServer)"
     ))
   }
 
