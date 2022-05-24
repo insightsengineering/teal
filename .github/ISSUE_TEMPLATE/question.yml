@@ -1,0 +1,35 @@
+---
+name: ❓ Question
+description: Question about usage or documentation
+title: "[Question]: <title>"
+labels: ["question"]
+body:
+  - type: textarea
+    attributes:
+      label: What is your question?
+    validations:
+      required: true
+  - type: checkboxes
+    id: code-of-conduct
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct.](https://insightsengineering.github.io/teal/CODE_OF_CONDUCT.html)
+      options:
+        - label: I agree to follow this project's Code of Conduct.
+          required: true
+  - type: checkboxes
+    id: contributor-guidelines
+    attributes:
+      label: Contribution Guidelines
+      description: By submitting this issue, you agree to follow our [Contribution Guidelines.](https://insightsengineering.github.io/teal/CONTRIBUTING.html)
+      options:
+        - label: I agree to follow this project's Contribution Guidelines.
+          required: true
+  - type: checkboxes
+    id: security-policy
+    attributes:
+      label: Security Policy
+      description: By submitting this issue, you agree to follow our [Security Policy.](https://github.com/insightsengineering/teal/security/policy)
+      options:
+        - label: I agree to follow this project's Security Policy.
+          required: true

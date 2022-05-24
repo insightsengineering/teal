@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - pre-release
+  workflow_dispatch:
 
 jobs:
   validation:
