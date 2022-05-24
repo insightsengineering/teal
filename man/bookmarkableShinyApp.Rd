@@ -28,12 +28,14 @@ This is a customization of \code{shinyApp}.
 To be bookmarkable, the Shiny UI function must have an
 argument \code{request}. This function ensures this.
 
-When \code{ui} is a function, it passes the following to \code{shinyApp}\preformatted{app <- teal::init(....)
+When \code{ui} is a function, it passes the following to \code{shinyApp}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{app <- teal::init(....)
 ui <- app$ui
 ui_new <- function(request) \{
   ui() # or just `ui` when ui is already evaluated, e.g. `shiny.tag`
 \}
-}
+}\if{html}{\out{</div>}}
 
 If no bookmarking is needed for teal apps, then you can also call
 \code{shinyApp(ui = app$ui, server = app$server)}, where \code{app} is returned
