@@ -228,19 +228,3 @@ custom_fun <- function(card = teal.reporter::TealReportCard$new()) {
 ```
 
 Otherwise, the API of `TealReportCard` will not be available inside the function.
-
-### Use a child class of `ReportCard` inside the module
-`teal.reporter` allows using a child of `ReportCard` inside the function passed to
-`teal.reporter::simple_reporter_srv()`. To properly support this, an instance of the child class must be passed
-as the default value of the `card` argument in the function handed to `teal.reporter::simple_reporter_srv()`. See
-below:
-```{r}
-CustomReportCard <- R6::R6Class( # nolint: object_name_linter.
-  classname = "CustomReportCard",
-  inherit = teal.reporter::ReportCard
-)
-
-custom_function <- function(card = CustomReportCard$new()) {
-  card
-}
-```
