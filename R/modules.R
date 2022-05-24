@@ -264,8 +264,12 @@ root_modules <- function(...) {
 #' runApp(app)
 #' }
 module <- function(label = "module",
-                   server =  function(id, ...) { moduleServer(id, function(input, output, session) {}) }, # nolint
-                   ui = function(id, ...) { tags$p(paste0("This module has no UI (id: ", id, " )")) }, # nolint
+                   server = function(id, ...) {
+                     moduleServer(id, function(input, output, session) {})
+                   }, # nolint
+                   ui = function(id, ...) {
+                     tags$p(paste0("This module has no UI (id: ", id, " )"))
+                   }, # nolint
                    filters = "all",
                    server_args = NULL,
                    ui_args = NULL) {
