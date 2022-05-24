@@ -24,6 +24,7 @@ Authors:
   \item Maciej Nasinski \email{maciej.nasinski@contractors.roche.com}
   \item Konrad Pagacz \email{konrad.pagacz@contractors.roche.com}
   \item Junlue Zhao \email{zhaoj88@gene.com}
+  \item Adrian Waddell \email{adrian.waddell@gene.com}
 }
 
 Other contributors:
