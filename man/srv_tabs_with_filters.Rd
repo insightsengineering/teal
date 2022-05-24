@@ -26,26 +26,34 @@ more details.}
 \item{filter}{(\code{list})\cr
 You can define filters that show when the app starts. List names should be
 named according to datanames passed to the \code{data} argument.
-In case of  data.frame` the list should be composed as follows:\preformatted{list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
+In case of  data.frame` the list should be composed as follows:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
      <dataname2> = list(...),
      ...)
 
-}
+}\if{html}{\out{</div>}}
 
 For example, filters for variable \code{Sepal.Length} in \code{iris} can be specified as
-follows:\preformatted{list(iris = list(Sepal.Length = list(selected = c(5.0, 7.0))))
+follows:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list(iris = list(Sepal.Length = list(selected = c(5.0, 7.0))))
 # or
 list(iris = list(Sepal.Length = c(5.0, 7.0)))
-}
+}\if{html}{\out{</div>}}
 
 In case developer would like to include \code{NA} and \code{Inf} values in  the
-filtered dataset.\preformatted{list(Species = list(selected = c(5.0, 7.0), keep_na = TRUE, keep_inf = TRUE))
+filtered dataset.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list(Species = list(selected = c(5.0, 7.0), keep_na = TRUE, keep_inf = TRUE))
 list(Species = c(c(5.0, 7.0), NA, Inf))
-}
+}\if{html}{\out{</div>}}
 
 To initialize with specific variable filter with all values on start, one
-can use\preformatted{list(Species = list())
-}
+can use
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list(Species = list())
+}\if{html}{\out{</div>}}
 
 \code{filter} should be set with respect to the class of the column:
 \itemize{
@@ -62,7 +70,9 @@ defining initial values selected to filter.
 different way. Since it contains patient data with list of experiments,
 \code{filter} list should be created as follows:
 \cr
-}\preformatted{list(
+}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list(
   <MAE dataname> = list(
     subjects = list(<column in colData> = ..., <column in colData> = ...),
     <experiment name> = list(
@@ -73,7 +83,7 @@ different way. Since it contains patient data with list of experiments,
     )
   )
 )
-}}
+}\if{html}{\out{</div>}}}
 }
 \value{
 \code{reactive} currently selected active_module

@@ -17,16 +17,12 @@ body:
       value: "A bug happened!"
     validations:
       required: true
-  - type: dropdown
-    id: r-version
+  - type: textarea
+    id: session-info
     attributes:
-      label: Which version(s) of R were you using?
-      multiple: true
-      options:
-        - "3.6.x"
-        - "4.1.x"
-        - "4.2.x"
-        - "Other"
+      label: sessionInfo()
+      description: Please copy and paste your output from `sessionInfo()`. This will be automatically formatted into code, so no need for backticks.
+      render: R
   - type: textarea
     id: logs
     attributes:
