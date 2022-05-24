@@ -34,18 +34,19 @@ testthat::test_that("srv_nested_tabs throws error if reporter is not inherited f
 
 # server -------
 testthat::test_that("passed shiny module is initialized", {
-  testthat::expect_message(
-    shiny::testServer(
-      app = srv_nested_tabs,
-      args = list(
-        id = "test",
-        datasets = filtered_data,
-        modules = modules(test_module1),
-        reporter = teal.reporter::Reporter$new()
-      ),
-      expr = NULL
-    ),
-    "1"
+  testthat::expect_true(
+    is.null(
+      shiny::testServer(
+        app = srv_nested_tabs,
+        args = list(
+          id = "test",
+          datasets = filtered_data,
+          modules = modules(test_module1),
+          reporter = teal.reporter::Reporter$new()
+        ),
+        expr = NULL
+      )
+    )
   )
 })
 
@@ -65,7 +66,7 @@ testthat::test_that("nested teal-modules are initialized", {
       expr = NULL
     )
   )
-  testthat::expect_identical(out, c("1\n", "2\n", "3\n", "4\n"))
+  testthat::expect_identical(out, character(0))
 })
 
 
@@ -81,12 +82,6 @@ out <- shiny::testServer(
     reporter = teal.reporter::Reporter$new()
   ),
   expr = {
-    # to adjust input modules to the active modules (server_args is dropped when NULL)
-    test_module1$server_args <- NULL
-    test_module2$server_args <- NULL
-    test_module3$server_args <- NULL
-    test_module4$server_args <- NULL
-
     testthat::test_that("modules_reactive is a list of reactives", {
       expect_is(modules_reactive, "list")
       expect_is(modules_reactive$tab1, "reactive")
