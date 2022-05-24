@@ -265,7 +265,7 @@ root_modules <- function(...) {
 #' }
 module <- function(label = "module",
                    server =  function(id, ...) { moduleServer(id, function(input, output, session) {}) }, # nolint
-                   ui = function(id, ...) { p("This module has no ui") }, # nolint
+                   ui = function(id, ...) { tags$p(paste0("This module has no UI (id: ", id, " )")) }, # nolint
                    filters = "all",
                    server_args = NULL,
                    ui_args = NULL) {
@@ -318,36 +318,26 @@ module <- function(label = "module",
 #' @keywords internal
 #'
 #' @examples
-#' create_mod <- function(module_name) {
-#'   module(
-#'     module_name,
-#'     server = function(input, output, session, datasets) {},
-#'     ui = function(id, ...) {
-#'       tags$p(id)
-#'     },
-#'     filters = "all"
-#'   )
-#' }
 #' mods <- modules(
 #'   label = "d1",
 #'   modules(
 #'     label = "d2",
 #'     modules(
 #'       label = "d3",
-#'       create_mod("aaa1"), create_mod("aaa2"), create_mod("aaa3")
+#'       module(label = "aaa1"), module(label = "aaa2"), module(label = "aaa3")
 #'     ),
-#'     create_mod("bbb")
+#'     module(label = "bbb")
 #'   ),
-#'   create_mod("ccc")
+#'   module(label = "ccc")
 #' )
 #' stopifnot(teal:::modules_depth(mods) == 3L)
 #'
 #' mods <- modules(
 #'   label = "a",
 #'   modules(
-#'     label = "b1", create_mod("c")
+#'     label = "b1", module(label = "c")
 #'   ),
-#'   create_mod("b2")
+#'   module(label = "b2")
 #' )
 #' stopifnot(teal:::modules_depth(mods) == 2L)
 modules_depth <- function(modules, depth = 0L) {

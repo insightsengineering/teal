@@ -10,7 +10,8 @@ module(
   label = "module",
   server = function(id, ...) {     moduleServer(id, function(input, output, session) { 
        }) },
-  ui = function(id, ...) {     p("This module has no ui") },
+  ui = function(id, ...) {     tags$p(paste0("This module has no UI (id: ", id, " )"))
+    },
   filters = "all",
   server_args = NULL,
   ui_args = NULL
