@@ -4,8 +4,6 @@ data <- teal_data(iris_ds, mtcars_ds)
 
 test_module1 <- module(
   label = "iris_tab",
-  ui = function(id, ...) NULL,
-  server = function(id, datasets) moduleServer(id, function(input, output, session) NULL),
   filters = "iris"
 )
 

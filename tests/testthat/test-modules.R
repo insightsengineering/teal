@@ -19,6 +19,10 @@ ui_fun2 <- function(id, datasets) {
   tags$p(paste0("id: ", id))
 }
 
+testthat::test_that("Calling module() does not throw", {
+  testthat::expect_error(module(), NA)
+})
+
 testthat::test_that("module requires label argument to be a string", {
   testthat::expect_error(module(
     label = "label",
@@ -33,12 +37,6 @@ testthat::test_that("module requires label argument to be a string", {
     ui = ui_fun1,
     filters = ""
   ), "Assertion on 'label' failed.+'NULL'")
-
-  testthat::expect_error(module(
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = ""
-  ), "is missing, with no default")
 
   testthat::expect_error(module(
     label = c("label", "label"),
@@ -78,10 +76,10 @@ testthat::test_that("module expects server being a shiny server module with data
 
   testthat::expect_error(module(
     label = "label",
-    server = ui_fun1,
+    server = function(id, reporter) NULL,
     ui = ui_fun1,
     filter = ""
-  ), "module\\(\\) server.+id and datasets \\(moduleServer\\)")
+  ), "module\\(\\) server.+id and \\[datasets or '...'\\] \\(moduleServer\\)")
 })
 
 testthat::test_that("module expects ui being a shiny ui module with id and datasets or ... arguments", {
@@ -543,35 +541,22 @@ get_srv_and_ui <- function() {
   ))
 }
 
-create_mod <- function(label = "label") {
-  srv_and_ui <- get_srv_and_ui()
-  mod <- module(label = label, server = srv_and_ui$server_fun, ui = srv_and_ui$ui_fun, filters = "")
-}
-
 testthat::test_that("is_reporter_used throws error if object is not teal_module or teal_modules", {
   testthat::expect_error(is_reporter_used(5), "is_reporter_used function not implemented for this object")
   testthat::expect_error(is_reporter_used(list()), "is_reporter_used function not implemented for this object")
 })
 
 testthat::test_that("is_reporter_used returns true if teal_module has reporter in server function args", {
-  testthat::expect_false(is_reporter_used(create_mod()))
+  testthat::expect_true(is_reporter_used(module(server = function(id, datasets, reporter) NULL)))
 })
 
 testthat::test_that("is_reporter_used returns false if teal_module does not have reporter in server function args", {
-  testthat::expect_false(is_reporter_used(create_mod()))
+  testthat::expect_false(is_reporter_used(module()))
 })
 
 
 testthat::test_that("is_reporter_used returns false if teal_modules has no children using reporter", {
-  srv_and_ui <- get_srv_and_ui()
-
-  mod <- module(
-    label = "label",
-    server = srv_and_ui$server_fun,
-    ui = srv_and_ui$ui_fun,
-    filters = ""
-  )
-
+  mod <- module()
   mods <- modules(label = "lab", mod, mod)
   testthat::expect_false(is_reporter_used(mods))
 
@@ -580,13 +565,10 @@ testthat::test_that("is_reporter_used returns false if teal_modules has no child
 })
 
 testthat::test_that("is_reporter_used returns true if teal_modules has at least one child using reporter", {
-  server_fun_with_reporter <- function(id, datasets, reporter) {} # nolint
+  server_fun_with_reporter <- function(id, datasets, reporter) NULL
 
-  srv_and_ui <- get_srv_and_ui()
-
-  mod <- module(label = "label", server = srv_and_ui$server_fun, ui = srv_and_ui$ui_fun, filters = "")
-
-  mod_with_reporter <- module(label = "label", server = server_fun_with_reporter, ui = srv_and_ui$ui_fun, filters = "")
+  mod <- module()
+  mod_with_reporter <- module(server = server_fun_with_reporter)
 
   mods <- modules(label = "lab", mod, mod_with_reporter)
   testthat::expect_true(is_reporter_used(mods))
@@ -600,21 +582,19 @@ testthat::test_that("is_reporter_used returns true if teal_modules has at least 
 
 # ---- append_module
 testthat::test_that("append_module throws error when modules is not inherited from teal_modules", {
-  mod <- create_mod()
-
   testthat::expect_error(
-    append_module(mod, mod),
+    append_module(module(), module()),
     "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
   )
 
   testthat::expect_error(
-    append_module(mod, list(mod)),
+    append_module(module(), list(module())),
     "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
   )
 })
 
 testthat::test_that("append_module throws error is module is not inherited from teal_module", {
-  mod <- create_mod()
+  mod <- module()
   mods <- modules(label = "A", mod)
 
   testthat::expect_error(
@@ -629,10 +609,10 @@ testthat::test_that("append_module throws error is module is not inherited from 
 })
 
 testthat::test_that("append_module appends a module to children of not nested teal_modules", {
-  mod <- create_mod(label = "a")
-  mod2 <- create_mod(label = "b")
+  mod <- module(label = "a")
+  mod2 <- module(label = "b")
   mods <- modules(label = "c", mod, mod2)
-  mod3 <- create_mod(label = "d")
+  mod3 <- module(label = "d")
 
   appended_mods <- append_module(mods, mod3)
   testthat::expect_equal(appended_mods$children, list(a = mod, b = mod2, d = mod3))
@@ -640,21 +620,21 @@ testthat::test_that("append_module appends a module to children of not nested te
 
 
 testthat::test_that("append_module appends a module to children of nested teal_modules", {
-  mod <- create_mod(label = "a")
-  mod2 <- create_mod(label = "b")
+  mod <- module(label = "a")
+  mod2 <- module(label = "b")
   mods <- modules(label = "c", mod)
   mods2 <- modules(label = "e", mods, mod2)
-  mod3 <- create_mod(label = "d")
+  mod3 <- module(label = "d")
 
   appended_mods <- append_module(mods2, mod3)
   testthat::expect_equal(appended_mods$children, list(c = mods, b = mod2, d = mod3))
 })
 
 testthat::test_that("append_module produces teal_modules with unique named children", {
-  mod <- create_mod(label = "a")
-  mod2 <- create_mod(label = "c")
+  mod <- module(label = "a")
+  mod2 <- module(label = "c")
   mods <- modules(label = "c", mod, mod2)
-  mod3 <- create_mod(label = "c")
+  mod3 <- module(label = "c")
 
   appended_mods <- append_module(mods, mod3)
   mod_names <- names(appended_mods$children)

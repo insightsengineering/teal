@@ -263,7 +263,16 @@ root_modules <- function(...) {
 #' \dontrun{
 #' runApp(app)
 #' }
-module <- function(label, server, ui, filters, server_args = NULL, ui_args = NULL) {
+module <- function(label = "module",
+                   server = function(id, ...) {
+                     moduleServer(id, function(input, output, session) {})
+                   },
+                   ui = function(id, ...) {
+                     tags$p(paste0("This module has no UI (id: ", id, " )"))
+                   },
+                   filters = "all",
+                   server_args = NULL,
+                   ui_args = NULL) {
   checkmate::assert_string(label)
   checkmate::assert_function(server)
   checkmate::assert_function(ui)
@@ -273,10 +282,10 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 
   server_main_args <- names(formals(server))
   if (!(identical(server_main_args[1:4], c("input", "output", "session", "datasets")) ||
-    identical(server_main_args[1:2], c("id", "datasets")))) {
+    identical(server_main_args[1:2], c("id", "datasets")) || identical(server_main_args[1:2], c("id", "...")))) {
     stop(paste(
       "module() server argument requires a function with ordered arguments:",
-      "\ninput, output, session, and datasets (callModule) or id and datasets (moduleServer)"
+      "\ninput, output, session, and datasets (callModule) or id and [datasets or '...'] (moduleServer)"
     ))
   }
 
@@ -313,36 +322,26 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' @keywords internal
 #'
 #' @examples
-#' create_mod <- function(module_name) {
-#'   module(
-#'     module_name,
-#'     server = function(input, output, session, datasets) {},
-#'     ui = function(id, ...) {
-#'       tags$p(id)
-#'     },
-#'     filters = "all"
-#'   )
-#' }
 #' mods <- modules(
 #'   label = "d1",
 #'   modules(
 #'     label = "d2",
 #'     modules(
 #'       label = "d3",
-#'       create_mod("aaa1"), create_mod("aaa2"), create_mod("aaa3")
+#'       module(label = "aaa1"), module(label = "aaa2"), module(label = "aaa3")
 #'     ),
-#'     create_mod("bbb")
+#'     module(label = "bbb")
 #'   ),
-#'   create_mod("ccc")
+#'   module(label = "ccc")
 #' )
 #' stopifnot(teal:::modules_depth(mods) == 3L)
 #'
 #' mods <- modules(
 #'   label = "a",
 #'   modules(
-#'     label = "b1", create_mod("c")
+#'     label = "b1", module(label = "c")
 #'   ),
-#'   create_mod("b2")
+#'   module(label = "b2")
 #' )
 #' stopifnot(teal:::modules_depth(mods) == 2L)
 modules_depth <- function(modules, depth = 0L) {

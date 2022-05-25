@@ -4,14 +4,10 @@ filtered_data$set_dataset(teal.data::dataset(dataname = "mtcars", x = head(mtcar
 
 test_module1 <- module(
   label = "iris tab",
-  ui = function(id, ...) NULL,
-  server = function(id, datasets) moduleServer(id, function(input, output, session) NULL),
   filters = "iris"
 )
 test_module2 <- module(
   label = "mtcars tab",
-  ui = function(id, ...) NULL,
-  server = function(id, datasets) moduleServer(id, function(input, output, session) NULL),
   filters = "mtcars"
 )
 
