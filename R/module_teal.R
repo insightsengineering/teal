@@ -214,7 +214,9 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         where = "beforeEnd",
         # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
         # just the first item of the tagList)
-        ui = div(ui_tabs_with_filters(
+        ui = div(
+          id = "TEST22",
+          ui_tabs_with_filters(
           session$ns("main_ui"),
           modules = modules,
           datasets = datasets_reactive()

@@ -4,6 +4,27 @@
 // this code alows the show R code "copy to clipbaord" button to work
 var clipboard = new ClipboardJS('.btn[data-clipboard-target]');
 
-$(document).on('shiny:idle', function(event) {
-  $("a[data-toggle=\'tab\']")[0].click();
+function waitForElm(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
+
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
+
+waitForElm('div#TEST22').then((elm) => {
+  $("a[data-toggle='tab']")[0].click();
 });
+
