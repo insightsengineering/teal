@@ -217,10 +217,11 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         ui = div(
           id = "teal_main_modules_ui",
           ui_tabs_with_filters(
-          session$ns("main_ui"),
-          modules = modules,
-          datasets = datasets_reactive()
-        )),
+            session$ns("main_ui"),
+            modules = modules,
+            datasets = datasets_reactive()
+          )
+        ),
         # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
         # have any effect as they are ignored when not present
         immediate = TRUE
