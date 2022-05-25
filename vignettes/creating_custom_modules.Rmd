@@ -201,3 +201,6 @@ if (interactive()) {
   shinyApp(app$ui, app$server)
 }
 ```
+
+## Adding reporting to a module
+Refer to `vignette("adding_support_for_reporting")` to read about adding support for reporting in your `teal` module.

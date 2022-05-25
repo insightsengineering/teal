@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.11.0.9008
+Version: 0.11.0.9011
 Date: 2022-04-07
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
@@ -11,6 +11,7 @@ Authors@R: c(
     person("Maciej", "Nasinski", , "maciej.nasinski@contractors.roche.com", role = "aut"),
     person("Konrad", "Pagacz", , "konrad.pagacz@contractors.roche.com", role = "aut"),
     person("Junlue", "Zhao", , "zhaoj88@gene.com", role = "aut"),
+    person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("Maximilian", "Mordig", role = "ctb")
   )
@@ -44,6 +45,7 @@ Suggests:
     dplyr,
     knitr,
     MultiAssayExperiment,
+    R6,
     rmarkdown,
     scda (>= 0.1.3),
     scda.2021 (>= 0.1.3),
