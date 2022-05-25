@@ -19,7 +19,7 @@ ui_fun2 <- function(id, datasets) {
   tags$p(paste0("id: ", id))
 }
 
-testthat::test_that("a module is created using module(), i.e. specifying no parameters", {
+testthat::test_that("Calling module() does not throw", {
   testthat::expect_error(module(), NA)
 })
 
