@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9010</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9011</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 30px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,15 +40,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -70,19 +61,20 @@ Other releases
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.11.0.9010" id="teal-01109010">teal 0.11.0.9010<a class="anchor" aria-label="anchor" href="#teal-01109010"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.11.0.9011" id="teal-01109011">teal 0.11.0.9011<a class="anchor" aria-label="anchor" href="#teal-01109011"></a></h2>
 <div class="section level4">
-<h4 id="enhancements-0-11-0-9010">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-11-0-9010"></a></h4>
+<h4 id="enhancements-0-11-0-9011">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-11-0-9011"></a></h4>
 <ul><li>Added new function <code>reporter_previewer_module</code> to wrap the <code>teal.reporter</code> package previewer functionality as a <code>teal</code> module.</li>
 <li>
 <code>teal</code> now supports <code>modules</code> which include reporting. If any <code>module</code> which supports reporting is included then a <code>reporter_previewer_module</code> is included.</li>
+<li>Added default arguments to <code><a href="../reference/module.html">module()</a></code> and the <code>server</code> argument is now a function where the second argument can be <code>...</code> or <code>datasets</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="breaking-changes-0-11-0-9010">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-11-0-9010"></a></h4>
+<h4 id="breaking-changes-0-11-0-9011">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-11-0-9011"></a></h4>
 <ul><li>Deprecated <code>bookmarkableShinyApp</code>. In future releases the <code>teal</code> framework will stop supporting shiny bookmarking (which has not officially been supported); it may be officially supported in the future. Note the filter panel in <code>teal.slice</code> retains its ability to save and restore its state if used in a standalone <code>shiny</code> app with bookmarking.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="miscellaneous-0-11-0-9010">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-11-0-9010"></a></h4>
+<h4 id="miscellaneous-0-11-0-9011">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-11-0-9011"></a></h4>
 <ul><li>Added a template to the <code>pkgdown</code> configuration.</li>
 <li>Removed unneeded <code>shinytest</code> app tests.</li>
 </ul></div>
