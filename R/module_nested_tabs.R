@@ -65,7 +65,8 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
       list(
         id = ns("active_tab"),
         type = if (modules$label == "root") "pills" else "tabs",
-        selected = "None"
+        # some random name to select nothing
+        selected = "none"
       ),
       lapply(
         names(modules$children),
