@@ -269,7 +269,7 @@ module <- function(label = "module",
                    },
                    ui = function(id, ...) {
                      tags$p(paste0("This module has no UI (id: ", id, " )"))
-                   }, # nolint
+                   },
                    filters = "all",
                    server_args = NULL,
                    ui_args = NULL) {
