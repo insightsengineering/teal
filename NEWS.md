@@ -1,9 +1,10 @@
-# teal 0.11.0.9011
+# teal 0.11.0.9012
 
 ### Enhancements
 
 * Added new function `reporter_previewer_module` to wrap the `teal.reporter` package previewer functionality as a `teal` module.
 * `teal` now supports `modules` which include reporting. If any `module` which supports reporting is included then a `reporter_previewer_module` is included.
+* Added default arguments to `module()` and the `server` argument is now a function where the second argument can be `...` or `datasets`. 
 
 ### Breaking changes
 * Deprecated `bookmarkableShinyApp`. In future releases the `teal` framework will stop supporting shiny bookmarking (which has not officially been supported); it may be officially supported in the future. Note the filter panel in `teal.slice` retains its ability to save and restore its state if used in a standalone `shiny` app with bookmarking. 

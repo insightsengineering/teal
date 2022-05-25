@@ -107,28 +107,17 @@ get_dummy_datasets <- function() { # nolint
 #' @return `teal_modules`
 #' @keywords internal
 get_dummy_modules <- function() {
-  create_mod <- function(module_name) {
-    module(
-      module_name,
-      server = function(input, output, session, datasets) {
-      },
-      ui = function(id, ...) {
-        tags$p(paste0("id: ", id))
-      },
-      filters = "all"
-    )
-  }
   mods <- modules(
     label = "d1",
     modules(
       label = "d2",
       modules(
         label = "d3",
-        create_mod("aaa1"), create_mod("aaa2"), create_mod("aaa3")
+        module(label = "aaa1"), module(label = "aaa2"), module(label = "aaa3")
       ),
-      create_mod("bbb")
+      module(label = "bbb")
     ),
-    create_mod("ccc")
+    module(label = "ccc")
   )
   return(mods)
 }
