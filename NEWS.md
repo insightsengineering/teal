@@ -1,9 +1,11 @@
 # teal 0.11.0.9012
 
-### Enhancements
+## New features
+* Added package vignettes.
 
+### Enhancements
 * Added new function `reporter_previewer_module` to wrap the `teal.reporter` package previewer functionality as a `teal` module.
-* `teal` now supports `modules` which include reporting. If any `module` which supports reporting is included then a `reporter_previewer_module` is included.
+* Updated `teal` to support `modules` which include reporting. If any `module` which supports reporting is included then a `reporter_previewer_module` is included.
 * Added default arguments to `module()` and the `server` argument is now a function where the second argument can be `...` or `datasets`. 
 
 ### Breaking changes
@@ -12,6 +14,7 @@
 ### Miscellaneous
 * Added a template to the `pkgdown` configuration.
 * Removed unneeded `shinytest` app tests.
+* Updated package authors.
 
 # teal 0.11.0
 
