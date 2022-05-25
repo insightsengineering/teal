@@ -4,6 +4,7 @@
 // this code alows the show R code "copy to clipbaord" button to work
 var clipboard = new ClipboardJS('.btn[data-clipboard-target]');
 
+// https://stackoverflow.com/a/61511955
 function waitForElm(selector) {
     return new Promise(resolve => {
         if (document.querySelector(selector)) {
@@ -24,7 +25,7 @@ function waitForElm(selector) {
     });
 }
 
-waitForElm('div#TEST22').then((elm) => {
+waitForElm('div#teal_main_modules_ui').then((elm) => {
   $("a[data-toggle='tab']")[0].click();
 });
 
