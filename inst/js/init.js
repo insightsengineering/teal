@@ -26,6 +26,6 @@ function waitForElm(selector) {
 }
 
 waitForElm('div#teal_main_modules_ui').then((elm) => {
-  $("a[data-toggle='tab']")[0].click();
+  $("div#teal_main_modules_ui a[data-toggle='tab']")[0].click();
 });
 
