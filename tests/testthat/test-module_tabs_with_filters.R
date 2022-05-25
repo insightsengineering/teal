@@ -81,6 +81,7 @@ testthat::test_that("active_datanames() returns dataname from single tab", {
       reporter = teal.reporter::Reporter$new()
     ),
     expr = {
+      session$setInputs(`root-active_tab` = "iris_tab")
       testthat::expect_identical(active_datanames(), "iris")
     }
   )
@@ -97,7 +98,7 @@ testthat::test_that("active_datanames() returns dataname from active tab after c
       reporter = teal.reporter::Reporter$new()
     ),
     expr = {
-      testthat::expect_error(active_datanames()) # to trigger active_module
+      testthat::expect_error(active_datanames())
       session$setInputs(`root-active_tab` = "iris_tab")
       testthat::expect_identical(active_datanames(), "iris")
       session$setInputs(`root-active_tab` = "mtcars_tab")
