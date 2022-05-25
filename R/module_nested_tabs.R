@@ -64,7 +64,8 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
       # by giving an id, we can reactively respond to tab changes
       list(
         id = ns("active_tab"),
-        type = if (modules$label == "root") "pills" else "tabs"
+        type = if (modules$label == "root") "pills" else "tabs",
+        selected = "None"
       ),
       lapply(
         names(modules$children),
@@ -151,6 +152,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter) {
 
     get_active_module <- reactive({
       if (length(modules$children) == 1L) {
+        req(input$active_tab)
         # single tab is active by default
         modules_reactive[[1]]()
       } else {
