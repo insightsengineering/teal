@@ -8,6 +8,7 @@ test_module1 <- module(
   server = function(id, datasets) moduleServer(id, function(input, output, session) NULL),
   filters = "iris"
 )
+
 test_module2 <- module(
   label = "mtcars tab",
   ui = function(id, ...) NULL,
@@ -15,10 +16,36 @@ test_module2 <- module(
   filters = "mtcars"
 )
 
+test_module3 <- module(
+  label = "mtcars tab",
+  ui = function(id, ...) NULL,
+  server = function(id, datasets) moduleServer(id, function(input, output, session) message("3")),
+  filters = "mtcars"
+)
+
 testthat::test_that("srv_tabs_with_filters throws error if reporter is not of class Reporter", {
   testthat::expect_error(
     srv_tabs_with_filters(id, datasets = filtered_data, modules = modules(test_module1), reporter = list()),
     "Assertion on 'reporter' failed"
+  )
+})
+
+testthat::test_that("passed shiny module is initialized when its tab is activated (clicked)", {
+  testthat::expect_message(
+    shiny::testServer(
+      app = srv_tabs_with_filters,
+      args = list(
+        id = "test",
+        datasets = filtered_data,
+        modules = modules(test_module3),
+        filter = list(),
+        reporter = teal.reporter::Reporter$new()
+      ),
+      expr = {
+        session$setInputs(`root-active_tab` = "mtcars_tab")
+      }
+    ),
+    "3"
   )
 })
 

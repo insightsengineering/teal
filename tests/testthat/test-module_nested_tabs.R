@@ -34,7 +34,7 @@ testthat::test_that("srv_nested_tabs throws error if reporter is not inherited f
 })
 
 # server -------
-testthat::test_that("passed shiny module is initialized", {
+testthat::test_that("passed shiny module is initialized, empty as is delayed", {
   testthat::expect_true(
     is.null(
       shiny::testServer(
@@ -51,7 +51,7 @@ testthat::test_that("passed shiny module is initialized", {
   )
 })
 
-testthat::test_that("nested teal-modules are initialized", {
+testthat::test_that("nested teal-modules are initialized, empty as is delayed", {
   out <- testthat::capture_messages(
     shiny::testServer(
       app = srv_nested_tabs,
