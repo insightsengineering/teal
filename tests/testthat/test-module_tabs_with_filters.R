@@ -5,19 +5,19 @@ filtered_data$set_dataset(teal.data::dataset(dataname = "mtcars", x = head(mtcar
 test_module1 <- module(
   label = "iris tab",
   ui = function(id, ...) NULL,
-  server = function(id, datasets) moduleServer(id, function(input, output, session) NULL),
+  server = function(id, datasets) moduleServer(id, function(input, output, session) message("1")),
   filters = "iris"
 )
 
 test_module2 <- module(
   label = "mtcars tab",
   ui = function(id, ...) NULL,
-  server = function(id, datasets) moduleServer(id, function(input, output, session) NULL),
+  server = function(id, datasets) moduleServer(id, function(input, output, session) message("2")),
   filters = "mtcars"
 )
 
 test_module3 <- module(
-  label = "mtcars tab",
+  label = "mtcars tab2",
   ui = function(id, ...) NULL,
   server = function(id, datasets) moduleServer(id, function(input, output, session) message("3")),
   filters = "mtcars"
@@ -47,6 +47,27 @@ testthat::test_that("passed shiny module is initialized when its tab is activate
     ),
     "3"
   )
+})
+
+testthat::test_that("passed shiny modules are initialized when their tab is activated (clicked)", {
+  out <- testthat::capture_messages(
+    shiny::testServer(
+      app = srv_tabs_with_filters,
+      args = list(
+        id = "test",
+        datasets = filtered_data,
+        modules = modules(test_module1, test_module2, test_module3),
+        filter = list(),
+        reporter = teal.reporter::Reporter$new()
+      ),
+      expr = {
+        session$setInputs(`root-active_tab` = "iris_tab")
+        session$setInputs(`root-active_tab` = "mtcars_tab")
+        session$setInputs(`root-active_tab` = "mtcars_tab2")
+      }
+    )
+  )
+  testthat::expect_identical(out, c("1\n", "2\n", "3\n"))
 })
 
 testthat::test_that("active_datanames() returns dataname from single tab", {
