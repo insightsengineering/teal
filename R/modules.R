@@ -266,7 +266,7 @@ root_modules <- function(...) {
 module <- function(label = "module",
                    server = function(id, ...) {
                      moduleServer(id, function(input, output, session) {})
-                   }, # nolint
+                   },
                    ui = function(id, ...) {
                      tags$p(paste0("This module has no UI (id: ", id, " )"))
                    }, # nolint
