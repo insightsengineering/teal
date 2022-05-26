@@ -4,16 +4,17 @@
 // this code alows the show R code "copy to clipbaord" button to work
 var clipboard = new ClipboardJS('.btn[data-clipboard-target]');
 
-// https://stackoverflow.com/a/61511955
-function waitForElm(selector) {
+function wait_for_element(selector) {
     return new Promise(resolve => {
-        if (document.querySelector(selector)) {
-            return resolve(document.querySelector(selector));
+        let init_check = document.querySelector(selector);
+        if (init_check) {
+            return resolve(init_check);
         }
 
-        const observer = new MutationObserver(mutations => {
-            if (document.querySelector(selector)) {
-                resolve(document.querySelector(selector));
+        const observer = new MutationObserver(() => {
+            let obs_check = document.querySelector(selector);
+            if (obs_check) {
+                resolve(obs_check);
                 observer.disconnect();
             }
         });
@@ -25,7 +26,7 @@ function waitForElm(selector) {
     });
 }
 
-waitForElm('div#teal_main_modules_ui').then((elm) => {
+wait_for_element('div#teal_main_modules_ui').then(() => {
   $("div#teal_main_modules_ui a[data-toggle='tab']")[0].click();
 });
 
