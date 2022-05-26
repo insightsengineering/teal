@@ -53,7 +53,6 @@ ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
-#' @export
 #' @keywords internal
 ui_nested_tabs_init <- function(id, modules, datasets, depth = 0L) {
   ns <- NS(id)
