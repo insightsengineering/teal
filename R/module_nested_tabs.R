@@ -53,8 +53,9 @@ ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
+
 #' @keywords internal
-ui_nested_tabs_init <- function(id, modules, datasets, depth = 0L) {
+ui_nested_tabs_base <- function(id, modules, datasets, depth = 0L, selected) {
   ns <- NS(id)
   do.call(
     tabsetPanel,
@@ -64,7 +65,7 @@ ui_nested_tabs_init <- function(id, modules, datasets, depth = 0L) {
         id = ns("active_tab"),
         type = if (modules$label == "root") "pills" else "tabs",
         # some random name to select nothing
-        selected = "none"
+        selected = selected
       ),
       lapply(
         names(modules$children),
@@ -80,33 +81,16 @@ ui_nested_tabs_init <- function(id, modules, datasets, depth = 0L) {
   )
 }
 
+#' @keywords internal
+ui_nested_tabs_init <- function(id, modules, datasets, depth = 0L) {
+  ui_nested_tabs_base(id, modules, datasets, depth, "none")
+}
+
 #' @rdname ui_nested_tabs
 #' @export
 #' @keywords internal
 ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
-  ns <- NS(id)
-  do.call(
-    tabsetPanel,
-    c(
-      # by giving an id, we can reactively respond to tab changes
-      list(
-        id = ns("active_tab"),
-        type = if (modules$label == "root") "pills" else "tabs",
-        # some random name to select nothing
-        selected = NULL
-      ),
-      lapply(
-        names(modules$children),
-        function(id) {
-          tabPanel(
-            title = modules$children[[id]]$label,
-            value = id, # when clicked this tab value changes input$<tabset panel id>
-            ui_nested_tabs(id = ns(id), modules = modules$children[[id]], datasets, depth = depth + 1L)
-          )
-        }
-      )
-    )
-  )
+  ui_nested_tabs_base(id, modules, datasets, depth, NULL)
 }
 
 #' @rdname ui_nested_tabs
