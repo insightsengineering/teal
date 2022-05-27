@@ -1,7 +1,5 @@
 # teal 0.11.0.9012
 
-## New features
-* Added package vignettes.
 
 ### Enhancements
 * Added new function `reporter_previewer_module` to wrap the `teal.reporter` package previewer functionality as a `teal` module.
@@ -15,6 +13,7 @@
 * Added a template to the `pkgdown` configuration.
 * Removed unneeded `shinytest` app tests.
 * Updated package authors.
+* Added package vignettes.
 
 # teal 0.11.0
 
