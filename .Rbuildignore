@@ -37,3 +37,5 @@
 ^templates$
 ^test_full_example$
 coverage.*
+^renv$
+^renv\.lock$
