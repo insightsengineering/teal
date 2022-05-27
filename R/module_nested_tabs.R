@@ -83,7 +83,7 @@ ui_nested_tabs_base <- function(id, modules, datasets, depth = 0L, selected) {
 
 #' @keywords internal
 ui_nested_tabs_init <- function(id, modules, datasets, depth = 0L) {
-  ui_nested_tabs_base(id, modules, datasets, depth, "none")
+  ui_nested_tabs_base(id, modules, datasets, depth, "__none_selected")
 }
 
 #' @rdname ui_nested_tabs
