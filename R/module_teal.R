@@ -215,6 +215,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
         # just the first item of the tagList)
         ui = div(
+          # This id is linked with a inst/js/init.js code which activates the app
           id = "teal_main_modules_ui",
           ui_tabs_with_filters(
             session$ns("main_ui"),
