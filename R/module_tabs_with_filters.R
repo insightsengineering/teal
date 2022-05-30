@@ -97,7 +97,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
   filter_and_info_ui <- datasets$ui_filter_panel(ns("filter_panel"))
 
   # modules must be teal_modules, not teal_module; otherwise we will get the UI and not a tabsetPanel of UIs
-  teal_ui <- ui_nested_tabs_init(ns("root"), modules = modules, datasets)
+  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets)
 
   filter_panel_btn <- tags$li(
     style = "flex-grow : 1;",
