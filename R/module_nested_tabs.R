@@ -49,13 +49,7 @@ ui_nested_tabs <- function(id, modules, datasets, depth = 0L) {
 #' @rdname ui_nested_tabs
 #' @export
 #' @keywords internal
-ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L) {
-  stop("Modules class not supported: ", paste(class(modules), collapse = " "))
-}
-
-
-#' @keywords internal
-ui_nested_tabs_base <- function(id, modules, datasets, depth = 0L, selected) {
+ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
   ns <- NS(id)
   do.call(
     tabsetPanel,
@@ -64,7 +58,10 @@ ui_nested_tabs_base <- function(id, modules, datasets, depth = 0L, selected) {
       list(
         id = ns("active_tab"),
         type = if (modules$label == "root") "pills" else "tabs",
-        selected = selected
+        # select inexisting initially to not trigger reactive cycle
+        # tab is selected by js event after initialization of shiny inputs
+        #  - see wait_for_element in init.js
+        selected = if (depth == 0L) "__none_selected" else NULL
       ),
       lapply(
         names(modules$children),
@@ -78,18 +75,6 @@ ui_nested_tabs_base <- function(id, modules, datasets, depth = 0L, selected) {
       )
     )
   )
-}
-
-#' @keywords internal
-ui_nested_tabs_init <- function(id, modules, datasets, depth = 0L) {
-  ui_nested_tabs_base(id, modules, datasets, depth, "__none_selected")
-}
-
-#' @rdname ui_nested_tabs
-#' @export
-#' @keywords internal
-ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
-  ui_nested_tabs_base(id, modules, datasets, depth, NULL)
 }
 
 #' @rdname ui_nested_tabs
