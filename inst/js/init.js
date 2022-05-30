@@ -4,6 +4,8 @@
 // this code alows the show R code "copy to clipbaord" button to work
 var clipboard = new ClipboardJS('.btn[data-clipboard-target]');
 
+// this code alows to click the first tab when then main teal UI is inserted
+// it is needed to achieve the full initial shiny input cycle
 function wait_for_element(selector) {
     return new Promise(resolve => {
         let init_check = document.querySelector(selector);
