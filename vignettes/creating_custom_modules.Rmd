@@ -205,10 +205,8 @@ if (interactive()) {
 ## `shiny` input cycle
 
 When teal modules are run inside the `teal::init` the initial shiny input cycle is empty for each of them.
-Then inputs are visible in the first reactive cycle.
-A developer has to be aware of this situation as often It will be needed to use `shiny::req` or `ignoreInit` argument.
-This side effect comes from the fact that module UIs are inserted with the `shiny::insertUI` function which causes such a scenario.
-We already started to look for a suited solution for this problem so the problem could be removed in a future release.
+In practice, this means that some inputs might be initialized with `NULL` value, unnecessary triggering some
+observers. A developer has to be aware of this situation as often It will require `shiny::req` or `ignoreInit` argument in the observers or reactives. This side effect is caused by the `shiny::insertUI` function. We are aware of this inconvenience and already started to look for a solution.
 
 ## Adding reporting to a module
 Refer to `vignette("adding_support_for_reporting")` to read about adding support for reporting in your `teal` module.
