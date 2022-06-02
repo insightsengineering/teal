@@ -1,5 +1,6 @@
 #' An example `teal` module
 #'
+#' @description `r lifecycle::badge("experimental")`
 #' @param label `character`, the label of the module
 #' @return A `teal` module which can be included in the `modules` argument to [teal::init()].
 #' @examples
