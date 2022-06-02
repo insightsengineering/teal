@@ -52,7 +52,6 @@ app <- shinyApp(
       id = "dummy",
       datasets = datasets,
       modules = mods,
-      reporter = teal.reporter::Reporter$new(),
       filter = NULL
     )
     output$info <- renderText({
@@ -86,14 +85,12 @@ app <- shinyApp(
       id = "app1",
       datasets = datasets1,
       modules = mods,
-      reporter = teal.reporter::Reporter$new(),
       filter = NULL
     )
     active_module2 <- teal:::srv_tabs_with_filters(
       id = "app2",
       datasets = datasets2,
       modules = mods,
-      reporter = teal.reporter::Reporter$new(),
       filter = NULL
     )
     output$info <- renderText({

@@ -64,8 +64,7 @@ app <- shinyApp(
     active_module <- teal:::srv_nested_tabs(
       "dummy",
       datasets = datasets,
-      modules = mods,
-      reporter = teal.reporter::Reporter$new()
+      modules = mods
     )
     output$info <- renderText({
       paste0("The currently active tab name is ", active_module()$label)

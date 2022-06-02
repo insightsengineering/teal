@@ -33,8 +33,7 @@
 #'     active_module <- teal:::srv_nested_tabs(
 #'       "dummy",
 #'       datasets = datasets,
-#'       modules = mods,
-#'       reporter = teal.reporter::Reporter$new()
+#'       modules = mods
 #'     )
 #'     output$info <- renderText({
 #'       paste0("The currently active tab name is ", active_module()$label)
@@ -125,7 +124,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
 #'
 #' @return `reactive` which returns the active module that corresponds to the selected tab
 #' @keywords internal
-srv_nested_tabs <- function(id, datasets, modules, reporter) {
+srv_nested_tabs <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new()) {
   stopifnot(inherits(datasets, "FilteredData"))
   stopifnot(inherits(reporter, "Reporter"))
   UseMethod("srv_nested_tabs", modules)
