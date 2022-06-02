@@ -38,7 +38,11 @@
 #'   },
 #'   server = function(input, output, session) {
 #'     active_module <- srv_tabs_with_filters(
-#'       id = "dummy", datasets = datasets, modules = mods, filter = NULL
+#'       id = "dummy",
+#'       datasets = datasets,
+#'       modules = mods,
+#'       reporter = teal.reporter::Reporter$new(),
+#'       filter = NULL
 #'     )
 #'     output$info <- renderText({
 #'       paste0("The currently active tab name is ", active_module()$label)
@@ -68,10 +72,18 @@
 #'   },
 #'   server = function(input, output, session) {
 #'     active_module1 <- teal:::srv_tabs_with_filters(
-#'       id = "app1", datasets = datasets1, modules = mods, filter = NULL
+#'       id = "app1",
+#'       datasets = datasets1,
+#'       modules = mods,
+#'       reporter = teal.reporter::Reporter$new(),
+#'       filter = NULL
 #'     )
 #'     active_module2 <- teal:::srv_tabs_with_filters(
-#'       id = "app2", datasets = datasets2, modules = mods, filter = NULL
+#'       id = "app2",
+#'       datasets = datasets2,
+#'       modules = mods,
+#'       reporter = teal.reporter::Reporter$new(),
+#'       filter = NULL
 #'     )
 #'     output$info <- renderText({
 #'       paste0(
