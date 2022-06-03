@@ -73,7 +73,7 @@ log_app_usage <- function(ta,
 #' @keywords internal
 #' @examples
 #' \dontrun{
-#' teal.utils:::line_usage_log("Oncology", "Tecentriq", "NSCLC", "Exploratory")
+#' teal:::line_usage_log("Oncology", "Tecentriq", "NSCLC", "Exploratory")
 #' }
 line_usage_log <- function(...) {
   args <- c(...)
@@ -99,7 +99,7 @@ line_usage_log <- function(...) {
 #'
 #' @examples
 #' \dontrun{
-#' teal.utils:::line_pkg_log(
+#' teal:::line_pkg_log(
 #'   pkgs = c("rtables", "tern", "teal"),
 #'   fields = c("Package", "Title", "Version", "RemoteRef")
 #' )
