@@ -1,6 +1,6 @@
 ---
 title: "Adding support for Reporting to custom modules"
-author: "NEST Core Dev Team"
+author: "NEST CoreDev"
 date: "2022-05-23"
 output: rmarkdown::html_vignette
 vignette: >
