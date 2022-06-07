@@ -1,6 +1,6 @@
 ---
 title: "Input MultiAssayExperiment data in a teal application"
-author: "NEST CoreDev Team"
+author: "NEST CoreDev"
 date: "2022-04-20"
 output: rmarkdown::html_vignette
 vignette: >
