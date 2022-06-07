@@ -254,9 +254,7 @@ example_reporter_module <- function(label = "Example") {
           teal.code::chunks_push(quote(result), id = "print_result", chunks = simple_chunks)
           teal.code::chunks_safe_eval(chunks = simple_chunks)
         })
-        
         output$table <- renderTable(table_r())
-        
         ### REPORTER
         card_fun <- function(card = TealReportCard$new(), comment) {
           card$set_name("Table Module")
@@ -277,7 +275,6 @@ example_reporter_module <- function(label = "Example") {
           }
           card
         }
-        
         teal.reporter::add_card_button_srv("addReportCard", reporter = reporter, card_fun = card_fun)
         teal.reporter::download_report_button_srv("downloadButton", reporter = reporter)
         teal.reporter::reset_report_button_srv("resetButton", reporter)
