@@ -249,14 +249,12 @@ example_reporter_module <- function(label = "Example") {
         table_r <- reactive({
           req(input$nrow)
           teal.code::chunks_reset(chunks = simple_chunks)
-          teal.code::chunks_push(bquote(result <- .(dput(dat()))), 
-                                 id = "get_data", 
-                                 chunks = simple_chunks)
+          teal.code::chunks_push(bquote(result <- .(dput(dat()))), id = "get_data", chunks = simple_chunks)
           teal.code::chunks_push(bquote(result <- head(result, .(input$nrow))), id = "nrow", chunks = simple_chunks)
           teal.code::chunks_push(quote(result), id = "print_result", chunks = simple_chunks)
           teal.code::chunks_safe_eval(chunks = simple_chunks)
         })
-
+        
         output$table <- renderTable(table_r())
         
         ### REPORTER
@@ -266,7 +264,9 @@ example_reporter_module <- function(label = "Example") {
           card$append_text("Selected Filters", "header2")
           card$append_fs(datasets)
           card$append_text("Encoding", "header2")
-          card$append_encodings(stats::setNames(lapply(c("dataname", "nrow"), function(x) input[[x]]), c("dataname", "nrow")))
+          card$append_encodings(
+            stats::setNames(lapply(c("dataname", "nrow"), function(x) input[[x]]), c("dataname", "nrow"))
+          )
           card$append_text("Module Table", "header2")
           card$append_table(table_r())
           card$append_text("Show R Code", "header2")
@@ -302,7 +302,6 @@ example_reporter_module <- function(label = "Example") {
     filters = "all"
   )
 }
-
 
 app <- init(
   data = teal_data(dataset("AIR", airquality), dataset("IRIS", iris), check = FALSE),
