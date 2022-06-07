@@ -229,3 +229,90 @@ custom_fun <- function(card = teal.reporter::TealReportCard$new()) {
 ```
 
 Otherwise, the API of `TealReportCard` will not be available inside the function.
+
+## Example
+
+```{r}
+library(teal)
+library(teal.reporter)
+
+example_reporter_module <- function(label = "Example") {
+  module(
+    label,
+    server = function(id, datasets, reporter) {
+      moduleServer(id, function(input, output, session) {
+        simple_chunks <- teal.code::chunks_new()
+        dat <- reactive(dat <- datasets$get_data(input$dataname, filtered = TRUE))
+        output$nrow_ui <- renderUI({
+            sliderInput(session$ns("nrow"), "Number of rows:", 1, nrow(dat()), 10)
+        })
+        table_r <- reactive({
+          req(input$nrow)
+          teal.code::chunks_reset(chunks = simple_chunks)
+          teal.code::chunks_push(bquote(result <- .(dput(dat()))), 
+                                 id = "get_data", 
+                                 chunks = simple_chunks)
+          teal.code::chunks_push(bquote(result <- head(result, .(input$nrow))), id = "nrow", chunks = simple_chunks)
+          teal.code::chunks_push(quote(result), id = "print_result", chunks = simple_chunks)
+          teal.code::chunks_safe_eval(chunks = simple_chunks)
+        })
+
+        output$table <- renderTable(table_r())
+        
+        ### REPORTER
+        card_fun <- function(card = TealReportCard$new(), comment) {
+          card$set_name("Table Module")
+          card$append_text(paste("Selected dataset", input$dataname), "header2")
+          card$append_text("Selected Filters", "header2")
+          card$append_fs(datasets)
+          card$append_text("Encoding", "header2")
+          card$append_encodings(stats::setNames(lapply(c("dataname", "nrow"), function(x) input[[x]]), c("dataname", "nrow")))
+          card$append_text("Module Table", "header2")
+          card$append_table(table_r())
+          card$append_text("Show R Code", "header2")
+          card$append_src(paste(teal.code::chunks_get_rcode(simple_chunks), collapse = "\n"))
+          if (!comment == "") {
+            card$append_text("Comment", "header3")
+            card$append_text(comment)
+          }
+          card
+        }
+        
+        teal.reporter::add_card_button_srv("addReportCard", reporter = reporter, card_fun = card_fun)
+        teal.reporter::download_report_button_srv("downloadButton", reporter = reporter)
+        teal.reporter::reset_report_button_srv("resetButton", reporter)
+        ###
+      })
+    },
+    ui = function(id, datasets) {
+      ns <- NS(id)
+      teal.widgets::standard_layout(
+        output = tableOutput(ns("table")),
+        encoding = tagList(
+          div(
+            teal.reporter::add_card_button_ui(ns("addReportCard")),
+            teal.reporter::download_report_button_ui(ns("downloadButton")),
+            teal.reporter::reset_report_button_ui(ns("resetButton"))
+          ),
+          selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames()),
+          uiOutput(ns("nrow_ui"))
+        )
+      )
+    },
+    filters = "all"
+  )
+}
+
+
+app <- init(
+  data = teal_data(dataset("AIR", airquality), dataset("IRIS", iris), check = FALSE),
+  modules = modules(
+    example_reporter_module(),
+    example_module()
+  ),
+  filter = list(AIR = list(Month = c(5, 5))),
+  header = "Example teal app with reporter"
+)
+
+if (interactive()) shinyApp(app$ui, app$server)
+```
