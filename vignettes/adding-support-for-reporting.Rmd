@@ -260,15 +260,18 @@ example_reporter_module <- function(label = "Example") {
           card$set_name("Table Module")
           card$append_text(paste("Selected dataset", input$dataname), "header2")
           card$append_text("Selected Filters", "header2")
-          card$append_fs(datasets)
+          card$append_text(datasets$get_formatted_filter_state(), "verbatim")
           card$append_text("Encoding", "header2")
-          card$append_encodings(
-            stats::setNames(lapply(c("dataname", "nrow"), function(x) input[[x]]), c("dataname", "nrow"))
+          card$append_text(
+             yaml::as.yaml(
+               stats::setNames(lapply(c("dataname", "nrow"), function(x) input[[x]]), c("dataname", "nrow"))
+             ),
+             "verbatim"
           )
           card$append_text("Module Table", "header2")
           card$append_table(table_r())
           card$append_text("Show R Code", "header2")
-          card$append_src(paste(teal.code::chunks_get_rcode(simple_chunks), collapse = "\n"))
+          card$append_text(paste(teal.code::chunks_get_rcode(simple_chunks), collapse = "\n"), "verbatim")
           if (!comment == "") {
             card$append_text("Comment", "header3")
             card$append_text(comment)
