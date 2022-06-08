@@ -265,10 +265,10 @@ example_reporter_module <- function(label = "Example") {
           card$append_text(datasets$get_formatted_filter_state(), "verbatim")
           card$append_text("Encoding", "header3")
           card$append_text(
-             yaml::as.yaml(
-               stats::setNames(lapply(c("dataname", "nrow"), function(x) input[[x]]), c("dataname", "nrow"))
-             ),
-             "verbatim"
+            yaml::as.yaml(
+              stats::setNames(lapply(c("dataname", "nrow"), function(x) input[[x]]), c("dataname", "nrow"))
+            ),
+            "verbatim"
           )
           card$append_text("Module Table", "header3")
           card$append_table(table_r())
