@@ -16,7 +16,8 @@
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<![endif]--><link rel="stylesheet" href="../consent.css">
+<script src="../consent.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -26,9 +27,9 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9012</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
 
-    <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 30px;"></a> </div>
+    <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -44,14 +45,14 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/adding_support_for_reporting.html">Adding support for Reporting to custom modules</a>
-    <a class="dropdown-item" href="../articles/creating_custom_modules.html">Creating Custom Modules</a>
+    <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
+    <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
     <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
     <a class="dropdown-item" href="../articles/join-keys.html">Join Keys</a>
     <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
-    <a class="dropdown-item" href="../articles/teal_options.html">Modifying a Teal application with R options</a>
+    <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
   </div>
 </li>
 <li class="nav-item">
@@ -88,7 +89,7 @@ Burkoff</h4>
             <h4 data-toc-skip class="date">2022-03-24</h4>
       
       
-      <div class="d-none name"><code>creating_custom_modules.Rmd</code></div>
+      <div class="d-none name"><code>creating-custom-modules.Rmd</code></div>
     </div>
 
     
@@ -290,9 +291,23 @@ below:</p>
 <span class="op">}</span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="shiny-input-cycle">
+<code>shiny</code> input cycle<a class="anchor" aria-label="anchor" href="#shiny-input-cycle"></a>
+</h2>
+<p>When teal modules are run inside the <code><a href="../reference/init.html">teal::init</a></code> the
+initial shiny input cycle is empty for each of them. In practice, this
+means that some inputs might be initialized with <code>NULL</code>
+value, unnecessary triggering some observers. A developer has to be
+aware of this situation as often It will require <code><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">shiny::req</a></code>
+or <code>ignoreInit</code> argument in observers or
+<code>reactive</code> expressions. This side effect is caused by the
+<code><a href="https://rdrr.io/pkg/shiny/man/insertUI.html" class="external-link">shiny::insertUI</a></code> function. We are aware of this
+inconvenience and have already started to look for a solution.</p>
+</div>
+<div class="section level2">
 <h2 id="adding-reporting-to-a-module">Adding reporting to a module<a class="anchor" aria-label="anchor" href="#adding-reporting-to-a-module"></a>
 </h2>
-<p>Refer to <code><a href="../articles/adding_support_for_reporting.html">vignette("adding_support_for_reporting")</a></code> to
+<p>Refer to <code>vignette("adding_support_for_reporting")</code> to
 read about adding support for reporting in your <code>teal</code>
 module.</p>
 </div>
@@ -305,8 +320,7 @@ module.</p>
     <footer><div class="nest">
   <p>teal is a part of the <strong>NEST</strong> and <a href="https://pharmaverse.org/" class="external-link"><strong>pharmaverse</strong></a>.</p>
 </div>
-
-    </footer>
+<script type="text/javascript" src="../analytics.js"></script></footer>
 </div>
 
   

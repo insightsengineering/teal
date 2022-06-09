@@ -2,16 +2,16 @@ pandoc: 2.17.1.1
 pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
-  adding_support_for_reporting: adding_support_for_reporting.html
-  creating_custom_modules: creating_custom_modules.html
+  adding-support-for-reporting: adding-support-for-reporting.html
+  creating-custom-modules: creating-custom-modules.html
   including-adam-data-in-teal: including-adam-data-in-teal.html
   including-general-data-in-teal: including-general-data-in-teal.html
   including-mae-data-in-teal: including-mae-data-in-teal.html
   join-keys: join-keys.html
   preprocessing-data: preprocessing-data.html
+  teal-options: teal-options.html
   teal: teal.html
-  teal_options: teal_options.html
-last_built: 2022-05-27T08:50Z
+last_built: 2022-06-09T17:11Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles
