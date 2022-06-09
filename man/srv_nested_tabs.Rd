@@ -7,7 +7,12 @@
 \alias{srv_nested_tabs.teal_module}
 \title{Server function that returns currently active module}
 \usage{
-srv_nested_tabs(id, datasets, modules, reporter)
+srv_nested_tabs(
+  id,
+  datasets,
+  modules,
+  reporter = teal.reporter::Reporter$new()
+)
 
 \method{srv_nested_tabs}{default}(id, datasets, modules, reporter)
 

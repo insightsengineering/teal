@@ -115,7 +115,7 @@ testthat::test_that("get_rcode for chunks", {
 
 testthat::test_that("style nested expressions", {
   testthat::expect_silent({
-    cs <- teal.code::chunks$new()
+    cs <- teal.code::chunks_new()
 
     cs$push(quote(a <- 1))
     cs$push(quote({

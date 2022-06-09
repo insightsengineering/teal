@@ -1,5 +1,4 @@
-# teal 0.11.0.9014
-
+# teal 0.11.1
 
 ### Enhancements
 * Added new function `reporter_previewer_module` to wrap the `teal.reporter` package previewer functionality as a `teal` module.
