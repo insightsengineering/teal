@@ -24,7 +24,7 @@ Depends:
     R (>= 4.0),
     shiny,
     teal.data (>= 0.1.1),
-    teal.transform (> 0.1.1)
+    teal.transform (>= 0.1.1)
 Imports:
     checkmate,
     lifecycle,
