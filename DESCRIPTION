@@ -37,7 +37,7 @@ Imports:
     styler,
     teal.code (>= 0.1.1),
     teal.logger (>= 0.1.0),
-    teal.reporter (>= 0.1.1),
+    teal.reporter (>= 0.1.0),
     teal.slice (>= 0.1.1),
     utils
 Suggests:
