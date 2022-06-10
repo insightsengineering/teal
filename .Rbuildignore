@@ -1,3 +1,7 @@
+^renv$
+^renv\.lock$
+CODE_OF_CONDUCT.md
+SECURITY.md
 ^.*\.Rproj$
 ^Jenkinsfile$
 ^Makefile$
@@ -37,5 +41,3 @@
 ^templates$
 ^test_full_example$
 coverage.*
-^renv$
-^renv\.lock$

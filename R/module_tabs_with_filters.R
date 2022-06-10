@@ -38,7 +38,10 @@
 #'   },
 #'   server = function(input, output, session) {
 #'     active_module <- srv_tabs_with_filters(
-#'       id = "dummy", datasets = datasets, modules = mods, filter = NULL
+#'       id = "dummy",
+#'       datasets = datasets,
+#'       modules = mods,
+#'       filter = NULL
 #'     )
 #'     output$info <- renderText({
 #'       paste0("The currently active tab name is ", active_module()$label)
@@ -68,10 +71,16 @@
 #'   },
 #'   server = function(input, output, session) {
 #'     active_module1 <- teal:::srv_tabs_with_filters(
-#'       id = "app1", datasets = datasets1, modules = mods, filter = NULL
+#'       id = "app1",
+#'       datasets = datasets1,
+#'       modules = mods,
+#'       filter = NULL
 #'     )
 #'     active_module2 <- teal:::srv_tabs_with_filters(
-#'       id = "app2", datasets = datasets2, modules = mods, filter = NULL
+#'       id = "app2",
+#'       datasets = datasets2,
+#'       modules = mods,
+#'       filter = NULL
 #'     )
 #'     output$info <- renderText({
 #'       paste0(
@@ -137,7 +146,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @param reporter (`Reporter`) object from `teal.reporter`
 #' @return `reactive` currently selected active_module
 #' @keywords internal
-srv_tabs_with_filters <- function(id, datasets, modules, reporter, filter) {
+srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new(), filter) {
   checkmate::assert_class(datasets, "FilteredData")
   checkmate::assert_class(reporter, "Reporter")
   moduleServer(id, function(input, output, session) {

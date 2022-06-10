@@ -11,7 +11,7 @@ app usage data fields to add to log file
 }
 \examples{
 \dontrun{
-teal.utils:::line_usage_log("Oncology", "Tecentriq", "NSCLC", "Exploratory")
+teal:::line_usage_log("Oncology", "Tecentriq", "NSCLC", "Exploratory")
 }
 }
 \keyword{internal}

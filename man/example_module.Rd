@@ -13,7 +13,7 @@ example_module(label = "example teal module")
 A \code{teal} module which can be included in the \code{modules} argument to \code{\link[=init]{init()}}.
 }
 \description{
-An example \code{teal} module
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 app <- init(

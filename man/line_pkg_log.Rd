@@ -14,7 +14,7 @@ Metadata included in logs relates to loaded NEST packages
 }
 \examples{
 \dontrun{
-teal.utils:::line_pkg_log(
+teal:::line_pkg_log(
   pkgs = c("rtables", "tern", "teal"),
   fields = c("Package", "Title", "Version", "RemoteRef")
 )
