@@ -186,9 +186,8 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       env$progress$set(0.25, message = "Setting data")
       # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
       # this is placed in the module scope so that bookmarking can be used with FilteredData object
-      datasets <- teal.slice:::filtered_data_new(raw_data())
-      # transfer the datasets from raw_data() into the FilteredData object
-      teal.slice:::filtered_data_set(raw_data(), datasets)
+      datasets <- do.call(teal.slice::init_filtered_data, raw_data()$get_teal_inputs())
+
       logger::log_trace("srv_teal@4 Raw Data transferred to FilteredData.")
       datasets
     })

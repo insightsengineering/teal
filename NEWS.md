@@ -1,5 +1,7 @@
 # teal 0.11.1.9000
 
+* Updated internals of `module_teal` to reflect changes in `teal.slice` and `teal.data`.
+
 # teal 0.11.1
 
 ### Enhancements
