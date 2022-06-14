@@ -42,32 +42,32 @@ For new feature requests, please elaborate on the context and the benefit the fe
 
 ## Pull requests
 
-### Github Flow
+### Github flow
 
-This repository uses the [Github Flow](https://docs.github.com/en/get-started/quickstart/github-flow) model for collaboration. To submit a pull request:
+This repository uses the [Github flow](https://docs.github.com/en/get-started/quickstart/github-flow) model for collaboration. To submit a pull request:
 
-1. Create a branch
+1. Create a branch.
 
    Please see the [branch naming convention](#branch-naming-convention) below. If you don't have write access to this repository, please fork it.
 
-2. Make changes
+2. Make changes.
 
-    Make sure your code
+    Make sure your code:
     * passes all checks imposed by GitHub Actions
     * is well documented
     * is well tested with unit tests sufficiently covering the changes introduced
 
-3. Create a pull request (PR)
+3. Create a pull request (PR).
 
    In the pull request description, please link the relevant issue (if any), provide a detailed description of the change, and include any assumptions.
 
-4. Address review comments, if any
+4. Address review comments, if any.
 
-5. Post approval
+5. Receive an approval.
 
    Merge your PR if you have write access. Otherwise, the reviewer will merge the PR on your behalf.
 
-6. Pat yourself on the back
+6. Pat yourself on the back.
 
    Congratulations! 🎉
    You are now an official contributor to this project! We are grateful for your contribution.
