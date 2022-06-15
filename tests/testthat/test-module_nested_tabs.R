@@ -1,5 +1,6 @@
 filtered_data <- teal.slice:::FilteredData$new()
 filtered_data$set_dataset(teal.data::dataset(dataname = "iris", x = head(iris)))
+
 test_module1 <- module(
   label = "test1",
   ui = function(id, ...) NULL,
@@ -33,23 +34,24 @@ testthat::test_that("srv_nested_tabs throws error if reporter is not inherited f
 })
 
 # server -------
-testthat::test_that("passed shiny module is initialized", {
-  testthat::expect_message(
-    shiny::testServer(
-      app = srv_nested_tabs,
-      args = list(
-        id = "test",
-        datasets = filtered_data,
-        modules = modules(test_module1),
-        reporter = teal.reporter::Reporter$new()
-      ),
-      expr = NULL
-    ),
-    "1"
+testthat::test_that("passed shiny module is initialized, empty as is delayed", {
+  testthat::expect_true(
+    is.null(
+      shiny::testServer(
+        app = srv_nested_tabs,
+        args = list(
+          id = "test",
+          datasets = filtered_data,
+          modules = modules(test_module1),
+          reporter = teal.reporter::Reporter$new()
+        ),
+        expr = NULL
+      )
+    )
   )
 })
 
-testthat::test_that("nested teal-modules are initialized", {
+testthat::test_that("nested teal-modules are initialized, empty as is delayed", {
   out <- testthat::capture_messages(
     shiny::testServer(
       app = srv_nested_tabs,
@@ -65,7 +67,7 @@ testthat::test_that("nested teal-modules are initialized", {
       expr = NULL
     )
   )
-  testthat::expect_identical(out, c("1\n", "2\n", "3\n", "4\n"))
+  testthat::expect_identical(out, character(0))
 })
 
 

@@ -68,7 +68,11 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
       # by giving an id, we can reactively respond to tab changes
       list(
         id = ns("active_tab"),
-        type = if (modules$label == "root") "pills" else "tabs"
+        type = if (modules$label == "root") "pills" else "tabs",
+        # select inexisting initially to not trigger reactive cycle
+        # tab is selected by js event after initialization of shiny inputs
+        #  - see wait_for_element in init.js
+        selected = if (depth == 0L) "__none_selected" else NULL
       ),
       lapply(
         names(modules$children),
@@ -155,6 +159,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter) {
 
     get_active_module <- reactive({
       if (length(modules$children) == 1L) {
+        req(input$active_tab)
         # single tab is active by default
         modules_reactive[[1]]()
       } else {
@@ -180,18 +185,22 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     )
   )
 
-  modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
-  is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
+  module_reactive <- reactive({
+    modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
+    is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
+    args <- c(list(id = id, datasets = datasets), modules$server_args)
 
-  args <- c(list(id = id, datasets = datasets), modules$server_args)
-  if (is_reporter_used(modules)) {
-    args <- c(args, list(reporter = reporter))
-  }
+    if (is_reporter_used(modules)) {
+      args <- c(args, list(reporter = reporter))
+    }
 
-  if (is_module_server) {
-    do.call(modules$server, args)
-  } else {
-    do.call(callModule, c(args, list(module = modules$server)))
-  }
-  reactive(modules)
+    if (is_module_server) {
+      do.call(modules$server, args)
+    } else {
+      do.call(callModule, c(args, list(module = modules$server)))
+    }
+    modules
+  })
+
+  module_reactive
 }
