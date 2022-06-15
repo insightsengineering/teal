@@ -1,4 +1,7 @@
-# teal 0.11.1.9001
+# teal 0.11.1.9002
+
+### Enhancements
+* Enhanced the initial shiny input cycle, all encoding inputs are available from the beginning when each module server is executed.
 
 * Updated the internals of `module_teal` to reflect changes in `teal.slice` and `teal.data`.
 
