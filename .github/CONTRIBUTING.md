@@ -1,10 +1,8 @@
 # Contribution Guidelines
 
-First of all, thank you for taking the time to contribute! ✌️ 🎉
+🙏 Thank you for taking the time to contribute!
 
-We love your input regardless of its size, content or scope - whether it is an issue, feature request, bug-fix or documentation enhancement.
-
-Thanks 🙏 You rock 🤘
+Your input is deeply valued, whether an issue, a pull request, or even feedback, regardless of size, content or scope.
 
 ## Table of contents
 
@@ -14,105 +12,114 @@ Thanks 🙏 You rock 🤘
 
 [🗃 License](#license)
 
-[🐛 How to report a bug?](#how-to-report-a-bug)
+[📜 Issues](#issues)
 
-[💡 How to request the change?](#how-to-request-the-change)
-
-[🚩 How to submit a change?](#how-to-submit-a-change)
+[🚩 Pull requests](#pull-requests)
 
 [👗 Style guide](#style-guide)
 
-[🧐 Recognition model](#recognition-model)
+[🏆 Recognition model](#recognition-model)
 
-[❓ Any questions](#any-questions)
+[❓ Questions](#questions)
 
 ## Getting started
 
-For an introduction, please read [`README`](README.md) file. You can also find vignettes [here](vignettes/). Usually you will find a "Getting started" article. Please also see the package manual in the form of a `pkgdown` website.
+Please refer the project [documentation][docs] for a brief introduction. Please also see other [articles][articles] within the project documentation for additional information.
 
 ## Code of Conduct
 
-This project is governed by [Code of Conduct](../CODE_OF_CONDUCT.md). By participating, you are expected to follow the rules outlined there.
+A [Code of Conduct](CODE_OF_CONDUCT.md) governs this project. Participants and contributors are expected to follow the rules outlined therein.
 
 ## License
 
-All of your code changes would be under the same [license](../LICENSE) that covers this project.
+All your contributions will be covered by this project's [license][license].
 
-## How to report a bug?
+## Issues
 
-We use GitHub to track issues, feature requests as well as bugs. Before opening a new issue please double-check if it's already reported (but don't worry if to be a duplicate - we will manage). If already there - up-vote ⬆️. We will have a look at it faster!
+We use GitHub to track issues, feature requests, and bugs. Before submitting a new issue, please check if the issue has already been reported. If the issue already exists, please upvote the existing issue 👍.
 
-We kindly ask you to write a good issue with a minimal and reproducible example that demonstrates the problem. It would also be great to know your local environment (R session info) as well. You will find our template for issues when opening a bug ticket. This will speed up the fixing process a lot! 📈.
+For new feature requests, please elaborate on the context and the benefit the feature will have for users, developers, or other relevant personas.
 
-## How to request the change?
+## Pull requests
 
-If you notice a missing feature or you have an idea how to enhance existing functionalities - please let us know by creating a new issue. Before opening a new issue please double-check if it's already reported (but don't worry if occurs to be a duplicate - we will manage). If already there - up-vote ⬆️. We will have a look at it faster!
+### Github flow
 
-Please elaborate on "why?" - what's the context, what's the benefit and for whom. You will find our template when opening a feature request ticket. This will help us prioritize and submit meaningful changes.
+This repository uses the [Github flow](https://docs.github.com/en/get-started/quickstart/github-flow) model for collaboration. To submit a pull request:
 
-## How to submit a change?
+1. Create a branch.
 
-### GitHub Flow
+   Please see the [branch naming convention](#branch-naming-convention) below. If you don't have write access to this repository, please fork it.
 
-We are following [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow) to collaborate in this repository. In order to submit the changes please do the following:
+2. Make changes.
 
-1. Open a branch
+    Make sure your code:
+    * passes all checks imposed by GitHub Actions
+    * is well documented
+    * is well tested with unit tests sufficiently covering the changes introduced
 
-   Please see branch naming convention below. If you don't have write access please fork it first.
+3. Create a pull request (PR).
 
-1. Make changes.
+   In the pull request description, please link the relevant issue (if any), provide a detailed description of the change, and include any assumptions.
 
-   Make sure your code passes all the checks and is well documented and tested so as not to decrease existing test coverage 💪.
+4. Address review comments, if any.
 
-1. Create a PR(s)
+5. Receive an approval.
 
-   Please link an issue and make a good change description. Include development assumptions when necessary. Give all the details for a reviewer to efficiently check your changes.
+   Merge your PR if you have write access. Otherwise, the reviewer will merge the PR on your behalf.
 
-1. Address review comments
+6. Pat yourself on the back.
 
-   Please apply changes where necessary. If you disagree with a reviewer - please explain why.
+   Congratulations! 🎉
+   You are now an official contributor to this project! We are grateful for your contribution.
 
-1. Once approved - merge your PR(s) and delete a branch
+### Branch naming convention
 
-### Branching convention
+Suppose your changes are related to a current issue in the current project; please name your branch as follows: `<issue_id>_<short_description>`. Please use underscore (`_`) as a delimiter for word separation. For example, `420_fix_ui_bug` would be a suitable branch name if your change is resolving and UI-related bug reported in issue number `420` in the current project.
 
-In case you are working on a task inside one specific repository, please name your branch `<issue_id>_<short_description>` all lowercase. Multiple words of the description should be divided by an underscore (`_`). E.g. `15_fix_spelling_error` in case you try to solve a spelling mistake mentioned in the issue number `15`.
-
-In case you are working on a task from one repository that affects multiple repositories, please always name your branches: `<issue_id>_<issue_repo>_<short description>` all lowercase. Multiple words of the description should be divided by an underscore (`_`). E.g. `15_abc_fix_spelling_error` in case you try to solve a spelling mistake inside `xyz` which closes issue `15` inside `abc`.
+If your change affects multiple repositories, please name your branches as follows: `<issue_id>_<issue_repo>_<short description>`. For example, `69_awesomeproject_fix_spelling_error` would reference issue `69` reported in project `awesomeproject` and aims to resolve one or more spelling errors in multiple (likely related) repositories.
 
 ### `monorepo` and `staged.dependencies`
 
-Sometimes you might need to change upstream dependent package(s) to be able to submit a meaningful change. We are using [`staged.dependencies`](https://github.com/openpharma/staged.dependencies) functionality to simulate a `monorepo` behavior. The configuration is already in the [`staged_dependencies.yaml`](../staged_dependencies.yaml) file. You just need to name the feature branches identically. This is the only exception from branch naming convention described above. Please read the package manual for more details.
+Sometimes you might need to change upstream dependent package(s) to be able to submit a meaningful change. We are using [`staged.dependencies`](https://github.com/openpharma/staged.dependencies) functionality to simulate a `monorepo` behavior. The dependency configuration is already specified in this project's `staged_dependencies.yaml` file. You need to name the feature branches appropriately. _This is the only exception from the branch naming convention described above_.
+
+Please refer to the [staged.dependencies package documentation](https://openpharma.github.io/staged.dependencies/) for more details.
 
 ### Recommended development environment & tools
 
 #### R & package versions
 
-We continuously test our packages against the newest R version as well as a given package dependencies. We recommend to set-up your working environment in the same way. You can find all the details in a given GitHub Action execution log - there is a step that prints out session info.
+We continuously test our packages against the newest R version along with the most recent dependencies from CRAN and BioConductor. We recommend that your working environment is also set up in the same way. You can find the details about the R version and packages used in the `R CMD check` GitHub Action execution log - there is a step that prints out the R `sessionInfo()`.
 
-If you find out any bugs on the older version of dependencies - please create appropriate bug ticket.
+If you discover bugs on older R versions or with an older set of dependencies, please create the relevant bug reports.
 
 #### `pre-commit`
 
-We highly recommend the [`pre-commit`](https://pre-commit.com/) tool combined with [`R hooks for pre-commit`](https://github.com/lorenzwalthert/precommit) to execute some of the checks prior committing and pushing. The configuration is already there in a repository ([here](../.pre-commit-config.yaml)). Please, follow the installation guide on the official [`pre-commit` page](https://github.com/lorenzwalthert/precommit) and the [`GitHub` `readme` page](https://github.com/lorenzwalthert/precommit#installation) for the R hooks.
+We highly recommend that you use the [`pre-commit`](https://pre-commit.com/) tool combined with [`R hooks for pre-commit`](https://github.com/lorenzwalthert/precommit) to execute some of the checks before committing and pushing your changes.
+
+Pre-commit hooks are already available in this repository's `.pre-commit-config.yaml` file.
 
 ## Style guide
 
-This repository follows standard [`tidyverse` style guide](https://style.tidyverse.org/) and it's being checked against it by [`lintr`](https://github.com/r-lib/lintr). There are some slight modifications to its default settings available in the [`.lintr`](../.lintr) file.
-
-Although it allows for some flexibility - we recommend sticking to the style of the existing code.
-
-Please note that there is a style and also `lintr` check in place that will validate your code.
+This repository follows the standard [`tidyverse` style guide](https://style.tidyverse.org/) and uses [`lintr`](https://github.com/r-lib/lintr) for lint checks. Customized lint configurations are available in this repository's `.lintr` file.
 
 ## Recognition model
 
-Any contribution is highly welcomed and appreciated. While all the contribution data is already there in GitHub repository insights feature, we introduced some objective rules to recognize a _significant_ contribution so as to became a package author:
+As mentioned previously, all contributions are deeply valued and appreciated. While all contribution data is available as part of the [repository insights][insights], to recognize a _significant_ contribution and hence add the contributor to the package authors list, the following rules are enforced:
 
-- Minimum 5% of lines of code authored (determined by `git blame` query) OR
-- Being at the top 5 contributors in terms of number of commits OR lines added OR lines removed.
+* Minimum 5% of lines of code authored* (determined by `git blame` query) OR
+* Being at the top 5 contributors in terms of number of commits OR lines added OR lines removed*
 
-The package maintainer also reserves the rights to manually adjust the criteria to recognize contributions.
+*Excluding auto-generated code, including but not limited to `roxygen` comments or `renv.lock` files.
 
-## Any questions
+The package maintainer also reserves the right to adjust the criteria to recognize contributions.
 
-If you have any further questions regarding contribution - please reach out to the repository maintainer(s)!
+## Questions
+
+If you have further questions regarding the contribution guidelines, please contact the package/repository maintainer.
+
+<!-- urls -->
+[issues]: https://github.com/insightsengineering/teal/issues
+[docs]: https://insightsengineering.github.io/teal/index.html
+[articles]: https://insightsengineering.github.io/teal/articles/index.html
+[license]: https://insightsengineering.github.io/teal/LICENSE-text.html
+[insights]: https://github.com/insightsengineering/teal/pulse

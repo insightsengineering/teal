@@ -1,4 +1,4 @@
-# teal 0.11.1.9000
+# teal 0.11.1.9001
 
 * Updated internals of `module_teal` to reflect changes in `teal.slice` and `teal.data`.
 
