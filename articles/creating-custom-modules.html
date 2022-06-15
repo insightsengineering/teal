@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9001</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -289,20 +289,6 @@ below:</p>
 <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="shiny-input-cycle">
-<code>shiny</code> input cycle<a class="anchor" aria-label="anchor" href="#shiny-input-cycle"></a>
-</h2>
-<p>When teal modules are run inside the <code><a href="../reference/init.html">teal::init</a></code> the
-initial shiny input cycle is empty for each of them. In practice, this
-means that some inputs might be initialized with <code>NULL</code>
-value, unnecessary triggering some observers. A developer has to be
-aware of this situation as often It will require <code><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">shiny::req</a></code>
-or <code>ignoreInit</code> argument in observers or
-<code>reactive</code> expressions. This side effect is caused by the
-<code><a href="https://rdrr.io/pkg/shiny/man/insertUI.html" class="external-link">shiny::insertUI</a></code> function. We are aware of this
-inconvenience and have already started to look for a solution.</p>
 </div>
 <div class="section level2">
 <h2 id="adding-reporting-to-a-module">Adding reporting to a module<a class="anchor" aria-label="anchor" href="#adding-reporting-to-a-module"></a>
