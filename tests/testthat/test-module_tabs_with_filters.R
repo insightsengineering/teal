@@ -1,6 +1,9 @@
-filtered_data <- teal.slice:::FilteredData$new()
-filtered_data$set_dataset(teal.data::dataset(dataname = "iris", x = head(iris)))
-filtered_data$set_dataset(teal.data::dataset(dataname = "mtcars", x = head(mtcars)))
+filtered_data <- teal.slice::init_filtered_data(
+  list(
+    iris = list(dataset = head(iris)),
+    mtcars = list(dataset = head(mtcars))
+  )
+)
 
 test_module1 <- module(
   label = "iris tab",

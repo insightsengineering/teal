@@ -1,9 +1,10 @@
-# teal 0.11.1.9002
+# teal 0.11.1.9003
 
 ### Enhancements
 
 * Enhanced the initial shiny input cycle, all encoding inputs are available from the beginning when each module server is executed.
 * Added a custom `ggplot2` theme - `theme_nest()`.
+* Updated the internals of `module_teal` to reflect changes in `teal.slice`.
 
 # teal 0.11.1
 
