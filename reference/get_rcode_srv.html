@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,24 +83,37 @@
     <dl><dt>id</dt>
 <dd><p>An ID string that corresponds with the ID used to call the module's
 UI function.</p></dd>
+
+
 <dt>datasets</dt>
 <dd><p>(<code>list</code>) list of <code>FilteredData</code> available inside the
 server function of any <a href="teal-package.html">teal</a> module.</p></dd>
+
+
 <dt>datanames</dt>
 <dd><p>(<code>character</code>)<br>
 names of datasets which code should be returned for. Due to fact that
 <code>teal</code> filter panel depending on <code>"ADSL"</code>, code for <code>ADSL</code>
 is always returned even if not specified.</p></dd>
+
+
 <dt>merge_expression</dt>
 <dd><p>optional, (<code>reactive</code>) code to get merged analysis dataset</p></dd>
+
+
 <dt>modal_title</dt>
 <dd><p>optional, (<code>character</code>) title of the modal</p></dd>
+
+
 <dt>code_header</dt>
 <dd><p>optional, (<code>character</code>) header inside R</p></dd>
+
+
 <dt>disable_buttons</dt>
 <dd><p>optional, (<code>reactive</code>)
 a shiny reactive value. Should be a single boolean value, indicating whether to disable
 or enable the show R code and Debug info buttons. Default: <code>reactiveVal(FALSE)</code>.</p></dd>
+
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

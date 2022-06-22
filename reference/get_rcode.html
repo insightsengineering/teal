@@ -22,7 +22,7 @@ code teal.code::chunks."><!-- mathjax --><script src="https://cdnjs.cloudflare.c
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,37 +102,54 @@ code <a href="https://rdrr.io/pkg/teal.code/man/chunks.html" class="external-lin
     <dl><dt>datasets</dt>
 <dd><p>(<code>list</code>) list of <code>FilteredData</code> available inside the
 server function of any <a href="teal-package.html">teal</a> module.</p></dd>
+
+
 <dt>datanames</dt>
 <dd><p>(<code>character</code>)<br>
 names of datasets which code should be returned for. Due to fact that
 <code>teal</code> filter panel depending on <code>"ADSL"</code>, code for <code>ADSL</code>
 is always returned even if not specified.</p></dd>
+
+
 <dt>merge_expression</dt>
 <dd><p>(<code>character</code>)<br>
 code to get merged analysis dataset</p></dd>
+
+
 <dt>chunks</dt>
 <dd><p>(<code>chunks</code>) <br>
 object of class <code>chunks</code> that stores code chunks. These code
 chunks are used in <a href="teal-package.html">teal</a> to enable reproducibility. Normally these chunks
 are stored within the <a href="https://rdrr.io/pkg/shiny/man/shiny-package.html" class="external-link">shiny::shiny-package</a> session. The default value
 can normally be used.</p></dd>
+
+
 <dt>selected_chunk_ids</dt>
 <dd><p>(<code>character</code> vector)<br>
 vector of code chunks to be shown
 in the code. If chunk id's are available this can be used to limit the
 chunks that appear in the <code>"Show R-Code"</code> modal. Please only use this
 feature if all chunks were set with designated IDs.</p></dd>
+
+
 <dt>session</dt>
 <dd><p>(<code>environment</code>) shiny session</p></dd>
+
+
 <dt>title</dt>
 <dd><p>A character title of the module</p></dd>
+
+
 <dt>description</dt>
 <dd><p>A character description of the module with additional
 information not reflected in the title</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Return the R Code needed to reproduce a teal module. The <code><a href="get_rcode_header.html">get_rcode_header()</a></code> part allows
+    
+
+<p>Return the R Code needed to reproduce a teal module. The <code><a href="get_rcode_header.html">get_rcode_header()</a></code> part allows
 to install the module. Additionally if the user filtered data by
 teal inherited functions, the code to filter the data is included. If the teal module
 is using <code><a href="https://rdrr.io/pkg/teal.transform/man/data_extract_srv.html" class="external-link">teal.transform::data_extract_srv()</a></code> the extraction and merging

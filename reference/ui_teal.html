@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,25 +81,36 @@
     <dl><dt>id</dt>
 <dd><p>(<code>character(1)</code>)<br>
 module id</p></dd>
+
+
 <dt>splash_ui</dt>
 <dd><p><code>shiny.tag</code> UI to display initially,
 can be a splash screen or a Shiny module UI. For the latter, see
 <code><a href="init.html">init()</a></code> about how to call the corresponding server function.</p></dd>
+
+
 <dt>title</dt>
 <dd><p>(<code>NULL</code> or <code>character</code>)<br>
 The browser window title (defaults to the host URL of the page).</p></dd>
+
+
 <dt>header</dt>
 <dd><p>(<code>character</code> or <code>shiny.tag</code>) <br>
 the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's <code>ui</code> function so code which needs to be placed in the <code>ui</code> function
 (such as loading css via <code><a href="https://rdrr.io/pkg/htmltools/man/htmlDependency.html" class="external-link">htmltools::htmlDependency()</a></code>) should be included here.</p></dd>
+
+
 <dt>footer</dt>
 <dd><p>(<code>character</code> or <code>shiny.tag</code>)<br>
 the footer of the app</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>HTML</code> for Shiny module UI</p>
+    
+
+<p><code>HTML</code> for Shiny module UI</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

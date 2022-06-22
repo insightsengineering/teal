@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
   <span class="va">id</span>,
   <span class="va">datasets</span>,
   <span class="va">modules</span>,
-  reporter <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/teal.reporter/man/Reporter.html" class="external-link">Reporter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+  reporter <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/reference/Reporter.html">Reporter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
@@ -92,20 +92,29 @@ module id to embed it, if provided,
 the server function must be called with <code><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">shiny::moduleServer()</a></code>;
 See the vignette for an example. However, <code><a href="ui_teal_with_splash.html">ui_teal_with_splash()</a></code>
 is then preferred to this function.</p></dd>
+
+
 <dt>datasets</dt>
 <dd><p>(<code>FilteredData</code>)<br>
 object to store filter state and filtered datasets, shared across modules. For more
 details see <code><a href="https://rdrr.io/pkg/teal.slice/man/FilteredData.html" class="external-link">teal.slice::FilteredData</a></code>.</p></dd>
+
+
 <dt>modules</dt>
 <dd><p>(<code>list</code> or <code>teal_modules</code>)<br>
 nested list of <code>teal_modules</code> or <code>module</code> objects. See <code><a href="modules.html">modules()</a></code> and <code><a href="module.html">module()</a></code> for
 more details.</p></dd>
+
+
 <dt>reporter</dt>
 <dd><p>(<code>Reporter</code>) object from <code>teal.reporter</code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>reactive</code> which returns the active module that corresponds to the selected tab</p>
+    
+
+<p><code>reactive</code> which returns the active module that corresponds to the selected tab</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -114,7 +123,12 @@ is currently active. To determine which module is active see the diagram.
 <img src="figures/uml_nested_tabs.jpg" width="75%" alt="Figure: uml_nested_tabs.jpg">
 
 Above depicts hypothetical situation in which one has module structure defined in following way:</p>
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div><ul><li><p><code>teal_module</code> returns self as a active module</p></li>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sc">+</span> root</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">+</span> tab1</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">+</span> test1</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">+</span> test2</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">+</span> tab2</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="sc">+</span> test3</span></code></pre><p></p></div><ul><li><p><code>teal_module</code> returns self as a active module</p></li>
 <li><p><code>teal_modules</code> returns module active within self which is determined by the <code>input$active_tab</code>.
 The choice of active module is done recursively (diagram from right to left).</p></li>
 </ul></div>

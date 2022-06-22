@@ -18,7 +18,7 @@ shapes the navigation panel of a teal application."><!-- mathjax --><script src=
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,19 +92,28 @@ shapes the navigation panel of a <code>teal</code> application.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>...</dt>
 <dd><p>parameters passed to <code>toString</code></p></dd>
+
+
 <dt>label</dt>
 <dd><p>(<code>character(1)</code>) label of modules collection (default <code>"root"</code>).
 If using the <code>label</code> argument then it must be explicitly named.
 For example <code>modules("lab", ...)</code> should be converted to <code>modules(label = "lab", ...)</code></p></dd>
+
+
 <dt>x</dt>
 <dd><p><code>teal_modules</code></p></dd>
+
+
 <dt>indent</dt>
 <dd><p>(<code>integer</code>) indent level;
 each submodule is indented one level more</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>object of class <code>teal_modules</code>. Object contains following fields</p><ul><li><p><code>label</code>: taken from the <code>label</code> argument</p></li>
+    
+
+<p>object of class <code>teal_modules</code>. Object contains following fields</p><ul><li><p><code>label</code>: taken from the <code>label</code> argument</p></li>
 <li><p><code>children</code>: a list containing objects passed in <code>...</code>. List elements are named after
 their <code>label</code> attribute converted to a valid <code>shiny</code> id.</p></li>
 </ul><p>(<code>character</code>)</p>

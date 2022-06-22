@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
   <span class="va">id</span>,
   <span class="va">datasets</span>,
   <span class="va">modules</span>,
-  reporter <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/teal.reporter/man/Reporter.html" class="external-link">Reporter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,
+  reporter <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/reference/Reporter.html">Reporter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,
   <span class="va">filter</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -84,31 +84,45 @@ module id to embed it, if provided,
 the server function must be called with <code><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">shiny::moduleServer()</a></code>;
 See the vignette for an example. However, <code><a href="ui_teal_with_splash.html">ui_teal_with_splash()</a></code>
 is then preferred to this function.</p></dd>
+
+
 <dt>datasets</dt>
 <dd><p>(<code>FilteredData</code>)<br>
 object to store filter state and filtered datasets, shared across modules. For more
 details see <code><a href="https://rdrr.io/pkg/teal.slice/man/FilteredData.html" class="external-link">teal.slice::FilteredData</a></code>.</p></dd>
+
+
 <dt>modules</dt>
 <dd><p>(<code>list</code> or <code>teal_modules</code>)<br>
 nested list of <code>teal_modules</code> or <code>module</code> objects. See <code><a href="modules.html">modules()</a></code> and <code><a href="module.html">module()</a></code> for
 more details.</p></dd>
+
+
 <dt>reporter</dt>
 <dd><p>(<code>Reporter</code>) object from <code>teal.reporter</code></p></dd>
+
+
 <dt>filter</dt>
 <dd><p>(<code>list</code>)<br>
 You can define filters that show when the app starts. List names should be
 named according to datanames passed to the <code>data</code> argument.
 In case of  data.frame` the list should be composed as follows:</p>
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="sc">&lt;</span>dataname1<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(<span class="sc">&lt;</span>varname1<span class="sc">&gt;</span> <span class="er">=</span> ..., <span class="sc">&lt;</span>varname2<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>     <span class="sc">&lt;</span>dataname2<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(...),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>     ...)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span></code></pre><p></p></div>
 <p>For example, filters for variable <code>Sepal.Length</code> in <code>iris</code> can be specified as
 follows:</p>
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">iris =</span> <span class="fu">list</span>(<span class="at">Sepal.Length =</span> <span class="fu">list</span>(<span class="at">selected =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>))))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">iris =</span> <span class="fu">list</span>(<span class="at">Sepal.Length =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>)))</span></code></pre><p></p></div>
 <p>In case developer would like to include <code>NA</code> and <code>Inf</code> values in  the
 filtered dataset.</p>
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">list</span>(<span class="at">selected =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>), <span class="at">keep_na =</span> <span class="cn">TRUE</span>, <span class="at">keep_inf =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">c</span>(<span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>), <span class="cn">NA</span>, <span class="cn">Inf</span>))</span></code></pre><p></p></div>
 <p>To initialize with specific variable filter with all values on start, one
 can use</p>
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">list</span>())</span></code></pre><p></p></div>
 <p><code>filter</code> should be set with respect to the class of the column:</p><ul><li><p><code>numeric</code>: <code>selected</code> should be a two elements vector defining the range
 of the filter.</p></li>
 <li><p><code>Date</code>: <code>selected</code> should be a two elements vector defining the date-range
@@ -121,11 +135,24 @@ defining initial values selected to filter.
 different way. Since it contains patient data with list of experiments,
 <code>filter</code> list should be created as follows:
 <br></p></li>
-</ul><p></p><div class="sourceCode"><pre><code></code></pre><p></p></div></dd>
+</ul><p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">&lt;</span>MAE dataname<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">subjects =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> colData<span class="sc">&gt;</span> <span class="er">=</span> ..., <span class="sc">&lt;</span>column <span class="cf">in</span> colData<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">&lt;</span>experiment name<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">subset =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> rowData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                    <span class="sc">&lt;</span>column <span class="cf">in</span> rowData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">select =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> colData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                    <span class="sc">&lt;</span>column <span class="cf">in</span> colData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre><p></p></div></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>reactive</code> currently selected active_module</p>
+    
+
+<p><code>reactive</code> currently selected active_module</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

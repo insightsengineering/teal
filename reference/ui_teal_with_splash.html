@@ -24,7 +24,7 @@ Please also refer to the doc of init()."><!-- mathjax --><script src="https://cd
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,6 +102,8 @@ a default splash screen is shown.</p>
     <dl><dt>id</dt>
 <dd><p>(<code>character(1)</code>)<br>
 module id</p></dd>
+
+
 <dt>data</dt>
 <dd><p>(<code>TealData</code> or <code>TealDataset</code> or <code>TealDatasetConnector</code> or <code>list</code> or <code>data.frame</code>
 or <code>MultiAssayExperiment</code>)<br><code>R6</code> object as returned by <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">teal.data::cdisc_data()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal.data::teal_data()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">teal.data::cdisc_dataset()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">teal.data::dataset()</a></code>,
@@ -110,17 +112,24 @@ or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 do not match the original object names. To ensure reproducibility please use <code><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal.data::teal_data()</a></code>
 or <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">teal.data::cdisc_data()</a></code> with <code>check = TRUE</code> enabled.</p></dd>
+
+
 <dt>title</dt>
 <dd><p>(<code>NULL</code> or <code>character</code>)<br>
 The browser window title (defaults to the host URL of the page).</p></dd>
+
+
 <dt>header</dt>
 <dd><p>(<code>character</code> or <code>shiny.tag</code>) <br>
 the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's <code>ui</code> function so code which needs to be placed in the <code>ui</code> function
 (such as loading css via <code><a href="https://rdrr.io/pkg/htmltools/man/htmlDependency.html" class="external-link">htmltools::htmlDependency()</a></code>) should be included here.</p></dd>
+
+
 <dt>footer</dt>
 <dd><p>(<code>character</code> or <code>shiny.tag</code>)<br>
 the footer of the app</p></dd>
+
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

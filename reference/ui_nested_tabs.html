@@ -14,7 +14,7 @@ teal_module is obtained by calling the ui function on it."><!-- mathjax --><scri
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,21 +90,30 @@ of its children is another tab-module called recursively. The UI of a
     <dl><dt>id</dt>
 <dd><p>(<code>character(1)</code>)<br>
 module id</p></dd>
+
+
 <dt>modules</dt>
 <dd><p>(<code>list</code> or <code>teal_modules</code>)<br>
 nested list of <code>teal_modules</code> or <code>module</code> objects. See <code><a href="modules.html">modules()</a></code> and <code><a href="module.html">module()</a></code> for
 more details.</p></dd>
+
+
 <dt>datasets</dt>
 <dd><p>(<code>FilteredData</code>)<br>
 object to store filter state and filtered datasets, shared across modules. For more
 details see <code><a href="https://rdrr.io/pkg/teal.slice/man/FilteredData.html" class="external-link">teal.slice::FilteredData</a></code></p></dd>
+
+
 <dt>depth</dt>
 <dd><p>(<code>integer(1)</code>)<br>
 number which helps to determine depth of the modules nesting.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>depending on class of <code>modules</code>:</p><ul><li><p><code>teal_module</code>: instantiated UI of the module</p></li>
+    
+
+<p>depending on class of <code>modules</code>:</p><ul><li><p><code>teal_module</code>: instantiated UI of the module</p></li>
 <li><p><code>teal_modules</code>: <code>tabsetPanel</code> with each tab corresponding to recursively
 calling this function on it.</p></li>
 </ul></div>
