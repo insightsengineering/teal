@@ -92,11 +92,7 @@ get_dummy_cdisc_data <- function() { # nolint
 #' @keywords internal
 get_dummy_datasets <- function() { # nolint
   dummy_cdisc_data <- get_dummy_cdisc_data()
-  datasets <- teal.slice:::filtered_data_new(dummy_cdisc_data)
-  isolate({
-    teal.slice:::filtered_data_set(dummy_cdisc_data, datasets)
-  })
-  return(datasets)
+  return(teal.slice::init_filtered_data(dummy_cdisc_data))
 }
 
 #' Get dummy modules
