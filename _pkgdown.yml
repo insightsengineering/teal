@@ -43,3 +43,6 @@ reference:
   - title: Deprecated function
     contents:
       - bookmarkableShinyApp
+  - title: NEST themes and configurations
+    contents:
+      - theme_nest
