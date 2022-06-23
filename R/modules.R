@@ -277,27 +277,53 @@ module <- function(label = "module",
   checkmate::assert_function(server)
   checkmate::assert_function(ui)
   checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
-  checkmate::assert_list(server_args, null.ok = TRUE)
-  checkmate::assert_list(ui_args, null.ok = TRUE)
+  checkmate::assert_list(server_args, null.ok = TRUE, names = "named")
+  checkmate::assert_list(ui_args, null.ok = TRUE, names = "named")
 
-  server_main_args <- names(formals(server))
-  if (!(identical(server_main_args[1:4], c("input", "output", "session", "datasets")) ||
-    identical(server_main_args[1:2], c("id", "datasets")) || identical(server_main_args[1:2], c("id", "...")))) {
-    stop(paste(
-      "module() server argument requires a function with ordered arguments:",
-      "\ninput, output, session, and datasets (callModule) or id and [datasets or '...'] (moduleServer)"
-    ))
-  }
-
-  if (length(formals(ui)) < 2 ||
-    !identical(names(formals(ui))[[1]], "id") ||
-    !identical(names(formals(ui))[[2]], "datasets") && !identical(names(formals(ui))[[2]], "...")
-  ) {
+  server_formals <- names(formals(server))
+  if (!any(c("id", "input", "output", "session") %in% server_formals)) {
     stop(
-      "module() ui argument requires a function with two ordered arguments:",
-      "\n- 'id'\n- 'datasets' or '...'"
+      "\nmodule() `server` argument requires a function with following arguments:",
+      "\n - id - teal will set proper shiny namespace for this module.",
+      "\n - input, output, session (not recommended) - then shiny::callModules will be used to call a module.",
+      "\n\nFollowing arguments can be used optionaly:",
+      "\n - `data` - module will receive list of reactive (filtered) data specied in the `filters` argument",
+      "\n - `datasets` - module will receive `FilteredData`. See `help(FilteredData)`",
+      "\n - `reporter` - module will receive `Reporter`. See `help(teal.widgets::Reporter)`",
+      "\n - `filter_panel_api` - module will receive `FilterPanelApi`. See `help(FilterPanelApi)`",
+      "\n - `...` server_args elements will be passed to the module argument of the same name or to the `...`"
     )
   }
+
+  srv_extra_args <- setdiff(names(server_args), server_formals)
+  if (length(srv_extra_args) > 0 && !"..." %in% server_formals) {
+    stop(
+      "\nFollowing `server_args` elements have no equivalent in the formals of `server`:\n",
+      paste(paste(" -", srv_extra_args), collapse = "\n"),
+      "\n\nUpdate the `server` arguments by including above or add `...`"
+    )
+  }
+
+  ui_formals <-  names(formals(ui))
+  if (!"id" %in% ui_formals) {
+    stop(
+      "\nmodule() ui argument requires a function with following arguments:",
+      "\n - id - teala will set proper shiny namespace for this module.",
+      "\n\nFollowing arguments can be used optionaly:",
+      "\n - `data` - module will receive list of reactive (filtered) data specied in the `filters` argument",
+      "\n - `datasets` - module will receive `FilteredData`. See `help(FilteredData)`",
+      "\n - `...` ui_args elements will be passed to the module argument of the same name or to the `...`"
+    )
+  }
+
+    ui_extra_args <- setdiff(names(ui_args), ui_formals)
+    if (length(ui_extra_args) > 0 && !"..." %in% ui_formals) {
+      stop(
+        "\nFollowing `ui_args` elements have no equivalent in the formals of `ui`:\n",
+        paste(paste(" -", ui_extra_args), collapse = "\n"),
+        "\n\nUopdate the `ui` arguments by including above or add `...`"
+      )
+    }
 
   structure(
     list(
