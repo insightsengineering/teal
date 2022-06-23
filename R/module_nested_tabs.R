@@ -68,11 +68,7 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
       # by giving an id, we can reactively respond to tab changes
       list(
         id = ns("active_tab"),
-        type = if (modules$label == "root") "pills" else "tabs",
-        # select inexisting initially to not trigger reactive cycle
-        # tab is selected by js event after initialization of shiny inputs
-        #  - see wait_for_element in init.js
-        selected = if (depth == 0L) "__none_selected" else NULL
+        type = if (modules$label == "root") "pills" else "tabs"
       ),
       lapply(
         names(modules$children),
@@ -159,7 +155,6 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter) {
 
     get_active_module <- reactive({
       if (length(modules$children) == 1L) {
-        req(input$active_tab)
         # single tab is active by default
         modules_reactive[[1]]()
       } else {
@@ -188,10 +183,38 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   module_reactive <- reactive({
     modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
     is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
-    args <- c(list(id = id, datasets = datasets), modules$server_args)
-
+    args <- c(list(id = id), modules$server_args)
     if (is_reporter_used(modules)) {
       args <- c(args, list(reporter = reporter))
+    }
+
+    is_datasets_used <- isTRUE("datasets" %in% names(formals(modules$server)))
+    if (is_datasets_used) {
+      args <- c(args, datasets = datasets)
+    }
+
+    is_data_used <- isTRUE("data" %in% names(formals(modules$server)))
+    if (is_data_used) {
+      datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
+
+      # list of reactive filtered data
+      data <- sapply(
+        datanames,
+        simplify = FALSE,
+        function(x) {
+          #todo: need to include metadata, keys, datalabel
+          reactive(datasets$get_data(x, filtered = TRUE))
+        }
+      )
+      #names(data) <- paste0(names(data), "_FILTERED") # these datasets are filtered
+
+      # code from previous stages
+      attr(data, "code") <- reactive(get_datasets_code(datanames, datasets))
+
+      # join_keys
+      attr(data, "join_keys") <- reactive(datasets$get_join_keys()[datanames])
+
+      args <- c(args, data = list(data))
     }
 
     if (is_module_server) {
