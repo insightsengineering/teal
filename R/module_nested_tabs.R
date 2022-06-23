@@ -90,7 +90,12 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   stopifnot(is(datasets, "FilteredData"))
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
-  args <- c(list(id = id, datasets = datasets), args)
+  args <- c(list(id = id), args)
+  is_datasets_used <- isTRUE("datasets" %in% names(formals(modules$ui)))
+  if (is_datasets_used) {
+    args <- c(args, datasets = datasets)
+  }
+
   tags$div(
     id = id,
     class = "teal_module",
