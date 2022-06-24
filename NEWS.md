@@ -1,4 +1,4 @@
-# teal 0.11.1.9003
+# teal 0.11.1.9004
 
 ### Enhancements
 * Enhanced the initial shiny input cycle, all encoding inputs are available from the beginning when each module server is executed.
