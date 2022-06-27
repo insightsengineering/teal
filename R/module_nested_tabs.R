@@ -187,6 +187,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 
   modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
   is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
+
   args <- c(list(id = id), modules$server_args)
   if (is_reporter_used(modules)) {
     args <- c(args, list(reporter = reporter))
