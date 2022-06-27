@@ -185,50 +185,46 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     )
   )
 
-  module_reactive <- reactive({
-    modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
-    is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
-    args <- c(list(id = id), modules$server_args)
-    if (is_reporter_used(modules)) {
-      args <- c(args, list(reporter = reporter))
-    }
+  modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
+  is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
+  args <- c(list(id = id), modules$server_args)
+  if (is_reporter_used(modules)) {
+    args <- c(args, list(reporter = reporter))
+  }
 
-    is_datasets_used <- isTRUE("datasets" %in% names(formals(modules$server)))
-    if (is_datasets_used) {
-      args <- c(args, datasets = datasets)
-    }
+  is_datasets_used <- isTRUE("datasets" %in% names(formals(modules$server)))
+  if (is_datasets_used) {
+    args <- c(args, datasets = datasets)
+  }
 
-    is_data_used <- isTRUE("data" %in% names(formals(modules$server)))
-    if (is_data_used) {
-      datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
+  is_data_used <- isTRUE("data" %in% names(formals(modules$server)))
+  if (is_data_used) {
+    datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
 
-      # list of reactive filtered data
-      data <- sapply(
-        datanames,
-        simplify = FALSE,
-        function(x) {
-          #todo: need to include metadata, keys, datalabel
-          reactive(datasets$get_data(x, filtered = TRUE))
-        }
-      )
-      #names(data) <- paste0(names(data), "_FILTERED") # these datasets are filtered
+    # list of reactive filtered data
+    data <- sapply(
+      datanames,
+      simplify = FALSE,
+      function(x) {
+        #todo: need to include metadata, keys, datalabel
+        reactive(datasets$get_data(x, filtered = TRUE))
+      }
+    )
+    #names(data) <- paste0(names(data), "_FILTERED") # these datasets are filtered
 
-      # code from previous stages
-      attr(data, "code") <- reactive(get_datasets_code(datanames, datasets))
+    # code from previous stages
+    attr(data, "code") <- reactive(get_datasets_code(datanames, datasets))
 
-      # join_keys
-      attr(data, "join_keys") <- reactive(datasets$get_join_keys()[datanames])
+    # join_keys
+    attr(data, "join_keys") <- reactive(datasets$get_join_keys()[datanames])
 
-      args <- c(args, data = list(data))
-    }
+    args <- c(args, data = list(data))
+  }
 
-    if (is_module_server) {
-      do.call(modules$server, args)
-    } else {
-      do.call(callModule, c(args, list(module = modules$server)))
-    }
-    modules
-  })
-
-  module_reactive
+  if (is_module_server) {
+    do.call(modules$server, args)
+  } else {
+    do.call(callModule, c(args, list(module = modules$server)))
+  }
+  reactive(modules)
 }

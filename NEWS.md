@@ -1,8 +1,8 @@
-# teal 0.11.1.9003
+# teal 0.11.1.9005
 
 ### Enhancements
+
 * `teal_module` having `data` argument in it's arguments will receive list of reactive filter data with `"code"` and `"join_keys"` attributes.
-* Enhanced the initial shiny input cycle, all encoding inputs are available from the beginning when each module server is executed.
 * Updated the internals of `module_teal` to reflect changes in `teal.slice`.
 
 # teal 0.11.1

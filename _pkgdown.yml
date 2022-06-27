@@ -9,6 +9,20 @@ navbar:
     - icon: fa-github
       href: https://github.com/insightsengineering/teal
 
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - teal
+  - preprocessing-data
+  - including-general-data-in-teal
+  - including-adam-data-in-teal
+  - including-mae-data-in-teal
+  - join-keys
+  - creating-custom-modules
+  - adding-support-for-reporting
+  - teal-options
+
 reference:
   - title: Teal Core Functions
     desc: These are the main functions needed to build a teal app.
