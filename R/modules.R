@@ -108,34 +108,42 @@ append_module <- function(modules, module) {
 }
 
 #' Does the object make use of `teal.reporter` reporting
-#' @param modules `teal_module` or `teal_modules` object
+#' @param modules (`teal_module` or `teal_modules`) object
+#' @param args (`character`) names of the arguments to be checked against formals of `teal` modules.
 #' @return `logical` whether the object makes use of `teal.reporter` reporting
-#' @rdname is_reporter_used
+#' @rdname is_args_used
 #' @keywords internal
-is_reporter_used <- function(modules) {
-  UseMethod("is_reporter_used", modules)
+is_args_used <- function(modules, args) {
+  UseMethod("is_args_used", modules)
 }
 
-#' @rdname is_reporter_used
+#' @rdname is_args_used
 #' @keywords internal
-is_reporter_used.default <- function(modules) {
-  stop("is_reporter_used function not implemented for this object")
+#' @export
+is_args_used.default <- function(modules, args) {
+  stop("is_args_used function not implemented for this object")
 }
 
-#' @rdname is_reporter_used
+#' @rdname is_args_used
 #' @export
 #' @keywords internal
-is_reporter_used.teal_modules <- function(modules) {
-  any(unlist(lapply(modules$children, function(x) is_reporter_used(x))))
+is_args_used.teal_modules <- function(modules, args) {
+  any(unlist(lapply(modules$children, function(x) is_args_used(x, args))))
 }
 
-#' @rdname is_reporter_used
+#' @rdname is_args_used
 #' @export
 #' @keywords internal
-is_reporter_used.teal_module <- function(modules) {
-  "reporter" %in% names(formals(modules$server))
+is_args_used.teal_module <- function(modules, args) {
+  is_args_used(modules$server, args) || is_args_used(modules$ui, args)
 }
 
+#' @rdname is_args_used
+#' @export
+#' @keywords internal
+is_args_used.function <- function(modules, args) {
+  isTRUE(args %in% names(formals(modules)))
+}
 
 #' Deprecated: Creates the root modules container
 #'

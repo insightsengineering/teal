@@ -7,7 +7,6 @@
 get_rcode(
   datasets = NULL,
   datanames = if (is.null(datasets)) datasets else datasets$datanames(),
-  merge_expression = "",
   chunks = teal.code::get_chunks_object(),
   selected_chunk_ids = character(0),
   session = getDefaultReactiveDomain(),
@@ -23,9 +22,6 @@ server function of any \link{teal} module.}
 names of datasets which code should be returned for. Due to fact that
 \code{teal} filter panel depending on \code{"ADSL"}, code for \code{ADSL}
 is always returned even if not specified.}
-
-\item{merge_expression}{(\code{character})\cr
-code to get merged analysis dataset}
 
 \item{chunks}{(\code{chunks}) \cr
 object of class \code{chunks} that stores code chunks. These code
@@ -73,7 +69,6 @@ show_rcode_modal(
   title = "R Code for a Regression Plot",
   rcode = get_rcode(
     datasets = datasets,
-    merge_expression = "<to be provided>",
     title = title,
     description = description
   )

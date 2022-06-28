@@ -531,7 +531,7 @@ testthat::test_that("modules_depth increases depth by 1 for each teal_modules", 
 })
 
 
-# is_reporter_used -----
+# is_args_used -----
 get_srv_and_ui <- function() {
   return(list(
     server_fun = function(id, datasets) {}, # nolint
@@ -541,43 +541,43 @@ get_srv_and_ui <- function() {
   ))
 }
 
-testthat::test_that("is_reporter_used throws error if object is not teal_module or teal_modules", {
-  testthat::expect_error(is_reporter_used(5), "is_reporter_used function not implemented for this object")
-  testthat::expect_error(is_reporter_used(list()), "is_reporter_used function not implemented for this object")
+testthat::test_that("is_args_used throws error if object is not teal_module or teal_modules", {
+  testthat::expect_error(is_args_used(5, "reporter"), "is_args_used function not implemented for this object")
+  testthat::expect_error(is_args_used(list(), "reporter"), "is_args_used function not implemented for this object")
 })
 
-testthat::test_that("is_reporter_used returns true if teal_module has reporter in server function args", {
-  testthat::expect_true(is_reporter_used(module(server = function(id, datasets, reporter) NULL)))
+testthat::test_that("is_args_used returns true if teal_module has reporter in server function args", {
+  testthat::expect_true(is_args_used(module(server = function(id, datasets, reporter) NULL), "reporter"))
 })
 
-testthat::test_that("is_reporter_used returns false if teal_module does not have reporter in server function args", {
-  testthat::expect_false(is_reporter_used(module()))
+testthat::test_that("is_args_used returns false if teal_module does not have reporter in server function args", {
+  testthat::expect_false(is_args_used(module(), "reporter"))
 })
 
 
-testthat::test_that("is_reporter_used returns false if teal_modules has no children using reporter", {
+testthat::test_that("is_args_used returns false if teal_modules has no children using reporter", {
   mod <- module()
   mods <- modules(label = "lab", mod, mod)
-  testthat::expect_false(is_reporter_used(mods))
+  testthat::expect_false(is_args_used(mods, "reporter"))
 
   mods <- modules(label = "lab", mods, mod, mod)
-  testthat::expect_false(is_reporter_used(mods))
+  testthat::expect_false(is_args_used(mods, "reporter"))
 })
 
-testthat::test_that("is_reporter_used returns true if teal_modules has at least one child using reporter", {
+testthat::test_that("is_args_used returns true if teal_modules has at least one child using reporter", {
   server_fun_with_reporter <- function(id, datasets, reporter) NULL
 
   mod <- module()
   mod_with_reporter <- module(server = server_fun_with_reporter)
 
   mods <- modules(label = "lab", mod, mod_with_reporter)
-  testthat::expect_true(is_reporter_used(mods))
+  testthat::expect_true(is_args_used(mods, "reporter"))
 
   mods_2 <- modules(label = "lab", mods, mod, mod)
-  testthat::expect_true(is_reporter_used(mods_2))
+  testthat::expect_true(is_args_used(mods_2, "reporter"))
 
   mods_3 <- modules(label = "lab", modules(label = "lab", mod, mod), mod_with_reporter, mod)
-  testthat::expect_true(is_reporter_used(mods_3))
+  testthat::expect_true(is_args_used(mods_3, "reporter"))
 })
 
 # ---- append_module

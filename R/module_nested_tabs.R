@@ -88,12 +88,37 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
 #' @export
 #' @keywords internal
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
-  stopifnot(is(datasets, "FilteredData"))
+  checkmate::check_class(datasets, "FilteredData")
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
   args <- c(list(id = id), args)
-  is_datasets_used <- isTRUE("datasets" %in% names(formals(modules$ui)))
+
+  is_datasets_used <- is_args_used(modules$ui, "datasets")
   if (is_datasets_used) {
     args <- c(args, datasets = datasets)
+  }
+
+  is_data_used <- is_args_used(modules$ui, "data")
+  if (is_data_used) {
+    datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
+
+    # list of reactive filtered data
+    data <- sapply(
+      datanames,
+      simplify = FALSE,
+      function(x) {
+        # todo: need to include metadata, keys, datalabel
+        reactive(datasets$get_data(x, filtered = TRUE))
+      }
+    )
+    # names(data) <- paste0(names(data), "_FILTERED") # these datasets are filtered
+
+    # code from previous stages
+    attr(data, "code") <- reactive(get_datasets_code(datanames, datasets))
+
+    # join_keys
+    attr(data, "join_keys") <- reactive(datasets$get_join_keys()[datanames])
+
+    args <- c(args, data = list(data))
   }
 
   tags$div(
@@ -186,19 +211,19 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   )
 
   modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
-  is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
+  is_module_server <- is_args_used(modules$server, "id")
 
   args <- c(list(id = id), modules$server_args)
-  if (is_reporter_used(modules)) {
+  if (is_args_used(modules$server, "reporter")) {
     args <- c(args, list(reporter = reporter))
   }
 
-  is_datasets_used <- isTRUE("datasets" %in% names(formals(modules$server)))
+  is_datasets_used <- is_args_used(modules$server, "datasets")
   if (is_datasets_used) {
     args <- c(args, datasets = datasets)
   }
 
-  is_data_used <- isTRUE("data" %in% names(formals(modules$server)))
+  is_data_used <- is_args_used(modules$server, "data")
   if (is_data_used) {
     datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
 
