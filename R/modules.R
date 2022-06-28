@@ -272,10 +272,10 @@ root_modules <- function(...) {
 #' runApp(app)
 #' }
 module <- function(label = "module",
-                   server = function(id, ...) {
+                   server = function(id, data) {
                      moduleServer(id, function(input, output, session) {})
                    },
-                   ui = function(id, ...) {
+                   ui = function(id, data) {
                      tags$p(paste0("This module has no UI (id: ", id, " )"))
                    },
                    filters = "all",
@@ -306,17 +306,19 @@ module <- function(label = "module",
   srv_extra_args <- setdiff(names(server_args), server_formals)
   if (length(srv_extra_args) > 0 && !"..." %in% server_formals) {
     stop(
-      "\nFollowing `server_args` elements have no equivalent in the formals of `server`:\n",
+      "\nFollowing `server_args` elements have no equivalent in the formals of the `server`:\n",
       paste(paste(" -", srv_extra_args), collapse = "\n"),
       "\n\nUpdate the `server` arguments by including above or add `...`"
     )
   }
 
-  ui_formals <-  names(formals(ui))
+
+
+  ui_formals <- names(formals(ui))
   if (!"id" %in% ui_formals) {
     stop(
-      "\nmodule() ui argument requires a function with following arguments:",
-      "\n - id - teala will set proper shiny namespace for this module.",
+      "\nmodule() `ui` argument requires a function with following arguments:",
+      "\n - id - teal will set proper shiny namespace for this module.",
       "\n\nFollowing arguments can be used optionaly:",
       "\n - `data` - module will receive list of reactive (filtered) data specied in the `filters` argument",
       "\n - `datasets` - module will receive `FilteredData`. See `help(FilteredData)`",
@@ -324,14 +326,14 @@ module <- function(label = "module",
     )
   }
 
-    ui_extra_args <- setdiff(names(ui_args), ui_formals)
-    if (length(ui_extra_args) > 0 && !"..." %in% ui_formals) {
-      stop(
-        "\nFollowing `ui_args` elements have no equivalent in the formals of `ui`:\n",
-        paste(paste(" -", ui_extra_args), collapse = "\n"),
-        "\n\nUopdate the `ui` arguments by including above or add `...`"
-      )
-    }
+  ui_extra_args <- setdiff(names(ui_args), ui_formals)
+  if (length(ui_extra_args) > 0 && !"..." %in% ui_formals) {
+    stop(
+      "\nFollowing `ui_args` elements have no equivalent in the formals of `ui`:\n",
+      paste(paste(" -", ui_extra_args), collapse = "\n"),
+      "\n\nUopdate the `ui` arguments by including above or add `...`"
+    )
+  }
 
   structure(
     list(

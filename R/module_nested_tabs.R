@@ -110,7 +110,6 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
         reactive(datasets$get_data(x, filtered = TRUE))
       }
     )
-    # names(data) <- paste0(names(data), "_FILTERED") # these datasets are filtered
 
     # code from previous stages
     attr(data, "code") <- reactive(get_datasets_code(datanames, datasets))
@@ -209,7 +208,6 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
       "module { deparse1(modules$label) }."
     )
   )
-
   modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
   is_module_server <- is_args_used(modules$server, "id")
 
@@ -232,11 +230,10 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
       datanames,
       simplify = FALSE,
       function(x) {
-        #todo: need to include metadata, keys, datalabel
+        # todo: need to include metadata, keys, datalabel
         reactive(datasets$get_data(x, filtered = TRUE))
       }
     )
-    #names(data) <- paste0(names(data), "_FILTERED") # these datasets are filtered
 
     # code from previous stages
     attr(data, "code") <- get_datasets_code(datanames, datasets)
@@ -247,7 +244,9 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     args <- c(args, data = list(data))
   }
 
-  if (is_module_server) {
+  # teal_modules do not suppose to return values as it's never passed anyway
+  # it's assigned here for tests
+  module_output <- if (is_module_server) {
     do.call(modules$server, args)
   } else {
     do.call(callModule, c(args, list(module = modules$server)))

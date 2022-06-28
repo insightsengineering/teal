@@ -25,7 +25,7 @@
 #'   chunks that appear in the `"Show R-Code"` modal. Please only use this
 #'   feature if all chunks were set with designated IDs.
 #'
-#' @param session (`environment`) shiny session
+#' @param session (`environment`) deprecated.
 #'
 #' @inheritParams get_rcode_header
 #'
@@ -58,28 +58,24 @@ get_rcode <- function(datasets = NULL,
                       datanames = `if`(is.null(datasets), datasets, datasets$datanames()),
                       chunks = teal.code::get_chunks_object(),
                       selected_chunk_ids = character(0),
-                      session = getDefaultReactiveDomain(),
+                      session = NULL,
                       title = NULL,
                       description = NULL) {
   checkmate::assert_class(datasets, "FilteredData", null.ok = TRUE)
-  checkmate::assert_string(merge_expression)
   if (!inherits(chunks, "chunks")) {
     stop("No code chunks given")
   }
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_string(description, null.ok = TRUE)
-
   rlang::push_options(width = 120)
 
-  progress <- Progress$new()
-  progress$set(message = "Getting R Code", value = 0)
+  if (!is.null(session)) {
+    lifecycle::deprecate_warn("0.11.2", "get_rcode(session)")
+  }
 
   if (!is.null(datasets)) {
     if (inherits(datasets, "CDISCFilteredData")) {
-      datanames <- intersect(
-        datasets$datanames(),
-        unique(c(datanames, unlist(lapply(datanames, datasets$get_parentname))))
-      )
+      datanames <- unique(c(datanames, unlist(lapply(datanames, datasets$get_parentname))))
     }
     str_header <- paste(
       c(get_rcode_header(title = title, description = description), ""),
@@ -94,7 +90,6 @@ get_rcode <- function(datasets = NULL,
     str_libs <- character(0)
     str_code <- character(0)
   }
-
   str_chunks <- paste0(
     chunks$get_rcode(chunk_ids = selected_chunk_ids),
     collapse = "\n"
@@ -114,6 +109,7 @@ get_rcode <- function(datasets = NULL,
   code_to_style <- paste(
     c(
       str_code,
+      "",
       str_chunks,
       "\n"
     ),
@@ -122,21 +118,8 @@ get_rcode <- function(datasets = NULL,
 
   # remove error with curly brace
   code_to_style <- gsub("}\n\\s*else", "} else", code_to_style)
-
-  # return styler::style_text output - use progress in case shiny session is there
-  if (exists("session") && (!is.null(session$progressStack))) {
-    progress$set(message = "Getting R Code", value = 0.7)
-  }
-
   code_to_style <- paste0(styler::style_text(code_to_style), collapse = "\n")
-
-  if (exists("progress")) {
-    progress$set(message = "Getting R Code", value = 1)
-    progress$close()
-  }
-
-  code <- paste(code_not_to_style, code_to_style, sep = "\n")
-  return(code)
+  paste(code_not_to_style, code_to_style, sep = "\n")
 }
 
 
@@ -151,52 +134,58 @@ get_rcode <- function(datasets = NULL,
 #'  - filter panel code
 #' @keywords internal
 get_datasets_code <- function(datanames, datasets) {
-   str_code <- datasets$get_code(datanames)
-   if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
-     str_code <- paste0(c(
-       "#################################################################",
-       "# ___  ____ ____ ___  ____ ____ ____ ____ ____ ____ _ _  _ ____ #",
-       "# |__] |__/ |___ |__] |__/ |  | |    |___ [__  [__  | |\\ | | __ #",
-       "# |    |  \\ |___ |    |  \\ |__| |___ |___ ___] ___] | | \\| |__] #",
-       "#              _ ____    ____ _  _ ___  ___ _   _               #",
-       "#              | [__     |___ |\\/| |__]  |   \\_/                #",
-       "#              | ___]    |___ |  | |     |    |                 #",
-       "#################################################################\n"
-     ), collapse = "\n")
-   } else if (length(str_code) > 0) {
-     str_code <- paste0(str_code, "\n\n")
-   }
-   if (!datasets$get_check()) {
-     check_note_string <- paste0(
-       c(
-         "## NOTE: Reproducibility of data import and preprocessing was not",
-         "## explicitly checked (argument \"check = FALSE\" is set).",
-         "## The app developer has the choice to check the reproducibility",
-         "## and might have omitted this step for some reason. Please reach",
-         "## out to the app developer for details.\n"
-       ),
-       collapse = "\n"
-     )
-     str_code <- paste0(str_code, "\n\n", check_note_string)
-   }
+  str_code <- datasets$get_code(datanames)
+  if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
+    str_code <- paste0(c(
+      "#################################################################",
+      "# ___  ____ ____ ___  ____ ____ ____ ____ ____ ____ _ _  _ ____ #",
+      "# |__] |__/ |___ |__] |__/ |  | |    |___ [__  [__  | |\\ | | __ #",
+      "# |    |  \\ |___ |    |  \\ |__| |___ |___ ___] ___] | | \\| |__] #",
+      "#              _ ____    ____ _  _ ___  ___ _   _               #",
+      "#              | [__     |___ |\\/| |__]  |   \\_/                #",
+      "#              | ___]    |___ |  | |     |    |                 #",
+      "#################################################################\n"
+    ), collapse = "\n")
+  } else if (length(str_code) > 0) {
+    str_code <- paste0(str_code, "\n\n")
+  }
+  if (!datasets$get_check()) {
+    check_note_string <- paste0(
+      c(
+        "## NOTE: Reproducibility of data import and preprocessing was not",
+        "## explicitly checked (argument \"check = FALSE\" is set).",
+        "## The app developer has the choice to check the reproducibility",
+        "## and might have omitted this step for some reason. Please reach",
+        "## out to the app developer for details.\n"
+      ),
+      collapse = "\n"
+    )
+    str_code <- paste0(str_code, "\n\n", check_note_string)
+  }
 
-   str_hash <- vapply(
-     datanames,
-     function(dataname) {
-       sprintf(
-         "# %s MD5 hash at the time of analysis: %s", dataname, datasets$get_filtered_dataset(dataname)$get_hash()
-       )
-     },
-     character(1)
-   ) %>%
-     paste(collapse = "\n") %>%
-     paste0("\n\n")
+  str_hash <- paste(
+    paste0(
+      vapply(
+        datanames,
+        function(dataname) {
+          sprintf(
+            "# %s MD5 hash at the time of analysis: %s",
+            dataname,
+            datasets$get_filtered_dataset(dataname)$get_hash()
+          )
+        },
+        character(1)
+      ),
+      collapse = "\n"
+    ),
+    "\n\n"
+  )
 
-   str_filter <- teal.slice::get_filter_expr(datasets, datanames)
-   if (str_filter != "") {
-     str_filter <- paste0(str_filter, "\n\n")
-   }
-   c(str_code, str_hash, str_filter)
+  str_filter <- teal.slice::get_filter_expr(datasets, datanames)
+  if (str_filter != "") {
+    str_filter <- paste0(str_filter, "\n\n")
+  }
+  c(str_code, str_hash, str_filter)
 }
 
 ## Module ----
@@ -206,7 +195,6 @@ get_datasets_code <- function(datanames, datasets) {
 #'
 #' @inheritParams get_rcode
 #' @inheritParams shiny::moduleServer
-#' @param merge_expression optional, (`reactive`) code to get merged analysis dataset
 #' @param modal_title optional, (`character`) title of the modal
 #' @param code_header optional, (`character`) header inside R
 #' @param disable_buttons optional, (`reactive`)
@@ -218,7 +206,6 @@ get_datasets_code <- function(datanames, datasets) {
 get_rcode_srv <- function(id,
                           datasets,
                           datanames = datasets$datanames(),
-                          merge_expression = reactive(""),
                           modal_title = "R Code",
                           code_header = "Automatically generated R code",
                           disable_buttons = reactiveVal(FALSE)) {
@@ -226,21 +213,19 @@ get_rcode_srv <- function(id,
   moduleServer(id, function(input, output, server) {
     chunks <- teal.code::get_chunks_object(parent_idx = 1L)
     observeEvent(input$show_rcode, {
-      # for backwards compatibility built-in type-check
-      if (!checkmate::test_string((merge_expression))) {
-        merge_expression <- merge_expression()
-      }
-
+      progress <- Progress$new()
+      progress$set(message = "Getting R Code", value = 0)
       show_rcode_modal(
         title = modal_title,
         rcode = get_rcode(
           datasets = datasets,
           datanames = datanames,
-          merge_expression = merge_expression,
           chunks = chunks,
           title = code_header
         )
       )
+      progress$set(message = "Getting R Code", value = 1)
+      progress$close()
     })
 
     teal.code::get_eval_details_srv(

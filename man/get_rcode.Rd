@@ -9,7 +9,7 @@ get_rcode(
   datanames = if (is.null(datasets)) datasets else datasets$datanames(),
   chunks = teal.code::get_chunks_object(),
   selected_chunk_ids = character(0),
-  session = getDefaultReactiveDomain(),
+  session = NULL,
   title = NULL,
   description = NULL
 )
@@ -35,7 +35,7 @@ in the code. If chunk id's are available this can be used to limit the
 chunks that appear in the \code{"Show R-Code"} modal. Please only use this
 feature if all chunks were set with designated IDs.}
 
-\item{session}{(\code{environment}) shiny session}
+\item{session}{(\code{environment}) deprecated.}
 
 \item{title}{A character title of the module}
 

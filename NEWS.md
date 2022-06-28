@@ -5,6 +5,12 @@
 * `teal_module` having `data` argument in it's arguments will receive list of reactive filter data with `"code"` and `"join_keys"` attributes.
 * Updated the internals of `module_teal` to reflect changes in `teal.slice`.
 
+### Breaking changes
+
+* `...` argument in the `teal_module` no longer receives `datasets` object. In order to use `datasets` in the `teal_module` please specify `datasets` explicitly.
+* Deprecated `merge_expression` argument in `get_rcode_srv` and `get_rcode` has been removed.
+* Deprecate `session` argument in `get_rcode` function.
+
 # teal 0.11.1
 
 ### Enhancements

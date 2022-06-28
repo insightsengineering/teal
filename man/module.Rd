@@ -8,12 +8,12 @@
 \usage{
 module(
   label = "module",
-  server = function(id, ...) {
+  server = function(id, data) {
      moduleServer(id, function(input, output, session)
     {
      })
  },
-  ui = function(id, ...) {
+  ui = function(id, data) {
      tags$p(paste0("This module has no UI (id: ", id,
     " )"))
  },

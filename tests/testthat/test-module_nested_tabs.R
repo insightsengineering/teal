@@ -5,25 +5,25 @@ filtered_data <- teal.slice::init_filtered_data(
 test_module1 <- module(
   label = "test1",
   ui = function(id, ...) NULL,
-  server = function(id, datasets) moduleServer(id, function(input, output, session) message("1")),
+  server = function(id) moduleServer(id, function(input, output, session) message("1")),
   filters = NULL
 )
 test_module2 <- module(
   label = "test2",
-  ui = function(id, ...) NULL,
-  server = function(id, datasets) moduleServer(id, function(input, output, session) message("2")),
+  ui = function(id) NULL,
+  server = function(id) moduleServer(id, function(input, output, session) message("2")),
   filters = NULL
 )
 test_module3 <- module(
   label = "test3",
-  ui = function(id, ...) NULL,
-  server = function(id, datasets) moduleServer(id, function(input, output, session) message("3")),
+  ui = function(id) NULL,
+  server = function(id) moduleServer(id, function(input, output, session) message("3")),
   filters = NULL
 )
 test_module4 <- module(
   label = "test4",
-  ui = function(id, ...) NULL,
-  server = function(id, datasets) moduleServer(id, function(input, output, session) message("4")),
+  ui = function(id) NULL,
+  server = function(id) moduleServer(id, function(input, output, session) message("4")),
   filters = NULL
 )
 
@@ -70,7 +70,6 @@ testthat::test_that("nested teal-modules are initialized", {
   testthat::expect_identical(out, c("1\n", "2\n", "3\n", "4\n"))
 })
 
-
 out <- shiny::testServer(
   app = srv_nested_tabs,
   args = list(
@@ -116,3 +115,84 @@ out <- shiny::testServer(
     })
   }
 )
+
+testthat::test_that("srv_nested_tabs.teal_module doesn't pass data if not in the args explicitly", {
+  module <- module(server = function(id, ...) {
+    moduleServer(id, function(input, output, session) checkmate::assert_list(data, "reactive"))
+  })
+
+  testthat::expect_error(
+    shiny::testServer(
+      app = srv_nested_tabs,
+      args = list(
+        id = "test",
+        datasets = filtered_data,
+        modules = modules(module),
+        reporter = teal.reporter::Reporter$new()
+      ),
+      expr = NULL
+    ),
+    "Assertion on 'data' failed"
+  )
+})
+
+testthat::test_that("srv_nested_tabs.teal_module passes data to the server module", {
+  module <- module(server = function(id, data) {
+    moduleServer(id, function(input, output, session) checkmate::assert_list(data, "reactive"))
+  })
+
+  testthat::expect_error(
+    shiny::testServer(
+      app = srv_nested_tabs,
+      args = list(
+        id = "test",
+        datasets = filtered_data,
+        modules = modules(module),
+        reporter = teal.reporter::Reporter$new()
+      ),
+      expr = NULL
+    ),
+    NA
+  )
+})
+
+testthat::test_that("srv_nested_tabs.teal_module passes datasets to the server module", {
+  module <- module(server = function(id, datasets) {
+    moduleServer(id, function(input, output, session) checkmate::assert_class(datasets, "FilteredData"))
+  })
+
+  testthat::expect_error(
+    shiny::testServer(
+      app = srv_nested_tabs,
+      args = list(
+        id = "test",
+        datasets = filtered_data,
+        modules = modules(module),
+        reporter = teal.reporter::Reporter$new()
+      ),
+      expr = NULL
+    ),
+    NA
+  )
+})
+
+testthat::test_that("srv_nested_tabs.teal_module passes server_args to the ...", {
+  server_args <- list(a = 1, b = 2)
+  module <- module(server_args = server_args, server = function(id, ...) {
+    moduleServer(id, function(input, output, session) stopifnot(identical(list(...), server_args)))
+  })
+
+  testthat::expect_error(
+    shiny::testServer(
+      app = srv_nested_tabs,
+      args = list(
+        id = "test",
+        datasets = filtered_data,
+        modules = modules(module),
+        reporter = teal.reporter::Reporter$new()
+      ),
+      expr = NULL
+    ),
+    NA
+  )
+})

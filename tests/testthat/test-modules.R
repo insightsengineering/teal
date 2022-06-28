@@ -24,225 +24,103 @@ testthat::test_that("Calling module() does not throw", {
 })
 
 testthat::test_that("module requires label argument to be a string", {
-  testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = ""
-  ), NA)
+  testthat::expect_error(module(label = "label"), NA)
 
-  testthat::expect_error(module(
-    label = NULL,
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = ""
-  ), "Assertion on 'label' failed.+'NULL'")
+  testthat::expect_error(module(label = NULL), "Assertion on 'label' failed.+'NULL'")
 
-  testthat::expect_error(module(
-    label = c("label", "label"),
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = ""
-  ), "Assertion on 'label' failed: Must have length 1.")
+  testthat::expect_error(module(label = c("label", "label")), "Assertion on 'label' failed: Must have length 1.")
 
-  testthat::expect_error(module(
-    label = 1L,
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = ""
-  ), "Assertion on 'label' failed.+not 'integer'")
+  testthat::expect_error(module(label = 1L), "Assertion on 'label' failed.+not 'integer'")
 })
 
-testthat::test_that("module expects server being a shiny server module with datasets argument", {
+testthat::test_that("module expects server being a shiny server module with any argument", {
   testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = ""
-  ), NA)
-  testthat::expect_error(module(
-    label = "label",
-    server = function(id, datasets) NULL,
-    ui = ui_fun1,
-    filters = ""
+    server = function(id) NULL
   ), NA)
 
   testthat::expect_error(module(
-    label = "label",
-    server = function(input, output, session, ...) NULL,
-    ui = ui_fun1,
-    filter = ""
-  ), "module\\(\\) server.+input, output, session, and datasets \\(callModule\\)")
-
-  testthat::expect_error(module(
-    label = "label",
-    server = function(id, reporter) NULL,
-    ui = ui_fun1,
-    filter = ""
-  ), "module\\(\\) server.+id and \\[datasets or '...'\\] \\(moduleServer\\)")
-})
-
-testthat::test_that("module expects ui being a shiny ui module with id and datasets or ... arguments", {
-  testthat::expect_error(module(
-    label = "label",
-    server = function(id, datasets) NULL,
-    ui = function(id, datasets) NULL,
-    filters = ""
+    server = function(id, any_argument) NULL,
   ), NA)
 
   testthat::expect_error(module(
-    label = "label",
-    server = function(id, datasets) NULL,
-    ui = ui_fun1,
-    filters = ""
+    server = function(id, any_argument) NULL,
   ), NA)
 
   testthat::expect_error(module(
-    label = "label",
-    server = function(id, datasets) NULL,
-    ui = function(id, datasets, ...) NULL,
-    filters = ""
+    server = function(input, output, session, any_argument) NULL,
   ), NA)
 
-  testthat::expect_error(module(
-    label = "label",
-    server = function(id, datasets) NULL,
-    ui = function(id, ..., datasets) NULL,
-    filters = ""
-  ), NA)
-
-  testthat::expect_error(module(
-    label = "label",
-    server = function(id, datasets) NULL,
-    ui = function() NULL,
-    filters = ""
-  ), "module\\(\\) ui argument requires a function with two ordered arguments:\n- 'id'\n- 'datasets' or '...'")
-
-  testthat::expect_error(module(
-    label = "label",
-    server = function(id, datasets) NULL,
-    ui = function(notid) NULL,
-    filters = ""
-  ), "module\\(\\) ui argument requires a function with two ordered arguments:\n- 'id'\n- 'datasets' or '...'")
-
-  testthat::expect_error(module(
-    label = "label",
-    server = function(id, datasets) NULL,
-    ui = function(id, notvalid) NULL,
-    filters = ""
-  ), "module\\(\\) ui argument requires a function with two ordered arguments:\n- 'id'\n- 'datasets' or '...'")
-})
-
-testthat::test_that("module requires filters argument to be a character", {
-  testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "all"
-  ), NA)
-
-  testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = ""
-  ), NA)
-
-  testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = NULL
-  ), NA)
-
-  testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = NA_character_
-  ), "Contains missing values")
+  testthat::expect_error(
+    module(server = function(any_argument) NULL),
+    "`server` argument requires a function with following arguments"
+  )
 })
 
 testthat::test_that("module requires server_args argument to be a list", {
+  testthat::expect_error(module(server = function(id, a) NULL, server_args = list(a = 1)), NA)
+  testthat::expect_error(module(server_args = list()), NA)
+  testthat::expect_error(module(server_args = NULL), NA)
+  testthat::expect_error(module(server_args = ""), "Assertion on 'server_args' failed.+'list'")
+  testthat::expect_error(module(server_args = list(1, 2, 3)), "Must have names")
+})
+
+testthat::test_that("module expects all server_args being a server arguments or passed through `...`", {
   testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "",
-    server_args = list(a = 1)
-  ), NA)
-  testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "",
-    server_args = list()
+    server = function(id, arg1) NULL,
+    server_args = list(arg1 = NULL)
   ), NA)
 
   testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "",
-    server_args = NULL
+    server = function(id, ...) NULL,
+    server_args = list(arg1 = NULL)
   ), NA)
 
-  testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "",
-    server_args = ""
-  ), "Assertion on 'server_args' failed.+'list'")
-
-  testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "",
-    server_args = list(1, 2, 3)
-  ), NA)
+  testthat::expect_error(
+    module(server = function(id) NULL, server_args = list(arg1 = NULL)),
+    "Following `server_args` elements have no equivalent in the formals of the `server`"
+  )
 })
 
 testthat::test_that("module requires ui_args argument to be a list", {
+  testthat::expect_error(module(ui = function(id, a) NULL, ui_args = list(a = 1)), NA)
+  testthat::expect_error(module(ui_args = list()), NA)
+  testthat::expect_error(module(ui_args = NULL), NA)
+  testthat::expect_error(module(ui_args = ""), "Assertion on 'ui_args' failed.+'list'")
+  testthat::expect_error(module(ui_args = list(1, 2, 3)), "Must have names")
+})
+
+testthat::test_that("module expects ui being a shiny ui module with any argument", {
+  testthat::expect_error(module(ui = function(id) NULL), NA)
+  testthat::expect_error(module(ui = function(id, any_argument) NULL), NA)
+  testthat::expect_error(
+    module(ui = function(any_argument) NULL),
+    "`ui` argument requires a function with following arguments"
+  )
+})
+
+testthat::test_that("module expects all ui_args being a ui arguments or passed through `...`", {
   testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "",
-    ui_args = list(a = 1)
-  ), NA)
-  testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "",
-    ui_args = list()
+    ui = function(id, arg1) NULL,
+    ui_args = list(arg1 = NULL)
   ), NA)
 
   testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "",
-    ui_args = NULL
+    ui = function(id, ...) NULL,
+    ui_args = list(arg1 = NULL)
   ), NA)
 
-  testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "",
-    ui_args = ""
-  ), "Assertion on 'ui_args' failed.+'list'")
 
-  testthat::expect_error(module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "",
-    ui_args = list(1, 2, 3)
-  ), NA)
+  testthat::expect_error(
+    module(ui = function(id) NULL, ui_args = list(arg1 = NULL)),
+    "Following `ui_args` elements have no equivalent in the formals of `ui`"
+  )
+})
+
+testthat::test_that("module requires filters argument to be a character", {
+  testthat::expect_error(module(filters = "all"), NA)
+  testthat::expect_error(module(filters = ""), NA)
+  testthat::expect_error(module(filters = NULL), NA)
+  testthat::expect_error(module(filters = NA_character_), "Contains missing values")
 })
 
 testthat::test_that("module() returns list of class 'teal_module' containing input objects", {
