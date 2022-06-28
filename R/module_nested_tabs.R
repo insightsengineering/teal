@@ -239,10 +239,10 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     #names(data) <- paste0(names(data), "_FILTERED") # these datasets are filtered
 
     # code from previous stages
-    attr(data, "code") <- reactive(get_datasets_code(datanames, datasets))
+    attr(data, "code") <- get_datasets_code(datanames, datasets)
 
     # join_keys
-    attr(data, "join_keys") <- reactive(datasets$get_join_keys()[datanames])
+    attr(data, "join_keys") <- datasets$get_join_keys()[datanames]
 
     args <- c(args, data = list(data))
   }

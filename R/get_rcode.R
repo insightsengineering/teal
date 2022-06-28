@@ -140,6 +140,16 @@ get_rcode <- function(datasets = NULL,
 }
 
 
+#' Get datasets code
+#'
+#' Get combined code from `FilteredData` and from `CodeClass` object.
+#' @param datanames (`character`) names of datasets to extract code from
+#' @param datasets (`FilteredData`) object
+#' @return `character(3)` containing following elements:
+#'  - code from CodeClass (data loading code)
+#'  - hash of loaded objects
+#'  - filter panel code
+#' @keywords internal
 get_datasets_code <- function(datanames, datasets) {
    str_code <- datasets$get_code(datanames)
    if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
