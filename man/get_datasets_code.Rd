@@ -14,7 +14,7 @@ get_datasets_code(datanames, datasets)
 \value{
 \code{character(3)} containing following elements:
 \itemize{
-\item code from CodeClass (data loading code)
+\item code from \code{CodeClass} (data loading code)
 \item hash of loaded objects
 \item filter panel code
 }
