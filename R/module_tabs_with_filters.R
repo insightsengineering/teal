@@ -173,8 +173,8 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
     )
     shinyjs::runjs(sprintf(
       script,
-      session$ns("filter_panel-filter_panel_whole"),
-      session$ns("filter_panel-filter_panel_whole")
+      session$ns("filter_panel"),
+      session$ns("filter_panel")
     ))
     teal.slice::set_filter_state(datasets = datasets, filter = filter)
     showNotification("Data loaded - App fully started up")
