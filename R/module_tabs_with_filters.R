@@ -113,7 +113,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
     tags$a(
       href = "javascript:void(0)",
       class = "menubtn",
-      onclick = "toggle_sidebar();",
+      onclick = "handleHamburgerClick();",
       title = "Toggle filter panels",
       tags$span(icon("fas fa-bars"))
     )
@@ -162,10 +162,20 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
           "srv_tabs_with_filters@1 changing active module to: { deparse1(active_module()$label) }."
         )
         datasets$handle_active_datanames(datanames = active_module()$filters)
-      }
+      },
+      ignoreNULL = FALSE
     )
 
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
+    script <- paste0(
+      "document.getElementById('%s').addEventListener('noDatasetsEvent', handleNoActiveDatasets);",
+      "document.getElementById('%s').addEventListener('datasetsActiveEvent', handleActiveDatasetsPresent);"
+    )
+    shinyjs::runjs(sprintf(
+      script,
+      session$ns("filter_panel-filter_panel_whole"),
+      session$ns("filter_panel-filter_panel_whole")
+    ))
     teal.slice::set_filter_state(datasets = datasets, filter = filter)
     showNotification("Data loaded - App fully started up")
 
