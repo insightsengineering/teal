@@ -92,13 +92,11 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
   args <- c(list(id = id), args)
 
-  is_datasets_used <- is_args_used(modules$ui, "datasets")
-  if (is_datasets_used) {
+  if (is_args_used(modules$ui, "datasets")) {
     args <- c(args, datasets = datasets)
   }
 
-  is_data_used <- is_args_used(modules$ui, "data")
-  if (is_data_used) {
+  if (is_args_used(modules$ui, "data")) {
     datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
 
     # list of reactive filtered data
@@ -106,16 +104,15 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
       datanames,
       simplify = FALSE,
       function(x) {
-        # todo: need to include metadata, keys, datalabel
         reactive(datasets$get_data(x, filtered = TRUE))
       }
     )
 
     # code from previous stages
-    attr(data, "code") <- reactive(get_datasets_code(datanames, datasets))
+    attr(data, "code") <- get_datasets_code(datanames, datasets)
 
     # join_keys
-    attr(data, "join_keys") <- reactive(datasets$get_join_keys()[datanames])
+    attr(data, "join_keys") <- datasets$get_join_keys()[datanames]
 
     args <- c(args, data = list(data))
   }
@@ -209,20 +206,17 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     )
   )
   modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
-  is_module_server <- is_args_used(modules$server, "id")
 
   args <- c(list(id = id), modules$server_args)
   if (is_args_used(modules$server, "reporter")) {
     args <- c(args, list(reporter = reporter))
   }
 
-  is_datasets_used <- is_args_used(modules$server, "datasets")
-  if (is_datasets_used) {
+  if (is_args_used(modules$server, "datasets")) {
     args <- c(args, datasets = datasets)
   }
 
-  is_data_used <- is_args_used(modules$server, "data")
-  if (is_data_used) {
+  if (is_args_used(modules$server, "data")) {
     datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
 
     # list of reactive filtered data
@@ -230,7 +224,6 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
       datanames,
       simplify = FALSE,
       function(x) {
-        # todo: need to include metadata, keys, datalabel
         reactive(datasets$get_data(x, filtered = TRUE))
       }
     )
@@ -246,7 +239,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 
   # teal_modules do not suppose to return values as it's never passed anyway
   # it's assigned here for tests
-  module_output <- if (is_module_server) {
+  module_output <- if (is_args_used(modules$server, "id")) {
     do.call(modules$server, args)
   } else {
     do.call(callModule, c(args, list(module = modules$server)))

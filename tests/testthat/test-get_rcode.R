@@ -1,7 +1,7 @@
 testthat::test_that("get_rcode returns header only for empty chunks", {
   ch <- teal.code::chunks_new()
 
-  testthat::expect_equal(
+  testthat::expect_identical(
     get_rcode(chunks = ch),
     sprintf("\n\n%s\n", paste(get_rcode_header(), collapse = "\n"))
   )

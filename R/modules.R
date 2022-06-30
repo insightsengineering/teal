@@ -128,7 +128,7 @@ is_args_used.default <- function(modules, args) {
 #' @export
 #' @keywords internal
 is_args_used.teal_modules <- function(modules, args) {
-  any(unlist(lapply(modules$children, function(x) is_args_used(x, args))))
+  any(unlist(lapply(modules$children, is_args_used, args)))
 }
 
 #' @rdname is_args_used
