@@ -88,9 +88,35 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
 #' @export
 #' @keywords internal
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
-  stopifnot(is(datasets, "FilteredData"))
+  checkmate::check_class(datasets, "FilteredData")
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
-  args <- c(list(id = id, datasets = datasets), args)
+  args <- c(list(id = id), args)
+
+  if (is_arg_used(modules$ui, "datasets")) {
+    args <- c(args, datasets = datasets)
+  }
+
+  if (is_arg_used(modules$ui, "data")) {
+    datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
+
+    # list of reactive filtered data
+    data <- sapply(
+      datanames,
+      simplify = FALSE,
+      function(x) {
+        reactive(datasets$get_data(x, filtered = TRUE))
+      }
+    )
+
+    # code from previous stages
+    attr(data, "code") <- get_datasets_code(datanames, datasets)
+
+    # join_keys
+    attr(data, "join_keys") <- datasets$get_join_keys()[datanames]
+
+    args <- c(args, data = list(data))
+  }
+
   tags$div(
     id = id,
     class = "teal_module",
@@ -179,16 +205,48 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
       "module { deparse1(modules$label) }."
     )
   )
-
   modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
-  is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
 
-  args <- c(list(id = id, datasets = datasets), modules$server_args)
-  if (is_reporter_used(modules)) {
+  args <- c(list(id = id), modules$server_args)
+  if (is_arg_used(modules$server, "reporter")) {
     args <- c(args, list(reporter = reporter))
   }
 
-  if (is_module_server) {
+  if (is_arg_used(modules$server, "datasets")) {
+    args <- c(args, datasets = datasets)
+  }
+
+  if (is_arg_used(modules$server, "data")) {
+    datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
+
+    # list of reactive filtered data
+    data <- sapply(
+      datanames,
+      simplify = FALSE,
+      function(x) {
+        reactive(datasets$get_data(x, filtered = TRUE))
+      }
+    )
+
+    # code from previous stages
+    attr(data, "code") <- get_datasets_code(datanames, datasets)
+
+    # join_keys
+    attr(data, "join_keys") <- datasets$get_join_keys()[datanames]
+
+    args <- c(args, data = list(data))
+  }
+
+  if (is_arg_used(modules$server, "datasets") && is_arg_used(modules$server, "data")) {
+    warning(
+      "Module '", modules$label, "' has `data` and `datasets` arguments in the formals.",
+      "\nIt's recommended to use `data` to work with filtered objects."
+    )
+  }
+
+  # teal_modules do not suppose to return values as it's never passed anyway
+  # it's assigned here for tests
+  module_output <- if (is_arg_used(modules$server, "id")) {
     do.call(modules$server, args)
   } else {
     do.call(callModule, c(args, list(module = modules$server)))

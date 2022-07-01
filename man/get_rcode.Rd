@@ -7,10 +7,9 @@
 get_rcode(
   datasets = NULL,
   datanames = if (is.null(datasets)) datasets else datasets$datanames(),
-  merge_expression = "",
   chunks = teal.code::get_chunks_object(),
   selected_chunk_ids = character(0),
-  session = getDefaultReactiveDomain(),
+  session = NULL,
   title = NULL,
   description = NULL
 )
@@ -24,9 +23,6 @@ names of datasets which code should be returned for. Due to fact that
 \code{teal} filter panel depending on \code{"ADSL"}, code for \code{ADSL}
 is always returned even if not specified.}
 
-\item{merge_expression}{(\code{character})\cr
-code to get merged analysis dataset}
-
 \item{chunks}{(\code{chunks}) \cr
 object of class \code{chunks} that stores code chunks. These code
 chunks are used in \link{teal} to enable reproducibility. Normally these chunks
@@ -39,7 +35,7 @@ in the code. If chunk id's are available this can be used to limit the
 chunks that appear in the \code{"Show R-Code"} modal. Please only use this
 feature if all chunks were set with designated IDs.}
 
-\item{session}{(\code{environment}) shiny session}
+\item{session}{(\code{environment}) deprecated.}
 
 \item{title}{A character title of the module}
 
@@ -73,7 +69,6 @@ show_rcode_modal(
   title = "R Code for a Regression Plot",
   rcode = get_rcode(
     datasets = datasets,
-    merge_expression = "<to be provided>",
     title = title,
     description = description
   )

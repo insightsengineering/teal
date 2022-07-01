@@ -8,12 +8,12 @@
 \usage{
 module(
   label = "module",
-  server = function(id, ...) {
+  server = function(id, data) {
      moduleServer(id, function(input, output, session)
     {
      })
  },
-  ui = function(id, ...) {
+  ui = function(id, data) {
      tags$p(paste0("This module has no UI (id: ", id,
     " )"))
  },
@@ -27,14 +27,25 @@ module(
 \method{print}{teal_module}(x, ...)
 }
 \arguments{
-\item{label}{(\code{character}) Label shown in the navigation item for the module.}
+\item{label}{(\code{character(1)}) Label shown in the navigation item for the module.}
 
-\item{server}{(\code{function}) Shiny server module function
-(see \code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}}).}
+\item{server}{(\code{function}) \code{shiny} module with following arguments:
+\itemize{
+\item \code{id} - teal will set proper shiny namespace for this module (see \code{\link[shiny:moduleServer]{shiny::moduleServer()}}).
+\item \code{input}, \code{output}, \code{session} - (not recommended) then \code{\link[shiny:callModule]{shiny::callModule()}} will be used to call a module.
+\item \code{data} (optional) module will receive list of reactive (filtered) data specified in the \code{filters} argument.
+\item \code{datasets} (optional) module will receive \code{FilteredData}. (See \verb{[teal.slice::FilteredData]}).
+\item \code{reporter} (optional) module will receive \code{Reporter}. (See \link[teal.reporter:Reporter]{teal.reporter::Reporter}).
+\item \code{...} (optional) \code{server_args} elements will be passed to the module named argument or to the \code{...}.
+}}
 
-\item{ui}{(\code{function}) Shiny ui module function
-(see \code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}})
-with additional teal-specific \code{datasets} argument.}
+\item{ui}{(\code{function}) Shiny ui module function with following arguments:
+\itemize{
+\item \code{id} - teal will set proper shiny namespace for this module.
+\item \code{data} (optional)  module will receive list of reactive (filtered) data specified in the \code{filters} argument.
+\item \code{datasets} (optional)  module will receive \code{FilteredData}. (See \verb{[teal.slice::FilteredData]}).
+\item \code{...} (optional) \code{ui_args} elements will be passed to the module named argument or to the \code{...}.
+}}
 
 \item{filters}{(\code{character}) A vector with datanames that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
@@ -43,12 +54,11 @@ and the keyword \code{'all'} will show the filters of all datasets. The
 argument can be thought of as \code{'active_datanames'} and may be renamed
 in future versions of teal.}
 
-\item{server_args}{(\code{list}) Named list with additional arguments passed on to the
-server function. Note that the \code{FilteredDatasets} object gets
-automatically passed to the server function as arguments \code{datasets}.}
+\item{server_args}{(named \code{list}) with additional arguments passed on to the
+\code{server} function.}
 
-\item{ui_args}{(\code{list}) Named list with additional arguments passed on to the
-ui function.}
+\item{ui_args}{(named \code{list}) with additional arguments passed on to the
+\code{ui} function.}
 
 \item{x}{\code{teal_module}}
 
