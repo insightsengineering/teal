@@ -92,11 +92,11 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
   args <- c(list(id = id), args)
 
-  if (is_args_used(modules$ui, "datasets")) {
+  if (is_arg_used(modules$ui, "datasets")) {
     args <- c(args, datasets = datasets)
   }
 
-  if (is_args_used(modules$ui, "data")) {
+  if (is_arg_used(modules$ui, "data")) {
     datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
 
     # list of reactive filtered data
@@ -208,15 +208,15 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
 
   args <- c(list(id = id), modules$server_args)
-  if (is_args_used(modules$server, "reporter")) {
+  if (is_arg_used(modules$server, "reporter")) {
     args <- c(args, list(reporter = reporter))
   }
 
-  if (is_args_used(modules$server, "datasets")) {
+  if (is_arg_used(modules$server, "datasets")) {
     args <- c(args, datasets = datasets)
   }
 
-  if (is_args_used(modules$server, "data")) {
+  if (is_arg_used(modules$server, "data")) {
     datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
 
     # list of reactive filtered data
@@ -237,7 +237,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     args <- c(args, data = list(data))
   }
 
-  if (is_args_used(modules$server, "datasets") && is_args_used(modules$server, "data")) {
+  if (is_arg_used(modules$server, "datasets") && is_arg_used(modules$server, "data")) {
     warning(
       "Module '", modules$label, "' has `data` and `datasets` arguments in the formals.",
       "\nIt's recommended to use `data` to work with filtered objects."
@@ -246,7 +246,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 
   # teal_modules do not suppose to return values as it's never passed anyway
   # it's assigned here for tests
-  module_output <- if (is_args_used(modules$server, "id")) {
+  module_output <- if (is_arg_used(modules$server, "id")) {
     do.call(modules$server, args)
   } else {
     do.call(callModule, c(args, list(module = modules$server)))

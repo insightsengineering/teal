@@ -107,42 +107,44 @@ append_module <- function(modules, module) {
   modules
 }
 
-#' Does the object make use of any of the `args`
+#' Does the object make use of the `arg`
+#'
 #' @param modules (`teal_module` or `teal_modules`) object
-#' @param args (`character`) names of the arguments to be checked against formals of `teal` modules.
-#' @return `logical` whether the object makes use of `args`
-#' @rdname is_args_used
+#' @param arg (`character(1)`) names of the arguments to be checked against formals of `teal` modules.
+#' @return `logical` whether the object makes use of `arg`
+#' @rdname is_arg_used
 #' @keywords internal
-is_args_used <- function(modules, args) {
-  UseMethod("is_args_used", modules)
+is_arg_used <- function(modules, arg) {
+  checkmate::check_string(arg)
+  UseMethod("is_arg_used", modules)
 }
 
-#' @rdname is_args_used
+#' @rdname is_arg_used
 #' @keywords internal
 #' @export
-is_args_used.default <- function(modules, args) {
-  stop("is_args_used function not implemented for this object")
+is_arg_used.default <- function(modules, arg) {
+  stop("is_arg_used function not implemented for this object")
 }
 
-#' @rdname is_args_used
+#' @rdname is_arg_used
 #' @export
 #' @keywords internal
-is_args_used.teal_modules <- function(modules, args) {
-  any(unlist(lapply(modules$children, is_args_used, args)))
+is_arg_used.teal_modules <- function(modules, arg) {
+  any(unlist(lapply(modules$children, is_arg_used, arg)))
 }
 
-#' @rdname is_args_used
+#' @rdname is_arg_used
 #' @export
 #' @keywords internal
-is_args_used.teal_module <- function(modules, args) {
-  is_args_used(modules$server, args) || is_args_used(modules$ui, args)
+is_arg_used.teal_module <- function(modules, arg) {
+  is_arg_used(modules$server, arg) || is_arg_used(modules$ui, arg)
 }
 
-#' @rdname is_args_used
+#' @rdname is_arg_used
 #' @export
 #' @keywords internal
-is_args_used.function <- function(modules, args) {
-  isTRUE(args %in% names(formals(modules)))
+is_arg_used.function <- function(modules, arg) {
+  isTRUE(arg %in% names(formals(modules)))
 }
 
 #' Deprecated: Creates the root modules container
@@ -295,7 +297,10 @@ module <- function(label = "module",
   checkmate::assert_list(ui_args, null.ok = TRUE, names = "named")
 
   server_formals <- names(formals(server))
-  if (!any(c("id", "input", "output", "session") %in% server_formals)) {
+  if (!(
+    "id" %in% server_formals ||
+    all(c("input", "output", "session") %in% server_formals)
+  )) {
     stop(
       "\nmodule() `server` argument requires a function with following arguments:",
       "\n - id - teal will set proper shiny namespace for this module.",
@@ -334,7 +339,7 @@ module <- function(label = "module",
     stop(
       "\nFollowing `ui_args` elements have no equivalent in the formals of `ui`:\n",
       paste(paste(" -", ui_extra_args), collapse = "\n"),
-      "\n\nUopdate the `ui` arguments by including above or add `...`"
+      "\n\nUpdate the `ui` arguments by including above or add `...`"
     )
   }
 
