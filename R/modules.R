@@ -115,7 +115,7 @@ append_module <- function(modules, module) {
 #' @rdname is_arg_used
 #' @keywords internal
 is_arg_used <- function(modules, arg) {
-  checkmate::check_string(arg)
+  checkmate::assert_string(arg)
   UseMethod("is_arg_used", modules)
 }
 

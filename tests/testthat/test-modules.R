@@ -460,6 +460,18 @@ testthat::test_that("is_arg_used returns true if teal_modules has at least one c
   testthat::expect_true(is_arg_used(mods_3, "reporter"))
 })
 
+testthat::test_that("is_arg_used returns TRUE/FALSE when the `arg` is in function formals", {
+  testthat::expect_true(is_arg_used(function(x) NULL, "x"))
+  testthat::expect_false(is_arg_used(function(x) NULL, "y"))
+})
+
+testthat::test_that("is_arg_used accepts `arg` to be a string only", {
+  testthat::expect_error(is_arg_used(function(x) NULL, c("x", "y")))
+  testthat::expect_error(is_arg_used(function(x) NULL, 1))
+  testthat::expect_error(is_arg_used(function(x) NULL, NULL))
+})
+
+
 # ---- append_module
 testthat::test_that("append_module throws error when modules is not inherited from teal_modules", {
   testthat::expect_error(
