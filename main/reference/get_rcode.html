@@ -22,7 +22,7 @@ code teal.code::chunks."><!-- mathjax --><script src="https://cdnjs.cloudflare.c
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9005</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,12 +52,6 @@ code teal.code::chunks."><!-- mathjax --><script src="https://cdnjs.cloudflare.c
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" href="https://insightsengineering.github.io/teal/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -91,16 +85,15 @@ code <a href="https://rdrr.io/pkg/teal.code/man/chunks.html" class="external-lin
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_rcode</span><span class="op">(</span>
-  datasets <span class="op">=</span> <span class="cn">NULL</span>,
-  datanames <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span><span class="op">)</span> <span class="va">datasets</span> <span class="kw">else</span> <span class="va">datasets</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>,
-  merge_expression <span class="op">=</span> <span class="st">""</span>,
-  chunks <span class="op">=</span> <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.code/man/get_chunks_object.html" class="external-link">get_chunks_object</a></span><span class="op">(</span><span class="op">)</span>,
-  selected_chunk_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  session <span class="op">=</span> <span class="fu">getDefaultReactiveDomain</span><span class="op">(</span><span class="op">)</span>,
-  title <span class="op">=</span> <span class="cn">NULL</span>,
-  description <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_rcode</span><span class="op">(</span></span>
+<span>  datasets <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  datanames <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span><span class="op">)</span> <span class="va">datasets</span> <span class="kw">else</span> <span class="va">datasets</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  chunks <span class="op">=</span> <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.code/man/get_chunks_object.html" class="external-link">get_chunks_object</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  selected_chunk_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  session <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  description <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -115,11 +108,6 @@ server function of any <a href="teal-package.html">teal</a> module.</p></dd>
 names of datasets which code should be returned for. Due to fact that
 <code>teal</code> filter panel depending on <code>"ADSL"</code>, code for <code>ADSL</code>
 is always returned even if not specified.</p></dd>
-
-
-<dt>merge_expression</dt>
-<dd><p>(<code>character</code>)<br>
-code to get merged analysis dataset</p></dd>
 
 
 <dt>chunks</dt>
@@ -139,7 +127,7 @@ feature if all chunks were set with designated IDs.</p></dd>
 
 
 <dt>session</dt>
-<dd><p>(<code>environment</code>) shiny session</p></dd>
+<dd><p>(<code>environment</code>) deprecated.</p></dd>
 
 
 <dt>title</dt>
@@ -174,17 +162,16 @@ with all packages available. If empty (the default), a placeholder string is bei
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="show_rcode_modal.html">show_rcode_modal</a></span><span class="op">(</span></span>
-<span class="r-in">  title <span class="op">=</span> <span class="st">"R Code for a Regression Plot"</span>,</span>
-<span class="r-in">  rcode <span class="op">=</span> <span class="fu">get_rcode</span><span class="op">(</span></span>
-<span class="r-in">    datasets <span class="op">=</span> <span class="va">datasets</span>,</span>
-<span class="r-in">    merge_expression <span class="op">=</span> <span class="st">"&lt;to be provided&gt;"</span>,</span>
-<span class="r-in">    title <span class="op">=</span> <span class="va">title</span>,</span>
-<span class="r-in">    description <span class="op">=</span> <span class="va">description</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="show_rcode_modal.html">show_rcode_modal</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  title <span class="op">=</span> <span class="st">"R Code for a Regression Plot"</span>,</span></span>
+<span class="r-in"><span>  rcode <span class="op">=</span> <span class="fu">get_rcode</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    datasets <span class="op">=</span> <span class="va">datasets</span>,</span></span>
+<span class="r-in"><span>    title <span class="op">=</span> <span class="va">title</span>,</span></span>
+<span class="r-in"><span>    description <span class="op">=</span> <span class="va">description</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

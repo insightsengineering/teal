@@ -14,7 +14,7 @@ This function adds the right filter panel to each main tab."><!-- mathjax --><sc
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9005</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,12 +44,6 @@ This function adds the right filter panel to each main tab."><!-- mathjax --><sc
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" href="https://insightsengineering.github.io/teal/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -79,7 +73,7 @@ This function adds the right filter panel to each main tab.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ui_tabs_with_filters</span><span class="op">(</span><span class="va">id</span>, <span class="va">modules</span>, <span class="va">datasets</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ui_tabs_with_filters</span><span class="op">(</span><span class="va">id</span>, <span class="va">modules</span>, <span class="va">datasets</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -118,75 +112,75 @@ panel is inserted at the right of the modules at depth 1 and not at the leaves.<
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="get_dummy_modules.html">get_dummy_modules</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="get_dummy_datasets.html">get_dummy_datasets</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
-<span class="r-in">  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="include_teal_css_js.html">include_teal_css_js</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">textOutput</a></span><span class="op">(</span><span class="st">"info"</span><span class="op">)</span>,</span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span> <span class="co"># needed for nice tabs</span></span>
-<span class="r-in">        <span class="fu">ui_tabs_with_filters</span><span class="op">(</span><span class="st">"dummy"</span>, modules <span class="op">=</span> <span class="va">mods</span>, datasets <span class="op">=</span> <span class="va">datasets</span><span class="op">)</span></span>
-<span class="r-in">      <span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span>,</span>
-<span class="r-in">  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="va">active_module</span> <span class="op">&lt;-</span> <span class="fu"><a href="srv_tabs_with_filters.html">srv_tabs_with_filters</a></span><span class="op">(</span></span>
-<span class="r-in">      id <span class="op">=</span> <span class="st">"dummy"</span>,</span>
-<span class="r-in">      datasets <span class="op">=</span> <span class="va">datasets</span>,</span>
-<span class="r-in">      modules <span class="op">=</span> <span class="va">mods</span>,</span>
-<span class="r-in">      filter <span class="op">=</span> <span class="cn">NULL</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The currently active tab name is "</span>, <span class="fu">active_module</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">label</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># An example with two filter panels in two apps side-by-side</span></span>
-<span class="r-in"><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="get_dummy_modules.html">get_dummy_modules</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">datasets1</span> <span class="op">&lt;-</span> <span class="va">datasets2</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="get_dummy_datasets.html">get_dummy_datasets</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
-<span class="r-in">  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="include_teal_css_js.html">include_teal_css_js</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">textOutput</a></span><span class="op">(</span><span class="st">"info"</span><span class="op">)</span>,</span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span> <span class="co"># needed for nice tabs</span></span>
-<span class="r-in">        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidRow</a></span><span class="op">(</span></span>
-<span class="r-in">          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/column.html" class="external-link">column</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fu">teal</span><span class="fu">:::</span><span class="fu">ui_tabs_with_filters</span><span class="op">(</span><span class="st">"app1"</span>, modules <span class="op">=</span> <span class="va">mods</span>, datasets <span class="op">=</span> <span class="va">datasets1</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/column.html" class="external-link">column</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fu">teal</span><span class="fu">:::</span><span class="fu">ui_tabs_with_filters</span><span class="op">(</span><span class="st">"app2"</span>, modules <span class="op">=</span> <span class="va">mods</span>, datasets <span class="op">=</span> <span class="va">datasets2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">        <span class="op">)</span></span>
-<span class="r-in">      <span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span>,</span>
-<span class="r-in">  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="va">active_module1</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="srv_tabs_with_filters.html">srv_tabs_with_filters</a></span><span class="op">(</span></span>
-<span class="r-in">      id <span class="op">=</span> <span class="st">"app1"</span>,</span>
-<span class="r-in">      datasets <span class="op">=</span> <span class="va">datasets1</span>,</span>
-<span class="r-in">      modules <span class="op">=</span> <span class="va">mods</span>,</span>
-<span class="r-in">      filter <span class="op">=</span> <span class="cn">NULL</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">    <span class="va">active_module2</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="srv_tabs_with_filters.html">srv_tabs_with_filters</a></span><span class="op">(</span></span>
-<span class="r-in">      id <span class="op">=</span> <span class="st">"app2"</span>,</span>
-<span class="r-in">      datasets <span class="op">=</span> <span class="va">datasets2</span>,</span>
-<span class="r-in">      modules <span class="op">=</span> <span class="va">mods</span>,</span>
-<span class="r-in">      filter <span class="op">=</span> <span class="cn">NULL</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
-<span class="r-in">        <span class="st">"The currently active tab names are: "</span>,</span>
-<span class="r-in">        <span class="fu">active_module1</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">label</span>, <span class="st">", "</span>, <span class="fu">active_module1</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">label</span></span>
-<span class="r-in">      <span class="op">)</span></span>
-<span class="r-in">    <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="get_dummy_modules.html">get_dummy_modules</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="get_dummy_datasets.html">get_dummy_datasets</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="include_teal_css_js.html">include_teal_css_js</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">textOutput</a></span><span class="op">(</span><span class="st">"info"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span> <span class="co"># needed for nice tabs</span></span></span>
+<span class="r-in"><span>        <span class="fu">ui_tabs_with_filters</span><span class="op">(</span><span class="st">"dummy"</span>, modules <span class="op">=</span> <span class="va">mods</span>, datasets <span class="op">=</span> <span class="va">datasets</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span>,</span></span>
+<span class="r-in"><span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">active_module</span> <span class="op">&lt;-</span> <span class="fu"><a href="srv_tabs_with_filters.html">srv_tabs_with_filters</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      id <span class="op">=</span> <span class="st">"dummy"</span>,</span></span>
+<span class="r-in"><span>      datasets <span class="op">=</span> <span class="va">datasets</span>,</span></span>
+<span class="r-in"><span>      modules <span class="op">=</span> <span class="va">mods</span>,</span></span>
+<span class="r-in"><span>      filter <span class="op">=</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">output</span><span class="op">$</span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The currently active tab name is "</span>, <span class="fu">active_module</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">label</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># An example with two filter panels in two apps side-by-side</span></span></span>
+<span class="r-in"><span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="get_dummy_modules.html">get_dummy_modules</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">datasets1</span> <span class="op">&lt;-</span> <span class="va">datasets2</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="get_dummy_datasets.html">get_dummy_datasets</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="include_teal_css_js.html">include_teal_css_js</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">textOutput</a></span><span class="op">(</span><span class="st">"info"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span> <span class="co"># needed for nice tabs</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidRow</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/column.html" class="external-link">column</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fu">teal</span><span class="fu">:::</span><span class="fu">ui_tabs_with_filters</span><span class="op">(</span><span class="st">"app1"</span>, modules <span class="op">=</span> <span class="va">mods</span>, datasets <span class="op">=</span> <span class="va">datasets1</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/column.html" class="external-link">column</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fu">teal</span><span class="fu">:::</span><span class="fu">ui_tabs_with_filters</span><span class="op">(</span><span class="st">"app2"</span>, modules <span class="op">=</span> <span class="va">mods</span>, datasets <span class="op">=</span> <span class="va">datasets2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span>,</span></span>
+<span class="r-in"><span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">active_module1</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="srv_tabs_with_filters.html">srv_tabs_with_filters</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      id <span class="op">=</span> <span class="st">"app1"</span>,</span></span>
+<span class="r-in"><span>      datasets <span class="op">=</span> <span class="va">datasets1</span>,</span></span>
+<span class="r-in"><span>      modules <span class="op">=</span> <span class="va">mods</span>,</span></span>
+<span class="r-in"><span>      filter <span class="op">=</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">active_module2</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="srv_tabs_with_filters.html">srv_tabs_with_filters</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      id <span class="op">=</span> <span class="st">"app2"</span>,</span></span>
+<span class="r-in"><span>      datasets <span class="op">=</span> <span class="va">datasets2</span>,</span></span>
+<span class="r-in"><span>      modules <span class="op">=</span> <span class="va">mods</span>,</span></span>
+<span class="r-in"><span>      filter <span class="op">=</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">output</span><span class="op">$</span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="st">"The currently active tab names are: "</span>,</span></span>
+<span class="r-in"><span>        <span class="fu">active_module1</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">label</span>, <span class="st">", "</span>, <span class="fu">active_module1</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">label</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -82,6 +82,9 @@
     <loc>https://insightsengineering.github.io/teal/main/reference/get_client_timezone.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/main/reference/get_datasets_code.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/get_dummy_cdisc_data.html</loc>
   </url>
   <url>
@@ -124,7 +127,7 @@
     <loc>https://insightsengineering.github.io/teal/main/reference/init.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/is_reporter_used.html</loc>
+    <loc>https://insightsengineering.github.io/teal/main/reference/is_arg_used.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/line_pkg_log.html</loc>
