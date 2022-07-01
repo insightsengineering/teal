@@ -299,7 +299,7 @@ module <- function(label = "module",
   server_formals <- names(formals(server))
   if (!(
     "id" %in% server_formals ||
-    all(c("input", "output", "session") %in% server_formals)
+      all(c("input", "output", "session") %in% server_formals)
   )) {
     stop(
       "\nmodule() `server` argument requires a function with following arguments:",
