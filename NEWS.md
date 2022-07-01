@@ -9,7 +9,7 @@
 
 * `...` argument in the `teal_module` no longer receives `datasets` object. In order to use `datasets` in the `teal_module` please specify `datasets` explicitly.
 * Deprecated `merge_expression` argument in `get_rcode_srv` and `get_rcode` has been removed.
-* Deprecate `session` argument in `get_rcode` function.
+* Deprecated `session` argument in `get_rcode` function.
 
 # teal 0.11.1
 

@@ -43,10 +43,6 @@ testthat::test_that("module expects server being a shiny server module with any 
   ), NA)
 
   testthat::expect_error(module(
-    server = function(id, any_argument) NULL,
-  ), NA)
-
-  testthat::expect_error(module(
     server = function(input, output, session, any_argument) NULL,
   ), NA)
 

@@ -107,10 +107,10 @@ append_module <- function(modules, module) {
   modules
 }
 
-#' Does the object make use of `teal.reporter` reporting
+#' Does the object make use of any of the `args`
 #' @param modules (`teal_module` or `teal_modules`) object
 #' @param args (`character`) names of the arguments to be checked against formals of `teal` modules.
-#' @return `logical` whether the object makes use of `teal.reporter` reporting
+#' @return `logical` whether the object makes use of `args`
 #' @rdname is_args_used
 #' @keywords internal
 is_args_used <- function(modules, args) {

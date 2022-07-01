@@ -196,3 +196,23 @@ testthat::test_that("srv_nested_tabs.teal_module passes server_args to the ...",
     NA
   )
 })
+
+testthat::test_that("srv_nested_tabs.teal_module warns if both data and datasets are passed", {
+  module <- module(label = "test module", server = function(id, datasets, data) {
+    moduleServer(id, function(input, output, session) NULL)
+  })
+
+  testthat::expect_warning(
+    shiny::testServer(
+      app = srv_nested_tabs,
+      args = list(
+        id = "test",
+        datasets = filtered_data,
+        modules = modules(module),
+        reporter = teal.reporter::Reporter$new()
+      ),
+      expr = NULL
+    ),
+    "Module 'test module' has `data` and `datasets` arguments in the formals"
+  )
+})

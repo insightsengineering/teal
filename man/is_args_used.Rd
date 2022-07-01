@@ -6,7 +6,7 @@
 \alias{is_args_used.teal_modules}
 \alias{is_args_used.teal_module}
 \alias{is_args_used.function}
-\title{Does the object make use of \code{teal.reporter} reporting}
+\title{Does the object make use of any of the \code{args}}
 \usage{
 is_args_used(modules, args)
 
@@ -24,9 +24,9 @@ is_args_used(modules, args)
 \item{args}{(\code{character}) names of the arguments to be checked against formals of \code{teal} modules.}
 }
 \value{
-\code{logical} whether the object makes use of \code{teal.reporter} reporting
+\code{logical} whether the object makes use of \code{args}
 }
 \description{
-Does the object make use of \code{teal.reporter} reporting
+Does the object make use of any of the \code{args}
 }
 \keyword{internal}

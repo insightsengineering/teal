@@ -237,6 +237,13 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     args <- c(args, data = list(data))
   }
 
+  if (is_args_used(modules$server, "datasets") && is_args_used(modules$server, "data")) {
+    warning(
+      "Module '", modules$label, "' has `data` and `datasets` arguments in the formals.",
+      "\nIt's recommended to use `data` to work with filtered objects."
+    )
+  }
+
   # teal_modules do not suppose to return values as it's never passed anyway
   # it's assigned here for tests
   module_output <- if (is_args_used(modules$server, "id")) {
