@@ -33,15 +33,17 @@ See these packages for more information about how to use the different parts of 
 
 ## Installation
 
-It is recommended that you [create and use a Github PAT](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) to install the latest version of this package. Once you have the PAT, run the following:
+For releases from August 2022 it is recommended that you [create and use a Github PAT](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) to install the latest version of this package. Once you have the PAT, run the following:
 
 ```r
 Sys.setenv(GITHUB_PAT = "your_access_token_here")
-if (!require("devtools")) install.packages("devtools")
-devtools::install_github("insightsengineering/teal@*release")
+if (!require("remotes")) install.packages("remotes")
+remotes::install_github("insightsengineering/teal@*release")
 ```
 
 In order to run many of the examples you will also need to install the [`scda`](https://insightsengineering.github.io/scda) package.
+
+A stable release of all `NEST` packages from June 2022 is also available [here](https://github.com/insightsengineering/depository#readme).
 
 See package vignettes `browseVignettes(package = "teal")` for usage of this package.
 
