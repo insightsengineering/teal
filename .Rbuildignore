@@ -41,3 +41,4 @@ SECURITY.md
 ^templates$
 ^test_full_example$
 coverage.*
+SECURITY.md
