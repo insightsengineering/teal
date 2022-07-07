@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.11.1.9006
+Version: 0.11.1.9007
 Date: 2022-06-09
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
@@ -55,18 +55,18 @@ Suggests:
     yaml
 VignetteBuilder:
     knitr
-Remotes:
-    insightsengineering/teal.code@*release,
-    insightsengineering/teal.reporter@*release,
-    insightsengineering/teal.slice@*release,
-    insightsengineering/teal.data@*release,
-    insightsengineering/teal.logger@*release,
-    insightsengineering/teal.widgets@*release,
-    insightsengineering/teal.transform@*release,
-    insightsengineering/scda@*release,
-    insightsengineering/scda.2021@*release
 RdMacros:
     lifecycle
+Remotes:
+    insightsengineering/scda.2021@*release,
+    insightsengineering/scda@*release,
+    insightsengineering/teal.code@*release,
+    insightsengineering/teal.data@*release,
+    insightsengineering/teal.logger@*release,
+    insightsengineering/teal.reporter@*release,
+    insightsengineering/teal.slice@*release,
+    insightsengineering/teal.transform@*release,
+    insightsengineering/teal.widgets@*release
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
