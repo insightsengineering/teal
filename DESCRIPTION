@@ -55,6 +55,16 @@ Suggests:
     yaml
 VignetteBuilder:
     knitr
+Remotes:
+    insightsengineering/teal.code@*release,
+    insightsengineering/teal.reporter@*release,
+    insightsengineering/teal.slice@*release,
+    insightsengineering/teal.data@*release,
+    insightsengineering/teal.logger@*release,
+    insightsengineering/teal.widgets@*release,
+    insightsengineering/teal.transform@*release,
+    insightsengineering/scda@*release,
+    insightsengineering/scda.2021@*release
 RdMacros:
     lifecycle
 Config/Needs/website: insightsengineering/nesttemplate

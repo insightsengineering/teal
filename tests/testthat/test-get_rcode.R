@@ -1,9 +1,14 @@
 testthat::test_that("get_rcode returns header only for empty chunks", {
   ch <- teal.code::chunks_new()
 
+  r_code_from_chunks <- get_rcode(chunks = ch)
+  r_code_from_header <- sprintf("\n\n%s\n", paste(get_rcode_header(), collapse = "\n"))
+
+  # removing the Date line from the header as the seconds may be different
+  # in the two strings
   testthat::expect_identical(
-    get_rcode(chunks = ch),
-    sprintf("\n\n%s\n", paste(get_rcode_header(), collapse = "\n"))
+    strsplit(r_code_from_chunks, "\n")[[1]][c(1:5, 7:14)],
+    strsplit(r_code_from_header, "\n")[[1]][c(1:5, 7:14)]
   )
 })
 
