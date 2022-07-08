@@ -26,7 +26,7 @@ testthat::test_that("get_rcode returns code from chunks at the end", {
   print("act:")
   print(act)
   print(str(act))
-  
+
   testthat::expect_identical(
     get_rcode(chunks = ch),
     sprintf("\n\n%s\n\na <- 1", paste(get_rcode_header(), collapse = "\n"))
