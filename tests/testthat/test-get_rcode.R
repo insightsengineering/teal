@@ -18,7 +18,7 @@ testthat::test_that("get_rcode returns code from chunks at the end", {
   header <- get_rcode_header()
   print("header:")
   print(header)
-  exp <- sprintf("\n\n%s\n\na <- 1", paste(header, collapse = "\n")
+  exp <- sprintf("\n\n%s\n\na <- 1", paste(header, collapse = "\n"))
   act <- get_rcode(chunks = ch)  
   print("exp:")
   print(exp)
@@ -28,7 +28,7 @@ testthat::test_that("get_rcode returns code from chunks at the end", {
   print(str(act))
   testthat::expect_identical(
     exp,
-    act)
+    act
   )
 })
 
