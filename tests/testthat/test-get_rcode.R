@@ -15,9 +15,20 @@ testthat::test_that("get_rcode returns header only for empty chunks", {
 testthat::test_that("get_rcode returns code from chunks at the end", {
   ch <- teal.code::chunks_new()
   teal.code::chunks_push(id = "test", chunks = ch, quote(a <- 1))
+  header <- get_rcode_header()
+  print("header:")
+  print(header)
+  exp <- sprintf("\n\n%s\n\na <- 1", paste(header, collapse = "\n")
+  act <- get_rcode(chunks = ch)  
+  print("exp:")
+  print(exp)
+  print(str(exp))
+  print("act:")
+  print(act)
+  print(str(act))
   testthat::expect_identical(
-    get_rcode(chunks = ch),
-    sprintf("\n\n%s\n\na <- 1", paste(get_rcode_header(), collapse = "\n"))
+    exp,
+    act)
   )
 })
 
