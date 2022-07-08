@@ -19,7 +19,7 @@ testthat::test_that("get_rcode returns code from chunks at the end", {
   print("header:")
   print(header)
   exp <- sprintf("\n\n%s\n\na <- 1", paste(header, collapse = "\n"))
-  act <- get_rcode(chunks = ch)  
+  act <- get_rcode(chunks = ch)
   print("exp:")
   print(exp)
   print(str(exp))
