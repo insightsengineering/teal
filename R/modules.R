@@ -310,6 +310,7 @@ module <- function(label = "module",
       "\n - `data` - module will receive list of reactive (filtered) data specified in the `filters` argument",
       "\n - `datasets` - module will receive `FilteredData`. See `help(teal.slice::FilteredData)`",
       "\n - `reporter` - module will receive `Reporter`. See `help(teal.reporter::Reporter)`",
+      "\n - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).",
       "\n - `...` server_args elements will be passed to the module named argument or to the `...`"
     )
   }
