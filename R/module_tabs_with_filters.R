@@ -111,6 +111,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
   filter_panel_btn <- tags$li(
     style = "flex-grow : 1;",
     tags$a(
+      id = "filter_burger",
       href = "javascript:void(0)",
       class = "menubtn",
       onclick = "handleHamburgerClick();",

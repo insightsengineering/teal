@@ -10,3 +10,9 @@
 .nav {
   display: flex;
 }
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+  color: grey;
+}
