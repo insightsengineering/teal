@@ -53,15 +53,15 @@ app <- init(
       label = "Module",
       module(
         label = "Inner module",
-        server = function(id, datasets) {
+        server = function(id, data) {
           moduleServer(
             id,
             module = function(input, output, session) {
-              output$data <- renderDataTable(datasets$get_data("iris"))
+              output$data <- renderDataTable(data[["iris"]]())
             }
           )
         },
-        ui = function(id, datasets) {
+        ui = function(id) {
           ns <- NS(id)
           tagList(dataTableOutput(ns("data")))
         },
@@ -70,7 +70,7 @@ app <- init(
     ),
     module(
       label = "Another module",
-      server = function(id, datasets) {
+      server = function(id) {
         moduleServer(
           id,
           module = function(input, output, session) {
@@ -78,7 +78,7 @@ app <- init(
           }
         )
       },
-      ui = function(id, datasets) {
+      ui = function(id) {
         ns <- NS(id)
         tagList(textOutput(ns("text")))
       },
