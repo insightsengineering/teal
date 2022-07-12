@@ -8,7 +8,6 @@ get_rcode_srv(
   id,
   datasets,
   datanames = datasets$datanames(),
-  merge_expression = reactive(""),
   modal_title = "R Code",
   code_header = "Automatically generated R code",
   disable_buttons = reactiveVal(FALSE)
@@ -25,8 +24,6 @@ server function of any \link{teal} module.}
 names of datasets which code should be returned for. Due to fact that
 \code{teal} filter panel depending on \code{"ADSL"}, code for \code{ADSL}
 is always returned even if not specified.}
-
-\item{merge_expression}{optional, (\code{reactive}) code to get merged analysis dataset}
 
 \item{modal_title}{optional, (\code{character}) title of the modal}
 

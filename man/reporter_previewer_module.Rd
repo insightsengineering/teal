@@ -7,7 +7,7 @@
 reporter_previewer_module(label = "Report previewer")
 }
 \arguments{
-\item{label}{(\code{character}) Label shown in the navigation item for the module.}
+\item{label}{(\code{character(1)}) Label shown in the navigation item for the module.}
 }
 \value{
 \code{teal_module} containing the \code{teal.reporter} previewer functionality
