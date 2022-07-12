@@ -280,10 +280,10 @@ root_modules <- function(...) {
 #' runApp(app)
 #' }
 module <- function(label = "module",
-                   server = function(id, data, filter_panel_api) {
+                   server = function(id, ...) {
                      moduleServer(id, function(input, output, session) {})
                    },
-                   ui = function(id, data) {
+                   ui = function(id, ...) {
                      tags$p(paste0("This module has no UI (id: ", id, " )"))
                    },
                    filters = "all",
@@ -323,10 +323,10 @@ module <- function(label = "module",
     )
   }
 
-  if (c("data", "datasets") %in% server_args && is.null(filters)) {
+  if ("data" %in% server_formals && is.null(filters)) {
     stop(
-      "\n`filters = NULL` indicates that module doesn't need any data while it has the `data` in formals."
-      "\nPlease specify `filters` with the names of needed datasets or exclude `data` from the arguments.
+      "\n`filters = NULL` indicates that the module doesn't need any data while it has the `data` in formals.",
+      "\nPlease specify `filters` with the names of needed datasets or exclude `data` from the arguments."
     )
   }
 
