@@ -237,6 +237,11 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     args <- c(args, data = list(data))
   }
 
+  if (is_arg_used(modules$server, "filter_panel_api")) {
+    filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets)
+    args <- c(args, filter_panel_api = filter_panel_api)
+  }
+
   if (is_arg_used(modules$server, "datasets") && is_arg_used(modules$server, "data")) {
     warning(
       "Module '", modules$label, "' has `data` and `datasets` arguments in the formals.",

@@ -8,9 +8,9 @@
 \usage{
 module(
   label = "module",
-  server = function(id, data) {
-     moduleServer(id, function(input, output, session)
-    {
+  server = function(id, data, filter_panel_api) {
+     moduleServer(id, function(input,
+    output, session) {
      })
  },
   ui = function(id, data) {
