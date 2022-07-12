@@ -26,11 +26,11 @@ const handleHamburgerClick = () => {
 };
 
 const handleNoActiveDatasets = () => {
-  $("#filter_burger").addClass("disabled");
+  $("#filter_hamburger").addClass("disabled");
   hideSidebar();
 };
 
 const handleActiveDatasetsPresent = () => {
-  $("#filter_burger").removeClass("disabled");
+  $("#filter_hamburger").removeClass("disabled");
   if (filter_open) showSidebar();
 }
