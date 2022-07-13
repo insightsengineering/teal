@@ -197,7 +197,7 @@ is_arg_used.function <- function(modules, arg) {
 #'         ns <- NS(id)
 #'         tagList(textOutput(ns("text")))
 #'       },
-#'       filters = NULL
+#'       filters = "all"
 #'     )
 #'   )
 #' )

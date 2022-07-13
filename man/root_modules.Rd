@@ -55,7 +55,7 @@ app <- init(
         ns <- NS(id)
         tagList(textOutput(ns("text")))
       },
-      filters = NULL
+      filters = "all"
     )
   )
 )
