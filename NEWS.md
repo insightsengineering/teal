@@ -11,6 +11,10 @@
 * Deprecated `merge_expression` argument in `get_rcode_srv` and `get_rcode` has been removed.
 * Deprecated `session` argument in `get_rcode` function.
 
+# Miscellaneous
+
+* Enhanced the burger button so it is disabled when the filter panel is not used.
+
 # teal 0.11.1
 
 ### Enhancements
