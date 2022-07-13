@@ -58,9 +58,9 @@ This function contains the shiny server logic for the module and should be of th
 
 ```
 function(id,
-         data, # optional use if you want your module to access the application data
-         filter_panel_api, # optional use if you want access to the filter panel from your module see teal.slice 
-         reporter, # optional use if your module supports reporting, see reporting vignette in teal 
+         data, # optional, use if you want your module to access the application data
+         filter_panel_api, # optional, use if you want access to the filter panel from your module see teal.slice 
+         reporter, # optional, use if your module supports reporting, see reporting vignette in teal 
          ...) {
   moduleServer(id, function(input, output, session) {
     # module code here
@@ -69,12 +69,8 @@ function(id,
 
 ```
 
-
-
-The `datasets` argument is a `FilteredData` object which provides a call to extract the data after having been filtered by the filterpanel:
-`datasets$get_data(<<dataname>>, filtered = TRUE)`. For more details about the `FilteredData` object see the supporting `teal` package
-[`teal.slice`](https://insightsengineering.github.io/teal.slice/)
-
+When used inside a teal application called with `teal::init` the `data` argument is a named list of reactive data.frames
+containing the data after having been filtered through the filter panel.
 
 ## A More Complicated Example
 
