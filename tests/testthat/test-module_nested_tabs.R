@@ -216,3 +216,44 @@ testthat::test_that("srv_nested_tabs.teal_module warns if both data and datasets
     "Module 'test module' has `data` and `datasets` arguments in the formals"
   )
 })
+
+fp_api <- teal.slice:::FilterPanelAPI$new(filtered_data)
+testthat::test_that("srv_nested_tabs.teal_module doesn't pass filter_panel_api if not in the args explicitly", {
+  module <- module(server = function(id, ...) {
+    moduleServer(id, function(input, output, session) checkmate::assert_class(filter_panel_api, "FilterPanelAPI"))
+  })
+
+  testthat::expect_error(
+    shiny::testServer(
+      app = srv_nested_tabs,
+      args = list(
+        id = "test",
+        datasets = filtered_data,
+        modules = modules(module),
+        reporter = teal.reporter::Reporter$new()
+      ),
+      expr = NULL
+    ),
+    "object 'filter_panel_api' not found"
+  )
+})
+
+testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the server module", {
+  module <- module(server = function(id, filter_panel_api) {
+    moduleServer(id, function(input, output, session) checkmate::assert_class(filter_panel_api, "FilterPanelAPI"))
+  })
+
+  testthat::expect_error(
+    shiny::testServer(
+      app = srv_nested_tabs,
+      args = list(
+        id = "test",
+        datasets = filtered_data,
+        modules = modules(module),
+        reporter = teal.reporter::Reporter$new()
+      ),
+      expr = NULL
+    ),
+    NA
+  )
+})

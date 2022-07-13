@@ -230,9 +230,11 @@ root_modules <- function(...) {
 #' @param server (`function`) `shiny` module with following arguments:
 #'  - `id` - teal will set proper shiny namespace for this module (see [shiny::moduleServer()]).
 #'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
-#'  - `data` (optional) module will receive list of reactive (filtered) data specified in the `filters` argument.
+#'  - `data` (optional) module will receive list of reactive (filtered) data specified in the `filters` argument. `filters`
+#'   can't be NULL
 #'  - `datasets` (optional) module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
 #'  - `reporter` (optional) module will receive `Reporter`. (See [teal.reporter::Reporter]).
+#   - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).
 #'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
 #' @param ui (`function`) Shiny ui module function with following arguments:
 #'  - `id` - teal will set proper shiny namespace for this module.
@@ -242,9 +244,8 @@ root_modules <- function(...) {
 #' @param filters (`character`) A vector with datanames that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed datasets. `NULL` will hide the filter panel,
-#'   and the keyword `'all'` will show the filters of all datasets. The
-#'   argument can be thought of as `'active_datanames'` and may be renamed
-#'   in future versions of teal.
+#'   and the keyword `'all'` will show the filters of all datasets. `filters` can't be `NULL` when
+#'   `data` argument is present in the `server` formals.
 #' @param server_args (named `list`) with additional arguments passed on to the
 #'   `server` function.
 #' @param ui_args (named `list`) with additional arguments passed on to the
@@ -271,8 +272,7 @@ root_modules <- function(...) {
 #'       ui = function(id) {
 #'         ns <- NS(id)
 #'         tagList(dataTableOutput(ns("data")))
-#'       },
-#'       filters = NULL
+#'       }
 #'     )
 #'   )
 #' )
@@ -280,10 +280,10 @@ root_modules <- function(...) {
 #' runApp(app)
 #' }
 module <- function(label = "module",
-                   server = function(id, data) {
+                   server = function(id, ...) {
                      moduleServer(id, function(input, output, session) {})
                    },
-                   ui = function(id, data) {
+                   ui = function(id, ...) {
                      tags$p(paste0("This module has no UI (id: ", id, " )"))
                    },
                    filters = "all",
@@ -309,6 +309,7 @@ module <- function(label = "module",
       "\n - `data` - module will receive list of reactive (filtered) data specified in the `filters` argument",
       "\n - `datasets` - module will receive `FilteredData`. See `help(teal.slice::FilteredData)`",
       "\n - `reporter` - module will receive `Reporter`. See `help(teal.reporter::Reporter)`",
+      "\n - `filter_panel_api` - module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).",
       "\n - `...` server_args elements will be passed to the module named argument or to the `...`"
     )
   }
@@ -319,6 +320,13 @@ module <- function(label = "module",
       "\nFollowing `server_args` elements have no equivalent in the formals of the `server`:\n",
       paste(paste(" -", srv_extra_args), collapse = "\n"),
       "\n\nUpdate the `server` arguments by including above or add `...`"
+    )
+  }
+
+  if ("data" %in% server_formals && is.null(filters)) {
+    stop(
+      "\n`filters = NULL` indicates that the module doesn't need any data while it has the `data` in formals.",
+      "\nPlease specify `filters` with the names of needed datasets or exclude `data` from the arguments."
     )
   }
 
