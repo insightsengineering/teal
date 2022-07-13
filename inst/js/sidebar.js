@@ -4,12 +4,10 @@ const hideSidebar = () => {
   $("#teal_secondary_col").fadeOut(1);
   $("#teal_primary_col").attr("class", "col-sm-12").resize();
 };
-
 const showSidebar = () => {
   $("#teal_primary_col").attr("class", "col-sm-9").resize();
   $("#teal_secondary_col").delay(600).fadeIn(50);
 };
-
 const toggleFilterPanel = () => {
   if (
     filter_open &&
@@ -24,11 +22,12 @@ const toggleFilterPanel = () => {
   else hideSidebar();
 };
 
+// Function to hide filter panel and disable the burger button
 const handleNoActiveDatasets = () => {
   $("#filter_hamburger").addClass("disabled");
   hideSidebar();
 };
-
+// Function to show filter panel and enable the burger button
 const handleActiveDatasetsPresent = () => {
   $("#filter_hamburger").removeClass("disabled");
   if (filter_open) showSidebar();
