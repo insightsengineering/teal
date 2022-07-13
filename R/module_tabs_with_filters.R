@@ -168,15 +168,23 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
     )
 
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
-    script <- paste0(
-      "document.getElementById('%s').addEventListener('noDatasetsEvent', handleNoActiveDatasets);",
-      "document.getElementById('%s').addEventListener('datasetsActiveEvent', handleActiveDatasetsPresent);"
+
+    # to handle per module filter = NULL
+    observeEvent(
+      eventExpr = active_datanames(),
+      handlerExpr = {
+        script <- if (length(active_datanames()) == 0 || is.null(active_datanames())) {
+          # hide the filter panel and disable the burger button
+          "handleNoActiveDatasets();"
+        } else {
+          # show the filter panel and enable the burger button
+          "handleActiveDatasetsPresent();"
+        }
+        shinyjs::runjs(script)
+      },
+      ignoreNULL = FALSE
     )
-    shinyjs::runjs(sprintf(
-      script,
-      session$ns("filter_panel"),
-      session$ns("filter_panel")
-    ))
+
     teal.slice::set_filter_state(datasets = datasets, filter = filter)
     showNotification("Data loaded - App fully started up")
 
