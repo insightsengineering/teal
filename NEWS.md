@@ -2,8 +2,9 @@
 
 ### Enhancements
 
-* `teal_module` having `data` argument in its arguments will receive list of reactive filter data with `"code"` and `"join_keys"` attributes.
+* `teal_module` having `data` argument in its arguments will receive a list of reactive filter data with `"code"` and `"join_keys"` attributes.
 * Updated the internals of `module_teal` to reflect changes in `teal.slice`.
+* `teal_module` having `filter_panel_api` argument in its arguments will receive a `FilterPanelAPI` object.
 
 ### Breaking changes
 

@@ -233,6 +233,7 @@ root_modules <- function(...) {
 #'  - `data` (optional) module will receive list of reactive (filtered) data specified in the `filters` argument.
 #'  - `datasets` (optional) module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
 #'  - `reporter` (optional) module will receive `Reporter`. (See [teal.reporter::Reporter]).
+#   - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).
 #'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
 #' @param ui (`function`) Shiny ui module function with following arguments:
 #'  - `id` - teal will set proper shiny namespace for this module.
@@ -280,7 +281,7 @@ root_modules <- function(...) {
 #' runApp(app)
 #' }
 module <- function(label = "module",
-                   server = function(id, data) {
+                   server = function(id, data, filter_panel_api) {
                      moduleServer(id, function(input, output, session) {})
                    },
                    ui = function(id, data) {
@@ -309,6 +310,7 @@ module <- function(label = "module",
       "\n - `data` - module will receive list of reactive (filtered) data specified in the `filters` argument",
       "\n - `datasets` - module will receive `FilteredData`. See `help(teal.slice::FilteredData)`",
       "\n - `reporter` - module will receive `Reporter`. See `help(teal.reporter::Reporter)`",
+      "\n - `filter_panel_api` - module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).",
       "\n - `...` server_args elements will be passed to the module named argument or to the `...`"
     )
   }
