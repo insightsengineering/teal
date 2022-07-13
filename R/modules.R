@@ -245,7 +245,7 @@ root_modules <- function(...) {
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed datasets. `NULL` will hide the filter panel,
 #'   and the keyword `'all'` will show the filters of all datasets. `filters` can't be `NULL` when
-#'   `data` is
+#'   `data` argument is present in the `server` formals.
 #' @param server_args (named `list`) with additional arguments passed on to the
 #'   `server` function.
 #' @param ui_args (named `list`) with additional arguments passed on to the

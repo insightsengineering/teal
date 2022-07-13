@@ -52,7 +52,7 @@ can't be NULL
 filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
 and the keyword \code{'all'} will show the filters of all datasets. \code{filters} can't be \code{NULL} when
-\code{data} is}
+\code{data} argument is present in the \code{server} formals.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the
 \code{server} function.}
