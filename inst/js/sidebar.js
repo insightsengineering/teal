@@ -10,7 +10,7 @@ const showSidebar = () => {
   $("#teal_secondary_col").delay(600).fadeIn(50);
 };
 
-const handleHamburgerClick = () => {
+const toggleFilterPanel = () => {
   console.log("Handling Filter Panel Hamburger click: " + filter_open);
   if (
     filter_open &&
