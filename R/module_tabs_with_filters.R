@@ -114,7 +114,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
       id = "filter_hamburger",
       href = "javascript:void(0)",
       class = "menubtn",
-      onclick = "toggleFilterPanel();",
+      onclick = "toggleFilterPanel();", # see sidebar.js
       title = "Toggle filter panels",
       tags$span(icon("fas fa-bars"))
     )
