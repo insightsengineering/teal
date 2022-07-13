@@ -11,7 +11,7 @@ module(
   server = function(id, ...) {
      moduleServer(id, function(input, output, session)
     {
-     })
+    })
  },
   ui = function(id, ...) {
      tags$p(paste0("This module has no UI (id: ", id,
