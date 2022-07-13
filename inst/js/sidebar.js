@@ -11,7 +11,6 @@ const showSidebar = () => {
 };
 
 const toggleFilterPanel = () => {
-  console.log("Handling Filter Panel Hamburger click: " + filter_open);
   if (
     filter_open &&
     getComputedStyle(document.getElementById("teal_secondary_col")).display ===
