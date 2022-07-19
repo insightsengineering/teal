@@ -232,7 +232,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     attr(data, "code") <- get_datasets_code(datanames, datasets)
 
     # join_keys
-    attr(data, "join_keys") <- datasets$get_join_keys()
+    attr(data, "join_keys") <- datasets$get_join_keys() 
 
     args <- c(args, data = list(data))
   }
