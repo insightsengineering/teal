@@ -9,14 +9,14 @@
 module(
   label = "module",
   server = function(id, ...) {
-     moduleServer(id, function(input, output, session)
-    {
-     })
+     moduleServer(id, function(input, output, session) {
+ 
+       })
  },
   ui = function(id, ...) {
-     tags$p(paste0("This module has no UI (id: ", id,
-    " )"))
- },
+     tags$p(paste0("This module has no UI (id: ", id, " )"))
+
+    },
   filters = "all",
   server_args = NULL,
   ui_args = NULL
