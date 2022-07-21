@@ -1,0 +1,9 @@
+Binding: project_skeleton
+Title: Teal Application
+OpenFiles: app.R
+Icon: teal.png
+
+Parameter: use_cdisc
+Widget: CheckboxInput
+Label: Use CDISC data
+Default: On
