@@ -29,15 +29,15 @@
 #'       label = "Module",
 #'       module(
 #'         label = "Inner module",
-#'         server = function(id, datasets) {
+#'         server = function(id, data) {
 #'           moduleServer(
 #'             id,
 #'             module = function(input, output, session) {
-#'               output$data <- renderDataTable(datasets$get_data("iris"))
+#'               output$data <- renderDataTable(data[["iris"]]())
 #'             }
 #'           )
 #'         },
-#'         ui = function(id, datasets) {
+#'         ui = function(id) {
 #'           ns <- NS(id)
 #'           tagList(dataTableOutput(ns("data")))
 #'         },
@@ -46,7 +46,7 @@
 #'     ),
 #'     module(
 #'       label = "Another module",
-#'       server = function(id, datasets) {
+#'       server = function(id) {
 #'         moduleServer(
 #'           id,
 #'           module = function(input, output, session) {
@@ -54,7 +54,7 @@
 #'           }
 #'         )
 #'       },
-#'       ui = function(id, datasets) {
+#'       ui = function(id) {
 #'         ns <- NS(id)
 #'         tagList(textOutput(ns("text")))
 #'       },
@@ -169,15 +169,15 @@ is_arg_used.function <- function(modules, arg) {
 #'   modules = modules(
 #'     module(
 #'       label = "Module",
-#'       server = function(id, datasets) {
+#'       server = function(id, data) {
 #'         moduleServer(
 #'           id,
 #'           module = function(input, output, session) {
-#'             output$data <- renderDataTable(datasets$get_data("iris"))
+#'             output$data <- renderDataTable(data[["iris"]]())
 #'           }
 #'         )
 #'       },
-#'       ui = function(id, datasets) {
+#'       ui = function(id) {
 #'         ns <- NS(id)
 #'         tagList(dataTableOutput(ns("data")))
 #'       },
@@ -185,7 +185,7 @@ is_arg_used.function <- function(modules, arg) {
 #'     ),
 #'     module(
 #'       label = "Another module",
-#'       server = function(id, datasets) {
+#'       server = function(id) {
 #'         moduleServer(
 #'           id,
 #'           module = function(input, output, session) {
@@ -193,11 +193,11 @@ is_arg_used.function <- function(modules, arg) {
 #'           }
 #'         )
 #'       },
-#'       ui = function(id, datasets) {
+#'       ui = function(id) {
 #'         ns <- NS(id)
 #'         tagList(textOutput(ns("text")))
 #'       },
-#'       filters = NULL
+#'       filters = "all"
 #'     )
 #'   )
 #' )
@@ -261,15 +261,15 @@ root_modules <- function(...) {
 #'   modules = list(
 #'     module(
 #'       label = "Module",
-#'       server = function(id, datasets) {
+#'       server = function(id, data) {
 #'         moduleServer(
 #'           id,
 #'           module = function(input, output, session) {
-#'             output$data <- renderDataTable(datasets$get_data("iris"))
+#'             output$data <- renderDataTable(data[["iris"]]())
 #'           }
 #'         )
 #'       },
-#'       ui = function(id, datasets) {
+#'       ui = function(id) {
 #'         ns <- NS(id)
 #'         tagList(dataTableOutput(ns("data")))
 #'       }

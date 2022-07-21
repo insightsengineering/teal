@@ -33,16 +33,16 @@ teal_example_module <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
-    server = function(id, datasets) {
+    server = function(id, data) {
       moduleServer(id, function(input, output, session) {
-        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
+        output$text <- renderPrint(data[[input$dataname]]())
       })
     },
-    ui = function(id, datasets) {
+    ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
     filters = "all"
@@ -72,16 +72,16 @@ example_module_with_reporting <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
-    server = function(id, datasets, reporter) {
+    server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
-        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
+        output$text <- renderPrint(data[[input$dataname]]())
       })
     },
-    ui = function(id, datasets) {
+    ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
     filters = "all"
@@ -114,24 +114,24 @@ example_module_with_reporting <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
-    server = function(id, datasets, reporter) {
+    server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
         teal.reporter::simple_reporter_srv(
           id = "reporter",
           reporter = reporter,
           card_fun = function(card) card
         )
-        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
+        output$text <- renderPrint(data[[input$dataname]]())
       })
     },
-    ui = function(id, datasets) {
+    ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = tagList(
           teal.reporter::simple_reporter_ui(ns("reporter")),
           verbatimTextOutput(ns("text"))
         ),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
     filters = "all"
@@ -176,20 +176,20 @@ example_module_with_reporting <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
-    server = function(id, datasets, reporter) {
+    server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
         teal.reporter::simple_reporter_srv(id = "simpleReporter", reporter = reporter, card_fun = custom_function)
-        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
+        output$text <- renderPrint(data[[input$dataname]]())
       })
     },
-    ui = function(id, datasets) {
+    ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = tagList(
           teal.reporter::simple_reporter_ui(ns("simpleReporter")),
           verbatimTextOutput(ns("text"))
         ),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
     filters = "all"
