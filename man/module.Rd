@@ -4,7 +4,7 @@
 \alias{module}
 \alias{toString.teal_module}
 \alias{print.teal_module}
-\title{Creates a \code{teal_modules} object.}
+\title{Creates a \code{teal_module} object.}
 \usage{
 module(
   label = "module",
