@@ -6,3 +6,4 @@ Icon: teal.png
 Parameter: use_cdisc
 Widget: CheckboxInput
 Label: Use CDISC data
+Default: On
