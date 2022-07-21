@@ -4,7 +4,7 @@
 #'
 #' inst/rstudio/templates/project/teal_application.dcf
 #'
-#' It is exported so that projects can be created outside of teal
+#' It is exported so that projects can be created outside of the RStudio IDE
 #'
 #' @export
 project_skeleton <- function(path, use_cdisc = TRUE) {

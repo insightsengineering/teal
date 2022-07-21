@@ -12,5 +12,5 @@ project_skeleton(path, use_cdisc = TRUE)
 inst/rstudio/templates/project/teal_application.dcf
 }
 \details{
-It is exported so that projects can be created outside of teal
+It is exported so that projects can be created outside of the RStudio IDE
 }
