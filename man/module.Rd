@@ -4,19 +4,19 @@
 \alias{module}
 \alias{toString.teal_module}
 \alias{print.teal_module}
-\title{Creates a \code{teal_modules} object.}
+\title{Creates a \code{teal_module} object.}
 \usage{
 module(
   label = "module",
   server = function(id, ...) {
-     moduleServer(id, function(input, output, session)
-    {
-     })
+     moduleServer(id, function(input, output, session) {
+ 
+       })
  },
   ui = function(id, ...) {
-     tags$p(paste0("This module has no UI (id: ", id,
-    " )"))
- },
+     tags$p(paste0("This module has no UI (id: ", id, " )"))
+
+    },
   filters = "all",
   server_args = NULL,
   ui_args = NULL

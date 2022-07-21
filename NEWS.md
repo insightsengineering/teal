@@ -1,4 +1,4 @@
-# teal 0.11.1.9011
+# teal 0.11.1.9014
 
 ### Enhancements
 
@@ -11,6 +11,10 @@
 * `...` argument in the `teal_module` no longer receives `datasets` object. In order to use `datasets` in the `teal_module` please specify `datasets` explicitly.
 * Deprecated `merge_expression` argument in `get_rcode_srv` and `get_rcode` has been removed.
 * Deprecated `session` argument in `get_rcode` function.
+
+# Miscellaneous
+
+* Enhanced the burger button so it is disabled when the filter panel is not used.
 
 # teal 0.11.1
 

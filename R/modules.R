@@ -221,7 +221,7 @@ root_modules <- function(...) {
 }
 
 
-#' Creates a `teal_modules` object.
+#' Creates a `teal_module` object.
 #'
 #' @description `r lifecycle::badge("stable")`
 #' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.

@@ -111,9 +111,10 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
   filter_panel_btn <- tags$li(
     style = "flex-grow : 1;",
     tags$a(
+      id = "filter_hamburger",
       href = "javascript:void(0)",
       class = "menubtn",
-      onclick = "toggle_sidebar();",
+      onclick = "toggleFilterPanel();", # see sidebar.js
       title = "Toggle filter panels",
       tags$span(icon("fas fa-bars"))
     )
@@ -162,10 +163,28 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
           "srv_tabs_with_filters@1 changing active module to: { deparse1(active_module()$label) }."
         )
         datasets$handle_active_datanames(datanames = active_module()$filters)
-      }
+      },
+      ignoreNULL = FALSE
     )
 
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
+
+    # to handle per module filter = NULL
+    observeEvent(
+      eventExpr = active_datanames(),
+      handlerExpr = {
+        script <- if (length(active_datanames()) == 0 || is.null(active_datanames())) {
+          # hide the filter panel and disable the burger button
+          "handleNoActiveDatasets();"
+        } else {
+          # show the filter panel and enable the burger button
+          "handleActiveDatasetsPresent();"
+        }
+        shinyjs::runjs(script)
+      },
+      ignoreNULL = FALSE
+    )
+
     teal.slice::set_filter_state(datasets = datasets, filter = filter)
     showNotification("Data loaded - App fully started up")
 
