@@ -1,5 +1,5 @@
-pandoc: 2.17.1.1
-pkgdown: 2.0.5
+pandoc: '2.18'
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   adding-support-for-reporting: adding-support-for-reporting.html
@@ -11,7 +11,7 @@ articles:
   preprocessing-data: preprocessing-data.html
   teal-options: teal-options.html
   teal: teal.html
-last_built: 2022-07-13T11:54Z
+last_built: 2022-07-21T07:51Z
 urls:
   reference: https://insightsengineering.github.io/teal/main/reference
   article: https://insightsengineering.github.io/teal/main/articles
