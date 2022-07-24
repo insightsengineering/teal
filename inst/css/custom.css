@@ -39,9 +39,13 @@
 }
 
 /* DataTable connected if any exists */
-
 .dataTables_wrapper {
     overflow: auto;
+}
+
+/* to set the alignment of pickerInput dropdowns */
+.dropdown-menu.open {
+  width: 100%;
 }
 
 /* per tag */
