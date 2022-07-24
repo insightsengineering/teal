@@ -111,9 +111,8 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
   filter_panel_btn <- tags$li(
     style = "flex-grow : 1;",
     tags$a(
-      id = "filter_hamburger",
+      id = "filter_hamburger", # see sidebar.css for style
       href = "javascript:void(0)",
-      class = "menubtn",
       onclick = "toggleFilterPanel();", # see sidebar.js
       title = "Toggle filter panels",
       tags$span(icon("fas fa-bars"))
