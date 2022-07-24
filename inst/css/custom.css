@@ -38,6 +38,12 @@
     z-index: 105;
 }
 
+/* DataTable connected if exists */
+
+.dataTables_wrapper {
+    overflow: auto;
+}
+
 /* per tag */
 
 .nav {
