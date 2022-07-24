@@ -1,8 +1,25 @@
-footer {
-    text-align: left;
-    padding: 5px;
-    font-size: 0.8em;
-    opacity: 0.6;
+/* custom teal css */
+
+/* tailwindcss inspired naming */
+.flex-grow {
+    flex-grow: 1;
+}
+
+.my-2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.mt-6 {
+    margin-top: 1.5rem;
+}
+
+.overflow-auto {
+    overflow: auto;
 }
 
 /* display waiting box at bottom right corner when Shiny is computing */
@@ -21,11 +38,16 @@ footer {
     z-index: 105;
 }
 
+/* per tag */
+
 .nav {
     display: flex;
     flex-wrap: wrap;
 }
 
-.dataTables_wrapper {
-    overflow: auto;
+footer {
+    text-align: left;
+    padding: 5px;
+    font-size: 0.8em;
+    opacity: 0.6;
 }
