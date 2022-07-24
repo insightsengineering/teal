@@ -1,29 +1,29 @@
 footer {
-  text-align: left;
-  padding: 5px;
-  font-size: 0.8em;
-  opacity: 0.6;
+    text-align: left;
+    padding: 5px;
+    font-size: 0.8em;
+    opacity: 0.6;
 }
 
 /* display waiting box at bottom right corner when Shiny is computing */
 .shinybusymessage {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  width: 140px;
-  margin: 15px;
-  padding: 5px 0 5px 10px;
-  text-align: left;
-  font-weight: bold;
-  font-size: 100%;
-  color: #ffffff;
-  background-color: #347ab7;
-  z-index: 105;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 140px;
+    margin: 15px;
+    padding: 5px 0 5px 10px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 100%;
+    color: #ffffff;
+    background-color: #347ab7;
+    z-index: 105;
 }
 
 .nav {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .dataTables_wrapper {
