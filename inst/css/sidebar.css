@@ -7,11 +7,7 @@
     background-color: transparent !important;
 }
 
-.nav {
-    display: flex;
-}
-
-/* disable any anchor with the disabled class*/
+/* disable any anchor with the disabled class */
 a.disabled {
     pointer-events: none;
   	cursor: not-allowed;
