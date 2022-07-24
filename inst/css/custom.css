@@ -38,7 +38,7 @@
     z-index: 105;
 }
 
-/* DataTable connected if exists */
+/* DataTable connected if any exists */
 
 .dataTables_wrapper {
     overflow: auto;
