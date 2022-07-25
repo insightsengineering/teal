@@ -109,11 +109,10 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
   teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets)
 
   filter_panel_btn <- tags$li(
-    style = "flex-grow : 1;",
+    class = "flex-grow",
     tags$a(
-      id = "filter_hamburger",
+      id = "filter_hamburger", # see sidebar.css for style
       href = "javascript:void(0)",
-      class = "menubtn",
       onclick = "toggleFilterPanel();", # see sidebar.js
       title = "Toggle filter panels",
       tags$span(icon("fas fa-bars"))
@@ -129,7 +128,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 
   teal_ui$children <- list(
     teal_ui$children[[1]],
-    tags$hr(style = "margin: 7px 0;"),
+    tags$hr(class = "my-2"),
     fluidRow(
       column(width = 9, teal_ui$children[[2]], id = "teal_primary_col"),
       column(width = 3, filter_and_info_ui, id = "teal_secondary_col")

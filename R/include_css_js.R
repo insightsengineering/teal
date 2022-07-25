@@ -13,7 +13,11 @@ include_css_files <- function(pattern = "*") {
     system.file("css", package = "teal", mustWork = TRUE),
     pattern = pattern, full.names = TRUE
   )
-  return(singleton(lapply(css_files, includeCSS)))
+  return(
+    shiny::singleton(
+      shiny::tags$head(lapply(css_files, shiny::includeCSS))
+    )
+  )
 }
 
 #' Include `JS` files from `/inst/js/` package directory to application header

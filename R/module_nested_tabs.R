@@ -121,7 +121,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
     id = id,
     class = "teal_module",
     tagList(
-      if (depth >= 2L) div(style = "margin-top: 1.5rem;"),
+      if (depth >= 2L) div(style = "mt-6"),
       do.call(modules$ui, args)
     )
   )
