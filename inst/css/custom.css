@@ -2,62 +2,62 @@
 /* tailwindcss inspired naming */
 
 .flex-grow {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .my-2 {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .mb-4 {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .mt-6 {
-    margin-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .overflow-auto {
-    overflow: auto;
+  overflow: auto;
 }
 
 /* display waiting box at bottom right corner when Shiny is computing */
 .shinybusymessage {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 140px;
-    margin: 15px;
-    padding: 5px 0 5px 10px;
-    text-align: left;
-    font-weight: bold;
-    font-size: 100%;
-    color: #ffffff;
-    background-color: #347ab7;
-    z-index: 105;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 140px;
+  margin: 15px;
+  padding: 5px 0 5px 10px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 100%;
+  color: #ffffff;
+  background-color: #347ab7;
+  z-index: 105;
 }
 
 /* DataTable connected if any exists */
 .dataTables_wrapper {
-    overflow: auto;
+  overflow: auto;
 }
 
 /* to set the alignment of pickerInput dropdowns */
 .dropdown-menu.open {
-    width: 100%;
+  width: 100%;
 }
 
 /* per tag */
 
 .nav {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 footer {
-    text-align: left;
-    padding: 5px;
-    font-size: 0.8em;
-    opacity: 0.6;
+  text-align: left;
+  padding: 5px;
+  font-size: 0.8em;
+  opacity: 0.6;
 }
