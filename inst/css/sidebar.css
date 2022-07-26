@@ -11,6 +11,6 @@
 /* disable any anchor with the disabled class */
 a.disabled {
   pointer-events: none;
-	cursor: not-allowed;
+  cursor: not-allowed;
   color: grey;
 }
