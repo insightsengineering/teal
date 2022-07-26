@@ -15,7 +15,7 @@ Teal applications are not restricted to `CDISC`-standard data. Although many tea
 
 For example this application uses the standard `iris` and `mtcars` datasets:
 
-```{r}
+```{r, message=FALSE}
 library(teal)
 
 app <- init(
@@ -38,7 +38,7 @@ For more information, see documentation in `teal.data`.
 To learn more about DDL, visit `vignette("delayed-data-loading", package = "teal.data")`. All the features of DDL
 are available for general datasets:
 
-```{r}
+```{r eval=FALSE}
 library(teal)
 
 person_generator <- function() {

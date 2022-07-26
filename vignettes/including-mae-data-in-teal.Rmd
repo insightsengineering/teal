@@ -16,9 +16,9 @@ You can read more about `MultiAssayExperiment` data [here](https://www.bioconduc
 
 
 ## Example application
-The below present an example application including `MultiAssayExperiment` data.
+The example below represents an application including `MultiAssayExperiment` data.
 
-```{r}
+```{r, eval = FALSE}
 library(teal)
 utils::data(miniACC, package = "MultiAssayExperiment")
 
