@@ -7,9 +7,10 @@ on:
       - main
     paths:
       - inst/templates/**
-      - _pkgdown.yml
+      - _pkgdown.yaml
       - DESCRIPTION
-      - '**.md'
+      - "**.md"
+      - "**.Rmd"
       - man/**
       - LICENSE.*
       - NAMESPACE
@@ -24,9 +25,10 @@ on:
       - pre-release
     paths:
       - inst/templates/**
-      - _pkgdown.yml
+      - _pkgdown.yaml
       - DESCRIPTION
-      - '**.md'
+      - "**.md"
+      - "**.Rmd"
       - man/**
       - LICENSE.*
       - NAMESPACE
