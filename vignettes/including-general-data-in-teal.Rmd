@@ -76,3 +76,5 @@ if (interactive()) {
   shinyApp(app$ui, app$server)
 }
 ```
+
+For more information about preprocessing, reproducibility, relationships between datasets and DDL, please refer to the `teal.data.` [vignette](https://insightsengineering.github.io/teal.data)

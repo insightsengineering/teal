@@ -11,7 +11,7 @@ vignette: >
 
 ## Introduction
 
-To include `ADaM` data in a teal app, use the `cdisc_data` function.
+To include `ADaM` data in a teal app, the `teal.data::cdisc_data` function is used.
 
 The `cdisc_data` function allows `teal` applications to include multiple datasets, identifying merge keys
 and providing information to produce R code for reproducibility.
@@ -33,15 +33,11 @@ shown below.
 library(teal)
 library(scda)
 
-# specify keys for ADSL using dataset
-adsl <- synthetic_cdisc_data("latest")$adsl
-dataset_adsl <- dataset("ADSL", adsl, keys = c("STUDYID", "USUBJID"))
-class(dataset_adsl)
-
 # using cdisc_dataset, keys are automatically derived for standard datanames
 # (although they can be overwritten)
-dataset_adsl2 <- cdisc_dataset("ADSL", adsl)
-class(dataset_adsl2)
+adsl <- synthetic_cdisc_data("latest")$adsl
+dataset_adsl <- cdisc_dataset("ADSL", adsl)
+class(dataset_adsl)
 ```
 
 When passing multiple datasets to the `cdisc_data` function, dataset relationship are set using
@@ -95,4 +91,4 @@ if (interactive()) {
 }
 ```
 
-If you want to learn more about basics of join keys, please refer to `vignette("join-keys", package = "teal.data")`.
+For more information about preprocessing, reproducibility, relationships between datasets and DDL, please refer to the `teal.data.` [vignette](https://insightsengineering.github.io/teal.data)
