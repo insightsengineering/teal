@@ -27,7 +27,7 @@ handled by `teal`.
 
 ## Custom module
 Let us consider the example module from `teal`:
-```{r}
+```{r, message=FALSE}
 library(teal)
 teal_example_module <- function(label = "example teal module") {
   checkmate::assert_string(label)
@@ -51,7 +51,7 @@ teal_example_module <- function(label = "example teal module") {
 ```
 
 `teal` can launch this example module with the following lines:
-```{r}
+```{r, eval = FALSE}
 app <- init(
   data = teal_data(
     dataset("IRIS", iris),

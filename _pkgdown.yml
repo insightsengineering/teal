@@ -14,11 +14,10 @@ articles:
   navbar: ~
   contents:
   - teal
-  - preprocessing-data
   - including-general-data-in-teal
   - including-adam-data-in-teal
   - including-mae-data-in-teal
-  - join-keys
+  - preprocessing-data
   - creating-custom-modules
   - adding-support-for-reporting
   - teal-options
