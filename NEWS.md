@@ -1,4 +1,4 @@
-# teal 0.11.1.9018
+# teal 1.0.1
 
 ### Enhancements
 
