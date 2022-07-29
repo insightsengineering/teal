@@ -124,14 +124,13 @@ srv_histogram_example <- function(id, datasets, histogram_var) {
       validate(need(length(selected) == 1, "Please select a variable"))
 
       # take the filtered data from the datasets object and add it into the chunks environment
-      # the name of the filtered data is <<dataname>>_FILTERED
       new_env <- new.env()
-      assign(paste0(dataname(), "_FILTERED"), datasets$get_data(dataname(), filtered = TRUE), envir = new_env)
+      assign(dataname(), datasets$get_data(dataname(), filtered = TRUE), envir = new_env)
       teal.code::chunks_reset(envir = new_env)
 
       # add the code for the plot into the chunks
       teal.code::chunks_push(
-        bquote(hist(.(as.name(paste0(dataname(), "_FILTERED")))[, .(selected())]))
+        bquote(hist(.(as.name(dataname()))[, .(selected())]))
       )
 
       # evaluate the chunks
