@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9013</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9018</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,11 +45,10 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
     <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
     <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
-    <a class="dropdown-item" href="../articles/join-keys.html">Join Keys</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Pre-processing data</a>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
@@ -58,12 +57,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" href="https://insightsengineering.github.io/teal/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -224,14 +217,13 @@ histogram.</p>
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/validate.html" class="external-link">validate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/validate.html" class="external-link">need</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">selected</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span>, <span class="st">"Please select a variable"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>      <span class="co"># take the filtered data from the datasets object and add it into the chunks environment</span></span>
-<span>      <span class="co"># the name of the filtered data is &lt;&lt;dataname&gt;&gt;_FILTERED</span></span>
 <span>      <span class="va">new_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">new.env</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/assign.html" class="external-link">assign</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span>, <span class="st">"_FILTERED"</span><span class="op">)</span>, <span class="va">datasets</span><span class="op">$</span><span class="fu">get_data</span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span>, filtered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, envir <span class="op">=</span> <span class="va">new_env</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/assign.html" class="external-link">assign</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span>, <span class="va">datasets</span><span class="op">$</span><span class="fu">get_data</span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span>, filtered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, envir <span class="op">=</span> <span class="va">new_env</span><span class="op">)</span></span>
 <span>      <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.code/man/chunks_reset.html" class="external-link">chunks_reset</a></span><span class="op">(</span>envir <span class="op">=</span> <span class="va">new_env</span><span class="op">)</span></span>
 <span></span>
 <span>      <span class="co"># add the code for the plot into the chunks</span></span>
 <span>      <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.code/man/chunks_push.html" class="external-link">chunks_push</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/bquote.html" class="external-link">bquote</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu">.</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span>, <span class="st">"_FILTERED"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="fu">selected</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/bquote.html" class="external-link">bquote</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu">.</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="fu">selected</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span></span>
 <span>      <span class="co"># evaluate the chunks</span></span>

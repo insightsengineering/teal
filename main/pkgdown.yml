@@ -7,11 +7,10 @@ articles:
   including-adam-data-in-teal: including-adam-data-in-teal.html
   including-general-data-in-teal: including-general-data-in-teal.html
   including-mae-data-in-teal: including-mae-data-in-teal.html
-  join-keys: join-keys.html
   preprocessing-data: preprocessing-data.html
   teal-options: teal-options.html
   teal: teal.html
-last_built: 2022-07-21T07:51Z
+last_built: 2022-07-29T12:22Z
 urls:
   reference: https://insightsengineering.github.io/teal/main/reference
   article: https://insightsengineering.github.io/teal/main/articles

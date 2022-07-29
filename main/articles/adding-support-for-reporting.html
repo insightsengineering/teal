@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9013</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9018</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,11 +45,10 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
     <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
     <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
-    <a class="dropdown-item" href="../articles/join-keys.html">Join Keys</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Pre-processing data</a>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
@@ -58,12 +57,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" href="https://insightsengineering.github.io/teal/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -126,15 +119,8 @@ setting up the module to preview the report is handled by
 </h2>
 <p>Let us consider the example module from <code>teal</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: shiny</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: teal.data</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: teal.transform</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: magrittr</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## You are using teal version 0.11.1.9013</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">teal_example_module</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"example teal module"</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></span>
+<span><span class="va">teal_example_module</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"example teal module"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkString.html" class="external-link">assert_string</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span></span>
 <span>    <span class="va">label</span>,</span>
@@ -155,7 +141,7 @@ setting up the module to preview the report is handled by
 <span><span class="op">}</span></span></code></pre></div>
 <p><code>teal</code> can launch this example module with the following
 lines:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
@@ -176,7 +162,7 @@ lines:</p>
 declaration - <code>reporter</code>. This needs to be the third argument
 to the server function inside the <code>teal.module</code> call. See
 below:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_module_with_reporting</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"example teal module"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkString.html" class="external-link">assert_string</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span></span>
@@ -197,7 +183,7 @@ below:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Such a module is ready to be launched again by <code>teal</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
@@ -223,7 +209,7 @@ interact with it to add to the report from this module yet. Thankfully,
 <code>UI</code> and the <code>shiny</code> module that allow users to
 add content from <code>example_module_with_reporting</code> to the
 report.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_module_with_reporting</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"example teal module"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkString.html" class="external-link">assert_string</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span></span>
@@ -252,7 +238,7 @@ report.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>This module is ready to be launched:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
@@ -286,7 +272,7 @@ methods. The content itself can be explored by calling the
 <code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">teal.reporter::simple_reporter_srv</a></code>. Make sure to return the
 <code>card</code> object from the passed function, otherwise
 <code>teal</code> might encounter errors.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">custom_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html" class="external-link">ReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="st">"This is content from a custom teal module!"</span><span class="op">)</span></span>
 <span>  <span class="va">card</span></span>
@@ -315,7 +301,7 @@ methods. The content itself can be explored by calling the
 <span>    filters <span class="op">=</span> <span class="st">"all"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
@@ -348,7 +334,7 @@ more at <code><a href="https://insightsengineering.github.io/teal.reporter/refer
 <p>To support <code>TealReportCard</code>, the function that is passed
 to <code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">teal.reporter::simple_reporter_srv</a></code> needs to define a
 default value for the card, like below:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">custom_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/reference/TealReportCard.html" class="external-link">TealReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">card</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -361,7 +347,7 @@ available inside the function.</p>
 </h2>
 <p>Summing up, we could build a regular teal app with code
 reproducibility and reporter functionality.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/insightsengineering/teal.reporter" class="external-link">teal.reporter</a></span><span class="op">)</span></span>
 <span></span>

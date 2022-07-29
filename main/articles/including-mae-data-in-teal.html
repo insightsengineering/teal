@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9013</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9018</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,11 +45,10 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
     <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
     <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
-    <a class="dropdown-item" href="../articles/join-keys.html">Join Keys</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Pre-processing data</a>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
@@ -58,12 +57,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" href="https://insightsengineering.github.io/teal/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -114,88 +107,15 @@ specimens.</p>
 <div class="section level2">
 <h2 id="example-application">Example application<a class="anchor" aria-label="anchor" href="#example-application"></a>
 </h2>
-<p>The below present an example application including
+<p>The example below represents an application including
 <code>MultiAssayExperiment</code> data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: shiny</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: teal.data</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: teal.transform</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: magrittr</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## You are using teal version 0.11.1.9013</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">miniACC</span>, package <span class="op">=</span> <span class="st">"MultiAssayExperiment"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></span>
+<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">miniACC</span>, package <span class="op">=</span> <span class="st">"MultiAssayExperiment"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">mae_d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"MAE"</span>, <span class="va">miniACC</span>, metadata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"example"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: MultiAssayExperiment</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: SummarizedExperiment</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: MatrixGenerics</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: matrixStats</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'MatrixGenerics'</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:matrixStats':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span></span>
-<span><span class="co">##     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span></span>
-<span><span class="co">##     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span></span>
-<span><span class="co">##     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span></span>
-<span><span class="co">##     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span></span>
-<span><span class="co">##     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span></span>
-<span><span class="co">##     colWeightedMeans, colWeightedMedians, colWeightedSds,</span></span>
-<span><span class="co">##     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span></span>
-<span><span class="co">##     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span></span>
-<span><span class="co">##     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span></span>
-<span><span class="co">##     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span></span>
-<span><span class="co">##     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span></span>
-<span><span class="co">##     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,</span></span>
-<span><span class="co">##     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span></span>
-<span><span class="co">##     rowWeightedSds, rowWeightedVars</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: GenomicRanges</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: stats4</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: BiocGenerics</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'BiocGenerics'</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     IQR, mad, sd, var, xtabs</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     anyDuplicated, append, as.data.frame, basename, cbind, colnames,</span></span>
-<span><span class="co">##     dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,</span></span>
-<span><span class="co">##     grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,</span></span>
-<span><span class="co">##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,</span></span>
-<span><span class="co">##     rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,</span></span>
-<span><span class="co">##     union, unique, unsplit, which.max, which.min</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: S4Vectors</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'S4Vectors'</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     expand.grid, I, unname</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: IRanges</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: GenomeInfoDb</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'GenomicRanges'</span></span></code></pre>
-<pre><code><span><span class="co">## The following object is masked from 'package:magrittr':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     subtract</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: Biobase</span></span></code></pre>
-<pre><code><span><span class="co">## Welcome to Bioconductor</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     Vignettes contain introductory material; view with</span></span>
-<span><span class="co">##     'browseVignettes()'. To cite Bioconductor, see</span></span>
-<span><span class="co">##     'citation("Biobase")', and for packages 'citation("pkgname")'.</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'Biobase'</span></span></code></pre>
-<pre><code><span><span class="co">## The following object is masked from 'package:MatrixGenerics':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     rowMedians</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:matrixStats':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     anyMissing, rowMedians</span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
+<span><span class="va">mae_d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"MAE"</span>, <span class="va">miniACC</span>, metadata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"example"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span><span class="va">mae_d</span><span class="op">)</span>,</span>
 <span>  modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -209,9 +129,13 @@ specimens.</p>
 <code>teal</code> itself does not guarantee that any module will work
 with <code>MAE</code> data the same way it works with other types of
 data (e.g. <code>ADaM</code>) because <code>MAE</code> has a unique
-structure that needs to be considered when developing a module.</p>
-<p>For more information , see documentation in
-<code>teal.data</code>.</p>
+structure that needs to be considered when developing a module. The
+package <a href="https://insightsengineering.github.io/teal.modules.hermes/" class="external-link"><code>teal.modules.hemres</code></a>
+has been specifically developed for the analysis of <code>MAE</code>
+data.</p>
+<p>For more information about preprocessing, reproducibility,
+relationships between datasets and DDL, please refer to the <a href="https://insightsengineering.github.io/teal.data" class="external-link"><code>teal.data</code>
+package</a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
