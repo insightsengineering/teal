@@ -1,8 +1,24 @@
-footer {
-  text-align: left;
-  padding: 5px;
-  font-size: 0.8em;
-  opacity: 0.6;
+/* teal custom css */
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.overflow-auto {
+  overflow: auto;
 }
 
 /* display waiting box at bottom right corner when Shiny is computing */
@@ -21,11 +37,26 @@ footer {
   z-index: 105;
 }
 
+/* DataTable connected if any exists */
+.dataTables_wrapper {
+  overflow: auto;
+}
+
+/* to set the alignment of pickerInput dropdowns */
+.dropdown-menu.open {
+  width: 100%;
+}
+
+/* per tag */
+
 .nav {
   display: flex;
   flex-wrap: wrap;
 }
 
-.dataTables_wrapper {
-    overflow: auto;
+footer {
+  text-align: left;
+  padding: 5px;
+  font-size: 0.8em;
+  opacity: 0.6;
 }

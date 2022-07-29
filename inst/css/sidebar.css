@@ -1,19 +1,16 @@
-/* custom_sidebarpanel */
+/* teal sidebar css */
 
-.menubtn {
+/* filter hamburger btn */
+#filter_hamburger {
   font-size: 16px;
   padding: 8px !important;
   float: right !important;
   background-color: transparent !important;
 }
 
-.nav {
-  display: flex;
-}
-
-/* disable any anchor with the disabled class*/
+/* disable any anchor with the disabled class */
 a.disabled {
   pointer-events: none;
-  cursor: default;
+  cursor: not-allowed;
   color: grey;
 }
