@@ -13,7 +13,11 @@ include_css_files <- function(pattern = "*") {
     system.file("css", package = "teal", mustWork = TRUE),
     pattern = pattern, full.names = TRUE
   )
-  return(singleton(lapply(css_files, includeCSS)))
+  return(
+    shiny::singleton(
+      shiny::tags$head(lapply(css_files, shiny::includeCSS))
+    )
+  )
 }
 
 #' Include `JS` files from `/inst/js/` package directory to application header
@@ -77,6 +81,6 @@ include_teal_css_js <- function() {
     include_css_files(),
     # init.js is executed from the server
     include_js_files(except = "init.js"),
-    shinyjs::hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
+    shinyjs::hidden(icon("gear")), # add hidden icon to load font-awesome css for icons
   )
 }

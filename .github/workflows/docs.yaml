@@ -6,12 +6,13 @@ on:
     branches:
       - main
     paths:
-      - inst/templates/**
-      - _pkgdown.yml
+      - "inst/templates/**"
+      - "_pkgdown.y[a]ml"
       - DESCRIPTION
-      - '**.md'
-      - man/**
-      - LICENSE.*
+      - "**.md"
+      - "**.Rmd"
+      - "man/**"
+      - "LICENSE.*"
       - NAMESPACE
   pull_request:
     types:
@@ -23,18 +24,19 @@ on:
       - main
       - pre-release
     paths:
-      - inst/templates/**
-      - _pkgdown.yml
+      - "inst/templates/**"
+      - "_pkgdown.y[a]ml"
       - DESCRIPTION
-      - '**.md'
-      - man/**
-      - LICENSE.*
+      - "**.md"
+      - "**.Rmd"
+      - "man/**"
+      - "LICENSE.*"
       - NAMESPACE
   workflow_dispatch:
 
 jobs:
   docs:
-    name: Pkgdown Docs 📚 
+    name: Pkgdown Docs 📚
     uses: insightsengineering/r.pkg.template/.github/workflows/pkgdown.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
