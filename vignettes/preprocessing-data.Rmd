@@ -1,78 +1,24 @@
 ---
-title: "Preprocessing data"
+title: "Pre-processing data"
 author: "NEST CoreDev"
-date: "2022-04-20"
+date: "2022-07-28"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Preprocessing data}
+  %\VignetteIndexEntry{Pre-processing data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-"Data" preprocessing refers to the code which precedes the `teal` app initialization in `app.R`, i.e.:
+## Usage in teal apps
+In this vignette, we will show how to use preprocessing in a `teal` app. The basics of preprocessing data have been discussed in `teal.data` [here](https://insightsengineering.github.io/teal.data/main/articles/preprocessing-data.html).
 
-1. Data import calls
-1. Data modification
-
-**NOTE:** that the `library` calls are captured by `teal`. Also, code that is used to configure the teal apps but does not affect the data such as creating `choices_selected` objects, should not be included in preprocessing code.
-
-For example, for the following app only `ADSL <- readRDS("<your data path>/adsl.rds")` is considered as preprocessing code:
-
-```{r}
-# for the purpose of example save the file to the current directory
-library(scda)
-library(teal)
-synthetic_cdisc_data("latest")$adsl
-saveRDS(synthetic_cdisc_data("latest")$adsl, "adsl.rds")
-
-## preprocessing -------------------
-adsl <- readRDS("adsl.rds")
-## -------------------
-
-cs_arm <- choices_selected(c("ACTARMCD", "ARMCD"), "ACTARMCD")
-
-app <- init(
-  data = cdisc_data(cdisc_dataset("ADSL", adsl)),
-  modules = modules(example_module())
-)
-
-shinyApp(app$ui, app$server)
-```
-
-If you run the app above, the show R code button will return R code that contains big letters saying "Preprocessing is empty". In order to show the preprocessing code correctly the `code` argument of the [teal.data::cdisc_data()] function needs to be specified. For the above example this would be:
-
-```{r}
-# for the purpose of example save the file to current directory
-library(scda)
-library(teal)
-synthetic_cdisc_data("latest")$adsl
-saveRDS(synthetic_cdisc_data("latest")$adsl, "adsl.rds")
-
-## preprocessing -------------------
-adsl <- readRDS("adsl.rds")
-## -------------------
-unlink("adsl.rds")
-
-cs_arm <- choices_selected(c("ACTARMCD", "ARMCD"), "ACTARMCD")
-
-app <- init(
-  data = cdisc_data(
-    cdisc_dataset("ADSL", adsl),
-    code = 'ADSL <- readRDS("adsl.rds")'
-  ),
-  modules = modules(example_module())
-)
-
-shinyApp(app$ui, app$server)
-```
-
-Providing the code in a copy-paste style as we did above is cumbersome and can lead to an out-of-sync situation where the code does not represent the preprocessing code anymore. We therefore provide the [teal.data::get_code()] function to extract the preprocessing code from the `app.R` file. The [teal.data::get_code()] function requires `#` tags to indicate which lines of code in `app.R` need be included in the preprocessing code. [teal.data::get_code()] understands the following tags:
+In a `teal` app, providing the code in a copy-paste style is cumbersome and can lead to an out-of-sync situation where the code does not represent the preprocessing code anymore. We therefore use the `get_code` function to extract the preprocessing code from the `app.R` file. The `get_code` function requires `#` tags to indicate which lines of code in `app.R` need be included in the preprocessing code. `get_code` understands the following tags:
 
 - Enclosing preprocessing code between `#code>` `#<code` determines the start and end of preprocessing. Only one start and one end is allowed. If start or end are not specified then preprocessing starts at the beginning of the file and ends at the end respectively.
 - `#nocode` at the end of the line excludes this line from preprocessing.
 - Lines enclosed within `#nocode>` `#<nocode` are excluded from preprocessing.
 
-Further, the [teal.data::get_code()] function has the following arguments that might be useful:
+Further, the `get_code` function has the following arguments that might be useful:
 
 - `exclude_comments = TRUE` removes comments from preprocessing code.
 - `read_sources = TRUE` means that code from sourced file will be included instead of `source()` call.
@@ -101,7 +47,7 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-Also try the following more advanced usage of [teal.data::get_code()]:
+Also try the following more advanced usage of `get_code`:
 
 ```{r eval=FALSE}
 # Code needs modification before it can be run:
@@ -134,10 +80,10 @@ x <- init(
 shinyApp(x$ui, x$server)
 ```
 
-If you set `check = TRUE` in [teal.data::cdisc_data()] then the data provided to the application is checked against
-the data obtained by evaluating the `code` in an isolated environment. If the dataset do not match then
-[teal.data::cdisc_data()] returns an error.
+If you set `check = TRUE` in `cdisc_data` then the data provided to the application is checked against
+the data obtained by evaluating the `code` in an isolated environment. If the datasets do not match then
+`cdisc_data` returns an error.
 
-[teal.data::cdisc_data()] also analyzes the arguments passed to it. Note that additional transformation within
-[teal.data::cdisc_data()] call break reproducibility and are not allowed, e.g. developers shouldn't do an operation
-like `ADSL = mutate(ADSL, a = 1)` inside [teal.data::cdisc_data()].
+`cdisc_data` also analyzes the arguments passed to it. Note that additional transformation within
+`cdisc_data` call can break reproducibility and is not allowed, e.g. developers shouldn't do an operation
+like `ADSL = mutate(ADSL, a = 1)` inside `cdisc_data`.

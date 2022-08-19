@@ -11,60 +11,53 @@ vignette: >
 
 ## Introduction
 
-To include `ADaM` data in a teal app, use the [teal.data::cdisc_data()] function.
+To include `ADaM` data in a teal app, the `teal.data::cdisc_data` function is used.
 
-The [teal.data::cdisc_data()] function allows `teal` applications to include multiple datasets, identifying merge keys
+The `cdisc_data` function allows `teal` applications to include multiple datasets, identifying merge keys
 and providing information to produce R code for reproducibility.
 
 There is an advantage to passing `CDISC` datasets that adhere to `ADaM` standards to these functions in that the code is
 minimized. However, the dataset-related functions also include the flexibility to work with non-standard datasets
 provided that merge keys and the relationship between the datasets are specified.
 
-The examples below illustrate the usage of these different dataset functions for example [teal.data::cdisc_dataset()] and [teal.data::dataset()]. For more information,
+The examples below illustrate the usage of these different dataset functions for example `cdisc_dataset` and `dataset`. For more information,
 see documentation in `teal.data`.
 
-## Join Keys
-
-If you want to learn more about basics of join keys in a non-`ADaM` context, read `vignette("join-keys")`.
+## Keys
 
 Primary keys serve as unique row identifiers in individual datasets and thus need to be specified for each dataset
-and dataset connector. These can be specified on the most general dataset constructor [teal.data::dataset()] as
+and dataset connector. These can be specified on the most general dataset constructor `dataset` as
 shown below.
 
-```{r}
+```{r, message=FALSE}
 library(teal)
 library(scda)
 
-# specify keys x and y on a general dataset
-dataset("x", data.frame(x = c(1, 1:9), y = 2:11, z = 1), keys = c("x", "y"))
-
-# or for ADSL
-adsl <- synthetic_cdisc_data("latest")$adsl
-dataset("ADSL", adsl, keys = c("STUDYID", "USUBJID"))
-
-# using cdisc_dataset keys are automatically derieved for standard datanames
+# using cdisc_dataset, keys are automatically derived for standard datanames
 # (although they can be overwritten)
-adtte <- synthetic_cdisc_data("latest")$adtte
-cdisc_dataset("ADTTE", adtte)
+adsl <- synthetic_cdisc_data("latest")$adsl
+dataset_adsl <- cdisc_dataset("ADSL", adsl)
+class(dataset_adsl)
 ```
 
-When passing multiple datasets to the [teal.data::cdisc_data()] function, dataset relationship are set using
-[teal.data::join_keys()] and [teal.data::join_key()] and these are used to merge datasets together within teal apps.
+When passing multiple datasets to the `cdisc_data` function, dataset relationship are set using
+`join_keys` and `join_key` and these are used to merge datasets together within teal apps.
 
 In the example below, two standard CDISC datasets (ADSL and ADTTE) are passed to the aforementioned
 function. In the case of `CDISC` datasets that adhere to `ADaM` standards, the merge keys do not need to be manually
 specified. Keys are automatically added if `dataname` matches one of the implemented standards as documented in the
-[teal.data::cdisc_dataset()] function. This minimizes the code needed to allow data merges as seen in this
+`cdisc_dataset` function. This minimizes the code needed to allow data merges as seen in this
 example:
 
-```{r}
+```{r, message=FALSE}
 adsl <- synthetic_cdisc_data("latest")$adsl
 adtte <- synthetic_cdisc_data("latest")$adtte
 
-cdisc_data(
+cdisc_data_obj <- cdisc_data(
   cdisc_dataset(dataname = "ADSL", x = adsl, code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"),
   cdisc_dataset(dataname = "ADTTE", x = adtte, code = "ADTTE <- synthetic_cdisc_data(\"latest\")$adtte")
 )
+class(cdisc_data_obj)
 
 # which is equivalent to:
 example_data <- cdisc_data(
@@ -107,3 +100,5 @@ The [teal.data::join_keys()] function is used to specify keys:
 
 Note that it is assumed that join keys are symmetric, i.e. `join_key("x", "y", "x_col" = "y_col")` will enable merge
 from "x" to "y" and vice-versa.
+
+For more information about preprocessing, reproducibility, relationships between datasets and DDL, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data).
