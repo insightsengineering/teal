@@ -93,7 +93,7 @@ library(teal)
 # ui function for the module
 # histogram_var is a teal.transform::data_extract_spec object
 # specifying which columns of which datasets users can choose
-ui_histogram_example <- function(id, datasets, histogram_var) {
+ui_histogram_example <- function(id, histogram_var) {
   ns <- NS(id)
   teal.widgets::standard_layout(
     output = plotOutput(ns("plot")),
@@ -106,52 +106,54 @@ ui_histogram_example <- function(id, datasets, histogram_var) {
     ),
     # we have a show R code button to show the code needed
     # to generate the histogram
-    forms = teal::get_rcode_ui(ns("rcode"))
+    forms = teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
   )
 }
 
 # server function for the module
 # histogram_var is a teal.transform::data_extract_spec object
 # specifying which columns of which datasets users can choose
-srv_histogram_example <- function(id, datasets, histogram_var) {
+srv_histogram_example <- function(id, data, histogram_var) {
   moduleServer(id, function(input, output, session) {
-    # initialize the reproducibility part of teal (i.e. "chunks")
-    teal.code::init_chunks()
 
     # get the selected dataset and column from the UI
-    extracted <- teal.transform::data_extract_srv("histogram_var", datasets, histogram_var)
+    extracted <- teal.transform::data_extract_srv(
+      id = "histogram_var",
+      datasets = data,
+      data_extract_spec = histogram_var,
+      join_keys = attr(data, "join_keys")
+    )
+
     dataname <- reactive(extracted()$dataname)
     selected <- reactive(extracted()$select)
 
-    # the reactive which adds the code to plot the histogram into the chunks
-    plot_code <- reactive({
+    # the reactive which adds the code to plot the histogram into the quosure
+    plot_code_q <- reactive({
       validate(need(length(selected) == 1, "Please select a variable"))
 
-      # take the filtered data from the datasets object and add it into the chunks environment
-      new_env <- new.env()
-      assign(dataname(), datasets$get_data(dataname(), filtered = TRUE), envir = new_env)
-      teal.code::chunks_reset(envir = new_env)
-
-      # add the code for the plot into the chunks
-      teal.code::chunks_push(
-        bquote(hist(.(as.name(dataname()))[, .(selected())]))
-      )
-
-      # evaluate the chunks
-      teal.code::chunks_safe_eval()
+      # take the filtered data from the data object and add it into the quosure environment
+      teal.code::new_quosure(env = data) %>%
+        teal.code::eval_code(
+          substitute(
+            expr = p <- hist(dataname[, selected]),
+            env = list(
+              dataname = as.name(dataname()),
+              selected = selected()
+            )
+          )
+        )
     })
 
     # shiny component to view
     output$plot <- renderPlot({
-      plot_code()
+      plot_code_q()[["p"]]
     })
 
     # Show the R code when user clicks 'Show R Code' button
-    teal::get_rcode_srv(
+    teal.widgets::verbatim_popup_srv(
       id = "rcode",
-      datasets = datasets,
-      modal_title = "R code for custom plot",
-      code_header = "R code for custom plot"
+      verbatim_content = reactive(teal.code::get_code(plot_code_q())),
+      title = "R Code"
     )
   })
 }
