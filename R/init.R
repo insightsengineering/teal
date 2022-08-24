@@ -86,6 +86,9 @@
 #'     )
 #'   )
 #'   ```
+#'  By adding the `filterable` attribute it is possible to control which variables can be filtered for each
+#'  dataset. See the example below where `ADSL` can only be filtered by `AGE`, `SEX` or `RACE`.
+#'
 #' @param header (`character` or `shiny.tag`) \cr
 #'   the header of the app. Note shiny code placed here (and in the footer
 #'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
@@ -137,7 +140,7 @@
 #'     )
 #'   ),
 #'   title = "App title",
-#'   filter = list(ADSL = list(AGE = list())),
+#'   filter = list(ADSL = structure(list(AGE = list()), "filterable" = c("AGE", "SEX", "RACE"))),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )

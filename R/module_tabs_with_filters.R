@@ -153,6 +153,12 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
     logger::log_trace(
       "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
     )
+
+   # set filterable variables for each dataset
+   for (filter_dataname in names(filter)) {
+       datasets$set_filterable_varnames(filter_dataname, attr(filter[[filter_dataname]], "filterable"))
+   }
+
     active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules, reporter = reporter)
 
     active_datanames <- eventReactive(

@@ -89,7 +89,10 @@ different way. Since it contains patient data with list of experiments,
     )
   )
 )
-}\if{html}{\out{</div>}}}
+}\if{html}{\out{</div>}}
+
+By adding the \code{filterable} attribute it is possible to control which variables can be filtered for each
+dataset. See the example below where \code{ADSL} can only be filtered by \code{AGE}, \code{SEX} or \code{RACE}.}
 }
 \value{
 \code{reactive} currently selected active_module
