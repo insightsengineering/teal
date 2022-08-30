@@ -91,4 +91,14 @@ if (interactive()) {
 }
 ```
 
+The [teal.data::join_keys()] function is used to specify keys:
+
+- [teal.data::join_keys()] is a collection of multiple [teal.data::join_key()] entries
+- [teal.data::join_key()] specifies the relation between two datasets:
+  - `dataset_1`, `dataset_2` - name of two datasets
+  - `key` - (optionally) named vector of column names
+
+Note that it is assumed that join keys are symmetric, i.e. `join_key("x", "y", "x_col" = "y_col")` will enable merge
+from "x" to "y" and vice-versa.
+
 For more information about preprocessing, reproducibility, relationships between datasets and DDL, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data).

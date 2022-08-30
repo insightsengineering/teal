@@ -14,11 +14,11 @@
 #' @export
 reporter_previewer_module <- function(label = "Report previewer") {
   checkmate::assert_string(label)
-  srv <- function(id, datasets, reporter, ...) {
+  srv <- function(id, reporter, ...) {
     teal.reporter::reporter_previewer_srv(id, reporter, ...)
   }
 
-  ui <- function(id, datasets, ...) {
+  ui <- function(id, ...) {
     teal.reporter::reporter_previewer_ui(id, ...)
   }
 

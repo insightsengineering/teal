@@ -96,24 +96,9 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
     args <- c(args, datasets = datasets)
   }
 
+
   if (is_arg_used(modules$ui, "data")) {
-    datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
-
-    # list of reactive filtered data
-    data <- sapply(
-      datanames,
-      simplify = FALSE,
-      function(x) {
-        reactive(datasets$get_data(x, filtered = TRUE))
-      }
-    )
-
-    # code from previous stages
-    attr(data, "code") <- get_datasets_code(datanames, datasets)
-
-    # join_keys
-    attr(data, "join_keys") <- datasets$get_join_keys()
-
+    data <- .datasets_to_data(modules, datasets)
     args <- c(args, data = list(data))
   }
 
@@ -217,23 +202,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   }
 
   if (is_arg_used(modules$server, "data")) {
-    datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
-
-    # list of reactive filtered data
-    data <- sapply(
-      datanames,
-      simplify = FALSE,
-      function(x) {
-        reactive(datasets$get_data(x, filtered = TRUE))
-      }
-    )
-
-    # code from previous stages
-    attr(data, "code") <- get_datasets_code(datanames, datasets)
-
-    # join_keys
-    attr(data, "join_keys") <- datasets$get_join_keys()
-
+    data <- .datasets_to_data(modules, datasets)
     args <- c(args, data = list(data))
   }
 
@@ -257,4 +226,39 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     do.call(callModule, c(args, list(module = modules$server)))
   }
   reactive(modules)
+}
+
+#' Convert `FilteredData` to reactive list of data
+#'
+#' Converts `FilteredData` object to list of data containing datasets needed for specific module.
+#' Please note that if module needs dataset which has a parent, then parent will be also returned.
+#'
+#' @param module (`teal_module`) module where needed filters are taken from
+#' @param datasets (`FilteredData`) object where needed data are taken from
+#' @return list of reactive datasets with following attributes:
+#' - `code` (`character`) containing datasets reproducible code.
+#' @keywords internal
+#' - `join_keys` (`JoinKeys`) containing relationships between datasets.
+.datasets_to_data <- function(module, datasets) {
+  datanames <- if (identical("all", module$filter)) {
+    datasets$datanames()
+    } else {
+    datasets$get_filterable_datanames(module$filter) # get_filterable_datanames adds parents if present
+    }
+
+  # list of reactive filtered data
+  data <- sapply(
+    datanames,
+    simplify = FALSE,
+    function(x) {
+      reactive(datasets$get_data(x, filtered = TRUE))
+    }
+  )
+
+  # code from previous stages
+  attr(data, "code") <- get_datasets_code(datanames, datasets)
+
+  # join_keys
+  attr(data, "join_keys") <- datasets$get_join_keys()
+  data
 }

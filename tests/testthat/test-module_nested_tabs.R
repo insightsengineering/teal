@@ -257,3 +257,80 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the 
     NA
   )
 })
+
+
+get_example_filtered_data <- function() {
+  d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)
+  d2 <- data.frame(id = 1:5, value = 1:5)
+
+  cc <- teal.data:::CodeClass$new()
+  cc$set_code("d1 <- data.frame(id = 1:5, pk = c(2,3,2,1,4), val = 1:5)", "d1")
+  cc$set_code("d2 <- data.frame(id = 1:5, value = 1:5)", "d2")
+
+  teal.slice::init_filtered_data(
+    x = list(
+      d1 = list(dataset = d1, keys = "id"),
+      d2 = list(dataset = d2, keys = "id")
+    ),
+    join_keys = teal.data::join_keys(teal.data::join_key("d1", "d2", c("pk" = "id"))),
+    code = cc,
+    check = TRUE
+  )
+}
+
+testthat::teat_that(".datasets_to_data returns filtered data", {
+  datasets <- get_example_filtered_data()
+  isolate(datasets$set_filter_state(list(d1 = list(val = list(selected = c(1, 2))))))
+  module <- list(filter = "all")
+  data <- isolate(.datasets_to_data(module, datasets))
+
+  d1_filtered <- isolate(data[["d1"]]())
+  testthat::expect_equal(d1_filtered, data.frame(id = 1:2, pk = 2:3, val = 1:2))
+  d2_filtered <- isolate(data[["d2"]]())
+  testthat::expect_equal(d2_filtered, data.frame(id = 1:5, value = 1:5))
+})
+
+
+testthat::teat_that(".datasets_to_data returns only data requested by modules$filter", {
+  datasets <- get_example_filtered_data()
+  module <- list(filter = "d1")
+  data <- .datasets_to_data(module, datasets)
+  testthat::expect_equal(isolate(names(data)), "d1")
+})
+
+testthat::teat_that(".datasets_to_data returns required attributes", {
+  datasets <- get_example_filtered_data()
+  module <- list(filter = "all")
+  data <- .datasets_to_data(module, datasets)
+
+  # join_keys
+  testthat::expect_equal(
+    attr(data, "join_keys"),
+    teal.data::join_keys(teal.data::join_key("d1", "d2", c("pk" = "id")))
+  )
+
+  # code
+  testthat::expect_equal(
+    attr(data, "code")[1],
+    "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\nd2 <- data.frame(id = 1:5, value = 1:5)\n\n"
+  )
+})
+
+testthat::teat_that(".datasets_to_data returns parent datasets for CDISC data", {
+  adsl <- data.frame(STUDYID = 1, USUBJID = 1)
+  adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1, AETERM = 1, AESEQ = 1)
+  adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)
+
+  datasets <- teal.slice::init_filtered_data(
+    teal.data::cdisc_data(
+      teal.data::cdisc_dataset("ADSL", adsl),
+      teal.data::cdisc_dataset("ADAE", adae),
+      teal.data::cdisc_dataset("ADTTE", adtte)
+    )
+  )
+
+  module <- list(filter = "ADAE")
+  data <- .datasets_to_data(module, datasets)
+  testthat::expect_setequal(isolate(names(data)), c("ADSL", "ADAE"))
+})
+
