@@ -51,9 +51,16 @@ See package vignettes `browseVignettes(package = "teal")` for usage of this pack
 
 This package is a result of a joint efforts by many developers and stakeholders. We would like to thank everyone who contributed so far!
 
-[![Stargazers repo roster for @insightsengineering/teal](https://reporoster.com/stars/insightsengineering/teal)](https://github.com/insightsengineering/teal/stargazers)
-[![Forkers repo roster for @insightsengineering/teal](https://reporoster.com/forks/insightsengineering/teal)](https://github.com/insightsengineering/teal/network/members)
+## Stargazers and Forkers
 
-## Stargazers over time
+### Stargazers over time
 
 [![Stargazers over time](https://starchart.cc/insightsengineering/teal.svg)](https://starchart.cc/insightsengineering/teal)
+
+### Stargazers
+
+[![Stargazers repo roster for @insightsengineering/teal](https://reporoster.com/stars/insightsengineering/teal)](https://github.com/insightsengineering/teal/stargazers)
+
+### Forkers
+
+[![Forkers repo roster for @insightsengineering/teal](https://reporoster.com/forks/insightsengineering/teal)](https://github.com/insightsengineering/teal/network/members)
