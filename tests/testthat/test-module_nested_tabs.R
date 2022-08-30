@@ -301,7 +301,7 @@ testthat::teat_that(".datasets_to_data returns only data requested by modules$fi
 testthat::teat_that(".datasets_to_data returns required attributes", {
   datasets <- get_example_filtered_data()
   module <- list(filter = "all")
-  data <- teal:::.datasets_to_data(module, datasets)
+  data <- .datasets_to_data(module, datasets)
 
   # join_keys
   testthat::expect_equal(
@@ -317,9 +317,8 @@ testthat::teat_that(".datasets_to_data returns required attributes", {
 })
 
 testthat::teat_that(".datasets_to_data returns parent datasets for CDISC data", {
-
   adsl <- data.frame(STUDYID = 1, USUBJID = 1)
-  adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1,  AETERM = 1, AESEQ = 1)
+  adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1, AETERM = 1, AESEQ = 1)
   adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)
 
   datasets <- teal.slice::init_filtered_data(
