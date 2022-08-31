@@ -242,9 +242,9 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 .datasets_to_data <- function(module, datasets) {
   datanames <- if (identical("all", module$filter)) {
     datasets$datanames()
-    } else {
+  } else {
     datasets$get_filterable_datanames(module$filter) # get_filterable_datanames adds parents if present
-    }
+  }
 
   # list of reactive filtered data
   data <- sapply(

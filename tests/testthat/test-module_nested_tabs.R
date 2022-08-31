@@ -333,4 +333,3 @@ testthat::teat_that(".datasets_to_data returns parent datasets for CDISC data", 
   data <- .datasets_to_data(module, datasets)
   testthat::expect_setequal(isolate(names(data)), c("ADSL", "ADAE"))
 })
-

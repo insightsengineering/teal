@@ -262,7 +262,7 @@ example_reporter_module <- function(label = "Example") {
                   nrows = input$nrow
                 )
               )
-           )
+            )
         })
 
         output$table <- renderTable(table_q()[["result"]])
