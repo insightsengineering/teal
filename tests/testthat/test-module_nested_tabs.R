@@ -278,7 +278,7 @@ get_example_filtered_data <- function() {
   )
 }
 
-testthat::teat_that(".datasets_to_data returns filtered data", {
+testthat::test_that(".datasets_to_data returns filtered data", {
   datasets <- get_example_filtered_data()
   isolate(datasets$set_filter_state(list(d1 = list(val = list(selected = c(1, 2))))))
   module <- list(filter = "all")
@@ -291,14 +291,14 @@ testthat::teat_that(".datasets_to_data returns filtered data", {
 })
 
 
-testthat::teat_that(".datasets_to_data returns only data requested by modules$filter", {
+testthat::test_that(".datasets_to_data returns only data requested by modules$filter", {
   datasets <- get_example_filtered_data()
   module <- list(filter = "d1")
   data <- .datasets_to_data(module, datasets)
   testthat::expect_equal(isolate(names(data)), "d1")
 })
 
-testthat::teat_that(".datasets_to_data returns required attributes", {
+testthat::test_that(".datasets_to_data returns required attributes", {
   datasets <- get_example_filtered_data()
   module <- list(filter = "all")
   data <- .datasets_to_data(module, datasets)
@@ -316,7 +316,7 @@ testthat::teat_that(".datasets_to_data returns required attributes", {
   )
 })
 
-testthat::teat_that(".datasets_to_data returns parent datasets for CDISC data", {
+testthat::test_that(".datasets_to_data returns parent datasets for CDISC data", {
   adsl <- data.frame(STUDYID = 1, USUBJID = 1)
   adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1, AETERM = 1, AESEQ = 1)
   adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)

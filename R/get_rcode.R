@@ -1,6 +1,6 @@
 #' Returns R Code from a teal module
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description `r lifecycle::badge("deprecated")`
 #' Return the R-code used to create a teal::teal] module analysis. This function
 #' will return all analysis code as a character string. In case of a good setup it will
 #' not only return the code used create the module analysis, but also the code used by
@@ -65,7 +65,7 @@ get_rcode <- function(datasets = NULL,
 
   lifecycle::deprecate_warn(
     when = "0.11.2",
-    what = "get_rcode",
+    what = "get_rcode()",
     details = "Reproducibility in teal apps has changed.
       See the teal.code package and example modules for further details"
   )
@@ -221,7 +221,7 @@ get_rcode_srv <- function(id,
 
   lifecycle::deprecate_warn(
     when = "0.11.2",
-    what = "get_rcode_srv",
+    what = "get_rcode_srv()",
     with = "teal.widgets::verbatim_popup_srv()",
     details = "Show R Code behaviour has changed,
       see example modules in vignettes for more details"
@@ -273,7 +273,7 @@ get_rcode_srv <- function(id,
 get_rcode_ui <- function(id) {
   lifecycle::deprecate_warn(
     when = "0.11.2",
-    what = "get_rcode_ui",
+    what = "get_rcode_ui()",
     with = "teal.widgets::verbatim_popup_ui()",
     details = "Show R Code behaviour has changed,
       see example modules in vignettes for more details"
