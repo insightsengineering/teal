@@ -117,16 +117,16 @@
 #'   modules = modules(
 #'     module(
 #'       "data source",
-#'       server = function(input, output, session, datasets) {},
+#'       server = function(input, output, session, data) {},
 #'       ui = function(id, ...) div(p("information about data source")),
 #'       filters = "all"
 #'     ),
 #'     example_module(),
 #'     module(
 #'       "ADSL AGE histogram",
-#'       server = function(input, output, session, datasets) {
+#'       server = function(input, output, session, data) {
 #'         output$hist <- renderPlot(
-#'           hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
+#'           hist(data[["ADSL"]]()$AGE)
 #'         )
 #'       },
 #'       ui = function(id, ...) {
