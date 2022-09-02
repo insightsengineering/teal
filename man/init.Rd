@@ -91,7 +91,10 @@ different way. Since it contains patient data with list of experiments,
     )
   )
 )
-}\if{html}{\out{</div>}}}
+}\if{html}{\out{</div>}}
+
+By adding the \code{filterable} attribute it is possible to control which variables can be filtered for each
+dataset. See the example below where \code{ADSL} can only be filtered by \code{AGE}, \code{SEX} or \code{RACE}.}
 
 \item{header}{(\code{character} or \code{shiny.tag}) \cr
 the header of the app. Note shiny code placed here (and in the footer
@@ -152,7 +155,7 @@ app <- init(
     )
   ),
   title = "App title",
-  filter = list(ADSL = list(AGE = list())),
+  filter = list(ADSL = structure(list(AGE = list()), filterable = c("AGE", "SEX", "RACE"))),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )
