@@ -155,7 +155,7 @@ app <- init(
     )
   ),
   title = "App title",
-  filter = list(ADSL = structure(list(AGE = list()), "filterable" = c("AGE", "SEX", "RACE"))),
+  filter = list(ADSL = structure(list(AGE = list()), filterable = c("AGE", "SEX", "RACE"))),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )
