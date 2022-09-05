@@ -26,6 +26,7 @@ Depends:
     teal.data (>= 0.1.1),
     teal.transform (>= 0.1.1)
 Imports:
+    bslib,
     checkmate,
     lifecycle,
     logger (>= 0.2.0),

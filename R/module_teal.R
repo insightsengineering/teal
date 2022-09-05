@@ -89,8 +89,19 @@ ui_teal <- function(id,
     )
   )
 
+  get_teal_bs_version <- function() {
+    bs_theme <- getOption("teal.bs_theme")
+    if (is.null(bs_theme)) bs_theme <- Sys.getenv("teal.bs_theme")
+    if (is.null(bs_theme)) return(bslib::bs_theme(version = "3"))
+    if (!inherits(bs_theme, "bs_theme")) {
+      warning("teal.bs_theme has to be of a bslib::bs_theme class")
+      return(bslib::bs_theme(version = "3"))
+    }
+  }
+
   res <- fluidPage(
     title = title,
+    theme = get_teal_bs_version(),
     include_teal_css_js(),
     tags$header(header),
     tags$hr(class = "my-2"),
