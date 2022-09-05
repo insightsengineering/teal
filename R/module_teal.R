@@ -95,7 +95,9 @@ ui_teal <- function(id,
     if (is.null(bs_theme)) return(bslib::bs_theme(version = "3"))
     if (!inherits(bs_theme, "bs_theme")) {
       warning("teal.bs_theme has to be of a bslib::bs_theme class")
-      return(bslib::bs_theme(version = "3"))
+      bslib::bs_theme(version = "3")
+    } else {
+      bs_theme
     }
   }
 
