@@ -1,7 +1,8 @@
-# teal 0.11.1.9020
+# teal 0.11.1.9021
 
 ### Enhancements
 
+* Added option to choose which variables can be filtered in the filter panel by using the `filterable` attributes for the per-dataset lists in the `filter` argument of `init`. 
 * `teal_module` having `data` argument in its arguments will receive a list of reactive filter data with `"code"` and `"join_keys"` attributes.
 * Updated the internals of `module_teal` to reflect changes in `teal.slice`.
 * `teal_module` having `filter_panel_api` argument in its arguments will receive a `FilterPanelAPI` object.
