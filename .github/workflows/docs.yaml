@@ -22,7 +22,6 @@ on:
       - ready_for_review
     branches:
       - main
-      - pre-release
     paths:
       - "inst/templates/**"
       - "_pkgdown.y[a]ml"
