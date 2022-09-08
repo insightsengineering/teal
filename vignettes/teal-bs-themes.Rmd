@@ -22,12 +22,10 @@ Optionally you could choose a **Bootswatch theme** and **customize the app css**
 Please read more about custom themes in [the bslib getting started vignette](https://rstudio.github.io/bslib/articles/bslib.html).
 The `teal.bs_theme` R option have to be specified at the top of the code script.
 
-### `teal.bs_theme` R  option
+### `teal.bs_theme` R option
 
 ```
 options("teal.bs_theme" = bslib::bs_theme())
-# or
-Sys.setenv("teal.bs_theme" = bslib::bs_theme())
 
 ###############
 # teal app code
@@ -57,7 +55,7 @@ The most important `teal` html tags have a proper id/class, so they could be dir
 The `bslib::bs_add_rules` function could be used around the `bslib::bs_theme` object to apply custom css rules.
 
 ```
-options("teal.bs_theme" = bslib::bs_theme(version = "5") %>% bslib::bs_add_rules("Anything understood by sass::as_sass()"))
+options("teal.bs_theme" = bslib::bs_theme(version = "5") |> bslib::bs_add_rules("Anything understood by sass::as_sass()"))
 ```
 
 Other `bslib::bs_add_*` family functions could be used to specify low-level bootstrap elements.
