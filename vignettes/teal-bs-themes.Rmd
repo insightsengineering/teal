@@ -17,11 +17,12 @@ Teal is a consumer of the `bslib` R package which provides tools for customizing
 ## Usage
 
 Teal user take the benefit of custom bootstrap theme by specifying the `teal.bs_theme` R  option, which have to be set to `bslib::bs_theme` object.
-The `bslib::bs_theme` object creates a Bootstrap theme object, where you have to specify the (major) Bootstrap version (currently 3, 4 or 5).
-Optionally you could choose a Bootswatch theme, customize main colors and fonts via explicitly named arguments (e.g., bg, fg, primary, etc),
-customize the app css with `bslib::bs_add_rules` and others.
+The `bslib::bs_theme` object creates a Bootstrap theme object, where you should to specify the (major) Bootstrap version (default or one of 3, 4 or 5).
+Optionally you could choose a **Bootswatch theme** and **customize the app css** with functions like `bslib::bs_add_rules`.
 Please read more about custom themes in [the bslib getting started vignette](https://rstudio.github.io/bslib/articles/bslib.html).
 The `teal.bs_theme` R option have to be specified at the top of the code script.
+
+### `teal.bs_theme` R  option
 
 ```
 options("teal.bs_theme" = bslib::bs_theme(...))
@@ -35,9 +36,36 @@ Sys.setenv("teal.bs_theme" = bslib::bs_theme(...))
 
 ### bootstrap version and themes
 
-### custom css
+The best way to **explore** the bootstrap themes is to use `bslib::run_with_themer(shinyApp(app$ui, app$server))` or `bslib::bs_theme_preview()`,
+both functions offer an interactive explore mode.
+The `bslib::bs_theme_preview()` is recommended when the end user does not have any shiny app yet. 
+When you have already a shiny app and want to test different bootstrap themes (and css styling) then `bslib::run_with_themer(shinyApp(app$ui, app$server))` is recommended.
+
+Available bootstrap versions could be checked with `bslib::versions()` and bootstrap themes (bootswatch) with `bslib::bootswatch_themes()`.
+
+```
+# bslib::bootswatch_themes()
+# bslib::versions()
+options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux")
+```
+
+### custom teal css
+
+The most important `teal` html tags have a proper id/class, so they could be directly styled.
+The `bslib::bs_add_rules` function could be used around the `bslib::bs_theme` object to apply custom css rules.
+
+```
+options("teal.bs_theme" = bslib::bs_theme(version = "5") %>% bslib::bs_add_rules("Anything understood by sass::as_sass()"))
+```
+
+Other `bslib::bs_add_*` family functions could be used to specify low-level bootstrap elements.
+
+### Examples
+
+...
 
 ## Sources
 
-bslib package
+- https://rstudio.github.io/bslib
+- 
 
