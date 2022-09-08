@@ -15,7 +15,7 @@ Authors@R: c(
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("Maximilian", "Mordig", role = "ctb")
   )
-Description: teal is a shiny based interactive exploration framework for
+Description: A shiny based interactive exploration framework for
     analyzing clinical trials data. teal currently provides a dynamic
     filtering facility and different data viewers. teal shiny applications
     are built using standard shiny modules.

@@ -35,8 +35,10 @@ This works with nested modules of depth greater than 2, though the filter
 panel is inserted at the right of the modules at depth 1 and not at the leaves.
 }
 \examples{
+
 mods <- teal:::get_dummy_modules()
 datasets <- teal:::get_dummy_datasets()
+
 app <- shinyApp(
   ui = function() {
     tagList(
@@ -65,8 +67,7 @@ runApp(app)
 
 
 # An example with two filter panels in two apps side-by-side
-mods <- teal:::get_dummy_modules()
-datasets1 <- datasets2 <- teal:::get_dummy_datasets()
+datasets1 <- datasets2 <- datasets
 app <- shinyApp(
   ui = function() {
     tagList(
