@@ -86,7 +86,7 @@ This option controls the dots per inch of the graphs rendered and downloaded whe
 Default: 72
 
 ### `teal.bs_theme` (`bslib::bs_theme` object)
-This option controls the bootstrap theme and version used in the teal apps. Achive better UX with the customized UI of an app.
-Please visit the XXX vignette to read more about the functionality.
+This option controls the bootstrap theme and version used in the teal apps. Achieve better UX with the customized UI of an app.
+Please visit the `vignette("teal-bs-themes", package = "teal")` to read more about the functionality.
 
 Default: NULL

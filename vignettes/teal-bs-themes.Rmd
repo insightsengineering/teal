@@ -1,0 +1,43 @@
+---
+title: "Teal and Bootstrap Themes"
+author: "Maciej Nasinski"
+date: "2022-09-08"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Teal and Bootstrap Themes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+We offer the easy application of a custom bootstrap theme to a `teal::init` app. 
+Teal is a consumer of the `bslib` R package which provides tools for customizing Bootstrap themes e.g. of Shiny apps.
+
+## Usage
+
+Teal user take the benefit of custom bootstrap theme by specifying the `teal.bs_theme` R  option, which have to be set to `bslib::bs_theme` object.
+The `bslib::bs_theme` object creates a Bootstrap theme object, where you have to specify the (major) Bootstrap version (currently 3, 4 or 5).
+Optionally you could choose a Bootswatch theme, customize main colors and fonts via explicitly named arguments (e.g., bg, fg, primary, etc),
+customize the app css with `bslib::bs_add_rules` and others.
+Please read more about custom themes in [the bslib getting started vignette](https://rstudio.github.io/bslib/articles/bslib.html).
+The `teal.bs_theme` R option have to be specified at the top of the code script.
+
+```
+options("teal.bs_theme" = bslib::bs_theme(...))
+# or
+Sys.setenv("teal.bs_theme" = bslib::bs_theme(...))
+
+###############
+# teal app code
+###############
+```
+
+### bootstrap version and themes
+
+### custom css
+
+## Sources
+
+bslib package
+

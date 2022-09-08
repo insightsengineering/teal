@@ -27,3 +27,5 @@ tmp.*
 vignettes/*.R
 vignettes/*.html
 vignettes/*.md
+/doc/
+/Meta/
