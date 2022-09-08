@@ -25,9 +25,9 @@ The `teal.bs_theme` R option have to be specified at the top of the code script.
 ### `teal.bs_theme` R  option
 
 ```
-options("teal.bs_theme" = bslib::bs_theme(...))
+options("teal.bs_theme" = bslib::bs_theme())
 # or
-Sys.setenv("teal.bs_theme" = bslib::bs_theme(...))
+Sys.setenv("teal.bs_theme" = bslib::bs_theme())
 
 ###############
 # teal app code
@@ -47,6 +47,8 @@ Available bootstrap versions could be checked with `bslib::versions()` and boots
 # bslib::bootswatch_themes()
 # bslib::versions()
 options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux")
+# or
+options("teal.bs_theme" = bslib::bs_theme_update(bslib::bs_theme(version = "5"), bootswatch = "lux"))
 ```
 
 ### custom teal css
