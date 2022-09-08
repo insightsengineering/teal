@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="teal is a shiny based interactive exploration framework for
+<meta name="description" content="A shiny based interactive exploration framework for
     analyzing clinical trials data. teal currently provides a dynamic
     filtering facility and different data viewers. teal shiny applications
     are built using standard shiny modules.">
@@ -15,7 +15,7 @@
 <script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Exploratory Web Apps for Analyzing Clinical Trials Data">
-<meta property="og:description" content="teal is a shiny based interactive exploration framework for
+<meta property="og:description" content="A shiny based interactive exploration framework for
     analyzing clinical trials data. teal currently provides a dynamic
     filtering facility and different data viewers. teal shiny applications
     are built using standard shiny modules.">
@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9021</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9022</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,12 +63,6 @@
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -89,7 +83,7 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="teal-interactive-exploratory-data-analysis-with-shiny-web-applications-">Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href="https://insightsengineering.github.io/teal" class="external-link"><img src="reference/figures/teal.png" align="right" height="139" style="max-width: 100%;"></a>
+<div class="page-header"><h1 id="teal-interactive-exploratory-data-analysis-with-shiny-web-applications-">Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href="https://insightsengineering.github.io/teal/" class="external-link"><img src="reference/figures/teal.png" align="right" height="139" style="max-width: 100%;"></a>
 <a class="anchor" aria-label="anchor" href="#teal-interactive-exploratory-data-analysis-with-shiny-web-applications-"></a>
 </h1></div>
 <p><em>teal</em> is a shiny-based interactive exploration framework for analyzing data. <code>teal</code> applications require app developers to specify:</p>
@@ -112,11 +106,11 @@
 <code>teal modules</code> are shiny modules built within the <code>teal</code> framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, lost of <code>teal</code> modules have been released and we recommend starting with modules found in the following packages:
 <ul>
 <li>
-<a href="https://insightsengineering.github.io/teal.modules.general" class="external-link"><code>teal.modules.general</code></a>: general modules for exploring relational/independent/CDISC data</li>
+<a href="https://insightsengineering.github.io/teal.modules.general/" class="external-link"><code>teal.modules.general</code></a>: general modules for exploring relational/independent/CDISC data</li>
 <li>
-<a href="https://insightsengineering.github.io/teal.modules.clinical" class="external-link"><code>teal.modules.clinical</code></a>: modules specific to CDISC data and clinical trial reporting</li>
+<a href="https://insightsengineering.github.io/teal.modules.clinical/" class="external-link"><code>teal.modules.clinical</code></a>: modules specific to CDISC data and clinical trial reporting</li>
 <li>
-<a href="https://insightsengineering.github.io/teal.modules.hermes" class="external-link"><code>teal.modules.hermes</code></a>: modules for analyzing <code>MultiAssayExperiment</code> objects</li>
+<a href="https://insightsengineering.github.io/teal.modules.hermes/" class="external-link"><code>teal.modules.hermes</code></a>: modules for analyzing <code>MultiAssayExperiment</code> objects</li>
 </ul>
 </li>
 </ul>
@@ -126,19 +120,19 @@
 <!-- markdownlint-disable MD007 MD030 -->
 <ul>
 <li>
-<a href="https://insightsengineering.github.io/teal.data" class="external-link"><code>teal.data</code></a>: creating and loading the data needed for <code>teal</code> applications.</li>
+<a href="https://insightsengineering.github.io/teal.data/" class="external-link"><code>teal.data</code></a>: creating and loading the data needed for <code>teal</code> applications.</li>
 <li>
-<a href="https://insightsengineering.github.io/teal.widgets" class="external-link"><code>teal.widgets</code></a>: shiny components used within <code>teal</code>.</li>
+<a href="https://insightsengineering.github.io/teal.widgets/" class="external-link"><code>teal.widgets</code></a>: shiny components used within <code>teal</code>.</li>
 <li>
-<a href="https://insightsengineering.github.io/teal.slice" class="external-link"><code>teal.slice</code></a>: provides a filtering panel to allow filtering of data.</li>
+<a href="https://insightsengineering.github.io/teal.slice/" class="external-link"><code>teal.slice</code></a>: provides a filtering panel to allow filtering of data.</li>
 <li>
-<a href="https://insightsengineering.github.io/teal.code" class="external-link"><code>teal.code</code></a>: handles reproducibility of outputs.</li>
+<a href="https://insightsengineering.github.io/teal.code/" class="external-link"><code>teal.code</code></a>: handles reproducibility of outputs.</li>
 <li>
-<a href="https://insightsengineering.github.io/teal.transform" class="external-link"><code>teal.transform</code></a>: standardizes extracting and merging data.</li>
+<a href="https://insightsengineering.github.io/teal.transform/" class="external-link"><code>teal.transform</code></a>: standardizes extracting and merging data.</li>
 <li>
-<a href="https://insightsengineering.github.io/teal.logger" class="external-link"><code>teal.logger</code></a>: standardizes logging within <code>teal</code> framework.</li>
+<a href="https://insightsengineering.github.io/teal.logger/" class="external-link"><code>teal.logger</code></a>: standardizes logging within <code>teal</code> framework.</li>
 <li>
-<a href="https://insightsengineering.github.io/teal.reporter" class="external-link"><code>teal.reporter</code></a>: allows <code>teal</code> applications to generate reports.</li>
+<a href="https://insightsengineering.github.io/teal.reporter/" class="external-link"><code>teal.reporter</code></a>: allows <code>teal</code> applications to generate reports.</li>
 </ul>
 <!-- markdownlint-enable MD007 MD030 --><p>See these packages for more information about how to use the different parts of the <code>teal</code> framework.</p>
 <div class="section level2">
@@ -149,7 +143,7 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>GITHUB_PAT <span class="op">=</span> <span class="st">"your_access_token_here"</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"insightsengineering/teal@*release"</span><span class="op">)</span></span></code></pre></div>
-<p>In order to run many of the examples you will also need to install the <a href="https://insightsengineering.github.io/scda" class="external-link"><code>scda</code></a> package.</p>
+<p>In order to run many of the examples you will also need to install the <a href="https://insightsengineering.github.io/scda/" class="external-link"><code>scda</code></a> package.</p>
 <p>A stable release of all <code>NEST</code> packages from June 2022 is also available <a href="https://github.com/insightsengineering/depository#readme" class="external-link">here</a>.</p>
 <p>See package vignettes <code>browseVignettes(package = "teal")</code> for usage of this package.</p>
 </div>
