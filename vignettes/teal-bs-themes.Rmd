@@ -55,17 +55,64 @@ The most important `teal` html tags have a proper id/class, so they could be dir
 The `bslib::bs_add_rules` function could be used around the `bslib::bs_theme` object to apply custom css rules.
 
 ```
-options("teal.bs_theme" = bslib::bs_theme(version = "5") |> bslib::bs_add_rules("Anything understood by sass::as_sass()"))
+library(magrittr)
+options("teal.bs_theme" = bslib::bs_theme(version = "5") %>% bslib::bs_add_rules("Anything understood by sass::as_sass()"))
 ```
 
 Other `bslib::bs_add_*` family functions could be used to specify low-level bootstrap elements.
 
+### Reset the bs theme
+
+Please use the `options("teal.bs_theme" = NULL)` call to return to the default shiny bootstrap for teal apps.
+
+### theme not updated
+
+One reason the theme is not update could be the problem that a browser caches the previous one, especially when we run different themes one after another.
+Please, use the Cmd+Shift+r (Mac) or Ctrl+F5 (Windows) to hard refresh the webpage.
+
 ### Examples
 
-...
+With `bslib::run_with_themer` to explore different themes.
+
+```{r, message=FALSE}
+library(teal)
+
+app <- init(
+  data = teal_data(
+    dataset("IRIS", iris),
+    dataset("MTCARS", mtcars)
+  ),
+  modules = modules(example_module(), example_module()),
+  header = "My first teal application"
+)
+
+if (interactive()) {
+  # Run with themer
+  bslib::run_with_themer(shinyApp(app$ui, app$server))
+}
+```
+
+Apply already chosen theme with `options("teal.bs_theme" = bslib::bs_theme(...))`.
+
+```{r, message=FALSE}
+options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux"))
+library(teal)
+
+app <- init(
+  data = teal_data(
+    dataset("IRIS", iris),
+    dataset("MTCARS", mtcars)
+  ),
+  modules = modules(example_module(), example_module()),
+  header = "My first teal application"
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
 
 ## Sources
 
 - https://rstudio.github.io/bslib
-- 
 
