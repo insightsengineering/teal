@@ -93,8 +93,8 @@ ui_teal <- function(id,
     bs_theme <- getOption("teal.bs_theme")
     if (is.null(bs_theme) || bs_theme == "") return(NULL)
     if (!inherits(bs_theme, "bs_theme")) {
-      warning("teal.bs_theme has to be of a bslib::bs_theme class, the bslib::bs_theme(version = '3') is used.")
-      bslib::bs_theme(version = "3")
+      warning("teal.bs_theme has to be of a bslib::bs_theme class, the default shiny bootstrap is used.")
+      NULL
     } else {
       bs_theme
     }
