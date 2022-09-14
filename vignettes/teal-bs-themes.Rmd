@@ -38,12 +38,11 @@ options("teal.bs_theme" = bslib::bs_theme("Custom Options"))
 
 The best way to **explore** the bootstrap themes is to use `bslib::run_with_themer(shinyApp(app$ui, app$server))` or `bslib::bs_theme_preview()`,
 both functions offer an interactive explore mode.
+Please, remember that the interactive theming for Bootstrap 3 is not supported.
 The `bslib::bs_theme_preview()` is recommended when the end user does not have any shiny app yet. 
 When you already have a shiny app and want to test different bootstrap themes (and css styling) then `bslib::run_with_themer(shinyApp(app$ui, app$server))` is recommended.
 
 Available bootstrap versions could be checked with `bslib::versions()` and bootstrap themes (bootswatch) with `bslib::bootswatch_themes()`.
-
-Please, remember that custom themes are available only for bootstrap version 4 and 5.
 
 ```
 # bslib::bootswatch_themes()
@@ -77,7 +76,8 @@ Please, use the Cmd+Shift+r (Mac) or Ctrl+F5 (Windows) to hard refresh the webpa
 ### Examples
 
 With `bslib::run_with_themer` to explore different themes.
-Please, remember that only bootstrap 4 and 5 support custom themes, so we have to inject one of them to the teal::init app.
+Please, remember that the interactive theming for Bootstrap 3 isn't supported.
+
 
 ```{r, message=FALSE}
 options("teal.bs_theme" = bslib::bs_theme(version = "5"))
