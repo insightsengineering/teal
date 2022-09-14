@@ -89,4 +89,4 @@ Default: 72
 This option controls the bootstrap theme and version used in the teal apps. Achieve better UX with the customized UI of an app.
 Please visit the `vignette("teal-bs-themes", package = "teal")` to read more about the functionality.
 
-Default: NULL
+Default: `NULL`

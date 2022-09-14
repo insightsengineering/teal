@@ -1,6 +1,6 @@
 ---
 title: "Teal and Bootstrap Themes"
-author: "Maciej Nasinski"
+author: "Coredev"
 date: "2022-09-08"
 output: rmarkdown::html_vignette
 vignette: >
@@ -22,7 +22,7 @@ Optionally you could choose a **Bootswatch theme** and **customize the app css**
 Please read more about custom themes in [the bslib getting started vignette](https://rstudio.github.io/bslib/articles/bslib.html).
 The `teal.bs_theme` R option has to be specified at the top of the code script.
 
-Please install `bslib` package if not already there.
+Please install `bslib` package if not already installed
 
 ### `teal.bs_theme` R option
 
@@ -94,7 +94,7 @@ if (interactive()) {
 }
 ```
 
-Apply the already chosen theme with `options("teal.bs_theme" = bslib::bs_theme(...))`.
+Apply the already chosen theme with `options("teal.bs_theme" = bslib::bs_theme(...))`, in this example the `lux` theme from Boostrap version 5.
 
 ```{r, message=FALSE}
 options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux"))
@@ -116,4 +116,4 @@ if (interactive()) {
 
 ## Sources
 
-- https://rstudio.github.io/bslib
+- https://rstudio.github.io/bslib/
