@@ -43,6 +43,8 @@ When you already have a shiny app and want to test different bootstrap themes (a
 
 Available bootstrap versions could be checked with `bslib::versions()` and bootstrap themes (bootswatch) with `bslib::bootswatch_themes()`.
 
+Please, remember that custom themes are available only for bootstrap version 4 and 5.
+
 ```
 # bslib::bootswatch_themes()
 # bslib::versions()
@@ -75,8 +77,10 @@ Please, use the Cmd+Shift+r (Mac) or Ctrl+F5 (Windows) to hard refresh the webpa
 ### Examples
 
 With `bslib::run_with_themer` to explore different themes.
+Please, remember that only bootstrap 4 and 5 support custom themes, so we have to inject one of them to the teal::init app.
 
 ```{r, message=FALSE}
+options("teal.bs_theme" = bslib::bs_theme(version = "5"))
 library(teal)
 
 app <- init(
