@@ -30,7 +30,7 @@ Please install `bslib` package if not already installed
 options("teal.bs_theme" = bslib::bs_theme("Custom Options"))
 
 ###############
-# teal app code
+# teal::init() app code
 ###############
 ```
 
