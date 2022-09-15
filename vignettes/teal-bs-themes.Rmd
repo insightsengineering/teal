@@ -73,6 +73,10 @@ Please use the `options("teal.bs_theme" = NULL)` call to return to the default s
 One reason the theme is not updated could be the problem that a browser caches the previous one, especially when we run different themes one after another.
 Please, use the Cmd+Shift+r (Mac) or Ctrl+F5 (Windows) to hard refresh the webpage.
 
+### regular fluidPage
+
+If you want to update the theme in the regular `shiny::fluidPage` like app, you do not need the `teal.bs_theme` option. Then simply provide the `bslib::bs_theme` directly to the `shiny::fluidPage(theme = bslib::bs_theme(...), ...)`. 
+
 ### Examples
 
 With `bslib::run_with_themer` to explore different themes.
