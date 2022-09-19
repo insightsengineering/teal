@@ -102,7 +102,8 @@ if (interactive()) {
 }
 ```
 
-Apply the already chosen theme with `options("teal.bs_theme" = bslib::bs_theme(...))`, in this example the `lux` theme from `bootstrap` version 5.
+Apply the already chosen theme with `options("teal.bs_theme" = bslib::bs_theme(...))`, 
+in this example the `lux` theme from `bootstrap` version 5.
 
 ```{r, message=FALSE}
 options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux"))
