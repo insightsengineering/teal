@@ -20,6 +20,7 @@ example_module <- function(label = "example teal module") {
   module(
     label,
     server = function(id, data) {
+      checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
         output$text <- renderPrint(data[[input$dataname]]())
       })

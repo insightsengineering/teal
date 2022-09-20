@@ -228,9 +228,9 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   reactive(modules)
 }
 
-#' Convert `FilteredData` to reactive list of data
+#' Convert `FilteredData` to reactive list of data of type `tdata`.
 #'
-#' Converts `FilteredData` object to list of data containing datasets needed for specific module.
+#' Converts `FilteredData` object to `tdata` object containing datasets needed for specific module.
 #' Please note that if module needs dataset which has a parent, then parent will be also returned.
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
@@ -255,10 +255,5 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     }
   )
 
-  # code from previous stages
-  attr(data, "code") <- get_datasets_code(datanames, datasets)
-
-  # join_keys
-  attr(data, "join_keys") <- datasets$get_join_keys()
-  data
+  new_tdata(data, reactive(get_datasets_code(datanames, datasets)), datasets$get_join_keys())
 }
