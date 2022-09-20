@@ -230,7 +230,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 
 #' Convert `FilteredData` to reactive list of datasets of the `tdata` type.
 #'
-#' Converts `FilteredData` object to `tdata` object containing datasets needed for specific module.
+#' Converts `FilteredData` object to `tdata` object containing datasets needed for a specific module.
 #' Please note that if module needs dataset which has a parent, then parent will be also returned.
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
