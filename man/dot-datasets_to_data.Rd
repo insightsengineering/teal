@@ -2,7 +2,7 @@
 % Please edit documentation in R/module_nested_tabs.R
 \name{.datasets_to_data}
 \alias{.datasets_to_data}
-\title{Convert \code{FilteredData} to reactive list of data of type \code{tdata}.}
+\title{Convert \code{FilteredData} to reactive list of datasets of the \code{tdata} type.}
 \usage{
 .datasets_to_data(module, datasets)
 }
@@ -18,7 +18,7 @@ list of reactive datasets with following attributes:
 }
 }
 \description{
-Converts \code{FilteredData} object to \code{tdata} object containing datasets needed for specific module.
+Converts \code{FilteredData} object to \code{tdata} object containing datasets needed for a specific module.
 Please note that if module needs dataset which has a parent, then parent will be also returned.
 }
 \keyword{(`JoinKeys`)}
