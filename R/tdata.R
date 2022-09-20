@@ -35,12 +35,12 @@ new_tdata <- function(data, code = "", join_keys = NULL) {
   checkmate::assert_class(join_keys, "JoinKeys", null.ok = TRUE)
   checkmate::assert_multi_class(code, c("character", "reactive"))
 
-  data <- lapply(data, function(x) {
-    if (is.reactive(x)) {
-      x
-    }
-    reactive(x)
-  })
+  #data <- lapply(data, function(x) {
+  #  if (is.reactive(x)) {
+  #    x
+  #  }
+  #  reactive(x)
+  #})
 
   # set attributes
   attr(data, "code") <- if (is.reactive(code)) code else reactive(code)
