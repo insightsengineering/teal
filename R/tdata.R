@@ -35,12 +35,17 @@ new_tdata <- function(data, code = "", join_keys = NULL) {
   checkmate::assert_class(join_keys, "JoinKeys", null.ok = TRUE)
   checkmate::assert_multi_class(code, c("character", "reactive"))
 
-  #data <- lapply(data, function(x) {
-  #  if (is.reactive(x)) {
-  #    x
-  #  }
-  #  reactive(x)
-  #})
+  #create reactive data.frames
+  for (x in names(data)) {
+    if (!is.reactive(data[[x]])) {
+      isolate({
+        data_var <- paste0(x,"_reactive_var_creation")
+        assign(data_var, data[[x]])
+        makeReactiveBinding(as.character(as.symbol(data_var)))
+        data[[x]] <- do.call(reactive, list(as.symbol(data_var)))
+      })
+    }
+  }
 
   # set attributes
   attr(data, "code") <- if (is.reactive(code)) code else reactive(code)
