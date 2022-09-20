@@ -253,7 +253,7 @@ example_reporter_module <- function(label = "Example") {
         table_q <- reactive({
           req(input$nrow)
 
-          teal.code::new_quosure(env = data) %>%
+          teal.code::new_qenv(env = data) %>%
             teal.code::eval_code(
               substitute(
                 result <- head(data, nrows),

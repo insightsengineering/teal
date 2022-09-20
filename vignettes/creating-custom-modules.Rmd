@@ -127,12 +127,12 @@ srv_histogram_example <- function(id, data, histogram_var) {
     dataname <- reactive(extracted()$dataname)
     selected <- reactive(extracted()$select)
 
-    # the reactive which adds the code to plot the histogram into the quosure
+    # the reactive which adds the code to plot the histogram into the qenv
     plot_code_q <- reactive({
       validate(need(length(selected) == 1, "Please select a variable"))
 
-      # take the filtered data from the data object and add it into the quosure environment
-      teal.code::new_quosure(env = data) %>%
+      # take the filtered data from the data object and add it into the qenv environment
+      teal.code::new_qenv(env = data) %>%
         teal.code::eval_code(
           substitute(
             expr = p <- hist(dataname[, selected]),
