@@ -36,6 +36,10 @@ new_tdata <- function(data, code = "", join_keys = NULL) {
   checkmate::assert_class(join_keys, "JoinKeys", null.ok = TRUE)
   checkmate::assert_multi_class(code, c("character", "reactive"))
 
+  if (is.reactive(code)) {
+    isolate(checkmate::assert_class(code(), "character"))
+  }
+
   #create reactive data.frames
   for (x in names(data)) {
     if (!is.reactive(data[[x]])) {
