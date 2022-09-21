@@ -1,14 +1,12 @@
 #' Create a new `tdata` object which contains
 #'
-#' - `data` a `reactive` list of data.frames (or other items which
-#'  can be passed into `teal modules` such as `MultiAssayExperiment`) with attributes
+#' - `data` a `reactive` list of data.frames (or `MultiAssayExperiment`) with attributes
 #' i) `code` (`reactive`) containing code used to generate the data
 #' and ii) join_keys (`JoinKeys`) containing the relationships between
 #' the data iii) metadata (`named list`) containing any metadata associated with
 #' the data frames
 #'
-#' @param data A `named list` of `data.frames` (or other items which
-#'  can be passed into `teal modules` such as `MultiAssayExperiment`)
+#' @param data A `named list` of `data.frames` (or `MultiAssayExperiment`)
 #'  which optionally can be `reactive`.
 #'   Inside this object all of these items will be made `reactive`.
 #' @param code A `character` (or `reactive` which evaluates to a `character`) containing
@@ -19,7 +17,6 @@
 #'   datasets.
 #' @param metadata A `named list` each element contains a list of metadata about the named data.frame
 #' Each element of these list should be atomic and length one.
-#' @rdname tdata
 #' @return A `tdata` object
 #' @examples
 #'
@@ -38,7 +35,8 @@
 new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   checkmate::assert_list(
     data,
-    any.missing = FALSE, names = "unique"
+    any.missing = FALSE, names = "unique",
+    types = c("data.frame", "reactive", "MultiAssayExperiment")
   )
   checkmate::assert_class(join_keys, "JoinKeys", null.ok = TRUE)
   checkmate::assert_multi_class(code, c("character", "reactive"))
@@ -55,6 +53,8 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   for (x in names(data)) {
     if (!is.reactive(data[[x]])) {
       data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
+    } else {
+      isolate(checkmate::assert_multi_class(data[[x]](), c("data.frame", "MultiAssayExperiment")))
     }
   }
 
