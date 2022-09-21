@@ -16,7 +16,7 @@
 #'   datasets.
 #' @param metadata A `named list` each element contains a list of metadata about the named data.frame
 #' Each element of these list should be atomic and length one.
-#'
+#' @rdname tdata
 #' @return A `tdata` object
 #' @examples
 #'
@@ -35,7 +35,7 @@
 new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   checkmate::assert_list(
     data,
-    types = c("data.frame", "reactive"), any.missing = FALSE, names = "unique"
+    any.missing = FALSE, names = "unique"
   )
   checkmate::assert_class(join_keys, "JoinKeys", null.ok = TRUE)
   checkmate::assert_multi_class(code, c("character", "reactive"))
@@ -52,8 +52,6 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   for (x in names(data)) {
     if (!is.reactive(data[[x]])) {
       data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
-    } else{
-      isolate(checkmate::assert_class(data[[x]](), "data.frame"))
     }
   }
 
@@ -97,6 +95,7 @@ get_code.tdata <- function(data) {
 get_join_keys <- function(data) {
   UseMethod("get_join_keys", data)
 }
+
 
 #' @export
 get_join_keys.tdata <- function(data) {
