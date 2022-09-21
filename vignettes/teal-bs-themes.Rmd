@@ -64,6 +64,33 @@ options("teal.bs_theme" = bslib::bs_theme(version = "5") %>% bslib::bs_add_rules
 
 Other `bslib::bs_add_*` family functions could be used to specify low-level bootstrap elements.
 
+### bootstrap NULL vs 3
+
+The important and possibly surprising is the difference between `options("teal.bs_theme" = NULL)` and `options("teal.bs_theme" = bslib::bs_theme(version = "3")`.
+The small differences could comes from the `bslib` approximation of the default shiny bootstrap for version 3.
+However both ways of representing version 3 should be overall the same.
+The important difference is that when using `bslib::bs_theme(version = "3", bootswatch = "THEME NAME")` we could apply the custom bootstrap theme.
+Another difference is that at the moment of writing it the newest `shinyWidgets` package from the main branch has to be used when `bslib::bs_theme(version = "3")` is used.
+
+```
+# Downloading the newest shinyWidgets
+# needed only when bslib::bs_theme(version = "3", ...) is used
+remotes::install_github("https://github.com/dreamRs/shinyWidgets@main")
+```
+
+### Default bootstrap theme
+
+When using the default `bslib` theme for any version (3, 4 or 5) its styling possibly will be not what expected.
+Please apply a custom theme or run the interactive `themer` to explore all the theme options.
+
+```
+# instead of
+options("teal.bs_theme" =  bslib::bs_theme(version = "5"))
+# try non-default themes
+options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "THEME NAME". ...))
+# or run the app inside bslib::run_with_themer
+```
+
 ### reset the bootstrap theme
 
 Please use the `options("teal.bs_theme" = NULL)` call to return to the default shiny bootstrap for teal apps.
