@@ -11,7 +11,7 @@ new_tdata(data, code = "", join_keys = NULL)
 Inside this object all \code{data.frames} will be made \code{reactive}.}
 
 \item{code}{A \code{character} (or \code{reactive} which evaluates to a \code{character}) containing
-the code used to generate the data. This should be \code{reactive}if the code is changing
+the code used to generate the data. This should be \code{reactive} if the code is changing
 during a reactive context (e.g. if filtering changes the code). Inside this
 object \code{code} will be made reactive}
 
@@ -31,10 +31,14 @@ the data
 }
 \examples{
 
-td <- new_tdata(
-  data = list(iris = iris, mtcars = reactive(mtcars)),
+data <- new_tdata(
+  data = list(iris = iris, mtcars = reactive(mtcars), dd = data.frame(x = 1:10)),
   code = "iris <- iris
-    mtcars = mtcars"
+    mtcars <- mtcars
+    dd <- data.frame(x = 1:10)"
 )
+
+# Extract a data.frame
+isolate(data[["iris"]]())
 
 }

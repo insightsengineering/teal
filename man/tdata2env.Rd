@@ -2,8 +2,8 @@
 % Please edit documentation in R/tdata.R
 \name{tdata2env}
 \alias{tdata2env}
-\title{Function to convert a \code{tdata} object to a list
-Any \code{reactives} inside \code{tdata} are evaluated}
+\title{Function to convert a \code{tdata} object to an \code{environment}
+Any \code{reactives} inside \code{tdata} are first evaluated}
 \usage{
 tdata2env(data)
 }
@@ -11,20 +11,20 @@ tdata2env(data)
 \item{`data`}{a \code{tdata} object}
 }
 \value{
-a list
+an \code{environment}
 }
 \description{
-Function to convert a \code{tdata} object to a list
-Any \code{reactives} inside \code{tdata} are evaluated
+Function to convert a \code{tdata} object to an \code{environment}
+Any \code{reactives} inside \code{tdata} are first evaluated
 }
 \examples{
 
-td <- new_tdata(
+data <- new_tdata(
   data = list(iris = iris, mtcars = reactive(mtcars)),
   code = "iris <- iris
     mtcars = mtcars"
 )
 
-my_list <- isolate(tdata2env(td))
+my_env <- isolate(tdata2env(data))
 
 }
