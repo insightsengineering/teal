@@ -255,5 +255,13 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     }
   )
 
-  new_tdata(data, reactive(get_datasets_code(datanames, datasets)), datasets$get_join_keys())
+  metadata <- lapply(datanames, datasets$get_metadata)
+  names(metadata) <- datanames
+
+  new_tdata(
+    data,
+    reactive(get_datasets_code(datanames, datasets)),
+    datasets$get_join_keys(),
+    metadata
+  )
 }

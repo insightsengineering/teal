@@ -4,7 +4,7 @@
 \alias{new_tdata}
 \title{Create a new \code{tdata} object which contains}
 \usage{
-new_tdata(data, code = "", join_keys = NULL)
+new_tdata(data, code = "", join_keys = NULL, metadata = NULL)
 }
 \arguments{
 \item{data}{A \verb{named list} of \code{data.frames} which optionally can be \code{reactive}.
@@ -17,6 +17,8 @@ object \code{code} will be made reactive}
 
 \item{join_keys}{A \code{teal.data::JoinKeys} object containing relationships between the
 datasets.}
+
+\item{metadata}{}
 }
 \value{
 A \code{tdata} object

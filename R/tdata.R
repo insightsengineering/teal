@@ -13,6 +13,7 @@
 #'   object `code` will be made reactive
 #' @param join_keys A `teal.data::JoinKeys` object containing relationships between the
 #'   datasets.
+#' @param metadata
 #'
 #' @return A `tdata` object
 #' @examples
@@ -28,7 +29,7 @@
 #' isolate(data[["iris"]]())
 #'
 #' @export
-new_tdata <- function(data, code = "", join_keys = NULL) {
+new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   checkmate::assert_list(
     data,
     types = c("data.frame", "reactive"), any.missing = FALSE, names = "unique"
@@ -52,6 +53,7 @@ new_tdata <- function(data, code = "", join_keys = NULL) {
   # set attributes
   attr(data, "code") <- if (is.reactive(code)) code else reactive(code)
   attr(data, "join_keys") <- join_keys
+  attr(data, "metadata") <- metadata
 
   # set class
   class(data) <- c("tdata", class(data))
@@ -98,4 +100,24 @@ get_join_keys.tdata <- function(data) {
 #' @export
 get_join_keys.default <- function(data) {
   stop("get_join_keys function not implemented for this object")
+}
+
+#' @export
+get_metadata <- function(data, dataname) {
+  checkmate::assert_string(dataname)
+  UseMethod("get_metadata", data)
+}
+
+#' @export
+get_metadata.tdata <- function(data, dataname) {
+  metadata <- attr(data, "metadata")
+  if (is.null(metadata)) {
+    return(metadata)
+  }
+  metadata[[dataname]]
+}
+
+#' @export
+get_metadata.default <- function(data, dataname) {
+  stop("get_metadata function not implemented for this object")
 }
