@@ -8,7 +8,7 @@
 #' @param data A `named list` of `data.frames` which optionally can be `reactive`.
 #'   Inside this object all `data.frames` will be made `reactive`.
 #' @param code A `character` (or `reactive` which evaluates to a `character`) containing
-#'   the code used to generate the data. This should be `reactive`if the code is changing
+#'   the code used to generate the data. This should be `reactive` if the code is changing
 #'   during a reactive context (e.g. if filtering changes the code). Inside this
 #'   object `code` will be made reactive
 #' @param join_keys A `teal.data::JoinKeys` object containing relationships between the
