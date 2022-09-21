@@ -3,7 +3,8 @@
 #' - `data` a `reactive` list of data.frames with attributes
 #' i) `code` (`reactive`) containing code used to generate the data
 #' and ii) join_keys (`JoinKeys`) containing the relationships between
-#' the data
+#' the data iii) metadata (`named list`) containing any metadata associated with
+#' the data frames
 #'
 #' @param data A `named list` of `data.frames` which optionally can be `reactive`.
 #'   Inside this object all `data.frames` will be made `reactive`.
@@ -13,7 +14,8 @@
 #'   object `code` will be made reactive
 #' @param join_keys A `teal.data::JoinKeys` object containing relationships between the
 #'   datasets.
-#' @param metadata
+#' @param metadata A `named list` each element contains a list of metadata about the named data.frame
+#' Each element of these list should be atomic and length one.
 #'
 #' @return A `tdata` object
 #' @examples
@@ -22,7 +24,8 @@
 #'   data = list(iris = iris, mtcars = reactive(mtcars), dd = data.frame(x = 1:10)),
 #'   code = "iris <- iris
 #'     mtcars <- mtcars
-#'     dd <- data.frame(x = 1:10)"
+#'     dd <- data.frame(x = 1:10)",
+#'   metadata = list(dd = list(author = "NEST"), iris = list(version = 1))
 #' )
 #'
 #' # Extract a data.frame
@@ -36,6 +39,10 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   )
   checkmate::assert_class(join_keys, "JoinKeys", null.ok = TRUE)
   checkmate::assert_multi_class(code, c("character", "reactive"))
+
+  checkmate::assert_list(metadata, any.missing = FALSE, names = "unique")
+  checkmate::assert_subset(names(metadata), names(data))
+  for (m in metadata) teal.data::validate_metadata(m)
 
   if (is.reactive(code)) {
     isolate(checkmate::assert_class(code(), "character"))
@@ -112,7 +119,7 @@ get_metadata <- function(data, dataname) {
 get_metadata.tdata <- function(data, dataname) {
   metadata <- attr(data, "metadata")
   if (is.null(metadata)) {
-    return(metadata)
+    return(NULL)
   }
   metadata[[dataname]]
 }

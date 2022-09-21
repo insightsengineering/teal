@@ -18,7 +18,8 @@ object \code{code} will be made reactive}
 \item{join_keys}{A \code{teal.data::JoinKeys} object containing relationships between the
 datasets.}
 
-\item{metadata}{}
+\item{metadata}{A \verb{named list} each element contains a list of metadata about the named data.frame
+Each element of these list should be atomic and length one.}
 }
 \value{
 A \code{tdata} object
@@ -28,7 +29,8 @@ A \code{tdata} object
 \item \code{data} a \code{reactive} list of data.frames with attributes
 i) \code{code} (\code{reactive}) containing code used to generate the data
 and ii) join_keys (\code{JoinKeys}) containing the relationships between
-the data
+the data iii) metadata (\verb{named list}) containing any metadata associated with
+the data frames
 }
 }
 \examples{
@@ -37,7 +39,8 @@ data <- new_tdata(
   data = list(iris = iris, mtcars = reactive(mtcars), dd = data.frame(x = 1:10)),
   code = "iris <- iris
     mtcars <- mtcars
-    dd <- data.frame(x = 1:10)"
+    dd <- data.frame(x = 1:10)",
+  metadata = list(dd = list(author = "NEST"), iris = list(version = 1))
 )
 
 # Extract a data.frame
