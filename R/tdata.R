@@ -40,7 +40,7 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   checkmate::assert_class(join_keys, "JoinKeys", null.ok = TRUE)
   checkmate::assert_multi_class(code, c("character", "reactive"))
 
-  checkmate::assert_list(metadata, any.missing = FALSE, names = "unique")
+  checkmate::assert_list(metadata, names = "unique", null.ok = TRUE)
   checkmate::assert_subset(names(metadata), names(data))
   for (m in metadata) teal.data::validate_metadata(m)
 
@@ -86,7 +86,6 @@ tdata2env <- function(data) { # nolint
   checkmate::assert_class(data, "tdata")
   list2env(lapply(data, function(x) if (is.reactive(x)) x() else x))
 }
-
 
 #' @export
 get_code.tdata <- function(data) {
