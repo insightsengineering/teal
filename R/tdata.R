@@ -39,12 +39,7 @@ new_tdata <- function(data, code = "", join_keys = NULL) {
   #create reactive data.frames
   for (x in names(data)) {
     if (!is.reactive(data[[x]])) {
-      isolate({
-        data_var <- paste0(x,"_reactive_var_creation")
-        assign(data_var, data[[x]])
-        makeReactiveBinding(as.character(as.symbol(data_var)))
-        data[[x]] <- do.call(reactive, list(as.symbol(data_var)))
-      })
+      data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
     }
   }
 
