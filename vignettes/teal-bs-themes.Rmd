@@ -52,6 +52,28 @@ options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux")
 options("teal.bs_theme" = bslib::bs_theme_update(bslib::bs_theme(version = "5"), bootswatch = "lux"))
 ```
 
+### Default bootstrap theme
+
+When using the default `bslib` theme for any version (3, 4 or 5) its styling possibly will be not what expected.
+Please apply a custom theme or run the interactive `themer` to explore all the theme options. In many scenarios updating the theme could not be enough and e.g. font color and other specifications have to be updated.
+
+```
+# instead of
+options("teal.bs_theme" =  bslib::bs_theme(version = "5"))
+# try non-default themes
+options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "THEME NAME". ...))
+# or run the app inside bslib::run_with_themer
+```
+
+### reset the bootstrap theme
+
+Please use the `options("teal.bs_theme" = NULL)` call to return to the default shiny bootstrap for teal apps.
+
+### theme not updated
+
+One reason the theme is not updated could be the problem that a browser caches the previous one, especially when we run different themes one after another.
+Please, use the "Cmd+Shift+r" (Mac) or "Ctrl+F5" (Windows) to hard refresh the webpage.
+
 ### custom teal css
 
 The most important `teal` html tags have a proper id/class, so they could be directly styled.
@@ -77,28 +99,6 @@ Another difference is that at the moment of writing it the newest `shinyWidgets`
 # needed only when bslib::bs_theme(version = "3", ...) is used
 remotes::install_github("https://github.com/dreamRs/shinyWidgets@main")
 ```
-
-### Default bootstrap theme
-
-When using the default `bslib` theme for any version (3, 4 or 5) its styling possibly will be not what expected.
-Please apply a custom theme or run the interactive `themer` to explore all the theme options.
-
-```
-# instead of
-options("teal.bs_theme" =  bslib::bs_theme(version = "5"))
-# try non-default themes
-options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "THEME NAME". ...))
-# or run the app inside bslib::run_with_themer
-```
-
-### reset the bootstrap theme
-
-Please use the `options("teal.bs_theme" = NULL)` call to return to the default shiny bootstrap for teal apps.
-
-### theme not updated
-
-One reason the theme is not updated could be the problem that a browser caches the previous one, especially when we run different themes one after another.
-Please, use the "Cmd+Shift+r" (Mac) or "Ctrl+F5" (Windows) to hard refresh the webpage.
 
 ### regular `shiny::fluidPage`
 
