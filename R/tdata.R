@@ -40,6 +40,8 @@ new_tdata <- function(data, code = "", join_keys = NULL) {
   for (x in names(data)) {
     if (!is.reactive(data[[x]])) {
       data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
+    } else{
+      isolate(checkmate::assert_class(data[[x]](), "data.frame"))
     }
   }
 
