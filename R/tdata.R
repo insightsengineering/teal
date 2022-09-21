@@ -18,9 +18,10 @@
 #' @examples
 #'
 #' data <- new_tdata(
-#'   data = list(iris = iris, mtcars = reactive(mtcars)),
+#'   data = list(iris = iris, mtcars = reactive(mtcars), dd = data.frame(x = 1:10)),
 #'   code = "iris <- iris
-#'     mtcars = mtcars"
+#'     mtcars <- mtcars
+#'     dd <- data.frame(x = 1:10)"
 #' )
 #'
 #' # Extract a data.frame
