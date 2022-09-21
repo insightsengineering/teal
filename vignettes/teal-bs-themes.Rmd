@@ -36,26 +36,28 @@ options("teal.bs_theme" = bslib::bs_theme("Custom Options"))
 
 ### bootstrap version and themes
 
-The best way to **explore** the bootstrap themes is to use `bslib::run_with_themer(shinyApp(app$ui, app$server))` or `bslib::bs_theme_preview()`,
+The best and recommended ways to **explore** the bootstrap themes is to use `bslib::run_with_themer(shinyApp(app$ui, app$server))` or `bslib::bs_theme_preview()`,
 both functions offer an interactive explore mode.
 Please, remember that the interactive theming for Bootstrap 3 is not supported.
 The `bslib::bs_theme_preview()` is recommended when the end user does not have any shiny app yet. 
 When you already have a shiny app and want to test different bootstrap themes (and css styling) then `bslib::run_with_themer(shinyApp(app$ui, app$server))` is recommended.
 
-Available bootstrap versions could be checked with `bslib::versions()` and bootstrap themes (`bootswatch`) with `bslib::bootswatch_themes()`.
+Available bootstrap versions could be checked with `bslib::versions()` and bootstrap themes (`bootswatch`) with `bslib::bootswatch_themes(version = "5")`.
 
 ```
-# bslib::bootswatch_themes()
+# bslib::bootswatch_themes(version = "5")
 # bslib::versions()
 options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux")
 # or
 options("teal.bs_theme" = bslib::bs_theme_update(bslib::bs_theme(version = "5"), bootswatch = "lux"))
 ```
 
+Specifying only the bootstrap theme in many scenarios is not enough, please read the next section "Default bootstrap theme".
+
 ### Default bootstrap theme
 
 When using the default `bslib` theme for any version (3, 4 or 5) its styling possibly will be not what expected.
-Please apply a custom theme or run the interactive `themer` to explore all the theme options. In many scenarios updating the theme could not be enough and e.g. font color and other specifications have to be updated.
+Please run the interactive `themer` (recommended) or apply a custom theme to explore all the theme options. **In many scenarios updating only the theme could not be enough and e.g. font color and other specifications should be updated too.**
 
 ```
 # instead of
