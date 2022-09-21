@@ -1,13 +1,16 @@
 #' Create a new `tdata` object which contains
 #'
-#' - `data` a `reactive` list of data.frames with attributes
+#' - `data` a `reactive` list of data.frames (or other items which
+#'  can be passed into `teal modules` such as `MultiAssayExperiment`) with attributes
 #' i) `code` (`reactive`) containing code used to generate the data
 #' and ii) join_keys (`JoinKeys`) containing the relationships between
 #' the data iii) metadata (`named list`) containing any metadata associated with
 #' the data frames
 #'
-#' @param data A `named list` of `data.frames` which optionally can be `reactive`.
-#'   Inside this object all `data.frames` will be made `reactive`.
+#' @param data A `named list` of `data.frames` (or other items which
+#'  can be passed into `teal modules` such as `MultiAssayExperiment`)
+#'  which optionally can be `reactive`.
+#'   Inside this object all of these items will be made `reactive`.
 #' @param code A `character` (or `reactive` which evaluates to a `character`) containing
 #'   the code used to generate the data. This should be `reactive` if the code is changing
 #'   during a reactive context (e.g. if filtering changes the code). Inside this

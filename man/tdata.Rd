@@ -7,8 +7,10 @@
 new_tdata(data, code = "", join_keys = NULL, metadata = NULL)
 }
 \arguments{
-\item{data}{A \verb{named list} of \code{data.frames} which optionally can be \code{reactive}.
-Inside this object all \code{data.frames} will be made \code{reactive}.}
+\item{data}{A \verb{named list} of \code{data.frames} (or other items which
+can be passed into \verb{teal modules} such as \code{MultiAssayExperiment})
+which optionally can be \code{reactive}.
+Inside this object all of these items will be made \code{reactive}.}
 
 \item{code}{A \code{character} (or \code{reactive} which evaluates to a \code{character}) containing
 the code used to generate the data. This should be \code{reactive} if the code is changing
@@ -26,7 +28,8 @@ A \code{tdata} object
 }
 \description{
 \itemize{
-\item \code{data} a \code{reactive} list of data.frames with attributes
+\item \code{data} a \code{reactive} list of data.frames (or other items which
+can be passed into \verb{teal modules} such as \code{MultiAssayExperiment}) with attributes
 i) \code{code} (\code{reactive}) containing code used to generate the data
 and ii) join_keys (\code{JoinKeys}) containing the relationships between
 the data iii) metadata (\verb{named list}) containing any metadata associated with
