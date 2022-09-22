@@ -311,7 +311,7 @@ testthat::test_that(".datasets_to_data returns required attributes", {
 
   # code
   testthat::expect_equal(
-    attr(data, "code")[1],
+    isolate(attr(data, "code")()[1]),
     "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\nd2 <- data.frame(id = 1:5, value = 1:5)\n\n"
   )
 })

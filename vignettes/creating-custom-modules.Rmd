@@ -23,6 +23,7 @@ example_module <- function(label = "example teal module") {
   module(
     label,
     server = function(id, data) {
+      checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
         output$text <- renderPrint(data[[input$dataname]]())
       })
@@ -70,7 +71,8 @@ function(id,
 ```
 
 When used inside a teal application called with `teal::init` the `data` argument is a named list of reactive data.frames
-containing the data after having been filtered through the filter panel.
+containing the data after having been filtered through the filter panel. It is of the `tdata` type and can be created using
+the `new_tdata` function.
 
 ## A More Complicated Example
 
@@ -114,6 +116,7 @@ ui_histogram_example <- function(id, histogram_var) {
 # histogram_var is a teal.transform::data_extract_spec object
 # specifying which columns of which datasets users can choose
 srv_histogram_example <- function(id, data, histogram_var) {
+  checkmate::assert_class(data, "tdata")
   moduleServer(id, function(input, output, session) {
 
     # get the selected dataset and column from the UI
@@ -121,18 +124,18 @@ srv_histogram_example <- function(id, data, histogram_var) {
       id = "histogram_var",
       datasets = data,
       data_extract_spec = histogram_var,
-      join_keys = attr(data, "join_keys")
+      join_keys = get_join_keys(data)
     )
 
     dataname <- reactive(extracted()$dataname)
     selected <- reactive(extracted()$select)
 
-    # the reactive which adds the code to plot the histogram into the quosure
+    # the reactive which adds the code to plot the histogram into the qenv
     plot_code_q <- reactive({
       validate(need(length(selected) == 1, "Please select a variable"))
 
-      # take the filtered data from the data object and add it into the quosure environment
-      teal.code::new_quosure(env = data) %>%
+      # take the filtered data from the data object and add it into the qenv environment
+      teal.code::new_qenv(tdata2env(data), code = get_code(data)) %>%
         teal.code::eval_code(
           substitute(
             expr = p <- hist(dataname[, selected]),
