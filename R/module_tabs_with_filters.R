@@ -24,8 +24,10 @@
 #' @keywords internal
 #'
 #' @examples
+#'
 #' mods <- teal:::get_dummy_modules()
 #' datasets <- teal:::get_dummy_datasets()
+#'
 #' app <- shinyApp(
 #'   ui = function() {
 #'     tagList(
@@ -54,8 +56,7 @@
 #'
 #'
 #' # An example with two filter panels in two apps side-by-side
-#' mods <- teal:::get_dummy_modules()
-#' datasets1 <- datasets2 <- teal:::get_dummy_datasets()
+#' datasets1 <- datasets2 <- datasets
 #' app <- shinyApp(
 #'   ui = function() {
 #'     tagList(
