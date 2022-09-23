@@ -1,5 +1,9 @@
 # teal 0.11.1.9023
 
+### New features
+
+* Added the support for custom `bslib` bootstrap themes in `teal::init` apps, please read more in the new `teal-bs-themes` vignette.
+
 ### Enhancements
 
 * Added option to choose which variables can be filtered in the filter panel by using the `filterable` attributes for the per-dataset lists in the `filter` argument of `init`. 
