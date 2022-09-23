@@ -41,7 +41,6 @@ testthat::test_that("new_tdata throws error if contents of data list are not of 
 })
 
 testthat::test_that("new_tdata throws error if code is not character or reactive character", {
-
   testthat::expect_error(
     new_tdata(list(x = iris), code = 5),
     "Assertion on 'code' failed: Must inherit from class 'character'/'reactive'"
@@ -51,7 +50,6 @@ testthat::test_that("new_tdata throws error if code is not character or reactive
     new_tdata(list(x = iris), code = reactive(5)),
     "Assertion on 'code' failed: Must inherit from class 'character'"
   )
-
 })
 
 testthat::test_that("new_tdata accepts character and reactive characters for code argument", {
@@ -65,7 +63,6 @@ testthat::test_that("new_tdata accepts character and reactive characters for cod
 })
 
 testthat::test_that("new_tdata throws error if join_keys is not of class JoinKeys", {
-
   testthat::expect_error(
     new_tdata(list(x = iris), join_keys = "x"),
     "Assertion on 'join_keys' failed: Must inherit from class 'JoinKeys'"
@@ -73,13 +70,40 @@ testthat::test_that("new_tdata throws error if join_keys is not of class JoinKey
 })
 
 testthat::test_that("new_tdata throws no error if join_keys is of class JoinKeys", {
-
   testthat::expect_error(
     new_tdata(list(x = iris), join_keys = teal.data::join_keys()),
     NA
   )
 })
 
+# note not testing the contents of metadata elements are good as we are relying on
+# the (tested) function in teal.data to do this
+testthat::test_that(
+  "new_tdata throws error if metadata is not a list with unique names a subset of the names of data",
+  {
+    testthat::expect_error(
+      new_tdata(list(x = iris, y = mtcars), metadata = 1:3),
+      "Assertion on 'metadata' failed: Must be of type 'list' \\(or 'NULL'\\)"
+    )
+
+    testthat::expect_error(
+      new_tdata(list(x = iris, y = mtcars), metadata = list(1, 2, 3)),
+      "Assertion on 'metadata' failed: Must have names."
+    )
+
+    testthat::expect_error(
+      new_tdata(list(x = iris, y = mtcars), metadata = list(x = list(A = 1), z = list(B = 1))),
+      "Must be a subset of \\{'x','y'\\}, but has additional elements \\{'z'\\}."
+    )
+  }
+)
+
+testthat::test_that("new_tdata does not throw error with valid metadata", {
+  testthat::expect_error(
+    new_tdata(list(x = iris, y = mtcars), metadata = list(x = list(A = 1), y = list(B = 1))),
+    NA
+  )
+})
 
 # ---- get_metadata ----
 testthat::test_that("get_metadata returns NULL if no metadata", {
