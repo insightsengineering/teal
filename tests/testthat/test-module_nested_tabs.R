@@ -269,7 +269,7 @@ get_example_filtered_data <- function() {
 
   teal.slice::init_filtered_data(
     x = list(
-      d1 = list(dataset = d1, keys = "id"),
+      d1 = list(dataset = d1, keys = "id", metadata = list("A" = 1)),
       d2 = list(dataset = d2, keys = "id")
     ),
     join_keys = teal.data::join_keys(teal.data::join_key("d1", "d2", c("pk" = "id"))),
@@ -298,22 +298,33 @@ testthat::test_that(".datasets_to_data returns only data requested by modules$fi
   testthat::expect_equal(isolate(names(data)), "d1")
 })
 
-testthat::test_that(".datasets_to_data returns required attributes", {
+testthat::test_that(".datasets_to_data returns tdata object", {
   datasets <- get_example_filtered_data()
   module <- list(filter = "all")
   data <- .datasets_to_data(module, datasets)
 
+  testthat::expect_s3_class(data, "tdata")
+
   # join_keys
   testthat::expect_equal(
-    attr(data, "join_keys"),
+    get_join_keys(data),
     teal.data::join_keys(teal.data::join_key("d1", "d2", c("pk" = "id")))
   )
 
   # code
   testthat::expect_equal(
-    isolate(attr(data, "code")()[1]),
+    isolate(get_code(data)[1]),
     "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\nd2 <- data.frame(id = 1:5, value = 1:5)\n\n"
   )
+
+  # metadata
+  testthat::expect_equal(
+    get_metadata(data, "d1"),
+    list(A = 1)
+  )
+
+  testthat::expect_null(get_metadata(data, "d2"))
+
 })
 
 testthat::test_that(".datasets_to_data returns parent datasets for CDISC data", {
