@@ -52,7 +52,7 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   for (m in metadata) teal.data::validate_metadata(m)
 
   if (is.reactive(code)) {
-    isolate(checkmate::assert_class(code(), "character"))
+    isolate(checkmate::assert_class(code(), "character", .var.name = "code"))
   }
 
   #create reactive data.frames
@@ -60,7 +60,9 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
     if (!is.reactive(data[[x]])) {
       data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
     } else {
-      isolate(checkmate::assert_multi_class(data[[x]](), c("data.frame", "MultiAssayExperiment")))
+      isolate(
+        checkmate::assert_multi_class(
+          data[[x]](), c("data.frame", "MultiAssayExperiment"), .var.name = "data"))
     }
   }
 

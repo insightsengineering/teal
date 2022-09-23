@@ -40,6 +40,47 @@ testthat::test_that("new_tdata throws error if contents of data list are not of 
   )
 })
 
+testthat::test_that("new_tdata throws error if code is not character or reactive character", {
+
+  testthat::expect_error(
+    new_tdata(list(x = iris), code = 5),
+    "Assertion on 'code' failed: Must inherit from class 'character'/'reactive'"
+  )
+
+  testthat::expect_error(
+    new_tdata(list(x = iris), code = reactive(5)),
+    "Assertion on 'code' failed: Must inherit from class 'character'"
+  )
+
+})
+
+testthat::test_that("new_tdata accepts character and reactive characters for code argument", {
+  testthat::expect_error(
+    new_tdata(list(x = iris, y = mtcars), code = c("x <- iris", "y <- mtcars")), NA
+  )
+
+  testthat::expect_error(
+    new_tdata(list(x = iris, y = mtcars), code = reactive(c("x <- iris", "y <- mtcars"))), NA
+  )
+})
+
+testthat::test_that("new_tdata throws error if join_keys is not of class JoinKeys", {
+
+  testthat::expect_error(
+    new_tdata(list(x = iris), join_keys = "x"),
+    "Assertion on 'join_keys' failed: Must inherit from class 'JoinKeys'"
+  )
+})
+
+testthat::test_that("new_tdata throws no error if join_keys is of class JoinKeys", {
+
+  testthat::expect_error(
+    new_tdata(list(x = iris), join_keys = teal.data::join_keys()),
+    NA
+  )
+})
+
+
 # ---- get_metadata ----
 testthat::test_that("get_metadata returns NULL if no metadata", {
   my_tdata <- new_tdata(data = list(iris = iris, mtcars = mtcars))
