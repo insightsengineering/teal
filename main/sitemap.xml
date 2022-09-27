@@ -37,6 +37,9 @@
     <loc>https://insightsengineering.github.io/teal/main/articles/preprocessing-data.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/main/articles/teal-bs-themes.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/main/articles/teal-options.html</loc>
   </url>
   <url>
@@ -107,6 +110,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/get_rcode_ui.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/main/reference/get_teal_bs_theme.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/include_css_files.html</loc>

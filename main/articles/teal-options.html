@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9022</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9023</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,17 +52,12 @@
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
+    <a class="dropdown-item" href="../articles/teal-bs-themes.html">Teal and Bootstrap Themes</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -241,8 +236,9 @@ making any changes to the application code. See the documentation of
 <p>Default: <code><a href="https://rdrr.io/pkg/teal.widgets/man/basic_table_args.html" class="external-link">teal.widgets::basic_table_args()</a></code>.</p>
 </div>
 <div class="section level4">
-<h4 id="teal-ggplot2_args">
-<code>teal.ggplot2_args</code><a class="anchor" aria-label="anchor" href="#teal-ggplot2_args"></a>
+<h4 id="teal-ggplot2_args-ggplot2_args-object">
+<code>teal.ggplot2_args</code> (<code>ggplot2_args</code>
+object)<a class="anchor" aria-label="anchor" href="#teal-ggplot2_args-ggplot2_args-object"></a>
 </h4>
 <p>This option allows modifying labels and themes of all
 <code>ggplot2</code> plots in a <code>teal</code> application. See the
@@ -257,6 +253,17 @@ information.</p>
 <p>This option controls the dots per inch of the graphs rendered and
 downloaded when using <code>plot_with_settings</code>.</p>
 <p>Default: 72</p>
+</div>
+<div class="section level4">
+<h4 id="teal-bs_theme-bslibbs_theme-object">
+<code>teal.bs_theme</code> (<code>bslib::bs_theme</code>
+object)<a class="anchor" aria-label="anchor" href="#teal-bs_theme-bslibbs_theme-object"></a>
+</h4>
+<p>This option controls the bootstrap theme and version used in the teal
+apps. Achieve better UX with the customized UI of an app. Please visit
+the <code><a href="../articles/teal-bs-themes.html">vignette("teal-bs-themes", package = "teal")</a></code> to read
+more about the functionality.</p>
+<p>Default: <code>NULL</code></p>
 </div>
 </div>
 </div>
