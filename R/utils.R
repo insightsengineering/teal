@@ -19,3 +19,17 @@ get_client_timezone <- function(ns) {
   shinyjs::runjs(script) # function does not return anything
   return(invisible(NULL))
 }
+
+#' Resolve the expected bootstrap theme
+#' @keywords internal
+get_teal_bs_theme <- function() {
+  bs_theme <- getOption("teal.bs_theme")
+  if (is.null(bs_theme)) {
+    NULL
+  } else if (!inherits(bs_theme, "bs_theme")) {
+    warning("teal.bs_theme has to be of a bslib::bs_theme class, the default shiny bootstrap is used.")
+    NULL
+  } else {
+    bs_theme
+  }
+}

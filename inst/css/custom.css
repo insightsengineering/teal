@@ -60,3 +60,7 @@ footer {
   font-size: 0.8em;
   opacity: 0.6;
 }
+
+#teal_secondary_col .well {
+  margin: 0  0 15px 0;
+}

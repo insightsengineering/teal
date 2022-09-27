@@ -41,6 +41,7 @@ Imports:
     teal.slice (>= 0.1.1),
     utils
 Suggests:
+    bslib,
     covr,
     dplyr,
     knitr,

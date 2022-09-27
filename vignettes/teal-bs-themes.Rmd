@@ -1,0 +1,156 @@
+---
+title: "Teal and Bootstrap Themes"
+author: "NEST CoreDev"
+date: "2022-09-08"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Teal and Bootstrap Themes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+We offer the easy application of a custom bootstrap theme to a `teal::init` app. 
+Teal is a consumer of the `bslib` R package which provides tools for customizing Bootstrap themes e.g. of Shiny apps.
+
+## Usage
+
+Teal users have the benefit of custom bootstrap themes by specifying the `teal.bs_theme` R option, which has to be set to `bslib::bs_theme` object.
+The `bslib::bs_theme(...)` function creates a Bootstrap theme object, where you should specify the (major) Bootstrap version (default or one of 3, 4 or 5).
+Optionally you could choose a **`bootswatch` theme** and **customize the app css** with functions like `bslib::bs_add_rules`.
+Please read more about custom themes in [the `bslib` getting started vignette](https://rstudio.github.io/bslib/articles/bslib.html).
+The `teal.bs_theme` R option has to be specified at the top of the code script.
+
+Please install `bslib` package before you run the code below.
+
+### `teal.bs_theme` R option
+
+```
+options("teal.bs_theme" = bslib::bs_theme("Custom Options"))
+
+#######################
+# teal::init() app code
+#######################
+```
+
+### bootstrap version and themes
+
+The best and recommended ways to **explore** the bootstrap themes are to use `bslib::run_with_themer(shinyApp(app$ui, app$server))` or `bslib::bs_theme_preview()`,
+both functions offer an interactive explore mode.
+Note that the interactive theming for Bootstrap 3 is not supported.
+The `bslib::bs_theme_preview()` is recommended when the end user does not have any shiny app yet. 
+When you already have a shiny app and you want to test different bootstrap themes (and css styling) then `bslib::run_with_themer(shinyApp(app$ui, app$server))` is recommended.
+
+Available bootstrap versions could be checked with `bslib::versions()` and bootstrap themes (`bootswatch`) with `bslib::bootswatch_themes(version = "5")`.
+
+```
+# bslib::versions()
+# bslib::bootswatch_themes(version = "5")
+options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux")
+# or
+options("teal.bs_theme" = bslib::bs_theme_update(bslib::bs_theme(version = "5"), bootswatch = "lux"))
+```
+
+Specifying only the bootstrap theme in many scenarios is not enough, please read the next section "Default bootstrap theme".
+
+### Default bootstrap theme
+
+When using the default `bslib` theme for any version (3, 4 or 5) its styling might not be as expected.
+Please run the interactive `themer` (recommended) or apply a custom theme to explore all the theme options. **In many scenarios updating only the theme might not be enough and e.g. font color and other specifications should be updated too.**
+
+```
+# instead of
+options("teal.bs_theme" =  bslib::bs_theme(version = "5"))
+# try non-default themes
+options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "THEME NAME". ...))
+# or run the app inside bslib::run_with_themer
+```
+
+### Reset the bootstrap theme
+
+Please use the `options("teal.bs_theme" = NULL)` call to return to the default shiny bootstrap for teal apps.
+
+### Theme not updated
+
+One reason the theme is not updated could be the problem that a browser caches the previous one, especially when we run different themes one after another.
+Please, use the "Cmd+Shift+R" (Mac) or "Ctrl+F5" (Windows) to hard refresh the webpage.
+
+### Custom teal css
+
+The most important `teal` html tags have a proper id/class, so they could be directly styled.
+The `bslib::bs_add_rules` function could be used around the `bslib::bs_theme` object to apply custom css rules.
+
+```
+library(magrittr)
+options("teal.bs_theme" = bslib::bs_theme(version = "5") %>% bslib::bs_add_rules("Anything understood by sass::as_sass()"))
+```
+
+Other `bslib::bs_add_*` family functions could be used to specify low-level bootstrap elements.
+
+### Bootstrap NULL vs 3
+
+It is important to note the difference between `options("teal.bs_theme" = NULL)` and `options("teal.bs_theme" = bslib::bs_theme(version = "3")`.
+The small differences could comes from the `bslib` approximation of the default shiny bootstrap for version 3.
+An important difference is that when using `bslib::bs_theme(version = "3", bootswatch = "THEME NAME")` we could apply the custom bootstrap theme.
+Another difference is that the usage of `bslib::bs_theme(version = "3")` requires the installation of the newest `shinyWidgets` package from the main branch, see below.
+
+```
+# Downloading the newest shinyWidgets
+# needed only when bslib::bs_theme(version = "3", ...) is used
+remotes::install_github("https://github.com/dreamRs/shinyWidgets@main")
+```
+
+### Regular `shiny::fluidPage`
+
+If you want to update the theme in the regular `shiny::fluidPage` like app, you do not need the `teal.bs_theme` option. Then simply provide the `bslib::bs_theme` directly to the `shiny::fluidPage(theme = bslib::bs_theme(...), ...)`. 
+
+### Examples
+
+With `bslib::run_with_themer` to explore different themes.
+Please, remember that the interactive theming for Bootstrap 3 is not supported.
+
+
+```{r, message=FALSE}
+options("teal.bs_theme" = bslib::bs_theme(version = "5"))
+library(teal)
+
+app <- init(
+  data = teal_data(
+    dataset("IRIS", iris),
+    dataset("MTCARS", mtcars)
+  ),
+  modules = modules(example_module(), example_module()),
+  header = "My first teal application"
+)
+
+if (interactive()) {
+  # Run with themer
+  bslib::run_with_themer(shinyApp(app$ui, app$server))
+}
+```
+
+Apply the already chosen theme with `options("teal.bs_theme" = bslib::bs_theme(...))`, 
+in this example the `lux` theme from `bootstrap` version 5.
+
+```{r, message=FALSE}
+options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux"))
+library(teal)
+
+app <- init(
+  data = teal_data(
+    dataset("IRIS", iris),
+    dataset("MTCARS", mtcars)
+  ),
+  modules = modules(example_module(), example_module()),
+  header = "My first teal application"
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+## Sources
+
+- https://rstudio.github.io/bslib/

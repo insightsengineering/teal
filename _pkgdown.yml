@@ -21,6 +21,7 @@ articles:
   - creating-custom-modules
   - adding-support-for-reporting
   - teal-options
+  - teal-bs-themes
 
 reference:
   - title: Teal Core Functions
