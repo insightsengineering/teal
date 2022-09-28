@@ -102,7 +102,8 @@ get_code.tdata <- function(data) {
 #' @return (`character`) code used in the `tdata` object.
 #' @export
 get_code_tdata <- function(data) {
-  get_code.tdata(data)
+  checkmate::assert_class(data, "tdata")
+  get_code(data)
 }
 
 #' @export
