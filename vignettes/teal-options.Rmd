@@ -75,7 +75,7 @@ This specifies the list of arguments passed to every call to `rtables::basic_tab
 
 Default: `teal.widgets::basic_table_args()`.
 
-### `teal.ggplot2_args`
+### `teal.ggplot2_args` (`ggplot2_args` object)
 This option allows modifying labels and themes of all `ggplot2` plots in a `teal` application. See the documentation of `teal.widgets::ggplot2_args` for more information.
 
 Default: `teal.widgets::ggplot2_args()`.
@@ -84,3 +84,9 @@ Default: `teal.widgets::ggplot2_args()`.
 This option controls the dots per inch of the graphs rendered and downloaded when using `plot_with_settings`. 
 
 Default: 72
+
+### `teal.bs_theme` (`bslib::bs_theme` object)
+This option controls the bootstrap theme and version used in the teal apps. Achieve better UX with the customized UI of an app.
+Please visit the `vignette("teal-bs-themes", package = "teal")` to read more about the functionality.
+
+Default: `NULL`

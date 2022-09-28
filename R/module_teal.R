@@ -91,6 +91,7 @@ ui_teal <- function(id,
 
   res <- fluidPage(
     title = title,
+    theme = get_teal_bs_theme(),
     include_teal_css_js(),
     tags$header(header),
     tags$hr(class = "my-2"),

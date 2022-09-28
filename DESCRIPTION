@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.11.1.9023
-Date: 2022-09-08
+Version: 0.11.1.9024
+Date: 2022-09-27
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
     person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
@@ -41,6 +41,7 @@ Imports:
     teal.slice (>= 0.1.1),
     utils
 Suggests:
+    bslib,
     covr,
     dplyr,
     knitr,
