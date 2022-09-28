@@ -49,7 +49,7 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
     isolate(checkmate::assert_class(code(), "character"))
   }
 
-  #create reactive data.frames
+  # create reactive data.frames
   for (x in names(data)) {
     if (!is.reactive(data[[x]])) {
       data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
