@@ -6,6 +6,7 @@
 * `teal_module` having `data` argument in its arguments of type `tdata`. Modules receive this object (a list of reactive filtered datasets with `"code"` and `"join_keys"` attributes).
 * Updated the internals of `module_teal` to reflect changes in `teal.slice`.
 * `teal_module` having `filter_panel_api` argument in its arguments will receive a `FilterPanelAPI` object.
+* create the wrapper `get_code_tdata` to be used in downstream packages.
 
 ### Breaking changes
 

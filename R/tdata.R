@@ -94,11 +94,21 @@ get_code.tdata <- function(data) {
   attr(data, "code")()
 }
 
+#' Wrapper for `get_code.tdata`
+#' This wrapper is to be used by downstream packages to extract the code of a `tdata` object
+#'
+#' @param data (`tdata`) object
+#'
+#' @return (`character`) code used in the `tdata` object.
+#' @export
+get_code_tdata <- function(data) {
+  get_code.tdata(data)
+}
+
 #' @export
 get_join_keys <- function(data) {
   UseMethod("get_join_keys", data)
 }
-
 
 #' @export
 get_join_keys.tdata <- function(data) {
