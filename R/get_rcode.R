@@ -1,6 +1,6 @@
 #' Returns R Code from a teal module
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description `r lifecycle::badge("deprecated")`
 #' Return the R-code used to create a teal::teal] module analysis. This function
 #' will return all analysis code as a character string. In case of a good setup it will
 #' not only return the code used create the module analysis, but also the code used by
@@ -62,6 +62,14 @@ get_rcode <- function(datasets = NULL,
                       title = NULL,
                       description = NULL) {
   checkmate::assert_class(datasets, "FilteredData", null.ok = TRUE)
+
+  lifecycle::deprecate_warn(
+    when = "0.11.2",
+    what = "get_rcode()",
+    details = "Reproducibility in teal apps has changed.
+      See the teal.code package and example modules for further details"
+  )
+
   if (!inherits(chunks, "chunks")) {
     stop("No code chunks given")
   }
@@ -191,7 +199,7 @@ get_datasets_code <- function(datanames, datasets) {
 ## Module ----
 #' Server part of get R code module
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' @inheritParams get_rcode
 #' @inheritParams shiny::moduleServer
@@ -210,6 +218,15 @@ get_rcode_srv <- function(id,
                           code_header = "Automatically generated R code",
                           disable_buttons = reactiveVal(FALSE)) {
   checkmate::check_class(disable_buttons, c("reactive", "function"))
+
+  lifecycle::deprecate_warn(
+    when = "0.11.2",
+    what = "get_rcode_srv()",
+    with = "teal.widgets::verbatim_popup_srv()",
+    details = "Show R Code behaviour has changed,
+      see example modules in vignettes for more details"
+  )
+
   moduleServer(id, function(input, output, server) {
     chunks <- teal.code::get_chunks_object(parent_idx = 1L)
     observeEvent(input$show_rcode, {
@@ -247,13 +264,21 @@ get_rcode_srv <- function(id,
 
 #' Ui part of get R code module
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description `r lifecycle::badge("deprecated")`
 #' @param id (`character`) id of shiny module
 #'
 #' @return (`shiny.tag`)
 #'
 #' @export
 get_rcode_ui <- function(id) {
+  lifecycle::deprecate_warn(
+    when = "0.11.2",
+    what = "get_rcode_ui()",
+    with = "teal.widgets::verbatim_popup_ui()",
+    details = "Show R Code behaviour has changed,
+      see example modules in vignettes for more details"
+  )
+
   ns <- NS(id)
   tagList(
     tags$div(actionButton(ns("show_rcode"), "Show R code", width = "100%")),

@@ -22,16 +22,17 @@ example_module <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
-    server = function(id, datasets) {
+    server = function(id, data) {
+      checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
-        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
+        output$text <- renderPrint(data[[input$dataname]]())
       })
     },
-    ui = function(id, datasets) {
+    ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
     filters = "all"
@@ -45,8 +46,10 @@ which can be added into `teal` apps using `example_module(label = "Label for tab
 
 ### UI function
 
-This function contains the UI required for the module. It should be a function with at least the arguments `id` and `datasets`.
-It can contain standard UI components alongside additional widgets provided by the `teal.widgets` package.
+This function contains the UI required for the module. It should be a function with at least the arguments `id`.
+It can also contain the argument `data` for access to the application data. See the server section below for more details.
+
+The UI function can contain standard UI components alongside additional widgets provided by the `teal.widgets` package.
 In the example above we are using the `standard_layout` function of `teal.widgets` which generates a layout
 including an encoding panel on the left and main output covering the rest of the module's UI.
 
@@ -55,7 +58,11 @@ including an encoding panel on the left and main output covering the rest of the
 This function contains the shiny server logic for the module and should be of the form:
 
 ```
-function(id, datasets, ...) {
+function(id,
+         data, # optional, use if you want your module to access the application data
+         filter_panel_api, # optional, use if you want access to the filter panel from your module see teal.slice 
+         reporter, # optional, use if your module supports reporting, see reporting vignette in teal 
+         ...) {
   moduleServer(id, function(input, output, session) {
     # module code here
   })
@@ -63,10 +70,9 @@ function(id, datasets, ...) {
 
 ```
 
-The `datasets` argument is a `FilteredData` object which provides a call to extract the data after having been filtered by the filterpanel:
-`datasets$get_data(<<dataname>>, filtered = TRUE)`. For more details about the `FilteredData` object see the supporting `teal` package
-[`teal.slice`](https://insightsengineering.github.io/teal.slice/)
-
+When used inside a teal application called with `teal::init` the `data` argument is a named list of reactive data.frames
+containing the data after having been filtered through the filter panel. It is of the `tdata` type and can be created using
+the `new_tdata` function.
 
 ## A More Complicated Example
 
@@ -89,7 +95,7 @@ library(teal)
 # ui function for the module
 # histogram_var is a teal.transform::data_extract_spec object
 # specifying which columns of which datasets users can choose
-ui_histogram_example <- function(id, datasets, histogram_var) {
+ui_histogram_example <- function(id, histogram_var) {
   ns <- NS(id)
   teal.widgets::standard_layout(
     output = plotOutput(ns("plot")),
@@ -102,52 +108,55 @@ ui_histogram_example <- function(id, datasets, histogram_var) {
     ),
     # we have a show R code button to show the code needed
     # to generate the histogram
-    forms = teal::get_rcode_ui(ns("rcode"))
+    forms = teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
   )
 }
 
 # server function for the module
 # histogram_var is a teal.transform::data_extract_spec object
 # specifying which columns of which datasets users can choose
-srv_histogram_example <- function(id, datasets, histogram_var) {
+srv_histogram_example <- function(id, data, histogram_var) {
+  checkmate::assert_class(data, "tdata")
   moduleServer(id, function(input, output, session) {
-    # initialize the reproducibility part of teal (i.e. "chunks")
-    teal.code::init_chunks()
 
     # get the selected dataset and column from the UI
-    extracted <- teal.transform::data_extract_srv("histogram_var", datasets, histogram_var)
+    extracted <- teal.transform::data_extract_srv(
+      id = "histogram_var",
+      datasets = data,
+      data_extract_spec = histogram_var,
+      join_keys = get_join_keys(data)
+    )
+
     dataname <- reactive(extracted()$dataname)
     selected <- reactive(extracted()$select)
 
-    # the reactive which adds the code to plot the histogram into the chunks
-    plot_code <- reactive({
+    # the reactive which adds the code to plot the histogram into the qenv
+    plot_code_q <- reactive({
       validate(need(length(selected) == 1, "Please select a variable"))
 
-      # take the filtered data from the datasets object and add it into the chunks environment
-      new_env <- new.env()
-      assign(dataname(), datasets$get_data(dataname(), filtered = TRUE), envir = new_env)
-      teal.code::chunks_reset(envir = new_env)
-
-      # add the code for the plot into the chunks
-      teal.code::chunks_push(
-        bquote(hist(.(as.name(dataname()))[, .(selected())]))
-      )
-
-      # evaluate the chunks
-      teal.code::chunks_safe_eval()
+      # take the filtered data from the data object and add it into the qenv environment
+      teal.code::new_qenv(tdata2env(data), code = get_code(data)) %>%
+        teal.code::eval_code(
+          substitute(
+            expr = p <- hist(dataname[, selected]),
+            env = list(
+              dataname = as.name(dataname()),
+              selected = selected()
+            )
+          )
+        )
     })
 
     # shiny component to view
     output$plot <- renderPlot({
-      plot_code()
+      plot_code_q()[["p"]]
     })
 
     # Show the R code when user clicks 'Show R Code' button
-    teal::get_rcode_srv(
+    teal.widgets::verbatim_popup_srv(
       id = "rcode",
-      datasets = datasets,
-      modal_title = "R code for custom plot",
-      code_header = "R code for custom plot"
+      verbatim_content = reactive(teal.code::get_code(plot_code_q())),
+      title = "R Code"
     )
   })
 }

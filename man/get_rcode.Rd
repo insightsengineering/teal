@@ -51,7 +51,7 @@ code will be returned, too.
 If code chunks were used, these will also be used to derive module R Code.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 Return the R-code used to create a teal::teal] module analysis. This function
 will return all analysis code as a character string. In case of a good setup it will
 not only return the code used create the module analysis, but also the code used by
