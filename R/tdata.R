@@ -5,7 +5,7 @@
 #' and ii) join_keys (`JoinKeys`) containing the relationships between
 #' the data iii) metadata (`named list`) containing any metadata associated with
 #' the data frames
-#'
+#' @name tdata
 #' @param data A `named list` of `data.frames` (or `MultiAssayExperiment`)
 #'  which optionally can be `reactive`.
 #'   Inside this object all of these items will be made `reactive`.
@@ -31,6 +31,12 @@
 #' # Extract a data.frame
 #' isolate(data[["iris"]]())
 #'
+#' # Get code
+#' isolate(get_code(data))
+#'
+#' # Get metadata
+#' get_metadata(data, "iris")
+#'
 #' @export
 new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   checkmate::assert_list(
@@ -46,7 +52,7 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   for (m in metadata) teal.data::validate_metadata(m)
 
   if (is.reactive(code)) {
-    isolate(checkmate::assert_class(code(), "character"))
+    isolate(checkmate::assert_class(code(), "character", .var.name = "code"))
   }
 
   # create reactive data.frames
@@ -54,7 +60,9 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
     if (!is.reactive(data[[x]])) {
       data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
     } else {
-      isolate(checkmate::assert_multi_class(data[[x]](), c("data.frame", "MultiAssayExperiment")))
+      isolate(
+        checkmate::assert_multi_class(
+          data[[x]](), c("data.frame", "MultiAssayExperiment"), .var.name = "data"))
     }
   }
 
@@ -70,7 +78,7 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
 
 #' Function to convert a `tdata` object to an `environment`
 #' Any `reactives` inside `tdata` are first evaluated
-#' @param `data` a `tdata` object
+#' @param data a `tdata` object
 #' @return an `environment`
 #' @examples
 #'
@@ -88,11 +96,15 @@ tdata2env <- function(data) { # nolint
   list2env(lapply(data, function(x) if (is.reactive(x)) x() else x))
 }
 
+#' @rdname tdata
+#' @param x a `tdata` object
+#' @param ... additional arguments for the generic
 #' @export
-get_code.tdata <- function(data) {
+get_code.tdata <- function(x, ...) {
   # note teal.data which teal depends on defines the get_code method
-  attr(data, "code")()
+  attr(x, "code")()
 }
+
 
 #' Wrapper for `get_code.tdata`
 #' This wrapper is to be used by downstream packages to extract the code of a `tdata` object
@@ -106,27 +118,40 @@ get_code_tdata <- function(data) {
   get_code(data)
 }
 
+
+#' Function to get join keys from a `tdata` object
+#' @param data `tdata` - object to extract the join keys
+#' @return Either `JoinKeys` object or `NULL` if no join keys
 #' @export
 get_join_keys <- function(data) {
   UseMethod("get_join_keys", data)
 }
 
+
+#' @rdname get_join_keys
 #' @export
 get_join_keys.tdata <- function(data) {
   attr(data, "join_keys")
 }
 
+
+#' @rdname get_join_keys
 #' @export
 get_join_keys.default <- function(data) {
   stop("get_join_keys function not implemented for this object")
 }
 
+#' Function to get metadata from a `tdata` object
+#' @param data `tdata` - object to extract the data from
+#' @param dataname `character(1)` the dataset name whose metadata is requested
+#' @return Either list of metadata or NULL if no metadata
 #' @export
 get_metadata <- function(data, dataname) {
   checkmate::assert_string(dataname)
   UseMethod("get_metadata", data)
 }
 
+#' @rdname get_metadata
 #' @export
 get_metadata.tdata <- function(data, dataname) {
   metadata <- attr(data, "metadata")
@@ -136,6 +161,7 @@ get_metadata.tdata <- function(data, dataname) {
   metadata[[dataname]]
 }
 
+#' @rdname get_metadata
 #' @export
 get_metadata.default <- function(data, dataname) {
   stop("get_metadata function not implemented for this object")
