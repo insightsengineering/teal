@@ -8,7 +8,7 @@ Any \code{reactives} inside \code{tdata} are first evaluated}
 tdata2env(data)
 }
 \arguments{
-\item{`data`}{a \code{tdata} object}
+\item{data}{a \code{tdata} object}
 }
 \value{
 an \code{environment}
