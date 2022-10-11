@@ -6,7 +6,7 @@
 
 ### Enhancements
 
-* Added the option to choose which variables can be filtered in the filter panel by using the `filterable` attributes for the per-dataset lists in the `filter` argument of `init`. 
+* Added the option to choose which variables can be filtered in the filter panel by using the `filterable` attributes for the per-dataset lists in the `filter` argument of `init`.
 * Updated `teal_module` to have `data` argument which receives a list of reactive filter data with `"code"` and `"join_keys"` attributes.
 * Updated `teal_module` to have `filter_panel_api` argument which receives a `FilterPanelAPI` object.
 * Updated the internals of `module_teal` to reflect changes in `teal.slice`.
@@ -17,6 +17,7 @@
 * Updated `teal_module` to no longer receive `datasets` object in the `...` argument. In order to use `datasets` in the `teal_module` please specify `datasets` explicitly.
 * Deprecated `merge_expression` argument in `get_rcode_srv` function and removed it in `get_rcode` function.
 * Deprecated `session` argument in `get_rcode` function.
+* Removed deprecated function `root_module`.
 
 # Miscellaneous
 
@@ -27,10 +28,10 @@
 ### Enhancements
 * Added new function `reporter_previewer_module` to wrap the `teal.reporter` package previewer functionality as a `teal` module.
 * Updated `teal` to support `modules` which include reporting. If any `module` which supports reporting is included then a `reporter_previewer_module` is included.
-* Added default arguments to `module()` and the `server` argument is now a function where the second argument can be `...` or `datasets`. 
+* Added default arguments to `module()` and the `server` argument is now a function where the second argument can be `...` or `datasets`.
 
 ### Breaking changes
-* Deprecated `bookmarkableShinyApp`. In future releases the `teal` framework will stop supporting shiny bookmarking (which has not officially been supported); it may be officially supported in the future. Note the filter panel in `teal.slice` retains its ability to save and restore its state if used in a standalone `shiny` app with bookmarking. 
+* Deprecated `bookmarkableShinyApp`. In future releases the `teal` framework will stop supporting shiny bookmarking (which has not officially been supported); it may be officially supported in the future. Note the filter panel in `teal.slice` retains its ability to save and restore its state if used in a standalone `shiny` app with bookmarking.
 
 ### Miscellaneous
 * Added a template to the `pkgdown` configuration.

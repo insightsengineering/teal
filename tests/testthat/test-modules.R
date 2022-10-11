@@ -273,29 +273,6 @@ testthat::test_that("modules returns children as list with unique names if label
 })
 
 
-testthat::test_that("root_modules is deprecated", {
-  lifecycle::expect_deprecated(root_modules(test_module <- module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = ""
-  )))
-})
-
-testthat::test_that("root_modules returns teal_modules object with label='root'", {
-  withr::local_options(lifecycle_verbosity = "quiet")
-  test_module <- module(
-    label = "label",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = ""
-  )
-  out <- root_modules(test_module)
-  testthat::expect_s3_class(out, "teal_modules")
-  testthat::expect_named(out, c("label", "children"))
-  testthat::expect_identical(out$label, "root")
-})
-
 testthat::test_that("modules_depth accepts depth as integer", {
   testthat::expect_error(
     modules_depth(
