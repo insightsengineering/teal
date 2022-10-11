@@ -6,15 +6,16 @@
 
 ### Enhancements
 
-* Added option to choose which variables can be filtered in the filter panel by using the `filterable` attributes for the per-dataset lists in the `filter` argument of `init`. 
-* `teal_module` having `data` argument in its arguments will receive a list of reactive filter data with `"code"` and `"join_keys"` attributes.
+* Added the option to choose which variables can be filtered in the filter panel by using the `filterable` attributes for the per-dataset lists in the `filter` argument of `init`. 
+* Updated `teal_module` to have `data` argument which receives a list of reactive filter data with `"code"` and `"join_keys"` attributes.
+* Updated `teal_module` to have `filter_panel_api` argument which receives a `FilterPanelAPI` object.
 * Updated the internals of `module_teal` to reflect changes in `teal.slice`.
-* `teal_module` having `filter_panel_api` argument in its arguments will receive a `FilterPanelAPI` object.
+* Updated vignettes and README content.
 
 ### Breaking changes
 
-* `...` argument in the `teal_module` no longer receives `datasets` object. In order to use `datasets` in the `teal_module` please specify `datasets` explicitly.
-* Deprecated `merge_expression` argument in `get_rcode_srv` and `get_rcode` has been removed.
+* Updated `teal_module` to no longer receive `datasets` object in the `...` argument. In order to use `datasets` in the `teal_module` please specify `datasets` explicitly.
+* Deprecated `merge_expression` argument in `get_rcode_srv` function and removed it in `get_rcode` function.
 * Deprecated `session` argument in `get_rcode` function.
 
 # Miscellaneous
