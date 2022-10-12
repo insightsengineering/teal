@@ -112,6 +112,12 @@ so your users can view and configure their reports before downloading them.
 
 To learn more about the `teal` framework we recommend first exploring some of the available analysis modules.
 
+## Empty `shiny` input cycle
+
+Please read more about the first empty `shiny` input cycle in the `teal::init` apps in the `creating-custom-modules` vignette.
+It could be needed to use `options(shiny.useragg = FALSE)` to make the `teal::init` apps more stable, till `ragg` package is not fixed.
+It is recommented to put this option in the `.Rprofile` file.
+
 For example see:
 
 * [general analysis modules](https://insightsengineering.github.io/teal.modules.general/)
