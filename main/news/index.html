@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.9025</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,12 +40,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -67,13 +61,13 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.11.1.9025" id="teal-01119025">teal 0.11.1.9025<a class="anchor" aria-label="anchor" href="#teal-01119025"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.12.0" id="teal-0120">teal 0.12.0<a class="anchor" aria-label="anchor" href="#teal-0120"></a></h2>
 <div class="section level4">
-<h4 id="new-features-0-11-1-9025">New features<a class="anchor" aria-label="anchor" href="#new-features-0-11-1-9025"></a></h4>
+<h4 id="new-features-0-12-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-12-0"></a></h4>
 <ul><li>Added the support for custom <code>bslib</code> bootstrap themes in <code><a href="../reference/init.html">teal::init</a></code> apps, please read more in the new <code>teal-bs-themes</code> vignette.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="enhancements-0-11-1-9025">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-11-1-9025"></a></h4>
+<h4 id="enhancements-0-12-0">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-12-0"></a></h4>
 <ul><li>Added the option to choose which variables can be filtered in the filter panel by using the <code>filterable</code> attributes for the per-dataset lists in the <code>filter</code> argument of <code>init</code>.</li>
 <li>Updated <code>teal_module</code> to have <code>data</code> argument which receives a list of reactive filter data with <code>"code"</code> and <code>"join_keys"</code> attributes.</li>
 <li>Updated <code>teal_module</code> to have <code>filter_panel_api</code> argument which receives a <code>FilterPanelAPI</code> object.</li>
@@ -81,7 +75,7 @@
 <li>Updated vignettes and README content.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="breaking-changes-0-11-1-9025">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-11-1-9025"></a></h4>
+<h4 id="breaking-changes-0-12-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-12-0"></a></h4>
 <ul><li>Updated <code>teal_module</code> to no longer receive <code>datasets</code> object in the <code>...</code> argument. In order to use <code>datasets</code> in the <code>teal_module</code> please specify <code>datasets</code> explicitly.</li>
 <li>Deprecated <code>merge_expression</code> argument in <code>get_rcode_srv</code> function and removed it in <code>get_rcode</code> function.</li>
 <li>Deprecated <code>session</code> argument in <code>get_rcode</code> function.</li>
