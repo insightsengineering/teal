@@ -1,5 +1,7 @@
 # teal 0.12.0.9000
 
+* Updated examples to use `scda.2022`.
+
 # teal 0.12.0
 
 ### New features
