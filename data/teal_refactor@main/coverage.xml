@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage line-rate="0.673371647509579" branch-rate="0" lines-covered="703" lines-valid="1044" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2022-10-27 13:26:47">
+<coverage line-rate="0.673371647509579" branch-rate="0" lines-covered="703" lines-valid="1044" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2022-10-27 15:27:21">
   <sources/>
   <packages>
     <package name="teal" line-rate="0.673371647509579" branch-rate="0" complexity="0">
@@ -776,39 +776,38 @@
           <methods>
             <method name="init" signature="" line-rate="0.857142857142857" branch-rate="0">
               <lines>
-                <line number="160" hits="32" branch="false"/>
                 <line number="161" hits="32" branch="false"/>
-                <line number="163" hits="27" branch="false"/>
+                <line number="162" hits="32" branch="false"/>
                 <line number="164" hits="27" branch="false"/>
                 <line number="165" hits="27" branch="false"/>
                 <line number="166" hits="27" branch="false"/>
                 <line number="167" hits="27" branch="false"/>
                 <line number="168" hits="27" branch="false"/>
                 <line number="169" hits="27" branch="false"/>
-                <line number="171" hits="27" branch="false"/>
-                <line number="173" hits="27" branch="false"/>
-                <line number="174" hits="0" branch="false"/>
-                <line number="181" hits="27" branch="false"/>
+                <line number="170" hits="27" branch="false"/>
+                <line number="172" hits="27" branch="false"/>
+                <line number="174" hits="27" branch="false"/>
+                <line number="175" hits="0" branch="false"/>
                 <line number="182" hits="27" branch="false"/>
                 <line number="183" hits="27" branch="false"/>
-                <line number="185" hits="0" branch="false"/>
+                <line number="184" hits="27" branch="false"/>
                 <line number="186" hits="0" branch="false"/>
-                <line number="187" hits="27" branch="false"/>
+                <line number="187" hits="0" branch="false"/>
                 <line number="188" hits="27" branch="false"/>
                 <line number="189" hits="27" branch="false"/>
                 <line number="190" hits="27" branch="false"/>
+                <line number="191" hits="27" branch="false"/>
               </lines>
             </method>
             <method name="bookmarkableShinyApp" signature="" line-rate="0" branch-rate="0">
               <lines>
-                <line number="239" hits="0" branch="false"/>
                 <line number="240" hits="0" branch="false"/>
                 <line number="241" hits="0" branch="false"/>
                 <line number="242" hits="0" branch="false"/>
                 <line number="243" hits="0" branch="false"/>
-                <line number="246" hits="0" branch="false"/>
-                <line number="248" hits="0" branch="false"/>
-                <line number="250" hits="0" branch="false"/>
+                <line number="244" hits="0" branch="false"/>
+                <line number="247" hits="0" branch="false"/>
+                <line number="249" hits="0" branch="false"/>
                 <line number="251" hits="0" branch="false"/>
                 <line number="252" hits="0" branch="false"/>
                 <line number="253" hits="0" branch="false"/>
@@ -819,39 +818,39 @@
                 <line number="258" hits="0" branch="false"/>
                 <line number="259" hits="0" branch="false"/>
                 <line number="260" hits="0" branch="false"/>
+                <line number="261" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="160" hits="32" branch="false"/>
             <line number="161" hits="32" branch="false"/>
-            <line number="163" hits="27" branch="false"/>
+            <line number="162" hits="32" branch="false"/>
             <line number="164" hits="27" branch="false"/>
             <line number="165" hits="27" branch="false"/>
             <line number="166" hits="27" branch="false"/>
             <line number="167" hits="27" branch="false"/>
             <line number="168" hits="27" branch="false"/>
             <line number="169" hits="27" branch="false"/>
-            <line number="171" hits="27" branch="false"/>
-            <line number="173" hits="27" branch="false"/>
-            <line number="174" hits="0" branch="false"/>
-            <line number="181" hits="27" branch="false"/>
+            <line number="170" hits="27" branch="false"/>
+            <line number="172" hits="27" branch="false"/>
+            <line number="174" hits="27" branch="false"/>
+            <line number="175" hits="0" branch="false"/>
             <line number="182" hits="27" branch="false"/>
             <line number="183" hits="27" branch="false"/>
-            <line number="185" hits="0" branch="false"/>
+            <line number="184" hits="27" branch="false"/>
             <line number="186" hits="0" branch="false"/>
-            <line number="187" hits="27" branch="false"/>
+            <line number="187" hits="0" branch="false"/>
             <line number="188" hits="27" branch="false"/>
             <line number="189" hits="27" branch="false"/>
             <line number="190" hits="27" branch="false"/>
-            <line number="239" hits="0" branch="false"/>
+            <line number="191" hits="27" branch="false"/>
             <line number="240" hits="0" branch="false"/>
             <line number="241" hits="0" branch="false"/>
             <line number="242" hits="0" branch="false"/>
             <line number="243" hits="0" branch="false"/>
-            <line number="246" hits="0" branch="false"/>
-            <line number="248" hits="0" branch="false"/>
-            <line number="250" hits="0" branch="false"/>
+            <line number="244" hits="0" branch="false"/>
+            <line number="247" hits="0" branch="false"/>
+            <line number="249" hits="0" branch="false"/>
             <line number="251" hits="0" branch="false"/>
             <line number="252" hits="0" branch="false"/>
             <line number="253" hits="0" branch="false"/>
@@ -862,6 +861,7 @@
             <line number="258" hits="0" branch="false"/>
             <line number="259" hits="0" branch="false"/>
             <line number="260" hits="0" branch="false"/>
+            <line number="261" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="log_app_usage.R" filename="R/log_app_usage.R" line-rate="0" branch-rate="0" complexity="0">
