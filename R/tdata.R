@@ -103,7 +103,7 @@ tdata2env <- function(data) { # nolint
 #' @param x a `tdata` object
 #' @param ... additional arguments for the generic
 #' @export
-get_code.tdata <- function(x, ...) {
+get_code.tdata <- function(x, ...) { # nolint
   # note teal.data which teal depends on defines the get_code method
   attr(x, "code")()
 }

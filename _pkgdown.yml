@@ -40,6 +40,13 @@ reference:
   - title: Report previewer module
     contents:
       - reporter_previewer_module
+  - title: Functions for module developers
+    contents:
+      - tdata
+      - get_code_tdata
+      - get_join_keys
+      - get_metadata
+      - tdata2env
   - title: Functions moved to other packages
     desc: These functions have been moved from teal and will be deprecated.
     contents:
@@ -48,12 +55,10 @@ reference:
   - title: Validation functions
     contents:
       - starts_with("validate_")
-  - title: Functions related to showing R code
+  - title: Deprecated functions
     contents:
+      - bookmarkableShinyApp
       - get_rcode
       - get_rcode_srv
       - get_rcode_ui
       - show_rcode_modal
-  - title: Deprecated function
-    contents:
-      - bookmarkableShinyApp

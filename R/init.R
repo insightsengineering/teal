@@ -16,8 +16,9 @@
 #'
 #' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
 #' or `MultiAssayExperiment`)\cr
-#' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()], [teal.data::cdisc_dataset()], [teal.data::dataset()],
-#' [teal.data::dataset_connector()] or [teal.data::cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`
+#' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()],
+#' [teal.data::cdisc_dataset()], [teal.data::dataset()], [teal.data::dataset_connector()] or
+#' [teal.data::cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`
 #' or a list of the previous objects or function returning a named list.
 #' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 #' do not match the original object names. To ensure reproducibility please use [teal.data::teal_data()]
