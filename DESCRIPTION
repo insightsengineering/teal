@@ -39,6 +39,7 @@ Imports:
     teal.logger (>= 0.1.1),
     teal.reporter (>= 0.1.1),
     teal.slice (>= 0.2.0),
+    teal.widgets (>= 0.2.0),
     utils
 Suggests:
     bslib,
@@ -50,7 +51,6 @@ Suggests:
     rmarkdown,
     scda (>= 0.1.5),
     scda.2022 (>= 0.1.3),
-    teal.widgets (>= 0.2.0),
     testthat (>= 2.0),
     withr,
     yaml
