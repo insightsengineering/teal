@@ -55,7 +55,7 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
     isolate(checkmate::assert_class(code(), "character", .var.name = "code"))
   }
 
-  #create reactive data.frames
+  # create reactive data.frames
   for (x in names(data)) {
     if (!is.reactive(data[[x]])) {
       data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
@@ -106,6 +106,19 @@ get_code.tdata <- function(x, ...) {
 }
 
 
+#' Wrapper for `get_code.tdata`
+#' This wrapper is to be used by downstream packages to extract the code of a `tdata` object
+#'
+#' @param data (`tdata`) object
+#'
+#' @return (`character`) code used in the `tdata` object.
+#' @export
+get_code_tdata <- function(data) {
+  checkmate::assert_class(data, "tdata")
+  get_code(data)
+}
+
+
 #' Function to get join keys from a `tdata` object
 #' @param data `tdata` - object to extract the join keys
 #' @return Either `JoinKeys` object or `NULL` if no join keys
@@ -113,6 +126,7 @@ get_code.tdata <- function(x, ...) {
 get_join_keys <- function(data) {
   UseMethod("get_join_keys", data)
 }
+
 
 #' @rdname get_join_keys
 #' @export
