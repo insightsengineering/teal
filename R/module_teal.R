@@ -101,7 +101,7 @@ ui_teal <- function(id,
     tags$footer(
       div(
         footer,
-        teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type ="link"),
+        teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
         textOutput(ns("identifier"))
       )
     )
