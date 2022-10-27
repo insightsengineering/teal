@@ -62,7 +62,10 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
     } else {
       isolate(
         checkmate::assert_multi_class(
-          data[[x]](), c("data.frame", "MultiAssayExperiment"), .var.name = "data"))
+          data[[x]](), c("data.frame", "MultiAssayExperiment"),
+          .var.name = "data"
+        )
+      )
     }
   }
 

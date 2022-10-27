@@ -1,7 +1,7 @@
 testthat::test_that("get_rcode returns header only for empty chunks", {
   ch <- teal.code::chunks_new()
 
-  #deprecation warning
+  # deprecation warning
   testthat::expect_warning(r_code_from_chunks <- strsplit(get_rcode(chunks = ch), "\n")[[1]])
   r_code_from_header <- strsplit(sprintf("\n\n%s\n", paste(get_rcode_header(), collapse = "\n")), "\n")[[1]]
 

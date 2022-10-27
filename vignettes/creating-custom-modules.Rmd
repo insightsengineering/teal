@@ -118,7 +118,6 @@ ui_histogram_example <- function(id, histogram_var) {
 srv_histogram_example <- function(id, data, histogram_var) {
   checkmate::assert_class(data, "tdata")
   moduleServer(id, function(input, output, session) {
-
     # get the selected dataset and column from the UI
     extracted <- teal.transform::data_extract_srv(
       id = "histogram_var",

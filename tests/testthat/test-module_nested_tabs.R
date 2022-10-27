@@ -324,7 +324,6 @@ testthat::test_that(".datasets_to_data returns tdata object", {
   )
 
   testthat::expect_null(get_metadata(data, "d2"))
-
 })
 
 testthat::test_that(".datasets_to_data returns parent datasets for CDISC data", {
