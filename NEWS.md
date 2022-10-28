@@ -1,4 +1,4 @@
-# teal 0.12.0.9001
+# teal 0.12.0.9002
 
 * Updated examples to use `scda.2022`.
 * Added R session information into a link in the footer of `teal` applications.
