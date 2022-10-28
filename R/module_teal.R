@@ -98,7 +98,13 @@ ui_teal <- function(id,
     shiny_busy_message_panel,
     splash_ui,
     tags$hr(),
-    tags$footer(div(footer, textOutput(ns("identifier"))))
+    tags$footer(
+      div(
+        footer,
+        teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
+        textOutput(ns("identifier"))
+      )
+    )
   )
   return(res)
 }
@@ -128,6 +134,12 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
 
     output$identifier <- renderText(
       paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
+    )
+
+    teal.widgets::verbatim_popup_srv(
+      "sessionInfo",
+      verbatim_content = utils::capture.output(utils::sessionInfo()),
+      title = "SessionInfo"
     )
 
     # Javascript code
