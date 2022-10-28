@@ -240,7 +240,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 #' @keywords internal
 #' - `join_keys` (`JoinKeys`) containing relationships between datasets.
 .datasets_to_data <- function(module, datasets) {
-  datanames <- if (identical("all", module$filter)) {
+  datanames <- if (identical("all", module$filter) || is.null(module$filter)) {
     datasets$datanames()
   } else {
     datasets$get_filterable_datanames(module$filter) # get_filterable_datanames adds parents if present

@@ -34,7 +34,6 @@ module(
 \item \code{id} - teal will set proper shiny namespace for this module (see \code{\link[shiny:moduleServer]{shiny::moduleServer()}}).
 \item \code{input}, \code{output}, \code{session} - (not recommended) then \code{\link[shiny:callModule]{shiny::callModule()}} will be used to call a module.
 \item \code{data} (optional) module will receive list of reactive (filtered) data specified in the \code{filters} argument.
-\code{filters} can't be NULL
 \item \code{datasets} (optional) module will receive \code{FilteredData}. (See \verb{[teal.slice::FilteredData]}).
 \item \code{reporter} (optional) module will receive \code{Reporter}. (See \link[teal.reporter:Reporter]{teal.reporter::Reporter}).
 \item \code{...} (optional) \code{server_args} elements will be passed to the module named argument or to the \code{...}.
@@ -51,8 +50,7 @@ module(
 \item{filters}{(\code{character}) A vector with datanames that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
-and the keyword \code{'all'} will show the filters of all datasets. \code{filters} can't be \code{NULL} when
-\code{data} argument is present in the \code{server} formals.}
+and the keyword \code{'all'} will show the filters of all datasets.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the
 \code{server} function.}
