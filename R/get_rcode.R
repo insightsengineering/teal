@@ -64,7 +64,7 @@ get_rcode <- function(datasets = NULL,
   checkmate::assert_class(datasets, "FilteredData", null.ok = TRUE)
 
   lifecycle::deprecate_warn(
-    when = "0.11.2",
+    when = "0.12.1",
     what = "get_rcode()",
     details = "Reproducibility in teal apps has changed.
       See the teal.code package and example modules for further details"
@@ -78,7 +78,7 @@ get_rcode <- function(datasets = NULL,
   rlang::push_options(width = 120)
 
   if (!is.null(session)) {
-    lifecycle::deprecate_warn("0.11.2", "get_rcode(session)")
+    lifecycle::deprecate_warn("0.12.1", "get_rcode(session)")
   }
 
   if (!is.null(datasets)) {
@@ -220,7 +220,7 @@ get_rcode_srv <- function(id,
   checkmate::check_class(disable_buttons, c("reactive", "function"))
 
   lifecycle::deprecate_warn(
-    when = "0.11.2",
+    when = "0.12.1",
     what = "get_rcode_srv()",
     with = "teal.widgets::verbatim_popup_srv()",
     details = "Show R Code behaviour has changed,
@@ -272,7 +272,7 @@ get_rcode_srv <- function(id,
 #' @export
 get_rcode_ui <- function(id) {
   lifecycle::deprecate_warn(
-    when = "0.11.2",
+    when = "0.12.1",
     what = "get_rcode_ui()",
     with = "teal.widgets::verbatim_popup_ui()",
     details = "Show R Code behaviour has changed,
