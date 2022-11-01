@@ -144,27 +144,18 @@ get_rcode <- function(datasets = NULL,
 get_datasets_code <- function(datanames, datasets) {
   str_code <- datasets$get_code(datanames)
   if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
-    str_code <- paste0(c(
-      "#################################################################",
-      "# ___  ____ ____ ___  ____ ____ ____ ____ ____ ____ _ _  _ ____ #",
-      "# |__] |__/ |___ |__] |__/ |  | |    |___ [__  [__  | |\\ | | __ #",
-      "# |    |  \\ |___ |    |  \\ |__| |___ |___ ___] ___] | | \\| |__] #",
-      "#              _ ____    ____ _  _ ___  ___ _   _               #",
-      "#              | [__     |___ |\\/| |__]  |   \\_/                #",
-      "#              | ___]    |___ |  | |     |    |                 #",
-      "#################################################################\n"
-    ), collapse = "\n")
+    str_code <- "message('Preprocessing is empty')"
   } else if (length(str_code) > 0) {
     str_code <- paste0(str_code, "\n\n")
   }
   if (!datasets$get_check()) {
     check_note_string <- paste0(
       c(
-        "## NOTE: Reproducibility of data import and preprocessing was not",
-        "## explicitly checked (argument \"check = FALSE\" is set).",
-        "## The app developer has the choice to check the reproducibility",
-        "## and might have omitted this step for some reason. Please reach",
-        "## out to the app developer for details.\n"
+        "warning(paste(\"Reproducibility of data import and preprocessing was not\",",
+        "   \"explicitly checked (argument 'check = FALSE' is set).\",",
+        "   \"The app developer has the choice to check the reproducibility\",",
+        "   \"and might have omitted this step for some reason. Please reach\",",
+        "   \"out to the app developer for details.\n\"))"
       ),
       collapse = "\n"
     )
@@ -177,8 +168,8 @@ get_datasets_code <- function(datanames, datasets) {
         datanames,
         function(dataname) {
           sprintf(
-            "# %s MD5 hash at the time of analysis: %s",
-            dataname,
+            "stopifnot(%s == '%s')",
+            deparse1(datasets$get_filtered_dataset(dataname)$get_hash_call()),
             datasets$get_filtered_dataset(dataname)$get_hash()
           )
         },
