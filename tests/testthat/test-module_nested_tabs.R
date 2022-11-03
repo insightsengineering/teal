@@ -278,7 +278,7 @@ get_example_filtered_data <- function() {
   )
 }
 
-testthat::test_that(".datasets_to_data returns filtered data", {
+testthat::test_that(".datasets_to_data returns data which is filtered", {
   datasets <- get_example_filtered_data()
   isolate(datasets$set_filter_state(list(d1 = list(val = list(selected = c(1, 2))))))
   module <- list(filter = "all")
