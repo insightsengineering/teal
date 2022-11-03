@@ -44,7 +44,7 @@ filter_calls_module <- function(label = "Filter Calls Module") { # nolint
       checkmate::assert_class(data, "tdata")
 
       output$filter_calls <- renderText({
-        get_code(data)
+        get_code_tdata(data)
       })
     },
     ui = function(id, ...) {
