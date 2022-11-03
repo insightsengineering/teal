@@ -160,10 +160,8 @@ app <- init(
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )
-\dontrun{
-shinyApp(app$ui, app$server)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
 }
 
-# See the vignette for an example how to embed this app as a module
-# into a larger application
 }
