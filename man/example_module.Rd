@@ -23,7 +23,7 @@ app <- init(
   ),
   modules = modules(example_module())
 )
-\dontrun{
-shinyApp(app$ui, app$server)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
 }
 }

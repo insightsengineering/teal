@@ -11,8 +11,8 @@
 #'   ),
 #'   modules = modules(example_module())
 #' )
-#' \dontrun{
-#' shinyApp(app$ui, app$server)
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
 #' }
 #' @export
 example_module <- function(label = "example teal module") {
