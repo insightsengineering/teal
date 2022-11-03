@@ -134,7 +134,7 @@ srv_histogram_example <- function(id, data, histogram_var) {
       validate(need(length(selected) == 1, "Please select a variable"))
 
       # take the filtered data from the data object and add it into the qenv environment
-      teal.code::new_qenv(tdata2env(data), code = get_code(data)) %>%
+      teal.code::new_qenv(tdata2env(data), code = get_code_tdata(data)) %>%
         teal.code::eval_code(
           substitute(
             expr = p <- hist(dataname[, selected]),
