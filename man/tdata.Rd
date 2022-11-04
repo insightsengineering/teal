@@ -4,7 +4,7 @@
 \alias{tdata}
 \alias{new_tdata}
 \alias{get_code.tdata}
-\title{Create a new \code{tdata} object which contains}
+\title{Create a \code{tdata} Object}
 \usage{
 new_tdata(data, code = "", join_keys = NULL, metadata = NULL)
 
@@ -34,12 +34,12 @@ Each element of these list should be atomic and length one.}
 A \code{tdata} object
 }
 \description{
+Create a new object called \code{tdata} which contains \code{data}, a \code{reactive} list of data.frames
+(or \code{MultiAssayExperiment}), with attributes:
 \itemize{
-\item \code{data} a \code{reactive} list of data.frames (or \code{MultiAssayExperiment}) with attributes
-i) \code{code} (\code{reactive}) containing code used to generate the data
-and ii) join_keys (\code{JoinKeys}) containing the relationships between
-the data iii) metadata (\verb{named list}) containing any metadata associated with
-the data frames
+\item{\code{code} (\code{reactive}) containing code used to generate the data}
+\item{join_keys (\code{JoinKeys}) containing the relationships between the data}
+\item{metadata (\verb{named list}) containing any metadata associated with the data frames}
 }
 }
 \examples{

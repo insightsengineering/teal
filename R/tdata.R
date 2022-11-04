@@ -1,10 +1,12 @@
-#' Create a new `tdata` object which contains
+#' Create a `tdata` Object
 #'
-#' - `data` a `reactive` list of data.frames (or `MultiAssayExperiment`) with attributes
-#' i) `code` (`reactive`) containing code used to generate the data
-#' and ii) join_keys (`JoinKeys`) containing the relationships between
-#' the data iii) metadata (`named list`) containing any metadata associated with
-#' the data frames
+#' Create a new object called `tdata` which contains `data`, a `reactive` list of data.frames
+#' (or `MultiAssayExperiment`), with attributes:
+#' \itemize{
+#'   \item{`code` (`reactive`) containing code used to generate the data}
+#'   \item{join_keys (`JoinKeys`) containing the relationships between the data}
+#'   \item{metadata (`named list`) containing any metadata associated with the data frames}
+#' }
 #' @name tdata
 #' @param data A `named list` of `data.frames` (or `MultiAssayExperiment`)
 #'  which optionally can be `reactive`.
