@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,14 +40,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -142,6 +134,44 @@ to <code><a href="../reference/srv_teal.html">srv_teal()</a></code>.</dd>
         </dt>
         <dd>Create a <code>teal</code> module for previewing a report</dd>
       </dl></div><div class="section level2">
+      <h2 id="functions-for-module-developers">Functions for module developers<a class="anchor" aria-label="anchor" href="#functions-for-module-developers"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="tdata.html">new_tdata()</a></code> <code><a href="tdata.html">get_code(<i>&lt;tdata&gt;</i>)</a></code> 
+        </dt>
+        <dd>Create a <code>tdata</code> Object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_code_tdata.html">get_code_tdata()</a></code> 
+        </dt>
+        <dd>Wrapper for <code>get_code.tdata</code>
+This wrapper is to be used by downstream packages to extract the code of a <code>tdata</code> object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_join_keys.html">get_join_keys()</a></code> 
+        </dt>
+        <dd>Function to get join keys from a <code>tdata</code> object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_metadata.html">get_metadata()</a></code> 
+        </dt>
+        <dd>Function to get metadata from a <code>tdata</code> object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="tdata2env.html">tdata2env()</a></code> 
+        </dt>
+        <dd>Function to convert a <code>tdata</code> object to an <code>environment</code>
+Any <code>reactives</code> inside <code>tdata</code> are first evaluated</dd>
+      </dl></div><div class="section level2">
       <h2 id="functions-moved-to-other-packages">Functions moved to other packages<a class="anchor" aria-label="anchor" href="#functions-moved-to-other-packages"></a></h2>
       
       <p class="section-desc"></p><p>These functions have been moved from teal and will be deprecated.</p>
@@ -209,7 +239,7 @@ to <code><a href="../reference/srv_teal.html">srv_teal()</a></code>.</dd>
         </dt>
         <dd>Validate that dataset has unique rows for key variables</dd>
       </dl></div><div class="section level2">
-      <h2 id="functions-related-to-showing-r-code">Functions related to showing R code<a class="anchor" aria-label="anchor" href="#functions-related-to-showing-r-code"></a></h2>
+      <h2 id="deprecated-functions">Deprecated functions<a class="anchor" aria-label="anchor" href="#deprecated-functions"></a></h2>
       
       
 
@@ -220,6 +250,11 @@ to <code><a href="../reference/srv_teal.html">srv_teal()</a></code>.</dd>
       
 
       <dl><dt>
+          
+          <code><a href="bookmarkableShinyApp.html">bookmarkableShinyApp()</a></code> 
+        </dt>
+        <dd>Make a Shiny UI function bookmarkable</dd>
+      </dl><dl><dt>
           
           <code><a href="get_rcode.html">get_rcode()</a></code> 
         </dt>
@@ -239,22 +274,6 @@ to <code><a href="../reference/srv_teal.html">srv_teal()</a></code>.</dd>
           <code><a href="show_rcode_modal.html">show_rcode_modal()</a></code> 
         </dt>
         <dd>Show R Code Modal</dd>
-      </dl></div><div class="section level2">
-      <h2 id="deprecated-function">Deprecated function<a class="anchor" aria-label="anchor" href="#deprecated-function"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="bookmarkableShinyApp.html">bookmarkableShinyApp()</a></code> 
-        </dt>
-        <dd>Make a Shiny UI function bookmarkable</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
