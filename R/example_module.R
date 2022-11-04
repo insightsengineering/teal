@@ -11,24 +11,25 @@
 #'   ),
 #'   modules = modules(example_module())
 #' )
-#' \dontrun{
-#' shinyApp(app$ui, app$server)
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
 #' }
 #' @export
 example_module <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
-    server = function(id, datasets) {
+    server = function(id, data) {
+      checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
-        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
+        output$text <- renderPrint(data[[input$dataname]]())
       })
     },
-    ui = function(id, datasets) {
+    ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
     filters = "all"

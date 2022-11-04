@@ -10,8 +10,6 @@
 #' and avoids session restarts!
 #'
 #' @param label `character` label of module
-#' @param active_datanames `character vector` datanames shown in filter panel;
-#'   can be `"all"` to mean all available datasets
 #' @keywords internal
 #'
 #' @examples
@@ -34,19 +32,19 @@
 #'   ),
 #'   header = "Simple teal app"
 #' )
-#' \dontrun{
-#' shinyApp(app$ui, app$server)
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
 #' }
-filter_calls_module <- function(label = "Filter Calls Module", active_datanames = "all") { # nolint
+filter_calls_module <- function(label = "Filter Calls Module") { # nolint
   checkmate::assert_string(label)
-  checkmate::check_character(active_datanames, min.len = 1, any.missing = FALSE)
 
   module(
     label = label,
-    server = function(input, output, session, datasets) {
+    server = function(input, output, session, data) {
+      checkmate::assert_class(data, "tdata")
+
       output$filter_calls <- renderText({
-        active_datanames <- datasets$handle_active_datanames(active_datanames)
-        teal.slice::get_filter_expr(datasets, datanames = active_datanames)
+        get_code_tdata(data)
       })
     },
     ui = function(id, ...) {
@@ -56,6 +54,6 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
         verbatimTextOutput(ns("filter_calls"))
       )
     },
-    filters = active_datanames
+    filters = "all"
   )
 }

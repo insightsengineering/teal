@@ -1,5 +1,16 @@
 # teal 0.12.0.9002
 
+### Major breaking changes
+
+* The use of `datasets` argument in `teal` `modules` has been deprecated and will be removed in a future release. Please use `data` argument instead. `data` is of type `tdata`; see "Creating custom modules" vignettes and function documentation of `teal::new_tdata` for further details.
+
+### Breaking changes
+
+* Due to deprecation of `chunks` in `teal.code`, the `teal` framework now uses their replacement (`qenv`) instead. The documentation in `teal` has been updated to reflect this and custom modules written with `chunks` should be updated to use `qenv`.
+
+
+### Miscellaneous
+
 * Updated examples to use `scda.2022`.
 * Added R session information into a link in the footer of `teal` applications.
 
@@ -15,7 +26,7 @@
 * Updated `teal_module` to have `data` argument which receives a list of reactive filter data with `"code"` and `"join_keys"` attributes.
 * Updated `teal_module` to have `filter_panel_api` argument which receives a `FilterPanelAPI` object.
 * Updated the internals of `module_teal` to reflect changes in `teal.slice`.
-* Updated vignettes and README content.
+
 
 ### Breaking changes
 
