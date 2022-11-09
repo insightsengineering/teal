@@ -160,6 +160,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter) {
         "module { deparse1(modules$label) }."
       )
     )
+
     modules_reactive <- sapply(names(modules$children), USE.NAMES = TRUE, function(id) {
       srv_nested_tabs(id = id, datasets = datasets, modules = modules$children[[id]], reporter = reporter)
     })
@@ -255,13 +256,32 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     }
   )
 
+  hashes <- calculate_hashes(datanames, datasets)
   metadata <- lapply(datanames, datasets$get_metadata)
   names(metadata) <- datanames
 
   new_tdata(
     data,
-    reactive(get_datasets_code(datanames, datasets)),
+    reactive(c(get_datasets_code(datanames, datasets, hashes), teal.slice::get_filter_expr(datasets, datanames))),
     datasets$get_join_keys(),
     metadata
+  )
+}
+
+#' Get the hash of a dataset
+#'
+#' @param datanames (`character`) names of datasets
+#' @param datasets (`FilteredData`) object holding the data
+#'
+#' @return A list of hashes per dataname
+#' @keywords internal
+#'
+calculate_hashes <- function(datanames, datasets) {
+  sapply(
+    datanames,
+    simplify = FALSE,
+    function(x) {
+      rlang::hash(datasets$get_data(x, filtered = FALSE))
+    }
   )
 }

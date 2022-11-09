@@ -80,15 +80,16 @@ testthat::test_that("get_datasets_code returns code only for specified datanames
     )
   )
 
+  hashes <- calculate_hashes(datasets$datanames(), datasets)
   testthat::expect_true(
     !grepl(
       "mtcars",
-      paste(get_datasets_code(datasets = datasets, dataname = "IRIS"), collapse = "\n"),
+      paste(get_datasets_code(datasets = datasets, dataname = "IRIS", hashes = hashes), collapse = "\n"),
       ignore.case = TRUE
     ) &&
       grepl(
         "iris",
-        paste(get_datasets_code(datasets = datasets, dataname = "IRIS"), collapse = "\n"),
+        paste(get_datasets_code(datasets = datasets, dataname = "IRIS", hashes = hashes), collapse = "\n"),
         ignore.case = TRUE
       )
   )

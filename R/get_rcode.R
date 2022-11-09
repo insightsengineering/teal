@@ -91,7 +91,9 @@ get_rcode <- function(datasets = NULL,
     )
     str_install <- paste(c(get_rcode_str_install(), ""), collapse = "\n")
     str_libs <- paste(get_rcode_libraries(), "\n")
-    str_code <- get_datasets_code(datanames, datasets)
+
+    hashes <-  calculate_hashes(datanames, datasets)
+    str_code <- c(get_datasets_code(datanames, datasets, hashes), teal.slice::get_filter_expr(datasets, datanames))
   } else {
     str_header <- get_rcode_header(title = title, description = description)
     str_install <- character(0)
@@ -141,30 +143,21 @@ get_rcode <- function(datasets = NULL,
 #'  - hash of loaded objects
 #'  - filter panel code
 #' @keywords internal
-get_datasets_code <- function(datanames, datasets) {
+get_datasets_code <- function(datanames, datasets, hashes) {
   str_code <- datasets$get_code(datanames)
   if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
-    str_code <- paste0(c(
-      "#################################################################",
-      "# ___  ____ ____ ___  ____ ____ ____ ____ ____ ____ _ _  _ ____ #",
-      "# |__] |__/ |___ |__] |__/ |  | |    |___ [__  [__  | |\\ | | __ #",
-      "# |    |  \\ |___ |    |  \\ |__| |___ |___ ___] ___] | | \\| |__] #",
-      "#              _ ____    ____ _  _ ___  ___ _   _               #",
-      "#              | [__     |___ |\\/| |__]  |   \\_/                #",
-      "#              | ___]    |___ |  | |     |    |                 #",
-      "#################################################################\n"
-    ), collapse = "\n")
+    str_code <- "message('Preprocessing is empty')"
   } else if (length(str_code) > 0) {
     str_code <- paste0(str_code, "\n\n")
   }
   if (!datasets$get_check()) {
     check_note_string <- paste0(
       c(
-        "## NOTE: Reproducibility of data import and preprocessing was not",
-        "## explicitly checked (argument \"check = FALSE\" is set).",
-        "## The app developer has the choice to check the reproducibility",
-        "## and might have omitted this step for some reason. Please reach",
-        "## out to the app developer for details.\n"
+        "warning(paste(\"Reproducibility of data import and preprocessing was not\",",
+        "   \"explicitly checked (argument 'check = FALSE' is set).\",",
+        "   \"The app developer has the choice to check the reproducibility\",",
+        "   \"and might have omitted this step for some reason. Please reach\",",
+        "   \"out to the app developer for details.\n\"))"
       ),
       collapse = "\n"
     )
@@ -177,9 +170,9 @@ get_datasets_code <- function(datanames, datasets) {
         datanames,
         function(dataname) {
           sprintf(
-            "# %s MD5 hash at the time of analysis: %s",
-            dataname,
-            datasets$get_filtered_dataset(dataname)$get_hash()
+            "stopifnot(%s == %s)",
+            deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+            deparse1(hashes[[dataname]])
           )
         },
         character(1)
@@ -189,11 +182,7 @@ get_datasets_code <- function(datanames, datasets) {
     "\n\n"
   )
 
-  str_filter <- teal.slice::get_filter_expr(datasets, datanames)
-  if (str_filter != "") {
-    str_filter <- paste0(str_filter, "\n\n")
-  }
-  c(str_code, str_hash, str_filter)
+  c(str_code, str_hash)
 }
 
 ## Module ----
