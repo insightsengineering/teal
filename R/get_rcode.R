@@ -92,7 +92,7 @@ get_rcode <- function(datasets = NULL,
     str_install <- paste(c(get_rcode_str_install(), ""), collapse = "\n")
     str_libs <- paste(get_rcode_libraries(), "\n")
 
-    hashes <-  calculate_hashes(datanames, datasets)
+    hashes <- calculate_hashes(datanames, datasets)
     str_code <- c(get_datasets_code(datanames, datasets, hashes), teal.slice::get_filter_expr(datasets, datanames))
   } else {
     str_header <- get_rcode_header(title = title, description = description)

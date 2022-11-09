@@ -1,5 +1,9 @@
 # Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%;"/></a  >
 
+<!-- start badges -->
+[![Code Coverage](https://raw.githubusercontent.com/insightsengineering/teal/_xml_coverage_reports/data/main/badge.svg)](https://raw.githubusercontent.com/insightsengineering/teal/_xml_coverage_reports/data/main/coverage.xml)
+<!-- end badges -->
+
 *teal* is a shiny-based interactive exploration framework for analyzing data. `teal` applications require app developers to specify:
 
 <!-- markdownlint-disable MD007 MD030 -->
