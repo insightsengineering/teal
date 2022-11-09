@@ -4,7 +4,7 @@
 \alias{get_datasets_code}
 \title{Get datasets code}
 \usage{
-get_datasets_code(datanames, datasets)
+get_datasets_code(datanames, datasets, hashes)
 }
 \arguments{
 \item{datanames}{(\code{character}) names of datasets to extract code from}
