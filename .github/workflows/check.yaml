@@ -30,7 +30,7 @@ jobs:
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
   linter:
-    if: github.event_name == 'pull_request'
+    if: github.event_name != 'push'
     name: SuperLinter 🦸‍♀️
     uses: insightsengineering/r.pkg.template/.github/workflows/linter.yaml@main
   roxygen:
@@ -44,11 +44,11 @@ jobs:
     name: gitleaks 💧
     uses: insightsengineering/r.pkg.template/.github/workflows/gitleaks.yaml@main
   spelling:
-    if: github.event_name == 'pull_request'
+    if: github.event_name != 'push'
     name: Spell Check 🆎
     uses: insightsengineering/r.pkg.template/.github/workflows/spelling.yaml@main
   links:
-    if: github.event_name == 'pull_request'
+    if: github.event_name != 'push'
     name: Check URLs 🌐
     uses: insightsengineering/r.pkg.template/.github/workflows/links.yaml@main
   vbump:
@@ -64,7 +64,7 @@ jobs:
     name: License Check 🃏
     uses: insightsengineering/r.pkg.template/.github/workflows/licenses.yaml@main
   style:
-    if: github.event_name == 'pull_request'
+    if: github.event_name != 'push'
     name: Style Check 👗
     uses: insightsengineering/r.pkg.template/.github/workflows/style.yaml@main
     with:
