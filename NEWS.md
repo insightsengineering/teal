@@ -13,6 +13,7 @@
 
 * Updated examples to use `scda.2022`.
 * Added R session information into a link in the footer of `teal` applications.
+* Added data hashing step and hashing check in reproducible code.
 
 # teal 0.12.0
 
