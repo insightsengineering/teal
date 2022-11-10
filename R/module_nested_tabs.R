@@ -273,7 +273,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 #' @param datanames (`character`) names of datasets
 #' @param datasets (`FilteredData`) object holding the data
 #'
-#' @return A list of hashes per dataname
+#' @return A list of hashes per dataset
 #' @keywords internal
 #'
 calculate_hashes <- function(datanames, datasets) {
