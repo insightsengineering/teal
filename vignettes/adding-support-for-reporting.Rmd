@@ -323,8 +323,9 @@ example_reporter_module <- function(label = "Example") {
 
 app <- init(
   data = teal_data(
-    dataset("AIR", airquality, code = "AIR <- data(airquality)"),
-    dataset("IRIS", iris, code = "IRIS <- data(iris)")
+    dataset("AIR", airquality, code = "data(airquality); AIR <- airquality"),
+    dataset("IRIS", iris, code = "data(iris); IRIS <- iris"),
+    check = FALSE
   ),
   modules = modules(
     example_reporter_module(label = "with Reporter"),

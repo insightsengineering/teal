@@ -15,17 +15,13 @@
 list of reactive datasets with following attributes:
 \itemize{
 \item \code{code} (\code{character}) containing datasets reproducible code.
+\item \code{join_keys} (\code{JoinKeys}) containing relationships between datasets.
+\item \code{metadata} (\code{list}) containing metadata of datasets.
 }
 }
 \description{
 Converts \code{FilteredData} object to \code{tdata} object containing datasets needed for a specific module.
 Please note that if module needs dataset which has a parent, then parent will be also returned.
+A hash per \code{dataset} is calculated internally and returned in the code.
 }
-\keyword{(`JoinKeys`)}
-\keyword{-}
-\keyword{`join_keys`}
-\keyword{between}
-\keyword{containing}
-\keyword{datasets.}
 \keyword{internal}
-\keyword{relationships}
