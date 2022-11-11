@@ -317,8 +317,10 @@ testthat::test_that(".datasets_to_data returns tdata object", {
     c(
       "# Add any code to install/load your NEST environment here",
       paste0(
-        "library(shiny)\nlibrary(teal.data)\nlibrary(magrittr)\nlibrary(teal.transform)\n",
-        "library(testthat)\nlibrary(teal)"
+        "library(testthat)\nlibrary(shiny)\nlibrary(teal.data)\nlibrary(magrittr)\nlibrary(teal.transform)\n",
+        "library(teal)\nlibrary(matrixStats)\nlibrary(MatrixGenerics)\nlibrary(BiocGenerics)\nlibrary(S4Vectors)\n",
+        "library(IRanges)\nlibrary(GenomeInfoDb)\nlibrary(GenomicRanges)\nlibrary(Biobase)\n",
+        "library(SummarizedExperiment)\nlibrary(MultiAssayExperiment)"
       ),
       "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\nd2 <- data.frame(id = 1:5, value = 1:5)\n\n",
       paste0(
