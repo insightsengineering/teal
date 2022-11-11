@@ -154,11 +154,8 @@ get_datasets_code <- function(datanames, datasets, hashes) {
   if (!datasets$get_check()) {
     check_note_string <- paste0(
       c(
-        "warning(paste(\"Reproducibility of data import and preprocessing was not\",",
-        "   \"explicitly checked (argument 'check = FALSE' is set).\",",
-        "   \"The app developer has the choice to check the reproducibility\",",
-        "   \"and might have omitted this step for some reason. Please reach\",",
-        "   \"out to the app developer for details.\n\"))"
+        "message(paste(\"Reproducibility of data import and preprocessing was not explicitly checked\",",
+        "   \" ('check = FALSE' is set). Contact app developer if this is an issue.\n\"))"
       ),
       collapse = "\n"
     )
