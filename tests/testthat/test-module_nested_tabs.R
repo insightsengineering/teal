@@ -315,6 +315,11 @@ testthat::test_that(".datasets_to_data returns tdata object", {
   testthat::expect_equal(
     isolate(get_code(data)),
     c(
+      "# Add any code to install/load your NEST environment here",
+      paste0(
+        "library(shiny)\nlibrary(teal.data)\nlibrary(magrittr)\nlibrary(teal.transform)\n",
+        "library(testthat)\nlibrary(teal)"
+      ),
       "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\nd2 <- data.frame(id = 1:5, value = 1:5)\n\n",
       paste0(
         "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")\n",
