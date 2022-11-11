@@ -136,12 +136,15 @@ get_rcode <- function(datasets = NULL,
 #' Get datasets code
 #'
 #' Get combined code from `FilteredData` and from `CodeClass` object.
+#'
 #' @param datanames (`character`) names of datasets to extract code from
 #' @param datasets (`FilteredData`) object
+#' @param hashes named (`list`) of hashes per dataset
+#'
 #' @return `character(3)` containing following elements:
 #'  - code from `CodeClass` (data loading code)
-#'  - hash of loaded objects
-#'  - filter panel code
+#'  - hash check of loaded objects
+#'
 #' @keywords internal
 get_datasets_code <- function(datanames, datasets, hashes) {
   str_code <- datasets$get_code(datanames)
@@ -190,6 +193,7 @@ get_datasets_code <- function(datanames, datasets, hashes) {
 #'
 #' @inheritParams get_rcode
 #' @inheritParams shiny::moduleServer
+#'
 #' @param modal_title optional, (`character`) title of the modal
 #' @param code_header optional, (`character`) header inside R
 #' @param disable_buttons optional, (`reactive`)

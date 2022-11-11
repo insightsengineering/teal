@@ -10,13 +10,14 @@ get_datasets_code(datanames, datasets, hashes)
 \item{datanames}{(\code{character}) names of datasets to extract code from}
 
 \item{datasets}{(\code{FilteredData}) object}
+
+\item{hashes}{named (\code{list}) of hashes per dataset}
 }
 \value{
 \code{character(3)} containing following elements:
 \itemize{
 \item code from \code{CodeClass} (data loading code)
-\item hash of loaded objects
-\item filter panel code
+\item hash check of loaded objects
 }
 }
 \description{

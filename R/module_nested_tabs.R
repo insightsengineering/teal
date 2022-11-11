@@ -233,13 +233,16 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 #'
 #' Converts `FilteredData` object to `tdata` object containing datasets needed for a specific module.
 #' Please note that if module needs dataset which has a parent, then parent will be also returned.
+#' A hash per `dataset` is calculated internally and returned in the code.
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
 #' @param datasets (`FilteredData`) object where needed data are taken from
 #' @return list of reactive datasets with following attributes:
 #' - `code` (`character`) containing datasets reproducible code.
-#' @keywords internal
 #' - `join_keys` (`JoinKeys`) containing relationships between datasets.
+#' - `metadata` (`list`) containing metadata of datasets.
+#'
+#' @keywords internal
 .datasets_to_data <- function(module, datasets) {
   datanames <- if (identical("all", module$filter) || is.null(module$filter)) {
     datasets$datanames()
