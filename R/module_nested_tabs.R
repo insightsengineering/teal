@@ -262,7 +262,14 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 
   new_tdata(
     data,
-    reactive(c(get_datasets_code(datanames, datasets, hashes), teal.slice::get_filter_expr(datasets, datanames))),
+    reactive(
+      c(
+        get_rcode_str_install(),
+        get_rcode_libraries(),
+        get_datasets_code(datanames, datasets, hashes),
+        teal.slice::get_filter_expr(datasets, datanames)
+      )
+    ),
     datasets$get_join_keys(),
     metadata
   )

@@ -150,6 +150,7 @@ get_datasets_code <- function(datanames, datasets, hashes) {
   } else if (length(str_code) > 0) {
     str_code <- paste0(str_code, "\n\n")
   }
+
   if (!datasets$get_check()) {
     check_note_string <- paste0(
       c(
