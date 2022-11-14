@@ -17,7 +17,7 @@
 * Updated `teal_module` to no longer receive `datasets` object in the `...` argument. In order to use `datasets` in the `teal_module` please specify `datasets` explicitly.
 * Deprecated `merge_expression` argument in `get_rcode_srv` function and removed it in `get_rcode` function.
 * Deprecated `session` argument in `get_rcode` function.
-* Removed deprecated function `root_module`.
+* Removed the deprecated function `root_module`.
 
 # Miscellaneous
 
