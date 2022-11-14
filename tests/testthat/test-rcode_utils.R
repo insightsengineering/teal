@@ -96,3 +96,13 @@ testthat::test_that("With teal.load_nest_code option is not character get_rcode_
     testthat::expect_equal(get_rcode_str_install(), "# Add any code to install/load your NEST environment here")
   )
 })
+
+
+testthat::test_that("get_rcode_libraries returns current session packages", {
+  testthat::expect_true(
+    setequal(
+      strsplit(gsub("library\\(|\\)", "", get_rcode_libraries()), "\n")[[1]],
+      vapply(sessionInfo()$otherPkgs, FUN = `[[`, index = "Package", FUN.VALUE = character(1), USE.NAMES = FALSE)
+    )
+  )
+})
