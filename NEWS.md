@@ -14,6 +14,7 @@
 * Updated examples to use `scda.2022`.
 * Added R session information into a link in the footer of `teal` applications.
 * Added data hashing step using `rlang` instead of `digest` package to calculate the hash (which has been moved from `teal.data` and `teal.slice`). There is now an explicit hashing check in the reproducible code output 
+* Removed deprecated function `default_filter`.
 
 # teal 0.12.0
 
