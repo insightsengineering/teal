@@ -32,7 +32,6 @@ reference:
       - modules
       - srv_teal_with_splash
       - ui_teal_with_splash
-      - default_filter
   - title: Example module
     desc: A simple example teal module
     contents:
