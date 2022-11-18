@@ -50,7 +50,6 @@ reference:
   - title: Functions moved to other packages
     desc: These functions have been moved from teal and will be deprecated.
     contents:
-      - log_app_usage
       - root_modules
   - title: Validation functions
     contents:
