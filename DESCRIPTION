@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.11.1.9025
-Date: 2022-10-11
+Version: 0.12.0.9007
+Date: 2022-11-14
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
     person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
@@ -23,8 +23,8 @@ License: Apache License 2.0 | file LICENSE
 Depends:
     R (>= 4.0),
     shiny,
-    teal.data (>= 0.1.1),
-    teal.transform (>= 0.1.1)
+    teal.data (>= 0.1.2),
+    teal.transform (>= 0.2.0)
 Imports:
     checkmate,
     lifecycle,
@@ -35,10 +35,11 @@ Imports:
     shinyjs,
     stats,
     styler,
-    teal.code (>= 0.1.1),
-    teal.logger (>= 0.1.0),
-    teal.reporter (>= 0.1.0),
-    teal.slice (>= 0.1.1),
+    teal.code (>= 0.2.0),
+    teal.logger (>= 0.1.1),
+    teal.reporter (>= 0.1.1),
+    teal.slice (>= 0.2.0),
+    teal.widgets (>= 0.2.0),
     utils
 Suggests:
     bslib,
@@ -48,9 +49,8 @@ Suggests:
     MultiAssayExperiment,
     R6,
     rmarkdown,
-    scda (>= 0.1.3),
-    scda.2021 (>= 0.1.3),
-    teal.widgets (>= 0.1.1),
+    scda (>= 0.1.5),
+    scda.2022 (>= 0.1.3),
     testthat (>= 2.0),
     withr,
     yaml
@@ -59,7 +59,7 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Remotes:
-    insightsengineering/scda.2021@*release,
+    insightsengineering/scda.2022@*release,
     insightsengineering/scda@*release,
     insightsengineering/teal.code@*release,
     insightsengineering/teal.data@*release,
@@ -92,6 +92,7 @@ Collate:
     'modules_debugging.R'
     'reporter_previewer_module.R'
     'show_rcode_modal.R'
+    'tdata.R'
     'teal.R'
     'utils.R'
     'validations.R'

@@ -33,16 +33,17 @@ teal_example_module <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
-    server = function(id, datasets) {
+    server = function(id, data) {
+      checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
-        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
+        output$text <- renderPrint(data[[input$dataname]]())
       })
     },
-    ui = function(id, datasets) {
+    ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
     filters = "all"
@@ -65,23 +66,23 @@ if (interactive()) shinyApp(app$ui, app$server)
 
 ## Add support for Reporting
 ### Change the declaration of the server function
-The first step is to add another argument to the server function declaration - `reporter`. This needs to be the third
-argument to the server function inside the `teal.module` call. See below:
+The first step is to add another argument to the server function declaration - `reporter`. See below:
 ```{r}
 example_module_with_reporting <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
-    server = function(id, datasets, reporter) {
+    server = function(id, data, reporter) {
+      checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
-        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
+        output$text <- renderPrint(data[[input$dataname]]())
       })
     },
-    ui = function(id, datasets) {
+    ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
     filters = "all"
@@ -114,24 +115,25 @@ example_module_with_reporting <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
-    server = function(id, datasets, reporter) {
+    server = function(id, data, reporter) {
+      checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
         teal.reporter::simple_reporter_srv(
           id = "reporter",
           reporter = reporter,
           card_fun = function(card) card
         )
-        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
+        output$text <- renderPrint(data[[input$dataname]]())
       })
     },
-    ui = function(id, datasets) {
+    ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = tagList(
           teal.reporter::simple_reporter_ui(ns("reporter")),
           verbatimTextOutput(ns("text"))
         ),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
     filters = "all"
@@ -176,20 +178,21 @@ example_module_with_reporting <- function(label = "example teal module") {
   checkmate::assert_string(label)
   module(
     label,
-    server = function(id, datasets, reporter) {
+    server = function(id, data, reporter) {
+      checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
         teal.reporter::simple_reporter_srv(id = "simpleReporter", reporter = reporter, card_fun = custom_function)
-        output$text <- renderPrint(datasets$get_data(input$dataname, filtered = TRUE))
+        output$text <- renderPrint(data[[input$dataname]]())
       })
     },
-    ui = function(id, datasets) {
+    ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = tagList(
           teal.reporter::simple_reporter_ui(ns("simpleReporter")),
           verbatimTextOutput(ns("text"))
         ),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames())
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
     filters = "all"
@@ -233,6 +236,7 @@ Otherwise, the API of `TealReportCard` will not be available inside the function
 ## Example
 
 Summing up, we could build a regular teal app with code reproducibility and reporter functionality.
+Note that the `server` function requires the `filter_panel_api` argument so that the filter panel state can be added to the report.
 
 ```{r}
 library(teal)
@@ -241,28 +245,40 @@ library(teal.reporter)
 example_reporter_module <- function(label = "Example") {
   module(
     label,
-    server = function(id, datasets, reporter) {
+    server = function(id, data, reporter, filter_panel_api) {
+      with_filter <- !missing(filter_panel_api) && inherits(filter_panel_api, "FilterPanelApi")
+      checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
-        simple_chunks <- teal.code::chunks_new()
-        dat <- reactive(dat <- datasets$get_data(input$dataname, filtered = TRUE))
+        dat <- reactive(data[[input$dataname]]())
         output$nrow_ui <- renderUI({
-          sliderInput(session$ns("nrow"), "Number of rows:", 1, nrow(dat()), 10)
+          sliderInput(session$ns("nrow"), "Number of rows:", 1, nrow(data[[input$dataname]]()), 10)
         })
-        table_r <- reactive({
+
+        table_q <- reactive({
           req(input$nrow)
-          teal.code::chunks_reset(chunks = simple_chunks)
-          teal.code::chunks_push(bquote(result <- .(dat())), id = "get_data", chunks = simple_chunks)
-          teal.code::chunks_push(bquote(result <- head(result, .(input$nrow))), id = "nrow", chunks = simple_chunks)
-          teal.code::chunks_push(quote(result), id = "print_result", chunks = simple_chunks)
-          teal.code::chunks_safe_eval(chunks = simple_chunks)
+
+          teal.code::new_qenv(tdata2env(data), code = get_code(data)) %>%
+            teal.code::eval_code(
+              substitute(
+                result <- head(data, nrows),
+                list(
+                  data = as.name(input$dataname),
+                  nrows = input$nrow
+                )
+              )
+            )
         })
-        output$table <- renderTable(table_r())
+
+        output$table <- renderTable(table_q()[["result"]])
+
         ### REPORTER
         card_fun <- function(card = ReportCard$new(), comment) {
           card$set_name("Table Module")
           card$append_text(paste("Selected dataset", input$dataname), "header2")
           card$append_text("Selected Filters", "header3")
-          card$append_text(datasets$get_formatted_filter_state(), "verbatim")
+          if (with_filter) {
+            card$append_text(filter_panel_api$get_filter_state(), "verbatim")
+          }
           card$append_text("Encoding", "header3")
           card$append_text(
             yaml::as.yaml(
@@ -271,9 +287,9 @@ example_reporter_module <- function(label = "Example") {
             "verbatim"
           )
           card$append_text("Module Table", "header3")
-          card$append_table(table_r())
+          card$append_table(table_q()[["result"]])
           card$append_text("Show R Code", "header3")
-          card$append_text(paste(teal.code::chunks_get_rcode(simple_chunks), collapse = "\n"), "verbatim")
+          card$append_text(paste(teal.code::get_code(table_q()), collapse = "\n"), "verbatim")
           if (!comment == "") {
             card$append_text("Comment", "header3")
             card$append_text(comment)
@@ -286,7 +302,7 @@ example_reporter_module <- function(label = "Example") {
         ###
       })
     },
-    ui = function(id, datasets) {
+    ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = tableOutput(ns("table")),
@@ -296,7 +312,7 @@ example_reporter_module <- function(label = "Example") {
             teal.reporter::download_report_button_ui(ns("downloadButton")),
             teal.reporter::reset_report_button_ui(ns("resetButton"))
           ),
-          selectInput(ns("dataname"), "Choose a dataset", choices = datasets$datanames()),
+          selectInput(ns("dataname"), "Choose a dataset", choices = names(data)),
           uiOutput(ns("nrow_ui"))
         )
       )
@@ -306,7 +322,11 @@ example_reporter_module <- function(label = "Example") {
 }
 
 app <- init(
-  data = teal_data(dataset("AIR", airquality), dataset("IRIS", iris), check = FALSE),
+  data = teal_data(
+    dataset("AIR", airquality, code = "data(airquality); AIR <- airquality"),
+    dataset("IRIS", iris, code = "data(iris); IRIS <- iris"),
+    check = FALSE
+  ),
   modules = modules(
     example_reporter_module(label = "with Reporter"),
     example_module(label = "without Reporter")

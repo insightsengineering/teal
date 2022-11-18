@@ -16,8 +16,9 @@
 #'
 #' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
 #' or `MultiAssayExperiment`)\cr
-#' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()], [teal.data::cdisc_dataset()], [teal.data::dataset()],
-#' [teal.data::dataset_connector()] or [teal.data::cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`
+#' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()],
+#' [teal.data::cdisc_dataset()], [teal.data::dataset()], [teal.data::dataset_connector()] or
+#' [teal.data::cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`
 #' or a list of the previous objects or function returning a named list.
 #' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 #' do not match the original object names. To ensure reproducibility please use [teal.data::teal_data()]
@@ -120,16 +121,16 @@
 #'   modules = modules(
 #'     module(
 #'       "data source",
-#'       server = function(input, output, session, datasets) {},
+#'       server = function(input, output, session, data) {},
 #'       ui = function(id, ...) div(p("information about data source")),
 #'       filters = "all"
 #'     ),
 #'     example_module(),
 #'     module(
 #'       "ADSL AGE histogram",
-#'       server = function(input, output, session, datasets) {
+#'       server = function(input, output, session, data) {
 #'         output$hist <- renderPlot(
-#'           hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
+#'           hist(data[["ADSL"]]()$AGE)
 #'         )
 #'       },
 #'       ui = function(id, ...) {
@@ -144,12 +145,10 @@
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )
-#' \dontrun{
-#' shinyApp(app$ui, app$server)
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
 #' }
 #'
-#' # See the vignette for an example how to embed this app as a module
-#' # into a larger application
 init <- function(data,
                  modules,
                  title = NULL,

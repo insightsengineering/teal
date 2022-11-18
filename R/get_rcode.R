@@ -1,6 +1,6 @@
 #' Returns R Code from a teal module
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description `r lifecycle::badge("deprecated")`
 #' Return the R-code used to create a teal::teal] module analysis. This function
 #' will return all analysis code as a character string. In case of a good setup it will
 #' not only return the code used create the module analysis, but also the code used by
@@ -62,6 +62,14 @@ get_rcode <- function(datasets = NULL,
                       title = NULL,
                       description = NULL) {
   checkmate::assert_class(datasets, "FilteredData", null.ok = TRUE)
+
+  lifecycle::deprecate_warn(
+    when = "0.12.1",
+    what = "get_rcode()",
+    details = "Reproducibility in teal apps has changed.
+      See the teal.code package and example modules for further details"
+  )
+
   if (!inherits(chunks, "chunks")) {
     stop("No code chunks given")
   }
@@ -70,7 +78,7 @@ get_rcode <- function(datasets = NULL,
   rlang::push_options(width = 120)
 
   if (!is.null(session)) {
-    lifecycle::deprecate_warn("0.11.2", "get_rcode(session)")
+    lifecycle::deprecate_warn("0.12.1", "get_rcode(session)")
   }
 
   if (!is.null(datasets)) {
@@ -83,7 +91,9 @@ get_rcode <- function(datasets = NULL,
     )
     str_install <- paste(c(get_rcode_str_install(), ""), collapse = "\n")
     str_libs <- paste(get_rcode_libraries(), "\n")
-    str_code <- get_datasets_code(datanames, datasets)
+
+    hashes <- calculate_hashes(datanames, datasets)
+    str_code <- c(get_datasets_code(datanames, datasets, hashes), teal.slice::get_filter_expr(datasets, datanames))
   } else {
     str_header <- get_rcode_header(title = title, description = description)
     str_install <- character(0)
@@ -126,37 +136,29 @@ get_rcode <- function(datasets = NULL,
 #' Get datasets code
 #'
 #' Get combined code from `FilteredData` and from `CodeClass` object.
+#'
 #' @param datanames (`character`) names of datasets to extract code from
 #' @param datasets (`FilteredData`) object
+#' @param hashes named (`list`) of hashes per dataset
+#'
 #' @return `character(3)` containing following elements:
 #'  - code from `CodeClass` (data loading code)
-#'  - hash of loaded objects
-#'  - filter panel code
+#'  - hash check of loaded objects
+#'
 #' @keywords internal
-get_datasets_code <- function(datanames, datasets) {
+get_datasets_code <- function(datanames, datasets, hashes) {
   str_code <- datasets$get_code(datanames)
   if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
-    str_code <- paste0(c(
-      "#################################################################",
-      "# ___  ____ ____ ___  ____ ____ ____ ____ ____ ____ _ _  _ ____ #",
-      "# |__] |__/ |___ |__] |__/ |  | |    |___ [__  [__  | |\\ | | __ #",
-      "# |    |  \\ |___ |    |  \\ |__| |___ |___ ___] ___] | | \\| |__] #",
-      "#              _ ____    ____ _  _ ___  ___ _   _               #",
-      "#              | [__     |___ |\\/| |__]  |   \\_/                #",
-      "#              | ___]    |___ |  | |     |    |                 #",
-      "#################################################################\n"
-    ), collapse = "\n")
+    str_code <- "message('Preprocessing is empty')"
   } else if (length(str_code) > 0) {
     str_code <- paste0(str_code, "\n\n")
   }
+
   if (!datasets$get_check()) {
     check_note_string <- paste0(
       c(
-        "## NOTE: Reproducibility of data import and preprocessing was not",
-        "## explicitly checked (argument \"check = FALSE\" is set).",
-        "## The app developer has the choice to check the reproducibility",
-        "## and might have omitted this step for some reason. Please reach",
-        "## out to the app developer for details.\n"
+        "message(paste(\"Reproducibility of data import and preprocessing was not explicitly checked\",",
+        "   \" ('check = FALSE' is set). Contact app developer if this is an issue.\n\"))"
       ),
       collapse = "\n"
     )
@@ -169,9 +171,9 @@ get_datasets_code <- function(datanames, datasets) {
         datanames,
         function(dataname) {
           sprintf(
-            "# %s MD5 hash at the time of analysis: %s",
-            dataname,
-            datasets$get_filtered_dataset(dataname)$get_hash()
+            "stopifnot(%s == %s)",
+            deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+            deparse1(hashes[[dataname]])
           )
         },
         character(1)
@@ -181,20 +183,17 @@ get_datasets_code <- function(datanames, datasets) {
     "\n\n"
   )
 
-  str_filter <- teal.slice::get_filter_expr(datasets, datanames)
-  if (str_filter != "") {
-    str_filter <- paste0(str_filter, "\n\n")
-  }
-  c(str_code, str_hash, str_filter)
+  c(str_code, str_hash)
 }
 
 ## Module ----
 #' Server part of get R code module
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' @inheritParams get_rcode
 #' @inheritParams shiny::moduleServer
+#'
 #' @param modal_title optional, (`character`) title of the modal
 #' @param code_header optional, (`character`) header inside R
 #' @param disable_buttons optional, (`reactive`)
@@ -210,6 +209,15 @@ get_rcode_srv <- function(id,
                           code_header = "Automatically generated R code",
                           disable_buttons = reactiveVal(FALSE)) {
   checkmate::check_class(disable_buttons, c("reactive", "function"))
+
+  lifecycle::deprecate_warn(
+    when = "0.12.1",
+    what = "get_rcode_srv()",
+    with = "teal.widgets::verbatim_popup_srv()",
+    details = "Show R Code behaviour has changed,
+      see example modules in vignettes for more details"
+  )
+
   moduleServer(id, function(input, output, server) {
     chunks <- teal.code::get_chunks_object(parent_idx = 1L)
     observeEvent(input$show_rcode, {
@@ -247,13 +255,21 @@ get_rcode_srv <- function(id,
 
 #' Ui part of get R code module
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description `r lifecycle::badge("deprecated")`
 #' @param id (`character`) id of shiny module
 #'
 #' @return (`shiny.tag`)
 #'
 #' @export
 get_rcode_ui <- function(id) {
+  lifecycle::deprecate_warn(
+    when = "0.12.1",
+    what = "get_rcode_ui()",
+    with = "teal.widgets::verbatim_popup_ui()",
+    details = "Show R Code behaviour has changed,
+      see example modules in vignettes for more details"
+  )
+
   ns <- NS(id)
   tagList(
     tags$div(actionButton(ns("show_rcode"), "Show R code", width = "100%")),

@@ -17,8 +17,9 @@ init(
 \arguments{
 \item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
 or \code{MultiAssayExperiment})\cr
-\code{R6} object as returned by \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}}, \code{\link[teal.data:teal_data]{teal.data::teal_data()}}, \code{\link[teal.data:cdisc_dataset]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:dataset]{teal.data::dataset()}},
-\code{\link[teal.data:dataset_connector]{teal.data::dataset_connector()}} or \code{\link[teal.data:cdisc_dataset_connector]{teal.data::cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
+\code{R6} object as returned by \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}}, \code{\link[teal.data:teal_data]{teal.data::teal_data()}},
+\code{\link[teal.data:cdisc_dataset]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:dataset]{teal.data::dataset()}}, \code{\link[teal.data:dataset_connector]{teal.data::dataset_connector()}} or
+\code{\link[teal.data:cdisc_dataset_connector]{teal.data::cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
 or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 do not match the original object names. To ensure reproducibility please use \code{\link[teal.data:teal_data]{teal.data::teal_data()}}
@@ -135,16 +136,16 @@ app <- init(
   modules = modules(
     module(
       "data source",
-      server = function(input, output, session, datasets) {},
+      server = function(input, output, session, data) {},
       ui = function(id, ...) div(p("information about data source")),
       filters = "all"
     ),
     example_module(),
     module(
       "ADSL AGE histogram",
-      server = function(input, output, session, datasets) {
+      server = function(input, output, session, data) {
         output$hist <- renderPlot(
-          hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
+          hist(data[["ADSL"]]()$AGE)
         )
       },
       ui = function(id, ...) {
@@ -159,10 +160,8 @@ app <- init(
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )
-\dontrun{
-shinyApp(app$ui, app$server)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
 }
 
-# See the vignette for an example how to embed this app as a module
-# into a larger application
 }

@@ -118,18 +118,12 @@ testthat::test_that("module expects all ui_args being a ui arguments or passed t
   )
 })
 
-testthat::test_that("module requires filters argument to be a character", {
+testthat::test_that("module requires filters argument to be a character or NULL", {
   testthat::expect_error(module(filters = "all"), NA)
   testthat::expect_error(module(filters = ""), NA)
   testthat::expect_error(module(filters = NULL), NA)
   testthat::expect_error(module(filters = NA_character_), "Contains missing values")
-})
-
-testthat::test_that("module shouldn't have filter = NULL and data or datasets in the formals", {
-  testthat::expect_error(
-    module(server = function(id, data) NULL, filters = NULL),
-    "Please specify `filters`"
-  )
+  testthat::expect_error(module(server = function(id, data) NULL, filters = NULL), NA)
 })
 
 testthat::test_that("module() returns list of class 'teal_module' containing input objects", {

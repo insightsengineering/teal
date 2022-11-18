@@ -96,24 +96,9 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
     args <- c(args, datasets = datasets)
   }
 
+
   if (is_arg_used(modules$ui, "data")) {
-    datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
-
-    # list of reactive filtered data
-    data <- sapply(
-      datanames,
-      simplify = FALSE,
-      function(x) {
-        reactive(datasets$get_data(x, filtered = TRUE))
-      }
-    )
-
-    # code from previous stages
-    attr(data, "code") <- get_datasets_code(datanames, datasets)
-
-    # join_keys
-    attr(data, "join_keys") <- datasets$get_join_keys()
-
+    data <- .datasets_to_data(modules, datasets)
     args <- c(args, data = list(data))
   }
 
@@ -175,6 +160,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter) {
         "module { deparse1(modules$label) }."
       )
     )
+
     modules_reactive <- sapply(names(modules$children), USE.NAMES = TRUE, function(id) {
       srv_nested_tabs(id = id, datasets = datasets, modules = modules$children[[id]], reporter = reporter)
     })
@@ -217,23 +203,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   }
 
   if (is_arg_used(modules$server, "data")) {
-    datanames <- if (identical("all", modules$filter)) datasets$datanames() else modules$filter
-
-    # list of reactive filtered data
-    data <- sapply(
-      datanames,
-      simplify = FALSE,
-      function(x) {
-        reactive(datasets$get_data(x, filtered = TRUE))
-      }
-    )
-
-    # code from previous stages
-    attr(data, "code") <- get_datasets_code(datanames, datasets)
-
-    # join_keys
-    attr(data, "join_keys") <- datasets$get_join_keys()
-
+    data <- .datasets_to_data(modules, datasets)
     args <- c(args, data = list(data))
   }
 
@@ -257,4 +227,71 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     do.call(callModule, c(args, list(module = modules$server)))
   }
   reactive(modules)
+}
+
+#' Convert `FilteredData` to reactive list of datasets of the `tdata` type.
+#'
+#' Converts `FilteredData` object to `tdata` object containing datasets needed for a specific module.
+#' Please note that if module needs dataset which has a parent, then parent will be also returned.
+#' A hash per `dataset` is calculated internally and returned in the code.
+#'
+#' @param module (`teal_module`) module where needed filters are taken from
+#' @param datasets (`FilteredData`) object where needed data are taken from
+#' @return list of reactive datasets with following attributes:
+#' - `code` (`character`) containing datasets reproducible code.
+#' - `join_keys` (`JoinKeys`) containing relationships between datasets.
+#' - `metadata` (`list`) containing metadata of datasets.
+#'
+#' @keywords internal
+.datasets_to_data <- function(module, datasets) {
+  datanames <- if (identical("all", module$filter) || is.null(module$filter)) {
+    datasets$datanames()
+  } else {
+    datasets$get_filterable_datanames(module$filter) # get_filterable_datanames adds parents if present
+  }
+
+  # list of reactive filtered data
+  data <- sapply(
+    datanames,
+    simplify = FALSE,
+    function(x) {
+      reactive(datasets$get_data(x, filtered = TRUE))
+    }
+  )
+
+  hashes <- calculate_hashes(datanames, datasets)
+  metadata <- lapply(datanames, datasets$get_metadata)
+  names(metadata) <- datanames
+
+  new_tdata(
+    data,
+    reactive(
+      c(
+        get_rcode_str_install(),
+        get_rcode_libraries(),
+        get_datasets_code(datanames, datasets, hashes),
+        teal.slice::get_filter_expr(datasets, datanames)
+      )
+    ),
+    datasets$get_join_keys(),
+    metadata
+  )
+}
+
+#' Get the hash of a dataset
+#'
+#' @param datanames (`character`) names of datasets
+#' @param datasets (`FilteredData`) object holding the data
+#'
+#' @return A list of hashes per dataset
+#' @keywords internal
+#'
+calculate_hashes <- function(datanames, datasets) {
+  sapply(
+    datanames,
+    simplify = FALSE,
+    function(x) {
+      rlang::hash(datasets$get_data(x, filtered = FALSE))
+    }
+  )
 }

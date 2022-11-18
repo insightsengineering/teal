@@ -257,3 +257,160 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the 
     NA
   )
 })
+
+
+get_example_filtered_data <- function() {
+  d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)
+  d2 <- data.frame(id = 1:5, value = 1:5)
+
+  cc <- teal.data:::CodeClass$new()
+  cc$set_code("d1 <- data.frame(id = 1:5, pk = c(2,3,2,1,4), val = 1:5)", "d1")
+  cc$set_code("d2 <- data.frame(id = 1:5, value = 1:5)", "d2")
+
+  teal.slice::init_filtered_data(
+    x = list(
+      d1 = list(dataset = d1, keys = "id", metadata = list("A" = 1)),
+      d2 = list(dataset = d2, keys = "id")
+    ),
+    join_keys = teal.data::join_keys(teal.data::join_key("d1", "d2", c("pk" = "id"))),
+    code = cc,
+    check = TRUE
+  )
+}
+
+testthat::test_that(".datasets_to_data returns data which is filtered", {
+  datasets <- get_example_filtered_data()
+  isolate(datasets$set_filter_state(list(d1 = list(val = list(selected = c(1, 2))))))
+  module <- list(filter = "all")
+  data <- isolate(.datasets_to_data(module, datasets))
+
+  d1_filtered <- isolate(data[["d1"]]())
+  testthat::expect_equal(d1_filtered, data.frame(id = 1:2, pk = 2:3, val = 1:2))
+  d2_filtered <- isolate(data[["d2"]]())
+  testthat::expect_equal(d2_filtered, data.frame(id = 1:5, value = 1:5))
+})
+
+
+testthat::test_that(".datasets_to_data returns only data requested by modules$filter", {
+  datasets <- get_example_filtered_data()
+  module <- list(filter = "d1")
+  data <- .datasets_to_data(module, datasets)
+  testthat::expect_equal(isolate(names(data)), "d1")
+})
+
+testthat::test_that(".datasets_to_data returns tdata object", {
+  datasets <- get_example_filtered_data()
+  module <- list(filter = "all")
+  data <- .datasets_to_data(module, datasets)
+
+  testthat::expect_s3_class(data, "tdata")
+
+  # join_keys
+  testthat::expect_equal(
+    get_join_keys(data),
+    teal.data::join_keys(teal.data::join_key("d1", "d2", c("pk" = "id")))
+  )
+
+  # code
+  testthat::expect_equal(
+    isolate(get_code(data)),
+    c(
+      get_rcode_str_install(),
+      get_rcode_libraries(),
+      "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\nd2 <- data.frame(id = 1:5, value = 1:5)\n\n",
+      paste0(
+        "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")\n",
+        "stopifnot(rlang::hash(d2) == \"6e30be195b7d914a1311672c3ebf4e4f\") \n\n"
+      ),
+      ""
+    )
+  )
+
+  # metadata
+  testthat::expect_equal(
+    get_metadata(data, "d1"),
+    list(A = 1)
+  )
+
+  testthat::expect_null(get_metadata(data, "d2"))
+})
+
+testthat::test_that(".datasets_to_data returns parent datasets for CDISC data", {
+  adsl <- data.frame(STUDYID = 1, USUBJID = 1)
+  adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1, AETERM = 1, AESEQ = 1)
+  adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)
+
+  datasets <- teal.slice::init_filtered_data(
+    teal.data::cdisc_data(
+      teal.data::cdisc_dataset("ADSL", adsl),
+      teal.data::cdisc_dataset("ADAE", adae),
+      teal.data::cdisc_dataset("ADTTE", adtte)
+    )
+  )
+
+  module <- list(filter = "ADAE")
+  data <- .datasets_to_data(module, datasets)
+  testthat::expect_setequal(isolate(names(data)), c("ADSL", "ADAE"))
+})
+
+testthat::test_that("calculate_hashes takes a FilteredData and vector of datanames as input", {
+  adsl <- data.frame(STUDYID = 1, USUBJID = 1)
+  adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1, AETERM = 1, AESEQ = 1)
+  adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)
+
+  datasets <- teal.slice::init_filtered_data(
+    teal.data::cdisc_data(
+      teal.data::cdisc_dataset("ADSL", adsl),
+      teal.data::cdisc_dataset("ADAE", adae),
+      teal.data::cdisc_dataset("ADTTE", adtte)
+    )
+  )
+
+  testthat::expect_error(calculate_hashes(datanames = c("ADSL", "ADAE", "ADTTE"), datasets = datasets), NA)
+})
+
+testthat::test_that("calculate_hashes returns a named list", {
+  adsl <- data.frame(STUDYID = 1, USUBJID = 1)
+  adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1, AETERM = 1, AESEQ = 1)
+  adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)
+
+  datasets <- teal.slice::init_filtered_data(
+    teal.data::cdisc_data(
+      teal.data::cdisc_dataset("ADSL", adsl),
+      teal.data::cdisc_dataset("ADAE", adae),
+      teal.data::cdisc_dataset("ADTTE", adtte)
+    )
+  )
+
+  hashes <- calculate_hashes(datanames = c("ADSL", "ADAE", "ADTTE"), datasets = datasets)
+  testthat::expect_identical(
+    hashes,
+    list(
+      "ADSL" = "e89f5271357822c78dd5cfddb60c0a95",
+      "ADAE" = "f71b576ecfd23075f7285841327515e0",
+      "ADTTE" = "c68c01c86b946a3dfe05150da040aa2a"
+    )
+  )
+  testthat::expect_is(hashes, "list")
+  testthat::expect_named(hashes)
+})
+
+testthat::test_that("calculate_hashes returns the hash of the non Filtered dataset", {
+  datasets <- teal.slice::init_filtered_data(
+    teal.data::teal_data(
+      teal.data::dataset("iris", iris)
+    )
+  )
+
+  fs <- list(
+    iris = list(
+      Sepal.Length = list(c(5.1, 6.4)),
+      Species = c("setosa", "versicolor")
+    )
+  )
+  datasets$set_filter_state(state = fs)
+
+  hashes <- calculate_hashes(datanames = c("iris"), datasets = datasets)
+  testthat::expect_identical(hashes, list("iris" = "34844aba7bde36f5a34f6d8e39803508"))
+  testthat::expect_false(hashes == rlang::hash(isolate(datasets$get_data("iris", filtered = TRUE))))
+})
