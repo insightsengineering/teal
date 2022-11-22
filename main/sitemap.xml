@@ -70,9 +70,6 @@
     <loc>https://insightsengineering.github.io/teal/main/reference/dot-datasets_to_data.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/dot-log.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/example_module.html</loc>
   </url>
   <url>
@@ -143,15 +140,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/is_arg_used.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/line_pkg_log.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/line_usage_log.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/log_app_usage.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/module.html</loc>
