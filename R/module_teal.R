@@ -157,36 +157,6 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       }
     )
 
-    # bookmarking -----
-    # Note bookmarkableShinyApp has been soft deprecated and when it has been removed completely
-    # this code should be removed.
-    saved_datasets_state <- reactiveVal(NULL) # set when restored because data must already be populated
-    onBookmark(function(state) {
-      # this function is isolated by Shiny
-      # We store the entire R6 class with reactive values in it, but set the data to NULL.
-      # Note that we cannnot directly do this on datasets as this would trigger
-      # reactivity to recompute the filtered datasets, which is not needed.
-      logger::log_trace(
-        paste(
-          "srv_teal@2 saving active filter state for",
-          "datasets: { paste(names(datasets_reactive()$get_filter_state()), collapse = ' ') }."
-        )
-      )
-      state$values$datasets_state <- datasets_reactive()$get_filter_state()
-    })
-    onRestore(function(state) {
-      # The saved datasets mainly contains the filter states as the data
-      # was set to NULL before storing. The data should have been set again
-      # by the user, so we just need to set the filters.
-      logger::log_trace(
-        paste(
-          "srv_teal@3 restoring filter states from the bookmark for",
-          "datasets: { paste(names(state$values$datasets_state), collapse = ' ') }."
-        )
-      )
-      saved_datasets_state(state$values$datasets_state)
-    })
-
     # loading the data -----
     env <- environment()
     datasets_reactive <- reactive({
