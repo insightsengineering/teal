@@ -82,8 +82,6 @@ Collate:
     'include_css_js.R'
     'modules.R'
     'init.R'
-    'log_app_usage.R'
-    'logging.R'
     'module_nested_tabs.R'
     'module_tabs_with_filters.R'
     'module_teal.R'
