@@ -188,4 +188,3 @@ init <- function(data,
   logger::log_trace("init teal app has been initialized.")
   return(res)
 }
-
