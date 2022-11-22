@@ -54,7 +54,6 @@ reference:
       - starts_with("validate_")
   - title: Deprecated functions
     contents:
-      - bookmarkableShinyApp
       - get_rcode
       - get_rcode_srv
       - get_rcode_ui
