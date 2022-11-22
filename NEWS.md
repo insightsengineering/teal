@@ -14,10 +14,7 @@
 * Updated examples to use `scda.2022`.
 * Added R session information into a link in the footer of `teal` applications.
 * Added data hashing step using `rlang` instead of `digest` package to calculate the hash (which has been moved from `teal.data` and `teal.slice`). There is now an explicit hashing check in the reproducible code output.
-* Removed deprecated function `root_modules`.
-* Removed deprecated function `default_filter`.
-* Removed deprecated logging mechanism, including the functions `log_app_usage` and `.log`.
-* Removed deprecated function `bookmarkableShinyApp`.
+* Removed deprecated functions: `root_modules`, `default_filter`, `bookmarkableShinyApp`, as well as deprecated logging mechanism, including the functions `log_app_usage` and `.log`.
 
 # teal 0.12.0
 
@@ -32,13 +29,11 @@
 * Updated `teal_module` to have `filter_panel_api` argument which receives a `FilterPanelAPI` object.
 * Updated the internals of `module_teal` to reflect changes in `teal.slice`.
 
-
 ### Breaking changes
 
 * Updated `teal_module` to no longer receive `datasets` object in the `...` argument. In order to use `datasets` in the `teal_module` please specify `datasets` explicitly.
 * Deprecated `merge_expression` argument in `get_rcode_srv` function and removed it in `get_rcode` function.
 * Deprecated `session` argument in `get_rcode` function.
-* Removed the deprecated function `root_module`.
 
 # Miscellaneous
 
