@@ -206,10 +206,6 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         immediate = TRUE
       )
 
-      # switching filter to bookmarked state
-      if (!is.null(saved_datasets_state())) filter <- saved_datasets_state()
-
-
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)
       active_module <- srv_tabs_with_filters(
