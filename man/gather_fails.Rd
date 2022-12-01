@@ -60,12 +60,14 @@ ui <- fluidPage(
       selectInput("number", "select a number:", 1:6),
       br(),
       selectInput("color", "select a color:",
-                  c("black", "indianred2", "springgreen2", "cornflowerblue"),
-                  multiple = TRUE),
+        c("black", "indianred2", "springgreen2", "cornflowerblue"),
+        multiple = TRUE
+      ),
       sliderInput("size", "select point size:",
-                  min = 0.1, max = 4, value = 0.25)
+        min = 0.1, max = 4, value = 0.25
+      )
     ),
-    mainPanel(plotOutput('plot'))
+    mainPanel(plotOutput("plot"))
   )
 )
 
@@ -79,26 +81,33 @@ server <- function(input, output) {
   iv_par <- InputValidator$new()
   iv_par$add_rule("color", sv_required(message = "choose a color"))
   iv_par$add_rule("color", ~ if (length(.) > 1L) "choose only one color")
-  iv_par$add_rule("size",
-                  sv_between(left = 0.5, right = 3,
-                             message_fmt = "choose a value between {left} and {right}"))
+  iv_par$add_rule(
+    "size",
+    sv_between(
+      left = 0.5, right = 3,
+      message_fmt = "choose a value between {left} and {right}"
+    )
+  )
   iv_par$enable()
 
   output$plot <- renderPlot({
     # validate output
     switch(input[["method"]],
-           "hierarchical" = {
-             gather_fails(iv)
-             gather_fails(iv_par, "Set proper graphical parameters")
-           },
-           "combined" = gather_fails_com(iv, iv_par),
-           "grouped" = gather_fails_grp(list(
-             "Some inputs require attention" = iv,
-             "Set proper graphical parameters" = iv_par
-           )))
+      "hierarchical" = {
+        gather_fails(iv)
+        gather_fails(iv_par, "Set proper graphical parameters")
+      },
+      "combined" = gather_fails_com(iv, iv_par),
+      "grouped" = gather_fails_grp(list(
+        "Some inputs require attention" = iv,
+        "Set proper graphical parameters" = iv_par
+      ))
+    )
 
-    plot(eruptions ~ waiting, faithful, las = 1, pch = 16,
-         col = input[["color"]], cex = input[["size"]])
+    plot(eruptions ~ waiting, faithful,
+      las = 1, pch = 16,
+      col = input[["color"]], cex = input[["size"]]
+    )
   })
 }
 
@@ -107,5 +116,5 @@ if (interactive()) {
 }
 }
 \seealso{
-\code{\link{[shinyvalidate::InputValidator]}} \code{\link{[shiny::validate]}}
+\code{[shinyvalidate::InputValidator]} \code{[shiny::validate]}
 }
