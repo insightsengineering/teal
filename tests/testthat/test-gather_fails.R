@@ -467,29 +467,3 @@ test_that("hierarchical validation", {
     ))
   })
 })
-
-
-
-# shiny::testServer(server, {
-#   session$setInputs(
-#     "method" = "hierarchical",
-#     "letter" = "a",
-#     "number" = 1L,
-#     "color" = "",
-#     "size" = 0.25
-#   )
-#   expect_error(gather_fails(iv))
-#
-#   errmess <- tryCatch(gather_fails(iv),
-#                       error = function(e) e$message
-#   )
-#   expect_identical(errmess,
-#                    paste(
-#                      c("Some inputs require attention\n",
-#                        "choose a capital letter",
-#                        "choose an even number",
-#                        # "choose a color",
-#                        # "choose a value between 0.5 and 3",
-#                        "\n"),
-#                      collapse = "\n"))
-#
