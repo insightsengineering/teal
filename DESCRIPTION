@@ -73,10 +73,11 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 Collate:
     'dummy_functions.R'
     'example_module.R'
+    'gather_fails.R'
     'get_rcode.R'
     'get_rcode_utils.R'
     'include_css_js.R'
