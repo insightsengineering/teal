@@ -33,6 +33,7 @@ Imports:
     methods,
     rlang,
     shinyjs,
+    shinyvalidate,
     stats,
     styler,
     teal.code (>= 0.2.0),
