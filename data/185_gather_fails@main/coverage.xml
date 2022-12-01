@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage line-rate="0.743827160493827" branch-rate="0" lines-covered="723" lines-valid="972" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2022-12-01 16:10:09">
+<coverage line-rate="0.743827160493827" branch-rate="0" lines-covered="723" lines-valid="972" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2022-12-01 16:43:55">
   <sources/>
   <packages>
     <package name="teal" line-rate="0.743827160493827" branch-rate="0" complexity="0">
@@ -224,82 +224,82 @@
           <methods>
             <method name="gather_fails" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="101" hits="8" branch="false"/>
-                <line number="102" hits="8" branch="false"/>
-                <line number="104" hits="8" branch="false"/>
-                <line number="105" hits="8" branch="false"/>
-                <line number="107" hits="8" branch="false"/>
+                <line number="109" hits="8" branch="false"/>
+                <line number="110" hits="8" branch="false"/>
+                <line number="112" hits="8" branch="false"/>
+                <line number="113" hits="8" branch="false"/>
+                <line number="115" hits="8" branch="false"/>
               </lines>
             </method>
             <method name="gather_fails_com" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="114" hits="11" branch="false"/>
-                <line number="115" hits="11" branch="false"/>
-                <line number="116" hits="11" branch="false"/>
-                <line number="118" hits="11" branch="false"/>
-                <line number="119" hits="11" branch="false"/>
-                <line number="121" hits="11" branch="false"/>
+                <line number="122" hits="11" branch="false"/>
+                <line number="123" hits="11" branch="false"/>
+                <line number="124" hits="11" branch="false"/>
+                <line number="126" hits="11" branch="false"/>
+                <line number="127" hits="11" branch="false"/>
+                <line number="129" hits="11" branch="false"/>
               </lines>
             </method>
             <method name="gather_fails_grp" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="128" hits="11" branch="false"/>
-                <line number="131" hits="11" branch="false"/>
-                <line number="132" hits="11" branch="false"/>
-                <line number="133" hits="15" branch="false"/>
                 <line number="136" hits="11" branch="false"/>
-                <line number="138" hits="11" branch="false"/>
+                <line number="139" hits="11" branch="false"/>
+                <line number="140" hits="11" branch="false"/>
+                <line number="141" hits="15" branch="false"/>
+                <line number="144" hits="11" branch="false"/>
+                <line number="146" hits="11" branch="false"/>
               </lines>
             </method>
             <method name="gather_messages" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="148" hits="38" branch="false"/>
-                <line number="149" hits="38" branch="false"/>
-                <line number="150" hits="38" branch="false"/>
+                <line number="156" hits="38" branch="false"/>
+                <line number="157" hits="38" branch="false"/>
+                <line number="158" hits="38" branch="false"/>
               </lines>
             </method>
             <method name="add_header" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="158" hits="34" branch="false"/>
-                <line number="159" hits="31" branch="false"/>
-                <line number="160" hits="3" branch="false"/>
+                <line number="166" hits="34" branch="false"/>
+                <line number="167" hits="31" branch="false"/>
+                <line number="169" hits="3" branch="false"/>
               </lines>
             </method>
             <method name="gather_and_add" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="167" hits="15" branch="false"/>
-                <line number="168" hits="15" branch="false"/>
-                <line number="169" hits="15" branch="false"/>
+                <line number="177" hits="15" branch="false"/>
+                <line number="178" hits="15" branch="false"/>
+                <line number="179" hits="15" branch="false"/>
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="101" hits="8" branch="false"/>
-            <line number="102" hits="8" branch="false"/>
-            <line number="104" hits="8" branch="false"/>
-            <line number="105" hits="8" branch="false"/>
-            <line number="107" hits="8" branch="false"/>
-            <line number="114" hits="11" branch="false"/>
-            <line number="115" hits="11" branch="false"/>
-            <line number="116" hits="11" branch="false"/>
-            <line number="118" hits="11" branch="false"/>
-            <line number="119" hits="11" branch="false"/>
-            <line number="121" hits="11" branch="false"/>
-            <line number="128" hits="11" branch="false"/>
-            <line number="131" hits="11" branch="false"/>
-            <line number="132" hits="11" branch="false"/>
-            <line number="133" hits="15" branch="false"/>
+            <line number="109" hits="8" branch="false"/>
+            <line number="110" hits="8" branch="false"/>
+            <line number="112" hits="8" branch="false"/>
+            <line number="113" hits="8" branch="false"/>
+            <line number="115" hits="8" branch="false"/>
+            <line number="122" hits="11" branch="false"/>
+            <line number="123" hits="11" branch="false"/>
+            <line number="124" hits="11" branch="false"/>
+            <line number="126" hits="11" branch="false"/>
+            <line number="127" hits="11" branch="false"/>
+            <line number="129" hits="11" branch="false"/>
             <line number="136" hits="11" branch="false"/>
-            <line number="138" hits="11" branch="false"/>
-            <line number="148" hits="38" branch="false"/>
-            <line number="149" hits="38" branch="false"/>
-            <line number="150" hits="38" branch="false"/>
-            <line number="158" hits="34" branch="false"/>
-            <line number="159" hits="31" branch="false"/>
-            <line number="160" hits="3" branch="false"/>
-            <line number="167" hits="15" branch="false"/>
-            <line number="168" hits="15" branch="false"/>
-            <line number="169" hits="15" branch="false"/>
+            <line number="139" hits="11" branch="false"/>
+            <line number="140" hits="11" branch="false"/>
+            <line number="141" hits="15" branch="false"/>
+            <line number="144" hits="11" branch="false"/>
+            <line number="146" hits="11" branch="false"/>
+            <line number="156" hits="38" branch="false"/>
+            <line number="157" hits="38" branch="false"/>
+            <line number="158" hits="38" branch="false"/>
+            <line number="166" hits="34" branch="false"/>
+            <line number="167" hits="31" branch="false"/>
+            <line number="169" hits="3" branch="false"/>
+            <line number="177" hits="15" branch="false"/>
+            <line number="178" hits="15" branch="false"/>
+            <line number="179" hits="15" branch="false"/>
           </lines>
         </class>
         <class name="get_rcode_utils.R" filename="R/get_rcode_utils.R" line-rate="0.961538461538462" branch-rate="0" complexity="0">
