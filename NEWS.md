@@ -2,7 +2,7 @@
 
 ### New features
 
-* Added the `gather_fails` function that produces informative error messages in app ouput.
+* Added the `gather_fails` function that produces informative error messages in app output.
 
 ### Major breaking changes
 
