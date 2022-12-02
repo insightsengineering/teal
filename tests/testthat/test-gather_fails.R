@@ -1,21 +1,18 @@
-library(shiny)
-library(shinyvalidate)
 
-
-test_that("invalid arguments raise errors", {
-  expect_error(gather_files("string"))
-  expect_error(gather_files_com("string"))
-  expect_error(gather_files_grp(list("name" = "string")))
+testthat::test_that("invalid arguments raise errors", {
+  testthat::expect_error(gather_files("string"))
+  testthat::expect_error(gather_files_com("string"))
+  testthat::expect_error(gather_files_grp(list("name" = "string")))
 })
 
 
-test_that("gather_fails: valid inputs produce desired output", {
+testthat::test_that("gather_fails: valid inputs produce desired output", {
   server <- function(input, output, session) {
-    iv <- InputValidator$new()
-    iv$add_rule("letter", sv_in_set(LETTERS, "choose a capital letter"))
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
     iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     iv$enable()
-    values <- reactive({
+    values <- shiny::reactive({
       gather_fails(iv)
       list(
         "letter" = input[["letter"]],
@@ -29,20 +26,20 @@ test_that("gather_fails: valid inputs produce desired output", {
       "letter" = "A",
       "number" = 2L
     )
-    expect_identical(values(), list(
+    testthat::expect_identical(values(), list(
       "letter" = input[["letter"]],
       "number" = input[["number"]]
     ))
   })
 })
 
-test_that("gather_fails_com: valid inputs produce desired output", {
+testthat::test_that("gather_fails_com: valid inputs produce desired output", {
   server <- function(input, output, session) {
-    iv <- InputValidator$new()
-    iv$add_rule("letter", sv_in_set(LETTERS, "choose a capital letter"))
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
     iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     iv$enable()
-    values <- reactive({
+    values <- shiny::reactive({
       gather_fails_com(iv)
       list(
         "letter" = input[["letter"]],
@@ -56,20 +53,20 @@ test_that("gather_fails_com: valid inputs produce desired output", {
       "letter" = "A",
       "number" = 2L
     )
-    expect_identical(values(), list(
+    testthat::expect_identical(values(), list(
       "letter" = input[["letter"]],
       "number" = input[["number"]]
     ))
   })
 })
 
-test_that("gather_fails_grp: valid inputs produce desired output", {
+testthat::test_that("gather_fails_grp: valid inputs produce desired output", {
   server <- function(input, output, session) {
-    iv <- InputValidator$new()
-    iv$add_rule("letter", sv_in_set(LETTERS, "choose a capital letter"))
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
     iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     iv$enable()
-    values <- reactive({
+    values <- shiny::reactive({
       gather_fails_grp(list(iv))
       list(
         "letter" = input[["letter"]],
@@ -83,7 +80,7 @@ test_that("gather_fails_grp: valid inputs produce desired output", {
       "letter" = "A",
       "number" = 2L
     )
-    expect_identical(values(), list(
+    testthat::expect_identical(values(), list(
       "letter" = input[["letter"]],
       "number" = input[["number"]]
     ))
@@ -91,13 +88,13 @@ test_that("gather_fails_grp: valid inputs produce desired output", {
 })
 
 
-test_that("gather_fails: invalid inputs raise errors in output", {
+testthat::test_that("gather_fails: invalid inputs raise errors in output", {
   server <- function(input, output, session) {
-    iv <- InputValidator$new()
-    iv$add_rule("letter", sv_in_set(LETTERS, "choose a capital letter"))
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
     iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     iv$enable()
-    values <- reactive({
+    values <- shiny::reactive({
       gather_fails(iv)
       list(
         "letter" = input[["letter"]],
@@ -111,31 +108,31 @@ test_that("gather_fails: invalid inputs raise errors in output", {
       "letter" = "a",
       "number" = 2L
     )
-    expect_error(values())
+    testthat::expect_error(values())
   })
   shiny::testServer(server, {
     session$setInputs(
       "letter" = "A",
       "number" = 1L
     )
-    expect_error(values())
+    testthat::expect_error(values())
   })
   shiny::testServer(server, {
     session$setInputs(
       "letter" = "a",
       "number" = 1L
     )
-    expect_error(values())
+    testthat::expect_error(values())
   })
 })
 
-test_that("gather_fails_com: invalid inputs raise errors in output", {
+testthat::test_that("gather_fails_com: invalid inputs raise errors in output", {
   server <- function(input, output, session) {
-    iv <- InputValidator$new()
-    iv$add_rule("letter", sv_in_set(LETTERS, "choose a capital letter"))
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
     iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     iv$enable()
-    values <- reactive({
+    values <- shiny::reactive({
       gather_fails_com(iv)
       list(
         "letter" = input[["letter"]],
@@ -149,31 +146,31 @@ test_that("gather_fails_com: invalid inputs raise errors in output", {
       "letter" = "a",
       "number" = 2L
     )
-    expect_error(values())
+    testthat::expect_error(values())
   })
   shiny::testServer(server, {
     session$setInputs(
       "letter" = "A",
       "number" = 1L
     )
-    expect_error(values())
+    testthat::expect_error(values())
   })
   shiny::testServer(server, {
     session$setInputs(
       "letter" = "a",
       "number" = 1L
     )
-    expect_error(values())
+    testthat::expect_error(values())
   })
 })
 
-test_that("gather_fails_grp: invalid inputs raise errors in output", {
+testthat::test_that("gather_fails_grp: invalid inputs raise errors in output", {
   server <- function(input, output, session) {
-    iv <- InputValidator$new()
-    iv$add_rule("letter", sv_in_set(LETTERS, "choose a capital letter"))
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
     iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     iv$enable()
-    values <- reactive({
+    values <- shiny::reactive({
       gather_fails_grp(list(iv))
       list(
         "letter" = input[["letter"]],
@@ -187,36 +184,36 @@ test_that("gather_fails_grp: invalid inputs raise errors in output", {
       "letter" = "a",
       "number" = 2L
     )
-    expect_error(values())
+    testthat::expect_error(values())
   })
   shiny::testServer(server, {
     session$setInputs(
       "letter" = "A",
       "number" = 1L
     )
-    expect_error(values())
+    testthat::expect_error(values())
   })
   shiny::testServer(server, {
     session$setInputs(
       "letter" = "a",
       "number" = 1L
     )
-    expect_error(values())
+    testthat::expect_error(values())
   })
 })
 
 
-test_that("error message is formatted properly", {
+testthat::test_that("error message is formatted properly", {
   server <- function(input, output, session) {
-    iv <- InputValidator$new()
-    iv$add_rule("letter", sv_in_set(LETTERS, "choose a capital letter"))
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
     iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     iv$enable()
-    iv_par <- InputValidator$new()
-    iv_par$add_rule("color", sv_required(message = "choose a color"))
+    iv_par <- shinyvalidate::InputValidator$new()
+    iv_par$add_rule("color", shinyvalidate::sv_required(message = "choose a color"))
     iv_par$add_rule(
       "size",
-      sv_between(
+      shinyvalidate::sv_between(
         left = 0.5, right = 3,
         message_fmt = "choose a value between {left} and {right}"
       )
@@ -232,15 +229,15 @@ test_that("error message is formatted properly", {
       "size" = 0.25
     )
     # check error class
-    expect_error(gather_fails(iv), class = "shiny.silent.error")
-    expect_error(gather_fails_com(iv), class = "shiny.silent.error")
-    expect_error(gather_fails_com(iv, iv_par), class = "shiny.silent.error")
-    expect_error(gather_fails_grp(list(iv)), class = "shiny.silent.error")
-    expect_error(gather_fails_grp(list(iv, iv_par)), class = "shiny.silent.error")
+    testthat::expect_error(gather_fails(iv), class = "shiny.silent.error")
+    testthat::expect_error(gather_fails_com(iv), class = "shiny.silent.error")
+    testthat::expect_error(gather_fails_com(iv, iv_par), class = "shiny.silent.error")
+    testthat::expect_error(gather_fails_grp(list(iv)), class = "shiny.silent.error")
+    testthat::expect_error(gather_fails_grp(list(iv, iv_par)), class = "shiny.silent.error")
 
     # check error message
     errmess <- tryCatch(gather_fails(iv), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "Some inputs require attention\n",
         "choose a capital letter",
@@ -251,7 +248,7 @@ test_that("error message is formatted properly", {
     ))
 
     errmess <- tryCatch(gather_fails_com(iv), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "Some inputs require attention\n",
         "choose a capital letter",
@@ -262,7 +259,7 @@ test_that("error message is formatted properly", {
     ))
 
     errmess <- tryCatch(gather_fails_com(iv, iv_par), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "Some inputs require attention\n",
         "choose a capital letter",
@@ -275,7 +272,7 @@ test_that("error message is formatted properly", {
     ))
 
     errmess <- tryCatch(gather_fails_grp(list(iv)), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "\n",
         "choose a capital letter",
@@ -286,7 +283,7 @@ test_that("error message is formatted properly", {
     ))
 
     errmess <- tryCatch(gather_fails_grp(list(iv, iv_par)), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "\n",
         "choose a capital letter",
@@ -302,7 +299,7 @@ test_that("error message is formatted properly", {
 
     # check custom headers
     errmess <- tryCatch(gather_fails(iv, "Header message"), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "Header message\n",
         "choose a capital letter",
@@ -313,7 +310,7 @@ test_that("error message is formatted properly", {
     ))
 
     errmess <- tryCatch(gather_fails_com(iv, header = "Header message"), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "Header message\n",
         "choose a capital letter",
@@ -324,7 +321,7 @@ test_that("error message is formatted properly", {
     ))
 
     errmess <- tryCatch(gather_fails_com(iv, iv_par, header = "Header message"), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "Header message\n",
         "choose a capital letter",
@@ -337,7 +334,7 @@ test_that("error message is formatted properly", {
     ))
 
     errmess <- tryCatch(gather_fails_grp(list("Header message" = iv)), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "Header message\n",
         "choose a capital letter",
@@ -354,7 +351,7 @@ test_that("error message is formatted properly", {
       )),
       error = function(e) e$message
     )
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "Header message 1\n",
         "choose a capital letter",
@@ -371,24 +368,24 @@ test_that("error message is formatted properly", {
 })
 
 
-test_that("hierarchical validation", {
+testthat::test_that("hierarchical validation", {
   server <- function(input, output, session) {
-    iv <- InputValidator$new()
-    iv$add_rule("letter", sv_in_set(LETTERS, "choose a capital letter"))
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
     iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     iv$enable()
-    iv_par <- InputValidator$new()
-    iv_par$add_rule("color", sv_required(message = "choose a color"))
+    iv_par <- shinyvalidate::InputValidator$new()
+    iv_par$add_rule("color", shinyvalidate::sv_required(message = "choose a color"))
     iv_par$add_rule(
       "size",
-      sv_between(
+      shinyvalidate::sv_between(
         left = 0.5, right = 3,
         message_fmt = "choose a value between {left} and {right}"
       )
     )
     iv_par$enable()
 
-    values_h <- reactive({
+    values_h <- shiny::reactive({
       gather_fails(iv, header = "Main validator")
       gather_fails(iv_par, header = "Graphical validator")
       list(
@@ -398,7 +395,7 @@ test_that("hierarchical validation", {
         "size" = input[["size"]]
       )
     })
-    values_c <- reactive({
+    values_c <- shiny::reactive({
       gather_fails_com(iv, iv_par, header = "Both validators")
       list(
         "letter" = input[["letter"]],
@@ -407,7 +404,7 @@ test_that("hierarchical validation", {
         "size" = input[["size"]]
       )
     })
-    values_g <- reactive({
+    values_g <- shiny::reactive({
       gather_fails_grp(list("Main validator" = iv, "Graphical validator" = iv_par))
       list(
         "letter" = input[["letter"]],
@@ -428,7 +425,7 @@ test_that("hierarchical validation", {
     )
 
     errmess <- tryCatch(values_h(), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "Main validator\n",
         "choose a capital letter",
@@ -439,7 +436,7 @@ test_that("hierarchical validation", {
     ))
 
     errmess <- tryCatch(values_c(), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "Both validators\n",
         "choose a capital letter",
@@ -452,7 +449,7 @@ test_that("hierarchical validation", {
     ))
 
     errmess <- tryCatch(values_g(), error = function(e) e$message)
-    expect_identical(errmess, paste(
+    testthat::expect_identical(errmess, paste(
       c(
         "Main validator\n",
         "choose a capital letter",

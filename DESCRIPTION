@@ -33,7 +33,6 @@ Imports:
     methods,
     rlang,
     shinyjs,
-    shinyvalidate,
     stats,
     styler,
     teal.code (>= 0.2.0),
@@ -52,6 +51,7 @@ Suggests:
     rmarkdown,
     scda (>= 0.1.5),
     scda.2022 (>= 0.1.3),
+    shinyvalidate,
     testthat (>= 2.0),
     withr,
     yaml
