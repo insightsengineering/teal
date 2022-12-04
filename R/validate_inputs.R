@@ -14,21 +14,18 @@
 #' validation message that is passed to a `validate`/`need` call.
 #' This way the input validator messages are repeated in the output.
 #'
-#' \code{gather_fails} accepts one `InputValidator`
-#' and can add a header to its validation messages.
-#' \code{gather_fails_com} accepts an arbitrary number of `InputValidator`s
-#' and prints all messages together under one header.
-#' \code{gather_fails_grp} accepts a \strong{list} of `InputValidator`s
-#' and prints messages in groups. If elements of \code{validators} are named,
+#' \code{validate_inputs} accepts an arbitrary number of `InputValidator`s
+#' and prints all messages together, adding one (optional) header.
+#' \code{validate_inputs_segregated} accepts a list of `InputValidator`s
+#' and prints messages grouped by validator. If elements of \code{validators} are named,
 #' the names are used as headers for their respective message groups.
 #'
 #'
-#' @name gather_fails
+#' @name validate_inputs
 #'
-#' @param iv object of class `InputValidator`
+#' @param ... for \code{validate_inputs} any number of `InputValidator` objects \cr
+#'            for \code{validate_inputs_segregated} arguments passed to `shiny::validate`
 #' @param header `character(1)` optional generic validation message
-#' @param ... for \code{gather_fails} and \code{gather_fails_grp} arguments passed to `shiny::validate`\cr
-#'            for \code{gather_fails_com} any number of `InputValidator` objects
 #' @param validators optionally named `list` of `InputValidator` objects, see \code{Details}
 #'
 #' @return
@@ -82,11 +79,11 @@
 #'     # validate output
 #'     switch(input[["method"]],
 #'       "hierarchical" = {
-#'         gather_fails(iv)
-#'         gather_fails(iv_par, "Set proper graphical parameters")
+#'         validate_inputs(iv)
+#'         validate_inputs(iv_par, "Set proper graphical parameters")
 #'       },
-#'       "combined" = gather_fails_com(iv, iv_par),
-#'       "grouped" = gather_fails_grp(list(
+#'       "combined" = validate_inputs(iv, iv_par),
+#'       "grouped" = validate_inputs_segregated(list(
 #'         "Some inputs require attention" = iv,
 #'         "Set proper graphical parameters" = iv_par
 #'       ))
@@ -103,22 +100,9 @@
 #'   shinyApp(ui, server)
 #' }
 
-#' @rdname gather_fails
+#' @rdname validate_inputs
 #' @export
-gather_fails <- function(iv, header = "Some inputs require attention", ...) {
-  checkmate::assert_class(iv, "InputValidator")
-  checkmate::assert_string(header, null.ok = TRUE)
-
-  fail_messages <- gather_messages(iv)
-  failings <- add_header(fail_messages, header)
-
-  shiny::validate(shiny::need(is.null(failings), failings), ...)
-}
-
-
-#' @rdname gather_fails
-#' @export
-gather_fails_com <- function(..., header = "Some inputs require attention") {
+validate_inputs <- function(..., header = "Some inputs require attention") {
   vals <- list(...)
   lapply(vals, checkmate::assert_class, "InputValidator")
   checkmate::assert_string(header, null.ok = TRUE)
@@ -130,9 +114,9 @@ gather_fails_com <- function(..., header = "Some inputs require attention") {
 }
 
 
-#' @rdname gather_fails
+#' @rdname validate_inputs
 #' @export
-gather_fails_grp <- function(validators, ...) {
+validate_inputs_segregated <- function(validators, ...) {
   checkmate::assert_list(validators, types = "InputValidator")
 
   # Since some or all names may be NULL, mapply cannot be used here, a loop is required.

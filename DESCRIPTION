@@ -78,7 +78,6 @@ RoxygenNote: 7.2.2
 Collate:
     'dummy_functions.R'
     'example_module.R'
-    'gather_fails.R'
     'get_rcode.R'
     'get_rcode_utils.R'
     'include_css_js.R'
@@ -94,5 +93,6 @@ Collate:
     'tdata.R'
     'teal.R'
     'utils.R'
+    'validate_inputs.R'
     'validations.R'
     'zzz.R'
