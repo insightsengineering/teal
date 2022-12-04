@@ -51,6 +51,7 @@ Suggests:
     rmarkdown,
     scda (>= 0.1.5),
     scda.2022 (>= 0.1.3),
+    shinyvalidate,
     testthat (>= 2.0),
     withr,
     yaml
@@ -73,7 +74,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 Collate:
     'dummy_functions.R'
     'example_module.R'
@@ -92,5 +93,6 @@ Collate:
     'tdata.R'
     'teal.R'
     'utils.R'
+    'validate_inputs.R'
     'validations.R'
     'zzz.R'

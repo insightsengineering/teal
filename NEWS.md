@@ -1,5 +1,9 @@
 # teal 0.12.0.9011
 
+### New features
+
+* Added the `validate_inputs` function that produces informative error messages in app output.
+
 ### Major breaking changes
 
 * The use of `datasets` argument in `teal` `modules` has been deprecated and will be removed in a future release. Please use `data` argument instead. `data` is of type `tdata`; see "Creating custom modules" vignettes and function documentation of `teal::new_tdata` for further details.
