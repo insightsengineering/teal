@@ -170,9 +170,11 @@ testthat::test_that("error message is formatted properly", {
     testthat::expect_error(validate_inputs_segregated(list(iv)), class = "shiny.silent.error")
     testthat::expect_error(validate_inputs_segregated(list(iv, iv_par)), class = "shiny.silent.error")
     testthat::expect_error(validate_inputs_segregated(list(iv), errorClass = "custom.error.class"),
-                           class = "custom.error.class")
+      class = "custom.error.class"
+    )
     testthat::expect_error(validate_inputs_segregated(list(iv, iv_par), errorClass = "custom.error.class"),
-                           class = "custom.error.class")
+      class = "custom.error.class"
+    )
 
     # check error message
     errmess <- tryCatch(validate_inputs(iv), error = function(e) e$message)
