@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage line-rate="0.743827160493827" branch-rate="0" lines-covered="723" lines-valid="972" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2022-12-01 16:43:55">
+<coverage line-rate="0.742502585315408" branch-rate="0" lines-covered="718" lines-valid="967" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2022-12-04 23:23:23">
   <sources/>
   <packages>
-    <package name="teal" line-rate="0.743827160493827" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.742502585315408" branch-rate="0" complexity="0">
       <classes>
         <class name="dummy_functions.R" filename="R/dummy_functions.R" line-rate="0.175675675675676" branch-rate="0" complexity="0">
           <methods>
@@ -218,88 +218,6 @@
             <line number="34" hits="0" branch="false"/>
             <line number="35" hits="0" branch="false"/>
             <line number="36" hits="0" branch="false"/>
-          </lines>
-        </class>
-        <class name="gather_fails.R" filename="R/gather_fails.R" line-rate="1" branch-rate="0" complexity="0">
-          <methods>
-            <method name="gather_fails" signature="" line-rate="1" branch-rate="0">
-              <lines>
-                <line number="109" hits="8" branch="false"/>
-                <line number="110" hits="8" branch="false"/>
-                <line number="112" hits="8" branch="false"/>
-                <line number="113" hits="8" branch="false"/>
-                <line number="115" hits="8" branch="false"/>
-              </lines>
-            </method>
-            <method name="gather_fails_com" signature="" line-rate="1" branch-rate="0">
-              <lines>
-                <line number="122" hits="11" branch="false"/>
-                <line number="123" hits="11" branch="false"/>
-                <line number="124" hits="11" branch="false"/>
-                <line number="126" hits="11" branch="false"/>
-                <line number="127" hits="11" branch="false"/>
-                <line number="129" hits="11" branch="false"/>
-              </lines>
-            </method>
-            <method name="gather_fails_grp" signature="" line-rate="1" branch-rate="0">
-              <lines>
-                <line number="136" hits="11" branch="false"/>
-                <line number="139" hits="11" branch="false"/>
-                <line number="140" hits="11" branch="false"/>
-                <line number="141" hits="15" branch="false"/>
-                <line number="144" hits="11" branch="false"/>
-                <line number="146" hits="11" branch="false"/>
-              </lines>
-            </method>
-            <method name="gather_messages" signature="" line-rate="1" branch-rate="0">
-              <lines>
-                <line number="156" hits="38" branch="false"/>
-                <line number="157" hits="38" branch="false"/>
-                <line number="158" hits="38" branch="false"/>
-              </lines>
-            </method>
-            <method name="add_header" signature="" line-rate="1" branch-rate="0">
-              <lines>
-                <line number="166" hits="34" branch="false"/>
-                <line number="167" hits="31" branch="false"/>
-                <line number="169" hits="3" branch="false"/>
-              </lines>
-            </method>
-            <method name="gather_and_add" signature="" line-rate="1" branch-rate="0">
-              <lines>
-                <line number="177" hits="15" branch="false"/>
-                <line number="178" hits="15" branch="false"/>
-                <line number="179" hits="15" branch="false"/>
-              </lines>
-            </method>
-          </methods>
-          <lines>
-            <line number="109" hits="8" branch="false"/>
-            <line number="110" hits="8" branch="false"/>
-            <line number="112" hits="8" branch="false"/>
-            <line number="113" hits="8" branch="false"/>
-            <line number="115" hits="8" branch="false"/>
-            <line number="122" hits="11" branch="false"/>
-            <line number="123" hits="11" branch="false"/>
-            <line number="124" hits="11" branch="false"/>
-            <line number="126" hits="11" branch="false"/>
-            <line number="127" hits="11" branch="false"/>
-            <line number="129" hits="11" branch="false"/>
-            <line number="136" hits="11" branch="false"/>
-            <line number="139" hits="11" branch="false"/>
-            <line number="140" hits="11" branch="false"/>
-            <line number="141" hits="15" branch="false"/>
-            <line number="144" hits="11" branch="false"/>
-            <line number="146" hits="11" branch="false"/>
-            <line number="156" hits="38" branch="false"/>
-            <line number="157" hits="38" branch="false"/>
-            <line number="158" hits="38" branch="false"/>
-            <line number="166" hits="34" branch="false"/>
-            <line number="167" hits="31" branch="false"/>
-            <line number="169" hits="3" branch="false"/>
-            <line number="177" hits="15" branch="false"/>
-            <line number="178" hits="15" branch="false"/>
-            <line number="179" hits="15" branch="false"/>
           </lines>
         </class>
         <class name="get_rcode_utils.R" filename="R/get_rcode_utils.R" line-rate="0.961538461538462" branch-rate="0" complexity="0">
@@ -2174,6 +2092,74 @@
             <line number="30" hits="2" branch="false"/>
             <line number="31" hits="2" branch="false"/>
             <line number="33" hits="1" branch="false"/>
+          </lines>
+        </class>
+        <class name="validate_inputs.R" filename="R/validate_inputs.R" line-rate="1" branch-rate="0" complexity="0">
+          <methods>
+            <method name="validate_inputs" signature="" line-rate="1" branch-rate="0">
+              <lines>
+                <line number="106" hits="13" branch="false"/>
+                <line number="107" hits="13" branch="false"/>
+                <line number="108" hits="12" branch="false"/>
+                <line number="110" hits="12" branch="false"/>
+                <line number="111" hits="12" branch="false"/>
+                <line number="113" hits="12" branch="false"/>
+              </lines>
+            </method>
+            <method name="validate_inputs_segregated" signature="" line-rate="1" branch-rate="0">
+              <lines>
+                <line number="120" hits="14" branch="false"/>
+                <line number="123" hits="13" branch="false"/>
+                <line number="124" hits="13" branch="false"/>
+                <line number="125" hits="18" branch="false"/>
+                <line number="128" hits="13" branch="false"/>
+                <line number="130" hits="13" branch="false"/>
+              </lines>
+            </method>
+            <method name="gather_messages" signature="" line-rate="1" branch-rate="0">
+              <lines>
+                <line number="140" hits="34" branch="false"/>
+                <line number="141" hits="34" branch="false"/>
+                <line number="142" hits="34" branch="false"/>
+              </lines>
+            </method>
+            <method name="add_header" signature="" line-rate="1" branch-rate="0">
+              <lines>
+                <line number="150" hits="30" branch="false"/>
+                <line number="151" hits="28" branch="false"/>
+                <line number="153" hits="2" branch="false"/>
+              </lines>
+            </method>
+            <method name="gather_and_add" signature="" line-rate="1" branch-rate="0">
+              <lines>
+                <line number="161" hits="18" branch="false"/>
+                <line number="162" hits="18" branch="false"/>
+                <line number="163" hits="18" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="106" hits="13" branch="false"/>
+            <line number="107" hits="13" branch="false"/>
+            <line number="108" hits="12" branch="false"/>
+            <line number="110" hits="12" branch="false"/>
+            <line number="111" hits="12" branch="false"/>
+            <line number="113" hits="12" branch="false"/>
+            <line number="120" hits="14" branch="false"/>
+            <line number="123" hits="13" branch="false"/>
+            <line number="124" hits="13" branch="false"/>
+            <line number="125" hits="18" branch="false"/>
+            <line number="128" hits="13" branch="false"/>
+            <line number="130" hits="13" branch="false"/>
+            <line number="140" hits="34" branch="false"/>
+            <line number="141" hits="34" branch="false"/>
+            <line number="142" hits="34" branch="false"/>
+            <line number="150" hits="30" branch="false"/>
+            <line number="151" hits="28" branch="false"/>
+            <line number="153" hits="2" branch="false"/>
+            <line number="161" hits="18" branch="false"/>
+            <line number="162" hits="18" branch="false"/>
+            <line number="163" hits="18" branch="false"/>
           </lines>
         </class>
         <class name="validations.R" filename="R/validations.R" line-rate="0.370967741935484" branch-rate="0" complexity="0">
