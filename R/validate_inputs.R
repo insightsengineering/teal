@@ -31,7 +31,7 @@
 #' @return
 #' Returns NULL if the final validation call passes and a \code{shiny.silent.error} if it fails.
 #'
-#' @seealso \code{\link{shinyvalidate::InputValidator}} \code{\link{shiny::validate}}
+#' @seealso [`shinyvalidate::InputValidator`] [`shiny::validate`]
 #'
 #' @examples
 #' library(shiny)
