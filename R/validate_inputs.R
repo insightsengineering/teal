@@ -38,7 +38,7 @@
 #' library(shinyvalidate)
 #'
 #' ui <- fluidPage(
-#'   selectInput("method", "validation method", c("hierarchical", "combined", "grouped")),
+#'   selectInput("method", "validation method", c("sequential", "combined", "grouped")),
 #'   sidebarLayout(
 #'     sidebarPanel(
 #'       selectInput("letter", "select a letter:", c(letters[1:3], LETTERS[4:6])),
@@ -78,9 +78,9 @@
 #'   output$plot <- renderPlot({
 #'     # validate output
 #'     switch(input[["method"]],
-#'       "hierarchical" = {
+#'       "sequential" = {
 #'         validate_inputs(iv)
-#'         validate_inputs(iv_par, "Set proper graphical parameters")
+#'         validate_inputs(iv_par, header = "Set proper graphical parameters")
 #'       },
 #'       "combined" = validate_inputs(iv, iv_par),
 #'       "grouped" = validate_inputs_segregated(list(
