@@ -11,7 +11,7 @@ validate_inputs_segregated(validators, ...)
 }
 \arguments{
 \item{...}{for \code{validate_inputs} any number of \code{InputValidator} objects \cr
-for \code{validate_inputs_segregated} arguments passed to \code{shiny::validate}}
+for \code{validate_inputs_segregated} arguments passed to \code{validate}}
 
 \item{header}{\code{character(1)} optional generic validation message}
 
@@ -26,13 +26,13 @@ into one message passed to \code{validate}.
 }
 \details{
 \code{shiny::validate} is used to withhold rendering of an output element until
-certain conditions are met and a print a validation message in place
+certain conditions are met and to print a validation message in place
 of the output element.
 \code{shinyvalidate::InputValidator} allows to validate input elements
-and display specific messages in their respective input widgets.
+and to display specific messages in their respective input widgets.
 This function is a hybrid solution. Given an \code{InputValidator} object,
 it extracts messages from inputs that fail validation and places them all in one
-validation message that is passed to a \code{validate}/\code{need} call.
+validation message that is passed to a \code{validate}\code{need} call.
 This way the input validator messages are repeated in the output.
 
 \code{validate_inputs} accepts an arbitrary number of \code{InputValidator}s
@@ -109,5 +109,5 @@ if (interactive()) {
 }
 }
 \seealso{
-\code{[shinyvalidate::InputValidator]} \code{[shiny::validate]}
+\code{\link{shinyvalidate::InputValidator}} \code{\link{shiny::validate}}
 }
