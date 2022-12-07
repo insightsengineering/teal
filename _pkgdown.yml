@@ -10,18 +10,18 @@ navbar:
       href: https://github.com/insightsengineering/teal
 
 articles:
-- title: Articles
-  navbar: ~
-  contents:
-  - teal
-  - including-general-data-in-teal
-  - including-adam-data-in-teal
-  - including-mae-data-in-teal
-  - preprocessing-data
-  - creating-custom-modules
-  - adding-support-for-reporting
-  - teal-options
-  - teal-bs-themes
+  - title: Articles
+    navbar: ~
+    contents:
+      - teal
+      - including-general-data-in-teal
+      - including-adam-data-in-teal
+      - including-mae-data-in-teal
+      - preprocessing-data
+      - creating-custom-modules
+      - adding-support-for-reporting
+      - teal-options
+      - teal-bs-themes
 
 reference:
   - title: Teal Core Functions
@@ -52,6 +52,7 @@ reference:
   - title: Validation functions
     contents:
       - starts_with("validate_")
+      - starts_with("validate_inputs")
   - title: Deprecated functions
     contents:
       - get_rcode

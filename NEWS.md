@@ -8,6 +8,9 @@
 
 * Due to deprecation of `chunks` in `teal.code`, the `teal` framework now uses their replacement (`qenv`) instead. The documentation in `teal` has been updated to reflect this and custom modules written with `chunks` should be updated to use `qenv`.
 
+### New features
+
+* Added the `validate_inputs` and `validate_inputs_segregated` functions transfer input validation messages to app output.
 
 ### Miscellaneous
 
