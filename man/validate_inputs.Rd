@@ -32,7 +32,7 @@ of the output element.
 and to display specific messages in their respective input widgets.
 This function is a hybrid solution. Given an \code{InputValidator} object,
 it extracts messages from inputs that fail validation and places them all in one
-validation message that is passed to a \code{validate}\code{need} call.
+validation message that is passed to a \code{validate}/\code{need} call.
 This way the input validator messages are repeated in the output.
 
 \code{validate_inputs} accepts an arbitrary number of \code{InputValidator}s
