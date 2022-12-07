@@ -18,6 +18,7 @@
 #' and prints all messages together, adding one (optional) header.
 #' `validate_inputs_segregated` accepts a list of `InputValidator`s
 #' and prints messages grouped by validator. If elements of `validators` are named,
+
 #' the names are used as headers for their respective message groups.
 #'
 #'
