@@ -134,7 +134,6 @@ validate_inputs_segregated <- function(validators, ...) {
 ### internal functions
 
 #' @keywords internal
-# internal used by all methods
 # collate failing messages from validator
 gather_messages <- function(iv) {
   status <- iv$validate()
@@ -144,7 +143,6 @@ gather_messages <- function(iv) {
 
 
 #' @keywords internal
-# internal used by all hierarchical and combined methods
 # format failing messages with optional header message
 add_header <- function(messages, header) {
   if (length(messages) > 0L) {
@@ -156,7 +154,7 @@ add_header <- function(messages, header) {
 
 #' @keywords internal
 # collate failing messages with optional header message
-# internal used by grouped method
+# used by segregated method
 gather_and_add <- function(iv, header) {
   fail_messages <- gather_messages(iv)
   failings <- add_header(fail_messages, header)

@@ -10,7 +10,7 @@
 
 ### New features
 
-* Added the `validate_inputs` and `validate_inputs_segregated` functions that produce informative error messages in app output.
+* Added the `validate_inputs` and `validate_inputs_segregated` functions transfer input validation messages to app output.
 
 ### Miscellaneous
 
