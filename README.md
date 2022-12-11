@@ -19,7 +19,6 @@
 [![Open Issues](https://img.shields.io/github/issues-raw/insightsengineering/teal?color=red\&label=open%20issues)](https://github.com/insightsengineering/teal/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 <!-- end badges -->
 
-
 *teal* is a shiny-based interactive exploration framework for analyzing data. `teal` applications require app developers to specify:
 
 <!-- markdownlint-disable MD007 MD030 -->
