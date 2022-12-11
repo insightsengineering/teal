@@ -1,7 +1,22 @@
 # Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%;"/></a  >
 
 <!-- start badges -->
-[![Code Coverage](https://raw.githubusercontent.com/insightsengineering/teal/_xml_coverage_reports/data/main/badge.svg)](https://raw.githubusercontent.com/insightsengineering/teal/_xml_coverage_reports/data/main/coverage.xml)
+[![Check 🛠](https://github.com/insightsengineering/teal/actions/workflows/check.yaml/badge.svg)](https://github.com/insightsengineering/teal/actions/workflows/check.yaml)
+[![Docs 📚](https://github.com/insightsengineering/teal/actions/workflows/docs.yaml/badge.svg)](https://insightsengineering.github.io/teal/)
+[![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/teal/_xml_coverage_reports/data/main/badge.svg)](https://raw.githubusercontent.com/insightsengineering/teal/_xml_coverage_reports/data/main/coverage.xml)
+
+![GitHub forks](https://img.shields.io/github/forks/insightsengineering/teal?style=social)
+![GitHub Repo stars](https://img.shields.io/github/stars/insightsengineering/teal?style=social)
+
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/insightsengineering/teal)
+![GitHub contributors](https://img.shields.io/github/contributors/insightsengineering/teal)
+![GitHub last commit](https://img.shields.io/github/last-commit/insightsengineering/teal)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/insightsengineering/teal)
+![GitHub repo size](https://img.shields.io/github/repo-size/insightsengineering/teal)
+![GitHub language count](https://img.shields.io/github/languages/count/insightsengineering/teal)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Current Version](https://img.shields.io/github/r-package/v/insightsengineering/teal/main?color=purple\&label=package%20version)](https://github.com/insightsengineering/teal/tree/main)
+[![Open Issues](https://img.shields.io/github/issues-raw/insightsengineering/teal?color=red\&label=open%20issues)](https://github.com/insightsengineering/teal/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 <!-- end badges -->
 
 *teal* is a shiny-based interactive exploration framework for analyzing data. `teal` applications require app developers to specify:

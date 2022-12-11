@@ -16,7 +16,7 @@ Your input is deeply valued, whether an issue, a pull request, or even feedback,
 
 [🚩 Pull requests](#pull-requests)
 
-[👗 Style guide](#style-guide)
+[💻 Coding guidelines](#coding-guidelines)
 
 [🏆 Recognition model](#recognition-model)
 
@@ -42,32 +42,32 @@ For new feature requests, please elaborate on the context and the benefit the fe
 
 ## Pull requests
 
-### Github flow
+### Github Flow
 
-This repository uses the [Github flow](https://docs.github.com/en/get-started/quickstart/github-flow) model for collaboration. To submit a pull request:
+This repository uses the [Github Flow](https://docs.github.com/en/get-started/quickstart/github-flow) model for collaboration. To submit a pull request:
 
-1. Create a branch.
+1. Create a branch
 
    Please see the [branch naming convention](#branch-naming-convention) below. If you don't have write access to this repository, please fork it.
 
-2. Make changes.
+2. Make changes
 
-    Make sure your code:
+    Make sure your code
     * passes all checks imposed by GitHub Actions
     * is well documented
     * is well tested with unit tests sufficiently covering the changes introduced
 
-3. Create a pull request (PR).
+3. Create a pull request (PR)
 
    In the pull request description, please link the relevant issue (if any), provide a detailed description of the change, and include any assumptions.
 
-4. Address review comments, if any.
+4. Address review comments, if any
 
-5. Receive an approval.
+5. Post approval
 
    Merge your PR if you have write access. Otherwise, the reviewer will merge the PR on your behalf.
 
-6. Pat yourself on the back.
+6. Pat yourself on the back
 
    Congratulations! 🎉
    You are now an official contributor to this project! We are grateful for your contribution.
@@ -84,6 +84,22 @@ Sometimes you might need to change upstream dependent package(s) to be able to s
 
 Please refer to the [staged.dependencies package documentation](https://openpharma.github.io/staged.dependencies/) for more details.
 
+## Coding guidelines
+
+This repository follows some unified processes and standards adopted by its maintainers to ensure software development is carried out consistently within teams and cohesively across other repositories.
+
+### Style guide
+
+This repository follows the standard [`tidyverse` style guide](https://style.tidyverse.org/) and uses [`lintr`](https://github.com/r-lib/lintr) for lint checks. Customized lint configurations are available in this repository's `.lintr` file.
+
+### Dependency management
+
+Lightweight is the right weight. This repository follows [tinyverse](https://www.tinyverse.org/) recommedations of limiting dependencies to minimum.
+
+### Dependency version management
+
+If the code is not compatible with all (!) historical versions of a given dependenct package, it is required to specify minimal version in the `DESCRIPTION` file. In particular: if the development version requires (imports) the development version of another package - it is required to put `abc (>= 1.2.3.9000)`.
+
 ### Recommended development environment & tools
 
 #### R & package versions
@@ -97,10 +113,6 @@ If you discover bugs on older R versions or with an older set of dependencies, p
 We highly recommend that you use the [`pre-commit`](https://pre-commit.com/) tool combined with [`R hooks for pre-commit`](https://github.com/lorenzwalthert/precommit) to execute some of the checks before committing and pushing your changes.
 
 Pre-commit hooks are already available in this repository's `.pre-commit-config.yaml` file.
-
-## Style guide
-
-This repository follows the standard [`tidyverse` style guide](https://style.tidyverse.org/) and uses [`lintr`](https://github.com/r-lib/lintr) for lint checks. Customized lint configurations are available in this repository's `.lintr` file.
 
 ## Recognition model
 
@@ -118,8 +130,7 @@ The package maintainer also reserves the right to adjust the criteria to recogni
 If you have further questions regarding the contribution guidelines, please contact the package/repository maintainer.
 
 <!-- urls -->
-[issues]: https://github.com/insightsengineering/teal/issues
 [docs]: https://insightsengineering.github.io/teal/index.html
-[articles]: https://insightsengineering.github.io/teal/articles/index.html
-[license]: https://insightsengineering.github.io/teal/LICENSE-text.html
+[articles]: https://insightsengineering.github.io/teal/main/articles/index.html
+[license]: https://insightsengineering.github.io/teal/main/LICENSE-text.html
 [insights]: https://github.com/insightsengineering/teal/pulse
