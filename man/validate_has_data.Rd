@@ -27,6 +27,9 @@ infinite.}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
+\details{
+This function is a wrapper for \code{shiny::validate}.
+}
 \examples{
 library(scda)
 ADSL <- synthetic_cdisc_data("latest")$adsl
