@@ -10,7 +10,7 @@
 
 ### New features
 
-* Added the `validate_inputs` and `validate_inputs_segregated` functions transfer input validation messages to app output.
+* Added the `validate_inputs` and `validate_inputs_segregated` functions that transfer input validation messages to app output.
 
 ### Miscellaneous
 
@@ -18,6 +18,7 @@
 * Added R session information into a link in the footer of `teal` applications.
 * Added data hashing step using `rlang` instead of `digest` package to calculate the hash (which has been moved from `teal.data` and `teal.slice`). There is now an explicit hashing check in the reproducible code output.
 * Removed deprecated functions: `root_modules`, `default_filter`, `bookmarkableShinyApp`, as well as deprecated logging mechanism, including the functions `log_app_usage` and `.log`.
+* Updated documentation.
 
 # teal 0.12.0
 
