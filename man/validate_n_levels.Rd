@@ -23,6 +23,7 @@ validation message}
 \details{
 If the number of levels of \code{x} is less than \code{min_levels}
 or greater than \code{max_levels} the validation will fail.
+This function is a wrapper for \code{shiny::validate}.
 }
 \examples{
 library(scda)

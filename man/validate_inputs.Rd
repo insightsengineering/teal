@@ -3,7 +3,7 @@
 \name{validate_inputs}
 \alias{validate_inputs}
 \alias{validate_inputs_segregated}
-\title{send input validation messages to output}
+\title{Send input validation messages to output}
 \usage{
 validate_inputs(..., header = "Some inputs require attention")
 
