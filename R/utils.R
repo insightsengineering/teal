@@ -20,6 +20,8 @@ get_client_timezone <- function(ns) {
   return(invisible(NULL))
 }
 
+
+
 #' Resolve the expected bootstrap theme
 #' @keywords internal
 get_teal_bs_theme <- function() {
@@ -32,4 +34,66 @@ get_teal_bs_theme <- function() {
   } else {
     bs_theme
   }
+}
+
+
+
+#' Add condition to rule function.
+#'
+#' Adds a condition to a rule function to be used in an `InputValidator`.
+#'
+#' When building a `shinyvalidate::InputValidator`, some rules may only need to be checked
+#' under specific conditions. Since an input value must not be validated by multiple
+#' validator objects (as per `shinyvalidate` documentation),
+#' some validation scenarios cannot be covered by adding `condition`s to a whole validator.
+#'
+#' This function takes a function or formula that can be used as a validation rule
+#' and incorporates `condition` into its body, upstream of the actual test.
+#'
+#' In cases where `condition` relies in input values, it is safer to wrap `condition`
+#' in an `isTRUE` call so that missing values or NULLs do not crash evaluation.
+#' For example, `input$id == "x"` will return `logical(0)` if input$id is NULL
+#' and `NA` if input$id is NA, whereas `isTRUE(input$id == "x")` will reliably return `FALSE`.
+#'
+#' @param rule `function` or `formula` that specifies a validation rule and a failing message
+#' @param condition `call` that specifies when to check `rule`, see `Details`
+#' @param ... additional arguments passed to `rule`
+#'
+#' @return
+#' Returns a closure, ready to be placed into a `iv$add_rule` call as a rule function.
+#'
+#' @seealso `[shinyvalidate::InputValidator]`
+#'
+#' @examples
+#' \dontrun{
+#' library(shinyvalidate)
+#'
+#' set <- c("element1", "element2")
+#'
+#' custom_rule <- function(value) {
+#'   if (! value %in% set) sprintf("id must be a set of %s", paste(set, collapse = ", "))
+#' }
+#'
+#' iv <- InputValidator$new()
+#' iv$add_rule("id", sv_required())
+#' iv$add_rule("id", crule(custom_rule, !is.null(set)))
+#' }
+#'
+#' @export
+#'
+crule <- function(rule, condition, ...) {
+  checkmate::assert_multi_class(rule, c("function", "formula"))
+  checkmate::assert_class(substitute(condition), "call")
+
+  if (inherits(rule, "formula")) {
+    rule <- rlang::as_function(rule)
+  }
+
+  dep <- paste(deparse(substitute(condition)), collapse = "")
+  ex <- list(
+    str2lang(sprintf("if (isFALSE(%s)) return(NULL)", dep)),
+    body(rule)
+  )
+  body(rule) <- as.call(c(as.name("{"), ex))
+  rule
 }
