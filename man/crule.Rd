@@ -29,7 +29,7 @@ This function takes a function or formula that can be used as a validation rule
 and incorporates \code{condition} into its body, upstream of the actual test.
 
 In cases where \code{condition} relies in input values, it is safer to wrap \code{condition}
-in an \code{isTRUE} call so that missing values or NULLs do not crash evaluation.
+in an \code{isTRUE} call so that NA or NULL does not crash evaluation.
 For example, \code{input$id == "x"} will return \code{logical(0)} if input$id is NULL
 and \code{NA} if input$id is NA, whereas \code{isTRUE(input$id == "x")} will reliably return \code{FALSE}.
 }

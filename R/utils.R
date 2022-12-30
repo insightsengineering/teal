@@ -51,7 +51,7 @@ get_teal_bs_theme <- function() {
 #' and incorporates `condition` into its body, upstream of the actual test.
 #'
 #' In cases where `condition` relies in input values, it is safer to wrap `condition`
-#' in an `isTRUE` call so that missing values or NULLs do not crash evaluation.
+#' in an `isTRUE` call so that NA or NULL does not crash evaluation.
 #' For example, `input$id == "x"` will return `logical(0)` if input$id is NULL
 #' and `NA` if input$id is NA, whereas `isTRUE(input$id == "x")` will reliably return `FALSE`.
 #'
