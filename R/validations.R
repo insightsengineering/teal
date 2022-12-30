@@ -8,6 +8,8 @@
 #'   infinite.
 #' @param msg (`character(1)`) additional message to display alongside the default message.
 #'
+#' @details This function is a wrapper for `shiny::validate`.
+#'
 #' @export
 #'
 #' @examples
@@ -74,6 +76,8 @@ validate_has_data <- function(x,
 #' @param x a data.frame
 #' @param key a vector of ID variables from \code{x} that identify unique records
 #'
+#' @details This function is a wrapper for `shiny::validate`.
+#'
 #' @export
 #'
 #' @examples
@@ -109,6 +113,8 @@ validate_one_row_per_id <- function(x, key = c("USUBJID", "STUDYID")) {
 #' @param x values to test. All must be in \code{choices}
 #' @param choices a vector to test for values of \code{x}
 #' @param msg warning message to display
+#'
+#' @details This function is a wrapper for `shiny::validate`.
 #'
 #' @export
 #'
@@ -148,6 +154,8 @@ validate_in <- function(x, choices, msg) {
 #' @description `r lifecycle::badge("stable")`
 #' @param x vector
 #' @param msg message to display
+#'
+#' @details This function is a wrapper for `shiny::validate`.
 #'
 #' @export
 #'
@@ -192,6 +200,8 @@ validate_has_elements <- function(x, msg) {
 #' @param x vector
 #' @param y vector
 #' @param msg message to display if \code{x} and \code{y} intersect
+#'
+#' @details This function is a wrapper for `shiny::validate`.
 #'
 #' @export
 #'
@@ -241,6 +251,8 @@ validate_no_intersection <- function(x, y, msg) {
 #' @param data a data.frame
 #' @param varname name of variable in \code{data}
 #' @param msg message to display if \code{data} does not include \code{varname}
+#'
+#' @details This function is a wrapper for `shiny::validate`.
 #'
 #' @export
 #'
@@ -297,6 +309,7 @@ validate_has_variable <- function(data, varname, msg) {
 #'
 #' @details If the number of levels of \code{x} is less than \code{min_levels}
 #'   or greater than \code{max_levels} the validation will fail.
+#'   This function is a wrapper for `shiny::validate`.
 #'
 #' @export
 #' @examples
