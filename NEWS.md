@@ -11,6 +11,7 @@
 ### New features
 
 * Added the `validate_inputs` and `validate_inputs_segregated` functions transfer input validation messages to app output.
+* Added function `crule` to create conditional rules for input validation.
 
 ### Miscellaneous
 
