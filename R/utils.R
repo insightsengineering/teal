@@ -89,11 +89,10 @@ crule <- function(rule, condition, ...) {
     rule <- rlang::as_function(rule)
   }
 
-  dep <- paste(deparse(substitute(condition)), collapse = "")
-  ex <- list(
-    str2lang(sprintf("if (isFALSE(%s)) return(NULL)", dep)),
+  body(rule) <- call(
+    "{",
+    substitute(if (isFALSE(condition)) return(NULL)),
     body(rule)
   )
-  body(rule) <- as.call(c(as.name("{"), ex))
   rule
 }
