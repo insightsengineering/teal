@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage line-rate="0.745398773006135" branch-rate="0" lines-covered="729" lines-valid="978" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2022-12-30 09:56:21">
+<coverage line-rate="0.745138178096213" branch-rate="0" lines-covered="728" lines-valid="977" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2023-01-02 10:35:49">
   <sources/>
   <packages>
-    <package name="teal" line-rate="0.745398773006135" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.745138178096213" branch-rate="0" complexity="0">
       <classes>
         <class name="dummy_functions.R" filename="R/dummy_functions.R" line-rate="0.175675675675676" branch-rate="0" complexity="0">
           <methods>
@@ -2089,7 +2089,6 @@
                 <line number="95" hits="6" branch="false"/>
                 <line number="96" hits="6" branch="false"/>
                 <line number="97" hits="6" branch="false"/>
-                <line number="98" hits="6" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -2117,7 +2116,6 @@
             <line number="95" hits="6" branch="false"/>
             <line number="96" hits="6" branch="false"/>
             <line number="97" hits="6" branch="false"/>
-            <line number="98" hits="6" branch="false"/>
           </lines>
         </class>
         <class name="validate_inputs.R" filename="R/validate_inputs.R" line-rate="1" branch-rate="0" complexity="0">
