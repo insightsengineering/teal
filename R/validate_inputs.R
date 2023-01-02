@@ -108,6 +108,11 @@ validate_inputs <- function(..., header = "Some inputs require attention") {
   lapply(vals, checkmate::assert_class, "InputValidator")
   checkmate::assert_string(header, null.ok = TRUE)
 
+  if (any(vapply(vals, function(iv) isFALSE(iv$.__enclos_env__$private$enabled), logical(1L)))) {
+    warning("Some validators are disabled and will be omitted.", call. = TRUE)
+  }
+  vals <- Filter(function(iv) iv$.__enclos_env__$private$enabled, vals)
+
   fail_messages <- unlist(lapply(vals, gather_messages))
   failings <- add_header(fail_messages, header)
 
@@ -119,6 +124,11 @@ validate_inputs <- function(..., header = "Some inputs require attention") {
 #' @export
 validate_inputs_segregated <- function(validators, ...) {
   checkmate::assert_list(validators, types = "InputValidator")
+
+  if (any(vapply(validators, function(iv) isFALSE(iv$.__enclos_env__$private$enabled), logical(1L)))) {
+    warning("Some validators are disabled and will be omitted.", call. = TRUE)
+  }
+  validators <- Filter(function(iv) iv$.__enclos_env__$private$enabled, validators)
 
   # Since some or all names may be NULL, mapply cannot be used here, a loop is required.
   fail_messages <- vector("list", length(validators))
