@@ -7,11 +7,13 @@ testthat::test_that("invalid arguments raise errors", {
 
 testthat::test_that("validate_inputs: disabled validators raise warnings", {
   server <- function(input, output, session) {
-    iv <- shinyvalidate::InputValidator$new()
-    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
-    iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
+    iv1 <- shinyvalidate::InputValidator$new()
+    iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
+    iv1$enable()
+    iv2 <- shinyvalidate::InputValidator$new()
+    iv2$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     values <- shiny::reactive({
-      validate_inputs(iv)
+      validate_inputs(iv1, iv2)
       list(
         "letter" = input[["letter"]],
         "number" = input[["number"]]
