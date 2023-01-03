@@ -110,8 +110,8 @@ validate_inputs <- function(..., header = "Some inputs require attention") {
 
   if (!all(vapply(vals, validator_enabled, logical(1L)))) {
     warning("Some validators are disabled and will be omitted.", call. = TRUE)
+    vals <- Filter(validator_enabled, vals)
   }
-  vals <- Filter(validator_enabled, vals)
 
   fail_messages <- unlist(lapply(vals, gather_messages))
   failings <- add_header(fail_messages, header)
@@ -127,8 +127,8 @@ validate_inputs_segregated <- function(validators, ...) {
 
   if (!all(vapply(validators, validator_enabled, logical(1L)))) {
     warning("Some validators are disabled and will be omitted.", call. = TRUE)
+    validators <- Filter(validator_enabled, validators)
   }
-  validators <- Filter(validator_enabled, validators)
 
   # Since some or all names may be NULL, mapply cannot be used here, a loop is required.
   fail_messages <- vector("list", length(validators))
