@@ -109,7 +109,7 @@ validate_inputs <- function(..., header = "Some inputs require attention") {
   checkmate::assert_string(header, null.ok = TRUE)
 
   if (!all(vapply(vals, validator_enabled, logical(1L)))) {
-    warning("Some validators are disabled and will be omitted.", call. = TRUE)
+    logger::log_warn("Some validators are disabled and will be omitted.")
     vals <- Filter(validator_enabled, vals)
   }
 
@@ -126,7 +126,7 @@ validate_inputs_segregated <- function(validators, ...) {
   checkmate::assert_list(validators, types = "InputValidator")
 
   if (!all(vapply(validators, validator_enabled, logical(1L)))) {
-    warning("Some validators are disabled and will be omitted.", call. = TRUE)
+    logger::log_warn("Some validators are disabled and will be omitted.")
     validators <- Filter(validator_enabled, validators)
   }
 
@@ -172,8 +172,8 @@ gather_and_add <- function(iv, header) {
 }
 
 #' @keywords internal
-#' test if an InputValidator object is enabled
-#' returns logical of length 1
+# test if an InputValidator object is enabled
+# returns logical of length 1
 validator_enabled <- function(x) {
   x$.__enclos_env__$private$enabled
 }
