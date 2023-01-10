@@ -22,7 +22,10 @@ testthat::test_that("validate_inputs: disabled validators raise warnings", {
   }
 
   shiny::testServer(server, {
-    testthat::expect_warning(values())
+    testthat::expect_output(
+      object = values(),
+      regexp = "\\[WARN\\].+Some validators are disabled and will be omitted."
+    )
   })
 })
 
@@ -44,7 +47,10 @@ testthat::test_that("validate_inputs_segregated: disabled validators raise warni
   }
 
   shiny::testServer(server, {
-    testthat::expect_warning(values())
+    testthat::expect_output(
+      object = values(),
+      regexp = "\\[WARN\\].+Some validators are disabled and will be omitted."
+    )
   })
 })
 
