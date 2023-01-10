@@ -88,7 +88,7 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
 #' @export
 #' @keywords internal
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
-  checkmate::check_class(datasets, "FilteredData")
+  checkmate::assert_class(datasets, "FilteredData")
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
   args <- c(list(id = id), args)
 

@@ -161,8 +161,7 @@ init <- function(data,
 
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_class(data, "TealData")
-  checkmate::check_list(modules)
-  checkmate::check_class(modules, "teal_modules")
+  checkmate::assert_multi_class(modules, c("list", "teal_modules"))
   checkmate::assert_list(filter, min.len = 0, names = "unique")
   checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
