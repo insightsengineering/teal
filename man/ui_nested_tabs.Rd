@@ -19,11 +19,8 @@ ui_nested_tabs(id, modules, datasets, depth = 0L)
 \item{id}{(\code{character(1)})\cr
 module id}
 
-\item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
-nested list of \code{teal_modules} or \code{teal_module} objects or a single
-\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
-will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
-more details.}
+\item{modules}{(\code{teal_modules}) the modules which will be displayed in the teal application.
+See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for more details.}
 
 \item{datasets}{(\code{FilteredData})\cr
 object to store filter state and filtered datasets, shared across modules. For more
