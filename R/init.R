@@ -23,8 +23,10 @@
 #' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 #' do not match the original object names. To ensure reproducibility please use [teal.data::teal_data()]
 #' or [teal.data::cdisc_data()] with `check = TRUE` enabled.
-#' @param modules (`list` or `teal_modules`)\cr
-#'   nested list of `teal_modules` or `module` objects. See [modules()] and [module()] for
+#' @param modules (`list`, `teal_modules` or `teal_module`)\cr
+#'   nested list of `teal_modules` or `teal_module` objects or a single
+#'   `teal_modules` or `teal_module` object. These are the specific output modules which
+#'   will be displayed in the teal application. See [modules()] and [module()] for
 #'   more details.
 #' @param title (`NULL` or `character`)\cr
 #'   The browser window title (defaults to the host URL of the page).
@@ -161,16 +163,14 @@ init <- function(data,
 
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_class(data, "TealData")
-  checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
+  checkmate::check_list(modules)
+  checkmate::check_class(modules, "teal_modules")
   checkmate::assert_list(filter, min.len = 0, names = "unique")
   checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   teal.logger::log_system_info()
 
-  if (is(modules, "teal_module")) {
-    modules <- teal::modules(modules)
-  }
   if (is(modules, "list")) {
     modules <- do.call(teal::modules, modules)
   }
