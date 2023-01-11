@@ -2,9 +2,11 @@ ADHY
 ADSL
 ADTTE
 ADaM
+Bootswatch
 CDISC
 Cmd
 Ctrl
+Customizer
 DDL
 Datanames
 Forkers
@@ -19,9 +21,13 @@ UI
 UIs
 UX
 Ui
+bootswatch
 css
 customizable
+customizations
+customizer
 datanames
+dropdown
 funder
 lifecycle
 omics
@@ -31,6 +37,8 @@ repo
 reproducibility
 submodule
 tabsetted
+themer
 theming
 ui
+uncheck
 validator
