@@ -83,7 +83,7 @@ example_data <- cdisc_data(
 
 app <- init(
   data = example_data,
-  modules = modules(example_module())
+  modules = example_module()
 )
 
 if (interactive()) {

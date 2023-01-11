@@ -26,9 +26,7 @@ mae_d <- dataset("MAE", miniACC, metadata = list(type = "example"))
 
 app <- init(
   data = teal_data(mae_d),
-  modules = modules(
-    example_module()
-  )
+  modules = example_module()
 )
 
 if (interactive()) {

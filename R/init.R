@@ -161,13 +161,16 @@ init <- function(data,
 
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_class(data, "TealData")
-  checkmate::assert_multi_class(modules, c("list", "teal_modules"))
+  checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_list(filter, min.len = 0, names = "unique")
   checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   teal.logger::log_system_info()
 
+  if (is(modules, "teal_module")) {
+    modules <- teal::modules(modules)
+  }
   if (is(modules, "list")) {
     modules <- do.call(teal::modules, modules)
   }
