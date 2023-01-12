@@ -171,7 +171,7 @@ init <- function(data,
 
   teal.logger::log_system_info()
 
-  if (is(modules, "list")) {
+  if (is(modules, "teal_module")) {
     modules <- do.call(teal::modules, modules)
   }
 
