@@ -13,8 +13,10 @@ the server function must be called with \code{\link[shiny:moduleServer]{shiny::m
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 
-\item{modules}{(\code{list} or \code{teal_modules})\cr
-nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+\item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
+nested list of \code{teal_modules} or \code{teal_module} objects or a single
+\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
+will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
 \item{raw_data}{(\code{reactive})\cr

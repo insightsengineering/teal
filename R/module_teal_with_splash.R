@@ -48,6 +48,9 @@ ui_teal_with_splash <- function(id,
 #' Please also refer to the doc of [init()].
 #'
 #' @inheritParams init
+#' @param modules `teal_modules` object containing the output modules which
+#'   will be displayed in the teal application. See [modules()] and [module()] for
+#'   more details.
 #' @inheritParams shiny::moduleServer
 #' @return `reactive`, return value of [srv_teal()]
 #' @export

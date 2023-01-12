@@ -58,7 +58,7 @@ app <- init(
     dataset("IRIS", iris),
     dataset("MTCARS", mtcars)
   ),
-  modules = modules(teal_example_module())
+  modules = teal_example_module()
 )
 
 if (interactive()) shinyApp(app$ui, app$server)
@@ -97,7 +97,7 @@ app <- init(
     dataset("IRIS", iris),
     dataset("MTCARS", mtcars)
   ),
-  modules = modules(example_module_with_reporting())
+  modules = example_module_with_reporting()
 )
 
 if (interactive()) shinyApp(app$ui, app$server)
@@ -148,7 +148,7 @@ app <- init(
     dataset("IRIS", iris),
     dataset("MTCARS", mtcars)
   ),
-  modules = modules(example_module_with_reporting())
+  modules = example_module_with_reporting()
 )
 
 if (interactive()) shinyApp(app$ui, app$server)
@@ -206,7 +206,7 @@ app <- init(
     dataset("IRIS", iris),
     dataset("MTCARS", mtcars)
   ),
-  modules = modules(example_module_with_reporting())
+  modules = example_module_with_reporting()
 )
 
 if (interactive()) shinyApp(app$ui, app$server)
@@ -327,7 +327,7 @@ app <- init(
     dataset("IRIS", iris, code = "data(iris); IRIS <- iris"),
     check = FALSE
   ),
-  modules = modules(
+  modules = list(
     example_reporter_module(label = "with Reporter"),
     example_module(label = "without Reporter")
   ),

@@ -120,7 +120,7 @@ app <- init(
     dataset("IRIS", iris),
     dataset("MTCARS", mtcars)
   ),
-  modules = modules(example_module(), example_module()),
+  modules = list(example_module(), example_module()),
   header = "My first teal application"
 )
 
@@ -142,7 +142,7 @@ app <- init(
     dataset("IRIS", iris),
     dataset("MTCARS", mtcars)
   ),
-  modules = modules(example_module(), example_module()),
+  modules = list(example_module(), example_module()),
   header = "My first teal application"
 )
 
