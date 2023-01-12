@@ -122,8 +122,9 @@ app <- init(
   data = teal_data(
     dataset("IRIS", iris)
   ),
-  modules = modules(example_module()),
   filter = list(IRIS = list(Sepal.Length = c(5, 7)))
+  modules = list(example_module(), example_module()),
+  header = "My first teal application"
 )
 
 bslib::run_with_themer(shinyApp(app$ui, app$server))
@@ -205,8 +206,8 @@ app <- init(
   data = teal_data(
     dataset("IRIS", iris)
   ),
-  modules = modules(example_module()),
   filter = list(IRIS = list(Sepal.Length = c(5, 7)))
+  modules = list(example_module(), example_module())
 )
 
 shinyApp(app$ui, app$server)

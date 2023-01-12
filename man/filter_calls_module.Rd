@@ -29,9 +29,7 @@ app <- init(
     ),
     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   ),
-  modules = modules(
-    teal:::filter_calls_module()
-  ),
+  modules = teal:::filter_calls_module(),
   header = "Simple teal app"
 )
 if (interactive()) {

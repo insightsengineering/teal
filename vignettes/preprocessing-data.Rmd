@@ -41,7 +41,7 @@ cs_arm <- choices_selected(c("ACTARMCD", "ARMCD"), "ACTARMCD")
 
 app <- init(
   data = cdisc_data(cdisc_dataset("ADSL", adsl), code = get_code(file = "app.R")),
-  modules = modules(example_module())
+  modules = example_module()
 )
 
 shinyApp(app$ui, app$server)
@@ -72,7 +72,7 @@ x <- init(
     code = get_code("app.R", exclude_comments = TRUE, read_sources = TRUE),
     check = TRUE
   ),
-  modules = modules(example_module()),
+  modules = example_module(),
   header = "Simple app with preprocessing",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 )

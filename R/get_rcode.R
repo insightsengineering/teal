@@ -208,7 +208,7 @@ get_rcode_srv <- function(id,
                           modal_title = "R Code",
                           code_header = "Automatically generated R code",
                           disable_buttons = reactiveVal(FALSE)) {
-  checkmate::check_class(disable_buttons, c("reactive", "function"))
+  checkmate::assert_class(disable_buttons, c("reactive", "function"))
 
   lifecycle::deprecate_warn(
     when = "0.12.1",
