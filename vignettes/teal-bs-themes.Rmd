@@ -105,51 +105,123 @@ remotes::install_github("https://github.com/dreamRs/shinyWidgets@main")
 
 If you want to update the theme in the regular `shiny::fluidPage` like app, you do not need the `teal.bs_theme` option. Then simply provide the `bslib::bs_theme` directly to the `shiny::fluidPage(theme = bslib::bs_theme(...), ...)`. 
 
-### Examples
+### Interactive theming guide
 
-With `bslib::run_with_themer` to explore different themes.
-Please, remember that the interactive theming for Bootstrap 3 is not supported.
+In this section we provide a step-by-step guide to customizing a `teal` application theme interactively with `bslib::run_with_themer()`.
+We recommend starting with a simple case and when you are satisfied, verify with your full application.
+To that end we will use the following `teal` application.
+For this example we assume that we want to use Bootstrap 5.
+To start, we launch the app with `bslib::run_with_themer(app$ui, app$server)` instead of `shiny::runApp`.
 
-
-```{r, message=FALSE}
+```{r, eval = FALSE}
 options("teal.bs_theme" = bslib::bs_theme(version = "5"))
+
 library(teal)
 
 app <- init(
   data = teal_data(
-    dataset("IRIS", iris),
-    dataset("MTCARS", mtcars)
+    dataset("IRIS", iris) # nolint
   ),
+  filter = list(IRIS = list(Sepal.Length = c(5, 7))),
   modules = list(example_module(), example_module()),
   header = "My first teal application"
 )
 
-if (interactive()) {
-  # Run with themer
-  bslib::run_with_themer(shinyApp(app$ui, app$server))
-}
+bslib::run_with_themer(shinyApp(app$ui, app$server))
 ```
 
-Apply the already chosen theme with `options("teal.bs_theme" = bslib::bs_theme(...))`, 
-in this example the `lux` theme from `bootstrap` version 5.
+This gives us the following.
 
-```{r, message=FALSE}
-options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux"))
+```{r echo = FALSE}
+knitr::include_graphics("images/bs-launch.png")
+```
+
+Note the "Theme Customizer" section on the right hand side.
+This was added by `bslib` and is how we customize our theme.
+
+#### Set overall app theme
+
+Instead of starting from scratch, we want to start with a [Bootswatch](https://bootswatch.com/) theme.
+We like the Minty theme so we select this in the "Overall theme" dropdown.
+
+```{r echo = FALSE}
+knitr::include_graphics("images/bs-theme-set.png")
+```
+
+`bslib` has updated our CSS styles to use our new theme, including the theme customizer.
+Additionally if we look at our R console, we will see
+
+```{r eval = FALSE}
+####  Update your bs_theme() R code with:  #####
+bs_theme_update(theme, bootswatch = "minty")
+```
+
+This is a helpful guide that provides code to update our theme.
+For `teal` applications we don't actually use `bs_theme_update` and opt for `bs_theme` instead.
+However, the printed code will still be helpful.
+
+#### Customizing bootswatch theme
+
+Our base theme of Minty is close to what we want but let's make a few customizations.
+To start, we will increase the base font size.
+To do this, we choose the "Fonts" section of the theme customizer and then set a value in the "Base font size" input.
+We use 1.25 here which means all our fonts with be 1.25 times the default font size.
+If we check the R console, we will see `bslib` has printed `bs_theme_update(theme, font_scale = 1.25, bootswatch = "minty")`, which now includes our font adjustment.
+
+```{r echo = FALSE}
+knitr::include_graphics("images/bs-font-size.png")
+```
+
+Finally, suppose we do not want borders to be rounded.
+In our theme customizer, we can go to "Options" and then uncheck the "Rounded corners" box.
+
+
+```{r echo = FALSE}
+knitr::include_graphics("images/bs-corners.png")
+```
+
+As expected, our corners are no longer rounded.
+If we look at our R console, we will now see ``bs_theme_update(theme, font_scale = 1.25, `enable-rounded` = FALSE, bootswatch = "minty")``.
+
+#### Applying a custom theme
+
+Assuming our customization is now complete, it's time to apply the changes to our application.
+To do this, we use the option `teal.bs_theme` like before.
+But this time we will expand on our `bslib::bs_theme` call to include our changes.
+Helpfully, the arguments that were printed to the R console when running our app in the themer can be plugged right in.
+
+```{r eval = FALSE}
+options(
+  "teal.bs_theme" = bslib::bs_theme(
+    version = "5",
+    font_scale = 1.25,
+    `enable-rounded` = FALSE,
+    bootswatch = "minty"
+  )
+)
+
 library(teal)
 
 app <- init(
   data = teal_data(
-    dataset("IRIS", iris),
-    dataset("MTCARS", mtcars)
+    dataset("IRIS", iris)
   ),
-  modules = list(example_module(), example_module()),
-  header = "My first teal application"
+  filter = list(IRIS = list(Sepal.Length = c(5, 7))),
+  modules = list(example_module(), example_module())
 )
 
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
+shinyApp(app$ui, app$server)
 ```
+
+Now the application has our custom theme applied.
+
+```{r echo = FALSE}
+knitr::include_graphics("images/bs-final.png")
+```
+
+Please note the interactive themer only contains the mostly commonly applied options.
+For more customization options, review the `bslib` documentation.
+
 
 ## Sources
 
