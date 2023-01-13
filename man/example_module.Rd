@@ -21,7 +21,7 @@ app <- init(
     dataset("IRIS", iris),
     dataset("MTCARS", mtcars)
   ),
-  modules = modules(example_module())
+  modules = example_module()
 )
 if (interactive()) {
   shinyApp(app$ui, app$server)

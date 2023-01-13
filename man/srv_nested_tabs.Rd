@@ -31,8 +31,8 @@ is then preferred to this function.}
 object to store filter state and filtered datasets, shared across modules. For more
 details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}.}
 
-\item{modules}{(\code{list} or \code{teal_modules})\cr
-nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+\item{modules}{\code{teal_modules} object containing the output modules which
+will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}

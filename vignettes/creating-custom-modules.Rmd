@@ -190,14 +190,12 @@ app <- init(
     dataset("IRIS", iris, code = "IRIS <- iris"),
     check = TRUE
   ),
-  modules = modules(
-    tm_histogram_example(
-      label = "Simple Module",
-      histogram_var = data_extract_spec(
-        dataname = "IRIS",
-        select = select_spec(
-          choices = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
-        )
+  modules = tm_histogram_example(
+    label = "Simple Module",
+    histogram_var = data_extract_spec(
+      dataname = "IRIS",
+      select = select_spec(
+        choices = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
       )
     )
   ),
