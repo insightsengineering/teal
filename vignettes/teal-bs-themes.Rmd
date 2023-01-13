@@ -122,7 +122,7 @@ app <- init(
   data = teal_data(
     dataset("IRIS", iris)
   ),
-  filter = list(IRIS = list(Sepal.Length = c(5, 7)))
+  filter = list(IRIS = list(Sepal.Length = c(5, 7))),
   modules = list(example_module(), example_module()),
   header = "My first teal application"
 )
