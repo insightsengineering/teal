@@ -1,11 +1,11 @@
 
 testthat::test_that("invalid arguments raise errors", {
   testthat::expect_error(validate_inputs("string"))
-  testthat::expect_error(validate_inputs_segregated(list("name" = "string")))
+  testthat::expect_error(validate_inputs(list("name" = "string")))
 })
 
 
-testthat::test_that("validate_inputs: disabled validators raise warnings", {
+testthat::test_that("validate_inputs: disabled validators raise warnings (individual validators)", {
   server <- function(input, output, session) {
     iv1 <- shinyvalidate::InputValidator$new()
     iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -30,7 +30,7 @@ testthat::test_that("validate_inputs: disabled validators raise warnings", {
 })
 
 
-testthat::test_that("validate_inputs_segregated: disabled validators raise warnings", {
+testthat::test_that("validate_inputs_segregated: disabled validators raise warnings (validator list)", {
   server <- function(input, output, session) {
     iv1 <- shinyvalidate::InputValidator$new()
     iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -38,7 +38,7 @@ testthat::test_that("validate_inputs_segregated: disabled validators raise warni
     iv2 <- shinyvalidate::InputValidator$new()
     iv2$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     values <- shiny::reactive({
-      validate_inputs_segregated(list(iv1, iv2))
+      validate_inputs(list(iv1, iv2))
       list(
         "letter" = input[["letter"]],
         "number" = input[["number"]]
@@ -55,7 +55,7 @@ testthat::test_that("validate_inputs_segregated: disabled validators raise warni
 })
 
 
-testthat::test_that("validate_inputs: valid inputs produce desired output", {
+testthat::test_that("validate_inputs: valid inputs produce desired output (individual validators)", {
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -83,14 +83,14 @@ testthat::test_that("validate_inputs: valid inputs produce desired output", {
 })
 
 
-testthat::test_that("validate_inputs_segregated: valid inputs produce desired output", {
+testthat::test_that("validate_inputs_segregated: valid inputs produce desired output (validator list)", {
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
     iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     iv$enable()
     values <- shiny::reactive({
-      validate_inputs_segregated(list(iv))
+      validate_inputs(list(iv))
       list(
         "letter" = input[["letter"]],
         "number" = input[["number"]]
@@ -111,7 +111,7 @@ testthat::test_that("validate_inputs_segregated: valid inputs produce desired ou
 })
 
 
-testthat::test_that("validate_inputs: invalid inputs raise errors in output", {
+testthat::test_that("validate_inputs: invalid inputs raise errors in output (individual validators)", {
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -150,14 +150,14 @@ testthat::test_that("validate_inputs: invalid inputs raise errors in output", {
 })
 
 
-testthat::test_that("validate_inputs_segregated: invalid inputs raise errors in output", {
+testthat::test_that("validate_inputs_segregated: invalid inputs raise errors in output (validator list)", {
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
     iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     iv$enable()
     values <- shiny::reactive({
-      validate_inputs_segregated(list(iv))
+      validate_inputs(list(iv))
       list(
         "letter" = input[["letter"]],
         "number" = input[["number"]]
@@ -217,14 +217,8 @@ testthat::test_that("error message is formatted properly", {
     # check error class
     testthat::expect_error(validate_inputs(iv))
     testthat::expect_error(validate_inputs(iv, iv_par))
-    testthat::expect_error(validate_inputs_segregated(list(iv)), class = "shiny.silent.error")
-    testthat::expect_error(validate_inputs_segregated(list(iv, iv_par)), class = "shiny.silent.error")
-    testthat::expect_error(validate_inputs_segregated(list(iv), errorClass = "custom.error.class"),
-      class = "custom.error.class"
-    )
-    testthat::expect_error(validate_inputs_segregated(list(iv, iv_par), errorClass = "custom.error.class"),
-      class = "custom.error.class"
-    )
+    testthat::expect_error(validate_inputs(list(iv)), class = "shiny.silent.error")
+    testthat::expect_error(validate_inputs(list(iv, iv_par)), class = "shiny.silent.error")
 
     # check error message
     errmess <- tryCatch(validate_inputs(iv), error = function(e) e$message)
@@ -251,7 +245,7 @@ testthat::test_that("error message is formatted properly", {
       collapse = "\n"
     ))
 
-    errmess <- tryCatch(validate_inputs_segregated(list(iv)), error = function(e) e$message)
+    errmess <- tryCatch(validate_inputs(list(iv)), error = function(e) e$message)
     testthat::expect_identical(errmess, paste(
       c(
         "\n",
@@ -262,7 +256,7 @@ testthat::test_that("error message is formatted properly", {
       collapse = "\n"
     ))
 
-    errmess <- tryCatch(validate_inputs_segregated(list(iv, iv_par)), error = function(e) e$message)
+    errmess <- tryCatch(validate_inputs(list(iv, iv_par)), error = function(e) e$message)
     testthat::expect_identical(errmess, paste(
       c(
         "\n",
@@ -302,7 +296,7 @@ testthat::test_that("error message is formatted properly", {
       collapse = "\n"
     ))
 
-    errmess <- tryCatch(validate_inputs_segregated(list("Header message" = iv)), error = function(e) e$message)
+    errmess <- tryCatch(validate_inputs(list("Header message" = iv)), error = function(e) e$message)
     testthat::expect_identical(errmess, paste(
       c(
         "Header message\n",
@@ -314,7 +308,7 @@ testthat::test_that("error message is formatted properly", {
     ))
 
     errmess <- tryCatch(
-      validate_inputs_segregated(list(
+      validate_inputs(list(
         "Header message 1" = iv,
         "Header message 2" = iv_par
       )),
@@ -374,7 +368,7 @@ testthat::test_that("different validation modes produce proper messages", {
       )
     })
     values_g <- shiny::reactive({
-      validate_inputs_segregated(list("Main validator" = iv, "Graphical validator" = iv_par))
+      validate_inputs(list("Main validator" = iv, "Graphical validator" = iv_par))
       list(
         "letter" = input[["letter"]],
         "number" = input[["number"]],
