@@ -52,7 +52,7 @@ reference:
   - title: Validation functions
     contents:
       - starts_with("validate_")
-      - starts_with("validate_inputs")
+      - validate_inputs
   - title: Deprecated functions
     contents:
       - get_rcode
