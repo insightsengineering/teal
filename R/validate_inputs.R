@@ -1,5 +1,5 @@
 
-#' Send input validation messages to output
+#' Send input validation messages to output.
 #'
 #' Captures messages from `InputValidator` objects and collates them
 #' into one message passed to `validate`.
@@ -9,25 +9,20 @@
 #' of the output element.
 #' `shinyvalidate::InputValidator` allows to validate input elements
 #' and to display specific messages in their respective input widgets.
-#' This function is a hybrid solution. Given an `InputValidator` object,
-#' it extracts messages from inputs that fail validation and places them all in one
-#' validation message that is passed to a `validate`/`need` call.
+#' `validate_inputs` provides a hybrid solution.
+#' Given an `InputValidator` object, messages corresponding to inputs that fail validation
+#' are extracted and placed in one validation message that is passed to a `validate`/`need` call.
 #' This way the input validator messages are repeated in the output.
 #'
-#' `validate_inputs` accepts an arbitrary number of `InputValidator`s
-#' and prints all messages together, adding one (optional) header.
-#' `validate_inputs_segregated` accepts a list of `InputValidator`s
-#' and prints messages grouped by validator. If elements of `validators` are named,
-
-#' the names are used as headers for their respective message groups.
+#' The `...` argument accepts `InputValidators` directly or wrapped in a list.
+#' If validators are passed directly, all their messages are printed together
+#' under one (optional) header message specified by `header`. If a list is passed,
+#' messages are grouped by validator. The list's names are used as headers
+#' for their respective message groups.
 #'
-#'
-#' @name validate_inputs
-#'
-#' @param ... for `validate_inputs` any number of `InputValidator` objects \cr
-#'            for `validate_inputs_segregated` arguments passed to `validate`
-#' @param header `character(1)` optional generic validation message
-#' @param validators optionally named `list` of `InputValidator` objects, see `Details`
+#' @param ... either any number of `InputValidator` objects
+#'            or an optionally named `list` of `InputValidator` objects, see `Details`
+#' @param header `character(1)` generic validation message; set to NULL to omit
 #'
 #' @return
 #' Returns NULL if the final validation call passes and a `shiny.silent.error` if it fails.
@@ -84,7 +79,7 @@
 #'         validate_inputs(iv_par, header = "Set proper graphical parameters")
 #'       },
 #'       "combined" = validate_inputs(iv, iv_par),
-#'       "grouped" = validate_inputs_segregated(list(
+#'       "grouped" = validate_inputs(list(
 #'         "Some inputs require attention" = iv,
 #'         "Set proper graphical parameters" = iv_par
 #'       ))
@@ -101,44 +96,38 @@
 #'   shinyApp(ui, server)
 #' }
 
-#' @rdname validate_inputs
 #' @export
 validate_inputs <- function(..., header = "Some inputs require attention") {
-  vals <- list(...)
-  lapply(vals, checkmate::assert_class, "InputValidator")
+  dots <- list(...)
+
+  # check arguments and determine input type
+  if (all(vapply(dots, inherits, logical(1L), what = "InputValidator"))) {
+    input <- "validators"
+  } else if (all(vapply(unlist(dots), inherits, logical(1L), what = "InputValidator"))) {
+    input <- "list"
+  } else {
+    stop("... must be InputValidator objects or a list thereof")
+  }
   checkmate::assert_string(header, null.ok = TRUE)
+
+  vals <- switch(
+    input,
+    "validators" = dots,
+    "list" = unlist(dots)
+  )
 
   if (!all(vapply(vals, validator_enabled, logical(1L)))) {
     logger::log_warn("Some validators are disabled and will be omitted.")
     vals <- Filter(validator_enabled, vals)
   }
 
-  fail_messages <- unlist(lapply(vals, gather_messages))
-  failings <- add_header(fail_messages, header)
+  failings <- switch(
+    input,
+    "validators" = wrap_together(vals, header),
+    "list" = wrap_separately(vals)
+  )
 
   shiny::validate(shiny::need(is.null(failings), failings))
-}
-
-
-#' @rdname validate_inputs
-#' @export
-validate_inputs_segregated <- function(validators, ...) {
-  checkmate::assert_list(validators, types = "InputValidator")
-
-  if (!all(vapply(validators, validator_enabled, logical(1L)))) {
-    logger::log_warn("Some validators are disabled and will be omitted.")
-    validators <- Filter(validator_enabled, validators)
-  }
-
-  # Since some or all names may be NULL, mapply cannot be used here, a loop is required.
-  fail_messages <- vector("list", length(validators))
-  for (v in seq_along(validators)) {
-    fail_messages[[v]] <- gather_and_add(validators[[v]], names(validators)[v])
-  }
-
-  failings <- unlist(fail_messages)
-
-  shiny::validate(shiny::need(is.null(failings), failings), ...)
 }
 
 
@@ -169,6 +158,22 @@ gather_and_add <- function(iv, header) {
   fail_messages <- gather_messages(iv)
   failings <- add_header(fail_messages, header)
   failings
+}
+
+#' @keywords internal
+# collates messages from multiple validators under common header
+wrap_together <- function(iv_list, header) {
+  add_header(unlist(lapply(iv_list, gather_messages)), header)
+}
+
+#' @keywords internal
+# prints messages from multiple validators under separate headers
+wrap_separately <- function(iv_list) {
+  fail_messages <- vector("list", length(iv_list))
+  for (v in seq_along(iv_list)) {
+    fail_messages[[v]] <- gather_and_add(iv_list[[v]], names(iv_list)[v])
+  }
+  unlist(fail_messages)
 }
 
 #' @keywords internal
