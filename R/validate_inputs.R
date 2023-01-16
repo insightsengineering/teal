@@ -27,7 +27,7 @@
 #' @return
 #' Returns NULL if the final validation call passes and a `shiny.silent.error` if it fails.
 #'
-#' @seealso [`shinyvalidate::InputValidator`] [`shiny::validate`]
+#' @seealso [`shinyvalidate::InputValidator`], [`shiny::validate`]
 #'
 #' @examples
 #' library(shiny)

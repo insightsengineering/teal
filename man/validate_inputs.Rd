@@ -104,5 +104,5 @@ if (interactive()) {
 }
 }
 \seealso{
-\code{\link[shinyvalidate:InputValidator]{shinyvalidate::InputValidator}} \code{\link[shiny:validate]{shiny::validate}}
+\code{\link[shinyvalidate:InputValidator]{shinyvalidate::InputValidator}}, \code{\link[shiny:validate]{shiny::validate}}
 }
