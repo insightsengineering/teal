@@ -1,8 +1,8 @@
 testthat::test_that("get_rcode returns header only for empty chunks", {
+  rlang::local_options(lifecycle_verbosity = "quiet")
   ch <- teal.code::chunks_new()
 
-  # deprecation warning
-  testthat::expect_warning(r_code_from_chunks <- strsplit(get_rcode(chunks = ch), "\n")[[1]])
+  r_code_from_chunks <- strsplit(get_rcode(chunks = ch), "\n")[[1]]
   r_code_from_header <- strsplit(sprintf("\n\n%s\n", paste(get_rcode_header(), collapse = "\n")), "\n")[[1]]
 
   # removing the Date line from the header as the seconds may be different
@@ -14,6 +14,7 @@ testthat::test_that("get_rcode returns header only for empty chunks", {
 })
 
 testthat::test_that("get_rcode returns code from chunks at the end", {
+  rlang::local_options(lifecycle_verbosity = "quiet")
   ch <- teal.code::chunks_new()
   teal.code::chunks_push(id = "test", chunks = ch, quote(a <- 1))
 
@@ -27,6 +28,7 @@ testthat::test_that("get_rcode returns code from chunks at the end", {
 })
 
 testthat::test_that("get_rcode returns data-loading, filter-panel and chunks code combined", {
+  rlang::local_options(lifecycle_verbosity = "quiet")
   ch <- teal.code::chunks_new()
   teal.code::chunks_push(id = "test", chunks = ch, quote(a <- 1))
 
@@ -50,6 +52,7 @@ testthat::test_that("get_rcode returns data-loading, filter-panel and chunks cod
 })
 
 testthat::test_that("style nested expressions", {
+  rlang::local_options(lifecycle_verbosity = "quiet")
   testthat::expect_silent({
     cs <- teal.code::chunks_new()
 
