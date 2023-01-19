@@ -18,12 +18,12 @@ testthat::test_that("get_rcode returns code from chunks at the end", {
   ch <- teal.code::chunks_new()
   teal.code::chunks_push(id = "test", chunks = ch, quote(a <- 1))
 
-  r_code_from_chunks <- strsplit(get_rcode(chunks = ch), "\n")[[1]]
-  r_code_from_header <- strsplit(sprintf("\n\n%s\na <- 1", paste(get_rcode_header(), collapse = "\n")), "\n")[[1]]
+  r_code_from_chunks <- gsub("\n", "", get_rcode(chunks = ch))
+  r_code_from_header <- gsub("\n", "", paste0(paste(get_rcode_header(), collapse = ""), "a <- 1"))
 
   testthat::expect_identical(
-    r_code_from_chunks[c(1:5, 7:length(r_code_from_chunks))],
-    r_code_from_header[c(1:5, 7:length(r_code_from_header))]
+    r_code_from_chunks,
+    r_code_from_header
   )
 })
 
