@@ -106,7 +106,7 @@ validate_inputs <- function(..., header = "Some inputs require attention") {
   } else if (all(vapply(unlist(dots), inherits, logical(1L), what = "InputValidator"))) {
     input <- "list"
   } else {
-    stop("... must be InputValidator objects or a list thereof")
+    stop("... provide InputValidator objects or a list thereof")
   }
   checkmate::assert_string(header, null.ok = TRUE)
 
