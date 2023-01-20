@@ -99,42 +99,24 @@
 #' @export
 validate_inputs <- function(..., header = "Some inputs require attention") {
   dots <- list(...)
-  if (is_validator_list(dots)) {
-    dots <- structure(list(dots), names = header)
+  if (!is_validators(dots)) stop("validate_inputs accepts validators or a list thereof")
+
+  messages <- extract_validator(dots, header)
+  failings <- if (!any_names(dots)) {
+    add_header(messages, header)
+  } else {
+    unlist(messages)
   }
-  dots <- lapply(dots, function(x) if (inherits(x, "InputValidator")) list(x) else x)
-
-  vals <- drop_empty(drop_disabled(dots))
-
-  failings_list <- lapply(vals, wrap_validators)
-  failings <- wrap_messages(failings_list)
 
   shiny::validate(shiny::need(is.null(failings), failings))
 }
-
 
 ### internal functions
 
 #' @keywords internal
 # advanced object type test
-is_validator_list <- function(x) {
-  is.list(x) && all(vapply(x, inherits, logical(1L), what = "InputValidator"))
-}
-
-#' @keywords internal
-# recursively returns enabled validators from a nested list
-drop_disabled <- function(x) {
-  if (is_validator_list(x))
-    Filter(validator_enabled, x) else lapply(x, drop_disabled)
-}
-
-#' @keywords internal
-# drops empty items from list and logs a warning if any
-drop_empty <- function(x) {
-  ans <- Filter(function(x) length(x) > 0L, x)
-  if (!identical(x, ans))
-    logger::log_warn("Some validators are disabled and will be omitted.")
-  ans
+is_validators <- function(x) {
+  all(if (is.list(x)) unlist(lapply(x, is_validators)) else inherits(x, "InputValidator"))
 }
 
 #' @keywords internal
@@ -142,35 +124,6 @@ drop_empty <- function(x) {
 # returns logical of length 1
 validator_enabled <- function(x) {
   x$.__enclos_env__$private$enabled
-}
-
-#' @keywords internal
-#' collate messages from a list of validators
-wrap_validators <- function(iv_list) {
-  fail_messages <- vector("list", length(iv_list))
-  for (v in seq_along(iv_list)) {
-    fail_messages[[v]] <- gather_and_add(iv_list[[v]], names(iv_list)[v])
-  }
-  fail_messages
-}
-
-#' @keywords internal
-#' collate messages from a list of character vectors
-wrap_messages <- function(message_list) {
-  fail_messages <- vector("list", length(message_list))
-  for (v in seq_along(message_list)) {
-    fail_messages[[v]] <- add_header(message_list[[v]], names(message_list)[v])
-  }
-  unlist(fail_messages)
-}
-
-#' @keywords internal
-# collate failing messages with optional header message
-# used by segregated method
-gather_and_add <- function(iv, header = NULL) {
-  fail_messages <- gather_messages(iv)
-  failings <- add_header(fail_messages, header)
-  failings
 }
 
 #' @keywords internal
@@ -195,4 +148,27 @@ add_header <- function(messages, header = "") {
     ans <- c(paste0(header, "\n"), ans, "\n")
   }
   ans
+}
+
+#' @keywords internal
+# recursively extract messages from validator list
+extract_validator <- function(iv, header) {
+  if (inherits(iv, "InputValidator")) {
+    add_header(gather_messages(iv), header)
+  } else {
+    if (is.null(names(iv))) names(iv) <- rep("", length(iv))
+    mapply(extract_validator, iv = iv, header = names(iv), SIMPLIFY = FALSE)
+  }
+}
+
+#' @keywords internal
+# recursively check if the object contains a named list
+any_names <- function(x) {
+  any(
+    if (is.list(x)) {
+      if (!is.null(names(x)) && any(names(x) != "")) TRUE else unlist(lapply(x, any_names))
+    } else {
+      FALSE
+    }
+  )
 }
