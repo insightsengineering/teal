@@ -99,33 +99,15 @@
 #' @export
 validate_inputs <- function(..., header = "Some inputs require attention") {
   dots <- list(...)
-
-  # check arguments and determine input type
-  if (all(vapply(dots, inherits, logical(1L), what = "InputValidator"))) {
-    input <- "validators"
-  } else if (all(vapply(unlist(dots), inherits, logical(1L), what = "InputValidator"))) {
-    input <- "list"
-  } else {
-    stop("... provide InputValidator objects or a list thereof")
+  if (is_validator_list(dots)) {
+    dots <- structure(list(dots), names = header)
   }
-  checkmate::assert_string(header, null.ok = TRUE)
+  dots <- lapply(dots, function(x) if (inherits(x, "InputValidator")) list(x) else x)
 
-  vals <- switch(
-    input,
-    "validators" = dots,
-    "list" = unlist(dots)
-  )
+  vals <- drop_empty(drop_disabled(dots))
 
-  if (!all(vapply(vals, validator_enabled, logical(1L)))) {
-    logger::log_warn("Some validators are disabled and will be omitted.")
-    vals <- Filter(validator_enabled, vals)
-  }
-
-  failings <- switch(
-    input,
-    "validators" = wrap_together(vals, header),
-    "list" = wrap_separately(vals)
-  )
+  failings_list <- lapply(vals, wrap_validators)
+  failings <- wrap_messages(failings_list)
 
   shiny::validate(shiny::need(is.null(failings), failings))
 }
@@ -134,46 +116,25 @@ validate_inputs <- function(..., header = "Some inputs require attention") {
 ### internal functions
 
 #' @keywords internal
-# collate failing messages from validator
-gather_messages <- function(iv) {
-  status <- iv$validate()
-  failing_inputs <- Filter(Negate(is.null), status)
-  unique(lapply(failing_inputs, function(x) x[["message"]]))
+# advanced object type test
+is_validator_list <- function(x) {
+  is.list(x) && all(vapply(x, inherits, logical(1L), what = "InputValidator"))
 }
 
 #' @keywords internal
-# format failing messages with optional header message
-add_header <- function(messages, header) {
-  if (length(messages) > 0L) {
-    c(paste0(header, "\n"), unlist(messages), "\n")
-  } else {
-    NULL
-  }
+# recursively returns enabled validators from a nested list
+drop_disabled <- function(x) {
+  if (is_validator_list(x))
+    Filter(validator_enabled, x) else lapply(x, drop_disabled)
 }
 
 #' @keywords internal
-# collate failing messages with optional header message
-# used by segregated method
-gather_and_add <- function(iv, header) {
-  fail_messages <- gather_messages(iv)
-  failings <- add_header(fail_messages, header)
-  failings
-}
-
-#' @keywords internal
-# collates messages from multiple validators under common header
-wrap_together <- function(iv_list, header) {
-  add_header(unlist(lapply(iv_list, gather_messages)), header)
-}
-
-#' @keywords internal
-# prints messages from multiple validators under separate headers
-wrap_separately <- function(iv_list) {
-  fail_messages <- vector("list", length(iv_list))
-  for (v in seq_along(iv_list)) {
-    fail_messages[[v]] <- gather_and_add(iv_list[[v]], names(iv_list)[v])
-  }
-  unlist(fail_messages)
+# drops empty items from list and logs a warning if any
+drop_empty <- function(x) {
+  ans <- Filter(function(x) length(x) > 0L, x)
+  if (!identical(x, ans))
+    logger::log_warn("Some validators are disabled and will be omitted.")
+  ans
 }
 
 #' @keywords internal
@@ -181,4 +142,57 @@ wrap_separately <- function(iv_list) {
 # returns logical of length 1
 validator_enabled <- function(x) {
   x$.__enclos_env__$private$enabled
+}
+
+#' @keywords internal
+#' collate messages from a list of validators
+wrap_validators <- function(iv_list) {
+  fail_messages <- vector("list", length(iv_list))
+  for (v in seq_along(iv_list)) {
+    fail_messages[[v]] <- gather_and_add(iv_list[[v]], names(iv_list)[v])
+  }
+  fail_messages
+}
+
+#' @keywords internal
+#' collate messages from a list of character vectors
+wrap_messages <- function(message_list) {
+  fail_messages <- vector("list", length(message_list))
+  for (v in seq_along(message_list)) {
+    fail_messages[[v]] <- add_header(message_list[[v]], names(message_list)[v])
+  }
+  unlist(fail_messages)
+}
+
+#' @keywords internal
+# collate failing messages with optional header message
+# used by segregated method
+gather_and_add <- function(iv, header = NULL) {
+  fail_messages <- gather_messages(iv)
+  failings <- add_header(fail_messages, header)
+  failings
+}
+
+#' @keywords internal
+# collate failing messages from validator
+# returns list
+gather_messages <- function(iv) {
+  if (validator_enabled(iv)) {
+    status <- iv$validate()
+    failing_inputs <- Filter(Negate(is.null), status)
+    unique(lapply(failing_inputs, function(x) x[["message"]]))
+  } else {
+    logger::log_warn("Validators is disabled and will be omitted.")
+    list()
+  }
+}
+
+#' @keywords internal
+# add optional header to failing messages
+add_header <- function(messages, header = "") {
+  ans <- unlist(messages)
+  if (length(ans) != 0L && isTRUE(nchar(header) > 0L)) {
+    ans <- c(paste0(header, "\n"), ans, "\n")
+  }
+  ans
 }
