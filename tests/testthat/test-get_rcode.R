@@ -40,7 +40,7 @@ testthat::test_that("get_rcode returns data-loading, filter-panel and chunks cod
         "MTCARS <- mtcars",
         "a <- 1"
       ) %in%
-        strsplit(get_rcode(datasets = datasets, chunks = ch), "\n")[[1]]
+        strsplit(shiny::isolate(get_rcode(datasets = datasets, chunks = ch)), "\n")[[1]]
     )
   )
 })

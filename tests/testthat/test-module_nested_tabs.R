@@ -408,7 +408,7 @@ testthat::test_that("calculate_hashes returns the hash of the non Filtered datas
       Species = c("setosa", "versicolor")
     )
   )
-  datasets$set_filter_state(state = fs)
+  shiny::isolate(datasets$set_filter_state(state = fs))
 
   hashes <- calculate_hashes(datanames = c("iris"), datasets = datasets)
   testthat::expect_identical(hashes, list("iris" = "34844aba7bde36f5a34f6d8e39803508"))
