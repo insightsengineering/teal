@@ -1,4 +1,4 @@
-# teal 0.12.0.9019
+# teal 0.12.0.9020
 
 ### Major breaking changes
 
