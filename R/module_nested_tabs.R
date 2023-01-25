@@ -117,21 +117,9 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
 #' @inheritParams srv_tabs_with_filters
 #' @details
 #' This module calls recursively all elements of the `modules` returns one which
-#' is currently active. To determine which module is active see the diagram.
-#' \if{html}{\figure{uml_nested_tabs.jpg}{options: width="75\%" alt="Figure: uml_nested_tabs.jpg"}}
-#' \if{latex}{\figure{uml_nested_tabs.jpg}{options: width=7cm}}
-#' Above depicts hypothetical situation in which one has module structure defined in following way:
-#' ```
-#' + root
-#'   + tab1
-#'     + test1
-#'     + test2
-#'   + tab2
-#'     + test3
-#' ```
-#' * `teal_module` returns self as a active module
-#' * `teal_modules` returns module active within self which is determined by the `input$active_tab`.
-#' The choice of active module is done recursively (diagram from right to left).
+#' is currently active. \cr
+#' `teal_module` returns self as a active module.
+#' `teal_modules` also returns module active within self which is determined by the `input$active_tab`.
 #'
 #' @return `reactive` which returns the active module that corresponds to the selected tab
 #' @keywords internal
