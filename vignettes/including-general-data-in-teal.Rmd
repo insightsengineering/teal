@@ -23,7 +23,7 @@ app <- init(
     dataset("IRIS", iris, code = "IRIS <- iris"),
     dataset("CARS", mtcars, code = "CARS <- mtcars")
   ),
-  modules = modules(example_module())
+  modules = example_module()
 )
 
 if (interactive()) {
@@ -69,7 +69,7 @@ app <- init(
     fun_dataset_connector("PETS", fun = pet_generator, keys = "ID")
   ) %>%
     mutate_join_keys("PERSON", "PETS", c("ID" = "PERSON_ID")),
-  modules = modules(example_module())
+  modules = example_module()
 )
 
 if (interactive()) {

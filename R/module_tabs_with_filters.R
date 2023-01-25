@@ -14,6 +14,8 @@
 #' panel is inserted at the right of the modules at depth 1 and not at the leaves.
 #'
 #' @inheritParams ui_teal_with_splash
+#' @param modules (`teal_modules`) the modules which will be displayed in the teal application.
+#'   See [modules()] and [module()] for more details.
 #' @inheritParams init
 #' @param datasets (`FilteredData`)\cr
 #'   object to store filter state and filtered datasets, shared across modules. For more

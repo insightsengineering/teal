@@ -1,8 +1,8 @@
-# teal 0.12.0.9015
+# teal 0.12.0.9019
 
 ### Major breaking changes
 
-* The use of `datasets` argument in `teal` `modules` has been deprecated and will be removed in a future release. Please use `data` argument instead. `data` is of type `tdata`; see "Creating custom modules" vignettes and function documentation of `teal::new_tdata` for further details.
+* The use of `datasets` argument in `modules` has been deprecated and will be removed in a future release. Please use `data` argument instead. `data` is of type `tdata`; see "Creating custom modules" vignettes and function documentation of `teal::new_tdata` for further details.
 
 ### Breaking changes
 
@@ -19,6 +19,7 @@
 * Added R session information into a link in the footer of `teal` applications.
 * Added data hashing step using `rlang` instead of `digest` package to calculate the hash (which has been moved from `teal.data` and `teal.slice`). There is now an explicit hashing check in the reproducible code output.
 * Removed deprecated functions: `root_modules`, `default_filter`, `bookmarkableShinyApp`, as well as deprecated logging mechanism, including the functions `log_app_usage` and `.log`.
+* Updated the "Teal and Bootstrap Themes" vignette to provide more details customizing a `teal` app with `bslib::run_with_themer`.
 
 # teal 0.12.0
 
