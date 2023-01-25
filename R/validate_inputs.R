@@ -98,8 +98,9 @@
 #' if (interactive()) {
 #'   shinyApp(ui, server)
 #' }
-
+#'
 #' @export
+#'
 validate_inputs <- function(..., header = "Some inputs require attention") {
   dots <- list(...)
   if (!is_validators(dots)) stop("validate_inputs accepts validators or a list thereof")

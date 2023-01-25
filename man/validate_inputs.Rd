@@ -105,6 +105,7 @@ server <- function(input, output) {
 if (interactive()) {
   shinyApp(ui, server)
 }
+
 }
 \seealso{
 \code{\link[shinyvalidate:InputValidator]{shinyvalidate::InputValidator}}, \code{\link[shiny:validate]{shiny::validate}}
