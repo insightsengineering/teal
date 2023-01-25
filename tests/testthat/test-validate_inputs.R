@@ -7,297 +7,279 @@ testthat::test_that("invalid arguments raise errors", {
 })
 
 
-testthat::test_that(
-  "validate_inputs: disabled validators raise warnings (individual validators)",
-  code = {
-    server <- function(input, output, session) {
-      iv1 <- shinyvalidate::InputValidator$new()
-      iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
-      iv1$enable()
-      iv2 <- shinyvalidate::InputValidator$new()
-      iv2$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
-      values <- shiny::reactive({
-        validate_inputs(iv1, iv2)
-        list(
-          "letter" = input[["letter"]],
-          "number" = input[["number"]]
-        )
-      })
-    }
-
-    shiny::testServer(server, {
-      testthat::expect_output(
-        object = values(),
-        regexp = "\\[WARN\\].+Validator is disabled and will be omitted."
-      )
-    })
-  })
-
-
-testthat::test_that(
-  "validate_inputs_segregated: disabled validators raise warnings (validator list)",
-  code = {
-    server <- function(input, output, session) {
-      iv1 <- shinyvalidate::InputValidator$new()
-      iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
-      iv1$enable()
-      iv2 <- shinyvalidate::InputValidator$new()
-      iv2$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
-      values <- shiny::reactive({
-        validate_inputs(list(iv1, iv2))
-        list(
-          "letter" = input[["letter"]],
-          "number" = input[["number"]]
-        )
-      })
-    }
-
-    shiny::testServer(server, {
-      testthat::expect_output(
-        object = values(),
-        regexp = "\\[WARN\\].+Validator is disabled and will be omitted."
-      )
-    })
-  })
-
-
-testthat::test_that(
-  "validate_inputs_segregated: disabled validators raise warnings (nested validator list)",
-  code = {
-    server <- function(input, output, session) {
-      iv1 <- shinyvalidate::InputValidator$new()
-      iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
-      iv1$enable()
-      iv2 <- shinyvalidate::InputValidator$new()
-      iv2$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
-      values <- shiny::reactive({
-        validate_inputs(list(list(iv1), list(iv2)))
-        list(
-          "letter" = input[["letter"]],
-          "number" = input[["number"]]
-        )
-      })
-    }
-
-    shiny::testServer(server, {
-      testthat::expect_output(
-        object = values(),
-        regexp = "\\[WARN\\].+Validator is disabled and will be omitted."
-      )
-    })
-  })
-
-
-testthat::test_that(
-  "validate_inputs: valid inputs produce desired output (individual validators)",
-  code = {
-    server <- function(input, output, session) {
-      iv <- shinyvalidate::InputValidator$new()
-      iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
-      iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
-      iv$enable()
-      values <- shiny::reactive({
-        validate_inputs(iv)
-        list(
-          "letter" = input[["letter"]],
-          "number" = input[["number"]]
-        )
-      })
-    }
-
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "A",
-        "number" = 2L
-      )
-      testthat::expect_identical(values(), list(
+testthat::test_that("disabled validators raise warnings (individual validators)", {
+  server <- function(input, output, session) {
+    iv1 <- shinyvalidate::InputValidator$new()
+    iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
+    iv1$enable()
+    iv2 <- shinyvalidate::InputValidator$new()
+    iv2$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
+    values <- shiny::reactive({
+      validate_inputs(iv1, iv2)
+      list(
         "letter" = input[["letter"]],
         "number" = input[["number"]]
-      ))
-    })
-  })
-
-
-testthat::test_that(
-  "validate_inputs_segregated: valid inputs produce desired output (validator list)",
-  code = {
-    server <- function(input, output, session) {
-      iv <- shinyvalidate::InputValidator$new()
-      iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
-      iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
-      iv$enable()
-      values <- shiny::reactive({
-        validate_inputs(list(iv))
-        list(
-          "letter" = input[["letter"]],
-          "number" = input[["number"]]
-        )
-      })
-    }
-
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "A",
-        "number" = 2L
       )
-      testthat::expect_identical(values(), list(
+    })
+  }
+
+  shiny::testServer(server, {
+    testthat::expect_output(
+      object = values(),
+      regexp = "\\[WARN\\].+Validator is disabled and will be omitted."
+    )
+  })
+})
+
+
+testthat::test_that("disabled validators raise warnings (validator list)", {
+  server <- function(input, output, session) {
+    iv1 <- shinyvalidate::InputValidator$new()
+    iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
+    iv1$enable()
+    iv2 <- shinyvalidate::InputValidator$new()
+    iv2$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
+    values <- shiny::reactive({
+      validate_inputs(list(iv1, iv2))
+      list(
         "letter" = input[["letter"]],
         "number" = input[["number"]]
-      ))
-    })
-  })
-
-
-testthat::test_that(
-  "validate_inputs_segregated: valid inputs produce desired output (nested validator list)",
-  code = {
-    server <- function(input, output, session) {
-      iv <- shinyvalidate::InputValidator$new()
-      iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
-      iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
-      iv$enable()
-      values <- shiny::reactive({
-        validate_inputs(list(list(iv)))
-        list(
-          "letter" = input[["letter"]],
-          "number" = input[["number"]]
-        )
-      })
-    }
-
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "A",
-        "number" = 2L
       )
-      testthat::expect_identical(values(), list(
+    })
+  }
+
+  shiny::testServer(server, {
+    testthat::expect_output(
+      object = values(),
+      regexp = "\\[WARN\\].+Validator is disabled and will be omitted."
+    )
+  })
+})
+
+
+testthat::test_that("disabled validators raise warnings (nested validator list)", {
+  server <- function(input, output, session) {
+    iv1 <- shinyvalidate::InputValidator$new()
+    iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
+    iv1$enable()
+    iv2 <- shinyvalidate::InputValidator$new()
+    iv2$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
+    values <- shiny::reactive({
+      validate_inputs(list(list(iv1), list(iv2)))
+      list(
         "letter" = input[["letter"]],
         "number" = input[["number"]]
-      ))
+      )
     })
+  }
+
+  shiny::testServer(server, {
+    testthat::expect_output(
+      object = values(),
+      regexp = "\\[WARN\\].+Validator is disabled and will be omitted."
+    )
   })
+})
 
 
-testthat::test_that(
-  "validate_inputs: invalid inputs raise errors in output (individual validators)",
-  code = {
-    server <- function(input, output, session) {
-      iv <- shinyvalidate::InputValidator$new()
-      iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
-      iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
-      iv$enable()
-      values <- shiny::reactive({
-        validate_inputs(iv)
-        list(
-          "letter" = input[["letter"]],
-          "number" = input[["number"]]
-        )
-      })
-    }
+testthat::test_that("valid inputs produce desired output (individual validators)", {
+  server <- function(input, output, session) {
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
+    iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
+    iv$enable()
+    values <- shiny::reactive({
+      validate_inputs(iv)
+      list(
+        "letter" = input[["letter"]],
+        "number" = input[["number"]]
+      )
+    })
+  }
 
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "a",
-        "number" = 2L
-      )
-      testthat::expect_error(values(), "choose a capital letter")
-    })
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "A",
-        "number" = 1L
-      )
-      testthat::expect_error(values(), "choose an even number")
-    })
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "a",
-        "number" = 1L
-      )
-      testthat::expect_error(values(), "choose a capital letter.+choose an even number")
-    })
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "A",
+      "number" = 2L
+    )
+    testthat::expect_identical(values(), list(
+      "letter" = input[["letter"]],
+      "number" = input[["number"]]
+    ))
   })
+})
 
 
-testthat::test_that(
-  "validate_inputs_segregated: invalid inputs raise errors in output (validator list)",
-  code = {
-    server <- function(input, output, session) {
-      iv <- shinyvalidate::InputValidator$new()
-      iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
-      iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
-      iv$enable()
-      values <- shiny::reactive({
-        validate_inputs(list(iv))
-        list(
-          "letter" = input[["letter"]],
-          "number" = input[["number"]]
-        )
-      })
-    }
+testthat::test_that("valid inputs produce desired output (validator list)", {
+  server <- function(input, output, session) {
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
+    iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
+    iv$enable()
+    values <- shiny::reactive({
+      validate_inputs(list(iv))
+      list(
+        "letter" = input[["letter"]],
+        "number" = input[["number"]]
+      )
+    })
+  }
 
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "a",
-        "number" = 2L
-      )
-      testthat::expect_error(values(), "choose a capital letter")
-    })
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "A",
-        "number" = 1L
-      )
-      testthat::expect_error(values(), "choose an even number")
-    })
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "a",
-        "number" = 1L
-      )
-      testthat::expect_error(values(), "choose a capital letter.+choose an even number")
-    })
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "A",
+      "number" = 2L
+    )
+    testthat::expect_identical(values(), list(
+      "letter" = input[["letter"]],
+      "number" = input[["number"]]
+    ))
   })
+})
 
-testthat::test_that(
-  "validate_inputs_segregated: invalid inputs raise errors in output (nested validator list)",
-  code = {
-    server <- function(input, output, session) {
-      iv <- shinyvalidate::InputValidator$new()
-      iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
-      iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
-      iv$enable()
-      values <- shiny::reactive({
-        validate_inputs(list(iv))
-        list(
-          "letter" = input[["letter"]],
-          "number" = input[["number"]]
-        )
-      })
-    }
 
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "a",
-        "number" = 2L
+testthat::test_that("valid inputs produce desired output (nested validator list)", {
+  server <- function(input, output, session) {
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
+    iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
+    iv$enable()
+    values <- shiny::reactive({
+      validate_inputs(list(list(iv)))
+      list(
+        "letter" = input[["letter"]],
+        "number" = input[["number"]]
       )
-      testthat::expect_error(values(), "choose a capital letter")
     })
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "A",
-        "number" = 1L
-      )
-      testthat::expect_error(values(), "choose an even number")
-    })
-    shiny::testServer(server, {
-      session$setInputs(
-        "letter" = "a",
-        "number" = 1L
-      )
-      testthat::expect_error(values(), "choose a capital letter.+choose an even number")
-    })
+  }
+
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "A",
+      "number" = 2L
+    )
+    testthat::expect_identical(values(), list(
+      "letter" = input[["letter"]],
+      "number" = input[["number"]]
+    ))
   })
+})
+
+
+testthat::test_that("invalid inputs raise errors in output (individual validators)", {
+  server <- function(input, output, session) {
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
+    iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
+    iv$enable()
+    values <- shiny::reactive({
+      validate_inputs(iv)
+      list(
+        "letter" = input[["letter"]],
+        "number" = input[["number"]]
+      )
+    })
+  }
+
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "a",
+      "number" = 2L
+    )
+    testthat::expect_error(values(), "choose a capital letter")
+  })
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "A",
+      "number" = 1L
+    )
+    testthat::expect_error(values(), "choose an even number")
+  })
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "a",
+      "number" = 1L
+    )
+    testthat::expect_error(values(), "choose a capital letter.+choose an even number")
+  })
+})
+
+
+testthat::test_that("invalid inputs raise errors in output (validator list)", {
+  server <- function(input, output, session) {
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
+    iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
+    iv$enable()
+    values <- shiny::reactive({
+      validate_inputs(list(iv))
+      list(
+        "letter" = input[["letter"]],
+        "number" = input[["number"]]
+      )
+    })
+  }
+
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "a",
+      "number" = 2L
+    )
+    testthat::expect_error(values(), "choose a capital letter")
+  })
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "A",
+      "number" = 1L
+    )
+    testthat::expect_error(values(), "choose an even number")
+  })
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "a",
+      "number" = 1L
+    )
+    testthat::expect_error(values(), "choose a capital letter.+choose an even number")
+  })
+})
+
+testthat::test_that("invalid inputs raise errors in output (nested validator list)", {
+  server <- function(input, output, session) {
+    iv <- shinyvalidate::InputValidator$new()
+    iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
+    iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
+    iv$enable()
+    values <- shiny::reactive({
+      validate_inputs(list(iv))
+      list(
+        "letter" = input[["letter"]],
+        "number" = input[["number"]]
+      )
+    })
+  }
+
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "a",
+      "number" = 2L
+    )
+    testthat::expect_error(values(), "choose a capital letter")
+  })
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "A",
+      "number" = 1L
+    )
+    testthat::expect_error(values(), "choose an even number")
+  })
+  shiny::testServer(server, {
+    session$setInputs(
+      "letter" = "a",
+      "number" = 1L
+    )
+    testthat::expect_error(values(), "choose a capital letter.+choose an even number")
+  })
+})
 
 
 testthat::test_that("error message is formatted properly", {
