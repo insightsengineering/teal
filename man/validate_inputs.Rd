@@ -32,7 +32,7 @@ are extracted and placed in one validation message that is passed to a \code{val
 This way the input validator messages are repeated in the output.
 
 The \code{...} argument accepts any number of \code{InputValidator} objects
-or an (possibly infinitely) nested list of such objects.
+or a nested list of such objects.
 If validators are passed directly, all their messages are printed together
 under one (optional) header message specified by \code{header}. If a list is passed,
 messages are grouped by validator. The list's names are used as headers

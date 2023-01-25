@@ -15,7 +15,7 @@
 #' This way the input validator messages are repeated in the output.
 #'
 #' The `...` argument accepts any number of `InputValidator` objects
-#' or an (possibly infinitely) nested list of such objects.
+#' or a nested list of such objects.
 #' If validators are passed directly, all their messages are printed together
 #' under one (optional) header message specified by `header`. If a list is passed,
 #' messages are grouped by validator. The list's names are used as headers
@@ -126,6 +126,7 @@ is_validators <- function(x) {
 #' @keywords internal
 # test if an InputValidator object is enabled
 # returns logical of length 1
+# official method requested at https://github.com/rstudio/shinyvalidate/issues/64
 validator_enabled <- function(x) {
   x$.__enclos_env__$private$enabled
 }
