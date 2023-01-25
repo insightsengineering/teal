@@ -250,7 +250,7 @@ testthat::test_that("invalid inputs raise errors in output (nested validator lis
     iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
     iv$enable()
     values <- shiny::reactive({
-      validate_inputs(list(iv))
+      validate_inputs(list(list(iv)))
       list(
         "letter" = input[["letter"]],
         "number" = input[["number"]]
@@ -450,6 +450,25 @@ testthat::test_that("error message is formatted properly", {
         "choose an even number",
         "\n",
         "Header message 2\n",
+        "choose a color",
+        "choose a value between 0.5 and 3",
+        "\n"
+      ),
+      collapse = "\n"
+    ))
+
+    errmess <- tryCatch(
+      validate_inputs(list(
+        iv,
+        "Header message" = iv_par
+      )),
+      error = function(e) e$message
+    )
+    testthat::expect_identical(errmess, paste(
+      c(
+        "choose a capital letter",
+        "choose an even number",
+        "Header message\n",
         "choose a color",
         "choose a value between 0.5 and 3",
         "\n"
