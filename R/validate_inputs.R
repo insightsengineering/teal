@@ -114,7 +114,8 @@ validate_inputs <- function(..., header = "Some inputs require attention") {
 ### internal functions
 
 #' @keywords internal
-# advanced object type test
+# recursive object type test
+# returns logical of length 1
 is_validators <- function(x) {
   all(if (is.list(x)) unlist(lapply(x, is_validators)) else inherits(x, "InputValidator"))
 }
@@ -127,6 +128,18 @@ validator_enabled <- function(x) {
 }
 
 #' @keywords internal
+# recursively extract messages from validator list
+# returns character vector or a list of character vectors, possibly nested and named
+extract_validator <- function(iv, header) {
+  if (inherits(iv, "InputValidator")) {
+    add_header(gather_messages(iv), header)
+  } else {
+    if (is.null(names(iv))) names(iv) <- rep("", length(iv))
+    mapply(extract_validator, iv = iv, header = names(iv), SIMPLIFY = FALSE)
+  }
+}
+
+#' @keywords internal
 # collate failing messages from validator
 # returns list
 gather_messages <- function(iv) {
@@ -135,7 +148,7 @@ gather_messages <- function(iv) {
     failing_inputs <- Filter(Negate(is.null), status)
     unique(lapply(failing_inputs, function(x) x[["message"]]))
   } else {
-    logger::log_warn("Validators is disabled and will be omitted.")
+    logger::log_warn("Validator is disabled and will be omitted.")
     list()
   }
 }
@@ -148,17 +161,6 @@ add_header <- function(messages, header = "") {
     ans <- c(paste0(header, "\n"), ans, "\n")
   }
   ans
-}
-
-#' @keywords internal
-# recursively extract messages from validator list
-extract_validator <- function(iv, header) {
-  if (inherits(iv, "InputValidator")) {
-    add_header(gather_messages(iv), header)
-  } else {
-    if (is.null(names(iv))) names(iv) <- rep("", length(iv))
-    mapply(extract_validator, iv = iv, header = names(iv), SIMPLIFY = FALSE)
-  }
 }
 
 #' @keywords internal
