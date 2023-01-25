@@ -2,20 +2,16 @@
 % Please edit documentation in R/validate_inputs.R
 \name{validate_inputs}
 \alias{validate_inputs}
-\alias{validate_inputs_segregated}
-\title{Send input validation messages to output}
+\title{Send input validation messages to output.}
 \usage{
 validate_inputs(..., header = "Some inputs require attention")
-
-validate_inputs_segregated(validators, ...)
 }
 \arguments{
-\item{...}{for \code{validate_inputs} any number of \code{InputValidator} objects \cr
-for \code{validate_inputs_segregated} arguments passed to \code{validate}}
+\item{...}{either any number of \code{InputValidator} objects
+or an optionally named, possibly nested \code{list} of \code{InputValidator}
+objects, see \code{Details}}
 
-\item{header}{\code{character(1)} optional generic validation message}
-
-\item{validators}{optionally named \code{list} of \code{InputValidator} objects, see \code{Details}}
+\item{header}{\code{character(1)} generic validation message; set to NULL to omit}
 }
 \value{
 Returns NULL if the final validation call passes and a \code{shiny.silent.error} if it fails.
@@ -30,16 +26,18 @@ certain conditions are met and to print a validation message in place
 of the output element.
 \code{shinyvalidate::InputValidator} allows to validate input elements
 and to display specific messages in their respective input widgets.
-This function is a hybrid solution. Given an \code{InputValidator} object,
-it extracts messages from inputs that fail validation and places them all in one
-validation message that is passed to a \code{validate}/\code{need} call.
+\code{validate_inputs} provides a hybrid solution.
+Given an \code{InputValidator} object, messages corresponding to inputs that fail validation
+are extracted and placed in one validation message that is passed to a \code{validate}/\code{need} call.
 This way the input validator messages are repeated in the output.
 
-\code{validate_inputs} accepts an arbitrary number of \code{InputValidator}s
-and prints all messages together, adding one (optional) header.
-\code{validate_inputs_segregated} accepts a list of \code{InputValidator}s
-and prints messages grouped by validator. If elements of \code{validators} are named,
-the names are used as headers for their respective message groups.
+The \code{...} argument accepts any number of \code{InputValidator} objects
+or an (possibly infinitely) nested list of such objects.
+If validators are passed directly, all their messages are printed together
+under one (optional) header message specified by \code{header}. If a list is passed,
+messages are grouped by validator. The list's names are used as headers
+for their respective message groups.
+If neither of the nested list elements is named, a header message is taken from \code{header}.
 }
 \examples{
 library(shiny)
@@ -91,7 +89,7 @@ server <- function(input, output) {
         validate_inputs(iv_par, header = "Set proper graphical parameters")
       },
       "combined" = validate_inputs(iv, iv_par),
-      "grouped" = validate_inputs_segregated(list(
+      "grouped" = validate_inputs(list(
         "Some inputs require attention" = iv,
         "Set proper graphical parameters" = iv_par
       ))
@@ -109,5 +107,5 @@ if (interactive()) {
 }
 }
 \seealso{
-\code{\link[shinyvalidate:InputValidator]{shinyvalidate::InputValidator}} \code{\link[shiny:validate]{shiny::validate}}
+\code{\link[shinyvalidate:InputValidator]{shinyvalidate::InputValidator}}, \code{\link[shiny:validate]{shiny::validate}}
 }
