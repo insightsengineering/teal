@@ -1,4 +1,4 @@
-# teal 0.12.0.9019
+# teal 0.12.0.9020
 
 ### Major breaking changes
 
@@ -10,7 +10,7 @@
 
 ### New features
 
-* Added the `validate_inputs` and `validate_inputs_segregated` functions that transfer input validation messages to app output.
+* Added the `validate_inputs` function that transfers input validation messages to app output.
 * `modules` argument of `init` accepts `teal_module` type of object. There is no need to wrap up a single module in `modules()` or `list()`.
 
 ### Miscellaneous
