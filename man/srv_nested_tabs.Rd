@@ -46,21 +46,7 @@ Server function that returns currently active module
 \details{
 This module calls recursively all elements of the \code{modules} returns one which
 is currently active. \cr
-To determine which module is active, please see the diagram: \cr
-\if{html}{\figure{umlnestedtabs.jpg}{options: width="75\%" alt="Figure: umlnestedtabs.jpg"}}
-\if{latex}{\figure{umlnestedtabs.jpg}{options: width=7cm}} \cr
-Above depicts hypothetical situation in which one has module structure defined in following way:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{+ root
-  + tab1
-    + test1
-    + test2
-  + tab2
-    + test3
-}\if{html}{\out{</div>}}
-
 \code{teal_module} returns self as a active module.
 \code{teal_modules} also returns module active within self which is determined by the \code{input$active_tab}.
-The choice of active module is done recursively (diagram from right to left).
 }
 \keyword{internal}
