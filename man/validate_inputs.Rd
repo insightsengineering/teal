@@ -8,7 +8,8 @@ validate_inputs(..., header = "Some inputs require attention")
 }
 \arguments{
 \item{...}{either any number of \code{InputValidator} objects
-or an optionally named \code{list} of \code{InputValidator} objects, see \code{Details}}
+or an optionally named, possibly nested \code{list} of \code{InputValidator}
+objects, see \code{Details}}
 
 \item{header}{\code{character(1)} generic validation message; set to NULL to omit}
 }
@@ -30,11 +31,13 @@ Given an \code{InputValidator} object, messages corresponding to inputs that fai
 are extracted and placed in one validation message that is passed to a \code{validate}/\code{need} call.
 This way the input validator messages are repeated in the output.
 
-The \code{...} argument accepts \code{InputValidators} directly or wrapped in a list.
+The \code{...} argument accepts any number of \code{InputValidator} objects
+or an (possibly infinitely) nested list of such objects.
 If validators are passed directly, all their messages are printed together
 under one (optional) header message specified by \code{header}. If a list is passed,
 messages are grouped by validator. The list's names are used as headers
 for their respective message groups.
+If neither of the nested list elements is named, a header message is taken from \code{header}.
 }
 \examples{
 library(shiny)

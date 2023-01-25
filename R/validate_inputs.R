@@ -14,14 +14,17 @@
 #' are extracted and placed in one validation message that is passed to a `validate`/`need` call.
 #' This way the input validator messages are repeated in the output.
 #'
-#' The `...` argument accepts `InputValidators` directly or wrapped in a list.
+#' The `...` argument accepts any number of `InputValidator` objects
+#' or an (possibly infinitely) nested list of such objects.
 #' If validators are passed directly, all their messages are printed together
 #' under one (optional) header message specified by `header`. If a list is passed,
 #' messages are grouped by validator. The list's names are used as headers
 #' for their respective message groups.
+#' If neither of the nested list elements is named, a header message is taken from `header`.
 #'
 #' @param ... either any number of `InputValidator` objects
-#'            or an optionally named `list` of `InputValidator` objects, see `Details`
+#'            or an optionally named, possibly nested `list` of `InputValidator`
+#'            objects, see `Details`
 #' @param header `character(1)` generic validation message; set to NULL to omit
 #'
 #' @return
