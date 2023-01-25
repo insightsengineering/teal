@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage line-rate="0.755873340143003" branch-rate="0" lines-covered="740" lines-valid="979" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2023-01-25 13:56:53">
+<coverage line-rate="0.755873340143003" branch-rate="0" lines-covered="740" lines-valid="979" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2023-01-25 14:58:21">
   <sources/>
   <packages>
     <package name="teal" line-rate="0.755873340143003" branch-rate="0" complexity="0">
@@ -2100,98 +2100,98 @@
           <methods>
             <method name="validate_inputs" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="105" hits="35" branch="false"/>
+                <line number="105" hits="36" branch="false"/>
                 <line number="106" hits="2" branch="false"/>
-                <line number="108" hits="33" branch="false"/>
-                <line number="109" hits="33" branch="false"/>
+                <line number="108" hits="34" branch="false"/>
+                <line number="109" hits="34" branch="false"/>
                 <line number="110" hits="29" branch="false"/>
-                <line number="111" hits="33" branch="false"/>
-                <line number="112" hits="4" branch="false"/>
-                <line number="113" hits="33" branch="false"/>
-                <line number="115" hits="33" branch="false"/>
+                <line number="111" hits="34" branch="false"/>
+                <line number="112" hits="5" branch="false"/>
+                <line number="113" hits="34" branch="false"/>
+                <line number="115" hits="34" branch="false"/>
               </lines>
             </method>
             <method name="is_validators" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="124" hits="111" branch="false"/>
+                <line number="124" hits="118" branch="false"/>
               </lines>
             </method>
             <method name="validator_enabled" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="132" hits="47" branch="false"/>
+                <line number="132" hits="49" branch="false"/>
               </lines>
             </method>
             <method name="extract_validator" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="139" hits="106" branch="false"/>
-                <line number="140" hits="47" branch="false"/>
-                <line number="142" hits="54" branch="false"/>
-                <line number="143" hits="59" branch="false"/>
+                <line number="139" hits="113" branch="false"/>
+                <line number="140" hits="49" branch="false"/>
+                <line number="142" hits="58" branch="false"/>
+                <line number="143" hits="64" branch="false"/>
               </lines>
             </method>
             <method name="gather_messages" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="151" hits="47" branch="false"/>
-                <line number="152" hits="44" branch="false"/>
-                <line number="153" hits="44" branch="false"/>
-                <line number="154" hits="44" branch="false"/>
+                <line number="151" hits="49" branch="false"/>
+                <line number="152" hits="46" branch="false"/>
+                <line number="153" hits="46" branch="false"/>
+                <line number="154" hits="46" branch="false"/>
                 <line number="156" hits="3" branch="false"/>
                 <line number="157" hits="3" branch="false"/>
               </lines>
             </method>
             <method name="add_header" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="164" hits="76" branch="false"/>
-                <line number="165" hits="76" branch="false"/>
-                <line number="166" hits="30" branch="false"/>
-                <line number="168" hits="76" branch="false"/>
+                <line number="164" hits="78" branch="false"/>
+                <line number="165" hits="78" branch="false"/>
+                <line number="166" hits="31" branch="false"/>
+                <line number="168" hits="78" branch="false"/>
               </lines>
             </method>
             <method name="any_names" signature="" line-rate="1" branch-rate="0">
               <lines>
-                <line number="174" hits="98" branch="false"/>
-                <line number="175" hits="98" branch="false"/>
-                <line number="176" hits="4" branch="false"/>
-                <line number="177" hits="98" branch="false"/>
+                <line number="174" hits="103" branch="false"/>
+                <line number="175" hits="103" branch="false"/>
+                <line number="176" hits="5" branch="false"/>
+                <line number="177" hits="103" branch="false"/>
                 <line number="178" hits="40" branch="false"/>
-                <line number="179" hits="98" branch="false"/>
-                <line number="180" hits="98" branch="false"/>
+                <line number="179" hits="103" branch="false"/>
+                <line number="180" hits="103" branch="false"/>
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="105" hits="35" branch="false"/>
+            <line number="105" hits="36" branch="false"/>
             <line number="106" hits="2" branch="false"/>
-            <line number="108" hits="33" branch="false"/>
-            <line number="109" hits="33" branch="false"/>
+            <line number="108" hits="34" branch="false"/>
+            <line number="109" hits="34" branch="false"/>
             <line number="110" hits="29" branch="false"/>
-            <line number="111" hits="33" branch="false"/>
-            <line number="112" hits="4" branch="false"/>
-            <line number="113" hits="33" branch="false"/>
-            <line number="115" hits="33" branch="false"/>
-            <line number="124" hits="111" branch="false"/>
-            <line number="132" hits="47" branch="false"/>
-            <line number="139" hits="106" branch="false"/>
-            <line number="140" hits="47" branch="false"/>
-            <line number="142" hits="54" branch="false"/>
-            <line number="143" hits="59" branch="false"/>
-            <line number="151" hits="47" branch="false"/>
-            <line number="152" hits="44" branch="false"/>
-            <line number="153" hits="44" branch="false"/>
-            <line number="154" hits="44" branch="false"/>
+            <line number="111" hits="34" branch="false"/>
+            <line number="112" hits="5" branch="false"/>
+            <line number="113" hits="34" branch="false"/>
+            <line number="115" hits="34" branch="false"/>
+            <line number="124" hits="118" branch="false"/>
+            <line number="132" hits="49" branch="false"/>
+            <line number="139" hits="113" branch="false"/>
+            <line number="140" hits="49" branch="false"/>
+            <line number="142" hits="58" branch="false"/>
+            <line number="143" hits="64" branch="false"/>
+            <line number="151" hits="49" branch="false"/>
+            <line number="152" hits="46" branch="false"/>
+            <line number="153" hits="46" branch="false"/>
+            <line number="154" hits="46" branch="false"/>
             <line number="156" hits="3" branch="false"/>
             <line number="157" hits="3" branch="false"/>
-            <line number="164" hits="76" branch="false"/>
-            <line number="165" hits="76" branch="false"/>
-            <line number="166" hits="30" branch="false"/>
-            <line number="168" hits="76" branch="false"/>
-            <line number="174" hits="98" branch="false"/>
-            <line number="175" hits="98" branch="false"/>
-            <line number="176" hits="4" branch="false"/>
-            <line number="177" hits="98" branch="false"/>
+            <line number="164" hits="78" branch="false"/>
+            <line number="165" hits="78" branch="false"/>
+            <line number="166" hits="31" branch="false"/>
+            <line number="168" hits="78" branch="false"/>
+            <line number="174" hits="103" branch="false"/>
+            <line number="175" hits="103" branch="false"/>
+            <line number="176" hits="5" branch="false"/>
+            <line number="177" hits="103" branch="false"/>
             <line number="178" hits="40" branch="false"/>
-            <line number="179" hits="98" branch="false"/>
-            <line number="180" hits="98" branch="false"/>
+            <line number="179" hits="103" branch="false"/>
+            <line number="180" hits="103" branch="false"/>
           </lines>
         </class>
         <class name="validations.R" filename="R/validations.R" line-rate="0.370967741935484" branch-rate="0" complexity="0">
