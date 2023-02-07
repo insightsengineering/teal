@@ -173,6 +173,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
 
     observeEvent(active_module(), {
       active_id(attr(active_module(), "name"))
+      # TODO remove this print
       print(sprintf("Active ID has changed to %s", active_id()))
     })
 

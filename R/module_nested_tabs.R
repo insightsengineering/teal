@@ -167,12 +167,12 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter, active
         active_mod <- modules_reactive[[1]]()
         structure(
           active_mod,
-          name = attr(active_mod, "name"))  #if (id == "root") attr(active_mod, "name") else names(modules_reactive))
+          name = attr(active_mod, "name"))
       } else {
         # switch to active tab
         req(input$active_tab)
         active_mod <- modules_reactive[[input$active_tab]]()
-        active_name <- attr(active_mod, "name")  #if (id == "root") attr(active_mod, "name") else input$active_tab
+        active_name <- attr(active_mod, "name")
         structure(active_mod, name = active_name)
       }
     })
