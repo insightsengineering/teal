@@ -100,7 +100,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   #TODO we want to add deprecation, you should not have access to data in ui
   # and handle active_id here
   if (is_arg_used(modules$ui, "data")) {
-    data <- .datasets_to_data(modules, datasets)
+    data <- .datasets_to_data(modules, datasets, id)
     args <- c(args, data = list(data))
   }
 
@@ -204,7 +204,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter, active_
   }
 
   if (is_arg_used(modules$server, "data")) {
-    data <- .datasets_to_data(modules, datasets)
+    data <- .datasets_to_data(modules, datasets, id, active_id)
     args <- c(args, data = list(data))
   }
 
@@ -244,7 +244,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter, active_
 #' - `metadata` (`list`) containing metadata of datasets.
 #'
 #' @keywords internal
-.datasets_to_data <- function(module, datasets) {
+.datasets_to_data <- function(module, datasets, id, active_id = reactive(id)) {
   datanames <- if (identical("all", module$filter) || is.null(module$filter)) {
     datasets$datanames()
   } else {
@@ -256,8 +256,19 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter, active_
     datanames,
     simplify = FALSE,
     function(x) {
+
+      data_rv <- reactiveVal(data.frame()) #how to make it not trigger on load
+
+      observeEvent(active_id(), {
+        if(active_id() == id) data_rv(datasets$get_data(x, filtered = TRUE))
+      })
+
+      observeEvent(datasets$get_data(x, filtered = TRUE), {
+        if (active_id() == id) data_rv(datasets$get_data(x, filtered = TRUE))
+      })
+
       reactive({
-        datasets$get_data(x, filtered = TRUE)
+        data_rv()
       })
     }
   )
