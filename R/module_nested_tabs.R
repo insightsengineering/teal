@@ -256,16 +256,14 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter, active_
     datanames,
     simplify = FALSE,
     function(x) {
-
-      data_rv <- reactiveVal(data.frame()) #how to make it not trigger on load
-
-      observeEvent(active_id(), {
+      data_rv <- reactiveVal(NULL)
+      observeEvent(active_id(),
         if(active_id() == id) data_rv(datasets$get_data(x, filtered = TRUE))
-      })
+      )
 
-      observeEvent(datasets$get_data(x, filtered = TRUE), {
+      observeEvent(datasets$get_data(x, filtered = TRUE),
         if (active_id() == id) data_rv(datasets$get_data(x, filtered = TRUE))
-      })
+      )
 
       reactive({
         data_rv()
