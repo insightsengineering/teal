@@ -256,21 +256,13 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter, active_
     datanames,
     simplify = FALSE,
     function(x) {
-      # TODO instead of being NULL it should be a shiny-error and the tdata constructor should cope with that?
-      # as although observers in modules can cope with data[[]]() being NULL, they have not been designed
-      # to work like that, much better ot be shiny error so the reactive chain stops
-      data_rv <- reactiveVal(NULL)
-
-      observeEvent(active_id(),
-        if(active_id() == id) data_rv(datasets$get_data(x, filtered = TRUE))
-      )
-
-      observeEvent(datasets$get_data(x, filtered = TRUE),
-        if (active_id() == id) data_rv(datasets$get_data(x, filtered = TRUE))
-      )
-
+      # TODO we could make this smarter to not re-trigger when
+      # datasets$get_data(x, filtered = TRUE) invalidated but does
+      # not change value, i.e. when a new filter is added but doesn't
+      # change the filtered data
       reactive({
-        data_rv()
+        req(active_id() == id)
+        datasets$get_data(x, filtered = TRUE)
       })
     }
   )

@@ -62,13 +62,23 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
     if (!is.reactive(data[[x]])) {
       data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
     } else {
-      isolate(
-        checkmate::assert_multi_class(
-          data[[x]](), c("data.frame", "MultiAssayExperiment"),
-          .var.name = "data",
-          null.ok = TRUE # TODO instead of NULL should be allowed to be a shiny validate error
+      isolate({ # TODO add tests to cover this case
+        is_valid_reactive <- tryCatch(
+          {
+            data[[x]]()
+            TRUE
+          },
+          error = function(cond) {
+            FALSE
+          }
         )
-      )
+        if (is_valid_reactive) {
+          checkmate::assert_multi_class(
+            data[[x]](), c("data.frame", "MultiAssayExperiment"),
+            .var.name = "data"
+          )
+        }
+      })
     }
   }
 
