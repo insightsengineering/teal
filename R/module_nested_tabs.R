@@ -98,7 +98,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
 
 
   #TODO we want to add deprecation, you should not have access to data in ui
-  # and handle active_id here
+  # and handle active_id here (modules e.g. missing data do still use it)
   if (is_arg_used(modules$ui, "data")) {
     data <- .datasets_to_data(modules, datasets, id)
     args <- c(args, data = list(data))
@@ -257,6 +257,8 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter, active_
     simplify = FALSE,
     function(x) {
       # TODO instead of being NULL it should be a shiny-error and the tdata constructor should cope with that?
+      # as although observers in modules can cope with data[[]]() being NULL, they have not been designed
+      # to work like that, much better ot be shiny error so the reactive chain stops
       data_rv <- reactiveVal(NULL)
 
       observeEvent(active_id(),
