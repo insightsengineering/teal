@@ -66,7 +66,7 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
         checkmate::assert_multi_class(
           data[[x]](), c("data.frame", "MultiAssayExperiment"),
           .var.name = "data",
-          null.ok = TRUE
+          null.ok = TRUE # TODO instead of NULL should be allowed to be a shiny validate error
         )
       )
     }

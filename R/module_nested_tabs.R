@@ -256,7 +256,9 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter, active_
     datanames,
     simplify = FALSE,
     function(x) {
+      # TODO instead of being NULL it should be a shiny-error and the tdata constructor should cope with that?
       data_rv <- reactiveVal(NULL)
+
       observeEvent(active_id(),
         if(active_id() == id) data_rv(datasets$get_data(x, filtered = TRUE))
       )
