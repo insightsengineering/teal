@@ -182,3 +182,10 @@ get_metadata.tdata <- function(data, dataname) {
 get_metadata.default <- function(data, dataname) {
   stop("get_metadata function not implemented for this object")
 }
+
+#' Function to call data elements of a `tdata` object
+#' @param data `tdata` - object to extract the data from
+#' @export
+req_tdata <- function(data) {
+  lapply(data, function(x) x())
+}
