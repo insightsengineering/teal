@@ -23,6 +23,8 @@ jobs:
     uses: insightsengineering/r.pkg.template/.github/workflows/pkgdown.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+    with:
+      default-landing-page: latest-tag
   validation:
     name: R Package Validation report 📃
     needs: release
