@@ -97,7 +97,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   }
 
 
-  #TODO we want to add deprecation, you should not have access to data in ui
+  # TODO we want to add deprecation, you should not have access to data in ui
   # and handle active_id here (modules e.g. missing data do still use it)
   if (is_arg_used(modules$ui, "data")) {
     data <- .datasets_to_data(modules, datasets, id)
@@ -167,7 +167,8 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter, active
         active_mod <- modules_reactive[[1]]()
         structure(
           active_mod,
-          name = attr(active_mod, "name"))
+          name = attr(active_mod, "name")
+        )
       } else {
         # switch to active tab
         req(input$active_tab)

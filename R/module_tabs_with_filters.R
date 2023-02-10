@@ -163,7 +163,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
     }
 
     active_id <- reactiveVal({
-      if(is(modules$children[[1]], "teal_modules")) { #TODO make generic
+      if (is(modules$children[[1]], "teal_modules")) { # TODO make generic
         names(modules$children[[1]]$children)[[1]]
       }
       names(modules$children)[[1]]
