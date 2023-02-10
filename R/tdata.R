@@ -62,12 +62,23 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
     if (!is.reactive(data[[x]])) {
       data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
     } else {
-      isolate(
-        checkmate::assert_multi_class(
-          data[[x]](), c("data.frame", "MultiAssayExperiment"),
-          .var.name = "data"
+      isolate({ # TODO add tests to cover this case
+        is_valid_reactive <- tryCatch(
+          {
+            data[[x]]()
+            TRUE
+          },
+          error = function(cond) {
+            FALSE
+          }
         )
-      )
+        if (is_valid_reactive) {
+          checkmate::assert_multi_class(
+            data[[x]](), c("data.frame", "MultiAssayExperiment"),
+            .var.name = "data"
+          )
+        }
+      })
     }
   }
 
@@ -170,4 +181,11 @@ get_metadata.tdata <- function(data, dataname) {
 #' @export
 get_metadata.default <- function(data, dataname) {
   stop("get_metadata function not implemented for this object")
+}
+
+#' Function to call data elements of a `tdata` object
+#' @param data `tdata` - object to extract the data from
+#' @export
+req_tdata <- function(data) {
+  lapply(data, function(x) x())
 }

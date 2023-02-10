@@ -177,6 +177,8 @@ init <- function(data,
     modules <- do.call(teal::modules, modules)
   }
 
+  # TODO make module names unique here
+
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
   # the `ui` and `server` with `id = character(0)` and calling the server function directly

@@ -11,14 +11,15 @@ srv_nested_tabs(
   id,
   datasets,
   modules,
-  reporter = teal.reporter::Reporter$new()
+  reporter = teal.reporter::Reporter$new(),
+  active_id
 )
 
-\method{srv_nested_tabs}{default}(id, datasets, modules, reporter)
+\method{srv_nested_tabs}{default}(id, datasets, modules, reporter, active_id)
 
-\method{srv_nested_tabs}{teal_modules}(id, datasets, modules, reporter)
+\method{srv_nested_tabs}{teal_modules}(id, datasets, modules, reporter, active_id)
 
-\method{srv_nested_tabs}{teal_module}(id, datasets, modules, reporter)
+\method{srv_nested_tabs}{teal_module}(id, datasets, modules, reporter, active_id)
 }
 \arguments{
 \item{id}{(\code{character})\cr

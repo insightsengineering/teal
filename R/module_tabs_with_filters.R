@@ -162,7 +162,18 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
       datasets$set_filterable_varnames(filter_dataname, attr(filter[[filter_dataname]], "filterable"))
     }
 
-    active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules, reporter = reporter)
+    active_id <- reactiveVal({
+      if(is(modules$children[[1]], "teal_modules")) { #TODO make generic
+        names(modules$children[[1]]$children)[[1]]
+      }
+      names(modules$children)[[1]]
+    })
+
+    active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules, reporter = reporter, active_id = reactive(active_id()))
+
+    observeEvent(active_module(), {
+      active_id(attr(active_module(), "name"))
+    })
 
     active_datanames <- eventReactive(
       eventExpr = active_module(),

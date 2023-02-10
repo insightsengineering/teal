@@ -97,8 +97,10 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   }
 
 
+  #TODO we want to add deprecation, you should not have access to data in ui
+  # and handle active_id here (modules e.g. missing data do still use it)
   if (is_arg_used(modules$ui, "data")) {
-    data <- .datasets_to_data(modules, datasets)
+    data <- .datasets_to_data(modules, datasets, id)
     args <- c(args, data = list(data))
   }
 
@@ -123,7 +125,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
 #'
 #' @return `reactive` which returns the active module that corresponds to the selected tab
 #' @keywords internal
-srv_nested_tabs <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new()) {
+srv_nested_tabs <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new(), active_id) {
   stopifnot(inherits(datasets, "FilteredData"))
   stopifnot(inherits(reporter, "Reporter"))
   UseMethod("srv_nested_tabs", modules)
@@ -132,14 +134,14 @@ srv_nested_tabs <- function(id, datasets, modules, reporter = teal.reporter::Rep
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.default <- function(id, datasets, modules, reporter) {
+srv_nested_tabs.default <- function(id, datasets, modules, reporter, active_id) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter) {
+srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter, active_id) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_trace(
       paste(
@@ -150,17 +152,28 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter) {
     )
 
     modules_reactive <- sapply(names(modules$children), USE.NAMES = TRUE, function(id) {
-      srv_nested_tabs(id = id, datasets = datasets, modules = modules$children[[id]], reporter = reporter)
+      srv_nested_tabs(
+        id = id,
+        datasets = datasets,
+        modules = modules$children[[id]],
+        reporter = reporter,
+        active_id
+      )
     })
 
     get_active_module <- reactive({
       if (length(modules$children) == 1L) {
         # single tab is active by default
-        modules_reactive[[1]]()
+        active_mod <- modules_reactive[[1]]()
+        structure(
+          active_mod,
+          name = attr(active_mod, "name"))
       } else {
         # switch to active tab
         req(input$active_tab)
-        modules_reactive[[input$active_tab]]()
+        active_mod <- modules_reactive[[input$active_tab]]()
+        active_name <- attr(active_mod, "name")
+        structure(active_mod, name = active_name)
       }
     })
 
@@ -171,7 +184,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter) {
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
+srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter, active_id) {
   logger::log_trace(
     paste(
       "srv_nested_tabs.teal_module initializing the module with:",
@@ -191,7 +204,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   }
 
   if (is_arg_used(modules$server, "data")) {
-    data <- .datasets_to_data(modules, datasets)
+    data <- .datasets_to_data(modules, datasets, id, active_id)
     args <- c(args, data = list(data))
   }
 
@@ -214,7 +227,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   } else {
     do.call(callModule, c(args, list(module = modules$server)))
   }
-  reactive(modules)
+  reactive(structure(modules, name = id))
 }
 
 #' Convert `FilteredData` to reactive list of datasets of the `tdata` type.
@@ -231,7 +244,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 #' - `metadata` (`list`) containing metadata of datasets.
 #'
 #' @keywords internal
-.datasets_to_data <- function(module, datasets) {
+.datasets_to_data <- function(module, datasets, id, active_id = reactive(id)) {
   datanames <- if (identical("all", module$filter) || is.null(module$filter)) {
     datasets$datanames()
   } else {
@@ -243,7 +256,14 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     datanames,
     simplify = FALSE,
     function(x) {
-      reactive(datasets$get_data(x, filtered = TRUE))
+      # TODO we could make this smarter to not re-trigger when
+      # datasets$get_data(x, filtered = TRUE) invalidated but does
+      # not change value, i.e. when a new filter is added but doesn't
+      # change the filtered data
+      reactive({
+        req(active_id() == id)
+        datasets$get_data(x, filtered = TRUE)
+      })
     }
   )
 
