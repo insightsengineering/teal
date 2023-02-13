@@ -203,7 +203,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
     trigger_data <- reactiveVal(1L)
     output$data_reactive <- renderUI({
       lapply(datanames, function(x) {
-       datasets$get_data(x, filtered = TRUE)
+        datasets$get_data(x, filtered = TRUE)
       })
       isolate(trigger_data(trigger_data() + 1))
 
