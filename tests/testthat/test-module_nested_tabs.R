@@ -278,11 +278,31 @@ get_example_filtered_data <- function() {
   )
 }
 
+testthat::test_that(".datasets_to_data accepts a reactiveVal as trigger_data input", {
+  datasets <- get_example_filtered_data()
+  isolate(datasets$set_filter_state(list(d1 = list(val = list(selected = c(1, 2))))))
+  module <- list(filter = "all")
+  trigger_data <- reactiveVal(1L)
+  testthat::expect_silent(isolate(.datasets_to_data(module, datasets, trigger_data)))
+})
+
+testthat::test_that(".datasets_to_data throws error if trigger_data is not a reactiveVal function", {
+  datasets <- get_example_filtered_data()
+  isolate(datasets$set_filter_state(list(d1 = list(val = list(selected = c(1, 2))))))
+  module <- list(filter = "all")
+  trigger_data <- 1
+  testthat::expect_error(
+    isolate(.datasets_to_data(module, datasets, trigger_data)),
+    "Must inherit from class 'reactiveVal', but has class 'numeric'."
+  )
+})
+
 testthat::test_that(".datasets_to_data returns data which is filtered", {
   datasets <- get_example_filtered_data()
   isolate(datasets$set_filter_state(list(d1 = list(val = list(selected = c(1, 2))))))
   module <- list(filter = "all")
-  data <- isolate(.datasets_to_data(module, datasets))
+  trigger_data <- reactiveVal(1L)
+  data <- isolate(.datasets_to_data(module, datasets, trigger_data))
 
   d1_filtered <- isolate(data[["d1"]]())
   testthat::expect_equal(d1_filtered, data.frame(id = 1:2, pk = 2:3, val = 1:2))
@@ -294,14 +314,16 @@ testthat::test_that(".datasets_to_data returns data which is filtered", {
 testthat::test_that(".datasets_to_data returns only data requested by modules$filter", {
   datasets <- get_example_filtered_data()
   module <- list(filter = "d1")
-  data <- .datasets_to_data(module, datasets)
+  trigger_data <- reactiveVal(1L)
+  data <- .datasets_to_data(module, datasets, trigger_data)
   testthat::expect_equal(isolate(names(data)), "d1")
 })
 
 testthat::test_that(".datasets_to_data returns tdata object", {
   datasets <- get_example_filtered_data()
   module <- list(filter = "all")
-  data <- .datasets_to_data(module, datasets)
+  trigger_data <- reactiveVal(1L)
+  data <- .datasets_to_data(module, datasets, trigger_data)
 
   testthat::expect_s3_class(data, "tdata")
 
@@ -349,7 +371,8 @@ testthat::test_that(".datasets_to_data returns parent datasets for CDISC data", 
   )
 
   module <- list(filter = "ADAE")
-  data <- .datasets_to_data(module, datasets)
+  trigger_data <- reactiveVal(1L)
+  data <- .datasets_to_data(module, datasets, trigger_data)
   testthat::expect_setequal(isolate(names(data)), c("ADSL", "ADAE"))
 })
 

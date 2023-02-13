@@ -4,12 +4,14 @@
 \alias{.datasets_to_data}
 \title{Convert \code{FilteredData} to reactive list of datasets of the \code{tdata} type.}
 \usage{
-.datasets_to_data(module, datasets)
+.datasets_to_data(module, datasets, trigger_data)
 }
 \arguments{
 \item{module}{(\code{teal_module}) module where needed filters are taken from}
 
 \item{datasets}{(\code{FilteredData}) object where needed data are taken from}
+
+\item{trigger_data}{(\code{reactiveVal}) to trigger getting the filtered data}
 }
 \value{
 list of reactive datasets with following attributes:
