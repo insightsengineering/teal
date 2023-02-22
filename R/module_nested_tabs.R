@@ -97,7 +97,6 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
     args <- c(args, datasets = datasets)
   }
 
-
   if (is_arg_used(modules$ui, "data")) {
     data <- .datasets_to_data(modules, datasets)
     args <- c(args, data = list(data))
@@ -201,11 +200,13 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 
     # trigger the data when the tab is selected
     trigger_data <- reactiveVal(1L)
+    trigger_module <- reactiveVal(NULL)
     output$data_reactive <- renderUI({
       lapply(datanames, function(x) {
         datasets$get_data(x, filtered = TRUE)
       })
       isolate(trigger_data(trigger_data() + 1))
+      isolate(trigger_module(TRUE))
 
       NULL
     })
@@ -227,13 +228,19 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
       )
     }
 
-    # teal_modules do not suppose to return values as it's never passed anyway
-    # it's assigned here for tests
-    module_output <- if (is_arg_used(modules$server, "id")) {
-      do.call(modules$server, args)
-    } else {
-      do.call(callModule, c(args, list(module = modules$server)))
-    }
+    # observe the trigger_module above to induce the module once the renderUI is triggered
+    observeEvent(
+      ignoreNULL = TRUE,
+      once = TRUE,
+      eventExpr = trigger_module(),
+      handlerExpr = {
+        module_output <- if (is_arg_used(modules$server, "id")) {
+          do.call(modules$server, args)
+        } else {
+          do.call(callModule, c(args, list(module = modules$server)))
+        }
+      }
+    )
     reactive(modules)
   })
 }
