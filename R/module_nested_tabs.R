@@ -88,14 +88,14 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
 #' @export
 #' @keywords internal
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
+  ns <- NS(id)
   checkmate::assert_class(datasets, "FilteredData")
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
-  args <- c(list(id = id), args)
+  args <- c(list(id = ns("module")), args)
 
   if (is_arg_used(modules$ui, "datasets")) {
     args <- c(args, datasets = datasets)
   }
-
 
   if (is_arg_used(modules$ui, "data")) {
     data <- .datasets_to_data(modules, datasets)
@@ -105,6 +105,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   tags$div(
     id = id,
     class = "teal_module",
+    uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
       if (depth >= 2L) div(style = "mt-6"),
       do.call(modules$ui, args)
@@ -179,42 +180,69 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
       "module { deparse1(modules$label) }."
     )
   )
-  modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
+  moduleServer(id = id, module = function(input, output, session) {
+    modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
 
-  args <- c(list(id = id), modules$server_args)
-  if (is_arg_used(modules$server, "reporter")) {
-    args <- c(args, list(reporter = reporter))
-  }
+    args <- c(list(id = "module"), modules$server_args)
+    if (is_arg_used(modules$server, "reporter")) {
+      args <- c(args, list(reporter = reporter))
+    }
 
-  if (is_arg_used(modules$server, "datasets")) {
-    args <- c(args, datasets = datasets)
-  }
+    if (is_arg_used(modules$server, "datasets")) {
+      args <- c(args, datasets = datasets)
+    }
 
-  if (is_arg_used(modules$server, "data")) {
-    data <- .datasets_to_data(modules, datasets)
-    args <- c(args, data = list(data))
-  }
+    datanames <- if (identical("all", modules$filter) || is.null(modules$filter)) {
+      datasets$datanames()
+    } else {
+      datasets$get_filterable_datanames(modules$filter) # get_filterable_datanames adds parents if present
+    }
 
-  if (is_arg_used(modules$server, "filter_panel_api")) {
-    filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets)
-    args <- c(args, filter_panel_api = filter_panel_api)
-  }
+    # trigger the data when the tab is selected
+    trigger_data <- reactiveVal(1L)
+    trigger_module <- reactiveVal(NULL)
+    output$data_reactive <- renderUI({
+      lapply(datanames, function(x) {
+        datasets$get_data(x, filtered = TRUE)
+      })
+      isolate(trigger_data(trigger_data() + 1))
+      isolate(trigger_module(TRUE))
 
-  if (is_arg_used(modules$server, "datasets") && is_arg_used(modules$server, "data")) {
-    warning(
-      "Module '", modules$label, "' has `data` and `datasets` arguments in the formals.",
-      "\nIt's recommended to use `data` to work with filtered objects."
+      NULL
+    })
+
+    if (is_arg_used(modules$server, "data")) {
+      data <- .datasets_to_data(modules, datasets, trigger_data)
+      args <- c(args, data = list(data))
+    }
+
+    if (is_arg_used(modules$server, "filter_panel_api")) {
+      filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets)
+      args <- c(args, filter_panel_api = filter_panel_api)
+    }
+
+    if (is_arg_used(modules$server, "datasets") && is_arg_used(modules$server, "data")) {
+      warning(
+        "Module '", modules$label, "' has `data` and `datasets` arguments in the formals.",
+        "\nIt's recommended to use `data` to work with filtered objects."
+      )
+    }
+
+    # observe the trigger_module above to induce the module once the renderUI is triggered
+    observeEvent(
+      ignoreNULL = TRUE,
+      once = TRUE,
+      eventExpr = trigger_module(),
+      handlerExpr = {
+        module_output <- if (is_arg_used(modules$server, "id")) {
+          do.call(modules$server, args)
+        } else {
+          do.call(callModule, c(args, list(module = modules$server)))
+        }
+      }
     )
-  }
-
-  # teal_modules do not suppose to return values as it's never passed anyway
-  # it's assigned here for tests
-  module_output <- if (is_arg_used(modules$server, "id")) {
-    do.call(modules$server, args)
-  } else {
-    do.call(callModule, c(args, list(module = modules$server)))
-  }
-  reactive(modules)
+    reactive(modules)
+  })
 }
 
 #' Convert `FilteredData` to reactive list of datasets of the `tdata` type.
@@ -225,13 +253,15 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
 #' @param datasets (`FilteredData`) object where needed data are taken from
+#' @param trigger_data (`reactiveVal`) to trigger getting the filtered data
 #' @return list of reactive datasets with following attributes:
 #' - `code` (`character`) containing datasets reproducible code.
 #' - `join_keys` (`JoinKeys`) containing relationships between datasets.
 #' - `metadata` (`list`) containing metadata of datasets.
 #'
 #' @keywords internal
-.datasets_to_data <- function(module, datasets) {
+.datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
+  checkmate::assert_class(trigger_data, "reactiveVal")
   datanames <- if (identical("all", module$filter) || is.null(module$filter)) {
     datasets$datanames()
   } else {
@@ -240,11 +270,9 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 
   # list of reactive filtered data
   data <- sapply(
-    datanames,
-    simplify = FALSE,
-    function(x) {
-      reactive(datasets$get_data(x, filtered = TRUE))
-    }
+    USE.NAMES = TRUE,
+    X = datanames,
+    FUN = function(x) eventReactive(trigger_data(), datasets$get_data(x, filtered = TRUE))
   )
 
   hashes <- calculate_hashes(datanames, datasets)
@@ -253,7 +281,8 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 
   new_tdata(
     data,
-    reactive(
+    eventReactive(
+      trigger_data(),
       c(
         get_rcode_str_install(),
         get_rcode_libraries(),

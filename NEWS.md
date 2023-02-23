@@ -1,17 +1,15 @@
 # teal 0.12.0.9022
 
-### Major breaking changes
-
-* The use of `datasets` argument in `modules` has been deprecated and will be removed in a future release. Please use `data` argument instead. `data` is of type `tdata`; see "Creating custom modules" vignettes and function documentation of `teal::new_tdata` for further details.
-
 ### Breaking changes
 
+* The use of `datasets` argument in `modules` has been deprecated and will be removed in a future release. Please use `data` argument instead. `data` is of type `tdata`; see "Creating custom modules" vignettes and function documentation of `teal::new_tdata` for further details.
 * Due to deprecation of `chunks` in `teal.code`, the `teal` framework now uses their replacement (`qenv`) instead. The documentation in `teal` has been updated to reflect this and custom modules written with `chunks` should be updated to use `qenv`.
 
 ### New features
 
 * Added the `validate_inputs` function that transfers input validation messages to app output.
 * `modules` argument of `init` accepts `teal_module` type of object. There is no need to wrap up a single module in `modules()` or `list()`.
+* Updated `module_nested_tabs` so that only active modules are calculated in a teal app.
 
 ### Miscellaneous
 
