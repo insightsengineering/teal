@@ -293,7 +293,7 @@ testthat::test_that("srv_nested_tabs.teal_module doesn't pass filter_panel_api i
           error = function(cond) FALSE
         )
       )
-  })
+    })
   })
 
   testthat::expect_no_error(
