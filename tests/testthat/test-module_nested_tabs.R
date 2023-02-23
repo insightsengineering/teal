@@ -156,8 +156,12 @@ out <- shiny::testServer(
 testthat::test_that("srv_nested_tabs.teal_module does not pass data if not in the args explicitly", {
   module <- module(server = function(id, ...) {
     moduleServer(id, function(input, output, session) {
-      # data has not been passed so utils::data will be evaluated hence we check for a function and not a tdata
-      checkmate::assert_function(data)
+      checkmate::assert_false(
+        tryCatch(
+          checkmate::test_class(data, "tdata"),
+          error = function(cond) FALSE
+        )
+      )
     })
   })
 
@@ -282,10 +286,17 @@ testthat::test_that("srv_nested_tabs.teal_module warns if both data and datasets
 fp_api <- teal.slice:::FilterPanelAPI$new(filtered_data)
 testthat::test_that("srv_nested_tabs.teal_module doesn't pass filter_panel_api if not in the args explicitly", {
   module <- module(server = function(id, ...) {
-    moduleServer(id, function(input, output, session) checkmate::assert_class(filter_panel_api, "FilterPanelAPI"))
+    moduleServer(id, function(input, output, session) {
+      checkmate::assert_false(
+        tryCatch(
+          checkmate::test_class(filter_panel_api, "FilterPanelAPI"),
+          error = function(cond) FALSE
+        )
+      )
+  })
   })
 
-  testthat::expect_warning(
+  testthat::expect_no_error(
     shiny::testServer(
       app = srv_nested_tabs,
       args = list(
@@ -297,8 +308,30 @@ testthat::test_that("srv_nested_tabs.teal_module doesn't pass filter_panel_api i
       expr = {
         session$setInputs()
       }
-    ),
-    "object 'filter_panel_api' not found"
+    )
+  )
+})
+
+testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api when passed in the args explicitly", {
+  module <- module(server = function(id, filter_panel_api = fp_api, ...) {
+    moduleServer(id, function(input, output, session) {
+      checkmate::assert_class(filter_panel_api, "FilterPanelAPI")
+    })
+  })
+
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = srv_nested_tabs,
+      args = list(
+        id = "test",
+        datasets = filtered_data,
+        modules = modules(module),
+        reporter = teal.reporter::Reporter$new()
+      ),
+      expr = {
+        session$setInputs()
+      }
+    )
   )
 })
 
