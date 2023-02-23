@@ -155,10 +155,13 @@ out <- shiny::testServer(
 
 testthat::test_that("srv_nested_tabs.teal_module does not pass data if not in the args explicitly", {
   module <- module(server = function(id, ...) {
-    moduleServer(id, function(input, output, session) checkmate::assert_list(data, "reactive"))
+    moduleServer(id, function(input, output, session) {
+      # data has not been passed so utils::data will be evaluated hence we check for a function and not a tdata
+      checkmate::assert_function(data)
+    })
   })
 
-  testthat::expect_warning(
+  testthat::expect_no_error(
     shiny::testServer(
       app = srv_nested_tabs,
       args = list(
@@ -170,8 +173,28 @@ testthat::test_that("srv_nested_tabs.teal_module does not pass data if not in th
       expr = {
         session$setInputs()
       }
-    ),
-    "Assertion on 'data' failed"
+    )
+  )
+})
+
+testthat::test_that("srv_nested_tabs.teal_module does pass data if in the args explicitly", {
+  module <- module(server = function(id, data, ...) {
+    moduleServer(id, function(input, output, session) checkmate::assert_class(data, "tdata"))
+  })
+
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = srv_nested_tabs,
+      args = list(
+        id = "test",
+        datasets = filtered_data,
+        modules = modules(module),
+        reporter = teal.reporter::Reporter$new()
+      ),
+      expr = {
+        session$setInputs()
+      }
+    )
   )
 })
 
