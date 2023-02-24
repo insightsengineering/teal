@@ -163,11 +163,12 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       if (is.null(raw_data())) {
         return(NULL)
       }
+
       env$progress <- shiny::Progress$new(session)
       env$progress$set(0.25, message = "Setting data")
       # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
       # this is placed in the module scope so that bookmarking can be used with FilteredData object
-      datasets <- teal.slice::init_filtered_data(raw_data())
+      datasets <- teal.slice::init_filtered_data(raw_data()$get_tdata())
 
       logger::log_trace("srv_teal@4 Raw Data transferred to FilteredData.")
       datasets
