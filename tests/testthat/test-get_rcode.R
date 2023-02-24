@@ -26,12 +26,12 @@ testthat::test_that("get_rcode returns data-loading, filter-panel and chunks cod
   ch <- teal.code::chunks_new()
   teal.code::chunks_push(id = "test", chunks = ch, quote(a <- 1))
 
-  datasets <- teal.slice::init_filtered_data(
+  datasets <- isolate(teal.slice::init_filtered_data(
     teal.data::teal_data(
       teal.data::dataset("IRIS", x = iris, code = "IRIS <- iris"),
       teal.data::dataset("MTCARS", x = mtcars, code = "MTCARS <- mtcars")
-    )
-  )
+    )$get_tdata()
+  ))
 
   testthat::expect_true(
     all(
@@ -70,12 +70,12 @@ testthat::test_that("style nested expressions", {
 
 
 testthat::test_that("get_datasets_code returns code only for specified datanames", {
-  datasets <- teal.slice::init_filtered_data(
+  datasets <- isolate(teal.slice::init_filtered_data(
     teal.data::teal_data(
       teal.data::dataset("IRIS", x = iris, code = "IRIS <- iris"),
       teal.data::dataset("MTCARS", x = mtcars, code = "MTCARS <- mtcars")
-    )
-  )
+    )$get_tdata()
+  ))
 
   hashes <- calculate_hashes(datasets$datanames(), datasets)
   testthat::expect_true(

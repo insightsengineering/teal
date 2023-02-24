@@ -43,7 +43,7 @@ testthat::test_that("srv_teal initializes the data when raw_data changes", {
 })
 
 testthat::test_that("srv_teal initialized FilteredData based on the raw_data input", {
-  filtered_data <- teal.slice::init_filtered_data(data)
+  filtered_data <- isolate(teal.slice::init_filtered_data(data$get_tdata()))
 
   shiny::testServer(
     app = srv_teal,

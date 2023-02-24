@@ -412,7 +412,7 @@ testthat::test_that(".datasets_to_data returns only data requested by modules$fi
   datasets <- get_example_filtered_data()
   module <- list(filter = "d1")
   trigger_data <- reactiveVal(1L)
-  data <- .datasets_to_data(module, datasets, trigger_data)
+  data <- isolate(.datasets_to_data(module, datasets, trigger_data))
   testthat::expect_equal(isolate(names(data)), "d1")
 })
 
@@ -420,7 +420,7 @@ testthat::test_that(".datasets_to_data returns tdata object", {
   datasets <- get_example_filtered_data()
   module <- list(filter = "all")
   trigger_data <- reactiveVal(1L)
-  data <- .datasets_to_data(module, datasets, trigger_data)
+  data <- isolate(.datasets_to_data(module, datasets, trigger_data))
 
   testthat::expect_s3_class(data, "tdata")
 
@@ -433,15 +433,14 @@ testthat::test_that(".datasets_to_data returns tdata object", {
   # code
   testthat::expect_equal(
     isolate(get_code(data)),
-    c(
+    paste(
       get_rcode_str_install(),
       get_rcode_libraries(),
-      "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\nd2 <- data.frame(id = 1:5, value = 1:5)\n\n",
-      paste0(
-        "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")\n",
-        "stopifnot(rlang::hash(d2) == \"6e30be195b7d914a1311672c3ebf4e4f\") \n\n"
-      ),
-      ""
+      "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\nd2 <- data.frame(id = 1:5, value = 1:5)",
+      "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")",
+      "stopifnot(rlang::hash(d2) == \"6e30be195b7d914a1311672c3ebf4e4f\")",
+      "",
+      sep = "\n"
     )
   )
 
@@ -459,17 +458,17 @@ testthat::test_that(".datasets_to_data returns parent datasets for CDISC data", 
   adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1, AETERM = 1, AESEQ = 1)
   adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)
 
-  datasets <- teal.slice::init_filtered_data(
+  datasets <- isolate(teal.slice::init_filtered_data(
     teal.data::cdisc_data(
       teal.data::cdisc_dataset("ADSL", adsl),
       teal.data::cdisc_dataset("ADAE", adae),
       teal.data::cdisc_dataset("ADTTE", adtte)
-    )
-  )
+    )$get_tdata()
+  ))
 
   module <- list(filter = "ADAE")
   trigger_data <- reactiveVal(1L)
-  data <- .datasets_to_data(module, datasets, trigger_data)
+  data <- isolate(.datasets_to_data(module, datasets, trigger_data))
   testthat::expect_setequal(isolate(names(data)), c("ADSL", "ADAE"))
 })
 
@@ -478,12 +477,12 @@ testthat::test_that("calculate_hashes takes a FilteredData and vector of datanam
   adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1, AETERM = 1, AESEQ = 1)
   adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)
 
-  datasets <- teal.slice::init_filtered_data(
+  datasets <- isolate(teal.slice::init_filtered_data(
     teal.data::cdisc_data(
       teal.data::cdisc_dataset("ADSL", adsl),
       teal.data::cdisc_dataset("ADAE", adae),
       teal.data::cdisc_dataset("ADTTE", adtte)
-    )
+    )$get_tdata())
   )
 
   testthat::expect_error(calculate_hashes(datanames = c("ADSL", "ADAE", "ADTTE"), datasets = datasets), NA)
@@ -494,12 +493,12 @@ testthat::test_that("calculate_hashes returns a named list", {
   adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1, AETERM = 1, AESEQ = 1)
   adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)
 
-  datasets <- teal.slice::init_filtered_data(
+  datasets <- isolate(teal.slice::init_filtered_data(
     teal.data::cdisc_data(
       teal.data::cdisc_dataset("ADSL", adsl),
       teal.data::cdisc_dataset("ADAE", adae),
       teal.data::cdisc_dataset("ADTTE", adtte)
-    )
+    )$get_tdata())
   )
 
   hashes <- calculate_hashes(datanames = c("ADSL", "ADAE", "ADTTE"), datasets = datasets)
@@ -516,11 +515,9 @@ testthat::test_that("calculate_hashes returns a named list", {
 })
 
 testthat::test_that("calculate_hashes returns the hash of the non Filtered dataset", {
-  datasets <- teal.slice::init_filtered_data(
-    teal.data::teal_data(
-      teal.data::dataset("iris", iris)
-    )
-  )
+  datasets <- isolate(teal.slice::init_filtered_data(
+    teal.data::teal_data(teal.data::dataset("iris", iris))$get_tdata()
+  ))
 
   fs <- list(
     iris = list(
