@@ -284,7 +284,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
   teal.data::new_tdata(
     data,
     eventReactive(
-      trigger_data(), {
+      trigger_data(),
       c(
         get_rcode_str_install(),
         get_rcode_libraries(),

@@ -293,7 +293,7 @@ testthat::test_that("srv_nested_tabs.teal_module doesn't pass filter_panel_api i
           error = function(cond) FALSE
         )
       )
-  })
+    })
   })
 
   testthat::expect_no_error(
@@ -421,7 +421,6 @@ testthat::test_that(".datasets_to_data returns tdata object", {
   module <- list(filter = "all")
   trigger_data <- reactiveVal(1L)
   data <- isolate(.datasets_to_data(module, datasets, trigger_data))
-
   testthat::expect_s3_class(data, "tdata")
 
   # join_keys
