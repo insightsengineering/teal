@@ -431,15 +431,16 @@ testthat::test_that(".datasets_to_data returns tdata object", {
 
   # code
   testthat::expect_equal(
-    isolate(get_code(data)),
-    paste(
+    isolate(teal.data::get_code(data)),
+    c(
       get_rcode_str_install(),
       get_rcode_libraries(),
-      "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\nd2 <- data.frame(id = 1:5, value = 1:5)",
-      "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")",
-      "stopifnot(rlang::hash(d2) == \"6e30be195b7d914a1311672c3ebf4e4f\")",
-      "",
-      sep = "\n"
+      "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\nd2 <- data.frame(id = 1:5, value = 1:5)\n\n",
+      paste0(
+        "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")\n",
+        "stopifnot(rlang::hash(d2) == \"6e30be195b7d914a1311672c3ebf4e4f\") \n\n"
+      ),
+      ""
     )
   )
 
