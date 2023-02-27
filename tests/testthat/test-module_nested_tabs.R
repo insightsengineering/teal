@@ -481,8 +481,8 @@ testthat::test_that("calculate_hashes takes a FilteredData and vector of datanam
       teal.data::cdisc_dataset("ADSL", adsl),
       teal.data::cdisc_dataset("ADAE", adae),
       teal.data::cdisc_dataset("ADTTE", adtte)
-    )$get_tdata())
-  )
+    )$get_tdata()
+  ))
 
   testthat::expect_error(calculate_hashes(datanames = c("ADSL", "ADAE", "ADTTE"), datasets = datasets), NA)
 })
@@ -497,8 +497,8 @@ testthat::test_that("calculate_hashes returns a named list", {
       teal.data::cdisc_dataset("ADSL", adsl),
       teal.data::cdisc_dataset("ADAE", adae),
       teal.data::cdisc_dataset("ADTTE", adtte)
-    )$get_tdata())
-  )
+    )$get_tdata()
+  ))
 
   hashes <- calculate_hashes(datanames = c("ADSL", "ADAE", "ADTTE"), datasets = datasets)
   testthat::expect_identical(
