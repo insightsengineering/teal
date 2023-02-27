@@ -291,7 +291,6 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
         get_datasets_code(datanames, datasets, hashes),
         teal.slice::get_filter_expr(datasets, datanames)
       )
-      }
     ),
     datasets$get_join_keys(),
     metadata,
