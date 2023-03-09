@@ -192,7 +192,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
       args <- c(args, datasets = datasets)
     }
 
-    datanames <- if (identical("all", modules$filter) || is.null(modules$filter)) {
+    datanames <- if (is.null(modules$filter)) {
       datasets$datanames()
     } else {
       datasets$get_filterable_datanames(modules$filter) # get_filterable_datanames adds parents if present
@@ -262,7 +262,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
 #' @keywords internal
 .datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
   checkmate::assert_class(trigger_data, "reactiveVal")
-  datanames <- if (identical("all", module$filter) || is.null(module$filter)) {
+  datanames <- if (is.null(module$filter)) {
     datasets$datanames()
   } else {
     datasets$get_filterable_datanames(module$filter) # get_filterable_datanames adds parents if present

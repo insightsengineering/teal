@@ -163,25 +163,14 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
     }
 
     active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules, reporter = reporter)
-
-    active_datanames <- eventReactive(
-      eventExpr = active_module(),
-      valueExpr = {
-        logger::log_trace(
-          "srv_tabs_with_filters@1 changing active module to: { deparse1(active_module()$label) }."
-        )
-        datasets$handle_active_datanames(datanames = active_module()$filters)
-      },
-      ignoreNULL = FALSE
-    )
-
+    active_datanames <- reactive(active_module()$filters)
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
 
     # to handle per module filter = NULL
     observeEvent(
       eventExpr = active_datanames(),
       handlerExpr = {
-        script <- if (length(active_datanames()) == 0 || is.null(active_datanames())) {
+        script <- if (length(active_datanames()) == 0) {
           # hide the filter panel and disable the burger button
           "handleNoActiveDatasets();"
         } else {
