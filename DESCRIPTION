@@ -78,7 +78,6 @@ RoxygenNote: 7.2.3
 Collate:
     'dummy_functions.R'
     'example_module.R'
-    'get_rcode.R'
     'get_rcode_utils.R'
     'include_css_js.R'
     'modules.R'
