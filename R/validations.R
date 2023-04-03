@@ -327,7 +327,7 @@ validate_has_variable <- function(data, varname, msg) {
 #' server <- function(input, output) {
 #'   output$arm_summary <- renderText({
 #'     validate_n_levels(ADSL[[input$arm]],
-#'       min_levels = 1, max_levels = 15,
+#'       min_levels = 2, max_levels = 15,
 #'       var_name = input$arm
 #'     )
 #'     paste0(
