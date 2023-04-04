@@ -15,6 +15,13 @@ on:
       - main
   workflow_dispatch:
 
+  # Rerun workflows once pkgdown has finished running, to add coverage
+  # and unit test report to gh-pages branch.
+  workflow_run:
+    workflows: ["Docs 📚"]
+    types:
+      - completed
+
 jobs:
   audit:
     name: Audit Dependencies 🕵️‍♂️
@@ -28,6 +35,10 @@ jobs:
       additional-env-vars: |
         _R_CHECK_CRAN_INCOMING_REMOTE_=false
       additional-r-cmd-check-params: --as-cran
+      enforce-note-blocklist: true
+      note-blocklist: '*'
+      unit-test-report-brand: >-
+        https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/thumbs/teal.png
   coverage:
     name: Coverage 📔
     uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
