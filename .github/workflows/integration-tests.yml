@@ -8,6 +8,7 @@ on:
 jobs:
   dependency-test:
     strategy:
+      fail-fast: false
       matrix:
         test-strategy: ["min", "release", "max"]
     # TODO change branch
