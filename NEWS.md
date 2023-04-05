@@ -1,4 +1,4 @@
-# teal 0.12.0.9024
+# teal 0.12.0.9025
 
 ### Breaking changes
 
