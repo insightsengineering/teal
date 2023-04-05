@@ -4,6 +4,7 @@ name:  Dependency Test 🔢
 on:
   schedule:
     - cron: '45 3 * * *'
+    - cron: '11 14 * * *'
   pull_request:
     branches:
       - main
