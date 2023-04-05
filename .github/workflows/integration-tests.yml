@@ -18,5 +18,6 @@ jobs:
     name: Dependency Test - ${{ matrix.test-strategy }}
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      GCHAT_WEBHOOK: ${{ secrets.GCHAT_WEBHOOK }}
     with:
       strategy: ${{ matrix.test-strategy }}
