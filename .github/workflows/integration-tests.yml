@@ -4,6 +4,9 @@ name:  Dependency Test 🔢
 on:
   schedule:
     - cron: '45 3 * * *'
+  pull_request:
+    branches:
+      - main
 
 jobs:
   dependency-test:
@@ -11,8 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         test-strategy: ["min", "release", "max"]
-    # TODO change branch
-    uses: insightsengineering/r.pkg.template/.github/workflows/verdepcheck.yaml@add-r-min-deps-check-workflow
+    uses: insightsengineering/r.pkg.template/.github/workflows/verdepcheck.yaml@main
     name: Dependency Test - ${{ matrix.test-strategy }}
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
