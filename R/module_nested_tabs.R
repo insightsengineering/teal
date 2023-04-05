@@ -133,14 +133,14 @@ srv_nested_tabs <- function(id, datasets, modules, reporter = teal.reporter::Rep
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.default <- function(id, datasets, modules, reporter) {
+srv_nested_tabs.default <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new()) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter) {
+srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new()) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_trace(
       paste(
@@ -172,7 +172,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter) {
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter) {
+srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new()) {
   logger::log_trace(
     paste(
       "srv_nested_tabs.teal_module initializing the module with:",
