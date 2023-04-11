@@ -1,9 +1,9 @@
 ---
-name:  Dependency Test 🔢
+name: Integration Tests 🧪
 
 on:
   schedule:
-    - cron: '45 3 * * *'
+    - cron: '45 3 * * 0'
   pull_request:
     branches:
       - main
@@ -15,7 +15,7 @@ jobs:
       matrix:
         test-strategy: ["min", "release", "max"]
     uses: insightsengineering/r.pkg.template/.github/workflows/verdepcheck.yaml@main
-    name: Dependency Test - ${{ matrix.test-strategy }}
+    name: Dependency Test - ${{ matrix.test-strategy }} 🔢
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
       GCHAT_WEBHOOK: ${{ secrets.GCHAT_WEBHOOK }}
