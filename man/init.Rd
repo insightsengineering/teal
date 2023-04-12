@@ -9,8 +9,8 @@ init(
   modules,
   title = NULL,
   filter = list(),
-  header = tags$p("Add Title Here"),
-  footer = tags$p("Add Footer Here"),
+  header = tags$p(),
+  footer = tags$p(),
   id = character(0)
 )
 }
@@ -99,12 +99,12 @@ different way. Since it contains patient data with list of experiments,
 By adding the \code{filterable} attribute it is possible to control which variables can be filtered for each
 dataset. See the example below where \code{ADSL} can only be filtered by \code{AGE}, \code{SEX} or \code{RACE}.}
 
-\item{header}{(\code{character} or \code{shiny.tag}) \cr
+\item{header}{(\code{shiny.tag}) \cr
 the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
 (such as loading css via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
 
-\item{footer}{(\code{character} or \code{shiny.tag})\cr
+\item{footer}{(\code{shiny.tag})\cr
 the footer of the app}
 
 \item{id}{(\code{character})\cr

@@ -23,12 +23,12 @@ can be a splash screen or a Shiny module UI. For the latter, see
 \item{title}{(\code{NULL} or \code{character})\cr
 The browser window title (defaults to the host URL of the page).}
 
-\item{header}{(\code{character} or \code{shiny.tag}) \cr
+\item{header}{(\code{shiny.tag}) \cr
 the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
 (such as loading css via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
 
-\item{footer}{(\code{character} or \code{shiny.tag})\cr
+\item{footer}{(\code{shiny.tag})\cr
 the footer of the app}
 }
 \value{

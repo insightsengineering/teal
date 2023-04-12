@@ -92,11 +92,11 @@
 #'  By adding the `filterable` attribute it is possible to control which variables can be filtered for each
 #'  dataset. See the example below where `ADSL` can only be filtered by `AGE`, `SEX` or `RACE`.
 #'
-#' @param header (`character` or `shiny.tag`) \cr
+#' @param header (`shiny.tag`) \cr
 #'   the header of the app. Note shiny code placed here (and in the footer
 #'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
 #'   (such as loading css via [htmltools::htmlDependency()]) should be included here.
-#' @param footer (`character` or `shiny.tag`)\cr
+#' @param footer (`shiny.tag`)\cr
 #'   the footer of the app
 #' @param id (`character`)\cr
 #'   module id to embed it, if provided,
@@ -155,8 +155,8 @@ init <- function(data,
                  modules,
                  title = NULL,
                  filter = list(),
-                 header = tags$p("Add Title Here"),
-                 footer = tags$p("Add Footer Here"),
+                 header = tags$p(),
+                 footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
   data <- teal.data::to_relational_data(data = data)
