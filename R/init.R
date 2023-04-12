@@ -92,11 +92,11 @@
 #'  By adding the `filterable` attribute it is possible to control which variables can be filtered for each
 #'  dataset. See the example below where `ADSL` can only be filtered by `AGE`, `SEX` or `RACE`.
 #'
-#' @param header (`shiny.tag`) \cr
+#' @param header (`shiny.tag` or `character`) \cr
 #'   the header of the app. Note shiny code placed here (and in the footer
 #'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
 #'   (such as loading css via [htmltools::htmlDependency()]) should be included here.
-#' @param footer (`shiny.tag`)\cr
+#' @param footer (`shiny.tag` or `character`)\cr
 #'   the footer of the app
 #' @param id (`character`)\cr
 #'   module id to embed it, if provided,
@@ -163,11 +163,11 @@ init <- function(data,
 
   checkmate::assert_class(data, "TealData")
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
+  checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_list(filter, min.len = 0, names = "unique")
   checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
-  checkmate::assert_string(title, null.ok = TRUE)
-  checkmate::assert_class(header, "shiny.tag")
-  checkmate::assert_class(footer, "shiny.tag")
+  checkmate::assert_multi_class(header, c("shiny.tag", "character"))
+  checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   teal.logger::log_system_info()
