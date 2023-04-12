@@ -161,11 +161,13 @@ init <- function(data,
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
   data <- teal.data::to_relational_data(data = data)
 
-  checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_class(data, "TealData")
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_list(filter, min.len = 0, names = "unique")
   checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_class(header, "shiny.tag")
+  checkmate::assert_class(footer, "shiny.tag")
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   teal.logger::log_system_info()
