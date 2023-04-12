@@ -20,7 +20,7 @@
 * Removed deprecated functions: `root_modules`, `default_filter`, `bookmarkableShinyApp`, as well as deprecated logging mechanism, including the functions `log_app_usage` and `.log`.
 * Updated the "Teal and Bootstrap Themes" vignette to provide more details customizing a `teal` app with `bslib::run_with_themer`.
 * Removed outdated diagram from `srv_nested_tabs` documentation.
-* Chaged deafult values of `header` and `footer` arguments in `init` to empty text.
+* Changed default values of `header` and `footer` arguments in `init` to empty text.
 
 # teal 0.12.0
 
