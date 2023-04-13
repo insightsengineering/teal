@@ -5,6 +5,7 @@
 * The use of `datasets` argument in `modules` has been deprecated and will be removed in a future release. Please use `data` argument instead. `data` is of type `tdata`; see "Creating custom modules" vignettes and function documentation of `teal::new_tdata` for further details.
 * Due to deprecation of `chunks` in `teal.code`, the `teal` framework now uses their replacement (`qenv`) instead. The documentation in `teal` has been updated to reflect this and custom modules written with `chunks` should be updated to use `qenv`.
 * Due to deprecation of `chunks` in `teal.code`, `get_rcode`, `get_rcode_srv`, and `get_rcode_ui` have been removed.
+* Modify `init` to accept a `teal_slices` object for filter specification.
 
 ### New features
 
