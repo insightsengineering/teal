@@ -11,7 +11,7 @@ show_rcode_modal(title = NULL, rcode, session = getDefaultReactiveDomain())
 Title of the modal, displayed in the first comment of the R-code.}
 
 \item{rcode}{(\code{character})\cr
-vector with R code to show inside the modal. You can use \code{\link[=get_rcode]{get_rcode()}} to derive this R
+vector with R code to show inside the modal. You can use \code{\link[teal.code:get_code]{teal.code::get_code()}} to derive this R
 code inside a module.}
 
 \item{session}{(\code{ShinySession} optional)\cr
@@ -22,5 +22,5 @@ code inside a module.}
 Use the \code{\link[shiny:showModal]{shiny::showModal()}} function to show the R code inside.
 }
 \references{
-\code{\link[shiny:showModal]{shiny::showModal()}} \code{\link[=get_rcode]{get_rcode()}}
+\code{\link[shiny:showModal]{shiny::showModal()}} \code{\link[teal.code:get_code]{teal.code::get_code()}}
 }
