@@ -30,9 +30,13 @@
 #'   more details.
 #' @param title (`NULL` or `character`)\cr
 #'   The browser window title (defaults to the host URL of the page).
-#' @param filter (`list`)\cr
-#'   You can define filters that show when the app starts. List names should be
-#'   named according to datanames passed to the `data` argument.
+#' @param filter (`teal_slices` or `list`)\cr
+#'   You can define filters that show when the app starts.
+#'   There are two ways to specify the filter states:
+#'   1) with a `teal_slices` object - see `?teal.slice::teal_slice` for details
+#'   2) with a named list (deprecated)
+#'
+#'   List names should be named according to datanames passed to the `data` argument.
 #'   In case of  data.frame` the list should be composed as follows:
 #'   ```
 #'   list(<dataname1> = list(<varname1> = ..., <varname2> = ...),

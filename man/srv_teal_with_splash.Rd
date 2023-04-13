@@ -28,9 +28,15 @@ or \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}} with \code{check 
 will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{filter}{(\code{list})\cr
-You can define filters that show when the app starts. List names should be
-named according to datanames passed to the \code{data} argument.
+\item{filter}{(\code{teal_slices} or \code{list})\cr
+You can define filters that show when the app starts.
+There are two ways to specify the filter states:
+\enumerate{
+\item with a \code{teal_slices} object - see \code{?teal.slice::teal_slice} for details
+\item with a named list (deprecated)
+}
+
+List names should be named according to datanames passed to the \code{data} argument.
 In case of  data.frame` the list should be composed as follows:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
