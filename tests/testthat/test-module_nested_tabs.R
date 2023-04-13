@@ -366,8 +366,8 @@ get_example_filtered_data <- function() {
 
   teal.slice::init_filtered_data(
     x = list(
-      d1 = list(dataset = d1, keys = "id", metadata = list("A" = 1)),
-      d2 = list(dataset = d2, keys = "id")
+      d1 = list(dataset = d1, metadata = list("A" = 1)),
+      d2 = list(dataset = d2)
     ),
     join_keys = teal.data::join_keys(teal.data::join_key("d1", "d2", c("pk" = "id"))),
     code = cc,
@@ -377,33 +377,45 @@ get_example_filtered_data <- function() {
 
 testthat::test_that(".datasets_to_data accepts a reactiveVal as trigger_data input", {
   datasets <- get_example_filtered_data()
-  isolate(datasets$set_filter_state(list(d1 = list(val = list(selected = c(1, 2))))))
+  shiny::isolate(datasets$set_filter_state(
+    teal.slice:::filter_settings(
+      teal.slice:::filter_var(dataname = "d1", varname = "val", selected = c(1, 2))
+    )
+  ))
   module <- list(filter = "all")
   trigger_data <- reactiveVal(1L)
-  testthat::expect_silent(isolate(.datasets_to_data(module, datasets, trigger_data)))
+  testthat::expect_silent(shiny::isolate(.datasets_to_data(module, datasets, trigger_data)))
 })
 
 testthat::test_that(".datasets_to_data throws error if trigger_data is not a reactiveVal function", {
   datasets <- get_example_filtered_data()
-  isolate(datasets$set_filter_state(list(d1 = list(val = list(selected = c(1, 2))))))
+  shiny::isolate(datasets$set_filter_state(
+    teal.slice:::filter_settings(
+      teal.slice:::filter_var(dataname = "d1", varname = "val", selected = c(1, 2))
+    )
+  ))
   module <- list(filter = "all")
   trigger_data <- 1
   testthat::expect_error(
-    isolate(.datasets_to_data(module, datasets, trigger_data)),
+    shiny::isolate(.datasets_to_data(module, datasets, trigger_data)),
     "Must inherit from class 'reactiveVal', but has class 'numeric'."
   )
 })
 
 testthat::test_that(".datasets_to_data returns data which is filtered", {
   datasets <- get_example_filtered_data()
-  isolate(datasets$set_filter_state(list(d1 = list(val = list(selected = c(1, 2))))))
+  shiny::isolate(datasets$set_filter_state(
+    teal.slice:::filter_settings(
+      teal.slice:::filter_var(dataname = "d1", varname = "val", selected = c(1, 2))
+    )
+  ))
   module <- list(filter = "all")
   trigger_data <- reactiveVal(1L)
-  data <- isolate(.datasets_to_data(module, datasets, trigger_data))
+  data <- shiny::isolate(.datasets_to_data(module, datasets, trigger_data))
 
-  d1_filtered <- isolate(data[["d1"]]())
+  d1_filtered <- shiny::isolate(data[["d1"]]())
   testthat::expect_equal(d1_filtered, data.frame(id = 1:2, pk = 2:3, val = 1:2))
-  d2_filtered <- isolate(data[["d2"]]())
+  d2_filtered <- shiny::isolate(data[["d2"]]())
   testthat::expect_equal(d2_filtered, data.frame(id = 1:5, value = 1:5))
 })
 
@@ -413,7 +425,7 @@ testthat::test_that(".datasets_to_data returns only data requested by modules$fi
   module <- list(filter = "d1")
   trigger_data <- reactiveVal(1L)
   data <- .datasets_to_data(module, datasets, trigger_data)
-  testthat::expect_equal(isolate(names(data)), "d1")
+  testthat::expect_equal(shiny::isolate(names(data)), "d1")
 })
 
 testthat::test_that(".datasets_to_data returns tdata object", {
@@ -432,7 +444,7 @@ testthat::test_that(".datasets_to_data returns tdata object", {
 
   # code
   testthat::expect_equal(
-    isolate(get_code(data)),
+    shiny::isolate(get_code(data)),
     c(
       get_rcode_str_install(),
       get_rcode_libraries(),
@@ -470,7 +482,7 @@ testthat::test_that(".datasets_to_data returns parent datasets for CDISC data", 
   module <- list(filter = "ADAE")
   trigger_data <- reactiveVal(1L)
   data <- .datasets_to_data(module, datasets, trigger_data)
-  testthat::expect_setequal(isolate(names(data)), c("ADSL", "ADAE"))
+  testthat::expect_setequal(shiny::isolate(names(data)), c("ADSL", "ADAE"))
 })
 
 testthat::test_that("calculate_hashes takes a FilteredData and vector of datanames as input", {
@@ -522,15 +534,14 @@ testthat::test_that("calculate_hashes returns the hash of the non Filtered datas
     )
   )
 
-  fs <- list(
-    iris = list(
-      Sepal.Length = list(c(5.1, 6.4)),
-      Species = c("setosa", "versicolor")
-    )
+  fs <- teal.slice:::filter_settings(
+    teal.slice:::filter_var(dataname = "iris", varname = "Sepal.Length", selected = c(5.1, 6.4)),
+    teal.slice:::filter_var(dataname = "iris", varname = "Species", selected = c("setosa", "versicolor"))
   )
+
   shiny::isolate(datasets$set_filter_state(state = fs))
 
   hashes <- calculate_hashes(datanames = c("iris"), datasets = datasets)
   testthat::expect_identical(hashes, list("iris" = "34844aba7bde36f5a34f6d8e39803508"))
-  testthat::expect_false(hashes == rlang::hash(isolate(datasets$get_data("iris", filtered = TRUE))))
+  testthat::expect_false(hashes == rlang::hash(shiny::isolate(datasets$get_data("iris", filtered = TRUE))))
 })
