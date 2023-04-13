@@ -164,7 +164,10 @@ app <- init(
     )
   ),
   title = "App title",
-  filter = list(ADSL = structure(list(AGE = list()), filterable = c("AGE", "SEX", "RACE"))),
+  filter = teal.slice:::filter_settings(
+    teal.slice:::filter_var("ADSL", "AGE"),
+    exclude = list(ADSL = setdiff(names(ADSL), c("AGE", "SEX", "RACE")))
+  ),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )
