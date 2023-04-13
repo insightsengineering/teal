@@ -168,6 +168,11 @@ init <- function(data,
   checkmate::assert_class(data, "TealData")
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert(
+    checkmate::check_class(filter, "teal_slices"),
+    checkmate::check_list(filter, names = "named")
+  )
+  if (!teal.slice:::is.teal_slices(filter)) checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
   checkmate::assert_multi_class(header, c("shiny.tag", "character"))
   checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
