@@ -144,3 +144,17 @@ testthat::test_that("init modules accepts a teal_module object", {
   mods <- example_module()
   testthat::expect_error(init(data = iris, modules = mods), NA)
 })
+
+testthat::test_that("init filter accepts named list or `teal_slices`", {
+  fl <- list(
+    "iris" = list(
+      "Species" = list(selected = "setosa")
+    )
+  )
+  fs <- teal.slice::filter_settings(
+    teal.slice::filter_var(dataname = "iris", varname = "species", selected = "setosa")
+  )
+  testthat::expect_no_error(init(data = dataset_1, modules = mods, filter = fl))
+  testthat::expect_no_error(init(data = dataset_1, modules = mods, filter = fs))
+  testthat::expect_error(init(data = dataset_1, modules = mods, filter = unclass(fs)), "Assertion failed")
+})
