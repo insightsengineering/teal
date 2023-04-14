@@ -9,8 +9,8 @@ init(
   modules,
   title = NULL,
   filter = list(),
-  header = tags$p("Add Title Here"),
-  footer = tags$p("Add Footer Here"),
+  header = tags$p(),
+  footer = tags$p(),
   id = character(0)
 )
 }
@@ -34,9 +34,15 @@ more details.}
 \item{title}{(\code{NULL} or \code{character})\cr
 The browser window title (defaults to the host URL of the page).}
 
-\item{filter}{(\code{list})\cr
-You can define filters that show when the app starts. List names should be
-named according to datanames passed to the \code{data} argument.
+\item{filter}{(\code{teal_slices} or \code{list})\cr
+You can define filters that show when the app starts.
+There are two ways to specify the filter states:
+\enumerate{
+\item with a \code{teal_slices} object - see \code{?teal.slice::teal_slice} for details
+\item with a named list (deprecated)
+}
+
+List names should be named according to datanames passed to the \code{data} argument.
 In case of  data.frame` the list should be composed as follows:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
@@ -99,12 +105,12 @@ different way. Since it contains patient data with list of experiments,
 By adding the \code{filterable} attribute it is possible to control which variables can be filtered for each
 dataset. See the example below where \code{ADSL} can only be filtered by \code{AGE}, \code{SEX} or \code{RACE}.}
 
-\item{header}{(\code{character} or \code{shiny.tag}) \cr
+\item{header}{(\code{shiny.tag} or \code{character}) \cr
 the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
 (such as loading css via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
 
-\item{footer}{(\code{character} or \code{shiny.tag})\cr
+\item{footer}{(\code{shiny.tag} or \code{character})\cr
 the footer of the app}
 
 \item{id}{(\code{character})\cr
@@ -158,7 +164,10 @@ app <- init(
     )
   ),
   title = "App title",
-  filter = list(ADSL = structure(list(AGE = list()), filterable = c("AGE", "SEX", "RACE"))),
+  filter = teal.slice:::filter_settings(
+    teal.slice:::filter_var("ADSL", "AGE"),
+    exclude = list(ADSL = setdiff(names(ADSL), c("AGE", "SEX", "RACE")))
+  ),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )

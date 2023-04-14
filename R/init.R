@@ -30,9 +30,13 @@
 #'   more details.
 #' @param title (`NULL` or `character`)\cr
 #'   The browser window title (defaults to the host URL of the page).
-#' @param filter (`list`)\cr
-#'   You can define filters that show when the app starts. List names should be
-#'   named according to datanames passed to the `data` argument.
+#' @param filter (`teal_slices` or `list`)\cr
+#'   You can define filters that show when the app starts.
+#'   There are two ways to specify the filter states:
+#'   1) with a `teal_slices` object - see `?teal.slice::teal_slice` for details
+#'   2) with a named list (deprecated)
+#'
+#'   List names should be named according to datanames passed to the `data` argument.
 #'   In case of  data.frame` the list should be composed as follows:
 #'   ```
 #'   list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
@@ -92,11 +96,11 @@
 #'  By adding the `filterable` attribute it is possible to control which variables can be filtered for each
 #'  dataset. See the example below where `ADSL` can only be filtered by `AGE`, `SEX` or `RACE`.
 #'
-#' @param header (`character` or `shiny.tag`) \cr
+#' @param header (`shiny.tag` or `character`) \cr
 #'   the header of the app. Note shiny code placed here (and in the footer
 #'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
 #'   (such as loading css via [htmltools::htmlDependency()]) should be included here.
-#' @param footer (`character` or `shiny.tag`)\cr
+#' @param footer (`shiny.tag` or `character`)\cr
 #'   the footer of the app
 #' @param id (`character`)\cr
 #'   module id to embed it, if provided,
@@ -143,7 +147,10 @@
 #'     )
 #'   ),
 #'   title = "App title",
-#'   filter = list(ADSL = structure(list(AGE = list()), filterable = c("AGE", "SEX", "RACE"))),
+#'   filter = teal.slice:::filter_settings(
+#'     teal.slice:::filter_var("ADSL", "AGE"),
+#'     exclude = list(ADSL = setdiff(names(ADSL), c("AGE", "SEX", "RACE")))
+#'   ),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )
@@ -155,17 +162,24 @@ init <- function(data,
                  modules,
                  title = NULL,
                  filter = list(),
-                 header = tags$p("Add Title Here"),
-                 footer = tags$p("Add Footer Here"),
+                 header = tags$p(),
+                 footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
   data <- teal.data::to_relational_data(data = data)
 
-  checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_class(data, "TealData")
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
-  checkmate::assert_list(filter, min.len = 0, names = "unique")
-  checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert(
+    checkmate::check_class(filter, "teal_slices"),
+    checkmate::check_list(filter, names = "named")
+  )
+  if (!teal.slice:::is.teal_slices(filter)) {
+    checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
+  }
+  checkmate::assert_multi_class(header, c("shiny.tag", "character"))
+  checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   teal.logger::log_system_info()
