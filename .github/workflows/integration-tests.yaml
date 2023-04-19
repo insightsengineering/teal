@@ -4,9 +4,6 @@ name: Integration Tests 🧪
 on:
   schedule:
     - cron: '45 3 * * 0'
-  pull_request:
-    branches:
-      - main
 
 jobs:
   dependency-test:
