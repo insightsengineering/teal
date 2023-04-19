@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.12.0.9024
-Date: 2023-03-10
+Version: 0.12.0.9026
+Date: 2023-04-12
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
     person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
@@ -78,7 +78,6 @@ RoxygenNote: 7.2.3
 Collate:
     'dummy_functions.R'
     'example_module.R'
-    'get_rcode.R'
     'get_rcode_utils.R'
     'include_css_js.R'
     'modules.R'
