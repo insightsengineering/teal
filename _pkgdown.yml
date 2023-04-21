@@ -58,4 +58,3 @@ reference:
       - get_rcode
       - get_rcode_srv
       - get_rcode_ui
-      - show_rcode_modal
