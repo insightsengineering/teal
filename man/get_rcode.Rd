@@ -66,12 +66,12 @@ with all packages available. If empty (the default), a placeholder string is bei
 \examples{
 \dontrun{
 show_rcode_modal(
-    title = "R Code for a Regression Plot",
-    rcode = get_rcode(
-        datasets = datasets,
-        title = title,
-        description = description
-    )
+  title = "R Code for a Regression Plot",
+  rcode = get_rcode(
+    datasets = datasets,
+    title = title,
+    description = description
+  )
 )
 }
 }
