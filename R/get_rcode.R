@@ -45,12 +45,12 @@
 #' @examples
 #' \dontrun{
 #' show_rcode_modal(
-#'     title = "R Code for a Regression Plot",
-#'     rcode = get_rcode(
-#'         datasets = datasets,
-#'         title = title,
-#'         description = description
-#'     )
+#'   title = "R Code for a Regression Plot",
+#'   rcode = get_rcode(
+#'     datasets = datasets,
+#'     title = title,
+#'     description = description
+#'   )
 #' )
 #' }
 #' @references [show_rcode_modal()], [get_rcode_header()]
@@ -61,75 +61,75 @@ get_rcode <- function(datasets = NULL,
                       session = NULL,
                       title = NULL,
                       description = NULL) {
-    checkmate::assert_class(datasets, "FilteredData", null.ok = TRUE)
+  checkmate::assert_class(datasets, "FilteredData", null.ok = TRUE)
 
-    lifecycle::deprecate_warn(
-        when = "0.12.1",
-        what = "get_rcode()",
-        details = "Reproducibility in teal apps has changed.
+  lifecycle::deprecate_warn(
+    when = "0.12.1",
+    what = "get_rcode()",
+    details = "Reproducibility in teal apps has changed.
       See the teal.code package and example modules for further details"
-    )
+  )
 
-    if (!inherits(chunks, "chunks")) {
-        stop("No code chunks given")
+  if (!inherits(chunks, "chunks")) {
+    stop("No code chunks given")
+  }
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_string(description, null.ok = TRUE)
+  rlang::push_options(width = 120)
+
+  if (!is.null(session)) {
+    lifecycle::deprecate_warn("0.12.1", "get_rcode(session)")
+  }
+
+  if (!is.null(datasets)) {
+    if (inherits(datasets, "CDISCFilteredData")) {
+      datanames <- unique(c(datanames, unlist(lapply(datanames, datasets$get_parentname))))
     }
-    checkmate::assert_string(title, null.ok = TRUE)
-    checkmate::assert_string(description, null.ok = TRUE)
-    rlang::push_options(width = 120)
-
-    if (!is.null(session)) {
-        lifecycle::deprecate_warn("0.12.1", "get_rcode(session)")
-    }
-
-    if (!is.null(datasets)) {
-        if (inherits(datasets, "CDISCFilteredData")) {
-            datanames <- unique(c(datanames, unlist(lapply(datanames, datasets$get_parentname))))
-        }
-        str_header <- paste(
-            c(get_rcode_header(title = title, description = description), ""),
-            collapse = "\n"
-        )
-        str_install <- paste(c(get_rcode_str_install(), ""), collapse = "\n")
-        str_libs <- paste(get_rcode_libraries(), "\n")
-
-        hashes <- calculate_hashes(datanames, datasets)
-        str_code <- c(get_datasets_code(datanames, datasets, hashes), teal.slice::get_filter_expr(datasets, datanames))
-    } else {
-        str_header <- get_rcode_header(title = title, description = description)
-        str_install <- character(0)
-        str_libs <- character(0)
-        str_code <- character(0)
-    }
-    str_chunks <- paste0(
-        chunks$get_rcode(chunk_ids = selected_chunk_ids),
-        collapse = "\n"
+    str_header <- paste(
+      c(get_rcode_header(title = title, description = description), ""),
+      collapse = "\n"
     )
+    str_install <- paste(c(get_rcode_str_install(), ""), collapse = "\n")
+    str_libs <- paste(get_rcode_libraries(), "\n")
 
-    code_not_to_style <- paste(
-        c(
-            "\n",
-            str_header,
-            str_install,
-            str_libs
-        ),
-        collapse = "\n"
-    )
+    hashes <- calculate_hashes(datanames, datasets)
+    str_code <- c(get_datasets_code(datanames, datasets, hashes), teal.slice::get_filter_expr(datasets, datanames))
+  } else {
+    str_header <- get_rcode_header(title = title, description = description)
+    str_install <- character(0)
+    str_libs <- character(0)
+    str_code <- character(0)
+  }
+  str_chunks <- paste0(
+    chunks$get_rcode(chunk_ids = selected_chunk_ids),
+    collapse = "\n"
+  )
+
+  code_not_to_style <- paste(
+    c(
+      "\n",
+      str_header,
+      str_install,
+      str_libs
+    ),
+    collapse = "\n"
+  )
 
 
-    code_to_style <- paste(
-        c(
-            str_code,
-            "",
-            str_chunks,
-            "\n"
-        ),
-        collapse = "\n"
-    )
+  code_to_style <- paste(
+    c(
+      str_code,
+      "",
+      str_chunks,
+      "\n"
+    ),
+    collapse = "\n"
+  )
 
-    # remove error with curly brace
-    code_to_style <- gsub("}\n\\s*else", "} else", code_to_style)
-    code_to_style <- paste0(styler::style_text(code_to_style), collapse = "\n")
-    paste(code_not_to_style, code_to_style, sep = "\n")
+  # remove error with curly brace
+  code_to_style <- gsub("}\n\\s*else", "} else", code_to_style)
+  code_to_style <- paste0(styler::style_text(code_to_style), collapse = "\n")
+  paste(code_not_to_style, code_to_style, sep = "\n")
 }
 
 
@@ -147,43 +147,43 @@ get_rcode <- function(datasets = NULL,
 #'
 #' @keywords internal
 get_datasets_code <- function(datanames, datasets, hashes) {
-    str_code <- datasets$get_code(datanames)
-    if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
-        str_code <- "message('Preprocessing is empty')"
-    } else if (length(str_code) > 0) {
-        str_code <- paste0(str_code, "\n\n")
-    }
+  str_code <- datasets$get_code(datanames)
+  if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
+    str_code <- "message('Preprocessing is empty')"
+  } else if (length(str_code) > 0) {
+    str_code <- paste0(str_code, "\n\n")
+  }
 
-    if (!datasets$get_check()) {
-        check_note_string <- paste0(
-            c(
-                "message(paste(\"Reproducibility of data import and preprocessing was not explicitly checked\",",
-                "   \" ('check = FALSE' is set). Contact app developer if this is an issue.\n\"))"
-            ),
-            collapse = "\n"
-        )
-        str_code <- paste0(str_code, "\n\n", check_note_string)
-    }
-
-    str_hash <- paste(
-        paste0(
-            vapply(
-                datanames,
-                function(dataname) {
-                    sprintf(
-                        "stopifnot(%s == %s)",
-                        deparse1(bquote(rlang::hash(.(as.name(dataname))))),
-                        deparse1(hashes[[dataname]])
-                    )
-                },
-                character(1)
-            ),
-            collapse = "\n"
-        ),
-        "\n\n"
+  if (!datasets$get_check()) {
+    check_note_string <- paste0(
+      c(
+        "message(paste(\"Reproducibility of data import and preprocessing was not explicitly checked\",",
+        "   \" ('check = FALSE' is set). Contact app developer if this is an issue.\n\"))"
+      ),
+      collapse = "\n"
     )
+    str_code <- paste0(str_code, "\n\n", check_note_string)
+  }
 
-    c(str_code, str_hash)
+  str_hash <- paste(
+    paste0(
+      vapply(
+        datanames,
+        function(dataname) {
+          sprintf(
+            "stopifnot(%s == %s)",
+            deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+            deparse1(hashes[[dataname]])
+          )
+        },
+        character(1)
+      ),
+      collapse = "\n"
+    ),
+    "\n\n"
+  )
+
+  c(str_code, str_hash)
 }
 
 ## Module ----
@@ -208,49 +208,49 @@ get_rcode_srv <- function(id,
                           modal_title = "R Code",
                           code_header = "Automatically generated R code",
                           disable_buttons = reactiveVal(FALSE)) {
-    checkmate::assert_class(disable_buttons, c("reactive", "function"))
+  checkmate::assert_class(disable_buttons, c("reactive", "function"))
 
-    lifecycle::deprecate_warn(
-        when = "0.12.1",
-        what = "get_rcode_srv()",
-        with = "teal.widgets::verbatim_popup_srv()",
-        details = "Show R Code behaviour has changed,
+  lifecycle::deprecate_warn(
+    when = "0.12.1",
+    what = "get_rcode_srv()",
+    with = "teal.widgets::verbatim_popup_srv()",
+    details = "Show R Code behaviour has changed,
       see example modules in vignettes for more details"
+  )
+
+  moduleServer(id, function(input, output, server) {
+    chunks <- teal.code::get_chunks_object(parent_idx = 1L)
+    observeEvent(input$show_rcode, {
+      progress <- Progress$new()
+      progress$set(message = "Getting R Code", value = 0)
+      show_rcode_modal(
+        title = modal_title,
+        rcode = get_rcode(
+          datasets = datasets,
+          datanames = datanames,
+          chunks = chunks,
+          title = code_header
+        )
+      )
+      progress$set(message = "Getting R Code", value = 1)
+      progress$close()
+    })
+
+    teal.code::get_eval_details_srv(
+      id = "show_eval_details",
+      chunks = chunks
     )
 
-    moduleServer(id, function(input, output, server) {
-        chunks <- teal.code::get_chunks_object(parent_idx = 1L)
-        observeEvent(input$show_rcode, {
-            progress <- Progress$new()
-            progress$set(message = "Getting R Code", value = 0)
-            show_rcode_modal(
-                title = modal_title,
-                rcode = get_rcode(
-                    datasets = datasets,
-                    datanames = datanames,
-                    chunks = chunks,
-                    title = code_header
-                )
-            )
-            progress$set(message = "Getting R Code", value = 1)
-            progress$close()
-        })
-
-        teal.code::get_eval_details_srv(
-            id = "show_eval_details",
-            chunks = chunks
-        )
-
-        observeEvent(disable_buttons(), {
-            if (disable_buttons()) {
-                shinyjs::disable("show_rcode")
-                shinyjs::disable("show_eval_details-evaluation_details")
-            } else {
-                shinyjs::enable("show_rcode")
-                shinyjs::enable("show_eval_details-evaluation_details")
-            }
-        })
+    observeEvent(disable_buttons(), {
+      if (disable_buttons()) {
+        shinyjs::disable("show_rcode")
+        shinyjs::disable("show_eval_details-evaluation_details")
+      } else {
+        shinyjs::enable("show_rcode")
+        shinyjs::enable("show_eval_details-evaluation_details")
+      }
     })
+  })
 }
 
 #' Ui part of get R code module
@@ -262,17 +262,17 @@ get_rcode_srv <- function(id,
 #'
 #' @export
 get_rcode_ui <- function(id) {
-    lifecycle::deprecate_warn(
-        when = "0.12.1",
-        what = "get_rcode_ui()",
-        with = "teal.widgets::verbatim_popup_ui()",
-        details = "Show R Code behaviour has changed,
+  lifecycle::deprecate_warn(
+    when = "0.12.1",
+    what = "get_rcode_ui()",
+    with = "teal.widgets::verbatim_popup_ui()",
+    details = "Show R Code behaviour has changed,
       see example modules in vignettes for more details"
-    )
+  )
 
-    ns <- NS(id)
-    tagList(
-        tags$div(actionButton(ns("show_rcode"), "Show R code", width = "100%")),
-        tags$div(teal.code::get_eval_details_ui(ns("show_eval_details")))
-    )
+  ns <- NS(id)
+  tagList(
+    tags$div(actionButton(ns("show_rcode"), "Show R code", width = "100%")),
+    tags$div(teal.code::get_eval_details_ui(ns("show_eval_details")))
+  )
 }
