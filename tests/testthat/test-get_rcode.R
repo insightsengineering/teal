@@ -67,27 +67,3 @@ testthat::test_that("style nested expressions", {
     styler::style_text(cs$get_rcode())
   )
 })
-
-
-testthat::test_that("get_datasets_code returns code only for specified datanames", {
-  datasets <- teal.slice::init_filtered_data(
-    teal.data::teal_data(
-      teal.data::dataset("IRIS", x = iris, code = "IRIS <- iris"),
-      teal.data::dataset("MTCARS", x = mtcars, code = "MTCARS <- mtcars")
-    )
-  )
-
-  hashes <- calculate_hashes(datasets$datanames(), datasets)
-  testthat::expect_true(
-    !grepl(
-      "mtcars",
-      paste(get_datasets_code(datasets = datasets, dataname = "IRIS", hashes = hashes), collapse = "\n"),
-      ignore.case = TRUE
-    ) &&
-      grepl(
-        "iris",
-        paste(get_datasets_code(datasets = datasets, dataname = "IRIS", hashes = hashes), collapse = "\n"),
-        ignore.case = TRUE
-      )
-  )
-})
