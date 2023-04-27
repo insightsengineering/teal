@@ -158,10 +158,6 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
     )
 
     # set filterable variables for each dataset
-    for (filter_dataname in names(filter)) {
-      datasets$set_filterable_varnames(filter_dataname, attr(filter[[filter_dataname]], "filterable"))
-    }
-
     active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules, reporter = reporter)
     active_datanames <- reactive(active_module()$filters)
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
