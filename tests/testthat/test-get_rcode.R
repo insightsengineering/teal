@@ -68,7 +68,6 @@ testthat::test_that("style nested expressions", {
   )
 })
 
-
 testthat::test_that("get_datasets_code returns code only for specified datanames", {
   datasets <- isolate(teal.slice::init_filtered_data(
     teal.data::teal_data(

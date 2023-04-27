@@ -39,6 +39,7 @@ reference:
   - title: Report previewer module
     contents:
       - reporter_previewer_module
+      
   # - title: Functions moved to other packages
     # desc: These functions have been moved from teal and will be deprecated.
     # contents:
@@ -50,4 +51,3 @@ reference:
       - get_rcode
       - get_rcode_srv
       - get_rcode_ui
-      - show_rcode_modal
