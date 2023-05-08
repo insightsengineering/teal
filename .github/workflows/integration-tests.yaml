@@ -14,7 +14,7 @@ jobs:
     uses: insightsengineering/r.pkg.template/.github/workflows/verdepcheck.yaml@main
     name: Dependency Test - ${{ matrix.test-strategy }} 🔢
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GCHAT_WEBHOOK: ${{ secrets.GCHAT_WEBHOOK }}
     with:
       strategy: ${{ matrix.test-strategy }}
