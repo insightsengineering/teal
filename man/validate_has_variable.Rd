@@ -25,7 +25,7 @@ ADSL <- synthetic_cdisc_data("latest")$adsl
 
 ui <- fluidPage(
   selectInput("arm", "Select treatment",
-    choices = c("ARM", "ARMCD", "ACTARM", "ACTARMCD", "TRT01P", "TRT01A"),
+    choices = c("ARM", "ARMCD", "ACTARM", "TRT"),
     selected = "ARM", multiple = TRUE
   ),
   verbatimTextOutput("arm_summary")
