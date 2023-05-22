@@ -4,7 +4,7 @@ End-users: This is the most important function for you to start a
 teal app that is composed out of teal modules.
 Notes for developers:
 This is a wrapper function around the module_teal.R functions. Unless you are
-an end-user, don't use this function, but instead this module."><title>Create the Server and UI Function For the Shiny App — init • teal</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Create the Server and UI Function For the Shiny App — init"><meta property="og:description" content="
+an end-user, don't use this function, but instead this module."><title>Create the Server and UI Function For the Shiny App — init • teal</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Create the Server and UI Function For the Shiny App — init"><meta property="og:description" content="
 End-users: This is the most important function for you to start a
 teal app that is composed out of teal modules.
 Notes for developers:
@@ -20,7 +20,7 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,7 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
           aria-expanded="false" aria-haspopup="true"
           id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
 <!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -95,8 +96,8 @@ an end-user, don't use this function, but instead this module.</p>
 <span>  <span class="va">modules</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  header <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"Add Title Here"</span><span class="op">)</span>,</span>
-<span>  footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"Add Footer Here"</span><span class="op">)</span>,</span>
+<span>  header <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -105,8 +106,9 @@ an end-user, don't use this function, but instead this module.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>(<code>TealData</code> or <code>TealDataset</code> or <code>TealDatasetConnector</code> or <code>list</code> or <code>data.frame</code>
-or <code>MultiAssayExperiment</code>)<br><code>R6</code> object as returned by <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">teal.data::cdisc_data()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal.data::teal_data()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">teal.data::cdisc_dataset()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">teal.data::dataset()</a></code>,
-<code><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector.html" class="external-link">teal.data::dataset_connector()</a></code> or <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset_connector.html" class="external-link">teal.data::cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a <code>MultiAssayExperiment</code>
+or <code>MultiAssayExperiment</code>)<br><code>R6</code> object as returned by <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">teal.data::cdisc_data()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal.data::teal_data()</a></code>,
+<code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">teal.data::cdisc_dataset()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">teal.data::dataset()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector.html" class="external-link">teal.data::dataset_connector()</a></code> or
+<code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset_connector.html" class="external-link">teal.data::cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a <code>MultiAssayExperiment</code>
 or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 do not match the original object names. To ensure reproducibility please use <code><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal.data::teal_data()</a></code>
@@ -114,8 +116,10 @@ or <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="exte
 
 
 <dt>modules</dt>
-<dd><p>(<code>list</code> or <code>teal_modules</code>)<br>
-nested list of <code>teal_modules</code> or <code>module</code> objects. See <code><a href="modules.html">modules()</a></code> and <code><a href="module.html">module()</a></code> for
+<dd><p>(<code>list</code>, <code>teal_modules</code> or <code>teal_module</code>)<br>
+nested list of <code>teal_modules</code> or <code>teal_module</code> objects or a single
+<code>teal_modules</code> or <code>teal_module</code> object. These are the specific output modules which
+will be displayed in the teal application. See <code><a href="modules.html">modules()</a></code> and <code><a href="module.html">module()</a></code> for
 more details.</p></dd>
 
 
@@ -173,14 +177,14 @@ dataset. See the example below where <code>ADSL</code> can only be filtered by <
 
 
 <dt>header</dt>
-<dd><p>(<code>character</code> or <code>shiny.tag</code>) <br>
+<dd><p>(<code>shiny.tag</code> or <code>character</code>) <br>
 the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's <code>ui</code> function so code which needs to be placed in the <code>ui</code> function
-(such as loading css via <code><a href="https://rdrr.io/pkg/htmltools/man/htmlDependency.html" class="external-link">htmltools::htmlDependency()</a></code>) should be included here.</p></dd>
+(such as loading css via <code><a href="https://rstudio.github.io/htmltools/reference/htmlDependency.html" class="external-link">htmltools::htmlDependency()</a></code>) should be included here.</p></dd>
 
 
 <dt>footer</dt>
-<dd><p>(<code>character</code> or <code>shiny.tag</code>)<br>
+<dd><p>(<code>shiny.tag</code> or <code>character</code>)<br>
 the footer of the app</p></dd>
 
 
@@ -213,16 +217,16 @@ is then preferred to this function.</p></dd>
 <span class="r-in"><span>  modules <span class="op">=</span> <span class="fu"><a href="modules.html">modules</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="module.html">module</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>      <span class="st">"data source"</span>,</span></span>
-<span class="r-in"><span>      server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span>,</span></span>
+<span class="r-in"><span>      server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span>,</span></span>
 <span class="r-in"><span>      ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">div</span><span class="op">(</span><span class="fu">p</span><span class="op">(</span><span class="st">"information about data source"</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>      filters <span class="op">=</span> <span class="st">"all"</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span>,</span></span>
 <span class="r-in"><span>    <span class="fu"><a href="example_module.html">example_module</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    <span class="fu"><a href="module.html">module</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>      <span class="st">"ADSL AGE histogram"</span>,</span></span>
-<span class="r-in"><span>      server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>      server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>        <span class="va">output</span><span class="op">$</span><span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu">renderPlot</span><span class="op">(</span></span></span>
-<span class="r-in"><span>          <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">$</span><span class="fu">get_data</span><span class="op">(</span><span class="st">"ADSL"</span>, filtered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">AGE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>          <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="st">"ADSL"</span><span class="op">]</span><span class="op">]</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">AGE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>        <span class="op">)</span></span></span>
 <span class="r-in"><span>      <span class="op">}</span>,</span></span>
 <span class="r-in"><span>      ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -237,12 +241,10 @@ is then preferred to this function.</p></dd>
 <span class="r-in"><span>  header <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">h1</span><span class="op">(</span><span class="st">"Sample App"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"Copyright 2017 - 2020"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">shinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">shinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># See the vignette for an example how to embed this app as a module</span></span></span>
-<span class="r-in"><span><span class="co"># into a larger application</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

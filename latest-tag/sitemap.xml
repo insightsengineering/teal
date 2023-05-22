@@ -1,219 +1,222 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/404.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/404.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/CODE_OF_CONDUCT.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/CONTRIBUTING.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/CONTRIBUTING.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/LICENSE-text.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/SECURITY.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/SECURITY.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/articles/adding-support-for-reporting.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/articles/adding-support-for-reporting.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/articles/creating-custom-modules.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/articles/creating-custom-modules.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/articles/including-adam-data-in-teal.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/articles/including-adam-data-in-teal.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/articles/including-general-data-in-teal.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/articles/including-general-data-in-teal.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/articles/including-mae-data-in-teal.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/articles/including-mae-data-in-teal.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/articles/index.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/articles/preprocessing-data.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/articles/preprocessing-data.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/articles/teal-bs-themes.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/articles/teal-bs-themes.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/articles/teal-options.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/articles/teal-options.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/articles/teal.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/articles/teal.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/authors.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/authors.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/index.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/index.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/news/index.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/news/index.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/pull_request_template.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/pull_request_template.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/append_module.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/append_module.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/bookmarkableShinyApp.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/calculate_hashes.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/default_filter.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/dot-datasets_to_data.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/dot-log.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/example_module.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/example_module.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/filter_calls_module.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/filter_calls_module.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/fold_lines.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/fold_lines.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_client_timezone.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_client_timezone.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_code_tdata.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_datasets_code.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_datasets_code.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_dummy_cdisc_data.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_dummy_cdisc_data.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_dummy_datasets.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_dummy_datasets.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_dummy_filter.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_dummy_filter.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_dummy_modules.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_dummy_modules.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_rcode.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_join_keys.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_rcode_header.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_metadata.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_rcode_libraries.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_rcode.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_rcode_srv.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_rcode_header.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_rcode_ui.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_rcode_libraries.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/get_teal_bs_theme.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_rcode_srv.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/include_css_files.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_rcode_ui.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/include_js_files.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/get_teal_bs_theme.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/include_teal_css_js.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/include_css_files.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/index.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/include_js_files.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/init.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/include_teal_css_js.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/is_arg_used.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/line_pkg_log.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/init.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/line_usage_log.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/is_arg_used.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/log_app_usage.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/module.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/module.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/modules.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/modules.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/modules_depth.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/modules_depth.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/pad.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/pad.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/reexports.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/reexports.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/reporter_previewer_module.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/reporter_previewer_module.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/run_js_files.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/root_modules.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/show_rcode_modal.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/run_js_files.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/srv_nested_tabs.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/show_rcode_modal.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/srv_tabs_with_filters.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/srv_nested_tabs.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/srv_teal.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/srv_tabs_with_filters.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/srv_teal_with_splash.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/srv_teal.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/tdata.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/srv_teal_with_splash.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/tdata2env.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/teal-package.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/teal-package.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/ui_nested_tabs.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/ui_nested_tabs.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/ui_tabs_with_filters.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/ui_tabs_with_filters.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/ui_teal.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/ui_teal.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/ui_teal_with_splash.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/ui_teal_with_splash.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/validate_has_data.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/validate_has_data.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/validate_has_elements.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/validate_has_elements.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/validate_has_variable.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/validate_has_variable.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/validate_in.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/validate_in.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/validate_n_levels.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/validate_inputs.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/validate_no_intersection.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/validate_n_levels.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/v0.12.0/reference/validate_one_row_per_id.html</loc>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/validate_no_intersection.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/v0.13.0/reference/validate_one_row_per_id.html</loc>
   </url>
 </urlset>

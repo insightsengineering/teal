@@ -1,5 +1,5 @@
 pandoc: 2.19.2
-pkgdown: 2.0.6
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   adding-support-for-reporting: adding-support-for-reporting.html
@@ -11,8 +11,8 @@ articles:
   teal-bs-themes: teal-bs-themes.html
   teal-options: teal-options.html
   teal: teal.html
-last_built: 2022-10-14T01:34Z
+last_built: 2023-05-22T18:19Z
 urls:
-  reference: https://insightsengineering.github.io/teal/v0.12.0/reference
-  article: https://insightsengineering.github.io/teal/v0.12.0/articles
+  reference: https://insightsengineering.github.io/teal/v0.13.0/reference
+  article: https://insightsengineering.github.io/teal/v0.13.0/articles
 

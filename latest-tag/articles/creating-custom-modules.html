@@ -8,10 +8,10 @@
 <meta name="description" content="teal">
 <title>Creating Custom Modules • teal</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Creating Custom Modules">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Creating Custom Modules">
 <meta property="og:description" content="teal">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,7 @@
           aria-expanded="false" aria-haspopup="true"
           id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
 <!-- end dropdown for versions -->
       </ul>
@@ -116,16 +117,17 @@ it is also possible to create your own modules using the
 <span>  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkString.html" class="external-link">assert_string</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span></span>
 <span>    <span class="va">label</span>,</span>
-<span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkClass.html" class="external-link">assert_class</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"tdata"</span><span class="op">)</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span>        <span class="va">output</span><span class="op">$</span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderPrint</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">$</span><span class="fu">get_data</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span>, filtered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="va">output</span><span class="op">$</span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderPrint</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">]</span><span class="op">]</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="op">}</span><span class="op">)</span></span>
 <span>    <span class="op">}</span>,</span>
-<span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>        encoding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="va">datasets</span><span class="op">$</span><span class="fu">datanames</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>        encoding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">}</span>,</span>
 <span>    filters <span class="op">=</span> <span class="st">"all"</span></span>
@@ -141,8 +143,10 @@ it is also possible to create your own modules using the
 <h3 id="ui-function">UI function<a class="anchor" aria-label="anchor" href="#ui-function"></a>
 </h3>
 <p>This function contains the UI required for the module. It should be a
-function with at least the arguments <code>id</code> and
-<code>datasets</code>. It can contain standard UI components alongside
+function with at least the arguments <code>id</code>. It can also
+contain the argument <code>data</code> for access to the application
+data. See the server section below for more details.</p>
+<p>The UI function can contain standard UI components alongside
 additional widgets provided by the <code>teal.widgets</code> package. In
 the example above we are using the <code>standard_layout</code> function
 of <code>teal.widgets</code> which generates a layout including an
@@ -154,17 +158,20 @@ module’s UI.</p>
 </h3>
 <p>This function contains the shiny server logic for the module and
 should be of the form:</p>
-<pre><code><span><span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">datasets</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<pre><code><span><span class="kw">function</span><span class="op">(</span><span class="va">id</span>,</span>
+<span>         <span class="va">data</span>, <span class="co"># optional, use if you want your module to access the application data</span></span>
+<span>         <span class="va">filter_panel_api</span>, <span class="co"># optional, use if you want access to the filter panel from your module see teal.slice </span></span>
+<span>         <span class="va">reporter</span>, <span class="co"># optional, use if your module supports reporting, see reporting vignette in teal </span></span>
+<span>         <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># module code here</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-<p>The <code>datasets</code> argument is a <code>FilteredData</code>
-object which provides a call to extract the data after having been
-filtered by the filterpanel:
-<code>datasets$get_data(&lt;&lt;dataname&gt;&gt;, filtered = TRUE)</code>.
-For more details about the <code>FilteredData</code> object see the
-supporting <code>teal</code> package <a href="https://insightsengineering.github.io/teal.slice/" class="external-link"><code>teal.slice</code></a></p>
+<p>When used inside a teal application called with
+<code><a href="../reference/init.html">teal::init</a></code>, the <code>data</code> argument is a named list
+of reactive data.frames containing the data after having been filtered
+through the filter panel. It is of the <code>tdata</code> type and can
+be created using the <code>new_tdata</code> function.</p>
 </div>
 </div>
 <div class="section level2">
@@ -191,11 +198,11 @@ histogram.</p>
 <span><span class="co"># ui function for the module</span></span>
 <span><span class="co"># histogram_var is a teal.transform::data_extract_spec object</span></span>
 <span><span class="co"># specifying which columns of which datasets users can choose</span></span>
-<span><span class="va">ui_histogram_example</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">datasets</span>, <span class="va">histogram_var</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">ui_histogram_example</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">histogram_var</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span>  <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>    output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"plot"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    encoding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
+<span>    encoding <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
 <span>      <span class="fu">teal.transform</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/data_extract_ui.html" class="external-link">data_extract_ui</a></span><span class="op">(</span></span>
 <span>        id <span class="op">=</span> <span class="fu">ns</span><span class="op">(</span><span class="st">"histogram_var"</span><span class="op">)</span>,</span>
 <span>        label <span class="op">=</span> <span class="st">"Variable"</span>,</span>
@@ -204,52 +211,54 @@ histogram.</p>
 <span>    <span class="op">)</span>,</span>
 <span>    <span class="co"># we have a show R code button to show the code needed</span></span>
 <span>    <span class="co"># to generate the histogram</span></span>
-<span>    forms <span class="op">=</span> <span class="fu">teal</span><span class="fu">::</span><span class="fu"><a href="../reference/get_rcode_ui.html">get_rcode_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"rcode"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    forms <span class="op">=</span> <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/verbatim_popup.html" class="external-link">verbatim_popup_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"rcode"</span><span class="op">)</span>, <span class="st">"Show R code"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># server function for the module</span></span>
 <span><span class="co"># histogram_var is a teal.transform::data_extract_spec object</span></span>
 <span><span class="co"># specifying which columns of which datasets users can choose</span></span>
-<span><span class="va">srv_histogram_example</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">datasets</span>, <span class="va">histogram_var</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">srv_histogram_example</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">histogram_var</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkClass.html" class="external-link">assert_class</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"tdata"</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="co"># initialize the reproducibility part of teal (i.e. "chunks")</span></span>
-<span>    <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.code/man/init_chunks.html" class="external-link">init_chunks</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
 <span>    <span class="co"># get the selected dataset and column from the UI</span></span>
-<span>    <span class="va">extracted</span> <span class="op">&lt;-</span> <span class="fu">teal.transform</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/data_extract_srv.html" class="external-link">data_extract_srv</a></span><span class="op">(</span><span class="st">"histogram_var"</span>, <span class="va">datasets</span>, <span class="va">histogram_var</span><span class="op">)</span></span>
+<span>    <span class="va">extracted</span> <span class="op">&lt;-</span> <span class="fu">teal.transform</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/data_extract_srv.html" class="external-link">data_extract_srv</a></span><span class="op">(</span></span>
+<span>      id <span class="op">=</span> <span class="st">"histogram_var"</span>,</span>
+<span>      datasets <span class="op">=</span> <span class="va">data</span>,</span>
+<span>      data_extract_spec <span class="op">=</span> <span class="va">histogram_var</span>,</span>
+<span>      join_keys <span class="op">=</span> <span class="fu"><a href="../reference/get_join_keys.html">get_join_keys</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
 <span>    <span class="va">dataname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="fu">extracted</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span></span>
 <span>    <span class="va">selected</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="fu">extracted</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">select</span><span class="op">)</span></span>
 <span></span>
-<span>    <span class="co"># the reactive which adds the code to plot the histogram into the chunks</span></span>
-<span>    <span class="va">plot_code</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="co"># the reactive which adds the code to plot the histogram into the qenv</span></span>
+<span>    <span class="va">plot_code_q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/validate.html" class="external-link">validate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/validate.html" class="external-link">need</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">selected</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span>, <span class="st">"Please select a variable"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span>      <span class="co"># take the filtered data from the datasets object and add it into the chunks environment</span></span>
-<span>      <span class="va">new_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">new.env</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/assign.html" class="external-link">assign</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span>, <span class="va">datasets</span><span class="op">$</span><span class="fu">get_data</span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span>, filtered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, envir <span class="op">=</span> <span class="va">new_env</span><span class="op">)</span></span>
-<span>      <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.code/man/chunks_reset.html" class="external-link">chunks_reset</a></span><span class="op">(</span>envir <span class="op">=</span> <span class="va">new_env</span><span class="op">)</span></span>
-<span></span>
-<span>      <span class="co"># add the code for the plot into the chunks</span></span>
-<span>      <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.code/man/chunks_push.html" class="external-link">chunks_push</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/bquote.html" class="external-link">bquote</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu">.</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="fu">selected</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="op">)</span></span>
-<span></span>
-<span>      <span class="co"># evaluate the chunks</span></span>
-<span>      <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.code/man/chunks_safe_eval.html" class="external-link">chunks_safe_eval</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>      <span class="co"># take the filtered data from the data object and add it into the qenv environment</span></span>
+<span>      <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.code/man/new_qenv.html" class="external-link">new_qenv</a></span><span class="op">(</span><span class="fu"><a href="../reference/tdata2env.html">tdata2env</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, code <span class="op">=</span> <span class="fu"><a href="../reference/get_code_tdata.html">get_code_tdata</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>        <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.code/man/eval_code.html" class="external-link">eval_code</a></span><span class="op">(</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">substitute</a></span><span class="op">(</span></span>
+<span>            expr <span class="op">=</span> <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">dataname</span><span class="op">[</span>, <span class="va">selected</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>            env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>              dataname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>              selected <span class="op">=</span> <span class="fu">selected</span><span class="op">(</span><span class="op">)</span></span>
+<span>            <span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="co"># shiny component to view</span></span>
 <span>    <span class="va">output</span><span class="op">$</span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>      <span class="fu">plot_code</span><span class="op">(</span><span class="op">)</span></span>
+<span>      <span class="fu">plot_code_q</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="co"># Show the R code when user clicks 'Show R Code' button</span></span>
-<span>    <span class="fu">teal</span><span class="fu">::</span><span class="fu"><a href="../reference/get_rcode_srv.html">get_rcode_srv</a></span><span class="op">(</span></span>
+<span>    <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/verbatim_popup.html" class="external-link">verbatim_popup_srv</a></span><span class="op">(</span></span>
 <span>      id <span class="op">=</span> <span class="st">"rcode"</span>,</span>
-<span>      datasets <span class="op">=</span> <span class="va">datasets</span>,</span>
-<span>      modal_title <span class="op">=</span> <span class="st">"R code for custom plot"</span>,</span>
-<span>      code_header <span class="op">=</span> <span class="st">"R code for custom plot"</span></span>
+<span>      verbatim_content <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.code/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="fu">plot_code_q</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      title <span class="op">=</span> <span class="st">"R Code"</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -279,14 +288,12 @@ below:</p>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span>, code <span class="op">=</span> <span class="st">"IRIS &lt;- iris"</span><span class="op">)</span>,</span>
 <span>    check <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span>,</span>
-<span>  modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span></span>
-<span>    <span class="fu">tm_histogram_example</span><span class="op">(</span></span>
-<span>      label <span class="op">=</span> <span class="st">"Simple Module"</span>,</span>
-<span>      histogram_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/data_extract_spec.html" class="external-link">data_extract_spec</a></span><span class="op">(</span></span>
-<span>        dataname <span class="op">=</span> <span class="st">"IRIS"</span>,</span>
-<span>        select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/select_spec.html" class="external-link">select_spec</a></span><span class="op">(</span></span>
-<span>          choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Sepal.Width"</span>, <span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span></span>
-<span>        <span class="op">)</span></span>
+<span>  modules <span class="op">=</span> <span class="fu">tm_histogram_example</span><span class="op">(</span></span>
+<span>    label <span class="op">=</span> <span class="st">"Simple Module"</span>,</span>
+<span>    histogram_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/data_extract_spec.html" class="external-link">data_extract_spec</a></span><span class="op">(</span></span>
+<span>      dataname <span class="op">=</span> <span class="st">"IRIS"</span>,</span>
+<span>      select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.transform/man/select_spec.html" class="external-link">select_spec</a></span><span class="op">(</span></span>
+<span>        choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Sepal.Width"</span>, <span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
