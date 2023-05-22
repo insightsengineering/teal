@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,14 +40,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -69,22 +61,22 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.12.0.9026" id="teal-01209026">teal 0.12.0.9026<a class="anchor" aria-label="anchor" href="#teal-01209026"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.13.0" id="teal-0130">teal 0.13.0<a class="anchor" aria-label="anchor" href="#teal-0130"></a></h2>
 <div class="section level4">
-<h4 id="breaking-changes-0-12-0-9026">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-12-0-9026"></a></h4>
+<h4 id="breaking-changes-0-13-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-13-0"></a></h4>
 <ul><li>The use of <code>datasets</code> argument in <code>modules</code> has been deprecated and will be removed in a future release. Please use <code>data</code> argument instead. <code>data</code> is of type <code>tdata</code>; see “Creating custom modules” vignettes and function documentation of <code><a href="../reference/tdata.html">teal::new_tdata</a></code> for further details.</li>
 <li>Due to deprecation of <code>chunks</code> in <code>teal.code</code>, the <code>teal</code> framework now uses their replacement (<code>qenv</code>) instead. The documentation in <code>teal</code> has been updated to reflect this and custom modules written with <code>chunks</code> should be updated to use <code>qenv</code>.</li>
 <li>Due to deprecation of <code>chunks</code> in <code>teal.code</code>, <code>get_rcode</code>, <code>get_rcode_srv</code>, and <code>get_rcode_ui</code> have been removed.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="new-features-0-12-0-9026">New features<a class="anchor" aria-label="anchor" href="#new-features-0-12-0-9026"></a></h4>
+<h4 id="new-features-0-13-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-13-0"></a></h4>
 <ul><li>Added the <code>validate_inputs</code> function that transfers input validation messages to app output.</li>
 <li>
 <code>modules</code> argument of <code>init</code> accepts <code>teal_module</code> type of object. There is no need to wrap up a single module in <code><a href="../reference/modules.html">modules()</a></code> or <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</li>
 <li>Updated <code>module_nested_tabs</code> so that only active modules are calculated in a teal app.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="miscellaneous-0-12-0-9026">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-12-0-9026"></a></h4>
+<h4 id="miscellaneous-0-13-0">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-13-0"></a></h4>
 <ul><li>Updated examples to use <code>scda.2022</code>.</li>
 <li>Added R session information into a link in the footer of <code>teal</code> applications.</li>
 <li>Added data hashing step using <code>rlang</code> instead of <code>digest</code> package to calculate the hash (which has been moved from <code>teal.data</code> and <code>teal.slice</code>). There is now an explicit hashing check in the reproducible code output.</li>
@@ -202,7 +194,7 @@
 <li><p>Added public facing constructor functions for <code>CDISCDataConnector</code>, <code>RelationalDataConnector</code>, and <code>DataConnection</code> classes.</p></li>
 <li><p>Modified <code>data_extract_spec</code> to allow both the <code>filter</code> and <code>select</code> parameters to be <code>NULL</code>, which results in the <code>data_extract_ui</code> acting as if a <code>filter_spec</code> with all variables as possible choices had been supplied as the <code>filter</code> argument and a <code>select_spec</code> with the <code>multiple</code> parameter set to <code>TRUE</code> had been supplied as the <code>select</code> argument.</p></li>
 <li><p>Added support of the full screen for a <code>module</code> when the <code>filters</code> argument is equal <code>NULL</code>.</p></li>
-<li><p>Added support for <code><a href="https://shiny.rstudio.com/reference/shiny/latest/moduleServer.html" class="external-link">shiny::moduleServer</a></code> passed to the <code>server</code> parameter of <code><a href="../reference/module.html">teal::module</a></code>.</p></li>
+<li><p>Added support for <code><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">shiny::moduleServer</a></code> passed to the <code>server</code> parameter of <code><a href="../reference/module.html">teal::module</a></code>.</p></li>
 <li><p>Added <code>teal.threshold_slider_vs_checkboxgroup</code> as an R option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.</p></li>
 <li><p>Extended the <code>FilteredData</code> API to allow managing filter states programmatically and not only from the UI of a <code>teal</code> application.</p></li>
 <li><p>Hid the buttons to remove filters from all datasets and each dataset when there are no active filters.</p></li>
@@ -231,7 +223,7 @@
 <li>Changed references to outdated functions of <code>teal.devel</code> in the documentation.</li>
 <li>Introduced a <code>Teal</code> prefix to all public <code>R6</code> classes to avoid name collisions with other packages.</li>
 <li>Removed dependency on <code>utils.nest</code> and replaced its functionality in <code>teal</code> with equivalents from the <code>checkmate</code> package and base <code>R</code>.</li>
-<li>Replaced the old <code>shiny</code> server functions of <code>DataConnection</code>, <code>RelationalDataConnector</code>, <code>DatasetConnector</code>, and <code>RelationalData</code> with the <code><a href="https://shiny.rstudio.com/reference/shiny/latest/moduleServer.html" class="external-link">shiny::moduleServer</a></code> equivalents.</li>
+<li>Replaced the old <code>shiny</code> server functions of <code>DataConnection</code>, <code>RelationalDataConnector</code>, <code>DatasetConnector</code>, and <code>RelationalData</code> with the <code><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">shiny::moduleServer</a></code> equivalents.</li>
 <li>Running a <code>teal</code> application via <code>ui_teal_with_splash</code> and <code>srv_teal_with_splash</code> is now no longer recommended because it doesn’t support new features (e.g. logging, bookmarking). Use <code>init</code> instead.</li>
 <li>Updated the R version requirement to &gt;= 4.0.</li>
 <li>Updated the “filter panel collapse” icon to remove warnings when using <code>shiny</code> version &gt;= 1.7.</li>
