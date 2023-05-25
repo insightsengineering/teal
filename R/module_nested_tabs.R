@@ -90,6 +90,17 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L) {
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   ns <- NS(id)
   checkmate::assert_class(datasets, "FilteredData")
+
+  datanames <- if (is.null(modules$filter)) {
+  datasets$datanames()
+  } else {
+    datasets$get_filterable_datanames(modules$filter) # get_filterable_datanames adds parents if present
+  }
+  raw_data <- sapply(datanames, simplify = FALSE, FUN = function(dataname) {
+      list(dataset = datasets$get_data(dataname, filtered = FALSE))
+  })
+  module_datasets <- init_filtered_data(x = raw_data, join_keys = datasets$get_join_keys())
+
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
   args <- c(list(id = ns("module")), args)
 
@@ -106,9 +117,12 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
     id = id,
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
-    tagList(
-      if (depth >= 2L) div(style = "mt-6"),
-      do.call(modules$ui, args)
+    fluidPage(
+      column(4, module_datasets$ui_filter_panel(ns("module_filter_panel"))),
+      column(8, tagList(
+        if (depth >= 2L) div(style = "mt-6"),
+        do.call(modules$ui, args)
+      ))
     )
   )
 }
@@ -183,19 +197,29 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter = teal.r
   moduleServer(id = id, module = function(input, output, session) {
     modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
 
+    datanames <- if (is.null(modules$filter)) {
+      datasets$datanames()
+    } else {
+      datasets$get_filterable_datanames(modules$filter) # get_filterable_datanames adds parents if present
+    }
+
+    # create module-specific FilteredData
+    raw_data <- sapply(datanames, simplify = FALSE, function(dataname) {
+     list(dataset = datasets$get_data(dataname, filtered = FALSE))
+    })
+    module_datasets <- init_filtered_data(x = raw_data, join_keys = datasets$get_join_keys())
+    observeEvent(datasets$get_filter_state(), {
+      module_datasets$set_filter_state(datasets$get_filter_state())
+    })
+    module_datasets$srv_filter_panel("module_filter_panel", active_datanames = reactive(datanames))
+
     args <- c(list(id = "module"), modules$server_args)
     if (is_arg_used(modules$server, "reporter")) {
       args <- c(args, list(reporter = reporter))
     }
 
     if (is_arg_used(modules$server, "datasets")) {
-      args <- c(args, datasets = datasets)
-    }
-
-    datanames <- if (is.null(modules$filter)) {
-      datasets$datanames()
-    } else {
-      datasets$get_filterable_datanames(modules$filter) # get_filterable_datanames adds parents if present
+      args <- c(args, datasets = module_datasets)
     }
 
     # trigger the data when the tab is selected
@@ -203,7 +227,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter = teal.r
     trigger_module <- reactiveVal(NULL)
     output$data_reactive <- renderUI({
       lapply(datanames, function(x) {
-        datasets$get_data(x, filtered = TRUE)
+        module_datasets$get_data(x, filtered = TRUE)
       })
       isolate(trigger_data(trigger_data() + 1))
       isolate(trigger_module(TRUE))
@@ -212,12 +236,12 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter = teal.r
     })
 
     if (is_arg_used(modules$server, "data")) {
-      data <- .datasets_to_data(modules, datasets, trigger_data)
+      data <- .datasets_to_data(modules, module_datasets, trigger_data)
       args <- c(args, data = list(data))
     }
 
     if (is_arg_used(modules$server, "filter_panel_api")) {
-      filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets)
+      filter_panel_api <- teal.slice::FilterPanelAPI$new(module_datasets)
       args <- c(args, filter_panel_api = filter_panel_api)
     }
 
