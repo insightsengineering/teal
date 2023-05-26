@@ -97,7 +97,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
     datasets$get_filterable_datanames(modules$filter) # get_filterable_datanames adds parents if present
   }
   raw_data <- sapply(datanames, simplify = FALSE, FUN = function(dataname) {
-      list(dataset = datasets$get_data(dataname, filtered = FALSE))
+    list(dataset = datasets$get_data(dataname, filtered = FALSE))
   })
   module_datasets <- init_filtered_data(x = raw_data, join_keys = datasets$get_join_keys())
 
@@ -113,18 +113,45 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
     args <- c(args, data = list(data))
   }
 
-  tags$div(
+  teal_ui <- tags$div(
     id = id,
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
-    fluidPage(
-      column(4, module_datasets$ui_filter_panel(ns("module_filter_panel"))),
-      column(8, tagList(
-        if (depth >= 2L) div(style = "mt-6"),
-        do.call(modules$ui, args)
-      ))
+    tagList(
+      if (depth >= 2L) div(style = "mt-6"),
+      do.call(modules$ui, args)
     )
   )
+
+ filter_panel_btn <- tags$li(
+    class = "flex-grow",
+    tags$a(
+      id = "filter_hamburger", # see sidebar.css for style
+      href = "javascript:void(0)",
+      onclick = "toggleFilterPanel();", # see sidebar.js
+      title = "Toggle filter panels",
+      tags$span(icon("fas fa-bars"))
+    )
+  )
+
+  stopifnot(length(teal_ui$children) == 2)
+  # teal_ui$children[[1]] contains links to tabs
+  # teal_ui$children[[2]] contains actual tab contents
+
+  # adding filter_panel_btn to the tabsetPanel pills
+  teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
+
+  teal_ui$children <- list(
+    teal_ui$children[[1]],
+    tags$hr(class = "my-2"),
+    fluidRow(
+      column(width = 9, teal_ui$children[[2]], id = "teal_primary_col"),
+      column(width = 3, module_datasets$ui_filter_panel(ns("module_filter_panel")), id = "teal_secondary_col")
+    )
+  )
+
+  teal_ui
+
 }
 
 #' Server function that returns currently active module
@@ -163,23 +190,9 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter = teal.
         "module { deparse1(modules$label) }."
       )
     )
-
-    modules_reactive <- sapply(names(modules$children), USE.NAMES = TRUE, function(id) {
+    sapply(names(modules$children), USE.NAMES = TRUE, function(id) {
       srv_nested_tabs(id = id, datasets = datasets, modules = modules$children[[id]], reporter = reporter)
     })
-
-    get_active_module <- reactive({
-      if (length(modules$children) == 1L) {
-        # single tab is active by default
-        modules_reactive[[1]]()
-      } else {
-        # switch to active tab
-        req(input$active_tab)
-        modules_reactive[[input$active_tab]]()
-      }
-    })
-
-    get_active_module
   })
 }
 
@@ -208,21 +221,25 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter = teal.r
      list(dataset = datasets$get_data(dataname, filtered = FALSE))
     })
     module_datasets <- init_filtered_data(x = raw_data, join_keys = datasets$get_join_keys())
-    observeEvent(datasets$get_filter_state(), {
-      module_datasets$set_filter_state(datasets$get_filter_state())
+
+    this_module_states <- reactive({
+      states <- datasets$get_filter_state()
+      Filter(
+        function(x) is.null(x$external_id) || modules$label %in% x$external_id,
+        states
+      )
+    })
+
+    observeEvent(this_module_states(), {
+      module_datasets$set_filter_state(this_module_states())
     })
     module_datasets$srv_filter_panel("module_filter_panel", active_datanames = reactive(datanames))
 
-    args <- c(list(id = "module"), modules$server_args)
-    if (is_arg_used(modules$server, "reporter")) {
-      args <- c(args, list(reporter = reporter))
-    }
 
-    if (is_arg_used(modules$server, "datasets")) {
-      args <- c(args, datasets = module_datasets)
-    }
-
-    # trigger the data when the tab is selected
+    # Create two triggers to limit reactivity between filter-panel and modules.
+    # We want to recalculate only visible modules
+    # - trigger the data when the tab is selected
+    # - trigger module to be called when the tab is selected for the first time
     trigger_data <- reactiveVal(1L)
     trigger_module <- reactiveVal(NULL)
     output$data_reactive <- renderUI({
@@ -234,6 +251,16 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter = teal.r
 
       NULL
     })
+
+    # collect arguments to run teal_module
+    args <- c(list(id = "module"), modules$server_args)
+    if (is_arg_used(modules$server, "reporter")) {
+      args <- c(args, list(reporter = reporter))
+    }
+
+    if (is_arg_used(modules$server, "datasets")) {
+      args <- c(args, datasets = module_datasets)
+    }
 
     if (is_arg_used(modules$server, "data")) {
       data <- .datasets_to_data(modules, module_datasets, trigger_data)
@@ -265,7 +292,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter = teal.r
         }
       }
     )
-    reactive(modules)
+    module_datasets
   })
 }
 
