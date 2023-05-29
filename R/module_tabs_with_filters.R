@@ -103,11 +103,34 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
     is(datasets, "FilteredData")
   )
   ns <- NS(id)
-  fluidPage(
-    filter_manager_modal_ui(ns("filter_manager")),
-    ui_nested_tabs(ns("root"), modules = modules, datasets)
 
+  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets)
+  filter_panel_btn <- tags$li(
+    class = "flex-grow",
+    tags$button(
+      class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
+      href = "javascript:void(0)",
+      onclick = "toggleFilterPanel();", # see sidebar.js
+      title = "Toggle filter panels",
+      icon("fas fa-bars")
+    ),
+    filter_manager_modal_ui(ns("filter_manager"))
   )
+
+  # stopifnot(length(teal_ui$children) == 2)
+  # teal_ui$children[[1]] contains links to tabs
+  # teal_ui$children[[2]] contains actual tab contents
+
+  # # adding filter_panel_btn to the tabsetPanel pills
+  teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
+
+  teal_ui$children <- list(
+    teal_ui$children[[1]],
+    tags$hr(class = "my-2"),
+    teal_ui$children[[2]]
+  )
+
+  teal_ui
 }
 
 #' Server function

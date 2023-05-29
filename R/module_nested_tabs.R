@@ -123,35 +123,10 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
     )
   )
 
- filter_panel_btn <- tags$li(
-    class = "flex-grow",
-    tags$a(
-      id = "filter_hamburger", # see sidebar.css for style
-      href = "javascript:void(0)",
-      onclick = "toggleFilterPanel();", # see sidebar.js
-      title = "Toggle filter panels",
-      tags$span(icon("fas fa-bars"))
-    )
+  fluidRow(
+    column(width = 9, teal_ui, class = "teal_primary_col"),
+    column(width = 3, module_datasets$ui_filter_panel(ns("module_filter_panel")), class = "teal_secondary_col")
   )
-
-  stopifnot(length(teal_ui$children) == 2)
-  # teal_ui$children[[1]] contains links to tabs
-  # teal_ui$children[[2]] contains actual tab contents
-
-  # adding filter_panel_btn to the tabsetPanel pills
-  teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
-
-  teal_ui$children <- list(
-    teal_ui$children[[1]],
-    tags$hr(class = "my-2"),
-    fluidRow(
-      column(width = 9, teal_ui$children[[2]], id = "teal_primary_col"),
-      column(width = 3, module_datasets$ui_filter_panel(ns("module_filter_panel")), id = "teal_secondary_col")
-    )
-  )
-
-  teal_ui
-
 }
 
 #' Server function that returns currently active module

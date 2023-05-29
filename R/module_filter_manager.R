@@ -1,6 +1,11 @@
 filter_manager_modal_ui <- function(id) {
   ns <- NS(id)
-  actionButton(ns("filter_manager_modal"), "Filter manager")
+  tags$button(
+    id = ns("filter_manager_modal"),
+    class = "btn action-button filter_manager_button",
+    title = "Show filters manager modal",
+    icon("gear")
+  )
 }
 
 filter_manager_modal_srv <- function(id, filtered_data_list) {
@@ -41,7 +46,6 @@ filter_manager_srv <- function(id, filtered_data_list) {
               x$external_id <- union(x$external_id, i)
               x
             })
-            print(slices)
             slices_global[[i]](slices)
           }
         )
