@@ -50,9 +50,6 @@ get_rcode_libraries <- function() {
     rev() %>%
     paste0(sep = "\n") %>%
     paste0(collapse = "")
-    # motivation: second one does not have '\n' at the end which is needed
-    # letters[1:5] %>% paste0(sep = "\n") %>% paste0(collapse = "")
-    # letters[1:5] %>% paste0(collapse = "\n")
 }
 
 
