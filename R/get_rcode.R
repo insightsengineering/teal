@@ -162,7 +162,7 @@ get_datasets_code <- function(datanames, datasets, hashes) {
       ),
       collapse = "\n"
     )
-    str_code <- paste0(str_code, "\n\n", check_note_string)
+    str_code <- paste0(str_code, "\n\n", check_note_string, "\n\n")
   }
 
   str_hash <- paste(
