@@ -77,7 +77,6 @@ modules <- function(..., label = "root") {
   }
 
   checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
-
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
   labels <- vapply(submodules, function(submodule) submodule$label, character(1))
@@ -372,3 +371,21 @@ print.teal_modules <- function(x, ...) {
 #' @export
 #' @rdname module
 print.teal_module <- print.teal_modules
+
+
+#' Module specific filter settings
+#'
+#' Module specific filter settings
+#' @inheritParams teal.slice::filter_settings
+#' @export
+teal_filters <- function(..., exclude_varnames = NULL, include_varnames = NULL, count_type = NULL, mapping = NULL) {
+  fs <- filter_settings(
+    ...,
+    exclude_varnames = exclude_varnames,
+    include_varnames = include_varnames,
+    count_type = count_type
+  )
+  attr(fs, "mapping") <- mapping
+  class(fs) <- c("modules_filter_settings", class(fs))
+  fs
+}

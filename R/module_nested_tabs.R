@@ -196,19 +196,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter = teal.r
      list(dataset = datasets$get_data(dataname, filtered = FALSE))
     })
     module_datasets <- init_filtered_data(x = raw_data, join_keys = datasets$get_join_keys())
-
-    this_module_states <- reactive({
-      states <- datasets$get_filter_state()
-      Filter(
-        function(x) is.null(x$external_id) || modules$label %in% x$external_id,
-        states
-      )
-    })
-
-    observeEvent(this_module_states(), {
-      module_datasets$set_filter_state(this_module_states())
-    })
-    module_datasets$srv_filter_panel("module_filter_panel", active_datanames = reactive(datanames))
+    module_datasets$srv_filter_panel("module_filter_panel")
 
 
     # Create two triggers to limit reactivity between filter-panel and modules.

@@ -152,8 +152,13 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
 
     # set filterable variables for each dataset
     teal.slice::set_filter_state(datasets = datasets, filter = filter)
-    modules_out <- active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules, reporter = reporter)
-    filter_manager_modal_srv("filter_manager", modules_out)
+    filtered_data_list <- srv_nested_tabs(
+      id = "root",
+      datasets = datasets,
+      modules = modules,
+      reporter = reporter
+    )
+    filter_manager_modal_srv("filter_manager", filtered_data_list = filtered_data_list, filter = filter)
 
     showNotification("Data loaded - App fully started up")
     logger::log_trace(
