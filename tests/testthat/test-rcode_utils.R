@@ -1,7 +1,7 @@
 testthat::test_that("With no teal.load_nest_code option set get_rcode_str_install returns default string", {
   withr::with_options(
     list(teal.load_nest_code = NULL),
-    testthat::expect_equal(get_rcode_str_install(), "# Add any code to install/load your NEST environment here")
+    testthat::expect_equal(get_rcode_str_install(), "# Add any code to install/load your NEST environment here\n")
   )
 })
 
@@ -24,13 +24,13 @@ testthat::test_that("With teal.load_nest_code option is not character get_rcode_
           default string", {
   withr::with_options(
     list(teal.load_nest_code = TRUE),
-    testthat::expect_equal(get_rcode_str_install(), "# Add any code to install/load your NEST environment here")
+    testthat::expect_equal(get_rcode_str_install(), "# Add any code to install/load your NEST environment here\n")
   )
 
 
   withr::with_options(
     list(teal.load_nest_code = list(x = "boo")),
-    testthat::expect_equal(get_rcode_str_install(), "# Add any code to install/load your NEST environment here")
+    testthat::expect_equal(get_rcode_str_install(), "# Add any code to install/load your NEST environment here\n")
   )
 })
 

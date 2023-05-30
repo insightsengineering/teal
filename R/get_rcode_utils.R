@@ -48,7 +48,8 @@ get_rcode_libraries <- function() {
   ) %>%
     # put it into reverse order to correctly simulate executed code
     rev() %>%
-    paste0(collapse = "\n")
+    paste0(sep = "\n") %>%
+    paste0(collapse = "")
 }
 
 
@@ -60,7 +61,7 @@ get_rcode_str_install <- function() {
     return(code_string)
   }
 
-  return("# Add any code to install/load your NEST environment here")
+  return("# Add any code to install/load your NEST environment here\n")
 }
 
 #' Pads a string
