@@ -1,5 +1,7 @@
 # teal 0.13.0.9000
 
+# teal 0.13.0
+
 ### Breaking changes
 
 * The use of `datasets` argument in `modules` has been deprecated and will be removed in a future release. Please use `data` argument instead. `data` is of type `tdata`; see "Creating custom modules" vignettes and function documentation of `teal::new_tdata` for further details.
