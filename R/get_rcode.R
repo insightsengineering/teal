@@ -1,7 +1,7 @@
 #' Returns R Code from a teal module
 #'
 #' @description `r lifecycle::badge("deprecated")`
-#' Return the R-code used to create a teal::teal] module analysis. This function
+#' Return the R-code used to create a [teal::teal] module analysis. This function
 #' will return all analysis code as a character string. In case of a good setup it will
 #' not only return the code used create the module analysis, but also the code used by
 #' the app author to create the app. The main feature of this function is encapsulating
