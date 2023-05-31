@@ -33,47 +33,70 @@ filter_manager_modal_srv <- function(id, filtered_data_list, filter) {
 filter_manager_ui <- function(id) {
   ns <- NS(id)
   div(
-    tableOutput(ns("filters_map")),
+    tableOutput(ns("slices_table")),
     verbatimTextOutput(ns("filter_output"))
 
   )
 }
 
+
+#' Manage multiple `FilteredData` objects
+#'
+#' Manage multiple `FilteredData` objects
+#'
+#' @details
+#' Multiple `FilteredData` objects are linked with each other by so called
+#' `slices_map`. This module observes the changes of the filters in each `FilteredData` object
+#' and updates a map by names of the filters used in the object. This map is represented in the
+#' UI as a matrix where rows are ids of the filters and columns are names of the `filtered_data_list`
+#' (named after teal modules).
+#'
+#'
+#' @param id
+#' @param filtered_data_list (`list` of `FilteredData`)\cr
+#' @inheritParams teal::init
+#' @keywords internal
 filter_manager_srv <- function(id, filtered_data_list, filter) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("filter_manager_srv initializing for: { paste(names(filtered_data_list), collapse = ', ')}.")
 
-    # set initial filters
-    lapply(names(attr(filter, "mapping")), function(module_name) {
-      initial_module_slices <- Filter(x = filter, f = function(x) {
-        get_teal_slice_id(x) %in% attr(filter, "mapping")[[module_name]]
+    # set initial teal_slices for each module-FilteredData
+    lapply(names(filtered_data_list), function(module_name) {
+      slices_module <- Filter(x = filter, f = function(x) {
+        x$id %in% unique(unlist(attr(filter, "mapping")[c(module_name, "global_filters")]))
       })
-      filtered_data_list[[module_name]]$set_filter_state(initial_module_slices)
+      if (length(slices_module)) {
+        filtered_data_list[[module_name]]$set_filter_state(slices_module)
+      }
     })
 
-
-    # reactive map filters <-> modules
-    filters_map <- sapply(
+    # create a reactive map between modules and filters
+    slices_map <- sapply(
       names(filtered_data_list),
       function(module_name) {
         shiny::reactiveVal(attr(filter, "mapping")[[module_name]])
       }
     )
 
-    # copy of all filters kept in one (global) place
-    all_filters <- reactiveVal(filter)
+    # global list of slices (all available teal_slice)
+    slices_global <- reactiveVal(filter)
+
     lapply(names(filtered_data_list), function(module_name) {
       module_fd <- filtered_data_list[[module_name]]
-      module_states <- reactive(module_fd$get_filter_state())
+      slices_module <- reactive(module_fd$get_filter_state())
 
-      global_state_ids <- reactive(vapply(all_filters(), get_teal_slice_id, character(1)))
-      current_state_ids <- reactive(vapply(module_states(), get_teal_slice_id, character(1)))
+      global_state_ids <- reactive(vapply(slices_global(), `[[`, character(1), "id"))
+      current_state_ids <- reactive(vapply(slices_module(), `[[`, character(1), "id"))
       previous_state_ids <- reactiveVal(NULL)
-      added_state_ids <- reactiveVal(NULL)
-      removed_state_ids <- reactiveVal(NULL)
+      previous_slices_map <- reactiveVal(NULL)
+
+      added_state_ids <- reactiveVal(NULL) # added on the module level
+      removed_state_ids <- reactiveVal(NULL) # removed in the module
+      activated_state_ids <- reactiveVal(NULL) # activated in the slices map
+      deactivated_state_ids <- reactiveVal(NULL) # deactivated in the slices map
 
       observeEvent(current_state_ids(), {
-        logger::log_trace("filter_manager_srv@1 detecting states for module: { module_name }.")
+        logger::log_trace("filter_manager_srv@1 detecting states deltas in module: { module_name }.")
         added <- setdiff(current_state_ids(), previous_state_ids())
         removed <- setdiff(previous_state_ids(), current_state_ids())
         if (length(added)) added_state_ids(added)
@@ -82,25 +105,57 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       })
 
       observeEvent(added_state_ids(), ignoreNULL = TRUE, {
-        logger::log_trace("filter_manager_srv@2 updating global list of states for module: { module_name }.")
+        logger::log_trace("filter_manager_srv@2 detected new module filter: { module_name }.")
         if (any(!added_state_ids() %in% global_state_ids())) {
-          all_filters_new <- c(all_filters(), module_states())
-          all_filters(all_filters_new)
-          filters_map[[module_name]](current_state_ids())
-          added_state_ids(NULL)
+          slices_global_new <- c(slices_global(), slices_module())
+          slices_global(slices_global_new)
         }
+        if (!setequal(current_state_ids(), slices_map[[module_name]]())) {
+          slices_map[[module_name]](current_state_ids())
+        }
+        added_state_ids(NULL)
       })
 
       observeEvent(removed_state_ids(), ignoreNULL = TRUE, {
-        logger::log_trace("filter_manager_srv@2 removing state from the module: { module_name }.")
-        filters_map[[module_name]](removed_state_ids())
+        logger::log_trace("filter_manager_srv@3 detected removal of module filter: { module_name }.")
+        # todo: trigger only if removed state is activa
+        if (any(removed_state_ids() %in% slices_map[[module_name]]())) {
+          new_slices_map <- setdiff(slices_map[[module_name]](), removed_state_ids())
+          slices_map[[module_name]](new_slices_map)
+        }
         removed_state_ids(NULL)
+      })
+
+      observeEvent(slices_map[[module_name]], {
+        logger::log_trace("filter_manager_srv@4 detecting states deltas in slices_map of module: { module_name }.")
+        added <- setdiff(
+          setdiff(slices_map[[module_name]](), previous_slices_map()),
+          current_state_ids()
+        )
+        removed <- setdiff(previous_slices_map(), slices_map[[module_name]]())
+        if (length(added)) activated_state_ids(added)
+        if (length(removed)) deactivated_state_ids(removed)
+        previous_slices_map(current_state_ids())
+      })
+
+      observeEvent(activated_state_ids(), ignoreNULL = TRUE, {
+        logger::log_trace("filter_manager_srv@5 detected activation of the filter for module: { module_name }.")
+        activated_slices <- Filter(function(slice) slice$id %in% activated_state_ids(), slices_global())
+        module_fd$set_filter_state(activated_slices)
+        activated_state_ids(NULL)
+      })
+
+      observeEvent(deactivated_state_ids(), ignoreNULL = TRUE, {
+        logger::log_trace("filter_manager_srv@6 detected deactivation of the filter for module: { module_name }.")
+        deactivated_slices <- Filter(function(slice) slice$id %in% deactivated_state_ids(), slices_global())
+        module_fd$remove_filter_state(deactivated_slices)
+        deactivated_state_ids(NULL)
       })
     })
 
-    reactive_mapping_matrix <- reactive({
+    mapping_matrix <- reactive({
       module_names <- names(filtered_data_list)
-      filter_names <- vapply(X = all_filters(), FUN = get_teal_slice_id, FUN.VALUE = character(1))
+      filter_names <- vapply(X = slices_global(), `[[`, character(1), "id")
       mapping_matrix <- matrix(
         FALSE,
         nrow = length(filter_names),
@@ -108,20 +163,16 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
         dimnames = list(filter_names, module_names)
       )
       for (i in module_names) {
-        mapping_matrix[filters_map[[i]](), i] <- TRUE
+        mapping_matrix[slices_map[[i]](), i] <- TRUE
       }
       mapping_matrix
     })
 
-    output$filters_map <- renderTable(rownames = TRUE, {
-      as.data.frame(reactive_mapping_matrix())
+    output$slices_table <- renderTable(rownames = TRUE, {
+      as.data.frame(mapping_matrix())
     })
     output$filter_output <- renderText(
-      format(all_filters())
+      format(slices_global())
     )
-
-    # todo:
-    #  - mapping matrix should be editable
-    #  - we need to observe these changes and set/remove corresponding filters
   })
 }
