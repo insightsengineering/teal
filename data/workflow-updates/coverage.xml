@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.763833992094862" branch-rate="0" lines-covered="773" lines-valid="1012" branches-covered="0" branches-valid="0" complexity="0" version="3.6.2" timestamp="2023-05-24 23:11:31">
+<coverage line-rate="0.764067127344521" branch-rate="0" lines-covered="774" lines-valid="1013" branches-covered="0" branches-valid="0" complexity="0" version="3.6.2" timestamp="2023-06-01 11:55:25">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
   <packages>
-    <package name="teal" line-rate="0.763833992094862" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.764067127344521" branch-rate="0" complexity="0">
       <classes>
         <class name="dummy_functions.R" filename="R/dummy_functions.R" line-rate="0.175675675675676" branch-rate="0" complexity="0">
           <methods>
@@ -223,7 +223,7 @@
             <line number="36" hits="5" branch="false"/>
           </lines>
         </class>
-        <class name="get_rcode_utils.R" filename="R/get_rcode_utils.R" line-rate="0.961538461538462" branch-rate="0" complexity="0">
+        <class name="get_rcode_utils.R" filename="R/get_rcode_utils.R" line-rate="0.962264150943396" branch-rate="0" complexity="0">
           <methods>
             <method name="get_rcode_header" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
@@ -260,34 +260,34 @@
                 <line number="48" hits="11" branch="false"/>
                 <line number="50" hits="11" branch="false"/>
                 <line number="51" hits="11" branch="false"/>
+                <line number="52" hits="11" branch="false"/>
               </lines>
             </method>
             <method name="get_rcode_str_install" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="57" hits="15" branch="false"/>
-                <line number="59" hits="15" branch="false"/>
-                <line number="60" hits="2" branch="false"/>
-                <line number="63" hits="13" branch="false"/>
+                <line number="58" hits="15" branch="false"/>
+                <line number="60" hits="15" branch="false"/>
+                <line number="61" hits="2" branch="false"/>
+                <line number="64" hits="13" branch="false"/>
               </lines>
             </method>
             <method name="pad" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="76" hits="12" branch="false"/>
-                <line number="77" hits="8" branch="false"/>
-                <line number="79" hits="4" branch="false"/>
+                <line number="77" hits="12" branch="false"/>
+                <line number="78" hits="8" branch="false"/>
+                <line number="80" hits="4" branch="false"/>
               </lines>
             </method>
             <method name="fold_lines" signature="" line-rate="0.875" branch-rate="0" complexity="0">
               <lines>
-                <line number="92" hits="4" branch="false"/>
                 <line number="93" hits="4" branch="false"/>
-                <line number="94" hits="0" branch="false"/>
-                <line number="95" hits="4" branch="false"/>
+                <line number="94" hits="4" branch="false"/>
+                <line number="95" hits="0" branch="false"/>
                 <line number="96" hits="4" branch="false"/>
                 <line number="97" hits="4" branch="false"/>
                 <line number="98" hits="4" branch="false"/>
-                <line number="99" hits="0" branch="false"/>
-                <line number="100" hits="4" branch="false"/>
+                <line number="99" hits="4" branch="false"/>
+                <line number="100" hits="0" branch="false"/>
                 <line number="101" hits="4" branch="false"/>
                 <line number="102" hits="4" branch="false"/>
                 <line number="103" hits="4" branch="false"/>
@@ -295,6 +295,7 @@
                 <line number="105" hits="4" branch="false"/>
                 <line number="106" hits="4" branch="false"/>
                 <line number="107" hits="4" branch="false"/>
+                <line number="108" hits="4" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -328,22 +329,22 @@
             <line number="48" hits="11" branch="false"/>
             <line number="50" hits="11" branch="false"/>
             <line number="51" hits="11" branch="false"/>
-            <line number="57" hits="15" branch="false"/>
-            <line number="59" hits="15" branch="false"/>
-            <line number="60" hits="2" branch="false"/>
-            <line number="63" hits="13" branch="false"/>
-            <line number="76" hits="12" branch="false"/>
-            <line number="77" hits="8" branch="false"/>
-            <line number="79" hits="4" branch="false"/>
-            <line number="92" hits="4" branch="false"/>
+            <line number="52" hits="11" branch="false"/>
+            <line number="58" hits="15" branch="false"/>
+            <line number="60" hits="15" branch="false"/>
+            <line number="61" hits="2" branch="false"/>
+            <line number="64" hits="13" branch="false"/>
+            <line number="77" hits="12" branch="false"/>
+            <line number="78" hits="8" branch="false"/>
+            <line number="80" hits="4" branch="false"/>
             <line number="93" hits="4" branch="false"/>
-            <line number="94" hits="0" branch="false"/>
-            <line number="95" hits="4" branch="false"/>
+            <line number="94" hits="4" branch="false"/>
+            <line number="95" hits="0" branch="false"/>
             <line number="96" hits="4" branch="false"/>
             <line number="97" hits="4" branch="false"/>
             <line number="98" hits="4" branch="false"/>
-            <line number="99" hits="0" branch="false"/>
-            <line number="100" hits="4" branch="false"/>
+            <line number="99" hits="4" branch="false"/>
+            <line number="100" hits="0" branch="false"/>
             <line number="101" hits="4" branch="false"/>
             <line number="102" hits="4" branch="false"/>
             <line number="103" hits="4" branch="false"/>
@@ -351,6 +352,7 @@
             <line number="105" hits="4" branch="false"/>
             <line number="106" hits="4" branch="false"/>
             <line number="107" hits="4" branch="false"/>
+            <line number="108" hits="4" branch="false"/>
           </lines>
         </class>
         <class name="get_rcode.R" filename="R/get_rcode.R" line-rate="0.605839416058394" branch-rate="0" complexity="0">
