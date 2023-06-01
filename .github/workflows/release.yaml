@@ -13,7 +13,7 @@ jobs:
     needs: release
     uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     with:
       skip-r-cmd-check: true
       skip-r-cmd-install: true
@@ -22,7 +22,7 @@ jobs:
     needs: release
     uses: insightsengineering/r.pkg.template/.github/workflows/pkgdown.yaml@main
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     with:
       default-landing-page: latest-tag
   validation:
@@ -30,9 +30,33 @@ jobs:
     needs: release
     uses: insightsengineering/r.pkg.template/.github/workflows/validation.yaml@main
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release:
     name: Create release 🎉
     uses: insightsengineering/r.pkg.template/.github/workflows/release.yaml@main
     permissions:
       contents: write
+  r-cmd:
+    name: R CMD Check 🧬
+    needs: [release, docs]
+    uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    with:
+      additional-env-vars: |
+        _R_CHECK_CRAN_INCOMING_REMOTE_=false
+      additional-r-cmd-check-params: --as-cran
+      enforce-note-blocklist: true
+      note-blocklist: |
+        checking dependencies in R code ... NOTE
+        checking R code for possible problems ... NOTE
+        checking examples ... NOTE
+        checking Rd line widths ... NOTE
+      unit-test-report-brand: >-
+        https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/thumbs/teal.png
+  coverage:
+    name: Coverage 📔
+    needs: [release, docs]
+    uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

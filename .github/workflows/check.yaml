@@ -15,6 +15,13 @@ on:
       - main
   workflow_dispatch:
 
+  # Rerun workflows once pkgdown has finished running, to add coverage
+  # and unit test report to gh-pages branch.
+  workflow_run:
+    workflows: ["Docs 📚"]
+    types:
+      - completed
+
 jobs:
   audit:
     name: Audit Dependencies 🕵️‍♂️
@@ -23,16 +30,24 @@ jobs:
     name: R CMD Check 🧬
     uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     with:
       additional-env-vars: |
         _R_CHECK_CRAN_INCOMING_REMOTE_=false
       additional-r-cmd-check-params: --as-cran
+      enforce-note-blocklist: true
+      note-blocklist: |
+        checking dependencies in R code ... NOTE
+        checking R code for possible problems ... NOTE
+        checking examples ... NOTE
+        checking Rd line widths ... NOTE
+      unit-test-report-brand: >-
+        https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/thumbs/teal.png
   coverage:
     name: Coverage 📔
     uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   linter:
     if: github.event_name != 'push'
     name: SuperLinter 🦸‍♀️
@@ -41,7 +56,7 @@ jobs:
     name: Roxygen 🅾
     uses: insightsengineering/r.pkg.template/.github/workflows/roxygen.yaml@main
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     with:
       auto-update: true
   gitleaks:
@@ -60,7 +75,7 @@ jobs:
     if: github.event_name == 'push'
     uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@main
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   version:
     name: Version Check 🏁
     uses: insightsengineering/r.pkg.template/.github/workflows/version.yaml@main
