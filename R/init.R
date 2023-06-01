@@ -30,72 +30,10 @@
 #'   more details.
 #' @param title (`NULL` or `character`)\cr
 #'   The browser window title (defaults to the host URL of the page).
-#' @param filter (`teal_slices` or `list`)\cr
-#'   You can define filters that show when the app starts.
-#'   There are two ways to specify the filter states:
-#'   1) with a `teal_slices` object - see `?teal.slice::teal_slice` for details
-#'   2) with a named list (deprecated)
-#'
-#'   List names should be named according to datanames passed to the `data` argument.
-#'   In case of  data.frame` the list should be composed as follows:
-#'   ```
-#'   list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
-#'        <dataname2> = list(...),
-#'        ...)
-#'
-#'   ```
-#'
-#'   For example, filters for variable `Sepal.Length` in `iris` can be specified as
-#'   follows:
-#'   ```
-#'   list(iris = list(Sepal.Length = list(selected = c(5.0, 7.0))))
-#'   # or
-#'   list(iris = list(Sepal.Length = c(5.0, 7.0)))
-#'   ```
-#'
-#'   In case developer would like to include `NA` and `Inf` values in  the
-#'   filtered dataset.
-#'   ```
-#'   list(Species = list(selected = c(5.0, 7.0), keep_na = TRUE, keep_inf = TRUE))
-#'   list(Species = c(c(5.0, 7.0), NA, Inf))
-#'   ```
-#'
-#'   To initialize with specific variable filter with all values on start, one
-#'   can use
-#'   ```
-#'   list(Species = list())
-#'   ```
-#'   `filter` should be set with respect to the class of the column:
-#'   * `numeric`: `selected` should be a two elements vector defining the range
-#'   of the filter.
-#'   * `Date`: `selected` should be a two elements vector defining the date-range
-#'   of the filter
-#'   * `POSIXct`: `selected` should be a two elements vector defining the
-#'   `datetime` range of the filter
-#'   * `character` and `factor`: `selected` should be a vector of any length
-#'   defining initial values selected to filter.
-#'   \cr
-#'   `filter` for `MultiAssayExperiment` objects should be specified in slightly
-#'   different way. Since it contains patient data with list of experiments,
-#'   `filter` list should be created as follows:
-#'   \cr
-#'
-#'   ```
-#'   list(
-#'     <MAE dataname> = list(
-#'       subjects = list(<column in colData> = ..., <column in colData> = ...),
-#'       <experiment name> = list(
-#'         subset = list(<column in rowData of experiment> = ...,
-#'                       <column in rowData of experiment> = ...),
-#'         select = list(<column in colData of experiment> = ...,
-#'                       <column in colData of experiment> = ...)
-#'       )
-#'     )
-#'   )
-#'   ```
-#'  By adding the `filterable` attribute it is possible to control which variables can be filtered for each
-#'  dataset. See the example below where `ADSL` can only be filtered by `AGE`, `SEX` or `RACE`.
-#'
+#' @param filter (`teal_slices`)\cr
+#'   Specification of initial filter. Filters can be specified using [teal::teal_filters()].
+#'   Old way of specifying filters through a list is deprecated and will be removed in the
+#'   next release. Please fix your applications to use [teal::teal_filters()].
 #' @param header (`shiny.tag` or `character`) \cr
 #'   the header of the app. Note shiny code placed here (and in the footer
 #'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
@@ -126,12 +64,12 @@
 #'   ),
 #'   modules = modules(
 #'     module(
-#'       "data source",
+#'       label = "data source",
 #'       server = function(input, output, session, data) {},
 #'       ui = function(id, ...) div(p("information about data source")),
 #'       filters = "all"
 #'     ),
-#'     example_module(),
+#'     example_module(label = "example teal module"),
 #'     module(
 #'       "ADSL AGE histogram",
 #'       server = function(input, output, session, data) {
@@ -147,9 +85,16 @@
 #'     )
 #'   ),
 #'   title = "App title",
-#'   filter = teal.slice:::filter_settings(
+#'   filter = teal:::teal_filters(
 #'     teal.slice:::filter_var("ADSL", "AGE"),
-#'     exclude = list(ADSL = setdiff(names(ADSL), c("AGE", "SEX", "RACE")))
+#'     teal.slice:::filter_var("ADSL", "SEX"),
+#'     teal.slice:::filter_var("ADSL", "RACE"),
+#'     exclude_varnames = list(ADSL = setdiff(names(ADSL), c("AGE", "SEX", "RACE"))),
+#'     mapping = list(
+#'       `example teal module` = "ADSL_RACE",
+#'       `ADSL AGE histogram` = "ADSL_AGE",
+#'       global_filters = "ADSL_SEX"
+#'     )
 #'   ),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
@@ -161,7 +106,7 @@
 init <- function(data,
                  modules,
                  title = NULL,
-                 filter = list(),
+                 filter = teal_filters(),
                  header = tags$p(),
                  footer = tags$p(),
                  id = character(0)) {
@@ -189,6 +134,10 @@ init <- function(data,
   }
   if (is(modules, "list")) {
     modules <- do.call(teal::modules, modules)
+  }
+
+  if (!inherits(filter, "teal_slices")) {
+    filter <- teal.slice:::as.teal_slices(filter)
   }
 
   # Note regarding case `id = character(0)`:

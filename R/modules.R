@@ -373,19 +373,75 @@ print.teal_modules <- function(x, ...) {
 print.teal_module <- print.teal_modules
 
 
-#' Module specific filter settings
+#' Filter settings for teal applications
 #'
-#' Module specific filter settings
+#' Filter settings for teal applications
+#'
 #' @inheritParams teal.slice::filter_settings
+#' @param mapping (`named list`)\cr
+#'  Each element of the list should contain character vector of `teal_slices` `id` (see
+#'  [teal.slice::filter_var()]). Filters referred in list elements will be set on the startup of a
+#'  `teal` application.
+#'  Names of the list should correspond to `teal_module` `label` set in [module()] function.
+#'
+#' @param global (`logical(1)`)\cr
+#'  - `TRUE` when one filter panel needed to all modules. All filters will be shared
+#'    by all modules.
+#'  - `FALSE` when filter panel should be module-specific. All modules can have different set
+#'   of filters specified - see `mapping` argument.
+#'
+#' @examples
+#' filter <- teal::teal_filters(
+#'   teal.slice::filter_var(dataname = "iris", varname = "Species", id = "species"),
+#'   teal.slice::filter_var(dataname = "iris", varname = "Sepal.Length", id = "sepal_length"),
+#'   teal.slice::filter_expr(
+#'     dataname = "iris", id = "long_petals", title = "Long petals", expr = "Petal.Length > 5"
+#'   ),
+#'   teal.slice::filter_var(dataname = "mtcars", varname = "mpg", id = "mtcars_mpg"),
+#'   mapping = list(
+#'     module1 = c("species", "sepal_length"),
+#'     module2 = c("mtcars_mpg"),
+#'     global_filters = "long_petals"
+#'   )
+#' )
+#'
+#' app <- teal::init(
+#'   modules = list(
+#'     module("module1"),
+#'     module("module2")
+#'   ),
+#'   data = list(iris, mtcars),
+#'   filter = filter
+#' )
+#'
+#' if (interactive()) {
+#'   shiny::runApp(app)
+#' }
+#'
 #' @export
-teal_filters <- function(..., exclude_varnames = NULL, include_varnames = NULL, count_type = NULL, mapping = NULL) {
-  fs <- filter_settings(
+teal_filters <- function(...,
+                         exclude_varnames = NULL,
+                         include_varnames = NULL,
+                         count_type = NULL,
+                         mapping = list(),
+                         global = length(mapping) == 0) {
+  checkmate::assert_list(mapping, names = "named")
+  checkmate::assert_flag(global)
+  if (length(mapping) && global) {
+    stop(
+      "`mapping` is specified even though `global` is TRUE.",
+      "Please set global to `FALSE` or specify filters without mapping."
+    )
+  }
+
+  fs <- teal.slice::filter_settings(
     ...,
     exclude_varnames = exclude_varnames,
     include_varnames = include_varnames,
     count_type = count_type
   )
   attr(fs, "mapping") <- mapping
+  attr(fs, "global") <- global
   class(fs) <- c("modules_filter_settings", class(fs))
   fs
 }

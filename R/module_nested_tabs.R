@@ -165,9 +165,14 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter = teal.
         "module { deparse1(modules$label) }."
       )
     )
-    sapply(names(modules$children), USE.NAMES = TRUE, function(id) {
+
+
+    labels <- sapply(modules$children, `[[`, "label")
+    filtered_data_list <- lapply(names(modules$children), function(id) {
       srv_nested_tabs(id = id, datasets = datasets, modules = modules$children[[id]], reporter = reporter)
     })
+    names(filtered_data_list) <- labels
+    filtered_data_list
   })
 }
 

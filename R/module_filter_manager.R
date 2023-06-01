@@ -1,3 +1,4 @@
+#' @rdname module_filter_manager_modal
 filter_manager_modal_ui <- function(id) {
   ns <- NS(id)
 
@@ -13,6 +14,42 @@ filter_manager_modal_ui <- function(id) {
   )
 }
 
+#' Filter manager modal
+#'
+#' Filter manager modal
+#' @rdname module_filter_manager_modal
+#' @inheritParams filter_manager_srv
+#' @examples
+#' fd1 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
+#' fd2 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris), mtcars = list(dataset = mtcars)))
+#' fd3 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris), women = list(dataset = women)))
+#' filter <- teal::teal_filters(
+#'   teal.slice::filter_var(dataname = "iris", varname = "Sepal.Length"),
+#'   teal.slice::filter_var(dataname = "iris", varname = "Species"),
+#'   teal.slice::filter_var(dataname = "mtcars", varname = "mpg"),
+#'   teal.slice::filter_var(dataname = "women", varname = "height"),
+#'   mapping = list(
+#'     module2 = c("mtcars_mpg"),
+#'     module3 = c("women_height"),
+#'     global_filters = "iris_Species"
+#'   )
+#' )
+#'
+#' if (interactive()) {
+#'   shinyApp(
+#'     ui = fluidPage(
+#'       filter_manager_modal_ui("manager")
+#'     ),
+#'     server = function(input, output, session) {
+#'       filter_manager_modal_srv(
+#'         "manager",
+#'         filtered_data_list = list(module1 = fd1, module2 = fd2, module3 = fd3),
+#'         filter = filter
+#'       )
+#'     }
+#'   )
+#' }
+#'
 filter_manager_modal_srv <- function(id, filtered_data_list, filter) {
   moduleServer(id, function(input, output, session) {
     observeEvent(input$show, {
@@ -30,6 +67,7 @@ filter_manager_modal_srv <- function(id, filtered_data_list, filter) {
   })
 }
 
+#' @rdname module_filter_manager
 filter_manager_ui <- function(id) {
   ns <- NS(id)
   div(
@@ -39,36 +77,39 @@ filter_manager_ui <- function(id) {
   )
 }
 
-
 #' Manage multiple `FilteredData` objects
 #'
 #' Manage multiple `FilteredData` objects
 #'
+#' @rdname module_filter_manager
 #' @details
-#' Multiple `FilteredData` objects are linked with each other by so called
-#' `slices_map`. This module observes the changes of the filters in each `FilteredData` object
-#' and updates a map by names of the filters used in the object. This map is represented in the
-#' UI as a matrix where rows are ids of the filters and columns are names of the `filtered_data_list`
-#' (named after teal modules).
+#' This module observes the changes of the filters in each `FilteredData` object
+#' and keeps track of all filters used. Map of the filters is kept in so called
+#' `slices_map` object where each `FilteredData` is linked with its active filters.
+#' This map is represented in the UI as a matrix where rows are ids of the filters and
+#' columns are names of the `filtered_data_list` (named after teal modules).
 #'
-#'
-#' @param id
+#' @param id (`character(1)`)\cr
+#'  `shiny` module id.
 #' @param filtered_data_list (`list` of `FilteredData`)\cr
-#' @inheritParams teal::init
+#'  Names of the list should be the same as `teal_module$label`.
+#' @inheritParams init
 #' @keywords internal
 filter_manager_srv <- function(id, filtered_data_list, filter) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("filter_manager_srv initializing for: { paste(names(filtered_data_list), collapse = ', ')}.")
-
     # set initial teal_slices for each module-FilteredData
-    lapply(names(filtered_data_list), function(module_name) {
-      slices_module <- Filter(x = filter, f = function(x) {
-        x$id %in% unique(unlist(attr(filter, "mapping")[c(module_name, "global_filters")]))
+    shiny::isolate(
+      lapply(names(filtered_data_list), function(module_name) {
+        slices_module <- Filter(x = filter, f = function(x) {
+          x$id %in% unique(unlist(attr(filter, "mapping")[c(module_name, "global_filters")]))
+        })
+        if (length(slices_module)) {
+          filtered_data_list[[module_name]]$set_filter_state(slices_module)
+        }
       })
-      if (length(slices_module)) {
-        filtered_data_list[[module_name]]$set_filter_state(slices_module)
-      }
-    })
+
+    )
 
     # create a reactive map between modules and filters
     slices_map <- sapply(
