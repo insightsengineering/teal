@@ -120,9 +120,6 @@ init <- function(data,
     checkmate::check_class(filter, "teal_slices"),
     checkmate::check_list(filter, names = "named")
   )
-  if (!teal.slice:::is.teal_slices(filter)) {
-    checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
-  }
   checkmate::assert_multi_class(header, c("shiny.tag", "character"))
   checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
@@ -137,6 +134,7 @@ init <- function(data,
   }
 
   if (!inherits(filter, "teal_slices")) {
+    checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
     filter <- teal.slice:::as.teal_slices(filter)
   }
 
