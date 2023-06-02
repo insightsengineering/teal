@@ -120,9 +120,6 @@ init <- function(data,
     checkmate::check_class(filter, "teal_slices"),
     checkmate::check_list(filter, names = "named")
   )
-  if (!teal.slice:::is.teal_slices(filter)) {
-    checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
-  }
   checkmate::assert_multi_class(header, c("shiny.tag", "character"))
   checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
@@ -138,6 +135,44 @@ init <- function(data,
 
   if (!inherits(filter, "teal_slices")) {
     filter <- teal.slice:::as.teal_slices(filter)
+  }
+
+  # check teal_slices
+  for (i in seq_along(filter)) {
+    dataname_i <- shiny::isolate(filter[[i]]$dataname)
+    if (!dataname_i %in% teal.data::get_dataname(data)) {
+      stop(
+        sprintf(
+          "filter[[%s]] has a different dataname than available in a 'data':\n %s not in %s",
+          i,
+          dataname_i,
+          toString(teal.data::get_dataname(data))
+        )
+      )
+    }
+  }
+
+  if (isFALSE(attr(filter, "global"))) {
+    module_names <- unlist(c(module_labels(modules), "global_filters"))
+    failed_mod_names <- setdiff(names(attr(filter, "mapping")), module_names)
+    if (length(failed_mod_names)) {
+      stop(
+        sprintf(
+          "Some module names in the mapping arguments don't match module labels.\n %s not in %s",
+          toString(failed_mod_names),
+          toString(unique(module_names))
+        )
+      )
+    }
+
+    if (anyDuplicated(module_names)) {
+      stop(
+        sprintf(
+          "Module labels should be unique when teal_filters(mapping = TRUE). Duplicated labels:\n%s ",
+          toString(module_names[duplicated(module_names)])
+        )
+      )
+    }
   }
 
   # Note regarding case `id = character(0)`:

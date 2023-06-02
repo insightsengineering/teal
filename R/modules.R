@@ -151,7 +151,8 @@ is_arg_used.function <- function(modules, arg) {
 #' @description `r lifecycle::badge("stable")`
 #' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.
 #'
-#' @param label (`character(1)`) Label shown in the navigation item for the module.
+#' @param label (`character(1)`) Label shown in the navigation item for the module. Any label possible except
+#'  `"global_filters"` - read more in `mapping` argument of [teal::teal_filters].
 #' @param server (`function`) `shiny` module with following arguments:
 #'  - `id` - teal will set proper shiny namespace for this module (see [shiny::moduleServer()]).
 #'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
@@ -220,6 +221,9 @@ module <- function(label = "module",
   checkmate::assert_list(server_args, null.ok = TRUE, names = "named")
   checkmate::assert_list(ui_args, null.ok = TRUE, names = "named")
 
+  if (label == "global_filters") {
+    stop("Label 'global_filters' is reserved in teal. Please change to something else.")
+  }
   server_formals <- names(formals(server))
   if (!(
     "id" %in% server_formals ||
@@ -323,6 +327,15 @@ modules_depth <- function(modules, depth = 0L) {
     max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
   } else {
     depth
+  }
+}
+
+
+module_labels <- function(modules) {
+  if (inherits(modules, "teal_modules")) {
+    lapply(modules$children, module_labels)
+  } else {
+    modules$label
   }
 }
 
@@ -440,6 +453,20 @@ teal_filters <- function(...,
     include_varnames = include_varnames,
     count_type = count_type
   )
+
+  all_slice_id <- isolate(vapply(fs, `[[`, character(1), "id"))
+  for (i in names(mapping)) {
+    failed_slice_id <- setdiff(mapping[[i]], all_slice_id)
+    if (length(failed_slice_id)) {
+      stop(sprintf(
+        "id of filters in mapping '%s' don't match any available filter.\n %s not in %s",
+        i,
+        toString(failed_slice_id),
+        toString(all_slice_id)
+      ))
+    }
+  }
+
   attr(fs, "mapping") <- mapping
   attr(fs, "global") <- global
   class(fs) <- c("modules_filter_settings", class(fs))

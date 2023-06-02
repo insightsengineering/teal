@@ -159,7 +159,6 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 
       observeEvent(removed_state_ids(), ignoreNULL = TRUE, {
         logger::log_trace("filter_manager_srv@3 detected removal of module filter: { module_name }.")
-        # todo: trigger only if removed state is activa
         if (any(removed_state_ids() %in% slices_map[[module_name]]())) {
           new_slices_map <- setdiff(slices_map[[module_name]](), removed_state_ids())
           slices_map[[module_name]](new_slices_map)
