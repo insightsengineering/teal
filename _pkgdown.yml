@@ -5,8 +5,19 @@ template:
   package: nesttemplate
 
 navbar:
-  right:
-    - icon: fa-github
+  structure:
+    left: [intro, reference, articles, tutorials, news, reports]
+    right: [search, github]
+  components:
+    reports:
+      text: Reports
+      menu:
+      - text: Coverage report
+        href: coverage-report/
+      - text: Unit test report
+        href: unit-test-report/
+    github:
+      icon: fa-github
       href: https://github.com/insightsengineering/teal
 
 articles:
@@ -53,3 +64,8 @@ reference:
   - title: Validation functions
     contents:
       - starts_with("validate_")
+  - title: Deprecated functions
+    contents:
+      - get_rcode
+      - get_rcode_srv
+      - get_rcode_ui
