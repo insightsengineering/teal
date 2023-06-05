@@ -80,7 +80,7 @@ modules <- function(..., label = "root") {
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
   labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  names(submodules) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
+  names(submodules) <- make.unique(str_to_shiny_ns(labels), sep = "_")
   structure(
     list(
       label = label,
@@ -334,6 +334,7 @@ modules_depth <- function(modules, depth = 0L) {
 module_labels <- function(modules) {
   if (inherits(modules, "teal_modules")) {
     lapply(modules$children, module_labels)
+
   } else {
     modules$label
   }

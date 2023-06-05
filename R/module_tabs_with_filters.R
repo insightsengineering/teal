@@ -97,11 +97,9 @@
 #' runApp(app)
 #' }
 ui_tabs_with_filters <- function(id, modules, datasets) {
-  stopifnot(
-    # `teal_module` not supported because we insert the filters into the UI below
-    is(modules, "teal_modules"),
-    is(datasets, "FilteredData")
-  )
+  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_list(datasets, types = c("list", "FilteredData"))
+
   ns <- NS(id)
 
   teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets)
@@ -143,27 +141,23 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @return `reactive` currently selected active_module
 #' @keywords internal
 srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new(), filter) {
-  checkmate::assert_class(datasets, "FilteredData")
+  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   checkmate::assert_class(reporter, "Reporter")
   moduleServer(id, function(input, output, session) {
-    logger::log_trace(
-      "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
-    )
+    logger::log_trace("srv_tabs_with_filters initializing the module.")
 
     # set filterable variables for each dataset
-    teal.slice::set_filter_state(datasets = datasets, filter = filter)
-    filtered_data_list <- srv_nested_tabs(
+    filter_manager_modal_srv("filter_manager", filtered_data_list = datasets, filter = filter)
+    active_module <- srv_nested_tabs(
       id = "root",
       datasets = datasets,
       modules = modules,
       reporter = reporter
     )
-    filter_manager_modal_srv("filter_manager", filtered_data_list = filtered_data_list, filter = filter)
 
     showNotification("Data loaded - App fully started up")
-    logger::log_trace(
-      "srv_tabs_with_filters initialized the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
-    )
+    logger::log_trace("srv_tabs_with_filters initialized the module")
     return(NULL)
   })
 }

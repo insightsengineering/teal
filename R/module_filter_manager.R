@@ -68,12 +68,11 @@ filter_manager_modal_srv <- function(id, filtered_data_list, filter) {
 }
 
 #' @rdname module_filter_manager
-filter_manager_ui <- function(id) {
+filter_manager_ui <- function(id, is_global) {
   ns <- NS(id)
   div(
     tableOutput(ns("slices_table")),
     verbatimTextOutput(ns("filter_output"))
-
   )
 }
 
@@ -124,6 +123,10 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 
     lapply(names(filtered_data_list), function(module_name) {
       module_fd <- filtered_data_list[[module_name]]
+      available_slices <- reactive(
+        Filter(function(slice) slice$dataname %in% module_fd$datanames(), slices_global())
+      )
+      module_fd$set_external_teal_slices(available_slices)
       slices_module <- reactive(module_fd$get_filter_state())
 
       global_state_ids <- reactive(vapply(slices_global(), `[[`, character(1), "id"))
