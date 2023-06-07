@@ -163,7 +163,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter = teal.
     logger::log_trace("srv_nested_tabs.teal_modules initializing the module { deparse1(modules$label) }.")
 
     labels <- vapply(modules$children, `[[`, character(1), "label")
-    filtered_data_list <- lapply(
+    modules_reactive <- lapply(
       names(modules$children),
       function(module_id) {
         srv_nested_tabs(
@@ -174,8 +174,18 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter = teal.
         )
       }
     )
-    names(filtered_data_list) <- labels
-    filtered_data_list
+    get_active_module <- reactive({
+      if (length(modules$children) == 1L) {
+        # single tab is active by default
+        modules_reactive[[1]]()
+      } else {
+        # switch to active tab
+        req(input$active_tab)
+        modules_reactive[[input$active_tab]]()
+      }
+    })
+
+    get_active_module
   })
 }
 
@@ -193,9 +203,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter = teal.r
     } else {
       datasets$get_filterable_datanames(modules$filter) # get_filterable_datanames adds parents if present
     }
-
     datasets$srv_filter_panel("module_filter_panel")
-
 
     # Create two triggers to limit reactivity between filter-panel and modules.
     # We want to recalculate only visible modules

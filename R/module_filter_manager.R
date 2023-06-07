@@ -126,7 +126,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       available_slices <- reactive(
         Filter(function(slice) slice$dataname %in% module_fd$datanames(), slices_global())
       )
-      module_fd$set_external_teal_slices(available_slices)
+      module_fd$set_available_teal_slices(available_slices)
       slices_module <- reactive(module_fd$get_filter_state())
 
       global_state_ids <- reactive(vapply(slices_global(), `[[`, character(1), "id"))

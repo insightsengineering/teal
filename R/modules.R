@@ -68,7 +68,6 @@
 modules <- function(..., label = "root") {
   checkmate::assert_string(label)
   submodules <- list(...)
-
   if (any(vapply(submodules, is.character, FUN.VALUE = logical(1)))) {
     stop(
       "The only character argument to modules() must be 'label' and it must be named, ",
@@ -80,7 +79,7 @@ modules <- function(..., label = "root") {
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
   labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  names(submodules) <- make.unique(str_to_shiny_ns(labels), sep = "_")
+  names(submodules) <- make.unique(gsub("[^[:alnum:]]+", "_", labels), sep = "_")
   structure(
     list(
       label = label,

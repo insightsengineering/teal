@@ -158,6 +158,6 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
 
     showNotification("Data loaded - App fully started up")
     logger::log_trace("srv_tabs_with_filters initialized the module")
-    return(NULL)
+    return(active_module)
   })
 }
