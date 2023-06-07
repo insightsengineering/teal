@@ -167,6 +167,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       env$progress$set(0.25, message = "Setting data")
 
       datasets_singleton <- teal.slice::init_filtered_data(raw_data())
+      datasets_singleton$set_filter_state(filter)
       module_datasets <- function(modules) {
         if (inherits(modules, "teal_modules")) {
           datasets <- lapply(modules$children, module_datasets)
@@ -174,7 +175,14 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
           names(datasets) <- labels
           datasets
         } else if (isFALSE(attr(filter, "global"))) {
-          teal.slice::init_filtered_data(raw_data())
+          datasets_module <- teal.slice::init_filtered_data(raw_data())
+          slices_module <- Filter(x = filter, f = function(x) {
+            x$id %in% unique(unlist(attr(filter, "mapping")[c(modules$label, "global_filters")]))
+          })
+          if (length(slices_module)) {
+            datasets_module$set_filter_state(slices_module)
+          }
+          datasets_module
         } else {
           datasets_singleton
         }

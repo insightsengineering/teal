@@ -97,19 +97,6 @@ filter_manager_ui <- function(id, is_global) {
 filter_manager_srv <- function(id, filtered_data_list, filter) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("filter_manager_srv initializing for: { paste(names(filtered_data_list), collapse = ', ')}.")
-    # set initial teal_slices for each module-FilteredData
-    shiny::isolate(
-      lapply(names(filtered_data_list), function(module_name) {
-        slices_module <- Filter(x = filter, f = function(x) {
-          x$id %in% unique(unlist(attr(filter, "mapping")[c(module_name, "global_filters")]))
-        })
-        if (length(slices_module)) {
-          filtered_data_list[[module_name]]$set_filter_state(slices_module)
-        }
-      })
-
-    )
-
     # create a reactive map between modules and filters
     slices_map <- sapply(
       names(filtered_data_list),
