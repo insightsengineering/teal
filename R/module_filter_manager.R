@@ -101,6 +101,20 @@ filter_manager_ui <- function(id, is_global) {
 filter_manager_srv <- function(id, filtered_data_list, filter) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("filter_manager_srv initializing for: { paste(names(filtered_data_list), collapse = ', ')}.")
+
+    # instead of unlist which unlist with concatenating nested names with '.'
+    flatten_nested <- function(x, name = NULL) {
+      if (inherits(x, "FilteredData")) {
+        setNames(list(x), name)
+      } else {
+        unlist(lapply(names(x), function(name) flatten_nested(x[[name]], name)))
+      }
+    }
+    filtered_data_list <- flatten_nested(filtered_data_list)
+
+    # global list of slices (all available teal_slice)
+    slices_global <- reactiveVal(filter)
+
     # create a reactive map between modules and filters
     slices_map <- sapply(
       names(filtered_data_list),
@@ -109,82 +123,13 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       }
     )
 
-    # global list of slices (all available teal_slice)
-    slices_global <- reactiveVal(filter)
-
     lapply(names(filtered_data_list), function(module_name) {
-      module_fd <- filtered_data_list[[module_name]]
-      available_slices <- reactive(
-        Filter(function(slice) slice$dataname %in% module_fd$datanames(), slices_global())
+      filter_manager_module_srv(
+        module_name = module_name,
+        module_fd = filtered_data_list[[module_name]],
+        slices_map_module = slices_map[[module_name]],
+        slices_global = slices_global
       )
-      module_fd$set_available_teal_slices(available_slices)
-      slices_module <- reactive(module_fd$get_filter_state())
-
-      global_state_ids <- reactive(vapply(slices_global(), `[[`, character(1), "id"))
-      current_state_ids <- reactive(vapply(slices_module(), `[[`, character(1), "id"))
-      previous_state_ids <- reactiveVal(NULL)
-      previous_slices_map <- reactiveVal(NULL)
-
-      added_state_ids <- reactiveVal(NULL) # added on the module level
-      removed_state_ids <- reactiveVal(NULL) # removed in the module
-      activated_state_ids <- reactiveVal(NULL) # activated in the slices map
-      deactivated_state_ids <- reactiveVal(NULL) # deactivated in the slices map
-
-      observeEvent(current_state_ids(), {
-        logger::log_trace("filter_manager_srv@1 detecting states deltas in module: { module_name }.")
-        added <- setdiff(current_state_ids(), previous_state_ids())
-        removed <- setdiff(previous_state_ids(), current_state_ids())
-        if (length(added)) added_state_ids(added)
-        if (length(removed)) removed_state_ids(removed)
-        previous_state_ids(current_state_ids())
-      })
-
-      observeEvent(added_state_ids(), ignoreNULL = TRUE, {
-        logger::log_trace("filter_manager_srv@2 detected new module filter: { module_name }.")
-        if (any(!added_state_ids() %in% global_state_ids())) {
-          slices_global_new <- c(slices_global(), slices_module())
-          slices_global(slices_global_new)
-        }
-        if (!setequal(current_state_ids(), slices_map[[module_name]]())) {
-          slices_map[[module_name]](current_state_ids())
-        }
-        added_state_ids(NULL)
-      })
-
-      observeEvent(removed_state_ids(), ignoreNULL = TRUE, {
-        logger::log_trace("filter_manager_srv@3 detected removal of module filter: { module_name }.")
-        if (any(removed_state_ids() %in% slices_map[[module_name]]())) {
-          new_slices_map <- setdiff(slices_map[[module_name]](), removed_state_ids())
-          slices_map[[module_name]](new_slices_map)
-        }
-        removed_state_ids(NULL)
-      })
-
-      observeEvent(slices_map[[module_name]], {
-        logger::log_trace("filter_manager_srv@4 detecting states deltas in slices_map of module: { module_name }.")
-        added <- setdiff(
-          setdiff(slices_map[[module_name]](), previous_slices_map()),
-          current_state_ids()
-        )
-        removed <- setdiff(previous_slices_map(), slices_map[[module_name]]())
-        if (length(added)) activated_state_ids(added)
-        if (length(removed)) deactivated_state_ids(removed)
-        previous_slices_map(current_state_ids())
-      })
-
-      observeEvent(activated_state_ids(), ignoreNULL = TRUE, {
-        logger::log_trace("filter_manager_srv@5 detected activation of the filter for module: { module_name }.")
-        activated_slices <- Filter(function(slice) slice$id %in% activated_state_ids(), slices_global())
-        module_fd$set_filter_state(activated_slices)
-        activated_state_ids(NULL)
-      })
-
-      observeEvent(deactivated_state_ids(), ignoreNULL = TRUE, {
-        logger::log_trace("filter_manager_srv@6 detected deactivation of the filter for module: { module_name }.")
-        deactivated_slices <- Filter(function(slice) slice$id %in% deactivated_state_ids(), slices_global())
-        module_fd$remove_filter_state(deactivated_slices)
-        deactivated_state_ids(NULL)
-      })
     })
 
     mapping_matrix <- reactive({
@@ -208,5 +153,101 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     output$filter_output <- renderText(
       format(slices_global())
     )
+  })
+}
+
+#' Module specific filter manager
+#'
+#' This module compares filters between single `FilteredData` settings
+#' and global `teal_slices`. Updates appropriate objects `module_fd`,
+#' `slices_map_module`, `slices_global` to keep them consistent.
+#'
+#' @param id (`character(1)`)\cr
+#'  `shiny` module id.
+#' @param module_fd (`FilteredData`)\cr
+#'   object to filter data in the teal-module
+#' @param slices_map_modul (`reactiveVal` of `character`)\cr
+#'   `id` of the `teal_slice` objects used in the module specific `FilteredData`.
+#' @param slices_global (`reactiveVal` or `teal_slices`)\cr
+#'   stores a list of all available filters which can be utilized in several ways, for example:
+#'   - to disable/enable specific filter in the module
+#'   - to restore filter saved settings
+#'   - to save current filter settings panel
+#' @return shiny module returning NULL
+#' @keywords internal
+filter_manager_module_srv <- function(module_name, module_fd, slices_map_module, slices_global) {
+  moduleServer(module_name, function(input, output, session) {
+    available_slices <- reactive(
+      Filter(function(slice) slice$dataname %in% module_fd$datanames(), slices_global())
+    )
+    module_fd$set_available_teal_slices(available_slices)
+    slices_module <- reactive(module_fd$get_filter_state())
+
+    global_state_ids <- reactive(vapply(slices_global(), `[[`, character(1), "id"))
+    current_state_ids <- reactive(vapply(slices_module(), `[[`, character(1), "id"))
+    previous_state_ids <- reactiveVal(NULL)
+    previous_slices_map <- reactiveVal(NULL)
+
+    added_state_ids <- reactiveVal(NULL) # added on the module level
+    removed_state_ids <- reactiveVal(NULL) # removed in the module
+    activated_state_ids <- reactiveVal(NULL) # activated in the slices map
+    deactivated_state_ids <- reactiveVal(NULL) # deactivated in the slices map
+
+    observeEvent(current_state_ids(), {
+      logger::log_trace("filter_manager_srv@1 detecting states deltas in module: { module_name }.")
+      added <- setdiff(current_state_ids(), previous_state_ids())
+      removed <- setdiff(previous_state_ids(), current_state_ids())
+      if (length(added)) added_state_ids(added)
+      if (length(removed)) removed_state_ids(removed)
+      previous_state_ids(current_state_ids())
+    })
+
+    observeEvent(added_state_ids(), ignoreNULL = TRUE, {
+      logger::log_trace("filter_manager_srv@2 detected new module filter: { module_name }.")
+      if (any(!added_state_ids() %in% global_state_ids())) {
+        slices_global_new <- c(slices_global(), slices_module())
+        slices_global(slices_global_new)
+      }
+      if (!setequal(current_state_ids(), slices_map_module())) {
+        slices_map_module(current_state_ids())
+      }
+      added_state_ids(NULL)
+    })
+
+    observeEvent(removed_state_ids(), ignoreNULL = TRUE, {
+      logger::log_trace("filter_manager_srv@3 detected removal of module filter: { module_name }.")
+      if (any(removed_state_ids() %in% slices_map_module())) {
+        new_slices_map <- setdiff(slices_map_module(), removed_state_ids())
+        slices_map_module(new_slices_map)
+      }
+      removed_state_ids(NULL)
+    })
+
+    observeEvent(slices_map_module, {
+      logger::log_trace("filter_manager_srv@4 detecting states deltas in slices_map of module: { module_name }.")
+      added <- setdiff(
+        setdiff(slices_map_module(), previous_slices_map()),
+        current_state_ids()
+      )
+      removed <- setdiff(previous_slices_map(), slices_map_module())
+      if (length(added)) activated_state_ids(added)
+      if (length(removed)) deactivated_state_ids(removed)
+      previous_slices_map(current_state_ids())
+    })
+
+    observeEvent(activated_state_ids(), ignoreNULL = TRUE, {
+      logger::log_trace("filter_manager_srv@5 detected activation of the filter for module: { module_name }.")
+      activated_slices <- Filter(function(slice) slice$id %in% activated_state_ids(), slices_global())
+      module_fd$set_filter_state(activated_slices)
+      activated_state_ids(NULL)
+    })
+
+    observeEvent(deactivated_state_ids(), ignoreNULL = TRUE, {
+      logger::log_trace("filter_manager_srv@6 detected deactivation of the filter for module: { module_name }.")
+      deactivated_slices <- Filter(function(slice) slice$id %in% deactivated_state_ids(), slices_global())
+      module_fd$remove_filter_state(deactivated_slices)
+      deactivated_state_ids(NULL)
+    })
+    NULL
   })
 }
