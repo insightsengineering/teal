@@ -27,7 +27,8 @@ module(
 \method{print}{teal_module}(x, ...)
 }
 \arguments{
-\item{label}{(\code{character(1)}) Label shown in the navigation item for the module.}
+\item{label}{(\code{character(1)}) Label shown in the navigation item for the module. Any label possible except
+\code{"global_filters"} - read more in \code{mapping} argument of \link{teal_filters}.}
 
 \item{server}{(\code{function}) \code{shiny} module with following arguments:
 \itemize{

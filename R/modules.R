@@ -333,7 +333,6 @@ modules_depth <- function(modules, depth = 0L) {
 module_labels <- function(modules) {
   if (inherits(modules, "teal_modules")) {
     lapply(modules$children, module_labels)
-
   } else {
     modules$label
   }

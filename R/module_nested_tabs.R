@@ -97,12 +97,6 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   checkmate::assert_class(datasets, class = "FilteredData")
   ns <- NS(id)
 
-  datanames <- if (is.null(modules$filter)) {
-  datasets$datanames()
-  } else {
-    datasets$get_filterable_datanames(modules$filter) # get_filterable_datanames adds parents if present
-  }
-
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
   args <- c(list(id = ns("module")), args)
 
@@ -125,10 +119,14 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
     )
   )
 
-  fluidRow(
-    column(width = 9, teal_ui, class = "teal_primary_col"),
-    column(width = 3, datasets$ui_filter_panel(ns("module_filter_panel")), class = "teal_secondary_col")
-  )
+  if (!is.null(modules$filter)) {
+    fluidRow(
+      column(width = 9, teal_ui, class = "teal_primary_col"),
+      column(width = 3, datasets$ui_filter_panel(ns("module_filter_panel")), class = "teal_secondary_col")
+    )
+  } else {
+    fluidRow(datasets$ui_filter_panel(ns("module_filter_panel")))
+  }
 }
 
 #' Server function that returns currently active module
@@ -163,7 +161,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, reporter = teal.
     logger::log_trace("srv_nested_tabs.teal_modules initializing the module { deparse1(modules$label) }.")
 
     labels <- vapply(modules$children, `[[`, character(1), "label")
-    modules_reactive <- lapply(
+    modules_reactive <- sapply(
       names(modules$children),
       function(module_id) {
         srv_nested_tabs(
@@ -197,13 +195,9 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter = teal.r
   logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
-
-    datanames <- if (is.null(modules$filter)) {
-      datasets$datanames()
-    } else {
-      datasets$get_filterable_datanames(modules$filter) # get_filterable_datanames adds parents if present
+    if (!is.null(modules$filter)) {
+      datasets$srv_filter_panel("module_filter_panel")
     }
-    datasets$srv_filter_panel("module_filter_panel")
 
     # Create two triggers to limit reactivity between filter-panel and modules.
     # We want to recalculate only visible modules
@@ -212,7 +206,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, reporter = teal.r
     trigger_data <- reactiveVal(1L)
     trigger_module <- reactiveVal(NULL)
     output$data_reactive <- renderUI({
-      lapply(datanames, function(x) {
+      lapply(datasets$datanames(), function(x) {
         datasets$get_data(x, filtered = TRUE)
       })
       isolate(trigger_data(trigger_data() + 1))

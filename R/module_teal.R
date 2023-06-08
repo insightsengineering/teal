@@ -127,7 +127,7 @@ ui_teal <- function(id,
 #'
 #' @return `reactive` which returns the currently active module
 #' @keywords internal
-srv_teal <- function(id, modules, raw_data, filter = list()) {
+srv_teal <- function(id, modules, raw_data, filter = teal_filters()) {
   stopifnot(is.reactive(raw_data))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal initializing the module.")
@@ -175,13 +175,41 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
           names(datasets) <- labels
           datasets
         } else if (isFALSE(attr(filter, "global"))) {
-          datasets_module <- teal.slice::init_filtered_data(raw_data())
-          slices_module <- Filter(x = filter, f = function(x) {
+          # create FilteredData
+          datanames <- if (modules$filter == "all" || is.null(modules$filter)) {
+            raw_data()$get_datanames()
+          } else if (is.character(modules$filter)) {
+            intersect(modules$filter, raw_data()$get_datanames())
+          }
+          data_objects <- sapply(
+            datanames,
+            simplify = FALSE,
+            FUN = function(dataname) {
+              dataset <- raw_data()$get_dataset(dataname)
+              list(
+                dataset = dataset$get_raw_data(),
+                metadata = dataset$get_metadata(),
+                label = dataset$get_dataset_label()
+              )
+            }
+          )
+          datasets_module <- teal.slice::init_filtered_data(
+            data_objects,
+            join_keys = raw_data()$get_join_keys(),
+            code = raw_data()$get_code_class(),
+            check = raw_data()$get_check()
+          )
+
+          # set initial filters
+          slices <- Filter(x = filter, f = function(x) {
             x$id %in% unique(unlist(attr(filter, "mapping")[c(modules$label, "global_filters")]))
           })
-          if (length(slices_module)) {
-            datasets_module$set_filter_state(slices_module)
-          }
+          include_varnames <- attr(slices, "include_varnames")[names(attr(slices, "include_varnames")) %in% datanames]
+          exclude_varnames <- attr(slices, "exclude_varnames")[names(attr(slices, "exclude_varnames")) %in% datanames]
+          slices$include_varnames <- include_varnames
+          slices$exclude_varnames <- exclude_varnames
+          datasets_module$set_filter_state(slices)
+
           datasets_module
         } else {
           datasets_singleton

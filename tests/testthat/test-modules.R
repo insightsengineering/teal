@@ -32,7 +32,7 @@ testthat::test_that("module requires label argument to be a string different tha
 
   testthat::expect_error(module(label = 1L), "Assertion on 'label' failed.+not 'integer'")
 
-  testthat::expect_error(module(label = 'global_filters'), "is reserved in teal")
+  testthat::expect_error(module(label = "global_filters"), "is reserved in teal")
 })
 
 testthat::test_that("module expects server being a shiny server module with any argument", {
@@ -576,4 +576,3 @@ testthat::test_that("teal_filters fails when mapping is specified with global = 
     "`mapping` is specified even though `global` is TRUE"
   )
 })
-

@@ -115,11 +115,10 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
     filter_manager_modal_ui(ns("filter_manager"))
   )
 
-  # stopifnot(length(teal_ui$children) == 2)
+
   # teal_ui$children[[1]] contains links to tabs
   # teal_ui$children[[2]] contains actual tab contents
-
-  # # adding filter_panel_btn to the tabsetPanel pills
+  # # adding filter_panel_btn to the tabsetPanel
   teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
 
   teal_ui$children <- list(

@@ -21,17 +21,21 @@ filter_manager_modal_ui <- function(id) {
 #' @inheritParams filter_manager_srv
 #' @examples
 #' fd1 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
-#' fd2 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris), mtcars = list(dataset = mtcars)))
-#' fd3 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris), women = list(dataset = women)))
+#' fd2 <- teal.slice::init_filtered_data(
+#'   list(iris = list(dataset = iris), mtcars = list(dataset = mtcars))
+#' )
+#' fd3 <- teal.slice::init_filtered_data(
+#'   list(iris = list(dataset = iris), women = list(dataset = women))
+#' )
 #' filter <- teal::teal_filters(
 #'   teal.slice::filter_var(dataname = "iris", varname = "Sepal.Length"),
 #'   teal.slice::filter_var(dataname = "iris", varname = "Species"),
 #'   teal.slice::filter_var(dataname = "mtcars", varname = "mpg"),
 #'   teal.slice::filter_var(dataname = "women", varname = "height"),
 #'   mapping = list(
-#'     module2 = c("mtcars_mpg"),
-#'     module3 = c("women_height"),
-#'     global_filters = "iris_Species"
+#'     module2 = c("mtcars mpg"),
+#'     module3 = c("women height"),
+#'     global_filters = "iris Species"
 #'   )
 #' )
 #'

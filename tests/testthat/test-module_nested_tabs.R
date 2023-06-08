@@ -30,7 +30,7 @@ test_module4 <- module(
 testthat::test_that("srv_nested_tabs throws error if reporter is not inherited from class Reporter", {
   testthat::expect_error(
     srv_nested_tabs(id, datasets = filtered_data, modules = modules(test_module1), reporter = list()),
-    "inherits\\(reporter, \"Reporter\"\\) is not TRUE"
+    "Must inherit from class 'Reporter'"
   )
 })
 
@@ -42,7 +42,7 @@ testthat::test_that("passed shiny module is initialized only when the UI is trig
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(test1 = filtered_data),
         modules = modules(test_module1),
         reporter = teal.reporter::Reporter$new()
       ),
@@ -56,7 +56,7 @@ testthat::test_that("passed shiny module is initialized only when the UI is trig
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(test1 = filtered_data),
         modules = modules(test_module1),
         reporter = teal.reporter::Reporter$new()
       ),
@@ -75,7 +75,10 @@ testthat::test_that("nested teal-modules are initialized when the UI is triggere
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(
+          tab1 = list(test1 = filtered_data, test2 = filtered_data),
+          tab2 = list(test3 = filtered_data, test4 = filtered_data)
+        ),
         modules = modules(
           modules(label = "tab1", test_module1, test_module2),
           modules(label = "tab2", test_module3, test_module4)
@@ -92,7 +95,10 @@ testthat::test_that("nested teal-modules are initialized when the UI is triggere
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(
+          tab1 = list(test1 = filtered_data, test2 = filtered_data),
+          tab2 = list(test3 = filtered_data, test4 = filtered_data)
+        ),
         modules = modules(
           modules(label = "tab1", test_module1, test_module2),
           modules(label = "tab2", test_module3, test_module4)
@@ -111,7 +117,10 @@ out <- shiny::testServer(
   app = srv_nested_tabs,
   args = list(
     id = "test",
-    datasets = filtered_data,
+    datasets = list(
+      tab1 = list(test1 = filtered_data, test2 = filtered_data),
+      tab2 = list(test3 = filtered_data, test4 = filtered_data)
+    ),
     modules = modules(
       modules(label = "tab1", test_module1, test_module2),
       modules(label = "tab2", test_module3, test_module4)
@@ -170,7 +179,7 @@ testthat::test_that("srv_nested_tabs.teal_module does not pass data if not in th
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(module = filtered_data),
         modules = modules(module),
         reporter = teal.reporter::Reporter$new()
       ),
@@ -191,7 +200,7 @@ testthat::test_that("srv_nested_tabs.teal_module does pass data if in the args e
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(module = filtered_data),
         modules = modules(module),
         reporter = teal.reporter::Reporter$new()
       ),
@@ -212,7 +221,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes data to the server modul
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(module = filtered_data),
         modules = modules(module),
         reporter = teal.reporter::Reporter$new()
       ),
@@ -232,7 +241,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes datasets to the server m
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(module = filtered_data),
         modules = modules(module),
         reporter = teal.reporter::Reporter$new()
       ),
@@ -253,7 +262,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes server_args to the ...",
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(module = filtered_data),
         modules = modules(module),
         reporter = teal.reporter::Reporter$new()
       ),
@@ -273,7 +282,7 @@ testthat::test_that("srv_nested_tabs.teal_module warns if both data and datasets
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(`test module` = filtered_data),
         modules = modules(module),
         reporter = teal.reporter::Reporter$new()
       ),
@@ -301,7 +310,7 @@ testthat::test_that("srv_nested_tabs.teal_module doesn't pass filter_panel_api i
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(module = filtered_data),
         modules = modules(module),
         reporter = teal.reporter::Reporter$new()
       ),
@@ -324,7 +333,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api when pa
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(module = filtered_data),
         modules = modules(module),
         reporter = teal.reporter::Reporter$new()
       ),
@@ -345,7 +354,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the 
       app = srv_nested_tabs,
       args = list(
         id = "test",
-        datasets = filtered_data,
+        datasets = list(module = filtered_data),
         modules = modules(module),
         reporter = teal.reporter::Reporter$new()
       ),
