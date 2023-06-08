@@ -119,13 +119,13 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
     )
   )
 
-  if (!is.null(modules$filter)) {
+  if (is.null(modules$filter)) {
+    fluidRow(teal_ui)
+  } else {
     fluidRow(
       column(width = 9, teal_ui, class = "teal_primary_col"),
       column(width = 3, datasets$ui_filter_panel(ns("module_filter_panel")), class = "teal_secondary_col")
     )
-  } else {
-    fluidRow(datasets$ui_filter_panel(ns("module_filter_panel")))
   }
 }
 
