@@ -166,9 +166,10 @@ srv_teal <- function(id, modules, raw_data, filter = teal_filters()) {
       env$progress <- shiny::Progress$new(session)
       env$progress$set(0.25, message = "Setting data")
 
-      datasets_singleton <- teal.slice::init_filtered_data(raw_data())
-      datasets_singleton$set_filter_state(filter)
+      # create a list of data based on the nested modules structure
       module_datasets <- function(modules) {
+        datasets_singleton <- teal.slice::init_filtered_data(raw_data())
+        datasets_singleton$set_filter_state(filter)
         if (inherits(modules, "teal_modules")) {
           datasets <- lapply(modules$children, module_datasets)
           labels <- vapply(modules$children, `[[`, character(1), "label")
@@ -176,7 +177,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_filters()) {
           datasets
         } else if (isFALSE(attr(filter, "global"))) {
           # create FilteredData
-          datanames <- if (modules$filter == "all" || is.null(modules$filter)) {
+          datanames <- if (identical(modules$filter, "all") || is.null(modules$filter)) {
             raw_data()$get_datanames()
           } else if (is.character(modules$filter)) {
             intersect(modules$filter, raw_data()$get_datanames())
@@ -238,6 +239,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_filters()) {
       env$progress$set(0.5, message = "Setting up main UI")
       on.exit(env$progress$close())
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
+
       removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
       insertUI(
         selector = paste0("#", session$ns("main_ui_container")),
@@ -247,7 +249,8 @@ srv_teal <- function(id, modules, raw_data, filter = teal_filters()) {
         ui = div(ui_tabs_with_filters(
           session$ns("main_ui"),
           modules = modules,
-          datasets = datasets_reactive()
+          datasets = datasets_reactive(),
+          filter = filter
         )),
         # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
         # have any effect as they are ignored when not present

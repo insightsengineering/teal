@@ -185,8 +185,8 @@ filter_manager_module_srv <- function(module_name, module_fd, slices_map_module,
 
     global_state_ids <- reactive(vapply(slices_global(), `[[`, character(1), "id"))
     current_state_ids <- reactive(vapply(slices_module(), `[[`, character(1), "id"))
-    previous_state_ids <- reactiveVal(NULL)
-    previous_slices_map <- reactiveVal(NULL)
+    previous_state_ids <- reactiveVal(shiny::isolate(current_state_ids()))
+    previous_slices_map <- reactiveVal(shiny::isolate(previous_state_ids()))
 
     added_state_ids <- reactiveVal(NULL) # added on the module level
     removed_state_ids <- reactiveVal(NULL) # removed in the module
@@ -197,7 +197,31 @@ filter_manager_module_srv <- function(module_name, module_fd, slices_map_module,
       logger::log_trace("filter_manager_srv@1 detecting states deltas in module: { module_name }.")
       added <- setdiff(current_state_ids(), previous_state_ids())
       removed <- setdiff(previous_state_ids(), current_state_ids())
-      if (length(added)) added_state_ids(added)
+      if (length(added)) {
+        # if there is a duplicated state (by id) but it's a new object
+        # then force change of the id and exit observer
+        # observer will be reentered again as it observes id change
+        is_duplicated <- vapply(added, function(id) {
+            slice_module <- Find(function(x) x$id == id, slices_module())
+            slice_duplicated <- Find(function(x) {
+              identical(x$id, slice_module$id) && !identical(x, slice_module)
+              },
+              slices_global()
+            )
+            if (!is.null(slice_duplicated)) {
+              logger::log_trace("filter_manager_srv@1 changing duplicated id of added state: { slice_module$id }.")
+              slice_module$id <- utils::tail(make.unique(c(global_state_ids(), slice_module$id), sep = "_"), 1)
+              TRUE
+            } else {
+              FALSE
+            }
+          },
+          logical(1)
+        )
+        if (any(is_duplicated)) return(NULL)
+
+        added_state_ids(added)
+      }
       if (length(removed)) removed_state_ids(removed)
       previous_state_ids(current_state_ids())
     })

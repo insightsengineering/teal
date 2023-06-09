@@ -35,6 +35,6 @@ shiny module returning NULL
 \description{
 This module compares filters between single \code{FilteredData} settings
 and global \code{teal_slices}. Updates appropriate objects \code{module_fd},
-\code{slices_map_module}, \code{slices_global} to keep them constistent.
+\code{slices_map_module}, \code{slices_global} to keep them consistent.
 }
 \keyword{internal}

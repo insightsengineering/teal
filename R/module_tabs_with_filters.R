@@ -96,12 +96,11 @@
 #' \dontrun{
 #' runApp(app)
 #' }
-ui_tabs_with_filters <- function(id, modules, datasets) {
+ui_tabs_with_filters <- function(id, modules, datasets, filter) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
 
   ns <- NS(id)
-
   teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets)
   filter_panel_btn <- tags$li(
     class = "flex-grow",
@@ -112,7 +111,9 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
       title = "Toggle filter panels",
       icon("fas fa-bars")
     ),
-    filter_manager_modal_ui(ns("filter_manager"))
+    if (isFALSE(attr(filter, "global"))) {
+      filter_manager_modal_ui(ns("filter_manager"))
+    }
   )
 
 
@@ -139,7 +140,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @param reporter (`Reporter`) object from `teal.reporter`
 #' @return `reactive` currently selected active_module
 #' @keywords internal
-srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new(), filter) {
+srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   checkmate::assert_class(reporter, "Reporter")
@@ -147,7 +148,10 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
     logger::log_trace("srv_tabs_with_filters initializing the module.")
 
     # set filterable variables for each dataset
-    filter_manager_modal_srv("filter_manager", filtered_data_list = datasets, filter = filter)
+    if (isFALSE(attr(filter, "global"))) {
+      filter_manager_modal_srv("filter_manager", filtered_data_list = datasets, filter = filter)
+    }
+
     active_module <- srv_nested_tabs(
       id = "root",
       datasets = datasets,

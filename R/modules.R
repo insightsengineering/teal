@@ -439,9 +439,10 @@ teal_filters <- function(...,
                          global = length(mapping) == 0) {
   checkmate::assert_list(mapping, names = "named")
   checkmate::assert_flag(global)
-  if (length(mapping) && global) {
+  modules_mapped <- setdiff(names(mapping), "global_filters")
+  if (length(modules_mapped) && global) {
     stop(
-      "`mapping` is specified even though `global` is TRUE.",
+      "`mapping` is specified for modules (", toString(modules_mapped), ") even though `global` is TRUE.",
       "Please set global to `FALSE` or specify filters without mapping."
     )
   }
