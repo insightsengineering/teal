@@ -26,7 +26,7 @@ Depends:
     teal.data (>= 0.1.2),
     teal.transform (>= 0.2.0)
 Imports:
-    checkmate,
+    checkmate (>= 2.0.0),
     lifecycle,
     logger (>= 0.2.0),
     magrittr,
@@ -69,6 +69,35 @@ Remotes:
     insightsengineering/teal.slice@*release,
     insightsengineering/teal.transform@*release,
     insightsengineering/teal.widgets@*release
+Config/Needs/verdepcheck:
+    rstudio/shiny,
+    insightsengineering/teal.data,
+    insightsengineering/teal.transform,
+    mllg/checkmate,
+    r-lib/lifecycle,
+    daroczig/logger,
+    tidyverse/magrittr,
+    r-lib/rlang,
+    daattali/shinyjs,
+    r-lib/styler,
+    insightsengineering/teal.code,
+    insightsengineering/teal.logger,
+    insightsengineering/teal.reporter,
+    insightsengineering/teal.slice,
+    insightsengineering/teal.widgets,
+    rstudio/bslib,
+    r-lib/covr,
+    tidyverse/dplyr,
+    yihui/knitr,
+    bioc::MultiAssayExperiment,
+    r-lib/R6,
+    rstudio/rmarkdown,
+    insightsengineering/scda,
+    insightsengineering/scda.2022,
+    rstudio/shinyvalidate,
+    r-lib/testthat,
+    r-lib/withr,
+    yaml=vubiostat/r-yaml
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US

@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '45 3 * * 0'
   workflow_dispatch:
+  push:
+    branches:
+      - min_deps
 
 jobs:
   dependency-test:
