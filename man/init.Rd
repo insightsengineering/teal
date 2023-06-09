@@ -42,7 +42,7 @@ There are two ways to specify the filter states:
 \item with a named list (deprecated)
 }
 
-List names should be named according to datanames passed to the \code{data} argument.
+List names should be named according to \code{datanames} passed to the \code{data} argument.
 In case of  data.frame` the list should be composed as follows:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
@@ -108,7 +108,7 @@ dataset. See the example below where \code{ADSL} can only be filtered by \code{A
 \item{header}{(\code{shiny.tag} or \code{character}) \cr
 the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
-(such as loading css via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
+(such as loading \code{CSS} via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
 
 \item{footer}{(\code{shiny.tag} or \code{character})\cr
 the footer of the app}
@@ -120,7 +120,7 @@ See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_t
 is then preferred to this function.}
 }
 \value{
-named list with server and ui function
+named list with \code{server} and \code{ui} function
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

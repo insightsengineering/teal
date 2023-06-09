@@ -30,7 +30,7 @@ There are two ways to specify the filter states:
 \item with a named list (deprecated)
 }
 
-List names should be named according to datanames passed to the \code{data} argument.
+List names should be named according to \code{datanames} passed to the \code{data} argument.
 In case of  data.frame` the list should be composed as follows:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
@@ -102,7 +102,7 @@ It evaluates the \code{raw_data} (delayed data mechanism) and creates the
 Once it is ready and non-\code{NULL}, the splash screen is replaced by the
 main teal UI that depends on the data.
 The currently active tab is tracked and the right filter panel
-updates the displayed datasets to filter for according to the active datanames
+updates the displayed datasets to filter for according to the active \code{datanames}
 of the tab.
 }
 \details{

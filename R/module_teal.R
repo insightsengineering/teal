@@ -7,7 +7,7 @@
 #' It displays the splash UI which is used to fetch the data, possibly
 #' prompting for a password input to fetch the data. Once the data is ready,
 #' the splash screen is replaced by the actual teal UI that is tabsetted and
-#' has a filter panel with datanames that are relevant for the current tab.
+#' has a filter panel with `datanames` that are relevant for the current tab.
 #' Nested tabs are possible, but we limit it to two nesting levels for reasons
 #' of clarity of the UI.
 #'
@@ -116,7 +116,7 @@ ui_teal <- function(id,
 #' Once it is ready and non-`NULL`, the splash screen is replaced by the
 #' main teal UI that depends on the data.
 #' The currently active tab is tracked and the right filter panel
-#' updates the displayed datasets to filter for according to the active datanames
+#' updates the displayed datasets to filter for according to the active `datanames`
 #' of the tab.
 #'
 #' For more doc, see [ui_teal()].
@@ -142,11 +142,11 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       title = "SessionInfo"
     )
 
-    # Javascript code
-    run_js_files(files = "init.js") # Javascript code to make the clipboard accessible
+    # `JavaScript` code
+    run_js_files(files = "init.js") # `JavaScript` code to make the clipboard accessible
     # set timezone in shiny app
     # timezone is set in the early beginning so it will be available also
-    # for DDL and all shiny modules
+    # for `DDL` and all shiny modules
     get_client_timezone(session$ns)
     observeEvent(
       eventExpr = input$timezone,

@@ -12,13 +12,13 @@
 #' `validate_inputs` provides a hybrid solution.
 #' Given an `InputValidator` object, messages corresponding to inputs that fail validation
 #' are extracted and placed in one validation message that is passed to a `validate`/`need` call.
-#' This way the input validator messages are repeated in the output.
+#' This way the input `validator` messages are repeated in the output.
 #'
 #' The `...` argument accepts any number of `InputValidator` objects
 #' or a nested list of such objects.
-#' If validators are passed directly, all their messages are printed together
+#' If `validators` are passed directly, all their messages are printed together
 #' under one (optional) header message specified by `header`. If a list is passed,
-#' messages are grouped by validator. The list's names are used as headers
+#' messages are grouped by `validator`. The list's names are used as headers
 #' for their respective message groups.
 #' If neither of the nested list elements is named, a header message is taken from `header`.
 #'
