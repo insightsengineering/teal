@@ -250,7 +250,7 @@ testthat::test_that("modules returns useful error message if label argument not 
     ui = ui_fun1,
     filters = ""
   )
-  expect_error(modules("module", test_module), "The only character argument to modules\\(\\) must be 'label'")
+  testthat::expect_error(modules("module", test_module), "The only character argument to modules\\(\\) must be 'label'")
 })
 
 
@@ -573,6 +573,6 @@ testthat::test_that("teal_filters fails when mapping is specified with global = 
       mapping = list(module = "test"),
       global = TRUE
     ),
-    "`mapping` is specified even though `global` is TRUE"
+    "`mapping` is specified .+ even though `global` is TRUE"
   )
 })

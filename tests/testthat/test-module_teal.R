@@ -53,7 +53,7 @@ testthat::test_that("srv_teal initialized FilteredData based on the raw_data inp
       modules = modules(test_module1, test_module2)
     ),
     expr = {
-      # todo: test creation of filtered data based on modules
+      # todo: test creation of filtered data based on modules and filters
     }
   )
 })
