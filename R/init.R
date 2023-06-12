@@ -134,6 +134,9 @@ init <- function(data,
   }
 
   if (!inherits(filter, "teal_slices")) {
+    # todo: check if we can @importFrom teal.slice as.teal_slices
+    #  getAnywhere,
+    # !!getFromNamespace!!
     checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
     filter <- teal.slice:::as.teal_slices(filter)
   }
@@ -167,6 +170,9 @@ init <- function(data,
     }
 
     if (anyDuplicated(module_names)) {
+      # In teal we are able to set nested modules with duplicated label.
+      # Because mapping argument bases on the relationship between module-label and filter-id,
+      # it is possible that module-label in mapping might refer to multiple teal_module (identified by the same label)
       stop(
         sprintf(
           "Module labels should be unique when teal_filters(mapping = TRUE). Duplicated labels:\n%s ",

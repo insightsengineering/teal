@@ -454,7 +454,7 @@ teal_filters <- function(...,
     count_type = count_type
   )
 
-  all_slice_id <- isolate(vapply(fs, `[[`, character(1), "id"))
+  all_slice_id <- shiny::isolate(vapply(fs, `[[`, character(1), "id"))
   for (i in names(mapping)) {
     failed_slice_id <- setdiff(mapping[[i]], all_slice_id)
     if (length(failed_slice_id)) {
