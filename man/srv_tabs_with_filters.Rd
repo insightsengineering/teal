@@ -37,7 +37,7 @@ There are two ways to specify the filter states:
 \item with a named list (deprecated)
 }
 
-List names should be named according to datanames passed to the \code{data} argument.
+List names should be named according to \code{datanames} passed to the \code{data} argument.
 In case of  data.frame` the list should be composed as follows:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{list(<dataname1> = list(<varname1> = ..., <varname2> = ...),

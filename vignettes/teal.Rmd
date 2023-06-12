@@ -14,7 +14,7 @@ vignette: >
 ## Introduction
 
 *teal* is a shiny-based interactive exploration framework for analyzing data, with particular emphasis on
-CDISC clinical trial data. `teal` applications provide their users with:
+`CDISC` clinical trial data. `teal` applications provide their users with:
 
 * Ability to "pull" in data from external data sources 
 * Dynamic filtering of data to be used in the analyses
@@ -23,7 +23,7 @@ CDISC clinical trial data. `teal` applications provide their users with:
 
 In addition, the `teal` framework also provides application developers with:
 
-* A large suite of customizable standard analysis modules to be included in applications
+* A large suite of custom-made standard analysis modules to be included in applications
 * A logging framework to facilitate debugging of applications
 
 More advanced users of the framework can also create new analysis modules which can be added into any teal applications.
@@ -87,18 +87,18 @@ used to allow data to be pulled into `teal` applications from external sources w
 
 In the example above we call `teal_data` to convert the raw datasets into `teal` specific datasets and to bind them in one `R` object.
 This function can also be used to specify relationships between different datasets. 
-In order to use CDISC clinical trial data in a `teal` application the `cdisc_data` function is used instead.  
+In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.  
 
 For further details we recommend exploring the [`teal.data`](https://insightsengineering.github.io/teal.data/) package documentation.
 
 ### Modules
 
 The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`).
-We recommend creating applications using pre-defined `teal` modules. See the references below for links to these modules.
+We recommend creating applications using predefined `teal` modules. See the references below for links to these modules.
 
 ### Defining filters
 
-The `init` function has an additional argument `filters` which allows you to initialize the application with certain filters pre-selected.
+The `init` function has an additional argument `filters` which allows you to initialize the application with certain filters preselected.
 See the documentation for `init` for further details.
 
 ### Reporting

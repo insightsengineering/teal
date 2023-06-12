@@ -36,7 +36,7 @@
 #'   1) with a `teal_slices` object - see `?teal.slice::teal_slice` for details
 #'   2) with a named list (deprecated)
 #'
-#'   List names should be named according to datanames passed to the `data` argument.
+#'   List names should be named according to `datanames` passed to the `data` argument.
 #'   In case of  data.frame` the list should be composed as follows:
 #'   ```
 #'   list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
@@ -99,7 +99,7 @@
 #' @param header (`shiny.tag` or `character`) \cr
 #'   the header of the app. Note shiny code placed here (and in the footer
 #'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
-#'   (such as loading css via [htmltools::htmlDependency()]) should be included here.
+#'   (such as loading `CSS` via [htmltools::htmlDependency()]) should be included here.
 #' @param footer (`shiny.tag` or `character`)\cr
 #'   the footer of the app
 #' @param id (`character`)\cr
@@ -108,7 +108,7 @@
 #'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
 #'
-#' @return named list with server and ui function
+#' @return named list with `server` and `ui` function
 #'
 #' @export
 #'
