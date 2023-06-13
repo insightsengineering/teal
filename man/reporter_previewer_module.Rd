@@ -4,10 +4,20 @@
 \alias{reporter_previewer_module}
 \title{Create a \code{teal} module for previewing a report}
 \usage{
-reporter_previewer_module(label = "Report previewer")
+reporter_previewer_module(
+  label = "Report previewer",
+  srv_args = list(),
+  ui_args = list()
+)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module.}
+
+\item{srv_args}{(\verb{named list})\cr
+Arguments passed to \code{\link[teal.reporter:reporter_previewer_srv]{teal.reporter::reporter_previewer_srv()}}.}
+
+\item{ui_args}{(\verb{named list})\cr
+Arguments passed to \code{\link[teal.reporter:reporter_previewer_ui]{teal.reporter::reporter_previewer_ui()}}.}
 }
 \value{
 \code{teal_module} containing the \code{teal.reporter} previewer functionality
