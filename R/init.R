@@ -134,11 +134,10 @@ init <- function(data,
   }
 
   if (!inherits(filter, "teal_slices")) {
-    # todo: check if we can @importFrom teal.slice as.teal_slices
-    #  getAnywhere,
-    # !!getFromNamespace!!
     checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
-    filter <- teal.slice:::as.teal_slices(filter)
+    # as.teal_slices is lifted from teal.slice package, see zzz.R
+    # This is a temporary measure and will be removed two release cycles from now (now meaning 0.13.0).
+    filter <- as.teal_slices(filter)
   }
 
   # check teal_slices
