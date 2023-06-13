@@ -4,16 +4,17 @@
 \alias{filter_manager_module_srv}
 \title{Module specific filter manager}
 \usage{
-filter_manager_module_srv(
-  module_name,
-  module_fd,
-  slices_map_module,
-  slices_global
-)
+filter_manager_module_srv(id, module_fd, slices_map_module, slices_global)
 }
 \arguments{
+\item{id}{(\code{character(1)})\cr
+\code{shiny} module id.}
+
 \item{module_fd}{(\code{FilteredData})\cr
 object to filter data in the teal-module}
+
+\item{slices_map_module}{(\code{reactiveVal} of \code{character})\cr
+\code{id} of the \code{teal_slice} objects used in the module specific \code{FilteredData}.}
 
 \item{slices_global}{(\code{reactiveVal} or \code{teal_slices})\cr
 stores a list of all available filters which can be utilized in several ways, for example:
@@ -22,12 +23,6 @@ stores a list of all available filters which can be utilized in several ways, fo
 \item to restore filter saved settings
 \item to save current filter settings panel
 }}
-
-\item{id}{(\code{character(1)})\cr
-\code{shiny} module id.}
-
-\item{slices_map_modul}{(\code{reactiveVal} of \code{character})\cr
-\code{id} of the \code{teal_slice} objects used in the module specific \code{FilteredData}.}
 }
 \value{
 shiny module returning NULL

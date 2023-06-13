@@ -167,9 +167,9 @@ srv_teal <- function(id, modules, raw_data, filter = teal_filters()) {
       env$progress$set(0.25, message = "Setting data")
 
       # create a list of data based on the nested modules structure
+      datasets_singleton <- teal.slice::init_filtered_data(raw_data())
+      datasets_singleton$set_filter_state(filter)
       module_datasets <- function(modules) {
-        datasets_singleton <- teal.slice::init_filtered_data(raw_data())
-        datasets_singleton$set_filter_state(filter)
         if (inherits(modules, "teal_modules")) {
           datasets <- lapply(modules$children, module_datasets)
           labels <- vapply(modules$children, `[[`, character(1), "label")

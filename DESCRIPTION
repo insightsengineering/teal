@@ -92,6 +92,7 @@ Collate:
     'show_rcode_modal.R'
     'tdata.R'
     'teal.R'
+    'teal_filters.R'
     'utils.R'
     'validate_inputs.R'
     'validations.R'

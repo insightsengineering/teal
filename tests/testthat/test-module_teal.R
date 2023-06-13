@@ -42,18 +42,54 @@ testthat::test_that("srv_teal initializes the data when raw_data changes", {
   )
 })
 
-testthat::test_that("srv_teal initialized FilteredData based on the raw_data input", {
-  filtered_data <- teal.slice::init_filtered_data(data)
-
+testthat::test_that("srv_teal initialized data list structure reflects modules", {
   shiny::testServer(
     app = srv_teal,
     args = list(
       id = "test",
       raw_data = reactiveVal(data),
-      modules = modules(test_module1, test_module2)
+      modules = modules(test_module1, modules(label = "tab", test_module1, test_module2))
     ),
     expr = {
-      # todo: test creation of filtered data based on modules and filters
+      raw_data(data)
+      testthat::expect_named(datasets_reactive(), c("iris_tab", "tab"))
+      testthat::expect_named(datasets_reactive()$tab, c("iris_tab", "mtcars_tab"))
+    }
+  )
+})
+
+testthat::test_that("srv_teal initialized data containing same FilteredData when the filter is global", {
+  shiny::testServer(
+    app = srv_teal,
+    args = list(
+      id = "test",
+      raw_data = reactiveVal(data),
+      modules = modules(test_module1, modules(label = "tab", test_module1, test_module2)),
+      filter = teal_filters(global = TRUE)
+    ),
+    expr = {
+      raw_data(data)
+      unlisted_fd <- unlist(datasets_reactive(), use.names = FALSE)
+      testthat::expect_identical(unlisted_fd[[1]], unlisted_fd[[2]])
+      testthat::expect_identical(unlisted_fd[[2]], unlisted_fd[[3]])
+    }
+  )
+})
+
+testthat::test_that("srv_teal initialized data containing different FilteredData when the filter is not global", {
+  shiny::testServer(
+    app = srv_teal,
+    args = list(
+      id = "test",
+      raw_data = reactiveVal(data),
+      modules = modules(test_module1, modules(label = "tab", test_module1, test_module2)),
+      filter = teal_filters(global = FALSE)
+    ),
+    expr = {
+      raw_data(data)
+      unlisted_fd <- unlist(datasets_reactive(), use.names = FALSE)
+      testthat::expect_false(identical(unlisted_fd[[1]], unlisted_fd[[2]]))
+      testthat::expect_false(identical(unlisted_fd[[2]], unlisted_fd[[3]]))
     }
   )
 })

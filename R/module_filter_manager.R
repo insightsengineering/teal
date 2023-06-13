@@ -1,11 +1,6 @@
 #' @rdname module_filter_manager_modal
 filter_manager_modal_ui <- function(id) {
   ns <- NS(id)
-
-  # todo: menu with several options such as:
-  #       - save filter state (initial should be saved by default)
-  #       - restore saved filter states
-  #       - ...
   tags$button(
     id = ns("show"),
     class = "btn action-button filter_manager_button",
@@ -119,13 +114,15 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     slices_map <- sapply(
       names(filtered_data_list),
       function(module_name) {
-        shiny::reactiveVal(attr(filter, "mapping")[[module_name]])
+        shiny::reactiveVal(
+          unlist(attr(filter, "mapping")[c(module_name, "global_filters")], use.names = FALSE)
+        )
       }
     )
 
     lapply(names(filtered_data_list), function(module_name) {
       filter_manager_module_srv(
-        module_name = module_name,
+        id = module_name,
         module_fd = filtered_data_list[[module_name]],
         slices_map_module = slices_map[[module_name]],
         slices_global = slices_global
@@ -166,7 +163,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 #'  `shiny` module id.
 #' @param module_fd (`FilteredData`)\cr
 #'   object to filter data in the teal-module
-#' @param slices_map_modul (`reactiveVal` of `character`)\cr
+#' @param slices_map_module (`reactiveVal` of `character`)\cr
 #'   `id` of the `teal_slice` objects used in the module specific `FilteredData`.
 #' @param slices_global (`reactiveVal` or `teal_slices`)\cr
 #'   stores a list of all available filters which can be utilized in several ways, for example:
@@ -175,9 +172,9 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 #'   - to save current filter settings panel
 #' @return shiny module returning NULL
 #' @keywords internal
-filter_manager_module_srv <- function(module_name, module_fd, slices_map_module, slices_global) {
-  moduleServer(module_name, function(input, output, session) {
-    setdiff.teal_slices <- function(x, y) {
+filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_global) {
+  moduleServer(id, function(input, output, session) {
+    setdiff_teal_slices <- function(x, y) {
       Filter(
         function(xx) {
           !any(vapply(y, function(yy) identical(yy, xx), logical(1)))
@@ -186,7 +183,6 @@ filter_manager_module_srv <- function(module_name, module_fd, slices_map_module,
       )
     }
 
-    # todo: locked should not be on this list (or should be locked)
     available_slices <- reactive(
       Filter(function(slice) slice$dataname %in% module_fd$datanames(), slices_global())
     )
@@ -200,10 +196,10 @@ filter_manager_module_srv <- function(module_name, module_fd, slices_map_module,
 
 
     observeEvent(slices_module(), {
-      logger::log_trace("filter_manager_srv@1 detecting states deltas in module: { module_name }.")
-      added <- setdiff.teal_slices(slices_module(), slices_global())
-      activated <- setdiff.teal_slices(slices_module(), previous_slices())
-      deactivated <- setdiff.teal_slices(previous_slices(), slices_module())
+      logger::log_trace("filter_manager_srv@1 detecting states deltas in module: { id }.")
+      added <- setdiff_teal_slices(slices_module(), slices_global())
+      activated <- setdiff_teal_slices(slices_module(), previous_slices())
+      deactivated <- setdiff_teal_slices(previous_slices(), slices_module())
       if (length(added)) slices_added(added)
       if (length(activated)) slices_activated(activated)
       if (length(deactivated)) slices_deactivated(deactivated)
@@ -211,13 +207,14 @@ filter_manager_module_srv <- function(module_name, module_fd, slices_map_module,
     })
 
     observeEvent(slices_added(), ignoreNULL = TRUE, {
-      logger::log_trace("filter_manager_srv@2 added filter in module: { module_name }.")
+      browser()
+      logger::log_trace("filter_manager_srv@2 added filter in module: { id }.")
       lapply(
         slices_added(),
         function(slice) {
           global_ids <- vapply(slices_global(), function(x) x$id, character(1))
           if (slice$id %in% global_ids) {
-            slice$id <- tail(make.unique(c(global_ids, slice$id), sep = "_"), 1)
+            slice$id <- utils::tail(make.unique(c(global_ids, slice$id), sep = "_"), 1)
           }
         }
       )
@@ -227,14 +224,14 @@ filter_manager_module_srv <- function(module_name, module_fd, slices_map_module,
     })
 
     observeEvent(slices_activated(), ignoreNULL = TRUE, {
-      logger::log_trace("filter_manager_srv@3 activated filter in module: { module_name }.")
+      logger::log_trace("filter_manager_srv@3 activated filter in module: { id }.")
       activated_ids <- vapply(slices_activated(), `[[`, character(1), "id")
       slices_map_module(c(slices_map_module(), activated_ids))
       slices_activated(NULL)
     })
 
     observeEvent(slices_deactivated(), ignoreNULL = TRUE, {
-      logger::log_trace("filter_manager_srv@4 deactivated filter in module: { module_name }.")
+      logger::log_trace("filter_manager_srv@4 deactivated filter in module: { id }.")
       deactivated_ids <- vapply(slices_deactivated(), `[[`, character(1), "id")
       slices_map_module(setdiff(slices_map_module(), deactivated_ids))
       slices_deactivated(NULL)

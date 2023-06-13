@@ -124,7 +124,8 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L) {
   } else {
     fluidRow(
       column(width = 9, teal_ui, class = "teal_primary_col"),
-      column(width = 3,
+      column(
+        width = 3,
         datasets$ui_filter_panel(ns("module_filter_panel")),
         class = "teal_secondary_col"
       )
