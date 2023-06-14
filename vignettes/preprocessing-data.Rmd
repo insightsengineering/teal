@@ -1,5 +1,5 @@
 ---
-title: "Pre-processing data"
+title: "Preprocessing data"
 author: "NEST CoreDev"
 date: "2022-07-28"
 output: rmarkdown::html_vignette

@@ -2,7 +2,7 @@
 % Please edit documentation in R/include_css_js.R
 \name{include_teal_css_js}
 \alias{include_teal_css_js}
-\title{Code to include teal CSS and Javascript files}
+\title{Code to include teal \code{CSS} and \code{JavaScript} files}
 \usage{
 include_teal_css_js()
 }
@@ -10,7 +10,7 @@ include_teal_css_js()
 HTML code to include
 }
 \description{
-This is useful when you want to use the same Javascript and CSS files that are
+This is useful when you want to use the same \code{JavaScript} and \code{CSS} files that are
 used with the teal application.
 This is also useful for running standalone modules in teal with the correct
 styles.

@@ -29,13 +29,13 @@ and to display specific messages in their respective input widgets.
 \code{validate_inputs} provides a hybrid solution.
 Given an \code{InputValidator} object, messages corresponding to inputs that fail validation
 are extracted and placed in one validation message that is passed to a \code{validate}/\code{need} call.
-This way the input validator messages are repeated in the output.
+This way the input \code{validator} messages are repeated in the output.
 
 The \code{...} argument accepts any number of \code{InputValidator} objects
 or a nested list of such objects.
-If validators are passed directly, all their messages are printed together
+If \code{validators} are passed directly, all their messages are printed together
 under one (optional) header message specified by \code{header}. If a list is passed,
-messages are grouped by validator. The list's names are used as headers
+messages are grouped by \code{validator}. The list's names are used as headers
 for their respective message groups.
 If neither of the nested list elements is named, a header message is taken from \code{header}.
 }

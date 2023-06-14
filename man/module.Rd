@@ -41,7 +41,7 @@ the \code{filters} argument.
 \item \code{...} (optional) \code{server_args} elements will be passed to the module named argument or to the \code{...}.
 }}
 
-\item{ui}{(\code{function}) Shiny ui module function with following arguments:
+\item{ui}{(\code{function}) Shiny \code{ui} module function with following arguments:
 \itemize{
 \item \code{id} - teal will set proper shiny namespace for this module.
 \item \code{data} (optional)  module will receive list of reactive (filtered) data specified in the \code{filters} argument.
@@ -49,7 +49,7 @@ the \code{filters} argument.
 \item \code{...} (optional) \code{ui_args} elements will be passed to the module named argument or to the \code{...}.
 }}
 
-\item{filters}{(\code{character}) A vector with datanames that are relevant for the item. The
+\item{filters}{(\code{character}) A vector with \code{datanames} that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
 and the keyword \code{'all'} will show the filters of all datasets.}
@@ -63,7 +63,7 @@ and the keyword \code{'all'} will show the filters of all datasets.}
 \item{x}{\code{teal_module}}
 
 \item{indent}{(\code{integer}) indent level;
-each submodule is indented one level more}
+each \code{submodule} is indented one level more}
 
 \item{...}{parameters passed to \code{toString}}
 }

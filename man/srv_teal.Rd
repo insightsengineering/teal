@@ -36,7 +36,7 @@ It evaluates the \code{raw_data} (delayed data mechanism) and creates the
 Once it is ready and non-\code{NULL}, the splash screen is replaced by the
 main teal UI that depends on the data.
 The currently active tab is tracked and the right filter panel
-updates the displayed datasets to filter for according to the active datanames
+updates the displayed datasets to filter for according to the active \code{datanames}
 of the tab.
 }
 \details{

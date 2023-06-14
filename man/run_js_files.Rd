@@ -12,8 +12,8 @@ run_js_files(files)
 \description{
 This is triggered from the server to execute on the client
 rather than triggered directly on the client.
-Unlike \code{include_js_files} which includes Javascript functions,
-the \code{run_js} actually executes Javascript functions.
+Unlike \code{include_js_files} which includes \code{JavaScript} functions,
+the \code{run_js} actually executes \code{JavaScript} functions.
 }
 \details{
 \code{system.file} should not be used to access files in other packages, it does

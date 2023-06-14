@@ -161,12 +161,12 @@ is_arg_used.function <- function(modules, arg) {
 #'  - `reporter` (optional) module will receive `Reporter`. (See [teal.reporter::Reporter]).
 #   - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).
 #'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
-#' @param ui (`function`) Shiny ui module function with following arguments:
+#' @param ui (`function`) Shiny `ui` module function with following arguments:
 #'  - `id` - teal will set proper shiny namespace for this module.
 #'  - `data` (optional)  module will receive list of reactive (filtered) data specified in the `filters` argument.
 #'  - `datasets` (optional)  module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
 #'  - `...` (optional) `ui_args` elements will be passed to the module named argument or to the `...`.
-#' @param filters (`character`) A vector with datanames that are relevant for the item. The
+#' @param filters (`character`) A vector with `datanames` that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed datasets. `NULL` will hide the filter panel,
 #'   and the keyword `'all'` will show the filters of all datasets.
@@ -342,7 +342,7 @@ module_labels <- function(modules) {
 #'
 #' @param x (`teal_modules`) to print
 #' @param indent (`integer`) indent level;
-#'   each submodule is indented one level more
+#'   each `submodule` is indented one level more
 #' @param ... (optional) additional parameters to pass to recursive calls of `toString`
 #' @return (`character`)
 #' @export
