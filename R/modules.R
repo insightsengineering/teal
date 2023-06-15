@@ -89,8 +89,6 @@ modules <- function(..., label = "root") {
   )
 }
 
-
-
 #' Function which appends a teal_module onto the children of a teal_modules object
 #' @keywords internal
 #' @param modules `teal_modules`

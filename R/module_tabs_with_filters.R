@@ -101,7 +101,9 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
 
   ns <- NS(id)
-  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets)
+  is_global <- !isFALSE(attr(filter, "global"))
+
+  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets, is_global = is_global)
   filter_panel_btn <- tags$li(
     class = "flex-grow",
     tags$button(
@@ -110,25 +112,31 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter) {
       onclick = "toggleFilterPanel();", # see sidebar.js
       title = "Toggle filter panels",
       icon("fas fa-bars")
-    ),
-    if (isFALSE(attr(filter, "global"))) {
+    )
+  )
+
+  if (is_global) {
+    # need to rearrange html so that filter panel is within tabset
+    tabset_bar <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
+    teal_modules <- teal_ui$children[[2]]
+    filter_ui <- unlist(datasets)[[1]]$ui_filter_panel(ns("filter_panel"))
+    list(
+      tabset_bar,
+      tags$hr(class = "my-2"),
+      fluidRow(
+        column(width = 9, teal_modules, class = "teal_primary_col"),
+        column(width = 3, filter_ui, class = "teal_secondary_col")
+      )
+    )
+  } else {
+    filter_panel_btn <- tagAppendChild(
+      filter_panel_btn,
       filter_manager_modal_ui(ns("filter_manager"))
-    }
-  )
-
-
-  # teal_ui$children[[1]] contains links to tabs
-  # teal_ui$children[[2]] contains actual tab contents
-  # # adding filter_panel_btn to the tabsetPanel
-  teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
-
-  teal_ui$children <- list(
-    teal_ui$children[[1]],
-    tags$hr(class = "my-2"),
-    teal_ui$children[[2]]
-  )
-
-  teal_ui
+    )
+    # appending buttons to tabset bar
+    teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
+    teal_ui
+  }
 }
 
 #' Server function
@@ -147,17 +155,39 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_tabs_with_filters initializing the module.")
 
-    # set filterable variables for each dataset
-    if (isFALSE(attr(filter, "global"))) {
-      filter_manager_modal_srv("filter_manager", filtered_data_list = datasets, filter = filter)
+    is_global <- !isFALSE(attr(filter, "global"))
+    if (!is_global) {
+      manager_out <- filter_manager_modal_srv("filter_manager", filtered_data_list = datasets, filter = filter)
     }
 
     active_module <- srv_nested_tabs(
       id = "root",
       datasets = datasets,
       modules = modules,
-      reporter = reporter
+      reporter = reporter,
+      is_global = is_global
     )
+
+    if (is_global) {
+      active_datanames <- reactive(active_module()$filters)
+      singleton <- unlist(datasets)[[1]]
+      singleton$srv_filter_panel("filter_panel", active_datanames = active_datanames)
+
+      observeEvent(
+        eventExpr = active_datanames(),
+        handlerExpr = {
+          script <- if (length(active_datanames()) == 0 || is.null(active_datanames())) {
+            # hide the filter panel and disable the burger button
+            "handleNoActiveDatasets();"
+          } else {
+            # show the filter panel and enable the burger button
+            "handleActiveDatasetsPresent();"
+          }
+          shinyjs::runjs(script)
+        },
+        ignoreNULL = FALSE
+      )
+    }
 
     showNotification("Data loaded - App fully started up")
     logger::log_trace("srv_tabs_with_filters initialized the module")

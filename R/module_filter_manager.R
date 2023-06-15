@@ -67,11 +67,10 @@ filter_manager_modal_srv <- function(id, filtered_data_list, filter) {
 }
 
 #' @rdname module_filter_manager
-filter_manager_ui <- function(id, is_global) {
+filter_manager_ui <- function(id) {
   ns <- NS(id)
   div(
-    tableOutput(ns("slices_table")),
-    verbatimTextOutput(ns("filter_output"))
+    tableOutput(ns("slices_table"))
   )
 }
 
@@ -120,7 +119,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       }
     )
 
-    lapply(names(filtered_data_list), function(module_name) {
+    modules_out <- lapply(names(filtered_data_list), function(module_name) {
       filter_manager_module_srv(
         id = module_name,
         module_fd = filtered_data_list[[module_name]],
@@ -147,9 +146,8 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     output$slices_table <- renderTable(rownames = TRUE, {
       as.data.frame(mapping_matrix())
     })
-    output$filter_output <- renderText(
-      format(slices_global())
-    )
+
+    modules_out # returned for testing purpose
   })
 }
 
@@ -194,7 +192,6 @@ filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_g
     slices_activated <- reactiveVal(NULL)
     slices_deactivated <- reactiveVal(NULL)
 
-
     observeEvent(slices_module(), {
       logger::log_trace("filter_manager_srv@1 detecting states deltas in module: { id }.")
       added <- setdiff_teal_slices(slices_module(), slices_global())
@@ -207,7 +204,6 @@ filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_g
     })
 
     observeEvent(slices_added(), ignoreNULL = TRUE, {
-      browser()
       logger::log_trace("filter_manager_srv@2 added filter in module: { id }.")
       lapply(
         slices_added(),
@@ -237,6 +233,6 @@ filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_g
       slices_deactivated(NULL)
     })
 
-    NULL
+    slices_module # returned for testing purpose
   })
 }

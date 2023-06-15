@@ -165,36 +165,31 @@ out <- shiny::testServer(
 testthat::test_that("srv_nested_tabs.teal_module does not pass data if not in the args explicitly", {
   module <- module(server = function(id, ...) {
     moduleServer(id, function(input, output, session) {
-      checkmate::assert_false(
-        tryCatch(
-          checkmate::test_class(data, "tdata"),
-          error = function(cond) FALSE
-        )
-      )
+      testthat::expect_null(list(...)$data)
     })
   })
 
-  testthat::expect_no_error(
-    shiny::testServer(
-      app = srv_nested_tabs,
-      args = list(
-        id = "test",
-        datasets = list(module = filtered_data),
-        modules = modules(module),
-        reporter = teal.reporter::Reporter$new()
-      ),
-      expr = {
-        session$setInputs()
-      }
-    )
+  shiny::testServer(
+    app = srv_nested_tabs,
+    args = list(
+      id = "test",
+      datasets = list(module = filtered_data),
+      modules = modules(module),
+      reporter = teal.reporter::Reporter$new()
+    ),
+    expr = {
+      session$setInputs()
+    }
   )
 })
 
 testthat::test_that("srv_nested_tabs.teal_module does pass data if in the args explicitly", {
-  module <- module(server = function(id, data, ...) {
-    moduleServer(id, function(input, output, session) checkmate::assert_class(data, "tdata"))
-  })
-
+  module <- module(
+    server = function(id, data, ...) {
+      moduleServer(id, function(input, output, session) checkmate::assert_class(data, "tdata"))
+    },
+    filters = NULL
+  )
   testthat::expect_no_error(
     shiny::testServer(
       app = srv_nested_tabs,
@@ -212,7 +207,7 @@ testthat::test_that("srv_nested_tabs.teal_module does pass data if in the args e
 })
 
 testthat::test_that("srv_nested_tabs.teal_module passes data to the server module", {
-  module <- module(server = function(id, data) {
+  module <- module(filters = NULL, server = function(id, data) {
     moduleServer(id, function(input, output, session) checkmate::assert_list(data, "reactive"))
   })
 
@@ -273,7 +268,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes server_args to the ...",
 })
 
 testthat::test_that("srv_nested_tabs.teal_module warns if both data and datasets are passed", {
-  module <- module(label = "test module", server = function(id, datasets, data) {
+  module <- module(filters = NULL, label = "test module", server = function(id, datasets, data) {
     moduleServer(id, function(input, output, session) NULL)
   })
 
@@ -386,23 +381,23 @@ get_example_filtered_data <- function() {
 
 testthat::test_that(".datasets_to_data accepts a reactiveVal as trigger_data input", {
   datasets <- get_example_filtered_data()
-  shiny::isolate(datasets$set_filter_state(
+  datasets$set_filter_state(
     teal.slice:::filter_settings(
       teal.slice:::filter_var(dataname = "d1", varname = "val", selected = c(1, 2))
     )
-  ))
-  module <- list(filter = "all")
+  )
+  module <- list(filter = c("d1", "d2"))
   trigger_data <- reactiveVal(1L)
   testthat::expect_silent(shiny::isolate(.datasets_to_data(module, datasets, trigger_data)))
 })
 
 testthat::test_that(".datasets_to_data throws error if trigger_data is not a reactiveVal function", {
   datasets <- get_example_filtered_data()
-  shiny::isolate(datasets$set_filter_state(
+  datasets$set_filter_state(
     teal.slice:::filter_settings(
       teal.slice:::filter_var(dataname = "d1", varname = "val", selected = c(1, 2))
     )
-  ))
+  )
   module <- list(filter = "all")
   trigger_data <- 1
   testthat::expect_error(
@@ -413,12 +408,12 @@ testthat::test_that(".datasets_to_data throws error if trigger_data is not a rea
 
 testthat::test_that(".datasets_to_data returns data which is filtered", {
   datasets <- get_example_filtered_data()
-  shiny::isolate(datasets$set_filter_state(
+  datasets$set_filter_state(
     teal.slice:::filter_settings(
       teal.slice:::filter_var(dataname = "d1", varname = "val", selected = c(1, 2))
     )
-  ))
-  module <- list(filter = "all")
+  )
+  module <- list(filter = c("d1", "d2"))
   trigger_data <- reactiveVal(1L)
   data <- shiny::isolate(.datasets_to_data(module, datasets, trigger_data))
 
@@ -439,7 +434,7 @@ testthat::test_that(".datasets_to_data returns only data requested by modules$fi
 
 testthat::test_that(".datasets_to_data returns tdata object", {
   datasets <- get_example_filtered_data()
-  module <- list(filter = "all")
+  module <- list(filter = c("d1", "d2"))
   trigger_data <- reactiveVal(1L)
   data <- .datasets_to_data(module, datasets, trigger_data)
 

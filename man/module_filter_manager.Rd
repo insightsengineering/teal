@@ -5,7 +5,7 @@
 \alias{filter_manager_srv}
 \title{Manage multiple \code{FilteredData} objects}
 \usage{
-filter_manager_ui(id, is_global)
+filter_manager_ui(id)
 
 filter_manager_srv(id, filtered_data_list, filter)
 }

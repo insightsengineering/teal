@@ -18,3 +18,14 @@ const toggleFilterPanel = () => {
   if (filter_open) showSidebar();
   else hideSidebar();
 };
+
+// Function to hide filter panel and disable the burger button
+const handleNoActiveDatasets = () => {
+  $(".filter_hamburger").addClass("hidden");
+  hideSidebar();
+};
+// Function to show filter panel and enable the burger button
+const handleActiveDatasetsPresent = () => {
+  $(".filter_hamburger").removeClass("hidden");
+  if (filter_open) showSidebar();
+}

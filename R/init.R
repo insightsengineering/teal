@@ -133,23 +133,44 @@ init <- function(data,
     modules <- do.call(teal::modules, modules)
   }
 
+  # resolve modules datanames
+  datanames <- teal.data::get_dataname(data)
+  join_keys <- data$get_join_keys()
+  resolve_modules_datanames <- function(modules) {
+    if (inherits(modules, "teal_modules")) {
+      modules$children <- sapply(modules$children, resolve_modules_datanames, simplify = FALSE)
+      modules
+    } else {
+      modules$filters <- if (identical(modules$filters, "all")) {
+        datanames
+      } else if (is.character(modules$filters)) {
+        datanames_adjusted <- intersect(modules$filters, datanames)
+        include_parent_datanames(dataname = datanames_adjusted, join_keys = join_keys)
+      }
+      modules
+    }
+  }
+  modules <- resolve_modules_datanames(modules = modules)
+
   if (!inherits(filter, "teal_slices")) {
-    checkmate::assert_subset(names(filter), choices = teal.data::get_dataname(data))
+    checkmate::assert_subset(names(filter), choices = datanames)
     # as.teal_slices is lifted from teal.slice package, see zzz.R
     # This is a temporary measure and will be removed two release cycles from now (now meaning 0.13.0).
     filter <- as.teal_slices(filter)
   }
 
+
+
   # check teal_slices
   for (i in seq_along(filter)) {
     dataname_i <- shiny::isolate(filter[[i]]$dataname)
-    if (!dataname_i %in% teal.data::get_dataname(data)) {
+    if (!dataname_i %in% datanames) {
       stop(
         sprintf(
           "filter[[%s]] has a different dataname than available in a 'data':\n %s not in %s",
           i,
           dataname_i,
-          toString(teal.data::get_dataname(data))
+          toString(datanames)
         )
       )
     }

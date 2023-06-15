@@ -166,7 +166,8 @@ srv_teal <- function(id, modules, raw_data, filter = teal_filters()) {
       env$progress <- shiny::Progress$new(session)
       env$progress$set(0.25, message = "Setting data")
 
-      # create a list of data based on the nested modules structure
+      # create a list of data following structure of the nested modules list structure.
+      # Because it's easier to unpack modules and datasets when they follow the same nested structure.
       datasets_singleton <- teal.slice::init_filtered_data(raw_data())
       datasets_singleton$set_filter_state(filter)
       module_datasets <- function(modules) {
@@ -176,12 +177,9 @@ srv_teal <- function(id, modules, raw_data, filter = teal_filters()) {
           names(datasets) <- labels
           datasets
         } else if (isFALSE(attr(filter, "global"))) {
-          # create FilteredData
-          datanames <- if (identical(modules$filter, "all") || is.null(modules$filter)) {
-            raw_data()$get_datanames()
-          } else if (is.character(modules$filter)) {
-            intersect(modules$filter, raw_data()$get_datanames())
-          }
+          # we should create FilteredData even if modules$filter is null
+          # null controls a display of filter panel but data should be still passed
+          datanames <- if (is.null(modules$filter)) raw_data()$get_datanames() else modules$filter
           data_objects <- sapply(
             datanames,
             simplify = FALSE,
@@ -210,7 +208,6 @@ srv_teal <- function(id, modules, raw_data, filter = teal_filters()) {
           slices$include_varnames <- include_varnames
           slices$exclude_varnames <- exclude_varnames
           datasets_module$set_filter_state(slices)
-
           datasets_module
         } else {
           datasets_singleton

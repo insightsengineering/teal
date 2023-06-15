@@ -25,4 +25,4 @@
 
 # Use non-exported function from teal.slice.
 # This is a temporary measure and will be removed two release cycles from now (now meaning 0.13.0).
-as.teal_slices <- getFromNamespace("as.teal_slices", "teal.slice")
+as.teal_slices <- getFromNamespace("as.teal_slices", "teal.slice") # nolint
