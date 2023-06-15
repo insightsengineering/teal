@@ -201,7 +201,8 @@ srv_teal <- function(id, modules, raw_data, filter = teal_filters()) {
 
           # set initial filters
           slices <- Filter(x = filter, f = function(x) {
-            x$id %in% unique(unlist(attr(filter, "mapping")[c(modules$label, "global_filters")]))
+            x$id %in% unique(unlist(attr(filter, "mapping")[c(modules$label, "global_filters")])) &&
+            x$dataname %in% datanames
           })
           include_varnames <- attr(slices, "include_varnames")[names(attr(slices, "include_varnames")) %in% datanames]
           exclude_varnames <- attr(slices, "exclude_varnames")[names(attr(slices, "exclude_varnames")) %in% datanames]
