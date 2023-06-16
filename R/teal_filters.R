@@ -10,11 +10,11 @@
 #'  `teal` application.
 #'  Names of the list should correspond to `teal_module` `label` set in [module()] function.
 #'
-#' @param global (`logical(1)`)\cr
-#'  - `TRUE` when one filter panel needed to all modules. All filters will be shared
-#'    by all modules.
-#'  - `FALSE` when filter panel should be module-specific. All modules can have different set
+#' @param module_specific (`logical(1)`)\cr
+#'  - `TRUE` when filter panel should be module-specific. All modules can have different set
 #'   of filters specified - see `mapping` argument.
+#'  - `FALSE` when one filter panel needed to all modules. All filters will be shared
+#'    by all modules.
 #'
 #' @examples
 #' filter <- teal::teal_filters(
@@ -50,15 +50,15 @@ teal_filters <- function(...,
                          include_varnames = NULL,
                          count_type = NULL,
                          mapping = list(),
-                         global = length(mapping) == 0) {
+                         module_specific = length(mapping) > 0) {
   shiny::isolate({
     checkmate::assert_list(mapping, names = "named")
-    checkmate::assert_flag(global)
+    checkmate::assert_flag(module_specific)
     modules_mapped <- setdiff(names(mapping), "global_filters")
-    if (length(modules_mapped) && global) {
+    if (length(modules_mapped) && !module_specific) {
       stop(
-        "`mapping` is specified for modules (", toString(modules_mapped), ") even though `global` is TRUE.",
-        "Please set global to `FALSE` or specify filters without mapping."
+        "`mapping` is specified for modules (", toString(modules_mapped), ") even though `module_specific` isn't TRUE.",
+        "Please set module_specific to `TRUE` or specify filters without mapping."
       )
     }
 
@@ -83,7 +83,7 @@ teal_filters <- function(...,
     }
 
     attr(fs, "mapping") <- mapping
-    attr(fs, "global") <- global
+    attr(fs, "module_specific") <- module_specific
     class(fs) <- c("modules_filter_settings", class(fs))
     fs
   })

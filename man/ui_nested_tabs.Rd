@@ -7,13 +7,13 @@
 \alias{ui_nested_tabs.teal_module}
 \title{Create a UI of nested tabs of \code{teal_modules}}
 \usage{
-ui_nested_tabs(id, modules, datasets, depth = 0L, is_global = FALSE)
+ui_nested_tabs(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
 
-\method{ui_nested_tabs}{default}(id, modules, datasets, depth = 0L, is_global = FALSE)
+\method{ui_nested_tabs}{default}(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
 
-\method{ui_nested_tabs}{teal_modules}(id, modules, datasets, depth = 0L, is_global = FALSE)
+\method{ui_nested_tabs}{teal_modules}(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
 
-\method{ui_nested_tabs}{teal_module}(id, modules, datasets, depth = 0L, is_global = FALSE)
+\method{ui_nested_tabs}{teal_module}(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
 }
 \arguments{
 \item{id}{(\code{character(1)})\cr
@@ -28,6 +28,10 @@ details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}}
 
 \item{depth}{(\code{integer(1)})\cr
 number which helps to determine depth of the modules nesting.}
+
+\item{is_module_specific}{(\code{logical(1)})\cr
+flag determinining if the filter panel is global or module-specific. When \code{module_specific}
+is \code{TRUE} then a filter panel is called inside of each module tab.}
 }
 \value{
 depending on class of \code{modules}:

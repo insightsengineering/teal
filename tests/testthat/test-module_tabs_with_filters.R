@@ -26,14 +26,14 @@ testthat::test_that("srv_tabs_with_filters throws error if reporter is not of cl
   )
 })
 
-testthat::test_that("active_module() returns module specs from active tab when filter.global = TRUE", {
+testthat::test_that("active_module() returns module specs from active tab when filter.module_specific = FALSE", {
   shiny::testServer(
     app = srv_tabs_with_filters,
     args = list(
       id = "test",
       datasets = list(`iris tab` = filtered_data, `mtcars tab` = filtered_data),
       modules = modules(test_module1, test_module2),
-      filter = teal_filters(global = TRUE),
+      filter = teal_filters(module_specific = FALSE),
       reporter = teal.reporter::Reporter$new()
     ),
     expr = {

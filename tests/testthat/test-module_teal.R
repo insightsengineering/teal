@@ -65,7 +65,7 @@ testthat::test_that("srv_teal initialized data containing same FilteredData when
       id = "test",
       raw_data = reactiveVal(data),
       modules = modules(test_module1, modules(label = "tab", test_module1, test_module2)),
-      filter = teal_filters(global = TRUE)
+      filter = teal_filters(module_specific = FALSE)
     ),
     expr = {
       raw_data(data)
@@ -76,14 +76,14 @@ testthat::test_that("srv_teal initialized data containing same FilteredData when
   )
 })
 
-testthat::test_that("srv_teal initialized data containing different FilteredData when the filter is not global", {
+testthat::test_that("srv_teal initialized data containing different FilteredData when the filter is module_specific", {
   shiny::testServer(
     app = srv_teal,
     args = list(
       id = "test",
       raw_data = reactiveVal(data),
       modules = modules(test_module1, modules(label = "tab", test_module1, test_module2)),
-      filter = teal_filters(global = FALSE)
+      filter = teal_filters(module_specific = TRUE)
     ),
     expr = {
       raw_data(data)

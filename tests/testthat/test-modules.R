@@ -566,13 +566,13 @@ testthat::test_that("teal_filters fails when inexisting teal_slice id is specifi
   )
 })
 
-testthat::test_that("teal_filters fails when mapping is specified with global = TRUE", {
+testthat::test_that("teal_filters fails when mapping is specified with module_specific = FALSE", {
   testthat::expect_error(
     teal_filters(
       teal.slice::filter_var(dataname = "data", varname = "var", id = "test"),
       mapping = list(module = "test"),
-      global = TRUE
+      module_specific = FALSE
     ),
-    "`mapping` is specified .+ even though `global` is TRUE"
+    "`mapping` is specified .+ even though `module_specific` isn't TRUE"
   )
 })

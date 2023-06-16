@@ -12,6 +12,9 @@
 #' @inheritParams ui_tabs_with_filters
 #' @param depth (`integer(1)`)\cr
 #'  number which helps to determine depth of the modules nesting.
+#' @param is_module_specific (`logical(1)`)\cr
+#'  flag determinining if the filter panel is global or module-specific. When `module_specific`
+#'  is `TRUE` then a filter panel is called inside of each module tab.
 #' @return depending on class of `modules`:
 #'   - `teal_module`: instantiated UI of the module
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
@@ -44,7 +47,7 @@
 #' runApp(app)
 #' }
 #' @keywords internal
-ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_global = FALSE) {
+ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
   checkmate::assert_int(depth)
   UseMethod("ui_nested_tabs", modules)
 }
@@ -52,14 +55,14 @@ ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_global = FALSE)
 #' @rdname ui_nested_tabs
 #' @export
 #' @keywords internal
-ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_global = FALSE) {
+ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname ui_nested_tabs
 #' @export
 #' @keywords internal
-ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_global = FALSE) {
+ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   ns <- NS(id)
   do.call(
@@ -82,7 +85,7 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_gl
               modules = modules$children[[module_id]],
               datasets = datasets[[module_label]],
               depth = depth + 1L,
-              is_global = is_global
+              is_module_specific = is_module_specific
             )
           )
         }
@@ -94,7 +97,7 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_gl
 #' @rdname ui_nested_tabs
 #' @export
 #' @keywords internal
-ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_global = FALSE) {
+ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
   checkmate::assert_class(datasets, class = "FilteredData")
   ns <- NS(id)
 
@@ -120,7 +123,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_glo
     )
   )
 
-  if (!is.null(modules$filter) && !is_global) {
+  if (!is.null(modules$filter) && is_module_specific) {
     fluidRow(
       column(width = 9, teal_ui, class = "teal_primary_col"),
       column(
@@ -145,7 +148,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_glo
 #'
 #' @return `reactive` which returns the active module that corresponds to the selected tab
 #' @keywords internal
-srv_nested_tabs <- function(id, datasets, modules, is_global = FALSE,
+srv_nested_tabs <- function(id, datasets, modules, is_module_specific = FALSE,
                             reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_class(reporter, "Reporter")
   UseMethod("srv_nested_tabs", modules)
@@ -154,7 +157,7 @@ srv_nested_tabs <- function(id, datasets, modules, is_global = FALSE,
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.default <- function(id, datasets, modules, is_global = FALSE,
+srv_nested_tabs.default <- function(id, datasets, modules, is_module_specific = FALSE,
                                     reporter = teal.reporter::Reporter$new()) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
@@ -162,7 +165,7 @@ srv_nested_tabs.default <- function(id, datasets, modules, is_global = FALSE,
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_global = FALSE,
+srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specific = FALSE,
                                          reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   moduleServer(id = id, module = function(input, output, session) {
@@ -176,7 +179,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_global = FALS
           id = module_id,
           datasets = datasets[[labels[module_id]]],
           modules = modules$children[[module_id]],
-          is_global = is_global,
+          is_module_specific = is_module_specific,
           reporter = reporter
         )
       }
@@ -201,13 +204,13 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_global = FALS
 #' @rdname srv_nested_tabs
 #' @export
 #' @keywords internal
-srv_nested_tabs.teal_module <- function(id, datasets, modules, is_global = FALSE,
+srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specific = TRUE,
                                         reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_class(datasets, class = "FilteredData")
   logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
-    if (!is.null(modules$filter) && !is_global) {
+    if (!is.null(modules$filter) && is_module_specific) {
       datasets$srv_filter_panel("module_filter_panel", active_datanames = reactive(modules$filter))
     }
 

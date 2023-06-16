@@ -176,7 +176,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_filters()) {
           labels <- vapply(modules$children, `[[`, character(1), "label")
           names(datasets) <- labels
           datasets
-        } else if (isFALSE(attr(filter, "global"))) {
+        } else if (isTRUE(attr(filter, "module_specific"))) {
           # we should create FilteredData even if modules$filter is null
           # null controls a display of filter panel but data should be still passed
           datanames <- if (is.null(modules$filter)) raw_data()$get_datanames() else modules$filter

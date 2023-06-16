@@ -10,7 +10,7 @@ teal_filters(
   include_varnames = NULL,
   count_type = NULL,
   mapping = list(),
-  global = length(mapping) == 0
+  module_specific = length(mapping) > 0
 )
 }
 \arguments{
@@ -36,12 +36,12 @@ Each element of the list should contain character vector of \code{teal_slices} \
 \code{teal} application.
 Names of the list should correspond to \code{teal_module} \code{label} set in \code{\link[=module]{module()}} function.}
 
-\item{global}{(\code{logical(1)})\cr
+\item{module_specific}{(\code{logical(1)})\cr
 \itemize{
-\item \code{TRUE} when one filter panel needed to all modules. All filters will be shared
-by all modules.
-\item \code{FALSE} when filter panel should be module-specific. All modules can have different set
+\item \code{TRUE} when filter panel should be module-specific. All modules can have different set
 of filters specified - see \code{mapping} argument.
+\item \code{FALSE} when one filter panel needed to all modules. All filters will be shared
+by all modules.
 }}
 }
 \description{

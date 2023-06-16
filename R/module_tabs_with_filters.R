@@ -101,9 +101,9 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
 
   ns <- NS(id)
-  is_global <- !isFALSE(attr(filter, "global"))
+  is_module_specific <- isTRUE(attr(filter, "module_specific"))
 
-  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets, is_global = is_global)
+  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets, is_module_specific = is_module_specific)
   filter_panel_btn <- tags$li(
     class = "flex-grow",
     tags$button(
@@ -115,7 +115,7 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter) {
     )
   )
 
-  if (is_global) {
+  if (!is_module_specific) {
     # need to rearrange html so that filter panel is within tabset
     tabset_bar <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
     teal_modules <- teal_ui$children[[2]]
@@ -155,8 +155,8 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_tabs_with_filters initializing the module.")
 
-    is_global <- !isFALSE(attr(filter, "global"))
-    if (!is_global) {
+    is_module_specific <- isTRUE(attr(filter, "module_specific"))
+    if (is_module_specific) {
       manager_out <- filter_manager_modal_srv("filter_manager", filtered_data_list = datasets, filter = filter)
     }
 
@@ -165,10 +165,10 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
       datasets = datasets,
       modules = modules,
       reporter = reporter,
-      is_global = is_global
+      is_module_specific = is_module_specific
     )
 
-    if (is_global) {
+    if (!is_module_specific) {
       active_datanames <- reactive(active_module()$filters)
       singleton <- unlist(datasets)[[1]]
       singleton$srv_filter_panel("filter_panel", active_datanames = active_datanames)
