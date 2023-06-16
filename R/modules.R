@@ -167,7 +167,8 @@ is_arg_used.function <- function(modules, arg) {
 #' @param filters (`character`) A vector with `datanames` that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed datasets. `NULL` will hide the filter panel,
-#'   and the keyword `'all'` will show the filters of all datasets.
+#'   and the keyword `'all'` will show the filters of all datasets. `filters` determines also
+#'   a subset of datasets which are appended to the `data` argument in `server` function.
 #' @param server_args (named `list`) with additional arguments passed on to the
 #'   `server` function.
 #' @param ui_args (named `list`) with additional arguments passed on to the

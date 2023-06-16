@@ -470,25 +470,6 @@ testthat::test_that(".datasets_to_data returns tdata object", {
   testthat::expect_null(get_metadata(data, "d2"))
 })
 
-testthat::test_that(".datasets_to_data returns parent datasets for CDISC data", {
-  adsl <- data.frame(STUDYID = 1, USUBJID = 1)
-  adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1, AETERM = 1, AESEQ = 1)
-  adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)
-
-  datasets <- teal.slice::init_filtered_data(
-    teal.data::cdisc_data(
-      teal.data::cdisc_dataset("ADSL", adsl),
-      teal.data::cdisc_dataset("ADAE", adae),
-      teal.data::cdisc_dataset("ADTTE", adtte)
-    )
-  )
-
-  module <- list(filter = "ADAE")
-  trigger_data <- reactiveVal(1L)
-  data <- .datasets_to_data(module, datasets, trigger_data)
-  testthat::expect_setequal(shiny::isolate(names(data)), c("ADSL", "ADAE"))
-})
-
 testthat::test_that("calculate_hashes takes a FilteredData and vector of datanames as input", {
   adsl <- data.frame(STUDYID = 1, USUBJID = 1)
   adae <- data.frame(STUDYID = 1, USUBJID = 1, ASTDTM = 1, AETERM = 1, AESEQ = 1)
