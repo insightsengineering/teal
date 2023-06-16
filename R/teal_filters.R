@@ -1,4 +1,3 @@
-
 #' Filter settings for teal applications
 #'
 #' Filter settings for teal applications
