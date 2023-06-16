@@ -26,7 +26,7 @@ The browser window title (defaults to the host URL of the page).}
 \item{header}{(\code{shiny.tag} or \code{character}) \cr
 the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
-(such as loading css via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
+(such as loading \code{CSS} via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
 
 \item{footer}{(\code{shiny.tag} or \code{character})\cr
 the footer of the app}
@@ -41,7 +41,7 @@ This is the main teal UI that puts everything together.
 It displays the splash UI which is used to fetch the data, possibly
 prompting for a password input to fetch the data. Once the data is ready,
 the splash screen is replaced by the actual teal UI that is tabsetted and
-has a filter panel with datanames that are relevant for the current tab.
+has a filter panel with \code{datanames} that are relevant for the current tab.
 Nested tabs are possible, but we limit it to two nesting levels for reasons
 of clarity of the UI.
 

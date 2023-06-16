@@ -43,8 +43,8 @@ include_js_files <- function(pattern = NULL, except = NULL) {
 #'
 #' This is triggered from the server to execute on the client
 #' rather than triggered directly on the client.
-#' Unlike `include_js_files` which includes Javascript functions,
-#' the `run_js` actually executes Javascript functions.
+#' Unlike `include_js_files` which includes `JavaScript` functions,
+#' the `run_js` actually executes `JavaScript` functions.
 #'
 #' `system.file` should not be used to access files in other packages, it does
 #' not work with `devtools`. Therefore, we redefine this method in each package
@@ -60,9 +60,9 @@ run_js_files <- function(files) {
   return(invisible(NULL))
 }
 
-#' Code to include teal CSS and Javascript files
+#' Code to include teal `CSS` and `JavaScript` files
 #'
-#' This is useful when you want to use the same Javascript and CSS files that are
+#' This is useful when you want to use the same `JavaScript` and `CSS` files that are
 #' used with the teal application.
 #' This is also useful for running standalone modules in teal with the correct
 #' styles.

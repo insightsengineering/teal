@@ -144,3 +144,62 @@ testthat::test_that("init modules accepts a teal_module object", {
   mods <- example_module()
   testthat::expect_error(init(data = iris, modules = mods), NA)
 })
+
+testthat::test_that("init filter accepts named list or `teal_slices`", {
+  fl <- list(
+    "iris" = list(
+      "Species" = list(selected = "setosa")
+    )
+  )
+  fs <- teal.slice::filter_settings(
+    teal.slice::filter_var(dataname = "iris", varname = "species", selected = "setosa")
+  )
+  testthat::expect_no_error(init(data = dataset_1, modules = mods, filter = fl))
+  testthat::expect_no_error(init(data = dataset_1, modules = mods, filter = fs))
+  testthat::expect_error(init(data = dataset_1, modules = mods, filter = unclass(fs)), "Assertion failed")
+})
+
+testthat::test_that("init filter fails when filters don't refer to available data names", {
+  testthat::expect_error(
+    init(
+      data = list(iris = iris),
+      modules = teal:::get_dummy_modules(),
+      filter = teal.slice::filter_settings(
+        teal.slice::filter_var(dataname = "inexisting", varname = "varname")
+      )
+    ),
+    "inexisting not in iris"
+  )
+})
+
+testthat::test_that("init filter fails when mapping don't refer to available module labels", {
+  testthat::expect_error(
+    init(
+      data = list(iris = iris),
+      modules = teal:::get_dummy_modules(),
+      filter = teal_filters(
+        teal.slice::filter_var(dataname = "iris", varname = "varname", id = "iris varname"),
+        mapping = list(
+          inexisting = c("iris varname")
+        )
+      )
+    ),
+    "inexisting not in aaa1, aaa2, aaa3"
+  )
+})
+
+testthat::test_that("init filter fails when mapping don't refer to available filter id", {
+  testthat::expect_error(
+    init(
+      data = list(iris = iris),
+      modules = teal:::get_dummy_modules(),
+      filter = teal_filters(
+        teal.slice::filter_var(dataname = "iris", varname = "varname", id = "iris varname"),
+        mapping = list(
+          aaa1 = "inexisting"
+        )
+      )
+    ),
+    "inexisting not in iris varname"
+  )
+})
