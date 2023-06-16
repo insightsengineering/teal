@@ -27,7 +27,8 @@ module(
 \method{print}{teal_module}(x, ...)
 }
 \arguments{
-\item{label}{(\code{character(1)}) Label shown in the navigation item for the module.}
+\item{label}{(\code{character(1)}) Label shown in the navigation item for the module. Any label possible except
+\code{"global_filters"} - read more in \code{mapping} argument of \link{teal_filters}.}
 
 \item{server}{(\code{function}) \code{shiny} module with following arguments:
 \itemize{
@@ -51,7 +52,8 @@ the \code{filters} argument.
 \item{filters}{(\code{character}) A vector with \code{datanames} that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
-and the keyword \code{'all'} will show the filters of all datasets.}
+and the keyword \code{'all'} will show the filters of all datasets. \code{filters} determines also
+a subset of datasets which are appended to the \code{data} argument in \code{server} function.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the
 \code{server} function.}

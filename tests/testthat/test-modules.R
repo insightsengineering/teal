@@ -23,7 +23,7 @@ testthat::test_that("Calling module() does not throw", {
   testthat::expect_error(module(), NA)
 })
 
-testthat::test_that("module requires label argument to be a string", {
+testthat::test_that("module requires label argument to be a string different than 'global_filters'", {
   testthat::expect_error(module(label = "label"), NA)
 
   testthat::expect_error(module(label = NULL), "Assertion on 'label' failed.+'NULL'")
@@ -31,6 +31,8 @@ testthat::test_that("module requires label argument to be a string", {
   testthat::expect_error(module(label = c("label", "label")), "Assertion on 'label' failed: Must have length 1.")
 
   testthat::expect_error(module(label = 1L), "Assertion on 'label' failed.+not 'integer'")
+
+  testthat::expect_error(module(label = "global_filters"), "is reserved in teal")
 })
 
 testthat::test_that("module expects server being a shiny server module with any argument", {
@@ -248,7 +250,7 @@ testthat::test_that("modules returns useful error message if label argument not 
     ui = ui_fun1,
     filters = ""
   )
-  expect_error(modules("module", test_module), "The only character argument to modules\\(\\) must be 'label'")
+  testthat::expect_error(modules("module", test_module), "The only character argument to modules\\(\\) must be 'label'")
 })
 
 
@@ -509,4 +511,68 @@ testthat::test_that("append_module produces teal_modules with unique named child
   appended_mods <- append_module(mods, mod3)
   mod_names <- names(appended_mods$children)
   testthat::expect_equal(mod_names, unique(mod_names))
+})
+
+testthat::test_that("teal_filters fails when inexisting teal_slice id is specified in mapping", {
+  testthat::expect_error(
+    teal_filters(
+      teal.slice::filter_var(dataname = "data", varname = "var", id = "test"),
+      mapping = list(
+        module = "inexisting"
+      )
+    )
+  )
+})
+
+testthat::test_that("teal_filters returns modules_filter_settings", {
+  testthat::expect_s3_class(
+    teal_filters(
+      teal.slice::filter_var(dataname = "data", varname = "var", id = "test")
+    ),
+    "modules_filter_settings"
+  )
+})
+
+testthat::test_that("teal_filters mapping should be an empty list or a named list", {
+  testthat::expect_no_error(
+    teal_filters(
+      teal.slice::filter_var(dataname = "data", varname = "var", id = "test"),
+      mapping = list()
+    )
+  )
+  testthat::expect_no_error(
+    teal_filters(
+      teal.slice::filter_var(dataname = "data", varname = "var", id = "test"),
+      mapping = list(module = c())
+    )
+  )
+  testthat::expect_error(
+    teal_filters(
+      teal.slice::filter_var(dataname = "data", varname = "var", id = "test"),
+      mapping = list(1, 2, 3)
+    )
+  )
+})
+
+testthat::test_that("teal_filters fails when inexisting teal_slice id is specified in mapping", {
+  testthat::expect_error(
+    teal_filters(
+      teal.slice::filter_var(dataname = "data", varname = "var", id = "test"),
+      mapping = list(
+        module = "inexisting"
+      )
+    ),
+    "inexisting not in test"
+  )
+})
+
+testthat::test_that("teal_filters fails when mapping is specified with module_specific = FALSE", {
+  testthat::expect_error(
+    teal_filters(
+      teal.slice::filter_var(dataname = "data", varname = "var", id = "test"),
+      mapping = list(module = "test"),
+      module_specific = FALSE
+    ),
+    "`mapping` is specified .+ even though `module_specific` isn't TRUE"
+  )
 })

@@ -33,3 +33,16 @@ get_teal_bs_theme <- function() {
     bs_theme
   }
 }
+
+include_parent_datanames <- function(dataname, join_keys) {
+  parents <- character(0)
+  for (i in dataname) {
+    while (length(i) > 0) {
+      parent_i <- join_keys$get_parent(i)
+      parents <- c(parent_i, parents)
+      i <- parent_i
+    }
+  }
+
+  return(unique(c(parents, dataname)))
+}
