@@ -9,6 +9,7 @@ teal_filters(
   exclude_varnames = NULL,
   include_varnames = NULL,
   count_type = NULL,
+  module_add = TRUE,
   mapping = list(),
   module_specific = length(mapping) > 0
 )
@@ -22,7 +23,9 @@ for other functions arguments passed to other methods}
 match names of data sets and vector elements match variable names in respective data sets;
 specify which variables are allowed to be filtered; see \code{Details}}
 
-\item{count_type}{\code{character(1)} string specifying how observations are tallied by these filter states.
+\item{count_type}{\code{character(1)} string specifying how observations are tallied by these filter states.}
+
+\item{module_add}{\code{logical(1)} logical flag specifying whether the user will be able to add new filters
 Possible options:
 \itemize{
 \item \code{"all"} to have counts of single \code{FilterState} to show number of observation in filtered
