@@ -48,11 +48,13 @@ teal_filters <- function(...,
                          exclude_varnames = NULL,
                          include_varnames = NULL,
                          count_type = NULL,
+                         module_add = TRUE,
                          mapping = list(),
                          module_specific = length(mapping) > 0) {
   shiny::isolate({
     checkmate::assert_list(mapping, names = "named")
     checkmate::assert_flag(module_specific)
+    checkmate::assert_flag(module_add)
     modules_mapped <- setdiff(names(mapping), "global_filters")
     if (length(modules_mapped) && !module_specific) {
       stop(
@@ -65,7 +67,8 @@ teal_filters <- function(...,
       ...,
       exclude_varnames = exclude_varnames,
       include_varnames = include_varnames,
-      count_type = count_type
+      count_type = count_type,
+      module_add = module_add
     )
 
     all_slice_id <- vapply(fs, `[[`, character(1), "id")
