@@ -20,7 +20,7 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,15 +50,6 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -140,22 +131,22 @@ The browser window title (defaults to the host URL of the page).</p></dd>
 You can define filters that show when the app starts. List names should be
 named according to datanames passed to the <code>data</code> argument.
 In case of  data.frame` the list should be composed as follows:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="sc">&lt;</span>dataname1<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(<span class="sc">&lt;</span>varname1<span class="sc">&gt;</span> <span class="er">=</span> ..., <span class="sc">&lt;</span>varname2<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>     <span class="sc">&lt;</span>dataname2<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(...),</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>     ...)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(<span class="sc">&lt;</span>dataname1<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(<span class="sc">&lt;</span>varname1<span class="sc">&gt;</span> <span class="er">=</span> ..., <span class="sc">&lt;</span>varname2<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>     <span class="sc">&lt;</span>dataname2<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(...),</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>     ...)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span></code></pre><p></p></div>
 <p>For example, filters for variable <code>Sepal.Length</code> in <code>iris</code> can be specified as
 follows:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">iris =</span> <span class="fu">list</span>(<span class="at">Sepal.Length =</span> <span class="fu">list</span>(<span class="at">selected =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>))))</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">iris =</span> <span class="fu">list</span>(<span class="at">Sepal.Length =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>)))</span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(<span class="at">iris =</span> <span class="fu">list</span>(<span class="at">Sepal.Length =</span> <span class="fu">list</span>(<span class="at">selected =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>))))</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># or</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">list</span>(<span class="at">iris =</span> <span class="fu">list</span>(<span class="at">Sepal.Length =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>)))</span></code></pre><p></p></div>
 <p>In case developer would like to include <code>NA</code> and <code>Inf</code> values in  the
 filtered dataset.</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">list</span>(<span class="at">selected =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>), <span class="at">keep_na =</span> <span class="cn">TRUE</span>, <span class="at">keep_inf =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">c</span>(<span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>), <span class="cn">NA</span>, <span class="cn">Inf</span>))</span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">list</span>(<span class="at">selected =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>), <span class="at">keep_na =</span> <span class="cn">TRUE</span>, <span class="at">keep_inf =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">c</span>(<span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>), <span class="cn">NA</span>, <span class="cn">Inf</span>))</span></code></pre><p></p></div>
 <p>To initialize with specific variable filter with all values on start, one
 can use</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">list</span>())</span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">list</span>())</span></code></pre><p></p></div>
 <p><code>filter</code> should be set with respect to the class of the column:</p><ul><li><p><code>numeric</code>: <code>selected</code> should be a two elements vector defining the range
 of the filter.</p></li>
 <li><p><code>Date</code>: <code>selected</code> should be a two elements vector defining the date-range
@@ -168,17 +159,17 @@ defining initial values selected to filter.
 different way. Since it contains patient data with list of experiments,
 <code>filter</code> list should be created as follows:
 <br></p></li>
-</ul><p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">&lt;</span>MAE dataname<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">subjects =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> colData<span class="sc">&gt;</span> <span class="er">=</span> ..., <span class="sc">&lt;</span>column <span class="cf">in</span> colData<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">&lt;</span>experiment name<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">subset =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> rowData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                    <span class="sc">&lt;</span>column <span class="cf">in</span> rowData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">select =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> colData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                    <span class="sc">&lt;</span>column <span class="cf">in</span> colData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre><p></p></div>
+</ul><p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="sc">&lt;</span>MAE dataname<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="at">subjects =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> colData<span class="sc">&gt;</span> <span class="er">=</span> ..., <span class="sc">&lt;</span>column <span class="cf">in</span> colData<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>    <span class="sc">&lt;</span>experiment name<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>      <span class="at">subset =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> rowData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...,</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>                    <span class="sc">&lt;</span>column <span class="cf">in</span> rowData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>      <span class="at">select =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> colData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...,</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>                    <span class="sc">&lt;</span>column <span class="cf">in</span> colData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    )</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  )</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>)</span></code></pre><p></p></div>
 <p>By adding the <code>filterable</code> attribute it is possible to control which variables can be filtered for each
 dataset. See the example below where <code>ADSL</code> can only be filtered by <code>AGE</code>, <code>SEX</code> or <code>RACE</code>.</p></dd>
 
