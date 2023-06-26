@@ -78,7 +78,7 @@ the `new_tdata` function.
 
 The `teal` framework also provides:
 
-- A way to create modules which the generate the R code needed to reproduce their outputs;
+- A way to create modules which then generate the R code needed to reproduce their outputs;
 these modules use the [`teal.code`](https://insightsengineering.github.io/teal.code/) package.
 - A way extract from and merge related datasets using the
 [`teal.transform`](https://insightsengineering.github.io/teal.transform/) package.
