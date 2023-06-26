@@ -181,7 +181,6 @@ An example `teal` application using this module is shown below:
 
 
 ```{r}
-
 library(teal)
 
 app <- init(
