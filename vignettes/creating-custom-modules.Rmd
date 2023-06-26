@@ -84,8 +84,7 @@ these modules use the [`teal.code`](https://insightsengineering.github.io/teal.c
 [`teal.transform`](https://insightsengineering.github.io/teal.transform/) package.
 - A way to allow app creators to customize your modules also using `teal.transform`.
 
-The annotated example below shows these features inside a simple histogram module where app developers can choose
-what data and which columns from them, their app users can select to be displayed as a histogram.
+The annotated example below demonstrates these features within a simple histogram module, allowing app developers to choose the data and columns that their app users can select for display in a histogram.
 
 See the package and function documentation for further details.
 
