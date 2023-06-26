@@ -130,7 +130,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 
     mapping_matrix <- reactive({
       module_names <- names(filtered_data_list)
-      filter_names <- vapply(X = slices_global(), `[[`, character(1), "id")
+      filter_names <- slices_field(slices_global(), "id")
       mapping_matrix <- matrix(
         FALSE,
         nrow = length(filter_names),
@@ -208,7 +208,7 @@ filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_g
       lapply(
         slices_added(),
         function(slice) {
-          global_ids <- vapply(slices_global(), function(x) x$id, character(1))
+          global_ids <- slices_field(slices_global(), "id")
           if (slice$id %in% global_ids) {
             slice$id <- utils::tail(make.unique(c(global_ids, slice$id), sep = "_"), 1)
           }
@@ -221,14 +221,14 @@ filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_g
 
     observeEvent(slices_activated(), ignoreNULL = TRUE, {
       logger::log_trace("filter_manager_srv@3 activated filter in module: { id }.")
-      activated_ids <- vapply(slices_activated(), `[[`, character(1), "id")
+      activated_ids <- slices_field(slices_activated(), "id")
       slices_map_module(c(slices_map_module(), activated_ids))
       slices_activated(NULL)
     })
 
     observeEvent(slices_deactivated(), ignoreNULL = TRUE, {
       logger::log_trace("filter_manager_srv@4 deactivated filter in module: { id }.")
-      deactivated_ids <- vapply(slices_deactivated(), `[[`, character(1), "id")
+      deactivated_ids <- slices_field(slices_deactivated(), "id")
       slices_map_module(setdiff(slices_map_module(), deactivated_ids))
       slices_deactivated(NULL)
     })
