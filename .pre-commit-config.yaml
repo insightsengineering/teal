@@ -6,7 +6,7 @@ default_language_version:
   python: python3
 repos:
   - repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.3.2.9011
+    rev: v0.3.2.9013
     hooks:
       - id: style-files
         name: Style code with `styler`
