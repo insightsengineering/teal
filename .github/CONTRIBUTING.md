@@ -42,9 +42,9 @@ For new feature requests, please elaborate on the context and the benefit the fe
 
 ## Pull requests
 
-### Github Flow
+### GitHub Flow
 
-This repository uses the [Github Flow](https://docs.github.com/en/get-started/quickstart/github-flow) model for collaboration. To submit a pull request:
+This repository uses the [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow) model for collaboration. To submit a pull request:
 
 1. Create a branch
 
