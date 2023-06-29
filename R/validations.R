@@ -25,11 +25,11 @@
 #'   output$plot <- renderPlot({
 #'     df <- iris[iris$Sepal.Length <= input$len, ]
 #'     validate_has_data(
-#'        iris_f,
-#'        min_nrow = 10,
-#'        complete = FALSE,
-#'        msg = "Please adjust Max Length of Sepal"
-#'      )
+#'       iris_f,
+#'       min_nrow = 10,
+#'       complete = FALSE,
+#'       msg = "Please adjust Max Length of Sepal"
+#'     )
 #'
 #'     hist(iris_f$Sepal.Length, breaks = 5)
 #'   })
@@ -225,7 +225,6 @@ validate_has_elements <- function(x, msg) {
 #'
 #' server <- function(input, output) {
 #'   output$summary <- renderText({
-#'
 #'     sample_1 <- data$id[data$strata == input$ref1]
 #'     sample_2 <- data$id[data$strata == input$ref2]
 #'

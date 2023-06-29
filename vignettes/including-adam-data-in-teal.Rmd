@@ -78,7 +78,7 @@ cdisc_data_obj <- cdisc_data(
       USUBJID = 1:10,
       SEX = sample(c("F", "M"), 10, replace = TRUE),
       AGE = rpois(10, 40)
-    )' 
+    )'
   ),
   cdisc_dataset(
     dataname = "ADTTE",
