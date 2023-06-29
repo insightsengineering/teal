@@ -53,34 +53,49 @@ get_dummy_filter <- function(data) { # nolint
 #' @return `cdisc_data`
 #' @keywords internal
 get_dummy_cdisc_data <- function() { # nolint
-  teal_with_pkg <- function(pkg, code) {
-    pkg_name <- paste0("package:", pkg)
-    if (!pkg_name %in% search()) {
-      require(pkg, character.only = TRUE)
-      on.exit(detach(pkg_name, character.only = TRUE))
-    }
-    eval.parent(code)
-    return(invisible(NULL))
-  }
-
-  teal_with_pkg("scda", code = {
-    ADSL <- scda::synthetic_cdisc_data("latest")$adsl # nolint
-    ADAE <- scda::synthetic_cdisc_data("latest")$adae # nolint
-    ADLB <- scda::synthetic_cdisc_data("latest")$adlb # nolint
-  })
+  ADSL <- data.frame( # nolint
+    STUDYID = "study",
+    USUBJID = 1:10,
+    SEX = sample(c("F", "M"), 10, replace = TRUE),
+    AGE = stats::rpois(10, 40)
+  )
+  ADTTE <- rbind(ADSL, ADSL, ADSL) # nolint
+  ADTTE$PARAMCD <- rep(c("OS", "EFS", "PFS"), each = 10)
+  ADTTE$AVAL <- c(
+    stats::rnorm(10, mean = 700, sd = 200), # dummy OS level
+    stats::rnorm(10, mean = 400, sd = 100), # dummy EFS level
+    stats::rnorm(10, mean = 450, sd = 200) # dummy PFS level
+  )
 
   ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE) # nolint
-  ADSL$SEX[1:150] <- NA # nolint
+  ADSL$SEX[c(2, 5)] <- NA # nolint
+
+  cdisc_data_obj <- cdisc_data(
+    cdisc_dataset(dataname = "ADSL", x = ADSL),
+    cdisc_dataset(dataname = "ADTTE", x = ADTTE)
+  )
 
   res <- teal.data::cdisc_data(
     teal.data::cdisc_dataset(dataname = "ADSL", x = ADSL),
-    teal.data::cdisc_dataset(dataname = "ADAE", x = ADAE),
-    teal.data::cdisc_dataset(dataname = "ADLB", x = ADLB),
-    code = "
-      ADSL <- synthetic_cdisc_data(\"latest\")$adsl
-      ADAE <- synthetic_cdisc_data(\"latest\")$adae
-      ADLB <- synthetic_cdisc_data(\"latest\")$adlb
-    "
+    teal.data::cdisc_dataset(dataname = "ADTTE", x = ADTTE),
+    code = '
+      ADSL <- data.frame(
+        STUDYID = "study",
+        USUBJID = 1:10,
+        SEX = sample(c("F", "M"), 10, replace = TRUE),
+        AGE = rpois(10, 40)
+      )
+      ADTTE <- rbind(ADSL, ADSL, ADSL)
+      ADTTE$PARAMCD <- rep(c("OS", "EFS", "PFS"), each = 10)
+      ADTTE$AVAL <- c(
+        rnorm(10, mean = 700, sd = 200),
+        rnorm(10, mean = 400, sd = 100),
+        rnorm(10, mean = 450, sd = 200)
+      )
+
+      ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
+      ADSL$SEX[c(2, 5)] <- NA
+    '
   )
   return(res)
 }

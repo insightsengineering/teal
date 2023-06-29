@@ -20,26 +20,21 @@ validate_in(x, choices, msg)
 This function is a wrapper for \code{shiny::validate}.
 }
 \examples{
-library(scda)
-
-ADSL <- synthetic_cdisc_data("latest")$adsl
-ADRS <- synthetic_cdisc_data("latest")$adrs
-
 ui <- fluidPage(
   selectInput(
-    "rsp",
-    "Select response parameter",
-    choices = c("BESRSPI", "INVET", "CBRSPI"),
-    selected = "BESRSPI",
+    "species",
+    "Select species",
+    choices = c("setosa", "versicolor", "virginica", "unknown species"),
+    selected = "setosa",
     multiple = FALSE
   ),
-  verbatimTextOutput("rsp_summary")
+  verbatimTextOutput("summary")
 )
 
 server <- function(input, output) {
-  output$rsp_summary <- renderPrint({
-    validate_in(input$rsp, ADRS$PARAMCD, "Parameter does not exist.")
-    nrow(ADRS[ADRS$PARAMCD == input$rsp, ])
+  output$summary <- renderPrint({
+    validate_in(input$species, iris$Species, "Species does not exist.")
+    nrow(iris[iris$Species == input$species, ])
   })
 }
 \dontrun{

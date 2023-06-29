@@ -31,22 +31,25 @@ infinite.}
 This function is a wrapper for \code{shiny::validate}.
 }
 \examples{
-library(scda)
-ADSL <- synthetic_cdisc_data("latest")$adsl
-
+library(teal)
 ui <- fluidPage(
-  sliderInput("obs", "Max Age",
-    min = 0, max = 100, value = 50
+  sliderInput("len", "Max Length of Sepal",
+    min = 4.3, max = 7.9, value = 5
   ),
   plotOutput("plot")
 )
 
 server <- function(input, output) {
   output$plot <- renderPlot({
-    ADSL_f <- ADSL[ADSL$AGE <= input$obs, ]
-    validate_has_data(ADSL_f, min_nrow = 10, complete = FALSE, msg = "Please adjust your Max Age")
+    df <- iris[iris$Sepal.Length <= input$len, ]
+    validate_has_data(
+       iris_f,
+       min_nrow = 10,
+       complete = FALSE,
+       msg = "Please adjust Max Length of Sepal"
+     )
 
-    hist(ADSL_f$AGE, breaks = 5)
+    hist(iris_f$Sepal.Length, breaks = 5)
   })
 }
 \dontrun{

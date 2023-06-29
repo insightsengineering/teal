@@ -13,20 +13,8 @@
 #' @keywords internal
 #'
 #' @examples
-#' library(scda)
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
-#' # by testing with NA values, we will see whether the filtering really works when
-#' # we add and remove filters
-#' ADSL$SEX[1:150] <- NA
-#'
 #' app <- init(
-#'   data = cdisc_data(
-#'     cdisc_dataset(
-#'       dataname = "ADSL",
-#'       x = ADSL
-#'     ),
-#'     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
-#'   ),
+#'   data = list(iris = iris, mtcars = mtcars),
 #'   modules = teal:::filter_calls_module(),
 #'   header = "Simple teal app"
 #' )

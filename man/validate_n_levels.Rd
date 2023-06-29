@@ -26,26 +26,29 @@ or greater than \code{max_levels} the validation will fail.
 This function is a wrapper for \code{shiny::validate}.
 }
 \examples{
-library(scda)
-
-ADSL <- synthetic_cdisc_data("latest")$adsl
-
+data <- data.frame(
+  one = rep("a", length.out = 20),
+  two = rep(c("a", "b"), length.out = 20),
+  three = rep(c("a", "b", "c"), length.out = 20),
+  four = rep(c("a", "b", "c", "d"), length.out = 20),
+  stringsAsFactors = TRUE
+)
 ui <- fluidPage(
-  selectInput("arm", "Select treatment",
-    choices = c("ARM", "ARMCD", "STUDYID"), selected = "ARM"
+  selectInput(
+    "var",
+    "Select variable",
+    choices = c("one", "two", "three", "four"),
+    selected = "one"
   ),
-  verbatimTextOutput("arm_summary")
+  verbatimTextOutput("summary")
 )
 
 server <- function(input, output) {
-  output$arm_summary <- renderText({
-    validate_n_levels(ADSL[[input$arm]],
-      min_levels = 2, max_levels = 15,
-      var_name = input$arm
-    )
+  output$summary <- renderText({
+    validate_n_levels(data[[input$var]], min_levels = 2, max_levels = 15, var_name = input$var)
     paste0(
       "Levels of selected treatment variable: ",
-      paste(levels(ADSL[[input$arm]]),
+      paste(levels(data[[input$var]]),
         collapse = ", "
       )
     )

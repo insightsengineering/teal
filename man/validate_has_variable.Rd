@@ -20,22 +20,24 @@ validate_has_variable(data, varname, msg)
 This function is a wrapper for \code{shiny::validate}.
 }
 \examples{
-library(scda)
-ADSL <- synthetic_cdisc_data("latest")$adsl
-
+data <- data.frame(
+  one = rep("a", length.out = 20),
+  two = rep(c("a", "b"), length.out = 20)
+)
 ui <- fluidPage(
-  selectInput("arm", "Select treatment",
-    choices = c("ARM", "ARMCD", "ACTARM", "TRT"),
-    selected = "ARM", multiple = TRUE
+  selectInput(
+    "var",
+    "Select variable",
+    choices = c("one", "two", "three", "four"),
+    selected = "one"
   ),
-  verbatimTextOutput("arm_summary")
+  verbatimTextOutput("summary")
 )
 
 server <- function(input, output) {
-  output$arm_summary <- renderText({
-    validate_has_variable(ADSL, input$arm)
-
-    paste0("Selected treatment variables: ", paste(input$arm, collapse = ", "))
+  output$summary <- renderText({
+    validate_has_variable(data, input$var)
+    paste0("Selected treatment variables: ", paste(input$var, collapse = ", "))
   })
 }
 \dontrun{

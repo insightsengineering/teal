@@ -18,30 +18,31 @@ validate_has_elements(x, msg)
 This function is a wrapper for \code{shiny::validate}.
 }
 \examples{
-library(scda)
-ADSL <- synthetic_cdisc_data("latest")$adsl
-
+data <- data.frame(
+  id = c(1:10, 11:20, 1:10),
+  strata = rep(c("A", "B"), each = 15)
+)
 ui <- fluidPage(
-  selectInput("ref_arm", "Select reference treatment",
-    choices = c("ARM A", "ARM B", "ARM X"), selected = "ARM A"
+  selectInput("ref1", "Select strata1 to compare",
+    choices = c("A", "B", "C"), selected = "A"
   ),
-  selectInput("comp_arm", "Select comparison treatment",
-    choices = c("ARM C", "ARM Y", "ARM Z"), selected = "ARM C"
+  selectInput("ref2", "Select strata2 to compare",
+    choices = c("A", "B", "C"), selected = "B"
   ),
   verbatimTextOutput("arm_summary")
 )
 
 server <- function(input, output) {
   output$arm_summary <- renderText({
-    ref_arm <- ADSL$ARMCD[input$ref_arm == ADSL$ARMCD]
-    comp_arm <- ADSL$ARMCD[input$comp_arm == ADSL$ARMCD]
+    sample_1 <- data$id[data$strata == input$ref1]
+    sample_2 <- data$id[data$strata == input$ref2]
 
-    validate_has_elements(ref_arm, "Need reference treatment.")
-    validate_has_elements(comp_arm, "Need comparison treatment.")
+    validate_has_elements(sample_1, "No subjects in strata1.")
+    validate_has_elements(sample_2, "No subjects in strata2.")
 
     paste0(
-      "Number of patients in: reference treatment=",
-      length(ref_arm), " comparions treatment=", length(comp_arm)
+      "Number of samples in: strata1=", length(sample_1),
+      " comparions strata2=", length(sample_2)
     )
   })
 }
