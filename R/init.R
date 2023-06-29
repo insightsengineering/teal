@@ -111,16 +111,16 @@
 #' @include modules.R
 #'
 #' @examples
-#' new_iris <- transform(iris, id = 1:nrow(iris))
-#' new_mtcars <- transform(mtcars, id = 1:nrow(mtcars))
+#' new_iris <- transform(iris, id = seq_len(nrow(iris)))
+#' new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
 #'
 #' app <- init(
 #'   data = teal_data(
 #'     dataset("new_iris", new_iris),
 #'     dataset("new_mtcars", new_mtcars),
 #'     code = "
-#'       new_iris <- transform(iris, id = 1:nrow(iris))
-#'       new_mtcars <- transform(mtcars, id = 1:nrow(mtcars))
+#'       new_iris <- transform(iris, id = seq_len(nrow(iris)))
+#'       new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
 #'     "
 #'   ),
 #'   modules = modules(

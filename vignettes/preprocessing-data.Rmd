@@ -32,7 +32,7 @@ To complete the above example try the code below (**<span style="color:red">NOTE
 library(teal)
 
 # code>
-new_iris <- transform(iris, id = 1:nrow(iris))
+new_iris <- transform(iris, id = seq_len(nrow(iris)))
 # <code
 
 app <- init(
@@ -52,7 +52,7 @@ library(teal)
 
 # code>
 # data import
-new_iris <- transform(iris, id = 1:nrow(iris))
+new_iris <- transform(iris, id = seq_len(nrow(iris)))
 
 excluded_obj1 <- 1:10 # nocode
 

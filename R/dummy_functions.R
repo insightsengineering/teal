@@ -60,8 +60,8 @@ get_dummy_cdisc_data <- function() { # nolint
     AGE = stats::rpois(10, 40)
   )
   ADTTE <- rbind(ADSL, ADSL, ADSL) # nolint
-  ADTTE$PARAMCD <- rep(c("OS", "EFS", "PFS"), each = 10)
-  ADTTE$AVAL <- c(
+  ADTTE$PARAMCD <- rep(c("OS", "EFS", "PFS"), each = 10) # nolint
+  ADTTE$AVAL <- c( # nolint
     stats::rnorm(10, mean = 700, sd = 200), # dummy OS level
     stats::rnorm(10, mean = 400, sd = 100), # dummy EFS level
     stats::rnorm(10, mean = 450, sd = 200) # dummy PFS level

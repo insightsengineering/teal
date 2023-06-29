@@ -126,16 +126,16 @@ This is a wrapper function around the \code{module_teal.R} functions. Unless you
 an end-user, don't use this function, but instead this module.
 }
 \examples{
-new_iris <- transform(iris, id = 1:nrow(iris))
-new_mtcars <- transform(mtcars, id = 1:nrow(mtcars))
+new_iris <- transform(iris, id = seq_len(nrow(iris)))
+new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
 
 app <- init(
   data = teal_data(
     dataset("new_iris", new_iris),
     dataset("new_mtcars", new_mtcars),
     code = "
-      new_iris <- transform(iris, id = 1:nrow(iris))
-      new_mtcars <- transform(mtcars, id = 1:nrow(mtcars))
+      new_iris <- transform(iris, id = seq_len(nrow(iris)))
+      new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
     "
   ),
   modules = modules(
