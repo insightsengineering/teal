@@ -43,11 +43,11 @@ server <- function(input, output) {
   output$plot <- renderPlot({
     df <- iris[iris$Sepal.Length <= input$len, ]
     validate_has_data(
-       iris_f,
-       min_nrow = 10,
-       complete = FALSE,
-       msg = "Please adjust Max Length of Sepal"
-     )
+      iris_f,
+      min_nrow = 10,
+      complete = FALSE,
+      msg = "Please adjust Max Length of Sepal"
+    )
 
     hist(iris_f$Sepal.Length, breaks = 5)
   })

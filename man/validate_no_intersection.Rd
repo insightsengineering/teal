@@ -39,7 +39,6 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$summary <- renderText({
-
     sample_1 <- data$id[data$strata == input$ref1]
     sample_2 <- data$id[data$strata == input$ref2]
 
