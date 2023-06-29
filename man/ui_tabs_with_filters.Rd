@@ -18,9 +18,9 @@ object to store filter state and filtered datasets, shared across modules. For m
 details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}}
 
 \item{filter}{(\code{teal_slices})\cr
-Specification of initial filter. Filters can be specified using \code{\link[=teal_filters]{teal_filters()}}.
+Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
 Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_filters]{teal_filters()}}.}
+next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 A \code{tagList} of The main menu, place holders for filters and

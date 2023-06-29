@@ -54,7 +54,7 @@ ui_teal_with_splash <- function(id,
 #' @inheritParams shiny::moduleServer
 #' @return `reactive`, return value of [srv_teal()]
 #' @export
-srv_teal_with_splash <- function(id, data, modules, filter = teal_filters()) {
+srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
   stopifnot(is(data, "TealDataAbstract"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace(

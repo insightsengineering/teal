@@ -513,9 +513,9 @@ testthat::test_that("append_module produces teal_modules with unique named child
   testthat::expect_equal(mod_names, unique(mod_names))
 })
 
-testthat::test_that("teal_filters fails when inexisting teal_slice id is specified in mapping", {
+testthat::test_that("teal_slices fails when inexisting teal_slice id is specified in mapping", {
   testthat::expect_error(
-    teal_filters(
+    teal_slices(
       teal.slice::teal_slice(dataname = "data", varname = "var", id = "test"),
       mapping = list(
         module = "inexisting"
@@ -524,39 +524,39 @@ testthat::test_that("teal_filters fails when inexisting teal_slice id is specifi
   )
 })
 
-testthat::test_that("teal_filters returns modules_teal_slices", {
+testthat::test_that("teal_slices returns modules_teal_slices", {
   testthat::expect_s3_class(
-    teal_filters(
+    teal_slices(
       teal.slice::teal_slice(dataname = "data", varname = "var", id = "test")
     ),
     "modules_teal_slices"
   )
 })
 
-testthat::test_that("teal_filters mapping should be an empty list or a named list", {
+testthat::test_that("teal_slices mapping should be an empty list or a named list", {
   testthat::expect_no_error(
-    teal_filters(
+    teal_slices(
       teal.slice::teal_slice(dataname = "data", varname = "var", id = "test"),
       mapping = list()
     )
   )
   testthat::expect_no_error(
-    teal_filters(
+    teal_slices(
       teal.slice::teal_slice(dataname = "data", varname = "var", id = "test"),
       mapping = list(module = c())
     )
   )
   testthat::expect_error(
-    teal_filters(
+    teal_slices(
       teal.slice::teal_slice(dataname = "data", varname = "var", id = "test"),
       mapping = list(1, 2, 3)
     )
   )
 })
 
-testthat::test_that("teal_filters fails when inexisting teal_slice id is specified in mapping", {
+testthat::test_that("teal_slices fails when inexisting teal_slice id is specified in mapping", {
   testthat::expect_error(
-    teal_filters(
+    teal_slices(
       teal.slice::teal_slice(dataname = "data", varname = "var", id = "test"),
       mapping = list(
         module = "inexisting"
@@ -566,9 +566,9 @@ testthat::test_that("teal_filters fails when inexisting teal_slice id is specifi
   )
 })
 
-testthat::test_that("teal_filters fails when mapping is specified with module_specific = FALSE", {
+testthat::test_that("teal_slices fails when mapping is specified with module_specific = FALSE", {
   testthat::expect_error(
-    teal_filters(
+    teal_slices(
       teal.slice::teal_slice(dataname = "data", varname = "var", id = "test"),
       mapping = list(module = "test"),
       module_specific = FALSE

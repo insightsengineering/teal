@@ -4,7 +4,7 @@
 \alias{srv_teal}
 \title{Server function corresponding to teal}
 \usage{
-srv_teal(id, modules, raw_data, filter = teal_filters())
+srv_teal(id, modules, raw_data, filter = teal_slices())
 }
 \arguments{
 \item{id}{(\code{character})\cr
@@ -23,9 +23,9 @@ more details.}
 returns the \code{TealData}, only evaluated once, \code{NULL} value is ignored}
 
 \item{filter}{(\code{teal_slices})\cr
-Specification of initial filter. Filters can be specified using \code{\link[=teal_filters]{teal_filters()}}.
+Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
 Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_filters]{teal_filters()}}.}
+next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 \code{reactive} which returns the currently active module

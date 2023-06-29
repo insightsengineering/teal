@@ -5,7 +5,7 @@
 \title{Server function that loads the data through reactive loading and then delegates
 to \code{\link[=srv_teal]{srv_teal()}}.}
 \usage{
-srv_teal_with_splash(id, data, modules, filter = teal_filters())
+srv_teal_with_splash(id, data, modules, filter = teal_slices())
 }
 \arguments{
 \item{id}{(\code{character})\cr
@@ -29,9 +29,9 @@ will be displayed in the teal application. See \code{\link[=modules]{modules()}}
 more details.}
 
 \item{filter}{(\code{teal_slices})\cr
-Specification of initial filter. Filters can be specified using \code{\link[=teal_filters]{teal_filters()}}.
+Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
 Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_filters]{teal_filters()}}.}
+next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 \code{reactive}, return value of \code{\link[=srv_teal]{srv_teal()}}

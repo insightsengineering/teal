@@ -30,9 +30,9 @@ more details.}
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
 
 \item{filter}{(\code{teal_slices})\cr
-Specification of initial filter. Filters can be specified using \code{\link[=teal_filters]{teal_filters()}}.
+Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
 Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_filters]{teal_filters()}}.}
+next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 \code{reactive} currently selected active_module

@@ -31,9 +31,9 @@
 #' @param title (`NULL` or `character`)\cr
 #'   The browser window title (defaults to the host URL of the page).
 #' @param filter (`teal_slices`)\cr
-#'   Specification of initial filter. Filters can be specified using [teal::teal_filters()].
+#'   Specification of initial filter. Filters can be specified using [teal::teal_slices()].
 #'   Old way of specifying filters through a list is deprecated and will be removed in the
-#'   next release. Please fix your applications to use [teal::teal_filters()].
+#'   next release. Please fix your applications to use [teal::teal_slices()].
 #' @param header (`shiny.tag` or `character`) \cr
 #'   the header of the app. Note shiny code placed here (and in the footer
 #'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
@@ -85,7 +85,7 @@
 #'     )
 #'   ),
 #'   title = "App title",
-#'   filter = teal::teal_filters(
+#'   filter = teal::teal_slices(
 #'     teal.slice::teal_slice(dataname = "ADSL", varname = "AGE"),
 #'     teal.slice::teal_slice(dataname = "ADSL", varname = "SEX"),
 #'     teal.slice::teal_slice(dataname = "ADSL", varname = "RACE"),
@@ -106,7 +106,7 @@
 init <- function(data,
                  modules,
                  title = NULL,
-                 filter = teal_filters(),
+                 filter = teal_slices(),
                  header = tags$p(),
                  footer = tags$p(),
                  id = character(0)) {
@@ -195,7 +195,7 @@ init <- function(data,
       # it is possible that module-label in mapping might refer to multiple teal_module (identified by the same label)
       stop(
         sprintf(
-          "Module labels should be unique when teal_filters(mapping = TRUE). Duplicated labels:\n%s ",
+          "Module labels should be unique when teal_slices(mapping = TRUE). Duplicated labels:\n%s ",
           toString(module_names[duplicated(module_names)])
         )
       )

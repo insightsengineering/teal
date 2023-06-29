@@ -8,7 +8,7 @@ init(
   data,
   modules,
   title = NULL,
-  filter = teal_filters(),
+  filter = teal_slices(),
   header = tags$p(),
   footer = tags$p(),
   id = character(0)
@@ -35,9 +35,9 @@ more details.}
 The browser window title (defaults to the host URL of the page).}
 
 \item{filter}{(\code{teal_slices})\cr
-Specification of initial filter. Filters can be specified using \code{\link[=teal_filters]{teal_filters()}}.
+Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
 Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_filters]{teal_filters()}}.}
+next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 
 \item{header}{(\code{shiny.tag} or \code{character}) \cr
 the header of the app. Note shiny code placed here (and in the footer
@@ -98,7 +98,7 @@ app <- init(
     )
   ),
   title = "App title",
-  filter = teal::teal_filters(
+  filter = teal::teal_slices(
     teal.slice::teal_slice(dataname = "ADSL", varname = "AGE"),
     teal.slice::teal_slice(dataname = "ADSL", varname = "SEX"),
     teal.slice::teal_slice(dataname = "ADSL", varname = "RACE"),
