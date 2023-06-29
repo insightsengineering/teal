@@ -99,9 +99,9 @@ app <- init(
   ),
   title = "App title",
   filter = teal::teal_filters(
-    teal.slice::filter_conf(dataname = "ADSL", varname = "AGE"),
-    teal.slice::filter_conf(dataname = "ADSL", varname = "SEX"),
-    teal.slice::filter_conf(dataname = "ADSL", varname = "RACE"),
+    teal.slice::teal_slice(dataname = "ADSL", varname = "AGE"),
+    teal.slice::teal_slice(dataname = "ADSL", varname = "SEX"),
+    teal.slice::teal_slice(dataname = "ADSL", varname = "RACE"),
     exclude_varnames = list(ADSL = setdiff(names(ADSL), c("AGE", "SEX", "RACE"))),
     mapping = list(
       `example teal module` = "ADSL RACE",

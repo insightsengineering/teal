@@ -2,10 +2,10 @@
 #'
 #' Filter settings for teal applications
 #'
-#' @inheritParams teal.slice::filter_settings
+#' @inheritParams teal.slice::teal_slices
 #' @param mapping (`named list`)\cr
 #'  Each element of the list should contain character vector of `teal_slices` `id` (see
-#'  [teal.slice::filter_conf()]). Filters referred in list elements will be set on the startup of a
+#'  [teal.slice::teal_slice()]). Filters referred in list elements will be set on the startup of a
 #'  `teal` application.
 #'  Names of the list should correspond to `teal_module` `label` set in [module()] function.
 #'
@@ -16,13 +16,13 @@
 #'    by all modules.
 #'
 #' @examples
-#' filter <- teal::teal_filters(
-#'   teal.slice::filter_conf(dataname = "iris", varname = "Species", id = "species"),
-#'   teal.slice::filter_conf(dataname = "iris", varname = "Sepal.Length", id = "sepal_length"),
-#'   teal.slice::filter_conf(
+#' filter <- teal::teal_slices(
+#'   teal.slice::teal_slice(dataname = "iris", varname = "Species", id = "species"),
+#'   teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length", id = "sepal_length"),
+#'   teal.slice::teal_slice(
 #'     dataname = "iris", id = "long_petals", title = "Long petals", expr = "Petal.Length > 5"
 #'   ),
-#'   teal.slice::filter_conf(dataname = "mtcars", varname = "mpg", id = "mtcars_mpg"),
+#'   teal.slice::teal_slice(dataname = "mtcars", varname = "mpg", id = "mtcars_mpg"),
 #'   mapping = list(
 #'     module1 = c("species", "sepal_length"),
 #'     module2 = c("mtcars_mpg"),
@@ -44,7 +44,7 @@
 #' }
 #'
 #' @export
-teal_filters <- function(...,
+teal_slices <- function(...,
                          exclude_varnames = NULL,
                          include_varnames = NULL,
                          count_type = NULL,
@@ -63,7 +63,7 @@ teal_filters <- function(...,
       )
     }
 
-    fs <- teal.slice::filter_settings(
+    fs <- teal.slice::teal_slices(
       ...,
       exclude_varnames = exclude_varnames,
       include_varnames = include_varnames,
@@ -86,7 +86,7 @@ teal_filters <- function(...,
 
     attr(fs, "mapping") <- mapping
     attr(fs, "module_specific") <- module_specific
-    class(fs) <- c("modules_filter_settings", class(fs))
+    class(fs) <- c("modules_teal_slices", class(fs))
     fs
   })
 }
@@ -103,7 +103,7 @@ teal_filters <- function(...,
 deep_copy_filter <- function(filter) {
   shiny::isolate({
     filter_copy <- lapply(filter, function(slice) {
-      do.call(teal.slice::filter_conf, args = reactiveValuesToList(slice))
+      do.call(teal.slice::teal_slice, args = reactiveValuesToList(slice))
     })
     attributes(filter_copy) <- attributes(filter)
     return(filter_copy)

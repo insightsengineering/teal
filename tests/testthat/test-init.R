@@ -151,8 +151,8 @@ testthat::test_that("init filter accepts named list or `teal_slices`", {
       "Species" = list(selected = "setosa")
     )
   )
-  fs <- teal.slice::filter_settings(
-    teal.slice::filter_conf(dataname = "iris", varname = "species", selected = "setosa")
+  fs <- teal.slice::teal_slices(
+    teal.slice::teal_slice(dataname = "iris", varname = "species", selected = "setosa")
   )
   testthat::expect_no_error(init(data = dataset_1, modules = mods, filter = fl))
   testthat::expect_no_error(init(data = dataset_1, modules = mods, filter = fs))
@@ -164,8 +164,8 @@ testthat::test_that("init filter fails when filters don't refer to available dat
     init(
       data = list(iris = iris),
       modules = teal:::get_dummy_modules(),
-      filter = teal.slice::filter_settings(
-        teal.slice::filter_conf(dataname = "inexisting", varname = "varname")
+      filter = teal.slice::teal_slices(
+        teal.slice::teal_slice(dataname = "inexisting", varname = "varname")
       )
     ),
     "inexisting not in iris"
@@ -178,7 +178,7 @@ testthat::test_that("init filter fails when mapping don't refer to available mod
       data = list(iris = iris),
       modules = teal:::get_dummy_modules(),
       filter = teal_filters(
-        teal.slice::filter_conf(dataname = "iris", varname = "varname", id = "iris varname"),
+        teal.slice::teal_slice(dataname = "iris", varname = "varname", id = "iris varname"),
         mapping = list(
           inexisting = c("iris varname")
         )
@@ -194,7 +194,7 @@ testthat::test_that("init filter fails when mapping don't refer to available fil
       data = list(iris = iris),
       modules = teal:::get_dummy_modules(),
       filter = teal_filters(
-        teal.slice::filter_conf(dataname = "iris", varname = "varname", id = "iris varname"),
+        teal.slice::teal_slice(dataname = "iris", varname = "varname", id = "iris varname"),
         mapping = list(
           aaa1 = "inexisting"
         )
