@@ -383,7 +383,7 @@ testthat::test_that(".datasets_to_data accepts a reactiveVal as trigger_data inp
   datasets <- get_example_filtered_data()
   datasets$set_filter_state(
     teal.slice:::filter_settings(
-      teal.slice:::filter_var(dataname = "d1", varname = "val", selected = c(1, 2))
+      teal.slice:::filter_conf(dataname = "d1", varname = "val", selected = c(1, 2))
     )
   )
   module <- list(filter = c("d1", "d2"))
@@ -395,7 +395,7 @@ testthat::test_that(".datasets_to_data throws error if trigger_data is not a rea
   datasets <- get_example_filtered_data()
   datasets$set_filter_state(
     teal.slice:::filter_settings(
-      teal.slice:::filter_var(dataname = "d1", varname = "val", selected = c(1, 2))
+      teal.slice:::filter_conf(dataname = "d1", varname = "val", selected = c(1, 2))
     )
   )
   module <- list(filter = "all")
@@ -410,7 +410,7 @@ testthat::test_that(".datasets_to_data returns data which is filtered", {
   datasets <- get_example_filtered_data()
   datasets$set_filter_state(
     teal.slice:::filter_settings(
-      teal.slice:::filter_var(dataname = "d1", varname = "val", selected = c(1, 2))
+      teal.slice:::filter_conf(dataname = "d1", varname = "val", selected = c(1, 2))
     )
   )
   module <- list(filter = c("d1", "d2"))
@@ -520,8 +520,8 @@ testthat::test_that("calculate_hashes returns the hash of the non Filtered datas
   )
 
   fs <- teal.slice:::filter_settings(
-    teal.slice:::filter_var(dataname = "iris", varname = "Sepal.Length", selected = c(5.1, 6.4)),
-    teal.slice:::filter_var(dataname = "iris", varname = "Species", selected = c("setosa", "versicolor"))
+    teal.slice:::filter_conf(dataname = "iris", varname = "Sepal.Length", selected = c(5.1, 6.4)),
+    teal.slice:::filter_conf(dataname = "iris", varname = "Species", selected = c("setosa", "versicolor"))
   )
 
   shiny::isolate(datasets$set_filter_state(state = fs))

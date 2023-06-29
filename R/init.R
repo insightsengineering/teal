@@ -86,9 +86,9 @@
 #'   ),
 #'   title = "App title",
 #'   filter = teal::teal_filters(
-#'     teal.slice::filter_var(dataname = "ADSL", varname = "AGE"),
-#'     teal.slice::filter_var(dataname = "ADSL", varname = "SEX"),
-#'     teal.slice::filter_var(dataname = "ADSL", varname = "RACE"),
+#'     teal.slice::filter_conf(dataname = "ADSL", varname = "AGE"),
+#'     teal.slice::filter_conf(dataname = "ADSL", varname = "SEX"),
+#'     teal.slice::filter_conf(dataname = "ADSL", varname = "RACE"),
 #'     exclude_varnames = list(ADSL = setdiff(names(ADSL), c("AGE", "SEX", "RACE"))),
 #'     mapping = list(
 #'       `example teal module` = "ADSL RACE",

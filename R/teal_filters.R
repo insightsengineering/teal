@@ -5,7 +5,7 @@
 #' @inheritParams teal.slice::filter_settings
 #' @param mapping (`named list`)\cr
 #'  Each element of the list should contain character vector of `teal_slices` `id` (see
-#'  [teal.slice::filter_var()]). Filters referred in list elements will be set on the startup of a
+#'  [teal.slice::filter_conf()]). Filters referred in list elements will be set on the startup of a
 #'  `teal` application.
 #'  Names of the list should correspond to `teal_module` `label` set in [module()] function.
 #'
@@ -17,12 +17,12 @@
 #'
 #' @examples
 #' filter <- teal::teal_filters(
-#'   teal.slice::filter_var(dataname = "iris", varname = "Species", id = "species"),
-#'   teal.slice::filter_var(dataname = "iris", varname = "Sepal.Length", id = "sepal_length"),
-#'   teal.slice::filter_expr(
+#'   teal.slice::filter_conf(dataname = "iris", varname = "Species", id = "species"),
+#'   teal.slice::filter_conf(dataname = "iris", varname = "Sepal.Length", id = "sepal_length"),
+#'   teal.slice::filter_conf(
 #'     dataname = "iris", id = "long_petals", title = "Long petals", expr = "Petal.Length > 5"
 #'   ),
-#'   teal.slice::filter_var(dataname = "mtcars", varname = "mpg", id = "mtcars_mpg"),
+#'   teal.slice::filter_conf(dataname = "mtcars", varname = "mpg", id = "mtcars_mpg"),
 #'   mapping = list(
 #'     module1 = c("species", "sepal_length"),
 #'     module2 = c("mtcars_mpg"),
@@ -103,11 +103,7 @@ teal_filters <- function(...,
 deep_copy_filter <- function(filter) {
   shiny::isolate({
     filter_copy <- lapply(filter, function(slice) {
-      if (inherits(slice, "teal_slice_expr")) {
-        do.call(teal.slice::filter_expr, args = reactiveValuesToList(slice))
-      } else {
-        do.call(teal.slice::filter_var, args = reactiveValuesToList(slice))
-      }
+      do.call(teal.slice::filter_conf, args = reactiveValuesToList(slice))
     })
     attributes(filter_copy) <- attributes(filter)
     return(filter_copy)

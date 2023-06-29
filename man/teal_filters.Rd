@@ -35,7 +35,7 @@ and unfiltered dataset.
 
 \item{mapping}{(\verb{named list})\cr
 Each element of the list should contain character vector of \code{teal_slices} \code{id} (see
-\code{\link[teal.slice:teal_slice]{teal.slice::filter_var()}}). Filters referred in list elements will be set on the startup of a
+\code{\link[teal.slice:teal_slice]{teal.slice::filter_conf()}}). Filters referred in list elements will be set on the startup of a
 \code{teal} application.
 Names of the list should correspond to \code{teal_module} \code{label} set in \code{\link[=module]{module()}} function.}
 
@@ -52,12 +52,12 @@ Filter settings for teal applications
 }
 \examples{
 filter <- teal::teal_filters(
-  teal.slice::filter_var(dataname = "iris", varname = "Species", id = "species"),
-  teal.slice::filter_var(dataname = "iris", varname = "Sepal.Length", id = "sepal_length"),
-  teal.slice::filter_expr(
+  teal.slice::filter_conf(dataname = "iris", varname = "Species", id = "species"),
+  teal.slice::filter_conf(dataname = "iris", varname = "Sepal.Length", id = "sepal_length"),
+  teal.slice::filter_conf(
     dataname = "iris", id = "long_petals", title = "Long petals", expr = "Petal.Length > 5"
   ),
-  teal.slice::filter_var(dataname = "mtcars", varname = "mpg", id = "mtcars_mpg"),
+  teal.slice::filter_conf(dataname = "mtcars", varname = "mpg", id = "mtcars_mpg"),
   mapping = list(
     module1 = c("species", "sepal_length"),
     module2 = c("mtcars_mpg"),
