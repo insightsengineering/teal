@@ -96,7 +96,14 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("filter_manager_srv initializing for: { paste(names(filtered_data_list), collapse = ', ')}.")
 
-    # instead of unlist which unlist with concatenating nested names with '.'
+    # Create global list of slices.
+    # Contains all available teal_slice objects available to all modules.
+    # Passed whole to instances of FilteredData used for individual modules.
+    # Down there a subset that pertains to the data sets used in that module is applied and displayed.
+    slices_global <- reactiveVal(filter)
+
+    # Flatten (potentially nested) list of FilteredData objects while maintaining useful names.
+    # Simply using `unlist` would result in concatenated names.
     flatten_nested <- function(x, name = NULL) {
       if (inherits(x, "FilteredData")) {
         setNames(list(x), name)
@@ -106,10 +113,11 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     }
     filtered_data_list <- flatten_nested(filtered_data_list)
 
-    # global list of slices (all available teal_slice)
-    slices_global <- reactiveVal(filter)
+    # # flatten nested alternative
+    # filtered_data_list <- unlist(filtered_data_list)
+    # names(filtered_data_list) <- sub("(.+)\\.(.+$)", "\\2", names(filtered_data_list))
 
-    # create a reactive map between modules and filters
+    # Create mapping of filter ids to modules. (list of reactiveVal)
     slices_map <- sapply(
       names(filtered_data_list),
       function(module_name) {
@@ -119,15 +127,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       }
     )
 
-    modules_out <- lapply(names(filtered_data_list), function(module_name) {
-      filter_manager_module_srv(
-        id = module_name,
-        module_fd = filtered_data_list[[module_name]],
-        slices_map_module = slices_map[[module_name]],
-        slices_global = slices_global
-      )
-    })
-
+    # Create matrix representation of filter mapping.
     mapping_matrix <- reactive({
       module_names <- names(filtered_data_list)
       filter_names <- slices_field(slices_global(), "id")
@@ -143,8 +143,26 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       mapping_matrix
     })
 
+    # # alternative
+    # mapping_matrix <- reactive({
+    #   mapping_ragged <- lapply(slices_map, function(x) x())
+    #   all_names <- slices_field(slices_global(), "id")
+    #   mapping_smooth <- lapply(mapping_ragged, is.element, el = all_names)
+    #   as.data.frame(mapping_smooth, row.names = all_names) %>% as.matrix
+    # })
+
     output$slices_table <- renderTable(rownames = TRUE, {
       as.data.frame(mapping_matrix())
+    })
+
+    # Create list of module calls.
+    modules_out <- lapply(names(filtered_data_list), function(module_name) {
+      filter_manager_module_srv(
+        id = module_name,
+        module_fd = filtered_data_list[[module_name]],
+        slices_map_module = slices_map[[module_name]],
+        slices_global = slices_global
+      )
     })
 
     modules_out # returned for testing purpose
@@ -172,6 +190,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 #' @keywords internal
 filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_global) {
   moduleServer(id, function(input, output, session) {
+
     setdiff_teal_slices <- function(x, y) {
       Filter(
         function(xx) {
@@ -181,17 +200,22 @@ filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_g
       )
     }
 
-    available_slices <- reactive(
+    # Only operate on slices that refer to data sets present in this module.
+    available_slices <- reactive({
       Filter(function(slice) slice$dataname %in% module_fd$datanames(), slices_global())
-    )
+    })
     module_fd$set_available_teal_slices(available_slices)
+
+    # Track filter state of this module.
     slices_module <- reactive(module_fd$get_filter_state())
 
+    # Reactive values for comparing states.
     previous_slices <- reactiveVal(shiny::isolate(slices_module()))
     slices_added <- reactiveVal(NULL)
     slices_activated <- reactiveVal(NULL)
     slices_deactivated <- reactiveVal(NULL)
 
+    # Observe changes in module filter state and trigger appropriate actions.
     observeEvent(slices_module(), {
       logger::log_trace("filter_manager_srv@1 detecting states deltas in module: { id }.")
       added <- setdiff_teal_slices(slices_module(), slices_global())
@@ -205,10 +229,11 @@ filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_g
 
     observeEvent(slices_added(), ignoreNULL = TRUE, {
       logger::log_trace("filter_manager_srv@2 added filter in module: { id }.")
+      # In case the new state has the same id as an existing state, add a suffix to it.
+      global_ids <- slices_field(slices_global(), "id")
       lapply(
         slices_added(),
         function(slice) {
-          global_ids <- slices_field(slices_global(), "id")
           if (slice$id %in% global_ids) {
             slice$id <- utils::tail(make.unique(c(global_ids, slice$id), sep = "_"), 1)
           }
