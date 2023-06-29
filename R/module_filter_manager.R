@@ -57,6 +57,7 @@ filter_manager_modal_srv <- function(id, filtered_data_list, filter) {
         modalDialog(
           filter_manager_ui(session$ns("filter_manager")),
           size = "l",
+          footer = NULL,
           easyClose = TRUE
         )
       )
@@ -70,7 +71,9 @@ filter_manager_modal_srv <- function(id, filtered_data_list, filter) {
 filter_manager_ui <- function(id) {
   ns <- NS(id)
   div(
-    tableOutput(ns("slices_table"))
+    class = "filter_manager_content",
+    tableOutput(ns("slices_table")),
+    snapshot_manager_ui(ns("snapshot_manager"))
   )
 }
 
@@ -101,6 +104,9 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     # Passed whole to instances of FilteredData used for individual modules.
     # Down there a subset that pertains to the data sets used in that module is applied and displayed.
     slices_global <- reactiveVal(filter)
+
+    # Call snapshot manager.
+    snapshot_manager_srv("snapshot_manager", slices_global)
 
     # Flatten (potentially nested) list of FilteredData objects while maintaining useful names.
     # Simply using `unlist` would result in concatenated names.
