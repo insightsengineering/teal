@@ -27,7 +27,7 @@
 #' @keywords internal
 #'
 #' @examples
-#' mods <- teal:::get_dummy_modules()
+#' mods <- teal:::example_modules()
 #' raw_data <- reactive(teal:::example_cdisc_data())
 #' app <- shinyApp(
 #'   ui = function() {

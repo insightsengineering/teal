@@ -117,7 +117,7 @@ example_datasets <- function() { # nolint
 #'
 #' @return `teal_modules`
 #' @keywords internal
-get_dummy_modules <- function() {
+example_modules <- function() {
   mods <- modules(
     label = "d1",
     modules(

@@ -4,7 +4,7 @@ adsl_dataset <- teal.data::cdisc_dataset(
   "ADSL", adsl_df,
   parent = character(0), keys = teal.data::get_cdisc_keys("ADSL")
 )
-mods <- teal:::get_dummy_modules()
+mods <- teal:::example_modules()
 
 testthat::test_that("init data accepts TealData objects", {
   teal_data_object <- teal.data::teal_data(dataset_1)
@@ -18,7 +18,7 @@ testthat::test_that("init data throws an error with input other than accepted in
   numeric_vector <- c(1, 2, 3)
   matrix_d <- as.matrix(c(1, 2, 3))
   teal_data_list <- list(teal.data::teal_data(dataset_1))
-  mods <- teal:::get_dummy_modules()
+  mods <- teal:::example_modules()
   testthat::expect_error(init(data = character_vector, modules = mods))
   testthat::expect_error(init(data = numeric_vector, modules = mods))
   testthat::expect_error(init(data = numeric_vector, modules = mods))

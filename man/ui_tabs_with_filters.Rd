@@ -35,7 +35,7 @@ panel is inserted at the right of the modules at depth 1 and not at the leaves.
 }
 \examples{
 
-mods <- teal:::get_dummy_modules()
+mods <- teal:::example_modules()
 datasets <- teal:::example_datasets()
 
 app <- shinyApp(

@@ -17,7 +17,7 @@
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
 #'     calling this function on it.
 #' @examples
-#' mods <- teal:::get_dummy_modules()
+#' mods <- teal:::example_modules()
 #' datasets <- teal:::example_datasets()
 #' app <- shinyApp(
 #'   ui = function() {
