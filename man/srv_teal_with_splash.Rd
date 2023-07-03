@@ -5,7 +5,7 @@
 \title{Server function that loads the data through reactive loading and then delegates
 to \code{\link[=srv_teal]{srv_teal()}}.}
 \usage{
-srv_teal_with_splash(id, data, modules, filter = teal_slices())
+srv_teal_with_splash(id, data, modules, filter = module_slices())
 }
 \arguments{
 \item{id}{(\code{character})\cr

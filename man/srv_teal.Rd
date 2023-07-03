@@ -4,7 +4,7 @@
 \alias{srv_teal}
 \title{Server function corresponding to teal}
 \usage{
-srv_teal(id, modules, raw_data, filter = teal_slices())
+srv_teal(id, modules, raw_data, filter = module_slices())
 }
 \arguments{
 \item{id}{(\code{character})\cr

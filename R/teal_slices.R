@@ -16,7 +16,7 @@
 #'    by all modules.
 #'
 #' @examples
-#' filter <- teal::teal_slices(
+#' filter <- module_slices(
 #'   teal.slice::teal_slice(dataname = "iris", varname = "Species", id = "species"),
 #'   teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length", id = "sepal_length"),
 #'   teal.slice::teal_slice(
@@ -44,7 +44,7 @@
 #' }
 #'
 #' @export
-teal_slices <- function(...,
+module_slices <- function(...,
                          exclude_varnames = NULL,
                          include_varnames = NULL,
                          count_type = NULL,

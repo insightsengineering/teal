@@ -127,7 +127,7 @@ ui_teal <- function(id,
 #'
 #' @return `reactive` which returns the currently active module
 #' @keywords internal
-srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
+srv_teal <- function(id, modules, raw_data, filter = module_slices()) {
   stopifnot(is.reactive(raw_data))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal initializing the module.")
