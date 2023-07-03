@@ -15,13 +15,14 @@ teal_slices(
 )
 }
 \arguments{
-\item{...}{any number of \code{teal_slice} objects}
+\item{...}{any number of \code{teal_slice} objects. In \code{print} and \code{format} \code{...} is used as other
+arguments passed to respective method of \link[teal.slice]{teal_slice}.}
 
-\item{include_varnames, exclude_varnames}{\verb{named list}s of \code{character} vectors where list names
+\item{include_varnames, exclude_varnames}{(\verb{named list}s of \code{character}) where list names
 match names of data sets and vector elements match variable names in respective data sets;
 specify which variables are allowed to be filtered; see \code{Details}}
 
-\item{count_type}{\code{character(1)} string specifying how observations are tallied by these filter states.
+\item{count_type}{(\code{character(1)}) string specifying how observations are tallied by these filter states.
 Possible options:
 \itemize{
 \item \code{"all"} to have counts of single \code{FilterState} to show number of observation in filtered
@@ -29,7 +30,7 @@ and unfiltered dataset.
 \item \code{"none"} to have counts of single \code{FilterState} to show unfiltered number only.
 }}
 
-\item{module_add}{\code{logical(1)} logical flag specifying whether the user will be able to add new filters}
+\item{module_add}{(\code{logical(1)}) logical flag specifying whether the user will be able to add new filters}
 
 \item{mapping}{(\verb{named list})\cr
 Each element of the list should contain character vector of \code{teal_slices} \code{id} (see
