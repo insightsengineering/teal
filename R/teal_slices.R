@@ -101,9 +101,10 @@ teal_slices <- function(...,
 #' @return `teal_slices`
 #' @keywords internal
 deep_copy_filter <- function(filter) {
+  checkmate::assert_class(filter, "teal_slices")
   shiny::isolate({
     filter_copy <- lapply(filter, function(slice) {
-      do.call(teal.slice::teal_slice, args = reactiveValuesToList(slice))
+      teal.slice::as.teal_slice(as.list(slice))
     })
     attributes(filter_copy) <- attributes(filter)
     return(filter_copy)
