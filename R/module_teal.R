@@ -28,7 +28,7 @@
 #'
 #' @examples
 #' mods <- teal:::get_dummy_modules()
-#' raw_data <- reactive(teal:::get_dummy_cdisc_data())
+#' raw_data <- reactive(teal:::example_cdisc_data())
 #' app <- shinyApp(
 #'   ui = function() {
 #'     teal:::ui_teal("dummy")

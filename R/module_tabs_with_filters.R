@@ -28,7 +28,7 @@
 #' @examples
 #'
 #' mods <- teal:::get_dummy_modules()
-#' datasets <- teal:::get_dummy_datasets()
+#' datasets <- teal:::example_datasets()
 #'
 #' app <- shinyApp(
 #'   ui = function() {

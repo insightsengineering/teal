@@ -8,7 +8,7 @@
 #' @param data (`TealData`)
 #' @return dummy filter states
 #' @keywords internal
-get_dummy_filter <- function(data) { # nolint
+example_filter <- function(data) { # nolint
   ADSL <- teal.data::get_raw_data(x = data, dataname = "ADSL") # nolint
   ADLB <- teal.data::get_raw_data(x = data, dataname = "ADLB") # nolint
 
@@ -52,7 +52,7 @@ get_dummy_filter <- function(data) { # nolint
 #'
 #' @return `cdisc_data`
 #' @keywords internal
-get_dummy_cdisc_data <- function() { # nolint
+example_cdisc_data <- function() { # nolint
   ADSL <- data.frame( # nolint
     STUDYID = "study",
     USUBJID = 1:10,
@@ -105,8 +105,8 @@ get_dummy_cdisc_data <- function() { # nolint
 #' Returns a new `R6` object on each invocation, not a singleton.
 #' @return `FilteredData` with `ADSL` set
 #' @keywords internal
-get_dummy_datasets <- function() { # nolint
-  dummy_cdisc_data <- get_dummy_cdisc_data()
+example_datasets <- function() { # nolint
+  dummy_cdisc_data <- example_cdisc_data()
   return(teal.slice::init_filtered_data(dummy_cdisc_data))
 }
 
