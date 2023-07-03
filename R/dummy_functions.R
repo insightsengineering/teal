@@ -70,7 +70,7 @@ get_dummy_cdisc_data <- function() { # nolint
   ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE) # nolint
   ADSL$SEX[c(2, 5)] <- NA # nolint
 
-  cdisc_data_obj <- cdisc_data(
+  cdisc_data_obj <- teal.data::cdisc_data(
     cdisc_dataset(dataname = "ADSL", x = ADSL),
     cdisc_dataset(dataname = "ADTTE", x = ADTTE)
   )
