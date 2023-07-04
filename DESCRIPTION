@@ -24,6 +24,7 @@ Depends:
     R (>= 4.0),
     shiny,
     teal.data (>= 0.1.2),
+    teal.slice (>= 0.3.0.9005),
     teal.transform (>= 0.2.0)
 Imports:
     checkmate,
@@ -36,7 +37,6 @@ Imports:
     stats,
     teal.logger (>= 0.1.1),
     teal.reporter (>= 0.1.1),
-    teal.slice (>= 0.2.0),
     teal.widgets (>= 0.2.0),
     utils
 Suggests:
