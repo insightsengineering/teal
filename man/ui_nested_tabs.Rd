@@ -74,8 +74,8 @@ app <- shinyApp(
     })
   }
 )
-\dontrun{
-runApp(app)
+if (interactive()) {
+  runApp(app)
 }
 }
 \keyword{internal}

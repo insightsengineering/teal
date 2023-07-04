@@ -62,8 +62,8 @@
 #'     )
 #'   )
 #' )
-#' \dontrun{
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
 #' }
 modules <- function(..., label = "root") {
   checkmate::assert_string(label)
@@ -199,8 +199,8 @@ is_arg_used.function <- function(modules, arg) {
 #'     )
 #'   )
 #' )
-#' \dontrun{
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
 #' }
 module <- function(label = "module",
                    server = function(id, ...) {

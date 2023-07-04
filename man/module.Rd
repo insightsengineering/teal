@@ -98,7 +98,7 @@ app <- init(
     )
   )
 )
-\dontrun{
-runApp(app)
+if (interactive()) {
+  runApp(app)
 }
 }

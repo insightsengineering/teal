@@ -5,7 +5,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' if (interactive()) {
 #' # start of shinytest script
 #' eval(shinytest_load_pckg())
 #' # continue with shinytest script

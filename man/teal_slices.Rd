@@ -15,8 +15,7 @@ teal_slices(
 )
 }
 \arguments{
-\item{...}{any number of \code{teal_slice} objects. In \code{print} and \code{format} \code{...} is used as other
-arguments passed to respective method of \link[teal.slice]{teal_slice}.}
+\item{...}{any number of \code{teal_slice} objects. For \code{print} and \code{format}, additional arguments passed to other functions.}
 
 \item{include_varnames, exclude_varnames}{(\verb{named list}s of \code{character}) where list names
 match names of data sets and vector elements match variable names in respective data sets;

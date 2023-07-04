@@ -34,19 +34,20 @@ filter_manager_modal_ui <- function(id) {
 #'   )
 #' )
 #'
+#' app <- shinyApp(
+#'   ui = fluidPage(
+#'     teal:::filter_manager_modal_ui("manager")
+#'   ),
+#'   server = function(input, output, session) {
+#'     teal:::filter_manager_modal_srv(
+#'       "manager",
+#'       filtered_data_list = list(module1 = fd1, module2 = fd2, module3 = fd3),
+#'       filter = filter
+#'     )
+#'   }
+#' )
 #' if (interactive()) {
-#'   shinyApp(
-#'     ui = fluidPage(
-#'       filter_manager_modal_ui("manager")
-#'     ),
-#'     server = function(input, output, session) {
-#'       filter_manager_modal_srv(
-#'         "manager",
-#'         filtered_data_list = list(module1 = fd1, module2 = fd2, module3 = fd3),
-#'         filter = filter
-#'       )
-#'     }
-#'   )
+#'   runApp(app)
 #' }
 #'
 filter_manager_modal_srv <- function(id, filtered_data_list, filter) {

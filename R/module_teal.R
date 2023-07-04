@@ -37,8 +37,8 @@
 #'     active_module <- teal:::srv_teal(id = "dummy", modules = mods, raw_data = raw_data)
 #'   }
 #' )
-#' \dontrun{
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
 #' }
 ui_teal <- function(id,
                     splash_ui = tags$h2("Starting the Teal App"),
