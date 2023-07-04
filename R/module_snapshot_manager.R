@@ -163,3 +163,25 @@ redress_slices <- function(x) {
 # This is needed temporarily, while filter_var and filter_expr are separate functions.
 # When both classes can be created by one function (that is exported), that can be called in redress_slices.
 as.teal_slice <- getFromNamespace("as.teal_slice", "teal.slice") # nolint
+
+
+# resolve module mapping such that global filters are explicitly specified for every module
+# @param mapping named list as stored in mapping parameter of `teal_slices`
+# @param module_names character vector enumerating names of all modules in the app
+unfold_mapping <- function(mapping, module_names) {
+  module_names <- structure(module_names, names = module_names)
+  slices_map_sattic <- lapply(module_names, function(x) c(mapping[[x]], mapping[["global_filters"]]))
+  lapply(slices_map_static, function(x) reactiveVal(x))
+}
+# return mapping to the shape used in `teal::teal_slices`
+# @param slice_map- named list specifying what filters are active in which module
+# @param all_filters character vector enumerating all existing filter state ids
+fold_mapping <- function(slice_map, all_filters) {
+  global <-
+    vapply(all_filters, function(x) {
+      all(vapply(slice_map, function(xx) is.element(x, xx), logical(1L)))
+    }, logical(1L))
+  global_filters <- names(global)[global]
+
+  mapping <- c(lapply(slice_map, setdiff, y = global_filters), list(global_filters = global_filters))
+  Filter(function(x) length(x) != 0L, mapping)
