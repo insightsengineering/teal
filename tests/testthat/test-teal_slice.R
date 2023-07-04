@@ -1,5 +1,5 @@
-testthat::test_that("teal_slices produces module_slices object with teal-specific-attributes", {
-  tss <- module_slices()
+testthat::test_that("teal_slices produces teal_slices object with teal-specific-attributes", {
+  tss <- teal_slices()
   testthat::expect_s3_class(tss, "teal_slices")
   testthat::expect_identical(attr(tss, "mapping"), list())
   testthat::expect_identical(attr(tss, "module_specific"), FALSE)
@@ -8,7 +8,7 @@ testthat::test_that("teal_slices produces module_slices object with teal-specifi
 
 testthat::test_that("deep_copy_filters copies teal_slice changes pointer of teal_slice object
   but values remain the same", {
-  tss <- module_slices(
+  tss <- teal_slices(
     teal.slice::teal_slice(dataname = "data", varname = "var1", choices = c("a", "b"), selected = "a"),
     teal.slice::teal_slice(dataname = "data", varname = "var2", choices = c("A", "B"), selected = "B")
   )

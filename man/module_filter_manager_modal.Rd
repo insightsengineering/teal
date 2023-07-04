@@ -32,7 +32,7 @@ fd2 <- teal.slice::init_filtered_data(
 fd3 <- teal.slice::init_filtered_data(
   list(iris = list(dataset = iris), women = list(dataset = women))
 )
-filter <- module_slices(
+filter <- teal_slices(
   teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length"),
   teal.slice::teal_slice(dataname = "iris", varname = "Species"),
   teal.slice::teal_slice(dataname = "mtcars", varname = "mpg"),

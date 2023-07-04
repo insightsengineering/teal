@@ -8,7 +8,7 @@ init(
   data,
   modules,
   title = NULL,
-  filter = module_slices(),
+  filter = teal_slices(),
   header = tags$p(),
   footer = tags$p(),
   id = character(0)
@@ -98,7 +98,7 @@ app <- init(
     )
   ),
   title = "App title",
-  filter = module_slices(
+  filter = teal_slices(
     teal.slice::teal_slice(dataname = "ADSL", varname = "AGE"),
     teal.slice::teal_slice(dataname = "ADSL", varname = "SEX"),
     teal.slice::teal_slice(dataname = "ADSL", varname = "RACE"),

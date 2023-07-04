@@ -33,7 +33,7 @@ testthat::test_that("active_module() returns module specs from active tab when f
       id = "test",
       datasets = list(`iris tab` = filtered_data, `mtcars tab` = filtered_data),
       modules = modules(test_module1, test_module2),
-      filter = module_slices(module_specific = FALSE),
+      filter = teal_slices(module_specific = FALSE),
       reporter = teal.reporter::Reporter$new()
     ),
     expr = {

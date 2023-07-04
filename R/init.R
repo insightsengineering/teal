@@ -85,7 +85,7 @@
 #'     )
 #'   ),
 #'   title = "App title",
-#'   filter = module_slices(
+#'   filter = teal_slices(
 #'     teal.slice::teal_slice(dataname = "ADSL", varname = "AGE"),
 #'     teal.slice::teal_slice(dataname = "ADSL", varname = "SEX"),
 #'     teal.slice::teal_slice(dataname = "ADSL", varname = "RACE"),
@@ -106,7 +106,7 @@
 init <- function(data,
                  modules,
                  title = NULL,
-                 filter = module_slices(),
+                 filter = teal_slices(),
                  header = tags$p(),
                  footer = tags$p(),
                  id = character(0)) {
@@ -161,7 +161,7 @@ init <- function(data,
 
 
 
-  # check module_slices
+  # check teal_slices
   for (i in seq_along(filter)) {
     dataname_i <- shiny::isolate(filter[[i]]$dataname)
     if (!dataname_i %in% datanames) {
@@ -195,7 +195,7 @@ init <- function(data,
       # it is possible that module-label in mapping might refer to multiple teal_module (identified by the same label)
       stop(
         sprintf(
-          "Module labels should be unique when module_slices(mapping = TRUE). Duplicated labels:\n%s ",
+          "Module labels should be unique when teal_slices(mapping = TRUE). Duplicated labels:\n%s ",
           toString(module_names[duplicated(module_names)])
         )
       )
