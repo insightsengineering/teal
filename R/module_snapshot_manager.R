@@ -15,7 +15,6 @@
 #' 8. button to load snapshot(s) - nested JSON would be the best probably
 #'
 #' TODO: saved snapshot must also contain the mapping matrix
-#' TODO: mapping matrix must be able to set filters-  otherwise states can be saved but not their active status
 #
 # ### END SNAPSHOT MANAGMENT ###
 
@@ -37,7 +36,14 @@ snapshot_manager_ui <- function(id) {
   )
 }
 
-snapshot_manager_srv <- function(id, slices_global) {
+snapshot_manager_srv <- function(id, slices_global, slices_map, filtered_data_list) {
+  checkmate::assert_character(id)
+  checkmate::assert_true(is.reactive(slices_global))
+  checkmate::assert_class(slices_global(), "teal_slices")
+  checkmate::assert_true(is.reactive(slices_map))
+  checkmate::assert_list(slices_map(), types = "reactiveVal", any.missing = FALSE, names = "named")
+  checkmate::assert_list(filtered_data_list, types = "FilteredData", any.missing = FALSE, names = "named")
+
   moduleServer(id, function(input, output, session) {
 
     ns <- session$ns
@@ -82,6 +88,7 @@ snapshot_manager_srv <- function(id, slices_global) {
         updateTextInput(inputId = "snapshot_name", value = , placeholder = "Meaningful, unique name")
       } else {
         snapshot <- strip_slices(slices_global())
+        attr(snapshot, "mapping") <- fold_mapping(slice_map(), slices_field(slices_global(), "id"))
         snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
         snapshot_history(snapshot_update)
@@ -94,7 +101,10 @@ snapshot_manager_srv <- function(id, slices_global) {
       ind <- "Initial application state"
       snapshot <- snapshot_history()[[ind]]
       snapshot_state <- redress_slices(snapshot)
+      lapply(filtered_data_list, function(x) x$clear_filter_states(force = TRUE))
       slices_global(snapshot_state)
+      slices_map_update <- unfold_mapping(attr(snapshot_state, "mapping"))
+      slices_map(slices_map_update)
     })
 
     # Create table to display list of snapshots and their actions.
@@ -108,7 +118,10 @@ snapshot_manager_srv <- function(id, slices_global) {
         observeEvent(input[[id_pickme]], {
           snapshot <- snapshot_history()[[s]]
           snapshot_state <- redress_slices(snapshot)
+          lapply(filtered_data_list, function(x) x$clear_filter_states(force = TRUE))
           slices_global(snapshot_state)
+          slices_map_update <- unfold_mapping(attr(snapshot_state, "mapping"))
+          slices_map(slices_map_update)
         })
 
         # Listen for button to save snapshot.
@@ -185,3 +198,4 @@ fold_mapping <- function(slice_map, all_filters) {
 
   mapping <- c(lapply(slice_map, setdiff, y = global_filters), list(global_filters = global_filters))
   Filter(function(x) length(x) != 0L, mapping)
+}

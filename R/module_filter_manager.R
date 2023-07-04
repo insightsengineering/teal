@@ -105,9 +105,6 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     # Down there a subset that pertains to the data sets used in that module is applied and displayed.
     slices_global <- reactiveVal(filter)
 
-    # Call snapshot manager.
-    snapshot_manager_srv("snapshot_manager", slices_global)
-
     # Flatten (potentially nested) list of FilteredData objects while maintaining useful names.
     # Simply using `unlist` would result in concatenated names.
     flatten_nested <- function(x, name = NULL) {
@@ -149,6 +146,9 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
         slices_global = slices_global
       )
     })
+
+    # Call snapshot manager.
+    snapshot_manager_srv("snapshot_manager", filtered_data_list, slices_global, slices_map)
 
     modules_out # returned for testing purpose
   })
