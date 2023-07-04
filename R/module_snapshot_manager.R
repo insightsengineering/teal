@@ -98,8 +98,9 @@ snapshot_manager_srv <- function(id, slices_global, slices_map, filtered_data_li
 
     # Restore initial state.
     observeEvent(input$snapshot_reset, {
-      ind <- "Initial application state"
-      snapshot <- snapshot_history()[[ind]]
+      s <- "Initial application state"
+      ### Begin restore procedure. ###
+      snapshot <- snapshot_history()[[s]]
       snapshot_state <- redress_slices(snapshot)
       mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
       mapply(
@@ -113,6 +114,7 @@ snapshot_manager_srv <- function(id, slices_global, slices_map, filtered_data_li
       )
       slices_global(snapshot_state)
       slices_map(mapping_unfolded)
+      ### End restore procedure. ###
     })
 
     # Create table to display list of snapshots and their actions.
@@ -124,12 +126,22 @@ snapshot_manager_srv <- function(id, slices_global, slices_map, filtered_data_li
 
         # Listen for button to restore snapshot.
         observeEvent(input[[id_pickme]], {
+          ### Begin restore procedure. ###
           snapshot <- snapshot_history()[[s]]
           snapshot_state <- redress_slices(snapshot)
-          lapply(filtered_data_list, function(x) x$clear_filter_states(force = TRUE))
+          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+          mapply(
+            function(filtered_data, filters) {
+              filtered_data$clear_filter_states(force = TRUE)
+              slices <- Filter(function(x) x$id %in% filters(), snapshot_state)
+              filtered_data$set_filter_state(slices)
+            },
+            filtered_data = filtered_data_list,
+            filters = mapping_unfolded
+          )
           slices_global(snapshot_state)
-          slices_map_update <- unfold_mapping(attr(snapshot_state, "mapping"))
-          slices_map(slices_map_update)
+          slices_map(mapping_unfolded)
+          ### End restore procedure. ###
         })
 
         # Listen for button to save snapshot.
