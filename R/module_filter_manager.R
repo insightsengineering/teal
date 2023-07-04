@@ -201,7 +201,7 @@ filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_g
     slices_deactivated <- reactiveVal(NULL)
 
     # Observe changes in module filter state and trigger appropriate actions.
-    observeEvent(slices_module(), {
+    observeEvent(slices_module(), ignoreNULL = FALSE, {
       logger::log_trace("filter_manager_srv@1 detecting states deltas in module: { id }.")
       added <- setdiff_teal_slices(slices_module(), slices_global())
       activated <- setdiff_teal_slices(slices_module(), previous_slices())
