@@ -148,7 +148,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     })
 
     # Call snapshot manager.
-    snapshot_manager_srv("snapshot_manager", filtered_data_list, slices_global, slices_map)
+    snapshot_manager_srv("snapshot_manager", slices_global, slices_map, filtered_data_list)
 
     modules_out # returned for testing purpose
   })

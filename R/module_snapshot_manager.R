@@ -103,7 +103,7 @@ snapshot_manager_srv <- function(id, slices_global, slices_map, filtered_data_li
       snapshot_state <- redress_slices(snapshot)
       lapply(filtered_data_list, function(x) x$clear_filter_states(force = TRUE))
       slices_global(snapshot_state)
-      slices_map_update <- unfold_mapping(attr(snapshot_state, "mapping"))
+      slices_map_update <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
       slices_map(slices_map_update)
     })
 
@@ -183,7 +183,7 @@ as.teal_slice <- getFromNamespace("as.teal_slice", "teal.slice") # nolint
 # @param module_names character vector enumerating names of all modules in the app
 unfold_mapping <- function(mapping, module_names) {
   module_names <- structure(module_names, names = module_names)
-  slices_map_sattic <- lapply(module_names, function(x) c(mapping[[x]], mapping[["global_filters"]]))
+  slices_map_static <- lapply(module_names, function(x) c(mapping[[x]], mapping[["global_filters"]]))
   lapply(slices_map_static, function(x) reactiveVal(x))
 }
 # return mapping to the shape used in `teal::teal_slices`
