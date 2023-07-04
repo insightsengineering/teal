@@ -123,9 +123,14 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     # filtered_data_list <- unlist(filtered_data_list)
     # names(filtered_data_list) <- sub("(.+)\\.(.+$)", "\\2", names(filtered_data_list))
 
+    # Create mapping of filter ids to modules. (list of reactiveVal)
+    slices_map <- reactiveVal({
+      unfold_mapping(attr(filter, "mapping"), names(filtered_data_list))
+    })
+
     # Create matrix representation of filter mapping.
     mapping_matrix <- reactive({
-      mapping_ragged <- lapply(filtered_data_list, function(x) slices_field(x$get_filter_state(), "id"))
+      mapping_ragged <- lapply(slices_map(), function(x) x())
       all_names <- slices_field(slices_global(), "id")
       mapping_smooth <- lapply(mapping_ragged, is.element, el = all_names)
       as.data.frame(mapping_smooth, row.names = all_names)
@@ -135,15 +140,12 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       mapping_matrix()
     })
 
-    # Create mapping of filter ids to modules. (list of reactiveVal)
-    slices_map <- lapply(mapping_matrix(), function(x) reactiveVal(rownames(mapping_matrix())[x]))
-
     # Create list of module calls.
     modules_out <- lapply(names(filtered_data_list), function(module_name) {
       filter_manager_module_srv(
         id = module_name,
         module_fd = filtered_data_list[[module_name]],
-        slices_map_module = slices_map[[module_name]],
+        slices_map_module = slices_map()[[module_name]],
         slices_global = slices_global
       )
     })
