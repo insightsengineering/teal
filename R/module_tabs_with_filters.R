@@ -52,8 +52,8 @@
 #'     })
 #'   }
 #' )
-#' \dontrun{
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
 #' }
 #'
 #'
@@ -93,8 +93,8 @@
 #'     })
 #'   }
 #' )
-#' \dontrun{
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
 #' }
 ui_tabs_with_filters <- function(id, modules, datasets, filter) {
   checkmate::assert_class(modules, "teal_modules")

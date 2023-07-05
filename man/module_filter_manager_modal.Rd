@@ -17,9 +17,9 @@ filter_manager_modal_srv(id, filtered_data_list, filter)
 Names of the list should be the same as \code{teal_module$label}.}
 
 \item{filter}{(\code{teal_slices})\cr
-Specification of initial filter. Filters can be specified using \code{\link[=teal_filters]{teal_filters()}}.
+Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
 Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_filters]{teal_filters()}}.}
+next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \description{
 Filter manager modal
@@ -32,11 +32,11 @@ fd2 <- teal.slice::init_filtered_data(
 fd3 <- teal.slice::init_filtered_data(
   list(iris = list(dataset = iris), women = list(dataset = women))
 )
-filter <- teal::teal_filters(
-  teal.slice::filter_var(dataname = "iris", varname = "Sepal.Length"),
-  teal.slice::filter_var(dataname = "iris", varname = "Species"),
-  teal.slice::filter_var(dataname = "mtcars", varname = "mpg"),
-  teal.slice::filter_var(dataname = "women", varname = "height"),
+filter <- teal_slices(
+  teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length"),
+  teal.slice::teal_slice(dataname = "iris", varname = "Species"),
+  teal.slice::teal_slice(dataname = "mtcars", varname = "mpg"),
+  teal.slice::teal_slice(dataname = "women", varname = "height"),
   mapping = list(
     module2 = c("mtcars mpg"),
     module3 = c("women height"),
@@ -44,19 +44,20 @@ filter <- teal::teal_filters(
   )
 )
 
+app <- shinyApp(
+  ui = fluidPage(
+    teal:::filter_manager_modal_ui("manager")
+  ),
+  server = function(input, output, session) {
+    teal:::filter_manager_modal_srv(
+      "manager",
+      filtered_data_list = list(module1 = fd1, module2 = fd2, module3 = fd3),
+      filter = filter
+    )
+  }
+)
 if (interactive()) {
-  shinyApp(
-    ui = fluidPage(
-      filter_manager_modal_ui("manager")
-    ),
-    server = function(input, output, session) {
-      filter_manager_modal_srv(
-        "manager",
-        filtered_data_list = list(module1 = fd1, module2 = fd2, module3 = fd3),
-        filter = filter
-      )
-    }
-  )
+  runApp(app)
 }
 
 }

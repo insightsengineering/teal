@@ -22,7 +22,7 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  stopifnot(is(data, "TealDataAbstract"))
+  checkmate::assert_class(data, "TealDataAbstract")
   is_pulled_data <- teal.data::is_pulled(data)
   ns <- NS(id)
 
@@ -54,8 +54,8 @@ ui_teal_with_splash <- function(id,
 #' @inheritParams shiny::moduleServer
 #' @return `reactive`, return value of [srv_teal()]
 #' @export
-srv_teal_with_splash <- function(id, data, modules, filter = teal_filters()) {
-  stopifnot(is(data, "TealDataAbstract"))
+srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
+  checkmate::assert_class(data, "TealDataAbstract")
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
       "srv_teal_with_splash initializing module with data { paste(data$get_datanames(), collapse = ' ')}."

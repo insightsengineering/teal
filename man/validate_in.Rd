@@ -42,8 +42,8 @@ server <- function(input, output) {
     nrow(ADRS[ADRS$PARAMCD == input$rsp, ])
   })
 }
-\dontrun{
-shinyApp(ui, server)
+if (interactive()) {
+  shinyApp(ui, server)
 }
 
 }

@@ -43,8 +43,8 @@
 #'     })
 #'   }
 #' )
-#' \dontrun{
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
 #' }
 #' @keywords internal
 ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
