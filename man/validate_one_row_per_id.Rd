@@ -36,8 +36,8 @@ server <- function(input, output) {
     paste0("Mean age :", mean(ADSL_f$AGE))
   })
 }
-\dontrun{
-shinyApp(ui, server)
+if (interactive()) {
+  shinyApp(ui, server)
 }
 
 }

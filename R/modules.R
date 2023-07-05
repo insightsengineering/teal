@@ -62,13 +62,12 @@
 #'     )
 #'   )
 #' )
-#' \dontrun{
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
 #' }
 modules <- function(..., label = "root") {
   checkmate::assert_string(label)
   submodules <- list(...)
-
   if (any(vapply(submodules, is.character, FUN.VALUE = logical(1)))) {
     stop(
       "The only character argument to modules() must be 'label' and it must be named, ",
@@ -77,11 +76,10 @@ modules <- function(..., label = "root") {
   }
 
   checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
-
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
   labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  names(submodules) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
+  names(submodules) <- make.unique(gsub("[^[:alnum:]]+", "_", labels), sep = "_")
   structure(
     list(
       label = label,
@@ -90,8 +88,6 @@ modules <- function(..., label = "root") {
     class = "teal_modules"
   )
 }
-
-
 
 #' Function which appends a teal_module onto the children of a teal_modules object
 #' @keywords internal
@@ -152,7 +148,8 @@ is_arg_used.function <- function(modules, arg) {
 #' @description `r lifecycle::badge("stable")`
 #' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.
 #'
-#' @param label (`character(1)`) Label shown in the navigation item for the module.
+#' @param label (`character(1)`) Label shown in the navigation item for the module. Any label possible except
+#'  `"global_filters"` - read more in `mapping` argument of [teal::teal_slices].
 #' @param server (`function`) `shiny` module with following arguments:
 #'  - `id` - teal will set proper shiny namespace for this module (see [shiny::moduleServer()]).
 #'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
@@ -162,15 +159,16 @@ is_arg_used.function <- function(modules, arg) {
 #'  - `reporter` (optional) module will receive `Reporter`. (See [teal.reporter::Reporter]).
 #   - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).
 #'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
-#' @param ui (`function`) Shiny ui module function with following arguments:
+#' @param ui (`function`) Shiny `ui` module function with following arguments:
 #'  - `id` - teal will set proper shiny namespace for this module.
 #'  - `data` (optional)  module will receive list of reactive (filtered) data specified in the `filters` argument.
 #'  - `datasets` (optional)  module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
 #'  - `...` (optional) `ui_args` elements will be passed to the module named argument or to the `...`.
-#' @param filters (`character`) A vector with datanames that are relevant for the item. The
+#' @param filters (`character`) A vector with `datanames` that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed datasets. `NULL` will hide the filter panel,
-#'   and the keyword `'all'` will show the filters of all datasets.
+#'   and the keyword `'all'` will show the filters of all datasets. `filters` determines also
+#'   a subset of datasets which are appended to the `data` argument in `server` function.
 #' @param server_args (named `list`) with additional arguments passed on to the
 #'   `server` function.
 #' @param ui_args (named `list`) with additional arguments passed on to the
@@ -201,8 +199,8 @@ is_arg_used.function <- function(modules, arg) {
 #'     )
 #'   )
 #' )
-#' \dontrun{
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
 #' }
 module <- function(label = "module",
                    server = function(id, ...) {
@@ -221,6 +219,9 @@ module <- function(label = "module",
   checkmate::assert_list(server_args, null.ok = TRUE, names = "named")
   checkmate::assert_list(ui_args, null.ok = TRUE, names = "named")
 
+  if (label == "global_filters") {
+    stop("Label 'global_filters' is reserved in teal. Please change to something else.")
+  }
   server_formals <- names(formals(server))
   if (!(
     "id" %in% server_formals ||
@@ -327,11 +328,20 @@ modules_depth <- function(modules, depth = 0L) {
   }
 }
 
+
+module_labels <- function(modules) {
+  if (inherits(modules, "teal_modules")) {
+    lapply(modules$children, module_labels)
+  } else {
+    modules$label
+  }
+}
+
 #' Converts `teal_modules` to a string
 #'
 #' @param x (`teal_modules`) to print
 #' @param indent (`integer`) indent level;
-#'   each submodule is indented one level more
+#'   each `submodule` is indented one level more
 #' @param ... (optional) additional parameters to pass to recursive calls of `toString`
 #' @return (`character`)
 #' @export

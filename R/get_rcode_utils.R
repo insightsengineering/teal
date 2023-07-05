@@ -1,37 +1,3 @@
-#' Generates header text for analysis items
-#'
-#' @param title A character title of the module
-#' @param description A character description of the module with additional
-#'   information not reflected in the title
-#'
-#' @return A character string for the header text
-#'
-#' @author Sebastian Wolf
-#' @keywords internal
-get_rcode_header <- function(title = NULL, description = NULL) {
-  # Derive sys Info
-  info <- Sys.info()
-  packages <- sapply(utils::sessionInfo()$otherPkgs, function(x) sprintf("%s (%s)", x$Package, x$Version))
-  head <-
-    c(
-      pad(title, pre = "", post = ""),
-      pad(description, post = c("", "")),
-      pad(
-        c(
-          paste("  Running:", getwd()),
-          paste("       on:", info["nodename"]),
-          paste("R version:", utils::sessionInfo()[["R.version"]][["version.string"]]),
-          paste("     Date:", date())
-        )
-      ),
-      "Current libraries loaded (derived by .libPaths()):",
-      paste0("  - ", .libPaths()),
-      "",
-      fold_lines(paste("Packages versions:", paste(packages, collapse = ", ")), 80, indent_from = ":")
-    )
-  paste0("# ", head)
-}
-
 #' Generates library calls from current session info
 #'
 #' Function to create multiple library calls out of current session info to make reproducible code works.
@@ -64,46 +30,55 @@ get_rcode_str_install <- function() {
   return("# Add any code to install/load your NEST environment here\n")
 }
 
-#' Pads a string
+#' Get datasets code
 #'
-#' Including elements before or after string. If NULL is provided no elements included. Padding in this case means
-#' appending additional element before or after \code{character} vector.
-#' @param str (\code{character}) vector of lines to be padded
-#' @param pre (\code{character}) elements to be appended before \code{str}
-#' @param post (\code{character}) elements to be appended after \code{str}
+#' Get combined code from `FilteredData` and from `CodeClass` object.
+#'
+#' @param datanames (`character`) names of datasets to extract code from
+#' @param datasets (`FilteredData`) object
+#' @param hashes named (`list`) of hashes per dataset
+#'
+#' @return `character(3)` containing following elements:
+#'  - code from `CodeClass` (data loading code)
+#'  - hash check of loaded objects
 #'
 #' @keywords internal
-pad <- function(str, pre = NULL, post = "") {
-  if (length(str) == 0 || (length(str) == 1 && str == "")) {
-    NULL
-  } else {
-    c(pre, str, post)
+get_datasets_code <- function(datanames, datasets, hashes) {
+  str_code <- datasets$get_code(datanames)
+  if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
+    str_code <- "message('Preprocessing is empty')"
+  } else if (length(str_code) > 0) {
+    str_code <- paste0(str_code, "\n\n")
   }
-}
 
-#' Fixed line width folding
-#'
-#' @description `r lifecycle::badge("stable")`
-#' Folds lines longer than specified width.
-#' @param txt (\code{character}) text to be adjusted
-#' @param width (\code{integer}) maximum number of characters in vector
-#' @param indent_from (\code{character}) character which begins the indent.
-#' @keywords internal
-fold_lines <- function(txt, width = 80, indent_from = NULL) {
-  unlist(sapply(txt, USE.NAMES = FALSE, FUN = function(x) {
-    if (nchar(x) < width) {
-      return(x)
-    }
-    idx <- if (!is.null(indent_from)) {
-      gregexpr(indent_from, x)[[1]]
-    } else {
-      0
-    }
-    strwrap(
-      x = x,
-      width = width,
-      prefix = strrep(" ", idx + 1),
-      initial = ""
+  if (!datasets$get_check()) {
+    check_note_string <- paste0(
+      c(
+        "message(paste(\"Reproducibility of data import and preprocessing was not explicitly checked\",",
+        "   \" ('check = FALSE' is set). Contact app developer if this is an issue.\n\"))"
+      ),
+      collapse = "\n"
     )
-  }))
+    str_code <- paste0(str_code, "\n\n", check_note_string)
+  }
+
+  str_hash <- paste(
+    paste0(
+      vapply(
+        datanames,
+        function(dataname) {
+          sprintf(
+            "stopifnot(%s == %s)",
+            deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+            deparse1(hashes[[dataname]])
+          )
+        },
+        character(1)
+      ),
+      collapse = "\n"
+    ),
+    "\n\n"
+  )
+
+  c(str_code, str_hash)
 }

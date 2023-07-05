@@ -22,7 +22,7 @@ The responsibilities of a module developer include:
 - adding the support for reporting to their module
 - specifying outputs that go into a snapshot of their module.
 
-The lifecycle of objects involved in creation of the report and setting up the module to preview the report is
+The life cycle of objects involved in creation of the report and setting up the module to preview the report is
 handled by `teal`.
 
 ## Custom module

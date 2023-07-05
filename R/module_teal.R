@@ -7,7 +7,7 @@
 #' It displays the splash UI which is used to fetch the data, possibly
 #' prompting for a password input to fetch the data. Once the data is ready,
 #' the splash screen is replaced by the actual teal UI that is tabsetted and
-#' has a filter panel with datanames that are relevant for the current tab.
+#' has a filter panel with `datanames` that are relevant for the current tab.
 #' Nested tabs are possible, but we limit it to two nesting levels for reasons
 #' of clarity of the UI.
 #'
@@ -37,8 +37,8 @@
 #'     active_module <- teal:::srv_teal(id = "dummy", modules = mods, raw_data = raw_data)
 #'   }
 #' )
-#' \dontrun{
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
 #' }
 ui_teal <- function(id,
                     splash_ui = tags$h2("Starting the Teal App"),
@@ -116,7 +116,7 @@ ui_teal <- function(id,
 #' Once it is ready and non-`NULL`, the splash screen is replaced by the
 #' main teal UI that depends on the data.
 #' The currently active tab is tracked and the right filter panel
-#' updates the displayed datasets to filter for according to the active datanames
+#' updates the displayed datasets to filter for according to the active `datanames`
 #' of the tab.
 #'
 #' For more doc, see [ui_teal()].
@@ -127,7 +127,7 @@ ui_teal <- function(id,
 #'
 #' @return `reactive` which returns the currently active module
 #' @keywords internal
-srv_teal <- function(id, modules, raw_data, filter = list()) {
+srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
   stopifnot(is.reactive(raw_data))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal initializing the module.")
@@ -142,11 +142,11 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       title = "SessionInfo"
     )
 
-    # Javascript code
-    run_js_files(files = "init.js") # Javascript code to make the clipboard accessible
+    # `JavaScript` code
+    run_js_files(files = "init.js") # `JavaScript` code to make the clipboard accessible
     # set timezone in shiny app
     # timezone is set in the early beginning so it will be available also
-    # for DDL and all shiny modules
+    # for `DDL` and all shiny modules
     get_client_timezone(session$ns)
     observeEvent(
       eventExpr = input$timezone,
@@ -165,9 +165,56 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       }
       env$progress <- shiny::Progress$new(session)
       env$progress$set(0.25, message = "Setting data")
-      # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
-      # this is placed in the module scope so that bookmarking can be used with FilteredData object
-      datasets <- teal.slice::init_filtered_data(raw_data())
+
+      # create a list of data following structure of the nested modules list structure.
+      # Because it's easier to unpack modules and datasets when they follow the same nested structure.
+      datasets_singleton <- teal.slice::init_filtered_data(raw_data())
+      datasets_singleton$set_filter_state(filter)
+      module_datasets <- function(modules) {
+        if (inherits(modules, "teal_modules")) {
+          datasets <- lapply(modules$children, module_datasets)
+          labels <- vapply(modules$children, `[[`, character(1), "label")
+          names(datasets) <- labels
+          datasets
+        } else if (isTRUE(attr(filter, "module_specific"))) {
+          # we should create FilteredData even if modules$filter is null
+          # null controls a display of filter panel but data should be still passed
+          datanames <- if (is.null(modules$filter)) raw_data()$get_datanames() else modules$filter
+          data_objects <- sapply(
+            datanames,
+            simplify = FALSE,
+            FUN = function(dataname) {
+              dataset <- raw_data()$get_dataset(dataname)
+              list(
+                dataset = dataset$get_raw_data(),
+                metadata = dataset$get_metadata(),
+                label = dataset$get_dataset_label()
+              )
+            }
+          )
+          datasets_module <- teal.slice::init_filtered_data(
+            data_objects,
+            join_keys = raw_data()$get_join_keys(),
+            code = raw_data()$get_code_class(),
+            check = raw_data()$get_check()
+          )
+
+          # set initial filters
+          slices <- Filter(x = filter, f = function(x) {
+            x$id %in% unique(unlist(attr(filter, "mapping")[c(modules$label, "global_filters")])) &&
+              x$dataname %in% datanames
+          })
+          include_varnames <- attr(slices, "include_varnames")[names(attr(slices, "include_varnames")) %in% datanames]
+          exclude_varnames <- attr(slices, "exclude_varnames")[names(attr(slices, "exclude_varnames")) %in% datanames]
+          slices$include_varnames <- include_varnames
+          slices$exclude_varnames <- exclude_varnames
+          datasets_module$set_filter_state(slices)
+          datasets_module
+        } else {
+          datasets_singleton
+        }
+      }
+      datasets <- module_datasets(modules)
 
       logger::log_trace("srv_teal@4 Raw Data transferred to FilteredData.")
       datasets
@@ -190,6 +237,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       env$progress$set(0.5, message = "Setting up main UI")
       on.exit(env$progress$close())
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
+
       removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
       insertUI(
         selector = paste0("#", session$ns("main_ui_container")),
@@ -199,7 +247,8 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
         ui = div(ui_tabs_with_filters(
           session$ns("main_ui"),
           modules = modules,
-          datasets = datasets_reactive()
+          datasets = datasets_reactive(),
+          filter = filter
         )),
         # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
         # have any effect as they are ignored when not present

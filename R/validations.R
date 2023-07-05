@@ -31,8 +31,8 @@
 #'     hist(ADSL_f$AGE, breaks = 5)
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 #'
 validate_has_data <- function(x,
@@ -99,8 +99,8 @@ validate_has_data <- function(x,
 #'     paste0("Mean age :", mean(ADSL_f$AGE))
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 #'
 validate_one_row_per_id <- function(x, key = c("USUBJID", "STUDYID")) {
@@ -141,8 +141,8 @@ validate_one_row_per_id <- function(x, key = c("USUBJID", "STUDYID")) {
 #'     nrow(ADRS[ADRS$PARAMCD == input$rsp, ])
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 #'
 validate_in <- function(x, choices, msg) {
@@ -187,8 +187,8 @@ validate_in <- function(x, choices, msg) {
 #'     )
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 validate_has_elements <- function(x, msg) {
   validate(need(length(x) > 0, msg))
@@ -236,8 +236,8 @@ validate_has_elements <- function(x, msg) {
 #'     )
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 #'
 validate_no_intersection <- function(x, y, msg) {
@@ -275,8 +275,8 @@ validate_no_intersection <- function(x, y, msg) {
 #'     paste0("Selected treatment variables: ", paste(input$arm, collapse = ", "))
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 validate_has_variable <- function(data, varname, msg) {
   if (length(varname) != 0) {
@@ -338,8 +338,8 @@ validate_has_variable <- function(data, varname, msg) {
 #'     )
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 validate_n_levels <- function(x, min_levels = 1, max_levels = 12, var_name) {
   x_levels <- if (is.factor(x)) {
