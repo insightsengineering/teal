@@ -36,12 +36,12 @@ snapshot_manager_ui <- function(id) {
   )
 }
 
-snapshot_manager_srv <- function(id, slices_global, slices_map, filtered_data_list) {
+snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_list) {
   checkmate::assert_character(id)
   checkmate::assert_true(is.reactive(slices_global))
   checkmate::assert_class(slices_global(), "teal_slices")
-  checkmate::assert_true(is.reactive(slices_map))
-  checkmate::assert_list(slices_map(), types = "reactiveVal", any.missing = FALSE, names = "named")
+  checkmate::assert_true(is.reactive(mapping_matrix))
+  checkmate::assert_data_frame(mapping_matrix())
   checkmate::assert_list(filtered_data_list, types = "FilteredData", any.missing = FALSE, names = "named")
 
   moduleServer(id, function(input, output, session) {
@@ -88,7 +88,7 @@ snapshot_manager_srv <- function(id, slices_global, slices_map, filtered_data_li
         updateTextInput(inputId = "snapshot_name", value = , placeholder = "Meaningful, unique name")
       } else {
         snapshot <- strip_slices(slices_global())
-        attr(snapshot, "mapping") <- fold_mapping(slice_map(), slices_field(slices_global(), "id"))
+        attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
         snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
         snapshot_history(snapshot_update)
@@ -106,14 +106,13 @@ snapshot_manager_srv <- function(id, slices_global, slices_map, filtered_data_li
       mapply(
         function(filtered_data, filters) {
           filtered_data$clear_filter_states(force = TRUE)
-          slices <- Filter(function(x) x$id %in% filters(), snapshot_state)
+          slices <- Filter(function(x) x$id %in% filters, snapshot_state)
           filtered_data$set_filter_state(slices)
         },
         filtered_data = filtered_data_list,
         filters = mapping_unfolded
       )
       slices_global(snapshot_state)
-      slices_map(mapping_unfolded)
       ### End restore procedure. ###
     })
 
@@ -133,14 +132,13 @@ snapshot_manager_srv <- function(id, slices_global, slices_map, filtered_data_li
           mapply(
             function(filtered_data, filters) {
               filtered_data$clear_filter_states(force = TRUE)
-              slices <- Filter(function(x) x$id %in% filters(), snapshot_state)
+              slices <- Filter(function(x) x$id %in% filters, snapshot_state)
               filtered_data$set_filter_state(slices)
             },
             filtered_data = filtered_data_list,
             filters = mapping_unfolded
           )
           slices_global(snapshot_state)
-          slices_map(mapping_unfolded)
           ### End restore procedure. ###
         })
 
@@ -198,24 +196,22 @@ redress_slices <- function(x) {
 as.teal_slice <- getFromNamespace("as.teal_slice", "teal.slice") # nolint
 
 
-# resolve module mapping such that global filters are explicitly specified for every module
+# transform module mapping such that global filters are explicitly specified for every module
 # @param mapping named list as stored in mapping parameter of `teal_slices`
 # @param module_names character vector enumerating names of all modules in the app
 unfold_mapping <- function(mapping, module_names) {
   module_names <- structure(module_names, names = module_names)
-  slices_map_static <- lapply(module_names, function(x) c(mapping[[x]], mapping[["global_filters"]]))
-  lapply(slices_map_static, function(x) reactiveVal(x))
+  lapply(module_names, function(x) c(mapping[[x]], mapping[["global_filters"]]))
 }
-# return mapping to the shape used in `teal::teal_slices`
-# @param slice_map- named list specifying what filters are active in which module
-# @param all_filters character vector enumerating all existing filter state ids
-fold_mapping <- function(slice_map, all_filters) {
-  global <-
-    vapply(all_filters, function(x) {
-      all(vapply(slice_map, function(xx) is.element(x, xx), logical(1L)))
-    }, logical(1L))
-  global_filters <- names(global)[global]
 
-  mapping <- c(lapply(slice_map, setdiff, y = global_filters), list(global_filters = global_filters))
+# convert filter mapping matirx to mapping specification
+# @param mapping_matrix data.frame of logicals vectors; columns represent modules and row represent teal_slices
+# @return named list like that in the mapping attribute of `teal_slices`
+matrix_to_mapping <- function(mapping_matrix) {
+  global <- vapply(as.data.frame(t(mapping_matrix)), all, logical(1L))
+  global_filters <- names(global[global])
+  local_filters <- mapping_matrix[!rownames(mapping_matrix) %in% global_filters, ]
+
+  mapping <- c(lapply(local_filters, function(x) rownames(local_filters)[x]), list(global_filters = global_filters))
   Filter(function(x) length(x) != 0L, mapping)
 }

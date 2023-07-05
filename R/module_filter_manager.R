@@ -120,12 +120,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     # filtered_data_list <- unlist(filtered_data_list)
     # names(filtered_data_list) <- sub("(.+)\\.(.+$)", "\\2", names(filtered_data_list))
 
-    # Create mapping of filter ids to modules. (list of reactiveVal)
-    slices_map <- reactiveVal({
-      unfold_mapping(attr(filter, "mapping"), names(filtered_data_list))
-    })
-
-    # Create matrix representation of filter mapping.
+    # Create mapping fo filters to modules in matrix form (presented as data.frame).
     mapping_matrix <- reactive({
       mapping_ragged <- lapply(filtered_data_list, function(x) slices_field(x$get_filter_state(), "id"))
       all_names <- slices_field(slices_global(), "id")
@@ -142,13 +137,12 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       filter_manager_module_srv(
         id = module_name,
         module_fd = filtered_data_list[[module_name]],
-        slices_map_module = slices_map()[[module_name]],
         slices_global = slices_global
       )
     })
 
     # Call snapshot manager.
-    snapshot_manager_srv("snapshot_manager", slices_global, slices_map, filtered_data_list)
+    snapshot_manager_srv("snapshot_manager", slices_global, mapping_matrix, filtered_data_list)
 
     modules_out # returned for testing purpose
   })
@@ -156,16 +150,13 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 
 #' Module specific filter manager
 #'
-#' This module compares filters between single `FilteredData` settings
-#' and global `teal_slices`. Updates appropriate objects `module_fd`,
-#' `slices_map_module`, `slices_global` to keep them consistent.
+#' This module compares filters between single `FilteredData` settings and global `teal_slices`.
+#' Updates appropriate objects `module_fd`, `slices_global` to keep them consistent.
 #'
 #' @param id (`character(1)`)\cr
 #'  `shiny` module id.
 #' @param module_fd (`FilteredData`)\cr
 #'   object to filter data in the teal-module
-#' @param slices_map_module (`reactiveVal` of `character`)\cr
-#'   `id` of the `teal_slice` objects used in the module specific `FilteredData`.
 #' @param slices_global (`reactiveVal` or `teal_slices`)\cr
 #'   stores a list of all available filters which can be utilized in several ways, for example:
 #'   - to disable/enable specific filter in the module
@@ -173,7 +164,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 #'   - to save current filter settings panel
 #' @return shiny module returning NULL
 #' @keywords internal
-filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_global) {
+filter_manager_module_srv <- function(id, module_fd, slices_global) {
   moduleServer(id, function(input, output, session) {
 
     setdiff_teal_slices <- function(x, y) {
@@ -197,18 +188,12 @@ filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_g
     # Reactive values for comparing states.
     previous_slices <- reactiveVal(shiny::isolate(slices_module()))
     slices_added <- reactiveVal(NULL)
-    slices_activated <- reactiveVal(NULL)
-    slices_deactivated <- reactiveVal(NULL)
 
     # Observe changes in module filter state and trigger appropriate actions.
     observeEvent(slices_module(), ignoreNULL = FALSE, {
       logger::log_trace("filter_manager_srv@1 detecting states deltas in module: { id }.")
       added <- setdiff_teal_slices(slices_module(), slices_global())
-      activated <- setdiff_teal_slices(slices_module(), previous_slices())
-      deactivated <- setdiff_teal_slices(previous_slices(), slices_module())
       if (length(added)) slices_added(added)
-      if (length(activated)) slices_activated(activated)
-      if (length(deactivated)) slices_deactivated(deactivated)
       previous_slices(slices_module())
     })
 
@@ -227,20 +212,6 @@ filter_manager_module_srv <- function(id, module_fd, slices_map_module, slices_g
       slices_global_new <- c(slices_global(), slices_added())
       slices_global(slices_global_new)
       slices_added(NULL)
-    })
-
-    observeEvent(slices_activated(), ignoreNULL = TRUE, {
-      logger::log_trace("filter_manager_srv@3 activated filter in module: { id }.")
-      activated_ids <- slices_field(slices_activated(), "id")
-      slices_map_module(c(slices_map_module(), activated_ids))
-      slices_activated(NULL)
-    })
-
-    observeEvent(slices_deactivated(), ignoreNULL = TRUE, {
-      logger::log_trace("filter_manager_srv@4 deactivated filter in module: { id }.")
-      deactivated_ids <- slices_field(slices_deactivated(), "id")
-      slices_map_module(setdiff(slices_map_module(), deactivated_ids))
-      slices_deactivated(NULL)
     })
 
     slices_module # returned for testing purpose
