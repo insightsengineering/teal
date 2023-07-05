@@ -127,7 +127,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 
     # Create matrix representation of filter mapping.
     mapping_matrix <- reactive({
-      mapping_ragged <- lapply(slices_map(), function(x) x())
+      mapping_ragged <- lapply(filtered_data_list, function(x) slices_field(x$get_filter_state(), "id"))
       all_names <- slices_field(slices_global(), "id")
       mapping_smooth <- lapply(mapping_ragged, is.element, el = all_names)
       as.data.frame(mapping_smooth, row.names = all_names)
