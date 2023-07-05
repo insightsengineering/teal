@@ -107,6 +107,6 @@ deep_copy_filter <- function(filter) {
       teal.slice::as.teal_slice(as.list(slice))
     })
     attributes(filter_copy) <- attributes(filter)
-    return(filter_copy)
+    filter_copy
   })
 }
