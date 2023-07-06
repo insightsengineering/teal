@@ -47,8 +47,8 @@ The \code{datasets} argument is required to resolve the teal arguments in an
 isolated context (with respect to reactivity)
 }
 \examples{
-mods <- teal:::get_dummy_modules()
-datasets <- teal:::get_dummy_datasets()
+mods <- teal:::example_modules()
+datasets <- teal:::example_datasets()
 app <- shinyApp(
   ui = function() {
     tagList(

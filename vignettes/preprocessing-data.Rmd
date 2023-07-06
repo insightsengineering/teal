@@ -29,18 +29,14 @@ To complete the above example try the code below (**<span style="color:red">NOTE
 # Code needs modification before it can be run:
 #     - save as app.R
 # for the purpose of example save the file to current directory
-library(scda)
 library(teal)
-synthetic_cdisc_data("latest")$adsl
-saveRDS(synthetic_cdisc_data("latest")$adsl, "adsl.rds")
+
 # code>
-adsl <- readRDS("adsl.rds")
+new_iris <- transform(iris, id = seq_len(nrow(iris)))
 # <code
 
-cs_arm <- choices_selected(c("ACTARMCD", "ARMCD"), "ACTARMCD")
-
 app <- init(
-  data = cdisc_data(cdisc_dataset("ADSL", adsl), code = get_code(file = "app.R")),
+  data = teal_data(dataset("new_iris", new_iris), code = get_code(file = "app.R")),
   modules = example_module()
 )
 
@@ -52,18 +48,19 @@ Also try the following more advanced usage of `get_code`:
 ```{r eval=FALSE}
 # Code needs modification before it can be run:
 #     - save as app.R
-library(scda)
 library(teal)
 
 # code>
 # data import
-adsl <- synthetic_cdisc_data("latest")$adsl
+new_iris <- transform(iris, id = seq_len(nrow(iris)))
 
 excluded_obj1 <- 1:10 # nocode
 
 # nocode>
 excluded_obj2 <- 1:10
 # <nocode
+
+included_obj <- 1:10
 
 # <code
 

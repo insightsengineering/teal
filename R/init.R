@@ -111,41 +111,41 @@
 #' @include modules.R
 #'
 #' @examples
-#' library(scda)
-#'
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
+#' new_iris <- transform(iris, id = seq_len(nrow(iris)))
+#' new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
 #'
 #' app <- init(
-#'   data = cdisc_data(
-#'     cdisc_dataset("ADSL", ADSL),
-#'     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
+#'   data = teal_data(
+#'     dataset("new_iris", new_iris),
+#'     dataset("new_mtcars", new_mtcars),
+#'     code = "
+#'       new_iris <- transform(iris, id = seq_len(nrow(iris)))
+#'       new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
+#'     "
 #'   ),
 #'   modules = modules(
 #'     module(
-#'       "data source",
+#'       label = "data source",
 #'       server = function(input, output, session, data) {},
 #'       ui = function(id, ...) div(p("information about data source")),
 #'       filters = "all"
 #'     ),
-#'     example_module(),
+#'     example_module(label = "example teal module"),
 #'     module(
-#'       "ADSL AGE histogram",
+#'       "Iris Sepal.Length histogram",
 #'       server = function(input, output, session, data) {
 #'         output$hist <- renderPlot(
-#'           hist(data[["ADSL"]]()$AGE)
+#'           hist(data[["new_iris"]]()$Sepal.Length)
 #'         )
 #'       },
 #'       ui = function(id, ...) {
 #'         ns <- NS(id)
 #'         plotOutput(ns("hist"))
 #'       },
-#'       filters = "ADSL"
+#'       filters = "new_iris"
 #'     )
 #'   ),
-#'   title = "App title",
-#'   filter = list(ADSL = structure(list(AGE = list()), filterable = c("AGE", "SEX", "RACE"))),
-#'   header = tags$h1("Sample App"),
-#'   footer = tags$p("Copyright 2017 - 2020")
+#'   title = "App title"
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
