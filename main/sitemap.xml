@@ -67,7 +67,19 @@
     <loc>https://insightsengineering.github.io/teal/main/reference/dot-datasets_to_data.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/main/reference/example_cdisc_data.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/main/reference/example_datasets.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/main/reference/example_filter.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/example_module.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/main/reference/example_modules.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/filter_calls_module.html</loc>
@@ -83,18 +95,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/get_datasets_code.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/get_dummy_cdisc_data.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/get_dummy_datasets.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/get_dummy_filter.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/get_dummy_modules.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/get_join_keys.html</loc>
