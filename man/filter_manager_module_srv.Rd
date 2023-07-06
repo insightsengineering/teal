@@ -4,7 +4,7 @@
 \alias{filter_manager_module_srv}
 \title{Module specific filter manager}
 \usage{
-filter_manager_module_srv(id, module_fd, slices_map_module, slices_global)
+filter_manager_module_srv(id, module_fd, slices_global)
 }
 \arguments{
 \item{id}{(\code{character(1)})\cr
@@ -12,9 +12,6 @@ filter_manager_module_srv(id, module_fd, slices_map_module, slices_global)
 
 \item{module_fd}{(\code{FilteredData})\cr
 object to filter data in the teal-module}
-
-\item{slices_map_module}{(\code{reactiveVal} of \code{character})\cr
-\code{id} of the \code{teal_slice} objects used in the module specific \code{FilteredData}.}
 
 \item{slices_global}{(\code{reactiveVal} or \code{teal_slices})\cr
 stores a list of all available filters which can be utilized in several ways, for example:
@@ -28,8 +25,7 @@ stores a list of all available filters which can be utilized in several ways, fo
 shiny module returning NULL
 }
 \description{
-This module compares filters between single \code{FilteredData} settings
-and global \code{teal_slices}. Updates appropriate objects \code{module_fd},
-\code{slices_map_module}, \code{slices_global} to keep them consistent.
+This module compares filters between single \code{FilteredData} settings and global \code{teal_slices}.
+Updates appropriate objects \code{module_fd}, \code{slices_global} to keep them consistent.
 }
 \keyword{internal}
