@@ -118,8 +118,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
 
     # Create table to display list of snapshots and their actions.
     output$snapshot_list <- renderUI({
-      # lapply(names(snapshot_history())[-1L], function(s) {
-      lapply(names(snapshot_history()), function(s) {
+      lapply(names(snapshot_history())[-1L], function(s) {
         id_pickme <- sprintf("pickme_%s", make.names(s))
         id_saveme <- sprintf("saveme_%s", make.names(s))
 
