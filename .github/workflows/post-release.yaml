@@ -1,0 +1,15 @@
+---
+name: Post release ✨
+
+on:
+  release:
+    types: ["released"]
+
+jobs:
+  vbump:
+    name: Version Bump 🤜🤛
+    uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@main
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+    with:
+      vbump-after-release: true

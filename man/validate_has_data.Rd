@@ -49,8 +49,8 @@ server <- function(input, output) {
     hist(ADSL_f$AGE, breaks = 5)
   })
 }
-\dontrun{
-shinyApp(ui, server)
+if (interactive()) {
+  shinyApp(ui, server)
 }
 
 }

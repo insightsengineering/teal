@@ -65,7 +65,7 @@ testthat::test_that("srv_teal initialized data containing same FilteredData when
       id = "test",
       raw_data = reactiveVal(data),
       modules = modules(test_module1, modules(label = "tab", test_module1, test_module2)),
-      filter = teal_filters(module_specific = FALSE)
+      filter = teal_slices(module_specific = FALSE)
     ),
     expr = {
       raw_data(data)
@@ -83,7 +83,7 @@ testthat::test_that("srv_teal initialized data containing different FilteredData
       id = "test",
       raw_data = reactiveVal(data),
       modules = modules(test_module1, modules(label = "tab", test_module1, test_module2)),
-      filter = teal_filters(module_specific = TRUE)
+      filter = teal_slices(module_specific = TRUE)
     ),
     expr = {
       raw_data(data)

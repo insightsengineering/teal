@@ -1,8 +1,8 @@
-filter <- teal::teal_filters(
-  teal.slice::filter_var(dataname = "iris", varname = "Sepal.Length"),
-  teal.slice::filter_var(dataname = "iris", varname = "Species"),
-  teal.slice::filter_var(dataname = "mtcars", varname = "mpg"),
-  teal.slice::filter_var(dataname = "women", varname = "height"),
+filter <- teal_slices(
+  teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length"),
+  teal.slice::teal_slice(dataname = "iris", varname = "Species"),
+  teal.slice::teal_slice(dataname = "mtcars", varname = "mpg"),
+  teal.slice::teal_slice(dataname = "women", varname = "height"),
   mapping = list(
     m1 = c("iris Sepal.Length"),
     m3 = c("women height"),

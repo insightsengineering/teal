@@ -8,7 +8,7 @@ reporter_previewer_module(label = "Report previewer")
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module. Any label possible except
-\code{"global_filters"} - read more in \code{mapping} argument of \link{teal_filters}.}
+\code{"global_filters"} - read more in \code{mapping} argument of \link{teal_slices}.}
 }
 \value{
 \code{teal_module} containing the \code{teal.reporter} previewer functionality

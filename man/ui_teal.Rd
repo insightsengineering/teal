@@ -62,8 +62,8 @@ app <- shinyApp(
     active_module <- teal:::srv_teal(id = "dummy", modules = mods, raw_data = raw_data)
   }
 )
-\dontrun{
-runApp(app)
+if (interactive()) {
+  runApp(app)
 }
 }
 \keyword{internal}
