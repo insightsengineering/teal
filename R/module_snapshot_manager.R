@@ -188,7 +188,7 @@ redress_slices <- function(x) {
   checkmate::assert_class(x, "teal_slices_stripped")
   attrs <- attributes(unclass(x))
   ans <- lapply(x, as.teal_slice)
-  do.call(teal_filters, c(ans, attrs))
+  do.call(teal_slices, c(ans, attrs))
 }
 
 # This is needed temporarily, while filter_var and filter_expr are separate functions.
