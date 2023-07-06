@@ -168,15 +168,6 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 filter_manager_module_srv <- function(id, module_fd, slices_global) {
   moduleServer(id, function(input, output, session) {
 
-    setdiff_teal_slices <- function(x, y) {
-      Filter(
-        function(xx) {
-          !any(vapply(y, function(yy) identical(yy, xx), logical(1)))
-        },
-        x
-      )
-    }
-
     # Only operate on slices that refer to data sets present in this module.
     available_slices <- reactive({
       Filter(function(slice) slice$dataname %in% module_fd$datanames(), slices_global())

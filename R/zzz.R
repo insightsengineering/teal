@@ -29,3 +29,5 @@ as.teal_slices <- getFromNamespace("as.teal_slices", "teal.slice") # nolint
 # This one is here because there are numerous instances of getting all ids from teal_slices.
 # The alternative is to always call vapply(<X>, `[[`, character(1), "id").
 slices_field <- getFromNamespace("slices_field", "teal.slice") # nolint
+# This one is here because setdiff_teal_slice should not be exported from teal.slice.
+setdiff_teal_slices <- getFromNamespace("setdiff_teal_slices", "teal.slice")
