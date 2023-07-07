@@ -18,22 +18,23 @@ validate_one_row_per_id(x, key = c("USUBJID", "STUDYID"))
 This function is a wrapper for \code{shiny::validate}.
 }
 \examples{
-library(scda)
-ADSL <- synthetic_cdisc_data("latest")$adsl
-
+iris$id <- rep(1:50, times = 3)
 ui <- fluidPage(
-  sliderInput("obs", "Max Age",
-    min = 0, max = 100, value = 50
+  selectInput(
+    inputId = "species",
+    label = "Select species",
+    choices = c("setosa", "versicolor", "virginica"),
+    selected = "setosa",
+    multiple = TRUE
   ),
-  verbatimTextOutput("age_summary")
+  plotOutput("plot")
 )
-
 server <- function(input, output) {
-  output$age_summary <- renderText({
-    ADSL_f <- ADSL[ADSL$AGE <= input$obs, ]
-    validate_one_row_per_id(ADSL_f, key = c("STUDYID"))
+  output$plot <- renderPlot({
+    iris_f <- iris[iris$Species \%in\% input$species, ]
+    validate_one_row_per_id(iris_f, key = c("id"))
 
-    paste0("Mean age :", mean(ADSL_f$AGE))
+    hist(iris_f$Sepal.Length, breaks = 5)
   })
 }
 \dontrun{

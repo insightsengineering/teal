@@ -1,5 +1,8 @@
-# teal 0.13.0.9002
+# teal 0.13.0.9005
 
+### Miscellaneous
+
+* Removed `scda` package dependency from examples.
 # teal 0.13.0
 
 ### Breaking changes
