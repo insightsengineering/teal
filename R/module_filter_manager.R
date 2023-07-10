@@ -126,7 +126,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       mapping_ragged <- lapply(filtered_data_list, function(x) slices_field(x$get_filter_state(), "id"))
       all_names <- slices_field(slices_global(), "id")
       mapping_smooth <- lapply(mapping_ragged, is.element, el = all_names)
-      as.data.frame(mapping_smooth, row.names = all_names)
+      as.data.frame(mapping_smooth, row.names = all_names, check.names = FALSE)
     })
 
     output$slices_table <- renderTable(rownames = TRUE, {
