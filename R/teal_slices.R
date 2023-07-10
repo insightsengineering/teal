@@ -71,7 +71,7 @@ teal_slices <- function(...,
       module_add = module_add
     )
 
-    all_slice_id <- slices_field(fs, "id")
+    all_slice_id <- vapply(fs, `[[`, character(1L), "id")
     for (i in names(mapping)) {
       failed_slice_id <- setdiff(mapping[[i]], all_slice_id)
       if (length(failed_slice_id)) {

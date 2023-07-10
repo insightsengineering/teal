@@ -123,8 +123,9 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 
     # Create mapping fo filters to modules in matrix form (presented as data.frame).
     mapping_matrix <- reactive({
-      mapping_ragged <- lapply(filtered_data_list, function(x) slices_field(x$get_filter_state(), "id"))
-      all_names <- slices_field(slices_global(), "id")
+      module_states <- lapply(filtered_data_list, function(x) x$get_filter_state())
+      mapping_ragged <- lapply(module_states, function(x) vapply(x, `[[`, character(1L), "id"))
+      all_names <- vapply(slices_global(), `[[`, character(1L), "id")
       mapping_smooth <- lapply(mapping_ragged, is.element, el = all_names)
       as.data.frame(mapping_smooth, row.names = all_names, check.names = FALSE)
     })
@@ -192,7 +193,7 @@ filter_manager_module_srv <- function(id, module_fd, slices_global) {
     observeEvent(slices_added(), ignoreNULL = TRUE, {
       logger::log_trace("filter_manager_srv@2 added filter in module: { id }.")
       # In case the new state has the same id as an existing state, add a suffix to it.
-      global_ids <- slices_field(slices_global(), "id")
+      global_ids <- vapply(slices_global(), `[[`, character(1L), "id")
       lapply(
         slices_added(),
         function(slice) {
