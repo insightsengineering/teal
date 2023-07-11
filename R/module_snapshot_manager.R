@@ -174,14 +174,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
             function(filtered_data, filters) {
               filtered_data$clear_filter_states(force = TRUE)
               slices <- Filter(function(x) x$id %in% filters, snapshot_state)
-              ## TODO
-              ## The following call fails for some reason so slices is broken up into individual slices.
-              ## Note this only fails here, not in restoring original state.
-              ## I suspect the culprit is exclude/include varnames attribute in teal_slices.
-              # filtered_data$set_filter_state(slices)
-              lapply(slices, function(slice) {
-                filtered_data$set_filter_state(teal_slices(slice))
-              })
+              filtered_data$set_filter_state(slices)
             },
             filtered_data = filtered_data_list,
             filters = mapping_unfolded
