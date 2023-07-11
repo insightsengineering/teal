@@ -62,8 +62,6 @@ if (!require("remotes")) install.packages("remotes")
 remotes::install_github("insightsengineering/teal@*release")
 ```
 
-In order to run many of the examples you will also need to install the [`scda`](https://insightsengineering.github.io/scda/) package.
-
 A stable release of all `NEST` packages from June 2022 is also available [here](https://github.com/insightsengineering/depository#readme).
 
 See package vignettes `browseVignettes(package = "teal")` for usage of this package.
