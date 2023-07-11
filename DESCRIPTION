@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.13.0.9004
-Date: 2023-06-29
+Version: 0.13.0.9006
+Date: 2023-07-07
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
     person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
@@ -46,8 +46,6 @@ Suggests:
     MultiAssayExperiment,
     R6,
     rmarkdown,
-    scda (>= 0.1.5),
-    scda.2022 (>= 0.1.3),
     shinyvalidate,
     teal.code (>= 0.3.0),
     testthat (>= 3.1.5),
@@ -58,8 +56,6 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Remotes:
-    insightsengineering/scda.2022@*release,
-    insightsengineering/scda@*release,
     insightsengineering/teal.code@*release,
     insightsengineering/teal.data@*release,
     insightsengineering/teal.logger@*release,

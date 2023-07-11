@@ -66,14 +66,17 @@ This is a wrapper function around the \code{module_teal.R} functions. Unless you
 an end-user, don't use this function, but instead this module.
 }
 \examples{
-library(scda)
-
-ADSL <- synthetic_cdisc_data("latest")$adsl
+new_iris <- transform(iris, id = seq_len(nrow(iris)))
+new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
 
 app <- init(
-  data = cdisc_data(
-    cdisc_dataset("ADSL", ADSL),
-    code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
+  data = teal_data(
+    dataset("new_iris", new_iris),
+    dataset("new_mtcars", new_mtcars),
+    code = "
+      new_iris <- transform(iris, id = seq_len(nrow(iris)))
+      new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
+    "
   ),
   modules = modules(
     module(
@@ -84,17 +87,17 @@ app <- init(
     ),
     example_module(label = "example teal module"),
     module(
-      "ADSL AGE histogram",
+      "Iris Sepal.Length histogram",
       server = function(input, output, session, data) {
         output$hist <- renderPlot(
-          hist(data[["ADSL"]]()$AGE)
+          hist(data[["new_iris"]]()$Sepal.Length)
         )
       },
       ui = function(id, ...) {
         ns <- NS(id)
         plotOutput(ns("hist"))
       },
-      filters = "ADSL"
+      filters = "new_iris"
     )
   ),
   title = "App title",

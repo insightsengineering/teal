@@ -10,10 +10,15 @@
 #' support report generation
 #'
 #' @inheritParams module
+#' @param server_args (`named list`)\cr
+#'  Arguments passed to [teal.reporter::reporter_previewer_srv()].
 #' @return `teal_module` containing the `teal.reporter` previewer functionality
 #' @export
-reporter_previewer_module <- function(label = "Report previewer") {
+reporter_previewer_module <- function(label = "Report previewer", server_args = list()) {
   checkmate::assert_string(label)
+  checkmate::assert_list(server_args, names = "named")
+  checkmate::assert_true(all(names(server_args) %in% names(formals(teal.reporter::reporter_previewer_srv))))
+
   srv <- function(id, reporter, ...) {
     teal.reporter::reporter_previewer_srv(id, reporter, ...)
   }
@@ -22,9 +27,11 @@ reporter_previewer_module <- function(label = "Report previewer") {
     teal.reporter::reporter_previewer_ui(id, ...)
   }
 
-  module(
+  module <- module(
     label = label,
     server = srv, ui = ui,
-    server_args = list(), ui_args = list(), filters = NULL
+    server_args = server_args, ui_args = list(), filters = NULL
   )
+  class(module) <- c("teal_module_previewer", class(module))
+  module
 }
