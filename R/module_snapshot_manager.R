@@ -220,17 +220,60 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
 
 ### utility functions ----
 
-# transform module mapping such that global filters are explicitly specified for every module
-# @param mapping named list as stored in mapping parameter of `teal_slices`
-# @param module_names character vector enumerating names of all modules in the app
+#' Convert teal_slices and to list of lists (drop classes), while maintaining attributes.
+#' Adds special class so that the reverse action can have assertion on argument type.
+#' @param tss (`teal_slices`)
+#' @return Object of class `teal_slices_snapshot`, which is a list of the same length as `tss`,
+#'         where each `teal_slice` has been converted to a list.
+#' @keywords internal
+#'
+disassemble_slices <- function(tss) {
+  checkmate::assert_class(tss, "teal_slices")
+  ans <- unclass(tss)
+  ans[] <- lapply(ans, as.list)
+  class(ans) <- "teal_slices_snapshot"
+  ans
+}
+
+#' Rebuild `teal_slices` from `teal_slices_snapshot`.
+#' @param x (`teal_slices_snapshot`)
+#' @return A `teal_slices` object.
+#' @keywords internal
+#'
+reassemble_slices <- function(x) {
+  checkmate::assert_class(x, "teal_slices_snapshot")
+  attrs <- attributes(unclass(x))
+  ans <- lapply(x, as.teal_slice)
+  do.call(teal_slices, c(ans, attrs))
+}
+
+
+#' Explicitly enumerate global filters.
+#'
+#' Transform module mapping such that global filters are explicitly specified for every module.
+#'
+#' @param mapping (`named list`) as stored in mapping parameter of `teal_slices`
+#' @param module_names (`character`) vector containing names of all modules in the app
+#' @return A `named_list` with one element per module, each element containing all filters applied to that module.
+#' @keywords internal
+#'
 unfold_mapping <- function(mapping, module_names) {
   module_names <- structure(module_names, names = module_names)
   lapply(module_names, function(x) c(mapping[[x]], mapping[["global_filters"]]))
 }
 
-# convert filter mapping matirx to mapping specification
-# @param mapping_matrix data.frame of logicals vectors; columns represent modules and row represent teal_slices
-# @return named list like that in the mapping attribute of `teal_slices`
+#' Convert mapping matrix to filter mapping specification.
+#'
+#' Transform a mapping matrix, i.e. a data frame that maps each filter state to each module,
+#' to a list specification like the one used in the `mapping` attribute of `teal_slices`.
+#' Global filters are gathered in one list element.
+#' If a module has no active filters but the global ones, it will not be mentnioned in the output.
+#'
+#' @param mapping_matrix (`reactive`) returning a `data.frame` of logical vectors;
+#'                       columns represent modules and row represent `teal_slice`s
+#' @return `named list` like that in the `mapping` attribute of a `teal_slices` object.
+#' @keywords internal
+#'
 matrix_to_mapping <- function(mapping_matrix) {
   global <- vapply(as.data.frame(t(mapping_matrix)), all, logical(1L))
   global_filters <- names(global[global])
