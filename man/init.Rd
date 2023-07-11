@@ -102,9 +102,9 @@ app <- init(
   ),
   title = "App title",
   filter = teal_slices(
-    teal.slice::teal_slice(dataname = "new_iris", varname = "Species"),
-    teal.slice::teal_slice(dataname = "new_iris", varname = "Sepal.Length"),
-    teal.slice::teal_slice(dataname = "new_mtcars", varname = "cyl"),
+    teal_slice(dataname = "new_iris", varname = "Species"),
+    teal_slice(dataname = "new_iris", varname = "Sepal.Length"),
+    teal_slice(dataname = "new_mtcars", varname = "cyl"),
     exclude_varnames = list(new_iris = c("Sepal.Width", "Petal.Width")),
     mapping = list(
       `example teal module` = "new_iris Species",
