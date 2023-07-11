@@ -89,18 +89,18 @@
 #'   ),
 #'   title = "App title",
 #'   filter = teal_slices(
-#'     teal.slice::teal_slice(dataname = "ADSL", varname = "AGE"),
-#'     teal.slice::teal_slice(dataname = "ADSL", varname = "SEX"),
-#'     teal.slice::teal_slice(dataname = "ADSL", varname = "RACE"),
-#'     exclude_varnames = list(ADSL = setdiff(names(ADSL), c("AGE", "SEX", "RACE"))),
+#'     teal_slice(dataname = "new_iris", varname = "Species"),
+#'     teal_slice(dataname = "new_iris", varname = "Sepal.Length"),
+#'     teal_slice(dataname = "new_mtcars", varname = "cyl"),
+#'     exclude_varnames = list(new_iris = c("Sepal.Width", "Petal.Width")),
 #'     mapping = list(
-#'       `example teal module` = "ADSL RACE",
-#'       `ADSL AGE histogram` = "ADSL AGE",
-#'       global_filters = "ADSL SEX"
+#'       `example teal module` = "new_iris Species",
+#'       `Iris Sepal.Length histogram` = "new_iris Species",
+#'       global_filters = "new_mtcars cyl"
 #'     )
 #'   ),
 #'   header = tags$h1("Sample App"),
-#'   footer = tags$p("Copyright 2017 - 2020")
+#'   footer = tags$p("Copyright 2017 - 2023")
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
