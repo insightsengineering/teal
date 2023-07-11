@@ -200,7 +200,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
           )
 
           # Prevent snapshot manager on data set level. App-level snapshot manager will be called by filter manager.
-          datasets_module$set_is_module_specific(TRUE)
+          datasets_module$activate_snapshot_manager(TRUE)
 
           # set initial filters
           slices <- Filter(x = filter, f = function(x) {
