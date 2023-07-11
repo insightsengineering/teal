@@ -28,3 +28,7 @@
 as.teal_slices <- getFromNamespace("as.teal_slices", "teal.slice") # nolint
 # This one is here because setdiff_teal_slice should not be exported from teal.slice.
 setdiff_teal_slices <- getFromNamespace("setdiff_teal_slices", "teal.slice")
+# These two are needed in the snapshot manager.
+disassemble_slices <- getFromNamespace("disassemble_slices", "teal.slice")
+reassemble_slices <- getFromNamespace("reassemble_slices", "teal.slice")
+
