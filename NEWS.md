@@ -1,8 +1,19 @@
 # teal 0.13.0.9006
 
+### New features
+
+* Enabled module specific filter panel. See `module_specific` in `teal::teal_slices` documentation.
+* Enabled `reporter_previewer_module` to customize default values through `srv_args`.
+* Enabled passing own `reporter_previewer_module` in a list of modules to override default one.
+
+### Breaking changes
+
+* Specifying `filter` argument in `teal::init` requires `teal_slices` object now. Details in documentation of `teal::init`.
+
 ### Miscellaneous
 
 * Removed `scda` package dependency from examples.
+
 # teal 0.13.0
 
 ### Breaking changes
