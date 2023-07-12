@@ -13,7 +13,7 @@
 #' @param depth (`integer(1)`)\cr
 #'  number which helps to determine depth of the modules nesting.
 #' @param is_module_specific (`logical(1)`)\cr
-#'  flag determinining if the filter panel is global or module-specific. When `module_specific`
+#'  flag determining if the filter panel is global or module-specific. When `module_specific`
 #'  is `TRUE` then a filter panel is called inside of each module tab.
 #' @return depending on class of `modules`:
 #'   - `teal_module`: instantiated UI of the module

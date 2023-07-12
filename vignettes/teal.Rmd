@@ -9,8 +9,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-<img src="images/teal.jpg" alt="Teal Duck" style="width: 100%;"/>
-
 ## Introduction
 
 *teal* is a shiny-based interactive exploration framework for analyzing data, with particular emphasis on
@@ -127,4 +125,5 @@ The `teal` framework relies on a set of supporting packages whose documentation 
 The packages which are of most interest when defining `teal`applications are:
 
 * [`teal.data`](https://insightsengineering.github.io/teal.data/): defining data for `teal` application.
+* [`teal.slice`](https://insightsengineering.github.io/teal.slice/): defining data filtering before passing into `teal` modules.
 * [`teal.transform`](https://insightsengineering.github.io/teal.transform/): defining the way arguments are passed into `teal` modules.
