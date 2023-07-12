@@ -186,7 +186,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         # Save snapshot.
         output[[id_saveme]] <- downloadHandler(
           filename = function() {
-            sprintf("teal_snapshot-%s.json", Sys.Date())
+            sprintf("teal_snapshot_%s_%s.json", s, Sys.Date())
           },
           content = function(file) {
             snapshot <- snapshot_history()[[s]]
