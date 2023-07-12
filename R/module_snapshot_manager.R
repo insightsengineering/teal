@@ -155,6 +155,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         filters = mapping_unfolded
       )
       slices_global(snapshot_state)
+      removeModal()
       ### End restore procedure. ###
     })
 
@@ -180,6 +181,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
             filters = mapping_unfolded
           )
           slices_global(snapshot_state)
+          removeModal()
           ### End restore procedure. ###
         })
 
