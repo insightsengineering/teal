@@ -11,11 +11,10 @@ vignette: >
 
 ## `teal` apps with filter panel
 
-Filter panel was always integral part of `teal` applications. By default, filter panel is included on the right side panel. Data is filtered based before passing to the `teal` modules and reproducible filter call is included in "Show R code". Technical details of filter panel are extensively described in [`teal.slice` documentation](https://insightsengineering.github.io/teal.slice/latest-tag/).
+Filter panel was always integral part of `teal` applications and is included on the right side. Depending on filter panel's selections respective filter expression is executed before passing data to `teal` modules. Technical details of filter panel are extensively described in [`teal.slice` documentation](https://insightsengineering.github.io/teal.slice/latest-tag/).
 
 `teal::init` by default initializes filter panel without any active filters but with possibility to filter by any column. To start `teal` application with predefined filters one need to specify `filter` argument.
 In the following example four filters are initialized, each set with `teal_slice` function. `teal_slices` wraps a collection of `teal_slice`. 
-
 
 ```r
 library(teal)
@@ -39,12 +38,12 @@ if (interactive()) {
 }
 ```
 
-
 ## Extending `teal.slice`
 
 ### Filter panel respective to `teal_module`
 
 Each `teal_module` (see `module()`) object contains `filters` attribute which determines which datasets are displayed in filter panel and then are sent to the module.
+
 ```r
 library(teal)
 
