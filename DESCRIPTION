@@ -1,17 +1,17 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.13.0.9006
-Date: 2023-07-07
+Version: 0.13.0.9007
+Date: 2023-07-14
 Authors@R: c(
-    person("Dawid", "Kaledkowski", email = "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
-    person("Pawel", "Rucki", email = "pawel.rucki@roche.com", role = "aut"),
-    person("Aleksander", "Chlebowski", email = "aleksander.chlebowski@contractors.roche.com", role = "aut"),
-    person("Kartikeya", "Kirar", email = "kartikeya.kirar@businesspartner.roche.com", role = "aut"),
-    person("Marcin", "Kosinski", email = "marcin.kosinski.mk1@roche.com", role = "aut"),
+    person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
+    person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
+    person("Aleksander", "Chlebowski", , "aleksander.chlebowski@contractors.roche.com", role = "aut"),
+    person("Kartikeya", "Kirar", , "kartikeya.kirar@businesspartner.roche.com", role = "aut"),
+    person("Marcin", "Kosinski", , "marcin.kosinski.mk1@roche.com", role = "aut"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
-    person("Chendi", "Liao", email = "chendi.liao@roche.com", role = "rev"),
-    person("Dony", "Unardi", email = "unardid@gene.com", role = "rev"),
+    person("Chendi", "Liao", , "chendi.liao@roche.com", role = "rev"),
+    person("Dony", "Unardi", , "unardid@gene.com", role = "rev"),
     person("Nikolas", "Burkoff", role = "aut"),
     person("Mahmoud", "Hallal", role = "aut"),
     person("Maciej", "Nasinski", role = "aut"),
