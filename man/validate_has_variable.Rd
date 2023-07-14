@@ -40,7 +40,7 @@ server <- function(input, output) {
     paste0("Selected treatment variables: ", paste(input$var, collapse = ", "))
   })
 }
-\dontrun{
-shinyApp(ui, server)
+if (interactive()) {
+  shinyApp(ui, server)
 }
 }

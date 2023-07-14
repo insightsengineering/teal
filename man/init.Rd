@@ -8,7 +8,7 @@ init(
   data,
   modules,
   title = NULL,
-  filter = list(),
+  filter = teal_slices(),
   header = tags$p(),
   footer = tags$p(),
   id = character(0)
@@ -34,75 +34,15 @@ more details.}
 \item{title}{(\code{NULL} or \code{character})\cr
 The browser window title (defaults to the host URL of the page).}
 
-\item{filter}{(\code{list})\cr
-You can define filters that show when the app starts. List names should be
-named according to datanames passed to the \code{data} argument.
-In case of  data.frame` the list should be composed as follows:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
-     <dataname2> = list(...),
-     ...)
-
-}\if{html}{\out{</div>}}
-
-For example, filters for variable \code{Sepal.Length} in \code{iris} can be specified as
-follows:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{list(iris = list(Sepal.Length = list(selected = c(5.0, 7.0))))
-# or
-list(iris = list(Sepal.Length = c(5.0, 7.0)))
-}\if{html}{\out{</div>}}
-
-In case developer would like to include \code{NA} and \code{Inf} values in  the
-filtered dataset.
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{list(Species = list(selected = c(5.0, 7.0), keep_na = TRUE, keep_inf = TRUE))
-list(Species = c(c(5.0, 7.0), NA, Inf))
-}\if{html}{\out{</div>}}
-
-To initialize with specific variable filter with all values on start, one
-can use
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{list(Species = list())
-}\if{html}{\out{</div>}}
-
-\code{filter} should be set with respect to the class of the column:
-\itemize{
-\item \code{numeric}: \code{selected} should be a two elements vector defining the range
-of the filter.
-\item \code{Date}: \code{selected} should be a two elements vector defining the date-range
-of the filter
-\item \code{POSIXct}: \code{selected} should be a two elements vector defining the
-\code{datetime} range of the filter
-\item \code{character} and \code{factor}: \code{selected} should be a vector of any length
-defining initial values selected to filter.
-\cr
-\code{filter} for \code{MultiAssayExperiment} objects should be specified in slightly
-different way. Since it contains patient data with list of experiments,
-\code{filter} list should be created as follows:
-\cr
-}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{list(
-  <MAE dataname> = list(
-    subjects = list(<column in colData> = ..., <column in colData> = ...),
-    <experiment name> = list(
-      subset = list(<column in rowData of experiment> = ...,
-                    <column in rowData of experiment> = ...),
-      select = list(<column in colData of experiment> = ...,
-                    <column in colData of experiment> = ...)
-    )
-  )
-)
-}\if{html}{\out{</div>}}
-
-By adding the \code{filterable} attribute it is possible to control which variables can be filtered for each
-dataset. See the example below where \code{ADSL} can only be filtered by \code{AGE}, \code{SEX} or \code{RACE}.}
+\item{filter}{(\code{teal_slices})\cr
+Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
+Old way of specifying filters through a list is deprecated and will be removed in the
+next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 
 \item{header}{(\code{shiny.tag} or \code{character}) \cr
 the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
-(such as loading css via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
+(such as loading \code{CSS} via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
 
 \item{footer}{(\code{shiny.tag} or \code{character})\cr
 the footer of the app}
@@ -114,7 +54,7 @@ See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_t
 is then preferred to this function.}
 }
 \value{
-named list with server and ui function
+named list with \code{server} and \code{ui} function
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -160,7 +100,20 @@ app <- init(
       filters = "new_iris"
     )
   ),
-  title = "App title"
+  title = "App title",
+  filter = teal_slices(
+    teal_slice(dataname = "new_iris", varname = "Species"),
+    teal_slice(dataname = "new_iris", varname = "Sepal.Length"),
+    teal_slice(dataname = "new_mtcars", varname = "cyl"),
+    exclude_varnames = list(new_iris = c("Sepal.Width", "Petal.Width")),
+    mapping = list(
+      `example teal module` = "new_iris Species",
+      `Iris Sepal.Length histogram` = "new_iris Species",
+      global_filters = "new_mtcars cyl"
+    )
+  ),
+  header = tags$h1("Sample App"),
+  footer = tags$p("Copyright 2017 - 2023")
 )
 if (interactive()) {
   shinyApp(app$ui, app$server)

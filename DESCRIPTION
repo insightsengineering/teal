@@ -4,14 +4,19 @@ Title: Exploratory Web Apps for Analyzing Clinical Trials Data
 Version: 0.13.0.9006
 Date: 2023-07-07
 Authors@R: c(
-    person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
-    person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
-    person("Nikolas", "Burkoff", , "nikolas.burkoff@roche.com", role = "aut"),
-    person("Mahmoud", "Hallal", , "mahmoud.hallal@roche.com", role = "aut"),
-    person("Maciej", "Nasinski", , "maciej.nasinski@contractors.roche.com", role = "aut"),
-    person("Konrad", "Pagacz", , "konrad.pagacz@contractors.roche.com", role = "aut"),
-    person("Junlue", "Zhao", , "zhaoj88@gene.com", role = "aut"),
+    person("Dawid", "Kaledkowski", email = "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
+    person("Pawel", "Rucki", email = "pawel.rucki@roche.com", role = "aut"),
+    person("Aleksander", "Chlebowski", email = "aleksander.chlebowski@contractors.roche.com", role = "aut"),
+    person("Kartikeya", "Kirar", email = "kartikeya.kirar@businesspartner.roche.com", role = "aut"),
+    person("Marcin", "Kosinski", email = "marcin.kosinski.mk1@roche.com", role = "aut"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
+    person("Chendi", "Liao", email = "chendi.liao@roche.com", role = "rev"),
+    person("Dony", "Unardi", email = "unardid@gene.com", role = "rev"),
+    person("Nikolas", "Burkoff", role = "aut"),
+    person("Mahmoud", "Hallal", role = "aut"),
+    person("Maciej", "Nasinski", role = "aut"),
+    person("Konrad", "Pagacz", role = "aut"),
+    person("Junlue", "Zhao", role = "aut"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("Maximilian", "Mordig", role = "ctb")
   )
@@ -24,21 +29,18 @@ Depends:
     R (>= 4.0),
     shiny,
     teal.data (>= 0.1.2),
+    teal.slice (>= 0.3.0.9005),
     teal.transform (>= 0.2.0)
 Imports:
     checkmate,
     lifecycle,
     logger (>= 0.2.0),
     magrittr,
-    methods,
     rlang,
     shinyjs,
     stats,
-    styler,
-    teal.code (>= 0.2.0),
     teal.logger (>= 0.1.1),
     teal.reporter (>= 0.1.1),
-    teal.slice (>= 0.2.0),
     teal.widgets (>= 0.2.0),
     utils
 Suggests:
@@ -50,6 +52,7 @@ Suggests:
     R6,
     rmarkdown,
     shinyvalidate,
+    teal.code (>= 0.3.0),
     testthat (>= 3.1.5),
     withr,
     yaml
@@ -74,11 +77,11 @@ RoxygenNote: 7.2.3
 Collate:
     'dummy_functions.R'
     'example_module.R'
-    'get_rcode.R'
     'get_rcode_utils.R'
     'include_css_js.R'
     'modules.R'
     'init.R'
+    'module_filter_manager.R'
     'module_nested_tabs.R'
     'module_tabs_with_filters.R'
     'module_teal.R'
@@ -88,6 +91,7 @@ Collate:
     'show_rcode_modal.R'
     'tdata.R'
     'teal.R'
+    'teal_slices.R'
     'utils.R'
     'validate_inputs.R'
     'validations.R'

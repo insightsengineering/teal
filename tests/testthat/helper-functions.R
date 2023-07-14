@@ -5,10 +5,10 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' # start of shinytest script
-#' eval(shinytest_load_pckg())
-#' # continue with shinytest script
+#' if (interactive()) {
+#'   # start of shinytest script
+#'   eval(shinytest_load_pckg())
+#'   # continue with shinytest script
 #' }
 #'
 shinytest_load_pckg <- function(package_name = NULL) {

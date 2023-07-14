@@ -2,7 +2,7 @@
 % Please edit documentation in R/dummy_functions.R
 \name{example_cdisc_data}
 \alias{example_cdisc_data}
-\title{Get dummy CDISC data}
+\title{Get dummy \code{CDISC} data}
 \usage{
 example_cdisc_data()
 }
@@ -10,7 +10,7 @@ example_cdisc_data()
 \code{cdisc_data}
 }
 \description{
-Get dummy CDISC data including \code{ADSL}, \code{ADAE} and \code{ADLB}.
+Get dummy \code{CDISC} data including \code{ADSL}, \code{ADAE} and \code{ADLB}.
 Some NAs are also introduced to stress test.
 }
 \keyword{internal}

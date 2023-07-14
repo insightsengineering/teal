@@ -2,21 +2,9 @@
 % Please edit documentation in R/modules.R
 \name{is_arg_used}
 \alias{is_arg_used}
-\alias{is_arg_used.default}
-\alias{is_arg_used.teal_modules}
-\alias{is_arg_used.teal_module}
-\alias{is_arg_used.function}
 \title{Does the object make use of the \code{arg}}
 \usage{
 is_arg_used(modules, arg)
-
-\method{is_arg_used}{default}(modules, arg)
-
-\method{is_arg_used}{teal_modules}(modules, arg)
-
-\method{is_arg_used}{teal_module}(modules, arg)
-
-\method{is_arg_used}{`function`}(modules, arg)
 }
 \arguments{
 \item{modules}{(\code{teal_module} or \code{teal_modules}) object}

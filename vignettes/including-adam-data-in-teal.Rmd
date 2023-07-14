@@ -1,10 +1,10 @@
 ---
-title: "Input ADaM data in a teal application"
+title: "Input `ADaM` data in a teal application"
 author: "NEST CoreDev"
 date: "2022-04-20"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Input ADaM data in a teal application}
+  %\VignetteIndexEntry{Input `ADaM` data in a teal application}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -47,7 +47,7 @@ class(dataset_adsl)
 When passing multiple datasets to the `cdisc_data` function, dataset relationship are set using
 `join_keys` and `join_key` and these are used to merge datasets together within teal apps.
 
-In the example below, two standard CDISC datasets (ADSL and ADTTE) are passed to the aforementioned
+In the example below, two standard `CDISC` datasets (`ADSL` and `ADTTE`) are passed to the aforementioned
 function. In the case of `CDISC` datasets that adhere to `ADaM` standards, the merge keys do not need to be manually
 specified. Keys are automatically added if `dataname` matches one of the implemented standards as documented in the
 `cdisc_dataset` function. This minimizes the code needed to allow data merges as seen in this
@@ -149,4 +149,4 @@ The [teal.data::join_keys()] function is used to specify keys:
 Note that it is assumed that join keys are symmetric, i.e. `join_key("x", "y", "x_col" = "y_col")` will enable merge
 from "x" to "y" and vice-versa.
 
-For more information about preprocessing, reproducibility, relationships between datasets and DDL, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/).
+For more information about preprocessing, reproducibility, relationships between datasets and `DDL`, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/).

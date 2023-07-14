@@ -45,9 +45,9 @@ example_filter <- function(data) { # nolint
   return(res)
 }
 
-#' Get dummy CDISC data
+#' Get dummy `CDISC` data
 #'
-#' Get dummy CDISC data including `ADSL`, `ADAE` and `ADLB`.
+#' Get dummy `CDISC` data including `ADSL`, `ADAE` and `ADLB`.
 #' Some NAs are also introduced to stress test.
 #'
 #' @return `cdisc_data`

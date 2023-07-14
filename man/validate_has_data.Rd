@@ -52,8 +52,8 @@ server <- function(input, output) {
     hist(iris_f$Sepal.Length, breaks = 5)
   })
 }
-\dontrun{
-shinyApp(ui, server)
+if (interactive()) {
+  shinyApp(ui, server)
 }
 
 }

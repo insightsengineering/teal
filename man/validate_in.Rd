@@ -37,8 +37,8 @@ server <- function(input, output) {
     nrow(iris[iris$Species == input$species, ])
   })
 }
-\dontrun{
-shinyApp(ui, server)
+if (interactive()) {
+  shinyApp(ui, server)
 }
 
 }

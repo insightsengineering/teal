@@ -7,7 +7,8 @@
 reporter_previewer_module(label = "Report previewer", server_args = list())
 }
 \arguments{
-\item{label}{(\code{character(1)}) Label shown in the navigation item for the module.}
+\item{label}{(\code{character(1)}) Label shown in the navigation item for the module. Any label possible except
+\code{"global_filters"} - read more in \code{mapping} argument of \link{teal_slices}.}
 
 \item{server_args}{(\verb{named list})\cr
 Arguments passed to \code{\link[teal.reporter:reporter_previewer_srv]{teal.reporter::reporter_previewer_srv()}}.}

@@ -1,8 +1,19 @@
 # teal 0.13.0.9006
 
+### New features
+
+* Enabled module specific filter panel. See `module_specific` in `teal::teal_slices` documentation.
+* Enabled `reporter_previewer_module` to customize default values through `srv_args`.
+* Enabled passing own `reporter_previewer_module` in a list of modules to override default one.
+
+### Breaking changes
+
+* Specifying `filter` argument in `teal::init` requires `teal_slices` object now. Details in documentation of `teal::init`.
+
 ### Miscellaneous
 
 * Removed `scda` package dependency from examples.
+
 # teal 0.13.0
 
 ### Breaking changes
@@ -195,7 +206,7 @@ function call.
 * Added informational stop message when using `mutate_data` with `RelationalDataConnector`.
 * Modified `as_cdisc` to behave similarly to `cdisc_dataset` when called on a `Dataset` object.
 * Changed the displayed format of the data name and the column name in `data_extract_spec` UI elements. Both are now compressed to `<data name>.<column name>` if they don't change during runtime of the app.
-* Added `ADSAFTTE` to the list of recognized ADaM dataset names.
+* Added `ADSAFTTE` to the list of recognized `ADaM` dataset names.
 * Added another example to `data_extract_spec`'s doc string showcasing app users can choose a variable used for filtering in the encoding panel.
 * Added CSS styling to tool tips in teal modules.
 
@@ -207,9 +218,9 @@ function call.
 
 ### Enhancements
 * Released `snowflake` connection and connectors.
-* Changed ordering of datasets to be more intuitive (topologically first for CDISC datasets only and then according to input datasets order).
+* Changed ordering of datasets to be more intuitive (topologically first for `CDISC` datasets only and then according to input datasets order).
 * When closing a teal app (ending a user shiny session), all `DataConnection`s will now try to close their connections.
-* Added ADHY keys to configuration file.
+* Added `ADHY` keys to configuration file.
 * Extended the `filter_spec` function: the parameter `choices` is no longer mandatory (the function will take all possible choices by default) and the `vars` parameter additionally accepts the `choices_selected` and allows to change the variables for filtering using the UI elements in the encoding panel.
 
 ### Bug fixes
@@ -240,7 +251,7 @@ function call.
 
 ### New Features
 * Added `python_dataset_connector` to create delayed data objects from python scripts or directly from python code.
-* NOTE: `python_dataset_connector` is not yet ready to be deployed on RSConnect because it does not contain `numpy` and `pandas`, which are `Python` libraries used in `python_dataset_connector`.
+* NOTE: `python_dataset_connector` is not yet ready to be deployed on `RSConnect` because it does not contain `numpy` and `pandas`, which are `Python` libraries used in `python_dataset_connector`.
 * Added support for filtering on `Date` and `Datetime` variables in the Filter Panel.
 * Added buttons for `date` and `datetime` filter widgets to reset the value to the original.
 * Added new function `check_key_duplicates`, which creates a short summary about rows with duplicated primary key (row numbers and the number of duplicates)
@@ -249,7 +260,7 @@ function call.
 * Fixed lack of labels for `character` and `factor` variables in the Filter Panel.
 * All variables are now displayed in `module_filter_panel`, not only those of types `numeric`, `logical`, `factor`, `character` and `Date`
 * Fixed `mutate_data` to accept the whole scope of objects for `vars`.
-* Clarified `teal::init` function documentation to state that custom css loading code with `htmltools::htmlDependency` should be included in the `header` argument rather than inside `ui` arguments of modules.
+* Clarified `teal::init` function documentation to state that custom `CSS` loading code with `htmltools::htmlDependency` should be included in the `header` argument rather than inside `ui` arguments of modules.
 * Enabled empty select field inside `data_extract_spec`.
 * Added new argument `drop_keys` to `filter_spec` to decide whether to drop or keep keys columns on single filter on those columns.
 * Added a new optional argument `keys` to `variable_choices`. `keys` specifies the names of the variables, which should have the new key icon shown next to them in the variable drop down menus in the left-hand side encoding panels instead of the icon appropriate for their original R variable type. `variable_choices` now also works with `RelationalDataset` and `RelationalDatasetConnector` objects.
@@ -262,7 +273,7 @@ function call.
 * Adds method to resolve nested lists containing delayed data objects, which can be used for `arm_ref_comp` objects.
 * Nested tabs module now has better alignment with the filter panel on the page.
 * Allow `width` argument in `optionalSelectInput`.
-* Added lifecycle badges to all exported functions.
+* Added `lifecycle` badges to all exported functions.
 * Added new `code_dataset_connector` and `code_cdisc_dataset_connector` functions which enable the creation of new delayed data objects given a string of code.
 * Added new functions `csv_dataset_connector` and `csv_cdisc_dataset_connector`.
 * Updated `set_ui_input` method of `RawDatasetConnector` and `NamedDatasetConnector` to handle user defined shiny inputs.
@@ -270,7 +281,7 @@ function call.
 * Replace existing `RelationalData` class with abstract class `RelationalDataCollection` and rename `RelationalDataList` class as `RelationalData`. The `data` argument to `teal::init` is now always a `RelationalData` object.
 * Added `fun_cdisc_dataset_connector` to enable providing a custom function which returning a dataset.
 * Removed `code` and `script` arguments from `as_relational` wrapper. This is intended to be done with `mutate_dataset` functionality.
-* `filer` argument in `init` has added a validation step to ensure compatibility with the rest of the app. Variables inherited from ADSL have to be specified only for ADSL dataset.
+* `filer` argument in `init` has added a validation step to ensure compatibility with the rest of the app. Variables inherited from `ADSL` have to be specified only for `ADSL` dataset.
 * Fixes the issue with connection close code not being present in `get_code` results.
 * Fixes the issue of occasional incorrect ordering of bar charts on the filter panel.
 * More informative error displayed when `pull_fun` of `DataConnection` produces an error.
@@ -317,7 +328,7 @@ function call.
 
 # teal 0.8.4
 
-* Progress bar for ui creation in delayed loading module.
+* Progress bar for UI creation in delayed loading module.
 * Change output of `keys` function to `keys` object.
 * Delayed version of `choices_selected`.
 * Fix an error in `choices_selected` when `selected` is not in `choices`.
@@ -366,7 +377,7 @@ function call.
 
 # teal 0.0.5
 
-* Added limit to data_table with scrolling, preventing overlap of ui elements.
+* Added limit to data_table with scrolling, preventing overlap of UI elements.
 * Boolean filtering.
 
 # teal 0.0.4
@@ -395,7 +406,7 @@ function call.
 # teal 0.0.2
 
  * New '01_getting_started' vignette.
- * Datanames in `FilteredData` are now case sensitive.
+ * `Datanames` in `FilteredData` are now case sensitive.
 
 # teal 0.0.1
 
