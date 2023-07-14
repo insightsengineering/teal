@@ -18,7 +18,7 @@ shapes the navigation panel of a teal application."><!-- mathjax --><script src=
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9006</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,10 +35,11 @@ shapes the navigation panel of a teal application."><!-- mathjax --><script src=
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Pre-processing data</a>
+    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input `ADaM` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input `MultiAssayExperiment` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
@@ -48,15 +49,6 @@ shapes the navigation panel of a teal application."><!-- mathjax --><script src=
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -122,7 +114,7 @@ For example <code>modules("lab", ...)</code> should be converted to <code>module
 
 <dt>indent</dt>
 <dd><p>(<code>integer</code>) indent level;
-each submodule is indented one level more</p></dd>
+each <code>submodule</code> is indented one level more</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -137,7 +129,7 @@ their <code>label</code> attribute converted to a valid <code>shiny</code> id.</
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="init.html">init</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="fu">teal_data</span><span class="op">(</span><span class="fu">dataset</span><span class="op">(</span><span class="st">"iris"</span>, <span class="va">iris</span><span class="op">)</span><span class="op">)</span>,</span></span>
@@ -180,8 +172,8 @@ their <code>label</code> attribute converted to a valid <code>shiny</code> id.</
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

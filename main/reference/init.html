@@ -20,7 +20,7 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9006</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,10 +37,11 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Pre-processing data</a>
+    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input `ADaM` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input `MultiAssayExperiment` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
@@ -50,15 +51,6 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -102,7 +94,7 @@ an end-user, don't use this function, but instead this module.</p>
 <span>  <span class="va">data</span>,</span>
 <span>  <span class="va">modules</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  filter <span class="op">=</span> <span class="fu"><a href="teal_slices.html">teal_slices</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  header <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
@@ -136,58 +128,17 @@ The browser window title (defaults to the host URL of the page).</p></dd>
 
 
 <dt>filter</dt>
-<dd><p>(<code>list</code>)<br>
-You can define filters that show when the app starts. List names should be
-named according to datanames passed to the <code>data</code> argument.
-In case of  data.frame` the list should be composed as follows:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(<span class="sc">&lt;</span>dataname1<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(<span class="sc">&lt;</span>varname1<span class="sc">&gt;</span> <span class="er">=</span> ..., <span class="sc">&lt;</span>varname2<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>     <span class="sc">&lt;</span>dataname2<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(...),</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>     ...)</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span></code></pre><p></p></div>
-<p>For example, filters for variable <code>Sepal.Length</code> in <code>iris</code> can be specified as
-follows:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(<span class="at">iris =</span> <span class="fu">list</span>(<span class="at">Sepal.Length =</span> <span class="fu">list</span>(<span class="at">selected =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>))))</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># or</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">list</span>(<span class="at">iris =</span> <span class="fu">list</span>(<span class="at">Sepal.Length =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>)))</span></code></pre><p></p></div>
-<p>In case developer would like to include <code>NA</code> and <code>Inf</code> values in  the
-filtered dataset.</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">list</span>(<span class="at">selected =</span> <span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>), <span class="at">keep_na =</span> <span class="cn">TRUE</span>, <span class="at">keep_inf =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">c</span>(<span class="fu">c</span>(<span class="fl">5.0</span>, <span class="fl">7.0</span>), <span class="cn">NA</span>, <span class="cn">Inf</span>))</span></code></pre><p></p></div>
-<p>To initialize with specific variable filter with all values on start, one
-can use</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Species =</span> <span class="fu">list</span>())</span></code></pre><p></p></div>
-<p><code>filter</code> should be set with respect to the class of the column:</p><ul><li><p><code>numeric</code>: <code>selected</code> should be a two elements vector defining the range
-of the filter.</p></li>
-<li><p><code>Date</code>: <code>selected</code> should be a two elements vector defining the date-range
-of the filter</p></li>
-<li><p><code>POSIXct</code>: <code>selected</code> should be a two elements vector defining the
-<code>datetime</code> range of the filter</p></li>
-<li><p><code>character</code> and <code>factor</code>: <code>selected</code> should be a vector of any length
-defining initial values selected to filter.
-<br><code>filter</code> for <code>MultiAssayExperiment</code> objects should be specified in slightly
-different way. Since it contains patient data with list of experiments,
-<code>filter</code> list should be created as follows:
-<br></p></li>
-</ul><p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="sc">&lt;</span>MAE dataname<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="at">subjects =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> colData<span class="sc">&gt;</span> <span class="er">=</span> ..., <span class="sc">&lt;</span>column <span class="cf">in</span> colData<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>    <span class="sc">&lt;</span>experiment name<span class="sc">&gt;</span> <span class="er">=</span> <span class="fu">list</span>(</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>      <span class="at">subset =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> rowData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...,</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>                    <span class="sc">&lt;</span>column <span class="cf">in</span> rowData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...),</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>      <span class="at">select =</span> <span class="fu">list</span>(<span class="sc">&lt;</span>column <span class="cf">in</span> colData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...,</span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>                    <span class="sc">&lt;</span>column <span class="cf">in</span> colData of experiment<span class="sc">&gt;</span> <span class="er">=</span> ...)</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    )</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  )</span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>)</span></code></pre><p></p></div>
-<p>By adding the <code>filterable</code> attribute it is possible to control which variables can be filtered for each
-dataset. See the example below where <code>ADSL</code> can only be filtered by <code>AGE</code>, <code>SEX</code> or <code>RACE</code>.</p></dd>
+<dd><p>(<code>teal_slices</code>)<br>
+Specification of initial filter. Filters can be specified using <code><a href="teal_slices.html">teal_slices()</a></code>.
+Old way of specifying filters through a list is deprecated and will be removed in the
+next release. Please fix your applications to use <code><a href="teal_slices.html">teal_slices()</a></code>.</p></dd>
 
 
 <dt>header</dt>
 <dd><p>(<code>shiny.tag</code> or <code>character</code>) <br>
 the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's <code>ui</code> function so code which needs to be placed in the <code>ui</code> function
-(such as loading css via <code><a href="https://rstudio.github.io/htmltools/reference/htmlDependency.html" class="external-link">htmltools::htmlDependency()</a></code>) should be included here.</p></dd>
+(such as loading <code>CSS</code> via <code><a href="https://rstudio.github.io/htmltools/reference/htmlDependency.html" class="external-link">htmltools::htmlDependency()</a></code>) should be included here.</p></dd>
 
 
 <dt>footer</dt>
@@ -207,7 +158,7 @@ is then preferred to this function.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>named list with server and ui function</p>
+<p>named list with <code>server</code> and <code>ui</code> function</p>
     </div>
 
     <div class="section level2">
@@ -246,7 +197,20 @@ is then preferred to this function.</p></dd>
 <span class="r-in"><span>      filters <span class="op">=</span> <span class="st">"new_iris"</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  title <span class="op">=</span> <span class="st">"App title"</span></span></span>
+<span class="r-in"><span>  title <span class="op">=</span> <span class="st">"App title"</span>,</span></span>
+<span class="r-in"><span>  filter <span class="op">=</span> <span class="fu"><a href="teal_slices.html">teal_slices</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu">teal_slice</span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"new_iris"</span>, varname <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu">teal_slice</span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"new_iris"</span>, varname <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu">teal_slice</span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"new_mtcars"</span>, varname <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    exclude_varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>new_iris <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Width"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    mapping <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      `example teal module` <span class="op">=</span> <span class="st">"new_iris Species"</span>,</span></span>
+<span class="r-in"><span>      `Iris Sepal.Length histogram` <span class="op">=</span> <span class="st">"new_iris Species"</span>,</span></span>
+<span class="r-in"><span>      global_filters <span class="op">=</span> <span class="st">"new_mtcars cyl"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  header <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">h1</span><span class="op">(</span><span class="st">"Sample App"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"Copyright 2017 - 2023"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu">shinyApp</span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span></span>

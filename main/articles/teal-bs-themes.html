@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9006</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,10 +45,11 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Pre-processing data</a>
+    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input `ADaM` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input `MultiAssayExperiment` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
@@ -58,15 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -128,7 +120,7 @@ the <code>teal.bs_theme</code> R option, which has to be set to
 object, where you should specify the (major) Bootstrap version (default
 or one of 3, 4 or 5). Optionally you could choose a
 <strong><code>bootswatch</code> theme</strong> and <strong>customize the
-app css</strong> with functions like <code><a href="https://rstudio.github.io/bslib/reference/bs_bundle.html" class="external-link">bslib::bs_add_rules</a></code>.
+app CSS</strong> with functions like <code><a href="https://rstudio.github.io/bslib/reference/bs_bundle.html" class="external-link">bslib::bs_add_rules</a></code>.
 Please read more about custom themes in <a href="https://rstudio.github.io/bslib/articles/bslib.html" class="external-link">the
 <code>bslib</code> getting started vignette</a>. The
 <code>teal.bs_theme</code> R option has to be specified at the top of
@@ -156,7 +148,7 @@ interactive explore mode. Note that the interactive theming for
 Bootstrap 3 is not supported. The <code><a href="https://rstudio.github.io/bslib/reference/bs_theme_preview.html" class="external-link">bslib::bs_theme_preview()</a></code>
 is recommended when the end user does not have any shiny app yet. When
 you already have a shiny app and you want to test different bootstrap
-themes (and css styling) then
+themes (and <code>CSS</code> styling) then
 <code>bslib::run_with_themer(shinyApp(app$ui, app$server))</code> is
 recommended.</p>
 <p>Available bootstrap versions could be checked with
@@ -197,16 +189,17 @@ return to the default shiny bootstrap for teal apps.</p>
 </h3>
 <p>One reason the theme is not updated could be the problem that a
 browser caches the previous one, especially when we run different themes
-one after another. Please, use the “Cmd+Shift+R” (Mac) or “Ctrl+F5”
-(Windows) to hard refresh the webpage.</p>
+one after another. Please, use the <code>Cmd+Shift+R</code> (Mac) or
+<code>Ctrl+F5</code> (Windows) to hard refresh the webpage.</p>
 </div>
 <div class="section level3">
-<h3 id="custom-teal-css">Custom teal css<a class="anchor" aria-label="anchor" href="#custom-teal-css"></a>
+<h3 id="custom-teal-css">Custom teal <code>CSS</code><a class="anchor" aria-label="anchor" href="#custom-teal-css"></a>
 </h3>
 <p>The most important <code>teal</code> html tags have a proper
 id/class, so they could be directly styled. The
 <code><a href="https://rstudio.github.io/bslib/reference/bs_bundle.html" class="external-link">bslib::bs_add_rules</a></code> function could be used around the
-<code><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bslib::bs_theme</a></code> object to apply custom css rules.</p>
+<code><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bslib::bs_theme</a></code> object to apply custom <code>CSS</code>
+rules.</p>
 <pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"5"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/bs_bundle.html" class="external-link">bs_add_rules</a></span><span class="op">(</span><span class="st">"Anything understood by sass::as_sass()"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 <p>Other <code>bslib::bs_add_*</code> family functions could be used to
@@ -268,17 +261,19 @@ To start, we launch the app with
 <span><span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/run_with_themer.html" class="external-link">run_with_themer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>This gives us the following.</p>
 <p><img src="images/bs-launch.png" width="956"></p>
-<p>Note the “Theme Customizer” section on the right hand side. This was
-added by <code>bslib</code> and is how we customize our theme.</p>
+<p>Note the <code>Theme Customizer</code> section on the right hand
+side. This was added by <code>bslib</code> and is how we customize our
+theme.</p>
 <div class="section level4">
 <h4 id="set-overall-app-theme">Set overall app theme<a class="anchor" aria-label="anchor" href="#set-overall-app-theme"></a>
 </h4>
-<p>Instead of starting from scratch, we want to start with a <a href="https://bootswatch.com/" class="external-link">Bootswatch</a> theme. We like the Minty
-theme so we select this in the “Overall theme” dropdown.</p>
+<p>Instead of starting from scratch, we want to start with a <a href="https://bootswatch.com/" class="external-link"><code>Bootswatch</code></a> theme. We
+like the Minty theme so we select this in the “Overall theme”
+drop-down.</p>
 <p><img src="images/bs-theme-set.png" width="955"></p>
-<p><code>bslib</code> has updated our CSS styles to use our new theme,
-including the theme customizer. Additionally if we look at our R
-console, we will see</p>
+<p><code>bslib</code> has updated our <code>CSS</code> styles to use our
+new theme, including the <code>customizer</code> theme. Additionally if
+we look at our R console, we will see</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">####  Update your bs_theme() R code with:  #####</span></span>
 <span><span class="fu">bs_theme_update</span><span class="op">(</span><span class="va">theme</span>, bootswatch <span class="op">=</span> <span class="st">"minty"</span><span class="op">)</span></span></code></pre></div>
@@ -288,20 +283,20 @@ console, we will see</p>
 However, the printed code will still be helpful.</p>
 </div>
 <div class="section level4">
-<h4 id="customizing-bootswatch-theme">Customizing bootswatch theme<a class="anchor" aria-label="anchor" href="#customizing-bootswatch-theme"></a>
+<h4 id="customizing-bootswatch-theme">Customizing <code>bootswatch</code> theme<a class="anchor" aria-label="anchor" href="#customizing-bootswatch-theme"></a>
 </h4>
 <p>Our base theme of Minty is close to what we want but let’s make a few
-customizations. To start, we will increase the base font size. To do
-this, we choose the “Fonts” section of the theme customizer and then set
-a value in the “Base font size” input. We use 1.25 here which means all
-our fonts with be 1.25 times the default font size. If we check the R
-console, we will see <code>bslib</code> has printed
+modifications. To start, we will increase the base font size. To do
+this, we choose the “Fonts” section of the <code>customizer</code> theme
+and then set a value in the “Base font size” input. We use 1.25 here
+which means all our fonts with be 1.25 times the default font size. If
+we check the R console, we will see <code>bslib</code> has printed
 <code>bs_theme_update(theme, font_scale = 1.25, bootswatch = "minty")</code>,
 which now includes our font adjustment.</p>
 <p><img src="images/bs-font-size.png" width="960"></p>
-<p>Finally, suppose we do not want borders to be rounded. In our theme
-customizer, we can go to “Options” and then uncheck the “Rounded
-corners” box.</p>
+<p>Finally, suppose we do not want borders to be rounded. In our
+<code>customizer</code> theme, we can go to “Options” and then uncheck
+the “Rounded corners” box.</p>
 <p><img src="images/bs-corners.png" width="955"></p>
 <p>As expected, our corners are no longer rounded. If we look at our R
 console, we will now see

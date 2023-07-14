@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9006</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,10 +27,11 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Pre-processing data</a>
+    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input `ADaM` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input `MultiAssayExperiment` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
@@ -40,15 +41,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -112,6 +104,11 @@ to <code><a href="../reference/srv_teal.html">srv_teal()</a></code>.</dd>
           <code><a href="ui_teal_with_splash.html">ui_teal_with_splash()</a></code> 
         </dt>
         <dd>UI to show a splash screen in the beginning, then delegate to <code><a href="../reference/srv_teal.html">srv_teal()</a></code></dd>
+      </dl><dl><dt>
+          
+          <code><a href="teal_slices.html">teal_slices()</a></code> 
+        </dt>
+        <dd>Filter settings for teal applications</dd>
       </dl></div><div class="section level2">
       <h2 id="example-module">Example module<a class="anchor" aria-label="anchor" href="#example-module"></a></h2>
       
@@ -238,32 +235,6 @@ Any <code>reactives</code> inside <code>tdata</code> are first evaluated</dd>
           <code><a href="validate_one_row_per_id.html">validate_one_row_per_id()</a></code> 
         </dt>
         <dd>Validate that dataset has unique rows for key variables</dd>
-      </dl></div><div class="section level2">
-      <h2 id="deprecated-functions">Deprecated functions<a class="anchor" aria-label="anchor" href="#deprecated-functions"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="get_rcode.html">get_rcode()</a></code> 
-        </dt>
-        <dd>Returns R Code from a teal module</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_rcode_srv.html">get_rcode_srv()</a></code> 
-        </dt>
-        <dd>Server part of get R code module</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_rcode_ui.html">get_rcode_ui()</a></code> 
-        </dt>
-        <dd>Ui part of get R code module</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

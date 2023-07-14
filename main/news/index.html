@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9006</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,10 +27,11 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Pre-processing data</a>
+    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input `ADaM` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input `MultiAssayExperiment` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
     <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
@@ -40,15 +41,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -77,26 +69,39 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.13.0.9005" id="teal-01309005">teal 0.13.0.9005<a class="anchor" aria-label="anchor" href="#teal-01309005"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.13.0.9006" id="teal-01309006">teal 0.13.0.9006<a class="anchor" aria-label="anchor" href="#teal-01309006"></a></h2>
 <div class="section level4">
-<h4 id="miscellaneous-0-13-0-9005">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-13-0-9005"></a></h4>
-<ul><li>Removed <code>scda</code> package dependency from examples. # teal 0.13.0</li>
+<h4 id="new-features-0-13-0-9006">New features<a class="anchor" aria-label="anchor" href="#new-features-0-13-0-9006"></a></h4>
+<ul><li>Enabled module specific filter panel. See <code>module_specific</code> in <code><a href="../reference/teal_slices.html">teal::teal_slices</a></code> documentation.</li>
+<li>Enabled <code>reporter_previewer_module</code> to customize default values through <code>srv_args</code>.</li>
+<li>Enabled passing own <code>reporter_previewer_module</code> in a list of modules to override default one.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="breaking-changes-0-13-0-9005">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-13-0-9005"></a></h4>
+<h4 id="breaking-changes-0-13-0-9006">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-13-0-9006"></a></h4>
+<ul><li>Specifying <code>filter</code> argument in <code><a href="../reference/init.html">teal::init</a></code> requires <code>teal_slices</code> object now. Details in documentation of <code><a href="../reference/init.html">teal::init</a></code>.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="miscellaneous-0-13-0-9006">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-13-0-9006"></a></h4>
+<ul><li>Removed <code>scda</code> package dependency from examples.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.13.0" id="teal-0130">teal 0.13.0<a class="anchor" aria-label="anchor" href="#teal-0130"></a></h2>
+<div class="section level4">
+<h4 id="breaking-changes-0-13-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-13-0"></a></h4>
 <ul><li>The use of <code>datasets</code> argument in <code>modules</code> has been deprecated and will be removed in a future release. Please use <code>data</code> argument instead. <code>data</code> is of type <code>tdata</code>; see “Creating custom modules” vignettes and function documentation of <code><a href="../reference/tdata.html">teal::new_tdata</a></code> for further details.</li>
 <li>Due to deprecation of <code>chunks</code> in <code>teal.code</code>, the <code>teal</code> framework now uses their replacement (<code>qenv</code>) instead. The documentation in <code>teal</code> has been updated to reflect this and custom modules written with <code>chunks</code> should be updated to use <code>qenv</code>.</li>
 <li>Due to deprecation of <code>chunks</code> in <code>teal.code</code>, <code>get_rcode</code>, <code>get_rcode_srv</code>, and <code>get_rcode_ui</code> have been removed.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="new-features-0-13-0-9005">New features<a class="anchor" aria-label="anchor" href="#new-features-0-13-0-9005"></a></h4>
+<h4 id="new-features-0-13-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-13-0"></a></h4>
 <ul><li>Added the <code>validate_inputs</code> function that transfers input validation messages to app output.</li>
 <li>
 <code>modules</code> argument of <code>init</code> accepts <code>teal_module</code> type of object. There is no need to wrap up a single module in <code><a href="../reference/modules.html">modules()</a></code> or <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</li>
 <li>Updated <code>module_nested_tabs</code> so that only active modules are calculated in a teal app.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="miscellaneous-0-13-0-9005-1">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-13-0-9005-1"></a></h4>
+<h4 id="miscellaneous-0-13-0">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-13-0"></a></h4>
 <ul><li>Updated examples to use <code>scda.2022</code>.</li>
 <li>Added R session information into a link in the footer of <code>teal</code> applications.</li>
 <li>Added data hashing step using <code>rlang</code> instead of <code>digest</code> package to calculate the hash (which has been moved from <code>teal.data</code> and <code>teal.slice</code>). There is now an explicit hashing check in the reproducible code output.</li>
@@ -306,7 +311,7 @@
 <ul><li>Added informational stop message when using <code>mutate_data</code> with <code>RelationalDataConnector</code>.</li>
 <li>Modified <code>as_cdisc</code> to behave similarly to <code>cdisc_dataset</code> when called on a <code>Dataset</code> object.</li>
 <li>Changed the displayed format of the data name and the column name in <code>data_extract_spec</code> UI elements. Both are now compressed to <code>&lt;data name&gt;.&lt;column name&gt;</code> if they don’t change during runtime of the app.</li>
-<li>Added <code>ADSAFTTE</code> to the list of recognized ADaM dataset names.</li>
+<li>Added <code>ADSAFTTE</code> to the list of recognized <code>ADaM</code> dataset names.</li>
 <li>Added another example to <code>data_extract_spec</code>’s doc string showcasing app users can choose a variable used for filtering in the encoding panel.</li>
 <li>Added CSS styling to tool tips in teal modules.</li>
 </ul></div>
@@ -321,9 +326,9 @@
 <div class="section level4">
 <h4 id="enhancements-0-9-4">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-9-4"></a></h4>
 <ul><li>Released <code>snowflake</code> connection and connectors.</li>
-<li>Changed ordering of datasets to be more intuitive (topologically first for CDISC datasets only and then according to input datasets order).</li>
+<li>Changed ordering of datasets to be more intuitive (topologically first for <code>CDISC</code> datasets only and then according to input datasets order).</li>
 <li>When closing a teal app (ending a user shiny session), all <code>DataConnection</code>s will now try to close their connections.</li>
-<li>Added ADHY keys to configuration file.</li>
+<li>Added <code>ADHY</code> keys to configuration file.</li>
 <li>Extended the <code>filter_spec</code> function: the parameter <code>choices</code> is no longer mandatory (the function will take all possible choices by default) and the <code>vars</code> parameter additionally accepts the <code>choices_selected</code> and allows to change the variables for filtering using the UI elements in the encoding panel.</li>
 </ul></div>
 <div class="section level4">
@@ -361,7 +366,7 @@
 <div class="section level4">
 <h4 id="new-features-0-9-2">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-2"></a></h4>
 <ul><li>Added <code>python_dataset_connector</code> to create delayed data objects from python scripts or directly from python code.</li>
-<li>NOTE: <code>python_dataset_connector</code> is not yet ready to be deployed on RSConnect because it does not contain <code>numpy</code> and <code>pandas</code>, which are <code>Python</code> libraries used in <code>python_dataset_connector</code>.</li>
+<li>NOTE: <code>python_dataset_connector</code> is not yet ready to be deployed on <code>RSConnect</code> because it does not contain <code>numpy</code> and <code>pandas</code>, which are <code>Python</code> libraries used in <code>python_dataset_connector</code>.</li>
 <li>Added support for filtering on <code>Date</code> and <code>Datetime</code> variables in the Filter Panel.</li>
 <li>Added buttons for <code>date</code> and <code>datetime</code> filter widgets to reset the value to the original.</li>
 <li>Added new function <code>check_key_duplicates</code>, which creates a short summary about rows with duplicated primary key (row numbers and the number of duplicates)</li>
@@ -372,7 +377,7 @@
 <li>All variables are now displayed in <code>module_filter_panel</code>, not only those of types <code>numeric</code>, <code>logical</code>, <code>factor</code>, <code>character</code> and <code>Date</code>
 </li>
 <li>Fixed <code>mutate_data</code> to accept the whole scope of objects for <code>vars</code>.</li>
-<li>Clarified <code><a href="../reference/init.html">teal::init</a></code> function documentation to state that custom css loading code with <code><a href="https://rstudio.github.io/htmltools/reference/htmlDependency.html" class="external-link">htmltools::htmlDependency</a></code> should be included in the <code>header</code> argument rather than inside <code>ui</code> arguments of modules.</li>
+<li>Clarified <code><a href="../reference/init.html">teal::init</a></code> function documentation to state that custom <code>CSS</code> loading code with <code><a href="https://rstudio.github.io/htmltools/reference/htmlDependency.html" class="external-link">htmltools::htmlDependency</a></code> should be included in the <code>header</code> argument rather than inside <code>ui</code> arguments of modules.</li>
 <li>Enabled empty select field inside <code>data_extract_spec</code>.</li>
 <li>Added new argument <code>drop_keys</code> to <code>filter_spec</code> to decide whether to drop or keep keys columns on single filter on those columns.</li>
 <li>Added a new optional argument <code>keys</code> to <code>variable_choices</code>. <code>keys</code> specifies the names of the variables, which should have the new key icon shown next to them in the variable drop down menus in the left-hand side encoding panels instead of the icon appropriate for their original R variable type. <code>variable_choices</code> now also works with <code>RelationalDataset</code> and <code>RelationalDatasetConnector</code> objects.</li>
@@ -387,7 +392,7 @@
 <ul><li>Adds method to resolve nested lists containing delayed data objects, which can be used for <code>arm_ref_comp</code> objects.</li>
 <li>Nested tabs module now has better alignment with the filter panel on the page.</li>
 <li>Allow <code>width</code> argument in <code>optionalSelectInput</code>.</li>
-<li>Added lifecycle badges to all exported functions.</li>
+<li>Added <code>lifecycle</code> badges to all exported functions.</li>
 <li>Added new <code>code_dataset_connector</code> and <code>code_cdisc_dataset_connector</code> functions which enable the creation of new delayed data objects given a string of code.</li>
 <li>Added new functions <code>csv_dataset_connector</code> and <code>csv_cdisc_dataset_connector</code>.</li>
 <li>Updated <code>set_ui_input</code> method of <code>RawDatasetConnector</code> and <code>NamedDatasetConnector</code> to handle user defined shiny inputs.</li>
@@ -396,7 +401,7 @@
 <li>Added <code>fun_cdisc_dataset_connector</code> to enable providing a custom function which returning a dataset.</li>
 <li>Removed <code>code</code> and <code>script</code> arguments from <code>as_relational</code> wrapper. This is intended to be done with <code>mutate_dataset</code> functionality.</li>
 <li>
-<code>filer</code> argument in <code>init</code> has added a validation step to ensure compatibility with the rest of the app. Variables inherited from ADSL have to be specified only for ADSL dataset.</li>
+<code>filer</code> argument in <code>init</code> has added a validation step to ensure compatibility with the rest of the app. Variables inherited from <code>ADSL</code> have to be specified only for <code>ADSL</code> dataset.</li>
 <li>Fixes the issue with connection close code not being present in <code>get_code</code> results.</li>
 <li>Fixes the issue of occasional incorrect ordering of bar charts on the filter panel.</li>
 <li>More informative error displayed when <code>pull_fun</code> of <code>DataConnection</code> produces an error.</li>
@@ -430,7 +435,7 @@
 <code>FilteredData</code> is now fully reactive. Now filtered data is lazy evaluated as per need. This further opens the door to bookmarking <code>teal</code> apps (bookmarking currently works for the right filtering panel, but we will make this feature more sophisticated in a future release, each module must be reviewed and adapted if it contains <code>reactiveValues</code>).</li>
 <li>Datasets and materialized connectors are provided to <code>FilteredData</code> by <code>set_datasets_data</code> function located in <code>init_datasets.R</code> file.</li>
 <li>Renamed <code><a href="https://rdrr.io/pkg/teal.data/man/get_dataset.html" class="external-link">get_dataset()</a></code> method to <code>get_data()</code>.</li>
-<li>Renamed <code>get_filter_call()</code> method to <code>get_filter_expr()</code>; returns an expression rather than a list.</li>
+<li>Renamed <code>get_filter_call()</code> method to <code><a href="https://rdrr.io/pkg/teal.slice/man/get_filter_expr.html" class="external-link">get_filter_expr()</a></code>; returns an expression rather than a list.</li>
 <li>Removed argument <code>isolate</code> from <code>get_data()</code> method and similar methods. You must <code>isolate</code> it yourself as needed. If you want to temporarily deactivate Shiny errors due to missing errors, you can set <code>options(shiny.suppressMissingContextError = TRUE)</code>. In general, avoid <code>isolate</code> as this breaks reactivity.</li>
 <li>We added a development module to add several filters at once, e.g. safety filters. This is to be evaluated before it is converted into a proper module and made available to end-users.</li>
 </ul></div>
@@ -441,7 +446,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.4" id="teal-084">teal 0.8.4<a class="anchor" aria-label="anchor" href="#teal-084"></a></h2>
-<ul><li>Progress bar for ui creation in delayed loading module.</li>
+<ul><li>Progress bar for UI creation in delayed loading module.</li>
 <li>Change output of <code>keys</code> function to <code>keys</code> object.</li>
 <li>Delayed version of <code>choices_selected</code>.</li>
 <li>Fix an error in <code>choices_selected</code> when <code>selected</code> is not in <code>choices</code>.</li>
@@ -489,7 +494,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.5" id="teal-005">teal 0.0.5<a class="anchor" aria-label="anchor" href="#teal-005"></a></h2>
-<ul><li>Added limit to data_table with scrolling, preventing overlap of ui elements.</li>
+<ul><li>Added limit to data_table with scrolling, preventing overlap of UI elements.</li>
 <li>Boolean filtering.</li>
 </ul></div>
     <div class="section level2">
@@ -526,7 +531,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="teal-002">teal 0.0.2<a class="anchor" aria-label="anchor" href="#teal-002"></a></h2>
 <ul><li>New ‘01_getting_started’ vignette.</li>
-<li>Datanames in <code>FilteredData</code> are now case sensitive.</li>
+<li>
+<code>Datanames</code> in <code>FilteredData</code> are now case sensitive.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.1" id="teal-001">teal 0.0.1<a class="anchor" aria-label="anchor" href="#teal-001"></a></h2>
