@@ -1,7 +1,7 @@
 #' An example `teal` module
 #'
 #' @description `r lifecycle::badge("experimental")`
-#' @param label `character`, the label of the module
+#' @inheritParams module
 #' @return A `teal` module which can be included in the `modules` argument to [teal::init()].
 #' @examples
 #' app <- init(
@@ -15,7 +15,7 @@
 #'   shinyApp(app$ui, app$server)
 #' }
 #' @export
-example_module <- function(label = "example teal module") {
+example_module <- function(label = "example teal module", filters = "all") {
   checkmate::assert_string(label)
   module(
     label,
@@ -32,6 +32,6 @@ example_module <- function(label = "example teal module") {
         encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
-    filters = "all"
+    filters = filters
   )
 }

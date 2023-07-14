@@ -30,7 +30,7 @@ details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}}
 number which helps to determine depth of the modules nesting.}
 
 \item{is_module_specific}{(\code{logical(1)})\cr
-flag determinining if the filter panel is global or module-specific. When \code{module_specific}
+flag determining if the filter panel is global or module-specific. When \code{module_specific}
 is \code{TRUE} then a filter panel is called inside of each module tab.}
 }
 \value{

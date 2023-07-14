@@ -112,36 +112,17 @@ append_module <- function(modules, module) {
 #' @keywords internal
 is_arg_used <- function(modules, arg) {
   checkmate::assert_string(arg)
-  UseMethod("is_arg_used", modules)
+  if (inherits(modules, "teal_modules")) {
+    any(unlist(lapply(modules$children, is_arg_used, arg)))
+  } else if (inherits(modules, "teal_module")) {
+    is_arg_used(modules$server, arg) || is_arg_used(modules$ui, arg)
+  } else if (is.function(modules)) {
+    isTRUE(arg %in% names(formals(modules)))
+  } else {
+    stop("is_arg_used function not implemented for this object")
+  }
 }
 
-#' @rdname is_arg_used
-#' @keywords internal
-#' @export
-is_arg_used.default <- function(modules, arg) {
-  stop("is_arg_used function not implemented for this object")
-}
-
-#' @rdname is_arg_used
-#' @export
-#' @keywords internal
-is_arg_used.teal_modules <- function(modules, arg) {
-  any(unlist(lapply(modules$children, is_arg_used, arg)))
-}
-
-#' @rdname is_arg_used
-#' @export
-#' @keywords internal
-is_arg_used.teal_module <- function(modules, arg) {
-  is_arg_used(modules$server, arg) || is_arg_used(modules$ui, arg)
-}
-
-#' @rdname is_arg_used
-#' @export
-#' @keywords internal
-is_arg_used.function <- function(modules, arg) {
-  isTRUE(arg %in% names(formals(modules)))
-}
 
 #' Creates a `teal_module` object.
 #'
