@@ -1,18 +1,7 @@
-#' @rdname module_filter_manager_modal
-filter_manager_modal_ui <- function(id) {
-  ns <- NS(id)
-  tags$button(
-    id = ns("show"),
-    class = "btn action-button filter_manager_button",
-    title = "Show filters manager modal",
-    icon("gear")
-  )
-}
-
 #' Filter manager modal
 #'
 #' Filter manager modal
-#' @rdname module_filter_manager_modal
+#' @name module_filter_manager_modal
 #' @inheritParams filter_manager_srv
 #' @examples
 #' fd1 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
@@ -49,7 +38,22 @@ filter_manager_modal_ui <- function(id) {
 #' if (interactive()) {
 #'   runApp(app)
 #' }
+#' @keywords internal
 #'
+NULL
+
+#' @rdname module_filter_manager_modal
+filter_manager_modal_ui <- function(id) {
+  ns <- NS(id)
+  tags$button(
+    id = ns("show"),
+    class = "btn action-button filter_manager_button",
+    title = "Show filters manager modal",
+    icon("gear")
+  )
+}
+
+#' @rdname module_filter_manager_modal
 filter_manager_modal_srv <- function(id, filtered_data_list, filter) {
   moduleServer(id, function(input, output, session) {
     observeEvent(input$show, {

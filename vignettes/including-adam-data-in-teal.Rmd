@@ -4,7 +4,7 @@ author: "NEST CoreDev"
 date: "2022-04-20"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Input ADaM data in a teal application}
+  %\VignetteIndexEntry{Input `ADaM` data in a teal application}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
