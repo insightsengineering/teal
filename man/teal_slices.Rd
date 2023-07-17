@@ -9,7 +9,7 @@ teal_slices(
   exclude_varnames = NULL,
   include_varnames = NULL,
   count_type = NULL,
-  module_add = TRUE,
+  allow_add = TRUE,
   mapping = list(),
   module_specific = length(mapping) > 0
 )
@@ -31,7 +31,7 @@ and unfiltered dataset. Note, that issues were reported when using this option w
 Please make sure that adding new filters doesn't fail on target platform before deploying for production.
 }}
 
-\item{module_add}{(\code{logical(1)}) logical flag specifying whether the user will be able to add new filters}
+\item{allow_add}{(\code{logical(1)}) logical flag specifying whether the user will be able to add new filters}
 
 \item{mapping}{(\verb{named list})\cr
 Each element of the list should contain character vector of \code{teal_slices} \code{id} (see
