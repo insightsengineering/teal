@@ -28,4 +28,3 @@
 as.teal_slices <- getFromNamespace("as.teal_slices", "teal.slice") # nolint
 # This one is here because setdiff_teal_slice should not be exported from teal.slice.
 setdiff_teal_slices <- getFromNamespace("setdiff_teal_slices", "teal.slice")
-

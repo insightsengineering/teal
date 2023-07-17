@@ -19,16 +19,21 @@ To learn mode about the package either read the project website at
 Authors:
 \itemize{
   \item Pawel Rucki \email{pawel.rucki@roche.com}
-  \item Nikolas Burkoff \email{nikolas.burkoff@roche.com}
-  \item Mahmoud Hallal \email{mahmoud.hallal@roche.com}
-  \item Maciej Nasinski \email{maciej.nasinski@contractors.roche.com}
-  \item Konrad Pagacz \email{konrad.pagacz@contractors.roche.com}
-  \item Junlue Zhao \email{zhaoj88@gene.com}
+  \item Aleksander Chlebowski \email{aleksander.chlebowski@contractors.roche.com}
+  \item Kartikeya Kirar \email{kartikeya.kirar@businesspartner.roche.com}
+  \item Marcin Kosinski \email{marcin.kosinski.mk1@roche.com}
   \item Adrian Waddell \email{adrian.waddell@gene.com}
+  \item Nikolas Burkoff
+  \item Mahmoud Hallal
+  \item Maciej Nasinski
+  \item Konrad Pagacz
+  \item Junlue Zhao
 }
 
 Other contributors:
 \itemize{
+  \item Chendi Liao \email{chendi.liao@roche.com} [reviewer]
+  \item Dony Unardi \email{unardid@gene.com} [reviewer]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item Maximilian Mordig [contributor]
 }

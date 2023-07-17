@@ -1,17 +1,22 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.13.0.9006
-Date: 2023-07-07
+Version: 0.13.0.9007
+Date: 2023-07-14
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
     person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
-    person("Nikolas", "Burkoff", , "nikolas.burkoff@roche.com", role = "aut"),
-    person("Mahmoud", "Hallal", , "mahmoud.hallal@roche.com", role = "aut"),
-    person("Maciej", "Nasinski", , "maciej.nasinski@contractors.roche.com", role = "aut"),
-    person("Konrad", "Pagacz", , "konrad.pagacz@contractors.roche.com", role = "aut"),
-    person("Junlue", "Zhao", , "zhaoj88@gene.com", role = "aut"),
+    person("Aleksander", "Chlebowski", , "aleksander.chlebowski@contractors.roche.com", role = "aut"),
+    person("Kartikeya", "Kirar", , "kartikeya.kirar@businesspartner.roche.com", role = "aut"),
+    person("Marcin", "Kosinski", , "marcin.kosinski.mk1@roche.com", role = "aut"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
+    person("Chendi", "Liao", , "chendi.liao@roche.com", role = "rev"),
+    person("Dony", "Unardi", , "unardid@gene.com", role = "rev"),
+    person("Nikolas", "Burkoff", role = "aut"),
+    person("Mahmoud", "Hallal", role = "aut"),
+    person("Maciej", "Nasinski", role = "aut"),
+    person("Konrad", "Pagacz", role = "aut"),
+    person("Junlue", "Zhao", role = "aut"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("Maximilian", "Mordig", role = "ctb")
   )

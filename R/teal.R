@@ -17,3 +17,7 @@ magrittr::`%>%`
 #' @import shiny teal.data teal.slice teal.transform
 #' @importFrom stats setNames
 NULL
+
+# Fix R CMD check notes
+#' @importFrom lifecycle deprecate_soft
+lifecycle::deprecate_soft
