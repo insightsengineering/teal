@@ -25,10 +25,9 @@ specify which variables are allowed to be filtered; see \code{Details}}
 \item{count_type}{(\code{character(1)}) string specifying how observations are tallied by these filter states.
 Possible options:
 \itemize{
-\item \code{"none"} (default) to have counts of single \code{FilterState} to show unfiltered number only.
 \item \code{"all"} to have counts of single \code{FilterState} to show number of observation in filtered
-and unfiltered dataset. Note, that issues were reported when using this option with \code{MultiAssayExperiment}.
-Please make sure that adding new filters doesn't fail on target platform before deploying for production.
+and unfiltered dataset.
+\item \code{"none"} to have counts of single \code{FilterState} to show unfiltered number only.
 }}
 
 \item{module_add}{(\code{logical(1)}) logical flag specifying whether the user will be able to add new filters}

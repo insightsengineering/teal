@@ -13,22 +13,27 @@ filter_manager_srv(id, filtered_data_list, filter)
 \item{id}{(\code{character(1)})\cr
 \code{shiny} module id.}
 
-\item{filtered_data_list}{(\code{list} of \code{FilteredData})\cr
-Names of the list should be the same as \code{teal_module$label}.}
+\item{filtered_data_list}{(\verb{named list})\cr
+A list, possibly nested, of \code{FilteredData} objects.
+Each \code{FilteredData} will be served to one module in the \code{teal} application.
+The structure of the list must reflect the nesting of modules in tabs
+and names of the list must be the same as labels of their respective modules.}
 
 \item{filter}{(\code{teal_slices})\cr
 Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
 Old way of specifying filters through a list is deprecated and will be removed in the
 next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
+\value{
+A list of \code{reactive}s, each holding a \code{teal_slices}, as returned by \code{filter_manager_module_srv}.
+}
 \description{
-Manage multiple \code{FilteredData} objects
+Oversee filter states in the whole application.
 }
 \details{
 This module observes the changes of the filters in each \code{FilteredData} object
-and keeps track of all filters used. Map of the filters is kept in so called
-\code{slices_map} object where each \code{FilteredData} is linked with its active filters.
-This map is represented in the UI as a matrix where rows are ids of the filters and
-columns are names of the \code{filtered_data_list} (named after teal modules).
+and keeps track of all filters used. A mapping of filters to modules
+is kept in the \code{mapping_matrix} object (which is actually a \code{data.frame})
+that tracks which filters (rows) are active in which modules (columns).
 }
 \keyword{internal}
