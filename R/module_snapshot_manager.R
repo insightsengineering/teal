@@ -1,4 +1,3 @@
-
 #' Filter state snapshot management.
 #'
 #' Capture and restore snapshots of the global (app) filter state.
@@ -87,7 +86,6 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
   checkmate::assert_list(filtered_data_list, types = "FilteredData", any.missing = FALSE, names = "named")
 
   moduleServer(id, function(input, output, session) {
-
     ns <- session$ns
 
     # Store global filter states.
@@ -206,7 +204,6 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         )
       })
     })
-
   })
 }
 
