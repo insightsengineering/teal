@@ -1,4 +1,3 @@
-
 testthat::test_that("snapshot manager holds initial state in history", {
   filter <- teal_slices(
     teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length"),
