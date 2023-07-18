@@ -17,6 +17,6 @@ columns represent modules and row represent \code{teal_slice}s}
 Transform a mapping matrix, i.e. a data frame that maps each filter state to each module,
 to a list specification like the one used in the \code{mapping} attribute of \code{teal_slices}.
 Global filters are gathered in one list element.
-If a module has no active filters but the global ones, it will not be mentnioned in the output.
+If a module has no active filters but the global ones, it will not be mentioned in the output.
 }
 \keyword{internal}
