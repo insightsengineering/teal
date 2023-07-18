@@ -157,53 +157,119 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       ### End restore procedure. ###
     })
 
-    # Create table to display list of snapshots and their actions.
-    output$snapshot_list <- renderUI({
-      lapply(names(snapshot_history())[-1L], function(s) {
+
+    observers <- reactiveValues()
+    handlers <- reactiveValues()
+    divs <- reactiveValues()
+
+    observeEvent(snapshot_history(), {
+      # lapply(names(snapshot_history())[-1L], function(s) {
+      lapply(names(snapshot_history()), function(s) {
         id_pickme <- sprintf("pickme_%s", make.names(s))
         id_saveme <- sprintf("saveme_%s", make.names(s))
+        id_rowme <- sprintf("rowme_%s", make.names(s))
 
-        # Restore snapshot.
-        observeEvent(input[[id_pickme]], {
-          ### Begin restore procedure. ###
-          snapshot <- snapshot_history()[[s]]
-          snapshot_state <- reassemble_slices(snapshot)
-          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
-          mapply(
-            function(filtered_data, filters) {
-              filtered_data$clear_filter_states(force = TRUE)
-              slices <- Filter(function(x) x$id %in% filters, snapshot_state)
-              filtered_data$set_filter_state(slices)
-            },
-            filtered_data = filtered_data_list,
-            filters = mapping_unfolded
-          )
-          slices_global(snapshot_state)
-          removeModal()
-          ### End restore procedure. ###
-        })
-
-        # Save snapshot.
-        output[[id_saveme]] <- downloadHandler(
-          filename = function() {
-            sprintf("teal_snapshot_%s_%s.json", s, Sys.Date())
-          },
-          content = function(file) {
+        if (!is.element(id_pickme, names(observers))) {
+          # Restore snapshot.
+          observers[[id_pickme]] <- observeEvent(input[[id_pickme]], {
+            ### Begin restore procedure. ###
             snapshot <- snapshot_history()[[s]]
             snapshot_state <- reassemble_slices(snapshot)
-            teal.slice::slices_store(tss = snapshot_state, file = file)
-          }
-        )
+            mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+            mapply(
+              function(filtered_data, filters) {
+                filtered_data$clear_filter_states(force = TRUE)
+                slices <- Filter(function(x) x$id %in% filters, snapshot_state)
+                filtered_data$set_filter_state(slices)
+              },
+              filtered_data = filtered_data_list,
+              filters = mapping_unfolded
+            )
+            slices_global(snapshot_state)
+            removeModal()
+            ### End restore procedure. ###
+          })
+        }
+        if (!is.element(id_saveme, names(handlers))) {
+          # Save snapshot.
+          output[[id_saveme]] <- downloadHandler(
+            filename = function() {
+              sprintf("teal_snapshot_%s_%s.json", s, Sys.Date())
+            },
+            content = function(file) {
+              snapshot <- snapshot_history()[[s]]
+              snapshot_state <- reassemble_slices(snapshot)
+              teal.slice::slices_store(tss = snapshot_state, file = file)
+            }
+          )
+          handlers[[id_saveme]] <- id_saveme
+        }
+        if (!is.element(id_rowme, names(divs))) {
+          # Create a row for the snapshot table.
+          divs[[id_rowme]] <- div(
+            class = "snapshot_table_row",
+            span(h5(s)),
+            actionLink(inputId = ns(id_pickme), label = icon("circle-check"), title = "select"),
+            downloadLink(outputId = ns(id_saveme), label = icon("save"), title = "save to file")
+          )
+        }
 
-        # Create a row for the snapshot table.
-        div(
-          class = "snapshot_table_row",
-          span(h5(s)),
-          actionLink(inputId = ns(id_pickme), label = icon("circle-check"), title = "select"),
-          downloadLink(outputId = ns(id_saveme), label = icon("save"), title = "save to file")
-        )
+
       })
     })
+
+    output$snapshot_list <- renderUI({
+      lapply(rev(reactiveValuesToList(divs)), function(d) d)
+    })
+
+
+    # # Create table to display list of snapshots and their actions.
+    # output$snapshot_list <- renderUI({
+    #   lapply(names(snapshot_history())[-1L], function(s) {
+    #     id_pickme <- sprintf("pickme_%s", make.names(s))
+    #     id_saveme <- sprintf("saveme_%s", make.names(s))
+    #
+    #     # Restore snapshot.
+    #     observeEvent(input[[id_pickme]], {
+    #       ### Begin restore procedure. ###
+    #       snapshot <- snapshot_history()[[s]]
+    #       snapshot_state <- reassemble_slices(snapshot)
+    #       mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+    #       mapply(
+    #         function(filtered_data, filters) {
+    #           filtered_data$clear_filter_states(force = TRUE)
+    #           slices <- Filter(function(x) x$id %in% filters, snapshot_state)
+    #           filtered_data$set_filter_state(slices)
+    #         },
+    #         filtered_data = filtered_data_list,
+    #         filters = mapping_unfolded
+    #       )
+    #       slices_global(snapshot_state)
+    #       removeModal()
+    #       ### End restore procedure. ###
+    #     })
+    #
+    #     # Save snapshot.
+    #     output[[id_saveme]] <- downloadHandler(
+    #       filename = function() {
+    #         sprintf("teal_snapshot_%s_%s.json", s, Sys.Date())
+    #       },
+    #       content = function(file) {
+    #         snapshot <- snapshot_history()[[s]]
+    #         snapshot_state <- reassemble_slices(snapshot)
+    #         teal.slice::slices_store(tss = snapshot_state, file = file)
+    #       }
+    #     )
+    #
+    #     # Create a row for the snapshot table.
+    #     div(
+    #       class = "snapshot_table_row",
+    #       span(h5(s)),
+    #       actionLink(inputId = ns(id_pickme), label = icon("circle-check"), title = "select"),
+    #       downloadLink(outputId = ns(id_saveme), label = icon("save"), title = "save to file")
+    #     )
+    #   })
+    # })
   })
 }
 
