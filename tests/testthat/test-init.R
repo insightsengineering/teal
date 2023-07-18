@@ -163,11 +163,7 @@ testthat::test_that("init filter fails when filters don't refer to available dat
   testthat::expect_error(
     init(
       data = list(iris = iris),
-<<<<<<< HEAD
-      modules = teal:::get_dummy_modules(),
-=======
       modules = teal:::example_modules(),
->>>>>>> main
       filter = teal.slice::teal_slices(
         teal.slice::teal_slice(dataname = "inexisting", varname = "varname")
       )
@@ -180,11 +176,7 @@ testthat::test_that("init filter fails when mapping don't refer to available mod
   testthat::expect_error(
     init(
       data = list(iris = iris),
-<<<<<<< HEAD
-      modules = teal:::get_dummy_modules(),
-=======
       modules = teal:::example_modules(),
->>>>>>> main
       filter = teal_slices(
         teal.slice::teal_slice(dataname = "iris", varname = "varname", id = "iris varname"),
         mapping = list(
@@ -200,11 +192,7 @@ testthat::test_that("init filter fails when mapping don't refer to available fil
   testthat::expect_error(
     init(
       data = list(iris = iris),
-<<<<<<< HEAD
-      modules = teal:::get_dummy_modules(),
-=======
       modules = teal:::example_modules(),
->>>>>>> main
       filter = teal_slices(
         teal.slice::teal_slice(dataname = "iris", varname = "varname", id = "iris varname"),
         mapping = list(
