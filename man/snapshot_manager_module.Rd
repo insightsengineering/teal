@@ -75,3 +75,4 @@ and then saved to file with \code{\link[teal.slice:slices_store]{teal.slice::sli
 \author{
 Aleksander Chlebowski
 }
+\keyword{internal}
