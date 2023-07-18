@@ -323,7 +323,7 @@ unfold_mapping <- function(mapping, module_names) {
 #' Transform a mapping matrix, i.e. a data frame that maps each filter state to each module,
 #' to a list specification like the one used in the `mapping` attribute of `teal_slices`.
 #' Global filters are gathered in one list element.
-#' If a module has no active filters but the global ones, it will not be mentnioned in the output.
+#' If a module has no active filters but the global ones, it will not be mentioned in the output.
 #'
 #' @param mapping_matrix (`reactive`) returning a `data.frame` of logical vectors;
 #'                       columns represent modules and row represent `teal_slice`s
