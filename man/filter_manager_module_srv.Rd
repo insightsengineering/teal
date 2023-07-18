@@ -4,7 +4,7 @@
 \alias{filter_manager_module_srv}
 \title{Module specific filter manager}
 \usage{
-filter_manager_module_srv(id, module_fd, slices_map_module, slices_global)
+filter_manager_module_srv(id, module_fd, slices_global)
 }
 \arguments{
 \item{id}{(\code{character(1)})\cr
@@ -13,23 +13,25 @@ filter_manager_module_srv(id, module_fd, slices_map_module, slices_global)
 \item{module_fd}{(\code{FilteredData})\cr
 object to filter data in the teal-module}
 
-\item{slices_map_module}{(\code{reactiveVal} of \code{character})\cr
-\code{id} of the \code{teal_slice} objects used in the module specific \code{FilteredData}.}
-
-\item{slices_global}{(\code{reactiveVal} or \code{teal_slices})\cr
-stores a list of all available filters which can be utilized in several ways, for example:
+\item{slices_global}{(\code{reactiveVal})\cr
+stores \code{teal_slices} with all available filters; allows the following actions:
 \itemize{
-\item to disable/enable specific filter in the module
-\item to restore filter saved settings
-\item to save current filter settings panel
+\item to disable/enable a specific filter in a module
+\item to restore saved filter settings
+\item to save current filter panel settings
 }}
 }
 \value{
-shiny module returning NULL
+A \code{reactive} expression containing the slices active in this module.
 }
 \description{
-This module compares filters between single \code{FilteredData} settings
-and global \code{teal_slices}. Updates appropriate objects \code{module_fd},
-\code{slices_map_module}, \code{slices_global} to keep them consistent.
+Track filter states in single module.
+}
+\details{
+This module tracks the state of a single \code{FilteredData} object and global \code{teal_slices}
+and updates both objects as necessary. Filter states added in different modules
+Filter states added any individual module are added to global \code{teal_slices}
+and from there become available in other modules
+by setting \code{private$available_teal_slices} in each \code{FilteredData}.
 }
 \keyword{internal}

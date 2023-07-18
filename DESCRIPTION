@@ -83,6 +83,7 @@ Collate:
     'init.R'
     'module_filter_manager.R'
     'module_nested_tabs.R'
+    'module_snapshot_manager.R'
     'module_tabs_with_filters.R'
     'module_teal.R'
     'module_teal_with_splash.R'

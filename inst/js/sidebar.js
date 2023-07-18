@@ -5,6 +5,7 @@ const hideSidebar = () => {
   $(".teal_primary_col").attr("class", "teal_primary_col col-sm-12").resize();
 };
 const showSidebar = () => {
+  debugger;
   $(".teal_primary_col").attr("class", "teal_primary_col col-sm-9").resize();
   $(".teal_secondary_col").delay(600).fadeIn(50);
 };
