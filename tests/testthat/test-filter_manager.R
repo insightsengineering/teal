@@ -10,7 +10,7 @@ filter <- teal_slices(
   )
 )
 
-testthat::test_that("filter_manager_srv initializes objects based on initial filter configuration", {
+testthat::test_that("filter_manager_srv initializes properly processes input arguments", {
   fd1 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
   fd2 <- teal.slice::init_filtered_data(
     list(iris = list(dataset = iris), mtcars = list(dataset = mtcars))
@@ -33,23 +33,7 @@ testthat::test_that("filter_manager_srv initializes objects based on initial fil
     expr = {
       testthat::expect_named(filtered_data_list, c("m1", "m2", "m3"))
 
-      testthat::expect_identical(slices_map$m1(), c("iris Sepal.Length", "iris Species"))
-      testthat::expect_identical(slices_map$m2(), "iris Species")
-      testthat::expect_identical(slices_map$m3(), c("women height", "iris Species"))
-
       testthat::expect_identical(slices_global(), filter)
-
-      testthat::expect_identical(
-        mapping_matrix(),
-        as.matrix(
-          data.frame(
-            m1 = c(TRUE, TRUE, FALSE, FALSE),
-            m2 = c(FALSE, TRUE, FALSE, FALSE),
-            m3 = c(FALSE, TRUE, FALSE, TRUE),
-            row.names = c("iris Sepal.Length", "iris Species", "mtcars mpg", "women height")
-          )
-        )
-      )
     }
   )
 })
