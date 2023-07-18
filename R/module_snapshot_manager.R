@@ -213,8 +213,6 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
             downloadLink(outputId = ns(id_saveme), label = icon("save"), title = "save to file")
           )
         }
-
-
       })
     })
 
