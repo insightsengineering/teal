@@ -127,10 +127,6 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     }
     filtered_data_list <- flatten_nested(filtered_data_list)
 
-    # # flatten nested alternative
-    # filtered_data_list <- unlist(filtered_data_list)
-    # names(filtered_data_list) <- sub("(.+)\\.(.+$)", "\\2", names(filtered_data_list))
-
     # Create mapping fo filters to modules in matrix form (presented as data.frame).
     mapping_matrix <- reactive({
       module_states <- lapply(filtered_data_list, function(x) x$get_filter_state())
