@@ -32,6 +32,15 @@ Capture and restore snapshots of the global (app) filter state.
 }
 \details{
 This module introduces snapshots: stored descriptions of the filter state of the entire application.
+Snapshots allow the user to save the current filter state of the application for later use in the session,
+as well as to save it to file in order to share it with an app developer or other users.
+
+The snapshot manager is accessed through the filter manager, with the cog icon in the top right corner.
+At the beginning of a session it presents two icons: a camera and an circular arrow.
+Clicking the camera captures a snapshot and clicking the arrow resets initial application state.
+As snapshots are added, they will show up as rows in a table and each will have a select button and a save button.
+}
+\section{Server logic}{
 
 Snapshots are basically \code{teal_slices} objects, however, since each module is served by a separate instance
 of \code{FilteredData} and these objects require shared state, \code{teal_slice} is a \code{reactiveVal} so \code{teal_slices}
@@ -46,6 +55,7 @@ the snapshot name, a select button to restore that snapshot, and a save button t
 The initial snapshot is restored by a separate "reset" button.
 It cannot be saved directly but a user is welcome to capture the initial state as a snapshot and save that.
 }
+
 \section{Snapshot mechanics}{
 
 When a snapshot is captured, the user is prompted to name it.

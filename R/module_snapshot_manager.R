@@ -3,7 +3,15 @@
 #' Capture and restore snapshots of the global (app) filter state.
 #'
 #' This module introduces snapshots: stored descriptions of the filter state of the entire application.
+#' Snapshots allow the user to save the current filter state of the application for later use in the session,
+#' as well as to save it to file in order to share it with an app developer or other users.
 #'
+#' The snapshot manager is accessed through the filter manager, with the cog icon in the top right corner.
+#' At the beginning of a session it presents two icons: a camera and an circular arrow.
+#' Clicking the camera captures a snapshot and clicking the arrow resets initial application state.
+#' As snapshots are added, they will show up as rows in a table and each will have a select button and a save button.
+#'
+#' @section Server logic:
 #' Snapshots are basically `teal_slices` objects, however, since each module is served by a separate instance
 #' of `FilteredData` and these objects require shared state, `teal_slice` is a `reactiveVal` so `teal_slices`
 #' cannot be stored as is. Therefore, `teal_slices` are reversibly converted to a list of lists representation
