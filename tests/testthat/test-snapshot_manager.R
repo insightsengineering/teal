@@ -14,18 +14,7 @@ testthat::test_that("snapshot manager holds initial state in history", {
   fd1 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
   fd2 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris), mtcars = list(dataset = mtcars)))
   fd3 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris), women = list(dataset = women)))
-  filtered_data_list <- list(
-    m1 = fd1,
-    tab = list(m2 = fd2, m3 = fd3)
-  )
-  flatten_nested <- function(x, name = NULL) {
-    if (inherits(x, "FilteredData")) {
-      setNames(list(x), name)
-    } else {
-      unlist(lapply(names(x), function(name) flatten_nested(x[[name]], name)))
-    }
-  }
-  filtered_data_list <- flatten_nested(filtered_data_list)
+  filtered_data_list <- list(m1 = fd1, m2 = fd2, m3 = fd3)
 
   slices_global <- reactiveVal(shiny::isolate(filter))
 
