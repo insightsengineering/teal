@@ -28,3 +28,5 @@
 as.teal_slices <- getFromNamespace("as.teal_slices", "teal.slice") # nolint
 # This one is here because setdiff_teal_slice should not be exported from teal.slice.
 setdiff_teal_slices <- getFromNamespace("setdiff_teal_slices", "teal.slice")
+# all *Block objects are private in teal.reporter
+RcodeBlock <- getFromNamespace("RcodeBlock", "teal.reporter") # nolint
