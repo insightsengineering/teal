@@ -136,9 +136,16 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       as.data.frame(mapping_smooth, row.names = all_names, check.names = FALSE)
     })
 
-    output$slices_table <- renderTable(rownames = TRUE, {
-      mapping_matrix()
-    })
+    output$slices_table <- renderTable(
+      expr = {
+        # Display logical values as UTF characters.
+        mm <- mapping_matrix()
+        mm[] <- lapply(mm, ifelse, yes = intToUtf8(9989), no = intToUtf8(10060))
+        mm
+      },
+      align = paste(c("l", rep("c", ncol(mapping_matrix()))), collapse = ""),
+      rownames = TRUE
+    )
 
     # Create list of module calls.
     modules_out <- lapply(names(filtered_data_list), function(module_name) {
