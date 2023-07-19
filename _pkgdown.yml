@@ -49,9 +49,10 @@ reference:
     desc: A simple example teal module
     contents:
       - example_module
-  - title: Report previewer module
+  - title: Creating reports
     contents:
       - reporter_previewer_module
+      - TealReportCard
   - title: Functions for module developers
     contents:
       - tdata

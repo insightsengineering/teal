@@ -26,3 +26,6 @@
 # Use non-exported function from teal.slice.
 # This is a temporary measure and will be removed two release cycles from now (now meaning 0.13.0).
 as.teal_slices <- getFromNamespace("as.teal_slices", "teal.slice") # nolint
+
+# all *Block objects are private in teal.reporter
+RcodeBlock <- getFromNamespace("RcodeBlock", "teal.reporter") # nolint
