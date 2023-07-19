@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9008</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,15 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -178,7 +169,9 @@ lines:</p>
 <h3 id="change-the-declaration-of-the-server-function">Change the declaration of the server function<a class="anchor" aria-label="anchor" href="#change-the-declaration-of-the-server-function"></a>
 </h3>
 <p>The first step is to add another argument to the server function
-declaration - <code>reporter</code>. See below:</p>
+declaration - <code>reporter</code>. This will tell <code>teal</code>
+that <code>reporter</code> is needed by this module and it will be
+included when module is called. See below:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_module_with_reporting</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"example teal module"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkString.html" class="external-link">assert_string</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span></span>
@@ -276,16 +269,16 @@ our module.</p>
 <div class="section level3">
 <h3 id="add-content-to-the-card">Add content to the card<a class="anchor" aria-label="anchor" href="#add-content-to-the-card"></a>
 </h3>
-<p>We will use the public API exposed by the
-<code><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html" class="external-link">teal.reporter::ReportCard</a></code> and
-<code><a href="https://insightsengineering.github.io/teal.reporter/reference/TealReportCard.html" class="external-link">teal.reporter::TealReportCard</a></code> classes to add content to a
-card. The <code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">teal.reporter::simple_reporter_srv</a></code> module accepts
-the <code>card_fun</code> argument that dictates the way the output from
-our custom module will look. <code>ReportCard</code> and its derivatives
-add the content sequentially according to the order of the calls to its
+<p>We will use the public API exposed by the <code>TealReportCard</code>
+class to add content to a card. The
+<code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">teal.reporter::simple_reporter_srv</a></code> module accepts the
+<code>card_fun</code> argument that dictates the way the output from our
+custom module will look. <code>ReportCard</code> and its derivatives add
+the content sequentially according to the order of the calls to its
 methods. The content itself can be explored by calling the
 <code>$get_content</code> method. If you want to learn more, check out
-<code><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html" class="external-link">teal.reporter::ReportCard</a></code>’s documentation.</p>
+<code>TealReportCard</code>’s documentation and
+<code><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html" class="external-link">teal.reporter::ReportCard</a></code>.</p>
 <p>We will add simple text to the card by modifying the
 <code>card_fun</code> argument passed to
 <code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">teal.reporter::simple_reporter_srv</a></code>. Make sure to return the
@@ -346,16 +339,17 @@ types of content are supported.</p>
 <h3 id="tealreportcard">
 <code>TealReportCard</code><a class="anchor" aria-label="anchor" href="#tealreportcard"></a>
 </h3>
-<p><code>teal.reporter</code> exports a <code>teal</code>-specific
-<code>ReportCard</code> class that has a number of convenience methods
-built into it to make working with <code>teal</code> objects like the
-filter panel or source code easier. Check out its documentation to learn
-more at <code><a href="https://insightsengineering.github.io/teal.reporter/reference/TealReportCard.html" class="external-link">teal.reporter::TealReportCard</a></code>.</p>
+<p><code>teal</code> exports <code>TealReportCard</code> which is an
+extension of <code><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html" class="external-link">teal.reporter::ReportCard</a></code> class.
+<code>TealReportCard</code> adds a number of convenience methods to make
+it work with <code>teal</code> features like the filter panel or source
+code easier. Check out its documentation to learn more at
+<code>TealReportCard</code>.</p>
 <p>To support <code>TealReportCard</code>, the function that is passed
 to <code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">teal.reporter::simple_reporter_srv</a></code> needs to define a
 default value for the card, like below:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">custom_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/reference/TealReportCard.html" class="external-link">TealReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="va">custom_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="va"><a href="../reference/TealReportCard.html">TealReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">card</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Otherwise, the API of <code>TealReportCard</code> will not be
