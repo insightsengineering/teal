@@ -104,7 +104,7 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter) {
   is_module_specific <- isTRUE(attr(filter, "module_specific"))
 
   teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets, is_module_specific = is_module_specific)
-  filter_panel_btn <- tags$li(
+  filter_panel_btns <- tags$li(
     class = "flex-grow",
     tags$button(
       class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
@@ -112,13 +112,14 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter) {
       onclick = "toggleFilterPanel();", # see sidebar.js
       title = "Toggle filter panels",
       icon("fas fa-bars")
-    )
+    ),
+    filter_manager_modal_ui(ns("filter_manager"))
   )
+  teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btns)
 
   if (!is_module_specific) {
     # need to rearrange html so that filter panel is within tabset
-    tabset_bar <- tagAppendChild(teal_ui$children[[1]], filter_manager_modal_ui(ns("filter_manager")))
-    tabset_bar <- tagAppendChild(tabset_bar, filter_panel_btn)
+    tabset_bar <- teal_ui$children[[1]]
     teal_modules <- teal_ui$children[[2]]
     filter_ui <- unlist(datasets)[[1]]$ui_filter_panel(ns("filter_panel"))
     list(
@@ -130,12 +131,6 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter) {
       )
     )
   } else {
-    filter_panel_btn <- tagAppendChild(
-      filter_panel_btn,
-      filter_manager_modal_ui(ns("filter_manager"))
-    )
-    # appending buttons to tabset bar
-    teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
     teal_ui
   }
 }
