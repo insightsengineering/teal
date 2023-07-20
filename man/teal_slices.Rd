@@ -10,8 +10,8 @@ teal_slices(
   include_varnames = NULL,
   count_type = NULL,
   allow_add = TRUE,
-  mapping = list(),
-  module_specific = length(mapping) > 0
+  module_specific = FALSE,
+  mapping
 )
 }
 \arguments{
@@ -33,12 +33,6 @@ Please make sure that adding new filters doesn't fail on target platform before 
 
 \item{allow_add}{(\code{logical(1)}) logical flag specifying whether the user will be able to add new filters}
 
-\item{mapping}{(\verb{named list})\cr
-Each element of the list should contain character vector of \code{teal_slices} \code{id} (see
-\code{\link[teal.slice:teal_slice]{teal.slice::teal_slice()}}). Filters referred in list elements will be set on the startup of a
-\code{teal} application.
-Names of the list should correspond to \code{teal_module} \code{label} set in \code{\link[=module]{module()}} function.}
-
 \item{module_specific}{(\code{logical(1)})\cr
 \itemize{
 \item \code{TRUE} when filter panel should be module-specific. All modules can have different set
@@ -46,6 +40,13 @@ of filters specified - see \code{mapping} argument.
 \item \code{FALSE} when one filter panel needed to all modules. All filters will be shared
 by all modules.
 }}
+
+\item{mapping}{(\verb{named list})\cr
+Specifies which filters will be available in which modules on app start.
+Elements should contain character vector of \code{teal_slice} \code{id}s (see \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice()}}).
+Names of the list should correspond to \code{teal_module} \code{label} set in \code{\link[=module]{module()}} function.
+If missing, all filters will be applied to all modules.
+If empty list, all filters will be available to all modules but will start inactive.}
 }
 \description{
 Filter settings for teal applications

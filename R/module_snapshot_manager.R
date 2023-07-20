@@ -286,7 +286,7 @@ unfold_mapping <- function(mapping, module_names) {
 #' Global filters are gathered in one list element.
 #' If a module has no active filters but the global ones, it will not be mentioned in the output.
 #'
-#' @param mapping_matrix (`reactive`) returning a `data.frame` of logical vectors;
+#' @param mapping_matrix (`data.frame`) of logical vectors where
 #'                       columns represent modules and row represent `teal_slice`s
 #' @return `named list` like that in the `mapping` attribute of a `teal_slices` object.
 #' @keywords internal

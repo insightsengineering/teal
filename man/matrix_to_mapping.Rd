@@ -7,7 +7,7 @@
 matrix_to_mapping(mapping_matrix)
 }
 \arguments{
-\item{mapping_matrix}{(\code{reactive}) returning a \code{data.frame} of logical vectors;
+\item{mapping_matrix}{(\code{data.frame}) of logical vectors where
 columns represent modules and row represent \code{teal_slice}s}
 }
 \value{
