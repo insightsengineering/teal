@@ -138,7 +138,9 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 
     # Create mapping fo filters to modules in matrix form (presented as data.frame).
     mapping_matrix <- reactive({
-      if (!is_module_specific) return(NULL)
+      if (!is_module_specific) {
+        return(NULL)
+      }
       module_states <- lapply(filtered_data_list, function(x) x$get_filter_state())
       mapping_ragged <- lapply(module_states, function(x) vapply(x, `[[`, character(1L), "id"))
       all_names <- vapply(slices_global(), `[[`, character(1L), "id")
