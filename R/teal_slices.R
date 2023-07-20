@@ -57,7 +57,7 @@ teal_slices <- function(...,
   shiny::isolate({
     checkmate::assert_flag(allow_add)
     checkmate::assert_flag(module_specific)
-    if (!missing(mapping)) checkmate::assert_list(mapping, names = "named")
+    if (!missing(mapping)) checkmate::assert_list(mapping, types = c("character", "NULL"), names = "named")
 
     slices <- list(...)
     all_slice_id <- vapply(slices, `[[`, character(1L), "id")
@@ -67,14 +67,12 @@ teal_slices <- function(...,
     }
     if (!module_specific) {
       mapping[setdiff(names(mapping), "global_filters")] <- NULL
-      warning("mapping of non-global filters was dropped")
     }
 
     failed_slice_id <- setdiff(unlist(mapping), all_slice_id)
     if (length(failed_slice_id)) {
       stop(sprintf(
-        "id of filters in mapping '%s' don't match any available filter.\n %s not in %s",
-        i,
+        "Filters in mapping don't match any available filter.\n %s not in %s",
         toString(failed_slice_id),
         toString(all_slice_id)
       ))
