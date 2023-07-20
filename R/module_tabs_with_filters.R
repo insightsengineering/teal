@@ -148,6 +148,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   checkmate::assert_class(reporter, "Reporter")
+  checkmate::assert_class(filter, "teal_slices")
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_tabs_with_filters initializing the module.")
 
