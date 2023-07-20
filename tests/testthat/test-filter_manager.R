@@ -65,7 +65,6 @@ testthat::test_that("filter_manager_srv initializes properly processes input arg
       testthat::expect_identical(slices_global(), filter)
     }
   )
-
 })
 
 # testthat::test_that("filter_manager_srv initializes properly processes input arguments for modular filtering", {

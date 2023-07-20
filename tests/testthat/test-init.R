@@ -158,4 +158,3 @@ testthat::test_that("init filter accepts named list or `teal_slices`", {
   testthat::expect_no_error(init(data = dataset_1, modules = mods, filter = fs))
   testthat::expect_error(init(data = dataset_1, modules = mods, filter = unclass(fs)), "Assertion failed")
 })
-

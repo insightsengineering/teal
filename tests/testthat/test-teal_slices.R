@@ -1,4 +1,3 @@
-
 testthat::test_that("teal_slices produces teal_slices object with teal-specific-attributes", {
   tss <- teal_slices()
   testthat::expect_s3_class(tss, "teal_slices")

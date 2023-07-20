@@ -512,5 +512,3 @@ testthat::test_that("append_module produces teal_modules with unique named child
   mod_names <- names(appended_mods$children)
   testthat::expect_equal(mod_names, unique(mod_names))
 })
-
-
