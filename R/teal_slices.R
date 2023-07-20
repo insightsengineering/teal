@@ -10,11 +10,13 @@
 #'  - `FALSE` when one filter panel needed to all modules. All filters will be shared
 #'    by all modules.
 #' @param mapping (`named list`)\cr
-#'  Specifies which filters will be available in which modules on app start.
+#'  Specifies which filters will be active in which modules on app start.
 #'  Elements should contain character vector of `teal_slice` `id`s (see [teal.slice::teal_slice()]).
 #'  Names of the list should correspond to `teal_module` `label` set in [module()] function.
+#'  `id`s listed under `"global_filters` will be active in all modules.
 #'  If missing, all filters will be applied to all modules.
 #'  If empty list, all filters will be available to all modules but will start inactive.
+#'  If `module_specific` is `FALSE`, only `global_filters` will be active on start.
 #'
 #' @examples
 #' filter <- teal_slices(
@@ -55,6 +57,7 @@ teal_slices <- function(...,
   shiny::isolate({
     checkmate::assert_flag(allow_add)
     checkmate::assert_flag(module_specific)
+    if (!missing(mapping)) checkmate::assert_list(mapping, names = "named")
 
     slices <- list(...)
     all_slice_id <- vapply(slices, `[[`, character(1L), "id")
@@ -62,15 +65,10 @@ teal_slices <- function(...,
     if (missing(mapping)) {
       mapping <- list(global_filters = all_slice_id)
     }
-    checkmate::assert_list(mapping, names = "named")
-
-    tss <- teal.slice::teal_slices(
-      ...,
-      exclude_varnames = exclude_varnames,
-      include_varnames = include_varnames,
-      count_type = count_type,
-      allow_add = allow_add
-    )
+    if (!module_specific) {
+      mapping[setdiff(names(mapping), "global_filters")] <- NULL
+      warning("mapping of non-global filters was dropped")
+    }
 
     failed_slice_id <- setdiff(unlist(mapping), all_slice_id)
     if (length(failed_slice_id)) {
@@ -82,6 +80,13 @@ teal_slices <- function(...,
       ))
     }
 
+    tss <- teal.slice::teal_slices(
+      ...,
+      exclude_varnames = exclude_varnames,
+      include_varnames = include_varnames,
+      count_type = count_type,
+      allow_add = allow_add
+    )
     attr(tss, "mapping") <- mapping
     attr(tss, "module_specific") <- module_specific
     class(tss) <- c("modules_teal_slices", class(tss))
