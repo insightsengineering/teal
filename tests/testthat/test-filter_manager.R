@@ -66,31 +66,3 @@ testthat::test_that("filter_manager_srv initializes properly processes input arg
     }
   )
 })
-
-# testthat::test_that("filter_manager_srv initializes properly processes input arguments for modular filtering", {
-#   fd1 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
-#   fd2 <- teal.slice::init_filtered_data(
-#     list(iris = list(dataset = iris), mtcars = list(dataset = mtcars))
-#   )
-#   fd3 <- teal.slice::init_filtered_data(
-#     list(iris = list(dataset = iris), women = list(dataset = women))
-#   )
-#   filtered_data_list <- list(
-#     m1 = fd1,
-#     tab = list(m2 = fd2, m3 = fd3)
-#   )
-#
-#   shiny::testServer(
-#     app = filter_manager_srv,
-#     args = list(
-#       id = "test",
-#       filtered_data_list = filtered_data_list,
-#       filter = filter
-#     ),
-#     expr = {
-#       testthat::expect_named(filtered_data_list, c("m1", "m2", "m3"))
-#
-#       testthat::expect_identical(slices_global(), filter)
-#     }
-#   )
-# })
