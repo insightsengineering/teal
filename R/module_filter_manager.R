@@ -110,25 +110,35 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("filter_manager_srv initializing for: { paste(names(filtered_data_list), collapse = ', ')}.")
 
+    is_module_specific <- isTRUE(attr(filter, "module_specific"))
+
     # Create global list of slices.
     # Contains all available teal_slice objects available to all modules.
     # Passed whole to instances of FilteredData used for individual modules.
     # Down there a subset that pertains to the data sets used in that module is applied and displayed.
     slices_global <- reactiveVal(filter)
 
-    # Flatten (potentially nested) list of FilteredData objects while maintaining useful names.
-    # Simply using `unlist` would result in concatenated names.
-    flatten_nested <- function(x, name = NULL) {
-      if (inherits(x, "FilteredData")) {
-        setNames(list(x), name)
+    filtered_data_list <-
+      if (!is_module_specific) {
+        # Retrieve the first FilteredData from potentially nested list.
+        # List of length one is named "global_filters" because that name is forbidden for a module label.
+        list(global_filters = filtered_data_list[[1]])
       } else {
-        unlist(lapply(names(x), function(name) flatten_nested(x[[name]], name)))
+        # Flatten potentially nested list of FilteredData objects while maintaining useful names.
+        # Simply using `unlist` would result in concatenated names.
+        flatten_nested <- function(x, name = NULL) {
+          if (inherits(x, "FilteredData")) {
+            setNames(list(x), name)
+          } else {
+            unlist(lapply(names(x), function(name) flatten_nested(x[[name]], name)))
+          }
+        }
+        flatten_nested(filtered_data_list)
       }
-    }
-    filtered_data_list <- flatten_nested(filtered_data_list)
 
     # Create mapping fo filters to modules in matrix form (presented as data.frame).
     mapping_matrix <- reactive({
+      if (!is_module_specific) return(NULL)
       module_states <- lapply(filtered_data_list, function(x) x$get_filter_state())
       mapping_ragged <- lapply(module_states, function(x) vapply(x, `[[`, character(1L), "id"))
       all_names <- vapply(slices_global(), `[[`, character(1L), "id")
@@ -136,16 +146,18 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       as.data.frame(mapping_smooth, row.names = all_names, check.names = FALSE)
     })
 
-    output$slices_table <- renderTable(
-      expr = {
-        # Display logical values as UTF characters.
-        mm <- mapping_matrix()
-        mm[] <- lapply(mm, ifelse, yes = intToUtf8(9989), no = intToUtf8(10060))
-        mm
-      },
-      align = paste(c("l", rep("c", ncol(mapping_matrix()))), collapse = ""),
-      rownames = TRUE
-    )
+    if (is_module_specific) {
+      output$slices_table <- renderTable(
+        expr = {
+          # Display logical values as UTF characters.
+          mm <- req(mapping_matrix())
+          mm[] <- lapply(mm, ifelse, yes = intToUtf8(9989), no = intToUtf8(10060))
+          mm
+        },
+        align = paste(c("l", rep("c", ncol(mapping_matrix()))), collapse = ""),
+        rownames = TRUE
+      )
+    }
 
     # Create list of module calls.
     modules_out <- lapply(names(filtered_data_list), function(module_name) {

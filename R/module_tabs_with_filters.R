@@ -117,7 +117,8 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter) {
 
   if (!is_module_specific) {
     # need to rearrange html so that filter panel is within tabset
-    tabset_bar <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
+    tabset_bar <- tagAppendChild(teal_ui$children[[1]], filter_manager_modal_ui(ns("filter_manager")))
+    tabset_bar <- tagAppendChild(tabset_bar, filter_panel_btn)
     teal_modules <- teal_ui$children[[2]]
     filter_ui <- unlist(datasets)[[1]]$ui_filter_panel(ns("filter_panel"))
     list(
@@ -156,9 +157,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
     logger::log_trace("srv_tabs_with_filters initializing the module.")
 
     is_module_specific <- isTRUE(attr(filter, "module_specific"))
-    if (is_module_specific) {
-      manager_out <- filter_manager_modal_srv("filter_manager", filtered_data_list = datasets, filter = filter)
-    }
+    manager_out <- filter_manager_modal_srv("filter_manager", filtered_data_list = datasets, filter = filter)
 
     active_module <- srv_nested_tabs(
       id = "root",

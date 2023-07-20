@@ -1,15 +1,7 @@
 /* teal sidebar css */
 
 
-.filter_manager_button {
-  font-size: 16px;
-  padding: 8px !important;
-  float: right !important;
-  background-color: transparent !important;
-}
-
-/* filter hamburger btn */
-.filter_hamburger {
+.filter_hamburger, .filter_manager_button {
   font-size: 16px;
   padding: 8px !important;
   float: right !important;
