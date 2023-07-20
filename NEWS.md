@@ -3,6 +3,7 @@
 ### New features
 
 * Enabled module specific filter panel. See `module_specific` in `teal::teal_slices` documentation.
+* Enabled capturing and resetting application filter state with snapshots. See `?snapshot`.
 * Enabled `reporter_previewer_module` to customize default values through `srv_args`.
 * Enabled passing own `reporter_previewer_module` in a list of modules to override default one.
 

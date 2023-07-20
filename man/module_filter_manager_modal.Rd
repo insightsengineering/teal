@@ -14,8 +14,11 @@ filter_manager_modal_srv(id, filtered_data_list, filter)
 \item{id}{(\code{character(1)})\cr
 \code{shiny} module id.}
 
-\item{filtered_data_list}{(\code{list} of \code{FilteredData})\cr
-Names of the list should be the same as \code{teal_module$label}.}
+\item{filtered_data_list}{(\verb{named list})\cr
+A list, possibly nested, of \code{FilteredData} objects.
+Each \code{FilteredData} will be served to one module in the \code{teal} application.
+The structure of the list must reflect the nesting of modules in tabs
+and names of the list must be the same as labels of their respective modules.}
 
 \item{filter}{(\code{teal_slices})\cr
 Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
@@ -23,7 +26,7 @@ Old way of specifying filters through a list is deprecated and will be removed i
 next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \description{
-Filter manager modal
+Opens modal containing the filter manager UI.
 }
 \examples{
 fd1 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
@@ -60,5 +63,6 @@ app <- shinyApp(
 if (interactive()) {
   runApp(app)
 }
+
 }
 \keyword{internal}

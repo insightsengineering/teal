@@ -55,7 +55,7 @@ Returns a \code{TealSlicesBlock} object.
 \describe{
 \item{\code{content}}{(\code{teal_slices}) object returned from \code{\link[=teal_slices]{teal_slices()}} function.}
 
-\item{\code{...}}{any \code{rmarkdown} R chunk parameter and it value.}
+\item{\code{style}}{(\code{character(1)}) string specifying style to apply.}
 }
 \if{html}{\out{</div>}}
 }

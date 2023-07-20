@@ -3,17 +3,20 @@
 #' Filter settings for teal applications
 #'
 #' @inheritParams teal.slice::teal_slices
-#' @param mapping (`named list`)\cr
-#'  Each element of the list should contain character vector of `teal_slices` `id` (see
-#'  [teal.slice::teal_slice()]). Filters referred in list elements will be set on the startup of a
-#'  `teal` application.
-#'  Names of the list should correspond to `teal_module` `label` set in [module()] function.
 #'
 #' @param module_specific (`logical(1)`)\cr
 #'  - `TRUE` when filter panel should be module-specific. All modules can have different set
 #'   of filters specified - see `mapping` argument.
 #'  - `FALSE` when one filter panel needed to all modules. All filters will be shared
 #'    by all modules.
+#' @param mapping (`named list`)\cr
+#'  Specifies which filters will be active in which modules on app start.
+#'  Elements should contain character vector of `teal_slice` `id`s (see [teal.slice::teal_slice()]).
+#'  Names of the list should correspond to `teal_module` `label` set in [module()] function.
+#'  `id`s listed under `"global_filters` will be active in all modules.
+#'  If missing, all filters will be applied to all modules.
+#'  If empty list, all filters will be available to all modules but will start inactive.
+#'  If `module_specific` is `FALSE`, only `global_filters` will be active on start.
 #'
 #' @examples
 #' filter <- teal_slices(
@@ -49,45 +52,43 @@ teal_slices <- function(...,
                         include_varnames = NULL,
                         count_type = NULL,
                         allow_add = TRUE,
-                        mapping = list(),
-                        module_specific = length(mapping) > 0) {
+                        module_specific = FALSE,
+                        mapping) {
   shiny::isolate({
-    checkmate::assert_list(mapping, names = "named")
-    checkmate::assert_flag(module_specific)
     checkmate::assert_flag(allow_add)
-    modules_mapped <- setdiff(names(mapping), "global_filters")
-    if (length(modules_mapped) && !module_specific) {
-      stop(
-        "`mapping` is specified for modules (", toString(modules_mapped), ") even though `module_specific` isn't TRUE.",
-        "Please set module_specific to `TRUE` or specify filters without mapping."
-      )
+    checkmate::assert_flag(module_specific)
+    if (!missing(mapping)) checkmate::assert_list(mapping, types = c("character", "NULL"), names = "named")
+
+    slices <- list(...)
+    all_slice_id <- vapply(slices, `[[`, character(1L), "id")
+
+    if (missing(mapping)) {
+      mapping <- list(global_filters = all_slice_id)
+    }
+    if (!module_specific) {
+      mapping[setdiff(names(mapping), "global_filters")] <- NULL
     }
 
-    fs <- teal.slice::teal_slices(
+    failed_slice_id <- setdiff(unlist(mapping), all_slice_id)
+    if (length(failed_slice_id)) {
+      stop(sprintf(
+        "Filters in mapping don't match any available filter.\n %s not in %s",
+        toString(failed_slice_id),
+        toString(all_slice_id)
+      ))
+    }
+
+    tss <- teal.slice::teal_slices(
       ...,
       exclude_varnames = exclude_varnames,
       include_varnames = include_varnames,
       count_type = count_type,
       allow_add = allow_add
     )
-
-    all_slice_id <- vapply(fs, `[[`, character(1), "id")
-    for (i in names(mapping)) {
-      failed_slice_id <- setdiff(mapping[[i]], all_slice_id)
-      if (length(failed_slice_id)) {
-        stop(sprintf(
-          "id of filters in mapping '%s' don't match any available filter.\n %s not in %s",
-          i,
-          toString(failed_slice_id),
-          toString(all_slice_id)
-        ))
-      }
-    }
-
-    attr(fs, "mapping") <- mapping
-    attr(fs, "module_specific") <- module_specific
-    class(fs) <- c("modules_teal_slices", class(fs))
-    fs
+    attr(tss, "mapping") <- mapping
+    attr(tss, "module_specific") <- module_specific
+    class(tss) <- c("modules_teal_slices", class(tss))
+    tss
   })
 }
 

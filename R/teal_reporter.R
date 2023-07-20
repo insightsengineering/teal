@@ -82,7 +82,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     #' @details Returns a `TealSlicesBlock` object with no content and no parameters.
     #'
     #' @param content (`teal_slices`) object returned from [teal_slices()] function.
-    #' @param ... any `rmarkdown` R chunk parameter and it value.
+    #' @param style (`character(1)`) string specifying style to apply.
     #'
     #' @return `TealSlicesBlock`
     #' @examples
