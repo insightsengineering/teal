@@ -42,11 +42,13 @@ by all modules.
 }}
 
 \item{mapping}{(\verb{named list})\cr
-Specifies which filters will be available in which modules on app start.
+Specifies which filters will be active in which modules on app start.
 Elements should contain character vector of \code{teal_slice} \code{id}s (see \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice()}}).
 Names of the list should correspond to \code{teal_module} \code{label} set in \code{\link[=module]{module()}} function.
+\code{id}s listed under \verb{"global_filters} will be active in all modules.
 If missing, all filters will be applied to all modules.
-If empty list, all filters will be available to all modules but will start inactive.}
+If empty list, all filters will be available to all modules but will start inactive.
+If \code{module_specific} is \code{FALSE}, only \code{global_filters} will be active on start.}
 }
 \description{
 Filter settings for teal applications
