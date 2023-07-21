@@ -157,12 +157,10 @@ init <- function(data,
 
   if (!inherits(filter, "teal_slices")) {
     checkmate::assert_subset(names(filter), choices = datanames)
-    # as.teal_slices is lifted from teal.slice package, see zzz.R
+    # list_to_teal_slices is lifted from teal.slice package, see zzz.R
     # This is a temporary measure and will be removed two release cycles from now (now meaning 0.13.0).
-    filter <- as.teal_slices(filter)
+    filter <- list_to_teal_slices(filter)
   }
-
-
 
   # check teal_slices
   for (i in seq_along(filter)) {
