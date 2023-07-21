@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - "inst/templates/**"
-      - "_pkgdown.y[a]ml"
+      - "_pkgdown.*"
       - DESCRIPTION
       - "**.md"
       - "**.Rmd"
@@ -24,7 +24,7 @@ on:
       - main
     paths:
       - "inst/templates/**"
-      - "_pkgdown.y[a]ml"
+      - "_pkgdown.*"
       - DESCRIPTION
       - "**.md"
       - "**.Rmd"

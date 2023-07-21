@@ -38,7 +38,7 @@ testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns 
 
 testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns pulled data when loaded", {
   teal.logger::suppress_logs()
-  x <- dataset_connector(dataname = "test_dataset", pull_callable = callable_code("iris"))
+  x <- dataset_connector(dataname = "iris", pull_callable = callable_code("iris"))
   delayed_data <- teal_data(x)
   shiny::testServer(
     app = srv_teal_with_splash,
@@ -51,7 +51,7 @@ testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns 
       testthat::expect_null(raw_data())
       session$setInputs(`startapp_module-submit` = TRUE) # DDL has independent session id (without ns)
       testthat::expect_is(raw_data(), "TealData")
-      testthat::expect_identical(raw_data()$get_dataset("test_dataset")$get_raw_data(), iris)
+      testthat::expect_identical(raw_data()$get_dataset("iris")$get_raw_data(), iris)
     }
   )
 })

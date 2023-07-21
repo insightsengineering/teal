@@ -1,10 +1,10 @@
 ---
-title: "Input MultiAssayExperiment data in a teal application"
+title: "Input `MultiAssayExperiment` data in a teal application"
 author: "NEST CoreDev"
 date: "2022-04-20"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Input MultiAssayExperiment data in a teal application}
+  %\VignetteIndexEntry{Input `MultiAssayExperiment` data in a teal application}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -38,4 +38,4 @@ The filter panel supports `MAE` data out of the box, but `teal` itself does not 
 The package [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/) has been specifically developed for the 
 analysis of `MAE` data.
 
-For more information about preprocessing, reproducibility, relationships between datasets and DDL, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/).
+For more information about preprocessing, reproducibility, relationships between datasets and `DDL`, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/).

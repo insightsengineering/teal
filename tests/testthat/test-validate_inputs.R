@@ -1,9 +1,12 @@
-
 testthat::test_that("invalid arguments raise errors", {
-  testthat::expect_error(validate_inputs("string"),
-                         "validate_inputs accepts validators or a list thereof")
-  testthat::expect_error(validate_inputs(list("name" = "string")),
-                         "validate_inputs accepts validators or a list thereof")
+  testthat::expect_error(
+    validate_inputs("string"),
+    "validate_inputs accepts validators or a list thereof"
+  )
+  testthat::expect_error(
+    validate_inputs(list("name" = "string")),
+    "validate_inputs accepts validators or a list thereof"
+  )
 })
 
 

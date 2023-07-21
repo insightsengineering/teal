@@ -7,12 +7,11 @@
 #' @param title (`character(1)`)\cr
 #'  Title of the modal, displayed in the first comment of the R-code.
 #' @param rcode (`character`)\cr
-#'  vector with R code to show inside the modal. You can use [teal.code::get_code()] to derive this R
-#'  code inside a module.
+#'  vector with R code to show inside the modal.
 #' @param session (`ShinySession` optional)\cr
 #'  `shiny` Session object, if missing then [shiny::getDefaultReactiveDomain()] is used.
 #'
-#' @references [shiny::showModal()] [teal.code::get_code()]
+#' @references [shiny::showModal()]
 show_rcode_modal <- function(title = NULL, rcode, session = getDefaultReactiveDomain()) {
   rcode <- paste(rcode, collapse = "\n")
 

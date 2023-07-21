@@ -4,7 +4,7 @@
 \alias{srv_teal}
 \title{Server function corresponding to teal}
 \usage{
-srv_teal(id, modules, raw_data, filter = list())
+srv_teal(id, modules, raw_data, filter = teal_slices())
 }
 \arguments{
 \item{id}{(\code{character})\cr
@@ -22,70 +22,10 @@ more details.}
 \item{raw_data}{(\code{reactive})\cr
 returns the \code{TealData}, only evaluated once, \code{NULL} value is ignored}
 
-\item{filter}{(\code{list})\cr
-You can define filters that show when the app starts. List names should be
-named according to datanames passed to the \code{data} argument.
-In case of  data.frame` the list should be composed as follows:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{list(<dataname1> = list(<varname1> = ..., <varname2> = ...),
-     <dataname2> = list(...),
-     ...)
-
-}\if{html}{\out{</div>}}
-
-For example, filters for variable \code{Sepal.Length} in \code{iris} can be specified as
-follows:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{list(iris = list(Sepal.Length = list(selected = c(5.0, 7.0))))
-# or
-list(iris = list(Sepal.Length = c(5.0, 7.0)))
-}\if{html}{\out{</div>}}
-
-In case developer would like to include \code{NA} and \code{Inf} values in  the
-filtered dataset.
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{list(Species = list(selected = c(5.0, 7.0), keep_na = TRUE, keep_inf = TRUE))
-list(Species = c(c(5.0, 7.0), NA, Inf))
-}\if{html}{\out{</div>}}
-
-To initialize with specific variable filter with all values on start, one
-can use
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{list(Species = list())
-}\if{html}{\out{</div>}}
-
-\code{filter} should be set with respect to the class of the column:
-\itemize{
-\item \code{numeric}: \code{selected} should be a two elements vector defining the range
-of the filter.
-\item \code{Date}: \code{selected} should be a two elements vector defining the date-range
-of the filter
-\item \code{POSIXct}: \code{selected} should be a two elements vector defining the
-\code{datetime} range of the filter
-\item \code{character} and \code{factor}: \code{selected} should be a vector of any length
-defining initial values selected to filter.
-\cr
-\code{filter} for \code{MultiAssayExperiment} objects should be specified in slightly
-different way. Since it contains patient data with list of experiments,
-\code{filter} list should be created as follows:
-\cr
-}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{list(
-  <MAE dataname> = list(
-    subjects = list(<column in colData> = ..., <column in colData> = ...),
-    <experiment name> = list(
-      subset = list(<column in rowData of experiment> = ...,
-                    <column in rowData of experiment> = ...),
-      select = list(<column in colData of experiment> = ...,
-                    <column in colData of experiment> = ...)
-    )
-  )
-)
-}\if{html}{\out{</div>}}
-
-By adding the \code{filterable} attribute it is possible to control which variables can be filtered for each
-dataset. See the example below where \code{ADSL} can only be filtered by \code{AGE}, \code{SEX} or \code{RACE}.}
+\item{filter}{(\code{teal_slices})\cr
+Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
+Old way of specifying filters through a list is deprecated and will be removed in the
+next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 \code{reactive} which returns the currently active module
@@ -96,7 +36,7 @@ It evaluates the \code{raw_data} (delayed data mechanism) and creates the
 Once it is ready and non-\code{NULL}, the splash screen is replaced by the
 main teal UI that depends on the data.
 The currently active tab is tracked and the right filter panel
-updates the displayed datasets to filter for according to the active datanames
+updates the displayed datasets to filter for according to the active \code{datanames}
 of the tab.
 }
 \details{

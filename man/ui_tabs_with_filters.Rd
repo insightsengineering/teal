@@ -4,7 +4,7 @@
 \alias{ui_tabs_with_filters}
 \title{Add right filter panel into each of the top-level \code{teal_modules} UIs.}
 \usage{
-ui_tabs_with_filters(id, modules, datasets)
+ui_tabs_with_filters(id, modules, datasets, filter)
 }
 \arguments{
 \item{id}{(\code{character(1)})\cr
@@ -16,6 +16,11 @@ See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for mo
 \item{datasets}{(\code{FilteredData})\cr
 object to store filter state and filtered datasets, shared across modules. For more
 details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}}
+
+\item{filter}{(\code{teal_slices})\cr
+Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
+Old way of specifying filters through a list is deprecated and will be removed in the
+next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 A \code{tagList} of The main menu, place holders for filters and
@@ -35,8 +40,8 @@ panel is inserted at the right of the modules at depth 1 and not at the leaves.
 }
 \examples{
 
-mods <- teal:::get_dummy_modules()
-datasets <- teal:::get_dummy_datasets()
+mods <- teal:::example_modules()
+datasets <- teal:::example_datasets()
 
 app <- shinyApp(
   ui = function() {
@@ -60,8 +65,8 @@ app <- shinyApp(
     })
   }
 )
-\dontrun{
-runApp(app)
+if (interactive()) {
+  runApp(app)
 }
 
 
@@ -101,8 +106,8 @@ app <- shinyApp(
     })
   }
 )
-\dontrun{
-runApp(app)
+if (interactive()) {
+  runApp(app)
 }
 }
 \keyword{internal}

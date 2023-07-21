@@ -37,10 +37,10 @@ jobs:
       additional-r-cmd-check-params: --as-cran
       enforce-note-blocklist: true
       note-blocklist: |
-        checking dependencies in R code ... NOTE
-        checking R code for possible problems ... NOTE
-        checking examples ... NOTE
-        checking Rd line widths ... NOTE
+        checking dependencies in R code .* NOTE
+        checking R code for possible problems .* NOTE
+        checking examples .* NOTE
+        checking Rd line widths .* NOTE
       unit-test-report-brand: >-
         https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/thumbs/teal.png
   coverage:

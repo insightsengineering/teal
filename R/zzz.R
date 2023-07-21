@@ -22,3 +22,11 @@
     read.dcf(system.file("DESCRIPTION", package = "teal"))[, "Version"]
   )
 }
+
+# Use non-exported function(s) from teal.slice.
+# This is a temporary measure and will be removed two release cycles from now (now meaning 0.13.0).
+as.teal_slices <- getFromNamespace("as.teal_slices", "teal.slice") # nolint
+# This one is here because setdiff_teal_slice should not be exported from teal.slice.
+setdiff_teal_slices <- getFromNamespace("setdiff_teal_slices", "teal.slice")
+# all *Block objects are private in teal.reporter
+RcodeBlock <- getFromNamespace("RcodeBlock", "teal.reporter") # nolint

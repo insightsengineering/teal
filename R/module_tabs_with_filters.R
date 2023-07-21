@@ -27,8 +27,8 @@
 #'
 #' @examples
 #'
-#' mods <- teal:::get_dummy_modules()
-#' datasets <- teal:::get_dummy_datasets()
+#' mods <- teal:::example_modules()
+#' datasets <- teal:::example_datasets()
 #'
 #' app <- shinyApp(
 #'   ui = function() {
@@ -52,8 +52,8 @@
 #'     })
 #'   }
 #' )
-#' \dontrun{
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
 #' }
 #'
 #'
@@ -93,51 +93,46 @@
 #'     })
 #'   }
 #' )
-#' \dontrun{
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
 #' }
-ui_tabs_with_filters <- function(id, modules, datasets) {
-  stopifnot(
-    # `teal_module` not supported because we insert the filters into the UI below
-    is(modules, "teal_modules"),
-    is(datasets, "FilteredData")
-  )
+ui_tabs_with_filters <- function(id, modules, datasets, filter) {
+  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_list(datasets, types = c("list", "FilteredData"))
+
   ns <- NS(id)
+  is_module_specific <- isTRUE(attr(filter, "module_specific"))
 
-  # use isolate because we assume that the number of datasets does not change over the course of the teal app
-  # this will just create placeholders which are shown only if non-empty
-  filter_and_info_ui <- datasets$ui_filter_panel(ns("filter_panel"))
-
-  # modules must be teal_modules, not teal_module; otherwise we will get the UI and not a tabsetPanel of UIs
-  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets)
-
-  filter_panel_btn <- tags$li(
+  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets, is_module_specific = is_module_specific)
+  filter_panel_btns <- tags$li(
     class = "flex-grow",
-    tags$a(
-      id = "filter_hamburger", # see sidebar.css for style
+    tags$button(
+      class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
       href = "javascript:void(0)",
       onclick = "toggleFilterPanel();", # see sidebar.js
       title = "Toggle filter panels",
-      tags$span(icon("fas fa-bars"))
-    )
+      icon("fas fa-bars")
+    ),
+    filter_manager_modal_ui(ns("filter_manager"))
   )
+  teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btns)
 
-  stopifnot(length(teal_ui$children) == 2)
-  # teal_ui$children[[1]] contains links to tabs
-  # teal_ui$children[[2]] contains actual tab contents
-
-  # adding filter_panel_btn to the tabsetPanel pills
-  teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
-
-  teal_ui$children <- list(
-    teal_ui$children[[1]],
-    tags$hr(class = "my-2"),
-    fluidRow(
-      column(width = 9, teal_ui$children[[2]], id = "teal_primary_col"),
-      column(width = 3, filter_and_info_ui, id = "teal_secondary_col")
+  if (!is_module_specific) {
+    # need to rearrange html so that filter panel is within tabset
+    tabset_bar <- teal_ui$children[[1]]
+    teal_modules <- teal_ui$children[[2]]
+    filter_ui <- unlist(datasets)[[1]]$ui_filter_panel(ns("filter_panel"))
+    list(
+      tabset_bar,
+      tags$hr(class = "my-2"),
+      fluidRow(
+        column(width = 9, teal_modules, class = "teal_primary_col"),
+        column(width = 3, filter_ui, class = "teal_secondary_col")
+      )
     )
-  )
-  return(teal_ui)
+  } else {
+    teal_ui
+  }
 }
 
 #' Server function
@@ -150,55 +145,47 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @return `reactive` currently selected active_module
 #' @keywords internal
 srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new(), filter) {
-  checkmate::assert_class(datasets, "FilteredData")
+  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   checkmate::assert_class(reporter, "Reporter")
+  checkmate::assert_class(filter, "teal_slices")
   moduleServer(id, function(input, output, session) {
-    logger::log_trace(
-      "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
+    logger::log_trace("srv_tabs_with_filters initializing the module.")
+
+    is_module_specific <- isTRUE(attr(filter, "module_specific"))
+    manager_out <- filter_manager_modal_srv("filter_manager", filtered_data_list = datasets, filter = filter)
+
+    active_module <- srv_nested_tabs(
+      id = "root",
+      datasets = datasets,
+      modules = modules,
+      reporter = reporter,
+      is_module_specific = is_module_specific
     )
 
-    # set filterable variables for each dataset
-    for (filter_dataname in names(filter)) {
-      datasets$set_filterable_varnames(filter_dataname, attr(filter[[filter_dataname]], "filterable"))
+    if (!is_module_specific) {
+      active_datanames <- reactive(active_module()$filters)
+      singleton <- unlist(datasets)[[1]]
+      singleton$srv_filter_panel("filter_panel", active_datanames = active_datanames)
+
+      observeEvent(
+        eventExpr = active_datanames(),
+        handlerExpr = {
+          script <- if (length(active_datanames()) == 0 || is.null(active_datanames())) {
+            # hide the filter panel and disable the burger button
+            "handleNoActiveDatasets();"
+          } else {
+            # show the filter panel and enable the burger button
+            "handleActiveDatasetsPresent();"
+          }
+          shinyjs::runjs(script)
+        },
+        ignoreNULL = FALSE
+      )
     }
 
-    active_module <- srv_nested_tabs(id = "root", datasets = datasets, modules = modules, reporter = reporter)
-
-    active_datanames <- eventReactive(
-      eventExpr = active_module(),
-      valueExpr = {
-        logger::log_trace(
-          "srv_tabs_with_filters@1 changing active module to: { deparse1(active_module()$label) }."
-        )
-        datasets$handle_active_datanames(datanames = active_module()$filters)
-      },
-      ignoreNULL = FALSE
-    )
-
-    datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
-
-    # to handle per module filter = NULL
-    observeEvent(
-      eventExpr = active_datanames(),
-      handlerExpr = {
-        script <- if (length(active_datanames()) == 0 || is.null(active_datanames())) {
-          # hide the filter panel and disable the burger button
-          "handleNoActiveDatasets();"
-        } else {
-          # show the filter panel and enable the burger button
-          "handleActiveDatasetsPresent();"
-        }
-        shinyjs::runjs(script)
-      },
-      ignoreNULL = FALSE
-    )
-
-    teal.slice::set_filter_state(datasets = datasets, filter = filter)
     showNotification("Data loaded - App fully started up")
-
-    logger::log_trace(
-      "srv_tabs_with_filters initialized the module with datasets { paste(datasets$datanames(), collapse = ' ') }."
-    )
+    logger::log_trace("srv_tabs_with_filters initialized the module")
     return(active_module)
   })
 }

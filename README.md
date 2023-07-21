@@ -6,7 +6,7 @@
 [![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/teal/_xml_coverage_reports/data/main/badge.svg)](https://insightsengineering.github.io/teal/main/coverage-report/)
 
 ![GitHub forks](https://img.shields.io/github/forks/insightsengineering/teal?style=social)
-![GitHub Repo stars](https://img.shields.io/github/stars/insightsengineering/teal?style=social)
+![GitHub repo stars](https://img.shields.io/github/stars/insightsengineering/teal?style=social)
 
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/insightsengineering/teal)
 ![GitHub contributors](https://img.shields.io/github/contributors/insightsengineering/teal)
@@ -23,14 +23,14 @@
 
 <!-- markdownlint-disable MD007 MD030 -->
 -   Data, which can be:
-    -    CDISC data, commonly used for clinical trial reporting
+    -    `CDISC` data, commonly used for clinical trial reporting
     -    Independent datasets, for example from a `data.frame`
     -    Related datasets, for example a set of `data.frames` with key columns to enable data joins
     -    `MultiAssayExperiment` objects which are R data structures for representing and analyzing multi-omics experiments
 -   `teal` modules:
     -   `teal modules` are shiny modules built within the `teal` framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, lost of `teal` modules have been released and we recommend starting with modules found in the following packages:
-        -   [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/): general modules for exploring relational/independent/CDISC data
-        -   [`teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/): modules specific to CDISC data and clinical trial reporting
+        -   [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/): general modules for exploring relational/independent/`CDISC` data
+        -   [`teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/): modules specific to `CDISC` data and clinical trial reporting
         -   [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/): modules for analyzing `MultiAssayExperiment` objects
 
 <!-- markdownlint-enable MD007 MD030 -->
@@ -54,15 +54,13 @@ Please see [`teal` gallery](https://github.com/insightsengineering/teal.gallery)
 
 ## Installation
 
-For releases from August 2022 it is recommended that you [create and use a Github PAT](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) to install the latest version of this package. Once you have the PAT, run the following:
+For releases from August 2022 it is recommended that you [create and use a GitHub PAT](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) to install the latest version of this package. Once you have the PAT, run the following:
 
 ```r
 Sys.setenv(GITHUB_PAT = "your_access_token_here")
 if (!require("remotes")) install.packages("remotes")
 remotes::install_github("insightsengineering/teal@*release")
 ```
-
-In order to run many of the examples you will also need to install the [`scda`](https://insightsengineering.github.io/scda/) package.
 
 A stable release of all `NEST` packages from June 2022 is also available [here](https://github.com/insightsengineering/depository#readme).
 

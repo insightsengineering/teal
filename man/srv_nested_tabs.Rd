@@ -11,6 +11,7 @@ srv_nested_tabs(
   id,
   datasets,
   modules,
+  is_module_specific = FALSE,
   reporter = teal.reporter::Reporter$new()
 )
 
@@ -18,6 +19,7 @@ srv_nested_tabs(
   id,
   datasets,
   modules,
+  is_module_specific = FALSE,
   reporter = teal.reporter::Reporter$new()
 )
 
@@ -25,6 +27,7 @@ srv_nested_tabs(
   id,
   datasets,
   modules,
+  is_module_specific = FALSE,
   reporter = teal.reporter::Reporter$new()
 )
 
@@ -32,6 +35,7 @@ srv_nested_tabs(
   id,
   datasets,
   modules,
+  is_module_specific = TRUE,
   reporter = teal.reporter::Reporter$new()
 )
 }

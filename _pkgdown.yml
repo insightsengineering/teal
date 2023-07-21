@@ -25,6 +25,7 @@ articles:
     navbar: ~
     contents:
       - teal
+      - filter-panel
       - including-general-data-in-teal
       - including-adam-data-in-teal
       - including-mae-data-in-teal
@@ -43,13 +44,15 @@ reference:
       - modules
       - srv_teal_with_splash
       - ui_teal_with_splash
+      - teal_slices
   - title: Example module
     desc: A simple example teal module
     contents:
       - example_module
-  - title: Report previewer module
+  - title: Creating reports
     contents:
       - reporter_previewer_module
+      - TealReportCard
   - title: Functions for module developers
     contents:
       - tdata
@@ -64,8 +67,3 @@ reference:
   - title: Validation functions
     contents:
       - starts_with("validate_")
-  - title: Deprecated functions
-    contents:
-      - get_rcode
-      - get_rcode_srv
-      - get_rcode_ui

@@ -7,13 +7,13 @@
 \alias{ui_nested_tabs.teal_module}
 \title{Create a UI of nested tabs of \code{teal_modules}}
 \usage{
-ui_nested_tabs(id, modules, datasets, depth = 0L)
+ui_nested_tabs(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
 
-\method{ui_nested_tabs}{default}(id, modules, datasets, depth = 0L)
+\method{ui_nested_tabs}{default}(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
 
-\method{ui_nested_tabs}{teal_modules}(id, modules, datasets, depth = 0L)
+\method{ui_nested_tabs}{teal_modules}(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
 
-\method{ui_nested_tabs}{teal_module}(id, modules, datasets, depth = 0L)
+\method{ui_nested_tabs}{teal_module}(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
 }
 \arguments{
 \item{id}{(\code{character(1)})\cr
@@ -28,6 +28,10 @@ details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}}
 
 \item{depth}{(\code{integer(1)})\cr
 number which helps to determine depth of the modules nesting.}
+
+\item{is_module_specific}{(\code{logical(1)})\cr
+flag determining if the filter panel is global or module-specific.
+When set to \code{TRUE}, a filter panel is called inside of each module tab.}
 }
 \value{
 depending on class of \code{modules}:
@@ -47,8 +51,8 @@ The \code{datasets} argument is required to resolve the teal arguments in an
 isolated context (with respect to reactivity)
 }
 \examples{
-mods <- teal:::get_dummy_modules()
-datasets <- teal:::get_dummy_datasets()
+mods <- teal:::example_modules()
+datasets <- teal:::example_datasets()
 app <- shinyApp(
   ui = function() {
     tagList(
@@ -70,8 +74,8 @@ app <- shinyApp(
     })
   }
 )
-\dontrun{
-runApp(app)
+if (interactive()) {
+  runApp(app)
 }
 }
 \keyword{internal}

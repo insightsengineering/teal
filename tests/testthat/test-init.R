@@ -4,7 +4,7 @@ adsl_dataset <- teal.data::cdisc_dataset(
   "ADSL", adsl_df,
   parent = character(0), keys = teal.data::get_cdisc_keys("ADSL")
 )
-mods <- teal:::get_dummy_modules()
+mods <- teal:::example_modules()
 
 testthat::test_that("init data accepts TealData objects", {
   teal_data_object <- teal.data::teal_data(dataset_1)
@@ -18,7 +18,7 @@ testthat::test_that("init data throws an error with input other than accepted in
   numeric_vector <- c(1, 2, 3)
   matrix_d <- as.matrix(c(1, 2, 3))
   teal_data_list <- list(teal.data::teal_data(dataset_1))
-  mods <- teal:::get_dummy_modules()
+  mods <- teal:::example_modules()
   testthat::expect_error(init(data = character_vector, modules = mods))
   testthat::expect_error(init(data = numeric_vector, modules = mods))
   testthat::expect_error(init(data = numeric_vector, modules = mods))
@@ -143,4 +143,18 @@ testthat::test_that("init modules accepts a list of teal_module elements", {
 testthat::test_that("init modules accepts a teal_module object", {
   mods <- example_module()
   testthat::expect_error(init(data = iris, modules = mods), NA)
+})
+
+testthat::test_that("init filter accepts named list or `teal_slices`", {
+  fl <- list(
+    "iris" = list(
+      "Species" = list(selected = "setosa")
+    )
+  )
+  fs <- teal.slice::teal_slices(
+    teal.slice::teal_slice(dataname = "iris", varname = "species", selected = "setosa")
+  )
+  testthat::expect_no_error(init(data = dataset_1, modules = mods, filter = fl))
+  testthat::expect_no_error(init(data = dataset_1, modules = mods, filter = fs))
+  testthat::expect_error(init(data = dataset_1, modules = mods, filter = unclass(fs)), "Assertion failed")
 })

@@ -18,7 +18,7 @@ Teal is a consumer of the `bslib` R package which provides tools for customizing
 
 Teal users have the benefit of custom bootstrap themes by specifying the `teal.bs_theme` R option, which has to be set to `bslib::bs_theme` object.
 The `bslib::bs_theme(...)` function creates a Bootstrap theme object, where you should specify the (major) Bootstrap version (default or one of 3, 4 or 5).
-Optionally you could choose a **`bootswatch` theme** and **customize the app css** with functions like `bslib::bs_add_rules`.
+Optionally you could choose a **`bootswatch` theme** and **customize the app CSS** with functions like `bslib::bs_add_rules`.
 Please read more about custom themes in [the `bslib` getting started vignette](https://rstudio.github.io/bslib/articles/bslib.html).
 The `teal.bs_theme` R option has to be specified at the top of the code script.
 
@@ -40,7 +40,7 @@ The best and recommended ways to **explore** the bootstrap themes are to use `bs
 both functions offer an interactive explore mode.
 Note that the interactive theming for Bootstrap 3 is not supported.
 The `bslib::bs_theme_preview()` is recommended when the end user does not have any shiny app yet. 
-When you already have a shiny app and you want to test different bootstrap themes (and css styling) then `bslib::run_with_themer(shinyApp(app$ui, app$server))` is recommended.
+When you already have a shiny app and you want to test different bootstrap themes (and `CSS` styling) then `bslib::run_with_themer(shinyApp(app$ui, app$server))` is recommended.
 
 Available bootstrap versions could be checked with `bslib::versions()` and bootstrap themes (`bootswatch`) with `bslib::bootswatch_themes(version = "5")`.
 
@@ -74,12 +74,12 @@ Please use the `options("teal.bs_theme" = NULL)` call to return to the default s
 ### Theme not updated
 
 One reason the theme is not updated could be the problem that a browser caches the previous one, especially when we run different themes one after another.
-Please, use the "Cmd+Shift+R" (Mac) or "Ctrl+F5" (Windows) to hard refresh the webpage.
+Please, use the `Cmd+Shift+R` (Mac) or `Ctrl+F5` (Windows) to hard refresh the webpage.
 
-### Custom teal css
+### Custom teal `CSS`
 
 The most important `teal` html tags have a proper id/class, so they could be directly styled.
-The `bslib::bs_add_rules` function could be used around the `bslib::bs_theme` object to apply custom css rules.
+The `bslib::bs_add_rules` function could be used around the `bslib::bs_theme` object to apply custom `CSS` rules.
 
 ```
 library(magrittr)
@@ -136,19 +136,19 @@ This gives us the following.
 knitr::include_graphics("images/bs-launch.png")
 ```
 
-Note the "Theme Customizer" section on the right hand side.
+Note the `Theme Customizer` section on the right hand side.
 This was added by `bslib` and is how we customize our theme.
 
 #### Set overall app theme
 
-Instead of starting from scratch, we want to start with a [Bootswatch](https://bootswatch.com/) theme.
-We like the Minty theme so we select this in the "Overall theme" dropdown.
+Instead of starting from scratch, we want to start with a [`Bootswatch`](https://bootswatch.com/) theme.
+We like the Minty theme so we select this in the "Overall theme" drop-down.
 
 ```{r echo = FALSE}
 knitr::include_graphics("images/bs-theme-set.png")
 ```
 
-`bslib` has updated our CSS styles to use our new theme, including the theme customizer.
+`bslib` has updated our `CSS` styles to use our new theme, including the `customizer` theme.
 Additionally if we look at our R console, we will see
 
 ```{r eval = FALSE}
@@ -160,11 +160,11 @@ This is a helpful guide that provides code to update our theme.
 For `teal` applications we don't actually use `bs_theme_update` and opt for `bs_theme` instead.
 However, the printed code will still be helpful.
 
-#### Customizing bootswatch theme
+#### Customizing `bootswatch` theme
 
-Our base theme of Minty is close to what we want but let's make a few customizations.
+Our base theme of Minty is close to what we want but let's make a few modifications.
 To start, we will increase the base font size.
-To do this, we choose the "Fonts" section of the theme customizer and then set a value in the "Base font size" input.
+To do this, we choose the "Fonts" section of the `customizer` theme and then set a value in the "Base font size" input.
 We use 1.25 here which means all our fonts with be 1.25 times the default font size.
 If we check the R console, we will see `bslib` has printed `bs_theme_update(theme, font_scale = 1.25, bootswatch = "minty")`, which now includes our font adjustment.
 
@@ -173,7 +173,7 @@ knitr::include_graphics("images/bs-font-size.png")
 ```
 
 Finally, suppose we do not want borders to be rounded.
-In our theme customizer, we can go to "Options" and then uncheck the "Rounded corners" box.
+In our `customizer` theme, we can go to "Options" and then uncheck the "Rounded corners" box.
 
 
 ```{r echo = FALSE}

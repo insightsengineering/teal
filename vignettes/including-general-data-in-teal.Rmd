@@ -33,9 +33,9 @@ if (interactive()) {
 
 For more information, see documentation in `teal.data`.
 
-## Delayed Data Loading (DDL)
+## Delayed Data Loading (`DDL`)
 
-To learn more about DDL, visit `vignette("delayed-data-loading", package = "teal.data")`. All the features of DDL
+To learn more about `DDL`, visit `vignette("delayed-data-loading", package = "teal.data")`. All the features of `DDL`
 are available for general datasets:
 
 ```{r eval=FALSE}
@@ -77,4 +77,4 @@ if (interactive()) {
 }
 ```
 
-For more information about preprocessing, reproducibility, relationships between datasets and DDL, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/).
+For more information about preprocessing, reproducibility, relationships between datasets and `DDL`, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/).

@@ -37,25 +37,59 @@ testthat::test_that("srv_teal initializes the data when raw_data changes", {
     expr = {
       testthat::expect_null(datasets_reactive())
       raw_data(data)
-      testthat::expect_is(datasets_reactive(), "FilteredData")
+      testthat::expect_named(datasets_reactive(), "iris_tab")
     }
   )
 })
 
-testthat::test_that("srv_teal initialized FilteredData based on the raw_data input", {
-  filtered_data <- teal.slice::init_filtered_data(data)
-
+testthat::test_that("srv_teal initialized data list structure reflects modules", {
   shiny::testServer(
     app = srv_teal,
     args = list(
       id = "test",
       raw_data = reactiveVal(data),
-      modules = modules(test_module1)
+      modules = modules(test_module1, modules(label = "tab", test_module1, test_module2))
     ),
     expr = {
-      testthat::expect_identical(datasets_reactive()$datanames(), filtered_data$datanames())
-      testthat::expect_identical(datasets_reactive()$get_data("iris"), filtered_data$get_data(dataname = "iris"))
-      testthat::expect_identical(datasets_reactive()$get_data("mtcars"), filtered_data$get_data(dataname = "mtcars"))
+      raw_data(data)
+      testthat::expect_named(datasets_reactive(), c("iris_tab", "tab"))
+      testthat::expect_named(datasets_reactive()$tab, c("iris_tab", "mtcars_tab"))
+    }
+  )
+})
+
+testthat::test_that("srv_teal initialized data containing same FilteredData when the filter is global", {
+  shiny::testServer(
+    app = srv_teal,
+    args = list(
+      id = "test",
+      raw_data = reactiveVal(data),
+      modules = modules(test_module1, modules(label = "tab", test_module1, test_module2)),
+      filter = teal_slices(module_specific = FALSE)
+    ),
+    expr = {
+      raw_data(data)
+      unlisted_fd <- unlist(datasets_reactive(), use.names = FALSE)
+      testthat::expect_identical(unlisted_fd[[1]], unlisted_fd[[2]])
+      testthat::expect_identical(unlisted_fd[[2]], unlisted_fd[[3]])
+    }
+  )
+})
+
+testthat::test_that("srv_teal initialized data containing different FilteredData when the filter is module_specific", {
+  shiny::testServer(
+    app = srv_teal,
+    args = list(
+      id = "test",
+      raw_data = reactiveVal(data),
+      modules = modules(test_module1, modules(label = "tab", test_module1, test_module2)),
+      filter = teal_slices(module_specific = TRUE)
+    ),
+    expr = {
+      raw_data(data)
+      unlisted_fd <- unlist(datasets_reactive(), use.names = FALSE)
+      testthat::expect_false(identical(unlisted_fd[[1]], unlisted_fd[[2]]))
+      testthat::expect_false(identical(unlisted_fd[[2]], unlisted_fd[[3]]))
     }
   )
 })

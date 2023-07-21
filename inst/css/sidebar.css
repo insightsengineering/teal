@@ -1,7 +1,7 @@
 /* teal sidebar css */
 
-/* filter hamburger btn */
-#filter_hamburger {
+
+.filter_hamburger, .filter_manager_button {
   font-size: 16px;
   padding: 8px !important;
   float: right !important;
@@ -13,4 +13,30 @@ a.disabled {
   pointer-events: none;
   cursor: not-allowed;
   color: grey;
+}
+
+.filter_manager_content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+}
+.filter_manager_content > * {
+  flex: 1 1 auto;
+  padding: 0em 1em;
+  width: min-content;
+}
+
+.snapshot_table_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.snapshot_table_row *:first-child {
+  flex: 1 1 80%;
+}
+.snapshot_table_row * + * {
+  flex: 1 0 50px;
+  padding: 0em 1em;
 }

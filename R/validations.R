@@ -13,26 +13,29 @@
 #' @export
 #'
 #' @examples
-#' library(scda)
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
-#'
+#' library(teal)
 #' ui <- fluidPage(
-#'   sliderInput("obs", "Max Age",
-#'     min = 0, max = 100, value = 50
+#'   sliderInput("len", "Max Length of Sepal",
+#'     min = 4.3, max = 7.9, value = 5
 #'   ),
 #'   plotOutput("plot")
 #' )
 #'
 #' server <- function(input, output) {
 #'   output$plot <- renderPlot({
-#'     ADSL_f <- ADSL[ADSL$AGE <= input$obs, ]
-#'     validate_has_data(ADSL_f, min_nrow = 10, complete = FALSE, msg = "Please adjust your Max Age")
+#'     df <- iris[iris$Sepal.Length <= input$len, ]
+#'     validate_has_data(
+#'       iris_f,
+#'       min_nrow = 10,
+#'       complete = FALSE,
+#'       msg = "Please adjust Max Length of Sepal"
+#'     )
 #'
-#'     hist(ADSL_f$AGE, breaks = 5)
+#'     hist(iris_f$Sepal.Length, breaks = 5)
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 #'
 validate_has_data <- function(x,
@@ -81,26 +84,27 @@ validate_has_data <- function(x,
 #' @export
 #'
 #' @examples
-#' library(scda)
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
-#'
+#' iris$id <- rep(1:50, times = 3)
 #' ui <- fluidPage(
-#'   sliderInput("obs", "Max Age",
-#'     min = 0, max = 100, value = 50
+#'   selectInput(
+#'     inputId = "species",
+#'     label = "Select species",
+#'     choices = c("setosa", "versicolor", "virginica"),
+#'     selected = "setosa",
+#'     multiple = TRUE
 #'   ),
-#'   verbatimTextOutput("age_summary")
+#'   plotOutput("plot")
 #' )
-#'
 #' server <- function(input, output) {
-#'   output$age_summary <- renderText({
-#'     ADSL_f <- ADSL[ADSL$AGE <= input$obs, ]
-#'     validate_one_row_per_id(ADSL_f, key = c("STUDYID"))
+#'   output$plot <- renderPlot({
+#'     iris_f <- iris[iris$Species %in% input$species, ]
+#'     validate_one_row_per_id(iris_f, key = c("id"))
 #'
-#'     paste0("Mean age :", mean(ADSL_f$AGE))
+#'     hist(iris_f$Sepal.Length, breaks = 5)
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 #'
 validate_one_row_per_id <- function(x, key = c("USUBJID", "STUDYID")) {
@@ -119,30 +123,25 @@ validate_one_row_per_id <- function(x, key = c("USUBJID", "STUDYID")) {
 #' @export
 #'
 #' @examples
-#' library(scda)
-#'
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
-#' ADRS <- synthetic_cdisc_data("latest")$adrs
-#'
 #' ui <- fluidPage(
 #'   selectInput(
-#'     "rsp",
-#'     "Select response parameter",
-#'     choices = c("BESRSPI", "INVET", "CBRSPI"),
-#'     selected = "BESRSPI",
+#'     "species",
+#'     "Select species",
+#'     choices = c("setosa", "versicolor", "virginica", "unknown species"),
+#'     selected = "setosa",
 #'     multiple = FALSE
 #'   ),
-#'   verbatimTextOutput("rsp_summary")
+#'   verbatimTextOutput("summary")
 #' )
 #'
 #' server <- function(input, output) {
-#'   output$rsp_summary <- renderPrint({
-#'     validate_in(input$rsp, ADRS$PARAMCD, "Parameter does not exist.")
-#'     nrow(ADRS[ADRS$PARAMCD == input$rsp, ])
+#'   output$summary <- renderPrint({
+#'     validate_in(input$species, iris$Species, "Species does not exist.")
+#'     nrow(iris[iris$Species == input$species, ])
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 #'
 validate_in <- function(x, choices, msg) {
@@ -160,35 +159,36 @@ validate_in <- function(x, choices, msg) {
 #' @export
 #'
 #' @examples
-#' library(scda)
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
-#'
+#' data <- data.frame(
+#'   id = c(1:10, 11:20, 1:10),
+#'   strata = rep(c("A", "B"), each = 15)
+#' )
 #' ui <- fluidPage(
-#'   selectInput("ref_arm", "Select reference treatment",
-#'     choices = c("ARM A", "ARM B", "ARM X"), selected = "ARM A"
+#'   selectInput("ref1", "Select strata1 to compare",
+#'     choices = c("A", "B", "C"), selected = "A"
 #'   ),
-#'   selectInput("comp_arm", "Select comparison treatment",
-#'     choices = c("ARM C", "ARM Y", "ARM Z"), selected = "ARM C"
+#'   selectInput("ref2", "Select strata2 to compare",
+#'     choices = c("A", "B", "C"), selected = "B"
 #'   ),
 #'   verbatimTextOutput("arm_summary")
 #' )
 #'
 #' server <- function(input, output) {
 #'   output$arm_summary <- renderText({
-#'     ref_arm <- ADSL$ARMCD[input$ref_arm == ADSL$ARMCD]
-#'     comp_arm <- ADSL$ARMCD[input$comp_arm == ADSL$ARMCD]
+#'     sample_1 <- data$id[data$strata == input$ref1]
+#'     sample_2 <- data$id[data$strata == input$ref2]
 #'
-#'     validate_has_elements(ref_arm, "Need reference treatment.")
-#'     validate_has_elements(comp_arm, "Need comparison treatment.")
+#'     validate_has_elements(sample_1, "No subjects in strata1.")
+#'     validate_has_elements(sample_2, "No subjects in strata2.")
 #'
 #'     paste0(
-#'       "Number of patients in: reference treatment=",
-#'       length(ref_arm), " comparions treatment=", length(comp_arm)
+#'       "Number of samples in: strata1=", length(sample_1),
+#'       " comparions strata2=", length(sample_2)
 #'     )
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 validate_has_elements <- function(x, msg) {
   validate(need(length(x) > 0, msg))
@@ -206,38 +206,40 @@ validate_has_elements <- function(x, msg) {
 #' @export
 #'
 #' @examples
-#' library(scda)
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
+#' data <- data.frame(
+#'   id = c(1:10, 11:20, 1:10),
+#'   strata = rep(c("A", "B", "C"), each = 10)
+#' )
 #'
 #' ui <- fluidPage(
-#'   selectInput("ref_arm", "Select reference treatment",
-#'     choices = c("ARM A", "ARM B", "ARM C"),
-#'     selected = "ARM A"
+#'   selectInput("ref1", "Select strata1 to compare",
+#'     choices = c("A", "B", "C"),
+#'     selected = "A"
 #'   ),
-#'   selectInput("comp_arm", "Select comparison treatment",
-#'     choices = c("ARM A", "ARM B", "ARM C"),
-#'     selected = "ARM C"
+#'   selectInput("ref2", "Select strata2 to compare",
+#'     choices = c("A", "B", "C"),
+#'     selected = "B"
 #'   ),
-#'   verbatimTextOutput("arm_summary")
+#'   verbatimTextOutput("summary")
 #' )
 #'
 #' server <- function(input, output) {
-#'   output$arm_summary <- renderText({
-#'     ref_arm <- ADSL$ARMCD[input$ref_arm == ADSL$ARMCD]
-#'     comp_arm <- ADSL$ARMCD[input$comp_arm == ADSL$ARMCD]
+#'   output$summary <- renderText({
+#'     sample_1 <- data$id[data$strata == input$ref1]
+#'     sample_2 <- data$id[data$strata == input$ref2]
 #'
 #'     validate_no_intersection(
-#'       comp_arm, ref_arm,
-#'       "reference and comparison treatments cannot overlap"
+#'       sample_1, sample_2,
+#'       "subjects within strata1 and strata2 cannot overlap"
 #'     )
 #'     paste0(
-#'       "Number of patients in: reference treatment=", length(ref_arm),
-#'       " comparions treatment=", length(comp_arm)
+#'       "Number of subject in: reference treatment=", length(sample_1),
+#'       " comparions treatment=", length(sample_2)
 #'     )
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 #'
 validate_no_intersection <- function(x, y, msg) {
@@ -257,26 +259,28 @@ validate_no_intersection <- function(x, y, msg) {
 #' @export
 #'
 #' @examples
-#' library(scda)
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
-#'
+#' data <- data.frame(
+#'   one = rep("a", length.out = 20),
+#'   two = rep(c("a", "b"), length.out = 20)
+#' )
 #' ui <- fluidPage(
-#'   selectInput("arm", "Select treatment",
-#'     choices = c("ARM", "ARMCD", "ACTARM", "TRT"),
-#'     selected = "ARM", multiple = TRUE
+#'   selectInput(
+#'     "var",
+#'     "Select variable",
+#'     choices = c("one", "two", "three", "four"),
+#'     selected = "one"
 #'   ),
-#'   verbatimTextOutput("arm_summary")
+#'   verbatimTextOutput("summary")
 #' )
 #'
 #' server <- function(input, output) {
-#'   output$arm_summary <- renderText({
-#'     validate_has_variable(ADSL, input$arm)
-#'
-#'     paste0("Selected treatment variables: ", paste(input$arm, collapse = ", "))
+#'   output$summary <- renderText({
+#'     validate_has_variable(data, input$var)
+#'     paste0("Selected treatment variables: ", paste(input$var, collapse = ", "))
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 validate_has_variable <- function(data, varname, msg) {
   if (length(varname) != 0) {
@@ -313,33 +317,36 @@ validate_has_variable <- function(data, varname, msg) {
 #'
 #' @export
 #' @examples
-#' library(scda)
-#'
-#' ADSL <- synthetic_cdisc_data("latest")$adsl
-#'
+#' data <- data.frame(
+#'   one = rep("a", length.out = 20),
+#'   two = rep(c("a", "b"), length.out = 20),
+#'   three = rep(c("a", "b", "c"), length.out = 20),
+#'   four = rep(c("a", "b", "c", "d"), length.out = 20),
+#'   stringsAsFactors = TRUE
+#' )
 #' ui <- fluidPage(
-#'   selectInput("arm", "Select treatment",
-#'     choices = c("ARM", "ARMCD", "STUDYID"), selected = "ARM"
+#'   selectInput(
+#'     "var",
+#'     "Select variable",
+#'     choices = c("one", "two", "three", "four"),
+#'     selected = "one"
 #'   ),
-#'   verbatimTextOutput("arm_summary")
+#'   verbatimTextOutput("summary")
 #' )
 #'
 #' server <- function(input, output) {
-#'   output$arm_summary <- renderText({
-#'     validate_n_levels(ADSL[[input$arm]],
-#'       min_levels = 2, max_levels = 15,
-#'       var_name = input$arm
-#'     )
+#'   output$summary <- renderText({
+#'     validate_n_levels(data[[input$var]], min_levels = 2, max_levels = 15, var_name = input$var)
 #'     paste0(
 #'       "Levels of selected treatment variable: ",
-#'       paste(levels(ADSL[[input$arm]]),
+#'       paste(levels(data[[input$var]]),
 #'         collapse = ", "
 #'       )
 #'     )
 #'   })
 #' }
-#' \dontrun{
-#' shinyApp(ui, server)
+#' if (interactive()) {
+#'   shinyApp(ui, server)
 #' }
 validate_n_levels <- function(x, min_levels = 1, max_levels = 12, var_name) {
   x_levels <- if (is.factor(x)) {

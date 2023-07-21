@@ -22,7 +22,7 @@ For example \code{modules("lab", ...)} should be converted to \code{modules(labe
 \item{x}{\code{teal_modules}}
 
 \item{indent}{(\code{integer}) indent level;
-each submodule is indented one level more}
+each \code{submodule} is indented one level more}
 }
 \value{
 object of class \code{teal_modules}. Object contains following fields
@@ -86,7 +86,7 @@ app <- init(
     )
   )
 )
-\dontrun{
-runApp(app)
+if (interactive()) {
+  runApp(app)
 }
 }
