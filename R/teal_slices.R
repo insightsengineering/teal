@@ -92,6 +92,20 @@ teal_slices <- function(...,
   })
 }
 
+
+#' @rdname teal_slices
+#' @export
+#' @keywords internal
+#'
+as.teal_slices <- function(x) {
+  checkmate::assert_list(x)
+  lapply(x, checkmate::assert_list, names = "named")
+  attrs <- attributes(unclass(x))
+  ans <- lapply(x, as.teal_slice)
+  do.call(teal_slices, c(ans, attrs))
+}
+
+
 #' Deep copy `teal_slices`
 #'
 #' it's important to create a new copy of `teal_slices` when
