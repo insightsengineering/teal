@@ -99,7 +99,7 @@ teal_slices <- function(...,
 #' @export
 #' @keywords internal
 #'
-as.teal_slices <- function(x) {
+as.teal_slices <- function(x) { # nolint
   checkmate::assert_list(x)
   lapply(x, checkmate::assert_list, names = "named", .var.name = "list element")
 
