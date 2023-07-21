@@ -53,7 +53,7 @@ If missing, all filters will be applied to all modules.
 If empty list, all filters will be available to all modules but will start inactive.
 If \code{module_specific} is \code{FALSE}, only \code{global_filters} will be active on start.}
 
-\item{x}{(\code{teal_slices}) object.}
+\item{x}{(\code{list}) of lists to convert to \code{teal_slices}}
 }
 \description{
 Filter settings for teal applications

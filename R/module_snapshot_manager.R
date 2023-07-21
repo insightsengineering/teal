@@ -100,7 +100,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
     filter <- isolate(slices_global())
     snapshot_history <- reactiveVal({
       list(
-        "Initial application state" = as.list(filter)
+        "Initial application state" = as.list(filter, total = TRUE)
       )
     })
 
@@ -133,7 +133,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         )
         updateTextInput(inputId = "snapshot_name", value = , placeholder = "Meaningful, unique name")
       } else {
-        snapshot <- as.list(slices_global())
+        snapshot <- as.list(slices_global(), total = TRUE)
         attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
         snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
