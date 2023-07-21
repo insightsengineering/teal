@@ -169,7 +169,9 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
       # create a list of data following structure of the nested modules list structure.
       # Because it's easier to unpack modules and datasets when they follow the same nested structure.
       datasets_singleton <- teal.slice::init_filtered_data(raw_data())
-      datasets_singleton$set_filter_state(filter)
+      # Singleton starts with only global filters active.
+      filter_global <- Filter(function(x) x$id %in% attr(filter, "mapping")$global_filters, filter)
+      datasets_singleton$set_filter_state(filter_global)
       module_datasets <- function(modules) {
         if (inherits(modules, "teal_modules")) {
           datasets <- lapply(modules$children, module_datasets)

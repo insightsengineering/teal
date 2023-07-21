@@ -67,7 +67,7 @@ testthat::test_that("active_datanames() returns dataname from single tab", {
       id = "test",
       datasets = list(`iris tab` = filtered_data),
       modules = modules(test_module1),
-      filter = list()
+      filter = teal_slices()
     ),
     expr = {
       testthat::expect_identical(active_datanames(), "iris")
@@ -82,7 +82,7 @@ testthat::test_that("active_datanames() returns dataname from active tab after c
       id = "test",
       datasets = list(`iris tab` = filtered_data, `mtcars tab` = filtered_data),
       modules = modules(test_module1, test_module2),
-      filter = list(),
+      filter = teal_slices(),
       reporter = teal.reporter::Reporter$new()
     ),
     expr = {
