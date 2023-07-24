@@ -20,7 +20,7 @@ This article is intended for module developers and aims to provide guidance on e
 The responsibilities of a module developer include:
 
 - Adding support for reporting to their module.
-- Specifying the outputs that contribute to a snapshot of their module.
+- Specifying the outputs that constitute a snapshot of their module.
 
 The entire lifecycle of objects involved in creating the report and configuring the module to preview the report is handled by `teal`.
 
