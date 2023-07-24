@@ -159,7 +159,7 @@ app <- init(
 if (interactive()) shinyApp(app$ui, app$server)
 ```
 
-The new `UI` is visible, and the buttons are clickable. An application user can review the card in the `Report previewer` module, but it will appear empty since we haven't added any content to the card of our module yet.
+A new piece of `UI` has been added, and the buttons are clickable. The user can now add a card to the report and view it in the `Report previewer` module but the preview is still empty since we have not instructed our module what to put on the card.
 
 ### Add content to the card
 
