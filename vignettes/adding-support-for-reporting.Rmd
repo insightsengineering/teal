@@ -110,7 +110,7 @@ if (interactive()) shinyApp(app$ui, app$server)
 
 `teal` adds another tab to the application, titled `Report previewer`. However, there is no visible change in how the module operates and appears and the user cannot add content to the report from this module. That requires inserting `teal.reporter` `ui` and `server` elements into the module body.
 
-### Introduce the new `UI` and supporting `shiny` modules
+### Insert `UI` and supporting `shiny` modules for adding report cards
 
 To enable users to add content from `example_module_with_reporting` to the report, we will utilize `teal.reporter::simple_reporter_ui` and `teal.reporter::simple_reporter_srv` to set up the `UI` and the `shiny` module.
 
