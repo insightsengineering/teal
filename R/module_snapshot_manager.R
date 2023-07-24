@@ -100,7 +100,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
     filter <- isolate(slices_global())
     snapshot_history <- reactiveVal({
       list(
-        "Initial application state" = disassemble_slices(filter)
+        "Initial application state" = as.list(filter, recursive = TRUE)
       )
     })
 
@@ -133,7 +133,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         )
         updateTextInput(inputId = "snapshot_name", value = , placeholder = "Meaningful, unique name")
       } else {
-        snapshot <- disassemble_slices(slices_global())
+        snapshot <- as.list(slices_global(), recursive = TRUE)
         attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
         snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
@@ -149,7 +149,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       s <- "Initial application state"
       ### Begin restore procedure. ###
       snapshot <- snapshot_history()[[s]]
-      snapshot_state <- reassemble_slices(snapshot)
+      snapshot_state <- as.teal_slices(snapshot)
       mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
       mapply(
         function(filtered_data, filters) {
@@ -183,7 +183,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
           observers[[id_pickme]] <- observeEvent(input[[id_pickme]], {
             ### Begin restore procedure. ###
             snapshot <- snapshot_history()[[s]]
-            snapshot_state <- reassemble_slices(snapshot)
+            snapshot_state <- as.teal_slices(snapshot)
             mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
             mapply(
               function(filtered_data, filters) {
@@ -207,7 +207,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
             },
             content = function(file) {
               snapshot <- snapshot_history()[[s]]
-              snapshot_state <- reassemble_slices(snapshot)
+              snapshot_state <- as.teal_slices(snapshot)
               teal.slice::slices_store(tss = snapshot_state, file = file)
             }
           )
@@ -236,34 +236,6 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
 
 
 ### utility functions ----
-
-#' Convert teal_slices and to list of lists (drop classes), while maintaining attributes.
-#' Adds special class so that the reverse action can have assertion on argument type.
-#' @param tss (`teal_slices`)
-#' @return Object of class `teal_slices_snapshot`, which is a list of the same length as `tss`,
-#'         where each `teal_slice` has been converted to a list.
-#' @keywords internal
-#'
-disassemble_slices <- function(tss) {
-  checkmate::assert_class(tss, "teal_slices")
-  ans <- unclass(tss)
-  ans[] <- lapply(ans, as.list)
-  class(ans) <- "teal_slices_snapshot"
-  ans
-}
-
-#' Rebuild `teal_slices` from `teal_slices_snapshot`.
-#' @param x (`teal_slices_snapshot`)
-#' @return A `teal_slices` object.
-#' @keywords internal
-#'
-reassemble_slices <- function(x) {
-  checkmate::assert_class(x, "teal_slices_snapshot")
-  attrs <- attributes(unclass(x))
-  ans <- lapply(x, as.teal_slice)
-  do.call(teal_slices, c(ans, attrs))
-}
-
 
 #' Explicitly enumerate global filters.
 #'

@@ -18,6 +18,8 @@
 #'  If empty list, all filters will be available to all modules but will start inactive.
 #'  If `module_specific` is `FALSE`, only `global_filters` will be active on start.
 #'
+#' @param x (`list`) of lists to convert to `teal_slices`
+#'
 #' @examples
 #' filter <- teal_slices(
 #'   teal.slice::teal_slice(dataname = "iris", varname = "Species", id = "species"),
@@ -91,6 +93,21 @@ teal_slices <- function(...,
     tss
   })
 }
+
+
+#' @rdname teal_slices
+#' @export
+#' @keywords internal
+#'
+as.teal_slices <- function(x) { # nolint
+  checkmate::assert_list(x)
+  lapply(x, checkmate::assert_list, names = "named", .var.name = "list element")
+
+  attrs <- attributes(unclass(x))
+  ans <- lapply(x, function(x) if (is.teal_slice(x)) x else as.teal_slice(x))
+  do.call(teal_slices, c(ans, attrs))
+}
+
 
 #' Deep copy `teal_slices`
 #'
