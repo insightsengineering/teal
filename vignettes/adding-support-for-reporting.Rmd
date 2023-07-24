@@ -112,7 +112,7 @@ if (interactive()) shinyApp(app$ui, app$server)
 
 ### Insert `UI` and supporting `shiny` modules for adding report cards
 
-To enable users to add content from `example_module_with_reporting` to the report, we will utilize `teal.reporter::simple_reporter_ui` and `teal.reporter::simple_reporter_srv` to set up the `UI` and the `shiny` module.
+The UI and the server logic necessary for adding cards from `example_module_with_reporting` to the report are provided by `teal.reporter::simple_reporter_ui` and `teal.reporter::simple_reporter_srv`.
 
 ```{r}
 example_module_with_reporting <- function(label = "example teal module") {
