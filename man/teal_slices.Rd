@@ -2,6 +2,7 @@
 % Please edit documentation in R/teal_slices.R
 \name{teal_slices}
 \alias{teal_slices}
+\alias{as.teal_slices}
 \title{Filter settings for teal applications}
 \usage{
 teal_slices(
@@ -13,6 +14,8 @@ teal_slices(
   module_specific = FALSE,
   mapping
 )
+
+as.teal_slices(x)
 }
 \arguments{
 \item{...}{any number of \code{teal_slice} objects. For \code{print} and \code{format},
@@ -49,6 +52,8 @@ Names of the list should correspond to \code{teal_module} \code{label} set in \c
 If missing, all filters will be applied to all modules.
 If empty list, all filters will be available to all modules but will start inactive.
 If \code{module_specific} is \code{FALSE}, only \code{global_filters} will be active on start.}
+
+\item{x}{(\code{list}) of lists to convert to \code{teal_slices}}
 }
 \description{
 Filter settings for teal applications
@@ -82,3 +87,4 @@ if (interactive()) {
 }
 
 }
+\keyword{internal}

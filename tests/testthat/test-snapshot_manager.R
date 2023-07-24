@@ -38,9 +38,9 @@ testthat::test_that("snapshot manager holds initial state in history", {
       testthat::expect_true("Initial application state" %in% names(snapshot_history()))
 
       snapshot <- snapshot_history()[["Initial application state"]]
-      snapshot_state <- reassemble_slices(snapshot)
+      snapshot_state <- as.teal_slices(snapshot)
 
-      testthat::expect_equal(disassemble_slices(snapshot_state), disassemble_slices(filter))
+      testthat::expect_equal(as.list(snapshot_state, recursive = TRUE), as.list(filter, recursive = TRUE))
     }
   )
 })
