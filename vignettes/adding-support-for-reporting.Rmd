@@ -108,7 +108,7 @@ app <- init(
 if (interactive()) shinyApp(app$ui, app$server)
 ```
 
-The `teal` platform adds another tab to the application titled `Report previewer`. However, it seems that there is no visible change in how the module operates and appears. As of now, users cannot interact with it to add content to the report from this module. Fortunately, `teal.reporter` provides `ui` and `server` objects to facilitate this.
+`teal` adds another tab to the application, titled `Report previewer`. However, there is no visible change in how the module operates and appears and the user cannot add content to the report from this module. That requires inserting `teal.reporter` `ui` and `server` elements into the module body.
 
 ### Introduce the new `UI` and supporting `shiny` modules
 
