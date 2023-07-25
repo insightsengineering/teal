@@ -113,13 +113,13 @@ example_datasets <- function() { # nolint
   list(
     "d2" = list(
       "d3" = list(
-        "aaa1" = dataset$clone(deep = true),
-        "aaa2" = dataset$clone(deep = true),
-        "aaa3" = dataset$clone(deep = true)
+        "aaa1" = dataset$clone(deep = TRUE),
+        "aaa2" = dataset$clone(deep = TRUE),
+        "aaa3" = dataset$clone(deep = TRUE)
       ),
-      "bbb" = dataset$clone(deep = true)
+      "bbb" = dataset$clone(deep = TRUE)
     ),
-    "ccc" = dataset$clone(deep = true)
+    "ccc" = dataset$clone(deep = TRUE)
   )
 }
 
