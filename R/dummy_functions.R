@@ -100,11 +100,11 @@ example_cdisc_data <- function() { # nolint
   return(res)
 }
 
-#' Get a dummy `datasets` object with `ADSL` data, useful in the examples
+#' Get datasets to go with example modules.
 #'
-#' Creates a list of `FilteredData` objects, the structure of which
-#' matches the module hierarchy created by `example_modules`.
-#' Each `FilteredData` is a deep clone of one original object.
+#' Creates a nested list, the structure of which matches the module hierarchy created by `example_modules`.
+#' Each list leaf is a `FilteredData` objectst, a deep clone of one original one.
+#'
 #' @return named list of `FilteredData` objects, each with `ADSL` set.
 #' @keywords internal
 example_datasets <- function() { # nolint
@@ -123,10 +123,9 @@ example_datasets <- function() { # nolint
   )
 }
 
-#' Get dummy modules
+#' Get example modules.
 #'
-#' Create an example hierarchy of `teal_modules` from which
-#' a teal app can be created.
+#' Creates an example hierarchy of `teal_modules` from which a `teal` app can be created.
 #'
 #' @return `teal_modules`
 #' @keywords internal

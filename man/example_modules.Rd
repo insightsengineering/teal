@@ -2,7 +2,7 @@
 % Please edit documentation in R/dummy_functions.R
 \name{example_modules}
 \alias{example_modules}
-\title{Get dummy modules}
+\title{Get example modules.}
 \usage{
 example_modules()
 }
@@ -10,7 +10,6 @@ example_modules()
 \code{teal_modules}
 }
 \description{
-Create an example hierarchy of \code{teal_modules} from which
-a teal app can be created.
+Creates an example hierarchy of \code{teal_modules} from which a \code{teal} app can be created.
 }
 \keyword{internal}

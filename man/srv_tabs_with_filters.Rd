@@ -9,7 +9,7 @@ srv_tabs_with_filters(
   datasets,
   modules,
   reporter = teal.reporter::Reporter$new(),
-  filter
+  filter = NULL
 )
 }
 \arguments{
