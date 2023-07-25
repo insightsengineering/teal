@@ -102,12 +102,25 @@ example_cdisc_data <- function() { # nolint
 
 #' Get a dummy `datasets` object with `ADSL` data, useful in the examples
 #'
-#' Returns a new `R6` object on each invocation, not a singleton.
-#' @return `FilteredData` with `ADSL` set
+#' Creates a list of `FilteredData` objects, the structure of which
+#' matches the module hierarchy created by `example_modules`.
+#' Each `FilteredData` is a deep clone of one original object.
+#' @return named list of `FilteredData` objects, each with `ADSL` set.
 #' @keywords internal
 example_datasets <- function() { # nolint
   dummy_cdisc_data <- example_cdisc_data()
-  return(teal.slice::init_filtered_data(dummy_cdisc_data))
+  dataset <- teal.slice::init_filtered_data(dummy_cdisc_data)
+  list(
+    "d2" = list(
+      "d3" = list(
+        "aaa1" = dataset$clone(deep = true),
+        "aaa2" = dataset$clone(deep = true),
+        "aaa3" = dataset$clone(deep = true)
+      ),
+      "bbb" = dataset$clone(deep = true)
+    ),
+    "ccc" = dataset$clone(deep = true)
+  )
 }
 
 #' Get dummy modules
@@ -131,4 +144,10 @@ example_modules <- function() {
     module(label = "ccc")
   )
   return(mods)
+
+  # modules(
+  #   label = "root",
+  #   module(label = "d1"),
+  #   module(label = "d2")
+  # )
 }
