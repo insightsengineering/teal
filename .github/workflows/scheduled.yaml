@@ -5,14 +5,20 @@ on:
   schedule:
     - cron: '45 3 * * 0'
   workflow_dispatch:
+  # Section to be removed before action is merged
+  #  note: branch below needs to point to main instead of new-verdepcheck-strategy
+  push:
+    branches:
+      - verdepcheck_action
+  # end of section to be removed
 
 jobs:
   dependency-test:
     strategy:
       fail-fast: false
       matrix:
-        test-strategy: ["min", "release", "max"]
-    uses: insightsengineering/r.pkg.template/.github/workflows/verdepcheck.yaml@main
+        test-strategy: ["min_cohort", "min_isolated", "release", "max"]
+    uses: insightsengineering/r.pkg.template/.github/workflows/verdepcheck.yaml@new-verdepcheck-strategy
     name: Dependency Test - ${{ matrix.test-strategy }} 🔢
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
