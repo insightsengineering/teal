@@ -181,6 +181,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
         reporter = reporter
       )
     })
+    names(modules_reactive) <- names(modules$children)
 
     # when not ready input$active_tab would return NULL - this would fail next reactive
     input_validated <- eventReactive(input$active_tab, input$active_tab, ignoreNULL = TRUE)
@@ -205,6 +206,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
                                         reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_class(datasets, class = "FilteredData")
   logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
+
   moduleServer(id = id, module = function(input, output, session) {
     modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
     if (!is.null(modules$datanames) && is_module_specific) {
@@ -289,6 +291,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #' @keywords internal
 .datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
   checkmate::assert_class(trigger_data, "reactiveVal")
+
   datanames <- if (is.null(module$datanames)) datasets$datanames() else module$datanames
   datanames <- structure(datanames, names = datanames)
 
