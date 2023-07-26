@@ -41,7 +41,7 @@
 #'           ns <- NS(id)
 #'           tagList(dataTableOutput(ns("data")))
 #'         },
-#'         filters = "all"
+#'         datanames = "all"
 #'       )
 #'     ),
 #'     module(
@@ -58,7 +58,7 @@
 #'         ns <- NS(id)
 #'         tagList(textOutput(ns("text")))
 #'       },
-#'       filters = NULL
+#'       datanames = NULL
 #'     )
 #'   )
 #' )
@@ -145,10 +145,11 @@ is_arg_used <- function(modules, arg) {
 #'  - `data` (optional)  module will receive list of reactive (filtered) data specified in the `filters` argument.
 #'  - `datasets` (optional)  module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
 #'  - `...` (optional) `ui_args` elements will be passed to the module named argument or to the `...`.
-#' @param filters (`character`) A vector with `datanames` that are relevant for the item. The
+#' @param filters (`character`) Deprecated. Use `datanames` instead.
+#' @param datanames (`character`) A vector with `datanames` that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed datasets. `NULL` will hide the filter panel,
-#'   and the keyword `'all'` will show the filters of all datasets. `filters` determines also
+#'   and the keyword `'all'` will show filters of all datasets. `datanames` also determines
 #'   a subset of datasets which are appended to the `data` argument in `server` function.
 #' @param server_args (named `list`) with additional arguments passed on to the
 #'   `server` function.

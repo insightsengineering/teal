@@ -35,7 +35,7 @@ example_module <- function(label = "example teal module") {
         encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
-    filters = "all"
+    datanames = "all"
   )
 }
 ```
@@ -170,7 +170,7 @@ tm_histogram_example <- function(label, histogram_var) {
     ui = ui_histogram_example,
     ui_args = list(histogram_var = histogram_var),
     server_args = list(histogram_var = histogram_var),
-    filters = "all"
+    datanames = "all"
   )
 }
 ```
