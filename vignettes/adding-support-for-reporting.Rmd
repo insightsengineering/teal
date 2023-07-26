@@ -166,7 +166,7 @@ A new piece of `UI` has been added, and the buttons are clickable. The user can 
 To add content to a card, we will utilize the public API exposed by the `TealReportCard` class. The `teal.reporter::simple_reporter_srv` module accepts the card_fun argument that determines the appearance of the output from our custom module. `ReportCard` and its derivatives allow the sequential addition of content according to the order of method calls. To explore the content, we can use the `$get_content` method. For further details, refer to the documentation of `TealReportCard` and `teal.reporter::ReportCard`.
 
 We will add simple text to the card by modifying the `card_fun` argument passed to `teal.reporter::simple_reporter_srv`. 
-Remember to return the `card` object from the function, as failure to do so may cause errors in `teal`.
+The function must return the `card` object, otherwise errors may occur in `teal`.
 
 ```{r}
 custom_function <- function(card = teal.reporter::ReportCard$new()) {
