@@ -225,7 +225,8 @@ Now, an application user can see the text added by `custom_function` in the `Rep
 To support `TealReportCard`, the function that is passed to `teal.reporter::simple_reporter_srv`  must define a default value for the card, as shown below:
 
 ```{r}
-custom_fun <- function(card = TealReportCard$new()) {
+custom_function <- function(card = TealReportCard$new()) {
+  # ... some code ... # 
   card
 }
 ```
