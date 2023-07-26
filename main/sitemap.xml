@@ -76,9 +76,6 @@
     <loc>https://insightsengineering.github.io/teal/main/reference/deep_copy_filter.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/disassemble_slices.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/dot-datasets_to_data.html</loc>
   </url>
   <url>
@@ -158,9 +155,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/modules_depth.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/reassemble_slices.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/reexports.html</loc>
