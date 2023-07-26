@@ -172,18 +172,15 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
     logger::log_trace("srv_nested_tabs.teal_modules initializing the module { deparse1(modules$label) }.")
 
     labels <- vapply(modules$children, `[[`, character(1), "label")
-    modules_reactive <- sapply(
-      names(modules$children),
-      function(module_id) {
-        srv_nested_tabs(
-          id = module_id,
-          datasets = datasets[[labels[module_id]]],
-          modules = modules$children[[module_id]],
-          is_module_specific = is_module_specific,
-          reporter = reporter
-        )
-      }
-    )
+    modules_reactive <- lapply(names(modules$children), function(module_id) {
+      srv_nested_tabs(
+        id = module_id,
+        datasets = datasets[[labels[module_id]]],
+        modules = modules$children[[module_id]],
+        is_module_specific = is_module_specific,
+        reporter = reporter
+      )
+    })
 
     # when not ready input$active_tab would return NULL - this would fail next reactive
     input_validated <- eventReactive(input$active_tab, input$active_tab, ignoreNULL = TRUE)
@@ -293,13 +290,10 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 .datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
   checkmate::assert_class(trigger_data, "reactiveVal")
   datanames <- if (is.null(module$datanames)) datasets$datanames() else module$datanames
+  datanames <- structure(datanames, names = datanames)
 
   # list of reactive filtered data
-  data <- sapply(
-    USE.NAMES = TRUE,
-    X = datanames,
-    FUN = function(x) eventReactive(trigger_data(), datasets$get_data(x, filtered = TRUE))
-  )
+  data <- lapply(datanames, function(x) eventReactive(trigger_data(), datasets$get_data(x, filtered = TRUE)))
 
   hashes <- calculate_hashes(datanames, datasets)
   metadata <- lapply(datanames, datasets$get_metadata)
@@ -330,11 +324,8 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #' @keywords internal
 #'
 calculate_hashes <- function(datanames, datasets) {
-  sapply(
-    datanames,
-    simplify = FALSE,
-    function(x) {
-      rlang::hash(datasets$get_data(x, filtered = FALSE))
-    }
-  )
+  if (is.null(names(datanames))) {
+    datanames <- structure(datanames, names = datanames)
+  }
+  lapply(datanames, function(x) rlang::hash(datasets$get_data(x, filtered = FALSE)))
 }
