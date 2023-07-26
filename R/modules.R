@@ -190,15 +190,23 @@ module <- function(label = "module",
                    ui = function(id, ...) {
                      tags$p(paste0("This module has no UI (id: ", id, " )"))
                    },
-                   filters = "all",
+                   filters,
+                   datanames = "all",
                    server_args = NULL,
                    ui_args = NULL) {
   checkmate::assert_string(label)
   checkmate::assert_function(server)
   checkmate::assert_function(ui)
-  checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+  checkmate::assert_character(datanames, min.len = 1, null.ok = TRUE, any.missing = FALSE)
   checkmate::assert_list(server_args, null.ok = TRUE, names = "named")
   checkmate::assert_list(ui_args, null.ok = TRUE, names = "named")
+
+  if (!missing(filters)) {
+    checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+    datanames <- filters
+    warning("The `filters` argument is deprecated and will be removed in the next release. ",
+            "Please use `datanames` instead. ")
+  }
 
   if (label == "global_filters") {
     stop("Label 'global_filters' is reserved in teal. Please change to something else.")
@@ -254,7 +262,7 @@ module <- function(label = "module",
   structure(
     list(
       label = label,
-      server = server, ui = ui, filters = filters,
+      server = server, ui = ui, datanames = datanames,
       server_args = server_args, ui_args = ui_args
     ),
     class = "teal_module"
