@@ -24,7 +24,7 @@ testthat::test_that("Calling module() does not throw", {
 })
 
 testthat::test_that("module requires label argument to be a string different than 'global_filters'", {
-  testthat::expect_error(module(label = "label"), NA)
+  testthat::expect_no_error(module(label = "label"))
 
   testthat::expect_error(module(label = NULL), "Assertion on 'label' failed.+'NULL'")
 
@@ -36,17 +36,11 @@ testthat::test_that("module requires label argument to be a string different tha
 })
 
 testthat::test_that("module expects server being a shiny server module with any argument", {
-  testthat::expect_error(module(
-    server = function(id) NULL
-  ), NA)
+  testthat::expect_no_error(module(server = function(id) NULL))
 
-  testthat::expect_error(module(
-    server = function(id, any_argument) NULL,
-  ), NA)
+  testthat::expect_no_error(module(server = function(id, any_argument) NULL))
 
-  testthat::expect_error(module(
-    server = function(input, output, session, any_argument) NULL,
-  ), NA)
+  testthat::expect_no_error(module(server = function(input, output, session, any_argument) NULL))
 
 
   testthat::expect_error(
@@ -61,23 +55,17 @@ testthat::test_that("module expects server being a shiny server module with any 
 })
 
 testthat::test_that("module requires server_args argument to be a list", {
-  testthat::expect_error(module(server = function(id, a) NULL, server_args = list(a = 1)), NA)
-  testthat::expect_error(module(server_args = list()), NA)
-  testthat::expect_error(module(server_args = NULL), NA)
+  testthat::expect_no_error(module(server = function(id, a) NULL, server_args = list(a = 1)))
+  testthat::expect_no_error(module(server_args = list()))
+  testthat::expect_no_error(module(server_args = NULL))
   testthat::expect_error(module(server_args = ""), "Assertion on 'server_args' failed.+'list'")
   testthat::expect_error(module(server_args = list(1, 2, 3)), "Must have names")
 })
 
 testthat::test_that("module expects all server_args being a server arguments or passed through `...`", {
-  testthat::expect_error(module(
-    server = function(id, arg1) NULL,
-    server_args = list(arg1 = NULL)
-  ), NA)
+  testthat::expect_no_error(module(server = function(id, arg1) NULL, server_args = list(arg1 = NULL)))
 
-  testthat::expect_error(module(
-    server = function(id, ...) NULL,
-    server_args = list(arg1 = NULL)
-  ), NA)
+  testthat::expect_no_error(module(server = function(id, ...) NULL, server_args = list(arg1 = NULL)))
 
   testthat::expect_error(
     module(server = function(id) NULL, server_args = list(arg1 = NULL)),
@@ -86,16 +74,16 @@ testthat::test_that("module expects all server_args being a server arguments or 
 })
 
 testthat::test_that("module requires ui_args argument to be a list", {
-  testthat::expect_error(module(ui = function(id, a) NULL, ui_args = list(a = 1)), NA)
-  testthat::expect_error(module(ui_args = list()), NA)
-  testthat::expect_error(module(ui_args = NULL), NA)
+  testthat::expect_no_error(module(ui = function(id, a) NULL, ui_args = list(a = 1)))
+  testthat::expect_no_error(module(ui_args = list()))
+  testthat::expect_no_error(module(ui_args = NULL))
   testthat::expect_error(module(ui_args = ""), "Assertion on 'ui_args' failed.+'list'")
   testthat::expect_error(module(ui_args = list(1, 2, 3)), "Must have names")
 })
 
 testthat::test_that("module expects ui being a shiny ui module with any argument", {
-  testthat::expect_error(module(ui = function(id) NULL), NA)
-  testthat::expect_error(module(ui = function(id, any_argument) NULL), NA)
+  testthat::expect_no_error(module(ui = function(id) NULL))
+  testthat::expect_no_error(module(ui = function(id, any_argument) NULL))
   testthat::expect_error(
     module(ui = function(any_argument) NULL),
     "`ui` argument requires a function with following arguments"
@@ -103,16 +91,9 @@ testthat::test_that("module expects ui being a shiny ui module with any argument
 })
 
 testthat::test_that("module expects all ui_args being a ui arguments or passed through `...`", {
-  testthat::expect_error(module(
-    ui = function(id, arg1) NULL,
-    ui_args = list(arg1 = NULL)
-  ), NA)
+  testthat::expect_no_error(module(ui = function(id, arg1) NULL, ui_args = list(arg1 = NULL)))
 
-  testthat::expect_error(module(
-    ui = function(id, ...) NULL,
-    ui_args = list(arg1 = NULL)
-  ), NA)
-
+  testthat::expect_no_error(module(ui = function(id, ...) NULL, ui_args = list(arg1 = NULL)))
 
   testthat::expect_error(
     module(ui = function(id) NULL, ui_args = list(arg1 = NULL)),
@@ -121,11 +102,11 @@ testthat::test_that("module expects all ui_args being a ui arguments or passed t
 })
 
 testthat::test_that("module requires datanames argument to be a character or NULL", {
-  testthat::expect_error(module(datanames = "all"), NA)
-  testthat::expect_error(module(datanames = ""), NA)
-  testthat::expect_error(module(datanames = NULL), NA)
+  testthat::expect_no_error(module(datanames = "all"))
+  testthat::expect_no_error(module(datanames = ""))
+  testthat::expect_no_error(module(datanames = NULL))
   testthat::expect_error(module(datanames = NA_character_), "Contains missing values")
-  testthat::expect_error(module(server = function(id, data) NULL, datanames = NULL), NA)
+  testthat::expect_no_error(module(server = function(id, data) NULL, datanames = NULL))
 })
 
 testthat::test_that("module() returns list of class 'teal_module' containing input objects", {
@@ -160,7 +141,7 @@ testthat::test_that("modules requires label argument to be a string ", {
     datanames = ""
   )
 
-  testthat::expect_error(modules(label = "label", test_module), NA)
+  testthat::expect_no_error(modules(label = "label", test_module))
   testthat::expect_error(modules(label = NULL, test_module), "Assertion on 'label' failed.+'NULL'")
   testthat::expect_error(
     modules(label = c("label", "label"), test_module),
@@ -176,7 +157,7 @@ testthat::test_that("modules accept teal_module in ...", {
     datanames = ""
   )
 
-  testthat::expect_error(modules(label = "label", test_module), NA)
+  testthat::expect_no_error(modules(label = "label", test_module))
 })
 
 testthat::test_that("modules accept multiple teal_module objects in ...", {
@@ -187,7 +168,7 @@ testthat::test_that("modules accept multiple teal_module objects in ...", {
     datanames = ""
   )
 
-  testthat::expect_error(modules(label = "label", test_module, test_module), NA)
+  testthat::expect_no_error(modules(label = "label", test_module, test_module))
 })
 
 testthat::test_that("modules accept multiple teal_module and teal_modules objects in ...", {
@@ -199,7 +180,7 @@ testthat::test_that("modules accept multiple teal_module and teal_modules object
   )
   test_modules <- modules(label = "label", test_module)
 
-  testthat::expect_error(modules(label = "label", test_module, test_modules), NA)
+  testthat::expect_no_error(modules(label = "label", test_module, test_modules))
 })
 
 testthat::test_that("modules does not accept objects other than teal_module(s) in ...", {
@@ -250,7 +231,10 @@ testthat::test_that("modules returns useful error message if label argument not 
     ui = ui_fun1,
     datanames = ""
   )
-  testthat::expect_error(modules("module", test_module), "The only character argument to modules\\(\\) must be 'label'")
+  testthat::expect_error(
+    modules("module", test_module),
+    "The only character argument to modules\\(\\) must be 'label'"
+  )
 })
 
 
@@ -270,7 +254,7 @@ testthat::test_that("modules returns children as list with unique names if label
 
 
 testthat::test_that("modules_depth accepts depth as integer", {
-  testthat::expect_error(
+  testthat::expect_no_error(
     modules_depth(
       module(
         label = "label",
@@ -279,8 +263,7 @@ testthat::test_that("modules_depth accepts depth as integer", {
         datanames = ""
       ),
       depth = 3L
-    ),
-    NA
+    )
   )
 
   testthat::expect_error(
@@ -312,7 +295,7 @@ testthat::test_that("modules_depth returns depth=0 by default", {
 })
 
 testthat::test_that("modules_depth accepts modules to be teal_module or teal_modules", {
-  testthat::expect_error(
+  testthat::expect_no_error(
     modules_depth(
       module(
         label = "label",
@@ -320,10 +303,9 @@ testthat::test_that("modules_depth accepts modules to be teal_module or teal_mod
         ui = ui_fun1,
         datanames = ""
       )
-    ),
-    NA
+    )
   )
-  testthat::expect_error(
+  testthat::expect_no_error(
     modules_depth(
       modules(
         label = "tabs",
@@ -334,8 +316,7 @@ testthat::test_that("modules_depth accepts modules to be teal_module or teal_mod
           datanames = ""
         )
       )
-    ),
-    NA
+    )
   )
 })
 
