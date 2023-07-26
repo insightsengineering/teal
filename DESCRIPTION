@@ -60,14 +60,6 @@ VignetteBuilder:
     knitr
 RdMacros:
     lifecycle
-Remotes:
-    insightsengineering/teal.code@*release,
-    insightsengineering/teal.data@*release,
-    insightsengineering/teal.logger@*release,
-    insightsengineering/teal.reporter@*release,
-    insightsengineering/teal.slice@*release,
-    insightsengineering/teal.transform@*release,
-    insightsengineering/teal.widgets@*release
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
