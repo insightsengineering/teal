@@ -229,6 +229,11 @@ module <- function(label = "module",
     )
   }
 
+  if (!is.element("data", server_formals)) {
+    message(sprintf("module \"%s\" server function takes no data so \"datanames\" will be ignored", label))
+    datanames <- NULL
+  }
+
   srv_extra_args <- setdiff(names(server_args), server_formals)
   if (length(srv_extra_args) > 0 && !"..." %in% server_formals) {
     stop(
