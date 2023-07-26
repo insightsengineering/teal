@@ -220,7 +220,7 @@ Now, an application user can see the text added by `custom_function` in the `Rep
 
 ### `TealReportCard`
 
-`teal` exports `TealReportCard`, which extends the `teal.reporter::ReportCard` class and provides several convenient methods to facilitate working with `teal` features like the filter panel or source code. For more details, refer to the documentation of `TealReportCard`.
+`teal` exports the `TealReportCard` class, which extends the `teal.reporter::ReportCard` class and provides several convenient methods to facilitate working with `teal` features like the filter panel or source code. For more details, refer to the documentation of `TealReportCard`.
 
 To support `TealReportCard`, the function that is passed to `teal.reporter::simple_reporter_srv`  must define a default value for the card, as shown below:
 
