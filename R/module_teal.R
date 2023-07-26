@@ -179,9 +179,9 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
           names(datasets) <- labels
           datasets
         } else if (isTRUE(attr(filter, "module_specific"))) {
-          # we should create FilteredData even if modules$filter is null
+          # we should create FilteredData even if modules$datanames is null
           # null controls a display of filter panel but data should be still passed
-          datanames <- if (is.null(modules$filter)) raw_data()$get_datanames() else modules$filter
+          datanames <- if (is.null(modules$datanames)) raw_data()$get_datanames() else modules$datanames
           data_objects <- sapply(
             datanames,
             simplify = FALSE,

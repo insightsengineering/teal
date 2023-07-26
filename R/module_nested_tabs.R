@@ -123,7 +123,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
     )
   )
 
-  if (!is.null(modules$filter) && is_module_specific) {
+  if (!is.null(modules$datanames) && is_module_specific) {
     fluidRow(
       column(width = 9, teal_ui, class = "teal_primary_col"),
       column(
@@ -210,8 +210,8 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
-    if (!is.null(modules$filter) && is_module_specific) {
-      datasets$srv_filter_panel("module_filter_panel", active_datanames = reactive(modules$filter))
+    if (!is.null(modules$datanames) && is_module_specific) {
+      datasets$srv_filter_panel("module_filter_panel", active_datanames = reactive(modules$datanames))
     }
 
     # Create two triggers to limit reactivity between filter-panel and modules.
