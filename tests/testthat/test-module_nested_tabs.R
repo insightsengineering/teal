@@ -6,25 +6,25 @@ test_module1 <- module(
   label = "test1",
   ui = function(id, ...) NULL,
   server = function(id) moduleServer(id, function(input, output, session) message("1")),
-  filters = NULL
+  datanames = NULL
 )
 test_module2 <- module(
   label = "test2",
   ui = function(id) NULL,
   server = function(id) moduleServer(id, function(input, output, session) message("2")),
-  filters = NULL
+  datanames = NULL
 )
 test_module3 <- module(
   label = "test3",
   ui = function(id) NULL,
   server = function(id) moduleServer(id, function(input, output, session) message("3")),
-  filters = NULL
+  datanames = NULL
 )
 test_module4 <- module(
   label = "test4",
   ui = function(id) NULL,
   server = function(id) moduleServer(id, function(input, output, session) message("4")),
-  filters = NULL
+  datanames = NULL
 )
 
 testthat::test_that("srv_nested_tabs throws error if reporter is not inherited from class Reporter", {
@@ -188,7 +188,7 @@ testthat::test_that("srv_nested_tabs.teal_module does pass data if in the args e
     server = function(id, data, ...) {
       moduleServer(id, function(input, output, session) checkmate::assert_class(data, "tdata"))
     },
-    filters = NULL
+    datanames = NULL
   )
   testthat::expect_no_error(
     shiny::testServer(
@@ -207,7 +207,7 @@ testthat::test_that("srv_nested_tabs.teal_module does pass data if in the args e
 })
 
 testthat::test_that("srv_nested_tabs.teal_module passes data to the server module", {
-  module <- module(filters = NULL, server = function(id, data) {
+  module <- module(datanames = NULL, server = function(id, data) {
     moduleServer(id, function(input, output, session) checkmate::assert_list(data, "reactive"))
   })
 
@@ -268,7 +268,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes server_args to the ...",
 })
 
 testthat::test_that("srv_nested_tabs.teal_module warns if both data and datasets are passed", {
-  module <- module(filters = NULL, label = "test module", server = function(id, datasets, data) {
+  module <- module(datanames = NULL, label = "test module", server = function(id, datasets, data) {
     moduleServer(id, function(input, output, session) NULL)
   })
 
@@ -386,7 +386,7 @@ testthat::test_that(".datasets_to_data accepts a reactiveVal as trigger_data inp
       teal.slice:::teal_slice(dataname = "d1", varname = "val", selected = c(1, 2))
     )
   )
-  module <- list(filter = c("d1", "d2"))
+  module <- list(datanames = c("d1", "d2"))
   trigger_data <- reactiveVal(1L)
   testthat::expect_silent(shiny::isolate(.datasets_to_data(module, datasets, trigger_data)))
 })
@@ -398,7 +398,7 @@ testthat::test_that(".datasets_to_data throws error if trigger_data is not a rea
       teal.slice:::teal_slice(dataname = "d1", varname = "val", selected = c(1, 2))
     )
   )
-  module <- list(filter = "all")
+  module <- list(datanames = "all")
   trigger_data <- 1
   testthat::expect_error(
     shiny::isolate(.datasets_to_data(module, datasets, trigger_data)),
@@ -413,7 +413,7 @@ testthat::test_that(".datasets_to_data returns data which is filtered", {
       teal.slice:::teal_slice(dataname = "d1", varname = "val", selected = c(1, 2))
     )
   )
-  module <- list(filter = c("d1", "d2"))
+  module <- list(datanames = c("d1", "d2"))
   trigger_data <- reactiveVal(1L)
   data <- shiny::isolate(.datasets_to_data(module, datasets, trigger_data))
 
@@ -426,7 +426,7 @@ testthat::test_that(".datasets_to_data returns data which is filtered", {
 
 testthat::test_that(".datasets_to_data returns only data requested by modules$filter", {
   datasets <- get_example_filtered_data()
-  module <- list(filter = "d1")
+  module <- list(datanames = "d1")
   trigger_data <- reactiveVal(1L)
   data <- .datasets_to_data(module, datasets, trigger_data)
   testthat::expect_equal(shiny::isolate(names(data)), "d1")
@@ -434,7 +434,7 @@ testthat::test_that(".datasets_to_data returns only data requested by modules$fi
 
 testthat::test_that(".datasets_to_data returns tdata object", {
   datasets <- get_example_filtered_data()
-  module <- list(filter = c("d1", "d2"))
+  module <- list(datanames = c("d1", "d2"))
   trigger_data <- reactiveVal(1L)
   data <- .datasets_to_data(module, datasets, trigger_data)
 

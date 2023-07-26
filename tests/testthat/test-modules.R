@@ -20,7 +20,7 @@ ui_fun2 <- function(id, datasets) {
 }
 
 testthat::test_that("Calling module() does not throw", {
-  testthat::expect_error(module(), NA)
+  testthat::expect_no_error(suppressMessages(module()))
 })
 
 testthat::test_that("module requires label argument to be a string different than 'global_filters'", {
@@ -120,12 +120,12 @@ testthat::test_that("module expects all ui_args being a ui arguments or passed t
   )
 })
 
-testthat::test_that("module requires filters argument to be a character or NULL", {
-  testthat::expect_error(module(filters = "all"), NA)
-  testthat::expect_error(module(filters = ""), NA)
-  testthat::expect_error(module(filters = NULL), NA)
-  testthat::expect_error(module(filters = NA_character_), "Contains missing values")
-  testthat::expect_error(module(server = function(id, data) NULL, filters = NULL), NA)
+testthat::test_that("module requires datanames argument to be a character or NULL", {
+  testthat::expect_error(module(datanames = "all"), NA)
+  testthat::expect_error(module(datanames = ""), NA)
+  testthat::expect_error(module(datanames = NULL), NA)
+  testthat::expect_error(module(datanames = NA_character_), "Contains missing values")
+  testthat::expect_error(module(server = function(id, data) NULL, datanames = NULL), NA)
 })
 
 testthat::test_that("module() returns list of class 'teal_module' containing input objects", {
@@ -133,16 +133,16 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
     label = "aaa1",
     server = call_module_server_fun,
     ui = ui_fun1,
-    filters = "all",
+    datanames = "all",
     server_args = NULL,
     ui_args = NULL
   )
   testthat::expect_s3_class(test_module, "teal_module")
-  testthat::expect_named(test_module, c("label", "server", "ui", "filters", "server_args", "ui_args"))
+  testthat::expect_named(test_module, c("label", "server", "ui", "datanames", "server_args", "ui_args"))
   testthat::expect_identical(test_module$label, "aaa1")
   testthat::expect_identical(test_module$server, call_module_server_fun)
   testthat::expect_identical(test_module$ui, ui_fun1)
-  testthat::expect_identical(test_module$filters, "all")
+  testthat::expect_identical(test_module$datanames, NULL)
   testthat::expect_identical(test_module$server_args, NULL)
   testthat::expect_identical(test_module$ui_args, NULL)
 })
@@ -157,7 +157,7 @@ testthat::test_that("modules requires label argument to be a string ", {
     label = "label",
     server = module_server_fun,
     ui = ui_fun1,
-    filters = ""
+    datanames = ""
   )
 
   testthat::expect_error(modules(label = "label", test_module), NA)
@@ -173,7 +173,7 @@ testthat::test_that("modules accept teal_module in ...", {
     label = "label",
     server = module_server_fun,
     ui = ui_fun1,
-    filters = ""
+    datanames = ""
   )
 
   testthat::expect_error(modules(label = "label", test_module), NA)
@@ -184,7 +184,7 @@ testthat::test_that("modules accept multiple teal_module objects in ...", {
     label = "label",
     server = module_server_fun,
     ui = ui_fun1,
-    filters = ""
+    datanames = ""
   )
 
   testthat::expect_error(modules(label = "label", test_module, test_module), NA)
@@ -195,7 +195,7 @@ testthat::test_that("modules accept multiple teal_module and teal_modules object
     label = "label",
     server = module_server_fun,
     ui = ui_fun1,
-    filters = ""
+    datanames = ""
   )
   test_modules <- modules(label = "label", test_module)
 
@@ -221,7 +221,7 @@ testthat::test_that("modules returns teal_modules object with label and children
     label = "label",
     server = module_server_fun,
     ui = ui_fun1,
-    filters = ""
+    datanames = ""
   )
   out <- modules(label = "label2", test_module)
   testthat::expect_s3_class(out, "teal_modules")
@@ -233,7 +233,7 @@ testthat::test_that("modules returns children as list with list named after labe
     label = "module",
     server = module_server_fun,
     ui = ui_fun1,
-    filters = ""
+    datanames = ""
   )
   test_modules <- modules(label = "modules", test_module)
   out <- modules(label = "tabs", test_module, test_modules)$children
@@ -248,7 +248,7 @@ testthat::test_that("modules returns useful error message if label argument not 
     label = "module",
     server = module_server_fun,
     ui = ui_fun1,
-    filters = ""
+    datanames = ""
   )
   testthat::expect_error(modules("module", test_module), "The only character argument to modules\\(\\) must be 'label'")
 })
@@ -259,7 +259,7 @@ testthat::test_that("modules returns children as list with unique names if label
     label = "module",
     server = module_server_fun,
     ui = ui_fun1,
-    filters = ""
+    datanames = ""
   )
   test_modules <- modules(label = "module", test_module)
   out <- modules(label = "tabs", test_module, test_modules)$children
@@ -276,7 +276,7 @@ testthat::test_that("modules_depth accepts depth as integer", {
         label = "label",
         server = module_server_fun,
         ui = ui_fun1,
-        filters = ""
+        datanames = ""
       ),
       depth = 3L
     ),
@@ -289,7 +289,7 @@ testthat::test_that("modules_depth accepts depth as integer", {
         label = "label",
         server = module_server_fun,
         ui = ui_fun1,
-        filters = ""
+        datanames = ""
       ),
       depth = "1"
     ),
@@ -304,7 +304,7 @@ testthat::test_that("modules_depth returns depth=0 by default", {
         label = "label",
         server = module_server_fun,
         ui = ui_fun1,
-        filters = ""
+        datanames = ""
       )
     ),
     0L
@@ -318,7 +318,7 @@ testthat::test_that("modules_depth accepts modules to be teal_module or teal_mod
         label = "label",
         server = module_server_fun,
         ui = ui_fun1,
-        filters = ""
+        datanames = ""
       )
     ),
     NA
@@ -331,7 +331,7 @@ testthat::test_that("modules_depth accepts modules to be teal_module or teal_mod
           label = "label",
           server = module_server_fun,
           ui = ui_fun1,
-          filters = ""
+          datanames = ""
         )
       )
     ),
@@ -346,7 +346,7 @@ testthat::test_that("modules_depth returns depth same as input for teal_module",
         label = "label",
         server = module_server_fun,
         ui = ui_fun1,
-        filters = ""
+        datanames = ""
       )
     ),
     0L
@@ -362,7 +362,7 @@ testthat::test_that("modules_depth increases depth by 1 for each teal_modules", 
           label = "label",
           server = module_server_fun,
           ui = ui_fun1,
-          filters = ""
+          datanames = ""
         )
       ),
       depth = 1L
@@ -380,7 +380,7 @@ testthat::test_that("modules_depth increases depth by 1 for each teal_modules", 
             label = "label",
             server = module_server_fun,
             ui = ui_fun1,
-            filters = ""
+            datanames = ""
           )
         )
       ),
