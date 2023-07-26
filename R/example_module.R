@@ -15,7 +15,7 @@
 #'   shinyApp(app$ui, app$server)
 #' }
 #' @export
-example_module <- function(label = "example teal module", filters = "all") {
+example_module <- function(label = "example teal module", datanames = "all") {
   checkmate::assert_string(label)
   module(
     label,
@@ -32,6 +32,6 @@ example_module <- function(label = "example teal module", filters = "all") {
         encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
-    filters = filters
+    datanames = datanames
   )
 }

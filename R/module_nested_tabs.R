@@ -292,7 +292,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #' @keywords internal
 .datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
   checkmate::assert_class(trigger_data, "reactiveVal")
-  datanames <- if (is.null(module$filter)) datasets$datanames() else module$filter
+  datanames <- if (is.null(module$datanames)) datasets$datanames() else module$datanames
 
   # list of reactive filtered data
   data <- sapply(

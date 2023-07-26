@@ -164,7 +164,7 @@ srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporte
     )
 
     if (!is_module_specific) {
-      active_datanames <- reactive(active_module()$filters)
+      active_datanames <- reactive(active_module()$datanames)
       singleton <- unlist(datasets)[[1]]
       singleton$srv_filter_panel("filter_panel", active_datanames = active_datanames)
 
