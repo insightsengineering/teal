@@ -5,7 +5,7 @@ adsl_dataset <- teal.data::cdisc_dataset(
   parent = character(0), keys = teal.data::get_cdisc_keys("ADSL")
 )
 
-call_module_server_fun <- function(input, output, session, datasets) {
+call_module_server_fun <- function(input, output, session, data, datasets) {
 }
 
 module_server_fun <- function(id, datasets) {
@@ -142,7 +142,7 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
   testthat::expect_identical(test_module$label, "aaa1")
   testthat::expect_identical(test_module$server, call_module_server_fun)
   testthat::expect_identical(test_module$ui, ui_fun1)
-  testthat::expect_identical(test_module$datanames, NULL)
+  testthat::expect_identical(test_module$datanames, "all")
   testthat::expect_identical(test_module$server_args, NULL)
   testthat::expect_identical(test_module$ui_args, NULL)
 })
