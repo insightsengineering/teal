@@ -54,14 +54,14 @@ Please see [`teal` gallery](https://github.com/insightsengineering/teal.gallery)
 
 ## Installation
 
-From July 2023 it is recommended to install packages from publicly available repositories.
+From July 2023 `insightsengineering` packages are available on [r-universe](https://r-universe.dev/).
 
 ```r
 # stable versions
-install.packages('teal', repos = c('https://insightsengineering.github.io/depository/stable', 'https://cloud.r-project.org'))
+install.packages('teal.logger', repos = c('https://insightsengineering.r-universe.dev', 'https://cloud.r-project.org'))
 
 # beta versions
-install.packages('teal', repos = c('https://pharmaverse.r-universe.dev', 'https://cloud.r-project.org'))
+install.packages('teal.logger', repos = c('https://pharmaverse.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 See package vignettes `browseVignettes(package = "teal")` for usage of this package.
