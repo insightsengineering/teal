@@ -1,50 +1,3 @@
-# These functions return dummy values to provide good values for the examples of other non-exported functions.
-# They should not be exported.
-
-#' Get dummy filter states to apply initially
-#'
-#' This can be used for the argument `filter` in [`srv_teal`].
-#'
-#' @param data (`TealData`)
-#' @return dummy filter states
-#' @keywords internal
-example_filter <- function(data) { # nolint
-  ADSL <- teal.data::get_raw_data(x = data, dataname = "ADSL") # nolint
-  ADLB <- teal.data::get_raw_data(x = data, dataname = "ADLB") # nolint
-
-  res <- list(
-    ADSL = list(
-      filter = list(
-        list(
-          SEX = teal.slice:::init_filter_state(
-            x = ADSL$SEX,
-            varname = "SEX",
-            varlabel = "Sex"
-          ),
-          AGE = teal.slice:::init_filter_state(
-            x = ADSL$AGE,
-            varname = "AGE",
-            varlabel = "Age"
-          )
-        )
-      )
-    ),
-    ADLB = list(
-      filter = list(
-        list(
-          ASEQ = teal.slice:::init_filter_state(
-            x = ADLB$ASEQ,
-            varname = "ASEQ",
-            varlabel = "Sequence Number"
-          )
-        )
-      )
-    )
-  )
-
-  return(res)
-}
-
 #' Get dummy `CDISC` data
 #'
 #' Get dummy `CDISC` data including `ADSL`, `ADAE` and `ADLB`.
@@ -109,19 +62,58 @@ example_cdisc_data <- function() { # nolint
 #' @keywords internal
 example_datasets <- function() { # nolint
   dummy_cdisc_data <- example_cdisc_data()
-  dataset <- teal.slice::init_filtered_data(dummy_cdisc_data)
+  datasets <- teal.slice::init_filtered_data(dummy_cdisc_data)
   list(
     "d2" = list(
       "d3" = list(
-        "aaa1" = dataset$clone(deep = TRUE),
-        "aaa2" = dataset$clone(deep = TRUE),
-        "aaa3" = dataset$clone(deep = TRUE)
+        "aaa1" = datasets,
+        "aaa2" = datasets,
+        "aaa3" = datasets
       ),
-      "bbb" = dataset$clone(deep = TRUE)
+      "bbb" = datasets
     ),
-    "ccc" = dataset$clone(deep = TRUE)
+    "ccc" = datasets
   )
 }
+
+#' An example `teal` module
+#'
+#' @description `r lifecycle::badge("experimental")`
+#' @inheritParams module
+#' @return A `teal` module which can be included in the `modules` argument to [teal::init()].
+#' @examples
+#' app <- init(
+#'   data = teal_data(
+#'     dataset("IRIS", iris),
+#'     dataset("MTCARS", mtcars)
+#'   ),
+#'   modules = example_module()
+#' )
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
+#' @export
+example_module <- function(label = "example teal module", filters = "all") {
+  checkmate::assert_string(label)
+  module(
+    label,
+    server = function(id, data) {
+      checkmate::assert_class(data, "tdata")
+      moduleServer(id, function(input, output, session) {
+        output$text <- renderPrint(data[[input$dataname]]())
+      })
+    },
+    ui = function(id, data) {
+      ns <- NS(id)
+      teal.widgets::standard_layout(
+        output = verbatimTextOutput(ns("text")),
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
+      )
+    },
+    filters = filters
+  )
+}
+
 
 #' Get example modules.
 #'
@@ -129,24 +121,20 @@ example_datasets <- function() { # nolint
 #'
 #' @return `teal_modules`
 #' @keywords internal
-example_modules <- function() {
+example_modules <- function(datanames = c("ADSL", "ADTTE")) {
   mods <- modules(
     label = "d1",
     modules(
       label = "d2",
       modules(
         label = "d3",
-        module(label = "aaa1"), module(label = "aaa2"), module(label = "aaa3")
+        example_module(label = "aaa1", filters = datanames),
+        example_module(label = "aaa2", filters = datanames),
+        example_module(label = "aaa3", filters = datanames)
       ),
-      module(label = "bbb")
+      example_module(label = "bbb", filters = datanames)
     ),
-    module(label = "ccc")
+    example_module(label = "ccc", filters = datanames)
   )
   return(mods)
-
-  # modules(
-  #   label = "root",
-  #   module(label = "d1"),
-  #   module(label = "d2")
-  # )
 }
