@@ -48,7 +48,8 @@
 #' }
 #' @keywords internal
 ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
-  checkmate::assert_int(depth)
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+  checkmate::assert_count(depth)
   UseMethod("ui_nested_tabs", modules)
 }
 
@@ -150,6 +151,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
 #' @keywords internal
 srv_nested_tabs <- function(id, datasets, modules, is_module_specific = FALSE,
                             reporter = teal.reporter::Reporter$new()) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(reporter, "Reporter")
   UseMethod("srv_nested_tabs", modules)
 }
@@ -168,6 +170,7 @@ srv_nested_tabs.default <- function(id, datasets, modules, is_module_specific = 
 srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specific = FALSE,
                                          reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
+
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_trace("srv_nested_tabs.teal_modules initializing the module { deparse1(modules$label) }.")
 
@@ -204,7 +207,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
 #' @keywords internal
 srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specific = TRUE,
                                         reporter = teal.reporter::Reporter$new()) {
-  checkmate::assert_class(datasets, class = "FilteredData")
+  checkmate::assert_class(datasets, "FilteredData")
   logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
 
   moduleServer(id = id, module = function(input, output, session) {
@@ -290,6 +293,8 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #'
 #' @keywords internal
 .datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
+  checkmate::assert_class(module, "teal_module")
+  checkmate::assert_class(datasets, "FilteredData")
   checkmate::assert_class(trigger_data, "reactiveVal")
 
   datanames <- if (is.null(module$datanames)) datasets$datanames() else module$datanames
