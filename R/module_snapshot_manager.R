@@ -88,9 +88,9 @@ snapshot_manager_ui <- function(id) {
 snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_list) {
   checkmate::assert_character(id)
   checkmate::assert_true(is.reactive(slices_global))
-  checkmate::assert_class(slices_global(), "teal_slices")
+  checkmate::assert_class(isolate(slices_global()), "teal_slices")
   checkmate::assert_true(is.reactive(mapping_matrix))
-  checkmate::assert_data_frame(mapping_matrix(), null.ok = TRUE)
+  checkmate::assert_data_frame(isolate(mapping_matrix()), null.ok = TRUE)
   checkmate::assert_list(filtered_data_list, types = "FilteredData", any.missing = FALSE, names = "named")
 
   moduleServer(id, function(input, output, session) {

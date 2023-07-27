@@ -2,14 +2,15 @@
 % Please edit documentation in R/dummy_functions.R
 \name{example_datasets}
 \alias{example_datasets}
-\title{Get a dummy \code{datasets} object with \code{ADSL} data, useful in the examples}
+\title{Get datasets to go with example modules.}
 \usage{
 example_datasets()
 }
 \value{
-\code{FilteredData} with \code{ADSL} set
+named list of \code{FilteredData} objects, each with \code{ADSL} set.
 }
 \description{
-Returns a new \code{R6} object on each invocation, not a singleton.
+Creates a nested list, the structure of which matches the module hierarchy created by \code{example_modules}.
+Each list leaf is the same \code{FilteredData} object.
 }
 \keyword{internal}
