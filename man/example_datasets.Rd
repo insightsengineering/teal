@@ -11,6 +11,6 @@ named list of \code{FilteredData} objects, each with \code{ADSL} set.
 }
 \description{
 Creates a nested list, the structure of which matches the module hierarchy created by \code{example_modules}.
-Each list leaf is a \code{FilteredData} objectst, a deep clone of one original one.
+Each list leaf the same \code{FilteredData} object.
 }
 \keyword{internal}

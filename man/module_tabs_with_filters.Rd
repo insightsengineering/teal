@@ -23,7 +23,7 @@ module id}
 \item{datasets}{(\verb{named list} of \code{FilteredData})\cr
 object to store filter state and filtered datasets, shared across modules. For more
 details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}. Structure of the list must be the same as structure
-of the \code{modules} argument. Listy elements must be named with the same names as the \code{modules}.
+of the \code{modules} argument. List of elements must be named with the same names as the \code{modules}.
 When filter is not module-specific then list contains the same object in all elements.}
 
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
