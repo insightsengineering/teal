@@ -4,7 +4,7 @@
 \alias{example_modules}
 \title{Get example modules.}
 \usage{
-example_modules()
+example_modules(datanames = c("ADSL", "ADTTE"))
 }
 \value{
 \code{teal_modules}

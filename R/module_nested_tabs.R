@@ -1,7 +1,6 @@
-# Nesting teal modules in a tab UI
-
 #' Create a UI of nested tabs of `teal_modules`
 #'
+#' @section `ui_nested_tabs`:
 #' Each `teal_modules` is translated to a `tabsetPanel` and each
 #' of its children is another tab-module called recursively. The UI of a
 #' `teal_module` is obtained by calling the `ui` function on it.
@@ -9,16 +8,27 @@
 #' The `datasets` argument is required to resolve the teal arguments in an
 #' isolated context (with respect to reactivity)
 #'
-#' @inheritParams ui_tabs_with_filters
+#' @section `srv_nested_tabs`:
+#' This module calls recursively all elements of the `modules` returns one which
+#' is currently active.
+#' - `teal_module` returns self as a active module.
+#' - `teal_modules` also returns module active within self which is determined by the `input$active_tab`.
+#'
+#' @name module_nested_tabs
+#'
+#' @inheritParams module_tabs_with_filters
+#'
 #' @param depth (`integer(1)`)\cr
 #'  number which helps to determine depth of the modules nesting.
 #' @param is_module_specific (`logical(1)`)\cr
 #'  flag determining if the filter panel is global or module-specific.
 #'  When set to `TRUE`, a filter panel is called inside of each module tab.
-#' @return depending on class of `modules`:
+#' @return depending on class of `modules`, `ui_nested_tabs` returns:
 #'   - `teal_module`: instantiated UI of the module
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
-#'     calling this function on it.
+#'     calling this function on it.\cr
+#' `srv_nested_tabs` returns a reactive which returns the active module that corresponds to the selected tab.
+#'
 #' @examples
 #' mods <- teal:::example_modules()
 #' datasets <- teal:::example_datasets()
@@ -47,21 +57,22 @@
 #'   runApp(app)
 #' }
 #' @keywords internal
+NULL
+
+#' @rdname module_nested_tabs
 ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
   checkmate::assert_int(depth)
   UseMethod("ui_nested_tabs", modules)
 }
 
-#' @rdname ui_nested_tabs
+#' @rdname module_nested_tabs
 #' @export
-#' @keywords internal
 ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
-#' @rdname ui_nested_tabs
+#' @rdname module_nested_tabs
 #' @export
-#' @keywords internal
 ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   ns <- NS(id)
@@ -94,9 +105,8 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
   )
 }
 
-#' @rdname ui_nested_tabs
+#' @rdname module_nested_tabs
 #' @export
-#' @keywords internal
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
   checkmate::assert_class(datasets, class = "FilteredData")
   ns <- NS(id)
@@ -137,34 +147,22 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
   }
 }
 
-#' Server function that returns currently active module
-#'
-#' @inheritParams srv_tabs_with_filters
-#' @details
-#' This module calls recursively all elements of the `modules` returns one which
-#' is currently active. \cr
-#' `teal_module` returns self as a active module.
-#' `teal_modules` also returns module active within self which is determined by the `input$active_tab`.
-#'
-#' @return `reactive` which returns the active module that corresponds to the selected tab
-#' @keywords internal
+#' @rdname module_nested_tabs
 srv_nested_tabs <- function(id, datasets, modules, is_module_specific = FALSE,
                             reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_class(reporter, "Reporter")
   UseMethod("srv_nested_tabs", modules)
 }
 
-#' @rdname srv_nested_tabs
+#' @rdname module_nested_tabs
 #' @export
-#' @keywords internal
 srv_nested_tabs.default <- function(id, datasets, modules, is_module_specific = FALSE,
                                     reporter = teal.reporter::Reporter$new()) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
-#' @rdname srv_nested_tabs
+#' @rdname module_nested_tabs
 #' @export
-#' @keywords internal
 srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specific = FALSE,
                                          reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
@@ -201,9 +199,8 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
   })
 }
 
-#' @rdname srv_nested_tabs
+#' @rdname module_nested_tabs
 #' @export
-#' @keywords internal
 srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specific = TRUE,
                                         reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_class(datasets, class = "FilteredData")
