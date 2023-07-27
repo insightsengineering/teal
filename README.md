@@ -58,10 +58,10 @@ From July 2023 `insightsengineering` packages are available on [r-universe](http
 
 ```r
 # stable versions
-install.packages('teal.logger', repos = c('https://insightsengineering.r-universe.dev', 'https://cloud.r-project.org'))
+install.packages('teal', repos = c('https://insightsengineering.r-universe.dev', 'https://cloud.r-project.org'))
 
 # beta versions
-install.packages('teal.logger', repos = c('https://pharmaverse.r-universe.dev', 'https://cloud.r-project.org'))
+install.packages('teal', repos = c('https://pharmaverse.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 See package vignettes `browseVignettes(package = "teal")` for usage of this package.
