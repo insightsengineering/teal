@@ -1,50 +1,3 @@
-# These functions return dummy values to provide good values for the examples of other non-exported functions.
-# They should not be exported.
-
-#' Get dummy filter states to apply initially
-#'
-#' This can be used for the argument `filter` in [`srv_teal`].
-#'
-#' @param data (`TealData`)
-#' @return dummy filter states
-#' @keywords internal
-example_filter <- function(data) { # nolint
-  ADSL <- teal.data::get_raw_data(x = data, dataname = "ADSL") # nolint
-  ADLB <- teal.data::get_raw_data(x = data, dataname = "ADLB") # nolint
-
-  res <- list(
-    ADSL = list(
-      filter = list(
-        list(
-          SEX = teal.slice:::init_filter_state(
-            x = ADSL$SEX,
-            varname = "SEX",
-            varlabel = "Sex"
-          ),
-          AGE = teal.slice:::init_filter_state(
-            x = ADSL$AGE,
-            varname = "AGE",
-            varlabel = "Age"
-          )
-        )
-      )
-    ),
-    ADLB = list(
-      filter = list(
-        list(
-          ASEQ = teal.slice:::init_filter_state(
-            x = ADLB$ASEQ,
-            varname = "ASEQ",
-            varlabel = "Sequence Number"
-          )
-        )
-      )
-    )
-  )
-
-  return(res)
-}
-
 #' Get dummy `CDISC` data
 #'
 #' Get dummy `CDISC` data including `ADSL`, `ADAE` and `ADLB`.
@@ -100,35 +53,90 @@ example_cdisc_data <- function() { # nolint
   return(res)
 }
 
-#' Get a dummy `datasets` object with `ADSL` data, useful in the examples
+#' Get datasets to go with example modules.
 #'
-#' Returns a new `R6` object on each invocation, not a singleton.
-#' @return `FilteredData` with `ADSL` set
+#' Creates a nested list, the structure of which matches the module hierarchy created by `example_modules`.
+#' Each list leaf is the same `FilteredData` object.
+#'
+#' @return named list of `FilteredData` objects, each with `ADSL` set.
 #' @keywords internal
 example_datasets <- function() { # nolint
   dummy_cdisc_data <- example_cdisc_data()
-  return(teal.slice::init_filtered_data(dummy_cdisc_data))
+  datasets <- teal.slice::init_filtered_data(dummy_cdisc_data)
+  list(
+    "d2" = list(
+      "d3" = list(
+        "aaa1" = datasets,
+        "aaa2" = datasets,
+        "aaa3" = datasets
+      ),
+      "bbb" = datasets
+    ),
+    "ccc" = datasets
+  )
 }
 
-#' Get dummy modules
+#' An example `teal` module
 #'
-#' Create an example hierarchy of `teal_modules` from which
-#' a teal app can be created.
+#' @description `r lifecycle::badge("experimental")`
+#' @inheritParams module
+#' @return A `teal` module which can be included in the `modules` argument to [teal::init()].
+#' @examples
+#' app <- init(
+#'   data = teal_data(
+#'     dataset("IRIS", iris),
+#'     dataset("MTCARS", mtcars)
+#'   ),
+#'   modules = example_module()
+#' )
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
+#' @export
+example_module <- function(label = "example teal module", filters = "all") {
+  checkmate::assert_string(label)
+  module(
+    label,
+    server = function(id, data) {
+      checkmate::assert_class(data, "tdata")
+      moduleServer(id, function(input, output, session) {
+        output$text <- renderPrint(data[[input$dataname]]())
+      })
+    },
+    ui = function(id, data) {
+      ns <- NS(id)
+      teal.widgets::standard_layout(
+        output = verbatimTextOutput(ns("text")),
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
+      )
+    },
+    filters = filters
+  )
+}
+
+
+#' Get example modules.
 #'
+#' Creates an example hierarchy of `teal_modules` from which a `teal` app can be created.
+#' @param datanames (`character`)\cr
+#'  names of the datasets to be used in the example modules. Possible choices are `ADSL`, `ADTTE`.
 #' @return `teal_modules`
 #' @keywords internal
-example_modules <- function() {
+example_modules <- function(datanames = c("ADSL", "ADTTE")) {
+  checkmate::assert_subset(datanames, c("ADSL", "ADTTE"))
   mods <- modules(
     label = "d1",
     modules(
       label = "d2",
       modules(
         label = "d3",
-        module(label = "aaa1"), module(label = "aaa2"), module(label = "aaa3")
+        example_module(label = "aaa1", filters = datanames),
+        example_module(label = "aaa2", filters = datanames),
+        example_module(label = "aaa3", filters = datanames)
       ),
-      module(label = "bbb")
+      example_module(label = "bbb", filters = datanames)
     ),
-    module(label = "ccc")
+    example_module(label = "ccc", filters = datanames)
   )
   return(mods)
 }
