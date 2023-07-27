@@ -56,7 +56,7 @@ example_cdisc_data <- function() { # nolint
 #' Get datasets to go with example modules.
 #'
 #' Creates a nested list, the structure of which matches the module hierarchy created by `example_modules`.
-#' Each list leaf the same `FilteredData` object.
+#' Each list leaf is the same `FilteredData` object.
 #'
 #' @return named list of `FilteredData` objects, each with `ADSL` set.
 #' @keywords internal

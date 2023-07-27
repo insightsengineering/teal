@@ -17,7 +17,7 @@
 #' @param datasets (`named list` of `FilteredData`)\cr
 #'   object to store filter state and filtered datasets, shared across modules. For more
 #'   details see [`teal.slice::FilteredData`]. Structure of the list must be the same as structure
-#'   of the `modules` argument. List of elements must be named with the same names as the `modules`.
+#'   of the `modules` argument and list names must correspond to the labels in `modules`.
 #'   When filter is not module-specific then list contains the same object in all elements.
 #' @param reporter (`Reporter`) object from `teal.reporter`
 #'
