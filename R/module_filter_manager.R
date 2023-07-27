@@ -122,7 +122,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       if (!is_module_specific) {
         # Retrieve the first FilteredData from potentially nested list.
         # List of length one is named "global_filters" because that name is forbidden for a module label.
-        list(global_filters = filtered_data_list[[1]])
+        list(global_filters = unlist(filtered_data_list)[[1]])
       } else {
         # Flatten potentially nested list of FilteredData objects while maintaining useful names.
         # Simply using `unlist` would result in concatenated names.
@@ -153,7 +153,6 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
         if (!is_module_specific) colnames(mm) <- "Global Filters"
         mm
       },
-      align = paste(c("l", rep("c", ncol(mapping_matrix()))), collapse = ""),
       rownames = TRUE
     )
 
