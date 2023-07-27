@@ -2,7 +2,9 @@
 title: "Adding support for Reporting to custom modules"
 author: "NEST CoreDev"
 date: "2022-05-23"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Adding support for Reporting to custom modules}
   %\VignetteEngine{knitr::rmarkdown}
@@ -11,20 +13,16 @@ vignette: >
 
 ## Introduction
 
-`teal` supports an in-built reporting feature using the `vignette("teal.reporter")` package. Head to its documentation
-if you want to know more about the reporting itself.
+The `teal` package offers an integrated reporting feature utilizing the `teal.reporter` package. For a comprehensive explanation of the reporting functionality itself, please refer to the documentation therein.
 
-This article is targeted to module developers and explains how to enhance a custom `teal` module with an automatic
-reporting feature. The enhancement allows users to add snapshots of the module outputs to a report and review it in
-another module that is automatically provided by `teal` and designed to let users interact with the report.
+This article is intended for module developers and aims to provide guidance on enriching a custom `teal` module with an automatic reporting feature. This enhancement enables users to incorporate snapshots of the module outputs into a report which can then be reviewed in another module automatically provided by `teal`. Thus the app user can interact with the report.
 
 The responsibilities of a module developer include:
 
-- adding the support for reporting to their module
-- specifying outputs that go into a snapshot of their module.
+- Adding support for reporting to their module.
+- Specifying the outputs that constitute a snapshot of their module.
 
-The life cycle of objects involved in creation of the report and setting up the module to preview the report is
-handled by `teal`.
+The entire lifecycle of objects involved in creating the report and configuring the module to preview the report is handled by `teal`.
 
 ## Custom module
 
@@ -53,7 +51,8 @@ teal_example_module <- function(label = "example teal module") {
 }
 ```
 
-`teal` can launch this example module with the following lines:
+Using `teal`, you can launch this example module with the following:
+
 ```{r, eval = FALSE}
 app <- init(
   data = teal_data(
@@ -68,10 +67,9 @@ if (interactive()) shinyApp(app$ui, app$server)
 
 ## Add support for Reporting
 
-### Change the declaration of the server function
+### Modify the declaration of the server function
 
-The first step is to add another argument to the server function declaration - `reporter`. This will tell `teal`
-that `reporter` is needed by this module and it will be included when module is called. See below:
+The first step is to add an additional argument to the server function declaration - `reporter`. This informs `teal` that the module requires `reporter`, and it will be included when the module is called. See below:
 
 ```{r}
 example_module_with_reporting <- function(label = "example teal module") {
@@ -96,7 +94,7 @@ example_module_with_reporting <- function(label = "example teal module") {
 }
 ```
 
-Such a module is ready to be launched again by `teal`:
+With these modifications, the module is now ready to be launched with `teal`:
 
 ```{r}
 app <- init(
@@ -110,14 +108,11 @@ app <- init(
 if (interactive()) shinyApp(app$ui, app$server)
 ```
 
-`teal` added another tab to the application titled `Report previewer` but besides that there appears to be no change in
-how the module works and what it looks like. Users cannot interact with it to add to the report from this module yet.
-Thankfully, `teal.reporter` provides `ui` and `server` objects that support that.
+`teal` adds another tab to the application, titled `Report previewer`. However, there is no visible change in how the module operates and appears and the user cannot add content to the report from this module. That requires inserting `teal.reporter` `ui` and `server` elements into the module body.
 
-### Introduce the new `UI` and the supporting `shiny` modules
+### Insert `UI` and supporting `shiny` modules for adding report cards
 
-We will use `teal.reporter::simple_reporter_ui` and `teal.reporter::simple_reporter_srv` to set up the `UI` and
-the `shiny` module that allow users to add content from `example_module_with_reporting` to the report.
+The UI and the server logic necessary for adding cards from `example_module_with_reporting` to the report are provided by `teal.reporter::simple_reporter_ui` and `teal.reporter::simple_reporter_srv`.
 
 ```{r}
 example_module_with_reporting <- function(label = "example teal module") {
@@ -150,7 +145,8 @@ example_module_with_reporting <- function(label = "example teal module") {
 }
 ```
 
-This module is ready to be launched:
+This updated module is now ready to be launched:
+
 ```{r}
 app <- init(
   data = teal_data(
@@ -163,20 +159,14 @@ app <- init(
 if (interactive()) shinyApp(app$ui, app$server)
 ```
 
-The new `UI` is visible and the buttons are clickable. An application user can review the card in the `Report previewer`
-module and it will appear empty because, as a module developer, we have not yet added any content to the card
-of our module.
+A new piece of `UI` has been added, and the buttons are clickable. The user can now add a card to the report and view it in the `Report previewer` module but the preview is still empty since we have not instructed our module what to put on the card.
 
 ### Add content to the card
 
-We will use the public API exposed by the `TealReportCard` class to add content to a card. The `teal.reporter::simple_reporter_srv` module accepts the `card_fun` argument that
-dictates the way the output from our custom module will look. `ReportCard` and its derivatives add
-the content sequentially according to the order of the calls to its methods. The content itself can be explored
-by calling the `$get_content` method. If you want to learn more, check out `TealReportCard`'s
-documentation and `teal.reporter::ReportCard`.
+To add content to a card, we will utilize the public API exposed by the `TealReportCard` class. The `teal.reporter::simple_reporter_srv` module accepts the `card_fun` argument that determines the appearance of the output from our custom module. `ReportCard` and its derivatives allow the sequential addition of content according to the order of method calls. To explore the content, we can use the `$get_content` method. For further details, refer to the documentation of `TealReportCard` and `teal.reporter::ReportCard`.
 
-We will add simple text to the card by modifying the `card_fun` argument passed to `teal.reporter::simple_reporter_srv`.
-Make sure to return the `card` object from the passed function, otherwise `teal` might encounter errors.
+We will add simple text to the card by modifying the `card_fun` argument passed to `teal.reporter::simple_reporter_srv`. 
+The function must return the `card` object, otherwise errors may occur in `teal`.
 
 ```{r}
 custom_function <- function(card = teal.reporter::ReportCard$new()) {
@@ -226,28 +216,28 @@ Now, an application user can see the text added by `custom_function` in the `Rep
 
 ### Add non-text content to the card
 
-`teal.reporter` supports adding tables, charts and more. Explore the API of `teal.reporter::ReportCard` to learn what
-types of content are supported.
+`teal.reporter` supports the addition of tables, charts, and more. For more information, explore the API of `teal.reporter::ReportCard` to learn about the supported content types.
 
 ### `TealReportCard`
 
-`teal` exports `TealReportCard` which is an extension of `teal.reporter::ReportCard` class. `TealReportCard` adds a number of convenience methods to make it work with `teal` features like the filter panel or source code easier. Check out its documentation to learn more at `TealReportCard`.
+`teal` exports the `TealReportCard` class, which extends the `teal.reporter::ReportCard` class and provides several convenient methods to facilitate working with `teal` features like the filter panel or source code. For more details, refer to the documentation of `TealReportCard`.
 
-To support `TealReportCard`, the function that is passed to `teal.reporter::simple_reporter_srv` needs to define
-a default value for the card, like below:
+To support `TealReportCard`, the function that is passed to `teal.reporter::simple_reporter_srv`  must define a default value for the card, as shown below:
 
 ```{r}
-custom_fun <- function(card = TealReportCard$new()) {
+custom_function <- function(card = TealReportCard$new()) {
+  # ... some code ... # 
   card
 }
 ```
 
-Otherwise, the API of `TealReportCard` will not be available inside the function.
+Without this definition, the API of `TealReportCard` will not be available within the function.
 
 ## Example
 
-Summing up, we could build a regular teal app with code reproducibility and reporter functionality.
-Note that the `server` function requires the `filter_panel_api` argument so that the filter panel state can be added to the report.
+In conclusion, we have demonstrated how to build a standard `teal` app with code reproducibility and reporter functionalities. Note that the `server` function requires the `filter_panel_api` argument so that the filter panel state can be added to the report.
+
+In the final example, we have incorporated `teal.code` snippets. `teal.code` is an R library that offers utilities for storing code and associating it with an execution environment. This allows `ReporterCard` to store the code necessary to generate the table along with the table itself. To learn more about `teal.code` see the vignette _`qenv`_ in  `teal.code`.
 
 ```{r}
 library(teal)
