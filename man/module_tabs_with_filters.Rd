@@ -60,60 +60,15 @@ app <- shinyApp(
     )
   },
   server = function(input, output, session) {
-    active_module <- srv_tabs_with_filters(
-      id = "dummy",
-      datasets = datasets,
-      modules = mods,
-      filter = NULL
-    )
     output$info <- renderText({
       paste0("The currently active tab name is ", active_module()$label)
     })
+    active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
   }
 )
 if (interactive()) {
   runApp(app)
 }
 
-
-# An example with two filter panels in two apps side-by-side
-datasets1 <- datasets2 <- datasets
-app <- shinyApp(
-  ui = function() {
-    tagList(
-      teal:::include_teal_css_js(),
-      textOutput("info"),
-      fluidPage( # needed for nice tabs
-        fluidRow(
-          column(6, teal:::ui_tabs_with_filters("app1", modules = mods, datasets = datasets1)),
-          column(6, teal:::ui_tabs_with_filters("app2", modules = mods, datasets = datasets2))
-        )
-      )
-    )
-  },
-  server = function(input, output, session) {
-    active_module1 <- teal:::srv_tabs_with_filters(
-      id = "app1",
-      datasets = datasets1,
-      modules = mods,
-      filter = NULL
-    )
-    active_module2 <- teal:::srv_tabs_with_filters(
-      id = "app2",
-      datasets = datasets2,
-      modules = mods,
-      filter = NULL
-    )
-    output$info <- renderText({
-      paste0(
-        "The currently active tab names are: ",
-        active_module1()$label, ", ", active_module1()$label
-      )
-    })
-  }
-)
-if (interactive()) {
-  runApp(app)
-}
 }
 \keyword{internal}

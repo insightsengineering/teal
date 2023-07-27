@@ -6,6 +6,10 @@
 \usage{
 example_modules(datanames = c("ADSL", "ADTTE"))
 }
+\arguments{
+\item{datanames}{(\code{character})\cr
+names of the datasets to be used in the example modules. Possible choices are \code{ADSL}, \code{ADTTE}.}
+}
 \value{
 \code{teal_modules}
 }

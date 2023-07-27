@@ -118,10 +118,12 @@ example_module <- function(label = "example teal module", filters = "all") {
 #' Get example modules.
 #'
 #' Creates an example hierarchy of `teal_modules` from which a `teal` app can be created.
-#'
+#' @param datanames (`character`)\cr
+#'  names of the datasets to be used in the example modules. Possible choices are `ADSL`, `ADTTE`.
 #' @return `teal_modules`
 #' @keywords internal
 example_modules <- function(datanames = c("ADSL", "ADTTE")) {
+  checkmate::assert_subset(datanames, c("ADSL", "ADTTE"))
   mods <- modules(
     label = "d1",
     modules(
