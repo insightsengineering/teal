@@ -85,9 +85,6 @@
     <loc>https://insightsengineering.github.io/teal/main/reference/example_datasets.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/example_filter.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/example_module.html</loc>
   </url>
   <url>
@@ -151,6 +148,15 @@
     <loc>https://insightsengineering.github.io/teal/main/reference/module_filter_manager_modal.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/main/reference/module_nested_tabs.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/main/reference/module_tabs_with_filters.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/main/reference/module_teal.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/modules.html</loc>
   </url>
   <url>
@@ -172,15 +178,6 @@
     <loc>https://insightsengineering.github.io/teal/main/reference/snapshot_manager_module.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/srv_nested_tabs.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/srv_tabs_with_filters.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/srv_teal.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/srv_teal_with_splash.html</loc>
   </url>
   <url>
@@ -194,15 +191,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/teal_slices.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/ui_nested_tabs.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/ui_tabs_with_filters.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/main/reference/ui_teal.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/main/reference/ui_teal_with_splash.html</loc>
