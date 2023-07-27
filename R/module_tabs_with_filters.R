@@ -96,14 +96,10 @@
 #' if (interactive()) {
 #'   runApp(app)
 #' }
-ui_tabs_with_filters <- function(id, modules, datasets, filter) {
+ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices()) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
-  if (!missing(filter)) {
-    checkmate::assert_class(filter, "teal_slices")
-  } else {
-    filter <- teal_slices(module_specific = FALSE)
-  }
+  checkmate::assert_class(filter, "teal_slices")
 
   ns <- NS(id)
   is_module_specific <- isTRUE(attr(filter, "module_specific"))
@@ -149,12 +145,15 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter) {
 #' @param reporter (`Reporter`) object from `teal.reporter`
 #' @return `reactive` currently selected active_module
 #' @keywords internal
-srv_tabs_with_filters <- function(id, datasets, modules, reporter = teal.reporter::Reporter$new(), filter = NULL) {
+srv_tabs_with_filters <- function(id,
+                                  datasets,
+                                  modules,
+                                  reporter = teal.reporter::Reporter$new(),
+                                  filter = teal_slices()) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   checkmate::assert_class(reporter, "Reporter")
-  checkmate::assert_class(filter, "teal_slices", null.ok = TRUE)
-  if (is.null(filter)) filter <- teal_slices(module_specific = FALSE)
+  checkmate::assert_class(filter, "teal_slices")
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_tabs_with_filters initializing the module.")
