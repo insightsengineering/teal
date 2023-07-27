@@ -226,7 +226,7 @@ To support `TealReportCard`, the function that is passed to `teal.reporter::simp
 
 ```{r}
 custom_function <- function(card = TealReportCard$new()) {
-  # ... some code ... # 
+  # ... some code ... #
   card
 }
 ```
