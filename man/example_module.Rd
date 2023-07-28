@@ -10,11 +10,7 @@ example_module(label = "example teal module", filters = "all")
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module. Any label possible except
 \code{"global_filters"} - read more in \code{mapping} argument of \link{teal_slices}.}
 
-\item{filters}{(\code{character}) A vector with \code{datanames} that are relevant for the item. The
-filter panel will automatically update the shown filters to include only
-filters in the listed datasets. \code{NULL} will hide the filter panel,
-and the keyword \code{'all'} will show the filters of all datasets. \code{filters} determines also
-a subset of datasets which are appended to the \code{data} argument in \code{server} function.}
+\item{filters}{(\code{character}) Deprecated. Use \code{datanames} instead.}
 }
 \value{
 A \code{teal} module which can be included in the \code{modules} argument to \code{\link[=init]{init()}}.

@@ -61,7 +61,8 @@ NULL
 
 #' @rdname module_nested_tabs
 ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
-  checkmate::assert_int(depth)
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+  checkmate::assert_count(depth)
   UseMethod("ui_nested_tabs", modules)
 }
 
@@ -133,7 +134,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
     )
   )
 
-  if (!is.null(modules$filter) && is_module_specific) {
+  if (!is.null(modules$datanames) && is_module_specific) {
     fluidRow(
       column(width = 9, teal_ui, class = "teal_primary_col"),
       column(
@@ -150,6 +151,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
 #' @rdname module_nested_tabs
 srv_nested_tabs <- function(id, datasets, modules, is_module_specific = FALSE,
                             reporter = teal.reporter::Reporter$new()) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(reporter, "Reporter")
   UseMethod("srv_nested_tabs", modules)
 }
@@ -166,6 +168,7 @@ srv_nested_tabs.default <- function(id, datasets, modules, is_module_specific = 
 srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specific = FALSE,
                                          reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
+
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_trace("srv_nested_tabs.teal_modules initializing the module { deparse1(modules$label) }.")
 
@@ -180,7 +183,8 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
           is_module_specific = is_module_specific,
           reporter = reporter
         )
-      }
+      },
+      simplify = FALSE
     )
 
     # when not ready input$active_tab would return NULL - this would fail next reactive
@@ -203,12 +207,13 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
 #' @export
 srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specific = TRUE,
                                         reporter = teal.reporter::Reporter$new()) {
-  checkmate::assert_class(datasets, class = "FilteredData")
+  checkmate::assert_class(datasets, "FilteredData")
   logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
+
   moduleServer(id = id, module = function(input, output, session) {
     modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
-    if (!is.null(modules$filter) && is_module_specific) {
-      datasets$srv_filter_panel("module_filter_panel", active_datanames = reactive(modules$filter))
+    if (!is.null(modules$datanames) && is_module_specific) {
+      datasets$srv_filter_panel("module_filter_panel", active_datanames = reactive(modules$datanames))
     }
 
     # Create two triggers to limit reactivity between filter-panel and modules.
@@ -288,14 +293,17 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #'
 #' @keywords internal
 .datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
+  checkmate::assert_class(module, "teal_module")
+  checkmate::assert_class(datasets, "FilteredData")
   checkmate::assert_class(trigger_data, "reactiveVal")
-  datanames <- if (is.null(module$filter)) datasets$datanames() else module$filter
+
+  datanames <- if (is.null(module$datanames)) datasets$datanames() else module$datanames
 
   # list of reactive filtered data
   data <- sapply(
-    USE.NAMES = TRUE,
-    X = datanames,
-    FUN = function(x) eventReactive(trigger_data(), datasets$get_data(x, filtered = TRUE))
+    datanames,
+    function(x) eventReactive(trigger_data(), datasets$get_data(x, filtered = TRUE)),
+    simplify = FALSE
   )
 
   hashes <- calculate_hashes(datanames, datasets)
@@ -327,11 +335,5 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #' @keywords internal
 #'
 calculate_hashes <- function(datanames, datasets) {
-  sapply(
-    datanames,
-    simplify = FALSE,
-    function(x) {
-      rlang::hash(datasets$get_data(x, filtered = FALSE))
-    }
-  )
+  sapply(datanames, function(x) rlang::hash(datasets$get_data(x, filtered = FALSE)), simplify = FALSE)
 }

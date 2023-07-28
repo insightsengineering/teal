@@ -65,7 +65,7 @@ app <- init(
           ns <- NS(id)
           tagList(dataTableOutput(ns("data")))
         },
-        filters = "all"
+        datanames = "all"
       )
     ),
     module(
@@ -82,7 +82,7 @@ app <- init(
         ns <- NS(id)
         tagList(textOutput(ns("text")))
       },
-      filters = NULL
+      datanames = NULL
     )
   )
 )

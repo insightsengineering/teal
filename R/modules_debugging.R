@@ -40,6 +40,6 @@ filter_calls_module <- function(label = "Filter Calls Module") { # nolint
         verbatimTextOutput(ns("filter_calls"))
       )
     },
-    filters = "all"
+    datanames = "all"
   )
 }

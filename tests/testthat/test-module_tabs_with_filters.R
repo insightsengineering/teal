@@ -7,11 +7,19 @@ filtered_data <- teal.slice::init_filtered_data(
 
 test_module1 <- module(
   label = "iris tab",
-  filters = "iris"
+  server = function(id, data, ...) {
+    moduleServer(id, function(input, output, session) {
+    })
+  },
+  datanames = "iris"
 )
 test_module2 <- module(
   label = "mtcars tab",
-  filters = "mtcars"
+  server = function(id, data, ...) {
+    moduleServer(id, function(input, output, session) {
+    })
+  },
+  datanames = "mtcars"
 )
 
 testthat::test_that("srv_tabs_with_filters throws error if reporter is not of class Reporter", {

@@ -17,7 +17,8 @@ module(
      tags$p(paste0("This module has no UI (id: ", id, " )"))
 
     },
-  filters = "all",
+  filters,
+  datanames = "all",
   server_args = NULL,
   ui_args = NULL
 )
@@ -49,10 +50,12 @@ the \code{filters} argument.
 \item \code{...} (optional) \code{ui_args} elements will be passed to the module named argument or to the \code{...}.
 }}
 
-\item{filters}{(\code{character}) A vector with \code{datanames} that are relevant for the item. The
+\item{filters}{(\code{character}) Deprecated. Use \code{datanames} instead.}
+
+\item{datanames}{(\code{character}) A vector with \code{datanames} that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
-and the keyword \code{'all'} will show the filters of all datasets. \code{filters} determines also
+and the keyword \code{'all'} will show filters of all datasets. \code{datanames} also determines
 a subset of datasets which are appended to the \code{data} argument in \code{server} function.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the

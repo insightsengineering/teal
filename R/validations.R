@@ -284,16 +284,14 @@ validate_no_intersection <- function(x, y, msg) {
 #' }
 validate_has_variable <- function(data, varname, msg) {
   if (length(varname) != 0) {
-    has_vars <- all(varname %in% names(data))
-    has_all <- all(has_vars)
+    has_vars <- varname %in% names(data)
 
-    if (!has_all) {
+    if (!all(has_vars)) {
       if (missing(msg)) {
-        dataname <- deparse(substitute(data))
-        msg <- paste(
-          dataname, "does not have the required variables:",
-          paste(varname[!has_vars], collapse = ", "),
-          "."
+        msg <- sprintf(
+          "%s does not have the required variables: %s.",
+          deparse(substitute(data)),
+          toString(varname[!has_vars])
         )
       }
       validate(need(FALSE, msg))
