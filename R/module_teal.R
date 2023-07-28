@@ -185,16 +185,17 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
           # we should create FilteredData even if modules$datanames is null
           # null controls a display of filter panel but data should be still passed
           datanames <- if (is.null(modules$datanames)) raw_data()$get_datanames() else modules$datanames
-          datanames <- structure(datanames, names = datanames)
-
-          data_objects <- lapply(datanames, function(dataname) {
-            dataset <- raw_data()$get_dataset(dataname)
-            list(
-              dataset = dataset$get_raw_data(),
-              metadata = dataset$get_metadata(),
-              label = dataset$get_dataset_label()
-            )
-          })
+          data_objects <- sapply(
+            datanames,
+            function(dataname) {
+              dataset <- raw_data()$get_dataset(dataname)
+              list(
+                dataset = dataset$get_raw_data(),
+                metadata = dataset$get_metadata(),
+                label = dataset$get_dataset_label()
+              )
+            },
+            simplify = FALSE)
           datasets_module <- teal.slice::init_filtered_data(
             data_objects,
             join_keys = raw_data()$get_join_keys(),
