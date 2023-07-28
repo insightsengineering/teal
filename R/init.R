@@ -141,7 +141,7 @@ init <- function(data,
   join_keys <- data$get_join_keys()
   resolve_modules_datanames <- function(modules) {
     if (inherits(modules, "teal_modules")) {
-      modules$children <- lapply(modules$children, resolve_modules_datanames)
+      modules$children <- sapply(modules$children, resolve_modules_datanames, simplify = FALSE)
       modules
     } else {
       modules$datanames <- if (identical(modules$datanames, "all")) {
