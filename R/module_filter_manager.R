@@ -142,7 +142,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
       mapping_smooth <- lapply(filtered_data_list, function(x) {
         state_ids_local <- vapply(x$get_filter_state(), `[[`, character(1L), "id")
-        state_ids_allowed <- vapply(x$get_available_teal_slices(), `[[`, character(1L), "id")
+        state_ids_allowed <- vapply(x$get_available_teal_slices()(), `[[`, character(1L), "id")
         states_active <- state_ids_global %in% state_ids_local
         ifelse(state_ids_global %in% state_ids_allowed, states_active, NA)
       })
