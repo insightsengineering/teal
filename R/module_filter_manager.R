@@ -137,19 +137,30 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       }
 
     # Create mapping fo filters to modules in matrix form (presented as data.frame).
+    # Modules get NAs for filteres that cannot be set for them.
     mapping_matrix <- reactive({
-      module_states <- lapply(filtered_data_list, function(x) x$get_filter_state())
-      mapping_ragged <- lapply(module_states, function(x) vapply(x, `[[`, character(1L), "id"))
-      all_names <- vapply(slices_global(), `[[`, character(1L), "id")
-      mapping_smooth <- lapply(mapping_ragged, is.element, el = all_names)
-      as.data.frame(mapping_smooth, row.names = all_names, check.names = FALSE)
+      state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
+      mapping_smooth <- lapply(filtered_data_list, function(x) {
+        state_ids_local <- vapply(x$get_filter_state(), `[[`, character(1L), "id")
+        state_ids_allowed <- vapply(x$get_available_teal_slices(), `[[`, character(1L), "id")
+        states_active <- state_ids_global %in% state_ids_local
+        ifelse(state_ids_global %in% state_ids_allowed, states_active, NA)
+      })
+
+      as.data.frame(mapping_smooth, row.names = state_ids_global, check.names = FALSE)
     })
 
     output$slices_table <- renderTable(
       expr = {
         # Display logical values as UTF characters.
         mm <- mapping_matrix()
-        mm[] <- lapply(mm, ifelse, yes = intToUtf8(9989), no = intToUtf8(10060))
+        mm[] <- lapply(
+          mm,
+          factor,
+          exclude = NULL, # NA values will be considered a level (dropped by default)
+          levels = c("TRUE", "FALSE", NA),
+          labels = c(intToUtf8(9989), intToUtf8(10060), intToUtf8(128306))
+        )
         if (!is_module_specific) colnames(mm) <- "Global Filters"
         mm
       },
