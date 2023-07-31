@@ -154,16 +154,12 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       expr = {
         # Display logical values as UTF characters.
         mm <- mapping_matrix()
-        mm[] <- lapply(
-          mm,
-          factor,
-          exclude = NULL, # NA values will be considered a level (dropped by default)
-          levels = c("TRUE", "FALSE", NA),
-          labels = c(intToUtf8(9989), intToUtf8(10060), intToUtf8(128306))
-        )
+        mm[] <- lapply(mm, ifelse, yes = intToUtf8(9989), no = intToUtf8(10060))
+        mm[] <- lapply(mm, function(x) ifelse(is.na(x), intToUtf8(128306), x))
         if (!is_module_specific) colnames(mm) <- "Global Filters"
         mm
       },
+      align = paste(c("l", rep("c", length(filtered_data_list))), collapse = ""),
       rownames = TRUE
     )
 
