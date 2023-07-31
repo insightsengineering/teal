@@ -195,7 +195,8 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
                 label = dataset$get_dataset_label()
               )
             },
-            simplify = FALSE)
+            simplify = FALSE
+          )
           datasets_module <- teal.slice::init_filtered_data(
             data_objects,
             join_keys = raw_data()$get_join_keys(),
