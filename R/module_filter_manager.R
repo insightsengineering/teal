@@ -204,10 +204,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 filter_manager_module_srv <- function(id, module_fd, slices_global) {
   moduleServer(id, function(input, output, session) {
     # Only operate on slices that refer to data sets present in this module.
-    available_slices <- reactive({
-      Filter(function(slice) slice$dataname %in% module_fd$datanames(), slices_global())
-    })
-    module_fd$set_available_teal_slices(available_slices)
+    module_fd$set_available_teal_slices(reactive(slices_global()))
 
     # Track filter state of this module.
     slices_module <- reactive(module_fd$get_filter_state())
