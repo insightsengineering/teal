@@ -433,7 +433,7 @@ testthat::test_that(".datasets_to_data returns data which is filtered", {
 })
 
 
-testthat::test_that(".datasets_to_data returns only data requested by modules$filter", {
+testthat::test_that(".datasets_to_data returns only data requested by modules$datanames", {
   datasets <- get_example_filtered_data()
   module <- test_module_wdata(datanames = "d1")
   trigger_data <- reactiveVal(1L)
