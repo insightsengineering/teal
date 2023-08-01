@@ -10,6 +10,7 @@
 ### Breaking changes
 
 * Specifying `filter` argument in `teal::init` requires `teal_slices` object now. Details in documentation of `teal::init`.
+* Soft deprecated `filters` argument in `module` and replaced it with `datanames`. Details in documentation of `teal::module`
 
 ### Miscellaneous
 
