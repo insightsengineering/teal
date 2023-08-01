@@ -205,10 +205,10 @@ module <- function(label = "module",
   if (!missing(filters)) {
     checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
     datanames <- filters
-    warning(
-      "The `filters` argument is deprecated and will be removed in the next release. ",
-      "Please use `datanames` instead. "
-    )
+    msg <-
+      "The `filters` argument is deprecated and will be removed in the next release. Please use `datanames` instead."
+    logger::log_warn(msg)
+    warning(msg)
   }
 
   if (label == "global_filters") {
