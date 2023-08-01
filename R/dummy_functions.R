@@ -93,7 +93,7 @@ example_datasets <- function() { # nolint
 #'   shinyApp(app$ui, app$server)
 #' }
 #' @export
-example_module <- function(label = "example teal module", filters = "all") {
+example_module <- function(label = "example teal module", datanames = "all") {
   checkmate::assert_string(label)
   module(
     label,
@@ -110,7 +110,7 @@ example_module <- function(label = "example teal module", filters = "all") {
         encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
-    filters = filters
+    datanames = datanames
   )
 }
 
@@ -130,13 +130,13 @@ example_modules <- function(datanames = c("ADSL", "ADTTE")) {
       label = "d2",
       modules(
         label = "d3",
-        example_module(label = "aaa1", filters = datanames),
-        example_module(label = "aaa2", filters = datanames),
-        example_module(label = "aaa3", filters = datanames)
+        example_module(label = "aaa1", datanames = datanames),
+        example_module(label = "aaa2", datanames = datanames),
+        example_module(label = "aaa3", datanames = datanames)
       ),
-      example_module(label = "bbb", filters = datanames)
+      example_module(label = "bbb", datanames = datanames)
     ),
-    example_module(label = "ccc", filters = datanames)
+    example_module(label = "ccc", datanames = datanames)
   )
   return(mods)
 }
