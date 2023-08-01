@@ -4,7 +4,7 @@ data <- teal_data(iris_ds, mtcars_ds)
 
 test_module1 <- module(
   label = "iris_tab",
-  filters = "iris"
+  datanames = "iris"
 )
 
 testthat::test_that("srv_teal_with_splash creates reactiveVal returning data input", {

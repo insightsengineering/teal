@@ -4,11 +4,11 @@ data <- teal_data(iris_ds, mtcars_ds)
 
 test_module1 <- module(
   label = "iris_tab",
-  filters = "iris"
+  datanames = "iris"
 )
 test_module2 <- module(
   label = "mtcars_tab",
-  filters = "mtcars"
+  datanames = "mtcars"
 )
 
 testthat::test_that("srv_teal fails when raw_data is not reactive", {

@@ -70,7 +70,7 @@
 #'       label = "data source",
 #'       server = function(input, output, session, data) {},
 #'       ui = function(id, ...) div(p("information about data source")),
-#'       filters = "all"
+#'       datanames = "all"
 #'     ),
 #'     example_module(label = "example teal module"),
 #'     module(
@@ -84,7 +84,7 @@
 #'         ns <- NS(id)
 #'         plotOutput(ns("hist"))
 #'       },
-#'       filters = "new_iris"
+#'       datanames = "new_iris"
 #'     )
 #'   ),
 #'   title = "App title",
@@ -144,10 +144,10 @@ init <- function(data,
       modules$children <- sapply(modules$children, resolve_modules_datanames, simplify = FALSE)
       modules
     } else {
-      modules$filters <- if (identical(modules$filters, "all")) {
+      modules$datanames <- if (identical(modules$datanames, "all")) {
         datanames
-      } else if (is.character(modules$filters)) {
-        datanames_adjusted <- intersect(modules$filters, datanames)
+      } else if (is.character(modules$datanames)) {
+        datanames_adjusted <- intersect(modules$datanames, datanames)
         include_parent_datanames(dataname = datanames_adjusted, join_keys = join_keys)
       }
       modules

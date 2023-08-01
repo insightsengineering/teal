@@ -46,7 +46,7 @@ teal_example_module <- function(label = "example teal module") {
         encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
-    filters = "all"
+    datanames = "all"
   )
 }
 ```
@@ -89,7 +89,7 @@ example_module_with_reporting <- function(label = "example teal module") {
         encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
-    filters = "all"
+    datanames = "all"
   )
 }
 ```
@@ -140,7 +140,7 @@ example_module_with_reporting <- function(label = "example teal module") {
         encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
-    filters = "all"
+    datanames = "all"
   )
 }
 ```
@@ -195,7 +195,7 @@ example_module_with_reporting <- function(label = "example teal module") {
         encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
       )
     },
-    filters = "all"
+    datanames = "all"
   )
 }
 ```
@@ -318,7 +318,7 @@ example_reporter_module <- function(label = "Example") {
         )
       )
     },
-    filters = "all"
+    datanames = "all"
   )
 }
 

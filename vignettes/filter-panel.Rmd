@@ -57,9 +57,9 @@ app <- init(
   ),
   modules = modules(
     example_module(label = "all datasets"),
-    example_module(label = "IRIS only", filters = "IRIS"),
-    example_module(label = "CARS only", filters = "CARS"),
-    example_module(label = "no filter panel", filters = NULL)
+    example_module(label = "IRIS only", datanames = "IRIS"),
+    example_module(label = "CARS only", datanames = "CARS"),
+    example_module(label = "no filter panel", datanames = NULL)
   )
 )
 if (interactive()) {

@@ -152,13 +152,13 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       snapshot_state <- as.teal_slices(snapshot)
       mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
       mapply(
-        function(filtered_data, filters) {
+        function(filtered_data, filter_ids) {
           filtered_data$clear_filter_states(force = TRUE)
-          slices <- Filter(function(x) x$id %in% filters, snapshot_state)
+          slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
           filtered_data$set_filter_state(slices)
         },
         filtered_data = filtered_data_list,
-        filters = mapping_unfolded
+        filter_ids = mapping_unfolded
       )
       slices_global(snapshot_state)
       removeModal()
@@ -186,13 +186,13 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
             snapshot_state <- as.teal_slices(snapshot)
             mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
             mapply(
-              function(filtered_data, filters) {
+              function(filtered_data, filter_ids) {
                 filtered_data$clear_filter_states(force = TRUE)
-                slices <- Filter(function(x) x$id %in% filters, snapshot_state)
+                slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
                 filtered_data$set_filter_state(slices)
               },
               filtered_data = filtered_data_list,
-              filters = mapping_unfolded
+              filter_ids = mapping_unfolded
             )
             slices_global(snapshot_state)
             removeModal()

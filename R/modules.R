@@ -41,7 +41,7 @@
 #'           ns <- NS(id)
 #'           tagList(dataTableOutput(ns("data")))
 #'         },
-#'         filters = "all"
+#'         datanames = "all"
 #'       )
 #'     ),
 #'     module(
@@ -58,7 +58,7 @@
 #'         ns <- NS(id)
 #'         tagList(textOutput(ns("text")))
 #'       },
-#'       filters = NULL
+#'       datanames = NULL
 #'     )
 #'   )
 #' )
@@ -145,10 +145,11 @@ is_arg_used <- function(modules, arg) {
 #'  - `data` (optional)  module will receive list of reactive (filtered) data specified in the `filters` argument.
 #'  - `datasets` (optional)  module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
 #'  - `...` (optional) `ui_args` elements will be passed to the module named argument or to the `...`.
-#' @param filters (`character`) A vector with `datanames` that are relevant for the item. The
+#' @param filters (`character`) Deprecated. Use `datanames` instead.
+#' @param datanames (`character`) A vector with `datanames` that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed datasets. `NULL` will hide the filter panel,
-#'   and the keyword `'all'` will show the filters of all datasets. `filters` determines also
+#'   and the keyword `'all'` will show filters of all datasets. `datanames` also determines
 #'   a subset of datasets which are appended to the `data` argument in `server` function.
 #' @param server_args (named `list`) with additional arguments passed on to the
 #'   `server` function.
@@ -190,15 +191,25 @@ module <- function(label = "module",
                    ui = function(id, ...) {
                      tags$p(paste0("This module has no UI (id: ", id, " )"))
                    },
-                   filters = "all",
+                   filters,
+                   datanames = "all",
                    server_args = NULL,
                    ui_args = NULL) {
   checkmate::assert_string(label)
   checkmate::assert_function(server)
   checkmate::assert_function(ui)
-  checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+  checkmate::assert_character(datanames, min.len = 1, null.ok = TRUE, any.missing = FALSE)
   checkmate::assert_list(server_args, null.ok = TRUE, names = "named")
   checkmate::assert_list(ui_args, null.ok = TRUE, names = "named")
+
+  if (!missing(filters)) {
+    checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+    datanames <- filters
+    msg <-
+      "The `filters` argument is deprecated and will be removed in the next release. Please use `datanames` instead."
+    logger::log_warn(msg)
+    warning(msg)
+  }
 
   if (label == "global_filters") {
     stop("Label 'global_filters' is reserved in teal. Please change to something else.")
@@ -219,6 +230,11 @@ module <- function(label = "module",
       "\n - `filter_panel_api` - module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).",
       "\n - `...` server_args elements will be passed to the module named argument or to the `...`"
     )
+  }
+
+  if (!is.element("data", server_formals)) {
+    message(sprintf("module \"%s\" server function takes no data so \"datanames\" will be ignored", label))
+    datanames <- NULL
   }
 
   srv_extra_args <- setdiff(names(server_args), server_formals)
@@ -254,7 +270,7 @@ module <- function(label = "module",
   structure(
     list(
       label = label,
-      server = server, ui = ui, filters = filters,
+      server = server, ui = ui, datanames = datanames,
       server_args = server_args, ui_args = ui_args
     ),
     class = "teal_module"
