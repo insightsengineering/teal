@@ -161,6 +161,8 @@ init <- function(data,
     # This is a temporary measure and will be removed two release cycles from now (now meaning 0.13.0).
     filter <- list_to_teal_slices(filter)
   }
+  # convert teal.slice::teal_slices to teal::teal_slices
+  filter <- as.teal_slices(as.list(filter))
 
   # check teal_slices
   for (i in seq_along(filter)) {
