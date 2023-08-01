@@ -264,6 +264,7 @@ unfold_mapping <- function(mapping, module_names) {
 #' @keywords internal
 #'
 matrix_to_mapping <- function(mapping_matrix) {
+  mapping_matrix[] <- lapply(mapping_matrix, function(x) x | is.na(x))
   global <- vapply(as.data.frame(t(mapping_matrix)), all, logical(1L))
   global_filters <- names(global[global])
   local_filters <- mapping_matrix[!rownames(mapping_matrix) %in% global_filters, ]
