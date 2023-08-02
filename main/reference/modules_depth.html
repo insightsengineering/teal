@@ -12,7 +12,7 @@ Nesting it increases overall depth by 1."><!-- mathjax --><script src="https://c
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9018</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9021</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,15 +43,6 @@ Nesting it increases overall depth by 1."><!-- mathjax --><script src="https://c
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -125,6 +116,11 @@ more details.</p></dd>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="module.html">module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"ccc"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> module "aaa1" server function takes no data so "datanames" will be ignored</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> module "aaa2" server function takes no data so "datanames" will be ignored</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> module "aaa3" server function takes no data so "datanames" will be ignored</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> module "bbb" server function takes no data so "datanames" will be ignored</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> module "ccc" server function takes no data so "datanames" will be ignored</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu">teal</span><span class="fu">:::</span><span class="fu">modules_depth</span><span class="op">(</span><span class="va">mods</span><span class="op">)</span> <span class="op">==</span> <span class="fl">3L</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu"><a href="modules.html">modules</a></span><span class="op">(</span></span></span>
@@ -134,6 +130,8 @@ more details.</p></dd>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="module.html">module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"b2"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> module "c" server function takes no data so "datanames" will be ignored</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> module "b2" server function takes no data so "datanames" will be ignored</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu">teal</span><span class="fu">:::</span><span class="fu">modules_depth</span><span class="op">(</span><span class="va">mods</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2L</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
