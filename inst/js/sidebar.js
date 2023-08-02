@@ -21,10 +21,12 @@ const toggleFilterPanel = () => {
 // Function to hide filter panel and disable the burger button
 const handleNoActiveDatasets = () => {
   $(".filter_hamburger").addClass("hidden");
+  $(".filter_manager_button").addClass("hidden");
   hideSidebar();
 };
 // Function to show filter panel and enable the burger button
 const handleActiveDatasetsPresent = () => {
   $(".filter_hamburger").removeClass("hidden");
+  $(".filter_manager_button").removeClass("hidden");
   if (filter_open) showSidebar();
 }
