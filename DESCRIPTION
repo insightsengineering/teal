@@ -27,7 +27,7 @@ Description: A shiny based interactive exploration framework for analyzing
 License: Apache License 2.0 | file LICENSE
 Depends:
     R (>= 4.0),
-    shiny,
+    shiny (>= 1.7.0),
     teal.data (>= 0.1.2),
     teal.slice (>= 0.3.0.9005),
     teal.transform (>= 0.2.0)
