@@ -44,7 +44,8 @@ of filters specified - see \code{mapping} argument.
 by all modules.
 }}
 
-\item{mapping}{(\verb{named list})\cr
+\item{mapping}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \emph{This is a new feature. Do kindly share your opinions. \cr}
+(\verb{named list})\cr
 Specifies which filters will be active in which modules on app start.
 Elements should contain character vector of \code{teal_slice} \code{id}s (see \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice()}}).
 Names of the list should correspond to \code{teal_module} \code{label} set in \code{\link[=module]{module()}} function.
