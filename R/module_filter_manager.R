@@ -157,6 +157,13 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
         mm[] <- lapply(mm, ifelse, yes = intToUtf8(9989), no = intToUtf8(10060))
         mm[] <- lapply(mm, function(x) ifelse(is.na(x), intToUtf8(128306), x))
         if (!is_module_specific) colnames(mm) <- "Global Filters"
+
+        # Display placeholder if no filters defined.
+        if (nrow(mm) == 0L) {
+          mm <- data.frame(`Filter manager` = "No filters specified.", check.names = FALSE)
+          rownames(mm) <- ""
+        }
+
         mm
       },
       align = paste(c("l", rep("c", length(filtered_data_list))), collapse = ""),
