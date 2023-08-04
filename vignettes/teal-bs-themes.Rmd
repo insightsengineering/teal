@@ -1,22 +1,22 @@
 ---
-title: "Teal and Bootstrap Themes"
+title: "teal and Bootstrap Themes"
 author: "NEST CoreDev"
 date: "2022-09-08"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Teal and Bootstrap Themes}
+  %\VignetteIndexEntry{teal and Bootstrap Themes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ## Introduction
 
-We offer the easy application of a custom bootstrap theme to a `teal::init` app. 
-Teal is a consumer of the `bslib` R package which provides tools for customizing Bootstrap themes e.g. of Shiny apps.
+We offer the easy application of a custom bootstrap theme to a `teal::init` app.
+`teal` is a consumer of the `bslib` R package which provides tools for customizing Bootstrap themes e.g. of Shiny apps.
 
 ## Usage
 
-Teal users have the benefit of custom bootstrap themes by specifying the `teal.bs_theme` R option, which has to be set to `bslib::bs_theme` object.
+`teal` users have the benefit of custom bootstrap themes by specifying the `teal.bs_theme` R option, which has to be set to `bslib::bs_theme` object.
 The `bslib::bs_theme(...)` function creates a Bootstrap theme object, where you should specify the (major) Bootstrap version (default or one of 3, 4 or 5).
 Optionally you could choose a **`bootswatch` theme** and **customize the app CSS** with functions like `bslib::bs_add_rules`.
 Please read more about custom themes in [the `bslib` getting started vignette](https://rstudio.github.io/bslib/articles/bslib.html).
@@ -39,7 +39,7 @@ options("teal.bs_theme" = bslib::bs_theme("Custom Options"))
 The best and recommended ways to **explore** the bootstrap themes are to use `bslib::run_with_themer(shinyApp(app$ui, app$server))` or `bslib::bs_theme_preview()`,
 both functions offer an interactive explore mode.
 Note that the interactive theming for Bootstrap 3 is not supported.
-The `bslib::bs_theme_preview()` is recommended when the end user does not have any shiny app yet. 
+The `bslib::bs_theme_preview()` is recommended when the end user does not have any shiny app yet.
 When you already have a shiny app and you want to test different bootstrap themes (and `CSS` styling) then `bslib::run_with_themer(shinyApp(app$ui, app$server))` is recommended.
 
 Available bootstrap versions could be checked with `bslib::versions()` and bootstrap themes (`bootswatch`) with `bslib::bootswatch_themes(version = "5")`.
@@ -103,7 +103,7 @@ remotes::install_github("https://github.com/dreamRs/shinyWidgets@main")
 
 ### Regular `shiny::fluidPage`
 
-If you want to update the theme in the regular `shiny::fluidPage` like app, you do not need the `teal.bs_theme` option. Then simply provide the `bslib::bs_theme` directly to the `shiny::fluidPage(theme = bslib::bs_theme(...), ...)`. 
+If you want to update the theme in the regular `shiny::fluidPage` like app, you do not need the `teal.bs_theme` option. Then simply provide the `bslib::bs_theme` directly to the `shiny::fluidPage(theme = bslib::bs_theme(...), ...)`.
 
 ### Interactive theming guide
 

@@ -11,7 +11,7 @@ vignette: >
 
 ## Introduction
 
-Teal applications are not restricted to `CDISC`-standard data. Although many teal modules included with `NEST` are designed for `CDISC` data, those in the library `teal.modules.general` have been designed to work with non-relational data.
+`teal` applications are not restricted to `CDISC`-standard data. Although many teal modules included with `NEST` are designed for `CDISC` data, those in the library `teal.modules.general` have been designed to work with non-relational data.
 
 For example this application uses the standard `iris` and `mtcars` datasets:
 

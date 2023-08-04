@@ -1,4 +1,4 @@
-# Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%;"/></a  >
+# teal: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%;"/></a  >
 
 <!-- start badges -->
 [![Check 🛠](https://github.com/insightsengineering/teal/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/teal/main/unit-test-report/)
@@ -19,7 +19,7 @@
 [![Open Issues](https://img.shields.io/github/issues-raw/insightsengineering/teal?color=red\&label=open%20issues)](https://github.com/insightsengineering/teal/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 <!-- end badges -->
 
-*teal* is a shiny-based interactive exploration framework for analyzing data. `teal` applications require app developers to specify:
+`teal` is a shiny-based interactive exploration framework for analyzing data. `teal` applications require app developers to specify:
 
 <!-- markdownlint-disable MD007 MD030 -->
 -   Data, which can be:
@@ -50,21 +50,31 @@ A lot of the functionality of the `teal` framework derives from the following pa
 
 See these packages for more information about how to use the different parts of the `teal` framework.
 
-Please see [`teal` gallery](https://github.com/insightsengineering/teal.gallery) and [TLG Catalog](https://github.com/insightsengineering/tlg-catalog) to see examples of `teal` apps.
+Please see [`teal` gallery](https://insightsengineering.github.io/teal.gallery/) and [TLG Catalog](https://github.com/insightsengineering/tlg-catalog) to see examples of `teal` apps.
+
+Please start with the ["Getting Started" article](https://insightsengineering.github.io/teal/articles/teal.html) and then other [package vignettes](https://insightsengineering.github.io/teal/articles/index.html) for more detailed guide.
 
 ## Installation
 
-From July 2023 `insightsengineering` packages are available on [r-universe](https://r-universe.dev/).
-
 ```r
-# stable versions
-install.packages('teal', repos = c('https://insightsengineering.r-universe.dev', 'https://cloud.r-project.org'))
+install.packages("teal", repos = c("https://insightsengineering.r-universe.dev", getOption("repos")))
 
-# beta versions
-install.packages('teal', repos = c('https://pharmaverse.r-universe.dev', 'https://cloud.r-project.org'))
+# install.packages("pak")
+pak::pak("insightsengineering/teal@*release")
 ```
 
-See package vignettes `browseVignettes(package = "teal")` for usage of this package.
+Alternatively you might also use the development version.
+
+```r
+install.packages("teal", repos = c("https://pharmaverse.r-universe.dev", getOption("repos")))
+
+# install.packages("pak")
+pak::pak("insightsengineering/teal")
+```
+
+## Getting help
+
+If you encounter a bug or you have a feature request - please file an issue. For questions, discussions and staying up to date, please use the "teal" channel in the [pharmaverse slack workspace](https://pharmaverse.slack.com).
 
 ## Acknowledgment
 

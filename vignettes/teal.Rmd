@@ -1,10 +1,10 @@
 ---
-title: "Getting Started with Teal"
+title: "Getting Started with teal"
 author: "NEST CoreDev"
 date: "2022-11-03"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting Started with Teal}
+  %\VignetteIndexEntry{Getting Started with teal}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,7 +14,7 @@ vignette: >
 *teal* is a shiny-based interactive exploration framework for analyzing data, with particular emphasis on
 `CDISC` clinical trial data. `teal` applications provide their users with:
 
-* Ability to "pull" in data from external data sources 
+* Ability to "pull" in data from external data sources
 * Dynamic filtering of data to be used in the analyses
 * Ability to generate reproducible code to regenerate the on-screen analyses
 * Ability to create and download reports containing results of analyses (for analysis modules which support reporting)
@@ -75,17 +75,17 @@ For modules which include reproducibility functionality, it often contains a "Sh
 
 ## Creating your own applications
 
-`init` is the key function to use to create your `teal` application and it requires two key arguments: `data` and `modules`. 
+`init` is the key function to use to create your `teal` application and it requires two key arguments: `data` and `modules`.
 
-### Application Data 
+### Application Data
 
 The `data` argument to the `init` function specifies the data used by your application. This can contain data currently in your R session,
 as in the example above, but also can contain `connectors` which describe where to "pull" data from when the application is run. This can be
 used to allow data to be pulled into `teal` applications from external sources which require your application users to enter credentials.
 
 In the example above we call `teal_data` to convert the raw datasets into `teal` specific datasets and to bind them in one `R` object.
-This function can also be used to specify relationships between different datasets. 
-In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.  
+This function can also be used to specify relationships between different datasets.
+In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.
 
 For further details we recommend exploring the [`teal.data`](https://insightsengineering.github.io/teal.data/) package documentation.
 

@@ -4,7 +4,7 @@
 \alias{module_teal}
 \alias{ui_teal}
 \alias{srv_teal}
-\title{Teal main app module}
+\title{teal main app module}
 \usage{
 ui_teal(
   id,
