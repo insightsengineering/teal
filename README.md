@@ -50,7 +50,7 @@ A lot of the functionality of the `teal` framework derives from the following pa
 
 See these packages for more information about how to use the different parts of the `teal` framework.
 
-Please see [`teal` gallery](https://insightsengineering.github.io/teal.gallery/) and [TLG Catalog](https://github.com/insightsengineering/tlg-catalog) to see examples of `teal` apps.
+Please see [`teal` gallery](https://insightsengineering.github.io/teal.gallery) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog) to see examples of `teal` apps.
 
 Please start with the ["Getting Started" article](https://insightsengineering.github.io/teal/articles/teal.html) and then other [package vignettes](https://insightsengineering.github.io/teal/articles/index.html) for more detailed guide.
 
