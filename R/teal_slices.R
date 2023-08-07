@@ -9,7 +9,8 @@
 #'   of filters specified - see `mapping` argument.
 #'  - `FALSE` when one filter panel needed to all modules. All filters will be shared
 #'    by all modules.
-#' @param mapping (`named list`)\cr
+#' @param mapping `r lifecycle::badge("experimental")` _This is a new feature. Do kindly share your opinions.\cr_
+#'  (`named list`)\cr
 #'  Specifies which filters will be active in which modules on app start.
 #'  Elements should contain character vector of `teal_slice` `id`s (see [teal.slice::teal_slice()]).
 #'  Names of the list should correspond to `teal_module` `label` set in [module()] function.
