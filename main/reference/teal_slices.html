@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9021</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9024</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,15 +41,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -111,7 +102,8 @@ specify which variables are allowed to be filtered; see <code>Details</code></p>
 
 
 <dt>count_type</dt>
-<dd><p>(<code>character(1)</code>) string specifying how observations are tallied by these filter states.
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a> <em>This is a new feature. Do kindly share your opinions.<br></em>
+(<code>character(1)</code>) string specifying how observations are tallied by these filter states.
 Possible options:</p><ul><li><p><code>"none"</code> (default) to have counts of single <code>FilterState</code> to show unfiltered number only.</p></li>
 <li><p><code>"all"</code> to have counts of single <code>FilterState</code> to show number of observation in filtered
 and unfiltered dataset. Note, that issues were reported when using this option with <code>MultiAssayExperiment</code>.
@@ -132,7 +124,8 @@ by all modules.</p></li>
 
 
 <dt>mapping</dt>
-<dd><p>(<code>named list</code>)<br>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a> <em>This is a new feature. Do kindly share your opinions.<br></em>
+(<code>named list</code>)<br>
 Specifies which filters will be active in which modules on app start.
 Elements should contain character vector of <code>teal_slice</code> <code>id</code>s (see <code><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal.slice::teal_slice()</a></code>).
 Names of the list should correspond to <code>teal_module</code> <code>label</code> set in <code><a href="module.html">module()</a></code> function.

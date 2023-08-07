@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9021</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9024</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,15 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -124,12 +115,12 @@ Bootstrap themes e.g. of Shiny apps.</p>
 </h2>
 <p>Teal users have the benefit of custom bootstrap themes by specifying
 the <code>teal.bs_theme</code> R option, which has to be set to
-<code><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bslib::bs_theme</a></code> object. The
+<code><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bslib::bs_theme</a></code> object. The
 <code>bslib::bs_theme(...)</code> function creates a Bootstrap theme
 object, where you should specify the (major) Bootstrap version (default
 or one of 3, 4 or 5). Optionally you could choose a
 <strong><code>bootswatch</code> theme</strong> and <strong>customize the
-app CSS</strong> with functions like <code><a href="https://rstudio.github.io/bslib/reference/bs_bundle.html" class="external-link">bslib::bs_add_rules</a></code>.
+app CSS</strong> with functions like <code><a href="https://rdrr.io/pkg/bslib/man/bs_bundle.html" class="external-link">bslib::bs_add_rules</a></code>.
 Please read more about custom themes in <a href="https://rstudio.github.io/bslib/articles/bslib.html" class="external-link">the
 <code>bslib</code> getting started vignette</a>. The
 <code>teal.bs_theme</code> R option has to be specified at the top of
@@ -140,7 +131,7 @@ below.</p>
 <h3 id="teal-bs_theme-r-option">
 <code>teal.bs_theme</code> R option<a class="anchor" aria-label="anchor" href="#teal-bs_theme-r-option"></a>
 </h3>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span><span class="st">"Custom Options"</span><span class="op">)</span><span class="op">)</span></span>
+<pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span><span class="st">"Custom Options"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#######################</span></span>
 <span><span class="co"># teal::init() app code</span></span>
@@ -152,16 +143,16 @@ below.</p>
 <p>The best and recommended ways to <strong>explore</strong> the
 bootstrap themes are to use
 <code>bslib::run_with_themer(shinyApp(app$ui, app$server))</code> or
-<code><a href="https://rstudio.github.io/bslib/reference/bs_theme_preview.html" class="external-link">bslib::bs_theme_preview()</a></code>, both functions offer an
+<code><a href="https://rdrr.io/pkg/bslib/man/bs_theme_preview.html" class="external-link">bslib::bs_theme_preview()</a></code>, both functions offer an
 interactive explore mode. Note that the interactive theming for
-Bootstrap 3 is not supported. The <code><a href="https://rstudio.github.io/bslib/reference/bs_theme_preview.html" class="external-link">bslib::bs_theme_preview()</a></code>
+Bootstrap 3 is not supported. The <code><a href="https://rdrr.io/pkg/bslib/man/bs_theme_preview.html" class="external-link">bslib::bs_theme_preview()</a></code>
 is recommended when the end user does not have any shiny app yet. When
 you already have a shiny app and you want to test different bootstrap
 themes (and <code>CSS</code> styling) then
 <code>bslib::run_with_themer(shinyApp(app$ui, app$server))</code> is
 recommended.</p>
 <p>Available bootstrap versions could be checked with
-<code><a href="https://rstudio.github.io/bslib/reference/versions.html" class="external-link">bslib::versions()</a></code> and bootstrap themes
+<code><a href="https://rdrr.io/pkg/bslib/man/versions.html" class="external-link">bslib::versions()</a></code> and bootstrap themes
 (<code>bootswatch</code>) with
 <code>bslib::bootswatch_themes(version = "5")</code>.</p>
 <pre><code># bslib::versions()
@@ -206,11 +197,11 @@ one after another. Please, use the <code>Cmd+Shift+R</code> (Mac) or
 </h3>
 <p>The most important <code>teal</code> html tags have a proper
 id/class, so they could be directly styled. The
-<code><a href="https://rstudio.github.io/bslib/reference/bs_bundle.html" class="external-link">bslib::bs_add_rules</a></code> function could be used around the
-<code><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bslib::bs_theme</a></code> object to apply custom <code>CSS</code>
+<code><a href="https://rdrr.io/pkg/bslib/man/bs_bundle.html" class="external-link">bslib::bs_add_rules</a></code> function could be used around the
+<code><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bslib::bs_theme</a></code> object to apply custom <code>CSS</code>
 rules.</p>
 <pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"5"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/bs_bundle.html" class="external-link">bs_add_rules</a></span><span class="op">(</span><span class="st">"Anything understood by sass::as_sass()"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"5"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bslib/man/bs_bundle.html" class="external-link">bs_add_rules</a></span><span class="op">(</span><span class="st">"Anything understood by sass::as_sass()"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 <p>Other <code>bslib::bs_add_*</code> family functions could be used to
 specify low-level bootstrap elements.</p>
 </div>
@@ -238,7 +229,7 @@ main branch, see below.</p>
 <p>If you want to update the theme in the regular
 <code><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">shiny::fluidPage</a></code> like app, you do not need the
 <code>teal.bs_theme</code> option. Then simply provide the
-<code><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bslib::bs_theme</a></code> directly to the
+<code><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bslib::bs_theme</a></code> directly to the
 <code>shiny::fluidPage(theme = bslib::bs_theme(...), ...)</code>.</p>
 </div>
 <div class="section level3">
@@ -246,7 +237,7 @@ main branch, see below.</p>
 </h3>
 <p>In this section we provide a step-by-step guide to customizing a
 <code>teal</code> application theme interactively with
-<code><a href="https://rstudio.github.io/bslib/reference/run_with_themer.html" class="external-link">bslib::run_with_themer()</a></code>. We recommend starting with a
+<code><a href="https://rdrr.io/pkg/bslib/man/run_with_themer.html" class="external-link">bslib::run_with_themer()</a></code>. We recommend starting with a
 simple case and when you are satisfied, verify with your full
 application. To that end we will use the following <code>teal</code>
 application. For this example we assume that we want to use Bootstrap 5.
@@ -254,7 +245,7 @@ To start, we launch the app with
 <code>bslib::run_with_themer(app$ui, app$server)</code> instead of
 <code><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">shiny::runApp</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"5"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"5"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></span>
 <span></span>
@@ -267,7 +258,7 @@ To start, we launch the app with
 <span>  header <span class="op">=</span> <span class="st">"My first teal application"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/run_with_themer.html" class="external-link">run_with_themer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bslib/man/run_with_themer.html" class="external-link">run_with_themer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>This gives us the following.</p>
 <p><img src="images/bs-launch.png" width="956"></p>
 <p>Note the <code>Theme Customizer</code> section on the right hand
@@ -317,12 +308,12 @@ console, we will now see
 <p>Assuming our customization is now complete, it’s time to apply the
 changes to our application. To do this, we use the option
 <code>teal.bs_theme</code> like before. But this time we will expand on
-our <code><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bslib::bs_theme</a></code> call to include our changes. Helpfully,
+our <code><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bslib::bs_theme</a></code> call to include our changes. Helpfully,
 the arguments that were printed to the R console when running our app in
 the themer can be plugged right in.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
-<span>  <span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span></span>
+<span>  <span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span></span>
 <span>    version <span class="op">=</span> <span class="st">"5"</span>,</span>
 <span>    font_scale <span class="op">=</span> <span class="fl">1.25</span>,</span>
 <span>    `enable-rounded` <span class="op">=</span> <span class="cn">FALSE</span>,</span>
