@@ -40,3 +40,6 @@ a.disabled {
   flex: 1 0 50px;
   padding: 0em 1em;
 }
+.snapshot_manager_placeholder {
+  margin-top: 1em;
+}
