@@ -11,7 +11,7 @@ vignette: >
 
 ## Introduction
 
-We offer the easy application of a custom bootstrap theme to a `teal::init` app.
+We offer easy application of a custom bootstrap theme to a `teal::init` app.
 `teal` is a consumer of the `bslib` R package which provides tools for customizing Bootstrap themes e.g. of Shiny apps.
 
 ## Usage
