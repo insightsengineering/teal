@@ -25,7 +25,8 @@ additional arguments passed to other functions.}
 match names of data sets and vector elements match variable names in respective data sets;
 specify which variables are allowed to be filtered; see \code{Details}}
 
-\item{count_type}{(\code{character(1)}) string specifying how observations are tallied by these filter states.
+\item{count_type}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \emph{This is a new feature. Do kindly share your opinions.\cr}
+(\code{character(1)}) string specifying how observations are tallied by these filter states.
 Possible options:
 \itemize{
 \item \code{"none"} (default) to have counts of single \code{FilterState} to show unfiltered number only.
@@ -44,7 +45,8 @@ of filters specified - see \code{mapping} argument.
 by all modules.
 }}
 
-\item{mapping}{(\verb{named list})\cr
+\item{mapping}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \emph{This is a new feature. Do kindly share your opinions.\cr}
+(\verb{named list})\cr
 Specifies which filters will be active in which modules on app start.
 Elements should contain character vector of \code{teal_slice} \code{id}s (see \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice()}}).
 Names of the list should correspond to \code{teal_module} \code{label} set in \code{\link[=module]{module()}} function.
