@@ -63,7 +63,7 @@ install.packages("teal", repos = c("https://insightsengineering.r-universe.dev",
 pak::pak("insightsengineering/teal@*release")
 ```
 
-Alternatively you might also use the development version.
+Alternatively, you might also use the development version.
 
 ```r
 install.packages("teal", repos = c("https://pharmaverse.r-universe.dev", getOption("repos")))
