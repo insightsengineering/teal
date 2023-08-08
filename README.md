@@ -101,8 +101,7 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-![](./inst/readme_app.gif)
-
+![App recording](./inst/readme_app.gif)
 
 Please see [`teal` gallery](https://insightsengineering.github.io/teal.gallery) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog) to see examples of `teal` apps.
 
