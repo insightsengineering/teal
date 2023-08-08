@@ -1,4 +1,4 @@
-# teal: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%;"/></a  >
+# `teal`: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%;"/></a  >
 
 <!-- start badges -->
 [![Check 🛠](https://github.com/insightsengineering/teal/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/teal/main/unit-test-report/)
@@ -48,12 +48,6 @@ A lot of the functionality of the `teal` framework derives from the following pa
 
 <!-- markdownlint-enable MD007 MD030 -->
 
-See these packages for more information about how to use the different parts of the `teal` framework.
-
-Please see [`teal` gallery](https://insightsengineering.github.io/teal.gallery) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog) to see examples of `teal` apps.
-
-Please start with the ["Getting Started" article](https://insightsengineering.github.io/teal/articles/teal.html) and then other [package vignettes](https://insightsengineering.github.io/teal/articles/index.html) for more detailed guide.
-
 ## Installation
 
 ```r
@@ -71,6 +65,48 @@ install.packages("teal", repos = c("https://pharmaverse.r-universe.dev", getOpti
 # install.packages("pak")
 pak::pak("insightsengineering/teal")
 ```
+
+## Usage
+
+```r
+library(teal)
+
+app <- init(
+  data = teal_data(
+    dataset("iris", iris)
+  ),
+  modules = list(
+    module(
+      "iris histogram",
+      server = function(input, output, session, data) {
+        output$hist <- renderPlot(
+          hist(data[["iris"]]()[[input$var]])
+        )
+      },
+      ui = function(id, data, ...) {
+        ns <- NS(id)
+        list(
+          shiny::selectInput(
+            ns("var"),
+            "Column name",
+            names(data[["iris"]]())[1:4]
+          ),
+          plotOutput(ns("hist"))
+        )
+      }
+    )
+  )
+)
+
+shinyApp(app$ui, app$server)
+```
+
+![](./inst/readme_app.gif)
+
+
+Please see [`teal` gallery](https://insightsengineering.github.io/teal.gallery) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog) to see examples of `teal` apps.
+
+Please start with the ["Getting Started" article](https://insightsengineering.github.io/teal/articles/teal.html) and then other [package vignettes](https://insightsengineering.github.io/teal/articles/index.html) for more detailed guide.
 
 ## Getting help
 
