@@ -12,10 +12,10 @@ navbar:
     reports:
       text: Reports
       menu:
-      - text: Coverage report
-        href: coverage-report/
-      - text: Unit test report
-        href: unit-test-report/
+        - text: Coverage report
+          href: coverage-report/
+        - text: Unit test report
+          href: unit-test-report/
     github:
       icon: fa-github
       href: https://github.com/insightsengineering/teal
@@ -36,7 +36,7 @@ articles:
       - teal-bs-themes
 
 reference:
-  - title: Teal Core Functions
+  - title: teal Core Functions
     desc: These are the main functions needed to build a teal app.
     contents:
       - init
