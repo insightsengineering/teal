@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9025</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9026</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,15 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -229,8 +220,8 @@ adding report cards<a class="anchor" aria-label="anchor" href="#insert-ui-and-su
 </h3>
 <p>The UI and the server logic necessary for adding cards from
 <code>example_module_with_reporting</code> to the report are provided by
-<code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_ui.html" class="external-link">teal.reporter::simple_reporter_ui</a></code> and
-<code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">teal.reporter::simple_reporter_srv</a></code>.</p>
+<code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_ui.html">teal.reporter::simple_reporter_ui</a></code> and
+<code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html">teal.reporter::simple_reporter_srv</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_module_with_reporting</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"example teal module"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkString.html" class="external-link">assert_string</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span></span>
@@ -239,7 +230,7 @@ adding report cards<a class="anchor" aria-label="anchor" href="#insert-ui-and-su
 <span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">reporter</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkClass.html" class="external-link">assert_class</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"tdata"</span><span class="op">)</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">simple_reporter_srv</a></span><span class="op">(</span></span>
+<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html">simple_reporter_srv</a></span><span class="op">(</span></span>
 <span>          id <span class="op">=</span> <span class="st">"reporter"</span>,</span>
 <span>          reporter <span class="op">=</span> <span class="va">reporter</span>,</span>
 <span>          card_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span><span class="op">)</span> <span class="va">card</span></span>
@@ -251,7 +242,7 @@ adding report cards<a class="anchor" aria-label="anchor" href="#insert-ui-and-su
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
-<span>          <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_ui.html" class="external-link">simple_reporter_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"reporter"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_ui.html">simple_reporter_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"reporter"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span></span>
 <span>        <span class="op">)</span>,</span>
 <span>        encoding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
@@ -281,21 +272,21 @@ since we have not instructed our module what to put on the card.</p>
 </h3>
 <p>To add content to a card, we will utilize the public API exposed by
 the <code>TealReportCard</code> class. The
-<code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">teal.reporter::simple_reporter_srv</a></code> module accepts the
+<code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html">teal.reporter::simple_reporter_srv</a></code> module accepts the
 <code>card_fun</code> argument that determines the appearance of the
 output from our custom module. <code>ReportCard</code> and its
 derivatives allow the sequential addition of content according to the
 order of method calls. To explore the content, we can use the
 <code>$get_content</code> method. For further details, refer to the
 documentation of <code>TealReportCard</code> and
-<code><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html" class="external-link">teal.reporter::ReportCard</a></code>.</p>
+<code><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html">teal.reporter::ReportCard</a></code>.</p>
 <p>We will add simple text to the card by modifying the
 <code>card_fun</code> argument passed to
-<code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">teal.reporter::simple_reporter_srv</a></code>. The function must
+<code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html">teal.reporter::simple_reporter_srv</a></code>. The function must
 return the <code>card</code> object, otherwise errors may occur in
 <code>teal</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">custom_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html" class="external-link">ReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="va">custom_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html">ReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="st">"This is content from a custom teal module!"</span><span class="op">)</span></span>
 <span>  <span class="va">card</span></span>
 <span><span class="op">}</span></span>
@@ -307,7 +298,7 @@ return the <code>card</code> object, otherwise errors may occur in
 <span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">reporter</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkClass.html" class="external-link">assert_class</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"tdata"</span><span class="op">)</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">simple_reporter_srv</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"simpleReporter"</span>, reporter <span class="op">=</span> <span class="va">reporter</span>, card_fun <span class="op">=</span> <span class="va">custom_function</span><span class="op">)</span></span>
+<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html">simple_reporter_srv</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"simpleReporter"</span>, reporter <span class="op">=</span> <span class="va">reporter</span>, card_fun <span class="op">=</span> <span class="va">custom_function</span><span class="op">)</span></span>
 <span>        <span class="va">output</span><span class="op">$</span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderPrint</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">]</span><span class="op">]</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="op">}</span><span class="op">)</span></span>
 <span>    <span class="op">}</span>,</span>
@@ -315,7 +306,7 @@ return the <code>card</code> object, otherwise errors may occur in
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
-<span>          <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_ui.html" class="external-link">simple_reporter_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"simpleReporter"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_ui.html">simple_reporter_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"simpleReporter"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span></span>
 <span>        <span class="op">)</span>,</span>
 <span>        encoding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
@@ -343,7 +334,7 @@ module.</p>
 </h3>
 <p><code>teal.reporter</code> supports the addition of tables, charts,
 and more. For more information, explore the API of
-<code><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html" class="external-link">teal.reporter::ReportCard</a></code> to learn about the supported
+<code><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html">teal.reporter::ReportCard</a></code> to learn about the supported
 content types.</p>
 </div>
 <div class="section level3">
@@ -351,13 +342,13 @@ content types.</p>
 <code>TealReportCard</code><a class="anchor" aria-label="anchor" href="#tealreportcard"></a>
 </h3>
 <p><code>teal</code> exports the <code>TealReportCard</code> class,
-which extends the <code><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html" class="external-link">teal.reporter::ReportCard</a></code> class and
+which extends the <code><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html">teal.reporter::ReportCard</a></code> class and
 provides several convenient methods to facilitate working with
 <code>teal</code> features like the filter panel or source code. For
 more details, refer to the documentation of
 <code>TealReportCard</code>.</p>
 <p>To support <code>TealReportCard</code>, the function that is passed
-to <code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html" class="external-link">teal.reporter::simple_reporter_srv</a></code> must define a default
+to <code><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_srv.html">teal.reporter::simple_reporter_srv</a></code> must define a default
 value for the card, as shown below:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">custom_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="va"><a href="../reference/TealReportCard.html">TealReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -417,7 +408,7 @@ the table along with the table itself. To learn more about
 <span>        <span class="va">output</span><span class="op">$</span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">renderTable</a></span><span class="op">(</span><span class="fu">table_q</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"result"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span>        <span class="co">### REPORTER</span></span>
-<span>        <span class="va">card_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="va"><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html" class="external-link">ReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>, <span class="va">comment</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="va">card_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="va"><a href="https://insightsengineering.github.io/teal.reporter/reference/ReportCard.html">ReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>, <span class="va">comment</span><span class="op">)</span> <span class="op">{</span></span>
 <span>          <span class="va">card</span><span class="op">$</span><span class="fu">set_name</span><span class="op">(</span><span class="st">"Table Module"</span><span class="op">)</span></span>
 <span>          <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Selected dataset"</span>, <span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span>, <span class="st">"header2"</span><span class="op">)</span></span>
 <span>          <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="st">"Selected Filters"</span>, <span class="st">"header3"</span><span class="op">)</span></span>
@@ -441,9 +432,9 @@ the table along with the table itself. To learn more about
 <span>          <span class="op">}</span></span>
 <span>          <span class="va">card</span></span>
 <span>        <span class="op">}</span></span>
-<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/add_card_button_srv.html" class="external-link">add_card_button_srv</a></span><span class="op">(</span><span class="st">"addReportCard"</span>, reporter <span class="op">=</span> <span class="va">reporter</span>, card_fun <span class="op">=</span> <span class="va">card_fun</span><span class="op">)</span></span>
-<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/download_report_button_srv.html" class="external-link">download_report_button_srv</a></span><span class="op">(</span><span class="st">"downloadButton"</span>, reporter <span class="op">=</span> <span class="va">reporter</span><span class="op">)</span></span>
-<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/reset_report_button_srv.html" class="external-link">reset_report_button_srv</a></span><span class="op">(</span><span class="st">"resetButton"</span>, <span class="va">reporter</span><span class="op">)</span></span>
+<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/add_card_button_srv.html">add_card_button_srv</a></span><span class="op">(</span><span class="st">"addReportCard"</span>, reporter <span class="op">=</span> <span class="va">reporter</span>, card_fun <span class="op">=</span> <span class="va">card_fun</span><span class="op">)</span></span>
+<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/download_report_button_srv.html">download_report_button_srv</a></span><span class="op">(</span><span class="st">"downloadButton"</span>, reporter <span class="op">=</span> <span class="va">reporter</span><span class="op">)</span></span>
+<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/reset_report_button_srv.html">reset_report_button_srv</a></span><span class="op">(</span><span class="st">"resetButton"</span>, <span class="va">reporter</span><span class="op">)</span></span>
 <span>        <span class="co">###</span></span>
 <span>      <span class="op">}</span><span class="op">)</span></span>
 <span>    <span class="op">}</span>,</span>
@@ -453,9 +444,9 @@ the table along with the table itself. To learn more about
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">tableOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"table"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        encoding <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
 <span>          <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
-<span>            <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/add_card_button_ui.html" class="external-link">add_card_button_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"addReportCard"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>            <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/download_report_button_ui.html" class="external-link">download_report_button_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"downloadButton"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>            <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/reset_report_button_ui.html" class="external-link">reset_report_button_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"resetButton"</span><span class="op">)</span><span class="op">)</span></span>
+<span>            <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/add_card_button_ui.html">add_card_button_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"addReportCard"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>            <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/download_report_button_ui.html">download_report_button_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"downloadButton"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>            <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/reset_report_button_ui.html">reset_report_button_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"resetButton"</span><span class="op">)</span><span class="op">)</span></span>
 <span>          <span class="op">)</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/htmlOutput.html" class="external-link">uiOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"nrow_ui"</span><span class="op">)</span><span class="op">)</span></span>
