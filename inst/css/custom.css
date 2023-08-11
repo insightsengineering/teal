@@ -54,6 +54,10 @@
   flex-wrap: wrap;
 }
 
+header {
+  display: flow-root;
+}
+
 footer {
   text-align: left;
   padding: 5px;
