@@ -28,9 +28,9 @@ License: Apache License 2.0 | file LICENSE
 Depends:
     R (>= 4.0),
     shiny (>= 1.7.0),
-    teal.data (>= 0.2.0.9007),
-    teal.slice (>= 0.3.0.9034),
-    teal.transform (>= 0.3.0.9009)
+    teal.data (>= 0.3.0),
+    teal.slice (>= 0.4.0),
+    teal.transform (>= 0.4.0)
 Imports:
     checkmate,
     lifecycle,
@@ -40,8 +40,8 @@ Imports:
     shinyjs,
     stats,
     teal.logger (>= 0.1.1),
-    teal.reporter (>= 0.1.1.9020),
-    teal.widgets (>= 0.3.0.9010),
+    teal.reporter (>= 0.2.0),
+    teal.widgets (>= 0.4.0),
     utils
 Suggests:
     bslib,
