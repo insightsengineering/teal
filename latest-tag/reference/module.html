@@ -12,7 +12,7 @@ This function embeds a shiny module inside a teal application. One teal_module m
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,14 +29,15 @@ This function embeds a shiny module inside a teal application. One teal_module m
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Pre-processing data</a>
+    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input `ADaM` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input `MultiAssayExperiment` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
-    <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
-    <a class="dropdown-item" href="../articles/teal-bs-themes.html">Teal and Bootstrap Themes</a>
+    <a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal application with R options</a>
+    <a class="dropdown-item" href="../articles/teal-bs-themes.html">teal and Bootstrap Themes</a>
   </div>
 </li>
 <li class="nav-item">
@@ -48,9 +49,17 @@ This function embeds a shiny module inside a teal application. One teal_module m
           aria-expanded="false" aria-haspopup="true"
           id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
 <!-- end dropdown for versions -->
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-reports">
+    <a class="dropdown-item" href="../coverage-report/">Coverage report</a>
+    <a class="dropdown-item" href="../unit-test-report/">Unit test report</a>
+  </div>
+</li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -82,7 +91,7 @@ This function embeds a <code>shiny</code> module inside a <code>teal</code> appl
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">module</span><span class="op">(</span></span>
 <span>  label <span class="op">=</span> <span class="st">"module"</span>,</span>
 <span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span>     <span class="fu">moduleServer</span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>     <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
 <span> </span>
 <span>       <span class="op">}</span><span class="op">)</span></span>
 <span> <span class="op">}</span>,</span>
@@ -90,7 +99,8 @@ This function embeds a <code>shiny</code> module inside a <code>teal</code> appl
 <span>     <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"This module has no UI (id: "</span>, <span class="va">id</span>, <span class="st">" )"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="op">}</span>,</span>
-<span>  filters <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  <span class="va">filters</span>,</span>
+<span>  datanames <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  server_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ui_args <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
@@ -105,7 +115,8 @@ This function embeds a <code>shiny</code> module inside a <code>teal</code> appl
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>label</dt>
-<dd><p>(<code>character(1)</code>) Label shown in the navigation item for the module.</p></dd>
+<dd><p>(<code>character(1)</code>) Label shown in the navigation item for the module. Any label possible except
+<code>"global_filters"</code> - read more in <code>mapping</code> argument of <a href="teal_slices.html">teal_slices</a>.</p></dd>
 
 
 <dt>server</dt>
@@ -114,13 +125,13 @@ This function embeds a <code>shiny</code> module inside a <code>teal</code> appl
 <li><p><code>data</code> (optional) module will receive a <code>tdata</code> object, a list of reactive (filtered) data specified in
 the <code>filters</code> argument.</p></li>
 <li><p><code>datasets</code> (optional) module will receive <code>FilteredData</code>. (See <code>[teal.slice::FilteredData]</code>).</p></li>
-<li><p><code>reporter</code> (optional) module will receive <code>Reporter</code>. (See <a href="https://insightsengineering.github.io/teal.reporter/reference/Reporter.html" class="external-link">teal.reporter::Reporter</a>).</p></li>
+<li><p><code>reporter</code> (optional) module will receive <code>Reporter</code>. (See <a href="https://insightsengineering.github.io/teal.reporter/reference/Reporter.html">teal.reporter::Reporter</a>).</p></li>
 <li><p><code>...</code> (optional) <code>server_args</code> elements will be passed to the module named argument or to the <code>...</code>.</p></li>
 </ul></dd>
 
 
 <dt>ui</dt>
-<dd><p>(<code>function</code>) Shiny ui module function with following arguments:</p><ul><li><p><code>id</code> - teal will set proper shiny namespace for this module.</p></li>
+<dd><p>(<code>function</code>) Shiny <code>ui</code> module function with following arguments:</p><ul><li><p><code>id</code> - teal will set proper shiny namespace for this module.</p></li>
 <li><p><code>data</code> (optional)  module will receive list of reactive (filtered) data specified in the <code>filters</code> argument.</p></li>
 <li><p><code>datasets</code> (optional)  module will receive <code>FilteredData</code>. (See <code>[teal.slice::FilteredData]</code>).</p></li>
 <li><p><code>...</code> (optional) <code>ui_args</code> elements will be passed to the module named argument or to the <code>...</code>.</p></li>
@@ -128,10 +139,15 @@ the <code>filters</code> argument.</p></li>
 
 
 <dt>filters</dt>
-<dd><p>(<code>character</code>) A vector with datanames that are relevant for the item. The
+<dd><p>(<code>character</code>) Deprecated. Use <code>datanames</code> instead.</p></dd>
+
+
+<dt>datanames</dt>
+<dd><p>(<code>character</code>) A vector with <code>datanames</code> that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
 filters in the listed datasets. <code>NULL</code> will hide the filter panel,
-and the keyword <code>'all'</code> will show the filters of all datasets.</p></dd>
+and the keyword <code>'all'</code> will show filters of all datasets. <code>datanames</code> also determines
+a subset of datasets which are appended to the <code>data</code> argument in <code>server</code> function.</p></dd>
 
 
 <dt>server_args</dt>
@@ -150,7 +166,7 @@ and the keyword <code>'all'</code> will show the filters of all datasets.</p></d
 
 <dt>indent</dt>
 <dd><p>(<code>integer</code>) indent level;
-each submodule is indented one level more</p></dd>
+each <code>submodule</code> is indented one level more</p></dd>
 
 
 <dt>...</dt>
@@ -166,10 +182,10 @@ each submodule is indented one level more</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="init.html">init</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  data <span class="op">=</span> <span class="fu">teal_data</span><span class="op">(</span><span class="fu">dataset</span><span class="op">(</span><span class="st">"iris"</span>, <span class="va">iris</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"iris"</span>, <span class="va">iris</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  modules <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="fu">module</span><span class="op">(</span></span></span>
 <span class="r-in"><span>      label <span class="op">=</span> <span class="st">"Module"</span>,</span></span>
@@ -188,8 +204,8 @@ each submodule is indented one level more</p></dd>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

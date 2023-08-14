@@ -12,7 +12,7 @@ interactive data analysis environment."><!-- mathjax --><script src="https://cdn
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,14 +29,15 @@ interactive data analysis environment."><!-- mathjax --><script src="https://cdn
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input ADaM data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input MultiAssayExperiment data in a teal application</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Pre-processing data</a>
+    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input `ADaM` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input `MultiAssayExperiment` data in a teal application</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
     <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
-    <a class="dropdown-item" href="../articles/teal-options.html">Modifying a Teal application with R options</a>
-    <a class="dropdown-item" href="../articles/teal-bs-themes.html">Teal and Bootstrap Themes</a>
+    <a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal application with R options</a>
+    <a class="dropdown-item" href="../articles/teal-bs-themes.html">teal and Bootstrap Themes</a>
   </div>
 </li>
 <li class="nav-item">
@@ -48,9 +49,17 @@ interactive data analysis environment."><!-- mathjax --><script src="https://cdn
           aria-expanded="false" aria-haspopup="true"
           id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
 <!-- end dropdown for versions -->
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-reports">
+    <a class="dropdown-item" href="../coverage-report/">Coverage report</a>
+    <a class="dropdown-item" href="../unit-test-report/">Unit test report</a>
+  </div>
+</li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -87,13 +96,18 @@ interactive data analysis environment.</p>
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p><strong>Maintainer</strong>: Dawid Kaledkowski <a href="mailto:dawid.kaledkowski@roche.com">dawid.kaledkowski@roche.com</a></p>
 <p>Authors:</p><ul><li><p>Pawel Rucki <a href="mailto:pawel.rucki@roche.com">pawel.rucki@roche.com</a></p></li>
-<li><p>Nikolas Burkoff <a href="mailto:nikolas.burkoff@roche.com">nikolas.burkoff@roche.com</a></p></li>
-<li><p>Mahmoud Hallal <a href="mailto:mahmoud.hallal@roche.com">mahmoud.hallal@roche.com</a></p></li>
-<li><p>Maciej Nasinski <a href="mailto:maciej.nasinski@contractors.roche.com">maciej.nasinski@contractors.roche.com</a></p></li>
-<li><p>Konrad Pagacz <a href="mailto:konrad.pagacz@contractors.roche.com">konrad.pagacz@contractors.roche.com</a></p></li>
-<li><p>Junlue Zhao <a href="mailto:zhaoj88@gene.com">zhaoj88@gene.com</a></p></li>
+<li><p>Aleksander Chlebowski <a href="mailto:aleksander.chlebowski@contractors.roche.com">aleksander.chlebowski@contractors.roche.com</a></p></li>
+<li><p>Kartikeya Kirar <a href="mailto:kartikeya.kirar@businesspartner.roche.com">kartikeya.kirar@businesspartner.roche.com</a></p></li>
+<li><p>Marcin Kosinski <a href="mailto:marcin.kosinski.mk1@roche.com">marcin.kosinski.mk1@roche.com</a></p></li>
 <li><p>Adrian Waddell <a href="mailto:adrian.waddell@gene.com">adrian.waddell@gene.com</a></p></li>
-</ul><p>Other contributors:</p><ul><li><p>F. Hoffmann-La Roche AG [copyright holder, funder]</p></li>
+<li><p>Nikolas Burkoff</p></li>
+<li><p>Mahmoud Hallal</p></li>
+<li><p>Maciej Nasinski</p></li>
+<li><p>Konrad Pagacz</p></li>
+<li><p>Junlue Zhao</p></li>
+</ul><p>Other contributors:</p><ul><li><p>Chendi Liao <a href="mailto:chendi.liao@roche.com">chendi.liao@roche.com</a> [reviewer]</p></li>
+<li><p>Dony Unardi <a href="mailto:unardid@gene.com">unardid@gene.com</a> [reviewer]</p></li>
+<li><p>F. Hoffmann-La Roche AG [copyright holder, funder]</p></li>
 <li><p>Maximilian Mordig [contributor]</p></li>
 </ul></div>
 
