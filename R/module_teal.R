@@ -1,6 +1,6 @@
 # This module is the main teal module that puts everything together.
 
-#' Teal main app module
+#' teal main app module
 #'
 #' This is the main teal app that puts everything together.
 #'
