@@ -22,16 +22,18 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  checkmate::assert_class(data, "TealDataAbstract")
-  is_pulled_data <- teal.data::is_pulled(data)
+  checkmate::assert_multi_class(data, c("TealDataAbstract", "tdata", "ddl"))
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
-  splash_ui <- if (is_pulled_data) {
-    # blank ui if data is already pulled
+  splash_ui <- if (inherits(data, "tdata")) {
+    div()
+  } else if (inherits(data, "ddl")) {
+    data$ui(ns("startapp_module"))
+  } else if (teal.data::is_pulled(data)) {
     div()
   } else {
     message("App was initialized with delayed data loading.")
@@ -55,7 +57,7 @@ ui_teal_with_splash <- function(id,
 #' @return `reactive`, return value of [srv_teal()]
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
-  checkmate::assert_class(data, "TealDataAbstract")
+  checkmate::assert_multi_class(data, c("TealDataAbstract", "tdata", "ddl"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
       "srv_teal_with_splash initializing module with data { paste(data$get_datanames(), collapse = ' ')}."
@@ -65,18 +67,29 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       shinyjs::showLog()
     }
 
-    is_pulled_data <- teal.data::is_pulled(data)
     # raw_data contains TealDataAbstract, i.e. R6 object and container for data
     # reactive to get data through delayed loading
     # we must leave it inside the server because of callModule which needs to pick up the right session
-    if (is_pulled_data) {
-      raw_data <- reactiveVal(data) # will trigger by setting it
+
+    raw_data <- if (inherits(data, "tdata")) {
+      reactiveVal(data)
+    } else if (inherits(data, "ddl")) {
+      data$server(
+        ns("startapp_module"),
+        code = x$code,
+        offline_args = x$offline_args,
+        postprocess_fun = x$postprocess_fun
+      )
+    } else if (teal.data::is_pulled(data)) {
+      reactiveVal(data) # will trigger by setting it
     } else {
       raw_data <- data$get_server()(id = "startapp_module")
       if (!is.reactive(raw_data)) {
         stop("The delayed loading module has to return a reactive object.")
       }
+      raw_data
     }
+
 
     res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
     logger::log_trace(
