@@ -20,10 +20,14 @@ repos:
           - logger
           - magrittr
           - rlang
+          - shiny
           - shinyjs
           - stats
+          - insightsengineering/teal.data
           - insightsengineering/teal.logger
           - insightsengineering/teal.reporter
+          - insightsengineering/teal.slice
+          - insightsengineering/teal.transform
           - insightsengineering/teal.widgets
           - utils
       - id: spell-check
