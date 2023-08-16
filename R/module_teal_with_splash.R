@@ -70,16 +70,10 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     # raw_data contains TealDataAbstract, i.e. R6 object and container for data
     # reactive to get data through delayed loading
     # we must leave it inside the server because of callModule which needs to pick up the right session
-
     raw_data <- if (inherits(data, "tdata")) {
       reactiveVal(data)
     } else if (inherits(data, "ddl")) {
-      data$server(
-        ns("startapp_module"),
-        code = x$code,
-        offline_args = x$offline_args,
-        postprocess_fun = x$postprocess_fun
-      )
+      data$server("startapp_module", data)
     } else if (teal.data::is_pulled(data)) {
       reactiveVal(data) # will trigger by setting it
     } else {

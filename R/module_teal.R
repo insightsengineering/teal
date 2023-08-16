@@ -162,10 +162,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
 
     # loading the data -----
     env <- environment()
-    datasets_reactive <- reactive({
-      if (is.null(raw_data())) {
-        return(NULL)
-      }
+    datasets_reactive <- eventReactive(raw_data(), ignoreNULL = TRUE, {
       env$progress <- shiny::Progress$new(session)
       env$progress$set(0.25, message = "Setting data")
 
