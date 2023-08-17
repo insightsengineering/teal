@@ -17,6 +17,7 @@
 ### Miscellaneous
 
 * Removed `scda` package dependency from examples.
+* Updated the header tag style to enhance element containment.
 
 # teal 0.13.0
 
@@ -161,7 +162,6 @@ The `teal` package contains the code to create apps (`teal::init`), to create a 
 * Updated the "filter panel collapse" icon to remove warnings when using `shiny` version >= 1.7.
 * Removed some of the non-exported, debugging modules.
 * Updated the footer tag style to be less visible.
-* Updated the header tag style to enhance element containment.
 
 # teal 0.10.0
 
