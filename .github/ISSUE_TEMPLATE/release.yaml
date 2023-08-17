@@ -55,7 +55,7 @@ body:
         - [ ] Update NEWS.md file: make sure it reflects a holistic summary of what has changed in the package, check README.
         - [ ] Remove the additional fields (`Remotes` and `Config/Needs/*`) from the DESCRIPTION file where applicable.
         - [ ] Make sure that the minimum dependency versions are updated in the DESCRIPTION file for the package.
-          - [ ] Increase versioned dependency on {package name} to >=X.X.X.
+        - [ ] Increase versioned dependency on {package name} to >=X.X.X.
         - [ ] Create a pull request to make necessary bug fixes/changes (add "[skip vbump]" in the PR title), and after merging the PR, tag the update(s) as a release candidate v < intended release version > -rc < release candidate iteration > on the main branch. Note that tags are created in GitHub and synchronized with GitLab automatically.
         - [ ] The package is submitted for internal validation by Release Coordinator (Applicable only for regulatory release).
         - [ ] Address any feedback (internal validation/user testing), retag the package as a release candidate vX.X.X-rc(n+1). Repeat the submission for internal validation if necessary.
