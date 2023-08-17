@@ -1,4 +1,4 @@
-# teal 0.14.0.9000
+# teal 0.14.0.9001
 
 # teal 0.14.0
 
@@ -17,6 +17,7 @@
 ### Miscellaneous
 
 * Removed `scda` package dependency from examples.
+* Updated the header tag style to enhance element containment.
 
 # teal 0.13.0
 
