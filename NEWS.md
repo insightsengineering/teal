@@ -17,6 +17,7 @@
 ### Miscellaneous
 
 * Removed `scda` package dependency from examples.
+* Updated the header tag style to enhance element containment.
 
 # teal 0.13.0
 
