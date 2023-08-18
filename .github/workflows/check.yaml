@@ -61,6 +61,8 @@ jobs:
   spelling:
     name: Spell Check 🆎
     uses: insightsengineering/r.pkg.template/.github/workflows/spelling.yaml@main
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
   links:
     if: github.event_name != 'push'
     name: Check URLs 🌐
