@@ -1,0 +1,107 @@
+---
+name: 🚀 Release
+description: Template for package release
+title: "[Release]: <version>"
+labels: ["release"]
+assignees:
+  - KlaudiaBB
+  - cicdguy
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ Please do not link or mention any internal references in this issue. This includes internal URLs, intellectual property and references.
+  - type: textarea
+    id: blocked-by
+    attributes:
+      label: Blocked by
+      description: Any PRs or issues that this release is blocked by.
+      placeholder: Add a list of blocking PRs or issues here.
+      value: |
+        ### PRs
+
+        - [ ] PR 1
+
+        ### Issues
+
+        - [ ] Issue 1
+    validations:
+      required: true
+  - type: textarea
+    id: pre-requisites
+    attributes:
+      label: Pre-requisites
+      description: Pre-requisites that must be fulfilled before initiating the release process.
+      placeholder: Add your list of pre-requisites here.
+      value: |
+        - [ ] Make sure that high priority bugs (label "priority" + "bug") have been resolved before going into the release.
+        - [ ] Review old/hanging PRs before going into the release.
+        - [ ] Revisit R-package's lifecycle badges (Optional).
+        - [ ] Discuss package dependencies before going into release activities.
+        - [ ] Create a plan to sequentially close release activities and submit groups of packages for internal validation (Applicable only for regulatory release).
+        - [ ] Make sure all relevant integration tests are green 2-3 days before the release. Look carefully through logs (check for warnings and notes).
+        - [ ] Check if a package is installable on our supported internal systems (Optional).
+        - [ ] Inform about the soft code freeze, decide what gets merged in before starting release activities.
+  - type: textarea
+    id: release-checklist
+    attributes:
+      label: Release Checklist
+      description: The steps to be taken in order to create a release.
+      placeholder: Steps to create a release.
+      value: |
+        - [ ] Recurring tasks: Execute the manual tests on Shiny apps that are deployed on various hosting providers (Posit connect and shinyapps.io) - track the results in GitHub issue (Applicable only for frameworks that use Shiny).
+        - [ ] Recurring tasks: Monitor integration tests, if integration fails, create priority issues on the board.
+        - [ ] Sanity checks for Shiny applications e.g. checking if Shiny apps are deployable and making sure there are no errors/warnings.
+        - [ ] Update NEWS.md file: make sure it reflects a holistic summary of what has changed in the package, check README.
+        - [ ] Remove the additional fields (`Remotes` and `Config/Needs/*`) from the DESCRIPTION file where applicable.
+        - [ ] Make sure that the minimum dependency versions are updated in the DESCRIPTION file for the package.
+        - [ ] Increase versioned dependency on {package name} to >=X.X.X.
+        - [ ] Create a pull request to make necessary bug fixes/changes (add "[skip vbump]" in the PR title), and after merging the PR, tag the update(s) as a release candidate v < intended release version > -rc < release candidate iteration > on the main branch. Note that tags are created in GitHub and synchronized with GitLab automatically.
+        - [ ] The package is submitted for internal validation by Release Coordinator (Applicable only for regulatory release).
+        - [ ] Address any feedback (internal validation/user testing), retag the package as a release candidate vX.X.X-rc(n+1). Repeat the submission for internal validation if necessary.
+        - [ ] Get the package validated (Applicable only for regulatory release).
+        - [ ] If the additional fields were removed, add them back in a separate PR, and then merge the PR back to main (add "[skip vbump]" in the PR title).
+        - [ ] Create a git tag with the final version set to X.X.X on the main branch.
+        - [ ] Update downstream package dependencies to (>=X.X.X) in {package name}.
+  - type: textarea
+    id: testing
+    attributes:
+      label: Testing
+      description: Summary of testing activities - integration tests, UAT, other.
+      placeholder: Tests results
+      value: |
+        - [ ] Integration tests results - accepted.
+        - [ ] UAT results - accepted.
+        - [ ] Shiny apps test results - accepted (Applicable only for Shiny apps).
+        - [ ] Necessary testing on target environment - performed (up to ETL).
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Release Feedback
+      description: Feedback received from internal validation/UAT testers.
+      placeholder: Feedback to be implemented after submission for internal validation/testing.
+      value: |
+        - [ ] Fix 1
+        - [ ] Enhancement 1
+        - [ ] Defect 1
+  - type: textarea
+    id: post-release
+    attributes:
+      label: Post-release Checklist
+      description: The list of activities to be completed after the release.
+      placeholder: The steps that must be taken after the release.
+      value: |
+        - [ ] Make sure that the package is published to internal repositories (Validated and/or Non-Validated repository).
+        - [ ] Review and update installation instructions for the package if needed.
+        - [ ] Verify if a new dev version (.9XXX) has been added to the NEWS.md file and DESCRIPTION file as a placeholder for release notes by automation.
+        - [ ] Make sure internal documentation/documentation catalogs are up to date.
+        - [ ] Notify the IDR team to start post-release/clean-up activities.
+        - [ ] Announce the release on ________.
+  - type: textarea
+    id: decision-tree
+    attributes:
+      label: Decision tree
+      description: Any decision tree(s) that would aid release management
+      placeholder: Any decision tree(s) that would aid release management.
+      value: |
+        Click [here](https://github.com/insightsengineering/.github/blob/main/.github/ISSUE_TEMPLATE/RELEASE_DECISION_TREE.md) to see the release decision tree.
