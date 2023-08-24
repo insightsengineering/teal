@@ -248,17 +248,6 @@ app_state_restore <- function(grab, file) {
 }
 
 
-#' @keywords internal
-#'
-setdiff_teal_grab <- function(x, y) {
-  ans <- setdiff(x, y)
-  class(ans) <- c("teal_grab", class(ans))
-  if (length(ans)) {
-    ans
-  }
-}
-
-
 #' @export
 #'
 format.teal_grab <- function(x) {
@@ -323,6 +312,23 @@ as.teal_grab <- function(x) { #nolint
   class(ans) <- c("teal_grab", class(ans))
 
   ans
+}
+
+
+#' Compare `teal_grab` objects.
+#'
+#' Performs a set difference adapted for the `teal_grab` class. Returns NULL if the difference is empty.
+#'
+#' @param x,y `teal_grab` objects
+#' @return `teal_grab` or `NULL`, if the difference is empty.
+#' @keywords internal
+#'
+setdiff_teal_grab <- function(x, y) {
+  ans <- setdiff(x, y)
+  class(ans) <- c("teal_grab", class(ans))
+  if (length(ans)) {
+    ans
+  }
 }
 
 
