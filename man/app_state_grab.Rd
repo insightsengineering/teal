@@ -7,11 +7,12 @@
 app_state_grab()
 }
 \value{
-Object of class \code{teal_grab}, which is a list of lists,
-each of which has two elements, one named "id" and the other "value".
+Object of class \code{teal_grab}, describing the state of all inputs in the app (except buttons).
 }
 \description{
-Grab selection state (value) of all input items in the app.
+Find all inputs in the app ans store their state.
+Buttons are omitted as their values do not (usually) matter
+and they are virtually impossible to restore.
 }
 \seealso{
 \code{\link{app_state_store}}, \code{\link{app_state_restore}}, \code{\link{state_manager_module}}
