@@ -192,7 +192,7 @@ module <- function(label = "module",
                      tags$p(paste0("This module has no UI (id: ", id, " )"))
                    },
                    filters,
-                   datanames = `if`(is.element("data", names(formals(server))), "all", NULL),
+                   datanames = "all",
                    server_args = NULL,
                    ui_args = NULL) {
   checkmate::assert_string(label)

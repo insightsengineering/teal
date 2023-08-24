@@ -18,7 +18,7 @@ module(
 
     },
   filters,
-  datanames = if (is.element("data", names(formals(server)))) "all" else NULL,
+  datanames = "all",
   server_args = NULL,
   ui_args = NULL
 )
