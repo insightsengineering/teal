@@ -180,8 +180,11 @@ app_state_grab <- function() {
   input <- session$input
 
   ans <- lapply(names(input), function(i) {
-    list(id = i, value = as.vector(input[[i]]))
+    if (!inherits(input[[i]], "shinyActionButtonValue")) {
+      list(id = i, value = as.vector(input[[i]]))
+    }
   })
+  ans <- Filter(Negate(is.null), ans)
 
   excluded_ids <- paste(c("filter_panel", "filter_manager", "snapshot_manager", "state_manager"), collapse = "|")
   included_ids <- grep(excluded_ids, vapply(ans, `[[`, character(1L), "id"), value = TRUE, invert = TRUE)
