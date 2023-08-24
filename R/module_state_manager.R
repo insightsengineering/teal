@@ -175,30 +175,19 @@ state_manager_srv <- function(id) {
 
 #' Grab selection state (value) of all input items in the app.
 #'
+#' Find all inputs in the app ans store their state.
+#' Buttons are omitted as their values do not (usually) matter
+#' and they are virtually impossible to restore.
+#'
 #' @return
-#' Object of class `teal_grab`, which is a list of lists,
-#' each of which has two elements, one named "id" and the other "value".
+#' Object of class `teal_grab`, describing the state of all inputs in the app (except buttons).
 #' @keywords internal
 #' @seealso [`app_state_store`], [`app_state_restore`], [`state_manager_module`]
 #'
 app_state_grab <- function() {
   session <- get_master_session()
   input <- session$input
-
-  ans <- lapply(names(input), function(i) {
-    if (!inherits(input[[i]], "shinyActionButtonValue")) {
-      list(id = i, value = as.vector(input[[i]]))
-    }
-  })
-  ans <- Filter(Negate(is.null), ans)
-
-  excluded_ids <- paste(c("filter_panel", "filter_manager", "snapshot_manager", "state_manager"), collapse = "|")
-  included_ids <- grep(excluded_ids, vapply(ans, `[[`, character(1L), "id"), value = TRUE, invert = TRUE)
-  ans <- Filter(function(x) x[["id"]] %in% included_ids, ans)
-
-  class(ans) <- c("teal_grab", class(ans))
-
-  ans
+  as.teal_grab(shiny::reactiveValuesToList(input))
 }
 
 
@@ -307,6 +296,35 @@ format.teal_grab <- function(x) {
 print.teal_grab <- function(x, ...) {
   cat(format(x, ...))
 }
+
+
+#' Convert named list to `teal_grab`.
+#'
+#' @param x `named list`
+#' @return
+#' Object of class `teal_grab`, which is a list of lists,
+#' each of which has two elements, one named "id" and the other "value".
+#' @keywords internal
+#'
+as.teal_grab <- function(x) { #nolint
+  checkmate::assert_list(x, names = "named")
+
+  ans <- lapply(names(x), function(i) {
+    if (!inherits(x[[i]], "shinyActionButtonValue")) {
+      list(id = i, value = as.vector(x[[i]]))
+    }
+  })
+  ans <- Filter(Negate(is.null), ans)
+
+  excluded_ids <- paste(c("filter_panel", "filter_manager", "snapshot_manager", "state_manager"), collapse = "|")
+  included_ids <- grep(excluded_ids, vapply(ans, `[[`, character(1L), "id"), value = TRUE, invert = TRUE)
+  ans <- Filter(function(x) x[["id"]] %in% included_ids, ans)
+
+  class(ans) <- c("teal_grab", class(ans))
+
+  ans
+}
+
 
 #' @keywords internal
 #'
