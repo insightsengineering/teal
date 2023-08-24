@@ -94,6 +94,9 @@ state_manager_srv <- function(id) {
       ### Begin restore procedure. ###
       grab <- grab_history()[[s]]
       app_state_restore(grab)
+      if (!is.null(setdiff_teal_grab(grab, app_state_grab()))) {
+        shinyjs::click("grab_reset")
+      }
       removeModal()
       ### End restore procedure. ###
     })
@@ -117,6 +120,9 @@ state_manager_srv <- function(id) {
             ### Begin restore procedure. ###
             grab <- grab_history()[[s]]
             app_state_restore(grab)
+            if (!is.null(setdiff_teal_grab(grab, app_state_grab()))) {
+              shinyjs::click(id_pickme)
+            }
             removeModal()
             ### End restore procedure. ###
           })
