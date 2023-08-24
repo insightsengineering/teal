@@ -176,7 +176,7 @@ state_manager_srv <- function(id) {
 #' @seealso [`app_state_store`], [`app_state_restore`], [`state_manager_module`]
 #'
 app_state_grab <- function() {
-  session <- .get_session()
+  session <- get_master_session()
   input <- session$input
 
   ans <- lapply(names(input), function(i) {
@@ -236,7 +236,7 @@ app_state_restore <- function(grab, file) {
       jsonlite::unserializeJSON(jsonlite::read_json(file)[[1L]])
     }
 
-  session <- .get_session()
+  session <- get_master_session()
   input <- session$input
 
   # validate saved input state
@@ -262,6 +262,7 @@ setdiff_teal_grab <- function(x, y) {
 
 
 #' @export
+#'
 format.teal_grab <- function(x) {
   all_ids <- vapply(x, `[[`, character(1), "id")
   all_values <- vapply(x, function(xx) toString(xx[["value"]]), character(1L))
@@ -293,12 +294,14 @@ format.teal_grab <- function(x) {
 
 
 #' @export
+#'
 print.teal_grab <- function(x, ...) {
   cat(format(x, ...))
 }
 
-
-.get_session <- function() {
+#' @keywords internal
+#'
+get_master_session <- function() {
   local_session <- shiny::getDefaultReactiveDomain()
   app_session <- .subset2(local_session, "parent")
   if (is.null(app_session)) {
