@@ -1,5 +1,9 @@
 # teal 0.14.0.9003
 
+### Miscellaneous
+
+* Enhance a `module` validation checks so that it won't throw messages about `data` argument unnecessarily.
+
 # teal 0.14.0
 
 ### New features

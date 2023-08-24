@@ -232,7 +232,7 @@ module <- function(label = "module",
     )
   }
 
-  if (!is.element("data", server_formals)) {
+  if (!is.element("data", server_formals) && !is.null(datanames)) {
     message(sprintf("module \"%s\" server function takes no data so \"datanames\" will be ignored", label))
     datanames <- NULL
   }
