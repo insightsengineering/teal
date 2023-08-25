@@ -300,7 +300,7 @@ as.teal_grab <- function(x) { #nolint
 
   ans <- lapply(names(x), function(i) {
     if (!inherits(x[[i]], "shinyActionButtonValue")) {
-      list(id = i, value = as.vector(x[[i]]))
+      list(id = i, value = x[[i]])
     }
   })
   ans <- Filter(Negate(is.null), ans)
