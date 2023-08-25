@@ -241,6 +241,9 @@ app_state_restore <- function(grab, file) {
   checkmate::assert_subset(vapply(app_state, `[[`, character(1L), "id"), choices = names(input))
 
   lapply(app_state, function(i) {
+    if (inherits(i$value, "POSIXt")) {
+      i$value <- posix_ms_to_json(i$value)
+    }
     session$sendInputMessage(inputId = i$id, message = list(value = i$value))
   })
 
@@ -342,4 +345,24 @@ get_master_session <- function() {
   } else {
     app_session
   }
+}
+
+
+#' Special consideration for datetimes which are handled by `airDatepickerInput`.
+#' `POSIXct` is expressed in milliseconds and converted to a JSON representation.
+#' Apparently this is the only way for the input widget to accept data.
+#'
+#' Adapted from `shinyWidgets`.
+#'
+#' @section Warning:
+#' Potential vulnerability if a different date time widget is used.
+#'
+#' @source [`shinyWidgets::updateAirDateInput`]
+#' @keywords internal
+#'
+posix_ms_to_json <- function(x) {
+  x <- if (!is.null(x)) {
+    1000 * as.numeric(as.POSIXct(as.character(x), tz = Sys.timezone()))
+  }
+  as.character(jsonlite::toJSON(x = x, auto_unbox = FALSE))
 }
