@@ -26,7 +26,7 @@ state_manager_ui <- function(id) {
       class = "snapshot_table_row",
       span(tags$b("State manager")),
       actionLink(ns("grab_add"), label = NULL, icon = icon("camera"), title = "grab input state"),
-      actionLink(ns("grab_reset"), label = NULL, icon = icon("undo"), title = "reset initial state"),
+      # actionLink(ns("grab_reset"), label = NULL, icon = icon("undo"), title = "reset initial state"),
       NULL
     ),
     uiOutput(ns("grab_list"))
@@ -44,9 +44,9 @@ state_manager_srv <- function(id) {
 
     # Store initial input states.
     grab_history <- reactiveVal({
-      list(
-        "Initial input state" = app_state_grab()
-      )
+      # list(
+      #   "Initial input state" = app_state_grab()
+      # )
     })
 
     # Grab current input state - name grab.
@@ -109,7 +109,7 @@ state_manager_srv <- function(id) {
     divs <- reactiveValues()
 
     observeEvent(grab_history(), {
-      lapply(names(grab_history())[-1L], function(s) {
+      lapply(names(grab_history()), function(s) {
         id_pickme <- sprintf("pickme_%s", make.names(s))
         id_saveme <- sprintf("saveme_%s", make.names(s))
         id_rowme <- sprintf("rowme_%s", make.names(s))
