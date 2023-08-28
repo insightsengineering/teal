@@ -163,8 +163,6 @@ state_manager_srv <- function(id) {
         rows
       }
     })
-
-
   })
 }
 
@@ -260,7 +258,7 @@ format.teal_grab <- function(x) {
   contents <- if (length(all_ids) + length(all_values) > 0L) {
     all_values_trimmed <- lapply(all_values, function(x) {
       if (nchar(x) > 40) {
-        paste(substr(x, 1, 36),  "...")
+        paste(substr(x, 1, 36), "...")
       } else {
         x
       }
@@ -298,7 +296,7 @@ print.teal_grab <- function(x, ...) {
 #' each of which has two elements, one named "id" and the other "value".
 #' @keywords internal
 #'
-as.teal_grab <- function(x) { #nolint
+as.teal_grab <- function(x) { # nolint
   checkmate::assert_list(x, names = "named")
 
   ans <- lapply(names(x), function(i) {
