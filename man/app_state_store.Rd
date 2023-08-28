@@ -9,7 +9,7 @@ app_state_store(grab, file)
 \arguments{
 \item{grab}{\code{teal_grab}}
 
-\item{file}{\code{path} to save the input states to; must be a .json file; will be overwritten}
+\item{file}{\code{path} to save the input states to; must be a \code{.json} file; will be overwritten}
 }
 \value{
 Returns \code{NULL} invisibly.

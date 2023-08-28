@@ -2,7 +2,7 @@
 % Please edit documentation in R/module_state_manager.R
 \name{posix_ms_to_json}
 \alias{posix_ms_to_json}
-\title{Special consideration for datetimes which are handled by \code{airDatepickerInput}.
+\title{Special consideration for date time objects which are handled by \code{airDatepickerInput}.
 \code{POSIXct} is expressed in milliseconds and converted to a JSON representation.
 Apparently this is the only way for the input widget to accept data.}
 \source{

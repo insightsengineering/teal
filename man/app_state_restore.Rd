@@ -9,7 +9,7 @@ app_state_restore(grab, file)
 \arguments{
 \item{grab}{optional \code{teal_grab}}
 
-\item{file}{optional \code{path} to a .json file}
+\item{file}{optional \code{path} to a \code{.json} file}
 }
 \value{
 Returns \code{NULL} invisibly.

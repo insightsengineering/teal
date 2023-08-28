@@ -192,7 +192,7 @@ app_state_grab <- function() {
 #' Save input grab to json file.
 #'
 #' @param grab `teal_grab`
-#' @param file `path` to save the input states to; must be a .json file; will be overwritten
+#' @param file `path` to save the input states to; must be a `.json` file; will be overwritten
 #' @return Returns `NULL` invisibly.
 #' @keywords internal
 #' @seealso [`app_state_grab`], [`app_state_restore`], [`state_manager_module`]
@@ -209,7 +209,7 @@ app_state_store <- function(grab, file) {
 #' Restore state (value) of all input items in the app according to a grab or file.
 #'
 #' @param grab optional `teal_grab`
-#' @param file optional `path` to a .json file
+#' @param file optional `path` to a `.json` file
 #' @return Returns `NULL` invisibly.
 #' @keywords internal
 #' @seealso [`app_state_grab`], [`app_state_store`], [`state_manager_module`]
@@ -346,7 +346,7 @@ get_master_session <- function() {
 }
 
 
-#' Special consideration for datetimes which are handled by `airDatepickerInput`.
+#' Special consideration for date time objects which are handled by `airDatepickerInput`.
 #' `POSIXct` is expressed in milliseconds and converted to a JSON representation.
 #' Apparently this is the only way for the input widget to accept data.
 #'
