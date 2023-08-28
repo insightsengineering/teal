@@ -189,7 +189,7 @@ app_state_grab <- function() {
 }
 
 
-#' Save input grab to json file.
+#' Save input grab to JSON file.
 #'
 #' @param grab `teal_grab`
 #' @param file `path` to save the input states to; must be a `.json` file; will be overwritten

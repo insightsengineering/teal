@@ -2,7 +2,7 @@
 % Please edit documentation in R/module_state_manager.R
 \name{app_state_store}
 \alias{app_state_store}
-\title{Save input grab to json file.}
+\title{Save input grab to JSON file.}
 \usage{
 app_state_store(grab, file)
 }
@@ -15,7 +15,7 @@ app_state_store(grab, file)
 Returns \code{NULL} invisibly.
 }
 \description{
-Save input grab to json file.
+Save input grab to JSON file.
 }
 \seealso{
 \code{\link{app_state_grab}}, \code{\link{app_state_restore}}, \code{\link{state_manager_module}}
