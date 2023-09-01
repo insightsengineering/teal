@@ -110,6 +110,47 @@ as.teal_slices <- function(x) { # nolint
 }
 
 
+#' @rdname teal_slices
+#' @export
+#' @keywords internal
+#'
+c.teal_slices <- function(...) {
+  x <- list(...)
+  checkmate::assert_true(all(vapply(x, is.teal_slices, logical(1L))), .var.name = "all arguments are teal_slices")
+
+  excludes <- lapply(x, attr, "exclude_varnames")
+  names(excludes) <- NULL
+  excludes <- unlist(excludes, recursive = FALSE)
+  excludes <- excludes[!duplicated(names(excludes))]
+
+  includes <- lapply(x, attr, "include_varnames")
+  names(includes) <- NULL
+  includes <- unlist(includes, recursive = FALSE)
+  includes <- includes[!duplicated(names(includes))]
+
+  count_types <- lapply(x, attr, "count_type")
+  count_types <- unique(unlist(count_types))
+
+  allow_adds <- lapply(x, attr, "allow_add")
+  allow_adds <- any(unlist(allow_adds))
+
+  do.call(
+    teal_slices,
+    c(
+      unique(unlist(x, recursive = FALSE)),
+      list(
+        include_varnames = if (length(includes)) includes,
+        exclude_varnames = if (length(excludes)) excludes,
+        count_type = count_types,
+        allow_add = allow_adds,
+        module_specific = lapply(x, attr, "module_specific")[[1]],
+        mapping = lapply(x, attr, "mapping")[[1]]
+      )
+    )
+  )
+}
+
+
 #' Deep copy `teal_slices`
 #'
 #' it's important to create a new copy of `teal_slices` when
