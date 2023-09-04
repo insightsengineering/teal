@@ -110,6 +110,28 @@ as.teal_slices <- function(x) { # nolint
 }
 
 
+#' @rdname teal_slices
+#' @export
+#' @keywords internal
+#'
+c.teal_slices <- function(...) {
+  x <- list(...)
+  checkmate::assert_true(all(vapply(x, is.teal_slices, logical(1L))), .var.name = "all arguments are teal_slices")
+
+  all_attributes <- lapply(x, attributes)
+  all_attributes <- coalesce_r(all_attributes)
+  all_attributes <- all_attributes[names(all_attributes) != "class"]
+
+  do.call(
+    teal_slices,
+    c(
+      unique(unlist(x, recursive = FALSE)),
+      all_attributes
+    )
+  )
+}
+
+
 #' Deep copy `teal_slices`
 #'
 #' it's important to create a new copy of `teal_slices` when
