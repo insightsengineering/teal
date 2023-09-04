@@ -1,4 +1,8 @@
-# teal 0.14.0.9000
+# teal 0.14.0.9004
+
+### Miscellaneous
+
+* Enhance a `module` validation checks so that it won't throw messages about `data` argument unnecessarily.
 
 # teal 0.14.0
 
@@ -17,6 +21,7 @@
 ### Miscellaneous
 
 * Removed `scda` package dependency from examples.
+* Updated the header tag style to enhance element containment.
 
 # teal 0.13.0
 
