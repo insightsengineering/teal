@@ -3,6 +3,7 @@
 \name{teal_slices}
 \alias{teal_slices}
 \alias{as.teal_slices}
+\alias{c.teal_slices}
 \title{Filter settings for teal applications}
 \usage{
 teal_slices(
@@ -16,6 +17,8 @@ teal_slices(
 )
 
 as.teal_slices(x)
+
+\method{c}{teal_slices}(...)
 }
 \arguments{
 \item{...}{any number of \code{teal_slice} objects. For \code{print} and \code{format},
