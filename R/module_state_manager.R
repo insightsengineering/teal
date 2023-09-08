@@ -138,7 +138,7 @@ state_manager_srv <- function(id) {
         if (!is.element(id_rowme, names(divs))) {
           divs[[id_rowme]] <- div(
             class = "snapshot_table_row",
-            a(h5(s), title = "restore bookmark", href = grab_history()[[s]])
+            a(h5(s), title = "restore bookmark", href = grab_history()[[s]], target = "blank")
           )
         }
       })
