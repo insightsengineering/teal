@@ -81,7 +81,9 @@ filter_manager_ui <- function(id) {
     class = "filter_manager_content",
     tableOutput(ns("slices_table")),
     snapshot_manager_ui(ns("snapshot_manager")),
-    state_manager_ui(ns("state_manager"))
+    if (getShinyOption("bookmarkStore", default = "disable") != "server") {
+      state_manager_ui(ns("state_manager"))
+    }
   )
 }
 
@@ -183,7 +185,9 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     # Call snapshot manager.
     snapshot_manager_srv("snapshot_manager", slices_global, mapping_matrix, filtered_data_list)
     # Call state manager.
-    state_manager_srv("state_manager")
+    if (getShinyOption("bookmarkStore", default = "disable") != "server") {
+      state_manager_srv("state_manager")
+    }
 
     modules_out # returned for testing purpose
   })
