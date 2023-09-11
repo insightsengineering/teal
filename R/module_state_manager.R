@@ -178,9 +178,11 @@ get_master_session <- function() {
 
 # add bookmark and return URL to saved state
 # simplified from session$doBookmark
+# @param session a `session` object; use get_master_session for best results
+# @return URL pointing to a bookmarked application state
 #' @keywords internal
 #'
-grab_state <- function(session) {
+grab_state <- function(session = shiny::getDefaultReactiveDomain()) {
   if (getShinyOption("bookmarkStore", default = "disable") != "server") {
     showNotification("Bookmarks have not been enabled for this application.")
     return(invisible(NULL))
