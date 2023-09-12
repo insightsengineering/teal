@@ -103,7 +103,7 @@ shinyApp(app$ui, app$server)
 
 ![App recording](man/figures/readme_app.gif)
 
-Please see [`teal gallery](https://insightsengineering.github.io/teal.gallery) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog) to see examples of `teal` apps.
+Please see [`teal.gallery`](https://insightsengineering.github.io/teal.gallery) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog) to see examples of `teal` apps.
 
 Please start with the ["Getting Started" article](https://insightsengineering.github.io/teal/articles/teal.html) and then other [package vignettes](https://insightsengineering.github.io/teal/articles/index.html) for more detailed guide.
 
