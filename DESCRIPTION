@@ -20,11 +20,14 @@ Authors@R: c(
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("Maximilian", "Mordig", role = "ctb")
   )
-Description: A shiny based interactive exploration framework for analyzing
-    clinical trials data. teal currently provides a dynamic filtering
-    facility and different data viewers. teal shiny applications are built
-    using standard shiny modules.
-License: Apache License 2.0 | file LICENSE
+Description: A 'shiny' based interactive exploration framework for analyzing
+    clinical trials data. 'teal' currently provides a dynamic filtering
+    facility and different data viewers. 'teal' 'shiny' applications are built
+    using standard 'shiny' modules.
+License: Apache License 2.0
+URL: https://insightsengineering.github.io/teal/,
+    https://github.com/insightsengineering/teal/
+BugReports: https://github.com/insightsengineering/teal/issues
 Depends:
     R (>= 4.0),
     shiny (>= 1.7.0),
