@@ -1,10 +1,10 @@
 ---
-title: "Modifying a teal application with R options"
+title: "Modifying a `teal` Application With R Options"
 author: "Paweł Rucki"
 date: " 2021-12-23"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Modifying a teal application with R options}
+  %\VignetteIndexEntry{Modifying a `teal` Application With R Options}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
@@ -12,7 +12,7 @@ editor_options:
 ---
 
 # Motivation
-Some `R` packages use `options` to modify their runtime behavior. These usually specify default values for internal functions or determine responses to users actions. For example, `testthat` uses an option `testthat.progress.max_fails` to define a default number of failed expectations before the testing functions terminate execution. While some of these adjustable values can be exposed as function parameters, some are destined to remain an option. This vignette details the options available to users of `teal`, `teal.logger`, `teal.widgets`, `teal.modules.general`, `teal.modules.clinical`.
+Some `R` packages use `options` to modify their runtime behavior. These usually specify default values for internal functions or determine responses to users actions. For example, `testthat` uses an option `testthat.progress.max_fails` to define a default number of failed expectations before the testing functions terminate execution. While some of these adjustable values can be exposed as function parameters, some are confined to an option. This vignette details the options available to users of `teal`, `teal.logger`, `teal.widgets`, `teal.modules.general`, `teal.modules.clinical`.
 
 # Setting an option
 At any time during an interactive session, you can change an option using:
@@ -39,7 +39,7 @@ This defines the layout of a log message used in a `teal` application. `teal` us
 
 Default: `"[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:[{token}] {ans} {msg}"`.
 
-Note that this layout is formatted by the package `glue::glue`.
+Note that this layout is formatted by the `glue` package.
 
 ### `teal.log_level` (`character`)
 This is the logging level threshold used in a `teal` application. A `teal` application will not emit logs below this level. Read the documentation of `teal.logger::register_logger` for more information. Possible values: `"TRACE"`, `"INFO"`, `"WARNING"`, `"ERROR"`. See the documentation of `logger::TRACE` for all possible values of logging threshold and more information on what it does.
@@ -60,7 +60,7 @@ This indicates whether to print the `JavaScript` console logs to the `R` console
 Default: `FALSE`.
 
 ### `teal.threshold_slider_vs_checkboxgroup` (`numeric`)
-It is the threshold that determines if a numeric variable is treated as a factor in the filter panel. If the number of unique values of a numeric variable is less than this threshold this variable will be treated as a factor instead of a numeric one. As an example, imagine `teal.threshold_slider_vs_checkboxgroup` equals to 2. Then a numeric variable `c(1, 1, 1)`, which has only one unique value (a digit `1`), is treated as a factor in the filter panel (and in the filter panel only!). The filter panel creates a checkbox widget to filter values from this variable, as it would for a factor variable, instead of a usual slider widget for numeric variables.
+This is the threshold that determines if a variable is treated as a factor in the filter panel. If the number of unique values of a variable is less than this threshold the variable will be treated as a factor instead of its original class. As an example, imagine `teal.threshold_slider_vs_checkboxgroup` equals to 2. Then a numeric variable `c(1, 1, 1)`, which has only one unique value, is treated as a factor in the filter panel (and in the filter panel only!). The filter panel creates a checkbox widget to filter values from this variable, as it would for a factor variable, instead of the usual numeric range selector.
 
 Default: 5.
 
@@ -86,7 +86,7 @@ This option controls the dots per inch of the graphs rendered and downloaded whe
 Default: 72
 
 ### `teal.bs_theme` (`bslib::bs_theme` object)
-This option controls the bootstrap theme and version used in the teal apps. Achieve better UX with the customized UI of an app.
-Please visit the `vignette("teal-bs-themes", package = "teal")` to read more about the functionality.
+This option controls the bootstrap theme and version used in `teal` apps. Achieve better UX with the customized UI of an app.
+Please visit the vignette on Bootstrap themes to read more about the functionality.
 
 Default: `NULL`

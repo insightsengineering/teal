@@ -11,8 +11,7 @@ vignette: >
 
 ## Introduction
 
-The `teal` framework provides a large number of analysis modules to be incorporated into `teal` applications.
-However, it is also possible to create your own modules using the `module()` function.
+The `teal` framework provides a large number of analysis modules to be incorporated into `teal` applications. However, it is also possible to create your own modules using the `module` function.
 
 Here is an implementation of a simple module:
 
@@ -46,11 +45,9 @@ which can be added into `teal` apps using `example_module(label = "Label for tab
 
 ### UI function
 
-This function contains the UI required for the module. It should be a function with at least the arguments `id`.
-It can also contain the argument `data` for access to the application data. See the server section below for more details.
+This function contains the UI required for the module. It should be a function with at least the arguments `id`. It can also contain the argument `data` for access to the application data. See the server section below for more details.
 
-The UI function can contain standard UI components alongside additional widgets provided by the `teal.widgets` package.
-In the example above we are using the `standard_layout` function of `teal.widgets` which generates a layout
+The UI function can contain standard UI components alongside additional widgets provided by the `teal.widgets` package. In the example above we are using the `standard_layout` function of `teal.widgets` which generates a layout
 including an encoding panel on the left and main output covering the rest of the module's UI.
 
 ### Server function
@@ -70,18 +67,14 @@ function(id,
 
 ```
 
-When used inside a teal application called with `teal::init`, the `data` argument is a named list of reactive data.frames
-containing the data after having been filtered through the filter panel. It is of the `tdata` type and can be created using
-the `new_tdata` function.
+When used inside a `teal` application called with `init`, the `data` argument is a named list of reactive `data.frame`s containing the data after having been filtered through the filter panel.  It is of the `tdata` type and can be created using the `new_tdata` function.
 
 ## A More Complicated Example
 
 The `teal` framework also provides:
 
-- A way to create modules which then generate the R code needed to reproduce their outputs;
-these modules use the [`teal.code`](https://insightsengineering.github.io/teal.code/) package.
-- A way extract from and merge related datasets using the
-[`teal.transform`](https://insightsengineering.github.io/teal.transform/) package.
+- A way to create modules which then generate the R code needed to reproduce their outputs; these modules use the [`teal.code`](https://insightsengineering.github.io/teal.code/) package.
+- A way extract from and merge related datasets using the [`teal.transform`](https://insightsengineering.github.io/teal.transform/) package.
 - A way to allow app creators to customize your modules also using `teal.transform`.
 
 The annotated example below demonstrates these features within a simple histogram module, allowing app developers to choose the data and columns that their app users can select for display in a histogram.
@@ -207,9 +200,7 @@ if (interactive()) {
 
 ## `shiny` input cycle
 
-When teal modules are run inside the `teal::init` the initial shiny input cycle is empty for each of them.
-In practice, this means that some inputs might be initialized with `NULL` value, unnecessary triggering some
-observers. A developer has to be aware of this situation as often It will require `shiny::req` or `ignoreInit` argument in observers or `reactive` expressions. This side effect is caused by the `shiny::insertUI` function. We are aware of this inconvenience and have already started to look for a solution.
+When `teal` modules are run inside the `init` the initial shiny input cycle is empty for each of them. In practice, this means that some inputs might be initialized with `NULL` value, unnecessary triggering some observers. A developer has to be aware of this situation as often it will require `shiny::req` or `ignoreInit` argument in observers or `reactive` expressions. This side effect is caused by the `shiny::insertUI` function. We are aware of this inconvenience and have already started to look for a solution.
 
 ## Adding reporting to a module
 Refer to `vignette("adding_support_for_reporting")` to read about adding support for reporting in your `teal` module.

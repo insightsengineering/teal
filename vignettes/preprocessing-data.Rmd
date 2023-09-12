@@ -1,18 +1,18 @@
 ---
-title: "Preprocessing data"
+title: "Preprocessing Data"
 author: "NEST CoreDev"
 date: "2022-07-28"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Preprocessing data}
+  %\VignetteIndexEntry{Preprocessing Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-## Usage in teal apps
-In this vignette, we will show how to use preprocessing in a `teal` app. The basics of preprocessing data have been discussed in `teal.data` [here](https://insightsengineering.github.io/teal.data/main/articles/preprocessing-data.html).
+## Usage in `teal` apps
+In this vignette, we will show how to use preprocessed data in `teal` apps. The basics of data preprocessing have been discussed in `teal.data` [here](https://insightsengineering.github.io/teal.data/main/articles/preprocessing-data.html).
 
-In a `teal` app, providing the code in a copy-paste style is cumbersome and can lead to an out-of-sync situation where the code does not represent the preprocessing code anymore. We therefore use the `get_code` function to extract the preprocessing code from the `app.R` file. The `get_code` function requires `#` tags to indicate which lines of code in `app.R` need be included in the preprocessing code. `get_code` understands the following tags:
+In a `teal` app providing the code in a copy-paste style is cumbersome and can lead to an out-of-sync situation where the code does not represent the preprocessing code anymore. We therefore use the `teal.data::get_code` function to extract the preprocessing code from the `app.R` file. The `get_code` function requires `#` tags to indicate which lines of code in `app.R` need be included in the preprocessing code. `get_code` understands the following tags:
 
 - Enclosing preprocessing code between `#code>` `#<code` determines the start and end of preprocessing. Only one start and one end is allowed. If start or end are not specified then preprocessing starts at the beginning of the file and ends at the end respectively.
 - `#nocode` at the end of the line excludes this line from preprocessing.
@@ -77,10 +77,6 @@ x <- init(
 shinyApp(x$ui, x$server)
 ```
 
-If you set `check = TRUE` in `cdisc_data` then the data provided to the application is checked against
-the data obtained by evaluating the `code` in an isolated environment. If the datasets do not match then
-`cdisc_data` returns an error.
+If you set `check = TRUE` in `cdisc_data` then the data provided to the application is checked against the data obtained by evaluating the `code` in an isolated environment. If the datasets do not match then `cdisc_data` returns an error.
 
-`cdisc_data` also analyzes the arguments passed to it. Note that additional transformation within
-`cdisc_data` call can break reproducibility and is not allowed, e.g. developers shouldn't do an operation
-like `ADSL = mutate(ADSL, a = 1)` inside `cdisc_data`.
+`cdisc_data` also analyzes the arguments passed to it. Note that additional transformation within `cdisc_data` call can break reproducibility and is not allowed, e.g. developers shouldn't do an operation like `ADSL = mutate(ADSL, a = 1)` inside `cdisc_data`.
