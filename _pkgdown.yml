@@ -21,23 +21,32 @@ navbar:
       href: https://github.com/insightsengineering/teal
 
 articles:
-  - title: Articles
+  - title: Get Started
     navbar: ~
     contents:
       - teal
+  - title: Articles
+    navbar: Using `teal`
+    contents:
       - filter-panel
-      - including-general-data-in-teal
-      - including-adam-data-in-teal
-      - including-mae-data-in-teal
-      - preprocessing-data
-      - creating-custom-modules
-      - adding-support-for-reporting
       - teal-options
       - teal-bs-themes
+  - title: Articles
+    navbar: Data in `teal` Apps
+    contents:
+      - including-adam-data-in-teal
+      - including-general-data-in-teal
+      - including-mae-data-in-teal
+      - preprocessing-data
+  - title: Articles
+    navbar: Extending `teal`
+    contents:
+      - creating-custom-modules
+      - adding-support-for-reporting
 
 reference:
-  - title: teal Core Functions
-    desc: These are the main functions needed to build a teal app.
+  - title: Core `teal` Functions
+    desc: Main functions needed to build a `teal` app
     contents:
       - init
       - module
@@ -45,15 +54,15 @@ reference:
       - srv_teal_with_splash
       - ui_teal_with_splash
       - teal_slices
-  - title: Example module
-    desc: A simple example teal module
+  - title: Example Module
+    desc: A simple `teal` module
     contents:
       - example_module
-  - title: Creating reports
+  - title: Creating Reports
     contents:
       - reporter_previewer_module
       - TealReportCard
-  - title: Functions for module developers
+  - title: Functions for Module Developers
     contents:
       - tdata
       - get_code_tdata
@@ -61,9 +70,9 @@ reference:
       - get_metadata
       - tdata2env
       - show_rcode_modal
-  # - title: Functions moved to other packages
-    # desc: These functions have been moved from teal and will be deprecated.
+  # - title: Functions Moved to Other Packages
+    # desc: These functions have been moved from teal and will be deprecated
     # contents:
-  - title: Validation functions
+  - title: Validation Functions
     contents:
       - starts_with("validate_")
