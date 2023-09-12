@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.14.0.9005
-Date: 2023-09-05
+Version: 0.14.0.9006
+Date: 2023-09-12
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
     person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
@@ -20,10 +20,10 @@ Authors@R: c(
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("Maximilian", "Mordig", role = "ctb")
   )
-Description: A 'shiny' based interactive exploration framework for analyzing
-    clinical trials data. 'teal' currently provides a dynamic filtering
-    facility and different data viewers. 'teal' 'shiny' applications are built
-    using standard 'shiny' modules.
+Description: A 'shiny' based interactive exploration framework for
+    analyzing clinical trials data. 'teal' currently provides a dynamic
+    filtering facility and different data viewers. 'teal' 'shiny'
+    applications are built using standard 'shiny' modules.
 License: Apache License 2.0
 URL: https://insightsengineering.github.io/teal/,
     https://github.com/insightsengineering/teal/
