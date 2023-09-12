@@ -26,20 +26,20 @@ articles:
     contents:
       - teal
   - title: Articles
-    navbar: Using `teal`
+    navbar: Using teal
     contents:
       - filter-panel
       - teal-options
       - teal-bs-themes
   - title: Articles
-    navbar: Data in `teal` Apps
+    navbar: Data in teal Apps
     contents:
       - including-adam-data-in-teal
       - including-general-data-in-teal
       - including-mae-data-in-teal
       - preprocessing-data
   - title: Articles
-    navbar: Extending `teal`
+    navbar: Extending teal
     contents:
       - creating-custom-modules
       - adding-support-for-reporting

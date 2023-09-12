@@ -1,10 +1,10 @@
 ---
-title: "Bootstrap Themes in `teal`"
+title: "Bootstrap Themes in teal"
 author: "NEST CoreDev"
 date: "2022-09-08"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Bootstrap Themes in `teal`}
+  %\VignetteIndexEntry{Bootstrap Themes in teal}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

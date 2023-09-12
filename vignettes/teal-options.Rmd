@@ -1,10 +1,10 @@
 ---
-title: "Modifying a `teal` Application With R Options"
+title: "Modifying a teal Application With R Options"
 author: "Paweł Rucki"
 date: " 2021-12-23"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Modifying a `teal` Application With R Options}
+  %\VignetteIndexEntry{Modifying a teal Application With R Options}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
