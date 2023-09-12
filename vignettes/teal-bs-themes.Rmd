@@ -134,7 +134,7 @@ bs_theme_update(theme, bootswatch = "minty")
 
 This is a helpful guide that provides code to update our theme. For `teal` applications we don't actually use `bs_theme_update` and opt for `bs_theme` instead. However, the printed code will still be helpful.
 
-#### Customizie a `bootswatch` theme
+#### Customize a `bootswatch` theme
 
 Our base theme (Minty) is close to what we want but let's make a few modifications. To start, we will increase the base font size. To do this, we choose the "Fonts" section of the `customizer` theme and then set a value in the "Base font size" input. We use 1.25 here, which means all our fonts will be increased by a factor of 1.25. If we check the R console, we will see `bslib` has printed `bs_theme_update(theme, font_scale = 1.25, bootswatch = "minty")`, which now includes our font size adjustment.
 
@@ -153,7 +153,7 @@ As expected, our corners are no longer rounded. If we look at our R console, we 
 
 #### Apply the customized theme
 
-Once our customization is complete, we will apply the changes to our application. To do this, we use the option `teal.bs_theme` like before but this time we will expand on our `bslib::bs_theme` call to include our changes. Luckilythe arguments that were printed to the R console when running our app in the themer can be plugged right in.
+Once our customization is complete, we will apply the changes to our application. To do this, we use the option `teal.bs_theme` like before but this time we will expand on our `bslib::bs_theme` call to include our changes. Luckily, the arguments that were printed to the R console when running our app in the themer can be plugged right in.
 
 ```{r eval = FALSE}
 options(
