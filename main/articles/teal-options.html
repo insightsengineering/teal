@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9005</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,16 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -106,7 +96,7 @@ Rucki</h4>
             
             <h4 data-toc-skip class="date">2021-12-23</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/HEAD/vignettes/teal-options.Rmd" class="external-link"><code>vignettes/teal-options.Rmd</code></a></small>
       <div class="d-none name"><code>teal-options.Rmd</code></div>
     </div>
 
@@ -163,7 +153,7 @@ overwrite your custom values.</p>
 <p>This defines the layout of a log message used in a <code>teal</code>
 application. <code>teal</code> uses this layout to format the emitted
 log messages. Read the documentation of
-<code><a href="https://rdrr.io/pkg/teal.logger/man/register_logger.html" class="external-link">teal.logger::register_logger</a></code> for more information.</p>
+<code><a href="https://github.com/insightsengineering/teal.logger/reference/register_logger.html" class="external-link">teal.logger::register_logger</a></code> for more information.</p>
 <p>Default:
 <code>"[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:[{token}] {ans} {msg}"</code>.</p>
 <p>Note that this layout is formatted by the package
@@ -176,7 +166,7 @@ log messages. Read the documentation of
 <p>This is the logging level threshold used in a <code>teal</code>
 application. A <code>teal</code> application will not emit logs below
 this level. Read the documentation of
-<code><a href="https://rdrr.io/pkg/teal.logger/man/register_logger.html" class="external-link">teal.logger::register_logger</a></code> for more information. Possible
+<code><a href="https://github.com/insightsengineering/teal.logger/reference/register_logger.html" class="external-link">teal.logger::register_logger</a></code> for more information. Possible
 values: <code>"TRACE"</code>, <code>"INFO"</code>,
 <code>"WARNING"</code>, <code>"ERROR"</code>. See the documentation of
 <code><a href="https://daroczig.github.io/logger/reference/log_levels.html" class="external-link">logger::TRACE</a></code> for all possible values of logging threshold

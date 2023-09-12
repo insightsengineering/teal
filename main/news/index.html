@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9005</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,16 +41,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -75,13 +65,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Changelog</h1>
-      
+      <small>Source: <a href="https://github.com/insightsengineering/teal/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.14.0.9004" id="teal-01409004">teal 0.14.0.9004<a class="anchor" aria-label="anchor" href="#teal-01409004"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.14.0.9005" id="teal-01409005">teal 0.14.0.9005<a class="anchor" aria-label="anchor" href="#teal-01409005"></a></h2>
 <div class="section level4">
-<h4 id="miscellaneous-0-14-0-9004">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-14-0-9004"></a></h4>
+<h4 id="miscellaneous-0-14-0-9005">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-14-0-9005"></a></h4>
 <ul><li>Enhance a <code>module</code> validation checks so that it won’t throw messages about <code>data</code> argument unnecessarily.</li>
 </ul></div>
 </div>
@@ -190,7 +180,7 @@
 <code>teal.transform</code>: standardizes extracting and merging data.</li>
 <li>
 <code>teal.logger</code>: standardizes logging within <code>teal</code> framework.</li>
-</ul><p>The <code>teal</code> package contains the code to create apps (<code><a href="../reference/init.html">teal::init</a></code>), to create a module (<code><a href="../reference/module.html">teal::module</a></code>) and to group modules in the app (<code><a href="../reference/modules.html">teal::modules</a></code>). <code>teal</code> depends on <code>teal.transform</code> and <code>teal.data</code> which contain the functions that <code>teal</code> app creators are likely to need. The other package <code>teal</code> only imports from and therefore <code>teal</code> module creators should either fully specify functions from these packages when required or import them into custom packages as <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(teal)</a></code> will not load them.</p>
+</ul><p>The <code>teal</code> package contains the code to create apps (<code><a href="../reference/init.html">teal::init</a></code>), to create a module (<code><a href="../reference/module.html">teal::module</a></code>) and to group modules in the app (<code><a href="../reference/modules.html">teal::modules</a></code>). <code>teal</code> depends on <code>teal.transform</code> and <code>teal.data</code> which contain the functions that <code>teal</code> app creators are likely to need. The other package <code>teal</code> only imports from and therefore <code>teal</code> module creators should either fully specify functions from these packages when required or import them into custom packages as <code><a href="https://insightsengineering.github.io/teal/">library(teal)</a></code> will not load them.</p>
 <div class="section level4">
 <h4 id="new-features-0-11-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-11-0"></a></h4>
 <ul><li>A simple new <code>teal</code> module named <code>example_module</code> has been included in the package.</li>
