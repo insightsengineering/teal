@@ -10,7 +10,7 @@ vignette: >
 ---
 
 ## Usage in `teal` apps
-In this vignette, we will show how to use preprocessed data in `teal` apps. The basics of data preprocessing have been discussed in `teal.data` [here](https://insightsengineering.github.io/teal.data/main/articles/preprocessing-data.html).
+In this vignette, we will show how to use preprocessed data in `teal` apps. The basics of data preprocessing have been discussed in `teal.data` [here](https://insightsengineering.github.io/teal.data/latest-tag/articles/preprocessing-data.html).
 
 In a `teal` app providing the code in a copy-paste style is cumbersome and can lead to an out-of-sync situation where the code does not represent the preprocessing code anymore. We therefore use the `teal.data::get_code` function to extract the preprocessing code from the `app.R` file. The `get_code` function requires `#` tags to indicate which lines of code in `app.R` need be included in the preprocessing code. `get_code` understands the following tags:
 
