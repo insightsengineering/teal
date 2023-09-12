@@ -1,7 +1,6 @@
 ---
 title: "Creating Custom Modules"
 author: "Nikolas Burkoff"
-date: "2022-03-24"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Creating Custom Modules}

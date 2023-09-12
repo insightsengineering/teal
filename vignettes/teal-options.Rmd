@@ -1,7 +1,6 @@
 ---
 title: "Modifying a teal Application With R Options"
 author: "Paweł Rucki"
-date: " 2021-12-23"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Modifying a teal Application With R Options}

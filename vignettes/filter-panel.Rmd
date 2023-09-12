@@ -1,7 +1,6 @@
 ---
 title: "Filter Panel"
 author: "NEST CoreDev"
-date: "2023-07-12"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Filter Panel}

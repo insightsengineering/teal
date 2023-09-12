@@ -1,7 +1,6 @@
 ---
 title: "Using MultiAssayExperiment data in teal Applications"
 author: "NEST CoreDev"
-date: "2022-04-20"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using MultiAssayExperiment data in teal Applications}

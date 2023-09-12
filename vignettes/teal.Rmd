@@ -1,7 +1,6 @@
 ---
 title: "Getting Started with teal"
 author: "NEST CoreDev"
-date: "2022-11-03"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting Started with teal}
