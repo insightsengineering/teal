@@ -124,8 +124,8 @@ class(cdisc_data_obj)
 
 The `teal.data::join_keys` function is used to specify keys:
 
-- [`teal.data::join_keys`](https://insightsengineering.github.io/teal.data/reference/join_keys.html) is a collection of multiple `teal.data::join_key` entries
-- [`teal.data::join_key`](https://insightsengineering.github.io/teal.data/reference/join_key.html) specifies the relation between two datasets:
+- [`teal.data::join_keys`](https://insightsengineering.github.io/teal.data/latest-tag/reference/join_keys.html) is a collection of multiple `teal.data::join_key` entries
+- [`teal.data::join_key`](https://insightsengineering.github.io/teal.data/latest-tag/reference/join_key.html) specifies the relation between two datasets:
   - `dataset_1`, `dataset_2` - name of two datasets
   - `key` - optionally named vector of column names
 
