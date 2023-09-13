@@ -13,6 +13,15 @@ interactive data analysis environment.
 To learn mode about the package either read the project website at
 \url{Project Website} or read the \code{\link{init}} manual pages.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://insightsengineering.github.io/teal/}
+  \item \url{https://github.com/insightsengineering/teal/}
+  \item Report bugs at \url{https://github.com/insightsengineering/teal/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Dawid Kaledkowski \email{dawid.kaledkowski@roche.com}
 
