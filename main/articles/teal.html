@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9006</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,30 +45,25 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>Using teal</h6>
     <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
-    <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input `ADaM` data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input `MultiAssayExperiment` data in a teal application</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
+    <a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal Application With R Options</a>
+    <a class="dropdown-item" href="../articles/teal-bs-themes.html">Bootstrap Themes in teal</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Data in teal Apps</h6>
+    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Using ADaM Data in teal Applications</a>
+    <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Using General Data in teal Applications</a>
+    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Using MultiAssayExperiment data in teal Applications</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing Data</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Extending teal</h6>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
-    <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
-    <a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal application with R options</a>
-    <a class="dropdown-item" href="../articles/teal-bs-themes.html">teal and Bootstrap Themes</a>
+    <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding Support for Reporting to Custom Modules</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -104,7 +99,6 @@
                         <h4 data-toc-skip class="author">NEST
 CoreDev</h4>
             
-            <h4 data-toc-skip class="date">2022-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/HEAD/vignettes/teal.Rmd" class="external-link"><code>vignettes/teal.Rmd</code></a></small>
       <div class="d-none name"><code>teal.Rmd</code></div>
@@ -115,35 +109,34 @@ CoreDev</h4>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p><em>teal</em> is a shiny-based interactive exploration framework for
-analyzing data, with particular emphasis on <code>CDISC</code> clinical
-trial data. <code>teal</code> applications provide their users with:</p>
+<p><code>teal</code> is a shiny-based interactive exploration framework
+for analyzing data, with particular emphasis on <code>CDISC</code>
+clinical trial data. <code>teal</code> applications allow their users
+to:</p>
 <ul>
-<li>Ability to “pull” in data from external data sources</li>
-<li>Dynamic filtering of data to be used in the analyses</li>
-<li>Ability to generate reproducible code to regenerate the on-screen
-analyses</li>
-<li>Ability to create and download reports containing results of
-analyses (for analysis modules which support reporting)</li>
+<li>“Pull” in data from external data sources</li>
+<li>Dynamically filter of data to be used in the analyses</li>
+<li>Generate reproducible code to regenerate the on-screen analyses</li>
+<li>Create and download reports containing results of analyses (for
+analysis modules which support reporting)</li>
 </ul>
-<p>In addition, the <code>teal</code> framework also provides
-application developers with:</p>
+<p>In addition, the <code>teal</code> framework provides application
+developers with:</p>
 <ul>
 <li>A large suite of custom-made standard analysis modules to be
 included in applications</li>
 <li>A logging framework to facilitate debugging of applications</li>
 </ul>
 <p>More advanced users of the framework can also create new analysis
-modules which can be added into any teal applications. See the Creating
-Custom Modules vignette for a brief introduction to creating
-modules.</p>
+modules which can be added into any <code>teal</code> applications. See
+the <em>Creating Custom Modules</em> vignette for a brief introduction
+to creating modules.</p>
 </div>
 <div class="section level2">
 <h2 id="your-first-teal-application">Your first <code>teal</code> application:<a class="anchor" aria-label="anchor" href="#your-first-teal-application"></a>
 </h2>
-<p>This simple application takes the <code>iris</code> and
-<code>mtcars</code> datasets and displays their contents in a
-<code>teal</code> application:</p>
+<p>This simple <code>teal</code> application takes the <code>iris</code>
+and <code>mtcars</code> datasets and displays their contents:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://insightsengineering.github.io/teal/">teal</a></span><span class="op">)</span></span>
 <span></span>
@@ -163,29 +156,42 @@ modules.</p>
 <p>As shown in the image above, this application consists of several
 distinct areas:</p>
 <ul>
-<li>Application header: The title of the application shown at the
+<li>Application header: the title of the application shown at the
 top.</li>
-<li>A filter panel (panels on the right hand side): for filtering the
-data to be passed into all <code>teal</code> modules.</li>
 <li>
-<code>teal</code> modules (accessible via a set of tabs): in this
-case a simple module named “example teal module”.</li>
-<li>An encoding panel (panel on the left hand side): Module specific UI
+<code>teal</code> modules (bar at the top): in this case a simple
+module named “example teal module”.</li>
+<li>Encoding panel (panel on the left hand side): Module specific UI
 components, in this case a drop-down to select a dataset name.</li>
 <li>Main output panel (panel on the middle): The outputs of the module,
 for this example module the chosen dataset is displayed.</li>
+<li>Filter panel (panels on the right hand side): for filtering the data
+to be passed into all <code>teal</code> modules.</li>
 </ul>
+<div class="section level3">
+<h3 id="encoding-panel">Encoding panel<a class="anchor" aria-label="anchor" href="#encoding-panel"></a>
+</h3>
+<p>The left hand side of the application is (usually) dedicated to
+module specific controls. In modules which include reproducibility
+functionality it often contains a <em>Show R Code</em> button that, when
+clicked, will display the code required to re-generate the output,
+including any filtering added by the filter panel and
+<code>library</code> calls to attach required packages.</p>
+</div>
 <div class="section level3">
 <h3 id="filter-panel">Filter panel<a class="anchor" aria-label="anchor" href="#filter-panel"></a>
 </h3>
-<p>The filter panel allows users to select parts of the datasets they
-wish to use in the modules. The top panel shows the number of records
-which remain after filtering.</p>
+<p>The filter panel allows app developers to select the datasets they
+wish to make available in the modules and define filters for those
+datasets. The top section shows the number of records remaining in each
+dataset after filtering. The middle section lists all currently defined
+filters. Typically these can be modified by the user. The bottom section
+allows the user to add new filters.</p>
 <p>In the example below:</p>
 <ul>
 <li>For the <code>IRIS</code> dataset, only rows satisfying the
 conditions <code>Petal.Length &gt;= 3.4</code> and
-<code>Species %in% c("setosa", "virginica")</code> are included thereby
+<code>Species %in% c("setosa", "virginica")</code> are included, thereby
 keeping 50 rows.</li>
 <li>For the <code>MTCARS</code> dataset, only rows satisfying the
 condition <code>cyl %in% c(4, 6)</code> are included, thereby keeping 18
@@ -193,36 +199,25 @@ rows.</li>
 </ul>
 <p><img src="images/filter_panel.png" alt="Example filter panel" style="width: 100%;"></p>
 </div>
-<div class="section level3">
-<h3 id="encoding-panel">Encoding panel<a class="anchor" aria-label="anchor" href="#encoding-panel"></a>
-</h3>
-<p>The left hand side of the application is (usually) dedicated to
-module specific controls. For modules which include reproducibility
-functionality, it often contains a “Show R Code” button which when
-clicked will show the code required to re-generate the output (including
-any filters added on the filter panel and library calls to load required
-packages).</p>
-</div>
 </div>
 <div class="section level2">
 <h2 id="creating-your-own-applications">Creating your own applications<a class="anchor" aria-label="anchor" href="#creating-your-own-applications"></a>
 </h2>
-<p><code>init</code> is the key function to use to create your
-<code>teal</code> application and it requires two key arguments:
-<code>data</code> and <code>modules</code>.</p>
+<p>The key function to use to create your <code>teal</code> application
+is <code>init</code>, which requires two arguments: <code>data</code>
+and <code>modules</code>.</p>
 <div class="section level3">
 <h3 id="application-data">Application Data<a class="anchor" aria-label="anchor" href="#application-data"></a>
 </h3>
 <p>The <code>data</code> argument to the <code>init</code> function
-specifies the data used by your application. This can contain data
-currently in your R session, as in the example above, but also can
-contain <code>connectors</code> which describe where to “pull” data from
-when the application is run. This can be used to allow data to be pulled
-into <code>teal</code> applications from external sources which require
-your application users to enter credentials.</p>
-<p>In the example above we call <code>teal_data</code> to convert the
-raw datasets into <code>teal</code> specific datasets and to bind them
-in one <code>R</code> object. This function can also be used to specify
+specifies the data used by your application. This can be data currently
+in your R session, as in the example above, but also
+<code>connectors</code>, which describe how to “pull” remote data when
+the application is run. Connectors can pull data from external sources,
+which may require authentication.</p>
+<p>In the example above we call <code>teal_data</code> to convert raw
+datasets into <code>teal</code> specific datasets and to bind them in
+one <code>R</code> object. This function can also be used to specify
 relationships between different datasets. In order to use
 <code>CDISC</code> clinical trial data in a <code>teal</code>
 application the <code>cdisc_data</code> function is used instead.</p>
@@ -239,23 +234,22 @@ using predefined <code>teal</code> modules. See the references below for
 links to these modules.</p>
 </div>
 <div class="section level3">
-<h3 id="defining-filters">Defining filters<a class="anchor" aria-label="anchor" href="#defining-filters"></a>
+<h3 id="defining-filters">Defining Filters<a class="anchor" aria-label="anchor" href="#defining-filters"></a>
 </h3>
-<p>The <code>init</code> function has an additional argument
-<code>filters</code> which allows you to initialize the application with
-certain filters preselected. See the documentation for <code>init</code>
-for further details.</p>
+<p>The optional <code>filter</code> argument in <code>init</code> allows
+you to initialize the application with predefined filters. See the
+documentation for <code>init</code> for further details.</p>
 </div>
 <div class="section level3">
 <h3 id="reporting">Reporting<a class="anchor" aria-label="anchor" href="#reporting"></a>
 </h3>
 <p>If any of the <code>modules</code> in your <code>teal</code>
 application support reporting (see <a href="https://insightsengineering.github.io/teal.reporter/"><code>teal.reporter</code></a>
-for more details) then users of your application can add these outputs
-to a report. This report can be downloaded and a special “Report
-Previewer” module will be added to your application as an additional tab
-so your users can view and configure their reports before downloading
-them.</p>
+for more details), users of your application can add the outputs of the
+modules to a report. This report can then be downloaded and a special
+<em>Report Previewer</em> module will be added to your application as an
+additional tab, where users can view and configure their reports before
+downloading them.</p>
 </div>
 </div>
 <div class="section level2">

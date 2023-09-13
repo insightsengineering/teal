@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9006</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,30 +45,25 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>Using teal</h6>
     <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
-    <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input `ADaM` data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input `MultiAssayExperiment` data in a teal application</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
+    <a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal Application With R Options</a>
+    <a class="dropdown-item" href="../articles/teal-bs-themes.html">Bootstrap Themes in teal</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Data in teal Apps</h6>
+    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Using ADaM Data in teal Applications</a>
+    <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Using General Data in teal Applications</a>
+    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Using MultiAssayExperiment data in teal Applications</a>
+    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing Data</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Extending teal</h6>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
-    <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
-    <a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal application with R options</a>
-    <a class="dropdown-item" href="../articles/teal-bs-themes.html">teal and Bootstrap Themes</a>
+    <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding Support for Reporting to Custom Modules</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -104,7 +99,6 @@
                         <h4 data-toc-skip class="author">NEST
 CoreDev</h4>
             
-            <h4 data-toc-skip class="date">2023-07-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/HEAD/vignettes/filter-panel.Rmd" class="external-link"><code>vignettes/filter-panel.Rmd</code></a></small>
       <div class="d-none name"><code>filter-panel.Rmd</code></div>
@@ -114,7 +108,7 @@ CoreDev</h4>
     
 <div class="section level2">
 <h2 id="teal-apps-with-the-filter-panel">
-<code>teal</code> apps with the filter panel<a class="anchor" aria-label="anchor" href="#teal-apps-with-the-filter-panel"></a>
+<code>teal</code> Apps With the Filter Panel<a class="anchor" aria-label="anchor" href="#teal-apps-with-the-filter-panel"></a>
 </h2>
 <p>The filter panel is an integral part of all <code>teal</code>
 applications and is included on the right side. Based on the selections
@@ -122,13 +116,12 @@ made in the filter panel, filter expressions are executed before passing
 data to <code>teal</code> modules. The technical details of the filter
 panel are extensively described in <a href="https://insightsengineering.github.io/teal.slice/latest-tag/"><code>teal.slice</code>
 documentation</a>.</p>
-<p>By default, <code><a href="../reference/init.html">teal::init</a></code> initializes the filter panel
-without any active filters but allows the user to add filters on any
-column. To start a <code>teal</code> application with predefined
-filters, one must to specify the <code>filter</code> argument. In the
-following example four filters are specified using the
-<code>teal_slice</code> function and wrapped together with
-<code>teal_slices</code>.</p>
+<p>By default, <code>init</code> initializes the filter panel without
+any active filters but allows the user to add filters on any column. To
+start a <code>teal</code> application with predefined filters, one must
+to specify the <code>filter</code> argument. In the following example
+four filters are specified using the <code>teal_slice</code> function
+and wrapped together with <code>teal_slices</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://insightsengineering.github.io/teal/">teal</a></span><span class="op">)</span></span>
 <span></span>
@@ -157,7 +150,7 @@ following example four filters are specified using the
 <h3 id="filter-panel-respective-to-teal_module">Filter panel respective to <code>teal_module</code><a class="anchor" aria-label="anchor" href="#filter-panel-respective-to-teal_module"></a>
 </h3>
 <p>Each <code>teal_module</code> (see <code><a href="../reference/module.html">?module</a></code>) object
-contains the <code>filters</code> attribute that determines which data
+contains the <code>datanames</code> attribute that determines which data
 sets are to be sent to that module. The filter panel will display only
 those data sets and hide the rest when this module is active.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -186,12 +179,12 @@ those data sets and hide the rest when this module is active.</p>
 extends the original <code>teal_slices</code> found in
 <code>teal.slice</code> by adding two arguments:
 <code>module_specific</code> and <code>mapping</code>. By default
-<code><a href="../reference/init.html">teal::init</a></code> initializes app with a “global” filter panel,
-where all modules use the same filters. Setting
+<code>init</code> initializes app with a “global” filter panel, where
+all modules use the same filters. Setting
 <code>module_specific = TRUE</code> switches to a “module-specific”
 filter panel, where each module can have a different set of filters
-active. It is still possible to set global filters that will be shared
-among modules.</p>
+active at any time. It is still possible to set global filters that will
+be shared among modules.</p>
 <p>One possible scenario is depicted in the figure below:</p>
 <ul>
 <li>
