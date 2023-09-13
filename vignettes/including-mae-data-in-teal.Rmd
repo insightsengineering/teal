@@ -1,10 +1,9 @@
 ---
-title: "Input `MultiAssayExperiment` data in a teal application"
+title: "Using MultiAssayExperiment data in teal Applications"
 author: "NEST CoreDev"
-date: "2022-04-20"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Input `MultiAssayExperiment` data in a teal application}
+  %\VignetteIndexEntry{Using MultiAssayExperiment data in teal Applications}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,10 +11,10 @@ vignette: >
 ## `MultiAssayExperiment` data
 `MultiAssayExperiment` offers a data structure for representing and analyzing multi-omics experiments: a biological analysis approach utilizing multiple types of observations, such as DNA mutations and abundance of RNA and proteins, in the same biological specimens.
 
-You can read more about `MultiAssayExperiment` data [here](https://www.bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/MultiAssayExperiment.html).
+`MultiAssayExperiment` data is described in detail [here](https://www.bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/MultiAssayExperiment.html).
 
 
-## Example application
+## Example Application
 The example below represents an application including `MultiAssayExperiment` data.
 
 ```{r, eval = FALSE}
@@ -34,8 +33,9 @@ if (interactive()) {
 }
 ```
 
-The filter panel supports `MAE` data out of the box, but `teal` itself does not guarantee that any module will work with `MAE` data the same way it works with other types of data (e.g. `ADaM`) because `MAE` has a unique structure that needs to be considered when developing a module.
-The package [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/) has been specifically developed for the 
-analysis of `MAE` data.
+The filter panel supports `MAE` data out of the box, but `teal` itself does not guarantee that any module will work with `MAE` data the same way it works with other types of data (e.g. `ADaM`) because `MAE` has a unique structure that requires special consideration when developing a module. The package [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/) has been specifically developed for the analysis of `MAE` data.
+
+
+## Further Reading
 
 For more information about preprocessing, reproducibility, relationships between datasets and `DDL`, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/).

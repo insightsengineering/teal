@@ -1,19 +1,18 @@
 ---
-title: "Input general data in a teal application"
+title: "Using General Data in teal Applications"
 author: "NEST CoreDev"
-date: "2022-04-20"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Input general data in a teal application}
+  %\VignetteIndexEntry{Using General Data in teal Applications}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ## Introduction
 
-`teal` applications are not restricted to `CDISC`-standard data. Although many teal modules included with `NEST` are designed for `CDISC` data, those in the library `teal.modules.general` have been designed to work with non-relational data.
+`teal` applications are not restricted to `CDISC`-standard data. Although many `teal` modules included with `NEST` are designed for `CDISC` data, those in the library `teal.modules.general` have been designed to work with non-relational data.
 
-For example this application uses the standard `iris` and `mtcars` datasets:
+This example application uses the standard `iris` and `mtcars` datasets:
 
 ```{r, message=FALSE}
 library(teal)
@@ -35,46 +34,11 @@ For more information, see documentation in `teal.data`.
 
 ## Delayed Data Loading (`DDL`)
 
-To learn more about `DDL`, visit `vignette("delayed-data-loading", package = "teal.data")`. All the features of `DDL`
-are available for general datasets:
+`teal` provides the ability to pull remote data and use it in the app. Additional user authentication may be necessary.
 
-```{r eval=FALSE}
-library(teal)
-
-person_generator <- function() {
-  return(
-    data.frame(
-      ID = factor(1:8),
-      AGE = c(40, 23, 56, 11, 17, 71, 23, 56)
-    )
-  )
-}
-
-pet_generator <- function() {
-  return(
-    data.frame(
-      ID = factor(1:10),
-      TYPE = rep(c("CAT", "DOG"), 5),
-      COLOR = c("GINGER", rep("BROWN", 5), rep("BLACK", 4)),
-      PERSON_ID = factor(c(5, 4, 3, 3, 3, 1, 8, 1, 2, 2))
-    )
-  )
-}
+To learn more about `DDL`, visit the appropriate vignette in `teal.data`.
 
 
-app <- init(
-  data = teal_data(
-    fun_dataset_connector("PERSON", fun = person_generator, keys = "ID") %>%
-      mutate_dataset("PERSON$SEX <- rep(c('M', 'F'), 4)"),
-    fun_dataset_connector("PETS", fun = pet_generator, keys = "ID")
-  ) %>%
-    mutate_join_keys("PERSON", "PETS", c("ID" = "PERSON_ID")),
-  modules = example_module()
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
+## Further Reading
 
 For more information about preprocessing, reproducibility, relationships between datasets and `DDL`, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/).
