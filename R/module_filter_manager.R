@@ -147,6 +147,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
         ifelse(state_ids_global %in% state_ids_allowed, states_active, NA)
       })
 
+      # mapping_smooth <- mapping_smooth[grep("Report previewer", names(mapping_smooth), invert = TRUE)]
       as.data.frame(mapping_smooth, row.names = state_ids_global, check.names = FALSE)
     })
 
@@ -164,9 +165,10 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
           rownames(mm) <- ""
         }
 
-        mm
+        # Report Previewer will not be displayed.
+        mm[!grepl("Report previewer", names(mm))]
       },
-      align = paste(c("l", rep("c", length(filtered_data_list))), collapse = ""),
+      align = paste(c("l", rep("c", sum(!grepl("Report previewer", names(filtered_data_list))))), collapse = ""),
       rownames = TRUE
     )
 
