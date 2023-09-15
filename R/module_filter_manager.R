@@ -147,7 +147,6 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
         ifelse(state_ids_global %in% state_ids_allowed, states_active, NA)
       })
 
-      # mapping_smooth <- mapping_smooth[grep("Report previewer", names(mapping_smooth), invert = TRUE)]
       as.data.frame(mapping_smooth, row.names = state_ids_global, check.names = FALSE)
     })
 
