@@ -2,7 +2,8 @@
 
 ### Miscellaneous
 
-* Enhance a `module` validation checks so that it won't throw messages about `data` argument unnecessarily.
+* Enhanced a `module` validation checks so that it won't throw messages about `data` argument unnecessarily.
+* Removed `Report previewer` module from mapping matrix display in filter manager.
 
 # teal 0.14.0
 
