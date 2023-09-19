@@ -165,9 +165,9 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
         }
 
         # Report Previewer will not be displayed.
-        mm[!grepl("Report previewer", names(mm))]
+        mm[names(mm) != "Report previewer"]
       },
-      align = paste(c("l", rep("c", sum(!grepl("Report previewer", names(filtered_data_list))))), collapse = ""),
+      align = paste(c("l", rep("c", sum(names(filtered_data_list) != "Report previewer"))), collapse = ""),
       rownames = TRUE
     )
 
