@@ -212,7 +212,18 @@ module <- function(label = "module",
   }
 
   if (label == "global_filters") {
-    stop("Label 'global_filters' is reserved in teal. Please change to something else.")
+    stop(
+      sprintf("module(label = \"%s\", ...\n  ", label),
+      "Label 'global_filters' is reserved in teal. Please change to something else.",
+      call. = FALSE
+    )
+  }
+  if (label == "Report previewer") {
+    stop(
+      sprintf("module(label = \"%s\", ...\n  ", label),
+      "Label 'Report previewer' is reserved in teal.",
+      call. = FALSE
+    )
   }
   server_formals <- names(formals(server))
   if (!(
