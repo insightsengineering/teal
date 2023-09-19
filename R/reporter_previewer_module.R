@@ -28,10 +28,11 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
   }
 
   module <- module(
-    label = label,
+    label = "temporary label",
     server = srv, ui = ui,
     server_args = server_args, ui_args = list(), datanames = NULL
   )
   class(module) <- c("teal_module_previewer", class(module))
+  module$label <- label
   module
 }
