@@ -1,7 +1,6 @@
 ---
 title: "Getting Started with teal"
 author: "NEST CoreDev"
-date: "2022-11-03"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting Started with teal}
@@ -11,25 +10,25 @@ vignette: >
 
 ## Introduction
 
-*teal* is a shiny-based interactive exploration framework for analyzing data, with particular emphasis on
-`CDISC` clinical trial data. `teal` applications provide their users with:
+`teal` is a shiny-based interactive exploration framework for analyzing data, with particular emphasis on `CDISC` clinical trial data. 
+`teal` applications allow their users to:
 
-* Ability to "pull" in data from external data sources
-* Dynamic filtering of data to be used in the analyses
-* Ability to generate reproducible code to regenerate the on-screen analyses
-* Ability to create and download reports containing results of analyses (for analysis modules which support reporting)
+* "Pull" in data from external data sources
+* Dynamically filter of data to be used in the analyses
+* Generate reproducible code to regenerate the on-screen analyses
+* Create and download reports containing results of analyses (for analysis modules which support reporting)
 
-In addition, the `teal` framework also provides application developers with:
+In addition, the `teal` framework provides application developers with:
 
 * A large suite of custom-made standard analysis modules to be included in applications
 * A logging framework to facilitate debugging of applications
 
-More advanced users of the framework can also create new analysis modules which can be added into any teal applications.
-See the Creating Custom Modules vignette for a brief introduction to creating modules.
+More advanced users of the framework can also create new analysis modules which can be added into any `teal` applications.
+See the _Creating Custom Modules_ vignette for a brief introduction to creating modules.
 
 ## Your first `teal` application:
 
-This simple application takes the `iris` and `mtcars` datasets and displays their contents in a `teal` application:
+This simple `teal` application takes the `iris` and `mtcars` datasets and displays their contents:
 
 ```{r, message=FALSE}
 library(teal)
@@ -51,60 +50,54 @@ if (interactive()) {
 
 As shown in the image above, this application consists of several distinct areas:
 
-* Application header: The title of the application shown at the top.
-* A filter panel (panels on the right hand side): for filtering the data to be passed into all `teal` modules.
-* `teal` modules (accessible via a set of tabs): in this case a simple module named "example teal module".
-* An encoding panel (panel on the left hand side): Module specific UI components, in this case a drop-down to select a dataset name.
+* Application header: the title of the application shown at the top.
+* `teal` modules (bar at the top): in this case a simple module named "example teal module".
+* Encoding panel (panel on the left hand side): Module specific UI components, in this case a drop-down to select a dataset name.
 * Main output panel (panel on the middle): The outputs of the module, for this example module the chosen dataset is displayed.
-
-### Filter panel
-
-The filter panel allows users to select parts of the datasets they wish to use in the modules. The top panel shows the number of records which remain after filtering.
-
-In the example below:
-
-* For the `IRIS` dataset, only rows satisfying the conditions `Petal.Length >= 3.4` and `Species %in% c("setosa", "virginica")` are included thereby keeping 50 rows.
-* For the `MTCARS` dataset, only rows satisfying the condition `cyl %in% c(4, 6)` are included, thereby keeping 18 rows.
-
-<img src="images/filter_panel.png" alt="Example filter panel" style="width: 100%;"/>
+* Filter panel (panels on the right hand side): for filtering the data to be passed into all `teal` modules.
 
 ### Encoding panel
 
 The left hand side of the application is (usually) dedicated to module specific controls.
-For modules which include reproducibility functionality, it often contains a "Show R Code" button which when clicked will show the code required to re-generate the output (including any filters added on the filter panel and library calls to load required packages).
+In modules which include reproducibility functionality it often contains a _Show R Code_ button that, when clicked, will display the code required to re-generate the output, including any filtering added by the filter panel and `library` calls to attach required packages.
+
+### Filter panel
+
+The filter panel allows app developers to select the datasets they wish to make available in the modules and define filters for those datasets.
+The top section shows the number of records remaining in each dataset after filtering.
+The middle section lists all currently defined filters. Typically these can be modified by the user.
+The bottom section allows the user to add new filters.
+
+In the example below:
+
+* For the `IRIS` dataset, only rows satisfying the conditions `Petal.Length >= 3.4` and `Species %in% c("setosa", "virginica")` are included, thereby keeping 50 rows.
+* For the `MTCARS` dataset, only rows satisfying the condition `cyl %in% c(4, 6)` are included, thereby keeping 18 rows.
+
+<img src="images/filter_panel.png" alt="Example filter panel" style="width: 100%;"/>
 
 ## Creating your own applications
 
-`init` is the key function to use to create your `teal` application and it requires two key arguments: `data` and `modules`.
+The key function to use to create your `teal` application is `init`, which requires two arguments: `data` and `modules`.
 
 ### Application Data
 
-The `data` argument to the `init` function specifies the data used by your application. This can contain data currently in your R session,
-as in the example above, but also can contain `connectors` which describe where to "pull" data from when the application is run. This can be
-used to allow data to be pulled into `teal` applications from external sources which require your application users to enter credentials.
+The `data` argument to the `init` function specifies the data used by your application. This can be data currently in your R session, as in the example above, but also `connectors`, which describe how to "pull" remote data when the application is run. Connectors can pull data from external sources, which may require authentication.
 
-In the example above we call `teal_data` to convert the raw datasets into `teal` specific datasets and to bind them in one `R` object.
-This function can also be used to specify relationships between different datasets.
-In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.
+In the example above we call `teal_data` to convert raw datasets into `teal` specific datasets and to bind them in one `R` object. This function can also be used to specify relationships between different datasets. In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.
 
 For further details we recommend exploring the [`teal.data`](https://insightsengineering.github.io/teal.data/) package documentation.
 
 ### Modules
 
-The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`).
-We recommend creating applications using predefined `teal` modules. See the references below for links to these modules.
+The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`). We recommend creating applications using predefined `teal` modules. See the references below for links to these modules.
 
-### Defining filters
+### Defining Filters
 
-The `init` function has an additional argument `filters` which allows you to initialize the application with certain filters preselected.
-See the documentation for `init` for further details.
+The optional `filter` argument in `init` allows you to initialize the application with predefined filters. See the documentation for `init` for further details.
 
 ### Reporting
 
-If any of the `modules` in your `teal` application support reporting
-(see [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) for more details) then users of your application
-can add these outputs to a report. This report can be downloaded and a special "Report Previewer" module will be added to your application as an additional tab
-so your users can view and configure their reports before downloading them.
+If any of the `modules` in your `teal` application support reporting (see [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) for more details), users of your application can add the outputs of the modules to a report.  This report can then be downloaded and a special _Report Previewer_ module will be added to your application as an additional tab, where users can view and configure their reports before downloading them.
 
 ## Where to go next
 

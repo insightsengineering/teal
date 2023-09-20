@@ -1,7 +1,6 @@
 ---
 title: "Filter Panel"
 author: "NEST CoreDev"
-date: "2023-07-12"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Filter Panel}
@@ -9,14 +8,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## `teal` apps with the filter panel
+## `teal` Apps With the Filter Panel
 
-The filter panel is an integral part of all `teal` applications and is included on the right side. Based on the selections made in the filter panel, filter expressions are executed before passing data to `teal` modules. 
-The technical details of the filter panel are extensively described in [`teal.slice` documentation](https://insightsengineering.github.io/teal.slice/latest-tag/).
+The filter panel is an integral part of all `teal` applications and is included on the right side. Based on the selections made in the filter panel, filter expressions are executed before passing data to `teal` modules. The technical details of the filter panel are extensively described in [`teal.slice` documentation](https://insightsengineering.github.io/teal.slice/latest-tag/).
 
-By default, `teal::init` initializes the filter panel without any active filters but allows the user to add filters on any column. 
-To start a `teal` application with predefined filters, one must to specify the `filter` argument.
-In the following example four filters are specified using the `teal_slice` function and wrapped together with `teal_slices`. 
+By default, `init` initializes the filter panel without any active filters but allows the user to add filters on any column. To start a `teal` application with predefined filters, one must to specify the `filter` argument. In the following example four filters are specified using the `teal_slice` function and wrapped together with `teal_slices`. 
 
 ```r
 library(teal)
@@ -44,8 +40,7 @@ if (interactive()) {
 
 ### Filter panel respective to `teal_module`
 
-Each `teal_module` (see `?module`) object contains the `filters` attribute that determines which data sets are to be sent to that module.
-The filter panel will display only those data sets and hide the rest when this module is active.
+Each `teal_module` (see `?module`) object contains the `datanames` attribute that determines which data sets are to be sent to that module. The filter panel will display only those data sets and hide the rest when this module is active.
 
 ```r
 library(teal)
@@ -69,10 +64,7 @@ if (interactive()) {
 
 ### Global and module specific filter panel
 
-`teal` contains the `teal_slices` function that extends the original `teal_slices` found in `teal.slice` by adding two arguments: `module_specific` and `mapping`. 
-By default `teal::init` initializes app with a "global" filter panel, where all modules use the same filters.
-Setting `module_specific = TRUE` switches to a "module-specific" filter panel, where each module can have a different set of filters active. 
-It is still possible to set global filters that will be shared among modules.
+`teal` contains the `teal_slices` function that extends the original `teal_slices` found in `teal.slice` by adding two arguments: `module_specific` and `mapping`. By default `init` initializes app with a "global" filter panel, where all modules use the same filters. Setting `module_specific = TRUE` switches to a "module-specific" filter panel, where each module can have a different set of filters active at any time. It is still possible to set global filters that will be shared among modules.
 
 One possible scenario is depicted in the figure below:
 
@@ -84,9 +76,7 @@ One possible scenario is depicted in the figure below:
 
 ![](./images/filters_mapping.jpg)
 
-To achieve the described setup, one must use the `mapping` argument to appropriately match each `teal_module` with its respective `teal_slice`. `mapping` takes a named list where each element is named with a module's `label` and contains a vector of `teal_slice` `id`s.
-These elements will active in that module at startup.
-In addition, `teal_slice`s whose `id`s are enumerated in the `global_filters` element of `mapping` will be applied to all modules in the app.
+To achieve the described setup, one must use the `mapping` argument to appropriately match each `teal_module` with its respective `teal_slice`. `mapping` takes a named list where each element is named with a module's `label` and contains a vector of `teal_slice` `id`s. These elements will active in that module at startup. In addition, `teal_slice`s whose `id`s are enumerated in the `global_filters` element of `mapping` will be applied to all modules in the app.
 
 ```r
 library(teal)
