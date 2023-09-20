@@ -32,7 +32,7 @@ Depends:
     R (>= 4.0),
     shiny (>= 1.7.0),
     teal.data (>= 0.3.0),
-    teal.slice (>= 0.4.0),
+    teal.slice (>= 0.4.0.0011),
     teal.transform (>= 0.4.0)
 Imports:
     checkmate,
