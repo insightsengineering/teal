@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9007</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,16 +64,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -157,7 +147,7 @@ configuring the module to preview the report is handled by
 <span>    <span class="op">}</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
+<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://github.com/insightsengineering/teal.widgets/reference/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        encoding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
@@ -169,9 +159,9 @@ configuring the module to preview the report is handled by
 following:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"MTCARS"</span>, <span class="va">mtcars</span><span class="op">)</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"MTCARS"</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  modules <span class="op">=</span> <span class="fu">teal_example_module</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -201,7 +191,7 @@ will be included when the module is called. See below:</p>
 <span>    <span class="op">}</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
+<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://github.com/insightsengineering/teal.widgets/reference/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        encoding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
@@ -213,9 +203,9 @@ will be included when the module is called. See below:</p>
 <code>teal</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"MTCARS"</span>, <span class="va">mtcars</span><span class="op">)</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"MTCARS"</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  modules <span class="op">=</span> <span class="fu">example_module_with_reporting</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -254,7 +244,7 @@ adding report cards<a class="anchor" aria-label="anchor" href="#insert-ui-and-su
 <span>    <span class="op">}</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
+<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://github.com/insightsengineering/teal.widgets/reference/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
 <span>          <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_ui.html">simple_reporter_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"reporter"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span></span>
@@ -268,9 +258,9 @@ adding report cards<a class="anchor" aria-label="anchor" href="#insert-ui-and-su
 <p>This updated module is now ready to be launched:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"MTCARS"</span>, <span class="va">mtcars</span><span class="op">)</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"MTCARS"</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  modules <span class="op">=</span> <span class="fu">example_module_with_reporting</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -318,7 +308,7 @@ return the <code>card</code> object, otherwise errors may occur in
 <span>    <span class="op">}</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
+<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://github.com/insightsengineering/teal.widgets/reference/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
 <span>          <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_ui.html">simple_reporter_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"simpleReporter"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span></span>
@@ -331,9 +321,9 @@ return the <code>card</code> object, otherwise errors may occur in
 <span><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"MTCARS"</span>, <span class="va">mtcars</span><span class="op">)</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"MTCARS"</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  modules <span class="op">=</span> <span class="fu">example_module_with_reporting</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -407,7 +397,7 @@ the table along with the table itself. To learn more about
 <span>        <span class="va">table_q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">nrow</span><span class="op">)</span></span>
 <span></span>
-<span>          <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.code/reference/new_qenv.html">new_qenv</a></span><span class="op">(</span><span class="fu"><a href="../reference/tdata2env.html">tdata2env</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/get_code.html" class="external-link">get_code</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>          <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.code/reference/new_qenv.html">new_qenv</a></span><span class="op">(</span><span class="fu"><a href="../reference/tdata2env.html">tdata2env</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, code <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/get_code.html">get_code</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>            <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.code/reference/eval_code.html">eval_code</a></span><span class="op">(</span></span>
 <span>              <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">substitute</a></span><span class="op">(</span></span>
 <span>                <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">nrows</span><span class="op">)</span>,</span>
@@ -454,7 +444,7 @@ the table along with the table itself. To learn more about
 <span>    <span class="op">}</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
+<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://github.com/insightsengineering/teal.widgets/reference/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">tableOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"table"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        encoding <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
 <span>          <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
@@ -472,9 +462,9 @@ the table along with the table itself. To learn more about
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"AIR"</span>, <span class="va">airquality</span>, code <span class="op">=</span> <span class="st">"data(airquality); AIR &lt;- airquality"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span>, code <span class="op">=</span> <span class="st">"data(iris); IRIS &lt;- iris"</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"AIR"</span>, <span class="va">airquality</span>, code <span class="op">=</span> <span class="st">"data(airquality); AIR &lt;- airquality"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span>, code <span class="op">=</span> <span class="st">"data(iris); IRIS &lt;- iris"</span><span class="op">)</span>,</span>
 <span>    check <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  modules <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>

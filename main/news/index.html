@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9007</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,16 +46,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -84,10 +74,11 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.14.0.9006" id="teal-01409006">teal 0.14.0.9006<a class="anchor" aria-label="anchor" href="#teal-01409006"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.14.0.9007" id="teal-01409007">teal 0.14.0.9007<a class="anchor" aria-label="anchor" href="#teal-01409007"></a></h2>
 <div class="section level4">
-<h4 id="miscellaneous-0-14-0-9006">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-14-0-9006"></a></h4>
-<ul><li>Enhance a <code>module</code> validation checks so that it won’t throw messages about <code>data</code> argument unnecessarily.</li>
+<h4 id="miscellaneous-0-14-0-9007">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-14-0-9007"></a></h4>
+<ul><li>Enhanced a <code>module</code> validation checks so that it won’t throw messages about <code>data</code> argument unnecessarily.</li>
+<li>Removed <code>Report previewer</code> module from mapping matrix display in filter manager.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -267,7 +258,7 @@
 </ul></div>
 <div class="section level4">
 <h4 id="miscellaneous-0-10-1">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1"></a></h4>
-<ul><li>Soft-deprecate <code><a href="https://rdrr.io/pkg/teal.data/man/mae_dataset.html" class="external-link">mae_dataset()</a></code> in favor of more general <code><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset()</a></code> constructor.</li>
+<ul><li>Soft-deprecate <code><a href="https://insightsengineering.github.io/teal.data/reference/mae_dataset.html">mae_dataset()</a></code> in favor of more general <code><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset()</a></code> constructor.</li>
 <li>Added a vignette describing the modifications to <code>teal</code> applications users can apply using <code>R</code> options.</li>
 <li>Added default values to the <code>label</code> argument of <code>select_spec</code> and <code>filter_spec</code>.</li>
 <li>Added validation to <code>FilteredDataset::get_data</code> to accept logical input only.</li>
@@ -312,7 +303,7 @@
 <ul><li>
 <code>modules</code> parameter of <code><a href="../reference/init.html">teal::init</a></code> function can also receive a <code>list</code> except <code>root_modules</code> function call.</li>
 <li>Added <code>split</code> and <code>merge</code> methods to the <code>JoinKeys</code> object.</li>
-<li>Added <code><a href="https://rdrr.io/pkg/teal.transform/man/all_choices.html" class="external-link">all_choices()</a></code> as a possible argument to the <code>selected</code> parameter of <code>filter_spec</code>, <code>select_spec</code> and <code>choices_selected</code> indicating that all choices are selected.</li>
+<li>Added <code><a href="https://insightsengineering.github.io/teal.transform/reference/all_choices.html">all_choices()</a></code> as a possible argument to the <code>selected</code> parameter of <code>filter_spec</code>, <code>select_spec</code> and <code>choices_selected</code> indicating that all choices are selected.</li>
 <li>The <code>append</code> method of a <code>CodeClass</code> object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.</li>
 <li>Implemented delayed functionality to the mutate method of the <code>Dataset</code> and <code>DatasetConnector</code> objects.</li>
 <li>Modified <code>teal_data</code> to return a <code>CDISCData</code> object whenever any of its arguments is a type of <code>CDISCData</code> object.</li>
@@ -369,15 +360,15 @@
 <div class="section level4">
 <h4 id="new-features-0-9-3">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-3"></a></h4>
 <ul><li>Support for data-standard independent input and filtering. That includes refactor of the all data and dataset structures together with refactor of <code>FilteredData</code> class.</li>
-<li>New <code>JoinKeys</code> class (with <code><a href="https://rdrr.io/pkg/teal.data/man/join_keys.html" class="external-link">join_keys()</a></code> constructors and <code><a href="https://rdrr.io/pkg/teal.data/man/join_key.html" class="external-link">join_key()</a></code> constructor for its elements) to store joining key columns between datasets.</li>
-<li>Refactored the most basic <code><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset()</a></code> constructor, added <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">cdisc_dataset()</a></code> constructor and <code><a href="https://rdrr.io/pkg/teal.data/man/as_cdisc.html" class="external-link">as_cdisc()</a></code> conversion function.</li>
+<li>New <code>JoinKeys</code> class (with <code><a href="https://insightsengineering.github.io/teal.data/reference/join_keys.html">join_keys()</a></code> constructors and <code><a href="https://insightsengineering.github.io/teal.data/reference/join_key.html">join_key()</a></code> constructor for its elements) to store joining key columns between datasets.</li>
+<li>Refactored the most basic <code><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset()</a></code> constructor, added <code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_dataset.html">cdisc_dataset()</a></code> constructor and <code><a href="https://insightsengineering.github.io/teal.data/reference/as_cdisc.html">as_cdisc()</a></code> conversion function.</li>
 <li>Soft-deprecate removed class constructors and obsolete functions (e.g. <code>keys()</code>).</li>
-<li>Added <code><a href="https://rdrr.io/pkg/teal.data/man/get_keys.html" class="external-link">get_keys()</a></code> and <code><a href="https://rdrr.io/pkg/teal.data/man/set_keys.html" class="external-link">set_keys()</a></code> functions to extract and manipulate datasets primary keys respectively.</li>
+<li>Added <code><a href="https://insightsengineering.github.io/teal.data/reference/get_keys.html">get_keys()</a></code> and <code><a href="https://insightsengineering.github.io/teal.data/reference/set_keys.html">set_keys()</a></code> functions to extract and manipulate datasets primary keys respectively.</li>
 <li>Unexported <code>filtered_data_new</code>, <code>filtered_data_set</code> and <code>filtered_data_set_filters</code>.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="bug-fixes-0-9-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-3"></a></h4>
-<ul><li>Duplicated lines of code passed to <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">teal::cdisc_dataset</a></code> and other <code>teal::RelationalDataset</code> constructors should now be shown when getting the code from <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">teal::cdisc_data</a></code> objects and other <code>teal::RelationalData</code> objects.</li>
+<ul><li>Duplicated lines of code passed to <code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_dataset.html">teal::cdisc_dataset</a></code> and other <code>teal::RelationalDataset</code> constructors should now be shown when getting the code from <code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_data.html">teal::cdisc_data</a></code> objects and other <code>teal::RelationalData</code> objects.</li>
 <li>Added ability to press “Enter” key without having to set focus to the Submit button for delayed data loading.</li>
 <li>Allow <code>variable_choices</code> to use datasets with missing labels.</li>
 <li>Fixed bug that ignores input of <code>NULL</code> to <code>selected</code> argument of <code>select_spec</code> function.</li>
@@ -460,8 +451,8 @@
 <ul><li>
 <code>FilteredData</code> is now fully reactive. Now filtered data is lazy evaluated as per need. This further opens the door to bookmarking <code>teal</code> apps (bookmarking currently works for the right filtering panel, but we will make this feature more sophisticated in a future release, each module must be reviewed and adapted if it contains <code>reactiveValues</code>).</li>
 <li>Datasets and materialized connectors are provided to <code>FilteredData</code> by <code>set_datasets_data</code> function located in <code>init_datasets.R</code> file.</li>
-<li>Renamed <code><a href="https://rdrr.io/pkg/teal.data/man/get_dataset.html" class="external-link">get_dataset()</a></code> method to <code>get_data()</code>.</li>
-<li>Renamed <code>get_filter_call()</code> method to <code><a href="https://rdrr.io/pkg/teal.slice/man/get_filter_expr.html" class="external-link">get_filter_expr()</a></code>; returns an expression rather than a list.</li>
+<li>Renamed <code><a href="https://insightsengineering.github.io/teal.data/reference/get_dataset.html">get_dataset()</a></code> method to <code>get_data()</code>.</li>
+<li>Renamed <code>get_filter_call()</code> method to <code><a href="https://insightsengineering.github.io/teal.slice/reference/get_filter_expr.html">get_filter_expr()</a></code>; returns an expression rather than a list.</li>
 <li>Removed argument <code>isolate</code> from <code>get_data()</code> method and similar methods. You must <code>isolate</code> it yourself as needed. If you want to temporarily deactivate Shiny errors due to missing errors, you can set <code>options(shiny.suppressMissingContextError = TRUE)</code>. In general, avoid <code>isolate</code> as this breaks reactivity.</li>
 <li>We added a development module to add several filters at once, e.g. safety filters. This is to be evaluated before it is converted into a proper module and made available to end-users.</li>
 </ul></div>

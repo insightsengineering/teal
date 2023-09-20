@@ -20,7 +20,7 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9007</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,16 +56,6 @@ an end-user, don't use this function, but instead this module."><!-- mathjax -->
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -120,13 +110,13 @@ an end-user, don't use this function, but instead this module.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>(<code>TealData</code> or <code>TealDataset</code> or <code>TealDatasetConnector</code> or <code>list</code> or <code>data.frame</code>
-or <code>MultiAssayExperiment</code>)<br><code>R6</code> object as returned by <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">teal.data::cdisc_data()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal.data::teal_data()</a></code>,
-<code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset.html" class="external-link">teal.data::cdisc_dataset()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">teal.data::dataset()</a></code>, <code><a href="https://rdrr.io/pkg/teal.data/man/dataset_connector.html" class="external-link">teal.data::dataset_connector()</a></code> or
-<code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_dataset_connector.html" class="external-link">teal.data::cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a <code>MultiAssayExperiment</code>
+or <code>MultiAssayExperiment</code>)<br><code>R6</code> object as returned by <code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_data.html">teal.data::cdisc_data()</a></code>, <code><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal.data::teal_data()</a></code>,
+<code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_dataset.html">teal.data::cdisc_dataset()</a></code>, <code><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">teal.data::dataset()</a></code>, <code><a href="https://insightsengineering.github.io/teal.data/reference/dataset_connector.html">teal.data::dataset_connector()</a></code> or
+<code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_dataset_connector.html">teal.data::cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a <code>MultiAssayExperiment</code>
 or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
-do not match the original object names. To ensure reproducibility please use <code><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal.data::teal_data()</a></code>
-or <code><a href="https://rdrr.io/pkg/teal.data/man/cdisc_data.html" class="external-link">teal.data::cdisc_data()</a></code> with <code>check = TRUE</code> enabled.</p></dd>
+do not match the original object names. To ensure reproducibility please use <code><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal.data::teal_data()</a></code>
+or <code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_data.html">teal.data::cdisc_data()</a></code> with <code>check = TRUE</code> enabled.</p></dd>
 
 
 <dt>modules</dt>
@@ -182,9 +172,9 @@ is then preferred to this function.</p></dd>
 <span class="r-in"><span><span class="va">new_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">mtcars</span>, id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">init</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"new_iris"</span>, <span class="va">new_iris</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"new_mtcars"</span>, <span class="va">new_mtcars</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"new_iris"</span>, <span class="va">new_iris</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">dataset</a></span><span class="op">(</span><span class="st">"new_mtcars"</span>, <span class="va">new_mtcars</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    code <span class="op">=</span> <span class="st">"</span></span></span>
 <span class="r-in"><span><span class="st">      new_iris &lt;- transform(iris, id = seq_len(nrow(iris)))</span></span></span>
 <span class="r-in"><span><span class="st">      new_mtcars &lt;- transform(mtcars, id = seq_len(nrow(mtcars)))</span></span></span>
@@ -214,9 +204,9 @@ is then preferred to this function.</p></dd>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  title <span class="op">=</span> <span class="st">"App title"</span>,</span></span>
 <span class="r-in"><span>  filter <span class="op">=</span> <span class="fu"><a href="teal_slices.html">teal_slices</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"new_iris"</span>, varname <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"new_iris"</span>, varname <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"new_mtcars"</span>, varname <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"new_iris"</span>, varname <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"new_iris"</span>, varname <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"new_mtcars"</span>, varname <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    exclude_varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>new_iris <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Width"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    mapping <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>      `example teal module` <span class="op">=</span> <span class="st">"new_iris Species"</span>,</span></span>
