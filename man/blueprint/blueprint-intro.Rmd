@@ -1,0 +1,28 @@
+`teal` is an interactive data exploration framework based on Shiny, designed with emphasis on analyzing CDISC clinical trial data.
+
+A Shiny Application created with `teal` offers users the ability to:
+
+- Import data from external sources;
+- Dynamically filter data for analysis;
+- Generate reproducible code for future analysis
+- Create downloadable reports of analysis results _(for analysis modules that support reporting)_.
+
+Moreover, the `teal` framework provides application developers with a wide range of customizable standard analysis modules to integrate into their applications, along with a logging framework that helps facilitate debugging.
+Additionally, advanced users of the framework can develop new analysis modules and easily integrate them into any `teal` application.
+
+The `teal` framework's functionality draws heavily from the following packages:  
+
+| R package                                                                | Description                  |
+|-------------------------------------------------------------------------:|:-----------------------------|
+|[`teal`](https://github.com/insightsengineering/teal)                     | `shiny`-based interactive exploration framework for analyzing data|
+|[`teal.data`](https://github.com/insightsengineering/teal.data)           | creating and loading the data needed for `teal` applications|
+|[`teal.widgets`](https://github.com/insightsengineering/teal.widgets)     | `shiny` UI components used within `teal`|
+|[`teal.slice`](https://github.com/insightsengineering/teal.slice)         | provides a filtering panel to allow filtering of data|
+|[`teal.code`](https://github.com/insightsengineering/teal.code)           | handles reproducibility of outputs|
+|[`teal.transform`](https://github.com/insightsengineering/teal.transform) | standardizes extracting and merging data|
+|[`teal.logger`](https://github.com/insightsengineering/teal.logger)       | standardizes logging within `teal` framework|
+|[`teal.reporter`](https://github.com/insightsengineering/teal.reporter)   | allows `teal` applications to generate reports|
+
+Although these packages are mentioned in the material, we strongly recommend visiting their vignettes to learn more about them.
+
+Learn on how to make your first `teal` application [here](https://insightsengineering.github.io/teal/main/articles/teal.html)!

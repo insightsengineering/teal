@@ -6,7 +6,7 @@ template:
 
 navbar:
   structure:
-    left: [intro, reference, articles, tutorials, news, reports]
+    left: [intro, reference, articles, blueprint, tutorials, news, reports]
     right: [search, github]
   components:
     reports:
@@ -16,6 +16,30 @@ navbar:
           href: coverage-report/
         - text: Unit test report
           href: unit-test-report/
+    blueprint:
+      text: Technical Blueprint
+      menu:
+        - text: Welcome
+          href: reference/blueprint-index.html
+        - text: Introduction
+          href: reference/blueprint-intro.html
+        - text: Actors
+          href: reference/blueprint-actors.html
+        - text: Data Flow
+          href: reference/blueprint-dataflow.html
+        - text: Product Map
+          href: reference/blueprint-products_map.html
+        - text: Features
+          navbar: Features
+        - text: "`qenv`"
+          href: reference/blueprint-qenv.html
+        - text: Filter Panel
+          href: reference/blueprint-filter_panel.html
+        - text: Delayed Data Loading (DDL)
+          href: reference/blueprint-ddl.html
+        - text: Module and Encapsulation
+          href: reference/blueprint-module_encapsulation.html
+
     github:
       icon: fa-github
       href: https://github.com/insightsengineering/teal

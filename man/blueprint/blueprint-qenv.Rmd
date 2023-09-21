@@ -1,0 +1,47 @@
+## Introduction
+
+Reproducibility is paramount in the pharmaceutical industry. 
+Accurate and consistent results are essential to ensure high-quality research and the safety of patients.
+By prioritizing reproducibility, researchers can validate their methods, confirm their findings, and contribute to the advancement of the field.
+
+`qenv` is an essential feature provided by the `teal.code` R package that simplifies code reproducibility.
+It is an R object that contains both code and environment, enabling the easy sharing and replication of R code.
+The R code is passed to the qenv object, which holds and evaluates it upon request.
+
+## `qenv` in a `teal` application
+
+In a `teal` application, the `qenv` object is created by the module developer when implementing the necessary logic for the module. In essence, it is a wrapper of the module's logic that allows the R code for the analysis to be inspected and reproducible outside the teal application. It includes the required libraries, filtering information and logic.
+
+The `qenv` object makes it easy for users to reproduce and validate the results of their analyses.
+
+```{dot qenv_dot_diagram, echo=FALSE}
+digraph G {
+    qenv [label = "qenv"];
+    node [shape=box];
+    teal_modules [label = "teal modules analysis R code"];
+    library [label = "R library() calls"];
+    filter_states [label = "filter states R code"];
+    data [label = "data preprocessing R code"];
+    teal_modules -> qenv;
+    library -> qenv;
+    edge [dir="back"];
+    qenv -> filter_states;
+    qenv -> data;
+}
+```
+
+#### `Show R Code` and `Reporter`
+
+The `qenv` object is used to support the module's visualizations, such as textual information, tables and plots. Additionally it also supports:
+
+1. The `Show R Code` button
+1. The `Reporter` feature
+
+The former allows users to inspect the contents of the `qenv` object, enabling them to closely analyze and replicate the module's analysis.
+The latter utilizes the `qenv` object to merge multiple `qenv` objects from various `teal` modules, resulting in a downloadable report with reproducible results that ensures accurate and consistent data presentations.
+
+![Show R Code](showrcode.jpg){width=95%}
+
+![Reporter](reporter.jpg)
+
+Overall, `qenv` from `teal.code` is a powerful tool for ensuring code reproducibility and promoting high-quality research in the R programming language.

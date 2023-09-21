@@ -1,0 +1,49 @@
+```{r, child = "setup.Rmd", include = FALSE}
+```
+
+## Introduction
+
+The filter panel is a key component of the `teal` framework, providing a powerful tool for exploring and analyzing data.
+
+One of the great things about the filter panel is that it comes built-in with `teal`, requiring no programming knowledge to use.
+
+The filter panel provides a convenient way for users to subset their data, simplifying the process of exploration and comprehension.
+Moreover, users can activate or deactivate filter states interactively, either individually or globally, using the filter panel.
+
+The `teal.slice` R package in the `teal` framework is responsible for managing the filter panel.
+
+![filter-panel screenshot](filterpanel.png)
+
+## Filter Flow
+
+```
+{r filter_panel_mermaid1, echo=FALSE}
+DiagrammeR::mermaid("
+%%| fig-width: 7.5
+sequenceDiagram
+    autonumber
+    participant data
+    participant teal.slice
+    participant shiny inputs
+    participant reactive dataset
+    participant teal modules
+    data->teal.slice: processed by
+    teal.slice->>shiny inputs: creates
+    Note over teal.slice,shiny inputs: based on data type
+    shiny inputs->>reactive dataset: updates
+    reactive dataset->>teal modules: processed by
+")
+```
+
+The filter panel plays a crucial role in the `teal` framework by processing the application data and creating appropriate filters the user can interact with.
+While processing the data, the filter panel identifies the data type of each column in the dataset, such as numeric, categorical, or date.
+Based on the column type, the filter panel generates shiny inputs appropriate for each column.
+
+These shiny inputs enable users to interact with the data by adding filters that subsets the data accordingly. For example, if a column is numeric, users can use a slider to enter a range of values, while for categorical columns, users can use a dropdown menu or a set of checkboxes to select specific categories.
+The `teal.slice` functionality makes it easy for users to filter the data based on their specific requirements.
+
+As users interact with these shiny inputs, the filter panel applies the filters to the data. At the same time, the filter panel also saves the filtering R code, which both records the specific filters applied to the data and a signature of that data.
+This is important for reproducibility, as it allows users to revisit the same filtering process in the future and obtain the same results from the same dataset.
+
+Once the filtering process is complete, the filtered dataset is transfered to the `teal` module for analysis processing via a reactive dataset.
+This module may perform various types of analysis on the filtered data, such as statistic
