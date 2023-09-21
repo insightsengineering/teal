@@ -1,3 +1,13 @@
+---
+title: "`qenv`"
+author: "NEST CoreDev"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{qenv}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
 ## Introduction
 
 Reproducibility is paramount in the pharmaceutical industry. 

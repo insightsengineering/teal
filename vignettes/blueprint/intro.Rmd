@@ -1,3 +1,13 @@
+---
+title: "Introduction"
+author: "NEST CoreDev"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
 `teal` is an interactive data exploration framework based on Shiny, designed with emphasis on analyzing CDISC clinical trial data.
 
 A Shiny Application created with `teal` offers users the ability to:

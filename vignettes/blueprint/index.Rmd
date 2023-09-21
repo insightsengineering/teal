@@ -1,3 +1,13 @@
+---
+title: "About Technical Blueprint"
+author: "NEST CoreDev"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{About Technical Blueprint}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
 Welcome to `teal` Technical Blueprint documentation!
 
 The purpose of this material is to aid new developer's comprehension of the fundamental principles of the `teal` framework.

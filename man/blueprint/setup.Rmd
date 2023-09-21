@@ -1,3 +1,0 @@
-```{r, include=FALSE}
-Sys.setenv(OPENSSL_CONF = "/dev/null")
-```

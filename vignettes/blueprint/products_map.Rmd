@@ -1,10 +1,15 @@
-```{r, child = "setup.Rmd", include = FALSE}
-```
+---
+title: "Products Map"
+author: "NEST CoreDev"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Products Map}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-```
-{r products_map_mermaid1, echo=FALSE}
+```{r products_map_mermaid1, echo=FALSE}
 DiagrammeR::mermaid("
-%%| fig-height: 6
 flowchart RL
 teal
 subgraph features

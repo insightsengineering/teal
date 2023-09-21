@@ -1,3 +1,13 @@
+---
+title: "Module Encapsulation"
+author: "NEST CoreDev"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Module Encapsulation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
 ## Introduction
 
 `teal` leverages the [Shiny module](https://rstudio.github.io/shiny/reference/moduleServer.html) concept to enable seamless communication between the framework and `teal` modules, while also promoting encapsulation.

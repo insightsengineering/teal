@@ -1,5 +1,12 @@
-```{r, child = "setup.Rmd", include = FALSE}
-```
+---
+title: "Filter Panel"
+author: "NEST CoreDev"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Filter Panel}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
 ## Introduction
 
@@ -12,21 +19,13 @@ Moreover, users can activate or deactivate filter states interactively, either i
 
 The `teal.slice` R package in the `teal` framework is responsible for managing the filter panel.
 
-![filter-panel screenshot](filterpanel.png)
+![filter-panel screenshot](../images/filterpanel.png)
 
 ## Filter Flow
 
-```
-{r filter_panel_mermaid1, echo=FALSE}
+```{r filter_panel_mermaid1, echo=FALSE}
 DiagrammeR::mermaid("
-%%| fig-width: 7.5
 sequenceDiagram
-    autonumber
-    participant data
-    participant teal.slice
-    participant shiny inputs
-    participant reactive dataset
-    participant teal modules
     data->teal.slice: processed by
     teal.slice->>shiny inputs: creates
     Note over teal.slice,shiny inputs: based on data type

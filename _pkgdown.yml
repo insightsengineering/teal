@@ -19,54 +19,74 @@ navbar:
     blueprint:
       text: Technical Blueprint
       menu:
-        - text: Welcome
-          href: reference/blueprint-index.html
+        - text: About Blueprint
+          href: articles/blueprint/index.html
         - text: Introduction
-          href: reference/blueprint-intro.html
+          href: articles/blueprint/intro.html
         - text: Actors
-          href: reference/blueprint-actors.html
+          href: articles/blueprint/actors.html
         - text: Data Flow
-          href: reference/blueprint-dataflow.html
+          href: articles/blueprint/dataflow.html
         - text: Product Map
-          href: reference/blueprint-products_map.html
+          href: articles/blueprint/products_map.html
         - text: Features
           navbar: Features
         - text: "`qenv`"
-          href: reference/blueprint-qenv.html
+          href: articles/blueprint/qenv.html
         - text: Filter Panel
-          href: reference/blueprint-filter_panel.html
+          href: articles/blueprint/filter_panel.html
         - text: Delayed Data Loading (DDL)
-          href: reference/blueprint-ddl.html
+          href: articles/blueprint/ddl.html
         - text: Module and Encapsulation
-          href: reference/blueprint-module_encapsulation.html
+          href: articles/blueprint/module_encapsulation.html
 
     github:
       icon: fa-github
       href: https://github.com/insightsengineering/teal
 
 articles:
-  - title: Get Started
-    navbar: ~
-    contents:
-      - teal
-  - title: Articles
-    navbar: Using teal
-    contents:
-      - filter-panel
-      - teal-options
-      - teal-bs-themes
-  - title: Articles
-    navbar: Data in teal Apps
-    contents:
-      - including-adam-data-in-teal
-      - including-general-data-in-teal
-      - including-mae-data-in-teal
-      - preprocessing-data
-  - title: Articles
-    navbar: Extending teal
-    contents:
-      - creating-custom-modules
-      - adding-support-for-reporting
+- title: Get Started
+  navbar: ~
+  contents:
+    - teal
+- title: Using teal
+  navbar: Using teal
+  contents:
+    - filter-panel
+    - teal-options
+    - teal-bs-themes
+- title: Data in teal Apps
+  navbar: Data in teal Apps
+  contents:
+    - including-adam-data-in-teal
+    - including-general-data-in-teal
+    - including-mae-data-in-teal
+    - preprocessing-data
+- title: Extending teal
+  navbar: Extending teal
+  contents:
+    - creating-custom-modules
+    - adding-support-for-reporting
+- title: 📃 Technical Blueprint
+  desc: >
+    The purpose of the blueprint is to aid new developer’s comprehension of the
+    fundamental principles of the `teal` framework. We will explore crucial `teal`
+    concepts such as data flow, actors, and filter panel, among others.
+  contents:
+    - blueprint/index
+    - blueprint/intro
+    - blueprint/actors
+    - blueprint/dataflow
+    - blueprint/products_map
+- title: ""
+  desc: >
+    Features
+  contents:
+  - blueprint/qenv
+  - blueprint/filter_panel
+  - blueprint/ddl
+  - blueprint/module_encapsulation
+
 
 reference:
   - title: Core `teal` Functions

@@ -1,12 +1,16 @@
-```{r, child = "setup.Rmd", include = FALSE}
-```
+---
+title: "Data Flow"
+author: "NEST CoreDev"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data Flow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-```
-{r dataflow_mermaid1, echo=FALSE}
+```{r dataflow_mermaid1, echo=FALSE}
 DiagrammeR::mermaid("
-%%| fig-width: 7.5
-graph
-    autonumber
+sequenceDiagram;
     participant data
     participant filters
     participant filtered data
