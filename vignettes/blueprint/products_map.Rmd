@@ -8,8 +8,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r products_map_mermaid1, echo=FALSE}
-DiagrammeR::mermaid("
+```{r, child="_setup.Rmd"}
+```
+
+```{r, echo=FALSE}
+shiny::pre(
+  class = "mermaid",
+  "
+%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 flowchart RL
 teal
 subgraph features

@@ -8,9 +8,16 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, child="_setup.Rmd"}
+```
+
 ```{r dataflow_mermaid1, echo=FALSE}
-DiagrammeR::mermaid("
+shiny::pre(
+  class = "mermaid",
+  "
+%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 sequenceDiagram;
+    autonumber
     participant data
     participant filters
     participant filtered data
@@ -18,7 +25,8 @@ sequenceDiagram;
     data->filters: gets
     filters->>filtered data: becomes
     filtered data->>teal module: sent to
-")
+"
+)
 ```
 
 The sequence diagram above illustrates the different stages that data goes through within the `teal` framework, supported by the `teal.slice` R package:

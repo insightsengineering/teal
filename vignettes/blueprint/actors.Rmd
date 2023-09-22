@@ -15,8 +15,14 @@ There are two main actors in the `teal` development:
 
 ## `teal` App Developer
 
+```{r, child="_setup.Rmd"}
+```
+
 ```{r actors_mermaid1, echo=FALSE}
-DiagrammeR::mermaid("
+shiny::pre(
+  class = "mermaid",
+  "
+%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 graph LR
     A[Teal App Developer]--utilizes--> B[teal modules]
     B--to create--> C[teal app]
@@ -24,7 +30,8 @@ graph LR
 style A fill:lightblue
 style C fill:gold
 style D fill:pink
-")
+"
+)
 ```
 
 The primary responsibility of a `teal` app developer is to leverage the available building blocks of the `teal` framework to create a functional `teal` app that analyses the data.
@@ -40,7 +47,10 @@ To learn more about the existing modules, visit [`teal.gallery`](https://insight
 ## `teal` Module Developer
 
 ```{r actors_mermaid2, echo=FALSE}
-DiagrammeR::mermaid("
+shiny::pre(
+  class = "mermaid",
+  "
+%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 graph LR
     A[Teal App Developer]--utilizes--> B[teal modules]
     E[Teal Module Developer]--develops--> B
@@ -50,7 +60,8 @@ style A fill:lightblue
 style E fill:lightgreen
 style D fill:pink
 style C fill:gold
-")
+"
+)
 ```
 
 The main duty of a `teal` module developer is to construct a compatible `teal` module that can be utilized within the `teal` framework.
@@ -67,7 +78,10 @@ To learn more about creating custom modules follow the [Tutorial on Creating a C
 ## Workflow in a Clinical Trial Study
 
 ```{r actors_mermaid3, echo=FALSE}
-DiagrammeR::mermaid("
+shiny::pre(
+  class = "mermaid",
+  "
+%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 %%| fig-width: 7.5
 graph LR
     subgraph Study B
@@ -93,7 +107,8 @@ style D fill:pink
 style D2 fill:pink
 style C fill:gold
 style C2 fill:gold
-")
+"
+)
 ```
 
 In a clinical trial study setting, a unique **study `teal` app developer** is assigned to each study team and is accountable for developing a tailored `teal` app for their respective study.

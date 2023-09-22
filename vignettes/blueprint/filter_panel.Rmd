@@ -23,15 +23,23 @@ The `teal.slice` R package in the `teal` framework is responsible for managing t
 
 ## Filter Flow
 
-```{r filter_panel_mermaid1, echo=FALSE}
-DiagrammeR::mermaid("
+```{r, child="_setup.Rmd"}
+```
+
+```{r dataflow_mermaid1, echo=FALSE}
+shiny::pre(
+  class = "mermaid",
+  "
+%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 sequenceDiagram
+    autonumber
     data->teal.slice: processed by
     teal.slice->>shiny inputs: creates
     Note over teal.slice,shiny inputs: based on data type
     shiny inputs->>reactive dataset: updates
     reactive dataset->>teal modules: processed by
-")
+"
+)
 ```
 
 The filter panel plays a crucial role in the `teal` framework by processing the application data and creating appropriate filters the user can interact with.

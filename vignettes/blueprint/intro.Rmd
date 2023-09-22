@@ -22,8 +22,8 @@ Additionally, advanced users of the framework can develop new analysis modules a
 
 The `teal` framework's functionality draws heavily from the following packages:  
 
-| R package                                                                | Description                  |
-|-------------------------------------------------------------------------:|:-----------------------------|
+| R package            | Description                                                             |
+|----------------------|:------------------------------------------------------------------------|
 |[`teal`](https://github.com/insightsengineering/teal)                     | `shiny`-based interactive exploration framework for analyzing data|
 |[`teal.data`](https://github.com/insightsengineering/teal.data)           | creating and loading the data needed for `teal` applications|
 |[`teal.widgets`](https://github.com/insightsengineering/teal.widgets)     | `shiny` UI components used within `teal`|

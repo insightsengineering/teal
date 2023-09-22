@@ -50,8 +50,8 @@ The `qenv` object is used to support the module's visualizations, such as textua
 The former allows users to inspect the contents of the `qenv` object, enabling them to closely analyze and replicate the module's analysis.
 The latter utilizes the `qenv` object to merge multiple `qenv` objects from various `teal` modules, resulting in a downloadable report with reproducible results that ensures accurate and consistent data presentations.
 
-![Show R Code](showrcode.jpg){width=95%}
+![Show R Code](../images/showrcode.jpg){width=95%}
 
-![Reporter](reporter.jpg)
+![Reporter](../images/reporter.jpg)
 
 Overall, `qenv` from `teal.code` is a powerful tool for ensuring code reproducibility and promoting high-quality research in the R programming language.
