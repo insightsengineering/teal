@@ -1,0 +1,10 @@
+
+```{css, echo=FALSE}
+pre.mermaid {
+  background: transparent;
+}
+```
+
+```{r, echo=FALSE}
+shiny::tags$script(type = "module", "import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/+esm'")
+```

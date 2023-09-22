@@ -1,0 +1,43 @@
+---
+title: "Data Flow"
+author: "NEST CoreDev"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data Flow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, child="_setup.Rmd"}
+```
+
+```{r dataflow_mermaid1, echo=FALSE}
+shiny::pre(
+  class = "mermaid",
+  "
+%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
+sequenceDiagram;
+    autonumber
+    participant data
+    participant filters
+    participant filtered data
+    participant teal module
+    data->filters: gets
+    filters->>filtered data: becomes
+    filtered data->>teal module: sent to
+"
+)
+```
+
+The sequence diagram above illustrates the different stages that data goes through within the `teal` framework, supported by the `teal.slice` R package:
+
+1. Users _(or app developers)_ select which filters to apply;
+    - See the [Filter panel vignette](filterpanel.qmd) for details;
+1. The R code is automatically generated from the selected filters;
+    - Creates a [`qenv`](qenv.qmd) R object that contains the code that will be applied to the data _(and used for reproducibility)_;
+1. Apply the filters to the data _(creating a filtered data instance)_;
+    - A module can have a custom set of filters that is only applied to it;
+    
+1. The filtered data is sent to the `teal` modules as the main data source for analysis.
+
+Whenever filters are added or removed, these stages are restarted, providing the `teal` module with new filtered data to conduct the required analysis.
