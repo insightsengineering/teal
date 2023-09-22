@@ -10,6 +10,10 @@ vignette: >
 
 ## Introduction
 
+<a href="../../reference/figures/filterpanel.png" target="_blank">
+  <img src="../../man/figures/filterpanel.png" align="right" style="max-width: 33%;"/>
+</a>
+
 The filter panel is a key component of the `teal` framework, providing a powerful tool for exploring and analyzing data.
 
 One of the great things about the filter panel is that it comes built-in with `teal`, requiring no programming knowledge to use.
@@ -19,7 +23,7 @@ Moreover, users can activate or deactivate filter states interactively, either i
 
 The `teal.slice` R package in the `teal` framework is responsible for managing the filter panel.
 
-![filter-panel screenshot](../images/filterpanel.png)
+<div style="clear: both"></div>
 
 ## Filter Flow
 

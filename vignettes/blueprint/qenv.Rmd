@@ -3,7 +3,7 @@ title: "`qenv`"
 author: "NEST CoreDev"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{qenv}
+  %\VignetteIndexEntry{`qenv`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -50,8 +50,14 @@ The `qenv` object is used to support the module's visualizations, such as textua
 The former allows users to inspect the contents of the `qenv` object, enabling them to closely analyze and replicate the module's analysis.
 The latter utilizes the `qenv` object to merge multiple `qenv` objects from various `teal` modules, resulting in a downloadable report with reproducible results that ensures accurate and consistent data presentations.
 
-![Show R Code](../images/showrcode.jpg){width=95%}
+<a href="../../reference/figures/showrcode.jpg" target="_blank">
+  <img title="Show R Code" src="../../man/figures/showrcode.jpg" align="left" style="max-width: 48%;"/>
+</a>
 
-![Reporter](../images/reporter.jpg)
+<a href="./reporter.jpg" target="_blank">
+  <img title="Reporter" src="./reporter.jpg" align="right" style="max-width: 48%;"/>
+</a>
+
+<div style="clear: both;"></div>
 
 Overall, `qenv` from `teal.code` is a powerful tool for ensuring code reproducibility and promoting high-quality research in the R programming language.
