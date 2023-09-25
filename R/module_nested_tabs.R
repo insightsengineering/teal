@@ -220,13 +220,11 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     # We want to recalculate only visible modules
     # - trigger the data when the tab is selected
     # - trigger module to be called when the tab is selected for the first time
-    trigger_data <- reactiveVal(1L)
     trigger_module <- reactiveVal(NULL)
     output$data_reactive <- renderUI({
       lapply(datasets$datanames(), function(x) {
         datasets$get_data(x, filtered = TRUE)
       })
-      isolate(trigger_data(trigger_data() + 1))
       isolate(trigger_module(TRUE))
 
       NULL
@@ -243,7 +241,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     if (is_arg_used(modules$server, "data")) {
-      data <- reactive(.tdata_upgrade(.datasets_to_data(modules, datasets, trigger_data)))
+      data <- reactive(.datasets_to_data(modules, datasets))
       args <- c(args, data = list(data))
     }
 
@@ -285,45 +283,33 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
 #' @param datasets (`FilteredData`) object where needed data are taken from
-#' @param trigger_data (`reactiveVal`) to trigger getting the filtered data
-#' @return list of reactive datasets with following attributes:
-#' - `code` (`character`) containing datasets reproducible code.
-#' - `join_keys` (`JoinKeys`) containing relationships between datasets.
-#' - `metadata` (`list`) containing metadata of datasets.
+#' @return A `tdata` object.
 #'
 #' @keywords internal
-.datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
+.datasets_to_data <- function(module, datasets) {
   checkmate::assert_class(module, "teal_module")
   checkmate::assert_class(datasets, "FilteredData")
-  checkmate::assert_class(trigger_data, "reactiveVal")
 
   datanames <- if (is.null(module$datanames)) datasets$datanames() else module$datanames
 
   # list of reactive filtered data
   data <- sapply(
     datanames,
-    function(x) eventReactive(trigger_data(), datasets$get_data(x, filtered = TRUE)),
+    function(x) datasets$get_data(x, filtered = TRUE),
     simplify = FALSE
   )
 
   hashes <- calculate_hashes(datanames, datasets)
-  metadata <- lapply(datanames, datasets$get_metadata)
-  names(metadata) <- datanames
 
-  new_tdata(
+  teal.data::new_tdata(
     data,
-    eventReactive(
-      trigger_data(), {
-        c(
-          get_rcode_str_install(),
-          get_rcode_libraries(),
-          get_datasets_code(datanames, datasets, hashes),
-          teal.slice::get_filter_expr(datasets, datanames)
-        )
-      }
+    c(
+      get_rcode_str_install(),
+      get_rcode_libraries(),
+      get_datasets_code(datanames, datasets, hashes),
+      teal.slice::get_filter_expr(datasets, datanames)
     ),
-    datasets$get_join_keys(),
-    metadata
+    datasets$get_join_keys()
   )
 }
 
