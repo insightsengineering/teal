@@ -243,7 +243,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     if (is_arg_used(modules$server, "data")) {
-      data <- .datasets_to_data(modules, datasets, trigger_data)
+      data <- reactive(.tdata_upgrade(.datasets_to_data(modules, datasets, trigger_data)))
       args <- c(args, data = list(data))
     }
 
