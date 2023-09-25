@@ -20,6 +20,9 @@
 #' @param metadata A `named list` each element contains a list of metadata about the named data.frame
 #' Each element of these list should be atomic and length one.
 #' @return A `tdata` object
+#'
+#' @seealso `tdata_deprecation`
+#'
 #' @examples
 #'
 #' data <- new_tdata(
@@ -170,4 +173,51 @@ get_metadata.tdata <- function(data, dataname) {
 #' @export
 get_metadata.default <- function(data, dataname) {
   stop("get_metadata function not implemented for this object")
+}
+
+
+#' Upgrade or downgrade `tdata` class.
+#'
+#' Convert between `teal::tdata` `teal.data::tdata` classes.
+#'
+#' Functions to switch between `tdata` classes during deprecation of the `tdata` class defined in `teal`.
+#' `.tdata_upgrade` converts object of class `tdata` as defined in `teal` package
+#' (list of reactive expressions, each containing one data set, with a `code` attribute)
+#' to object of class `tdata` as defined in package `teal.data` (extensions of class `qenv` as defined in `teal.code`).
+#' `.tdata_downgrade` does the reverse.
+#'
+#' Note the `metadata` attribute is discarded.
+#'
+#' @param (`tdata`) `tdata` object (old or new class)
+#'
+#' @return Object of class `tdata`: new for `.tdata_upgrade` and old for `.tdata_downgrade`.
+#'
+#' @keywords internal
+#' @rdname tdata_deprecation
+#'
+.tdata_upgrade <- function(x) {
+  checkmate::assert_class(x, "tdata")
+
+  if (inherits(x, "qenv")) return(x)
+
+  teal.data::new_tdata(
+    lapply(x[names(x)], function(x) x()),
+    code = attr(x, "code")(),
+    keys = attr(x, "join_keys")
+  )
+}
+
+#' @keywords internal
+#' @rdname tdata_deprecation
+#'
+.tdata_downgrade <- function(x) {
+  checkmate::assert_class(x, "tdata")
+
+  if (!inherits(x, "qenv")) return(x)
+
+  teal::new_tdata(
+    data = as.list(x@env),
+    code = teal.code::get_code(x),
+    join_keys = teal.data::get_join_keys(x)
+  )
 }
