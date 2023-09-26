@@ -59,7 +59,8 @@ hermes--supports-->teal.modules.hermes
 style teal fill:lightblue
 style features fill:lightgreen
 style modules fill:pink
-")
+"
+)
 ```
 
 `teal` is a modular framework that relies on a suite of related R packages, as illustrated in the above diagram, to provide a wide range of functionalities.
