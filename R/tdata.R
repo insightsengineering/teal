@@ -201,9 +201,9 @@ get_metadata.default <- function(data, dataname) {
   if (inherits(x, "qenv")) return(x)
 
   teal.data::new_tdata(
-    lapply(x[names(x)], function(x) x()),
-    code = attr(x, "code")(),
-    keys = attr(x, "join_keys")
+    lapply(x[names(x)], function(x) isolate(x())),
+    code = isolate(attr(x, "code")()),
+    keys = Find(Negate(is.null), list(attr(x, "join_keys"), teal.data::join_keys()))
   )
 }
 
