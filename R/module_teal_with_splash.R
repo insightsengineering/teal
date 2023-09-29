@@ -73,7 +73,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     raw_data <- if (inherits(data, "tdata")) {
       reactiveVal(data)
     } else if (inherits(data, "ddl")) {
-      data$server("startapp_module", data)
+      data$server("startapp_module")
     } else if (teal.data::is_pulled(data)) {
       reactiveVal(data) # will trigger by setting it
     } else {
