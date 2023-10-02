@@ -176,21 +176,22 @@ get_metadata.default <- function(data, dataname) {
 }
 
 
-#' Upgrade or downgrade `tdata` class.
+#' Upgrade or downgrade data objects.
 #'
-#' Convert between `teal::tdata` `teal.data::tdata` classes.
+#' Convert between `teal::tdata` and `teal.data::teal_data` classes.
 #'
-#' Functions to switch between `tdata` classes during deprecation of the `tdata` class defined in `teal`.
+#' Functions to switch between data classes during deprecation of the `tdata` class defined in `teal`.
 #' `.tdata_upgrade` converts object of class `tdata` as defined in `teal` package
 #' (list of reactive expressions, each containing one data set, with a `code` attribute)
-#' to object of class `tdata` as defined in package `teal.data` (extensions of class `qenv` as defined in `teal.code`).
+#' to object of class `teal_data` as defined in package `teal.data`
+#' (extension of class `qenv` as defined in `teal.code`).
 #' `.tdata_downgrade` does the reverse.
 #'
 #' Note the `metadata` attribute is discarded.
 #'
-#' @param (`tdata`) `tdata` object (old or new class)
+#' @param `x` data object, either `tdata` or `teal_data`
 #'
-#' @return Object of class `tdata`: new for `.tdata_upgrade` and old for `.tdata_downgrade`.
+#' @return Object of class `tdata` for `.tdata_upgrade` and `tdata` for `.tdata_downgrade`.
 #'
 #' @keywords internal
 #' @rdname tdata_deprecation
@@ -200,7 +201,7 @@ get_metadata.default <- function(data, dataname) {
 
   if (inherits(x, "qenv")) return(x)
 
-  teal.data::new_tdata(
+  teal.data::new_teal_data(
     lapply(x[names(x)], function(x) isolate(x())),
     code = isolate(attr(x, "code")()),
     keys = Find(Negate(is.null), list(attr(x, "join_keys"), teal.data::join_keys()))
@@ -211,7 +212,7 @@ get_metadata.default <- function(data, dataname) {
 #' @rdname tdata_deprecation
 #'
 .tdata_downgrade <- function(x) {
-  checkmate::assert_class(x, "tdata")
+  checkmate::assert_class(x, "teal_data")
 
   if (!inherits(x, "qenv")) return(x)
 

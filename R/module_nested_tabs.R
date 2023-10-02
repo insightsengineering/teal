@@ -305,7 +305,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 
   hashes <- calculate_hashes(datanames, datasets)
 
-  teal.data::new_tdata(
+  teal.data::new_teal_data(
     data,
     c(
       get_rcode_str_install(),
