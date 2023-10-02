@@ -220,11 +220,13 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     # We want to recalculate only visible modules
     # - trigger the data when the tab is selected
     # - trigger module to be called when the tab is selected for the first time
+    trigger_data <- reactiveVal(1L)
     trigger_module <- reactiveVal(NULL)
     output$data_reactive <- renderUI({
       lapply(datasets$datanames(), function(x) {
         datasets$get_data(x, filtered = TRUE)
       })
+      isolate(trigger_data(trigger_data() + 1))
       isolate(trigger_module(TRUE))
 
       NULL
@@ -241,7 +243,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     if (is_arg_used(modules$server, "data")) {
-      data <- reactive(.datasets_to_data(modules, datasets))
+      data <- reactive(.datasets_to_data(modules, datasets, trigger_data))
       args <- c(args, data = list(data))
     }
 
@@ -283,19 +285,21 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
 #' @param datasets (`FilteredData`) object where needed data are taken from
+#' @param trigger_data (`reactiveVal`) to trigger getting the filtered data
 #' @return A `tdata` object.
 #'
 #' @keywords internal
-.datasets_to_data <- function(module, datasets) {
+.datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
   checkmate::assert_class(module, "teal_module")
   checkmate::assert_class(datasets, "FilteredData")
+  checkmate::assert_class(trigger_data, "reactiveVal")
 
   datanames <- if (is.null(module$datanames)) datasets$datanames() else module$datanames
 
   # list of reactive filtered data
   data <- sapply(
     datanames,
-    function(x) datasets$get_data(x, filtered = TRUE),
+    function(x) eventReactive(trigger_data(), datasets$get_data(x, filtered = TRUE)),
     simplify = FALSE
   )
 
