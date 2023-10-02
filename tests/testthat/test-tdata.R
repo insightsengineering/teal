@@ -224,7 +224,7 @@ testthat::test_that("get_join_keys returns JoinKeys object if it exists inside t
 datasets <- list(iris = iris, mtcars = mtcars)
 code <- c("iris <- iris", "mtcars <- mtcars")
 tdata_old <- teal::new_tdata(datasets, code)
-tdata_new <- teal.data::new_tdata(datasets, code)
+tdata_new <- teal.data::new_teal_data(datasets, code)
 
 testthat::test_that("functions accept both versions of tdata class", {
   testthat::expect_no_error(.tdata_upgrade(tdata_old))
@@ -245,7 +245,7 @@ testthat::test_that("classes are changed when appropriate", {
   testthat::expect_s3_class(tdata_new_downgraded, "tdata")
   testthat::expect_failure( testthat::expect_s4_class(tdata_new_downgraded, "qenv") )
 
-  testthat::expect_s4_class(tdata_old_upgraded, "tdata")
+  testthat::expect_s4_class(tdata_old_upgraded, "teal_data")
   testthat::expect_s4_class(tdata_old_upgraded, "qenv")
 })
 
