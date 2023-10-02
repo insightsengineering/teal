@@ -197,7 +197,7 @@ get_metadata.default <- function(data, dataname) {
 #' @rdname tdata_deprecation
 #'
 .tdata_upgrade <- function(x) {
-  checkmate::assert_class(x, "tdata")
+  checkmate::assert_multi_class(x, c("tdata", "teal_data"))
 
   if (inherits(x, "qenv")) return(x)
 
@@ -212,7 +212,7 @@ get_metadata.default <- function(data, dataname) {
 #' @rdname tdata_deprecation
 #'
 .tdata_downgrade <- function(x) {
-  checkmate::assert_class(x, "teal_data")
+  checkmate::assert_multi_class(x, c("tdata", "teal_data"))
 
   if (!inherits(x, "qenv")) return(x)
 
