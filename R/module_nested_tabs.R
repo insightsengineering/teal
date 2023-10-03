@@ -243,7 +243,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     if (is_arg_used(modules$server, "data")) {
-      data <- reactive(.datasets_to_data(modules, datasets, trigger_data))
+      data <- reactive(.datasets_to_data(modules, datasets))
       args <- c(args, data = list(data))
     }
 
@@ -285,21 +285,19 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
 #' @param datasets (`FilteredData`) object where needed data are taken from
-#' @param trigger_data (`reactiveVal`) to trigger getting the filtered data
 #' @return A `tdata` object.
 #'
 #' @keywords internal
-.datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
+.datasets_to_data <- function(module, datasets) {
   checkmate::assert_class(module, "teal_module")
   checkmate::assert_class(datasets, "FilteredData")
-  checkmate::assert_class(trigger_data, "reactiveVal")
 
   datanames <- if (is.null(module$datanames)) datasets$datanames() else module$datanames
 
   # list of reactive filtered data
   data <- sapply(
     datanames,
-    function(x) eventReactive(trigger_data(), datasets$get_data(x, filtered = TRUE)),
+    function(x) datasets$get_data(x, filtered = TRUE),
     simplify = FALSE
   )
 
