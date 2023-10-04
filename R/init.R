@@ -116,7 +116,10 @@ init <- function(data,
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
   data <- teal.data::to_relational_data(data = data)
 
-  checkmate::assert_class(data, "TealData")
+  if (!inherits(data, c("TealData", "teal_data"))) {
+    data <- teal.data::to_relational_data(data = data)
+  }
+  checkmate::assert_multi_class(data, c("TealData", "teal_data"))
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert(
@@ -138,7 +141,7 @@ init <- function(data,
 
   # resolve modules datanames
   datanames <- teal.data::get_dataname(data)
-  join_keys <- data$get_join_keys()
+  join_keys <- teal.data::get_join_keys(data)
   resolve_modules_datanames <- function(modules) {
     if (inherits(modules, "teal_modules")) {
       modules$children <- sapply(modules$children, resolve_modules_datanames, simplify = FALSE)
@@ -147,6 +150,17 @@ init <- function(data,
       modules$datanames <- if (identical(modules$datanames, "all")) {
         datanames
       } else if (is.character(modules$datanames)) {
+        extra_datanames <- setdiff(modules$datanames, datanames)
+        if (length(extra_datanames)) {
+          stop(
+            sprintf(
+              "Module %s has datanames that are not available in a 'data':\n %s not in %s",
+              modules$label,
+              toString(extra_datanames),
+              toString(datanames)
+            )
+          )
+        }
         datanames_adjusted <- intersect(modules$datanames, datanames)
         include_parent_datanames(dataname = datanames_adjusted, join_keys = join_keys)
       }
@@ -212,8 +226,10 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-      # copy object so that load won't be shared between the session
-      data <- data$copy(deep = TRUE)
+      if (inherits(data, "TealDataAbstract")) {
+        # copy TealData so that load won't be shared between the session
+        data <- data$copy(deep = TRUE)
+      }
       filter <- deep_copy_filter(filter)
       srv_teal_with_splash(id = id, data = data, modules = modules, filter = filter)
     }
