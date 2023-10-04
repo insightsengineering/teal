@@ -114,12 +114,10 @@ init <- function(data,
                  footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  data <- teal.data::to_relational_data(data = data)
-
-  if (!inherits(data, c("TealData", "teal_data"))) {
+  if (!inherits(data, c("TealData", "teal_data", "ddl"))) {
     data <- teal.data::to_relational_data(data = data)
   }
-  checkmate::assert_multi_class(data, c("TealData", "teal_data"))
+  checkmate::assert_multi_class(data, c("TealData", "teal_data", "ddl"))
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert(

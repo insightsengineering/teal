@@ -22,7 +22,7 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data"))
+  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "ddl"))
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
@@ -31,6 +31,8 @@ ui_teal_with_splash <- function(id,
   # Shiny app does not time out.
   splash_ui <- if (inherits(data, "teal_data")) {
     div()
+  } else if (inherits(data, "ddl")) {
+    data$ui(ns("startapp_module"))
   } else if (teal.data::is_pulled(data)) {
     div()
   } else {
@@ -55,7 +57,7 @@ ui_teal_with_splash <- function(id,
 #' @return `reactive`, return value of [srv_teal()]
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data"))
+  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "ddl"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
       "srv_teal_with_splash initializing module with data { paste(data$get_datanames(), collapse = ' ')}."
@@ -70,6 +72,8 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     # we must leave it inside the server because of callModule which needs to pick up the right session
     raw_data <- if (inherits(data, "teal_data")) {
       reactiveVal(data)
+    } else if (inherits(data, "ddl")) {
+      data$server("startapp_module")
     } else if (teal.data::is_pulled(data)) {
       reactiveVal(data) # will trigger by setting it
     } else {

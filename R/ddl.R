@@ -81,7 +81,7 @@ ddl <- function(expr,
     # don't keep input further we don't want to keep input in the @env of teal_data
     # but we want to keep other non-dataset objects created in the code
     env_list <- as.list(env)
-    env_list <- env_list[!names(env_list) != "input"]
+    env_list <- env_list[names(env_list) != "input"]
 
     # substitute by offline args
     for (i in names(input_mask)) {
