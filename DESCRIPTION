@@ -36,6 +36,7 @@ Depends:
     teal.transform (>= 0.4.0)
 Imports:
     checkmate,
+    jsonlite,
     lifecycle,
     logger (>= 0.2.0),
     magrittr,
