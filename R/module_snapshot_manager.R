@@ -75,6 +75,7 @@ snapshot_manager_ui <- function(id) {
       class = "snapshot_table_row",
       span(tags$b("Snapshot manager")),
       actionLink(ns("snapshot_add"), label = NULL, icon = icon("camera"), title = "add snapshot"),
+      actionLink(ns("snapshot_load"), label = NULL, icon = icon("upload"), title = "upload snapshot"),
       actionLink(ns("snapshot_reset"), label = NULL, icon = icon("undo"), title = "reset initial state"),
       NULL
     ),
@@ -131,10 +132,51 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
           "This name is in conflict with other snapshot names. Please choose a different one.",
           type = "message"
         )
-        updateTextInput(inputId = "snapshot_name", value = , placeholder = "Meaningful, unique name")
+        updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         snapshot <- as.list(slices_global(), recursive = TRUE)
         attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
+        snapshot_update <- c(snapshot_history(), list(snapshot))
+        names(snapshot_update)[length(snapshot_update)] <- snapshot_name
+        snapshot_history(snapshot_update)
+        removeModal()
+        # Reopen filter manager modal by clicking button in the main application.
+        shinyjs::click(id = "teal-main_ui-filter_manager-show", asis = TRUE)
+      }
+    })
+
+    # Upload a snapshot - select file.
+    observeEvent(input$snapshot_load, {
+      showModal(
+        modalDialog(
+          fileInput(ns("snapshot_file"), "Choose snapshot file", accept = ".json", width = "100%"),
+          textInput(
+            ns("snapshot_name"),
+            "Name the snapshot (optional)",
+            width = "100%",
+            placeholder = "Meaningful, unique name"
+          ),
+          footer = tagList(
+            actionButton(ns("snaphot_file_accept"), "Accept", icon = icon("thumbs-up")),
+            modalButton(label = "Cancel", icon = icon("thumbs-down"))
+          )
+        )
+      )
+    })
+    # Upload a snapshot - add new snapshot to list.
+    observeEvent(input$snaphot_file_accept, {
+      snapshot_name <- trimws(input$snapshot_name)
+      if (identical(snapshot_name, "")) {
+        snapshot_name <- tools::file_path_sans_ext(input$snapshot_file$name)
+      }
+      if (is.element(make.names(snapshot_name), make.names(names(snapshot_history())))) {
+        showNotification(
+          "This name is in conflict with other snapshot names. Please choose a different one.",
+          type = "message"
+        )
+        updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
+      } else {
+        snapshot <- slices_restore(input$snapshot_file$datapath)
         snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
         snapshot_history(snapshot_update)
