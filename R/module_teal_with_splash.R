@@ -71,9 +71,23 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     raw_data <- if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (teal.data::is_pulled(data)) {
-      reactiveVal(data) # will trigger by setting it
+      new_data <- new_teal_data(
+        env = lapply(data$get_datasets(), function(x) x$get_raw_data()),
+        code = data$get_code(),
+        keys = data$get_join_keys()
+      )
+      reactiveVal(new_data) # will trigger by setting it
     } else {
-      raw_data <- data$get_server()(id = "startapp_module")
+      raw_data_old <- data$get_server()(id = "startapp_module")
+      raw_data <- reactive({
+        data <- raw_data_old()
+        new_teal_data(
+          env = lapply(data$get_datasets(), function(x) x$get_raw_data()),
+          code = data$get_code(),
+          keys = data$get_join_keys()
+        )
+      })
+
       if (!is.reactive(raw_data)) {
         stop("The delayed loading module has to return a reactive object.")
       }
