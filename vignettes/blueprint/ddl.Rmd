@@ -35,7 +35,7 @@ In cases where the modified splash screen is used, `teal` will display the custo
 After the data is fetched and loaded, `teal` removes the splash screen and replaces it with the content of the corresponding `teal` modules.
 `teal` also displays a notification indicating that the data has been loaded, and the app has fully started up.
 
-![Notification that the data is loaded and app is ready to use](notification.jpg)
+![Notification that the data is loaded and app is ready to use](../../reference/figures/notification.jpg)
 
 ## Additional resources
 
