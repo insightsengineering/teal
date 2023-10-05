@@ -10,7 +10,7 @@ vignette: >
 
 ## Introduction
 
-`teal` leverages the [Shiny module](https://rstudio.github.io/shiny/reference/moduleServer.html) concept to enable seamless communication between the framework and `teal` modules, while also promoting encapsulation.
+The `teal` framework leverages the [`shiny` module concept](https://rstudio.github.io/shiny/reference/moduleServer.html) to enable encapsulation of analytical actions in `teal` modules, while maintaining seamless communication between the modules and the application.
 
 `teal` modules heavily depends on this core Shiny feature and is a powerful extension that allows for a seamless
 
