@@ -45,15 +45,13 @@ sequenceDiagram
 )
 ```
 
-The filter panel plays a crucial role in the `teal` framework by processing the application data and creating appropriate filters the user can interact with.
-While processing the data, the filter panel identifies the data type of each column in the dataset, such as numeric, categorical, or date.
-Based on the column type, the filter panel generates shiny inputs appropriate for each column.
+The filter panel creates subsets of data. Subsetting is achieved by creating filter states, each of which holds a logical predicate (filter condition) that is applied to single variables. These filter conditions are composed into a single expression, a call to a particular function (e.g. `dplyr::filter`), and that expression is evaluated to create a filtered data subset.
 
-These shiny inputs enable users to interact with the data by adding filters that subsets the data accordingly. For example, if a column is numeric, users can use a slider to enter a range of values, while for categorical columns, users can use a dropdown menu or a set of checkboxes to select specific categories.
-The `teal.slice` functionality makes it easy for users to filter the data based on their specific requirements.
+The process is entirely interactive. Filter states can be created, removed, and changed at will, however, the app developer may choose to constrain or even restrict them.
 
-As users interact with these shiny inputs, the filter panel applies the filters to the data. At the same time, the filter panel also saves the filtering R code, which both records the specific filters applied to the data and a signature of that data.
-This is important for reproducibility, as it allows users to revisit the same filtering process in the future and obtain the same results from the same dataset.
+When a filter state is created, the filter panel generates a _filter card_ with `shiny` inputs appropriate to the type of the variable, e.g. range selectors for numeric columns and sets of checkboxes or dropdown menus for categorical ones. 
 
-Once the filtering process is complete, the filtered dataset is transfered to the `teal` module for analysis processing via a reactive dataset.
-This module may perform various types of analysis on the filtered data, such as statistic
+As users interact with the filter cards, the subsetting complete expression is updated and filtered data is recomputed.
+
+The filtered data is passed to `teal` modules for downstream analysis. The subsetting expression is returned along with the data, ensuring an unbroken track record of the entire analysis. Signature of the data are also stored to ensure reproducible results.
+
