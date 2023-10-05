@@ -31,13 +31,12 @@ sequenceDiagram;
 
 The sequence diagram above illustrates the different stages that data goes through within the `teal` framework, supported by the `teal.slice` R package:
 
-1. Users _(or app developers)_ select which filters to apply;
+1. Data is loaded into the `teal` app;
     - See the [Filter panel vignette](filterpanel.qmd) for details;
-1. The R code is automatically generated from the selected filters;
-    - Creates a [`qenv`](qenv.qmd) R object that contains the code that will be applied to the data _(and used for reproducibility)_;
-1. Apply the filters to the data _(creating a filtered data instance)_;
-    - A module can have a custom set of filters that is only applied to it;
-    
-1. The filtered data is sent to the `teal` modules as the main data source for analysis.
+2. Data is passed to the filter panel;
+    - Users _(or app developers)_ can specify filters to apply;
+    - Filters can be specified globally, for the whole app, or for specific modules;
+3. Filtered data is sent to `teal` modules for analysis;
+    - Each modulev creates a [`qenv`](qenv.qmd) object track the code that is be applied to the data _(and used for reproducibility)_;
 
 Whenever filters are added or removed, these stages are restarted, providing the `teal` module with new filtered data to conduct the required analysis.
