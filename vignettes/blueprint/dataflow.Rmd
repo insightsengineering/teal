@@ -39,4 +39,4 @@ The sequence diagram above illustrates the different stages that data goes throu
 3. Filtered data is sent to `teal` modules for analysis;
     - Each modulev creates a [`qenv`](qenv.qmd) object track the code that is be applied to the data _(and used for reproducibility)_;
 
-Whenever filters are added or removed, these stages are restarted, providing the `teal` module with new filtered data to conduct the required analysis.
+Whenever filters are added or removed, the data coming into modules is re-computed, providing the `teal` module with new filtered data to conduct the required analysis.
