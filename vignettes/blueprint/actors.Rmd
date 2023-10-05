@@ -24,7 +24,7 @@ shiny::pre(
   "
 %% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 graph LR
-    A[Teal App Developer]--utilizes--> B[teal modules]
+    A[teal App Developer]--utilizes--> B[teal modules]
     B--to create--> C[teal app]
     D[app user]--uses--> C
 style A fill:lightblue
