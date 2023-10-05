@@ -14,9 +14,9 @@ Reproducibility is paramount in the pharmaceutical industry.
 Accurate and consistent results are essential to ensure high-quality research and the safety of patients.
 By prioritizing reproducibility, researchers can validate their methods, confirm their findings, and contribute to the advancement of the field.
 
-`qenv` is an essential feature provided by the `teal.code` R package that simplifies code reproducibility.
-It is an R object that contains both code and environment, enabling the easy sharing and replication of R code.
-The R code is passed to the qenv object, which holds and evaluates it upon request.
+`qenv` is an essential feature provided by the `teal.code` package that facilitates code reproducibility.
+It is a class that stores both data and code, which enables tracking of the analytical process, and thus allows for sharing and replication of R code.
+Code is passed to a `qenv` object, where it is evaluated in a specific environment and stored, and can be retrieved on request.
 
 ## `qenv` in a `teal` application
 
