@@ -21,7 +21,6 @@ One of the great things about the filter panel is that it comes built-in with `t
 The filter panel provides a convenient way for users to subset their data, simplifying the process of exploration and comprehension.
 Moreover, users can activate or deactivate filter states interactively, either individually or globally, using the filter panel.
 
-The `teal.slice` R package in the `teal` framework is responsible for managing the filter panel.
 
 <div style="clear: both"></div>
 
