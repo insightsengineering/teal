@@ -71,7 +71,7 @@ Several factors influence the scope and requirements for building a `teal` modul
 When creating a reusable `teal` module, it's advisable to focus on making it as general and adaptable as feasible to maximize the possibilities of being re-used in the future.
 However, developers have the freedom to create a `teal` module that is customized to suit the specific demands of a project.
 
-Ultimately, one or more `teal` modules are employed to construct the `teal` app.
+Ultimately, one or more `teal` modules are employed to construct a `teal` app.
 
 To learn more about creating custom modules follow the [Tutorial on Creating a Custom Module](https://insightsengineering.github.io/teal/latest-tag/articles/creating-custom-modules.html).
 
