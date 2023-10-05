@@ -14,7 +14,7 @@ vignette: >
   <img src="../../man/figures/filterpanel.png" align="right" style="max-width: 33%;"/>
 </a>
 
-The filter panel is a key component of the `teal` framework, providing a powerful tool for exploring and analyzing data.
+The `teal.slice` package provides `teal` applications with the **filter panel**, a powerful tool for exploring and analyzing data, and a key component of the `teal` framework.
 
 One of the great things about the filter panel is that it comes built-in with `teal`, requiring no programming knowledge to use.
 
