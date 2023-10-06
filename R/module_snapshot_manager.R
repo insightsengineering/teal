@@ -165,7 +165,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         )
       )
     })
-    # Add new snapshot to list and apply filter states.
+    # Store new snapshot to list and restore filter states.
     observeEvent(input$snaphot_file_accept, {
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
@@ -179,7 +179,9 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         snapshot_state <- slices_restore(input$snapshot_file$datapath)
-        snapshot_update <- c(snapshot_history(), list(snapshot_state))
+        # Add to snapshot history.
+        snapshot <- as.list(snapshot_state, recursive = TRUE)
+        snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
         snapshot_history(snapshot_update)
         ### Begin simplified restore procedure. ###
