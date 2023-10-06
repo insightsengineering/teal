@@ -165,7 +165,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         )
       )
     })
-    # Add new snapshot to list.
+    # Add new snapshot to list and apply filter states.
     observeEvent(input$snaphot_file_accept, {
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
@@ -178,13 +178,24 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         )
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
-        snapshot <- slices_restore(input$snapshot_file$datapath)
-        snapshot_update <- c(snapshot_history(), list(snapshot))
+        snapshot_state <- slices_restore(input$snapshot_file$datapath)
+        snapshot_update <- c(snapshot_history(), list(snapshot_state))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
         snapshot_history(snapshot_update)
+        ### Begin simplified restore procedure. ###
+        mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+        mapply(
+          function(filtered_data, filter_ids) {
+            filtered_data$clear_filter_states(force = TRUE)
+            slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
+            filtered_data$set_filter_state(slices)
+          },
+          filtered_data = filtered_data_list,
+          filter_ids = mapping_unfolded
+        )
+        slices_global(snapshot_state)
         removeModal()
-        # Reopen filter manager modal by clicking button in the main application.
-        shinyjs::click(id = "teal-main_ui-filter_manager-show", asis = TRUE)
+        ### End  simplified restore procedure. ###
       }
     })
     # Apply newly added snapshot.
