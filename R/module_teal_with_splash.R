@@ -72,7 +72,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       reactiveVal(data)
     } else if (teal.data::is_pulled(data)) {
       new_data <- new_teal_data(
-        env = lapply(data$get_datasets(), function(x) x$get_raw_data()),
+        data = lapply(data$get_datasets(), function(x) x$get_raw_data()),
         code = data$get_code(),
         keys = data$get_join_keys()
       )
@@ -82,7 +82,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       raw_data <- reactive({
         data <- raw_data_old()
         new_teal_data(
-          env = lapply(data$get_datasets(), function(x) x$get_raw_data()),
+          data = lapply(data$get_datasets(), function(x) x$get_raw_data()),
           code = data$get_code(),
           keys = data$get_join_keys()
         )
