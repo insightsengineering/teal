@@ -63,7 +63,7 @@ filter_manager_modal_srv <- function(id, filtered_data_list, filter) {
       showModal(
         modalDialog(
           filter_manager_ui(session$ns("filter_manager")),
-          size = "l",
+          size = "xl",
           footer = NULL,
           easyClose = TRUE
         )

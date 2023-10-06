@@ -15,6 +15,10 @@ a.disabled {
   color: grey;
 }
 
+.modal-content:has(.filter_manager_content) {
+  padding: 30px 70px 30px 70px
+}
+
 .filter_manager_content {
   display: flex;
   flex-direction: row;
