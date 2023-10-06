@@ -91,7 +91,7 @@ ddl <- function(expr,
 
     # create  object
     obj <- teal.data::new_teal_data(
-      env = env_list,
+      data = env_list,
       code = as.expression(code),
       keys = join_keys,
       datanames = datanames
