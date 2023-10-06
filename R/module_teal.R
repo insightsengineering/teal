@@ -160,7 +160,6 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
       }
     )
 
-    # loading the data -----
     env <- environment()
     datasets_reactive <- eventReactive(raw_data(), ignoreNULL = TRUE, {
       env$progress <- shiny::Progress$new(session)
@@ -168,7 +167,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
 
       # create a list of data following structure of the nested modules list structure.
       # Because it's easier to unpack modules and datasets when they follow the same nested structure.
-      datasets_singleton <- teal.slice::init_filtered_data(raw_data())
+      datasets_singleton <- teal_data_to_filtered_data(raw_data())
       # Singleton starts with only global filters active.
       filter_global <- Filter(function(x) x$id %in% attr(filter, "mapping")$global_filters, filter)
       datasets_singleton$set_filter_state(filter_global)
@@ -183,7 +182,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
           # null controls a display of filter panel but data should be still passed
           datanames <- if (is.null(modules$datanames)) teal.data::get_dataname(raw_data()) else modules$datanames
           # todo: subset tdata object to datanames
-          datasets_module <- teal.slice::init_filtered_data(raw_data())
+          datasets_module <- teal_data_to_filtered_data(raw_data())
 
           # set initial filters
           slices <- Filter(x = filter, f = function(x) {
