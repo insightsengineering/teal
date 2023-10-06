@@ -97,7 +97,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    # Store global filter states.
+    # Store global filter states ----
     filter <- isolate(slices_global())
     snapshot_history <- reactiveVal({
       list(
@@ -105,7 +105,8 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       )
     })
 
-    # Snapshot current application state - name snaphsot.
+    # Snapshot current application state ----
+    # Name snaphsot.
     observeEvent(input$snapshot_add, {
       showModal(
         modalDialog(
@@ -118,7 +119,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         )
       )
     })
-    # Snapshot current application state - store snaphsot.
+    # Store snaphsot.
     observeEvent(input$snapshot_name_accept, {
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
@@ -145,7 +146,8 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       }
     })
 
-    # Upload a snapshot - select file.
+    # Upload a snapshot file ----
+    # Select file.
     observeEvent(input$snapshot_load, {
       showModal(
         modalDialog(
@@ -163,7 +165,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         )
       )
     })
-    # Upload a snapshot - add new snapshot to list.
+    # Add new snapshot to list.
     observeEvent(input$snaphot_file_accept, {
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
@@ -185,8 +187,9 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         shinyjs::click(id = "teal-main_ui-filter_manager-show", asis = TRUE)
       }
     })
+    # Apply newly added snapshot.
 
-    # Restore initial state.
+    # Restore initial state ----
     observeEvent(input$snapshot_reset, {
       s <- "Initial application state"
       ### Begin restore procedure. ###
@@ -207,6 +210,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       ### End restore procedure. ###
     })
 
+    # Build snapshot table ----
     # Create UI elements and server logic for the snapshot table.
     # Observers must be tracked to avoid duplication and excess reactivity.
     # Remaining elements are tracked likewise for consistency and a slight speed margin.
