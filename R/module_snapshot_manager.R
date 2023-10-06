@@ -97,7 +97,12 @@ snapshot_manager_ui <- function(id) {
         easyClose = TRUE
       ),
       div(
-        textInput(ns("new_snapshot_name"), "Name the snapshot", width = "100%", placeholder = "Meaningful, unique name"),
+        textInput(
+          ns("new_snapshot_name"),
+          "Name the snapshot",
+          width = "100%",
+          placeholder = "Meaningful, unique name"
+        ),
         div(
           actionButton(ns("snapshot_name_accept"), "Accept", icon = icon("thumbs-up")),
           actionButton(ns("snapshot_name_cancel"), label = "Cancel", icon = icon("thumbs-down"))
