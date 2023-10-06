@@ -80,4 +80,4 @@ By breaking down `teal` features, modules, and calculations into dedicated R pac
 
 Additionally, this separation allows for a clear distinction between the various roles and actors involved in the development of `teal`.
 
-To learn different roles/actors in `teal` development, visit [Actors](actors.qmd).
+To learn different roles/actors in `teal` development, visit [Actors](actors.html).
