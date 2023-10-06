@@ -47,15 +47,15 @@ include_parent_datanames <- function(dataname, join_keys) {
   return(unique(c(parents, dataname)))
 }
 
-#' Custom ModalDialog
+#' Custom modalDialog
 #'
-#' Alternative to modalDialog. To create a custom modalDialogs that can be shown/hidden
-#' using JS using the modal_id without disturbing other modalDialogs
+#' Alternative to modalDialog. To create custom modalDialogs that can be shown/hidden
+#' using JS using the modal `id` without disturbing other modalDialogs
 #'
-#' @param id (`character(1)`) `shiny` module id for the ModalDialog.\cr
+#' @param id (`character(1)`) `shiny` module id for the modalDialog.\cr
 #'           Note that this id will be used to show/hide using `shinyjs::show` and `shinyjs::hide`
 #' @param modal_args (`list`) list of arguments for the `shiny::modalDialog` function to customize the modal
-#' @param ... (`shiny.tag`) shiny UI elemets that will be displayed in the modal UI
+#' @param ... (`shiny.tag`) shiny UI elements that will be displayed in the modal UI
 #'
 #' @return (`shiny.tag`) returns `HTML` for Shiny module UI with modifications that allow for custom show/hide
 #' @keywords internal
