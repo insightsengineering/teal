@@ -20,7 +20,7 @@ Code is passed to a `qenv` object, where it is evaluated in a specific environme
 
 ## `qenv` in a `teal` application
 
-In a `teal` application, a `qenv` object is created by the module developer in the module's server function. All data operations are performed within the `qenv`'s environment and their R code is stored, which allows for the code to be inspected and reproduced outside the `teal` application. This includes data loading, preprocessing, filtering, transformations, and plotting, etc.
+In a `teal` application, a `qenv` object is created by the module developer in the module's server function. All data operations and their R code are appended and stored within the `qenv`'s environment, which allows for the code to be evaluated and executed in the `teal` application, and reproduced outside the `teal` application. This includes data loading, preprocessing, filtering, transformations, and plotting, etc.
 
 The `qenv` object makes it easy for users to reproduce and validate the results of their analyses.
 
