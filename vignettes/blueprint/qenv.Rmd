@@ -40,6 +40,7 @@ digraph G {
 }
 ```
 
+Learn more about the use of `qenv` in [`teal` custom module](https://insightsengineering.github.io/teal/main/articles/creating-custom-modules.html) vignette.
 #### `Show R Code` and `Reporter`
 
 The `qenv` object is used to support the module's visualizations, such as textual information, tables and plots. Additionally it also supports:
