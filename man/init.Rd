@@ -119,9 +119,9 @@ app <- init(
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2023"),
   landing = list(
-    title = 'Disclaimer',
-    text = 'By agreeing to this statement you confirm you accept A, B and C.',
-    button = 'Agree'
+    title = "Disclaimer",
+    text = "By agreeing to this statement you confirm you accept A, B and C.",
+    button = "Agree"
   )
 )
 if (interactive()) {
