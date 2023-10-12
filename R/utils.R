@@ -47,7 +47,7 @@ include_parent_datanames <- function(dataname, join_keys) {
   return(unique(c(parents, dataname)))
 }
 
-#' Template function to generate reporter card.
+#' Template Function for `TealReportCard` Creation and Customization
 #'
 #' This function generates a report card with a title,
 #' an optional description, and the option to append the filter state list.
