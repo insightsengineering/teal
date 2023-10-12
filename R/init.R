@@ -45,6 +45,8 @@
 #'   the server function must be called with [shiny::moduleServer()];
 #'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
+#' @param langind A named `list` with 3 character elements `title`, `text` and `button`. They
+#' will be passed to a disclaimer landing popup created with [shinyalert::shinyalert].
 #'
 #' @return named list with `server` and `ui` function
 #'
@@ -100,7 +102,12 @@
 #'     )
 #'   ),
 #'   header = tags$h1("Sample App"),
-#'   footer = tags$p("Copyright 2017 - 2023")
+#'   footer = tags$p("Copyright 2017 - 2023"),
+#'   landing = list(
+#'     title = 'Disclaimer',
+#'     text = 'By agreeing to this statement you confirm you accept A, B and C.',
+#'     button = 'Agree'
+#'   )
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
@@ -112,7 +119,8 @@ init <- function(data,
                  filter = teal_slices(),
                  header = tags$p(),
                  footer = tags$p(),
-                 id = character(0)) {
+                 id = character(0),
+                 landing = NULL) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
   data <- teal.data::to_relational_data(data = data)
 
@@ -126,6 +134,10 @@ init <- function(data,
   checkmate::assert_multi_class(header, c("shiny.tag", "character"))
   checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
+  checkmate::check_list(landing, names = "named", null.ok = TRUE)
+  if (is.list(landing)) {
+    checkmate::check_names(names(landing), subset.of = c('title', 'text', 'button'))
+  }
 
   teal.logger::log_system_info()
 
@@ -212,6 +224,15 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
+      if (!is.null(landing)) {
+        shinyalert::shinyalert(
+          title = landing$title,
+          text = landing$text,
+          type = "info",
+          showConfirmButton = TRUE,
+          confirmButtonText = landing$button
+        )
+      }
       # copy object so that load won't be shared between the session
       data <- data$copy(deep = TRUE)
       filter <- deep_copy_filter(filter)

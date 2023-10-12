@@ -11,7 +11,8 @@ init(
   filter = teal_slices(),
   header = tags$p(),
   footer = tags$p(),
-  id = character(0)
+  id = character(0),
+  landing = NULL
 )
 }
 \arguments{
@@ -52,6 +53,9 @@ module id to embed it, if provided,
 the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
+
+\item{langind}{A named \code{list} with 3 character elements \code{title}, \code{text} and \code{button}. They
+will be passed to a disclaimer landing popup created with \link[shinyalert:shinyalert]{shinyalert::shinyalert}.}
 }
 \value{
 named list with \code{server} and \code{ui} function
@@ -113,7 +117,12 @@ app <- init(
     )
   ),
   header = tags$h1("Sample App"),
-  footer = tags$p("Copyright 2017 - 2023")
+  footer = tags$p("Copyright 2017 - 2023"),
+  landing = list(
+    title = 'Disclaimer',
+    text = 'By agreeing to this statement you confirm you accept A, B and C.',
+    button = 'Agree'
+  )
 )
 if (interactive()) {
   shinyApp(app$ui, app$server)
