@@ -45,7 +45,7 @@
 #'   the server function must be called with [shiny::moduleServer()];
 #'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
-#' @param langind A named `list` with 3 character elements `title`, `text` and `button`. They
+#' @param landing A named `list` with 3 character elements `title`, `text` and `button`. They
 #' will be passed to a disclaimer landing popup created with [shinyalert::shinyalert].
 #'
 #' @return named list with `server` and `ui` function

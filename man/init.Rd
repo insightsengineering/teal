@@ -54,7 +54,7 @@ the server function must be called with \code{\link[shiny:moduleServer]{shiny::m
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 
-\item{langind}{A named \code{list} with 3 character elements \code{title}, \code{text} and \code{button}. They
+\item{landing}{A named \code{list} with 3 character elements \code{title}, \code{text} and \code{button}. They
 will be passed to a disclaimer landing popup created with \link[shinyalert:shinyalert]{shinyalert::shinyalert}.}
 }
 \value{
