@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{report_card_template}
 \alias{report_card_template}
-\title{Template function to generate reporter card.}
+\title{Template Function for \code{TealReportCard} Creation and Customization}
 \usage{
 report_card_template(
   title,
