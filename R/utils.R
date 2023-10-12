@@ -62,7 +62,7 @@ include_parent_datanames <- function(dataname, join_keys) {
 #' @return (`TealReportCard`) populated with a title, description and filter state
 #'
 #' @export
-card_template <- function(title, label, description = NULL, with_filter, filter_panel_api) {
+report_card_template <- function(title, label, description = NULL, with_filter, filter_panel_api) {
   checkmate::assert_string(title)
   checkmate::assert_string(label)
   checkmate::assert_string(description, null.ok = TRUE)
