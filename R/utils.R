@@ -74,8 +74,6 @@ card_template <- function(title, label, description = NULL, with_filter, filter_
   card$set_name(title)
   card$append_text(title, "header2")
   if (!is.null(description)) card$append_text(description, "header3")
-  if (with_filter) {
-    card$append_fs(filter_panel_api$get_filter_state())
-  }
+  if (with_filter) card$append_fs(filter_panel_api$get_filter_state())
   card
 }
