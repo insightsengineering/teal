@@ -47,7 +47,7 @@ include_parent_datanames <- function(dataname, join_keys) {
   return(unique(c(parents, dataname)))
 }
 
-#' Template function to generate reporter card.
+#' Template Function for `TealReportCard` Creation and Customization
 #'
 #' This function generates a report card with a title,
 #' an optional description, and the option to append the filter state list.
@@ -73,11 +73,7 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
   title <- if (label == "") title else label
   card$set_name(title)
   card$append_text(title, "header2")
-  if (!is.null(description)) {
-    card$append_text(description, "header3")
-  }
-  if (with_filter) {
-    card$append_fs(filter_panel_api$get_filter_state())
-  }
+  if (!is.null(description)) card$append_text(description, "header3")
+  if (with_filter) card$append_fs(filter_panel_api$get_filter_state())
   card
 }
