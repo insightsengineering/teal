@@ -1,0 +1,61 @@
+---
+title: "`qenv`"
+author: "NEST CoreDev"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{`qenv`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+Reproducibility is paramount in the pharmaceutical industry.
+Accurate and consistent results are essential to ensure high-quality research and the safety of patients.
+By prioritizing reproducibility, researchers can validate their methods, confirm their findings, and contribute to the advancement of the field.
+
+[`qenv`](https://insightsengineering.github.io/teal.code/latest-tag/articles/qenv.html) is an essential feature provided by the `teal.code` package that facilitates code reproducibility.
+It is a class that stores both data and code, which enables tracking of the analytical process, and thus allows for sharing and replication of R code.
+Code is passed to a `qenv` object, where it is evaluated in a specific environment and stored, and can be retrieved on request.
+
+## `qenv` in a `teal` application
+
+In a `teal` application, a `qenv` object is created by the module developer in the module's server function. All data operations and their R code are appended and stored within the `qenv`'s environment, which allows for the code to be evaluated and executed in the `teal` application, and reproduced outside the `teal` application. This includes data loading, preprocessing, filtering, transformations, and plotting, etc.
+
+The `qenv` object makes it easy for users to reproduce and validate the results of their analyses.
+
+```{dot qenv_dot_diagram, echo=FALSE}
+digraph G {
+    qenv [label = "qenv"];
+    node [shape=box];
+    teal_modules [label = "teal modules analysis R code"];
+    library [label = "R library() calls"];
+    filter_states [label = "filter states R code"];
+    data [label = "data preprocessing R code"];
+    teal_modules -> qenv;
+    library -> qenv;
+    edge [dir="back"];
+    qenv -> filter_states;
+    qenv -> data;
+}
+```
+
+Learn more about the use of `qenv` in [`teal` custom module](https://insightsengineering.github.io/teal/main/articles/creating-custom-modules.html) vignette.
+
+## `Show R Code` and `Reporter`
+
+In both the `teal.modules.clinical` and `teal.modules.general` R packages, you'll find that most modules include a convenient `Show R Code`button.
+When this button is clicked, a modal window appears, revealing the R code responsible for generating the module's output.
+This functionality is achieved by inspecting the qenv object, which contains the stored code.
+With the Show R Code button, users can now easily copy and independently run the code to reproduce the same analysis presented in the teal module.
+
+![Show R Code](../../man/figures/showrcode.jpg){width=50%}
+
+The Reporter feature also leverages the qenv object in its operation.
+Much like the Show R Code mechanism, the code displayed in a Reporter Card is extracted from the qenv object.
+
+![Reporter](../../man/figures/reporter.jpg){width=50%}
+
+To learn more about the `Reporter` feature, please visit the [teal.reporter documentation](https://insightsengineering.github.io/teal.reporter/latest-tag/index.html).
+
+Overall, `qenv` from `teal.code` is a powerful tool for ensuring code reproducibility and promoting high-quality research in the R programming language.
