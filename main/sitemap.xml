@@ -19,6 +19,33 @@
     <loc>https://insightsengineering.github.io/teal/articles/adding-support-for-reporting.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/articles/blueprint/actors.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/blueprint/dataflow.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/blueprint/ddl.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/blueprint/filter_panel.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/blueprint/index.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/blueprint/intro.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/blueprint/module_encapsulation.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/blueprint/products_map.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/articles/blueprint/qenv.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/articles/creating-custom-modules.html</loc>
   </url>
   <url>

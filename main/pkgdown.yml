@@ -3,6 +3,15 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   adding-support-for-reporting: adding-support-for-reporting.html
+  actors: blueprint/actors.html
+  dataflow: blueprint/dataflow.html
+  ddl: blueprint/ddl.html
+  filter_panel: blueprint/filter_panel.html
+  index: blueprint/index.html
+  intro: blueprint/intro.html
+  module_encapsulation: blueprint/module_encapsulation.html
+  products_map: blueprint/products_map.html
+  qenv: blueprint/qenv.html
   creating-custom-modules: creating-custom-modules.html
   filter-panel: filter-panel.html
   including-adam-data-in-teal: including-adam-data-in-teal.html
@@ -12,7 +21,7 @@ articles:
   teal-bs-themes: teal-bs-themes.html
   teal-options: teal-options.html
   teal: teal.html
-last_built: 2023-09-20T13:34Z
+last_built: 2023-10-12T03:17Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles
