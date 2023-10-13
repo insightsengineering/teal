@@ -117,10 +117,10 @@ app <- init(
   ),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2023"),
-  extra_server = landing_modal(
-    title = "Disclaimer",
-    text = "By agreeing to this statement you confirm you accept A, B and C.",
-    button = "Agree"
+  extra_server = teal.modules.general::tm_landing_popup(
+    title = "Welcome",
+    text = "A place for the welcome message or a disclaimer statement.",
+    button = "Proceed"
   )
 )
 if (interactive()) {

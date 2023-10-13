@@ -40,7 +40,6 @@ Imports:
     logger (>= 0.2.0),
     magrittr,
     rlang,
-    shinyalert,
     shinyjs,
     stats,
     teal.logger (>= 0.1.1),
