@@ -83,7 +83,7 @@ modules <- function(..., label = "root") {
   structure(
     list(
       label = label,
-      children = submodules
+      children = submodules # TEST FOR STAGED.DEPENDENCIES CYCLIC ERROR TRIGGER
     ),
     class = "teal_modules"
   )
