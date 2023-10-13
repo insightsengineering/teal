@@ -89,7 +89,7 @@ snapshot_manager_ui <- function(id) {
       NULL
     ),
     uiOutput(ns("snapshot_list")),
-    custom_modal_dialog(
+    teal.widgets::nested_closeable_modal(
       id = ns("snapshot_name_modal"),
       modal_args = list(
         size = "s",
@@ -109,7 +109,7 @@ snapshot_manager_ui <- function(id) {
         )
       )
     ),
-    custom_modal_dialog(
+    teal.widgets::nested_closeable_modal(
       id = ns("snapshot_file_modal"),
       modal_args = list(
         size = "s",
