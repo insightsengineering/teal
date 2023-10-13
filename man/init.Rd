@@ -119,7 +119,7 @@ app <- init(
   footer = tags$p("Copyright 2017 - 2023"),
   extra_server = teal.modules.general::tm_landing_popup(
     title = "Welcome",
-    text = "A place for the welcome message or a disclaimer statement.",
+    text = "A place for a welcome message or a disclaimer statement.",
     button = "Proceed"
   )
 )
