@@ -46,3 +46,20 @@ include_parent_datanames <- function(dataname, join_keys) {
 
   return(unique(c(parents, dataname)))
 }
+
+#' @title A Landing Page Popup
+#' @description Should be a part of `teal.modules.general`
+#' @param title,text,button Arguments passed to `shinyalert::shinyalert`.
+#'
+#' @export
+landing_modal <- function(title = NULL, text = NULL, button = NULL) {
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_string(text, null.ok = TRUE)
+  checkmate::assert_string(button, null.ok = TRUE)
+  shinyalert::shinyalert(
+    title = title,
+    text = text,
+    type = "info",
+    confirmButtonText = button
+  )
+}

@@ -12,7 +12,7 @@ init(
   header = tags$p(),
   footer = tags$p(),
   id = character(0),
-  landing = NULL
+  extra_server = NULL
 )
 }
 \arguments{
@@ -54,8 +54,7 @@ the server function must be called with \code{\link[shiny:moduleServer]{shiny::m
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 
-\item{landing}{A named \code{list} with 3 character elements \code{title}, \code{text} and \code{button}. They
-will be passed to a disclaimer landing popup created with \link[shinyalert:shinyalert]{shinyalert::shinyalert}.}
+\item{extra_server}{A list of elements passed to \code{shiny::server}.}
 }
 \value{
 named list with \code{server} and \code{ui} function
@@ -118,7 +117,7 @@ app <- init(
   ),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2023"),
-  landing = list(
+  extra_server = landing_modal(
     title = "Disclaimer",
     text = "By agreeing to this statement you confirm you accept A, B and C.",
     button = "Agree"
