@@ -63,3 +63,34 @@ landing_modal <- function(title = NULL, text = NULL, button = NULL) {
     confirmButtonText = button
   )
 }
+
+#' Template Function for `TealReportCard` Creation and Customization
+#'
+#' This function generates a report card with a title,
+#' an optional description, and the option to append the filter state list.
+#'
+#' @param title (`character(1)`) title of the card (unless overwritten by label)
+#' @param label (`character(1)`) label provided by the user when adding the card
+#' @param description (`character(1)`) optional additional description
+#' @param with_filter (`logical(1)`) flag indicating to add filter state
+#' @param filter_panel_api (`FilterPanelAPI`) object with API that allows the generation
+#' of the filter state in the report
+#'
+#' @return (`TealReportCard`) populated with a title, description and filter state
+#'
+#' @export
+report_card_template <- function(title, label, description = NULL, with_filter, filter_panel_api) {
+  checkmate::assert_string(title)
+  checkmate::assert_string(label)
+  checkmate::assert_string(description, null.ok = TRUE)
+  checkmate::assert_flag(with_filter)
+  checkmate::assert_class(filter_panel_api, classes = "FilterPanelAPI")
+
+  card <- teal::TealReportCard$new()
+  title <- if (label == "") title else label
+  card$set_name(title)
+  card$append_text(title, "header2")
+  if (!is.null(description)) card$append_text(description, "header3")
+  if (with_filter) card$append_fs(filter_panel_api$get_filter_state())
+  card
+}
