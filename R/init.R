@@ -138,6 +138,29 @@ init <- function(data,
     modules <- do.call(teal::modules, modules)
   }
 
+  # move these two functions to utils.R or modules.R
+  # maybe combine into one function?
+  extract_landing <- function(modules) {
+    if (inherits(modules, "landing_module")) {
+      modules
+    } else if (inherits(modules, "teal_module")) {
+      NULL
+    } else if (inherits(modules, "teal_modules")) {
+      Filter(Negate(is.null), lapply(modules$children, extract_landing))
+    }
+  }
+  drop_landing <- function(modules) {
+    if (inherits(modules, "landing_module")) {
+      NULL
+    } else if (inherits(modules, "teal_module")) {
+      modules
+    } else if (inherits(modules, "teal_modules")) {
+      Filter(Negate(is.null), lapply(modules$children, drop_landing))
+    }
+  }
+  landing <- extract_landing(modules)
+  modules$children <- drop_landing(modules)
+
   # resolve modules datanames
   datanames <- teal.data::get_dataname(data)
   join_keys <- data$get_join_keys()
@@ -207,20 +230,6 @@ init <- function(data,
     }
   }
 
-  # In case of a "Landing Popup", do not create a module for it. Just extract the module and use directly in server.
-  # Assuming "Landing Popup" is not used in a nested module.
-  labels <- module_labels(modules)
-  lp_cond <- "Landing_Popup" %in% names(labels)
-
-  if (!lp_cond && "Landing Page" %in% unlist(labels)) {
-    stop("Please do not use a module labelled 'Landing Popup' within a nested module.")
-  } else if (lp_cond) {
-    landing_popup <- modules$children[which(lp_cond)]
-    modules$children <- modules$children[-which(lp_cond)]
-  } else {
-    landing_popup <- NULL
-  }
-
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
   # the `ui` and `server` with `id = character(0)` and calling the server function directly
@@ -228,7 +237,10 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-      landing_popup
+      if (length(landing) > 0L) {
+        landing_module <- landing[[1L]]
+        do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
+      }
       # copy object so that load won't be shared between the session
       data <- data$copy(deep = TRUE)
       filter <- deep_copy_filter(filter)
