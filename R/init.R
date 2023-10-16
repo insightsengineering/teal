@@ -46,6 +46,8 @@
 #'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
 #'
+#' @note If you use a module labelled `"Landing Popup"` `teal` will not create a tab for this module.
+#'
 #' @return named list with `server` and `ui` function
 #'
 #' @export
@@ -205,6 +207,20 @@ init <- function(data,
     }
   }
 
+  # In case of a "Landing Popup", do not create a module for it. Just extract the module and use directly in server.
+  # Assuming "Landing Popup" is not used in a nested module.
+  labels <- module_labels(modules)
+  lp_cond <- "Landing_Popup" %in% names(labels)
+
+  if (!lp_cond && "Landing Page" %in% unlist(labels)) {
+    stop("Please do not use a module labelled 'Landing Popup' within a nested module.")
+  } else if (lp_cond) {
+    landing_popup <- modules$children[which(lp_cond)]
+    modules$children <- modules$children[-which(lp_cond)]
+  } else {
+    landing_popup <- NULL
+  }
+
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
   # the `ui` and `server` with `id = character(0)` and calling the server function directly
@@ -212,6 +228,7 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
+      landing_popup
       # copy object so that load won't be shared between the session
       data <- data$copy(deep = TRUE)
       filter <- deep_copy_filter(filter)
