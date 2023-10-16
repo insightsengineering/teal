@@ -65,6 +65,9 @@ teal app that is composed out of teal modules.
 This is a wrapper function around the \code{module_teal.R} functions. Unless you are
 an end-user, don't use this function, but instead this module.
 }
+\note{
+If you use a module labelled \code{"Landing Popup"} \code{teal} will not create a tab for this module.
+}
 \examples{
 new_iris <- transform(iris, id = seq_len(nrow(iris)))
 new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
