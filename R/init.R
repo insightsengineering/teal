@@ -45,7 +45,6 @@
 #'   the server function must be called with [shiny::moduleServer()];
 #'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
-#' @param extra_server A list of elements passed to `shiny::server`.
 #'
 #' @return named list with `server` and `ui` function
 #'
@@ -101,12 +100,7 @@
 #'     )
 #'   ),
 #'   header = tags$h1("Sample App"),
-#'   footer = tags$p("Copyright 2017 - 2023"),
-#'   extra_server = teal.modules.general::landing_popup(
-#'     title = "Welcome",
-#'     text = "A place for a welcome message or a disclaimer statement.",
-#'     button = modalButton("Proceed")
-#'   )
+#'   footer = tags$p("Copyright 2017 - 2023")
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
@@ -118,8 +112,7 @@ init <- function(data,
                  filter = teal_slices(),
                  header = tags$p(),
                  footer = tags$p(),
-                 id = character(0),
-                 extra_server = NULL) {
+                 id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
   data <- teal.data::to_relational_data(data = data)
 
@@ -219,7 +212,6 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-      extra_server
       # copy object so that load won't be shared between the session
       data <- data$copy(deep = TRUE)
       filter <- deep_copy_filter(filter)

@@ -11,8 +11,7 @@ init(
   filter = teal_slices(),
   header = tags$p(),
   footer = tags$p(),
-  id = character(0),
-  extra_server = NULL
+  id = character(0)
 )
 }
 \arguments{
@@ -53,8 +52,6 @@ module id to embed it, if provided,
 the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
-
-\item{extra_server}{A list of elements passed to \code{shiny::server}.}
 }
 \value{
 named list with \code{server} and \code{ui} function
@@ -116,12 +113,7 @@ app <- init(
     )
   ),
   header = tags$h1("Sample App"),
-  footer = tags$p("Copyright 2017 - 2023"),
-  extra_server = teal.modules.general::landing_popup(
-    title = "Welcome",
-    text = "A place for a welcome message or a disclaimer statement.",
-    button = modalButton("Proceed")
-  )
+  footer = tags$p("Copyright 2017 - 2023")
 )
 if (interactive()) {
   shinyApp(app$ui, app$server)
