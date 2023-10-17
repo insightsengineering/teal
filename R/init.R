@@ -146,7 +146,7 @@ init <- function(data,
     } else if (inherits(modules, "teal_module")) {
       NULL
     } else if (inherits(modules, "teal_modules")) {
-      Filter(Negate(is.null), lapply(modules$children, extract_landing))
+      Filter(function(x) length(x) > 0L, lapply(modules$children, extract_landing))
     }
   }
   drop_landing <- function(modules) {
@@ -155,11 +155,14 @@ init <- function(data,
     } else if (inherits(modules, "teal_module")) {
       modules
     } else if (inherits(modules, "teal_modules")) {
-      Filter(Negate(is.null), lapply(modules$children, drop_landing))
+      do.call(
+        "modules",
+        c(Filter(function(x) length(x) > 0L, lapply(modules$children, drop_landing)), label = modules$label)
+      )
     }
   }
   landing <- extract_landing(modules)
-  modules$children <- drop_landing(modules)
+  modules <- drop_landing(modules)
 
   # resolve modules datanames
   datanames <- teal.data::get_dataname(data)
