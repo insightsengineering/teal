@@ -13,7 +13,8 @@ teal_slices(
   count_type = NULL,
   allow_add = TRUE,
   module_specific = FALSE,
-  mapping
+  mapping,
+  app_id = NULL
 )
 
 as.teal_slices(x)
@@ -57,6 +58,11 @@ Names of the list should correspond to \code{teal_module} \code{label} set in \c
 If missing, all filters will be applied to all modules.
 If empty list, all filters will be available to all modules but will start inactive.
 If \code{module_specific} is \code{FALSE}, only \code{global_filters} will be active on start.}
+
+\item{app_id}{(\code{character(1)})\cr
+For internal use only, do not set manually.
+Added by \code{init} so that a \code{teal_slices} can be matched to the app in which it was used.
+Used for verifying snapshots uploaded from file. See \code{snapshot}.}
 
 \item{x}{(\code{list}) of lists to convert to \code{teal_slices}}
 }
