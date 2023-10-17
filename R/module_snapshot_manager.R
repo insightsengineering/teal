@@ -187,26 +187,34 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         )
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
+        # Restore snapshot and verify app compatibility.
         snapshot_state <- slices_restore(input$snapshot_file$datapath)
-        # Add to snapshot history.
-        snapshot <- as.list(snapshot_state, recursive = TRUE)
-        snapshot_update <- c(snapshot_history(), list(snapshot))
-        names(snapshot_update)[length(snapshot_update)] <- snapshot_name
-        snapshot_history(snapshot_update)
-        ### Begin simplified restore procedure. ###
-        mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
-        mapply(
-          function(filtered_data, filter_ids) {
-            filtered_data$clear_filter_states(force = TRUE)
-            slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
-            filtered_data$set_filter_state(slices)
-          },
-          filtered_data = filtered_data_list,
-          filter_ids = mapping_unfolded
-        )
-        slices_global(snapshot_state)
-        removeModal()
-        ### End  simplified restore procedure. ###
+        if (!identical(attr(snapshot_state, "app_id"), attr(slices_global(), "app_id"))) {
+          showNotification(
+            "This snapshot file is not compatible with the app and cannot be loaded.",
+            type = "message"
+          )
+        } else {
+          # Add to snapshot history.
+          snapshot <- as.list(snapshot_state, recursive = TRUE)
+          snapshot_update <- c(snapshot_history(), list(snapshot))
+          names(snapshot_update)[length(snapshot_update)] <- snapshot_name
+          snapshot_history(snapshot_update)
+          ### Begin simplified restore procedure. ###
+          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+          mapply(
+            function(filtered_data, filter_ids) {
+              filtered_data$clear_filter_states(force = TRUE)
+              slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
+              filtered_data$set_filter_state(slices)
+            },
+            filtered_data = filtered_data_list,
+            filter_ids = mapping_unfolded
+          )
+          slices_global(snapshot_state)
+          removeModal()
+          ### End  simplified restore procedure. ###
+        }
       }
     })
     # Apply newly added snapshot.
