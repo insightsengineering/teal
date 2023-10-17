@@ -18,6 +18,10 @@
 #'  If missing, all filters will be applied to all modules.
 #'  If empty list, all filters will be available to all modules but will start inactive.
 #'  If `module_specific` is `FALSE`, only `global_filters` will be active on start.
+#' @param app_id (`character(1)`)\cr
+#'  For internal use only, do not set manually.
+#'  Added by `init` so that a `teal_slices` can be matched to the app in which it was used.
+#'  Used for verifying snapshots uploaded from file. See `snapshot`.
 #'
 #' @param x (`list`) of lists to convert to `teal_slices`
 #'
