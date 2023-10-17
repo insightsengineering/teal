@@ -56,11 +56,13 @@ teal_slices <- function(...,
                         count_type = NULL,
                         allow_add = TRUE,
                         module_specific = FALSE,
-                        mapping) {
+                        mapping,
+                        app_id = NULL) {
   shiny::isolate({
     checkmate::assert_flag(allow_add)
     checkmate::assert_flag(module_specific)
     if (!missing(mapping)) checkmate::assert_list(mapping, types = c("character", "NULL"), names = "named")
+    checkmate::assert_string(app_id, null.ok = TRUE)
 
     slices <- list(...)
     all_slice_id <- vapply(slices, `[[`, character(1L), "id")
@@ -90,6 +92,7 @@ teal_slices <- function(...,
     )
     attr(tss, "mapping") <- mapping
     attr(tss, "module_specific") <- module_specific
+    attr(tss, "app_id") <- app_id
     class(tss) <- c("modules_teal_slices", class(tss))
     tss
   })
