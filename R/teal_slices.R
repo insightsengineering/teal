@@ -18,6 +18,10 @@
 #'  If missing, all filters will be applied to all modules.
 #'  If empty list, all filters will be available to all modules but will start inactive.
 #'  If `module_specific` is `FALSE`, only `global_filters` will be active on start.
+#' @param app_id (`character(1)`)\cr
+#'  For internal use only, do not set manually.
+#'  Added by `init` so that a `teal_slices` can be matched to the app in which it was used.
+#'  Used for verifying snapshots uploaded from file. See `snapshot`.
 #'
 #' @param x (`list`) of lists to convert to `teal_slices`
 #'
@@ -56,11 +60,13 @@ teal_slices <- function(...,
                         count_type = NULL,
                         allow_add = TRUE,
                         module_specific = FALSE,
-                        mapping) {
+                        mapping,
+                        app_id = NULL) {
   shiny::isolate({
     checkmate::assert_flag(allow_add)
     checkmate::assert_flag(module_specific)
     if (!missing(mapping)) checkmate::assert_list(mapping, types = c("character", "NULL"), names = "named")
+    checkmate::assert_string(app_id, null.ok = TRUE)
 
     slices <- list(...)
     all_slice_id <- vapply(slices, `[[`, character(1L), "id")
@@ -90,6 +96,7 @@ teal_slices <- function(...,
     )
     attr(tss, "mapping") <- mapping
     attr(tss, "module_specific") <- module_specific
+    attr(tss, "app_id") <- app_id
     class(tss) <- c("modules_teal_slices", class(tss))
     tss
   })
@@ -129,6 +136,21 @@ c.teal_slices <- function(...) {
       all_attributes
     )
   )
+}
+
+
+# this function must be defined in the `teal` namesspace so that it calls `teal::teal_slices`
+#' @noRd
+#' @keywords internal
+#'
+slices_restore <- function(file) {
+  checkmate::assert_file_exists(file, access = "r", extension = "json")
+
+  tss_json <- jsonlite::fromJSON(file, simplifyDataFrame = FALSE)
+
+  tss_elements <- lapply(tss_json$slices, as.teal_slice)
+
+  do.call(teal_slices, c(tss_elements, tss_json$attributes))
 }
 
 

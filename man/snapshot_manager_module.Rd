@@ -33,11 +33,13 @@ Capture and restore snapshots of the global (app) filter state.
 \details{
 This module introduces snapshots: stored descriptions of the filter state of the entire application.
 Snapshots allow the user to save the current filter state of the application for later use in the session,
-as well as to save it to file in order to share it with an app developer or other users.
+as well as to save it to file in order to share it with an app developer or other users,
+who in turn can upload it to their own session.
 
 The snapshot manager is accessed through the filter manager, with the cog icon in the top right corner.
-At the beginning of a session it presents two icons: a camera and an circular arrow.
-Clicking the camera captures a snapshot and clicking the arrow resets initial application state.
+At the beginning of a session it presents three icons: a camera, an upload, and an circular arrow.
+Clicking the camera captures a snapshot, clicking the upload adds a snapshot from a file
+and applies the filter states therein, and clicking the arrow resets initial application state.
 As snapshots are added, they will show up as rows in a table and each will have a select button and a save button.
 }
 \section{Server logic}{
@@ -80,6 +82,21 @@ The snapshot is then set as the current content of \code{slices_global}.
 
 To save a snapshot, the snapshot is retrieved and reassembled just like for restoring,
 and then saved to file with \code{\link[teal.slice:slices_store]{teal.slice::slices_store}}.
+
+When a snapshot is uploaded, it will first be added to storage just like a newly created one,
+and then used to restore app state much like a snapshot taken from storage.
+Upon clicking the upload icon the user will be prompted for a file to upload
+and may choose to name the new snapshot. The name defaults to the name of the file (the extension is dropped)
+and normal naming rules apply. Loading the file yields a \code{teal_slices} object,
+which is disassembled for storage and used directly for restoring app state.
+}
+
+\section{Transferring snapshots}{
+
+Snapshots uploaded from disk should only be used in the same application they come from.
+To ensure this is the case, \code{init} stamps \code{teal_slices} with an app id that is stored in the \code{app_id} attribute of
+a \code{teal_slices} object. When a snapshot is restored from file, its \code{app_id} is compared to that
+of the current app state and only if the match is the snapshot admitted to the session.
 }
 
 \author{
