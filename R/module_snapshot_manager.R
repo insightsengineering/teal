@@ -188,8 +188,13 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         # Restore snapshot and verify app compatibility.
-        snapshot_state <- slices_restore(input$snapshot_file$datapath)
-        if (!identical(attr(snapshot_state, "app_id"), attr(slices_global(), "app_id"))) {
+        snapshot_state <- try(slices_restore(input$snapshot_file$datapath))
+        if (!inherits(snapshot_state, "modules_teal_slices")) {
+          showNotification(
+            "File appears to be corrupt.",
+            type = "error"
+          )
+        } else if (!identical(attr(snapshot_state, "app_id"), attr(slices_global(), "app_id"))) {
           showNotification(
             "This snapshot file is not compatible with the app and cannot be loaded.",
             type = "message"
