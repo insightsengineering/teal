@@ -228,7 +228,9 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-      landing_popup
+      if (length(landing_popup) > 0L) {
+        do.call(landing_popup[[1]]$server, c(list(id = "landing_module_shiny_id"), landing_popup[[1]]$server_args))
+      }
       # copy object so that load won't be shared between the session
       data <- data$copy(deep = TRUE)
       filter <- deep_copy_filter(filter)
