@@ -197,7 +197,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         } else if (!identical(attr(snapshot_state, "app_id"), attr(slices_global(), "app_id"))) {
           showNotification(
             "This snapshot file is not compatible with the app and cannot be loaded.",
-            type = "message"
+            type = "warning"
           )
         } else {
           # Add to snapshot history.
