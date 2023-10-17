@@ -128,10 +128,11 @@ testthat::test_that("init data accepts a list of TealDatasetConnector object", {
   dsc1 <- list(teal.data::dataset_connector("iris", teal.data::callable_function(function() head(iris))))
   testthat::expect_no_error(init(data = dsc1, modules = mods))
   testthat::expect_no_error(
-    init(data = list(
-      teal.data::dataset_connector("iris", teal.data::callable_function(function() head(iris)))
-    ),
-    modules = mods
+    init(
+      data = list(
+        teal.data::dataset_connector("iris", teal.data::callable_function(function() head(iris)))
+      ),
+      modules = mods
     )
   )
 })
