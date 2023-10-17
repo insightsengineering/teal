@@ -132,7 +132,8 @@ init <- function(data,
   # Calculate app hash to ensure snapshot compatibility. See ?snapshot. Raw data must be extracted from environments.
   hashables <- c(mget(names(formals(init))), call = match.call())
   hashables$data <- lapply(hashables$data$get_datanames(), function(dn) {
-    try(hashables$data$get_dataset(dn)$get_raw_data(), silent = TRUE)}) # `try` handles errors from remote data
+    try(hashables$data$get_dataset(dn)$get_raw_data(), silent = TRUE)
+  }) # `try` handles errors from remote data
   hashables$filter <- as.list(hashables$filter, recursive = TRUE)
   attr(filter, "app_id") <- rlang::hash(hashables)
 
