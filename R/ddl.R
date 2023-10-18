@@ -84,9 +84,7 @@ ddl <- function(expr,
     env_list <- env_list[names(env_list) != "input"]
 
     # substitute by offline args
-    for (i in names(input_mask)) {
-      input[[i]] <- input_mask[[i]]
-    }
+    input <- modifyList(input, input_mask)
     code <- .substitute_inputs(code, args = input)
 
     # create  object
