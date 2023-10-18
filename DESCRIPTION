@@ -84,6 +84,7 @@ Config/Needs/verdepcheck:
     yihui/knitr,
     bioc::MultiAssayExperiment,
     r-lib/R6,
+    rstudio/rmarkdown,
     rstudio/shinyvalidate,
     insightsengineering/teal.code,
     r-lib/testthat,
