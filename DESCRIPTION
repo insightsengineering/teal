@@ -54,6 +54,7 @@ Suggests:
     knitr (>= 1.42),
     MultiAssayExperiment,
     R6,
+    rmarkdown (>= 2.19),
     shinyvalidate,
     teal.code (>= 0.3.0.9009),
     testthat (>= 3.1.5),
