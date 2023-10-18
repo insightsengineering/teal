@@ -58,6 +58,12 @@
 #' and normal naming rules apply. Loading the file yields a `teal_slices` object,
 #' which is disassembled for storage and used directly for restoring app state.
 #'
+#' @section Transferring snapshots:
+#' Snapshots uploaded from disk should only be used in the same application they come from.
+#' To ensure this is the case, `init` stamps `teal_slices` with an app id that is stored in the `app_id` attribute of
+#' a `teal_slices` object. When a snapshot is restored from file, its `app_id` is compared to that
+#' of the current app state and only if the match is the snapshot admitted to the session.
+#'
 #' @param id (`character(1)`) `shiny` module id
 #' @param slices_global (`reactiveVal`) that contains a `teal_slices` object
 #'                      containing all `teal_slice`s existing in the app, both active and inactive
@@ -208,26 +214,39 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         )
         updateTextInput(inputId = "new_file_snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
-        snapshot_state <- slices_restore(input$snapshot_file$datapath)
-        # Add to snapshot history.
-        snapshot <- as.list(snapshot_state, recursive = TRUE)
-        snapshot_update <- c(snapshot_history(), list(snapshot))
-        names(snapshot_update)[length(snapshot_update)] <- snapshot_name
-        snapshot_history(snapshot_update)
-        ### Begin simplified restore procedure. ###
-        mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
-        mapply(
-          function(filtered_data, filter_ids) {
-            filtered_data$clear_filter_states(force = TRUE)
-            slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
-            filtered_data$set_filter_state(slices)
-          },
-          filtered_data = filtered_data_list,
-          filter_ids = mapping_unfolded
-        )
-        slices_global(snapshot_state)
-        removeModal()
-        ### End  simplified restore procedure. ###
+        # Restore snapshot and verify app compatibility.
+        snapshot_state <- try(slices_restore(input$snapshot_file$datapath))
+        if (!inherits(snapshot_state, "modules_teal_slices")) {
+          showNotification(
+            "File appears to be corrupt.",
+            type = "error"
+          )
+        } else if (!identical(attr(snapshot_state, "app_id"), attr(slices_global(), "app_id"))) {
+          showNotification(
+            "This snapshot file is not compatible with the app and cannot be loaded.",
+            type = "warning"
+          )
+        } else {
+          # Add to snapshot history.
+          snapshot <- as.list(snapshot_state, recursive = TRUE)
+          snapshot_update <- c(snapshot_history(), list(snapshot))
+          names(snapshot_update)[length(snapshot_update)] <- snapshot_name
+          snapshot_history(snapshot_update)
+          ### Begin simplified restore procedure. ###
+          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+          mapply(
+            function(filtered_data, filter_ids) {
+              filtered_data$clear_filter_states(force = TRUE)
+              slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
+              filtered_data$set_filter_state(slices)
+            },
+            filtered_data = filtered_data_list,
+            filter_ids = mapping_unfolded
+          )
+          slices_global(snapshot_state)
+          removeModal()
+          ### End  simplified restore procedure. ###
+        }
       }
     })
     observeEvent(input$snaphot_file_cancel, {

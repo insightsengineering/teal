@@ -1,0 +1,47 @@
+---
+title: "Delayed Data Loading (DDL)"
+author: "NEST CoreDev"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Delayed Data Loading (DDL)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+The `teal` framework introduced the Delayed Data Loading mechanism to enhance the user experience while reading and loading data in the app.
+
+## Background
+
+Usually, when running a shiny app, the dataset must be immediately available in the session for processing and reading. However, if the data is stored externally (such as in a database or other data repository), loading the shiny app may be delayed because the data needs to be fetched first.
+If there is additional data processing code, this may further extend the loading process.
+
+To address this, we created the Delayed Data Loading mechanism. Learn how to use it [here](https://insightsengineering.github.io/teal.data/latest-tag/articles/using-delayed-data-basic.html).
+
+## What is Delayed Data Loading?
+
+Delayed Data Loading is an R object managed in `teal.data`, which stores instructions on how to obtain the data, including how to read and process it before it is used in `teal`.
+By adopting this approach, `teal` apps can load more quickly, and the data can be fetched after the app is loaded.
+
+## Splash Screen
+
+`teal` provides a comprehensive solution for managing the delayed data loading mechanism, which includes the incorporation of a splash screen.
+The splash screen serves as a visual cue to the user that data is being loaded and that they should wait for the app to be ready.
+
+Moreover, the splash screen can be modified to query the user for a password or other access credentials needed to fetch the data.
+In cases where the modified splash screen is used, `teal` will display the customized version to prompt the user for the necessary information.
+
+After the data is fetched and loaded, `teal` removes the splash screen and replaces it with the content of the corresponding `teal` modules.
+`teal` also displays a notification indicating that the data has been loaded, and the app has fully started up.
+
+![Notification that the data is loaded and app is ready to use](../../reference/figures/notification.jpg)
+
+## Additional resources
+
+The vignettes on `teal.data` documentation provide with basic and advanced examples for this feature.
+
+- [Pre-processing Delayed Data](https://insightsengineering.github.io/teal.data/latest-tag/articles/preprocessing-delayed-data.html)
+- [Using Delayed Data Loading (basic)](https://insightsengineering.github.io/teal.data/latest-tag/articles/using-delayed-data-basic.html)
+- [Creating Delayed Data Classes (Advanced)](https://insightsengineering.github.io/teal.data/latest-tag/articles/using-delayed-data-advanced.html)
+- [Testing Delayed Data Loading](https://insightsengineering.github.io/teal.data/latest-tag/articles/testing-delayed-data.html)
