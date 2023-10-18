@@ -88,18 +88,12 @@ ddl <- function(expr,
     code <- .substitute_inputs(code, args = input)
 
     # create  object
-    obj <- teal.data::new_teal_data(
+    teal.data::new_teal_data(
       data = env_list,
       code = as.expression(code),
       keys = join_keys,
       datanames = datanames
     )
-
-    if (!inherits(obj, "teal_data")) {
-      stop("postprocess_fun should return `teal_data` object")
-    }
-
-    obj
   }
 
   # changing enclosing environment of the server to have access to ddl_fun function
