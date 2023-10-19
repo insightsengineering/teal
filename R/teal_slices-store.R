@@ -10,10 +10,10 @@
 #'  The file extension should be `".json"`.
 #'
 #' @details `Date` classes is stored in `"ISO8601"` format (`YYYY-MM-DD`). `POSIX*t` classes are converted to a
-#' character with the usage of `format.POSIX*t(usetz = TRUE, tz = "UTC")` (`YYYY-MM-DD {N}{N}:{N}{N}:{N}{N} UTC`, where
+#' character by using `format.POSIX*t(usetz = TRUE, tz = "UTC")` (`YYYY-MM-DD {N}{N}:{N}{N}:{N}{N} UTC`, where
 #' `{N} = [0-9]` is a number and `UTC` is `Coordinated Universal Time` timezone short-code).
-#' This format is assumed during `slices_restore`. All `teal_slices` containing `teal_slice`s that have `selected` or
-#' `choices` fields of `POSIX*t` class are always converted to `UTC` timezone during `print` and `format` as well.
+#' This format is assumed during `slices_restore`. All `POSIX*t` objects in `selected` or `choices` fields of
+#' `teal_slice` objects are always printed in `UTC` timezone as well.
 #'
 #' @return `NULL`, invisibly.
 #'
