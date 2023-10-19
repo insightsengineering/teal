@@ -1,9 +1,10 @@
-# teal 0.14.0.9012
+# teal 0.14.0.9013
 
 ### Miscellaneous
 
 * Enhanced a `module` validation checks so that it won't throw messages about `data` argument unnecessarily.
 * Removed `Report previewer` module from mapping matrix display in filter manager.
+* Added internal functions for storing and restoring of `teal_slices` objects.
 * Filter state snapshots can now be uploaded from file. See `?snapshot`.
 * Added argument to `teal_slices` and made modifications to `init` to enable tagging `teal_slices` with an app id to safely upload snapshots from disk.
 

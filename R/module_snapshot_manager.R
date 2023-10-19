@@ -49,7 +49,7 @@
 #' The snapshot is then set as the current content of `slices_global`.
 #'
 #' To save a snapshot, the snapshot is retrieved and reassembled just like for restoring,
-#' and then saved to file with [`teal.slice::slices_store`].
+#' and then saved to file with [`slices_store`].
 #'
 #' When a snapshot is uploaded, it will first be added to storage just like a newly created one,
 #' and then used to restore app state much like a snapshot taken from storage.
@@ -295,7 +295,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
             content = function(file) {
               snapshot <- snapshot_history()[[s]]
               snapshot_state <- as.teal_slices(snapshot)
-              teal.slice::slices_store(tss = snapshot_state, file = file)
+              slices_store(tss = snapshot_state, file = file)
             }
           )
           handlers[[id_saveme]] <- id_saveme
