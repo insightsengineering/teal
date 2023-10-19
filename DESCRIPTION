@@ -87,6 +87,7 @@ Collate:
     'tdata.R'
     'teal.R'
     'teal_reporter.R'
+    'teal_slices-store.R'
     'teal_slices.R'
     'utils.R'
     'validate_inputs.R'
