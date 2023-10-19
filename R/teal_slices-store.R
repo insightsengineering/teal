@@ -9,7 +9,7 @@
 #' @param file (`character(1)`) The file path where `teal_slices` object will be saved.
 #'  The file extension should be `".json"`.
 #'
-#' @details `Date` classes is stored in `"ISO8601"` format (`YYYY-MM-DD`). `POSIX*t` classes are converted to a
+#' @details `Date` class is stored in `"ISO8601"` format (`YYYY-MM-DD`). `POSIX*t` classes are converted to a
 #' character by using `format.POSIX*t(usetz = TRUE, tz = "UTC")` (`YYYY-MM-DD {N}{N}:{N}{N}:{N}{N} UTC`, where
 #' `{N} = [0-9]` is a number and `UTC` is `Coordinated Universal Time` timezone short-code).
 #' This format is assumed during `slices_restore`. All `POSIX*t` objects in `selected` or `choices` fields of

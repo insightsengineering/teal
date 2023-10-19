@@ -22,7 +22,7 @@ create, modify, and delete filter states. The saved file can be later loaded usi
 the \code{slices_restore} function.
 }
 \details{
-\code{Date} classes is stored in \code{"ISO8601"} format (\code{YYYY-MM-DD}). \code{POSIX*t} classes are converted to a
+\code{Date} class is stored in \code{"ISO8601"} format (\code{YYYY-MM-DD}). \code{POSIX*t} classes are converted to a
 character by using \code{format.POSIX*t(usetz = TRUE, tz = "UTC")} (\verb{YYYY-MM-DD \{N\}\{N\}:\{N\}\{N\}:\{N\}\{N\} UTC}, where
 \verb{\{N\} = [0-9]} is a number and \code{UTC} is \verb{Coordinated Universal Time} timezone short-code).
 This format is assumed during \code{slices_restore}. All \code{POSIX*t} objects in \code{selected} or \code{choices} fields of
