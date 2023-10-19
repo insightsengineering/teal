@@ -52,7 +52,8 @@ ui_teal_with_splash <- function(id,
 #'   will be displayed in the teal application. See [modules()] and [module()] for
 #'   more details.
 #' @inheritParams shiny::moduleServer
-#' @return `reactive`, return value of [srv_teal()]
+#' @return `reactive` containing `teal_data` object when data is loaded.
+#' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data"))
@@ -81,11 +82,15 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       raw_data_old <- data$get_server()(id = "startapp_module")
       raw_data <- reactive({
         data <- raw_data_old()
-        new_teal_data(
-          data = lapply(data$get_datasets(), function(x) x$get_raw_data()),
-          code = data$get_code(),
-          keys = data$get_join_keys()
-        )
+        if (!is.null(data)) {
+          # raw_data is a reactive which returns data only when submit button clicked
+          # otherwise it returns NULL
+          new_teal_data(
+            data = lapply(data$get_datasets(), function(x) x$get_raw_data()),
+            code = data$get_code(),
+            keys = data$get_join_keys()
+          )
+        }
       })
 
       if (!is.reactive(raw_data)) {

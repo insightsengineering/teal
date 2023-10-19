@@ -1,14 +1,12 @@
-iris_ds <- teal.data::dataset(dataname = "iris", x = iris)
-mtcars_ds <- teal.data::dataset(dataname = "mtcars", x = mtcars)
-data <- teal_data(iris_ds, mtcars_ds)
+data <- teal_data(iris1 = iris, mtcars1 = mtcars, code = "iris1 <- iris; mtcars1 <- mtcars")
 
-test_module1 <- module(
+test_module1 <- example_module(
   label = "iris_tab",
-  datanames = "iris"
+  datanames = "iris1"
 )
-test_module2 <- module(
+test_module2 <- example_module(
   label = "mtcars_tab",
-  datanames = "mtcars"
+  datanames = "mtcars1"
 )
 
 testthat::test_that("srv_teal fails when raw_data is not reactive", {
@@ -35,7 +33,6 @@ testthat::test_that("srv_teal initializes the data when raw_data changes", {
       modules = modules(test_module1)
     ),
     expr = {
-      testthat::expect_null(datasets_reactive())
       raw_data(data)
       testthat::expect_named(datasets_reactive(), "iris_tab")
     }

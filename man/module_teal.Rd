@@ -36,7 +36,7 @@ argument) will be placed in the app's \code{ui} function so code which needs to 
 the footer of the app}
 
 \item{raw_data}{(\code{reactive})\cr
-returns the \code{TealData}, only evaluated once, \code{NULL} value is ignored}
+returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
 }
 \value{
 \code{ui_teal} returns \code{HTML} for Shiny module UI.
