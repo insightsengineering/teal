@@ -17,6 +17,8 @@
 #'
 #' @return `NULL`, invisibly.
 #'
+#' @keywords internal
+#'
 #' @examples
 #' # Create a teal_slices object
 #' tss <- teal_slices(
@@ -45,6 +47,8 @@ slices_store <- function(tss, file) {
 #' @param file Path to file where `teal_slices` is stored. Must have a `.json` extension and read access.
 #'
 #' @return A `teal_slices` object restored from the file.
+#'
+#' @keywords internal
 #'
 #' @examples
 #' if (interactive()) {
