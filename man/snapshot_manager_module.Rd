@@ -79,7 +79,7 @@ and set anew according to the \code{mapping} attribute of the snapshot.
 The snapshot is then set as the current content of \code{slices_global}.
 
 To save a snapshot, the snapshot is retrieved and reassembled just like for restoring,
-and then saved to file with \code{\link[teal.slice:slices_store]{teal.slice::slices_store}}.
+and then saved to file with \code{\link{slices_store}}.
 }
 
 \author{
