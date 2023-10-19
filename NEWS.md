@@ -4,6 +4,7 @@
 
 * Enhanced a `module` validation checks so that it won't throw messages about `data` argument unnecessarily.
 * Removed `Report previewer` module from mapping matrix display in filter manager.
+* Added storing and restoring of `teal_slices` objects.
 
 # teal 0.14.0
 
