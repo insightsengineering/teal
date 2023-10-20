@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9012</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9013</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,16 +63,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -143,10 +133,12 @@ all columns are <code>logical</code> vectors</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This module introduces snapshots: stored descriptions of the filter state of the entire application.
 Snapshots allow the user to save the current filter state of the application for later use in the session,
-as well as to save it to file in order to share it with an app developer or other users.</p>
+as well as to save it to file in order to share it with an app developer or other users,
+who in turn can upload it to their own session.</p>
 <p>The snapshot manager is accessed through the filter manager, with the cog icon in the top right corner.
-At the beginning of a session it presents two icons: a camera and an circular arrow.
-Clicking the camera captures a snapshot and clicking the arrow resets initial application state.
+At the beginning of a session it presents three icons: a camera, an upload, and an circular arrow.
+Clicking the camera captures a snapshot, clicking the upload adds a snapshot from a file
+and applies the filter states therein, and clicking the arrow resets initial application state.
 As snapshots are added, they will show up as rows in a table and each will have a select button and a save button.</p>
     </div>
     <div class="section level2">
@@ -187,6 +179,21 @@ and set anew according to the <code>mapping</code> attribute of the snapshot.
 The snapshot is then set as the current content of <code>slices_global</code>.</p>
 <p>To save a snapshot, the snapshot is retrieved and reassembled just like for restoring,
 and then saved to file with <code><a href="slices_store.html">slices_store</a></code>.</p>
+<p>When a snapshot is uploaded, it will first be added to storage just like a newly created one,
+and then used to restore app state much like a snapshot taken from storage.
+Upon clicking the upload icon the user will be prompted for a file to upload
+and may choose to name the new snapshot. The name defaults to the name of the file (the extension is dropped)
+and normal naming rules apply. Loading the file yields a <code>teal_slices</code> object,
+which is disassembled for storage and used directly for restoring app state.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="transferring-snapshots">Transferring snapshots<a class="anchor" aria-label="anchor" href="#transferring-snapshots"></a></h2>
+    
+
+<p>Snapshots uploaded from disk should only be used in the same application they come from.
+To ensure this is the case, <code>init</code> stamps <code>teal_slices</code> with an app id that is stored in the <code>app_id</code> attribute of
+a <code>teal_slices</code> object. When a snapshot is restored from file, its <code>app_id</code> is compared to that
+of the current app state and only if the match is the snapshot admitted to the session.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
