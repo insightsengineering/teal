@@ -65,6 +65,10 @@ teal app that is composed out of teal modules.
 This is a wrapper function around the \code{module_teal.R} functions. Unless you are
 an end-user, don't use this function, but instead this module.
 }
+\note{
+If you pass a module of class \code{"teal_module_landing"} in \code{modules} parameter, \code{teal} will not create a tab for
+this module.
+}
 \examples{
 new_iris <- transform(iris, id = seq_len(nrow(iris)))
 new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
