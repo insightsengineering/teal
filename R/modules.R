@@ -103,12 +103,12 @@ append_module <- function(modules, module) {
   modules
 }
 
-#' Extract a `landing_module` from list of `modules`
+#' Extract a `teal_module_landing` from list of `modules`
 #' @param modules `teal_modules`
 #' @keywords internal
-#' @return `landing_module`
+#' @return `teal_module_landing`
 extract_landing <- function(modules) {
-  if (inherits(modules, "landing_module")) {
+  if (inherits(modules, "teal_module_landing")) {
     modules
   } else if (inherits(modules, "teal_module")) {
     NULL
@@ -116,12 +116,12 @@ extract_landing <- function(modules) {
     Filter(function(x) length(x) > 0L, lapply(modules$children, extract_landing))
   }
 }
-#' Remove a `landing_module` from list of `modules`
+#' Remove a `teal_module_landing` from list of `modules`
 #' @param modules `teal_modules`
 #' @keywords internal
 #' @return `teal_modules`
 drop_landing <- function(modules) {
-  if (inherits(modules, "landing_module")) {
+  if (inherits(modules, "teal_module_landing")) {
     NULL
   } else if (inherits(modules, "teal_module")) {
     modules
@@ -185,6 +185,9 @@ is_arg_used <- function(modules, arg) {
 #'   `server` function.
 #' @param ui_args (named `list`) with additional arguments passed on to the
 #'   `ui` function.
+#' @param type (`character(1)`) The type of the class assigned to the final module. One of `"teal_module"`,
+#' `"teal_module_reporter"` or `"teal_module_landing"`. Modules of class `"teal_module_landing"` will not be wrapped
+#' into tabs in the `teal` application.
 #'
 #' @return object of class `teal_module`.
 #' @export
@@ -224,13 +227,15 @@ module <- function(label = "module",
                    filters,
                    datanames = "all",
                    server_args = NULL,
-                   ui_args = NULL) {
+                   ui_args = NULL,
+                   type = c("teal_module", "teal_module_reporter", "teal_module_landing")) {
   checkmate::assert_string(label)
   checkmate::assert_function(server)
   checkmate::assert_function(ui)
   checkmate::assert_character(datanames, min.len = 1, null.ok = TRUE, any.missing = FALSE)
   checkmate::assert_list(server_args, null.ok = TRUE, names = "named")
   checkmate::assert_list(ui_args, null.ok = TRUE, names = "named")
+  type <- match.arg(type)
 
   if (!missing(filters)) {
     checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
@@ -314,7 +319,7 @@ module <- function(label = "module",
       server = server, ui = ui, datanames = datanames,
       server_args = server_args, ui_args = ui_args
     ),
-    class = "teal_module"
+    class = type
   )
 }
 

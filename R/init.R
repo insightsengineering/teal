@@ -139,6 +139,7 @@ init <- function(data,
   }
 
   landing <- extract_landing(modules)
+  if (length(landing) > 1L) stop("teal only supports apps with one module of `tm_landing_poup` class.")
   modules <- drop_landing(modules)
 
   # resolve modules datanames
