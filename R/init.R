@@ -179,13 +179,18 @@ init <- function(data,
 
   # Calculate app hash to ensure snapshot compatibility. See ?snapshot. Raw data must be extracted from environments.
   hashables <- mget(c("data", "modules"))
-  hashables$data <- sapply(hashables$data$get_datanames(), function(dn) {
-    if (hashables$data$is_pulled()) {
+  hashables$data <- if (inherits(hashables$data, "teal_data")) {
+    as.list(hashables$data@env)
+  } else if (inherits(hashables$data, "ddl")) {
+    attr(hashables$data, "datanames") # todo: no access to the $code in the current design
+  } else if (hashables$data$is_pulled()) {
+    sapply(get_dataname(hashables$data), simplify = FALSE, function(dn) {
       hashables$data$get_dataset(dn)$get_raw_data()
-    } else {
-      hashables$data$get_code(dn)
-    }
-  }, simplify = FALSE)
+    })
+  } else {
+    hashables$data$get_code()
+  }
+
   attr(filter, "app_id") <- rlang::hash(hashables)
 
   # check teal_slices
