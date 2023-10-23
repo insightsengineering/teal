@@ -226,7 +226,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
     })
 
     reporter <- teal.reporter::Reporter$new()
-    if (is_arg_used(modules, "reporter") && length(extract_module(modules, 'teal_module_previewer')) == 0) {
+    if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
       modules <- append_module(modules, reporter_previewer_module())
     }
 
