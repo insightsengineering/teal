@@ -166,6 +166,17 @@ init <- function(data,
   # convert teal.slice::teal_slices to teal::teal_slices
   filter <- as.teal_slices(as.list(filter))
 
+  # Calculate app hash to ensure snapshot compatibility. See ?snapshot. Raw data must be extracted from environments.
+  hashables <- mget(c("data", "modules"))
+  hashables$data <- sapply(hashables$data$get_datanames(), function(dn) {
+    if (hashables$data$is_pulled()) {
+      hashables$data$get_dataset(dn)$get_raw_data()
+    } else {
+      hashables$data$get_code(dn)
+    }
+  }, simplify = FALSE)
+  attr(filter, "app_id") <- rlang::hash(hashables)
+
   # check teal_slices
   for (i in seq_along(filter)) {
     dataname_i <- shiny::isolate(filter[[i]]$dataname)

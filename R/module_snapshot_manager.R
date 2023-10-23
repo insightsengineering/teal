@@ -4,11 +4,13 @@
 #'
 #' This module introduces snapshots: stored descriptions of the filter state of the entire application.
 #' Snapshots allow the user to save the current filter state of the application for later use in the session,
-#' as well as to save it to file in order to share it with an app developer or other users.
+#' as well as to save it to file in order to share it with an app developer or other users,
+#' who in turn can upload it to their own session.
 #'
 #' The snapshot manager is accessed through the filter manager, with the cog icon in the top right corner.
-#' At the beginning of a session it presents two icons: a camera and an circular arrow.
-#' Clicking the camera captures a snapshot and clicking the arrow resets initial application state.
+#' At the beginning of a session it presents three icons: a camera, an upload, and an circular arrow.
+#' Clicking the camera captures a snapshot, clicking the upload adds a snapshot from a file
+#' and applies the filter states therein, and clicking the arrow resets initial application state.
 #' As snapshots are added, they will show up as rows in a table and each will have a select button and a save button.
 #'
 #' @section Server logic:
@@ -47,7 +49,20 @@
 #' The snapshot is then set as the current content of `slices_global`.
 #'
 #' To save a snapshot, the snapshot is retrieved and reassembled just like for restoring,
-#' and then saved to file with [`teal.slice::slices_store`].
+#' and then saved to file with [`slices_store`].
+#'
+#' When a snapshot is uploaded, it will first be added to storage just like a newly created one,
+#' and then used to restore app state much like a snapshot taken from storage.
+#' Upon clicking the upload icon the user will be prompted for a file to upload
+#' and may choose to name the new snapshot. The name defaults to the name of the file (the extension is dropped)
+#' and normal naming rules apply. Loading the file yields a `teal_slices` object,
+#' which is disassembled for storage and used directly for restoring app state.
+#'
+#' @section Transferring snapshots:
+#' Snapshots uploaded from disk should only be used in the same application they come from.
+#' To ensure this is the case, `init` stamps `teal_slices` with an app id that is stored in the `app_id` attribute of
+#' a `teal_slices` object. When a snapshot is restored from file, its `app_id` is compared to that
+#' of the current app state and only if the match is the snapshot admitted to the session.
 #'
 #' @param id (`character(1)`) `shiny` module id
 #' @param slices_global (`reactiveVal`) that contains a `teal_slices` object
@@ -75,6 +90,7 @@ snapshot_manager_ui <- function(id) {
       class = "snapshot_table_row",
       span(tags$b("Snapshot manager")),
       actionLink(ns("snapshot_add"), label = NULL, icon = icon("camera"), title = "add snapshot"),
+      actionLink(ns("snapshot_load"), label = NULL, icon = icon("upload"), title = "upload snapshot"),
       actionLink(ns("snapshot_reset"), label = NULL, icon = icon("undo"), title = "reset initial state"),
       NULL
     ),
@@ -96,7 +112,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    # Store global filter states.
+    # Store global filter states ----
     filter <- isolate(slices_global())
     snapshot_history <- reactiveVal({
       list(
@@ -104,7 +120,8 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       )
     })
 
-    # Snapshot current application state - name snaphsot.
+    # Snapshot current application state ----
+    # Name snaphsot.
     observeEvent(input$snapshot_add, {
       showModal(
         modalDialog(
@@ -117,7 +134,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         )
       )
     })
-    # Snapshot current application state - store snaphsot.
+    # Store snaphsot.
     observeEvent(input$snapshot_name_accept, {
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
@@ -131,7 +148,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
           "This name is in conflict with other snapshot names. Please choose a different one.",
           type = "message"
         )
-        updateTextInput(inputId = "snapshot_name", value = , placeholder = "Meaningful, unique name")
+        updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         snapshot <- as.list(slices_global(), recursive = TRUE)
         attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
@@ -144,7 +161,76 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       }
     })
 
-    # Restore initial state.
+    # Upload a snapshot file ----
+    # Select file.
+    observeEvent(input$snapshot_load, {
+      showModal(
+        modalDialog(
+          fileInput(ns("snapshot_file"), "Choose snapshot file", accept = ".json", width = "100%"),
+          textInput(
+            ns("snapshot_name"),
+            "Name the snapshot (optional)",
+            width = "100%",
+            placeholder = "Meaningful, unique name"
+          ),
+          footer = tagList(
+            actionButton(ns("snaphot_file_accept"), "Accept", icon = icon("thumbs-up")),
+            modalButton(label = "Cancel", icon = icon("thumbs-down"))
+          )
+        )
+      )
+    })
+    # Store new snapshot to list and restore filter states.
+    observeEvent(input$snaphot_file_accept, {
+      snapshot_name <- trimws(input$snapshot_name)
+      if (identical(snapshot_name, "")) {
+        snapshot_name <- tools::file_path_sans_ext(input$snapshot_file$name)
+      }
+      if (is.element(make.names(snapshot_name), make.names(names(snapshot_history())))) {
+        showNotification(
+          "This name is in conflict with other snapshot names. Please choose a different one.",
+          type = "message"
+        )
+        updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
+      } else {
+        # Restore snapshot and verify app compatibility.
+        snapshot_state <- try(slices_restore(input$snapshot_file$datapath))
+        if (!inherits(snapshot_state, "modules_teal_slices")) {
+          showNotification(
+            "File appears to be corrupt.",
+            type = "error"
+          )
+        } else if (!identical(attr(snapshot_state, "app_id"), attr(slices_global(), "app_id"))) {
+          showNotification(
+            "This snapshot file is not compatible with the app and cannot be loaded.",
+            type = "warning"
+          )
+        } else {
+          # Add to snapshot history.
+          snapshot <- as.list(snapshot_state, recursive = TRUE)
+          snapshot_update <- c(snapshot_history(), list(snapshot))
+          names(snapshot_update)[length(snapshot_update)] <- snapshot_name
+          snapshot_history(snapshot_update)
+          ### Begin simplified restore procedure. ###
+          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+          mapply(
+            function(filtered_data, filter_ids) {
+              filtered_data$clear_filter_states(force = TRUE)
+              slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
+              filtered_data$set_filter_state(slices)
+            },
+            filtered_data = filtered_data_list,
+            filter_ids = mapping_unfolded
+          )
+          slices_global(snapshot_state)
+          removeModal()
+          ### End  simplified restore procedure. ###
+        }
+      }
+    })
+    # Apply newly added snapshot.
+
+    # Restore initial state ----
     observeEvent(input$snapshot_reset, {
       s <- "Initial application state"
       ### Begin restore procedure. ###
@@ -165,6 +251,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       ### End restore procedure. ###
     })
 
+    # Build snapshot table ----
     # Create UI elements and server logic for the snapshot table.
     # Observers must be tracked to avoid duplication and excess reactivity.
     # Remaining elements are tracked likewise for consistency and a slight speed margin.
@@ -208,7 +295,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
             content = function(file) {
               snapshot <- snapshot_history()[[s]]
               snapshot_state <- as.teal_slices(snapshot)
-              teal.slice::slices_store(tss = snapshot_state, file = file)
+              slices_store(tss = snapshot_state, file = file)
             }
           )
           handlers[[id_saveme]] <- id_saveme
