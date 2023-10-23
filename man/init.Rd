@@ -66,7 +66,8 @@ This is a wrapper function around the \code{module_teal.R} functions. Unless you
 an end-user, don't use this function, but instead this module.
 }
 \note{
-If you use a module labelled \code{"Landing Popup"} \code{teal} will not create a tab for this module.
+If you pass a module of class \code{"teal_module_landing"} in \code{modules} parameter, \code{teal} will not create a tab for
+this module.
 }
 \examples{
 new_iris <- transform(iris, id = seq_len(nrow(iris)))

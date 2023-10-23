@@ -46,7 +46,8 @@
 #'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
 #'
-#' @note If you use a module labelled `"Landing Popup"` `teal` will not create a tab for this module.
+#' @note If you pass a module of class `"teal_module_landing"` in `modules` parameter, `teal` will not create a tab for
+#' this module.
 #'
 #' @return named list with `server` and `ui` function
 #'
