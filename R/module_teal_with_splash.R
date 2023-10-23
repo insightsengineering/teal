@@ -60,9 +60,7 @@ ui_teal_with_splash <- function(id,
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "ddl"))
   moduleServer(id, function(input, output, session) {
-    logger::log_trace(
-      "srv_teal_with_splash initializing module with data { paste(data$get_datanames(), collapse = ' ')}."
-    )
+    logger::log_trace("srv_teal_with_splash initializing module with data { toString(get_dataname(data))}.")
 
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
@@ -104,9 +102,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     }
 
     res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
-    logger::log_trace(
-      "srv_teal_with_splash initialized the module with data { paste(data$get_datanames(), collapse = ' ') }."
-    )
+    logger::log_trace("srv_teal_with_splash initialized module with data { toString(get_dataname(data))}.")
     return(res)
   })
 }
