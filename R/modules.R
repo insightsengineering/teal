@@ -103,6 +103,36 @@ append_module <- function(modules, module) {
   modules
 }
 
+#' Extract a `landing_module` from list of `modules`
+#' @param modules `teal_modules`
+#' @keywords internal
+#' @return `landing_module`
+extract_landing <- function(modules) {
+  if (inherits(modules, "landing_module")) {
+    modules
+  } else if (inherits(modules, "teal_module")) {
+    NULL
+  } else if (inherits(modules, "teal_modules")) {
+    Filter(function(x) length(x) > 0L, lapply(modules$children, extract_landing))
+  }
+}
+#' Remove a `landing_module` from list of `modules`
+#' @param modules `teal_modules`
+#' @keywords internal
+#' @return `teal_modules`
+drop_landing <- function(modules) {
+  if (inherits(modules, "landing_module")) {
+    NULL
+  } else if (inherits(modules, "teal_module")) {
+    modules
+  } else if (inherits(modules, "teal_modules")) {
+    do.call(
+      "modules",
+      c(Filter(function(x) length(x) > 0L, lapply(modules$children, drop_landing)), label = modules$label)
+    )
+  }
+}
+
 #' Does the object make use of the `arg`
 #'
 #' @param modules (`teal_module` or `teal_modules`) object

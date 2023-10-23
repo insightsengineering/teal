@@ -138,29 +138,6 @@ init <- function(data,
     modules <- do.call(teal::modules, modules)
   }
 
-  # move these two functions to utils.R or modules.R
-  # maybe combine into one function?
-  extract_landing <- function(modules) {
-    if (inherits(modules, "landing_module")) {
-      modules
-    } else if (inherits(modules, "teal_module")) {
-      NULL
-    } else if (inherits(modules, "teal_modules")) {
-      Filter(function(x) length(x) > 0L, lapply(modules$children, extract_landing))
-    }
-  }
-  drop_landing <- function(modules) {
-    if (inherits(modules, "landing_module")) {
-      NULL
-    } else if (inherits(modules, "teal_module")) {
-      modules
-    } else if (inherits(modules, "teal_modules")) {
-      do.call(
-        "modules",
-        c(Filter(function(x) length(x) > 0L, lapply(modules$children, drop_landing)), label = modules$label)
-      )
-    }
-  }
   landing <- extract_landing(modules)
   modules <- drop_landing(modules)
 
