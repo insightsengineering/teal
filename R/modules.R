@@ -103,25 +103,26 @@ append_module <- function(modules, module) {
   modules
 }
 
-#' Extract a `teal_module_landing` from list of `modules`
+#' Extract specific class from a list of `modules`
 #' @param modules `teal_modules`
 #' @keywords internal
 #' @return `teal_module_landing`
-extract_landing <- function(modules) {
-  if (inherits(modules, "teal_module_landing")) {
+extract_module <- function(modules, class) {
+  if (inherits(modules, class)) {
     modules
   } else if (inherits(modules, "teal_module")) {
     NULL
   } else if (inherits(modules, "teal_modules")) {
-    Filter(function(x) length(x) > 0L, lapply(modules$children, extract_landing))
+    Filter(function(x) length(x) > 0L, lapply(modules$children, extract_module))
   }
 }
-#' Remove a `teal_module_landing` from list of `modules`
+
+#' Remove a specific class from list of `modules`
 #' @param modules `teal_modules`
 #' @keywords internal
 #' @return `teal_modules`
-drop_landing <- function(modules) {
-  if (inherits(modules, "teal_module_landing")) {
+drop_module <- function(modules, class) {
+  if (inherits(modules, class)) {
     NULL
   } else if (inherits(modules, "teal_module")) {
     modules
