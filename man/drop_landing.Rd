@@ -2,7 +2,7 @@
 % Please edit documentation in R/modules.R
 \name{drop_landing}
 \alias{drop_landing}
-\title{Remove a \code{landing_module} from list of \code{modules}}
+\title{Remove a \code{teal_module_landing} from list of \code{modules}}
 \usage{
 drop_landing(modules)
 }
@@ -13,6 +13,6 @@ drop_landing(modules)
 \code{teal_modules}
 }
 \description{
-Remove a \code{landing_module} from list of \code{modules}
+Remove a \code{teal_module_landing} from list of \code{modules}
 }
 \keyword{internal}

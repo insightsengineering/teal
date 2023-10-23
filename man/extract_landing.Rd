@@ -2,7 +2,7 @@
 % Please edit documentation in R/modules.R
 \name{extract_landing}
 \alias{extract_landing}
-\title{Extract a \code{landing_module} from list of \code{modules}}
+\title{Extract a \code{teal_module_landing} from list of \code{modules}}
 \usage{
 extract_landing(modules)
 }
@@ -10,9 +10,9 @@ extract_landing(modules)
 \item{modules}{\code{teal_modules}}
 }
 \value{
-\code{landing_module}
+\code{teal_module_landing}
 }
 \description{
-Extract a \code{landing_module} from list of \code{modules}
+Extract a \code{teal_module_landing} from list of \code{modules}
 }
 \keyword{internal}
