@@ -15,7 +15,7 @@ See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_t
 is then preferred to this function.}
 
 \item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
-or \code{MultiAssayExperiment})\cr
+or \code{MultiAssayExperiment}, \code{teal_data})\cr
 \code{R6} object as returned by \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}}, \code{\link[teal.data:teal_data]{teal.data::teal_data()}},
 \code{\link[teal.data:cdisc_dataset]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:dataset]{teal.data::dataset()}}, \code{\link[teal.data:dataset_connector]{teal.data::dataset_connector()}} or
 \code{\link[teal.data:cdisc_dataset_connector]{teal.data::cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
@@ -34,7 +34,8 @@ Old way of specifying filters through a list is deprecated and will be removed i
 next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
-\code{reactive}, return value of \code{\link[=srv_teal]{srv_teal()}}
+\code{reactive} containing \code{teal_data} object when data is loaded.
+If data is not loaded yet, \code{reactive} returns \code{NULL}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

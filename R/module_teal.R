@@ -34,7 +34,7 @@
 #'   [init()] about how to call the corresponding server function.
 #'
 #' @param raw_data (`reactive`)\cr
-#'   returns the `TealData`, only evaluated once, `NULL` value is ignored
+#'   returns the `teal_data`, only evaluated once, `NULL` value is ignored
 #'
 #' @return
 #' `ui_teal` returns `HTML` for Shiny module UI.

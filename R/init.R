@@ -15,7 +15,7 @@
 #' an end-user, don't use this function, but instead this module.
 #'
 #' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
-#' or `MultiAssayExperiment`)\cr
+#' or `MultiAssayExperiment`, `teal_data`)\cr
 #' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()],
 #' [teal.data::cdisc_dataset()], [teal.data::dataset()], [teal.data::dataset_connector()] or
 #' [teal.data::cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`

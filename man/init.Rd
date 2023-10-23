@@ -16,7 +16,7 @@ init(
 }
 \arguments{
 \item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
-or \code{MultiAssayExperiment})\cr
+or \code{MultiAssayExperiment}, \code{teal_data})\cr
 \code{R6} object as returned by \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}}, \code{\link[teal.data:teal_data]{teal.data::teal_data()}},
 \code{\link[teal.data:cdisc_dataset]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:dataset]{teal.data::dataset()}}, \code{\link[teal.data:dataset_connector]{teal.data::dataset_connector()}} or
 \code{\link[teal.data:cdisc_dataset_connector]{teal.data::cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
