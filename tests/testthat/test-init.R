@@ -142,17 +142,17 @@ testthat::test_that("init data accepts a list of TealDatasetConnector object", {
 
 testthat::test_that("init modules accepts a teal_modules object", {
   mods <- modules(example_module(), example_module())
-  testthat::expect_error(init(data = iris, modules = mods), NA)
+  testthat::expect_no_error(init(data = iris, modules = mods))
 })
 
 testthat::test_that("init modules accepts a list of teal_module elements", {
   mods <- list(example_module(), example_module())
-  testthat::expect_error(init(data = iris, modules = mods), NA)
+  testthat::expect_no_error(init(data = iris, modules = mods))
 })
 
 testthat::test_that("init modules accepts a teal_module object", {
   mods <- example_module()
-  testthat::expect_error(init(data = iris, modules = mods), NA)
+  testthat::expect_no_error(init(data = iris, modules = mods))
 })
 
 testthat::test_that("init filter accepts named list or `teal_slices`", {
