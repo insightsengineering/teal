@@ -62,6 +62,7 @@ articles:
     - including-general-data-in-teal
     - including-mae-data-in-teal
     - preprocessing-data
+    - migrate-to-teal_data
 - title: Extending teal
   navbar: Extending teal
   contents:
