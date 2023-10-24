@@ -2,17 +2,17 @@
 % Please edit documentation in R/modules.R
 \name{extract_module}
 \alias{extract_module}
-\title{Extract specific class from a list of \code{modules}}
+\title{Extract module(s) of specific class.}
 \usage{
 extract_module(modules, class)
 }
 \arguments{
-\item{modules}{\code{teal_modules}}
+\item{modules}{\code{teal_modules} or \code{teal_module}, whatever is passed to \code{init}'s \code{modules} argument}
 }
 \value{
-\code{teal_module_landing}
+\code{teal_module} of class \code{class} or \code{teal_modules} containing modules of class \code{class}.
 }
 \description{
-Extract specific class from a list of \code{modules}
+Given a \code{teal_module} or a \code{teal_modules}, return the elements of the structure according to \code{class}.
 }
 \keyword{internal}
