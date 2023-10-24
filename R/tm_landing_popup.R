@@ -6,7 +6,7 @@
 #'
 #' @param label `character(1)` the label of the module.
 #' @param title `character(1)` the text to be displayed as a title of the popup.
-#' @param content `character(1)` the content of the popup. Passed to `...` of `shiny::modalDialog`. Can be a `character`
+#' @param content The content of the popup. Passed to `...` of `shiny::modalDialog`. Can be a `character`
 #' or a text input control (like `textInput`) or a list of `shiny` tags. See examples.
 #' @param buttons `shiny.tag` or a list of tags (`tagList`). Typically a `modalButton` or `actionButton`. See examples.
 #'
