@@ -90,6 +90,7 @@ Collate:
     'teal_reporter.R'
     'teal_slices-store.R'
     'teal_slices.R'
+    'tm_landing_popup.R'
     'utils.R'
     'validate_inputs.R'
     'validations.R'
