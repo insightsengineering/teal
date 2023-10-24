@@ -7,6 +7,7 @@
 * Added internal functions for storing and restoring of `teal_slices` objects.
 * Filter state snapshots can now be uploaded from file. See `?snapshot`.
 * Added argument to `teal_slices` and made modifications to `init` to enable tagging `teal_slices` with an app id to safely upload snapshots from disk.
+* `module` can now create modules of different classes that will be handled differently by `init`. The default class is still `"teal_module"` so no changes to existing templates are necessary. Currently handled classes are `"teal_module_landing"`, which will not be presented in tabs, and `"teal_module_reporter"`.
 
 # teal 0.14.0
 
