@@ -155,8 +155,7 @@ submit_button_server <- function(id, x) {
 
   # Use bquote to obtain code with input values and masking values.
   lapply(code_strings, function(x) {
-    bquote_call <- substitute(bquote(code), list(code = str2lang(x)))
-    eval(bquote_call, envir = list2env(args))
+    do.call(bquote, list(str2lang(x), list2env(args)))
   })
 }
 
