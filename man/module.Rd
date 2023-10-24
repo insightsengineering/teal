@@ -70,10 +70,6 @@ a subset of datasets which are appended to the \code{data} argument in \code{ser
 each \code{submodule} is indented one level more}
 
 \item{...}{parameters passed to \code{toString}}
-
-\item{type}{(\code{character(1)}) Class assigned to the resulting module.
-All modules will have class \code{teal_module} (default) but one other class may be added.
-Modules of class \code{"teal_module_landing"} will not be wrapped into tabs in the \code{teal} application.}
 }
 \value{
 object of class \code{teal_module}.
