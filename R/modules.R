@@ -103,7 +103,10 @@ append_module <- function(modules, module) {
   modules
 }
 
-#' Extract specific class from a list of `modules`
+#' Extract module(s) of specific class.
+#' 
+#' Given a `teal_module` or a `teal_modules`, return the elements of the structure according to `class`.
+#'
 #' @param modules `teal_modules`
 #' @keywords internal
 #' @return `teal_module_landing`
