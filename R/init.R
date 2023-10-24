@@ -230,7 +230,7 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-      if (length(landing) > 0L) {
+      if (length(landing) == 1L) {
         landing_module <- landing[[1L]]
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
