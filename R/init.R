@@ -137,8 +137,11 @@ init <- function(data,
   }
 
   landing <- extract_module(modules, "teal_module_landing")
-  if (length(landing) > 1L) stop("only one `teal_module_landing` can be used")
+  if (length(landing) > 1L) stop("only one `tm_landing_popup` can be used")
   modules <- drop_module(modules, "teal_module_landing")
+  if (length(landing) == 1L && length(modules) == 0L) {
+    stop("app needs to have one more module besides `tm_landing_popup`")
+  }
 
   # resolve modules datanames
   datanames <- teal.data::get_dataname(data)
