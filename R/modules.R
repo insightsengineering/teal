@@ -240,7 +240,6 @@ module <- function(label = "module",
   checkmate::assert_character(datanames, min.len = 1, null.ok = TRUE, any.missing = FALSE)
   checkmate::assert_list(server_args, null.ok = TRUE, names = "named")
   checkmate::assert_list(ui_args, null.ok = TRUE, names = "named")
-  type <- match.arg(type)
 
   if (!missing(filters)) {
     checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
