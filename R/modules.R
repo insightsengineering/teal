@@ -109,7 +109,7 @@ append_module <- function(modules, module) {
 #'
 #' @param modules `teal_modules` or `teal_module`, whatever is passed to `init`'s `modules` argument
 #' @keywords internal
-#' @return `teal_module_landing`
+#' @return `teal_module` of class `class` or `teal_modules` containing modules of class `class`.
 extract_module <- function(modules, class) {
   if (inherits(modules, class)) {
     modules
