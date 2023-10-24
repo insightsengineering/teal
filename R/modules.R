@@ -323,7 +323,7 @@ module <- function(label = "module",
       server = server, ui = ui, datanames = datanames,
       server_args = server_args, ui_args = ui_args
     ),
-    class = type
+    class = union(type, "teal_module")
   )
 }
 
