@@ -36,7 +36,7 @@
 #'   modules = teal::modules(
 #'     teal::tm_landing_popup(
 #'       title = "Welcome",
-#'       content = div(tags$b("A place for the welcome message or a disclaimer statement.", style = "color: red;")),
+#'       content = tags$b("A place for the welcome message or a disclaimer statement.", style = "color: red;"),
 #'       buttons = tagList(
 #'         modalButton("Proceed"),
 #'         actionButton("close", "Read more", onclick = "window.open('http://google.com', '_blank')")
