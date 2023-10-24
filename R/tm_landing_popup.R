@@ -54,6 +54,29 @@
 #'   shinyApp(app2$ui, app2$server)
 #' }
 #'
+#' app3 <- teal::init(
+#'   data = teal.data::dataset("iris", iris),
+#'   modules = teal::modules(
+#'     teal::tm_landing_popup(
+#'       title = "Welcome",
+#'       content = "App will close, once you click the rejection button!",
+#'       buttons = tagList(
+#'         modalButton("Proceed"),
+#'         actionButton("close", "Reject", onclick = "window.close()")
+#'       )
+#'     ),
+#'     module(
+#'       label = "example module",
+#'       server = function(input, output, session, data) {},
+#'       ui = function(id, ...) div(p("Example text"))
+#'     )
+#'   )
+#' )
+#'
+#' if (interactive()) {
+#'   shinyApp(app3$ui, app3$server, options = list(launch.browser = TRUE))
+#' }
+#'
 #' @export
 tm_landing_popup <-
   function(label = "Landing Popup",
