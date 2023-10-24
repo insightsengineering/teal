@@ -231,8 +231,7 @@ module <- function(label = "module",
                    filters,
                    datanames = "all",
                    server_args = NULL,
-                   ui_args = NULL,
-                   type = c("teal_module", "teal_module_reporter", "teal_module_landing")) {
+                   ui_args = NULL) {
   checkmate::assert_string(label)
   checkmate::assert_function(server)
   checkmate::assert_function(ui)
@@ -323,7 +322,7 @@ module <- function(label = "module",
       server = server, ui = ui, datanames = datanames,
       server_args = server_args, ui_args = ui_args
     ),
-    class = union(type, "teal_module")
+    class = "teal_module"
   )
 }
 
