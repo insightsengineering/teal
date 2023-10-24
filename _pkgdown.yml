@@ -109,7 +109,7 @@ reference:
       - report_card_template
   - title: Landing Popup
     contents:
-      - tm_landing_popup
+      - landing_popup_module
   - title: Functions for Module Developers
     contents:
       - tdata

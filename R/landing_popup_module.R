@@ -16,7 +16,7 @@
 #' app1 <- teal::init(
 #'   data = teal.data::dataset("iris", iris),
 #'   modules = teal::modules(
-#'     teal::tm_landing_popup(
+#'     teal::landing_popup_module(
 #'       content = "A place for the welcome message or a disclaimer statement.",
 #'       buttons = modalButton("Proceed")
 #'     ),
@@ -34,7 +34,7 @@
 #' app2 <- teal::init(
 #'   data = teal.data::dataset("iris", iris),
 #'   modules = teal::modules(
-#'     teal::tm_landing_popup(
+#'     teal::landing_popup_module(
 #'       title = "Welcome",
 #'       content = tags$b(
 #'         "A place for the welcome message or a disclaimer statement.",
@@ -62,7 +62,7 @@
 #' app3 <- teal::init(
 #'   data = teal.data::dataset("iris", iris),
 #'   modules = teal::modules(
-#'     teal::tm_landing_popup(
+#'     teal::landing_popup_module(
 #'       title = "Welcome",
 #'       content = "App will close, once you click the rejection button!",
 #'       buttons = tagList(
@@ -83,7 +83,7 @@
 #' }
 #'
 #' @export
-tm_landing_popup <-
+landing_popup_module <-
   function(label = "Landing Popup",
            title = NULL,
            content = NULL,
@@ -96,7 +96,7 @@ tm_landing_popup <-
     )
     checkmate::assert_multi_class(buttons, classes = c("shiny.tag", "shiny.tag.list"))
 
-    logger::log_info("Initializing tm_landing_popup")
+    logger::log_info("Initializing landing_popup_module")
 
     module <- module(
       label = label,
