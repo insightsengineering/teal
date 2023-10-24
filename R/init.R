@@ -46,6 +46,9 @@
 #'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
 #'
+#' @note If you pass a module of class `"teal_module_landing"` in `modules` parameter, `teal` will not create a tab for
+#' this module.
+#'
 #' @return named list with `server` and `ui` function
 #'
 #' @export
@@ -136,6 +139,10 @@ init <- function(data,
     modules <- do.call(teal::modules, modules)
   }
 
+  landing <- extract_module(modules, "teal_module_landing")
+  if (length(landing) > 1L) stop("only one `teal_module_landing` can be used")
+  modules <- drop_module(modules, "teal_module_landing")
+
   # resolve modules datanames
   datanames <- teal.data::get_dataname(data)
   join_keys <- data$get_join_keys()
@@ -223,6 +230,10 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
+      if (length(landing) == 1L) {
+        landing_module <- landing[[1L]]
+        do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
+      }
       # copy object so that load won't be shared between the session
       data <- data$copy(deep = TRUE)
       filter <- deep_copy_filter(filter)

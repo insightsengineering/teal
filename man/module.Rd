@@ -20,7 +20,8 @@ module(
   filters,
   datanames = "all",
   server_args = NULL,
-  ui_args = NULL
+  ui_args = NULL,
+  type = c("teal_module", "teal_module_reporter", "teal_module_landing")
 )
 
 \method{toString}{teal_module}(x, indent = 0, ...)
@@ -63,6 +64,10 @@ a subset of datasets which are appended to the \code{data} argument in \code{ser
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the
 \code{ui} function.}
+
+\item{type}{(\code{character(1)}) The type of the class assigned to the final module. One of \code{"teal_module"},
+\code{"teal_module_reporter"} or \code{"teal_module_landing"}. Modules of class \code{"teal_module_landing"} will not be wrapped
+into tabs in the \code{teal} application.}
 
 \item{x}{\code{teal_module}}
 
