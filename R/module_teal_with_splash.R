@@ -74,10 +74,13 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     } else if (inherits(data, "ddl")) {
       data$server("startapp_module")
     } else if (teal.data::is_pulled(data)) {
-      new_data <- new_teal_data(
-        data = lapply(data$get_datasets(), function(x) x$get_raw_data()),
-        code = data$get_code(),
-        keys = data$get_join_keys()
+      new_data <- do.call(
+        teal.data::teal_data,
+        c(
+          lapply(data$get_datasets(), function(x) x$get_raw_data()),
+          code = data$get_code(),
+          join_keys = data$get_join_keys()
+        )
       )
       reactiveVal(new_data) # will trigger by setting it
     } else {
@@ -87,10 +90,13 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         if (!is.null(data)) {
           # raw_data is a reactive which returns data only when submit button clicked
           # otherwise it returns NULL
-          new_teal_data(
-            data = lapply(data$get_datasets(), function(x) x$get_raw_data()),
-            code = data$get_code(),
-            keys = data$get_join_keys()
+          do.call(
+            teal.data::teal_data,
+            c(
+              lapply(data$get_datasets(), function(x) x$get_raw_data()),
+              code = data$get_code(),
+              join_keys = data$get_join_keys()
+            )
           )
         }
       })
