@@ -37,6 +37,11 @@ app1 <- teal::init(
     teal::tm_landing_popup(
       content = "A place for the welcome message or a disclaimer statement.",
       buttons = modalButton("Proceed")
+    ),
+    module(
+      label = "example module",
+      server = function(input, output, session, data) {},
+      ui = function(id, ...) div(p("Example text"))
     )
   )
 )
@@ -54,6 +59,11 @@ app2 <- teal::init(
         modalButton("Proceed"),
         actionButton("close", "Read more", onclick = "window.open('http://google.com', '_blank')")
       )
+    ),
+    module(
+      label = "example module",
+      server = function(input, output, session, data) {},
+      ui = function(id, ...) div(p("Example text"))
     )
   )
 )
