@@ -2,15 +2,23 @@
 % Please edit documentation in R/modules.R
 \name{extract_module}
 \alias{extract_module}
-\title{Extract module(s) of specific class.}
+\alias{drop_module}
+\title{Extract/Remove module(s) of specific class}
 \usage{
 extract_module(modules, class)
+
+drop_module(modules, class)
 }
 \arguments{
-\item{modules}{\code{teal_modules} or \code{teal_module}, whatever is passed to \code{init}'s \code{modules} argument}
+\item{modules}{\code{teal_modules}}
+
+\item{class}{The class name of \code{teal_module} to be extracted or dropped.}
 }
 \value{
-\code{teal_module} of class \code{class} or \code{teal_modules} containing modules of class \code{class}.
+For \code{extract_module}, a \code{teal_module} of class \code{class} or \code{teal_modules} containing modules of class \code{class}.
+For \code{drop_module}, an opposite, which is all \code{teal_modules} besides the ones with \code{class} class.
+
+\code{teal_modules}
 }
 \description{
 Given a \code{teal_module} or a \code{teal_modules}, return the elements of the structure according to \code{class}.

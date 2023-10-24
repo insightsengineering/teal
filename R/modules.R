@@ -89,7 +89,7 @@ modules <- function(..., label = "root") {
   )
 }
 
-#' Function which appends a teal_module onto the children of a teal_modules object
+#' Function which appends a `teal_module` onto the children of a `teal_modules` object
 #' @keywords internal
 #' @param modules `teal_modules`
 #' @param module `teal_module` object to be appended onto the children of `modules`
@@ -103,13 +103,16 @@ append_module <- function(modules, module) {
   modules
 }
 
-#' Extract module(s) of specific class.
+#' Extract/Remove module(s) of specific class
 #'
 #' Given a `teal_module` or a `teal_modules`, return the elements of the structure according to `class`.
 #'
-#' @param modules `teal_modules` or `teal_module`, whatever is passed to `init`'s `modules` argument
+#' @param modules `teal_modules`
+#' @param class The class name of `teal_module` to be extracted or dropped.
 #' @keywords internal
-#' @return `teal_module` of class `class` or `teal_modules` containing modules of class `class`.
+#' @return For `extract_module`, a `teal_module` of class `class` or `teal_modules` containing modules of class `class`.
+#' For `drop_module`, an opposite, which is all `teal_modules` besides the ones with `class` class.
+#' @rdname extract_module
 extract_module <- function(modules, class) {
   if (inherits(modules, class)) {
     modules
@@ -120,10 +123,9 @@ extract_module <- function(modules, class) {
   }
 }
 
-#' Remove a specific class from list of `modules`
-#' @param modules `teal_modules`
 #' @keywords internal
 #' @return `teal_modules`
+#' @rdname extract_module
 drop_module <- function(modules, class) {
   if (inherits(modules, class)) {
     NULL
