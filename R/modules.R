@@ -116,7 +116,7 @@ extract_module <- function(modules, class) {
   } else if (inherits(modules, "teal_module")) {
     NULL
   } else if (inherits(modules, "teal_modules")) {
-    Filter(function(x) length(x) > 0L, lapply(modules$children, extract_module))
+    Filter(function(x) length(x) > 0L, lapply(modules$children, extract_module, class))
   }
 }
 
@@ -132,7 +132,7 @@ drop_module <- function(modules, class) {
   } else if (inherits(modules, "teal_modules")) {
     do.call(
       "modules",
-      c(Filter(function(x) length(x) > 0L, lapply(modules$children, drop_landing)), label = modules$label)
+      c(Filter(function(x) length(x) > 0L, lapply(modules$children, drop_module, class)), label = modules$label)
     )
   }
 }
@@ -189,8 +189,8 @@ is_arg_used <- function(modules, arg) {
 #'   `server` function.
 #' @param ui_args (named `list`) with additional arguments passed on to the
 #'   `ui` function.
-#' @param type (`character(1)`) Class assigned to the resulting module. 
-#'             All modules will have class `teal_module` (default) but one other class may be added. 
+#' @param type (`character(1)`) Class assigned to the resulting module.
+#'             All modules will have class `teal_module` (default) but one other class may be added.
 #'             Modules of class `"teal_module_landing"` will not be wrapped into tabs in the `teal` application.
 #'
 #' @return object of class `teal_module`.
