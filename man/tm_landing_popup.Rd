@@ -19,7 +19,7 @@ tm_landing_popup(
 \item{content}{\code{character(1)} the content of the popup. Passed to \code{...} of \code{shiny::modalDialog}. Can be a \code{character}
 or a text input control (like \code{textInput}) or a list of \code{shiny} tags. See examples.}
 
-\item{buttons}{\code{shiny} tag or a list of tags (\code{tagList}). Typically a \code{modalButton} or \code{actionButton}. See examples.}
+\item{buttons}{\code{shiny.tag} or a list of tags (\code{tagList}). Typically a \code{modalButton} or \code{actionButton}. See examples.}
 }
 \value{
 A \code{teal_module} (extended with \code{teal_landing_module} class) to be used in \code{teal} applications.
