@@ -77,4 +77,4 @@ tm_landing_popup <-
     )
     class(module) <- c("teal_module_landing", class(module))
     module
-}
+  }
