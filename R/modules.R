@@ -189,9 +189,9 @@ is_arg_used <- function(modules, arg) {
 #'   `server` function.
 #' @param ui_args (named `list`) with additional arguments passed on to the
 #'   `ui` function.
-#' @param type (`character(1)`) The type of the class assigned to the final module. One of `"teal_module"`,
-#' `"teal_module_reporter"` or `"teal_module_landing"`. Modules of class `"teal_module_landing"` will not be wrapped
-#' into tabs in the `teal` application.
+#' @param type (`character(1)`) Class assigned to the resulting module. 
+#'             All modules will have class `teal_module` (default) but one other class may be added. 
+#'             Modules of class `"teal_module_landing"` will not be wrapped into tabs in the `teal` application.
 #'
 #' @return object of class `teal_module`.
 #' @export
