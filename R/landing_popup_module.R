@@ -1,6 +1,6 @@
 #' Landing Popup Module
 #'
-#' @description This module creates a landing welcome popup for `teal` applications.
+#' @description Creates a landing welcome popup for `teal` applications.
 #'
 #' This module is used to display a popup dialog when the application starts.
 #' The dialog blocks the access to the application and must be closed with a button before the application is viewed.
