@@ -25,7 +25,7 @@ or a list of \code{shiny.tag}s. See examples.}
 A \code{teal_module} (extended with \code{teal_landing_module} class) to be used in \code{teal} applications.
 }
 \description{
-This module creates a landing welcome popup for \code{teal} applications.
+Creates a landing welcome popup for \code{teal} applications.
 
 This module is used to display a popup dialog when the application starts.
 The dialog blocks the access to the application and must be closed with a button before the application is viewed.
