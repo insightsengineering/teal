@@ -17,7 +17,7 @@ landing_popup_module(
 \item{title}{\code{character(1)} the text to be displayed as a title of the popup.}
 
 \item{content}{The content of the popup. Passed to \code{...} of \code{shiny::modalDialog}. Can be a \code{character}
-or a text input control (like \code{textInput}) or a list of \code{shiny} tags. See examples.}
+or a list of \code{shiny.tag}s. See examples.}
 
 \item{buttons}{\code{shiny.tag} or a list of tags (\code{tagList}). Typically a \code{modalButton} or \code{actionButton}. See examples.}
 }
