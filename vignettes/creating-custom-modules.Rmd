@@ -177,7 +177,7 @@ library(teal)
 
 app <- init(
   data = teal_data(
-    IRIS = iris, 
+    IRIS = iris,
     code = "IRIS <- iris"
   ),
   modules = tm_histogram_example(

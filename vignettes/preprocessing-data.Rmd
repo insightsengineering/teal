@@ -36,7 +36,7 @@ new_iris <- transform(iris, id = seq_len(nrow(iris)))
 
 app <- init(
   data = teal_data(
-    new_iris = new_iris, 
+    new_iris = new_iris,
     code = get_code(file = "app.R")
   ),
   modules = example_module()

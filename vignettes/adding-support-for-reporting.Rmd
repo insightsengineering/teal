@@ -311,7 +311,7 @@ example_reporter_module <- function(label = "Example") {
 
 app <- init(
   data = teal_data(
-    AIR = airquality, 
+    AIR = airquality,
     IRI = iris,
     code = "data(airquality)
             AIR <- airquality

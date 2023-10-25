@@ -19,7 +19,7 @@ library(teal)
 
 app <- init(
   data = teal_data(
-    IRIS = iris, CARS = mtcars, 
+    IRIS = iris, CARS = mtcars,
     code = "IRIS <- iris
             CARS <- mtcars"
   ),
