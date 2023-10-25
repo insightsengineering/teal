@@ -21,11 +21,7 @@
 #'       content = "A place for the welcome message or a disclaimer statement.",
 #'       buttons = modalButton("Proceed")
 #'     ),
-#'     module(
-#'       label = "example module",
-#'       server = function(input, output, session, data) {},
-#'       ui = function(id, ...) div(p("Example text"))
-#'     )
+#'     example_module()
 #'   )
 #' )
 #' if (interactive()) {
@@ -48,11 +44,7 @@
 #'         )
 #'       )
 #'     ),
-#'     module(
-#'       label = "example module",
-#'       server = function(input, output, session, data) {},
-#'       ui = function(id, ...) div(p("Example text"))
-#'     )
+#'     example_module()
 #'   )
 #' )
 #'
