@@ -89,7 +89,7 @@ modules <- function(..., label = "root") {
   )
 }
 
-#' Function which appends a teal_module onto the children of a teal_modules object
+#' Append a `teal_module` to `children` of a `teal_modules` object
 #' @keywords internal
 #' @param modules `teal_modules`
 #' @param module `teal_module` object to be appended onto the children of `modules`
@@ -101,6 +101,43 @@ append_module <- function(modules, module) {
   labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
   names(modules$children) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
   modules
+}
+
+#' Extract/Remove module(s) of specific class
+#'
+#' Given a `teal_module` or a `teal_modules`, return the elements of the structure according to `class`.
+#'
+#' @param modules `teal_modules`
+#' @param class The class name of `teal_module` to be extracted or dropped.
+#' @keywords internal
+#' @return
+#' For `extract_module`, a `teal_module` of class `class` or `teal_modules` containing modules of class `class`.
+#' For `drop_module`, the opposite, which is all `teal_modules` of  class other than `class`.
+#' @rdname module_management
+extract_module <- function(modules, class) {
+  if (inherits(modules, class)) {
+    modules
+  } else if (inherits(modules, "teal_module")) {
+    NULL
+  } else if (inherits(modules, "teal_modules")) {
+    Filter(function(x) length(x) > 0L, lapply(modules$children, extract_module, class))
+  }
+}
+
+#' @keywords internal
+#' @return `teal_modules`
+#' @rdname module_management
+drop_module <- function(modules, class) {
+  if (inherits(modules, class)) {
+    NULL
+  } else if (inherits(modules, "teal_module")) {
+    modules
+  } else if (inherits(modules, "teal_modules")) {
+    do.call(
+      "modules",
+      c(Filter(function(x) length(x) > 0L, lapply(modules$children, drop_module, class)), label = modules$label)
+    )
+  }
 }
 
 #' Does the object make use of the `arg`
