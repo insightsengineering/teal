@@ -1,6 +1,11 @@
 #' Filter settings for teal applications
 #'
-#' Filter settings for teal applications
+#' Specify initial filter states and filtering settings for a `teal` app.
+#'
+#' Produces a `teal_slices` object.
+#' The `teal_slice` components will specify filter states that will be active when the app starts.
+#' Attributes (created with the named arguments) will configure the way the app applies filters.
+#' See argument descriptions for details.
 #'
 #' @inheritParams teal.slice::teal_slices
 #'
@@ -24,6 +29,11 @@
 #'  Used for verifying snapshots uploaded from file. See `snapshot`.
 #'
 #' @param x (`list`) of lists to convert to `teal_slices`
+#'
+#' @return
+#' A `teal_slices` object.
+#'
+#' @seealso [`teal.slice::teal_slices`], [`teal.slice::teal_slice`], [`slices_store`]
 #'
 #' @examples
 #' filter <- teal_slices(
