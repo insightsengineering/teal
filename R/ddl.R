@@ -158,7 +158,9 @@ close_conn <- function(conn) {
 
 # methods from teal.data
 
+#' Get datanames from `ddl`
 #' @rdname get_dataname
+#' @param x (`ddl`) object
 #' @export
 get_dataname.ddl <- function(x) {
   attr(x, "datanames")

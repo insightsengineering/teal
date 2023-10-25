@@ -2,8 +2,8 @@
 
 S3method(c,teal_slices)
 S3method(get_code,tdata)
-S3method(get_join_keys,ddl)
 S3method(get_dataname,ddl)
+S3method(get_join_keys,ddl)
 S3method(get_join_keys,tdata)
 S3method(get_metadata,default)
 S3method(get_metadata,tdata)
