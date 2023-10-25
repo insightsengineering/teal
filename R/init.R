@@ -182,7 +182,7 @@ init <- function(data,
   hashables$data <- if (inherits(hashables$data, "teal_data")) {
     as.list(hashables$data@env)
   } else if (inherits(hashables$data, "ddl")) {
-    attr(hashables$data, "datanames") # todo: no access to the $code in the current design
+    attr(hashables$data, "code")
   } else if (hashables$data$is_pulled()) {
     sapply(get_dataname(hashables$data), simplify = FALSE, function(dn) {
       hashables$data$get_dataset(dn)$get_raw_data()
