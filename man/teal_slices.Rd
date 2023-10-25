@@ -66,8 +66,17 @@ Used for verifying snapshots uploaded from file. See \code{snapshot}.}
 
 \item{x}{(\code{list}) of lists to convert to \code{teal_slices}}
 }
+\value{
+A \code{teal_slices} object.
+}
 \description{
-Filter settings for teal applications
+Specify initial filter states and filtering settings for a \code{teal} app.
+}
+\details{
+Produces a \code{teal_slices} object.
+The \code{teal_slice} components will specify filter states that will be active when the app starts.
+Attributes (created with the named arguments) will configure the way the app applies filters.
+See argument descriptions for details.
 }
 \examples{
 filter <- teal_slices(
@@ -97,5 +106,8 @@ if (interactive()) {
   shiny::runApp(app)
 }
 
+}
+\seealso{
+\code{\link[teal.slice:teal_slices]{teal.slice::teal_slices}}, \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice}}, \code{\link{slices_store}}
 }
 \keyword{internal}
