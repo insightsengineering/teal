@@ -6,6 +6,9 @@
 \usage{
 \method{get_join_keys}{tdata}(data)
 }
+\arguments{
+\item{data}{(\code{tdata}) object}
+}
 \description{
 Extract \code{JoinKeys} from \code{tdata}
 }
