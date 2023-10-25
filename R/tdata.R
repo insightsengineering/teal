@@ -123,27 +123,12 @@ get_code_tdata <- function(data) {
   get_code(data)
 }
 
-
-#' Function to get join keys from a `tdata` object
-#' @param data `tdata` - object to extract the join keys
-#' @return Either `JoinKeys` object or `NULL` if no join keys
-#' @export
-get_join_keys <- function(data) {
-  UseMethod("get_join_keys", data)
-}
-
-
+#' Extract `JoinKeys` from `tdata`
 #' @rdname get_join_keys
+#' @param data (`tdata`) object
 #' @export
 get_join_keys.tdata <- function(data) {
   attr(data, "join_keys")
-}
-
-
-#' @rdname get_join_keys
-#' @export
-get_join_keys.default <- function(data) {
-  stop("get_join_keys function not implemented for this object")
 }
 
 #' Function to get metadata from a `tdata` object
