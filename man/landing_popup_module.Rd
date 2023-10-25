@@ -26,9 +26,9 @@ A \code{teal_module} (extended with \code{teal_landing_module} class) to be used
 }
 \description{
 This module creates a landing welcome popup for \code{teal} applications.
-}
-\details{
-If you use this module in \code{teal::init(modules = )}, it will not be wrapped in a tab in \code{teal} application.
+
+This module is used to display a popup dialog when the application starts.
+The dialog blocks the access to the application and must be closed with a button before the application is viewed.
 }
 \examples{
 app1 <- teal::init(
