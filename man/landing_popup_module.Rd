@@ -56,27 +56,9 @@ app2 <- teal::init(
       ),
       buttons = tagList(
         modalButton("Proceed"),
-        actionButton("close", "Read more",
+        actionButton("read", "Read more",
           onclick = "window.open('http://google.com', '_blank')"
-        )
-      )
-    ),
-    example_module()
-  )
-)
-
-if (interactive()) {
-  shinyApp(app2$ui, app2$server)
-}
-
-app3 <- teal::init(
-  data = teal.data::dataset("iris", iris),
-  modules = teal::modules(
-    teal::landing_popup_module(
-      title = "Welcome",
-      content = "App will close, once you click the rejection button!",
-      buttons = tagList(
-        modalButton("Proceed"),
+        ),
         actionButton("close", "Reject", onclick = "window.close()")
       )
     ),
@@ -85,7 +67,7 @@ app3 <- teal::init(
 )
 
 if (interactive()) {
-  shinyApp(app3$ui, app3$server, options = list(launch.browser = TRUE))
+  shinyApp(app2$ui, app2$server)
 }
 
 }
