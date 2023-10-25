@@ -11,7 +11,7 @@ ddl(
   input_mask = list(),
   server = submit_button_server,
   join_keys = teal.data::join_keys(),
-  datanames
+  datanames = names(join_keys$get())
 )
 }
 \arguments{
@@ -41,7 +41,7 @@ returned code is still executable but secure.}
 \code{code} and return a reactive data containing necessary data. To handle
 evaluation and code masking process it is recommended to use \code{ddl_run}.
 Package provides universal \code{username_password_server} which
-runs \link{ddl_run} function, which returns \code{teal_data} object.
+runs \code{ddl_run} function, which returns \code{teal_data} object.
 Details in the the example}
 
 \item{join_keys}{(\code{JoinKeys}) or a single (\code{JoinKeySet})\cr

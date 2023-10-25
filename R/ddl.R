@@ -20,7 +20,7 @@
 #'   `code` and return a reactive data containing necessary data. To handle
 #'   evaluation and code masking process it is recommended to use `ddl_run`.
 #'   Package provides universal `username_password_server` which
-#'   runs [ddl_run] function, which returns `teal_data` object.
+#'   runs `ddl_run` function, which returns `teal_data` object.
 #'   Details in the the example
 #'
 #' @param input_mask (`list` named)\cr
@@ -47,7 +47,7 @@ ddl <- function(expr,
                 input_mask = list(),
                 server = submit_button_server,
                 join_keys = teal.data::join_keys(),
-                datanames) {
+                datanames = names(join_keys$get())) {
   if (!missing(expr) && !missing(code)) {
     stop("Only one of `expr` or `code` should be specified")
   }
@@ -58,61 +58,46 @@ ddl <- function(expr,
     code <- parse(text = code)
   }
 
-  if (missing(datanames)) {
-    stop("`dataname` argument is required")
+  if (length(datanames) == 0) {
+    stop("`datanames` argument is required")
   }
 
+  ddl_object <- structure(
+    list(ui = ui, server = server),
+    code = code,
+    input_mask = input_mask,
+    datanames = datanames,
+    join_keys = join_keys,
+    class = "ddl"
+  )
 
-  # function creates  object from the code, input and input_mask
-  # function defined here to have access to the arguments
+  # function defined here to have access to this environment
+  # ddl_run is a convenience wrapper over ddl_run2 to avoid specifying `x` argument
+  # thanks to this in the server one can simply call
+  #  `ddl_run(input = input)`
+  # instead of
+  #  `ddl_run(x = ddl_object, input = input))`
   ddl_run <- function(input = list()) {
-    checkmate::assert_list(input)
-    if (inherits(input, "reactivevalues")) {
-      input <- shiny::reactiveValuesToList(input)
-    }
-    env <- list2env(list(input = input))
-    # substitute by online args and evaluate
-    eval(code, envir = env)
-
-    if (identical(ls(env), character(0))) {
-      warning("DDL code returned NULL. Returning empty  object")
-    }
-
-    # don't keep input further we don't want to keep input in the @env of teal_data
-    # but we want to keep other non-dataset objects created in the code
-    env_list <- as.list(env)
-    env_list <- env_list[names(env_list) != "input"]
-
-    # substitute by offline args
-    input <- modifyList(input, input_mask)
-    code <- .substitute_inputs(code, args = input)
-
-    # create  object
-    teal.data::new_teal_data(
-      data = env_list,
-      code = as.expression(code),
-      keys = join_keys,
-      datanames = datanames
-    )
+    ddl_run2(x = ddl_object, input = input)
   }
 
   # changing enclosing environment of the server to have access to ddl_fun function
   # Thanks to this ddl object contains only ui and server functions
   #  and server function can be run just by calling ddl$server("<id>")!
-  environment(server) <- environment()
+  environment(ddl_object$server) <- environment()
 
-  structure(
-    list(ui = ui, server = server),
-    datanames = datanames,
-    join_keys = join_keys,
-    class = "ddl"
-  )
+  ddl_object
 }
 
+#' Run code and mask inputs
+#'
+#' Delayed Data Loading module with login and password input.
+#'
 #' @name submit_button_module
 #'
-#' @inheritParams ddl
 #' @param id (`character`) `shiny` module id.
+#' @param x (`ddl`) object
+#' @return `shiny` module
 NULL
 
 #' @rdname submit_button_module
@@ -127,7 +112,7 @@ submit_button_ui <- function(id) {
 submit_button_server <- function(id, x) {
   moduleServer(id, function(input, output, session) {
     tdata <- eventReactive(input$submit, {
-      ddl_run(input = input)
+      ddl_run2(x = x, input = input)
     })
 
     # would need to make sure we handle reactivity correctly here as teal::init expects not reactive teal_data...
@@ -154,9 +139,11 @@ submit_button_server <- function(id, x) {
   code_strings <- gsub("(input\\[\\[\")(\\w+)(\"\\]\\])", "\\.(\\2\\)", code_strings)
 
   # Use bquote to obtain code with input values and masking values.
-  lapply(code_strings, function(x) {
-    do.call(bquote, list(str2lang(x), list2env(args)))
-  })
+  as.expression(
+    lapply(code_strings, function(x) {
+      do.call(bquote, list(str2lang(x), list2env(args)))
+    })
+  )
 }
 
 # todo: to remove -------------
@@ -181,4 +168,41 @@ get_dataname.ddl <- function(x) {
 #' @export
 get_join_keys.ddl <- function(data) {
   attr(data, "join_keys")
+}
+
+#' Run code and mask inputs
+#'
+#' Function runs the `code`, masks the `code` and creates `teal_data` object.
+#' @param x (`ddl`) object
+#' @param input (`list`) input to be used in the `code`
+#' @return `teal_data` object
+ddl_run2 <- function(x, input = list()) {
+  checkmate::assert_class(x, "ddl")
+  checkmate::assert_list(input)
+  if (inherits(input, "reactivevalues")) {
+    input <- shiny::reactiveValuesToList(input)
+  }
+  data <- teal_data(join_keys = attr(x, "join_keys"))
+
+  # evaluate code and substitute input
+  data <- teal.code::eval_code(data, .substitute_inputs(attr(x, "code"), args = input))
+
+  if (identical(ls(data@env), character(0))) {
+    warning("DDL code returned NULL. Returning empty object")
+  }
+
+  # mask dynamic inputs with mask
+  input <- utils::modifyList(input, attr(x, "input_mask"))
+
+  # replace code of teal_data with masked code
+  #  question: warnings and errors are not masked, is it ok?
+  data@code <- c(
+    "", # todo: initialize qenv with empty character
+    teal.data:::format_expression(.substitute_inputs(attr(x, "code"), args = input)) # todo: need to fix :::
+  )
+
+  # setting datanames of the teal_data object
+  data@datanames <- attr(x, "datanames")
+
+  data
 }
