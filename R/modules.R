@@ -112,7 +112,7 @@ append_module <- function(modules, module) {
 #' @keywords internal
 #' @return For `extract_module`, a `teal_module` of class `class` or `teal_modules` containing modules of class `class`.
 #' For `drop_module`, an opposite, which is all `teal_modules` besides the ones with `class` class.
-#' @rdname extract_module
+#' @rdname module_management
 extract_module <- function(modules, class) {
   if (inherits(modules, class)) {
     modules
@@ -125,7 +125,7 @@ extract_module <- function(modules, class) {
 
 #' @keywords internal
 #' @return `teal_modules`
-#' @rdname extract_module
+#' @rdname module_management
 drop_module <- function(modules, class) {
   if (inherits(modules, class)) {
     NULL
