@@ -16,7 +16,7 @@ drop_module(modules, class)
 }
 \value{
 For \code{extract_module}, a \code{teal_module} of class \code{class} or \code{teal_modules} containing modules of class \code{class}.
-For \code{drop_module}, an opposite, which is all \code{teal_modules} besides the ones with \code{class} class.
+For \code{drop_module}, the opposite, which is all \code{teal_modules} of  class other than \code{class}.
 
 \code{teal_modules}
 }
