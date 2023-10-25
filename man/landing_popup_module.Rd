@@ -80,11 +80,7 @@ app3 <- teal::init(
         actionButton("close", "Reject", onclick = "window.close()")
       )
     ),
-    module(
-      label = "example module",
-      server = function(input, output, session, data) {},
-      ui = function(id, ...) div(p("Example text"))
-    )
+    example_module()
   )
 )
 
