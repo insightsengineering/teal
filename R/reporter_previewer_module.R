@@ -35,7 +35,8 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
     server = srv, ui = ui,
     server_args = server_args, ui_args = list(), datanames = NULL
   )
-  # Label 'Report previewer' is reserved in teal.
+# Module is created with a placeholder label and the label is changed later.
+# This is to prevent another module being labeled "Report previewer".
   class(module) <- c("teal_module_previewer", class(module))
   module$label <- label
   module
