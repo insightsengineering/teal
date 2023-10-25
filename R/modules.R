@@ -110,7 +110,8 @@ append_module <- function(modules, module) {
 #' @param modules `teal_modules`
 #' @param class The class name of `teal_module` to be extracted or dropped.
 #' @keywords internal
-#' @return For `extract_module`, a `teal_module` of class `class` or `teal_modules` containing modules of class `class`.
+#' @return
+#' For `extract_module`, a `teal_module` of class `class` or `teal_modules` containing modules of class `class`.
 #' For `drop_module`, an opposite, which is all `teal_modules` besides the ones with `class` class.
 #' @rdname module_management
 extract_module <- function(modules, class) {
