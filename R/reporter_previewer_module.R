@@ -7,17 +7,20 @@
 #'
 #' If you are creating a `teal` application using [teal::init()] then this
 #' module will be added to your application automatically if any of your `teal modules`
-#' support report generation
+#' support report generation.
 #'
 #' @inheritParams module
 #' @param server_args (`named list`)\cr
 #'  Arguments passed to [teal.reporter::reporter_previewer_srv()].
-#' @return `teal_module` containing the `teal.reporter` previewer functionality
+#' @return `teal_module` (extended with `teal_module_previewer` class) containing the `teal.reporter` previewer
+#' functionality.
 #' @export
 reporter_previewer_module <- function(label = "Report previewer", server_args = list()) {
   checkmate::assert_string(label)
   checkmate::assert_list(server_args, names = "named")
   checkmate::assert_true(all(names(server_args) %in% names(formals(teal.reporter::reporter_previewer_srv))))
+
+  logger::log_info("Initializing reporter_previewer_module")
 
   srv <- function(id, reporter, ...) {
     teal.reporter::reporter_previewer_srv(id, reporter, ...)
@@ -32,6 +35,8 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
     server = srv, ui = ui,
     server_args = server_args, ui_args = list(), datanames = NULL
   )
+# Module is created with a placeholder label and the label is changed later.
+# This is to prevent another module being labeled "Report previewer".
   class(module) <- c("teal_module_previewer", class(module))
   module$label <- label
   module
