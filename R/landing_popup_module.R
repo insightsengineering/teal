@@ -88,31 +88,31 @@ landing_popup_module <- function(label = "Landing Popup",
                                  title = NULL,
                                  content = NULL,
                                  buttons = modalButton("Accept")) {
-    checkmate::assert_string(label)
-    checkmate::assert_string(title, null.ok = TRUE)
-    checkmate::assert_multi_class(
-      content,
-      classes = c("character", "shiny.tag", "shiny.tag.list", "html"), null.ok = TRUE
-    )
-    checkmate::assert_multi_class(buttons, classes = c("shiny.tag", "shiny.tag.list"))
+  checkmate::assert_string(label)
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_multi_class(
+    content,
+    classes = c("character", "shiny.tag", "shiny.tag.list", "html"), null.ok = TRUE
+  )
+  checkmate::assert_multi_class(buttons, classes = c("shiny.tag", "shiny.tag.list"))
 
-    logger::log_info("Initializing landing_popup_module")
+  logger::log_info("Initializing landing_popup_module")
 
-    module <- module(
-      label = label,
-      server = function(id) {
-        moduleServer(id, function(input, output, session) {
-          showModal(
-            modalDialog(
-              id = "landingpopup",
-              title = title,
-              content,
-              footer = buttons
-            )
+  module <- module(
+    label = label,
+    server = function(id) {
+      moduleServer(id, function(input, output, session) {
+        showModal(
+          modalDialog(
+            id = "landingpopup",
+            title = title,
+            content,
+            footer = buttons
           )
-        })
-      }
-    )
-    class(module) <- c("teal_module_landing", class(module))
-    module
-  }
+        )
+      })
+    }
+  )
+  class(module) <- c("teal_module_landing", class(module))
+  module
+}
