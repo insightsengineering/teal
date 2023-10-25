@@ -2,7 +2,8 @@
 #'
 #' @description This module creates a landing welcome popup for `teal` applications.
 #'
-#' @details If you use this module in `teal::init(modules = )`, it will not be wrapped in a tab in `teal` application.
+#' This module is used to display a popup dialog when the application starts. 
+#' The dialog blocks access to the application and must be closed with a button before the app is viewed. 
 #'
 #' @param label `character(1)` the label of the module.
 #' @param title `character(1)` the text to be displayed as a title of the popup.
