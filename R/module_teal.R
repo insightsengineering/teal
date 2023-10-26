@@ -206,16 +206,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
     })
 
     reporter <- teal.reporter::Reporter$new()
-    is_any_previewer <- function(modules) {
-      if (inherits(modules, "teal_modules")) {
-        any(unlist(lapply(modules$children, is_any_previewer), use.names = FALSE))
-      } else if (inherits(modules, "teal_module_previewer")) {
-        TRUE
-      } else {
-        FALSE
-      }
-    }
-    if (is_arg_used(modules, "reporter") && !is_any_previewer(modules)) {
+    if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
       modules <- append_module(modules, reporter_previewer_module())
     }
 

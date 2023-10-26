@@ -1,4 +1,4 @@
-# teal 0.14.0.9015
+# teal 0.14.0.9016
 
 ### Miscellaneous
 
@@ -7,6 +7,7 @@
 * Added internal functions for storing and restoring of `teal_slices` objects.
 * Filter state snapshots can now be uploaded from file. See `?snapshot`.
 * Added argument to `teal_slices` and made modifications to `init` to enable tagging `teal_slices` with an app id to safely upload snapshots from disk.
+* Added `landing_popup_module` function which creates a module that will display a popup when the app starts. The popup will block access to the app until it is dismissed.
 
 # teal 0.14.0
 
