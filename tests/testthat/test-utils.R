@@ -36,3 +36,17 @@ testthat::test_that("report_card_template function returns TealReportCard object
   testthat::expect_equal(card$get_name(), "Card title")
   testthat::expect_length(card$get_content(), 1)
 })
+
+testthat::test_that("teal_data_to_filtered_data converts simple teal_data", {
+
+  data <- teal_data(
+    x1 = iris,
+    x2 = mtcars,
+    code = quote({
+      x1 <- iris
+      x2 <- mtcars
+    })
+  )
+  teal:::teal_data_to_filtered_data(data)
+
+})
