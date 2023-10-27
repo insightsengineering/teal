@@ -55,7 +55,7 @@ include_parent_datanames <- function(dataname, join_keys) {
 #' @param x (`teal_data`) object
 #' @return (`FilteredData`) object
 #' @keywords internal
-teal_data_to_filtered_data <- function(x) { #     nolint
+teal_data_to_filtered_data <- function(x) {
   checkmate::assert_class(x, "teal_data")
   datanames <- x@datanames
 
