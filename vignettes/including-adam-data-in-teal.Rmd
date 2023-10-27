@@ -57,29 +57,21 @@ adtte$AVAL <- c(
 )
 
 cdisc_data_obj <- cdisc_data(
-  cdisc_dataset(
-    dataname = "ADSL",
-    x = adsl,
-    code = '
+  ADSL = adsl, ADTTE = adtte,
+  code = '
     adsl <- data.frame(
       STUDYID = "study",
       USUBJID = 1:10,
       SEX = sample(c("F", "M"), 10, replace = TRUE),
       AGE = rpois(10, 40)
-    )'
-  ),
-  cdisc_dataset(
-    dataname = "ADTTE",
-    x = adtte,
-    code = '
+    )
     adtte <- rbind(adsl, adsl, adsl)
     adtte$PARAMCD <- rep(c("OS", "EFS", "PFS"), each = 10)
     adtte$AVAL <- c(
-      rnorm(10, mean = 700, sd = 200),
-      rnorm(10, mean = 400, sd = 100),
-      rnorm(10, mean = 450, sd = 200)
+      rnorm(10, mean = 700, sd = 200), # dummy OS level
+      rnorm(10, mean = 400, sd = 100), # dummy EFS level
+      rnorm(10, mean = 450, sd = 200) # dummy PFS level
     )'
-  )
 )
 class(cdisc_data_obj)
 ```
@@ -87,36 +79,21 @@ class(cdisc_data_obj)
 which is equivalent to:
 ```{r, message=FALSE}
 example_data <- cdisc_data(
-  cdisc_dataset(
-    dataname = "ADSL",
-    x = adsl,
-    code = '
+  ADSL = adsl, ADTTE = adtte,
+  code = '
     adsl <- data.frame(
       STUDYID = "study",
       USUBJID = 1:10,
       SEX = sample(c("F", "M"), 10, replace = TRUE),
       AGE = rpois(10, 40)
-    )',
-    keys = c("STUDYID", "USUBJID")
-  ),
-  cdisc_dataset(
-    dataname = "ADTTE",
-    x = adtte,
-    code = '
+    )
     adtte <- rbind(adsl, adsl, adsl)
     adtte$PARAMCD <- rep(c("OS", "EFS", "PFS"), each = 10)
     adtte$AVAL <- c(
       rnorm(10, mean = 700, sd = 200),
       rnorm(10, mean = 400, sd = 100),
       rnorm(10, mean = 450, sd = 200)
-    )',
-    keys = c("STUDYID", "USUBJID", "PARAMCD")
-  ),
-  join_keys = join_keys(
-    join_key("ADSL", "ADSL", c("STUDYID", "USUBJID")),
-    join_key("ADTTE", "ADTTE", c("USUBJID", "STUDYID", "PARAMCD")),
-    join_key("ADSL", "ADTTE", c("STUDYID", "USUBJID"))
-  )
+    )'
 )
 class(cdisc_data_obj)
 ```

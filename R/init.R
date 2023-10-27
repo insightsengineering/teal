@@ -15,7 +15,7 @@
 #' an end-user, don't use this function, but instead this module.
 #'
 #' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
-#' or `MultiAssayExperiment`)\cr
+#' or `MultiAssayExperiment`, `teal_data`)\cr
 #' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()],
 #' [teal.data::cdisc_dataset()], [teal.data::dataset()], [teal.data::dataset_connector()] or
 #' [teal.data::cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`
@@ -114,9 +114,11 @@ init <- function(data,
                  footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  data <- teal.data::to_relational_data(data = data)
 
-  checkmate::assert_class(data, "TealData")
+  if (!inherits(data, c("TealData", "teal_data"))) {
+    data <- teal.data::to_relational_data(data = data)
+  }
+  checkmate::assert_multi_class(data, c("TealData", "teal_data"))
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert(
@@ -142,22 +144,8 @@ init <- function(data,
 
   # resolve modules datanames
   datanames <- teal.data::get_dataname(data)
-  join_keys <- data$get_join_keys()
-  resolve_modules_datanames <- function(modules) {
-    if (inherits(modules, "teal_modules")) {
-      modules$children <- sapply(modules$children, resolve_modules_datanames, simplify = FALSE)
-      modules
-    } else {
-      modules$datanames <- if (identical(modules$datanames, "all")) {
-        datanames
-      } else if (is.character(modules$datanames)) {
-        datanames_adjusted <- intersect(modules$datanames, datanames)
-        include_parent_datanames(dataname = datanames_adjusted, join_keys = join_keys)
-      }
-      modules
-    }
-  }
-  modules <- resolve_modules_datanames(modules = modules)
+  join_keys <- teal.data::get_join_keys(data)
+  modules <- resolve_modules_datanames(modules = modules, datanames = datanames, join_keys = join_keys)
 
   if (!inherits(filter, "teal_slices")) {
     checkmate::assert_subset(names(filter), choices = datanames)
@@ -170,13 +158,18 @@ init <- function(data,
 
   # Calculate app hash to ensure snapshot compatibility. See ?snapshot. Raw data must be extracted from environments.
   hashables <- mget(c("data", "modules"))
-  hashables$data <- sapply(hashables$data$get_datanames(), function(dn) {
-    if (hashables$data$is_pulled()) {
+  hashables$data <- if (inherits(hashables$data, "teal_data")) {
+    as.list(hashables$data@env)
+  } else if (inherits(hashables$data, "ddl")) {
+    attr(hashables$data, "code")
+  } else if (hashables$data$is_pulled()) {
+    sapply(get_dataname(hashables$data), simplify = FALSE, function(dn) {
       hashables$data$get_dataset(dn)$get_raw_data()
-    } else {
-      hashables$data$get_code(dn)
-    }
-  }, simplify = FALSE)
+    })
+  } else {
+    hashables$data$get_code()
+  }
+
   attr(filter, "app_id") <- rlang::hash(hashables)
 
   # check teal_slices
@@ -231,8 +224,10 @@ init <- function(data,
         landing_module <- landing[[1L]]
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
-      # copy object so that load won't be shared between the session
-      data <- data$copy(deep = TRUE)
+      if (inherits(data, "TealDataAbstract")) {
+        # copy TealData so that load won't be shared between the session
+        data <- data$copy(deep = TRUE)
+      }
       filter <- deep_copy_filter(filter)
       srv_teal_with_splash(id = id, data = data, modules = modules, filter = filter)
     }

@@ -35,7 +35,10 @@ new_iris <- transform(iris, id = seq_len(nrow(iris)))
 # <code
 
 app <- init(
-  data = teal_data(dataset("new_iris", new_iris), code = get_code(file = "app.R")),
+  data = teal_data(
+    new_iris = new_iris,
+    code = get_code(file = "app.R")
+  ),
   modules = example_module()
 )
 
@@ -64,7 +67,8 @@ included_obj <- 1:10
 # <code
 
 x <- init(
-  data = cdisc_data(cdisc_dataset("ADSL", adsl),
+  data = cdisc_data(
+    ADSL = adsl,
     code = get_code("app.R", exclude_comments = TRUE, read_sources = TRUE),
     check = TRUE
   ),
