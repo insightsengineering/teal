@@ -416,7 +416,7 @@ toString.teal_module <- function(x, indent = 0, ...) { # nolint
 #' @export
 #' @rdname modules
 print.teal_modules <- function(x, ...) {
-  s <- toString(x, ...)
+  s <- format(x, ...)
   cat(s)
   return(invisible(s))
 }
