@@ -2,19 +2,22 @@
 % Please edit documentation in R/utils.R
 \name{resolve_modules_datanames}
 \alias{resolve_modules_datanames}
-\title{Resolve the datanames for the modules}
+\title{Resolve \code{datanames} for the modules}
 \usage{
 resolve_modules_datanames(modules, datanames, join_keys)
 }
 \arguments{
 \item{modules}{(\code{teal_modules}) object}
 
-\item{datanames}{(\code{character}) datanames available in the \code{data} object}
+\item{datanames}{(\code{character}) names of datasets available in the \code{data} object}
 
 \item{join_keys}{(\code{JoinKeys}) object}
 }
+\value{
+\code{teal_modules} with resolved \code{datanames}
+}
 \description{
-Modifies \code{module$datanames} to include parent datanames (taken from join_keys).
-When \code{datanames} is set to \code{"all"} it is replaced with all available datanames.
+Modifies \code{module$datanames} to include names of the parent dataset (taken from \code{join_keys}).
+When \code{datanames} is set to \code{"all"} it is replaced with all available datasets names.
 }
 \keyword{internal}

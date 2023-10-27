@@ -100,14 +100,14 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
   if (with_filter) card$append_fs(filter_panel_api$get_filter_state())
   card
 }
-#' Resolve the datanames for the modules
+#' Resolve `datanames` for the modules
 #'
-#' Modifies `module$datanames` to include parent datanames (taken from join_keys).
-#' When `datanames` is set to `"all"` it is replaced with all available datanames.
+#' Modifies `module$datanames` to include names of the parent dataset (taken from `join_keys`).
+#' When `datanames` is set to `"all"` it is replaced with all available datasets names.
 #' @param modules (`teal_modules`) object
-#' @param datanames (`character`) datanames available in the `data` object
+#' @param datanames (`character`) names of datasets available in the `data` object
 #' @param join_keys (`JoinKeys`) object
-#' @retun `teal_modules` with resolved datanames
+#' @return `teal_modules` with resolved `datanames`
 #' @keywords internal
 resolve_modules_datanames <- function(modules, datanames, join_keys) {
   if (inherits(modules, "teal_modules")) {
