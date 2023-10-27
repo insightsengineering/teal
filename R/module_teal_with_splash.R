@@ -31,7 +31,7 @@ ui_teal_with_splash <- function(id,
   # Shiny app does not time out.
   splash_ui <- if (inherits(data, "teal_data")) {
     div()
-  } else if (teal.data::is_pulled(data)) {
+  } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
     div()
   } else {
     message("App was initialized with delayed data loading.")
@@ -64,12 +64,11 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       shinyjs::showLog()
     }
 
-    # raw_data contains TealDataAbstract, i.e. R6 object and container for data
-    # reactive to get data through delayed loading
-    # we must leave it inside the server because of callModule which needs to pick up the right session
+    # raw_data contains teal_data object
+    # either passed to teal::init or returned from ddl
     raw_data <- if (inherits(data, "teal_data")) {
       reactiveVal(data)
-    } else if (teal.data::is_pulled(data)) {
+    } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
       new_data <- do.call(
         teal.data::teal_data,
         c(
