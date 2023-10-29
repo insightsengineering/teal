@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.14.0.9015
+Version: 0.14.0.9016
 Date: 2023-10-25
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
@@ -77,6 +77,7 @@ Collate:
     'include_css_js.R'
     'modules.R'
     'init.R'
+    'landing_popup_module.R'
     'module_filter_manager.R'
     'module_nested_tabs.R'
     'module_snapshot_manager.R'

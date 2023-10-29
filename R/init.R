@@ -137,35 +137,14 @@ init <- function(data,
     modules <- do.call(teal::modules, modules)
   }
 
+  landing <- extract_module(modules, "teal_module_landing")
+  if (length(landing) > 1L) stop("Only one `landing_popup_module` can be used.")
+  modules <- drop_module(modules, "teal_module_landing")
+
   # resolve modules datanames
   datanames <- teal.data::get_dataname(data)
   join_keys <- teal.data::get_join_keys(data)
-  resolve_modules_datanames <- function(modules) {
-    if (inherits(modules, "teal_modules")) {
-      modules$children <- sapply(modules$children, resolve_modules_datanames, simplify = FALSE)
-      modules
-    } else {
-      modules$datanames <- if (identical(modules$datanames, "all")) {
-        datanames
-      } else if (is.character(modules$datanames)) {
-        extra_datanames <- setdiff(modules$datanames, datanames)
-        if (length(extra_datanames)) {
-          stop(
-            sprintf(
-              "Module %s has datanames that are not available in a 'data':\n %s not in %s",
-              modules$label,
-              toString(extra_datanames),
-              toString(datanames)
-            )
-          )
-        }
-        datanames_adjusted <- intersect(modules$datanames, datanames)
-        include_parent_datanames(dataname = datanames_adjusted, join_keys = join_keys)
-      }
-      modules
-    }
-  }
-  modules <- resolve_modules_datanames(modules = modules)
+  modules <- resolve_modules_datanames(modules = modules, datanames = datanames, join_keys = join_keys)
 
   if (!inherits(filter, "teal_slices")) {
     checkmate::assert_subset(names(filter), choices = datanames)
@@ -240,6 +219,10 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
+      if (length(landing) == 1L) {
+        landing_module <- landing[[1L]]
+        do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
+      }
       if (inherits(data, "TealDataAbstract")) {
         # copy TealData so that load won't be shared between the session
         data <- data$copy(deep = TRUE)
