@@ -219,10 +219,7 @@ ddl_run <- function(input = list(), code, input_mask, datanames, join_keys) {
 
     # replace code of teal_data with masked code
     #  question: warnings and errors are not masked, is it ok?
-    data@code <- c(
-      "",
-      format_expression(.substitute_inputs(code, args = input))
-    )
+    data@code <- format_expression(.substitute_inputs(code, args = input))
   }
   datanames(data) <- datanames
 
