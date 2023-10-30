@@ -22,6 +22,14 @@
 #'   Package provides universal `username_password_server` which
 #'   runs `ddl_run` function, which returns `teal_data` object.
 #'   Details in the the example
+#'  - `code` (`character`, `language`) code to be executed and returned in `teal_data` object.
+#'  - `input_mask` (`list` named) arguments to be substituted in the `code`.
+#'  - `datanames` (`character`) names of the objects to be created from the code evaluation.
+#'  - `join_keys` (`JoinKeys`) object
+#'  `...` can be handled automatically by [ddl_run()] but
+#'
+#' @param join_keys (`JoinKeys`)\cr
+#'  object
 #'
 #' @param input_mask (`list` named)\cr
 #'   arguments to be substituted in the `code`. These
@@ -42,25 +50,23 @@
 #'
 #' @export
 ddl <- function(expr,
-                code,
+                code = character(0),
                 ui = submit_button_ui,
                 input_mask = list(),
                 server = submit_button_server,
                 join_keys = teal.data::join_keys(),
                 datanames = names(join_keys$get())) {
-  if (!missing(expr) && !missing(code)) {
-    stop("Only one of `expr` or `code` should be specified")
-  }
   if (!missing(expr)) {
     code <- substitute(expr)
   }
   if (is.character(code)) {
     code <- parse(text = code)
   }
-
-  if (length(datanames) == 0) {
-    stop("`datanames` argument is required")
-  }
+  checkmate::assert_list(input_mask)
+  checkmate::check_function(ui, args = "id")
+  checkmate::check_function(server, args = c("id", "..."))
+  checkmate::check_class(join_keys, "JoinKeys")
+  checkmate::check_character(datanames, min.len = 1)
 
   ddl_object <- structure(
     list(ui = ui, server = server),
@@ -103,8 +109,9 @@ ddl_ui <- function(id, x) {
 #'
 #' @name submit_button_module
 #'
+#'
 #' @param id (`character`) `shiny` module id.
-#' @param x (`ddl`) object
+#' @param ... (`list`) arguments passed to `ddl_run` function.
 #' @return `shiny` module
 NULL
 
@@ -214,7 +221,7 @@ ddl_run <- function(input = list(), code, input_mask, datanames, join_keys) {
     #  question: warnings and errors are not masked, is it ok?
     data@code <- c(
       "",
-      teal.code:::format_expression(.substitute_inputs(code, args = input)) # todo: need to fix :::
+      format_expression(.substitute_inputs(code, args = input))
     )
   }
   datanames(data) <- datanames
