@@ -32,7 +32,7 @@ ui_teal_with_splash <- function(id,
   splash_ui <- if (inherits(data, "teal_data")) {
     div()
   } else if (inherits(data, "ddl")) {
-    data$ui(ns("startapp_module"))
+    ddl_ui(id = ns("startapp_module"), x = data)
   } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
     div()
   } else {
@@ -71,7 +71,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     raw_data <- if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, "ddl")) {
-      data$server("startapp_module")
+      ddl_server(id = "startapp_module", x = data)
     } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
       new_data <- do.call(
         teal.data::teal_data,
