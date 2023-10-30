@@ -8,7 +8,7 @@
 \usage{
 submit_button_ui(id)
 
-submit_button_server(id, x)
+submit_button_server(id, ...)
 }
 \arguments{
 \item{id}{(\code{character}) \code{shiny} module id.}
