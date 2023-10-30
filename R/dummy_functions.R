@@ -23,14 +23,9 @@ example_cdisc_data <- function() { # nolint
   ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE) # nolint
   ADSL$SEX[c(2, 5)] <- NA # nolint
 
-  cdisc_data_obj <- teal.data::cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL),
-    cdisc_dataset(dataname = "ADTTE", x = ADTTE)
-  )
-
   res <- teal.data::cdisc_data(
-    teal.data::cdisc_dataset(dataname = "ADSL", x = ADSL),
-    teal.data::cdisc_dataset(dataname = "ADTTE", x = ADTTE),
+    ADSL = ADSL,
+    ADTTE = ADTTE,
     code = '
       ADSL <- data.frame(
         STUDYID = "study",
@@ -62,7 +57,7 @@ example_cdisc_data <- function() { # nolint
 #' @keywords internal
 example_datasets <- function() { # nolint
   dummy_cdisc_data <- example_cdisc_data()
-  datasets <- teal.slice::init_filtered_data(dummy_cdisc_data)
+  datasets <- teal_data_to_filtered_data(dummy_cdisc_data)
   list(
     "d2" = list(
       "d3" = list(

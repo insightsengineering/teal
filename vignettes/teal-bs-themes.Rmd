@@ -97,9 +97,7 @@ options("teal.bs_theme" = bslib::bs_theme(version = "5"))
 library(teal)
 
 app <- init(
-  data = teal_data(
-    dataset("IRIS", iris) # nolint
-  ),
+  data = teal_data(IRIS = iris), # nolint
   filter = list(IRIS = list(Sepal.Length = c(5, 7))),
   modules = list(example_module(), example_module()),
   header = "My first teal application"

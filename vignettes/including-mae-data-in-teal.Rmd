@@ -21,10 +21,8 @@ The example below represents an application including `MultiAssayExperiment` dat
 library(teal)
 utils::data(miniACC, package = "MultiAssayExperiment")
 
-mae_d <- dataset("MAE", miniACC, metadata = list(type = "example"))
-
 app <- init(
-  data = teal_data(mae_d),
+  data = teal_data(MAE = miniACC),
   modules = example_module()
 )
 

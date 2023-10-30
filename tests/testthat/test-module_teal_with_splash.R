@@ -2,12 +2,12 @@ iris_ds <- teal.data::dataset(dataname = "iris", x = head(iris))
 mtcars_ds <- teal.data::dataset(dataname = "mtcars", x = head(mtcars))
 data <- teal_data(iris_ds, mtcars_ds)
 
-test_module1 <- module(
+test_module1 <- example_module(
   label = "iris_tab",
   datanames = "iris"
 )
 
-testthat::test_that("srv_teal_with_splash creates reactiveVal returning data input", {
+testthat::test_that("srv_teal_with_splash creates reactiveVal returning teal_data", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -17,7 +17,7 @@ testthat::test_that("srv_teal_with_splash creates reactiveVal returning data inp
     ),
     expr = {
       testthat::expect_is(raw_data, "reactiveVal")
-      testthat::expect_identical(raw_data(), data)
+      testthat::expect_s4_class(raw_data(), "teal_data")
     }
   )
 })
@@ -50,8 +50,8 @@ testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns 
     expr = {
       testthat::expect_null(raw_data())
       session$setInputs(`startapp_module-submit` = TRUE) # DDL has independent session id (without ns)
-      testthat::expect_is(raw_data(), "TealData")
-      testthat::expect_identical(raw_data()$get_dataset("iris")$get_raw_data(), iris)
+      testthat::expect_is(raw_data(), "teal_data")
+      testthat::expect_identical(raw_data()[["iris"]], iris)
     }
   )
 })

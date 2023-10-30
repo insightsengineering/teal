@@ -54,10 +54,7 @@ Using `teal`, you can launch this example module with the following:
 
 ```{r, eval = FALSE}
 app <- init(
-  data = teal_data(
-    dataset("IRIS", iris),
-    dataset("MTCARS", mtcars)
-  ),
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = teal_example_module()
 )
 
@@ -97,10 +94,7 @@ With these modifications, the module is now ready to be launched with `teal`:
 
 ```{r}
 app <- init(
-  data = teal_data(
-    dataset("IRIS", iris),
-    dataset("MTCARS", mtcars)
-  ),
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = example_module_with_reporting()
 )
 
@@ -148,10 +142,7 @@ This updated module is now ready to be launched:
 
 ```{r}
 app <- init(
-  data = teal_data(
-    dataset("IRIS", iris),
-    dataset("MTCARS", mtcars)
-  ),
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = example_module_with_reporting()
 )
 
@@ -201,10 +192,7 @@ example_module_with_reporting <- function(label = "example teal module") {
 
 ```{r}
 app <- init(
-  data = teal_data(
-    dataset("IRIS", iris),
-    dataset("MTCARS", mtcars)
-  ),
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = example_module_with_reporting()
 )
 
@@ -323,9 +311,12 @@ example_reporter_module <- function(label = "Example") {
 
 app <- init(
   data = teal_data(
-    dataset("AIR", airquality, code = "data(airquality); AIR <- airquality"),
-    dataset("IRIS", iris, code = "data(iris); IRIS <- iris"),
-    check = FALSE
+    AIR = airquality,
+    IRI = iris,
+    code = "data(airquality)
+            AIR <- airquality
+            data(iris)
+            IRIS <- iris"
   ),
   modules = list(
     example_reporter_module(label = "with Reporter"),
