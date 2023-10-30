@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9015</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9016</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,16 +81,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -200,68 +190,49 @@ the code needed to allow data merges as seen in this example:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cdisc_data_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span></span>
-<span>    dataname <span class="op">=</span> <span class="st">"ADSL"</span>,</span>
-<span>    x <span class="op">=</span> <span class="va">adsl</span>,</span>
-<span>    code <span class="op">=</span> <span class="st">'</span></span>
+<span>  ADSL <span class="op">=</span> <span class="va">adsl</span>, ADTTE <span class="op">=</span> <span class="va">adtte</span>,</span>
+<span>  code <span class="op">=</span> <span class="st">'</span></span>
 <span><span class="st">    adsl &lt;- data.frame(</span></span>
 <span><span class="st">      STUDYID = "study",</span></span>
 <span><span class="st">      USUBJID = 1:10,</span></span>
 <span><span class="st">      SEX = sample(c("F", "M"), 10, replace = TRUE),</span></span>
 <span><span class="st">      AGE = rpois(10, 40)</span></span>
-<span><span class="st">    )'</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span></span>
-<span>    dataname <span class="op">=</span> <span class="st">"ADTTE"</span>,</span>
-<span>    x <span class="op">=</span> <span class="va">adtte</span>,</span>
-<span>    code <span class="op">=</span> <span class="st">'</span></span>
+<span><span class="st">    )</span></span>
 <span><span class="st">    adtte &lt;- rbind(adsl, adsl, adsl)</span></span>
 <span><span class="st">    adtte$PARAMCD &lt;- rep(c("OS", "EFS", "PFS"), each = 10)</span></span>
 <span><span class="st">    adtte$AVAL &lt;- c(</span></span>
-<span><span class="st">      rnorm(10, mean = 700, sd = 200),</span></span>
-<span><span class="st">      rnorm(10, mean = 400, sd = 100),</span></span>
-<span><span class="st">      rnorm(10, mean = 450, sd = 200)</span></span>
+<span><span class="st">      rnorm(10, mean = 700, sd = 200), # dummy OS level</span></span>
+<span><span class="st">      rnorm(10, mean = 400, sd = 100), # dummy EFS level</span></span>
+<span><span class="st">      rnorm(10, mean = 450, sd = 200) # dummy PFS level</span></span>
 <span><span class="st">    )'</span></span>
-<span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">cdisc_data_obj</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "TealData"         "TealDataAbstract" "R6"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "teal_data"</span></span>
+<span><span class="co">## attr(,"package")</span></span>
+<span><span class="co">## [1] "teal.data"</span></span></code></pre>
 <p>which is equivalent to:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span></span>
-<span>    dataname <span class="op">=</span> <span class="st">"ADSL"</span>,</span>
-<span>    x <span class="op">=</span> <span class="va">adsl</span>,</span>
-<span>    code <span class="op">=</span> <span class="st">'</span></span>
+<span>  ADSL <span class="op">=</span> <span class="va">adsl</span>, ADTTE <span class="op">=</span> <span class="va">adtte</span>,</span>
+<span>  code <span class="op">=</span> <span class="st">'</span></span>
 <span><span class="st">    adsl &lt;- data.frame(</span></span>
 <span><span class="st">      STUDYID = "study",</span></span>
 <span><span class="st">      USUBJID = 1:10,</span></span>
 <span><span class="st">      SEX = sample(c("F", "M"), 10, replace = TRUE),</span></span>
 <span><span class="st">      AGE = rpois(10, 40)</span></span>
-<span><span class="st">    )'</span>,</span>
-<span>    keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"STUDYID"</span>, <span class="st">"USUBJID"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span></span>
-<span>    dataname <span class="op">=</span> <span class="st">"ADTTE"</span>,</span>
-<span>    x <span class="op">=</span> <span class="va">adtte</span>,</span>
-<span>    code <span class="op">=</span> <span class="st">'</span></span>
+<span><span class="st">    )</span></span>
 <span><span class="st">    adtte &lt;- rbind(adsl, adsl, adsl)</span></span>
 <span><span class="st">    adtte$PARAMCD &lt;- rep(c("OS", "EFS", "PFS"), each = 10)</span></span>
 <span><span class="st">    adtte$AVAL &lt;- c(</span></span>
 <span><span class="st">      rnorm(10, mean = 700, sd = 200),</span></span>
 <span><span class="st">      rnorm(10, mean = 400, sd = 100),</span></span>
 <span><span class="st">      rnorm(10, mean = 450, sd = 200)</span></span>
-<span><span class="st">    )'</span>,</span>
-<span>    keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"STUDYID"</span>, <span class="st">"USUBJID"</span>, <span class="st">"PARAMCD"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  join_keys <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/join_keys.html">join_keys</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/join_key.html">join_key</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"ADSL"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"STUDYID"</span>, <span class="st">"USUBJID"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/join_key.html">join_key</a></span><span class="op">(</span><span class="st">"ADTTE"</span>, <span class="st">"ADTTE"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span>, <span class="st">"PARAMCD"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/join_key.html">join_key</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="st">"ADTTE"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"STUDYID"</span>, <span class="st">"USUBJID"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="st">    )'</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">cdisc_data_obj</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "TealData"         "TealDataAbstract" "R6"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "teal_data"</span></span>
+<span><span class="co">## attr(,"package")</span></span>
+<span><span class="co">## [1] "teal.data"</span></span></code></pre>
 <p>The <code><a href="https://insightsengineering.github.io/teal.data/reference/join_keys.html">teal.data::join_keys</a></code> function is used to specify
 keys:</p>
 <ul>

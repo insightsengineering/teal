@@ -205,6 +205,9 @@
     <loc>https://insightsengineering.github.io/teal/reference/reporter_previewer_module.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/resolve_modules_datanames.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/run_js_files.html</loc>
   </url>
   <url>
@@ -230,6 +233,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/teal-package.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/teal_data_to_filtered_data.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/teal_slices.html</loc>
