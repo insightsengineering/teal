@@ -54,7 +54,7 @@ Using `teal`, you can launch this example module with the following:
 
 ```{r, eval = FALSE}
 app <- init(
-  data = teal_data(IRIS = IRIS, MTCARS = mtcars),
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = teal_example_module()
 )
 
