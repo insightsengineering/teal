@@ -28,9 +28,6 @@
 #'  - `join_keys` (`JoinKeys`) object
 #'  `...` can be handled automatically by [ddl_run()] but
 #'
-#' @param join_keys (`JoinKeys`)\cr
-#'  object
-#'
 #' @param input_mask (`list` named)\cr
 #'   arguments to be substituted in the `code`. These
 #'   argument are going to replace arguments set through
@@ -162,9 +159,11 @@ submit_button_server <- function(id, ...) {
 }
 
 # todo: to remove -------------
+#' @export
 open_conn <- function(username, password) {
   if (password != "pass") stop("Invalid credentials. 'pass' is the password") else TRUE
 }
+#' @export
 close_conn <- function(conn) {
   message("closed")
   return(NULL)

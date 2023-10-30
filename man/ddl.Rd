@@ -6,7 +6,7 @@
 \usage{
 ddl(
   expr,
-  code,
+  code = character(0),
   ui = submit_button_ui,
   input_mask = list(),
   server = submit_button_server,
@@ -42,7 +42,14 @@ returned code is still executable but secure.}
 evaluation and code masking process it is recommended to use \code{ddl_run}.
 Package provides universal \code{username_password_server} which
 runs \code{ddl_run} function, which returns \code{teal_data} object.
-Details in the the example}
+Details in the the example
+\itemize{
+\item \code{code} (\code{character}, \code{language}) code to be executed and returned in \code{teal_data} object.
+\item \code{input_mask} (\code{list} named) arguments to be substituted in the \code{code}.
+\item \code{datanames} (\code{character}) names of the objects to be created from the code evaluation.
+\item \code{join_keys} (\code{JoinKeys}) object
+\code{...} can be handled automatically by \code{\link[=ddl_run]{ddl_run()}} but
+}}
 
 \item{join_keys}{(\code{JoinKeys}) or a single (\code{JoinKeySet})\cr
 (optional) object with dataset column relationships used for joining.
