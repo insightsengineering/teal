@@ -65,8 +65,13 @@ ddl_run <- function(input = list(),
   }
 
   code_strings <- vapply(code, deparse1, character(1L))
-  code_strings <- gsub("(input\\$)(\\w+)", "\\.(\\2\\)", code_strings)
-  code_strings <- gsub("(input\\[\\[\")(\\w+)(\"\\]\\])", "\\.(\\2\\)", code_strings)
+  # Replace input$ with .()
+  code_strings <- gsub("input\\$(\\w+\\.?\\w*)", "\\.(\\1)", code_strings)
+  code_strings <- gsub("(input\\$)(`[^`]+`)", "\\.(\\2)", code_strings)
+
+  # Replace input[[ with .()
+  code_strings <- gsub("(input\\[\\[\")(\\w+\\.?\\w*)(\"\\]\\])", "\\.(\\2\\)", code_strings)
+  code_strings <- gsub("(input\\[\\[\")(\\w+\\-\\w+)\"\\]\\]", ".(`\\2`)", code_strings)
 
   # Use bquote to obtain code with input values and masking values.
   as.expression(
