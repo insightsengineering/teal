@@ -19,7 +19,6 @@
 #' @export
 ui_teal_with_splash <- function(id,
                                 data,
-                                modules,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
