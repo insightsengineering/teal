@@ -193,7 +193,7 @@ init <- function(data = teal_data(),
   # the `ui` and `server` with `id = character(0)` and calling the server function directly
   # rather than through `callModule`
   res <- list(
-    ui = ui_teal_with_splash(id = id, data = data, modules = modules, title = title, header = header, footer = footer),
+    ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
       if (length(landing) == 1L) {
         landing_module <- landing[[1L]]

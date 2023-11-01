@@ -66,3 +66,33 @@ eval_and_mask <- function(data,
     )
   )
 }
+
+#' Convenience wrapper for ddl_login_password
+ddl_login_password <- function(data, code, input_mask) {
+  srv <- function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      eventReactive(input$submit, {
+        eval_and_mask(data, code = code, input = input, input_mask = input_mask)
+      })
+    })
+  }
+
+  ui <- function(id) {
+    ns <- NS(id)
+    actionButton(inputId = ns("submit"), label = "Submit")
+  }
+
+  teal_transform(data, ui, server)
+}
+
+
+# todo: to remove before merge -------------
+#' @export
+open_conn <- function(username, password) {
+  if (password != "pass") stop("Invalid credentials. 'pass' is the password") else TRUE
+}
+#' @export
+close_conn <- function(conn) {
+  message("closed")
+  return(NULL)
+}
