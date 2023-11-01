@@ -16,6 +16,9 @@ eval_and_mask <- function(data,
 
   # evaluate code and substitute input
   data <- teal.code::eval_code(data, .mask_code(code, args = input))
+  if (inherits(data, "qenv.error")) {
+    return(data)
+  }
 
   if (identical(ls(data@env), character(0))) {
     warning(

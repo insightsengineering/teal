@@ -160,8 +160,6 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
       }
     )
 
-    env <- environment()
-
     reporter <- teal.reporter::Reporter$new()
     if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
       modules <- append_module(modules, reporter_previewer_module())
@@ -172,19 +170,12 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
     # just handle it once because data obtained through delayed loading should
     # usually not change afterwards
     # if restored from bookmarked state, `filter` is ignored
+    env <- environment()
     observeEvent(raw_data(), {
       logger::log_trace("srv_teal@5 setting main ui after data was pulled")
       env$progress <- shiny::Progress$new(session)
       on.exit(env$progress$close())
       env$progress$set(0.25, message = "Setting data")
-
-      # after loading data we can finaly get datanames and join_keys
-      # we need to resolve module$datanames to replace "all" to all datasets and include parent datanames
-      # we need to check whether filters are set for existing datanames
-      datanames <- teal.data::get_dataname(raw_data())
-      join_keys <- teal.data::get_join_keys(raw_data())
-      modules <- resolve_modules_datanames(modules = modules, datanames = datanames, join_keys = join_keys)
-      assert_filter_datanames(filter, datanames)
 
       # create a list of data following structure of the nested modules list structure.
       # Because it's easier to unpack modules and datasets when they follow the same nested structure.
@@ -192,6 +183,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
       # Singleton starts with only global filters active.
       filter_global <- Filter(function(x) x$id %in% attr(filter, "mapping")$global_filters, filter)
       datasets_singleton$set_filter_state(filter_global)
+
       module_datasets <- function(modules) {
         if (inherits(modules, "teal_modules")) {
           datasets <- lapply(modules$children, module_datasets)
@@ -201,11 +193,16 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
         } else if (isTRUE(attr(filter, "module_specific"))) {
           # we should create FilteredData even if modules$datanames is null
           # null controls a display of filter panel but data should be still passed
-          datanames <- if (is.null(modules$datanames)) teal.data::get_dataname(raw_data()) else modules$datanames
-          # todo: subset tdata object to datanames
+          datanames <- if (is.null(modules$datanames) || modules$datanames == "all") {
+            include_parent_datanames(raw_data()@datanames, raw_data()@join_keys) # todo: use methods instead
+          } else {
+            modules$datanames
+          }
+          # todo: subset teal_data to datanames
           datasets_module <- teal_data_to_filtered_data(raw_data())
 
           # set initial filters
+          #  - filtering filters for this module
           slices <- Filter(x = filter, f = function(x) {
             x$id %in% unique(unlist(attr(filter, "mapping")[c(modules$label, "global_filters")])) &&
               x$dataname %in% datanames

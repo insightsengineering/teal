@@ -106,7 +106,7 @@
 #'   shinyApp(app$ui, app$server)
 #' }
 #'
-init <- function(data,
+init <- function(data = teal_data(),
                  modules,
                  title = NULL,
                  filter = teal_slices(),
@@ -164,7 +164,7 @@ init <- function(data,
   # datanames <- teal.data::get_dataname(data)
   # join_keys <- teal.data::get_join_keys(data)
   # modules <- resolve_modules_datanames(modules = modules, datanames = datanames, join_keys = join_keys)
-  # assert_filter_datanames(filter, datanames)
+  # check_filter_datanames(filter, datanames)
 
   if (isTRUE(attr(filter, "module_specific"))) {
     module_names <- unlist(c(module_labels(modules), "global_filters"))
