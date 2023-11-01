@@ -84,31 +84,6 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
           data_module[[1]]$server_args
         )
       )
-      reactive({
-        data <- ddl_out()
-        if (inherits(data, "qenv.error")) {
-          #
-          showNotification(sprintf("Error: %s", data$message))
-          return(NULL)
-        }
-
-        is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
-        is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
-
-        if (!isTRUE(is_modules_ok)) {
-          showNotification(is_modules_ok)
-          # NULL won't trigger observe which waits for raw_data()
-          # we will need to consider validate process for filtered data and modules!
-          return(NULL)
-        }
-        if (!isTRUE(is_filter_ok)) {
-          showNotification(is_filter_ok)
-          # we allow app to continue if applied filters are outside
-          # of possible data range
-        }
-
-        data
-      })
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
@@ -145,7 +120,34 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       raw_data
     }
 
-    res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
+    raw_data_checked <- reactive({
+      data <- raw_data()
+      if (inherits(data, "qenv.error")) {
+        #
+        showNotification(sprintf("Error: %s", data$message))
+        return(NULL)
+      }
+
+      is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
+      is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+
+      if (!isTRUE(is_modules_ok)) {
+        showNotification(is_modules_ok)
+        # NULL won't trigger observe which waits for raw_data()
+        # we will need to consider validate process for filtered data and modules!
+        return(NULL)
+      }
+      if (!isTRUE(is_filter_ok)) {
+        showNotification(is_filter_ok)
+        # we allow app to continue if applied filters are outside
+        # of possible data range
+      }
+
+      data
+    })
+
+
+    res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data_checked, filter = filter)
     logger::log_trace("srv_teal_with_splash initialized module with data { toString(get_dataname(data))}.")
     return(res)
   })
