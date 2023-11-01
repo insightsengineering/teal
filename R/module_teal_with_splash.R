@@ -19,17 +19,23 @@
 #' @export
 ui_teal_with_splash <- function(id,
                                 data,
+                                modules,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
   checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data"))
   ns <- NS(id)
 
+  data_module <- extract_module(modules, "teal_module_data")[[1]]
+
   # Startup splash screen for delayed loading
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
-  splash_ui <- if (inherits(data, "teal_data")) {
+
+  splash_ui <- if (length(data_module)) {
+    data_module$ui(ns("data"))
+  } else if (inherits(data, "teal_data")) {
     div()
   } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
     div()
@@ -64,9 +70,21 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       shinyjs::showLog()
     }
 
+    data_module <- extract_module(modules, "teal_module_data")
+    if (length(data_module) > 1L) stop("Only one `teal_module_data` can be used.")
+    modules <- drop_module(modules, "teal_module_data")
+
     # raw_data contains teal_data object
     # either passed to teal::init or returned from ddl
-    raw_data <- if (inherits(data, "teal_data")) {
+    raw_data <- if (length(data_module)) {
+      do.call(
+        data_module[[1]]$server,
+        c(
+          list(id = "data", data = data),
+          data_module[[1]]$server_args
+        )
+      )
+    } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
       new_data <- do.call(

@@ -140,3 +140,21 @@ resolve_modules_datanames <- function(modules, datanames, join_keys) {
     modules
   }
 }
+
+
+assert_filter_datanames <- function(filter, datanames) {
+  # check teal_slices against datanames
+  for (i in seq_along(filter)) {
+    dataname_i <- shiny::isolate(filter[[i]]$dataname)
+    if (!dataname_i %in% datanames) {
+      stop(
+        sprintf(
+          "filter[[%s]] has a different dataname than available in a 'data':\n %s not in %s",
+          i,
+          dataname_i,
+          toString(datanames)
+        )
+      )
+    }
+  }
+}
