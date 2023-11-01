@@ -77,13 +77,13 @@ password and we'd like to skip this input in the reproducible code. Possibly, us
 could be substituted with \code{askpass::askpass()} call, so the returned code is still executable but secure.
 \code{ddl} developer must understand that this is a security risk and should be handled with care.
 To make sure that the code is reproducible, \code{ddl} object should be used with \code{input_mask} argument.
-\code{teal} provides convenience function \code{\link[=ddl_run]{ddl_run()}} which handles evaluation of the code, masking
+\code{teal} provides convenience function \code{\link[=eval_and_mask]{eval_and_mask()}} which handles evaluation of the code, masking
 and creating \code{teal_data} object. Such \code{server} function could look like this:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{server = function(id, ...) \{
   moduleServer(id, function(input, output, session) \{
     reactive(\{
-     ddl_run(input = input, ...)
+     eval_and_mask(input = input, ...)
     \})
   \})
 \}

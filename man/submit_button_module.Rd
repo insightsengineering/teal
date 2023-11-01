@@ -13,7 +13,7 @@ submit_button_server(id, ...)
 \arguments{
 \item{id}{(\code{character}) \code{shiny} module id.}
 
-\item{...}{(\code{list}) arguments passed to \code{ddl_run} function.}
+\item{...}{(\code{list}) arguments passed to \code{\link[=eval_and_mask]{eval_and_mask()}}.}
 }
 \value{
 \code{shiny} module
