@@ -23,18 +23,16 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data"))
+  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "teal_module_data"))
   ns <- NS(id)
-
-  data_module <- extract_module(modules, "teal_module_data")[[1]]
 
   # Startup splash screen for delayed loading
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
 
-  splash_ui <- if (length(data_module)) {
-    data_module$ui(ns("data"))
+  splash_ui <- if (inherits(data, "teal_module_data")) {
+    data$ui(ns("data"))
   } else if (inherits(data, "teal_data")) {
     div()
   } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
@@ -62,7 +60,7 @@ ui_teal_with_splash <- function(id,
 #' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data"))
+  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "teal_module_data"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_with_splash initializing module with data { toString(get_dataname(data))}.")
 
@@ -70,18 +68,14 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       shinyjs::showLog()
     }
 
-    data_module <- extract_module(modules, "teal_module_data")
-    if (length(data_module) > 1L) stop("Only one `teal_module_data` can be used.")
-    modules <- drop_module(modules, "teal_module_data")
-
     # raw_data contains teal_data object
     # either passed to teal::init or returned from ddl
-    raw_data <- if (length(data_module)) {
+    raw_data <- if (inherits(data, "teal_module_data")) {
       ddl_out <- do.call(
-        data_module[[1]]$server,
+        data$server,
         c(
-          list(id = "data", data = data),
-          data_module[[1]]$server_args
+          list(id = "data"),
+          data$server_args
         )
       )
     } else if (inherits(data, "teal_data")) {
