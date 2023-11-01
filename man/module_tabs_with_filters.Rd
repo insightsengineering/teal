@@ -20,12 +20,6 @@ srv_tabs_with_filters(
 \item{id}{(\code{character(1)})\cr
 module id}
 
-\item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
-nested list of \code{teal_modules} or \code{teal_module} objects or a single
-\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
-will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
-more details.}
-
 \item{datasets}{(\verb{named list} of \code{FilteredData})\cr
 object to store filter state and filtered datasets, shared across modules. For more
 details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}. Structure of the list must be the same as structure

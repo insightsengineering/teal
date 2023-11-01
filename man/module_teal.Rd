@@ -35,12 +35,6 @@ argument) will be placed in the app's \code{ui} function so code which needs to 
 \item{footer}{(\code{shiny.tag} or \code{character})\cr
 the footer of the app}
 
-\item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
-nested list of \code{teal_modules} or \code{teal_module} objects or a single
-\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
-will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
-more details.}
-
 \item{raw_data}{(\code{reactive})\cr
 returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
 }

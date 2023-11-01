@@ -7,7 +7,6 @@
 ui_teal_with_splash(
   id,
   data,
-  modules,
   title,
   header = tags$p("Add Title Here"),
   footer = tags$p("Add Footer Here")
@@ -26,12 +25,6 @@ or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 do not match the original object names. To ensure reproducibility please use \code{\link[teal.data:teal_data]{teal.data::teal_data()}}
 or \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}} with \code{check = TRUE} enabled.}
-
-\item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
-nested list of \code{teal_modules} or \code{teal_module} objects or a single
-\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
-will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
-more details.}
 
 \item{title}{(\code{NULL} or \code{character})\cr
 The browser window title (defaults to the host URL of the page).}
