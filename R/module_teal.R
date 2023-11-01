@@ -178,6 +178,14 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
       on.exit(env$progress$close())
       env$progress$set(0.25, message = "Setting data")
 
+      # after loading data we can finaly get datanames and join_keys
+      # we need to resolve module$datanames to replace "all" to all datasets and include parent datanames
+      # we need to check whether filters are set for existing datanames
+      datanames <- teal.data::get_dataname(raw_data())
+      join_keys <- teal.data::get_join_keys(raw_data())
+      modules <- resolve_modules_datanames(modules = modules, datanames = datanames, join_keys = join_keys)
+      assert_filter_datanames(filter, datanames)
+
       # create a list of data following structure of the nested modules list structure.
       # Because it's easier to unpack modules and datasets when they follow the same nested structure.
       datasets_singleton <- teal_data_to_filtered_data(raw_data())

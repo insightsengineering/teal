@@ -160,11 +160,11 @@ init <- function(data,
   # convert teal.slice::teal_slices to teal::teal_slices
   filter <- as.teal_slices(as.list(filter))
 
-  # resolve modules datanames
-  datanames <- teal.data::get_dataname(data)
-  join_keys <- teal.data::get_join_keys(data)
-  modules <- resolve_modules_datanames(modules = modules, datanames = datanames, join_keys = join_keys)
-  assert_filter_datanames(filter, datanames)
+  # resolve modules datanames (can't be here anymore as we might not have datanames in data)
+  # datanames <- teal.data::get_dataname(data)
+  # join_keys <- teal.data::get_join_keys(data)
+  # modules <- resolve_modules_datanames(modules = modules, datanames = datanames, join_keys = join_keys)
+  # assert_filter_datanames(filter, datanames)
 
   if (isTRUE(attr(filter, "module_specific"))) {
     module_names <- unlist(c(module_labels(modules), "global_filters"))

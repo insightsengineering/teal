@@ -31,7 +31,7 @@ eval_and_mask <- function(data,
     # replace last code entry with masked code
     # format_expression needed to convert expression into character(1)
     #  question: warnings and errors are not masked, is it ok?
-    data@code[length(code)] <- format_expression(.mask_code(code, args = input))
+    data@code[length(data@code)] <- format_expression(.mask_code(code, args = input))
   }
 
   # todo: should it be here or in datanames(data)?
