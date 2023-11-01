@@ -161,8 +161,21 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
     )
 
     env <- environment()
-    datasets_reactive <- eventReactive(raw_data(), {
+
+    reporter <- teal.reporter::Reporter$new()
+    if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
+      modules <- append_module(modules, reporter_previewer_module())
+    }
+
+    # Replace splash / welcome screen once data is loaded ----
+    # ignoreNULL to not trigger at the beginning when data is NULL
+    # just handle it once because data obtained through delayed loading should
+    # usually not change afterwards
+    # if restored from bookmarked state, `filter` is ignored
+    observeEvent(raw_data(), {
+      logger::log_trace("srv_teal@5 setting main ui after data was pulled")
       env$progress <- shiny::Progress$new(session)
+      on.exit(env$progress$close())
       env$progress$set(0.25, message = "Setting data")
 
       # create a list of data following structure of the nested modules list structure.
@@ -201,26 +214,8 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
       }
       datasets <- module_datasets(modules)
 
-      logger::log_trace("srv_teal@4 Raw Data transferred to FilteredData.")
-      datasets
-    })
-
-    reporter <- teal.reporter::Reporter$new()
-    if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
-      modules <- append_module(modules, reporter_previewer_module())
-    }
-
-    # Replace splash / welcome screen once data is loaded ----
-    # ignoreNULL to not trigger at the beginning when data is NULL
-    # just handle it once because data obtained through delayed loading should
-    # usually not change afterwards
-    # if restored from bookmarked state, `filter` is ignored
-    observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, {
-      logger::log_trace("srv_teal@5 setting main ui after data was pulled")
-      env$progress$set(0.5, message = "Setting up main UI")
-      on.exit(env$progress$close())
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
-
+      env$progress$set(0.5, message = "Setting up main UI")
       removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
       insertUI(
         selector = paste0("#", session$ns("main_ui_container")),
@@ -230,7 +225,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
         ui = div(ui_tabs_with_filters(
           session$ns("main_ui"),
           modules = modules,
-          datasets = datasets_reactive(),
+          datasets = datasets,
           filter = filter
         )),
         # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
@@ -242,7 +237,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
       # registered once (calling server functions twice would trigger observers twice each time)
       active_module <- srv_tabs_with_filters(
         id = "main_ui",
-        datasets = datasets_reactive(),
+        datasets = datasets,
         modules = modules,
         reporter = reporter,
         filter = filter
