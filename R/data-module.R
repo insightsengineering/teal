@@ -26,14 +26,14 @@
 #' could be substituted with `askpass::askpass()` call, so the returned code is still executable but secure.
 #' `ddl` developer must understand that this is a security risk and should be handled with care.
 #' To make sure that the code is reproducible, `ddl` object should be used with `input_mask` argument.
-#' `teal` provides convenience function [ddl_run()] which handles evaluation of the code, masking
+#' `teal` provides convenience function [eval_and_mask()] which handles evaluation of the code, masking
 #' and creating `teal_data` object. Such `server` function could look like this:
 #'
 #' ```
 #' server = function(id, ...) {
 #'   moduleServer(id, function(input, output, session) {
 #'     reactive({
-#'      ddl_run(input = input, ...)
+#'      eval_and_mask(input = input, ...)
 #'     })
 #'   })
 #' }
@@ -97,7 +97,7 @@ tm_teal_data <- function(label = "data",
   if (!missing(expr) || !missing(code)) {
     # this is intended to be used with input mask
     # but in the same time we can't forbid user to use it
-    # without input_mask. Some users might prefer to use ddl_run
+    # without input_mask. Some users might prefer to use eval_and_mask
     # to automaticaly handle their code.
     # Q: can NEST bear responsibility for reproducibility of the masked code?
     if (!missing(expr)) {
@@ -121,7 +121,7 @@ tm_teal_data <- function(label = "data",
 #'
 #'
 #' @param id (`character`) `shiny` module id.
-#' @param ... (`list`) arguments passed to `ddl_run` function.
+#' @param ... (`list`) arguments passed to `eval_and_mask` function.
 #' @return `shiny` module
 NULL
 
@@ -137,7 +137,7 @@ submit_button_ui <- function(id) {
 submit_button_server <- function(id, ...) {
   moduleServer(id, function(input, output, session) {
     tdata <- eventReactive(input$submit, {
-      ddl_run(input = input, ...)
+      eval_and_mask(input = input, ...)
     })
 
     # would need to make sure we handle reactivity correctly here as teal::init expects not reactive teal_data...
