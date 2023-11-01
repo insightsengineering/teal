@@ -71,6 +71,8 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Collate:
+    'data-data-utils.R'
+    'data-module.R'
     'dummy_functions.R'
     'get_rcode_utils.R'
     'include_css_js.R'
