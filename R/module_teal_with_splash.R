@@ -19,17 +19,21 @@
 #' @export
 ui_teal_with_splash <- function(id,
                                 data,
+                                modules,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data"))
+  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "teal_transform_module"))
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
-  splash_ui <- if (inherits(data, "teal_data")) {
+
+  splash_ui <- if (inherits(data, "teal_transform_module")) {
+    data$ui(id)
+  } else if (inherits(data, "teal_data")) {
     div()
   } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
     div()
@@ -56,7 +60,7 @@ ui_teal_with_splash <- function(id,
 #' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data"))
+  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "teal_transform_module"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_with_splash initializing module with data { toString(get_dataname(data))}.")
 
@@ -66,7 +70,9 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
     # raw_data contains teal_data object
     # either passed to teal::init or returned from ddl
-    raw_data <- if (inherits(data, "teal_data")) {
+    raw_data <- if (inherits(data, "teal_transform_module")) {
+      ddl_out <- data$server(id, data = attr(data, "data"))
+    } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
       new_data <- do.call(
@@ -102,7 +108,34 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       raw_data
     }
 
-    res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
+    raw_data_checked <- reactive({
+      data <- raw_data()
+      if (inherits(data, "qenv.error")) {
+        #
+        showNotification(sprintf("Error: %s", data$message))
+        return(NULL)
+      }
+
+      is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
+      is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+
+      if (!isTRUE(is_modules_ok)) {
+        showNotification(is_modules_ok)
+        # NULL won't trigger observe which waits for raw_data()
+        # we will need to consider validate process for filtered data and modules!
+        return(NULL)
+      }
+      if (!isTRUE(is_filter_ok)) {
+        showNotification(is_filter_ok)
+        # we allow app to continue if applied filters are outside
+        # of possible data range
+      }
+
+      data
+    })
+
+
+    res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data_checked, filter = filter)
     logger::log_trace("srv_teal_with_splash initialized module with data { toString(get_dataname(data))}.")
     return(res)
   })
