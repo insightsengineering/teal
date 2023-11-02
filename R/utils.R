@@ -147,11 +147,12 @@ check_modules_datanames <- function(modules, datanames) {
     if (inherits(modules, "teal_modules")) {
       sapply(modules$children, function(module) recursive_check_datanames(module, datanames = datanames))
     } else {
-      if (!modules$datanames %in% c("all", datanames)) {
+      extra_datanames <- setdiff(modules$datanames, c("all", datanames))
+      if (length(extra_datanames)) {
         sprintf(
           "- Module %s has a different dataname than available in a 'data': %s not in %s",
           modules$label,
-          toString(datanames),
+          toString(extra_datanames),
           toString(datanames)
         )
       }
