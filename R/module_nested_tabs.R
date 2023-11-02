@@ -300,7 +300,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   datanames <- if (is.null(module$datanames) || identical(module$datanames, "all")) {
     datasets$datanames()
   } else {
-    module$datanames # todo: include parents!
+    unique(module$datanames) # todo: include parents!
   }
 
   # list of reactive filtered data
