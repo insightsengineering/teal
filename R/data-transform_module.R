@@ -9,7 +9,7 @@
 #' @param ui (`function(id)`) function to create UI
 #' @param server (`function(id)`) `shiny` server which returns `teal_data` object wrapped in
 #' `reactive`. `server` should have `id` argument and exactly the same formals as specified in `...`.
-#' @export
+#' @export # todo: do we want to export this?
 delayed_data <- function(ui, server, ...) {
   checkmate::assert_function(ui, args = "id")
   server_args <- list(...)

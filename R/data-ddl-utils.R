@@ -67,22 +67,23 @@ eval_and_mask <- function(data,
   )
 }
 
-#' Convenience wrapper for ddl_login_password
-ddl_login_password <- function(data, code, input_mask) {
-  srv <- function(id, data) {
-    moduleServer(id, function(input, output, session) {
-      eventReactive(input$submit, {
-        eval_and_mask(data, code = code, input = input, input_mask = input_mask)
-      })
+#' Convenience wrapper for ddl
+#' @export # todo: do we want to export this?
+ddl <- function(code, input_mask, ui, server) {
+  delayed_data(ui = ui, server = server, code = code, input_mask = input_mask)
+}
+
+ui_login_and_password <- function(id) {
+  ns <- NS(id)
+  actionButton(inputId = ns("submit"), label = "Submit")
+}
+
+srv_login_and_password <- function(id, code, input_mask) {
+  moduleServer(id, function(input, output, session) {
+    eventReactive(input$submit, {
+      teal_data() |> eval_and_mask(code = code, input = input, input_mask = input_mask)
     })
-  }
-
-  ui <- function(id) {
-    ns <- NS(id)
-    actionButton(inputId = ns("submit"), label = "Submit")
-  }
-
-  delayed_data(data, ui, server)
+  })
 }
 
 
