@@ -22,7 +22,10 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "delayed_data"))
+  checkmate::assert(
+    checkmate::check_multi_class(data, c("TealData", "teal_data")),
+    check_shiny_module_list(data)
+  )
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
@@ -59,7 +62,10 @@ ui_teal_with_splash <- function(id,
 #' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "delayed_data"))
+  checkmate::assert(
+    checkmate::check_multi_class(data, c("TealData", "teal_data")),
+    check_shiny_module_list(data)
+  )
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_with_splash initializing module with data.")
 
