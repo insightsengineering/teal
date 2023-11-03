@@ -38,9 +38,9 @@ delayed_data <- function(ui, server, ...) {
     )
   }
 
-  structure(
-    list(ui = ui, server = server),
+  x <- list(ui = ui, server = server)
+  structure(x,
     server_args = server_args,
-    class = "delayed_data"
+    class = c("delayed_data", class(x))
   )
 }

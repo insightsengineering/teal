@@ -188,3 +188,8 @@ check_filter_datanames <- function(filters, datanames) {
     TRUE
   }
 }
+
+
+is_shiny_module_list <- function(x) {
+  is.list(x) && identical(names(x), c("ui", "server"))
+}
