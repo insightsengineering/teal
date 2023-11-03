@@ -75,7 +75,8 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         append(
           list(id = "data"),
           attr(data, "server_args")
-        )
+        ),
+        quote = TRUE
       )
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
