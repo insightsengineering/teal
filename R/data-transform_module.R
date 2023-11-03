@@ -13,7 +13,7 @@
 delayed_data <- function(ui, server, ...) {
   checkmate::assert_function(ui, args = "id")
   server_args <- list(...)
-  if (is.null(names(server_args))) {
+  if (length(server_args) && is.null(names(server_args))) {
     stop("All arguments passed to delayed_data() should be named")
   }
 
