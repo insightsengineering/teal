@@ -30,7 +30,7 @@ ui_teal_with_splash <- function(id,
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
 
-  splash_ui <- if (is_shiny_module_list(data)) {
+  splash_ui <- if (test_shiny_module_list(data)) {
     data$ui(ns("data"))
   } else if (inherits(data, "teal_data")) {
     div()
@@ -69,7 +69,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
     # raw_data contains teal_data object
     # either passed to teal::init or returned from ddl
-    raw_data <- if (is_shiny_module_list(data)) {
+    raw_data <- if (test_shiny_module_list(data)) {
       ddl_out <- do.call(
         data$server,
         append(

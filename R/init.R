@@ -115,12 +115,15 @@ init <- function(data = teal_data(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
   if (
-    !inherits(data, c("TealData", "teal_data")) && !is_shiny_module_list(data)
+    !inherits(data, c("TealData", "teal_data")) && !test_shiny_module_list(data)
   ) {
     data <- teal.data::to_relational_data(data = data)
   }
 
-  checkmate::assert_multi_class(data, c("TealData", "teal_data", "list", "delayed_data"))
+  checkmate::assert(
+    checkmate::check_multi_class(data, c("TealData", "teal_data")),
+    check_shiny_module_list(data)
+  )
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert(
@@ -148,7 +151,7 @@ init <- function(data = teal_data(),
   hashables <- mget(c("data", "modules"))
   hashables$data <- if (inherits(hashables$data, "teal_data")) {
     as.list(hashables$data@env)
-  } else if (is_shiny_module_list(data)) {
+  } else if (test_shiny_module_list(data)) {
     # what?
   } else if (hashables$data$is_pulled()) {
     sapply(get_dataname(hashables$data), simplify = FALSE, function(dn) {

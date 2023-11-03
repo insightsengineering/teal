@@ -190,6 +190,15 @@ check_filter_datanames <- function(filters, datanames) {
 }
 
 
-is_shiny_module_list <- function(x) {
-  is.list(x) && identical(names(x), c("ui", "server"))
+test_shiny_module_list <- function(data) {
+  is.list(data) && identical(names(data), c("ui", "server"))
+}
+
+
+check_shiny_module_list <- function(data) {
+  if (!test_shiny_module_list(data)) {
+    "`data` should be a list with 'ui' and 'server' elements."
+  } else {
+    TRUE
+  }
 }
