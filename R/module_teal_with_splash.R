@@ -22,7 +22,7 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "teal_transform_module"))
+  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "delayed_data"))
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
@@ -30,8 +30,8 @@ ui_teal_with_splash <- function(id,
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
 
-  splash_ui <- if (inherits(data, "teal_transform_module")) {
-    data$ui(id)
+  splash_ui <- if (inherits(data, "delayed_data")) {
+    data$ui(ns("data"))
   } else if (inherits(data, "teal_data")) {
     div()
   } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
@@ -59,9 +59,9 @@ ui_teal_with_splash <- function(id,
 #' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "teal_transform_module"))
+  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data", "delayed_data"))
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_teal_with_splash initializing module with data { toString(get_dataname(data))}.")
+    logger::log_trace("srv_teal_with_splash initializing module with data.")
 
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
@@ -69,8 +69,14 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
     # raw_data contains teal_data object
     # either passed to teal::init or returned from ddl
-    raw_data <- if (inherits(data, "teal_transform_module")) {
-      ddl_out <- data$server(id, data = attr(data, "data"))
+    raw_data <- if (inherits(data, "delayed_data")) {
+      ddl_out <- do.call(
+        data$server,
+        append(
+          list(id = "data"),
+          attr(data, "server_args")
+        )
+      )
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
@@ -135,7 +141,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
 
     res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data_checked, filter = filter)
-    logger::log_trace("srv_teal_with_splash initialized module with data { toString(get_dataname(data))}.")
+    logger::log_trace("srv_teal_with_splash initialized module with data.")
     return(res)
   })
 }

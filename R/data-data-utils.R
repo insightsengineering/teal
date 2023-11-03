@@ -82,7 +82,7 @@ ddl_login_password <- function(data, code, input_mask) {
     actionButton(inputId = ns("submit"), label = "Submit")
   }
 
-  teal_transform(data, ui, server)
+  delayed_data(data, ui, server)
 }
 
 
