@@ -124,23 +124,30 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       data <- raw_data()
       if (inherits(data, "qenv.error")) {
         #
-        showNotification(sprintf("Error: %s", data$message))
+        showNotification(sprintf("Error: %s", data$message), type = "error")
         logger::log_error(data$message)
         return(NULL)
       }
+      if (!inherits(data, "teal_data")) {
+        msg <- "Error: server must return 'teal_data' object"
+        showNotification(msg, type = "error")
+        logger::log_error(msg)
+        return(NULL)
+      }
+
 
       is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
       is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
 
       if (!isTRUE(is_modules_ok)) {
-        showNotification(is_modules_ok)
+        showNotification(is_modules_ok, type = "error")
         logger::log_error(is_modules_ok)
         # NULL won't trigger observe which waits for raw_data()
         # we will need to consider validate process for filtered data and modules!
         return(NULL)
       }
       if (!isTRUE(is_filter_ok)) {
-        showNotification(is_filter_ok)
+        showNotification(is_filter_ok, type = "warning")
         logger::log_warn(is_filter_ok)
         # we allow app to continue if applied filters are outside
         # of possible data range

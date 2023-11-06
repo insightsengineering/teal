@@ -5,9 +5,9 @@
 #' [teal::init()]. This helps in case when app developer wants to use `teal` app
 #' where `data` can be influenced by app user. For example, app developer can create
 #' `teal` app which allows user to connect to database and then use data from this database.
-#' @param ... (`any`) arguments passed to `server` function.
 #' @param ui (`function(id)`) function to create UI
 #' @param server (`function(id)`) `shiny` server which returns `teal_data` object wrapped in
+#' @param ... (`any`) arguments passed to `server` function.
 #' `reactive`. `server` should have `id` argument and exactly the same formals as specified in `...`.
 #' @export
 delayed_data <- function(ui, server, ...) {
