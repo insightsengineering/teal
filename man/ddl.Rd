@@ -13,8 +13,7 @@ ddl(code, env_mask, ui, server)
 
 \item{ui}{(\verb{function(id)}) function to create UI}
 
-\item{server}{(\verb{function(id)}) \code{shiny} server which returns \code{teal_data} object wrapped in
-\code{reactive}. \code{server} should have \code{id} argument and exactly the same formals as specified in \code{...}.}
+\item{server}{(\verb{function(id)}) \code{shiny} server which returns \code{teal_data} object wrapped in}
 }
 \description{
 Convenience wrapper for ddl
