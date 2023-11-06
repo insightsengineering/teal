@@ -152,8 +152,8 @@ check_modules_datanames <- function(modules, datanames) {
         sprintf(
           "- Module %s has a different dataname than available in a 'data': %s not in %s",
           modules$label,
-          toString(extra_datanames),
-          toString(datanames)
+          toString(dQuote(extra_datanames, q = FALSE)),
+          toString(dQuote(datanames, q = FALSE))
         )
       }
     }
@@ -176,8 +176,8 @@ check_filter_datanames <- function(filters, datanames) {
         sprintf(
           "- Filter %s has a different dataname than available in a 'data':\n %s not in %s",
           filter$label,
-          dataname,
-          toString(datanames)
+          dQuote(dataname),
+          toString(dQuote(datanames))
         )
       }
     }

@@ -1,5 +1,5 @@
 testthat::test_that("init data accepts TealData object", {
-  testthat::expect_no_error(
+  lifecycle::expect_deprecated(
     init(
       data = teal.data::cdisc_data(
         teal.data::cdisc_dataset(
@@ -140,6 +140,15 @@ testthat::test_that("init data accepts a list of TealDatasetConnector object", {
   testthat::expect_no_error(init(data = dsc1, modules = modules(example_module())))
 })
 
+testthat::test_that("init data accepts a list with ui and server", {
+  testthat::expect_no_error(
+    init(
+      data = list(ui = function(id) div(), server = function(id) NULL),
+      modules = modules(teal:::example_module())
+    )
+  )
+})
+
 testthat::test_that("init modules accepts a teal_modules object", {
   mods <- modules(example_module(), example_module())
   testthat::expect_no_error(init(data = iris, modules = mods))
@@ -155,16 +164,10 @@ testthat::test_that("init modules accepts a teal_module object", {
   testthat::expect_no_error(init(data = iris, modules = mods))
 })
 
-testthat::test_that("init filter accepts named list or `teal_slices`", {
-  fl <- list(
-    "iris" = list(
-      "Species" = list(selected = "setosa")
-    )
-  )
+testthat::test_that("init filter accepts `teal_slices`", {
   fs <- teal.slice::teal_slices(
     teal.slice::teal_slice(dataname = "iris", varname = "species", selected = "setosa")
   )
-  testthat::expect_no_error(init(data = list(iris), modules = modules(example_module()), filter = fl))
   testthat::expect_no_error(init(data = list(iris), modules = modules(example_module()), filter = fs))
   testthat::expect_error(
     init(data = list(iris), modules = modules(example_module()), filter = unclass(fs)),

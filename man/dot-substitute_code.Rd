@@ -4,12 +4,13 @@
 \alias{.substitute_code}
 \title{Substitute symbols in the code}
 \usage{
-.substitute_code(code, args)
+.substitute_code(expr, env)
 }
 \arguments{
-\item{code}{(\code{language}) code to substitute}
+\item{expr}{any syntactically valid \R expression}
 
-\item{args}{(\code{list}) named list or arguments}
+\item{env}{an environment or a list object.  Defaults to the
+    current evaluation environment.}
 }
 \description{
 Function replaces symbols in the provided code by values of the \code{args} argument.

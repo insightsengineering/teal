@@ -4,7 +4,17 @@
 \alias{ddl}
 \title{Convenience wrapper for ddl}
 \usage{
-ddl(code, input_mask, ui, server)
+ddl(code, env_mask, ui, server)
+}
+\arguments{
+\item{code}{(\code{character} or \code{language})}
+
+\item{env_mask}{(\verb{named list})}
+
+\item{ui}{(\verb{function(id)}) function to create UI}
+
+\item{server}{(\verb{function(id)}) \code{shiny} server which returns \code{teal_data} object wrapped in
+\code{reactive}. \code{server} should have \code{id} argument and exactly the same formals as specified in \code{...}.}
 }
 \description{
 Convenience wrapper for ddl

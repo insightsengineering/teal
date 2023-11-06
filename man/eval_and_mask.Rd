@@ -4,16 +4,16 @@
 \alias{eval_and_mask}
 \title{Function runs the \code{code}, masks the \code{code} and creates \code{teal_data} object.}
 \usage{
-eval_and_mask(data, code, input = list(), input_mask = list())
+eval_and_mask(data, code, env = list(), env_mask = list())
 }
 \arguments{
 \item{data}{(\code{teal_data}) object}
 
 \item{code}{(\code{language}) code to evaluate}
 
-\item{input}{(\code{list}) containing inputs to be used in the \code{code}}
+\item{env}{(\code{list}) containing inputs to be used in the \code{code}}
 
-\item{input_mask}{(\code{list}) containing inputs to be masked in the \code{code}}
+\item{env_mask}{(\code{list}) containing inputs to be masked in the \code{code}}
 }
 \value{
 \code{teal_data} object

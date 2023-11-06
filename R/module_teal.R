@@ -165,16 +165,9 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
       modules <- append_module(modules, reporter_previewer_module())
     }
 
-    # Replace splash / welcome screen once data is loaded ----
-    # ignoreNULL to not trigger at the beginning when data is NULL
-    # just handle it once because data obtained through delayed loading should
-    # usually not change afterwards
-    # if restored from bookmarked state, `filter` is ignored
     env <- environment()
-    observeEvent(raw_data(), {
-      logger::log_trace("srv_teal@5 setting main ui after data was pulled")
+    datasets_reactive <- eventReactive(raw_data(), {
       env$progress <- shiny::Progress$new(session)
-      on.exit(env$progress$close())
       env$progress$set(0.25, message = "Setting data")
 
       # create a list of data following structure of the nested modules list structure.
@@ -217,10 +210,22 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
           datasets_singleton
         }
       }
-      datasets <- module_datasets(modules)
+      module_datasets(modules)
+    })
+
+    # Replace splash / welcome screen once data is loaded ----
+    # ignoreNULL to not trigger at the beginning when data is NULL
+    # just handle it once because data obtained through delayed loading should
+    # usually not change afterwards
+    # if restored from bookmarked state, `filter` is ignored
+
+    observeEvent(datasets_reactive(), {
+      logger::log_trace("srv_teal@5 setting main ui after data was pulled")
+      on.exit(env$progress$close())
+      env$progress$set(0.5, message = "Setting up main UI")
+      datasets <- datasets_reactive()
 
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
-      env$progress$set(0.5, message = "Setting up main UI")
       removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
       insertUI(
         selector = paste0("#", session$ns("main_ui_container")),

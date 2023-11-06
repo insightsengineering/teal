@@ -1,23 +1,24 @@
 #' Function runs the `code`, masks the `code` and creates `teal_data` object.
 #' @param data (`teal_data`) object
 #' @param code (`language`) code to evaluate
-#' @param input (`list`) containing inputs to be used in the `code`
-#' @param input_mask (`list`) containing inputs to be masked in the `code`
+#' @param env (`list`) containing inputs to be used in the `code`
+#' @param env_mask (`list`) containing inputs to be masked in the `code`
 #'
 #' @return `teal_data` object
 #'
 #' @export
 eval_and_mask <- function(data,
                           code,
-                          input = list(),
-                          input_mask = list()) {
-  # todo: do we need also within_and_mask?
-  checkmate::assert_list(input)
-  if (inherits(input, "reactivevalues")) {
-    input <- shiny::reactiveValuesToList(input)
-  }
+                          env = list(),
+                          env_mask = list()) {
+  checkmate::assert_class(data, "teal_data")
+  checkmate::assert_true(is.language(code))
+  checkmate::assert_list(env)
+  checkmate::assert_list(env_mask)
+
+
   # evaluate code and substitute input
-  data <- teal.code::eval_code(data, .substitute_code(code, args = input))
+  data <- teal.code::eval_code(data, .substitute_code(expr = code, env = env))
   if (inherits(data, "qenv.error")) {
     return(data)
   }
@@ -29,14 +30,14 @@ eval_and_mask <- function(data,
     )
   }
 
-  if (!missing(input_mask)) {
+  if (!missing(env_mask)) {
     # mask dynamic inputs with mask
-    input <- utils::modifyList(input, input_mask)
+    env_masked <- utils::modifyList(env, env_mask)
 
     # replace last code entry with masked code
     # format_expression needed to convert expression into character(1)
     #  question: warnings and errors are not masked, is it ok?
-    data@code[length(data@code)] <- format_expression(.substitute_code(code, args = input))
+    data@code[length(data@code)] <- format_expression(.substitute_code(expr = code, env = env_masked))
   }
 
   # todo: should it be here or in datanames(data)?
@@ -51,26 +52,30 @@ eval_and_mask <- function(data,
 #'
 #' Function replaces symbols in the provided code by values of the `args` argument.
 #'
-#' @param code (`language`) code to substitute
-#' @param args (`list`) named list or arguments
+#' @inheritParams base::substitute
 #' @keywords internal
-.substitute_code <- function(code, args) {
+.substitute_code <- function(expr, env) {
   do.call(
     substitute,
     list(
       expr = do.call(
         substitute,
-        list(expr = code)
+        list(expr = expr)
       ),
-      env = args
+      env = env
     )
   )
 }
 
 #' Convenience wrapper for ddl
-#' @export # todo: do we want to export this?
-ddl <- function(code, input_mask, ui, server) {
-  delayed_data(ui = ui, server = server, code = code, input_mask = input_mask)
+#'
+#' @inheritParams delayed_data
+#' @param code (`character` or `language`)
+#' @param env_mask (`named list`)
+#' @export
+ddl <- function(code, env_mask, ui, server) {
+  # todo: do we want to export this?
+  delayed_data(ui = ui, server = server, code = code, env_mask = env_mask)
 }
 
 ui_login_and_password <- function(id) {
@@ -78,10 +83,10 @@ ui_login_and_password <- function(id) {
   actionButton(inputId = ns("submit"), label = "Submit")
 }
 
-srv_login_and_password <- function(id, code, input_mask) {
+srv_login_and_password <- function(id, code, env_mask) {
   moduleServer(id, function(input, output, session) {
     eventReactive(input$submit, {
-      teal_data() |> eval_and_mask(code = code, input = input, input_mask = input_mask)
+      eval_and_mask(teal_data(), code = code, env = reactiveValuesToList(input), env_mask = env_mask)
     })
   })
 }
