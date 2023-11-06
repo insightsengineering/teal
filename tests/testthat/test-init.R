@@ -23,7 +23,7 @@ testthat::test_that("init data accepts teal_data object", {
   )
 })
 
-testthat::test_that("init data throws an error with input other than TealData, teal_data and ddl", {
+testthat::test_that("init data throws an error with input other than TealData, teal_data and list(ui, server)", {
   character_vector <- c("a", "b", "c")
   numeric_vector <- c(1, 2, 3)
   matrix_d <- as.matrix(c(1, 2, 3))
@@ -146,6 +146,23 @@ testthat::test_that("init data accepts a list with ui and server", {
       data = list(ui = function(id) div(), server = function(id) NULL),
       modules = modules(teal:::example_module())
     )
+  )
+})
+
+testthat::test_that("init data doesn't accept ui and server with other formals than id", {
+  testthat::expect_error(
+    init(
+      data = list(ui = function(id, x) div(), server = function(id) NULL),
+      modules = modules(teal:::example_module())
+    ),
+    " having 'id' argument only"
+  )
+  testthat::expect_error(
+    init(
+      data = list(ui = function(id) div(), server = function(id, x) NULL),
+      modules = modules(teal:::example_module())
+    ),
+    " having 'id' argument only"
   )
 })
 
