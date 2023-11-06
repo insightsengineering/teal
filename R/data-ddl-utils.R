@@ -40,11 +40,6 @@ eval_and_mask <- function(data,
     data@code[length(data@code)] <- format_expression(.substitute_code(expr = code, env = env_masked))
   }
 
-  # todo: should it be here or in datanames(data)?
-  if (length(datanames(data)) == 0) {
-    datanames(data) <- ls(data@env)
-  }
-
   data
 }
 
@@ -65,40 +60,4 @@ eval_and_mask <- function(data,
       env = env
     )
   )
-}
-
-#' Convenience wrapper for ddl
-#'
-#' @inheritParams delayed_data
-#' @param code (`character` or `language`)
-#' @param env_mask (`named list`)
-#' @export
-ddl <- function(code, env_mask, ui, server) {
-  # todo: do we want to export this?
-  delayed_data(ui = ui, server = server, code = code, env_mask = env_mask)
-}
-
-ui_login_and_password <- function(id) {
-  ns <- NS(id)
-  actionButton(inputId = ns("submit"), label = "Submit")
-}
-
-srv_login_and_password <- function(id, code, env_mask) {
-  moduleServer(id, function(input, output, session) {
-    eventReactive(input$submit, {
-      eval_and_mask(teal_data(), code = code, env = reactiveValuesToList(input), env_mask = env_mask)
-    })
-  })
-}
-
-
-# todo: to remove before merge -------------
-#' @export
-open_conn <- function(username, password) {
-  if (password != "pass") stop("Invalid credentials. 'pass' is the password") else TRUE
-}
-#' @export
-close_conn <- function(conn) {
-  message("closed")
-  return(NULL)
 }

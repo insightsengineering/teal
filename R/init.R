@@ -115,7 +115,8 @@ init <- function(data = teal_data(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
   if (
-    !inherits(data, c("TealData", "teal_data")) && !test_shiny_module_list(data)
+    !inherits(data, c("TealData", "teal_data")) &&
+      !(is.list(data) && identical(names(data), c("ui", "server")))
   ) {
     data <- teal.data::to_relational_data(data = data)
   }
