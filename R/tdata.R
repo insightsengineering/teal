@@ -123,6 +123,13 @@ get_code_tdata <- function(data) {
   get_code(data)
 }
 
+#' Temporary generic method till we support tdata. As `teal.data` deprecated the method
+#' @rdname get_join_keys
+#' @keywords internal
+get_join_keys <- function(data) {
+  UseMethod("get_join_keys", data)
+}
+
 #' Extract `JoinKeys` from `tdata`
 #' @rdname get_join_keys
 #' @param data (`tdata`) object
@@ -130,6 +137,14 @@ get_code_tdata <- function(data) {
 #' @export
 get_join_keys.tdata <- function(data) {
   attr(data, "join_keys")
+}
+
+
+#' @param data object to extract the join keys from
+#' @rdname get_join_keys
+#' @keywords internal
+get_join_keys.default <- function(data) {
+  teal.data::get_join_keys(data)
 }
 
 #' Function to get metadata from a `tdata` object

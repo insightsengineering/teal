@@ -144,7 +144,7 @@ init <- function(data,
 
   # resolve modules datanames
   datanames <- teal.data::get_dataname(data)
-  join_keys <- teal.data::get_join_keys(data)
+  join_keys <- teal.data::join_keys(data)
   modules <- resolve_modules_datanames(modules = modules, datanames = datanames, join_keys = join_keys)
 
   if (!inherits(filter, "teal_slices")) {
