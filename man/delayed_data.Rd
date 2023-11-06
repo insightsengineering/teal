@@ -16,7 +16,7 @@ delayed_data(ui, server, ...)
 }
 \description{
 Function creates object of class \code{delayed_data} which allows
-\code{teal} app developer to transform freely \code{teal_data} object passed to \code{data} argument in
+\code{teal} app developer to transform \code{teal_data} object passed to \code{data} argument in
 \code{\link[=init]{init()}}. This helps in case when app developer wants to use \code{teal} app
 where \code{data} can be influenced by app user. For example, app developer can create
 \code{teal} app which allows user to connect to database and then use data from this database.
