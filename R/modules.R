@@ -318,7 +318,7 @@ module <- function(label = "module",
   structure(
     list(
       label = label,
-      server = server, ui = ui, datanames = datanames,
+      server = server, ui = ui, datanames = unique(datanames),
       server_args = server_args, ui_args = ui_args
     ),
     class = "teal_module"

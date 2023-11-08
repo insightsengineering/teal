@@ -1,0 +1,230 @@
+---
+title: "Data as shiny module"
+author: "NEST CoreDev"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Data as shiny module}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+For the proper functioning of any `teal` application, the presence of a `teal_data` object is essential. Usually, application developers provide the `teal_data` object created within the `.GlobalEnv` environment as an argument for the `data` parameter. This `teal_data` object should encompass the required elements necessary for successful execution of the application's modules. In certain scenarios, application developers may opt to defer specific data operations by assigning a shiny module to the data parameter, allowing `teal` to execute the module every time a new session starts.
+
+## Postponed data creation
+
+In scenarios where certain data must be created anew each time a user opens the app, such as when the data is dynamic and frequently changing, loading the data once in the `.GlobalEnv` is not suitable. Instead, teal can generate the necessary objects each time a new session begins by specifying the `data_module` using the following components:
+
+- `ui` Function: This function should accept an `id` argument and define the user interface elements for the data module.
+
+- `server` Function: Similarly, the server function should accept an `id` argument and define the server logic for the data module. `moduleServer` should return a reactive `teal_data` object, which will be used by the application to ensure the availability of up-to-date data upon each session start.
+
+By following these requirements, teal can efficiently handle dynamic data updates and create the necessary objects for a seamless user experience.
+
+```{r}
+library(teal)
+data_mod <- data_module(
+  ui = function(id) div(),
+  server = function(id) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        data <- within(
+          teal.data::teal_data(),
+          {
+            dataset1 <- iris
+            dataset2 <- mtcars
+          }
+        )
+        teal.data::datanames(data) <- c("dataset1", "dataset2")
+        data
+      })
+    })
+  }
+)
+
+
+app <- init(
+  data = data_mod,
+  module = list(example_module())
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+
+## Postponed data modification
+
+In certain scenarios, app developers may want to pre-create a `data` object before a `teal` session initializes, allowing app users to interact with this `data` from the session's start. This can be achieved by using the `data_module` function to efficiently modify the existing data object.
+
+The following code snippet illustrates how data_module can be utilized to subset the `dataset1` based on the selected `Species` from the `input$species` variable:
+
+```{r}
+data <- within(teal_data(), {
+  dataset1 <- iris
+  dataset2 <- mtcars
+})
+teal.data::datanames(data) <- c("dataset1", "dataset2")
+
+data_mod <- data_module(
+  ui = function(id) {
+    ns <- NS(id)
+    div(
+      selectInput(ns("species"), "Select species to filter", choices = unique(iris$Species), multiple = TRUE),
+      actionButton(ns("submit"), "Submit")
+    )
+  },
+  server = function(id) {
+    moduleServer(id, function(input, output, session) {
+      eventReactive(input$submit, {
+        data_modified <- within(
+          data,
+          dataset1 <- subset(dataset1, Species %in% selected),
+          selected = input$species
+        )
+        data_modified
+      })
+    })
+  }
+)
+
+app <- init(
+  data = data_mod,
+  module = list(example_module())
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+It's important to note that this approach reduces app loading time as `data` creation in the `.GlobalEnv` only involves data transformation. However, it's crucial to ensure that the initial server function is defined in the same environment as the data object to enable this functionality. This requirement ensures that data exists in the same environment as the calling environment of the `server` function, allowing for efficient data modification and interaction.
+
+## Handling sensitive information
+
+In certain cases, app developers may need to load data from a source that requires user authorization. To maintain security and privacy, it's essential not to expose user credentials or sensitive information in the reproducible code of the `teal_data` object. A common solution to this issue is to apply a mechanism that masks sensitive data with relevant replacements.
+
+Let's imagine there is `login` function defined somewhere, which requires `username` and `password`.
+
+```{r}
+data <- within(
+  teal_data(),
+  login <- function(username, password) {
+    if (password == "pass") {
+      TRUE
+    } else {
+      stop("invalid credentials")
+    }
+  }
+)
+```
+
+One can load the data by successfully calling `login` which allows to continue evaluation in `teal_data` object.
+After running following code, `data_loaded` returns a code which exposes sensitive credentials (not nice!).
+
+```{r}
+data_loaded <- within(
+  data,
+  {
+    con <- login(username = username, password = password)
+    dataset <- iris
+  },
+  username = "that is me",
+  password = "pass"
+)
+
+cat(paste(teal.code::get_code(data_loaded), collapse = "\n"))
+```
+
+Developer aware of this flaw, should replace sensitive information. Instead of having `"pass"` in the code, one should replace it with `readlines("enter your password: ")` so returned code will be re-executable in the interactive session. 
+
+```r
+data_masked <- replace_code(
+  data_loaded,
+  substitute(
+    {
+      con <- login(username = username, password = password)
+      dataset <- iris
+    },
+    list(
+      username = quote(readline("Type your username: ")),
+      password = quote(readline("Type your password: "))
+    )
+  )
+)
+
+cat(paste(teal.code::get_code(data_masked), collapse = "\n"))
+```
+
+The same code is included below in the logic of the `data_module` and passed to `teal` application.
+
+```{r}
+data_mod <- data_module(
+  ui = function(id) {
+    ns <- NS(id)
+    tagList(
+      textInput(ns("username"), label = "Username"),
+      passwordInput(ns("password"), label = "Password"),
+      actionButton(ns("submit"), label = "Submit")
+    )
+  },
+  server = function(id) {
+    moduleServer(id, function(input, output, session) {
+      eventReactive(input$submit, {
+        data <- within(
+          teal_data(),
+          {
+            login <- function(username, password) {
+              if (password == "pass") {
+                TRUE
+              } else {
+                stop("invalid credentials")
+              }
+            }
+          }
+        )
+
+        data_loaded <- within(
+          data,
+          {
+            con <- login(username = username, password = password)
+            dataset <- iris
+          },
+          username = input$username,
+          password = input$password
+        )
+        teal.data::datanames(data_loaded) <- "dataset"
+
+        data_masked <- replace_code(
+          data_loaded,
+          substitute(
+            {
+              con <- login(username = username, password = password)
+              dataset <- iris
+            },
+            list(
+              username = quote(readline("Type your username: ")),
+              password = quote(readline("Type your password: "))
+            )
+          )
+        )
+      })
+    })
+  }
+)
+
+app <- init(
+  data = data_mod,
+  module = list(example_module())
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+Please note that `replace_code` is a potential violation of reproducibility, and should be handled with care. 

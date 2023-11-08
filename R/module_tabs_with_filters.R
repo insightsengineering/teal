@@ -122,7 +122,13 @@ srv_tabs_with_filters <- function(id,
     )
 
     if (!is_module_specific) {
-      active_datanames <- reactive(active_module()$datanames)
+      active_datanames <- reactive({
+        if (identical(active_module()$datanames, "all")) {
+          singleton$datanames()
+        } else {
+          active_module()$datanames
+        }
+      })
       singleton <- unlist(datasets)[[1]]
       singleton$srv_filter_panel("filter_panel", active_datanames = active_datanames)
 
