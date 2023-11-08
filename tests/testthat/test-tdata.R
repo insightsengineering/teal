@@ -200,12 +200,12 @@ testthat::test_that("tdata2env throws error if argument is not tdata", {
 })
 
 # ---- get_join_keys ----
-testthat::test_that("get_join_keys returns NULL if no JoinKeys object exists inside tdata", {
+testthat::test_that("join_keys returns NULL if no JoinKeys object exists inside tdata", {
   my_tdata <- new_tdata(data = list(iris = iris, mae = reactive(miniACC)))
-  testthat::expect_null(get_join_keys(my_tdata))
+  testthat::expect_null(join_keys(my_tdata))
 })
 
-testthat::test_that("get_join_keys returns JoinKeys object if it exists inside tdata", {
+testthat::test_that("join_keys returns JoinKeys object if it exists inside tdata", {
   jk <- teal.data::join_keys(teal.data::join_key("A", "B", c("id" = "fk")))
 
   my_tdata <- new_tdata(
@@ -216,5 +216,5 @@ testthat::test_that("get_join_keys returns JoinKeys object if it exists inside t
     join_keys = jk
   )
 
-  testthat::expect_equal(get_join_keys(my_tdata), jk)
+  testthat::expect_equal(join_keys(my_tdata), jk)
 })

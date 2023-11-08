@@ -451,7 +451,7 @@ testthat::test_that(".datasets_to_data returns tdata object", {
 
   # join_keys
   testthat::expect_equal(
-    get_join_keys(data),
+    join_keys(data),
     teal.data::join_keys(teal.data::join_key("d1", "d2", c("pk" = "id")))
   )
 
