@@ -188,20 +188,3 @@ check_filter_datanames <- function(filters, datanames) {
     TRUE
   }
 }
-
-
-test_shiny_module_list <- function(data) {
-  is.list(data) &&
-    identical(names(data), c("ui", "server")) &&
-    identical(names(formals(data$ui)), "id") &&
-    identical(names(formals(data$server)), "id")
-}
-
-
-check_shiny_module_list <- function(data) {
-  if (!test_shiny_module_list(data)) {
-    "`data` should be a list with 'ui' and 'server' functions having 'id' argument only."
-  } else {
-    TRUE
-  }
-}

@@ -5,7 +5,7 @@
 \title{Create the Server and UI Function For the Shiny App}
 \usage{
 init(
-  data = teal_data(),
+  data,
   modules,
   title = NULL,
   filter = teal_slices(),

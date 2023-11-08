@@ -226,7 +226,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
       datasets <- datasets_reactive()
 
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
-      removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
+      removeUI(sprintf("#%s > div:nth-child(1)", session$ns("main_ui_container")))
       insertUI(
         selector = paste0("#", session$ns("main_ui_container")),
         where = "beforeEnd",

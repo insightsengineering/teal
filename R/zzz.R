@@ -32,6 +32,3 @@ setdiff_teal_slices <- getFromNamespace("setdiff_teal_slices", "teal.slice")
 coalesce_r <- getFromNamespace("coalesce_r", "teal.slice")
 # all *Block objects are private in teal.reporter
 RcodeBlock <- getFromNamespace("RcodeBlock", "teal.reporter") # nolint
-
-
-format_expression <- getFromNamespace("format_expression", "teal.code")
