@@ -22,7 +22,7 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  checkmate::assert_multi_class(data, c("TealData", "teal_data", "data_module"))
+  checkmate::assert_multi_class(data, c("TealData", "teal_data", "teal_data_module"))
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
@@ -30,7 +30,7 @@ ui_teal_with_splash <- function(id,
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
 
-  splash_ui <- if (inherits(data, "data_module")) {
+  splash_ui <- if (inherits(data, "teal_data_module")) {
     data$ui(ns("data"))
   } else if (inherits(data, "teal_data")) {
     div()
@@ -59,7 +59,7 @@ ui_teal_with_splash <- function(id,
 #' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
-  checkmate::check_multi_class(data, c("TealData", "teal_data", "data_module"))
+  checkmate::check_multi_class(data, c("TealData", "teal_data", "teal_data_module"))
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_with_splash initializing module with data.")
@@ -70,7 +70,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
     # raw_data contains teal_data object
     # either passed to teal::init or returned from ddl
-    raw_data <- if (inherits(data, "data_module")) {
+    raw_data <- if (inherits(data, "teal_data_module")) {
       ddl_out <- do.call(
         data$server,
         append(

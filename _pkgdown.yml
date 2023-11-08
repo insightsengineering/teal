@@ -93,7 +93,7 @@ reference:
   - title: Core `teal` Functions
     desc: Main functions needed to build a `teal` app
     contents:
-      - data_module
+      - teal_data_module
       - init
       - module
       - modules

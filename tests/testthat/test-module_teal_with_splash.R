@@ -1,10 +1,10 @@
-testthat::test_that("srv_teal_with_splash data accepts data_module", {
+testthat::test_that("srv_teal_with_splash data accepts teal_data_module", {
   testthat::expect_no_error(
     shiny::testServer(
       app = srv_teal_with_splash,
       args = list(
         id = "id",
-        data = data_module(ui = function(id) div(), server = function(id) NULL),
+        data = teal_data_module(ui = function(id) div(), server = function(id) NULL),
         modules = modules(example_module())
       ),
       expr = {}
@@ -12,12 +12,12 @@ testthat::test_that("srv_teal_with_splash data accepts data_module", {
   )
 })
 
-testthat::test_that("srv_teal_with_splash raw_data evaluates the server when data is data_module", {
+testthat::test_that("srv_teal_with_splash raw_data evaluates the server when data is teal_data_module", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = data_module(ui = function(id) div(), server = function(id) reactive("whatever")),
+      data = teal_data_module(ui = function(id) div(), server = function(id) reactive("whatever")),
       modules = modules(example_module())
     ),
     expr = {
@@ -47,7 +47,7 @@ testthat::test_that("srv_teal_with_splash raw_data_checked returns NULL when qen
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = data_module(
+      data = teal_data_module(
         ui = function(id) div(),
         server = function(id) reactive(teal_data() |> within(stop("not good")))
       ),

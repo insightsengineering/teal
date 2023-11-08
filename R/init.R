@@ -15,10 +15,10 @@
 #' an end-user, don't use this function, but instead this module.
 #'
 #' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
-#' or `MultiAssayExperiment`, `teal_data`, `data_module`)\cr
+#' or `MultiAssayExperiment`, `teal_data`, `teal_data_module`)\cr
 #' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()],
 #' [teal.data::cdisc_dataset()], [teal.data::dataset()], [teal.data::dataset_connector()] or
-#' [teal.data::cdisc_dataset_connector()] or [teal::data_module()] or a single `data.frame` or a `MultiAssayExperiment`
+#' [teal.data::cdisc_dataset_connector()] or [teal::teal_data_module()] or a single `data.frame` or a `MultiAssayExperiment`
 #' or a list of the previous objects or function returning a named list.
 #' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 #' do not match the original object names. To ensure reproducibility please use [teal.data::teal_data()]
@@ -114,11 +114,11 @@ init <- function(data,
                  footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  if (!inherits(data, c("TealData", "teal_data", "data_module"))) {
+  if (!inherits(data, c("TealData", "teal_data", "teal_data_module"))) {
     data <- teal.data::to_relational_data(data = data)
   }
 
-  checkmate::assert_multi_class(data, c("TealData", "teal_data", "data_module"))
+  checkmate::assert_multi_class(data, c("TealData", "teal_data", "teal_data_module"))
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert(
@@ -146,7 +146,7 @@ init <- function(data,
   hashables <- mget(c("data", "modules"))
   hashables$data <- if (inherits(hashables$data, "teal_data")) {
     as.list(hashables$data@env)
-  } else if (inherits(data, "data_module")) {
+  } else if (inherits(data, "teal_data_module")) {
     # what?
   } else if (hashables$data$is_pulled()) {
     sapply(get_dataname(hashables$data), simplify = FALSE, function(dn) {
