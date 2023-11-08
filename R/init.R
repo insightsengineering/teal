@@ -114,11 +114,11 @@ init <- function(data,
                  footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-
-  if (!inherits(data, c("TealData", "teal_data"))) {
+  if (!inherits(data, c("TealData", "teal_data", "data_module"))) {
     data <- teal.data::to_relational_data(data = data)
   }
-  checkmate::assert_multi_class(data, c("TealData", "teal_data"))
+
+  checkmate::assert_multi_class(data, c("TealData", "teal_data", "data_module"))
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert(
@@ -142,26 +142,12 @@ init <- function(data,
   if (length(landing) > 1L) stop("Only one `landing_popup_module` can be used.")
   modules <- drop_module(modules, "teal_module_landing")
 
-  # resolve modules datanames
-  datanames <- teal.data::get_dataname(data)
-  join_keys <- teal.data::get_join_keys(data)
-  modules <- resolve_modules_datanames(modules = modules, datanames = datanames, join_keys = join_keys)
-
-  if (!inherits(filter, "teal_slices")) {
-    checkmate::assert_subset(names(filter), choices = datanames)
-    # list_to_teal_slices is lifted from teal.slice package, see zzz.R
-    # This is a temporary measure and will be removed two release cycles from now (now meaning 0.13.0).
-    filter <- list_to_teal_slices(filter)
-  }
-  # convert teal.slice::teal_slices to teal::teal_slices
-  filter <- as.teal_slices(as.list(filter))
-
   # Calculate app hash to ensure snapshot compatibility. See ?snapshot. Raw data must be extracted from environments.
   hashables <- mget(c("data", "modules"))
   hashables$data <- if (inherits(hashables$data, "teal_data")) {
     as.list(hashables$data@env)
-  } else if (inherits(hashables$data, "ddl")) {
-    attr(hashables$data, "code")
+  } else if (inherits(data, "data_module")) {
+    # what?
   } else if (hashables$data$is_pulled()) {
     sapply(get_dataname(hashables$data), simplify = FALSE, function(dn) {
       hashables$data$get_dataset(dn)$get_raw_data()
@@ -172,20 +158,8 @@ init <- function(data,
 
   attr(filter, "app_id") <- rlang::hash(hashables)
 
-  # check teal_slices
-  for (i in seq_along(filter)) {
-    dataname_i <- shiny::isolate(filter[[i]]$dataname)
-    if (!dataname_i %in% datanames) {
-      stop(
-        sprintf(
-          "filter[[%s]] has a different dataname than available in a 'data':\n %s not in %s",
-          i,
-          dataname_i,
-          toString(datanames)
-        )
-      )
-    }
-  }
+  # convert teal.slice::teal_slices to teal::teal_slices
+  filter <- as.teal_slices(as.list(filter))
 
   if (isTRUE(attr(filter, "module_specific"))) {
     module_names <- unlist(c(module_labels(modules), "global_filters"))

@@ -22,14 +22,17 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data"))
+  checkmate::assert_multi_class(data, c("TealData", "teal_data", "data_module"))
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
-  splash_ui <- if (inherits(data, "teal_data")) {
+
+  splash_ui <- if (inherits(data, "data_module")) {
+    data$ui(ns("data"))
+  } else if (inherits(data, "teal_data")) {
     div()
   } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
     div()
@@ -56,9 +59,10 @@ ui_teal_with_splash <- function(id,
 #' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
-  checkmate::assert_multi_class(data, c("TealDataAbstract", "teal_data"))
+  checkmate::check_multi_class(data, c("TealData", "teal_data", "data_module"))
+
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_teal_with_splash initializing module with data { toString(get_dataname(data))}.")
+    logger::log_trace("srv_teal_with_splash initializing module with data.")
 
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
@@ -66,7 +70,16 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
     # raw_data contains teal_data object
     # either passed to teal::init or returned from ddl
-    raw_data <- if (inherits(data, "teal_data")) {
+    raw_data <- if (inherits(data, "data_module")) {
+      ddl_out <- do.call(
+        data$server,
+        append(
+          list(id = "data"),
+          attr(data, "server_args") # might be NULL or list() - both are fine
+        ),
+        quote = TRUE
+      )
+    } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
       new_data <- do.call(
@@ -102,8 +115,45 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       raw_data
     }
 
-    res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
-    logger::log_trace("srv_teal_with_splash initialized module with data { toString(get_dataname(data))}.")
+    raw_data_checked <- reactive({
+      data <- raw_data()
+      if (inherits(data, "qenv.error")) {
+        #
+        showNotification(sprintf("Error: %s", data$message), type = "error")
+        logger::log_error(data$message)
+        return(NULL)
+      }
+      if (!inherits(data, "teal_data")) {
+        msg <- "Error: server must return 'teal_data' object"
+        showNotification(msg, type = "error")
+        logger::log_error(msg)
+        return(NULL)
+      }
+
+
+      is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
+      is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+
+      if (!isTRUE(is_modules_ok)) {
+        showNotification(is_modules_ok, type = "error")
+        logger::log_error(is_modules_ok)
+        # NULL won't trigger observe which waits for raw_data()
+        # we will need to consider validate process for filtered data and modules!
+        return(NULL)
+      }
+      if (!isTRUE(is_filter_ok)) {
+        showNotification(is_filter_ok, type = "warning")
+        logger::log_warn(is_filter_ok)
+        # we allow app to continue if applied filters are outside
+        # of possible data range
+      }
+
+      data
+    })
+
+
+    res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data_checked, filter = filter)
+    logger::log_trace("srv_teal_with_splash initialized module with data.")
     return(res)
   })
 }

@@ -1,0 +1,61 @@
+---
+title: "Data as shiny module"
+author: "NEST CoreDev"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Data as shiny module}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+Every `teal` application needs `teal_data` object to work. Typically, app developer passes `teal_data` object created in
+`.GlobalEnv` to the `data` argument. Such `teal_data` object should contain objects necessary to successfully call 
+the `modules`. In some cases, app developer can postpone some data operations by passing `shiny` module to the `data` 
+argument and `teal` will run a module each time when a new session starts.
+
+## Postponed data creation
+
+Some data is needed to be created each time when user opens an app. This could be a case when users need up to 
+date data which constantly changes. Then obviously, app developer can't load the data once in the `.GlobalEnv` but
+`teal` needs to create them each time when new session starts. `data` argument should be specified then as a `list`
+which:
+- contains `ui` and `server` functions,
+- `ui` and `server` should have `id` argument only and such 
+- `server` should call `moduleServer` returning reactive `teal_data` 
+
+```{r}
+ui <- function(id) {
+  ns <- NS(id)
+  actionButton(ns("submit"), label = "Load data")
+}
+
+server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    eventReactive(input$submit, {
+      data <- within(
+        teal.data::teal_data(),
+        {
+          dataset1 <- iris
+          dataset2 <- mtcars
+        }
+      )
+      teal.data::datanames(data) <- c("iris", "mtcars")
+
+      data
+    })
+  })
+}
+```
+
+
+```{r}
+
+```
+
+## Postponed data modification
+
+## Authorized data access
