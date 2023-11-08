@@ -1,4 +1,4 @@
-testthat::test_that("srv_teal_with_splash data accepts teal_data_module", {
+testthat::test_that("srv_teal_with_splash data accepts a teal_data_module", {
   testthat::expect_no_error(
     shiny::testServer(
       app = srv_teal_with_splash,
@@ -12,7 +12,7 @@ testthat::test_that("srv_teal_with_splash data accepts teal_data_module", {
   )
 })
 
-testthat::test_that("srv_teal_with_splash raw_data evaluates the server when data is teal_data_module", {
+testthat::test_that("srv_teal_with_splash raw_data evaluates the server of teal_data_module", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -65,9 +65,7 @@ testthat::test_that("srv_teal_with_splash raw_data_checked returns NULL when qen
 
 testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns NULL before loading", {
   x <- dataset_connector(dataname = "test_dataset", pull_callable = callable_code("iris"))
-  lifecycle::expect_deprecated(
-    delayed_data <- teal_data(x)
-  )
+  delayed_data <- teal_data(x)
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -82,7 +80,7 @@ testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns 
 testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns pulled data when loaded", {
   teal.logger::suppress_logs()
   x <- dataset_connector(dataname = "iris", pull_callable = callable_code("iris"))
-  lifecycle::expect_deprecated(delayed_data <- teal_data(x))
+  delayed_data <- teal_data(x)
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -111,7 +109,7 @@ testthat::test_that("srv_teal_with_splash raw_data_checked returns NULL if incom
       testthat::expect_is(raw_data_checked, "reactive")
       testthat::expect_output(
         testthat::expect_null(raw_data_checked()),
-        '"iris" not in "mtcars"'
+        "“iris” not in “mtcars”"
       )
     }
   )

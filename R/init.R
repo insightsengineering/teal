@@ -187,6 +187,22 @@ init <- function(data,
     }
   }
 
+  if (inherits(data, "teal_data")) {
+    # in case of teal_data_module this check is postponed to the srv_teal_with_splash
+    is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
+    if (!isTRUE(is_modules_ok)) {
+      logger::log_error(is_modules_ok)
+      stop(is_modules_ok)
+    }
+
+    is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+    if (!isTRUE(is_filter_ok)) {
+      logger::log_warn(is_filter_ok)
+      # we allow app to continue if applied filters are outside
+      # of possible data range
+    }
+  }
+
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
   # the `ui` and `server` with `id = character(0)` and calling the server function directly

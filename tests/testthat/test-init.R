@@ -191,3 +191,6 @@ testthat::test_that("init filter accepts `teal_slices`", {
     "Assertion failed"
   )
 })
+
+# todo: when modules datanames not matching datanames(data)
+# todo: when filters datanames not matching datanames(data)
