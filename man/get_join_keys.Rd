@@ -4,7 +4,7 @@
 \alias{get_join_keys}
 \alias{get_join_keys.tdata}
 \alias{get_join_keys.default}
-\title{Temporary generic method till we support tdata. As \code{teal.data} deprecated the method}
+\title{Temporary generic method until we support \code{tdata}. Since \code{teal.data} has deprecated the method.}
 \usage{
 get_join_keys(data)
 
@@ -16,7 +16,7 @@ get_join_keys(data)
 \item{data}{object to extract the join keys from}
 }
 \description{
-Temporary generic method till we support tdata. As \code{teal.data} deprecated the method
+Temporary generic method until we support \code{tdata}. Since \code{teal.data} has deprecated the method.
 
 Extract \code{JoinKeys} from \code{tdata}
 }

@@ -123,7 +123,7 @@ get_code_tdata <- function(data) {
   get_code(data)
 }
 
-#' Temporary generic method till we support tdata. As `teal.data` deprecated the method
+#' Temporary generic method until we support `tdata`. Since `teal.data` has deprecated the method.
 #' @rdname get_join_keys
 #' @keywords internal
 #' @export
