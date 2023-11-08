@@ -4,7 +4,7 @@
 \alias{example_module}
 \title{An example \code{teal} module}
 \usage{
-example_module(label = "example teal module", datanames = "all")
+example_module(label = "example teal module", datanames = "all", src = TRUE)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module. Any label possible except
@@ -15,6 +15,8 @@ filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
 and the keyword \code{'all'} will show filters of all datasets. \code{datanames} also determines
 a subset of datasets which are appended to the \code{data} argument in \code{server} function.}
+
+\item{src}{(\code{logical(1)}) whether to display reproducible R code in the module.}
 }
 \value{
 A \code{teal} module which can be included in the \code{modules} argument to \code{\link[=init]{init()}}.
