@@ -288,7 +288,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #' @param trigger_data (`reactiveVal`) to trigger getting the filtered data
 #' @return list of reactive datasets with following attributes:
 #' - `code` (`character`) containing datasets reproducible code.
-#' - `join_keys` (`JoinKeys`) containing relationships between datasets.
+#' - `join_keys` (`join_keys`) containing relationships between datasets.
 #' - `metadata` (`list`) containing metadata of datasets.
 #'
 #' @keywords internal
