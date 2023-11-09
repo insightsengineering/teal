@@ -2,22 +2,32 @@
 % Please edit documentation in R/teal_data_module.R
 \name{teal_data_module}
 \alias{teal_data_module}
-\title{Data module}
+\title{Data module for \code{teal} applications}
 \usage{
 teal_data_module(ui, server)
 }
 \arguments{
 \item{ui}{(\verb{function(id)})\cr
-\code{shiny} \code{ui} module with \code{id} argument}
+\code{shiny} module \code{ui} function; must only take \code{id} argument}
 
 \item{server}{(\verb{function(id)})\cr
-\code{shiny} server function with \code{id} as argument. Module should return reactive \code{teal_data}.}
+\code{shiny} module \code{ui} function; must only take \code{id} argument;
+must return reactive expression containing \code{teal_data} object}
 }
 \value{
-object of class \code{teal_data_module}
+Object of class \code{teal_data_module}.
 }
 \description{
-Data input for \code{teal::init} in form of a module
+Create \code{shiny} module to supply or modify data in a \code{teal} application.
+}
+\details{
+This function creates a \code{shiny} module that allows for running data pre-processing code after the app starts.
+The body of the server function will be run in the app rather than in the global environment.
+This means it will be run every time the app starts, so use sparingly.
+
+Pass this module instead of a \code{teal_data} object in a call to \code{init}.
+
+See vignette "Data as shiny Module" for more details.
 }
 \examples{
 data <- teal_data_module(

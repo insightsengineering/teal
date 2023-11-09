@@ -1,13 +1,22 @@
-#' Data module
+#' Data module for `teal` applications
 #'
-#' Data input for `teal::init` in form of a module
+#' Create `shiny` module to supply or modify data in a `teal` application.
+#'
+#' This function creates a `shiny` module that allows for running data pre-processing code after the app starts.
+#' The body of the server function will be run in the app rather than in the global environment.
+#' This means it will be run every time the app starts, so use sparingly.
+#'
+#' Pass this module instead of a `teal_data` object in a call to `init`.
+#'
+#' See vignette "Data as shiny Module" for more details.
 #'
 #' @param ui (`function(id)`)\cr
-#'  `shiny` `ui` module with `id` argument
+#'  `shiny` module `ui` function; must only take `id` argument
 #' @param server (`function(id)`)\cr
-#'  `shiny` server function with `id` as argument. Module should return reactive `teal_data`.
+#'  `shiny` module `ui` function; must only take `id` argument;
+#'  must return reactive expression containing `teal_data` object
 #'
-#' @return object of class `teal_data_module`
+#' @return Object of class `teal_data_module`.
 #'
 #' @examples
 #' data <- teal_data_module(
