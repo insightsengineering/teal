@@ -150,7 +150,7 @@ check_modules_datanames <- function(modules, datanames) {
       extra_datanames <- setdiff(modules$datanames, c("all", datanames))
       if (length(extra_datanames)) {
         sprintf(
-          "- Module '%s' has a different dataname than available in a 'data': %s not in %s",
+          "- Module '%s' uses different datanames than available in the 'data': (%s) not in (%s)",
           modules$label,
           toString(dQuote(extra_datanames, q = FALSE)),
           toString(dQuote(datanames, q = FALSE))
@@ -174,7 +174,7 @@ check_filter_datanames <- function(filters, datanames) {
       dataname <- shiny::isolate(filter$dataname)
       if (!dataname %in% datanames) {
         sprintf(
-          "- Filter '%s' has a different dataname than available in a 'data':\n %s not in %s",
+          "- Filter '%s' refers to dataname that in unavailable to 'data':\n %s not in (%s)",
           shiny::isolate(filter$id),
           dQuote(dataname, q = FALSE),
           toString(dQuote(datanames, q = FALSE))

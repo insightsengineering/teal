@@ -40,8 +40,13 @@ ui_teal_with_splash <- function(id,
     message("App was initialized with delayed data loading.")
     data$get_ui(ns("startapp_module"))
   }
-
-  ui_teal(id = ns("teal"), splash_ui = splash_ui, title = title, header = header, footer = footer)
+  ui_teal(
+    id = ns("teal"),
+    splash_ui = div(splash_ui, uiOutput(ns("error"))),
+    title = title,
+    header = header,
+    footer = footer
+  )
 }
 
 #' Server function that loads the data through reactive loading and then delegates
@@ -71,14 +76,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     # raw_data contains teal_data object
     # either passed to teal::init or returned from ddl
     raw_data <- if (inherits(data, "teal_data_module")) {
-      do.call(
-        data$server,
-        append(
-          list(id = "teal_data_module"),
-          attr(data, "server_args") # might be NULL or list() - both are fine
-        ),
-        quote = TRUE
-      )
+      data$server(id = "teal_data_module")
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
@@ -115,19 +113,19 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       raw_data
     }
 
-    raw_data_checked <- reactive({
+    output$error <- renderUI({
       data <- raw_data()
       if (inherits(data, "qenv.error")) {
         #
         showNotification(sprintf("Error: %s", data$message), type = "error")
         logger::log_error(data$message)
-        return(NULL)
+        stop("Check your inputs or call app developer\n", data$message, call. = FALSE)
       }
       if (!inherits(data, "teal_data")) {
         msg <- "Error: server must return 'teal_data' object"
         showNotification(msg, type = "error")
         logger::log_error(msg)
-        return(NULL)
+        stop("Check your inputs or call app developer\n", msg, call. = FALSE)
       }
 
       is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
@@ -138,13 +136,27 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         logger::log_error(is_modules_ok)
         # NULL won't trigger observe which waits for raw_data()
         # we will need to consider validate process for filtered data and modules!
-        return(NULL)
+        stop("Contact app developer.\n", is_modules_ok, call. = FALSE)
       }
       if (!isTRUE(is_filter_ok)) {
         showNotification(is_filter_ok, type = "warning")
         logger::log_warn(is_filter_ok)
-        # we allow app to continue if applied filters are outside
-        # of possible data range
+      }
+
+      NULL
+    })
+
+    raw_data_checked <- reactive({
+      data <- req(raw_data())
+      if (!inherits(data, "teal_data")) {
+        return(NULL)
+      }
+
+      is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
+      is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+
+      if (!isTRUE(is_modules_ok) || !isTRUE(is_filter_ok)) {
+        return(NULL)
       }
 
       data
