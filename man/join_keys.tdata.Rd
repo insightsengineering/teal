@@ -2,7 +2,7 @@
 % Please edit documentation in R/tdata.R
 \name{join_keys.tdata}
 \alias{join_keys.tdata}
-\title{Extract \code{JoinKeys} from \code{tdata}}
+\title{Extract \code{join_keys} from \code{tdata}}
 \usage{
 \method{join_keys}{tdata}(data)
 }
@@ -10,5 +10,5 @@
 \item{data}{(\code{tdata}) object}
 }
 \description{
-Extract \code{JoinKeys} from \code{tdata}
+Extract \code{join_keys} from \code{tdata}
 }

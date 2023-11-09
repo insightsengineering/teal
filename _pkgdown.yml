@@ -117,6 +117,7 @@ reference:
       - get_metadata
       - tdata2env
       - show_rcode_modal
+      - join_keys.tdata
   # - title: Functions Moved to Other Packages
     # desc: These functions have been moved from teal and will be deprecated
     # contents:

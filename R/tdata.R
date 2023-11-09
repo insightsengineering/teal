@@ -123,8 +123,7 @@ get_code_tdata <- function(data) {
   get_code(data)
 }
 
-#' Extract `JoinKeys` from `tdata`
-#' @rdname join_keys
+#' Extract `join_keys` from `tdata`
 #' @param data (`tdata`) object
 #' @export
 join_keys.tdata <- function(data) { # nolint
