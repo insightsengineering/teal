@@ -75,6 +75,7 @@ example_datasets <- function() { # nolint
 #'
 #' @description `r lifecycle::badge("experimental")`
 #' @inheritParams module
+#' @param src (`logical(1)`) whether to display reproducible R code in the module.
 #' @return A `teal` module which can be included in the `modules` argument to [teal::init()].
 #' @examples
 #' app <- init(
@@ -88,7 +89,7 @@ example_datasets <- function() { # nolint
 #'   shinyApp(app$ui, app$server)
 #' }
 #' @export
-example_module <- function(label = "example teal module", datanames = "all") {
+example_module <- function(label = "example teal module", datanames = "all", src = TRUE) {
   checkmate::assert_string(label)
   module(
     label,
@@ -96,13 +97,23 @@ example_module <- function(label = "example teal module", datanames = "all") {
       checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
         output$text <- renderPrint(data[[input$dataname]]())
+        teal.widgets::verbatim_popup_srv(
+          id = "rcode",
+          verbatim_content = attr(data, "code")(),
+          title = "Association Plot"
+        )
       })
     },
     ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
+        encoding = div(
+          selectInput(ns("dataname"), "Choose a dataset", choices = names(data)),
+          if (src) {
+            teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
+          }
+        )
       )
     },
     datanames = datanames

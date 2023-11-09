@@ -1,5 +1,5 @@
 testthat::test_that("init data accepts TealData object", {
-  testthat::expect_no_error(
+  lifecycle::expect_deprecated(
     init(
       data = teal.data::cdisc_data(
         teal.data::cdisc_dataset(
@@ -23,7 +23,7 @@ testthat::test_that("init data accepts teal_data object", {
   )
 })
 
-testthat::test_that("init data throws an error with input other than TealData, teal_data and ddl", {
+testthat::test_that("init data throws an error with input other than TealData, teal_data and list(ui, server)", {
   character_vector <- c("a", "b", "c")
   numeric_vector <- c(1, 2, 3)
   matrix_d <- as.matrix(c(1, 2, 3))
@@ -140,6 +140,32 @@ testthat::test_that("init data accepts a list of TealDatasetConnector object", {
   testthat::expect_no_error(init(data = dsc1, modules = modules(example_module())))
 })
 
+testthat::test_that("init data accepts teal_data_module", {
+  testthat::expect_no_error(
+    init(
+      data = teal_data_module(ui = function(id) div(), server = function(id) NULL),
+      modules = modules(teal:::example_module())
+    )
+  )
+})
+
+testthat::test_that("init teal_data_module doesn't accept ui and server with other formals than id", {
+  testthat::expect_error(
+    init(
+      data = teal_data_module(ui = function(id, x) div(), server = function(id) NULL),
+      modules = modules(teal:::example_module())
+    ),
+    "Must have exactly 1 formal arguments"
+  )
+  testthat::expect_error(
+    init(
+      data = teal_data_module(ui = function(id) div(), server = function(id, x) NULL),
+      modules = modules(teal:::example_module())
+    ),
+    "Must have exactly 1 formal arguments"
+  )
+})
+
 testthat::test_that("init modules accepts a teal_modules object", {
   mods <- modules(example_module(), example_module())
   testthat::expect_no_error(init(data = iris, modules = mods))
@@ -155,19 +181,31 @@ testthat::test_that("init modules accepts a teal_module object", {
   testthat::expect_no_error(init(data = iris, modules = mods))
 })
 
-testthat::test_that("init filter accepts named list or `teal_slices`", {
-  fl <- list(
-    "iris" = list(
-      "Species" = list(selected = "setosa")
-    )
-  )
+testthat::test_that("init filter accepts `teal_slices`", {
   fs <- teal.slice::teal_slices(
     teal.slice::teal_slice(dataname = "iris", varname = "species", selected = "setosa")
   )
-  testthat::expect_no_error(init(data = list(iris), modules = modules(example_module()), filter = fl))
   testthat::expect_no_error(init(data = list(iris), modules = modules(example_module()), filter = fs))
   testthat::expect_error(
     init(data = list(iris), modules = modules(example_module()), filter = unclass(fs)),
     "Assertion failed"
+  )
+})
+
+testthat::test_that("init throws when incompatible module's datanames", {
+  testthat::expect_error(
+    init(data = teal_data(mtcars = mtcars), modules = list(example_module(datanames = "iris"))),
+    '"iris" not in "mtcars"'
+  )
+})
+
+testthat::test_that("init throws when incompatible filter's datanames", {
+  testthat::expect_warning(
+    init(
+      data = teal_data(mtcars = mtcars),
+      modules = modules(example_module()),
+      filter = teal_slices(teal_slice(dataname = "iris", varname = "Species"))
+    ),
+    '"iris" not in "mtcars"'
   )
 })

@@ -140,3 +140,51 @@ resolve_modules_datanames <- function(modules, datanames, join_keys) {
     modules
   }
 }
+
+check_modules_datanames <- function(modules, datanames) {
+  recursive_check_datanames <- function(modules, datanames) {
+    # check teal_modules against datanames
+    if (inherits(modules, "teal_modules")) {
+      sapply(modules$children, function(module) recursive_check_datanames(module, datanames = datanames))
+    } else {
+      extra_datanames <- setdiff(modules$datanames, c("all", datanames))
+      if (length(extra_datanames)) {
+        sprintf(
+          "- Module '%s' has a different dataname than available in a 'data': %s not in %s",
+          modules$label,
+          toString(dQuote(extra_datanames, q = FALSE)),
+          toString(dQuote(datanames, q = FALSE))
+        )
+      }
+    }
+  }
+  check_datanames <- unlist(recursive_check_datanames(modules, datanames))
+  if (length(check_datanames)) {
+    paste(check_datanames, collapse = "\n")
+  } else {
+    TRUE
+  }
+}
+
+
+check_filter_datanames <- function(filters, datanames) {
+  # check teal_slices against datanames
+  out <- sapply(
+    filters, function(filter) {
+      dataname <- shiny::isolate(filter$dataname)
+      if (!dataname %in% datanames) {
+        sprintf(
+          "- Filter '%s' has a different dataname than available in a 'data':\n %s not in %s",
+          shiny::isolate(filter$id),
+          dQuote(dataname, q = FALSE),
+          toString(dQuote(datanames, q = FALSE))
+        )
+      }
+    }
+  )
+  if (length(unlist(out))) {
+    paste(out, collapse = "\n")
+  } else {
+    TRUE
+  }
+}
