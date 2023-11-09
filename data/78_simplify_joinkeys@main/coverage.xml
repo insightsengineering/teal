@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.631074168797954" branch-rate="0" lines-covered="987" lines-valid="1564" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-11-09 12:33:28.370183">
+<coverage line-rate="0.631074168797954" branch-rate="0" lines-covered="987" lines-valid="1564" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-11-09 12:56:17.106884">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -2770,26 +2770,26 @@
             </method>
             <method name="join_keys.tdata" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="130" hits="3" branch="false"/>
+                <line number="131" hits="3" branch="false"/>
               </lines>
             </method>
             <method name="get_metadata" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="140" hits="6" branch="false"/>
                 <line number="141" hits="6" branch="false"/>
+                <line number="142" hits="6" branch="false"/>
               </lines>
             </method>
             <method name="get_metadata.tdata" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="147" hits="6" branch="false"/>
                 <line number="148" hits="6" branch="false"/>
-                <line number="149" hits="1" branch="false"/>
-                <line number="151" hits="5" branch="false"/>
+                <line number="149" hits="6" branch="false"/>
+                <line number="150" hits="1" branch="false"/>
+                <line number="152" hits="5" branch="false"/>
               </lines>
             </method>
             <method name="get_metadata.default" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="157" hits="0" branch="false"/>
+                <line number="158" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -2825,14 +2825,14 @@
             <line number="110" hits="6" branch="false"/>
             <line number="122" hits="4" branch="false"/>
             <line number="123" hits="2" branch="false"/>
-            <line number="130" hits="3" branch="false"/>
-            <line number="140" hits="6" branch="false"/>
+            <line number="131" hits="3" branch="false"/>
             <line number="141" hits="6" branch="false"/>
-            <line number="147" hits="6" branch="false"/>
+            <line number="142" hits="6" branch="false"/>
             <line number="148" hits="6" branch="false"/>
-            <line number="149" hits="1" branch="false"/>
-            <line number="151" hits="5" branch="false"/>
-            <line number="157" hits="0" branch="false"/>
+            <line number="149" hits="6" branch="false"/>
+            <line number="150" hits="1" branch="false"/>
+            <line number="152" hits="5" branch="false"/>
+            <line number="158" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="teal_reporter.R" filename="R/teal_reporter.R" line-rate="0.916666666666667" branch-rate="0" complexity="0">
