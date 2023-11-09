@@ -4,10 +4,12 @@
 \alias{join_keys.tdata}
 \title{Extract \code{join_keys} from \code{tdata}}
 \usage{
-\method{join_keys}{tdata}(data)
+\method{join_keys}{tdata}(data, ...)
 }
 \arguments{
-\item{data}{(\code{tdata}) object}
+\item{data}{A \code{tdata} object}
+
+\item{...}{Additional arguments (not used)}
 }
 \description{
 Extract \code{join_keys} from \code{tdata}

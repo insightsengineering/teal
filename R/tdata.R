@@ -124,9 +124,10 @@ get_code_tdata <- function(data) {
 }
 
 #' Extract `join_keys` from `tdata`
-#' @param data (`tdata`) object
+#' @param data A `tdata` object
+#' @param ... Additional arguments (not used)
 #' @export
-join_keys.tdata <- function(data) { # nolint
+join_keys.tdata <- function(data, ...) {
   attr(data, "join_keys")
 }
 
