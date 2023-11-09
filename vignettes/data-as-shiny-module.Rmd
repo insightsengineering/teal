@@ -86,8 +86,9 @@ data_mod <- teal_data_module(
   ui = function(id) {
     ns <- NS(id)
     div(
-      selectInput(ns("species"), "Select species to filter", 
-                  choices = unique(iris$Species), multiple = TRUE),
+      selectInput(ns("species"), "Select species to filter",
+        choices = unique(iris$Species), multiple = TRUE
+      ),
       actionButton(ns("submit"), "Submit")
     )
   },
