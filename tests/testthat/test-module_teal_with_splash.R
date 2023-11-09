@@ -109,7 +109,7 @@ testthat::test_that("srv_teal_with_splash raw_data_checked returns NULL if incom
       testthat::expect_is(raw_data_checked, "reactive")
       testthat::expect_output(
         testthat::expect_null(raw_data_checked()),
-        "“iris” not in “mtcars”"
+        '"iris" not in "mtcars"'
       )
     }
   )

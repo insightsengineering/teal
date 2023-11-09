@@ -13,6 +13,9 @@ teal_data_module(ui, server)
 \item{server}{(\verb{function(id)})\cr
 \code{shiny} server function with \code{id} as argument. Module should return reactive \code{teal_data}.}
 }
+\value{
+object of class \code{teal_data_module}
+}
 \description{
 Data input for \code{teal::init} in form of a module
 }

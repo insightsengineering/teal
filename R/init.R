@@ -147,7 +147,7 @@ init <- function(data,
   hashables$data <- if (inherits(hashables$data, "teal_data")) {
     as.list(hashables$data@env)
   } else if (inherits(data, "teal_data_module")) {
-    # what?
+    body(data$server)
   } else if (hashables$data$is_pulled()) {
     sapply(get_dataname(hashables$data), simplify = FALSE, function(dn) {
       hashables$data$get_dataset(dn)$get_raw_data()
@@ -198,6 +198,7 @@ init <- function(data,
     is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
     if (!isTRUE(is_filter_ok)) {
       logger::log_warn(is_filter_ok)
+      warning(is_filter_ok)
       # we allow app to continue if applied filters are outside
       # of possible data range
     }

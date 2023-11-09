@@ -31,7 +31,7 @@ ui_teal_with_splash <- function(id,
   # Shiny app does not time out.
 
   splash_ui <- if (inherits(data, "teal_data_module")) {
-    data$ui(ns("data"))
+    data$ui(ns("teal_data_module"))
   } else if (inherits(data, "teal_data")) {
     div()
   } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
@@ -71,10 +71,10 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     # raw_data contains teal_data object
     # either passed to teal::init or returned from ddl
     raw_data <- if (inherits(data, "teal_data_module")) {
-      ddl_out <- do.call(
+      do.call(
         data$server,
         append(
-          list(id = "data"),
+          list(id = "teal_data_module"),
           attr(data, "server_args") # might be NULL or list() - both are fine
         ),
         quote = TRUE
@@ -129,7 +129,6 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         logger::log_error(msg)
         return(NULL)
       }
-
 
       is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
       is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))

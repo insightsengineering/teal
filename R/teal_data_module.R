@@ -6,6 +6,9 @@
 #'  `shiny` `ui` module with `id` argument
 #' @param server (`function(id)`)\cr
 #'  `shiny` server function with `id` as argument. Module should return reactive `teal_data`.
+#'
+#' @return object of class `teal_data_module`
+#'
 #' @examples
 #' data <- teal_data_module(
 #'   ui = function(id) {
