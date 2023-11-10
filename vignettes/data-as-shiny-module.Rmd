@@ -123,5 +123,5 @@ It is recommended to keep the constant code in the global environment and to mov
 
 ###### WARNING
 
-When using `teal_data_moduel` to modify a pre-existing `teal_data` object it is crucial that the server function and the data object are defined in the same environment as otherwise the server function will not be able to access the data object.
+When using `teal_data_module` to modify a pre-existing `teal_data` object it is crucial that the server function and the data object are defined in the same environment as otherwise the server function will not be able to access the data object.
 This means server functions defined in packages cannot be used.
