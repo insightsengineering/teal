@@ -42,7 +42,7 @@ testthat::test_that("srv_teal_with_splash raw_data evaluates the server of teal_
   )
 })
 
-testthat::test_that("srv_teal_with_splash passes teal_data to reactiveVal", {
+testthat::test_that("srv_teal_with_splash passes teal_data to reactive", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(

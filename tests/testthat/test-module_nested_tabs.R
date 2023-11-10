@@ -486,9 +486,9 @@ testthat::test_that("calculate_hashes takes a FilteredData and vector of datanam
 
   datasets <- teal.slice::init_filtered_data(
     list(
-      ADSL = list(dataset = head(adsl)),
-      ADAE = list(dataset = head(adae)),
-      ADTTE = list(dataset = head(adtte))
+      ADSL = list(dataset = adsl),
+      ADAE = list(dataset = adae),
+      ADTTE = list(dataset = adtte)
     )
   )
 

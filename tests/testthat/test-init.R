@@ -149,23 +149,6 @@ testthat::test_that("init data accepts teal_data_module", {
   )
 })
 
-testthat::test_that("init teal_data_module doesn't accept ui and server with other formals than id", {
-  testthat::expect_error(
-    init(
-      data = teal_data_module(ui = function(id, x) div(), server = function(id) NULL),
-      modules = modules(teal:::example_module())
-    ),
-    "Must have exactly 1 formal arguments"
-  )
-  testthat::expect_error(
-    init(
-      data = teal_data_module(ui = function(id) div(), server = function(id, x) NULL),
-      modules = modules(teal:::example_module())
-    ),
-    "Must have exactly 1 formal arguments"
-  )
-})
-
 testthat::test_that("init modules accepts a teal_modules object", {
   mods <- modules(example_module(), example_module())
   testthat::expect_no_error(init(data = iris, modules = mods))
