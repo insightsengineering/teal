@@ -8,6 +8,7 @@
 * Filter state snapshots can now be uploaded from file. See `?snapshot`.
 * Added argument to `teal_slices` and made modifications to `init` to enable tagging `teal_slices` with an app id to safely upload snapshots from disk.
 * Added `landing_popup_module` function which creates a module that will display a popup when the app starts. The popup will block access to the app until it is dismissed.
+* `validate_has_data` now accepts a `vector` input along with `data.frame`.
 
 # teal 0.14.0
 
