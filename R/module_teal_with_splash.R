@@ -143,7 +143,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
             FALSE,
             paste0(
               "Error when executing `teal_data_module`:\n ",
-              attr(data, "condition")$message,
+              data$message,
               "\n Check your inputs or contact app developer if error persists"
             )
           )

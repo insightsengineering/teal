@@ -78,13 +78,13 @@ testthat::test_that("srv_teal_with_splash raw_data_checked throws when teal_data
       id = "test",
       data = teal_data_module(
         ui = function(id) div(),
-        server = function(id) reactive(stop())
+        server = function(id) reactive(stop("this error"))
       ),
       modules = modules(example_module())
     ),
     expr = {
       testthat::expect_is(raw_data_checked, "reactive")
-      testthat::expect_error(raw_data_checked(), "Error when executing `teal_data_module`")
+      testthat::expect_error(raw_data_checked(), "this error")
     }
   )
 })
