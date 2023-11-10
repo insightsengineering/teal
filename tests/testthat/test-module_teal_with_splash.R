@@ -23,7 +23,7 @@ testthat::test_that("srv_teal_with_splash throws when teal_data_module doesn't r
       ),
       expr = {}
     ),
-    "The `teal_data_module` has to return a reactive object."
+    "The `teal_data_module` must return a reactive expression containing a `teal_data` object."
   )
 })
 
