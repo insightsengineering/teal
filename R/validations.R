@@ -1,7 +1,7 @@
 #' Validate that dataset has a minimum number of observations
 #'
 #' @description `r lifecycle::badge("stable")`
-#' @param x a data.frame
+#' @param x a data.frame or a vector
 #' @param min_nrow minimum number of rows in \code{x}
 #' @param complete \code{logical} default \code{FALSE} when set to \code{TRUE} then complete cases are checked.
 #' @param allow_inf \code{logical} default \code{TRUE} when set to \code{FALSE} then error thrown if any values are
@@ -46,7 +46,15 @@ validate_has_data <- function(x,
   stopifnot(
     "Please provide a character vector in msg argument of validate_has_data." = is.character(msg) || is.null(msg)
   )
-  validate(need(!is.null(x) && is.data.frame(x), "No data left."))
+
+  validate(need(is.vector(x) || is.data.frame(x), "Input must be a vector or a data frame."))
+
+  if (is.vector(x) && !is.null(x)) {
+    x <- data.frame(x)
+  }
+
+  validate(need(!is.null(x), "No data left."))
+
   if (!is.null(min_nrow)) {
     if (complete) {
       complete_index <- stats::complete.cases(x)

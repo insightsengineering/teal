@@ -13,7 +13,7 @@ validate_has_data(
 )
 }
 \arguments{
-\item{x}{a data.frame}
+\item{x}{a data.frame or a vector}
 
 \item{min_nrow}{minimum number of rows in \code{x}}
 
