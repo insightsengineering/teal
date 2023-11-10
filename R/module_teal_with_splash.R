@@ -169,7 +169,11 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       validate(need(isTRUE(is_modules_ok), is_modules_ok))
 
       if (!isTRUE(is_filter_ok)) {
-        showNotification(is_filter_ok, type = "warning", duration = 10)
+        showNotification(
+          "Some filters were not applied because of incompatibility with data. Contact app developer",
+          type = "warning",
+          duration = 10
+        )
         logger::log_warn(is_filter_ok)
       }
 

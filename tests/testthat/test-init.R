@@ -200,7 +200,7 @@ testthat::test_that("init throws when data has no datanames", {
 })
 
 testthat::test_that("init throws when incompatible module's datanames", {
-  msg <- "Module 'example teal module' uses datanames not available in the 'data'"
+  msg <- "Module 'example teal module' uses datanames not available in 'data'"
   testthat::expect_output(
     testthat::expect_error(
       init(data = teal_data(mtcars = mtcars), modules = list(example_module(datanames = "iris"))),

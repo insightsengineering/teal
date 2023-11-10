@@ -172,7 +172,7 @@ testthat::test_that("srv_teal_with_splash raw_data_checked throws when incompati
       testthat::expect_is(raw_data_checked, "reactive")
       testthat::expect_error(
         raw_data_checked(),
-        "Module 'example teal module' uses datanames not available in the 'data'"
+        "Module 'example teal module' uses datanames not available in 'data'"
       )
     }
   )
