@@ -23,7 +23,7 @@ testthat::test_that("srv_teal_with_splash throws when teal_data_module doesn't r
       ),
       expr = {}
     ),
-    "The delayed loading module has to return a reactive object."
+    "The `teal_data_module` has to return a reactive object."
   )
 })
 
@@ -47,12 +47,26 @@ testthat::test_that("srv_teal_with_splash passes teal_data to reactiveVal", {
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data(),
+      data = teal_data(iris = iris),
       modules = modules(example_module())
     ),
     expr = {
       testthat::expect_is(raw_data_checked, "reactive")
       testthat::expect_s4_class(raw_data_checked(), "teal_data")
+    }
+  )
+})
+
+testthat::test_that("srv_teal_with_splash throws when datanames are empty", {
+  shiny::testServer(
+    app = srv_teal_with_splash,
+    args = list(
+      id = "test",
+      data = teal_data(),
+      modules = modules(example_module())
+    ),
+    expr = {
+      testthat::expect_error(raw_data_checked(), "Data has no datanames")
     }
   )
 })
@@ -106,7 +120,7 @@ testthat::test_that("srv_teal_with_splash raw_data_checked throws when teal_data
     ),
     expr = {
       testthat::expect_is(raw_data_checked, "reactive")
-      testthat::expect_error(raw_data_checked(), "didn't return `teal_data`")
+      testthat::expect_error(raw_data_checked(), "did not return `teal_data`")
     }
   )
 })
@@ -158,7 +172,7 @@ testthat::test_that("srv_teal_with_splash raw_data_checked throws when incompati
       testthat::expect_is(raw_data_checked, "reactive")
       testthat::expect_error(
         raw_data_checked(),
-        "Module 'example teal module' uses different datanames than available in the 'data'"
+        "Module 'example teal module' uses datanames not available in the 'data'"
       )
     }
   )

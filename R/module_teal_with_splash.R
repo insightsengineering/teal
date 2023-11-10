@@ -110,7 +110,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     }
 
     if (!is.reactive(raw_data)) {
-      stop("The delayed loading module has to return a reactive object.")
+      stop("The `teal_data_module` has to return a reactive object.", call. = FALSE)
     }
 
     raw_data_checked <- reactive({
@@ -128,9 +128,9 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
           need(
             FALSE,
             paste(
-              "Error when executing `teal_data_module`:\n",
+              "Error when executing `teal_data_module`:\n ",
               data$message,
-              "\n Check your inputs or contact app developer if error persist"
+              "\n Check your inputs or contact app developer if error persists"
             )
           )
         )
@@ -142,9 +142,9 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
           need(
             FALSE,
             paste0(
-              "Error when executing `teal_data_module`:",
+              "Error when executing `teal_data_module`:\n ",
               attr(data, "condition")$message,
-              "\n Check your inputs or contact app developer if error persist"
+              "\n Check your inputs or contact app developer if error persists"
             )
           )
         )
@@ -154,11 +154,14 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         need(
           inherits(data, "teal_data"),
           paste(
-            "Error: `teal_data_module` didn't return `teal_data` object",
-            "\n Check your inputs or contact app developer if error persist"
+            "Error: `teal_data_module` did not return `teal_data` object",
+            "\n Check your inputs or contact app developer if error persists"
           )
         )
       )
+
+      validate(need(teal.data::datanames(data), "Data has no datanames. Contact app developer"))
+
 
       is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
       is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
@@ -166,7 +169,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       validate(need(isTRUE(is_modules_ok), is_modules_ok))
 
       if (!isTRUE(is_filter_ok)) {
-        showNotification(is_filter_ok, type = "warning")
+        showNotification(is_filter_ok, type = "warning", duration = 10)
         logger::log_warn(is_filter_ok)
       }
 

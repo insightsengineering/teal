@@ -160,7 +160,7 @@ check_modules_datanames <- function(modules, datanames) {
       extra_datanames <- setdiff(modules$datanames, c("all", datanames))
       if (length(extra_datanames)) {
         sprintf(
-          "- Module '%s' uses different datanames than available in the 'data': (%s) not in (%s)",
+          "- Module '%s' uses datanames not available in the 'data': (%s) not in (%s)",
           modules$label,
           toString(dQuote(extra_datanames, q = FALSE)),
           toString(dQuote(datanames, q = FALSE))
@@ -178,7 +178,7 @@ check_modules_datanames <- function(modules, datanames) {
 
 #' Check `datanames` in filters
 #'
-#' This function check `datanames` in filters correspond to those in `data`,
+#' This function checks whether `datanames` in filters correspond to those in `data`,
 #' returning character vector with error messages or TRUE if all checks pass.
 #'
 #' @param filters (`teal_slices`) object
@@ -188,20 +188,22 @@ check_modules_datanames <- function(modules, datanames) {
 #' @keywords internal
 check_filter_datanames <- function(filters, datanames) {
   # check teal_slices against datanames
-  out <- sapply(
+  out <- unlist(sapply(
     filters, function(filter) {
       dataname <- shiny::isolate(filter$dataname)
       if (!dataname %in% datanames) {
         sprintf(
-          "- Filter '%s' refers to dataname that in unavailable to 'data':\n %s not in (%s)",
+          "- Filter '%s' refers to dataname not available in 'data':\n %s not in (%s)",
           shiny::isolate(filter$id),
           dQuote(dataname, q = FALSE),
           toString(dQuote(datanames, q = FALSE))
         )
       }
     }
-  )
-  if (length(unlist(out))) {
+  ))
+
+
+  if (length(out)) {
     paste(out, collapse = "\n")
   } else {
     TRUE

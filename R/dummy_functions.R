@@ -75,7 +75,6 @@ example_datasets <- function() { # nolint
 #'
 #' @description `r lifecycle::badge("experimental")`
 #' @inheritParams module
-#' @param src (`logical(1)`) whether to display reproducible R code in the module.
 #' @return A `teal` module which can be included in the `modules` argument to [teal::init()].
 #' @examples
 #' app <- init(
@@ -89,7 +88,7 @@ example_datasets <- function() { # nolint
 #'   shinyApp(app$ui, app$server)
 #' }
 #' @export
-example_module <- function(label = "example teal module", datanames = "all", src = TRUE) {
+example_module <- function(label = "example teal module", datanames = "all") {
   checkmate::assert_string(label)
   module(
     label,
@@ -110,9 +109,7 @@ example_module <- function(label = "example teal module", datanames = "all", src
         output = verbatimTextOutput(ns("text")),
         encoding = div(
           selectInput(ns("dataname"), "Choose a dataset", choices = names(data)),
-          if (src) {
-            teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
-          }
+          teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
         )
       )
     },

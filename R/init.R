@@ -190,6 +190,10 @@ init <- function(data,
   }
 
   if (inherits(data, "teal_data")) {
+    if (length(teal.data::datanames(data)) == 0) {
+      stop("`data` object has no datanames. Specify `datanames(data)` and try again.")
+    }
+
     # in case of teal_data_module this check is postponed to the srv_teal_with_splash
     is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
     if (!isTRUE(is_modules_ok)) {
@@ -200,7 +204,6 @@ init <- function(data,
     is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
     if (!isTRUE(is_filter_ok)) {
       logger::log_warn(is_filter_ok)
-      warning(is_filter_ok)
       # we allow app to continue if applied filters are outside
       # of possible data range
     }
