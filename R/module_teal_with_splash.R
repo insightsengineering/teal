@@ -106,61 +106,78 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
           )
         }
       })
-
-      if (!is.reactive(raw_data)) {
-        stop("The delayed loading module has to return a reactive object.")
-      }
       raw_data
     }
 
-    output$error <- renderUI({
-      data <- raw_data()
+    if (!is.reactive(raw_data)) {
+      stop("The delayed loading module has to return a reactive object.")
+    }
+
+    raw_data_checked <- reactive({
+      # custom module can return error
+      data <- tryCatch(raw_data(), error = function(e) e)
+
+      # there is an empty reactive event on init!
+      if (inherits(data, "shiny.silent.error") && identical(data$message, "")) {
+        return(NULL)
+      }
+
+      # to handle qenv.error
       if (inherits(data, "qenv.error")) {
-        #
-        showNotification(sprintf("Error: %s", data$message), type = "error")
-        logger::log_error(data$message)
-        stop("Check your inputs or call app developer\n", data$message, call. = FALSE)
+        validate(
+          need(
+            FALSE,
+            paste(
+              "Error when executing `teal_data_module`:\n",
+              data$message,
+              "\n Check your inputs or contact app developer if error persist"
+            )
+          )
+        )
       }
-      if (!inherits(data, "teal_data")) {
-        msg <- "Error: server must return 'teal_data' object"
-        showNotification(msg, type = "error")
-        logger::log_error(msg)
-        stop("Check your inputs or call app developer\n", msg, call. = FALSE)
+
+      # to handle module non-qenv errors
+      if (inherits(data, "error")) {
+        validate(
+          need(
+            FALSE,
+            paste0(
+              "Error when executing `teal_data_module`:",
+              attr(data, "condition")$message,
+              "\n Check your inputs or contact app developer if error persist"
+            )
+          )
+        )
       }
+
+      validate(
+        need(
+          inherits(data, "teal_data"),
+          paste(
+            "Error: `teal_data_module` didn't return `teal_data` object",
+            "\n Check your inputs or contact app developer if error persist"
+          )
+        )
+      )
 
       is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
       is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
 
-      if (!isTRUE(is_modules_ok)) {
-        showNotification(is_modules_ok, type = "error")
-        logger::log_error(is_modules_ok)
-        # NULL won't trigger observe which waits for raw_data()
-        # we will need to consider validate process for filtered data and modules!
-        stop("Contact app developer.\n", is_modules_ok, call. = FALSE)
-      }
+      validate(need(isTRUE(is_modules_ok), is_modules_ok))
+
       if (!isTRUE(is_filter_ok)) {
         showNotification(is_filter_ok, type = "warning")
         logger::log_warn(is_filter_ok)
       }
 
+      raw_data()
+    })
+
+    output$error <- renderUI({
+      raw_data_checked()
       NULL
     })
 
-    raw_data_checked <- reactive({
-      data <- req(raw_data())
-      if (!inherits(data, "teal_data")) {
-        return(NULL)
-      }
-
-      is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
-      is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
-
-      if (!isTRUE(is_modules_ok) || !isTRUE(is_filter_ok)) {
-        return(NULL)
-      }
-
-      data
-    })
 
 
     res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data_checked, filter = filter)

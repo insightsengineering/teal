@@ -195,7 +195,7 @@ testthat::test_that("init filter accepts `teal_slices`", {
 testthat::test_that("init throws when incompatible module's datanames", {
   testthat::expect_error(
     init(data = teal_data(mtcars = mtcars), modules = list(example_module(datanames = "iris"))),
-    '"iris" not in "mtcars"'
+    "Module 'example teal module' uses different datanames than available in the 'data'"
   )
 })
 
@@ -206,6 +206,6 @@ testthat::test_that("init throws when incompatible filter's datanames", {
       modules = modules(example_module()),
       filter = teal_slices(teal_slice(dataname = "iris", varname = "Species"))
     ),
-    '"iris" not in "mtcars"'
+    "Filter 'iris Species' refers to dataname that in unavailable to 'data'"
   )
 })
