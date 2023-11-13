@@ -110,7 +110,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     }
 
     if (!is.reactive(teal_data_rv)) {
-      stop("The `teal_data_module` must return a reactive expression containing a `teal_data` object.", call. = FALSE)
+      stop("The `teal_data_module` must return a reactive expression.", call. = FALSE)
     }
 
     teal_data_rv_validate <- reactive({
