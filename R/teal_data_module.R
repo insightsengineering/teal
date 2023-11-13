@@ -6,7 +6,7 @@
 #' The body of the server function will be run in the app rather than in the global environment.
 #' This means it will be run every time the app starts, so use sparingly.
 #'
-#' Pass this module instead of a `teal_data` object in a call to `init`.
+#' Pass this module instead of a `teal_data` object in a call to [init()].
 #'
 #' See vignette "Data as shiny Module" for more details.
 #'

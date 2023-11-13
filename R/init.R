@@ -18,7 +18,7 @@
 #' or `MultiAssayExperiment`, `teal_data`, `teal_data_module`)\cr
 #' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()],
 #' [teal.data::cdisc_dataset()], [teal.data::dataset()], [teal.data::dataset_connector()] or
-#' [teal.data::cdisc_dataset_connector()] or [teal::teal_data_module()] or a single `data.frame` or
+#' [teal.data::cdisc_dataset_connector()] or [teal_data_module()] or a single `data.frame` or
 #' a `MultiAssayExperiment`
 #' or a list of the previous objects or function returning a named list.
 #' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
@@ -143,8 +143,9 @@ init <- function(data,
   if (length(landing) > 1L) stop("Only one `landing_popup_module` can be used.")
   modules <- drop_module(modules, "teal_module_landing")
 
-  # Calculate app hash to ensure snapshot compatibility.
-  # See ?snapshot. Raw data must be extracted from environments.
+  # Calculate app id that will be used to stamp filter state snapshots.
+  # App id is a hash of the app's data and modules.
+  # See "transferring snapshots" section in ?snapshot.
   hashables <- mget(c("data", "modules"))
   hashables$data <- if (inherits(hashables$data, "teal_data")) {
     as.list(hashables$data@env)

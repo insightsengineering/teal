@@ -152,6 +152,9 @@ resolve_modules_datanames <- function(modules, datanames, join_keys) {
 #' @return A `character(1)` containing error message or `TRUE` if validation passes.
 #' @keywords internal
 check_modules_datanames <- function(modules, datanames) {
+  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_character(datanames)
+
   recursive_check_datanames <- function(modules, datanames) {
     # check teal_modules against datanames
     if (inherits(modules, "teal_modules")) {
@@ -187,6 +190,9 @@ check_modules_datanames <- function(modules, datanames) {
 #' @return A `character(1)` containing error message or TRUE if validation passes.
 #' @keywords internal
 check_filter_datanames <- function(filters, datanames) {
+  checkmate::assert_class(filters, "teal_slices")
+  checkmate::assert_character(datanames)
+
   # check teal_slices against datanames
   out <- unlist(sapply(
     filters, function(filter) {

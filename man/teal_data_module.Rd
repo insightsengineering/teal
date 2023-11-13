@@ -25,7 +25,7 @@ This function creates a \code{shiny} module that allows for running data pre-pro
 The body of the server function will be run in the app rather than in the global environment.
 This means it will be run every time the app starts, so use sparingly.
 
-Pass this module instead of a \code{teal_data} object in a call to \code{init}.
+Pass this module instead of a \code{teal_data} object in a call to \code{\link[=init]{init()}}.
 
 See vignette "Data as shiny Module" for more details.
 }

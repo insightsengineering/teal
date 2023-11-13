@@ -130,7 +130,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
             paste(
               "Error when executing `teal_data_module`:\n ",
               paste(data$message, collapse = "\n"),
-              "\n Check your inputs or contact app developer if error persists"
+              "\n Check your inputs or contact app developer if error persists."
             )
           )
         )
@@ -144,7 +144,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
             paste0(
               "Error when executing `teal_data_module`:\n ",
               paste(data$message, collpase = "\n"),
-              "\n Check your inputs or contact app developer if error persists"
+              "\n Check your inputs or contact app developer if error persists."
             )
           )
         )
@@ -160,7 +160,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         )
       )
 
-      validate(need(teal.data::datanames(data), "Data has no datanames. Contact app developer"))
+      validate(need(teal.data::datanames(data), "Data has no datanames. Contact app developer."))
 
 
       is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
@@ -169,7 +169,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
       if (!isTRUE(is_filter_ok)) {
         showNotification(
-          "Some filters were not applied because of incompatibility with data. Contact app developer",
+          "Some filters were not applied because of incompatibility with data. Contact app developer.",
           type = "warning",
           duration = 10
         )
