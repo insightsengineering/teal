@@ -8,7 +8,7 @@
 #'
 #' Pass this module instead of a `teal_data` object in a call to [init()].
 #'
-#' See vignette "Data as shiny Module" for more details.
+#' See vignette \code{vignette("data-as-shiny-module", package = "teal")} for more details.
 #'
 #' @param ui (`function(id)`)\cr
 #'  `shiny` module `ui` function; must only take `id` argument
