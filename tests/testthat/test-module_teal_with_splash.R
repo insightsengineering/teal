@@ -107,23 +107,26 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws then qenv
   )
 })
 
-testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when teal_data_module doesn't return teal_data", {
-  shiny::testServer(
-    app = srv_teal_with_splash,
-    args = list(
-      id = "test",
-      data = teal_data_module(
-        ui = function(id) div(),
-        server = function(id) reactive(data.frame())
+testthat::test_that(
+  "srv_teal_with_splash teal_data_rv_validate throws when teal_data_module doesn't return teal_data",
+  {
+    shiny::testServer(
+      app = srv_teal_with_splash,
+      args = list(
+        id = "test",
+        data = teal_data_module(
+          ui = function(id) div(),
+          server = function(id) reactive(data.frame())
+        ),
+        modules = modules(example_module())
       ),
-      modules = modules(example_module())
-    ),
-    expr = {
-      testthat::expect_is(teal_data_rv_validate, "reactive")
-      testthat::expect_error(teal_data_rv_validate(), "did not return `teal_data`")
-    }
-  )
-})
+      expr = {
+        testthat::expect_is(teal_data_rv_validate, "reactive")
+        testthat::expect_error(teal_data_rv_validate(), "did not return `teal_data`")
+      }
+    )
+  }
+)
 
 
 testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns NULL before loading", {
