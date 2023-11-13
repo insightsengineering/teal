@@ -14,7 +14,7 @@ Please also refer to the doc of init()."><!-- mathjax --><script src="https://cd
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9016</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9017</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,6 +41,7 @@ Please also refer to the doc of init()."><!-- mathjax --><script src="https://cd
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Using General Data in teal Applications</a>
     <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Using MultiAssayExperiment data in teal Applications</a>
     <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing Data</a>
+    <a class="dropdown-item" href="../articles/data-as-shiny-module.html">Data as shiny Module</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Extending teal</h6>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
@@ -67,16 +68,6 @@ Please also refer to the doc of init()."><!-- mathjax --><script src="https://cd
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -128,9 +119,10 @@ is then preferred to this function.</p></dd>
 
 <dt>data</dt>
 <dd><p>(<code>TealData</code> or <code>TealDataset</code> or <code>TealDatasetConnector</code> or <code>list</code> or <code>data.frame</code>
-or <code>MultiAssayExperiment</code>, <code>teal_data</code>)<br><code>R6</code> object as returned by <code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_data.html">teal.data::cdisc_data()</a></code>, <code><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal.data::teal_data()</a></code>,
+or <code>MultiAssayExperiment</code>, <code>teal_data</code>, <code>teal_data_module</code>)<br><code>R6</code> object as returned by <code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_data.html">teal.data::cdisc_data()</a></code>, <code><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal.data::teal_data()</a></code>,
 <code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_dataset.html">teal.data::cdisc_dataset()</a></code>, <code><a href="https://insightsengineering.github.io/teal.data/reference/dataset.html">teal.data::dataset()</a></code>, <code><a href="https://insightsengineering.github.io/teal.data/reference/dataset_connector.html">teal.data::dataset_connector()</a></code> or
-<code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_dataset_connector.html">teal.data::cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a <code>MultiAssayExperiment</code>
+<code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_dataset_connector.html">teal.data::cdisc_dataset_connector()</a></code> or <code><a href="teal_data_module.html">teal_data_module()</a></code> or a single <code>data.frame</code> or
+a <code>MultiAssayExperiment</code>
 or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 do not match the original object names. To ensure reproducibility please use <code><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal.data::teal_data()</a></code>

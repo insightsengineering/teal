@@ -49,6 +49,9 @@
     <loc>https://insightsengineering.github.io/teal/articles/creating-custom-modules.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/articles/data-as-shiny-module.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/articles/filter-panel.html</loc>
   </url>
   <url>
@@ -98,6 +101,12 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/calculate_hashes.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/check_filter_datanames.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/check_modules_datanames.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/deep_copy_filter.html</loc>
@@ -233,6 +242,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/teal-package.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/teal_data_module.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/teal_data_to_filtered_data.html</loc>

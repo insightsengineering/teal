@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9016</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9017</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,6 +37,7 @@
     <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Using General Data in teal Applications</a>
     <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Using MultiAssayExperiment data in teal Applications</a>
     <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing Data</a>
+    <a class="dropdown-item" href="../articles/data-as-shiny-module.html">Data as shiny Module</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Extending teal</h6>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
@@ -63,16 +64,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -115,7 +106,7 @@
 <span>  footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">srv_teal</span><span class="op">(</span><span class="va">id</span>, <span class="va">modules</span>, <span class="va">raw_data</span>, filter <span class="op">=</span> <span class="fu"><a href="teal_slices.html">teal_slices</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">srv_teal</span><span class="op">(</span><span class="va">id</span>, <span class="va">modules</span>, <span class="va">teal_data_rv</span>, filter <span class="op">=</span> <span class="fu"><a href="teal_slices.html">teal_slices</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -148,7 +139,7 @@ argument) will be placed in the app's <code>ui</code> function so code which nee
 the footer of the app</p></dd>
 
 
-<dt>raw_data</dt>
+<dt>teal_data_rv</dt>
 <dd><p>(<code>reactive</code>)<br>
 returns the <code>teal_data</code>, only evaluated once, <code>NULL</code> value is ignored</p></dd>
 
@@ -171,7 +162,7 @@ of clarity of the UI.</p>
 <p>The splash screen functionality can also be used
 for non-delayed data which takes time to load into memory, avoiding
 Shiny session timeouts.</p>
-<p>Server evaluates the <code>raw_data</code> (delayed data mechanism) and creates the
+<p>Server evaluates the <code>teal_data_rv</code> (delayed data mechanism) and creates the
 <code>datasets</code> object that is shared across modules.
 Once it is ready and non-<code>NULL</code>, the splash screen is replaced by the
 main teal UI that depends on the data.
@@ -184,13 +175,13 @@ of the tab.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="example_modules.html">example_modules</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">raw_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="example_cdisc_data.html">example_cdisc_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">teal_data_rv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="example_cdisc_data.html">example_cdisc_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>    <span class="fu">teal</span><span class="fu">:::</span><span class="fu">ui_teal</span><span class="op">(</span><span class="st">"dummy"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">}</span>,</span></span>
 <span class="r-in"><span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="va">active_module</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu">srv_teal</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"dummy"</span>, modules <span class="op">=</span> <span class="va">mods</span>, raw_data <span class="op">=</span> <span class="va">raw_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">active_module</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">:::</span><span class="fu">srv_teal</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"dummy"</span>, modules <span class="op">=</span> <span class="va">mods</span>, teal_data_rv <span class="op">=</span> <span class="va">teal_data_rv</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">}</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
