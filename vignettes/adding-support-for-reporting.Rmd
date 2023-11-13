@@ -322,7 +322,7 @@ app <- init(
     example_reporter_module(label = "with Reporter"),
     example_module(label = "without Reporter")
   ),
-  filter = list(AIR = list(Month = c(5, 5))),
+  filter = teal_slices(teal_slice(dataname = "AIR", varname = "Month", selected = c(5, 5))),
   header = "Example teal app with reporter"
 )
 

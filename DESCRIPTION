@@ -88,6 +88,7 @@ Collate:
     'show_rcode_modal.R'
     'tdata.R'
     'teal.R'
+    'teal_data_module.R'
     'teal_reporter.R'
     'teal_slices-store.R'
     'teal_slices.R'

@@ -14,7 +14,7 @@ ui_teal(
   footer = tags$p("")
 )
 
-srv_teal(id, modules, raw_data, filter = teal_slices())
+srv_teal(id, modules, teal_data_rv, filter = teal_slices())
 }
 \arguments{
 \item{id}{(\code{character(1)})\cr
@@ -35,7 +35,7 @@ argument) will be placed in the app's \code{ui} function so code which needs to 
 \item{footer}{(\code{shiny.tag} or \code{character})\cr
 the footer of the app}
 
-\item{raw_data}{(\code{reactive})\cr
+\item{teal_data_rv}{(\code{reactive})\cr
 returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
 }
 \value{
@@ -57,7 +57,7 @@ The splash screen functionality can also be used
 for non-delayed data which takes time to load into memory, avoiding
 Shiny session timeouts.
 
-Server evaluates the \code{raw_data} (delayed data mechanism) and creates the
+Server evaluates the \code{teal_data_rv} (delayed data mechanism) and creates the
 \code{datasets} object that is shared across modules.
 Once it is ready and non-\code{NULL}, the splash screen is replaced by the
 main teal UI that depends on the data.
@@ -69,13 +69,13 @@ It is written as a Shiny module so it can be added into other apps as well.
 }
 \examples{
 mods <- teal:::example_modules()
-raw_data <- reactive(teal:::example_cdisc_data())
+teal_data_rv <- reactive(teal:::example_cdisc_data())
 app <- shinyApp(
   ui = function() {
     teal:::ui_teal("dummy")
   },
   server = function(input, output, session) {
-    active_module <- teal:::srv_teal(id = "dummy", modules = mods, raw_data = raw_data)
+    active_module <- teal:::srv_teal(id = "dummy", modules = mods, teal_data_rv = teal_data_rv)
   }
 )
 if (interactive()) {
