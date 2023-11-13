@@ -18,7 +18,7 @@ must return reactive expression containing \code{teal_data} object}
 Object of class \code{teal_data_module}.
 }
 \description{
-Create \code{shiny} module to supply or modify data in a \code{teal} application.
+Creates \code{teal_data_module} object - a \code{shiny} module to supply or modify data in a \code{teal} application.
 }
 \details{
 This function creates a \code{shiny} module that allows for running data pre-processing code after the app starts.
@@ -39,13 +39,13 @@ data <- teal_data_module(
     moduleServer(id, function(input, output, session) {
       eventReactive(input$submit, {
         data <- within(
-          teal.data::teal_data(),
+          teal_data(),
           {
             dataset1 <- iris
             dataset2 <- mtcars
           }
         )
-        teal.data::datanames(data) <- c("iris", "mtcars")
+        datanames(data) <- c("iris", "mtcars")
 
         data
       })

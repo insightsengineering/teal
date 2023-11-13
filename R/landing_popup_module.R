@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' app1 <- teal::init(
-#'   data = teal.data::dataset("iris", iris),
+#'   data = teal_data(iris = iris),
 #'   modules = teal::modules(
 #'     teal::landing_popup_module(
 #'       content = "A place for the welcome message or a disclaimer statement.",
@@ -29,7 +29,7 @@
 #' }
 #'
 #' app2 <- teal::init(
-#'   data = teal.data::dataset("iris", iris),
+#'   data = teal_data(iris = iris),
 #'   modules = teal::modules(
 #'     teal::landing_popup_module(
 #'       title = "Welcome",

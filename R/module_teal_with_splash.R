@@ -73,9 +73,9 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       shinyjs::showLog()
     }
 
-    # raw_data contains teal_data object
-    # either passed to teal::init or returned from ddl
-    raw_data <- if (inherits(data, "teal_data_module")) {
+    # teal_data_rv contains teal_data object
+    # either passed to teal::init or returned from teal_data_module
+    teal_data_rv <- if (inherits(data, "teal_data_module")) {
       data$server(id = "teal_data_module")
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
@@ -109,13 +109,13 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       raw_data
     }
 
-    if (!is.reactive(raw_data)) {
+    if (!is.reactive(teal_data_rv)) {
       stop("The `teal_data_module` must return a reactive expression containing a `teal_data` object.", call. = FALSE)
     }
 
-    raw_data_checked <- reactive({
+    teal_data_rv_validate <- reactive({
       # custom module can return error
-      data <- tryCatch(raw_data(), error = function(e) e)
+      data <- tryCatch(teal_data_rv(), error = function(e) e)
 
       # there is an empty reactive event on init!
       if (inherits(data, "shiny.silent.error") && identical(data$message, "")) {
@@ -129,7 +129,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
             FALSE,
             paste(
               "Error when executing `teal_data_module`:\n ",
-              data$message,
+              paste(data$message, collapse = "\n"),
               "\n Check your inputs or contact app developer if error persists"
             )
           )
@@ -143,7 +143,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
             FALSE,
             paste0(
               "Error when executing `teal_data_module`:\n ",
-              data$message,
+              paste(data$message, collpase = "\n"),
               "\n Check your inputs or contact app developer if error persists"
             )
           )
@@ -164,10 +164,9 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
 
       is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
-      is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
-
       validate(need(isTRUE(is_modules_ok), is_modules_ok))
 
+      is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
       if (!isTRUE(is_filter_ok)) {
         showNotification(
           "Some filters were not applied because of incompatibility with data. Contact app developer",
@@ -177,17 +176,17 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         logger::log_warn(is_filter_ok)
       }
 
-      raw_data()
+      teal_data_rv()
     })
 
     output$error <- renderUI({
-      raw_data_checked()
+      teal_data_rv_validate()
       NULL
     })
 
 
 
-    res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data_checked, filter = filter)
+    res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter)
     logger::log_trace("srv_teal_with_splash initialized module with data.")
     return(res)
   })

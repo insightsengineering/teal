@@ -112,7 +112,8 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
   checkmate::assert_class(datasets, class = "FilteredData")
   ns <- NS(id)
 
-  args <- c(list(id = ns("module")), modules$ui_args)
+  args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
+  args <- c(list(id = ns("module")), args)
 
   if (is_arg_used(modules$ui, "datasets")) {
     args <- c(args, datasets = datasets)

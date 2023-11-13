@@ -27,7 +27,7 @@ testthat::test_that("srv_teal_with_splash throws when teal_data_module doesn't r
   )
 })
 
-testthat::test_that("srv_teal_with_splash raw_data evaluates the server of teal_data_module", {
+testthat::test_that("srv_teal_with_splash teal_data_rv evaluates the server of teal_data_module", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -36,8 +36,8 @@ testthat::test_that("srv_teal_with_splash raw_data evaluates the server of teal_
       modules = modules(example_module())
     ),
     expr = {
-      testthat::expect_is(raw_data, "reactive")
-      testthat::expect_identical(raw_data(), "whatever")
+      testthat::expect_is(teal_data_rv, "reactive")
+      testthat::expect_identical(teal_data_rv(), "whatever")
     }
   )
 })
@@ -51,8 +51,8 @@ testthat::test_that("srv_teal_with_splash passes teal_data to reactive", {
       modules = modules(example_module())
     ),
     expr = {
-      testthat::expect_is(raw_data_checked, "reactive")
-      testthat::expect_s4_class(raw_data_checked(), "teal_data")
+      testthat::expect_is(teal_data_rv_validate, "reactive")
+      testthat::expect_s4_class(teal_data_rv_validate(), "teal_data")
     }
   )
 })
@@ -66,12 +66,12 @@ testthat::test_that("srv_teal_with_splash throws when datanames are empty", {
       modules = modules(example_module())
     ),
     expr = {
-      testthat::expect_error(raw_data_checked(), "Data has no datanames")
+      testthat::expect_error(teal_data_rv_validate(), "Data has no datanames")
     }
   )
 })
 
-testthat::test_that("srv_teal_with_splash raw_data_checked throws when teal_data_module returns error", {
+testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when teal_data_module returns error", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -83,13 +83,13 @@ testthat::test_that("srv_teal_with_splash raw_data_checked throws when teal_data
       modules = modules(example_module())
     ),
     expr = {
-      testthat::expect_is(raw_data_checked, "reactive")
-      testthat::expect_error(raw_data_checked(), "this error")
+      testthat::expect_is(teal_data_rv_validate, "reactive")
+      testthat::expect_error(teal_data_rv_validate(), "this error")
     }
   )
 })
 
-testthat::test_that("srv_teal_with_splash raw_data_checked throws then qenv.error occurs", {
+testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws then qenv.error occurs", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -101,13 +101,13 @@ testthat::test_that("srv_teal_with_splash raw_data_checked throws then qenv.erro
       modules = modules(example_module())
     ),
     expr = {
-      testthat::expect_is(raw_data_checked, "reactive")
-      testthat::expect_error(raw_data_checked(), "not good")
+      testthat::expect_is(teal_data_rv_validate, "reactive")
+      testthat::expect_error(teal_data_rv_validate(), "not good")
     }
   )
 })
 
-testthat::test_that("srv_teal_with_splash raw_data_checked throws when teal_data_module doesn't return teal_data", {
+testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when teal_data_module doesn't return teal_data", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -119,8 +119,8 @@ testthat::test_that("srv_teal_with_splash raw_data_checked throws when teal_data
       modules = modules(example_module())
     ),
     expr = {
-      testthat::expect_is(raw_data_checked, "reactive")
-      testthat::expect_error(raw_data_checked(), "did not return `teal_data`")
+      testthat::expect_is(teal_data_rv_validate, "reactive")
+      testthat::expect_error(teal_data_rv_validate(), "did not return `teal_data`")
     }
   )
 })
@@ -160,7 +160,7 @@ testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns 
   )
 })
 
-testthat::test_that("srv_teal_with_splash raw_data_checked throws when incompatible module's datanames", {
+testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when incompatible module's datanames", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -169,16 +169,16 @@ testthat::test_that("srv_teal_with_splash raw_data_checked throws when incompati
       modules = modules(example_module(datanames = "iris"))
     ),
     expr = {
-      testthat::expect_is(raw_data_checked, "reactive")
+      testthat::expect_is(teal_data_rv_validate, "reactive")
       testthat::expect_error(
-        raw_data_checked(),
+        teal_data_rv_validate(),
         "Module 'example teal module' uses datanames not available in 'data'"
       )
     }
   )
 })
 
-testthat::test_that("srv_teal_with_splash raw_data_checked returns teal_data if incompatible filter's datanames", {
+testthat::test_that("srv_teal_with_splash teal_data_rv_validate returns teal_data if incompatible filter's datanames", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -188,8 +188,8 @@ testthat::test_that("srv_teal_with_splash raw_data_checked returns teal_data if 
       filter = teal_slices(teal_slice(dataname = "iris", varname = "Species"))
     ),
     expr = {
-      testthat::expect_is(raw_data_checked, "reactive")
-      testthat::expect_s4_class(raw_data_checked(), "teal_data")
+      testthat::expect_is(teal_data_rv_validate, "reactive")
+      testthat::expect_s4_class(teal_data_rv_validate(), "teal_data")
     }
   )
 })
