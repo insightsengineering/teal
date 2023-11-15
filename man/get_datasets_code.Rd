@@ -14,10 +14,11 @@ get_datasets_code(datanames, datasets, hashes)
 \item{hashes}{named (\code{list}) of hashes per dataset}
 }
 \value{
-\code{character(2)} containing the following elements:
+\code{character(3)} containing the following elements:
 \itemize{
 \item data pre-processing code (from \code{data} argument in \code{init})
 \item hash check of loaded objects
+\item filter code
 }
 }
 \description{

@@ -38,9 +38,10 @@ get_rcode_str_install <- function() {
 #' @param datasets (`FilteredData`) object
 #' @param hashes named (`list`) of hashes per dataset
 #'
-#' @return `character(2)` containing the following elements:
+#' @return `character(3)` containing the following elements:
 #'  - data pre-processing code (from `data` argument in `init`)
 #'  - hash check of loaded objects
+#'  - filter code
 #'
 #' @keywords internal
 get_datasets_code <- function(datanames, datasets, hashes) {
@@ -69,5 +70,7 @@ get_datasets_code <- function(datanames, datasets, hashes) {
     "\n\n"
   )
 
-  c(str_code, str_hash)
+  str_filter <- teal.slice::get_filter_expr(datasets, datanames)
+
+  c(str_code, str_hash, str_filter)
 }
