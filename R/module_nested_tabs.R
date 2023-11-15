@@ -311,8 +311,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   )
 
   hashes <- calculate_hashes(datanames, datasets)
-  metadata <- lapply(datanames, datasets$get_metadata)
-  names(metadata) <- datanames
+  metadata <- sapply(datanames, datasets$get_metadata, simplify = FALSE)
 
   new_tdata(
     data,
