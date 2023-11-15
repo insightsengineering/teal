@@ -175,7 +175,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       datasets_singleton <- teal_data_to_filtered_data(teal_data_rv())
 
       # Piggy-back entire pre-processing code so that filtering code can be appended later.
-      attr(datasets_singleton, "preprocessing_code") <- get_code(teal_data_rv())
+      attr(datasets_singleton, "preprocessing_code") <- teal.code::get_code(teal_data_rv())
 
       # Singleton starts with only global filters active.
       filter_global <- Filter(function(x) x$id %in% attr(filter, "mapping")$global_filters, filter)
