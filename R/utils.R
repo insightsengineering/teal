@@ -61,12 +61,7 @@ teal_data_to_filtered_data <- function(x) {
 
   teal.slice::init_filtered_data(
     x = as.list(x@env)[datanames],
-    join_keys = x@join_keys,
-    code = teal.data:::CodeClass$new(
-      code = paste(teal.code::get_code(x), collapse = "\n"),
-      dataname = teal.data::get_dataname(x)
-    ),
-    check = FALSE
+    join_keys = x@join_keys
   )
 }
 
