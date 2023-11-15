@@ -45,11 +45,11 @@ get_rcode_str_install <- function() {
 #'
 #' @keywords internal
 get_datasets_code <- function(datanames, datasets, hashes) {
-  str_code <- teal.code:::get_code_dependency(attr(datasets, "preprocessing_code"), names = datanames)
-  if (length(str_code) == 0) {
-    str_code <- "message('Preprocessing is empty')"
-  } else if (length(str_code) > 0) {
-    str_code <- paste0(str_code, "\n\n")
+  str_prepro <- teal.code:::get_code_dependency(attr(datasets, "preprocessing_code"), names = datanames)
+  if (length(str_prepro) == 0) {
+    str_prepro <- "message('Preprocessing is empty')"
+  } else if (length(str_prepro) > 0) {
+    str_prepro <- paste0(str_prepro, "\n\n")
   }
 
   str_hash <- paste(
@@ -72,5 +72,5 @@ get_datasets_code <- function(datanames, datasets, hashes) {
 
   str_filter <- teal.slice::get_filter_expr(datasets, datanames)
 
-  c(str_code, str_hash, str_filter)
+  c(str_prepro, str_hash, str_filter)
 }
