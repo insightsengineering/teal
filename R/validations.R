@@ -46,6 +46,7 @@ validate_has_data <- function(x,
   stopifnot(
     "Please provide a character vector in msg argument of validate_has_data." = is.character(msg) || is.null(msg)
   )
+  checkmate::assert_data_frame(x)
   validate(need(!is.null(x) && is.data.frame(x), "No data left."))
   if (!is.null(min_nrow)) {
     if (complete) {
