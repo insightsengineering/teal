@@ -93,7 +93,8 @@ which is disassembled for storage and used directly for restoring app state.
 
 \section{Transferring snapshots}{
 
-Snapshots uploaded from disk should only be used in the same application they come from.
+Snapshots uploaded from disk should only be used in the same application they come from,
+\emph{i.e.} an application that uses the same data and the same modules.
 To ensure this is the case, \code{init} stamps \code{teal_slices} with an app id that is stored in the \code{app_id} attribute of
 a \code{teal_slices} object. When a snapshot is restored from file, its \code{app_id} is compared to that
 of the current app state and only if the match is the snapshot admitted to the session.

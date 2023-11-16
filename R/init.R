@@ -15,10 +15,11 @@
 #' an end-user, don't use this function, but instead this module.
 #'
 #' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
-#' or `MultiAssayExperiment`, `teal_data`)\cr
+#' or `MultiAssayExperiment`, `teal_data`, `teal_data_module`)\cr
 #' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()],
 #' [teal.data::cdisc_dataset()], [teal.data::dataset()], [teal.data::dataset_connector()] or
-#' [teal.data::cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`
+#' [teal.data::cdisc_dataset_connector()] or [teal_data_module()] or a single `data.frame` or
+#' a `MultiAssayExperiment`
 #' or a list of the previous objects or function returning a named list.
 #' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 #' do not match the original object names. To ensure reproducibility please use [teal.data::teal_data()]
@@ -114,11 +115,11 @@ init <- function(data,
                  footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-
-  if (!inherits(data, c("TealData", "teal_data"))) {
+  if (!inherits(data, c("TealData", "teal_data", "teal_data_module"))) {
     data <- teal.data::to_relational_data(data = data)
   }
-  checkmate::assert_multi_class(data, c("TealData", "teal_data"))
+
+  checkmate::assert_multi_class(data, c("TealData", "teal_data", "teal_data_module"))
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert(
@@ -156,12 +157,14 @@ init <- function(data,
   # convert teal.slice::teal_slices to teal::teal_slices
   filter <- as.teal_slices(as.list(filter))
 
-  # Calculate app hash to ensure snapshot compatibility. See ?snapshot. Raw data must be extracted from environments.
+  # Calculate app id that will be used to stamp filter state snapshots.
+  # App id is a hash of the app's data and modules.
+  # See "transferring snapshots" section in ?snapshot. Raw data must be extracted from environments.
   hashables <- mget(c("data", "modules"))
   hashables$data <- if (inherits(hashables$data, "teal_data")) {
     as.list(hashables$data@env)
-  } else if (inherits(hashables$data, "ddl")) {
-    attr(hashables$data, "code")
+  } else if (inherits(data, "teal_data_module")) {
+    body(data$server)
   } else if (hashables$data$is_pulled()) {
     sapply(get_dataname(hashables$data), simplify = FALSE, function(dn) {
       hashables$data$get_dataset(dn)$get_raw_data()
@@ -172,20 +175,8 @@ init <- function(data,
 
   attr(filter, "app_id") <- rlang::hash(hashables)
 
-  # check teal_slices
-  for (i in seq_along(filter)) {
-    dataname_i <- shiny::isolate(filter[[i]]$dataname)
-    if (!dataname_i %in% datanames) {
-      stop(
-        sprintf(
-          "filter[[%s]] has a different dataname than available in a 'data':\n %s not in %s",
-          i,
-          dataname_i,
-          toString(datanames)
-        )
-      )
-    }
-  }
+  # convert teal.slice::teal_slices to teal::teal_slices
+  filter <- as.teal_slices(as.list(filter))
 
   if (isTRUE(attr(filter, "module_specific"))) {
     module_names <- unlist(c(module_labels(modules), "global_filters"))
@@ -210,6 +201,27 @@ init <- function(data,
           toString(module_names[duplicated(module_names)])
         )
       )
+    }
+  }
+
+  if (inherits(data, "teal_data")) {
+    if (length(teal.data::datanames(data)) == 0) {
+      stop("`data` object has no datanames. Specify `datanames(data)` and try again.")
+    }
+
+    # in case of teal_data_module this check is postponed to the srv_teal_with_splash
+    is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
+    if (!isTRUE(is_modules_ok)) {
+      logger::log_error(is_modules_ok)
+      checkmate::assert(is_modules_ok, .var.name = "modules")
+    }
+
+
+    is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+    if (!isTRUE(is_filter_ok)) {
+      logger::log_warn(is_filter_ok)
+      # we allow app to continue if applied filters are outside
+      # of possible data range
     }
   }
 

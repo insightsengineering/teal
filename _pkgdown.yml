@@ -62,6 +62,7 @@ articles:
     - including-general-data-in-teal
     - including-mae-data-in-teal
     - preprocessing-data
+    - data-as-shiny-module
 - title: Extending teal
   navbar: Extending teal
   contents:
@@ -92,6 +93,7 @@ reference:
   - title: Core `teal` Functions
     desc: Main functions needed to build a `teal` app
     contents:
+      - teal_data_module
       - init
       - module
       - modules
