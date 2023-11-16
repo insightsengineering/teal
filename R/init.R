@@ -145,7 +145,7 @@ init <- function(data,
 
   # Calculate app id that will be used to stamp filter state snapshots.
   # App id is a hash of the app's data and modules.
-  # See "transferring snapshots" section in ?snapshot. Raw data must be extracted from environments.
+  # See "transferring snapshots" section in ?snapshot.
   hashables <- mget(c("data", "modules"))
   hashables$data <- if (inherits(hashables$data, "teal_data")) {
     as.list(hashables$data@env)
