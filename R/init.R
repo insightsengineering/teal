@@ -143,20 +143,6 @@ init <- function(data,
   if (length(landing) > 1L) stop("Only one `landing_popup_module` can be used.")
   modules <- drop_module(modules, "teal_module_landing")
 
-  # resolve modules datanames
-  datanames <- teal.data::get_dataname(data)
-  join_keys <- teal.data::join_keys(data)
-  modules <- resolve_modules_datanames(modules = modules, datanames = datanames, join_keys = join_keys)
-
-  if (!inherits(filter, "teal_slices")) {
-    checkmate::assert_subset(names(filter), choices = datanames)
-    # list_to_teal_slices is lifted from teal.slice package, see zzz.R
-    # This is a temporary measure and will be removed two release cycles from now (now meaning 0.13.0).
-    filter <- list_to_teal_slices(filter)
-  }
-  # convert teal.slice::teal_slices to teal::teal_slices
-  filter <- as.teal_slices(as.list(filter))
-
   # Calculate app id that will be used to stamp filter state snapshots.
   # App id is a hash of the app's data and modules.
   # See "transferring snapshots" section in ?snapshot. Raw data must be extracted from environments.
