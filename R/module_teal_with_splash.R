@@ -84,8 +84,8 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         teal.data::teal_data,
         c(
           lapply(data$get_datasets(), function(x) x$get_raw_data()),
-          code = data$get_code(),
-          join_keys = teal.data::join_keys(data)
+          list(code = data$get_code()),
+          list(join_keys = teal.data::join_keys(data))
         )
       )
       reactiveVal(new_data) # will trigger by setting it
@@ -100,8 +100,8 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
             teal.data::teal_data,
             c(
               lapply(data$get_datasets(), function(x) x$get_raw_data()),
-              code = data$get_code(),
-              join_keys = teal.data::join_keys(data)
+              list(code = data$get_code()),
+              list(join_keys = teal.data::join_keys(data))
             )
           )
         }
