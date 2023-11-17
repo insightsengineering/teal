@@ -40,7 +40,7 @@ app <- init(
 )
 
 if (interactive()) {
-  runApp(app)
+  shinyApp(app$ui, app$server)
 }
 ```
 <img src="images/example_app.png" alt="Example application" style="width: 100%;"/>
