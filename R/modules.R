@@ -63,7 +63,7 @@
 #'   )
 #' )
 #' if (interactive()) {
-#'   runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 modules <- function(..., label = "root") {
   checkmate::assert_string(label)
@@ -219,7 +219,7 @@ is_arg_used <- function(modules, arg) {
 #'   )
 #' )
 #' if (interactive()) {
-#'   runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 module <- function(label = "module",
                    server = function(id, ...) {
@@ -318,7 +318,7 @@ module <- function(label = "module",
   structure(
     list(
       label = label,
-      server = server, ui = ui, datanames = datanames,
+      server = server, ui = ui, datanames = unique(datanames),
       server_args = server_args, ui_args = ui_args
     ),
     class = "teal_module"

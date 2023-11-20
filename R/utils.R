@@ -38,7 +38,7 @@ include_parent_datanames <- function(dataname, join_keys) {
   parents <- character(0)
   for (i in dataname) {
     while (length(i) > 0) {
-      parent_i <- join_keys$get_parent(i)
+      parent_i <- teal.data::parent(join_keys, i)
       parents <- c(parent_i, parents)
       i <- parent_i
     }
@@ -106,7 +106,7 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
 #' When `datanames` is set to `"all"` it is replaced with all available datasets names.
 #' @param modules (`teal_modules`) object
 #' @param datanames (`character`) names of datasets available in the `data` object
-#' @param join_keys (`JoinKeys`) object
+#' @param join_keys (`join_keys`) object
 #' @return `teal_modules` with resolved `datanames`
 #' @keywords internal
 resolve_modules_datanames <- function(modules, datanames, join_keys) {
@@ -138,5 +138,80 @@ resolve_modules_datanames <- function(modules, datanames, join_keys) {
       include_parent_datanames(dataname = datanames_adjusted, join_keys = join_keys)
     }
     modules
+  }
+}
+
+#' Check `datanames` in modules
+#'
+#' This function ensures specified `datanames` in modules match those in the data object,
+#' returning error messages or `TRUE` for successful validation.
+#'
+#' @param modules (`teal_modules`) object
+#' @param datanames (`character`) names of datasets available in the `data` object
+#'
+#' @return A `character(1)` containing error message or `TRUE` if validation passes.
+#' @keywords internal
+check_modules_datanames <- function(modules, datanames) {
+  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_character(datanames)
+
+  recursive_check_datanames <- function(modules, datanames) {
+    # check teal_modules against datanames
+    if (inherits(modules, "teal_modules")) {
+      sapply(modules$children, function(module) recursive_check_datanames(module, datanames = datanames))
+    } else {
+      extra_datanames <- setdiff(modules$datanames, c("all", datanames))
+      if (length(extra_datanames)) {
+        sprintf(
+          "- Module '%s' uses datanames not available in 'data': (%s) not in (%s)",
+          modules$label,
+          toString(dQuote(extra_datanames, q = FALSE)),
+          toString(dQuote(datanames, q = FALSE))
+        )
+      }
+    }
+  }
+  check_datanames <- unlist(recursive_check_datanames(modules, datanames))
+  if (length(check_datanames)) {
+    paste(check_datanames, collapse = "\n")
+  } else {
+    TRUE
+  }
+}
+
+#' Check `datanames` in filters
+#'
+#' This function checks whether `datanames` in filters correspond to those in `data`,
+#' returning character vector with error messages or TRUE if all checks pass.
+#'
+#' @param filters (`teal_slices`) object
+#' @param datanames (`character`) names of datasets available in the `data` object
+#'
+#' @return A `character(1)` containing error message or TRUE if validation passes.
+#' @keywords internal
+check_filter_datanames <- function(filters, datanames) {
+  checkmate::assert_class(filters, "teal_slices")
+  checkmate::assert_character(datanames)
+
+  # check teal_slices against datanames
+  out <- unlist(sapply(
+    filters, function(filter) {
+      dataname <- shiny::isolate(filter$dataname)
+      if (!dataname %in% datanames) {
+        sprintf(
+          "- Filter '%s' refers to dataname not available in 'data':\n %s not in (%s)",
+          shiny::isolate(filter$id),
+          dQuote(dataname, q = FALSE),
+          toString(dQuote(datanames, q = FALSE))
+        )
+      }
+    }
+  ))
+
+
+  if (length(out)) {
+    paste(out, collapse = "\n")
+  } else {
+    TRUE
   }
 }

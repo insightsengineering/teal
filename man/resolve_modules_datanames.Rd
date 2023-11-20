@@ -11,7 +11,7 @@ resolve_modules_datanames(modules, datanames, join_keys)
 
 \item{datanames}{(\code{character}) names of datasets available in the \code{data} object}
 
-\item{join_keys}{(\code{JoinKeys}) object}
+\item{join_keys}{(\code{join_keys}) object}
 }
 \value{
 \code{teal_modules} with resolved \code{datanames}

@@ -62,14 +62,14 @@ testthat::test_that("new_tdata accepts character and reactive characters for cod
   )
 })
 
-testthat::test_that("new_tdata throws error if join_keys is not of class JoinKeys", {
+testthat::test_that("new_tdata throws error if join_keys is not of class join_keys", {
   testthat::expect_error(
     new_tdata(list(x = iris), join_keys = "x"),
-    "Assertion on 'join_keys' failed: Must inherit from class 'JoinKeys'"
+    "Assertion on 'join_keys' failed: Must inherit from class 'join_keys'"
   )
 })
 
-testthat::test_that("new_tdata throws no error if join_keys is of class JoinKeys", {
+testthat::test_that("new_tdata throws no error if join_keys is of class join_keys", {
   testthat::expect_error(
     new_tdata(list(x = iris), join_keys = teal.data::join_keys()),
     NA
@@ -200,12 +200,12 @@ testthat::test_that("tdata2env throws error if argument is not tdata", {
 })
 
 # ---- get_join_keys ----
-testthat::test_that("get_join_keys returns NULL if no JoinKeys object exists inside tdata", {
+testthat::test_that("join_keys returns NULL if no join_keys object exists inside tdata", {
   my_tdata <- new_tdata(data = list(iris = iris, mae = reactive(miniACC)))
-  testthat::expect_null(get_join_keys(my_tdata))
+  testthat::expect_null(join_keys(my_tdata))
 })
 
-testthat::test_that("get_join_keys returns JoinKeys object if it exists inside tdata", {
+testthat::test_that("join_keys returns join_keys object if it exists inside tdata", {
   jk <- teal.data::join_keys(teal.data::join_key("A", "B", c("id" = "fk")))
 
   my_tdata <- new_tdata(
@@ -216,5 +216,5 @@ testthat::test_that("get_join_keys returns JoinKeys object if it exists inside t
     join_keys = jk
   )
 
-  testthat::expect_equal(get_join_keys(my_tdata), jk)
+  testthat::expect_equal(join_keys(my_tdata), jk)
 })
