@@ -67,13 +67,10 @@ This is a wrapper function around the \code{module_teal.R} functions. Unless you
 an end-user, don't use this function, but instead this module.
 }
 \examples{
-new_iris <- transform(iris, id = seq_len(nrow(iris)))
-new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
-
 app <- init(
   data = teal_data(
-    dataset("new_iris", new_iris),
-    dataset("new_mtcars", new_mtcars),
+    new_iris = transform(iris, id = seq_len(nrow(iris))),
+    new_mtcars = transform(mtcars, id = seq_len(nrow(mtcars))),
     code = "
       new_iris <- transform(iris, id = seq_len(nrow(iris)))
       new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
@@ -91,7 +88,7 @@ app <- init(
       "Iris Sepal.Length histogram",
       server = function(input, output, session, data) {
         output$hist <- renderPlot(
-          hist(data[["new_iris"]]()$Sepal.Length)
+          hist(data()[["new_iris"]]$Sepal.Length)
         )
       },
       ui = function(id, ...) {

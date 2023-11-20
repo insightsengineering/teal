@@ -20,6 +20,9 @@
 #' @param metadata A `named list` each element contains a list of metadata about the named data.frame
 #' Each element of these list should be atomic and length one.
 #' @return A `tdata` object
+#'
+#' @seealso `tdata_deprecation`
+#'
 #' @examples
 #'
 #' data <- new_tdata(
@@ -156,4 +159,70 @@ get_metadata.tdata <- function(data, dataname) {
 #' @export
 get_metadata.default <- function(data, dataname) {
   stop("get_metadata function not implemented for this object")
+}
+
+
+#' Upgrade or downgrade data objects.
+#'
+#' Convert between `teal::tdata` and `teal.data::teal_data` classes.
+#'
+#' Functions to switch between data classes during deprecation of the `tdata` class defined in `teal`.
+#' `.tdata_upgrade` converts object of class `tdata` as defined in `teal` package
+#' (list of reactive expressions, each containing one data set, with a `code` attribute)
+#' to object of class `teal_data` as defined in package `teal.data`
+#' (extension of class `qenv` as defined in `teal.code`).
+#' `.tdata_downgrade` does the reverse.
+#'
+#' Note the `metadata` attribute is discarded.
+#'
+#' In apps and modules data objects passed to upgrade/downgrade may be reactive expressions.
+#' For convenience, these functions accept reactive expressions2 and run on their values.
+#'
+#' @param `x` data object, either `tdata` or `teal_data`; reactive expressions are handled, see `Details`
+#'
+#' @return Object of class `tdata` for `.tdata_upgrade` and `tdata` for `.tdata_downgrade`.
+#'
+#' @keywords internal
+#' @rdname tdata_deprecation
+#'
+.tdata_upgrade <- function(x) {
+  if (is.reactive(x)) {
+    x <- x()
+  }
+
+  checkmate::assert_multi_class(x, c("tdata", "teal_data"))
+
+  if (inherits(x, "qenv")) {
+    return(x)
+  }
+
+  do.call(
+    teal.data::teal_data,
+    args = c(
+      lapply(x[names(x)], function(x) isolate(x())),
+      code = list(isolate(attr(x, "code")())),
+      Find(Negate(is.null), list(attr(x, "join_keys"), teal.data::join_keys()))
+    )
+  )
+}
+
+#' @keywords internal
+#' @rdname tdata_deprecation
+#'
+.tdata_downgrade <- function(x) {
+  if (is.reactive(x)) {
+    x <- x()
+  }
+
+  checkmate::assert_multi_class(x, c("tdata", "teal_data"))
+
+  if (!inherits(x, "qenv")) {
+    return(x)
+  }
+
+  teal::new_tdata(
+    data = as.list(x@env)[datanames(x)],
+    code = teal.code::get_code(x),
+    join_keys = teal.data::join_keys(x)
+  )
 }
