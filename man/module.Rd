@@ -82,7 +82,7 @@ This function embeds a \code{shiny} module inside a \code{teal} application. One
 library(shiny)
 
 app <- init(
-  data = teal_data(dataset("iris", iris)),
+  data = teal_data(iris = iris),
   modules = list(
     module(
       label = "Module",

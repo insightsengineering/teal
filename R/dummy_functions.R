@@ -79,8 +79,8 @@ example_datasets <- function() { # nolint
 #' @examples
 #' app <- init(
 #'   data = teal_data(
-#'     dataset("IRIS", iris),
-#'     dataset("MTCARS", mtcars)
+#'     IRIS = iris,
+#'     MTCARS = mtcars
 #'   ),
 #'   modules = example_module()
 #' )
@@ -92,6 +92,16 @@ example_module <- function(label = "example teal module", datanames = "all") {
   checkmate::assert_string(label)
   module(
     label,
+    ui = function(id) {
+      ns <- NS(id)
+      teal.widgets::standard_layout(
+        output = dataTableOutput(ns("table")),
+        encoding = div(
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
+          teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
+        )
+      )
+    },
     server = function(id, data) {
       data_downgraded <- reactive(.tdata_downgrade(data))
       checkmate::assert_class(data_downgraded(), "tdata")
