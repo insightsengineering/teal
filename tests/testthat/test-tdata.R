@@ -267,7 +267,7 @@ testthat::test_that("datasets are maintained during conversion", {
 testthat::test_that("code is maintained during conversion", {
   tdata_old_upgraded <- .tdata_upgrade(tdata_old)
   tdata_new_downgraded <- .tdata_downgrade(tdata_new)
-skip("skipped until we resolve handling code in teal.data:::new_teal_data")
+  skip("skipped until we resolve handling code in teal.data:::new_teal_data")
   testthat::expect_identical(
     shiny::isolate(attr(tdata_old, "code")()),
     teal.code::get_code(tdata_old_upgraded)
