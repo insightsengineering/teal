@@ -243,7 +243,7 @@ testthat::test_that("classes are changed when appropriate", {
   testthat::expect_identical(tdata_new, tdata_new_upgraded)
 
   testthat::expect_s3_class(tdata_new_downgraded, "tdata")
-  testthat::expect_failure( testthat::expect_s4_class(tdata_new_downgraded, "qenv") )
+  testthat::expect_failure(testthat::expect_s4_class(tdata_new_downgraded, "qenv"))
 
   testthat::expect_s4_class(tdata_old_upgraded, "teal_data")
   testthat::expect_s4_class(tdata_old_upgraded, "qenv")
@@ -282,7 +282,7 @@ testthat::test_that("code is maintained during conversion", {
 testthat::test_that("join keys are added during upgrade if missing in old class object", {
   testthat::expect_null(attr(tdata_old, "join_keys"))
   tdata_old_upgraded <- .tdata_upgrade(tdata_old)
-  testthat::expect_failure( testthat::expect_null(teal.data::get_join_keys(tdata_old_upgraded)) )
+  testthat::expect_failure(testthat::expect_null(teal.data::get_join_keys(tdata_old_upgraded)))
   testthat::expect_equal(
     teal.data::get_join_keys(tdata_old_upgraded),
     teal.data::join_keys()
@@ -297,4 +297,3 @@ testthat::test_that("join keys are maintained during upgrade if not missing in o
     attr(tdata_old, "join_keys")
   )
 })
-

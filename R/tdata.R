@@ -185,7 +185,9 @@ get_metadata.default <- function(data, dataname) {
 .tdata_upgrade <- function(x) {
   checkmate::assert_multi_class(x, c("tdata", "teal_data"))
 
-  if (inherits(x, "qenv")) return(x)
+  if (inherits(x, "qenv")) {
+    return(x)
+  }
 
   teal.data::new_teal_data(
     lapply(x[names(x)], function(x) isolate(x())),
@@ -200,7 +202,9 @@ get_metadata.default <- function(data, dataname) {
 .tdata_downgrade <- function(x) {
   checkmate::assert_multi_class(x, c("tdata", "teal_data"))
 
-  if (!inherits(x, "qenv")) return(x)
+  if (!inherits(x, "qenv")) {
+    return(x)
+  }
 
   teal::new_tdata(
     data = as.list(x@env),
