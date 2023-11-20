@@ -19,7 +19,7 @@
 #'   header = "Simple teal app"
 #' )
 #' if (interactive()) {
-#'   runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 filter_calls_module <- function(label = "Filter Calls Module") { # nolint
   checkmate::assert_string(label)

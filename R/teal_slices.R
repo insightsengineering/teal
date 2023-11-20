@@ -60,7 +60,7 @@
 #' )
 #'
 #' if (interactive()) {
-#'   shiny::runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 #'
 #' @export

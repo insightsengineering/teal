@@ -54,7 +54,7 @@
 #'   }
 #' )
 #' if (interactive()) {
-#'   runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 #' @keywords internal
 NULL
@@ -109,7 +109,7 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
 #' @rdname module_nested_tabs
 #' @export
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
-  checkmate::assert_class(datasets, class = "FilteredData")
+  checkmate::assert_class(datasets, classes = "FilteredData")
   ns <- NS(id)
 
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
@@ -288,7 +288,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #' @param trigger_data (`reactiveVal`) to trigger getting the filtered data
 #' @return list of reactive datasets with following attributes:
 #' - `code` (`character`) containing datasets reproducible code.
-#' - `join_keys` (`JoinKeys`) containing relationships between datasets.
+#' - `join_keys` (`join_keys`) containing relationships between datasets.
 #' - `metadata` (`list`) containing metadata of datasets.
 #'
 #' @keywords internal

@@ -103,7 +103,7 @@ app <- teal::init(
 )
 
 if (interactive()) {
-  shiny::runApp(app)
+  shinyApp(app$ui, app$server)
 }
 
 }
