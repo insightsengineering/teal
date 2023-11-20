@@ -307,16 +307,14 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 
   hashes <- calculate_hashes(datanames, datasets)
 
-  teal.data::new_teal_data(
-    data,
-    c(
-      get_rcode_str_install(),
-      get_rcode_libraries(),
-      get_datasets_code(datanames, datasets, hashes),
-      teal.slice::get_filter_expr(datasets, datanames)
-    ),
-    datasets$get_join_keys()
+  code <- c(
+    get_rcode_str_install(),
+    get_rcode_libraries(),
+    get_datasets_code(datanames, datasets, hashes),
+    teal.slice::get_filter_expr(datasets, datanames)
   )
+
+  do.call(teal.data::teal_data, args = c(data, code = list(code), join_keys = list(datasets$get_join_keys())))
 }
 
 #' Get the hash of a dataset

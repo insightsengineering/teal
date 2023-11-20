@@ -207,8 +207,8 @@ get_metadata.default <- function(data, dataname) {
   }
 
   teal::new_tdata(
-    data = as.list(x@env),
+    data = as.list(x@env)[datanames(x)],
     code = teal.code::get_code(x),
-    join_keys = teal.data::get_join_keys(x)
+    join_keys = teal.data::join_keys(x)
   )
 }
