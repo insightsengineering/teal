@@ -55,11 +55,11 @@ testthat::test_that("validate_has_data returns message msg argument is set and c
 testthat::test_that("validate_has_data returns throws error with non-character msg input", {
   testthat::expect_error(
     validate_has_data(data, 10, msg = 1),
-    "Please provide a character vector in msg argument of validate_has_data."
+    "Assertion on 'msg' failed: Must be of type 'string' \\(or 'NULL'\\), not 'double'"
   )
 
   testthat::expect_error(
     validate_has_data(data, 10, msg = TRUE),
-    "Please provide a character vector in msg argument of validate_has_data."
+    "Assertion on 'msg' failed: Must be of type 'string' \\(or 'NULL'\\), not 'logical'."
   )
 })
