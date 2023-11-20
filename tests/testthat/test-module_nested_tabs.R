@@ -451,7 +451,7 @@ testthat::test_that(".datasets_to_data returns tdata object", {
 
   # join_keys
   testthat::expect_equal(
-    get_join_keys(data),
+    join_keys(data),
     teal.data::join_keys(teal.data::join_key("d1", "d2", c("pk" = "id")))
   )
 
@@ -485,10 +485,10 @@ testthat::test_that("calculate_hashes takes a FilteredData and vector of datanam
   adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)
 
   datasets <- teal.slice::init_filtered_data(
-    teal.data::cdisc_data(
-      teal.data::cdisc_dataset("ADSL", adsl),
-      teal.data::cdisc_dataset("ADAE", adae),
-      teal.data::cdisc_dataset("ADTTE", adtte)
+    list(
+      ADSL = list(dataset = adsl),
+      ADAE = list(dataset = adae),
+      ADTTE = list(dataset = adtte)
     )
   )
 
@@ -501,10 +501,10 @@ testthat::test_that("calculate_hashes returns a named list", {
   adtte <- data.frame(STUDYID = 1, USUBJID = 1, PARAMCD = 1)
 
   datasets <- teal.slice::init_filtered_data(
-    teal.data::cdisc_data(
-      teal.data::cdisc_dataset("ADSL", adsl),
-      teal.data::cdisc_dataset("ADAE", adae),
-      teal.data::cdisc_dataset("ADTTE", adtte)
+    list(
+      ADSL = list(dataset = adsl),
+      ADAE = list(dataset = adae),
+      ADTTE = list(dataset = adtte)
     )
   )
 
@@ -523,9 +523,7 @@ testthat::test_that("calculate_hashes returns a named list", {
 
 testthat::test_that("calculate_hashes returns the hash of the non Filtered dataset", {
   datasets <- teal.slice::init_filtered_data(
-    teal.data::teal_data(
-      teal.data::dataset("iris", iris)
-    )
+    list(iris = list(dataset = iris))
   )
 
   fs <- teal.slice:::teal_slices(

@@ -15,10 +15,11 @@
 #' an end-user, don't use this function, but instead this module.
 #'
 #' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
-#' or `MultiAssayExperiment`)\cr
+#' or `MultiAssayExperiment`, `teal_data`, `teal_data_module`)\cr
 #' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()],
 #' [teal.data::cdisc_dataset()], [teal.data::dataset()], [teal.data::dataset_connector()] or
-#' [teal.data::cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`
+#' [teal.data::cdisc_dataset_connector()] or [teal_data_module()] or a single `data.frame` or
+#' a `MultiAssayExperiment`
 #' or a list of the previous objects or function returning a named list.
 #' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
 #' do not match the original object names. To ensure reproducibility please use [teal.data::teal_data()]
@@ -114,11 +115,11 @@ init <- function(data,
                  footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  if (!inherits(data, c("TealData", "teal_data", "ddl"))) {
+  if (!inherits(data, c("TealData", "teal_data", "teal_data_module"))) {
     data <- teal.data::to_relational_data(data = data)
   }
 
-  checkmate::assert_multi_class(data, c("TealData", "teal_data", "ddl"))
+  checkmate::assert_multi_class(data, c("TealData", "teal_data", "teal_data_module"))
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert(
@@ -138,60 +139,30 @@ init <- function(data,
     modules <- do.call(teal::modules, modules)
   }
 
-  # resolve modules datanames
-  datanames <- teal.data::get_dataname(data)
-  join_keys <- teal.data::get_join_keys(data)
-  resolve_modules_datanames <- function(modules) {
-    if (inherits(modules, "teal_modules")) {
-      modules$children <- sapply(modules$children, resolve_modules_datanames, simplify = FALSE)
-      modules
-    } else {
-      modules$datanames <- if (identical(modules$datanames, "all")) {
-        datanames
-      } else if (is.character(modules$datanames)) {
-        extra_datanames <- setdiff(modules$datanames, datanames)
-        if (length(extra_datanames)) {
-          stop(
-            sprintf(
-              "Module %s has datanames that are not available in a 'data':\n %s not in %s",
-              modules$label,
-              toString(extra_datanames),
-              toString(datanames)
-            )
-          )
-        }
+  landing <- extract_module(modules, "teal_module_landing")
+  if (length(landing) > 1L) stop("Only one `landing_popup_module` can be used.")
+  modules <- drop_module(modules, "teal_module_landing")
 
-        datanames_adjusted <- intersect(modules$datanames, datanames)
-        include_parent_datanames(dataname = datanames_adjusted, join_keys = join_keys)
-      }
-      modules
-    }
+  # Calculate app id that will be used to stamp filter state snapshots.
+  # App id is a hash of the app's data and modules.
+  # See "transferring snapshots" section in ?snapshot.
+  hashables <- mget(c("data", "modules"))
+  hashables$data <- if (inherits(hashables$data, "teal_data")) {
+    as.list(hashables$data@env)
+  } else if (inherits(data, "teal_data_module")) {
+    body(data$server)
+  } else if (hashables$data$is_pulled()) {
+    sapply(get_dataname(hashables$data), simplify = FALSE, function(dn) {
+      hashables$data$get_dataset(dn)$get_raw_data()
+    })
+  } else {
+    hashables$data$get_code()
   }
-  modules <- resolve_modules_datanames(modules = modules)
 
-  if (!inherits(filter, "teal_slices")) {
-    checkmate::assert_subset(names(filter), choices = datanames)
-    # list_to_teal_slices is lifted from teal.slice package, see zzz.R
-    # This is a temporary measure and will be removed two release cycles from now (now meaning 0.13.0).
-    filter <- list_to_teal_slices(filter)
-  }
+  attr(filter, "app_id") <- rlang::hash(hashables)
+
   # convert teal.slice::teal_slices to teal::teal_slices
   filter <- as.teal_slices(as.list(filter))
-
-  # check teal_slices
-  for (i in seq_along(filter)) {
-    dataname_i <- shiny::isolate(filter[[i]]$dataname)
-    if (!dataname_i %in% datanames) {
-      stop(
-        sprintf(
-          "filter[[%s]] has a different dataname than available in a 'data':\n %s not in %s",
-          i,
-          dataname_i,
-          toString(datanames)
-        )
-      )
-    }
-  }
 
   if (isTRUE(attr(filter, "module_specific"))) {
     module_names <- unlist(c(module_labels(modules), "global_filters"))
@@ -219,6 +190,27 @@ init <- function(data,
     }
   }
 
+  if (inherits(data, "teal_data")) {
+    if (length(teal.data::datanames(data)) == 0) {
+      stop("`data` object has no datanames. Specify `datanames(data)` and try again.")
+    }
+
+    # in case of teal_data_module this check is postponed to the srv_teal_with_splash
+    is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
+    if (!isTRUE(is_modules_ok)) {
+      logger::log_error(is_modules_ok)
+      checkmate::assert(is_modules_ok, .var.name = "modules")
+    }
+
+
+    is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+    if (!isTRUE(is_filter_ok)) {
+      logger::log_warn(is_filter_ok)
+      # we allow app to continue if applied filters are outside
+      # of possible data range
+    }
+  }
+
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
   # the `ui` and `server` with `id = character(0)` and calling the server function directly
@@ -226,8 +218,12 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-      # copy object so that load won't be shared between the session
+      if (length(landing) == 1L) {
+        landing_module <- landing[[1L]]
+        do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
+      }
       if (inherits(data, "TealDataAbstract")) {
+        # copy TealData so that load won't be shared between the session
         data <- data$copy(deep = TRUE)
       }
       filter <- deep_copy_filter(filter)

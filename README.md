@@ -1,4 +1,4 @@
-# `teal`: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%;"/></a  >
+# `teal`: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%; max-height: 139px;"/></a  >
 
 <!-- start badges -->
 [![Check 🛠](https://github.com/insightsengineering/teal/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/teal/main/unit-test-report/)
@@ -105,7 +105,7 @@ shinyApp(app$ui, app$server)
 
 Please see [`teal.gallery`](https://insightsengineering.github.io/teal.gallery) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog) to see examples of `teal` apps.
 
-Please start with the ["Getting Started" article](https://insightsengineering.github.io/teal/latest-tag/articles/teal.html) and then other [package vignettes](https://insightsengineering.github.io/teal/articles/index.html) for more detailed guide.
+Please start with the ["Technical Blueprint" article](https://insightsengineering.github.io/teal/latest-tag/articles/blueprint/index.html), ["Getting Started" article](https://insightsengineering.github.io/teal/latest-tag/articles/teal.html), and then other [package vignettes](https://insightsengineering.github.io/teal/latest-tag/articles/index.html) for more detailed guide.
 
 ## Getting help
 

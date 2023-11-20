@@ -54,7 +54,7 @@
 #'   }
 #' )
 #' if (interactive()) {
-#'   runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 #' @keywords internal
 NULL
@@ -109,7 +109,7 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
 #' @rdname module_nested_tabs
 #' @export
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
-  checkmate::assert_class(datasets, class = "FilteredData")
+  checkmate::assert_class(datasets, classes = "FilteredData")
   ns <- NS(id)
 
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
@@ -292,7 +292,11 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   checkmate::assert_class(module, "teal_module")
   checkmate::assert_class(datasets, "FilteredData")
 
-  datanames <- if (is.null(module$datanames)) datasets$datanames() else module$datanames
+  datanames <- if (is.null(module$datanames) || identical(module$datanames, "all")) {
+    datasets$datanames()
+  } else {
+    unique(module$datanames) # todo: include parents! unique shouldn't be needed here!
+  }
 
   # list of reactive filtered data
   data <- sapply(

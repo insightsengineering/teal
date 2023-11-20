@@ -34,16 +34,13 @@ This simple `teal` application takes the `iris` and `mtcars` datasets and displa
 library(teal)
 
 app <- init(
-  data = teal_data(
-    dataset("IRIS", iris),
-    dataset("MTCARS", mtcars)
-  ),
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = example_module(),
   header = "My first teal application"
 )
 
 if (interactive()) {
-  runApp(app)
+  shinyApp(app$ui, app$server)
 }
 ```
 <img src="images/example_app.png" alt="Example application" style="width: 100%;"/>

@@ -15,7 +15,7 @@
 #' for non-delayed data which takes time to load into memory, avoiding
 #' Shiny session timeouts.
 #'
-#' Server evaluates the `raw_data` (delayed data mechanism) and creates the
+#' Server evaluates the `teal_data_rv` (delayed data mechanism) and creates the
 #' `datasets` object that is shared across modules.
 #' Once it is ready and non-`NULL`, the splash screen is replaced by the
 #' main teal UI that depends on the data.
@@ -33,8 +33,8 @@
 #'   can be a splash screen or a Shiny module UI. For the latter, see
 #'   [init()] about how to call the corresponding server function.
 #'
-#' @param raw_data (`reactive`)\cr
-#'   returns the `TealData`, only evaluated once, `NULL` value is ignored
+#' @param teal_data_rv (`reactive`)\cr
+#'   returns the `teal_data`, only evaluated once, `NULL` value is ignored
 #'
 #' @return
 #' `ui_teal` returns `HTML` for Shiny module UI.
@@ -44,17 +44,17 @@
 #'
 #' @examples
 #' mods <- teal:::example_modules()
-#' raw_data <- reactive(teal:::example_cdisc_data())
+#' teal_data_rv <- reactive(teal:::example_cdisc_data())
 #' app <- shinyApp(
 #'   ui = function() {
 #'     teal:::ui_teal("dummy")
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- teal:::srv_teal(id = "dummy", modules = mods, raw_data = raw_data)
+#'     active_module <- teal:::srv_teal(id = "dummy", modules = mods, teal_data_rv = teal_data_rv)
 #'   }
 #' )
 #' if (interactive()) {
-#'   runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 NULL
 
@@ -130,8 +130,8 @@ ui_teal <- function(id,
 
 
 #' @rdname module_teal
-srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
-  stopifnot(is.reactive(raw_data))
+srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
+  stopifnot(is.reactive(teal_data_rv))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal initializing the module.")
 
@@ -160,18 +160,23 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
       }
     )
 
-    # loading the data -----
+    reporter <- teal.reporter::Reporter$new()
+    if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
+      modules <- append_module(modules, reporter_previewer_module())
+    }
+
     env <- environment()
-    datasets_reactive <- eventReactive(raw_data(), ignoreNULL = TRUE, {
+    datasets_reactive <- eventReactive(teal_data_rv(), {
       env$progress <- shiny::Progress$new(session)
       env$progress$set(0.25, message = "Setting data")
 
       # create a list of data following structure of the nested modules list structure.
       # Because it's easier to unpack modules and datasets when they follow the same nested structure.
-      datasets_singleton <- teal.slice::init_filtered_data(raw_data())
+      datasets_singleton <- teal_data_to_filtered_data(teal_data_rv())
       # Singleton starts with only global filters active.
       filter_global <- Filter(function(x) x$id %in% attr(filter, "mapping")$global_filters, filter)
       datasets_singleton$set_filter_state(filter_global)
+
       module_datasets <- function(modules) {
         if (inherits(modules, "teal_modules")) {
           datasets <- lapply(modules$children, module_datasets)
@@ -181,10 +186,19 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
         } else if (isTRUE(attr(filter, "module_specific"))) {
           # we should create FilteredData even if modules$datanames is null
           # null controls a display of filter panel but data should be still passed
-          datanames <- if (is.null(modules$datanames)) teal.data::get_dataname(raw_data()) else modules$datanames
-          # todo: subset tdata object to datanames
-          datasets_module <- teal.slice::init_filtered_data(raw_data())
+          datanames <- if (is.null(modules$datanames) || modules$datanames == "all") {
+            include_parent_datanames(
+              teal.data::datanames(teal_data_rv()),
+              teal_data_rv()@join_keys
+            )
+          } else {
+            modules$datanames
+          }
+          # todo: subset teal_data to datanames
+          datasets_module <- teal_data_to_filtered_data(teal_data_rv())
+
           # set initial filters
+          #  - filtering filters for this module
           slices <- Filter(x = filter, f = function(x) {
             x$id %in% unique(unlist(attr(filter, "mapping")[c(modules$label, "global_filters")])) &&
               x$dataname %in% datanames
@@ -199,38 +213,23 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
           datasets_singleton
         }
       }
-      datasets <- module_datasets(modules)
-
-      logger::log_trace("srv_teal@4 Raw Data transferred to FilteredData.")
-      datasets
+      module_datasets(modules)
     })
-
-    reporter <- teal.reporter::Reporter$new()
-    is_any_previewer <- function(modules) {
-      if (inherits(modules, "teal_modules")) {
-        any(unlist(lapply(modules$children, is_any_previewer), use.names = FALSE))
-      } else if (inherits(modules, "teal_module_previewer")) {
-        TRUE
-      } else {
-        FALSE
-      }
-    }
-    if (is_arg_used(modules, "reporter") && !is_any_previewer(modules)) {
-      modules <- append_module(modules, reporter_previewer_module())
-    }
 
     # Replace splash / welcome screen once data is loaded ----
     # ignoreNULL to not trigger at the beginning when data is NULL
     # just handle it once because data obtained through delayed loading should
     # usually not change afterwards
     # if restored from bookmarked state, `filter` is ignored
-    observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, {
-      logger::log_trace("srv_teal@5 setting main ui after data was pulled")
-      env$progress$set(0.5, message = "Setting up main UI")
-      on.exit(env$progress$close())
-      # main_ui_container contains splash screen first and we remove it and replace it by the real UI
 
-      removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
+    observeEvent(datasets_reactive(), once = TRUE, {
+      logger::log_trace("srv_teal@5 setting main ui after data was pulled")
+      on.exit(env$progress$close())
+      env$progress$set(0.5, message = "Setting up main UI")
+      datasets <- datasets_reactive()
+
+      # main_ui_container contains splash screen first and we remove it and replace it by the real UI
+      removeUI(sprintf("#%s > div:nth-child(1)", session$ns("main_ui_container")))
       insertUI(
         selector = paste0("#", session$ns("main_ui_container")),
         where = "beforeEnd",
@@ -239,7 +238,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
         ui = div(ui_tabs_with_filters(
           session$ns("main_ui"),
           modules = modules,
-          datasets = datasets_reactive(),
+          datasets = datasets,
           filter = filter
         )),
         # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
@@ -251,7 +250,7 @@ srv_teal <- function(id, modules, raw_data, filter = teal_slices()) {
       # registered once (calling server functions twice would trigger observers twice each time)
       active_module <- srv_tabs_with_filters(
         id = "main_ui",
-        datasets = datasets_reactive(),
+        datasets = datasets,
         modules = modules,
         reporter = reporter,
         filter = filter

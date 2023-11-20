@@ -1,8 +1,18 @@
-# teal 0.14.0.9009
+# teal 0.14.0.9018
+
+### New features
+
+* `data` argument in `init` now accepts `teal_data` and `teal_data_module`.
+* Added `landing_popup_module` function which creates a module that will display a popup when the app starts. The popup will block access to the app until it is dismissed.
+* Filter state snapshots can now be uploaded from file. See `?snapshot`.
 
 ### Miscellaneous
 
 * Enhanced a `module` validation checks so that it won't throw messages about `data` argument unnecessarily.
+* Added argument to `teal_slices` and made modifications to `init` to enable tagging `teal_slices` with an app id to safely upload snapshots from disk.
+
+### Bug fixes
+
 * Removed `Report previewer` module from mapping matrix display in filter manager.
 
 # teal 0.14.0

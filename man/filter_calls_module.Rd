@@ -21,7 +21,7 @@ app <- init(
   header = "Simple teal app"
 )
 if (interactive()) {
-  runApp(app)
+  shinyApp(app$ui, app$server)
 }
 }
 \keyword{internal}

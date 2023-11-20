@@ -114,7 +114,7 @@ srv_histogram_example <- function(id, data, histogram_var) {
       id = "histogram_var",
       datasets = data,
       data_extract_spec = histogram_var,
-      join_keys = get_join_keys(data)
+      join_keys = teal.data::join_keys(data)
     )
 
     dataname <- reactive(extracted()$dataname)
@@ -177,8 +177,8 @@ library(teal)
 
 app <- init(
   data = teal_data(
-    dataset("IRIS", iris, code = "IRIS <- iris"),
-    check = TRUE
+    IRIS = iris,
+    code = "IRIS <- iris"
   ),
   modules = tm_histogram_example(
     label = "Simple Module",

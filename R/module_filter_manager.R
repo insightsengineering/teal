@@ -37,7 +37,7 @@
 #'   }
 #' )
 #' if (interactive()) {
-#'   runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 #'
 #' @keywords internal
@@ -137,7 +137,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
       }
 
     # Create mapping fo filters to modules in matrix form (presented as data.frame).
-    # Modules get NAs for filteres that cannot be set for them.
+    # Modules get NAs for filters that cannot be set for them.
     mapping_matrix <- reactive({
       state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
       mapping_smooth <- lapply(filtered_data_list, function(x) {

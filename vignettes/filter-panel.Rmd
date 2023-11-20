@@ -19,8 +19,9 @@ library(teal)
 
 app <- init(
   data = teal_data(
-    dataset("IRIS", iris, code = "IRIS <- iris"),
-    dataset("CARS", mtcars, code = "CARS <- mtcars")
+    IRIS = iris, CARS = mtcars,
+    code = "IRIS <- iris
+            CARS <- mtcars"
   ),
   modules = example_module(),
   filter = teal_slices(
@@ -32,7 +33,7 @@ app <- init(
 )
 
 if (interactive()) {
-  runApp(app)
+  shinyApp(app$ui, app$server)
 }
 ```
 
@@ -47,8 +48,9 @@ library(teal)
 
 app <- init(
   data = teal_data(
-    dataset("IRIS", iris, code = "IRIS <- iris"),
-    dataset("CARS", mtcars, code = "CARS <- mtcars")
+    IRIS = iris, CARS = mtcars,
+    code = "IRIS <- iris
+            CARS <- mtcars"
   ),
   modules = modules(
     example_module(label = "all datasets"),
@@ -58,7 +60,7 @@ app <- init(
   )
 )
 if (interactive()) {
-  runApp(app)
+  shinyApp(app$ui, app$server)
 }
 ```
 
@@ -109,6 +111,6 @@ app <- init(
 )
 
 if (interactive()) {
-  runApp(app)
+  shinyApp(app$ui, app$server)
 }
 ```

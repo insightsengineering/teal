@@ -1,6 +1,11 @@
 #' Filter settings for teal applications
 #'
-#' Filter settings for teal applications
+#' Specify initial filter states and filtering settings for a `teal` app.
+#'
+#' Produces a `teal_slices` object.
+#' The `teal_slice` components will specify filter states that will be active when the app starts.
+#' Attributes (created with the named arguments) will configure the way the app applies filters.
+#' See argument descriptions for details.
 #'
 #' @inheritParams teal.slice::teal_slices
 #'
@@ -18,8 +23,17 @@
 #'  If missing, all filters will be applied to all modules.
 #'  If empty list, all filters will be available to all modules but will start inactive.
 #'  If `module_specific` is `FALSE`, only `global_filters` will be active on start.
+#' @param app_id (`character(1)`)\cr
+#'  For internal use only, do not set manually.
+#'  Added by `init` so that a `teal_slices` can be matched to the app in which it was used.
+#'  Used for verifying snapshots uploaded from file. See `snapshot`.
 #'
 #' @param x (`list`) of lists to convert to `teal_slices`
+#'
+#' @return
+#' A `teal_slices` object.
+#'
+#' @seealso [`teal.slice::teal_slices`], [`teal.slice::teal_slice`], [`slices_store`]
 #'
 #' @examples
 #' filter <- teal_slices(
@@ -46,7 +60,7 @@
 #' )
 #'
 #' if (interactive()) {
-#'   shiny::runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 #'
 #' @export
@@ -56,11 +70,13 @@ teal_slices <- function(...,
                         count_type = NULL,
                         allow_add = TRUE,
                         module_specific = FALSE,
-                        mapping) {
+                        mapping,
+                        app_id = NULL) {
   shiny::isolate({
     checkmate::assert_flag(allow_add)
     checkmate::assert_flag(module_specific)
     if (!missing(mapping)) checkmate::assert_list(mapping, types = c("character", "NULL"), names = "named")
+    checkmate::assert_string(app_id, null.ok = TRUE)
 
     slices <- list(...)
     all_slice_id <- vapply(slices, `[[`, character(1L), "id")
@@ -90,6 +106,7 @@ teal_slices <- function(...,
     )
     attr(tss, "mapping") <- mapping
     attr(tss, "module_specific") <- module_specific
+    attr(tss, "app_id") <- app_id
     class(tss) <- c("modules_teal_slices", class(tss))
     tss
   })
