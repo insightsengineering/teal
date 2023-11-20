@@ -22,7 +22,7 @@
 #' library(shiny)
 #'
 #' app <- init(
-#'   data = teal_data(dataset("iris", iris)),
+#'   data = teal_data(iris = iris),
 #'   modules = modules(
 #'     label = "Modules",
 #'     modules(
@@ -199,7 +199,7 @@ is_arg_used <- function(modules, arg) {
 #' library(shiny)
 #'
 #' app <- init(
-#'   data = teal_data(dataset("iris", iris)),
+#'   data = teal_data(iris = iris),
 #'   modules = list(
 #'     module(
 #'       label = "Module",
