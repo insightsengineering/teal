@@ -196,10 +196,13 @@ get_metadata.default <- function(data, dataname) {
     return(x)
   }
 
-  teal.data::new_teal_data(
-    lapply(x[names(x)], function(x) isolate(x())),
-    code = isolate(attr(x, "code")()),
-    keys = Find(Negate(is.null), list(attr(x, "join_keys"), teal.data::join_keys()))
+  do.call(
+    teal.data::teal_data,
+    args = c(
+      lapply(x[names(x)], function(x) isolate(x())),
+      code = list(isolate(attr(x, "code")())),
+      Find(Negate(is.null), list(attr(x, "join_keys"), teal.data::join_keys()))
+    )
   )
 }
 
