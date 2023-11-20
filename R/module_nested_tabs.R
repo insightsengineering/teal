@@ -301,7 +301,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   # list of reactive filtered data
   data <- sapply(
     datanames,
-    function(x) datasets$get_data(x, filtered = TRUE),
+    function(x) isolate(datasets$get_data(x, filtered = TRUE)),
     simplify = FALSE
   )
 
@@ -311,10 +311,13 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     get_rcode_str_install(),
     get_rcode_libraries(),
     get_datasets_code(datanames, datasets, hashes),
-    teal.slice::get_filter_expr(datasets, datanames)
+    isolate(teal.slice::get_filter_expr(datasets, datanames))
   )
 
-  do.call(teal.data::teal_data, args = c(data, code = list(code), join_keys = list(datasets$get_join_keys())))
+  do.call(
+    teal.data::teal_data,
+    args = c(data, code = list(code), join_keys = list(datasets$get_join_keys()[datanames]))
+  )
 }
 
 #' Get the hash of a dataset
