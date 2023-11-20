@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.718085106382979" branch-rate="0" lines-covered="1215" lines-valid="1692" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-11-13 18:36:26.485407">
+<coverage line-rate="0.718085106382979" branch-rate="0" lines-covered="1215" lines-valid="1692" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-11-20 10:53:33.169918">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -2934,9 +2934,9 @@
                 <line number="123" hits="2" branch="false"/>
               </lines>
             </method>
-            <method name="get_join_keys.tdata" signature="" line-rate="1" branch-rate="0" complexity="0">
+            <method name="join_keys.tdata" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="132" hits="3" branch="false"/>
+                <line number="131" hits="3" branch="false"/>
               </lines>
             </method>
             <method name="get_metadata" signature="" line-rate="1" branch-rate="0" complexity="0">
@@ -2991,7 +2991,7 @@
             <line number="110" hits="6" branch="false"/>
             <line number="122" hits="4" branch="false"/>
             <line number="123" hits="2" branch="false"/>
-            <line number="132" hits="3" branch="false"/>
+            <line number="131" hits="3" branch="false"/>
             <line number="141" hits="6" branch="false"/>
             <line number="142" hits="6" branch="false"/>
             <line number="148" hits="6" branch="false"/>
