@@ -142,9 +142,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/get_datasets_code.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_join_keys.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_metadata.html</loc>
   </url>
   <url>
@@ -170,6 +167,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/is_arg_used.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/join_keys.tdata.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/landing_popup_module.html</loc>
