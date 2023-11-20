@@ -195,7 +195,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
             modules$datanames
           }
           # todo: subset teal_data to datanames
-          datasets_module <- teal_data_to_filtered_data(teal_data_rv())
+          datasets_module <- teal_data_to_filtered_data(teal_data_rv(), datanames = datanames)
 
           # set initial filters
           #  - filtering filters for this module
