@@ -4,7 +4,7 @@
 #' (or `MultiAssayExperiment`), with attributes:
 #' \itemize{
 #'   \item{`code` (`reactive`) containing code used to generate the data}
-#'   \item{join_keys (`JoinKeys`) containing the relationships between the data}
+#'   \item{join_keys (`join_keys`) containing the relationships between the data}
 #'   \item{metadata (`named list`) containing any metadata associated with the data frames}
 #' }
 #' @name tdata
@@ -15,7 +15,7 @@
 #'   the code used to generate the data. This should be `reactive` if the code is changing
 #'   during a reactive context (e.g. if filtering changes the code). Inside this
 #'   object `code` will be made reactive
-#' @param join_keys A `teal.data::JoinKeys` object containing relationships between the
+#' @param join_keys A `teal.data::join_keys` object containing relationships between the
 #'   datasets.
 #' @param metadata A `named list` each element contains a list of metadata about the named data.frame
 #' Each element of these list should be atomic and length one.
@@ -46,7 +46,7 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
     any.missing = FALSE, names = "unique",
     types = c("data.frame", "reactive", "MultiAssayExperiment")
   )
-  checkmate::assert_class(join_keys, "JoinKeys", null.ok = TRUE)
+  checkmate::assert_class(join_keys, "join_keys", null.ok = TRUE)
   checkmate::assert_multi_class(code, c("character", "reactive"))
 
   checkmate::assert_list(metadata, names = "unique", null.ok = TRUE)
@@ -123,14 +123,14 @@ get_code_tdata <- function(data) {
   get_code(data)
 }
 
-#' Extract `JoinKeys` from `tdata`
-#' @rdname get_join_keys
-#' @param data (`tdata`) object
-#' @keywords internal
+#' Extract `join_keys` from `tdata`
+#' @param data A `tdata` object
+#' @param ... Additional arguments (not used)
 #' @export
-get_join_keys.tdata <- function(data) {
+join_keys.tdata <- function(data, ...) {
   attr(data, "join_keys")
 }
+
 
 #' Function to get metadata from a `tdata` object
 #' @param data `tdata` - object to extract the data from

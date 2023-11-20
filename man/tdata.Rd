@@ -20,7 +20,7 @@ the code used to generate the data. This should be \code{reactive} if the code i
 during a reactive context (e.g. if filtering changes the code). Inside this
 object \code{code} will be made reactive}
 
-\item{join_keys}{A \code{teal.data::JoinKeys} object containing relationships between the
+\item{join_keys}{A \code{teal.data::join_keys} object containing relationships between the
 datasets.}
 
 \item{metadata}{A \verb{named list} each element contains a list of metadata about the named data.frame
@@ -38,7 +38,7 @@ Create a new object called \code{tdata} which contains \code{data}, a \code{reac
 (or \code{MultiAssayExperiment}), with attributes:
 \itemize{
 \item{\code{code} (\code{reactive}) containing code used to generate the data}
-\item{join_keys (\code{JoinKeys}) containing the relationships between the data}
+\item{join_keys (\code{join_keys}) containing the relationships between the data}
 \item{metadata (\verb{named list}) containing any metadata associated with the data frames}
 }
 }

@@ -17,7 +17,7 @@
 list of reactive datasets with following attributes:
 \itemize{
 \item \code{code} (\code{character}) containing datasets reproducible code.
-\item \code{join_keys} (\code{JoinKeys}) containing relationships between datasets.
+\item \code{join_keys} (\code{join_keys}) containing relationships between datasets.
 \item \code{metadata} (\code{list}) containing metadata of datasets.
 }
 }
