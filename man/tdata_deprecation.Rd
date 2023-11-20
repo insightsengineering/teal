@@ -10,7 +10,7 @@
 .tdata_downgrade(x)
 }
 \arguments{
-\item{`x`}{data object, either \code{tdata} or \code{teal_data}}
+\item{`x`}{data object, either \code{tdata} or \code{teal_data}; reactive expressions are handled, see \code{Details}}
 }
 \value{
 Object of class \code{tdata} for \code{.tdata_upgrade} and \code{tdata} for \code{.tdata_downgrade}.
@@ -27,5 +27,8 @@ to object of class \code{teal_data} as defined in package \code{teal.data}
 \code{.tdata_downgrade} does the reverse.
 
 Note the \code{metadata} attribute is discarded.
+
+In apps and modules data objects passed to upgrade/downgrade may be reactive expressions.
+For convenience, these functions accept reactive expressions2 and run on their values.
 }
 \keyword{internal}

@@ -175,7 +175,10 @@ get_metadata.default <- function(data, dataname) {
 #'
 #' Note the `metadata` attribute is discarded.
 #'
-#' @param `x` data object, either `tdata` or `teal_data`
+#' In apps and modules data objects passed to upgrade/downgrade may be reactive expressions.
+#' For convenience, these functions accept reactive expressions2 and run on their values.
+#'
+#' @param `x` data object, either `tdata` or `teal_data`; reactive expressions are handled, see `Details`
 #'
 #' @return Object of class `tdata` for `.tdata_upgrade` and `tdata` for `.tdata_downgrade`.
 #'
@@ -183,6 +186,10 @@ get_metadata.default <- function(data, dataname) {
 #' @rdname tdata_deprecation
 #'
 .tdata_upgrade <- function(x) {
+  if (is.reactive(x)) {
+    x <- x()
+  }
+
   checkmate::assert_multi_class(x, c("tdata", "teal_data"))
 
   if (inherits(x, "qenv")) {
@@ -200,6 +207,10 @@ get_metadata.default <- function(data, dataname) {
 #' @rdname tdata_deprecation
 #'
 .tdata_downgrade <- function(x) {
+  if (is.reactive(x)) {
+    x <- x()
+  }
+
   checkmate::assert_multi_class(x, c("tdata", "teal_data"))
 
   if (!inherits(x, "qenv")) {
