@@ -7,7 +7,7 @@
 as_tdata(x)
 }
 \arguments{
-\item{x}{data object, either \code{tdata} or a \code{reactive} containing a \code{teal_data}}
+\item{x}{data object, either \code{tdata} or \code{teal_data}, the latter possibly in a reactive expression}
 }
 \value{
 Object of class \code{tdata}.
