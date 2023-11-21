@@ -86,10 +86,12 @@ teal_slices <- function(...,
     slices <- list(...)
     all_slice_id <- vapply(slices, `[[`, character(1L), "id")
 
-    if (missing(module_specific) && !missing(mapping)) {
-      module_specific <- length(mapping) > 0L
-    } else {
-      module_specific <- FALSE
+    if (missing(module_specific)) {
+      if (!missing(mapping)) {
+        module_specific <- length(mapping) > 0L
+      } else {
+        module_specific <- FALSE
+      }
     }
     if (missing(mapping)) {
       mapping <- list(global_filters = all_slice_id)
