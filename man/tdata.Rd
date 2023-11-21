@@ -63,5 +63,5 @@ get_metadata(data, "iris")
 
 }
 \seealso{
-\code{tdata_deprecation}
+\code{as_tdata}
 }

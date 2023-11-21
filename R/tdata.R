@@ -21,7 +21,7 @@
 #' Each element of these list should be atomic and length one.
 #' @return A `tdata` object
 #'
-#' @seealso `tdata_deprecation`
+#' @seealso `as_tdata`
 #'
 #' @examples
 #'
@@ -162,72 +162,46 @@ get_metadata.default <- function(data, dataname) {
 }
 
 
-#' Upgrade or downgrade data objects.
+#' Downgrade `teal_data` objects in modules for compatibility.
 #'
-#' Convert between `teal::tdata` and `teal.data::teal_data` classes.
+#' Convert `teal_data` to `tdata` in `teal` modules.
 #'
-#' Functions to switch between data classes during deprecation of the `tdata` class defined in `teal`.
-#' `.tdata_upgrade` converts object of class `tdata` as defined in `teal` package
-#' (list of reactive expressions, each containing one data set, with a `code` attribute)
-#' to object of class `teal_data` as defined in package `teal.data`
-#' (extension of class `qenv` as defined in `teal.code`).
-#' `.tdata_downgrade` does the reverse.
+#' Recent changes in `teal` cause modules to fail because modules expect a `tdata` object
+#' to be passed to the `data` argument but instead they receive a `teal_data` object,
+#' which is additionally wrapped in a reactive expression in the server functions.
+#' In order to easily adapt such modules without a proper refactor,
+#' use this function to downgrade the `data` argument.
 #'
-#' Note the `metadata` attribute is discarded.
+#' @param `x` data object, either `tdata` or a `reactive` containing a `teal_data`
 #'
-#' In apps and modules data objects passed to upgrade/downgrade may be reactive expressions.
-#' For convenience, these functions accept reactive expressions2 and run on their values.
+#' @return Object of class `tdata`.
 #'
-#' @param `x` data object, either `tdata` or `teal_data`; reactive expressions are handled, see `Details`
+#' @examples
+#' td <- teal_data()
+#' td <- within(td, iris <- iris) %>% within(mtcars <- mtcars)
+#' td
+#' as_tdata(td)
+#' as_tdata(reactive(td))
 #'
-#' @return Object of class `tdata` for `.tdata_upgrade` and `tdata` for `.tdata_downgrade`.
-#'
-#' @keywords internal
+#' @export
 #' @rdname tdata_deprecation
 #'
-.tdata_upgrade <- function(x) {
-  if (is.reactive(x)) {
-    x <- x()
-  }
-
-  checkmate::assert_multi_class(x, c("tdata", "teal_data"))
-
-  if (inherits(x, "qenv")) {
+as_tdata <- function(x) {
+  if (inherits(x, "tdata")) {
     return(x)
   }
-
-  do.call(
-    teal.data::teal_data,
-    args = c(
-      lapply(x[names(x)], function(x) isolate(x())),
-      code = list(isolate(attr(x, "code")())),
-      Find(Negate(is.null), list(attr(x, "join_keys"), teal.data::join_keys()))
-    )
-  )
-}
-
-#' @keywords internal
-#' @rdname tdata_deprecation
-#'
-.tdata_downgrade <- function(x) {
-  if (inherits(x, "tdata")) {
-    x
+  if (is.reactive(x)) {
+    checkmate::assert_class(isolate(x()), "teal_data")
+    datanames <- isolate(teal.data::datanames(x()))
+    datasets <- sapply(datanames, function(dataname) reactive(x()[[dataname]]), simplify = FALSE)
+    code <- reactive(teal.code::get_code(x()))
+    join_keys <- isolate(teal.data::join_keys(x()))
+  } else if (inherits(x, "teal_data")) {
+    datanames <- teal.data::datanames(x)
+    datasets <- sapply(datanames, function(dataname) reactive(x[[dataname]]), simplify = FALSE)
+    code <- reactive(teal.code::get_code(x))
+    join_keys <- isolate(teal.data::join_keys(x))
   }
-  checkmate::assert_multi_class(x, c("reactive"))
 
-  if (is.reactive(x) && inherits(isolate(x()), "teal_data")) {
-    new_x <- sapply(
-      isolate(teal.data::datanames(x())),
-      function(dataname) {
-        reactive(x()[[dataname]])
-      },
-      simplify = FALSE
-    )
-
-    teal::new_tdata(
-      data = new_x,
-      code = reactive(teal.code::get_code(x())),
-      join_keys = isolate(teal.data::join_keys(x()))
-    )
-  }
+  new_tdata(data = datasets, code = code, join_keys = join_keys)
 }
