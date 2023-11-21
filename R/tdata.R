@@ -172,7 +172,7 @@ get_metadata.default <- function(data, dataname) {
 #' In order to easily adapt such modules without a proper refactor,
 #' use this function to downgrade the `data` argument.
 #'
-#' @param `x` data object, either `tdata` or a `reactive` containing a `teal_data`
+#' @param x data object, either `tdata` or a `reactive` containing a `teal_data`
 #'
 #' @return Object of class `tdata`.
 #'
