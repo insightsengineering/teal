@@ -95,3 +95,25 @@ testthat::test_that("srv_teal initialized data containing different FilteredData
     }
   )
 })
+
+testthat::test_that("srv_teal initialized data containing same FilteredData when module_specific is not specified", {
+  data <- teal_data(iris1 = iris, mtcars1 = mtcars)
+  shiny::testServer(
+    app = srv_teal,
+    args = list(
+      id = "test",
+      teal_data_rv = reactiveVal(data),
+      modules = modules(
+        example_module("iris_tab"),
+        modules(label = "tab", example_module("iris_tab"), example_module("mtcars_tab"))
+      ),
+      filter = teal_slices()
+    ),
+    expr = {
+      teal_data_rv(data)
+      unlisted_fd <- unlist(datasets_reactive(), use.names = FALSE)
+      testthat::expect_identical(unlisted_fd[[1]], unlisted_fd[[2]])
+      testthat::expect_identical(unlisted_fd[[2]], unlisted_fd[[3]])
+    }
+  )
+})
