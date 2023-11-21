@@ -210,19 +210,24 @@ get_metadata.default <- function(data, dataname) {
 #' @rdname tdata_deprecation
 #'
 .tdata_downgrade <- function(x) {
-  if (is.reactive(x)) {
-    x <- x()
+  if (inherits(x, "tdata")) {
+    x
   }
+  checkmate::assert_multi_class(x, c("reactive"))
 
-  checkmate::assert_multi_class(x, c("tdata", "teal_data"))
+  if (is.reactive(x) && inherits(isolate(x()), "teal_data")) {
+    new_x <- sapply(
+      isolate(teal.data::datanames(x())),
+      function(dataname) {
+        reactive(x()[[dataname]])
+      },
+      simplify = FALSE
+    )
 
-  if (!inherits(x, "qenv")) {
-    return(x)
+    teal::new_tdata(
+      data = new_x,
+      code = reactive(teal.code::get_code(x())),
+      join_keys = isolate(teal.data::join_keys(x()))
+    )
   }
-
-  teal::new_tdata(
-    data = as.list(x@env)[datanames(x)],
-    code = teal.code::get_code(x),
-    join_keys = teal.data::join_keys(x)
-  )
 }
