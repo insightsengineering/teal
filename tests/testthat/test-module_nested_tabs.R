@@ -409,14 +409,14 @@ testthat::test_that(".datasets_to_data returns data which is filtered", {
 testthat::test_that(".datasets_to_data returns only data requested by modules$datanames", {
   datasets <- get_example_filtered_data()
   module <- test_module_wdata(datanames = "d1")
-  data <- .datasets_to_data(module, datasets)
-  testthat::expect_equal(shiny::isolate(datanames(data)), "d1")
+  data <- shiny::isolate(.datasets_to_data(module, datasets))
+  testthat::expect_equal(datanames(data), "d1")
 })
 
 testthat::test_that(".datasets_to_data returns teal_data object", {
   datasets <- get_example_filtered_data()
   module <- test_module_wdata(datanames = c("d1", "d2"))
-  data <- .datasets_to_data(module, datasets)
+  data <- shiny::isolate(.datasets_to_data(module, datasets))
 
   testthat::expect_s4_class(data, "teal_data")
 
@@ -429,7 +429,7 @@ testthat::test_that(".datasets_to_data returns teal_data object", {
   # code
   skip("skipped until we resolve handling code in teal.data:::new_teal_data")
   testthat::expect_equal(
-    shiny::isolate(teal.code::get_code(data)),
+    teal.code::get_code(data),
     c(
       get_rcode_str_install(),
       get_rcode_libraries(),

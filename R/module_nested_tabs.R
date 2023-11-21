@@ -243,7 +243,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     if (is_arg_used(modules$server, "data")) {
-      data <- reactive(.datasets_to_data(modules, datasets))
+      data <- eventReactive(trigger_data(), .datasets_to_data(modules, datasets))
       args <- c(args, data = list(data))
     }
 
@@ -299,11 +299,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   }
 
   # list of reactive filtered data
-  data <- sapply(
-    datanames,
-    function(x) isolate(datasets$get_data(x, filtered = TRUE)),
-    simplify = FALSE
-  )
+  data <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
 
   hashes <- calculate_hashes(datanames, datasets)
 
@@ -311,7 +307,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     get_rcode_str_install(),
     get_rcode_libraries(),
     get_datasets_code(datanames, datasets, hashes),
-    isolate(teal.slice::get_filter_expr(datasets, datanames))
+    teal.slice::get_filter_expr(datasets, datanames)
   )
 
   do.call(
