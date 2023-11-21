@@ -93,25 +93,22 @@ example_module <- function(label = "example teal module", datanames = "all") {
   module(
     label,
     server = function(id, data) {
-      data_downgraded <- reactive(.tdata_downgrade(data))
-      checkmate::assert_class(data_downgraded(), "tdata")
+      checkmate::assert_class(data(), "teal_data")
       moduleServer(id, function(input, output, session) {
-        output$text <- renderPrint(data_downgraded()[[input$dataname]]())
+        output$text <- renderPrint(data()[[input$dataname]])
         teal.widgets::verbatim_popup_srv(
           id = "rcode",
-          verbatim_content = attr(data_downgraded(), "code")(),
+          verbatim_content = reactive(teal.code::get_code(data())),
           title = "Association Plot"
         )
       })
     },
     ui = function(id, data) {
-      data_downgraded <- reactive(.tdata_downgrade(data))
-
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
         encoding = div(
-          selectInput(ns("dataname"), "Choose a dataset", choices = names(data_downgraded())),
+          selectInput(ns("dataname"), "Choose a dataset", choices = teal.data::datanames(data)),
           teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
         )
       )
