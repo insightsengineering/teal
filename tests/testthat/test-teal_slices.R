@@ -26,6 +26,15 @@ testthat::test_that("teal_slices fails when inexisting teal_slice id is specifie
     ),
     "Filters in mapping don't match any available filter"
   )
+  testthat::expect_error(
+    teal_slices(
+      teal.slice::teal_slice(dataname = "data", varname = "var", id = "test"),
+      mapping = list(
+        module = "inexisting"
+      )
+    ),
+    "Filters in mapping don't match any available filter"
+  )
 })
 
 
@@ -80,6 +89,28 @@ testthat::test_that("teal_slices drops non-global filters if module_specific = F
       mod1 = "iris Species",
       mod2 = "mtcars mpg"
     )
+  )
+  testthat::expect_true(is.list(attr(tss, "mapping")) && length(attr(tss, "mapping")) == 0L)
+})
+
+testthat::test_that("teal_slices dynamically calculates module_specific", {
+  tss <- teal_slices(
+    teal.slice::teal_slice("iris", "Species"),
+    teal.slice::teal_slice("mtcars", "mpg"),
+    mapping = list(
+      mod1 = "iris Species",
+      mod2 = "mtcars mpg"
+    )
+  )
+  testthat::expect_identical(
+    attr(tss, "module_specific"),
+    length(attr(tss, "mapping")) > 0L
+  )
+
+  tss <- teal_slices(
+    teal.slice::teal_slice("iris", "Species"),
+    teal.slice::teal_slice("mtcars", "mpg"),
+    mapping = list()
   )
   testthat::expect_true(is.list(attr(tss, "mapping")) && length(attr(tss, "mapping")) == 0L)
 })
