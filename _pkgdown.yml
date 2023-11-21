@@ -114,6 +114,7 @@ reference:
       - landing_popup_module
   - title: Functions for Module Developers
     contents:
+      - as_tdata
       - tdata
       - get_code_tdata
       - get_metadata
