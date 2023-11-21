@@ -5,6 +5,7 @@
 * `data` argument in `init` now accepts `teal_data` and `teal_data_module`.
 * Added `landing_popup_module` function which creates a module that will display a popup when the app starts. The popup will block access to the app until it is dismissed.
 * Filter state snapshots can now be uploaded from file. See `?snapshot`.
+* Removed default value for `module_specific` from `teal_slices`, now dynamically determined based on mapping content—if mapping is provided and non-empty, `module_specific` defaults to `TRUE`, otherwise to `FALSE`.
 
 ### Miscellaneous
 
