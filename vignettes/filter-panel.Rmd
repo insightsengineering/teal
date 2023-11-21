@@ -78,7 +78,7 @@ One possible scenario is depicted in the figure below:
 
 ![](./images/filters_mapping.jpg)
 
-To achieve the described setup, one must use the `mapping` argument to appropriately match each `teal_module` with its respective `teal_slice`. `mapping` takes a named list where each element is named with a module's `label` and contains a vector of `teal_slice` `id`s. These elements will active in that module at startup. In addition, `teal_slice`s whose `id`s are enumerated in the `global_filters` element of `mapping` will be applied to all modules in the app.
+To achieve the described setup, one must use the `mapping` argument to appropriately match each `teal_module` with its respective `teal_slice`. `mapping` takes a named list where each element is named with a module's `label` and contains a vector of `teal_slice` `id`s. These elements will active in that module at startup.
 
 ```r
 library(teal)
@@ -99,7 +99,8 @@ app <- init(
     teal_slice(dataname = "mtcars", varname = "hp", id = "filter 4"),
     teal_slice(dataname = "mtcars", varname = "drat", id = "filter 5"),
     teal_slice(dataname = "mtcars", varname = "wt", id = "filter 6"),
-
+    
+    module_specific = TRUE,
     # filters mapped to modules
     mapping = list(
       "module 1" = c("filter 2", "filter 4"),
