@@ -12,7 +12,7 @@ teal_slices(
   include_varnames = NULL,
   count_type = NULL,
   allow_add = TRUE,
-  module_specific = FALSE,
+  module_specific,
   mapping,
   app_id = NULL
 )
@@ -47,6 +47,13 @@ Please make sure that adding new filters doesn't fail on target platform before 
 of filters specified - see \code{mapping} argument.
 \item \code{FALSE} when one filter panel needed to all modules. All filters will be shared
 by all modules.
+Note: This parameter does not have a default value and should be explicitly provided.
+If \code{module_specific} is not provided, its value is inferred based on the \code{mapping} parameter:
+\itemize{
+\item If \code{mapping} is provided and non-empty, \code{module_specific} is set to \code{TRUE}.
+\item If \code{mapping} is missing or empty, \code{module_specific} defaults to \code{FALSE}.
+This behavior allows for dynamic determination of filter panel specificity based on the provided \code{mapping}.
+}
 }}
 
 \item{mapping}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \emph{This is a new feature. Do kindly share your opinions.\cr}

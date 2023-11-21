@@ -14,6 +14,11 @@
 #'   of filters specified - see `mapping` argument.
 #'  - `FALSE` when one filter panel needed to all modules. All filters will be shared
 #'    by all modules.
+#'  Note: This parameter does not have a default value and should be explicitly provided.
+#'  If `module_specific` is not provided, its value is inferred based on the `mapping` parameter:
+#'    - If `mapping` is provided and non-empty, `module_specific` is set to `TRUE`.
+#'    - If `mapping` is missing or empty, `module_specific` defaults to `FALSE`.
+#'  This behavior allows for dynamic determination of filter panel specificity based on the provided `mapping`.
 #' @param mapping `r lifecycle::badge("experimental")` _This is a new feature. Do kindly share your opinions.\cr_
 #'  (`named list`)\cr
 #'  Specifies which filters will be active in which modules on app start.
@@ -69,18 +74,23 @@ teal_slices <- function(...,
                         include_varnames = NULL,
                         count_type = NULL,
                         allow_add = TRUE,
-                        module_specific = FALSE,
+                        module_specific,
                         mapping,
                         app_id = NULL) {
   shiny::isolate({
     checkmate::assert_flag(allow_add)
-    checkmate::assert_flag(module_specific)
+    if (!missing(module_specific)) checkmate::assert_flag(module_specific)
     if (!missing(mapping)) checkmate::assert_list(mapping, types = c("character", "NULL"), names = "named")
     checkmate::assert_string(app_id, null.ok = TRUE)
 
     slices <- list(...)
     all_slice_id <- vapply(slices, `[[`, character(1L), "id")
 
+    if (missing(module_specific) && !missing(mapping)) {
+      module_specific <- length(mapping) > 0L
+    } else {
+      module_specific <- FALSE
+    }
     if (missing(mapping)) {
       mapping <- list(global_filters = all_slice_id)
     }
