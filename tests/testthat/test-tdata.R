@@ -220,79 +220,47 @@ testthat::test_that("join_keys returns join_keys object if it exists inside tdat
 })
 
 
-# tdata conversions ----
+# as_tdata ----
 code <- c("iris <- iris", "mtcars <- mtcars")
-tdata_old <- teal::new_tdata(list(iris = iris, mtcars = mtcars), code)
-tdata_new <- teal.data::teal_data(iris = iris, mtcars = mtcars, code = code)
+data_tdata <- teal::new_tdata(list(iris = iris, mtcars = mtcars), code)
+data_teal_data <- teal.data::teal_data(iris = iris, mtcars = mtcars, code = code)
+data_reactive <- reactive(teal.data::teal_data(iris = iris, mtcars = mtcars, code = code))
 
-testthat::test_that("functions accept both versions of tdata class", {
-  testthat::expect_no_error(.tdata_upgrade(tdata_old))
-  testthat::expect_no_error(.tdata_upgrade(tdata_new))
-  testthat::expect_no_error(.tdata_downgrade(tdata_old))
-  testthat::expect_no_error(.tdata_downgrade(tdata_new))
+testthat::test_that("as_tdata accepts all possible inputs", {
+  testthat::expect_no_error(as_tdata(data_tdata))
+  testthat::expect_no_error(as_tdata(data_teal_data))
+  testthat::expect_no_error(as_tdata(data_reactive))
 })
 
-testthat::test_that("classes are changed when appropriate", {
-  tdata_old_upgraded <- .tdata_upgrade(tdata_old)
-  tdata_new_upgraded <- .tdata_upgrade(tdata_new)
-  tdata_old_downgraded <- .tdata_downgrade(tdata_old)
-  tdata_new_downgraded <- .tdata_downgrade(tdata_new)
+testthat::test_that("as_tdata always returns tdata object", {
+  data_tdata_downgraded <- as_tdata(data_tdata)
+  data_teal_data_downgraded <- as_tdata(data_teal_data)
+  data_reactive_downgraded <- as_tdata(data_teal_data)
 
-  testthat::expect_identical(tdata_old, tdata_old_downgraded)
-  testthat::expect_identical(tdata_new, tdata_new_upgraded)
-
-  testthat::expect_s3_class(tdata_new_downgraded, "tdata")
-  testthat::expect_failure(testthat::expect_s4_class(tdata_new_downgraded, "qenv"))
-
-  testthat::expect_s4_class(tdata_old_upgraded, "teal_data")
-  testthat::expect_s4_class(tdata_old_upgraded, "qenv")
+  testthat::expect_s3_class(data_tdata_downgraded, "tdata")
+  testthat::expect_s3_class(data_teal_data_downgraded, "tdata")
+  testthat::expect_s3_class(data_reactive_downgraded, "tdata")
 })
 
 testthat::test_that("datasets are maintained during conversion", {
-  tdata_old_up <- .tdata_upgrade(tdata_old)
-  tdata_new_down <- .tdata_downgrade(tdata_new)
+  data_tdata_downgraded <- as_tdata(data_teal_data)
 
-  datasets_old <- sapply(sort(names(tdata_old)), function(x) shiny::isolate(tdata_old[[x]]()))
-  datasets_old_up <- sapply(ls(tdata_old_up@env), function(x) teal.code::get_var(tdata_old_up, x))
+  datanames_teal_data <- sort(teal.data::datanames(data_teal_data))
+  datanames_tdata <- sort(names(data_tdata_downgraded))
 
-  testthat::expect_identical(datasets_old, datasets_old_up)
+  testthat::expect_identical(datanames_teal_data, datanames_tdata)
 
+  datasets_teal_data <- sapply(datanames_teal_data, function(x) teal.code::get_var(data_teal_data, x))
+  datasets_tdata <- sapply(datanames_tdata, function(x) shiny::isolate(data_tdata_downgraded[[x]]()))
 
-  datasets_new <- sapply(ls(tdata_new@env), function(x) teal.code::get_var(tdata_new, x))
-  datasets_new_down <- sapply(sort(names(tdata_new_down)), function(x) shiny::isolate(tdata_new_down[[x]]()))
-
-  testthat::expect_identical(datasets_new, datasets_new_down)
+  testthat::expect_identical(datasets_teal_data, datasets_tdata)
 })
 
 testthat::test_that("code is maintained during conversion", {
-  tdata_old_upgraded <- .tdata_upgrade(tdata_old)
-  tdata_new_downgraded <- .tdata_downgrade(tdata_new)
+  data_teal_data_downgraded <- as_tdata(data_teal_data)
   skip("skipped until we resolve handling code in teal.data:::new_teal_data")
   testthat::expect_identical(
-    shiny::isolate(attr(tdata_old, "code")()),
-    teal.code::get_code(tdata_old_upgraded)
-  )
-  testthat::expect_identical(
-    teal.code::get_code(tdata_new),
-    shiny::isolate(attr(tdata_new_downgraded, "code")())
-  )
-})
-
-testthat::test_that("join keys are added during upgrade if missing in old class object", {
-  testthat::expect_null(attr(tdata_old, "join_keys"))
-  tdata_old_upgraded <- .tdata_upgrade(tdata_old)
-  testthat::expect_failure(testthat::expect_null(teal.data::join_keys(tdata_old_upgraded)))
-  testthat::expect_equal(
-    teal.data::join_keys(tdata_old_upgraded),
-    teal.data::join_keys()
-  )
-})
-
-testthat::test_that("join keys are maintained during upgrade if not missing in old class object", {
-  attr(tdata_old, "join_keys") <- teal.data::join_keys()
-  tdata_old_upgraded <- .tdata_upgrade(tdata_old)
-  testthat::expect_equal(
-    teal.data::join_keys(tdata_old_upgraded),
-    attr(tdata_old, "join_keys")
+    teal.code::get_code(data_teal_data),
+    shiny::isolate(attr(data_teal_data_downgraded, "code")())
   )
 })

@@ -214,8 +214,10 @@ testthat::test_that("srv_nested_tabs.teal_module does not pass data if not in th
 testthat::test_that("srv_nested_tabs.teal_module does pass data if in the args explicitly", {
   module <- module(
     server = function(id, data, ...) {
-      data_downgraded <- reactive(.tdata_downgrade(data))
-      moduleServer(id, function(input, output, session) checkmate::assert_class(data_downgraded(), "tdata"))
+      moduleServer(id, function(input, output, session) {
+        checkmate::assert_class(data, "reactive")
+        checkmate::assert_class(data(), "teal_data")
+      })
     },
     datanames = NULL
   )
