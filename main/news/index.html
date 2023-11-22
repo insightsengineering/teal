@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9020</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9021</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,21 +92,23 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.14.0.9020" id="teal-01409020">teal 0.14.0.9020<a class="anchor" aria-label="anchor" href="#teal-01409020"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.14.0.9021" id="teal-01409021">teal 0.14.0.9021<a class="anchor" aria-label="anchor" href="#teal-01409021"></a></h2>
 <div class="section level4">
-<h4 id="new-features-0-14-0-9020">New features<a class="anchor" aria-label="anchor" href="#new-features-0-14-0-9020"></a></h4>
+<h4 id="new-features-0-14-0-9021">New features<a class="anchor" aria-label="anchor" href="#new-features-0-14-0-9021"></a></h4>
 <ul><li>
 <code>data</code> argument in <code>init</code> now accepts <code>teal_data</code> and <code>teal_data_module</code>.</li>
 <li>Added <code>landing_popup_module</code> function which creates a module that will display a popup when the app starts. The popup will block access to the app until it is dismissed.</li>
 <li>Filter state snapshots can now be uploaded from file. See <code><a href="../reference/snapshot_manager_module.html">?snapshot</a></code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="miscellaneous-0-14-0-9020">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-14-0-9020"></a></h4>
+<h4 id="miscellaneous-0-14-0-9021">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-14-0-9021"></a></h4>
 <ul><li>Enhanced a <code>module</code> validation checks so that it won’t throw messages about <code>data</code> argument unnecessarily.</li>
 <li>Added argument to <code>teal_slices</code> and made modifications to <code>init</code> to enable tagging <code>teal_slices</code> with an app id to safely upload snapshots from disk.</li>
+<li>
+<code>FilteredData</code> no longer stores pre-processing code in specific slots. Code is now attached as attribute. Adjusted appropriately.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="bug-fixes-0-14-0-9020">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-14-0-9020"></a></h4>
+<h4 id="bug-fixes-0-14-0-9021">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-14-0-9021"></a></h4>
 <ul><li>Removed <code>Report previewer</code> module from mapping matrix display in filter manager.</li>
 </ul></div>
 </div>
