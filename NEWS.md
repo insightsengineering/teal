@@ -15,6 +15,7 @@
 ### Bug fixes
 
 * Removed `Report previewer` module from mapping matrix display in filter manager.
+* Specified minimal version of package dependencies.
 
 # teal 0.14.0
 
