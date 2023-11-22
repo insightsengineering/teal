@@ -10,9 +10,9 @@
 #' @inheritParams teal.slice::teal_slices
 #'
 #' @param module_specific optional (`logical(1)`)\cr
-#'  - `FALSE` (default) when one filter panel applied to all modules. 
+#'  - `FALSE` (default) when one filter panel applied to all modules.
 #'  All filters will be shared by all modules.
-#'  - `TRUE` when filter panel module-specific. 
+#'  - `TRUE` when filter panel module-specific.
 #'  Modules can have different set of filters specified - see `mapping` argument.
 #' @param mapping `r lifecycle::badge("experimental")` _This is a new feature. Do kindly share your opinions.\cr_
 #'  (`named list`)\cr
