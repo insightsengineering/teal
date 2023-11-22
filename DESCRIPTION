@@ -70,6 +70,7 @@ Config/Needs/verdepcheck:
     insightsengineering/teal.slice,
     insightsengineering/teal.transform,
     mllg/checkmate,
+    jeroen/jsonlite,
     r-lib/lifecycle,
     daroczig/logger,
     tidyverse/magrittr,
