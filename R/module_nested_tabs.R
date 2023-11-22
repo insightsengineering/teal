@@ -213,7 +213,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   moduleServer(id = id, module = function(input, output, session) {
     modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
     if (!is.null(modules$datanames) && is_module_specific) {
-      datasets$srv_filter_panel("module_filter_panel", active_datanames = reactive(modules$datanames))
+      datasets$srv_filter_panel("module_filter_panel")
     }
 
     # Create two triggers to limit reactivity between filter-panel and modules.

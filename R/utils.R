@@ -55,11 +55,13 @@ include_parent_datanames <- function(dataname, join_keys) {
 #' @param x (`teal_data`) object
 #' @return (`FilteredData`) object
 #' @keywords internal
-teal_data_to_filtered_data <- function(x) {
+teal_data_to_filtered_data <- function(x, datanames = teal.data::datanames(x)) {
   checkmate::assert_class(x, "teal_data")
+  checkmate::assert_character(datanames)
+  checkmate::assert_subset(datanames, teal.data::datanames(x))
 
   teal.slice::init_filtered_data(
-    x = sapply(teal.data::datanames(x), function(dn) x[[dn]], simplify = FALSE),
+    x = sapply(datanames, function(dn) x[[dn]], simplify = FALSE),
     join_keys = teal.data::join_keys(x)
   )
 }
