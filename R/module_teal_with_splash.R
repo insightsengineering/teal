@@ -75,7 +75,11 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     # teal_data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
     teal_data_rv <- if (inherits(data, "teal_data_module")) {
-      data$server(id = "teal_data_module")
+      data <- data$server(id = "teal_data_module")
+      if (!is.reactive(data)) {
+        stop("The `teal_data_module` must return a reactive expression.", call. = FALSE)
+      }
+      data
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
@@ -108,10 +112,6 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       raw_data
     }
 
-    if (!is.reactive(teal_data_rv)) {
-      stop("The `teal_data_module` must return a reactive expression.", call. = FALSE)
-    }
-
     teal_data_rv_validate <- reactive({
       # custom module can return error
       data <- tryCatch(teal_data_rv(), error = function(e) e)
@@ -140,7 +140,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         validate(
           need(
             FALSE,
-            paste0(
+            paste(
               "Error when executing `teal_data_module`:\n ",
               paste(data$message, collpase = "\n"),
               "\n Check your inputs or contact app developer if error persists."

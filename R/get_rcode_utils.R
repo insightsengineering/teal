@@ -38,28 +38,18 @@ get_rcode_str_install <- function() {
 #' @param datasets (`FilteredData`) object
 #' @param hashes named (`list`) of hashes per dataset
 #'
-#' @return `character(3)` containing following elements:
-#'  - code from `CodeClass` (data loading code)
+#' @return `character(3)` containing the following elements:
+#'  - data pre-processing code (from `data` argument in `init`)
 #'  - hash check of loaded objects
+#'  - filter code
 #'
 #' @keywords internal
 get_datasets_code <- function(datanames, datasets, hashes) {
-  str_code <- datasets$get_code(datanames)
-  if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
-    str_code <- "message('Preprocessing is empty')"
-  } else if (length(str_code) > 0) {
-    str_code <- paste0(str_code, "\n\n")
-  }
-
-  if (!datasets$get_check()) {
-    check_note_string <- paste0(
-      c(
-        "message(paste(\"Reproducibility of data import and preprocessing was not explicitly checked\",",
-        "   \" ('check = FALSE' is set). Contact app developer if this is an issue.\n\"))"
-      ),
-      collapse = "\n"
-    )
-    str_code <- paste0(str_code, "\n\n", check_note_string)
+  str_prepro <- teal.data:::get_code_dependency(attr(datasets, "preprocessing_code"), names = datanames)
+  if (length(str_prepro) == 0) {
+    str_prepro <- "message('Preprocessing is empty')"
+  } else if (length(str_prepro) > 0) {
+    str_prepro <- paste0(str_prepro, "\n\n")
   }
 
   str_hash <- paste(
@@ -80,5 +70,7 @@ get_datasets_code <- function(datanames, datasets, hashes) {
     "\n\n"
   )
 
-  c(str_code, str_hash)
+  str_filter <- teal.slice::get_filter_expr(datasets, datanames)
+
+  c(str_prepro, str_hash, str_filter)
 }

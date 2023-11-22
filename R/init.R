@@ -10,10 +10,6 @@
 #' End-users: This is the most important function for you to start a
 #' teal app that is composed out of teal modules.
 #'
-#' **Notes for developers**:
-#' This is a wrapper function around the `module_teal.R` functions. Unless you are
-#' an end-user, don't use this function, but instead this module.
-#'
 #' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
 #' or `MultiAssayExperiment`, `teal_data`, `teal_data_module`)\cr
 #' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()],
