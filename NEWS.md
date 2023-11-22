@@ -10,6 +10,7 @@
 
 * Enhanced a `module` validation checks so that it won't throw messages about `data` argument unnecessarily.
 * Added argument to `teal_slices` and made modifications to `init` to enable tagging `teal_slices` with an app id to safely upload snapshots from disk.
+* `FilteredData` no longer stores pre-processing code in specific slots. Code is now attached as attribute. Adjusted appropriately.
 
 ### Bug fixes
 
