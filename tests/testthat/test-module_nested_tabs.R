@@ -1,3 +1,5 @@
+teal_data <- teal.data::teal_data()
+teal_data <- within(teal_data, iris <- head(iris))
 teal_data <- teal.data::teal_data() |> within(iris <- head(iris))
 datanames(teal_data) <- "iris"
 filtered_data <- teal_data_to_filtered_data(teal_data)
