@@ -41,12 +41,12 @@ Please make sure that adding new filters doesn't fail on target platform before 
 
 \item{allow_add}{(\code{logical(1)}) logical flag specifying whether the user will be able to add new filters}
 
-\item{module_specific}{(\code{logical(1)})\verb{\\cr Default is }FALSE
+\item{module_specific}{optional (\code{logical(1)})\cr
 \itemize{
-\item \code{FALSE} when one filter panel needed to all modules. All filters will be shared
-by all modules.
-\item \code{TRUE} when filter panel should be module-specific. All modules can have different set
-of filters specified - see \code{mapping} argument.
+\item \code{FALSE} (default) when one filter panel applied to all modules.
+All filters will be shared by all modules.
+\item \code{TRUE} when filter panel module-specific.
+Modules can have different set of filters specified - see \code{mapping} argument.
 }}
 
 \item{mapping}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \emph{This is a new feature. Do kindly share your opinions.\cr}
