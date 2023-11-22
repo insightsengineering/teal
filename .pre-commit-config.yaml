@@ -23,6 +23,7 @@ repos:
           - shiny
           - shinyjs
           - stats
+          - insightsengineering/teal.code
           - insightsengineering/teal.data
           - insightsengineering/teal.logger
           - insightsengineering/teal.reporter
