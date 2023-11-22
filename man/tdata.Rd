@@ -62,3 +62,6 @@ isolate(get_code(data))
 get_metadata(data, "iris")
 
 }
+\seealso{
+\code{as_tdata}
+}

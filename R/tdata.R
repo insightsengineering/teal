@@ -20,6 +20,9 @@
 #' @param metadata A `named list` each element contains a list of metadata about the named data.frame
 #' Each element of these list should be atomic and length one.
 #' @return A `tdata` object
+#'
+#' @seealso `as_tdata`
+#'
 #' @examples
 #'
 #' data <- new_tdata(
@@ -156,4 +159,49 @@ get_metadata.tdata <- function(data, dataname) {
 #' @export
 get_metadata.default <- function(data, dataname) {
   stop("get_metadata function not implemented for this object")
+}
+
+
+#' Downgrade `teal_data` objects in modules for compatibility.
+#'
+#' Convert `teal_data` to `tdata` in `teal` modules.
+#'
+#' Recent changes in `teal` cause modules to fail because modules expect a `tdata` object
+#' to be passed to the `data` argument but instead they receive a `teal_data` object,
+#' which is additionally wrapped in a reactive expression in the server functions.
+#' In order to easily adapt such modules without a proper refactor,
+#' use this function to downgrade the `data` argument.
+#'
+#' @param x data object, either `tdata` or `teal_data`, the latter possibly in a reactive expression
+#'
+#' @return Object of class `tdata`.
+#'
+#' @examples
+#' td <- teal_data()
+#' td <- within(td, iris <- iris) %>% within(mtcars <- mtcars)
+#' td
+#' as_tdata(td)
+#' as_tdata(reactive(td))
+#'
+#' @export
+#' @rdname tdata_deprecation
+#'
+as_tdata <- function(x) {
+  if (inherits(x, "tdata")) {
+    return(x)
+  }
+  if (is.reactive(x)) {
+    checkmate::assert_class(isolate(x()), "teal_data")
+    datanames <- isolate(teal.data::datanames(x()))
+    datasets <- sapply(datanames, function(dataname) reactive(x()[[dataname]]), simplify = FALSE)
+    code <- reactive(teal.code::get_code(x()))
+    join_keys <- isolate(teal.data::join_keys(x()))
+  } else if (inherits(x, "teal_data")) {
+    datanames <- teal.data::datanames(x)
+    datasets <- sapply(datanames, function(dataname) reactive(x[[dataname]]), simplify = FALSE)
+    code <- reactive(teal.code::get_code(x))
+    join_keys <- isolate(teal.data::join_keys(x))
+  }
+
+  new_tdata(data = datasets, code = code, join_keys = join_keys)
 }
