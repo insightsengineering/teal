@@ -99,7 +99,7 @@ app <- init(
     teal_slice(dataname = "mtcars", varname = "hp", id = "filter 4"),
     teal_slice(dataname = "mtcars", varname = "drat", id = "filter 5"),
     teal_slice(dataname = "mtcars", varname = "wt", id = "filter 6"),
-    
+    # module-specific filtering enabled
     module_specific = TRUE,
     # filters mapped to modules
     mapping = list(
