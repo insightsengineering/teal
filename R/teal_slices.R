@@ -9,11 +9,11 @@
 #'
 #' @inheritParams teal.slice::teal_slices
 #'
-#' @param module_specific (`logical(1)`)\cr
-#'  - `TRUE` when filter panel should be module-specific. All modules can have different set
-#'   of filters specified - see `mapping` argument.
-#'  - `FALSE` when one filter panel needed to all modules. All filters will be shared
-#'    by all modules.
+#' @param module_specific optional (`logical(1)`)\cr
+#'  - `FALSE` (default) when one filter panel applied to all modules. 
+#'  All filters will be shared by all modules.
+#'  - `TRUE` when filter panel module-specific. 
+#'  Modules can have different set of filters specified - see `mapping` argument.
 #' @param mapping `r lifecycle::badge("experimental")` _This is a new feature. Do kindly share your opinions.\cr_
 #'  (`named list`)\cr
 #'  Specifies which filters will be active in which modules on app start.
