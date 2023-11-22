@@ -1,6 +1,8 @@
-filtered_data <- teal.slice::init_filtered_data(
-  list(iris = list(dataset = head(iris)))
-)
+teal_data <- teal.data::teal_data()
+teal_data <- within(teal_data, iris <- head(iris))
+teal_data <- teal.data::teal_data() |> within(iris <- head(iris))
+datanames(teal_data) <- "iris"
+filtered_data <- teal_data_to_filtered_data(teal_data)
 
 test_module1 <- module(
   label = "test1",
@@ -36,22 +38,12 @@ test_module_wdata <- function(datanames) {
 }
 
 get_example_filtered_data <- function() {
-  d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)
-  d2 <- data.frame(id = 1:5, value = 1:5)
-
-  cc <- teal.data:::CodeClass$new()
-  cc$set_code("d1 <- data.frame(id = 1:5, pk = c(2,3,2,1,4), val = 1:5)", "d1")
-  cc$set_code("d2 <- data.frame(id = 1:5, value = 1:5)", "d2")
-
-  teal.slice::init_filtered_data(
-    x = list(
-      d1 = list(dataset = d1, metadata = list("A" = 1)),
-      d2 = list(dataset = d2)
-    ),
-    join_keys = teal.data::join_keys(teal.data::join_key("d1", "d2", c("pk" = "id"))),
-    code = cc,
-    check = TRUE
-  )
+  td <- teal.data::teal_data()
+  td <- within(td, d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5))
+  td <- within(td, d2 <- data.frame(id = 1:5, value = 1:5))
+  datanames(td) <- c("d1", "d2")
+  teal.data::join_keys(td) <- teal.data::join_keys(teal.data::join_key("d1", "d2", c("pk" = "id")))
+  teal_data_to_filtered_data(td)
 }
 
 
@@ -461,7 +453,8 @@ testthat::test_that(".datasets_to_data returns tdata object", {
     c(
       get_rcode_str_install(),
       get_rcode_libraries(),
-      "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\nd2 <- data.frame(id = 1:5, value = 1:5)\n\n",
+      "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\n\n",
+      "d2 <- data.frame(id = 1:5, value = 1:5)\n\n",
       paste0(
         "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")\n",
         "stopifnot(rlang::hash(d2) == \"6e30be195b7d914a1311672c3ebf4e4f\") \n\n"
@@ -469,14 +462,6 @@ testthat::test_that(".datasets_to_data returns tdata object", {
       ""
     )
   )
-
-  # metadata
-  testthat::expect_equal(
-    get_metadata(data, "d1"),
-    list(A = 1)
-  )
-
-  testthat::expect_null(get_metadata(data, "d2"))
 })
 
 testthat::test_that("calculate_hashes takes a FilteredData and vector of datanames as input", {

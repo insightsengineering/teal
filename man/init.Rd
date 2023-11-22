@@ -61,10 +61,6 @@ named list with \code{server} and \code{ui} function
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 End-users: This is the most important function for you to start a
 teal app that is composed out of teal modules.
-
-\strong{Notes for developers}:
-This is a wrapper function around the \code{module_teal.R} functions. Unless you are
-an end-user, don't use this function, but instead this module.
 }
 \examples{
 new_iris <- transform(iris, id = seq_len(nrow(iris)))

@@ -1,9 +1,8 @@
-filtered_data <- teal.slice::init_filtered_data(
-  list(
-    iris = list(dataset = head(iris)),
-    mtcars = list(dataset = head(mtcars))
-  )
-)
+teal_data <- teal.data::teal_data()
+teal_data <- within(teal_data, iris <- head(iris))
+teal_data <- within(teal_data, mtcars <- head(mtcars))
+datanames(teal_data) <- c("iris", "mtcars")
+filtered_data <- teal_data_to_filtered_data(teal_data)
 
 test_module1 <- module(
   label = "iris tab",
