@@ -53,21 +53,21 @@ include_parent_datanames <- function(dataname, join_keys) {
 #'
 #' Create a `FilteredData` object from a `teal_data` object
 #' @param x (`teal_data`) object
+#' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
 #' @return (`FilteredData`) object
 #' @keywords internal
 teal_data_to_filtered_data <- function(x, datanames = teal.data::datanames(x)) {
   checkmate::assert_class(x, "teal_data")
-  checkmate::assert_character(datanames)
+  checkmate::assert_character(datanames, min.len = 1L, any.missing = FALSE)
+  checkmate::assert_subset(datanames, teal.data::datanames(x))
 
-  teal.slice::init_filtered_data(
-    x = as.list(x@env)[datanames],
-    join_keys = join_keys(x)[datanames],
-    code = teal.data:::CodeClass$new(
-      code = paste(teal.code::get_code(x), collapse = "\n"),
-      dataname = teal.data::get_dataname(x)
-    ),
-    check = FALSE
+  ans <- teal.slice::init_filtered_data(
+    x = sapply(datanames, function(dn) x[[dn]], simplify = FALSE),
+    join_keys = teal.data::join_keys(x)
   )
+  # Piggy-back entire pre-processing code so that filtering code can be appended later.
+  attr(ans, "preprocessing_code") <- teal.code::get_code(x)
+  ans
 }
 
 #' Template Function for `TealReportCard` Creation and Customization
