@@ -18,8 +18,8 @@ init(
 \item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
 or \code{MultiAssayExperiment}, \code{teal_data}, \code{teal_data_module})\cr
 \code{R6} object as returned by \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}}, \code{\link[teal.data:teal_data]{teal.data::teal_data()}},
-\code{\link[teal.data:cdisc_dataset]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:dataset]{teal.data::dataset()}}, \code{\link[teal.data:dataset_connector]{teal.data::dataset_connector()}} or
-\code{\link[teal.data:cdisc_dataset_connector]{teal.data::cdisc_dataset_connector()}} or \code{\link[=teal_data_module]{teal_data_module()}} or a single \code{data.frame} or
+\code{\link[teal.data:TealData]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:TealData]{teal.data::dataset()}}, \code{\link[teal.data:TealData]{teal.data::dataset_connector()}} or
+\code{\link[teal.data:TealData]{teal.data::cdisc_dataset_connector()}} or \code{\link[=teal_data_module]{teal_data_module()}} or a single \code{data.frame} or
 a \code{MultiAssayExperiment}
 or a list of the previous objects or function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements

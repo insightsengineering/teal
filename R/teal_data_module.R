@@ -50,3 +50,57 @@ teal_data_module <- function(ui, server) {
     class = "teal_data_module"
   )
 }
+
+setOldClass("teal_data_module")
+
+#' @name eval_code
+#' @inherit teal.code::eval_code
+#' @importMethodsFrom teal.code eval_code
+#' @export
+setMethod("eval_code", signature = c("teal_data_module", "character"), function(object, code) {
+  teal_data_module(
+    ui = function(id) {
+      ns <- NS(id)
+      object$ui(ns("mutate_inner"))
+    },
+    server = function(id) {
+      moduleServer(id, function(input, output, session) {
+        data <- object$server("mutate_inner")
+        eventReactive(data(), {
+          eval_code(data(), code)
+        })
+      })
+    }
+  )
+})
+
+#' @rdname eval_code
+#' @export
+setMethod("eval_code", signature = c("teal_data_module", "language"), function(object, code) {
+  eval_code(object, code = teal.code:::format_expression(code))
+})
+
+#' @rdname eval_code
+#' @export
+setMethod("eval_code", signature = c("teal_data_module", "expression"), function(object, code) {
+  eval_code(object, code = teal.code:::format_expression(code))
+})
+
+#' @inherit teal.code::within.qenv
+#' @export
+within.teal_data_module <- function(data, expr, ...) {
+  expr <- substitute(expr)
+  extras <- list(...)
+
+  # Add braces for consistency.
+  if (!identical(as.list(expr)[[1L]], as.symbol("{"))) {
+    expr <- call("{", expr)
+  }
+
+  calls <- as.list(expr)[-1]
+
+  # Inject extra values into expressions.
+  calls <- lapply(calls, function(x) do.call(substitute, list(x, env = extras)))
+
+  eval_code(object = data, code = as.expression(calls))
+}
