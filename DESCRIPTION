@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.14.0.9022
+Version: 0.14.0.9024
 Date: 2023-11-22
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
@@ -35,12 +35,12 @@ Depends:
     teal.slice (>= 0.4.0.9023),
     teal.transform (>= 0.4.0.9007)
 Imports:
-    checkmate,
+    checkmate (>= 2.1.0),
     jsonlite,
-    lifecycle,
+    lifecycle (>= 0.2.0),
     logger (>= 0.2.0),
-    magrittr,
-    rlang,
+    magrittr (>= 1.5),
+    rlang (>= 1.0.0),
     shinyjs,
     stats,
     teal.logger (>= 0.1.1),
@@ -50,20 +50,30 @@ Imports:
 Suggests:
     bslib,
     covr,
-    dplyr,
-    knitr,
+    dplyr (>= 1.0.5),
+    knitr (>= 1.42),
     MultiAssayExperiment,
     R6,
-    rmarkdown,
+    rmarkdown (>= 2.19),
     shinyvalidate,
     teal.code (>= 0.3.0.9009),
     testthat (>= 3.1.5),
-    withr,
-    yaml
+    withr (>= 2.1.0),
+    yaml (>= 1.1.0)
 VignetteBuilder:
     knitr
 RdMacros:
     lifecycle
+Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
+    insightsengineering/teal.slice, insightsengineering/teal.transform,
+    mllg/checkmate, jeroen/jsonlite, r-lib/lifecycle, daroczig/logger,
+    tidyverse/magrittr, r-lib/rlang, daattali/shinyjs,
+    insightsengineering/teal.logger, insightsengineering/teal.reporter,
+    insightsengineering/teal.widgets, rstudio/bslib, r-lib/covr,
+    tidyverse/dplyr, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
+    rstudio/rmarkdown, rstudio/shinyvalidate,
+    insightsengineering/teal.code, r-lib/testthat, r-lib/withr,
+    yaml=vubiostat/r-yaml
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
