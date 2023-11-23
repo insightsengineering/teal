@@ -8,7 +8,7 @@
 \usage{
 new_tdata(data, code = "", join_keys = NULL, metadata = NULL)
 
-\method{get_code}{tdata}(x, ...)
+get_code.tdata(x, ...)
 }
 \arguments{
 \item{data}{A \verb{named list} of \code{data.frames} (or \code{MultiAssayExperiment})
