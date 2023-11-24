@@ -84,7 +84,7 @@ To achieve the described setup, one must set the `module_specific` argument to `
 library(teal)
 
 app <- init(
-  data = list(mtcars = mtcars),
+  data = teal_data(mtcars = mtcars),
   modules = modules(
     example_module(label = "module 1"),
     example_module(label = "module 2"),
