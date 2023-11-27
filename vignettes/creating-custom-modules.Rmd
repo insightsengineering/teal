@@ -1,6 +1,6 @@
 ---
 title: "Creating Custom Modules"
-author: "Nikolas Burkoff"
+author: "NEST CoreDev"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Creating Custom Modules}
