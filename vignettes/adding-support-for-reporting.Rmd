@@ -170,14 +170,12 @@ custom_function <- function(card = teal.reporter::ReportCard$new()) {
 }
 
 example_module_with_reporting <- function(label = "example teal module") {
-  checkmate::assert_string(label)
   module(
     label,
     server = function(id, data, reporter) {
-      checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
         teal.reporter::simple_reporter_srv(id = "simpleReporter", reporter = reporter, card_fun = custom_function)
-        output$text <- renderPrint(data[[input$dataname]]())
+        output$text <- renderPrint(data()[[input$dataname]])
       })
     },
     ui = function(id, data) {
@@ -187,7 +185,7 @@ example_module_with_reporting <- function(label = "example teal module") {
           teal.reporter::simple_reporter_ui(ns("simpleReporter")),
           verbatimTextOutput(ns("text"))
         ),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datanames(data))
       )
     },
     datanames = "all"
