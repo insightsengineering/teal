@@ -78,23 +78,31 @@ The key function to use to create your `teal` application is `init`, which requi
 
 ### Application Data
 
-The `data` argument to the `init` function specifies the data used by your application. This can be data currently in your R session, as in the example above, but also `connectors`, which describe how to "pull" remote data when the application is run. Connectors can pull data from external sources, which may require authentication.
+The `data` argument to the `init` function specifies the data used by your application.
+This can be data currently in your R session, as in the example above, but also `connectors`, which describe how to "pull" remote data when the application is run.
+Connectors can pull data from external sources, which may require authentication.
 
-In the example above we call `teal_data` to convert raw datasets into `teal` specific datasets and to bind them in one `R` object. This function can also be used to specify relationships between different datasets. In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.
+In the example above we call `teal_data` to convert raw datasets into `teal` specific datasets and to bind them in one `R` object.
+This function can also be used to specify relationships between different datasets.
+In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.
 
 For further details we recommend exploring the [`teal.data`](https://insightsengineering.github.io/teal.data/) package documentation.
 
 ### Modules
 
-The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`). We recommend creating applications using predefined `teal` modules. See the references below for links to these modules.
+The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`).
+We recommend creating applications using predefined `teal` modules.
+See the references below for links to these modules.
 
 ### Defining Filters
 
-The optional `filter` argument in `init` allows you to initialize the application with predefined filters. See the documentation for `init` for further details.
+The optional `filter` argument in `init` allows you to initialize the application with predefined filters.
+See the documentation for `init` for further details.
 
 ### Reporting
 
-If any of the `modules` in your `teal` application support reporting (see [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) for more details), users of your application can add the outputs of the modules to a report.  This report can then be downloaded and a special _Report Previewer_ module will be added to your application as an additional tab, where users can view and configure their reports before downloading them.
+If any of the `modules` in your `teal` application support reporting (see [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) for more details), users of your application can add the outputs of the modules to a report.
+This report can then be downloaded and a special _Report Previewer_ module will be added to your application as an additional tab, where users can view and configure their reports before downloading them.
 
 ## Where to go next
 
