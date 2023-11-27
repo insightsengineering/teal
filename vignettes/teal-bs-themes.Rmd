@@ -98,8 +98,8 @@ library(teal)
 
 app <- init(
   data = teal_data(IRIS = iris), # nolint
-  filter = list(IRIS = list(Sepal.Length = c(5, 7))),
-  modules = list(example_module(), example_module()),
+  filter = teal_slices(teal_slice("IRIS", "Sepal.Length", selected = c(5, 7))),
+  modules = modules(example_module(), example_module()),
   header = "My first teal application"
 )
 
@@ -165,11 +165,9 @@ options(
 library(teal)
 
 app <- init(
-  data = teal_data(
-    dataset("IRIS", iris)
-  ),
-  filter = list(IRIS = list(Sepal.Length = c(5, 7))),
-  modules = list(example_module(), example_module())
+  data = teal_data(IRIS = iris),
+  filter = teal_slices(teal_slice("IRIS", "Sepal.Length", selected = c(5, 7))),
+  modules = modules(example_module(), example_module())
 )
 
 shinyApp(app$ui, app$server)
