@@ -32,20 +32,18 @@ Let us consider an example module, based on the example module from `teal`:
 ```{r, message=FALSE}
 library(teal)
 teal_example_module <- function(label = "example teal module") {
-  checkmate::assert_string(label)
   module(
     label,
     server = function(id, data) {
-      checkmate::assert_class(data, "tdata")
       moduleServer(id, function(input, output, session) {
-        output$text <- renderPrint(data[[input$dataname]]())
+        output$text <- renderPrint(data()[[input$dataname]])
       })
     },
     ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datanames(data))
       )
     },
     datanames = "all"
