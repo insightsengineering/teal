@@ -22,16 +22,17 @@ example_module <- function(label = "example teal module") {
   module(
     label,
     server = function(id, data) {
-      checkmate::assert_class(data, "tdata")
+      checkmate::assert_class(data, "reactive")
+      checkmate::assert_class(isolate(data()), "teal_data")
       moduleServer(id, function(input, output, session) {
-        output$text <- renderPrint(data[[input$dataname]]())
+        output$text <- renderPrint(data()[[input$dataname]])
       })
     },
     ui = function(id, data) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datanames(data))
       )
     },
     datanames = "all"
@@ -87,18 +88,14 @@ See the package and function documentation for further details.
 library(teal)
 
 # ui function for the module
-# histogram_var is a teal.transform::data_extract_spec object
-# specifying which columns of which datasets users can choose
-ui_histogram_example <- function(id, histogram_var) {
+# allows for selecting dataset and one of its numeric variables
+ui_histogram_example <- function(id) {
   ns <- NS(id)
   teal.widgets::standard_layout(
     output = plotOutput(ns("plot")),
     encoding = div(
-      teal.transform::data_extract_ui(
-        id = ns("histogram_var"),
-        label = "Variable",
-        data_extract_spec = histogram_var
-      )
+      uiOutput(ns("datasets")),
+      uiOutput(ns("numerics"))
     ),
     # we have a show R code button to show the code needed
     # to generate the histogram
@@ -107,45 +104,49 @@ ui_histogram_example <- function(id, histogram_var) {
 }
 
 # server function for the module
-# histogram_var is a teal.transform::data_extract_spec object
-# specifying which columns of which datasets users can choose
-srv_histogram_example <- function(id, data, histogram_var) {
-  checkmate::assert_class(data, "tdata")
+# presents datasets and numeric variables for selection
+# displays a histogram of the selected variable
+srv_histogram_example <- function(id, data) {
+  checkmate::assert_class(data, "reactive")
+  checkmate::assert_class(isolate(data()), "teal_data")
+
   moduleServer(id, function(input, output, session) {
-    # get the selected dataset and column from the UI
-    extracted <- teal.transform::data_extract_srv(
-      id = "histogram_var",
-      datasets = data,
-      data_extract_spec = histogram_var,
-      join_keys = teal.data::join_keys(data)
-    )
+    ns <- session$ns
 
-    dataname <- reactive(extracted()$dataname)
-    selected <- reactive(extracted()$select)
+    # present dataset and variable choices
+    # each selection stored in separate reactive expression
+    output$datasets <- renderUI({
+      selectInput(ns("datasets"), "select dataset", datanames(data()))
+    })
+    dataset <- reactive(input$datasets)
+    output$numerics <- renderUI({
+      req(dataset())
+      nums <- vapply(data()[[dataset()]], is.numeric, logical(1L))
+      selectInput(ns("numerics"), "select numeric variable", names(nums[nums]))
+    })
+    selected <- reactive(input$numerics)
 
-    # the reactive which adds the code to plot the histogram into the qenv
+    # add plot code
     plot_code_q <- reactive({
-      validate(need(length(selected) == 1, "Please select a variable"))
+      validate(need(length(dataset()) == 1L, "Please select a dataset"))
+      validate(need(length(selected()) == 1L, "Please select a variable"))
+      req(selected() %in% names(data()[[dataset()]]))
 
-      # take the filtered data from the data object and add it into the qenv environment
-      teal.code::new_qenv(tdata2env(data), code = get_code_tdata(data)) %>%
-        teal.code::eval_code(
-          substitute(
-            expr = p <- hist(dataname[, selected]),
-            env = list(
-              dataname = as.name(dataname()),
-              selected = selected()
-            )
-          )
-        )
+      # evaluate plotting expression within data
+      # inject input values into plotting expression
+      within(
+        data(), 
+        p <- hist(dataset[, selected], las = 1), 
+        dataset = as.name(dataset()), selected = selected()
+      )
     })
 
-    # shiny component to view
+    # view plot
     output$plot <- renderPlot({
       plot_code_q()[["p"]]
     })
 
-    # Show the R code when user clicks 'Show R Code' button
+    # code upon clicking 'Show R Code' button
     teal.widgets::verbatim_popup_srv(
       id = "rcode",
       verbatim_content = reactive(teal.code::get_code(plot_code_q())),
@@ -154,17 +155,12 @@ srv_histogram_example <- function(id, data, histogram_var) {
   })
 }
 
-# the function which creates the teal module for users
-tm_histogram_example <- function(label, histogram_var) {
-  checkmate::assert_character(label)
-  checkmate::assert_class(histogram_var, "data_extract_spec")
-
+# function that creates module instance to use in `teal` app
+tm_histogram_example <- function(label) {
   module(
     label = label,
     server = srv_histogram_example,
     ui = ui_histogram_example,
-    ui_args = list(histogram_var = histogram_var),
-    server_args = list(histogram_var = histogram_var),
     datanames = "all"
   )
 }
@@ -179,19 +175,8 @@ An example `teal` application using this module is shown below:
 library(teal)
 
 app <- init(
-  data = teal_data(
-    IRIS = iris,
-    code = "IRIS <- iris"
-  ),
-  modules = tm_histogram_example(
-    label = "Simple Module",
-    histogram_var = data_extract_spec(
-      dataname = "IRIS",
-      select = select_spec(
-        choices = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
-      )
-    )
-  ),
+  data = teal_data(IRIS = iris, NPK = npk),
+  modules = tm_histogram_example(label = "Histogram Module"),
   header = "Simple app with custom histogram module"
 )
 
