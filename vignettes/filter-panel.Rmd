@@ -18,11 +18,7 @@ By default, `init` initializes the filter panel without any active filters but a
 library(teal)
 
 app <- init(
-  data = teal_data(
-    IRIS = iris, CARS = mtcars,
-    code = "IRIS <- iris
-            CARS <- mtcars"
-  ),
+  data = teal_data(IRIS = iris, CARS = mtcars),
   modules = example_module(),
   filter = teal_slices(
     teal_slice(dataname = "IRIS", varname = "Sepal.Length"),
@@ -47,11 +43,7 @@ Each `teal_module` (see `?module`) object contains the `datanames` attribute tha
 library(teal)
 
 app <- init(
-  data = teal_data(
-    IRIS = iris, CARS = mtcars,
-    code = "IRIS <- iris
-            CARS <- mtcars"
-  ),
+  data = teal_data(IRIS = iris, CARS = mtcars),
   modules = modules(
     example_module(label = "all datasets"),
     example_module(label = "IRIS only", datanames = "IRIS"),
