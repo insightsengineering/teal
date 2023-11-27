@@ -83,7 +83,7 @@ This can be data currently in your R session, as in the example above, but also 
 Connectors can pull data from external sources, which may require authentication.
 
 In the example above we call `teal_data` to convert raw datasets into `teal` specific datasets and to bind them in one `R` object.
-This function can also be used to specify relationships between different datasets.
+This function can also be used to specify relationships between different datasets by using the `join_keys` argument.
 In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.
 
 For further details we recommend exploring the [`teal.data`](https://insightsengineering.github.io/teal.data/) package documentation.
