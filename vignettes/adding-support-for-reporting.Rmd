@@ -28,7 +28,7 @@ The entire life cycle of objects involved in creating the report and configuring
 
 ## Custom module
 
-Let us consider the example module from `teal`:
+Let us consider an example module, based on the example module from `teal`:
 ```{r, message=FALSE}
 library(teal)
 teal_example_module <- function(label = "example teal module") {
