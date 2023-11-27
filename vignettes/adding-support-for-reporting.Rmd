@@ -277,7 +277,7 @@ example_reporter_module <- function(label = "Example") {
           card$append_text("Module Table", "header3")
           card$append_table(table_q()[["result"]])
           card$append_text("Show R Code", "header3")
-          card$append_text(paste(teal.code::get_code(table_q()), collapse = "\n"), "verbatim")
+          card$append_text(teal.code::get_code(table_q()), "verbatim")
           if (!comment == "") {
             card$append_text("Comment", "header3")
             card$append_text(comment)
