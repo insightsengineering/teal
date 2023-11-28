@@ -35,7 +35,12 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
     server = function(id) {
       moduleServer(id, function(input, output, session) {
         data <- object$server("mutate_inner")
-        reactive(eval_code(data(), code))
+        eventReactive(data(),
+          {
+            eval_code(data(), code)
+          },
+          ignoreNULL = TRUE
+        )
       })
     }
   )
