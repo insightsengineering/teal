@@ -30,9 +30,11 @@ through the \code{...} argument: as \code{name:value} pairs are passed to \code{
 \examples{
 tdm <- teal_data_module(
   ui = function(id) div(id = shiny::NS(id)("div_id")),
-  server = function(id) shiny::moduleServer(id, function(input, output, session) {
-    shiny::reactive(teal_data(IRIS = iris))
-  })
+  server = function(id) {
+    shiny::moduleServer(id, function(input, output, session) {
+      shiny::reactive(teal_data(IRIS = iris))
+    })
+  }
 )
 \dontrun{
 within(tdm, IRIS <- subset(IRIS, Species == "virginica"))

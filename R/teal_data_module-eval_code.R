@@ -21,7 +21,7 @@ setOldClass("teal_data_module")
 #' eval_code(tdm, "IRIS <- subset(IRIS, Species == 'virginica')")
 #' }
 setMethod("eval_code", signature = c("teal_data_module", "character"), function(object, code) {
-  tdm <- teal_data_module(
+  teal_data_module(
     ui = function(id) {
       ns <- NS(id)
       object$ui(ns("mutate_inner"))
@@ -33,9 +33,6 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
       })
     }
   )
-
-  attr(tdm, "code") <- paste(c(attr(object, "code"), code), collapse = "\n")
-  tdm
 })
 
 #' @rdname eval_code
