@@ -43,6 +43,7 @@ Imports:
     rlang (>= 1.0.0),
     shinyjs,
     stats,
+    teal.code (>= 0.3.0.9009),
     teal.logger (>= 0.1.1),
     teal.reporter (>= 0.2.0),
     teal.widgets (>= 0.4.0),
@@ -56,7 +57,6 @@ Suggests:
     R6,
     rmarkdown (>= 2.19),
     shinyvalidate,
-    teal.code (>= 0.3.0.9009),
     testthat (>= 3.1.5),
     withr (>= 2.1.0),
     yaml (>= 1.1.0)
@@ -98,6 +98,7 @@ Collate:
     'show_rcode_modal.R'
     'tdata.R'
     'teal.R'
+    'teal_data_module-eval_code.R'
     'teal_data_module.R'
     'teal_reporter.R'
     'teal_slices-store.R'
