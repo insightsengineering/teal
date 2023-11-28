@@ -48,7 +48,7 @@ if (interactive()) {
 As shown in the image above, this application consists of several distinct areas:
 
 * <span style="color: #FB6251;">Application Header</span> (title at the top): is the title of the application.
-* <span style="color: #3A88FE;">Teal Modules</span> (bar at the top): in this case a simple module named "example teal module".
+* <span style="color: #3A88FE;">Teal Modules</span> (bar under the title): in this case a simple module named "example teal module".
 * <span style="color: #BF37F3;">Encoding Panel</span> (panel on the left hand side): Module specific UI components, in this case a drop-down to select a dataset name.
 * <span style="color: #96D35F;">Main Output Panel</span> (panel on the middle): The outputs of the module, for this example module the chosen dataset is displayed.
 * <span style="color: #1DC6FC;">Filter Panel</span> (panel on the right hand side): for filtering the data to be passed into all `teal` modules.
