@@ -8,6 +8,7 @@ setOldClass("teal_data_module")
 #' @inheritParams teal.code::eval_code
 #' @return Returns a `teal_data_module` object.
 #' @importMethodsFrom teal.code eval_code
+#' @importFrom methods setMethod
 NULL
 
 #' @rdname eval_code

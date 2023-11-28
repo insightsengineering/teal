@@ -40,6 +40,7 @@ Imports:
     lifecycle (>= 0.2.0),
     logger (>= 0.2.0),
     magrittr (>= 1.5),
+    methods,
     rlang (>= 1.0.0),
     shinyjs,
     stats,
