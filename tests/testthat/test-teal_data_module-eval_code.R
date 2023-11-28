@@ -8,7 +8,7 @@ testthat::test_that("within.teal_data_module returns an object with teal_data_mo
     }
   )
 
-  tdm2 <- within(tdm, IRIS$id <- seq(NROW(IRIS)))
+  tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name_linter.
 
   testthat::expect_s3_class(tdm2, "teal_data_module")
 })
@@ -46,7 +46,7 @@ testthat::test_that("eval_code.teal_data_module modifies the reactive teal_data 
     }
   )
 
-  tdm2 <- eval_code(tdm, expression(IRIS$id <- seq(NROW(IRIS))))
+  tdm2 <- eval_code(tdm, expression(IRIS$id <- seq_len(nrow(IRIS)))) # nolint: object_name_linter.
 
   # Columns were added via eval_code.teal_data_module
   testthat::expect_setequal(
@@ -70,7 +70,7 @@ testthat::test_that("eval_code.teal_data_module modifies the reactive teal_data 
     }
   )
 
-  tdm2 <- eval_code(tdm, quote(IRIS$id <- seq(NROW(IRIS))))
+  tdm2 <- eval_code(tdm, quote(IRIS$id <- seq_len(nrow(IRIS)))) # nolint: object_name.
 
   # Columns were added via eval_code.teal_data_module
   testthat::expect_setequal(
@@ -94,7 +94,7 @@ testthat::test_that("within.teal_data_module modifies the reactive tea_data obje
     }
   )
 
-  tdm2 <- within(tdm, IRIS$id <- seq(NROW(IRIS)))
+  tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name_linter.
 
   # teal_data_modules are different
   testthat::expect_failure(
