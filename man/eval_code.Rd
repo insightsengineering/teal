@@ -2,9 +2,10 @@
 % Please edit documentation in R/teal_data_module-eval_code.R
 \name{eval_code}
 \alias{eval_code}
+\alias{eval_code,teal_data_module,character-method}
 \alias{eval_code,teal_data_module,language-method}
 \alias{eval_code,teal_data_module,expression-method}
-\title{Evaluate the code in the \code{qenv} environment}
+\title{Evaluate the code in the qenv environment}
 \usage{
 \S4method{eval_code}{teal_data_module,character}(object, code)
 
@@ -18,7 +19,7 @@
 \item{code}{(\code{character} or \code{language}) code to evaluate. Also accepts and stores comments}
 }
 \value{
-\code{qenv} object.
+Returns a \code{teal_data_module} object.
 }
 \description{
 Given code is evaluated in the \code{qenv} environment of \code{teal_data} reactive defined in \code{teal_data_module}.

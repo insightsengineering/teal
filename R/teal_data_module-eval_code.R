@@ -1,13 +1,18 @@
 setOldClass("teal_data_module")
 
+#' Evaluate the code in the qenv environment
 #' @name eval_code
 #' @description
 #' Given code is evaluated in the `qenv` environment of `teal_data` reactive defined in `teal_data_module`.
-#'
 #' @param object (`teal_data_module`)
-#' @inherit teal.code::eval_code
+#' @inheritParams teal.code::eval_code
+#' @return Returns a `teal_data_module` object.
 #' @importMethodsFrom teal.code eval_code
+NULL
+
+#' @rdname eval_code
 #' @export
+#'
 #' @examples
 #' tdm <- teal_data_module(
 #'   ui = function(id) div(id = shiny::NS(id)("div_id")),
