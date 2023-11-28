@@ -13,7 +13,7 @@ testthat::test_that("within.teal_data_module returns an object with teal_data_mo
   testthat::expect_s3_class(tdm2, "teal_data_module")
 })
 
-testthat::test_that("eval_code.teal_data_module ui is kept the same with modified namespace", {
+testthat::test_that("eval_code.teal_data_module ui has modified namespace for id", {
   tdm <- teal_data_module(
     ui = function(id) {
       ns <- NS(id)
@@ -31,7 +31,7 @@ testthat::test_that("eval_code.teal_data_module ui is kept the same with modifie
   testthat::expect_match(output_ui$attribs$id, "-mutate_inner-")
 })
 
-testthat::test_that("eval_code.teal_data_module modifies the reactive teal_data object with expression", {
+testthat::test_that("eval_code.teal_data_module modifies the reactive teal_data object with expression parameter", {
   testthat::local_mocked_bindings(
     getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
     .package = "shiny"
@@ -55,7 +55,7 @@ testthat::test_that("eval_code.teal_data_module modifies the reactive teal_data 
   )
 })
 
-testthat::test_that("eval_code.teal_data_module modifies the reactive teal_data object with quoted", {
+testthat::test_that("eval_code.teal_data_module modifies the reactive teal_data object with quoted parameter", {
   testthat::local_mocked_bindings(
     getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
     .package = "shiny"
@@ -111,10 +111,8 @@ testthat::test_that("within.teal_data_module modifies the reactive tea_data obje
   )
 
   # Original teal_data_module was left untouched
-  testthat::expect_failure(
-    testthat::expect_setequal(
-      c(names(iris), "id"),
-      colnames(shiny::isolate(tdm$server("test")()[["IRIS"]]))
-    )
+  testthat::expect_setequal(
+    c(names(iris)),
+    colnames(shiny::isolate(tdm$server("test")()[["IRIS"]]))
   )
 })
