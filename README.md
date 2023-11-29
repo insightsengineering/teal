@@ -123,8 +123,8 @@ This package is a result of a joint efforts by many developers and stakeholders.
 
 ### Stargazers
 
-[![Stargazers repo roster for @insightsengineering/teal](https://reporoster.com/stars/insightsengineering/teal)](https://github.com/insightsengineering/teal/stargazers)
+[![Stargazers repo roster for @insightsengineering/teal](http://reporoster.com/stars/insightsengineering/teal)](https://github.com/insightsengineering/teal/stargazers)
 
 ### Forkers
 
-[![Forkers repo roster for @insightsengineering/teal](https://reporoster.com/forks/insightsengineering/teal)](https://github.com/insightsengineering/teal/network/members)
+[![Forkers repo roster for @insightsengineering/teal](http://reporoster.com/forks/insightsengineering/teal)](https://github.com/insightsengineering/teal/network/members)
