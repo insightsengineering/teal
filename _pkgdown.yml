@@ -58,10 +58,7 @@ articles:
 - title: Data in teal Apps
   navbar: Data in teal Apps
   contents:
-    - including-adam-data-in-teal
-    - including-general-data-in-teal
-    - including-mae-data-in-teal
-    - preprocessing-data
+    - data-in-teal
     - data-as-shiny-module
 - title: Extending teal
   navbar: Extending teal
