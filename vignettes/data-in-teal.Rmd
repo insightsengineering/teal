@@ -232,8 +232,8 @@ Objects created with data objects and code are not verified by default but can b
 ```{r}
 data_with_code
 data_with_objects_and_code
-try(data_with_objects_and_code_verified <- teal.data::verify(data_with_objects_and_code)) # TODO uses `verify` function from main branch
-try(data_with_objects_and_code_verified)
+data_with_objects_and_code_verified <- verify(data_with_objects_and_code)
+data_with_objects_and_code_verified
 ```
 
 
