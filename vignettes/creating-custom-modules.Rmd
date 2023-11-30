@@ -59,12 +59,14 @@ including an encoding panel on the left and main output covering the rest of the
 
 This function contains the shiny server logic for the module and should be of the form:
 
-```
-function(id,
-         data, # optional, use if you want your module to access the application data
-         filter_panel_api, # optional, use if you want access to the filter panel from your module see teal.slice 
-         reporter, # optional, use if your module supports reporting, see reporting vignette in teal 
-         ...) {
+```{r, eval=FALSE}
+function(
+    id,
+    data,  # optional; use if module needs access application data
+    filter_panel_api,  # optional; use if module needs access to filter panel; see teal.slice 
+    reporter,  # optional; use if module supports reporting; see reporting vignette
+    ...
+) {
   moduleServer(id, function(input, output, session) {
     # module code here
   })
