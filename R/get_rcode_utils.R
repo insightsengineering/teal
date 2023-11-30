@@ -38,35 +38,38 @@ get_rcode_str_install <- function() {
 #' @param datasets (`FilteredData`) object
 #' @param hashes named (`list`) of hashes per dataset
 #'
-#' @return `character(3)` containing the following elements:
+#' @return `character(1)` containing a string concatenated from the following elements:
 #'  - data pre-processing code (from `data` argument in `init`)
 #'  - hash check of loaded objects
 #'  - filter code
 #'
 #' @keywords internal
 get_datasets_code <- function(datanames, datasets, hashes) {
+  # preprocessing code
   str_prepro <- teal.data:::get_code_dependency(attr(datasets, "preprocessing_code"), names = datanames)
-  str_prepro <- ifelse(length(str_prepro) == 0, "message('Preprocessing is empty')", str_prepro)
-  str_prepro <- sprintf("%s\n\n", paste(str_prepro, collapse = "\n"))
+  if (length(str_prepro) == 0) {
+    str_prepro <- "message('Preprocessing is empty')"
+  } else {
+    str_prepro <- paste(str_prepro, collapse = "\n")
+  }
 
-  str_hash <- paste(
-    vapply(
-      datanames,
-      function(dataname) {
-        sprintf(
-          "stopifnot(%s == %s)",
-          deparse1(bquote(rlang::hash(.(as.name(dataname))))),
-          deparse1(hashes[[dataname]])
-        )
-      },
-      character(1)
-    ),
-    collapse = "\n"
-  )
-  str_hash <- sprintf("%s\n\n", str_hash)
+  # hash checks
+  str_hash <- vapply(datanames, function(dataname) {
+    sprintf(
+      "stopifnot(%s == %s)",
+      deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+      deparse1(hashes[[dataname]])
+    )
+  }, character(1))
+  str_hash <- paste(str_hash, collapse = "\n")
 
-
+  # filter expressions
   str_filter <- teal.slice::get_filter_expr(datasets, datanames)
+  if (str_filter == "") {
+    str_filter <- character(0)
+  }
 
-  c(str_prepro, str_hash, str_filter)
+  # concatenate all code
+  str_code <- paste(c(str_prepro, str_hash, str_filter), collapse = "\n\n")
+  sprintf("%s\n", str_code)
 }
