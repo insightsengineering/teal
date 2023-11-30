@@ -64,16 +64,14 @@ This function contains the shiny server logic for the module and should be of th
 ```{r, eval=FALSE}
 function(
     id,
-    data,  # optional; use if module needs access application data
-    filter_panel_api,  # optional; use if module needs access to filter panel; see teal.slice 
-    reporter,  # optional; use if module supports reporting; see reporting vignette
-    ...
-) {
+    data, # optional; use if module needs access application data
+    filter_panel_api, # optional; use if module needs access to filter panel; see teal.slice
+    reporter, # optional; use if module supports reporting; see reporting vignette
+    ...) {
   moduleServer(id, function(input, output, session) {
     # module code here
   })
 }
-
 ```
 
 When used inside a `teal` application called with `init`, the `data` argument is a named list of reactive `data.frame`s containing the data after having been filtered through the filter panel.
