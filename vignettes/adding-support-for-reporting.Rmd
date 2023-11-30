@@ -26,7 +26,7 @@ The responsibilities of a module developer include:
 
 The entire life cycle of objects involved in creating the report and configuring the module to preview the report is handled by `teal`.
 
-## Custom module
+## Custom Module
 
 Let us consider an example module, based on the example module from `teal`:
 ```{r, message=FALSE}
@@ -62,12 +62,13 @@ app <- init(
 if (interactive()) shinyApp(app$ui, app$server)
 ```
 
-## Add support for Reporting
+## Add Support for Reporting
 
 ### Modify the declaration of the server function
 
 The first step is to add an additional argument to the server function declaration - `reporter`. 
-his informs `teal` that the module requires `reporter`, and it will be included when the module is called. See below:
+This informs `teal` that the module requires `reporter`, and it will be included when the module is called.
+See below:
 
 ```{r}
 example_module_with_reporting <- function(label = "example teal module") {
@@ -103,9 +104,9 @@ if (interactive()) shinyApp(app$ui, app$server)
 
 `teal` adds another tab to the application, titled `Report previewer`.
 However, there is no visible change in how the module operates and appears and the user cannot add content to the report from this module.
-That requires inserting `teal.reporter` `ui` and `server` elements into the module body.
+That requires inserting `ui` and `server` elements of the `teal.reporter` module into the module body.
 
-### Insert `UI` and supporting `shiny` modules for adding report cards
+### Insert `teal.reporter` module
 
 The UI and the server logic necessary for adding cards from `example_module_with_reporting` to the report are provided by `teal.reporter::simple_reporter_ui` and `teal.reporter::simple_reporter_srv`.
 
