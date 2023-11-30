@@ -1,5 +1,6 @@
 #' Create a `tdata` Object
 #'
+#' @description `r lifecycle::badge("deprecated")`
 #' Create a new object called `tdata` which contains `data`, a `reactive` list of data.frames
 #' (or `MultiAssayExperiment`), with attributes:
 #' \itemize{
@@ -37,13 +38,21 @@
 #' isolate(data[["iris"]]())
 #'
 #' # Get code
-#' isolate(get_code(data))
+#' isolate(get_code_tdata(data))
 #'
 #' # Get metadata
 #' get_metadata(data, "iris")
 #'
 #' @export
 new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
+  lifecycle::deprecate_soft(
+    when = "0.99.0",
+    what = "tdata()",
+    details = paste(
+      "tdata is deprecated and will be removed in the next release. Use `teal_data` instead.\n",
+      "Please follow migration instructions https://github.com/insightsengineering/teal/discussions/987."
+    )
+  )
   checkmate::assert_list(
     data,
     any.missing = FALSE, names = "unique",
@@ -54,7 +63,6 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
 
   checkmate::assert_list(metadata, names = "unique", null.ok = TRUE)
   checkmate::assert_subset(names(metadata), names(data))
-  for (m in metadata) teal.data::validate_metadata(m)
 
   if (is.reactive(code)) {
     isolate(checkmate::assert_class(code(), "character", .var.name = "code"))
@@ -104,15 +112,6 @@ tdata2env <- function(data) { # nolint
   list2env(lapply(data, function(x) if (is.reactive(x)) x() else x))
 }
 
-#' @rdname tdata
-#' @param x a `tdata` object
-#' @param ... additional arguments for the generic
-#' @export
-get_code.tdata <- function(x, ...) { # nolint
-  # note teal.data which teal depends on defines the get_code method
-  attr(x, "code")()
-}
-
 
 #' Wrapper for `get_code.tdata`
 #' This wrapper is to be used by downstream packages to extract the code of a `tdata` object
@@ -123,7 +122,7 @@ get_code.tdata <- function(x, ...) { # nolint
 #' @export
 get_code_tdata <- function(data) {
   checkmate::assert_class(data, "tdata")
-  get_code(data)
+  attr(data, "code")()
 }
 
 #' Extract `join_keys` from `tdata`

@@ -18,9 +18,9 @@ must return reactive expression containing \code{teal_data} object}
 Object of class \code{teal_data_module}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Creates \code{teal_data_module} object - a \code{shiny} module to supply or modify data in a \code{teal} application.
-}
-\details{
+
 This function creates a \code{shiny} module that allows for running data pre-processing code after the app starts.
 The body of the server function will be run in the app rather than in the global environment.
 This means it will be run every time the app starts, so use sparingly.

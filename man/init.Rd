@@ -15,16 +15,10 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
-or \code{MultiAssayExperiment}, \code{teal_data}, \code{teal_data_module})\cr
-\code{R6} object as returned by \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}}, \code{\link[teal.data:teal_data]{teal.data::teal_data()}},
-\code{\link[teal.data:TealData]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:TealData]{teal.data::dataset()}}, \code{\link[teal.data:TealData]{teal.data::dataset_connector()}} or
-\code{\link[teal.data:TealData]{teal.data::cdisc_dataset_connector()}} or \code{\link[=teal_data_module]{teal_data_module()}} or a single \code{data.frame} or
-a \code{MultiAssayExperiment}
-or a list of the previous objects or function returning a named list.
-NOTE: teal does not guarantee reproducibility of the code when names of the list elements
-do not match the original object names. To ensure reproducibility please use \code{\link[teal.data:teal_data]{teal.data::teal_data()}}
-or \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}} with \code{check = TRUE} enabled.}
+\item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})\cr
+\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or
+\code{teal_data_modules} or simply a list of a named list of objects
+(\code{data.frame} or \code{MultiAssayExperiment}).}
 
 \item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
 nested list of \code{teal_modules} or \code{teal_module} objects or a single

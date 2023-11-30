@@ -51,11 +51,11 @@
 #' )
 #'
 #' app <- teal::init(
+#'   data = list(iris = iris, mtcars = mtcars),
 #'   modules = list(
 #'     module("module1"),
 #'     module("module2")
 #'   ),
-#'   data = list(iris, mtcars),
 #'   filter = filter
 #' )
 #'

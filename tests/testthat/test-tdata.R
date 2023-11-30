@@ -1,3 +1,5 @@
+withr::local_options(lifecycle_verbosity = "quiet")
+
 # ---- constructor ----
 testthat::test_that("new_tdata accepts reactive and not reactive MAE and data.frames", {
   utils::data(miniACC, package = "MultiAssayExperiment")
@@ -138,7 +140,7 @@ testthat::test_that("get_metadata returns NULL if dataset doesn't exist", {
 # ---- get_code ----
 testthat::test_that("get_code returns empty character if tdata object has no code", {
   my_tdata <- new_tdata(data = list(iris = iris, mtcars = mtcars))
-  testthat::expect_equal("", isolate(get_code(my_tdata)))
+  testthat::expect_equal("", isolate(get_code_tdata(my_tdata)))
 })
 
 testthat::test_that("get_code returns character of code if tdata object has code", {
@@ -149,14 +151,14 @@ testthat::test_that("get_code returns character of code if tdata object has code
     data = list(x = iris, mtcars = head(mtcars)),
     code = reactive(code_string)
   )
-  testthat::expect_equal(isolate(get_code(my_tdata)), code_string)
+  testthat::expect_equal(isolate(get_code_tdata(my_tdata)), code_string)
 
   # not reactive case (for constructor)
   my_tdata <- new_tdata(
     data = list(x = iris, mtcars = head(mtcars)),
     code = code_string
   )
-  testthat::expect_equal(isolate(get_code(my_tdata)), code_string)
+  testthat::expect_equal(isolate(get_code_tdata(my_tdata)), code_string)
 })
 
 # ---- get_code wrapper ----

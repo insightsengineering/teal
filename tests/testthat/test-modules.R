@@ -1,10 +1,3 @@
-dataset_1 <- teal.data::dataset("iris", head(iris))
-adsl_df <- as.data.frame(as.list(setNames(nm = teal.data::get_cdisc_keys("ADSL"))))
-adsl_dataset <- teal.data::cdisc_dataset(
-  "ADSL", adsl_df,
-  parent = character(0), keys = teal.data::get_cdisc_keys("ADSL")
-)
-
 call_module_server_fun <- function(input, output, session, data, datasets) {
 }
 
