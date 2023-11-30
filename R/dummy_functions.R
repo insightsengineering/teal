@@ -96,9 +96,7 @@ example_module <- function(label = "example teal module", datanames = "all") {
       checkmate::assert_class(data(), "teal_data")
       moduleServer(id, function(input, output, session) {
         ns <- session$ns
-        output$datanames <- renderUI({
-          selectInput(ns("dataname"), "Choose a dataset", choices = teal.data::datanames(data()))
-        })
+        updateSelectInput(session, "dataname", choices = isolate(teal.data::datanames(data())))
         output$text <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]
@@ -115,7 +113,7 @@ example_module <- function(label = "example teal module", datanames = "all") {
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
         encoding = div(
-          uiOutput(ns("datanames")),
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
           teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
         )
       )
