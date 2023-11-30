@@ -25,14 +25,16 @@ example_module <- function(label = "example teal module") {
       checkmate::assert_class(data, "reactive")
       checkmate::assert_class(isolate(data()), "teal_data")
       moduleServer(id, function(input, output, session) {
+        ns <- session$ns
+        updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
         output$text <- renderPrint(data()[[input$dataname]])
       })
     },
-    ui = function(id, data) {
+    ui = function(id) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = datanames(data))
+        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
       )
     },
     datanames = "all"
@@ -59,12 +61,14 @@ including an encoding panel on the left and main output covering the rest of the
 
 This function contains the shiny server logic for the module and should be of the form:
 
-```
-function(id,
-         data, # optional, use if you want your module to access the application data
-         filter_panel_api, # optional, use if you want access to the filter panel from your module see teal.slice 
-         reporter, # optional, use if your module supports reporting, see reporting vignette in teal 
-         ...) {
+```{r, eval=FALSE}
+function(
+    id,
+    data,  # optional; use if module needs access application data
+    filter_panel_api,  # optional; use if module needs access to filter panel; see teal.slice 
+    reporter,  # optional; use if module supports reporting; see reporting vignette
+    ...
+) {
   moduleServer(id, function(input, output, session) {
     # module code here
   })
@@ -97,8 +101,8 @@ ui_histogram_example <- function(id) {
   teal.widgets::standard_layout(
     output = plotOutput(ns("plot")),
     encoding = div(
-      uiOutput(ns("datasets")),
-      uiOutput(ns("numerics"))
+      selectInput(ns("datasets"), "select dataset", choices = NULL),
+      selectInput(ns("numerics"), "select numeric variable", choices = NULL)
     ),
     # we have a show R code button to show the code needed
     # to generate the histogram
@@ -116,17 +120,15 @@ srv_histogram_example <- function(id, data) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    # present dataset and variable choices
+    # update dataset and variable choices
     # each selection stored in separate reactive expression
-    output$datasets <- renderUI({
-      selectInput(ns("datasets"), "select dataset", datanames(data()))
-    })
-    dataset <- reactive(input$datasets)
-    output$numerics <- renderUI({
+    updateSelectInput(session, "datasets", "select dataset", choices = isolate(datanames(data())))
+    observe({
       req(dataset())
       nums <- vapply(data()[[dataset()]], is.numeric, logical(1L))
-      selectInput(ns("numerics"), "select numeric variable", names(nums[nums]))
+      updateSelectInput(session, "numerics", "select numeric variable", choices = names(nums[nums]))
     })
+    dataset <- reactive(input$datasets)
     selected <- reactive(input$numerics)
 
     # add plot code
