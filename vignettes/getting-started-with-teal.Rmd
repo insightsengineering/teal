@@ -83,7 +83,7 @@ In the example above this is data that exists in the global environment.
 We call `teal_data` to bind all datasets into one R object of class `teal_data`.
 We could also specify relationships between the datasets using the `join_keys` argument but in this case the datasets are not related.
 If data is not available and has to be pulled from a remote source, `init` must receive a `teal_data_module` that specifies how to obtain the desired datasets and put them into a `teal_data` object.
-See [this vignette](https://insightsengineering.github.io/teal/latest-tag/articles/data-as-shiny-module.html) for details.
+See [this vignette](data-as-shiny-module.html) for details.
 
 In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.
 
