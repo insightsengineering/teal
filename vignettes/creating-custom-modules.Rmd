@@ -138,8 +138,8 @@ srv_histogram_example <- function(id, data) {
       # evaluate plotting expression within data
       # inject input values into plotting expression
       within(
-        data(), 
-        p <- hist(dataset[, selected], las = 1), 
+        data(),
+        p <- hist(dataset[, selected], las = 1),
         dataset = as.name(dataset()), selected = selected()
       )
     })
