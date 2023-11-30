@@ -29,7 +29,6 @@ ui_teal_with_splash <- function(id,
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
-
   splash_ui <- if (inherits(data, "teal_data_module")) {
     data$ui(ns("teal_data_module"))
   } else if (inherits(data, "teal_data")) {

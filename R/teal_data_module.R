@@ -34,7 +34,7 @@
 #'             dataset2 <- mtcars
 #'           }
 #'         )
-#'         datanames(data) <- c("iris", "mtcars")
+#'         datanames(data) <- c("dataset1", "dataset2")
 #'
 #'         data
 #'       })
