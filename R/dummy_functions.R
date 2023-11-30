@@ -95,7 +95,12 @@ example_module <- function(label = "example teal module", datanames = "all") {
     server = function(id, data) {
       checkmate::assert_class(data(), "teal_data")
       moduleServer(id, function(input, output, session) {
-        output$text <- renderPrint(data()[[input$dataname]])
+        ns <- session$ns
+        updateSelectInput(session, "dataname", choices = isolate(teal.data::datanames(data())))
+        output$text <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
         teal.widgets::verbatim_popup_srv(
           id = "rcode",
           verbatim_content = reactive(teal.code::get_code(data())),
@@ -103,12 +108,12 @@ example_module <- function(label = "example teal module", datanames = "all") {
         )
       })
     },
-    ui = function(id, data) {
+    ui = function(id) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
         encoding = div(
-          selectInput(ns("dataname"), "Choose a dataset", choices = teal.data::datanames(data)),
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
           teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
         )
       )
