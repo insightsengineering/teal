@@ -48,20 +48,17 @@ articles:
 - title: Get Started
   navbar: ~
   contents:
-    - teal
+    - getting-started-with-teal
 - title: Using teal
   navbar: Using teal
   contents:
     - filter-panel
     - teal-options
-    - teal-bs-themes
+    - bootstrap-themes-in-teal
 - title: Data in teal Apps
   navbar: Data in teal Apps
   contents:
-    - including-adam-data-in-teal
-    - including-general-data-in-teal
-    - including-mae-data-in-teal
-    - preprocessing-data
+    - including-data-in-teal-applications
     - data-as-shiny-module
 - title: Extending teal
   navbar: Extending teal
@@ -114,6 +111,7 @@ reference:
       - landing_popup_module
   - title: Functions for Module Developers
     contents:
+      - as_tdata
       - tdata
       - get_code_tdata
       - get_metadata

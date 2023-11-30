@@ -47,11 +47,11 @@ if (interactive()) {
 
 As shown in the image above, this application consists of several distinct areas:
 
-* Application header: the title of the application shown at the top.
-* `teal` modules (bar at the top): in this case a simple module named "example teal module".
-* Encoding panel (panel on the left hand side): Module specific UI components, in this case a drop-down to select a dataset name.
-* Main output panel (panel on the middle): The outputs of the module, for this example module the chosen dataset is displayed.
-* Filter panel (panels on the right hand side): for filtering the data to be passed into all `teal` modules.
+* <span style="color: #FB6251;">Application Header</span> (title at the top): is the title of the application.
+* <span style="color: #3A88FE;">Teal Modules</span> (bar under the title): in this case a simple module named "example teal module".
+* <span style="color: #BF37F3;">Encoding Panel</span> (panel on the left hand side): Module specific UI components, in this case a drop-down to select a dataset name.
+* <span style="color: #96D35F;">Main Output Panel</span> (panel on the middle): The outputs of the module, for this example module the chosen dataset is displayed.
+* <span style="color: #1DC6FC;">Filter Panel</span> (panel on the right hand side): for filtering the data to be passed into all `teal` modules.
 
 ### Encoding panel
 
@@ -70,7 +70,7 @@ In the example below:
 * For the `IRIS` dataset, only rows satisfying the conditions `Petal.Length >= 3.4` and `Species %in% c("setosa", "virginica")` are included, thereby keeping 50 rows.
 * For the `MTCARS` dataset, only rows satisfying the condition `cyl %in% c(4, 6)` are included, thereby keeping 18 rows.
 
-<img src="images/filter_panel.png" alt="Example filter panel" style="width: 100%;"/>
+<img src="images/filter_panel.png" alt="Example filter panel" style = "display: block; margin: auto; width: 45%"/>
 
 ## Creating your own applications
 
@@ -78,23 +78,32 @@ The key function to use to create your `teal` application is `init`, which requi
 
 ### Application Data
 
-The `data` argument to the `init` function specifies the data used by your application. This can be data currently in your R session, as in the example above, but also `connectors`, which describe how to "pull" remote data when the application is run. Connectors can pull data from external sources, which may require authentication.
+The `data` argument to the `init` function specifies the data used by your application.
+In the example above this is data that exists in the global environment.
+We call `teal_data` to bind all datasets into one R object of class `teal_data`.
+We could also specify relationships between the datasets using the `join_keys` argument but in this case the datasets are not related.
+If data is not available and has to be pulled from a remote source, `init` must receive a `teal_data_module` that specifies how to obtain the desired datasets and put them into a `teal_data` object.
+See [this vignette](data-as-shiny-module.html) for details.
 
-In the example above we call `teal_data` to convert raw datasets into `teal` specific datasets and to bind them in one `R` object. This function can also be used to specify relationships between different datasets. In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.
+In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.
 
 For further details we recommend exploring the [`teal.data`](https://insightsengineering.github.io/teal.data/) package documentation.
 
 ### Modules
 
-The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`). We recommend creating applications using predefined `teal` modules. See the references below for links to these modules.
+The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`).
+We recommend creating applications using predefined `teal` modules.
+See the references below for links to these modules.
 
 ### Defining Filters
 
-The optional `filter` argument in `init` allows you to initialize the application with predefined filters. See the documentation for `init` for further details.
+The optional `filter` argument in `init` allows you to initialize the application with predefined filters.
+See the documentation for `init` for further details.
 
 ### Reporting
 
-If any of the `modules` in your `teal` application support reporting (see [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) for more details), users of your application can add the outputs of the modules to a report.  This report can then be downloaded and a special _Report Previewer_ module will be added to your application as an additional tab, where users can view and configure their reports before downloading them.
+If any of the `modules` in your `teal` application support reporting (see [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) for more details), users of your application can add the outputs of the modules to a report.
+This report can then be downloaded and a special _Report Previewer_ module will be added to your application as an additional tab, where users can view and configure their reports before downloading them.
 
 ## Where to go next
 

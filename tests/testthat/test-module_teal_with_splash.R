@@ -128,41 +128,6 @@ testthat::test_that(
   }
 )
 
-
-testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns NULL before loading", {
-  x <- dataset_connector(dataname = "test_dataset", pull_callable = callable_code("iris"))
-  delayed_data <- teal_data(x)
-  shiny::testServer(
-    app = srv_teal_with_splash,
-    args = list(
-      id = "test",
-      data = delayed_data,
-      modules = modules(example_module())
-    ),
-    expr = testthat::expect_null(raw_data())
-  )
-})
-
-testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns pulled data when loaded", {
-  teal.logger::suppress_logs()
-  x <- dataset_connector(dataname = "iris", pull_callable = callable_code("iris"))
-  delayed_data <- teal_data(x)
-  shiny::testServer(
-    app = srv_teal_with_splash,
-    args = list(
-      id = "test",
-      data = delayed_data,
-      modules = modules(example_module())
-    ),
-    expr = {
-      testthat::expect_null(raw_data())
-      session$setInputs(`startapp_module-submit` = TRUE) # DDL has independent session id (without ns)
-      testthat::expect_is(raw_data(), "teal_data")
-      testthat::expect_identical(raw_data()[["iris"]], iris)
-    }
-  )
-})
-
 testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when incompatible module's datanames", {
   shiny::testServer(
     app = srv_teal_with_splash,

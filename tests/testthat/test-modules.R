@@ -1,21 +1,10 @@
-dataset_1 <- teal.data::dataset("iris", head(iris))
-adsl_df <- as.data.frame(as.list(setNames(nm = teal.data::get_cdisc_keys("ADSL"))))
-adsl_dataset <- teal.data::cdisc_dataset(
-  "ADSL", adsl_df,
-  parent = character(0), keys = teal.data::get_cdisc_keys("ADSL")
-)
-
-call_module_server_fun <- function(input, output, session, data, datasets) {
+call_module_server_fun <- function(input, output, session, data) {
 }
 
-module_server_fun <- function(id, datasets) {
+module_server_fun <- function(id, data) {
 }
 
 ui_fun1 <- function(id, ...) {
-  tags$p(paste0("id: ", id))
-}
-
-ui_fun2 <- function(id, datasets) {
   tags$p(paste0("id: ", id))
 }
 
@@ -34,6 +23,14 @@ testthat::test_that("module requires label argument to be a string different tha
 
   testthat::expect_error(module(label = "global_filters"), "is reserved in teal")
 })
+
+testthat::test_that("module warns when server contains datasets argument", {
+  testthat::expect_warning(
+    module(server = function(id, datasets) NULL),
+    "`datasets` argument in the `server` is deprecated"
+  )
+})
+
 
 testthat::test_that("module expects server being a shiny server module with any argument", {
   testthat::expect_no_error(module(server = function(id) NULL))
@@ -79,6 +76,11 @@ testthat::test_that("module requires ui_args argument to be a list", {
   testthat::expect_no_error(module(ui_args = NULL))
   testthat::expect_error(module(ui_args = ""), "Assertion on 'ui_args' failed.+'list'")
   testthat::expect_error(module(ui_args = list(1, 2, 3)), "Must have names")
+})
+
+testthat::test_that("module throws when ui has data or datasets argument", {
+  testthat::expect_error(module(ui = function(id, data) NULL))
+  testthat::expect_error(module(ui = function(id, datasets) NULL))
 })
 
 testthat::test_that("module expects ui being a shiny ui module with any argument", {
@@ -388,7 +390,7 @@ testthat::test_that("is_arg_used throws error if object is not teal_module or te
 })
 
 testthat::test_that("is_arg_used returns true if teal_module has given `arg` in server function args", {
-  testthat::expect_true(is_arg_used(module(server = function(id, datasets, reporter) NULL), "reporter"))
+  testthat::expect_true(is_arg_used(module(server = function(id, data, reporter) NULL), "reporter"))
 })
 
 testthat::test_that("is_arg_used returns false if teal_module does not have reporter in server function args", {
@@ -406,7 +408,7 @@ testthat::test_that("is_arg_used returns false if teal_modules has no children u
 })
 
 testthat::test_that("is_arg_used returns true if teal_modules has at least one child using given `arg`", {
-  server_fun_with_reporter <- function(id, datasets, reporter) NULL
+  server_fun_with_reporter <- function(id, data, reporter) NULL
 
   mod <- module()
   mod_with_reporter <- module(server = server_fun_with_reporter)

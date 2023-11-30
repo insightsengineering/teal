@@ -46,7 +46,7 @@ shapes the navigation panel of a \code{teal} application.
 library(shiny)
 
 app <- init(
-  data = teal_data(dataset("iris", iris)),
+  data = teal_data(iris = iris),
   modules = modules(
     label = "Modules",
     modules(

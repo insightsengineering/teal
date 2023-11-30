@@ -45,8 +45,6 @@ the \code{filters} argument.
 \item{ui}{(\code{function}) Shiny \code{ui} module function with following arguments:
 \itemize{
 \item \code{id} - teal will set proper shiny namespace for this module.
-\item \code{data} (optional)  module will receive list of reactive (filtered) data specified in the \code{filters} argument.
-\item \code{datasets} (optional)  module will receive \code{FilteredData}. (See \verb{[teal.slice::FilteredData]}).
 \item \code{...} (optional) \code{ui_args} elements will be passed to the module named argument or to the \code{...}.
 }}
 
@@ -82,7 +80,7 @@ This function embeds a \code{shiny} module inside a \code{teal} application. One
 library(shiny)
 
 app <- init(
-  data = teal_data(dataset("iris", iris)),
+  data = teal_data(iris = iris),
   modules = list(
     module(
       label = "Module",
