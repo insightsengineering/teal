@@ -7,6 +7,12 @@
 * Filter state snapshots can now be uploaded from file. See `?snapshot`.
 * Added `as_tdata` function to facilitate migration of modules to the new `teal_data` class.
 
+### Breaking changes
+
+* `tdata` has been deprecated and replaced with `teal_data`. Support for `tdata` as `data` argument in the `module(server)` will be removed in the next release.
+* `module(ui)` argument no longer accepts `data` and `datasets` arguments. Data dependent logic should be set in the `server` function.
+* `module(server)` argument deprecated a `datasets` argument. `teal_module`'s `server` should accept `data` (`teal_data`) instead.
+
 ### Miscellaneous
 
 * Enhanced a `module` validation checks so that it won't throw messages about `data` argument unnecessarily.

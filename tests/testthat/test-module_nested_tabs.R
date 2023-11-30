@@ -249,10 +249,12 @@ testthat::test_that("srv_nested_tabs.teal_module passes data to the server modul
   )
 })
 
-testthat::test_that("srv_nested_tabs.teal_module passes datasets to the server module", {
-  module <- module(server = function(id, datasets) {
-    moduleServer(id, function(input, output, session) checkmate::assert_class(datasets, "FilteredData"))
-  })
+testthat::test_that("srv_nested_tabs.teal_module passes (deprecated) datasets to the server module", {
+  module <- lifecycle::expect_deprecated(
+    module(server = function(id, datasets) {
+      moduleServer(id, function(input, output, session) checkmate::assert_class(datasets, "FilteredData"))
+    })
+  )
 
   testthat::expect_error(
     shiny::testServer(
@@ -287,26 +289,6 @@ testthat::test_that("srv_nested_tabs.teal_module passes server_args to the ...",
       expr = NULL
     ),
     NA
-  )
-})
-
-testthat::test_that("srv_nested_tabs.teal_module warns if both data and datasets are passed", {
-  module <- module(datanames = NULL, label = "test module", server = function(id, datasets, data) {
-    moduleServer(id, function(input, output, session) NULL)
-  })
-
-  testthat::expect_warning(
-    shiny::testServer(
-      app = srv_nested_tabs,
-      args = list(
-        id = "test",
-        datasets = list(`test module` = filtered_data),
-        modules = modules(module),
-        reporter = teal.reporter::Reporter$new()
-      ),
-      expr = NULL
-    ),
-    "Module 'test module' has `data` and `datasets` arguments in the formals"
   )
 })
 

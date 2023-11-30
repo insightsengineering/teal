@@ -115,15 +115,6 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
   args <- c(list(id = ns("module")), args)
 
-  if (is_arg_used(modules$ui, "datasets")) {
-    args <- c(args, datasets = datasets)
-  }
-
-  if (is_arg_used(modules$ui, "data")) {
-    data <- .datasets_to_data(modules, datasets)
-    args <- c(args, data = list(data))
-  }
-
   teal_ui <- tags$div(
     id = id,
     class = "teal_module",
@@ -250,13 +241,6 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     if (is_arg_used(modules$server, "filter_panel_api")) {
       filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets)
       args <- c(args, filter_panel_api = filter_panel_api)
-    }
-
-    if (is_arg_used(modules$server, "datasets") && is_arg_used(modules$server, "data")) {
-      warning(
-        "Module '", modules$label, "' has `data` and `datasets` arguments in the formals.",
-        "\nIt's recommended to use `data` to work with filtered objects."
-      )
     }
 
     # observe the trigger_module above to induce the module once the renderUI is triggered
