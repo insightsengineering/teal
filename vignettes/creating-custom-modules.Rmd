@@ -101,8 +101,8 @@ ui_histogram_example <- function(id) {
   teal.widgets::standard_layout(
     output = plotOutput(ns("plot")),
     encoding = div(
-      uiOutput(ns("datasets")),
-      uiOutput(ns("numerics"))
+      selectInput(ns("datasets"), "select dataset", choices = NULL),
+      selectInput(ns("numerics"), "select numeric variable", choices = NULL)
     ),
     # we have a show R code button to show the code needed
     # to generate the histogram
@@ -120,17 +120,15 @@ srv_histogram_example <- function(id, data) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    # present dataset and variable choices
+    # update dataset and variable choices
     # each selection stored in separate reactive expression
-    output$datasets <- renderUI({
-      selectInput(ns("datasets"), "select dataset", datanames(data()))
+    updateSelectInput(session, "datasets", "select dataset", choices = isolate(datanames(data())))
+    observeEvent(dataset(), {
+      nums <- vapply(data()[[dataset()]], is.numeric, logical(1L))
+      updateSelectInput(session, "numerics", "select numeric variable", choices = names(nums[nums]))
+
     })
     dataset <- reactive(input$datasets)
-    output$numerics <- renderUI({
-      req(dataset())
-      nums <- vapply(data()[[dataset()]], is.numeric, logical(1L))
-      selectInput(ns("numerics"), "select numeric variable", names(nums[nums]))
-    })
     selected <- reactive(input$numerics)
 
     # add plot code
