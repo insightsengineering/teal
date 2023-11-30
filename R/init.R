@@ -10,16 +10,10 @@
 #' End-users: This is the most important function for you to start a
 #' teal app that is composed out of teal modules.
 #'
-#' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
-#' or `MultiAssayExperiment`, `teal_data`, `teal_data_module`)\cr
-#' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()],
-#' [teal.data::cdisc_dataset()], [teal.data::dataset()], [teal.data::dataset_connector()] or
-#' [teal.data::cdisc_dataset_connector()] or [teal_data_module()] or a single `data.frame` or
-#' a `MultiAssayExperiment`
-#' or a list of the previous objects or function returning a named list.
-#' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
-#' do not match the original object names. To ensure reproducibility please use [teal.data::teal_data()]
-#' or [teal.data::cdisc_data()] with `check = TRUE` enabled.
+#' @param data (`teal_data`, `teal_data_module`, `named list`)\cr
+#' `teal_data` object as returned by [teal.data::teal_data()] or
+#' `teal_data_modules` or simply a list of a named list of objects
+#' (`data.frame` or `MultiAssayExperiment`).
 #' @param modules (`list`, `teal_modules` or `teal_module`)\cr
 #'   nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
@@ -50,13 +44,10 @@
 #' @include modules.R
 #'
 #' @examples
-#' new_iris <- transform(iris, id = seq_len(nrow(iris)))
-#' new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
-#'
 #' app <- init(
 #'   data = teal_data(
-#'     dataset("new_iris", new_iris),
-#'     dataset("new_mtcars", new_mtcars),
+#'     new_iris = transform(iris, id = seq_len(nrow(iris))),
+#'     new_mtcars = transform(mtcars, id = seq_len(nrow(mtcars))),
 #'     code = "
 #'       new_iris <- transform(iris, id = seq_len(nrow(iris)))
 #'       new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
@@ -74,7 +65,7 @@
 #'       "Iris Sepal.Length histogram",
 #'       server = function(input, output, session, data) {
 #'         output$hist <- renderPlot(
-#'           hist(data[["new_iris"]]()$Sepal.Length)
+#'           hist(data()[["new_iris"]]$Sepal.Length)
 #'         )
 #'       },
 #'       ui = function(id, ...) {
@@ -111,11 +102,22 @@ init <- function(data,
                  footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  if (!inherits(data, c("TealData", "teal_data", "teal_data_module"))) {
-    data <- teal.data::to_relational_data(data = data)
+  if (is.list(data)) {
+    checkmate::assert_list(data, names = "named")
+    data <- do.call(teal.data::teal_data, data)
+  }
+  if (inherits(data, "TealData")) {
+    lifecycle::deprecate_stop(
+      when = "0.99.0",
+      what = "init(data)",
+      paste(
+        "TealData is no longer supported. Use teal_data() instead.",
+        "Please follow migration instructions https://github.com/insightsengineering/teal/discussions/988."
+      )
+    )
   }
 
-  checkmate::assert_multi_class(data, c("TealData", "teal_data", "teal_data_module"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert(
@@ -217,10 +219,6 @@ init <- function(data,
       if (length(landing) == 1L) {
         landing_module <- landing[[1L]]
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
-      }
-      if (inherits(data, "TealDataAbstract")) {
-        # copy TealData so that load won't be shared between the session
-        data <- data$copy(deep = TRUE)
       }
       filter <- deep_copy_filter(filter)
       srv_teal_with_splash(id = id, data = data, modules = modules, filter = filter)

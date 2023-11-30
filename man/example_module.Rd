@@ -25,8 +25,8 @@ A \code{teal} module which can be included in the \code{modules} argument to \co
 \examples{
 app <- init(
   data = teal_data(
-    dataset("IRIS", iris),
-    dataset("MTCARS", mtcars)
+    IRIS = iris,
+    MTCARS = mtcars
   ),
   modules = example_module()
 )

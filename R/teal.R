@@ -19,5 +19,5 @@ magrittr::`%>%`
 NULL
 
 # Fix R CMD check notes
-#' @importFrom lifecycle deprecate_soft
-lifecycle::deprecate_soft
+#' @importFrom lifecycle badge
+lifecycle::badge

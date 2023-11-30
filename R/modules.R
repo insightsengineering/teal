@@ -22,7 +22,7 @@
 #' library(shiny)
 #'
 #' app <- init(
-#'   data = teal_data(dataset("iris", iris)),
+#'   data = teal_data(iris = iris),
 #'   modules = modules(
 #'     label = "Modules",
 #'     modules(
@@ -179,8 +179,6 @@ is_arg_used <- function(modules, arg) {
 #'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
 #' @param ui (`function`) Shiny `ui` module function with following arguments:
 #'  - `id` - teal will set proper shiny namespace for this module.
-#'  - `data` (optional)  module will receive list of reactive (filtered) data specified in the `filters` argument.
-#'  - `datasets` (optional)  module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
 #'  - `...` (optional) `ui_args` elements will be passed to the module named argument or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
 #' @param datanames (`character`) A vector with `datanames` that are relevant for the item. The
@@ -199,7 +197,7 @@ is_arg_used <- function(modules, arg) {
 #' library(shiny)
 #'
 #' app <- init(
-#'   data = teal_data(dataset("iris", iris)),
+#'   data = teal_data(iris = iris),
 #'   modules = list(
 #'     module(
 #'       label = "Module",
@@ -284,6 +282,14 @@ module <- function(label = "module",
     message(sprintf("module \"%s\" server function takes no data so \"datanames\" will be ignored", label))
     datanames <- NULL
   }
+  if ("datasets" %in% server_formals) {
+    warning(
+      sprintf("Called from module(label = \"%s\", ...)\n  ", label),
+      "`datasets` argument in the `server` is deprecated and will be removed in the next release. ",
+      "Please use `data` instead.",
+      call. = FALSE
+    )
+  }
 
   srv_extra_args <- setdiff(names(server_args), server_formals)
   if (length(srv_extra_args) > 0 && !"..." %in% server_formals) {
@@ -299,10 +305,17 @@ module <- function(label = "module",
     stop(
       "\nmodule() `ui` argument requires a function with following arguments:",
       "\n - id - teal will set proper shiny namespace for this module.",
-      "\n\nFollowing arguments can be used optionaly:",
-      "\n - `data` - module will receive list of reactive (filtered) data specied in the `filters` argument",
-      "\n - `datasets` - module will receive `FilteredData`. See `help(teal.slice::FilteredData)`",
+      "\n\nFollowing arguments can be used optionally:",
       "\n - `...` ui_args elements will be passed to the module argument of the same name or to the `...`"
+    )
+  }
+
+  if (any(c("data", "datasets") %in% ui_formals)) {
+    stop(
+      sprintf("Called from module(label = \"%s\", ...)\n  ", label),
+      "`ui` with `data` or `datasets` argument is no longer accepted.\n  ",
+      "If some `ui` inputs depend on data please fix your `server` instead.\n  ",
+      "Possible solutions are renderUI() or updateXyzInput() functions.",
     )
   }
 

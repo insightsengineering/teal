@@ -3,12 +3,9 @@
 \name{tdata}
 \alias{tdata}
 \alias{new_tdata}
-\alias{get_code.tdata}
 \title{Create a \code{tdata} Object}
 \usage{
 new_tdata(data, code = "", join_keys = NULL, metadata = NULL)
-
-\method{get_code}{tdata}(x, ...)
 }
 \arguments{
 \item{data}{A \verb{named list} of \code{data.frames} (or \code{MultiAssayExperiment})
@@ -25,15 +22,12 @@ datasets.}
 
 \item{metadata}{A \verb{named list} each element contains a list of metadata about the named data.frame
 Each element of these list should be atomic and length one.}
-
-\item{x}{a \code{tdata} object}
-
-\item{...}{additional arguments for the generic}
 }
 \value{
 A \code{tdata} object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 Create a new object called \code{tdata} which contains \code{data}, a \code{reactive} list of data.frames
 (or \code{MultiAssayExperiment}), with attributes:
 \itemize{
@@ -56,9 +50,12 @@ data <- new_tdata(
 isolate(data[["iris"]]())
 
 # Get code
-isolate(get_code(data))
+isolate(get_code_tdata(data))
 
 # Get metadata
 get_metadata(data, "iris")
 
+}
+\seealso{
+\code{as_tdata}
 }
