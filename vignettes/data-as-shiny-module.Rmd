@@ -67,7 +67,7 @@ if (interactive()) {
 ```
 
 
-## Modification Data In-App
+## Modification of Data In-App
 
 Another reason to postpone data operations is to allow the application user to act the preprocessing stage.
 An initial, constant form of the data can be created in the global environment and then modified once the app starts.
