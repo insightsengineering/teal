@@ -58,7 +58,7 @@ articles:
 - title: Data in teal Apps
   navbar: Data in teal Apps
   contents:
-    - data-in-teal
+    - including-data-in-teal-applications
     - data-as-shiny-module
 - title: Extending teal
   navbar: Extending teal
