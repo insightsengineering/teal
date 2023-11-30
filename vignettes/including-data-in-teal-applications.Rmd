@@ -2,8 +2,7 @@
 title: "Including Data in teal Applications"
 author: "NEST CoreDev"
 output: 
-  bookdown::html_document2:
-    base_format: rmarkdown::html_vignette
+  rmarkdown::html_vignette:
     toc: true
     toc_depth: 5
     number_sections: false
@@ -40,7 +39,7 @@ library(teal)
 data <- teal_data(iris = iris, cars = mtcars)
 ```
 
-Note that `iris` and `cars` have been added to the `datanames` property of `data` (jump to [`teal_data` properties]).
+Note that `iris` and `cars` have been added to the `datanames` property of `data` (see [`datanames` property](#datanames)).
 
 This is sufficient to run a `teal` app.
 
@@ -82,7 +81,7 @@ See `?eval_code` for more details.
 
 Note that with `data` the code that created the data objects is unknown so the process cannot be reproduced.
 The necessary code can be added with the `code` argument of the `teal_data` function but in that case the code may not reproduce the environment.
-Such an object is considered _unverified_ (jump to [`teal_data` properties]).
+Such an object is considered _unverified_ (see [`verified` property](#verified)).
 
 If reproducibility is required, we recommend creating `teal_data` empty and evaluating code.
 
@@ -110,7 +109,7 @@ Currently `teal` supports two specialized data formats.
 ### `ADaM` Data
 
 The `ADaM` data model specifies relationships between `CDISC` datasets.
-The `cdisc_data` function takes advantage of that facto to automatically set default joining keys (jump to [`teal_data` properties]).
+The `cdisc_data` function takes advantage of that facto to automatically set default joining keys (see [`join_keys` property](#join_keys)).
 In the example below, two standard `CDISC` datasets (`ADSL` and `ADTTE`) are passed to `cdisc_data`.
 
 ```{r}
@@ -187,7 +186,7 @@ Only objects enumerated in the `datanames` property of the `teal_data` object ca
 
 For a detailed explanation of datanames, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data.html).
 
-(back to [General Data])
+[(back to General Data)](#general-data)
 
 ##### `join_keys`
 
@@ -217,7 +216,7 @@ join_keys(data_relational2) <- keys
 
 For a detailed explanation of join keys, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/join-keys.html).
 
-(back to [`ADaM` Data])
+[(back to `ADaM` Data)](#adam-data)
 
 ##### `verified`
 
@@ -239,7 +238,7 @@ data_with_objects_and_code_verified
 
 For a detailed explanation of verification, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data-reproducibility.html).
 
-(back to [Reproducible Data])
+[(back to Reproducible Data)](#reproducible-data)
 
 <br>
 

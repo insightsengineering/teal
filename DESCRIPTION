@@ -48,7 +48,6 @@ Imports:
     teal.widgets (>= 0.4.0),
     utils
 Suggests:
-    bookdown,
     bslib,
     covr,
     dplyr (>= 1.0.5),
