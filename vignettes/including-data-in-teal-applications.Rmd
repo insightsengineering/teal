@@ -109,11 +109,8 @@ Currently `teal` supports two specialized data formats.
 
 ### `ADaM` Data
 
-The container used for `CDISC` data is the `cdisc_data` class, which is an extension of `teal_data` created with the `cdisc_data` function.
-The `ADaM` data model allows us to take some short cuts when creating the object.
-For example, relationships between datasets are known and so in most cases default join keys can be set (jump to [`teal_data` properties]).
-See the documentation for `cdisc_data` for details.
-
+The `ADaM` data model specifies relationships between `CDISC` datasets.
+The `cdisc_data` function takes advantage of that facto to automatically set default joining keys (jump to [`teal_data` properties]).
 In the example below, two standard `CDISC` datasets (`ADSL` and `ADTTE`) are passed to `cdisc_data`.
 
 ```{r}
@@ -240,7 +237,7 @@ data_with_objects_and_code_verified
 ```
 
 
-For a detailed explanation of verification, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data.html).
+For a detailed explanation of verification, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data-reproducibility.html).
 
 (back to [Reproducible Data])
 
