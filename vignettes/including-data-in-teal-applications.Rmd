@@ -109,7 +109,7 @@ Currently `teal` supports two specialized data formats.
 ### `ADaM` Data
 
 The `ADaM` data model specifies relationships between `CDISC` datasets.
-The `cdisc_data` function takes advantage of that facto to automatically set default joining keys (see [`join_keys` property](#join_keys)).
+The `cdisc_data` function takes advantage of that fact to to automatically set default joining keys (see [`join_keys` property](#join_keys)).
 In the example below, two standard `CDISC` datasets (`ADSL` and `ADTTE`) are passed to `cdisc_data`.
 
 ```{r}
