@@ -1,0 +1,247 @@
+---
+title: "Including Data in teal Applications"
+author: "NEST CoreDev"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 5
+    number_sections: false
+vignette: >
+  %\VignetteIndexEntry{Including Data in teal Applications}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Data in `teal` Applications
+
+While the `teal` framework is mainly geared towards clinical data that conforms to the `ADaM` standard, general, non-relational data is handled just as well and the mechanism of passing data to applications is virtually the same.
+Also, modules in `teal.modules.general` have been designed to work with general data.
+
+All applications use the `teal_data` class as a data container.
+`teal_data` objects are passed to `init` to build the application, where they are modified by the filter panel (if applicable) and passed on to modules.
+Thus, the first step of building a `teal` app is creating a `teal_data` object.
+
+### General Data
+
+A `teal_data` object is created by calling the `teal_data` function and passing data objects as `name:value` pairs.
+
+```{r, message=FALSE}
+library(teal)
+
+# create teal_data
+data <- teal_data(iris = iris, cars = mtcars)
+```
+
+Note that `iris` and `cars` have been added to the `datanames` property of `data` (see [`datanames` property](#datanames)).
+
+This is sufficient to run a `teal` app.
+
+```{r, eval=FALSE}
+# build app
+app <- init(
+  data = data,
+  modules = example_module()
+)
+
+# run app
+shinyApp(app$ui, app$server)
+```
+
+### Reproducible Data
+
+A `teal_data` stores data in a separate environment.
+Therefore, modifying the stored datasets requires that code be evaluated in that environment.
+Following that logic, one can create an empty `teal_data` object and populate it by evaluating code.
+This can be done using the `eval_code` function or, more conveniently, using the `within` function.
+
+```{r}
+# create empty object
+data0 <- teal_data()
+
+# run code in the object
+data1 <- teal.code::eval_code(data0, code = "iris <- iris
+                                             cars <- mtcars"
+)
+# alternative
+data2 <- within(data0, {
+  iris <- iris
+  cars <- mtcars
+})
+```
+
+The key difference between `eval_code` and `within` is that the former accepts code as character vector or language objects (calls and expressions), while `within` accepts _only_ inline code.
+See `?eval_code` for more details.
+
+Note that with `data` the code that created the data objects is unknown so the process cannot be reproduced.
+The necessary code can be added with the `code` argument of the `teal_data` function but in that case the code may not reproduce the environment.
+Such an object is considered _unverified_ (see [`verified` property](#verified)).
+
+If reproducibility is required, we recommend creating `teal_data` empty and evaluating code.
+
+###### code from file
+
+The ability to pass code as character vector to `eval_code` opens the door to using code stored in a file.
+```{r, eval=FALSE}
+# not run
+data_from_file <- teal_data()
+data_from_file <- eval_code(data, readLines("<path_to_file>"))
+```
+
+### Creating Data In-App
+
+The one departure from passing a `teal_data` object to `init` is when the data does not exist in the environment where the app is run, _e.g._ when it has to be pulled from a remote source.
+In those cases a `teal_data_module` must be used.
+See [this vignette](data-as-shiny-module.html) for a detailed description.
+
+<br>
+
+## Clinical Data
+
+Currently `teal` supports two specialized data formats.
+
+### `ADaM` Data
+
+The `ADaM` data model specifies relationships between `CDISC` datasets.
+The `cdisc_data` function takes advantage of that fact to to automatically set default joining keys (see [`join_keys` property](#join_keys)).
+In the example below, two standard `CDISC` datasets (`ADSL` and `ADTTE`) are passed to `cdisc_data`.
+
+```{r}
+# create cdisc_data
+data_cdisc <- cdisc_data(ADSL = teal.data::rADSL, ADTTE = teal.data::rADSL)
+
+datanames(data_cdisc)
+join_keys(data_cdisc)
+```
+
+
+```{r, eval=FALSE}
+app <- init(
+  data = data_cdisc,
+  modules = example_module()
+)
+shinyApp(app$ui, app$server)
+```
+
+### `MultiAssayExperiment` Data
+
+The `MultiAssayExperiment` package offers a data structure for representing and analyzing multi-omics experiments: a biological analysis approach utilizing multiple types of observations, such as DNA mutations and abundance of RNA and proteins, in the same biological specimens.
+
+The `MultiAssayExperiment` class is described in detail [here](https://www.bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/MultiAssayExperiment.html).
+
+`MultiAssayExperiment` objects (MAEs) are placed in `teal_data` just like normal objects.
+
+```{r, eval=FALSE}
+library(MultiAssayExperiment)
+utils::data(miniACC)
+
+data_mae <- teal_data(MAE = miniACC)
+
+app <- init(
+  data = data_mae,
+  modules = example_module()
+)
+shinyApp(app$ui, app$server)
+```
+
+Note that due to the unique structure of a MAE `teal` requires special considerations when building `teal` modules.
+Therefore, we cannot guarantee that all modules will work properly with MAEs.
+The package [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/latest-tag/) has been developed specifically with MAE in mind and will be more reliable.
+
+The filter panel supports MAEs out of the box.
+
+<br>
+
+## `teal_data` properties
+
+##### `datanames`
+
+The `datanames` property lists the objects stored in the `teal_data` that constitute datasets of interest.
+Objects passed to `teal_data` become automatically listed in the `datanames` property of the resulting object.
+Objects created in `teal_data` by evaluating code need not be data objects of interest and as such they are not automatically added to `datanames`.
+Use the `datanames` function to modify the `datanames` property.
+
+```{r}
+data_with_objects <- teal_data(iris = iris, cars = mtcars)
+data_with_code <- teal_data() %>% 
+  within({
+    iris <- iris
+    cars <- mtcars
+    not_a_dataset <- "data source credits"
+  })
+datanames(data_with_objects)
+datanames(data_with_code)
+datanames(data_with_code) <- c("iris", "cars")
+datanames(data_with_code)
+```
+
+All `teal` modules take a `datanames` argument that determines which datasets they are to have access to.
+Only objects enumerated in the `datanames` property of the `teal_data` object can be used.
+
+For a detailed explanation of datanames, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data.html).
+
+[(back to General Data)](#general-data)
+
+##### `join_keys`
+
+Using relational data requires specifying joining keys for each pair of datasets.
+Primary keys are unique row identifiers in individual datasets and thus should be specified for each dataset.
+Foreign keys describe mapping of variables between datasets.
+Joining keys are stored in the `join_keys` property, which can be set when creating a `teal_data` object, using the `join_keys` argument, or using the `join_keys` function.
+
+```{r}
+ds1 <- data.frame(
+  id = seq(1, 10),
+  group = rep(c("A", "B"), each = 5)
+)
+ds2 <- data.frame(
+  group = c("A", "B"),
+  condition = c("condition1", "condition2")
+)
+keys <- join_keys(
+  join_key("DS1", keys = "id"),
+  join_key("DS2", keys = "group"),
+  join_key("DS1", "DS2", keys = c("group" = "group"))
+)
+data_relational1 <- teal_data(DS1 = ds1, DS2 = ds2, join_keys = keys)
+data_relational2 <- teal_data(DS1 = ds1, DS2 = ds2)
+join_keys(data_relational2) <- keys
+```
+
+For a detailed explanation of join keys, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/join-keys.html).
+
+[(back to `ADaM` Data)](#adam-data)
+
+##### `verified`
+
+`teal_data` allows for tracking code from data creation through filtering through analysis so that the whole process can be reproduced.
+The `verified` property designates whether or not reproducibility has been confirmed.
+`teal_data` objects that are created empty and are only modified by evaluating code in them are verified by default.
+Ones created with data objects alone or with data objects and code are not verified by default but can become verified by running the `verify` function.
+
+```{r}
+data_with_code
+
+data_with_objects_and_code <- teal_data(iris = iris, cars = mtcars, code = expression(iris <- iris, cars <- mtcars))
+data_with_objects_and_code
+
+data_with_objects_and_code_verified <- verify(data_with_objects_and_code)
+data_with_objects_and_code_verified
+```
+
+
+For a detailed explanation of verification, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data-reproducibility.html).
+
+[(back to Reproducible Data)](#reproducible-data)
+
+<br>
+
+## Further Reading
+
+For a complete guide to the `teal_data` class, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/latest-tag/).

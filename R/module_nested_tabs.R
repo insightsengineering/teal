@@ -115,15 +115,6 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
   args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
   args <- c(list(id = ns("module")), args)
 
-  if (is_arg_used(modules$ui, "datasets")) {
-    args <- c(args, datasets = datasets)
-  }
-
-  if (is_arg_used(modules$ui, "data")) {
-    data <- .datasets_to_data(modules, datasets)
-    args <- c(args, data = list(data))
-  }
-
   teal_ui <- tags$div(
     id = id,
     class = "teal_module",
@@ -243,20 +234,13 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     if (is_arg_used(modules$server, "data")) {
-      data <- .datasets_to_data(modules, datasets, trigger_data)
+      data <- eventReactive(trigger_data(), .datasets_to_data(modules, datasets))
       args <- c(args, data = list(data))
     }
 
     if (is_arg_used(modules$server, "filter_panel_api")) {
       filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets)
       args <- c(args, filter_panel_api = filter_panel_api)
-    }
-
-    if (is_arg_used(modules$server, "datasets") && is_arg_used(modules$server, "data")) {
-      warning(
-        "Module '", modules$label, "' has `data` and `datasets` arguments in the formals.",
-        "\nIt's recommended to use `data` to work with filtered objects."
-      )
     }
 
     # observe the trigger_module above to induce the module once the renderUI is triggered
@@ -285,17 +269,12 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
 #' @param datasets (`FilteredData`) object where needed data are taken from
-#' @param trigger_data (`reactiveVal`) to trigger getting the filtered data
-#' @return list of reactive datasets with following attributes:
-#' - `code` (`character`) containing datasets reproducible code.
-#' - `join_keys` (`join_keys`) containing relationships between datasets.
-#' - `metadata` (`list`) containing metadata of datasets.
+#' @return A `tdata` object.
 #'
 #' @keywords internal
-.datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
+.datasets_to_data <- function(module, datasets) {
   checkmate::assert_class(module, "teal_module")
   checkmate::assert_class(datasets, "FilteredData")
-  checkmate::assert_class(trigger_data, "reactiveVal")
 
   datanames <- if (is.null(module$datanames) || identical(module$datanames, "all")) {
     datasets$datanames()
@@ -304,29 +283,20 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   }
 
   # list of reactive filtered data
-  data <- sapply(
-    datanames,
-    function(x) eventReactive(trigger_data(), datasets$get_data(x, filtered = TRUE)),
-    simplify = FALSE
-  )
+  data <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
 
   hashes <- calculate_hashes(datanames, datasets)
-  metadata <- sapply(datanames, datasets$get_metadata, simplify = FALSE)
 
-  new_tdata(
-    data,
-    eventReactive(
-      trigger_data(),
-      {
-        c(
-          get_rcode_str_install(),
-          get_rcode_libraries(),
-          get_datasets_code(datanames, datasets, hashes)
-        )
-      }
-    ),
-    datasets$get_join_keys(),
-    metadata
+  code <- c(
+    get_rcode_str_install(),
+    get_rcode_libraries(),
+    get_datasets_code(datanames, datasets, hashes),
+    teal.slice::get_filter_expr(datasets, datanames)
+  )
+
+  do.call(
+    teal.data::teal_data,
+    args = c(data, code = list(code), join_keys = list(datasets$get_join_keys()[datanames]))
   )
 }
 
