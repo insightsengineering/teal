@@ -306,8 +306,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   code <- c(
     get_rcode_str_install(),
     get_rcode_libraries(),
-    get_datasets_code(datanames, datasets, hashes),
-    teal.slice::get_filter_expr(datasets, datanames)
+    get_datasets_code(datanames, datasets, hashes)
   )
 
   do.call(
