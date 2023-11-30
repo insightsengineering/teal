@@ -46,30 +46,25 @@ get_rcode_str_install <- function() {
 #' @keywords internal
 get_datasets_code <- function(datanames, datasets, hashes) {
   str_prepro <- teal.data:::get_code_dependency(attr(datasets, "preprocessing_code"), names = datanames)
-  if (length(str_prepro) == 0) {
-    str_prepro <- "message('Preprocessing is empty')"
-  } else if (length(str_prepro) > 0) {
-    str_prepro <- sprintf("%s\n\n", paste(str_prepro, collapse = "\n"))
-
-  }
+  str_prepro <- ifelse(length(str_prepro) == 0, "message('Preprocessing is empty')", str_prepro)
+  str_prepro <- sprintf("%s\n\n", paste(str_prepro, collapse = "\n"))
 
   str_hash <- paste(
-    paste0(
-      vapply(
-        datanames,
-        function(dataname) {
-          sprintf(
-            "stopifnot(%s == %s)",
-            deparse1(bquote(rlang::hash(.(as.name(dataname))))),
-            deparse1(hashes[[dataname]])
-          )
-        },
-        character(1)
-      ),
-      collapse = "\n"
+    vapply(
+      datanames,
+      function(dataname) {
+        sprintf(
+          "stopifnot(%s == %s)",
+          deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+          deparse1(hashes[[dataname]])
+        )
+      },
+      character(1)
     ),
-    "\n\n"
+    collapse = "\n"
   )
+  str_hash <- sprintf("%s\n\n", str_hash)
+
 
   str_filter <- teal.slice::get_filter_expr(datasets, datanames)
 
