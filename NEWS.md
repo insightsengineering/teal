@@ -9,9 +9,9 @@
 
 ### Breaking changes
 
-* `tdata` has been deprecated and replaced with `teal_data`. Support for `tdata` as `data` argument in the `module(server)` will be removed in the next release.
-* `module(ui)` argument no longer accepts `data` and `datasets` arguments. Data dependent logic should be set in the `server` function.
-* `module(server)` argument deprecated a `datasets` argument. `teal_module`'s `server` should accept `data` (`teal_data`) instead.
+* `tdata` has been deprecated and replaced with `teal_data`. Support for `tdata` passed to the `data` argument in `module(server)` will be removed in the next release.
+* `module(ui)` argument no longer accepts `data` and `datasets` arguments. All data dependent logic should be set in the `server` function.
+* `module(server)` argument deprecated `datasets` argument. `teal_module`s' `server` functions should accept `data` (`teal_data`) instead.
 
 ### Miscellaneous
 
