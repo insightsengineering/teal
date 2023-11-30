@@ -176,8 +176,8 @@ example_module_with_reporting <- function(label = "example teal module") {
     server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
         teal.reporter::simple_reporter_srv(
-          id = "reporter", 
-          reporter = reporter, 
+          id = "reporter",
+          reporter = reporter,
           card_fun = custom_function
         )
         output$text <- renderPrint(data()[[input$dataname]])
@@ -258,9 +258,9 @@ example_reporter_module <- function(label = "Example") {
         table_q <- reactive({
           req(input$nrow)
           within(
-            data(), 
-            result <- head(dataset, nrows), 
-            dataset = as.name(input$dataname), 
+            data(),
+            result <- head(dataset, nrows),
+            dataset = as.name(input$dataname),
             nrows = input$nrow
           )
         })
@@ -295,8 +295,8 @@ example_reporter_module <- function(label = "Example") {
           card
         }
         teal.reporter::add_card_button_srv(
-          "addReportCard", 
-          reporter = reporter, 
+          "addReportCard",
+          reporter = reporter,
           card_fun = card_fun
         )
         teal.reporter::download_report_button_srv("downloadButton", reporter = reporter)
