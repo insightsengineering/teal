@@ -235,8 +235,8 @@ data_with_code
 data_with_objects_and_code <- teal_data(iris = iris, cars = mtcars, code = expression(iris <- iris, cars <- mtcars))
 data_with_objects_and_code
 
-data_with_objects_and_code_verified <- verify(data_with_objects_and_code) %>% try
-data_with_objects_and_code_verified %>% try
+data_with_objects_and_code_verified <- verify(data_with_objects_and_code)
+data_with_objects_and_code_verified
 ```
 
 
