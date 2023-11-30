@@ -49,7 +49,8 @@ get_datasets_code <- function(datanames, datasets, hashes) {
   if (length(str_prepro) == 0) {
     str_prepro <- "message('Preprocessing is empty')"
   } else if (length(str_prepro) > 0) {
-    str_prepro <- paste(paste0(str_prepro, collapse = "\n"), "\n\n")
+    str_prepro <- sprintf("%s\n\n", paste(str_prepro, collapse = "\n"))
+
   }
 
   str_hash <- paste(
