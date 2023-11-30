@@ -48,7 +48,7 @@ articles:
 - title: Get Started
   navbar: ~
   contents:
-    - teal
+    - getting-started-with-teal
 - title: Using teal
   navbar: Using teal
   contents:
