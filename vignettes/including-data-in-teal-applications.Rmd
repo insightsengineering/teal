@@ -67,8 +67,7 @@ data0 <- teal_data()
 
 # run code in the object
 data1 <- teal.code::eval_code(data0, code = "iris <- iris
-                                             cars <- mtcars"
-)
+                                             cars <- mtcars")
 # alternative
 data2 <- within(data0, {
   iris <- iris
@@ -169,7 +168,7 @@ Use the `datanames` function to modify the `datanames` property.
 
 ```{r}
 data_with_objects <- teal_data(iris = iris, cars = mtcars)
-data_with_code <- teal_data() %>% 
+data_with_code <- teal_data() %>%
   within({
     iris <- iris
     cars <- mtcars
