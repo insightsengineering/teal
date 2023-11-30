@@ -70,7 +70,7 @@ In the example below:
 * For the `IRIS` dataset, only rows satisfying the conditions `Petal.Length >= 3.4` and `Species %in% c("setosa", "virginica")` are included, thereby keeping 50 rows.
 * For the `MTCARS` dataset, only rows satisfying the condition `cyl %in% c(4, 6)` are included, thereby keeping 18 rows.
 
-<img src="images/filter_panel.png" alt="Example filter panel" style="width: 30%;"/>
+<img src="images/filter_panel.png" alt="Example filter panel" style="width: 100%;"/>
 
 ## Creating your own applications
 
