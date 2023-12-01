@@ -41,7 +41,7 @@ get_rcode_str_install <- function() {
 #' @return Character string concatenated from the following elements:
 #'  - data pre-processing code (from `data` argument in `init`)
 #'  - hash check of loaded objects
-#'  - filter code
+#'  - filter code (if any)
 #'
 #' @keywords internal
 get_datasets_code <- function(datanames, datasets, hashes) {
