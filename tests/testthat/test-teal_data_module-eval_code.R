@@ -177,7 +177,7 @@ testthat::test_that("eval_code.teal_data_module propagates error from the origin
 })
 
 
-testthat::test_that("eval_code.teal_data_module does not execute on anything other than `teal_data` or `error`", {
+testthat::test_that("eval_code.teal_data_module does not execute on a object (other than `teal_data` or `error`)", {
   testthat::local_mocked_bindings(
     getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
     .package = "shiny"
@@ -187,7 +187,7 @@ testthat::test_that("eval_code.teal_data_module does not execute on anything oth
     ui = function(id) div(),
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
-        reactive("I am a string")
+        reactive(list())
       })
     }
   )
