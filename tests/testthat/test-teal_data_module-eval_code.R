@@ -148,7 +148,7 @@ testthat::test_that("eval_code.teal_data_module throws error when result is not 
   )
 })
 
-testthat::test_that("eval_code.teal_data_module propagates error from the original/first call", {
+testthat::test_that("eval_code.teal_data_module propagates qenv error from the original/first call", {
   testthat::local_mocked_bindings(
     getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
     .package = "shiny"
@@ -159,10 +159,7 @@ testthat::test_that("eval_code.teal_data_module propagates error from the origin
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         reactive(
-          validate(
-            FALSE,
-            "an error at the bottom/original teal_data_module"
-          )
+          teal_data() |> within("non_existing_var + 1")
         )
       })
     }
@@ -170,12 +167,11 @@ testthat::test_that("eval_code.teal_data_module propagates error from the origin
 
   tdm2 <- eval_code(tdm, "1 + 1")
 
-  testthat::expect_error(
+  testthat::expect_s3_class(
     shiny::isolate(tdm2$server("test")()),
-    "an error at the bottom/original teal_data_module"
+    "error"
   )
 })
-
 
 testthat::test_that("eval_code.teal_data_module does not execute on a object (other than `teal_data` or `error`)", {
   testthat::local_mocked_bindings(
