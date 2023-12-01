@@ -75,13 +75,13 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
 #' @rdname eval_code
 #' @export
 setMethod("eval_code", signature = c("teal_data_module", "language"), function(object, code) {
-  eval_code(object, code = format_expression(code))
+  eval_code(object, code = paste(lang2calls(code), collapse = "\n"))
 })
 
 #' @rdname eval_code
 #' @export
 setMethod("eval_code", signature = c("teal_data_module", "expression"), function(object, code) {
-  eval_code(object, code = format_expression(code))
+  eval_code(object, code = paste(lang2calls(code), collapse = "\n"))
 })
 
 #' @inherit teal.code::within.qenv params title details

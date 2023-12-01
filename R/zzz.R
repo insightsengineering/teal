@@ -34,5 +34,5 @@ coalesce_r <- getFromNamespace("coalesce_r", "teal.slice")
 RcodeBlock <- getFromNamespace("RcodeBlock", "teal.reporter") # nolint
 
 # Use non-exported function(s) from teal.code
-# This one is here because format_expression should not be exported from teal.code
-format_expression <- getFromNamespace("format_expression", "teal.code")
+# This one is here because lang2calls should not be exported from teal.code
+lang2calls <- getFromNamespace("lang2calls", "teal.code")
