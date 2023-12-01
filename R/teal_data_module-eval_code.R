@@ -34,10 +34,21 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
     },
     server = function(id) {
       moduleServer(id, function(input, output, session) {
-        data <- object$server("mutate_inner")
-        eventReactive(data(),
+        teal_data_rv <- object$server("mutate_inner")
+
+        if (!is.reactive(teal_data_rv)) {
+          stop("The `teal_data_module` must return a reactive expression.", call. = FALSE)
+        }
+
+        eventReactive(teal_data_rv(),
           {
-            eval_code(data(), code)
+            data <- tryCatch(teal_data_rv(), error = function(e) e)
+
+            if (inherits(data, "teal_data")) {
+              eval_code(data, code)
+            } else {
+              data
+            }
           },
           ignoreNULL = TRUE
         )
