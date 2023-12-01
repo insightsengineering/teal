@@ -315,7 +315,7 @@ module <- function(label = "module",
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
       "`ui` with `data` or `datasets` argument is no longer accepted.\n  ",
       "If some `ui` inputs depend on data, please move the logic to your `server` instead.\n  ",
-      "Possible solutions are renderUI() or updateXyzInput() functions.",
+      "Possible solutions are renderUI() or updateXyzInput() functions."
     )
   }
 
