@@ -78,7 +78,7 @@ testthat::test_that("within.teal_data_module modifies the reactive tea_data obje
   )
 })
 
-testthat::test_that("eval_code.teal_data_module will execute several executions until error", {
+testthat::test_that("eval_code.teal_data_module will execute several times until error", {
   testthat::local_mocked_bindings(
     getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
     .package = "shiny"
@@ -102,30 +102,7 @@ testthat::test_that("eval_code.teal_data_module will execute several executions 
   )
 })
 
-testthat::test_that("eval_code.teal_data_module throws error when result is not reactive", {
-  testthat::local_mocked_bindings(
-    getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
-    .package = "shiny"
-  )
-
-  tdm <- teal_data_module(
-    ui = function(id) div(),
-    server = function(id) {
-      shiny::moduleServer(id, function(input, output, session) {
-        "I am not reactive, I am a string"
-      })
-    }
-  )
-
-  tdm2 <- eval_code(tdm, "1 + 1")
-
-  testthat::expect_error(
-    shiny::isolate(tdm2$server("test")()[["IRIS"]]),
-    "The `teal_data_module` must return a reactive expression."
-  )
-})
-
-testthat::test_that("eval_code.teal_data_module throws error when result is not reactive", {
+testthat::test_that("eval_code.teal_data_module throws error when original teal_data_module result is not reactive", {
   testthat::local_mocked_bindings(
     getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
     .package = "shiny"
@@ -159,13 +136,13 @@ testthat::test_that("eval_code.teal_data_module propagates qenv error from the o
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         reactive(
-          teal_data() |> within("non_existing_var + 1")
+          teal_data(IRIS = iris) |> within("non_existing_var + 1")
         )
       })
     }
   )
 
-  tdm2 <- eval_code(tdm, "1 + 1")
+  tdm2 <- eval_code(tdm, "IRIS$const <- 1 + 1")
 
   testthat::expect_s3_class(
     shiny::isolate(tdm2$server("test")()),
