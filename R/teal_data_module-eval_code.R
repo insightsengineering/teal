@@ -46,8 +46,23 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
 
             if (inherits(data, "teal_data")) {
               eval_code(data, code)
-            } else {
+            } else if (inherits(data, "error")) {
               data
+            } else {
+              validate(
+                need(
+                  FALSE,
+                  paste(
+                    sep = "\n",
+                    "Error when executing `teal_data_module`:",
+                    paste0(
+                      "It must always return a reactive with `teal_data`, it returns object of class(es): ",
+                      paste("'", class(data), "'", collapse = ", ", sep = ""),
+                      "."
+                    )
+                  )
+                )
+              )
             }
           },
           ignoreNULL = TRUE
