@@ -38,7 +38,7 @@ get_rcode_str_install <- function() {
 #' @param datasets (`FilteredData`) object
 #' @param hashes named (`list`) of hashes per dataset
 #'
-#' @return `character(1)` containing a string concatenated from the following elements:
+#' @return Character string concatenated from the following elements:
 #'  - data pre-processing code (from `data` argument in `init`)
 #'  - hash check of loaded objects
 #'  - filter code
