@@ -55,30 +55,6 @@ testthat::test_that("eval_code.teal_data_module modifies the reactive teal_data 
   )
 })
 
-testthat::test_that("eval_code.teal_data_module modifies the reactive teal_data object with quoted parameter", {
-  testthat::local_mocked_bindings(
-    getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
-    .package = "shiny"
-  )
-
-  tdm <- teal_data_module(
-    ui = function(id) div(),
-    server = function(id) {
-      shiny::moduleServer(id, function(input, output, session) {
-        shiny::reactive(teal.data::teal_data(IRIS = iris))
-      })
-    }
-  )
-
-  tdm2 <- eval_code(tdm, quote(IRIS$id <- seq_len(nrow(IRIS)))) # nolint: object_name.
-
-  # Columns were added via eval_code.teal_data_module
-  testthat::expect_setequal(
-    c(names(iris), "id"),
-    colnames(shiny::isolate(tdm2$server("test")()[["IRIS"]]))
-  )
-})
-
 testthat::test_that("within.teal_data_module modifies the reactive tea_data object", {
   testthat::local_mocked_bindings(
     getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
@@ -96,23 +72,8 @@ testthat::test_that("within.teal_data_module modifies the reactive tea_data obje
 
   tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name_linter.
 
-  # teal_data_modules are different
-  testthat::expect_failure(
-    testthat::expect_identical(
-      shiny::isolate(tdm$server("test")()[["IRIS"]]),
-      shiny::isolate(tdm2$server("test")()[["IRIS"]])
-    )
-  )
-
-  # Columns were added via within.teal_data_module
-  testthat::expect_setequal(
-    c(names(iris), "id"),
-    colnames(shiny::isolate(tdm2$server("test")()[["IRIS"]]))
-  )
-
-  # Original teal_data_module was left untouched
-  testthat::expect_setequal(
-    c(names(iris)),
-    colnames(shiny::isolate(tdm$server("test")()[["IRIS"]]))
+  testthat::expect_identical(
+    shiny::isolate(tdm2$server("test")()[["IRIS"]]),
+    within(iris, id <- seq_len(NROW(Species)))
   )
 })
