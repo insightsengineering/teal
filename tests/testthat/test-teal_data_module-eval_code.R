@@ -93,7 +93,7 @@ testthat::test_that("eval_code.teal_data_module will execute several executions 
     }
   )
 
-  tdm2 <- eval_code(tdm, "stop_me <- FALSE") %>%
+  tdm2 <- eval_code(tdm, quote(stop_me <- FALSE)) %>%
     eval_code("stopifnot(previous_error = stop_me)")
 
   testthat::expect_error(
