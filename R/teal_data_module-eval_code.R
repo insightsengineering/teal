@@ -103,9 +103,7 @@ setMethod("eval_code", signature = c("teal_data_module", "expression"), function
 #'     })
 #'   }
 #' )
-#' \dontrun{
 #' within(tdm, IRIS <- subset(IRIS, Species == "virginica"))
-#' }
 within.teal_data_module <- function(data, expr, ...) {
   expr <- substitute(expr)
   extras <- list(...)
