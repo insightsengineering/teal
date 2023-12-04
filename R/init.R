@@ -102,7 +102,7 @@ init <- function(data,
                  footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  if (is.list(data)) {
+  if (is.list(data) && !inherits(data, "teal_data_module")) {
     checkmate::assert_list(data, names = "named")
     data <- do.call(teal.data::teal_data, data)
   }
