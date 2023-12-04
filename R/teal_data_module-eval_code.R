@@ -42,30 +42,13 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
 
         eventReactive(teal_data_rv(),
           {
-            data <- tryCatch(teal_data_rv(), error = function(e) e)
-
-            if (inherits(data, "teal_data")) {
-              eval_code(data, code)
-            } else if (inherits(data, "error")) {
-              data
+            if (inherits(teal_data_rv(), c("teal_data", "qenv.error"))) {
+              eval_code(teal_data_rv(), code)
             } else {
-              validate(
-                need(
-                  FALSE,
-                  paste(
-                    sep = "\n",
-                    "Error when executing `teal_data_module`:",
-                    paste0(
-                      "It must always return a reactive with `teal_data`, it returns object of class(es): ",
-                      paste("'", class(data), "'", collapse = ", ", sep = ""),
-                      "."
-                    )
-                  )
-                )
-              )
+              teal_data_rv()
             }
           },
-          ignoreNULL = TRUE
+          ignoreNULL = FALSE
         )
       })
     }

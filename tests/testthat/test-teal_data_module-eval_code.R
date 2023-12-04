@@ -22,37 +22,13 @@ testthat::test_that("eval_code.teal_data_module ui has modified namespace for id
     server = function(id) NULL
   )
 
-  tdm2 <- within(tdm, 1 + 1)
+  tdm2 <- eval_code(tdm, "1 + 1")
 
   output_ui <- tdm2$ui("top_level_ns")
 
   testthat::expect_match(output_ui$attribs$id, "^top_level_ns-")
   testthat::expect_match(output_ui$attribs$id, "-element$")
   testthat::expect_match(output_ui$attribs$id, "-mutate_inner-")
-})
-
-testthat::test_that("eval_code.teal_data_module modifies the reactive teal_data object with expression parameter", {
-  testthat::local_mocked_bindings(
-    getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
-    .package = "shiny"
-  )
-
-  tdm <- teal_data_module(
-    ui = function(id) div(),
-    server = function(id) {
-      shiny::moduleServer(id, function(input, output, session) {
-        shiny::reactive(teal.data::teal_data(IRIS = iris))
-      })
-    }
-  )
-
-  tdm2 <- eval_code(tdm, expression(IRIS$id <- seq_len(nrow(IRIS)))) # nolint: object_name_linter.
-
-  # Columns were added via eval_code.teal_data_module
-  testthat::expect_setequal(
-    c(names(iris), "id"),
-    colnames(shiny::isolate(tdm2$server("test")()[["IRIS"]]))
-  )
 })
 
 testthat::test_that("within.teal_data_module modifies the reactive tea_data object", {
@@ -146,11 +122,11 @@ testthat::test_that("eval_code.teal_data_module propagates qenv error from the o
 
   testthat::expect_s3_class(
     shiny::isolate(tdm2$server("test")()),
-    "error"
+    "qenv.error"
   )
 })
 
-testthat::test_that("eval_code.teal_data_module does not execute on a object (other than `teal_data` or `error`)", {
+testthat::test_that("eval_code.teal_data_module handles an arbitrary object (other than `teal_data` or `qenv.error`)", {
   testthat::local_mocked_bindings(
     getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
     .package = "shiny"
@@ -167,8 +143,30 @@ testthat::test_that("eval_code.teal_data_module does not execute on a object (ot
 
   tdm2 <- eval_code(tdm, "1 + 1")
 
-  testthat::expect_error(
+  testthat::expect_identical(
     shiny::isolate(tdm2$server("test")()),
-    "It must always return a reactive with `teal_data`"
+    list()
+  )
+})
+
+testthat::test_that("eval_code.teal_data_module handles a `NULL` result", {
+  testthat::local_mocked_bindings(
+    getDefaultReactiveDomain = function() shiny::MockShinySession$new(),
+    .package = "shiny"
+  )
+
+  tdm <- teal_data_module(
+    ui = function(id) div(),
+    server = function(id) {
+      shiny::moduleServer(id, function(input, output, session) {
+        reactive(NULL)
+      })
+    }
+  )
+
+  tdm2 <- eval_code(tdm, "1 + 1")
+
+  testthat::expect_null(
+    shiny::isolate(tdm2$server("test")())
   )
 })
