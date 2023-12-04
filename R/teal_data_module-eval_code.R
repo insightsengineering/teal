@@ -40,7 +40,7 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
           stop("The `teal_data_module` must return a reactive expression.", call. = FALSE)
         }
 
-        eventReactive(teal_data_rv(),
+        td <- eventReactive(teal_data_rv(),
           {
             if (inherits(teal_data_rv(), c("teal_data", "qenv.error"))) {
               eval_code(teal_data_rv(), code)
@@ -50,6 +50,7 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
           },
           ignoreNULL = FALSE
         )
+        td
       })
     }
   )
