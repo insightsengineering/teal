@@ -36,9 +36,7 @@ tdm <- teal_data_module(
     })
   }
 )
-\dontrun{
 within(tdm, IRIS <- subset(IRIS, Species == "virginica"))
-}
 }
 \seealso{
 \code{\link[base:with]{base::within()}}, \code{\link[=teal_data_module]{teal_data_module()}}
