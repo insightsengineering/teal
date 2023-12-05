@@ -1,0 +1,26 @@
+---
+title: "In-App Data"
+author: "NEST CoreDev"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{In-App Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Building Data In The App
+
+Typically the data that is passed into a `teal` application is available before the app is run.
+However, this is not always true and in some cases the data will be built only after the app has started.
+A good example is pulling the data from an external repository, like a data base, or uploading a file.
+Additional authentication may be required.
+
+### `teal_data_module`
+
+Data can be created, fetched, or modified in-app using the `teal_data_module`.
+Rather than passing a `teal_data` object to the app, one may pass a _`shiny` module_ that _returns_ a `teal_data` object (wrapped in a reactive expression).
+This allows the app developer to include user actions in data preprocessing.
+
+## Further Reading
+
+A complete explanation of using the `teal_data_module` can be found in [this `teal` vignette](https://insightsengineering.github.io/teal/latest-tag/articles/data-as-shiny-module.html)

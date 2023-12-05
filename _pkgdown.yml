@@ -35,8 +35,8 @@ navbar:
           href: articles/blueprint/teal_data.html
         - text: Filter Panel
           href: articles/blueprint/filter_panel.html
-        - text: Delayed Data Loading (DDL)
-          href: articles/blueprint/ddl.html
+        - text: In-App Data
+          href: articles/blueprint/in_app_data.html
         - text: Module and Encapsulation
           href: articles/blueprint/module_encapsulation.html
 
@@ -82,7 +82,7 @@ articles:
   contents:
   - blueprint/teal_data
   - blueprint/filter_panel
-  - blueprint/ddl
+  - blueprint/in_app_data
   - blueprint/module_encapsulation
 
 
