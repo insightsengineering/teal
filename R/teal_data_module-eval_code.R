@@ -23,9 +23,7 @@ NULL
 #'     })
 #'   }
 #' )
-#' \dontrun{
 #' eval_code(tdm, "IRIS <- subset(IRIS, Species == 'virginica')")
-#' }
 setMethod("eval_code", signature = c("teal_data_module", "character"), function(object, code) {
   teal_data_module(
     ui = function(id) {

@@ -33,7 +33,5 @@ tdm <- teal_data_module(
     })
   }
 )
-\dontrun{
 eval_code(tdm, "IRIS <- subset(IRIS, Species == 'virginica')")
-}
 }
