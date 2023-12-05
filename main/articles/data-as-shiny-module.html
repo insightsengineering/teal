@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9024</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9025</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,16 +82,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -142,12 +132,12 @@ presence of a <code>teal_data</code> object. Typically, a
 <code>teal_data</code> object created in the global environment will be
 passed to the <code>data</code> argument in <code>init</code>. This
 <code>teal_data</code> object should contain all elements necessary for
-successful execution of the application’s modules. In some scenarios,
-however, application developers may opt to postpone some data operations
-until the application run time. This can be done by passing a special
-<em><code>shiny</code> module</em> to the <code>data</code> argument.
-The <code>teal_data_module</code> function is used to build such a
-module from the following components:</p>
+successful execution of the application’s modules.</p>
+<p>In some scenarios, however, application developers may opt to
+postpone some data operations until the application run time. This can
+be done by passing a special <em><code>shiny</code> module</em> to the
+<code>data</code> argument. The <code>teal_data_module</code> function
+is used to build such a module from the following components:</p>
 <ul>
 <li>a <code>ui</code> function; accepts only one argument,
 <code>id</code>; defines user interface elements for the data
@@ -202,7 +192,7 @@ application.</p>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="modification-data-in-app">Modification Data In-App<a class="anchor" aria-label="anchor" href="#modification-data-in-app"></a>
+<h2 id="modification-of-data-in-app">Modification of Data In-App<a class="anchor" aria-label="anchor" href="#modification-of-data-in-app"></a>
 </h2>
 <p>Another reason to postpone data operations is to allow the
 application user to act the preprocessing stage. An initial, constant
@@ -263,6 +253,42 @@ dynamic parts to a data module.</p>
 the data object are defined in the same environment as otherwise the
 server function will not be able to access the data object. This means
 server functions defined in packages cannot be used.</p>
+</div>
+<div class="section level3">
+<h3 id="extending-existing-teal_data_modules">Extending existing <code>teal_data_modules</code><a class="anchor" aria-label="anchor" href="#extending-existing-teal_data_modules"></a>
+</h3>
+<p>The <code>teal_data_module</code> can be further modified outside of
+the initial <code>shiny</code> module and processed after user inputs.
+The <code>within</code> function allows to process at runtime the data
+in the <code>teal_data</code> object contained in
+<code>teal_data_module</code>.</p>
+<p>Building on the previous example, the <code>data_mod</code> is
+handled as a generic connector and here new columns are added once the
+data is retrieved.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_mod_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">within</a></span><span class="op">(</span></span>
+<span>  <span class="va">data_mod</span>,</span>
+<span>  <span class="op">{</span></span>
+<span>    <span class="co"># Create new column with Ratio of Sepal.Width and Petal.Width</span></span>
+<span>    <span class="va">dataset1</span><span class="op">$</span><span class="va">Ratio.Sepal.Petal.Width</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">dataset1</span><span class="op">$</span><span class="va">Sepal.Width</span> <span class="op">/</span> <span class="va">dataset1</span><span class="op">$</span><span class="va">Petal.Width</span>, digits <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span></span>
+<span>    <span class="co"># Create new column that converts Miles per Galon to Liter per 100 Km</span></span>
+<span>    <span class="va">dataset2</span><span class="op">$</span><span class="va">lp100km</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">dataset2</span><span class="op">$</span><span class="va">mpg</span> <span class="op">*</span> <span class="fl">0.42514371</span>, digits <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span></span>
+<span>    <span class="va">dataset2</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">relocate</a></span><span class="op">(</span></span>
+<span>      <span class="va">dataset2</span>,</span>
+<span>      <span class="st">"lp100km"</span>,</span>
+<span>      .after <span class="op">=</span> <span class="st">"mpg"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">data_mod_2</span>,</span>
+<span>  module <span class="op">=</span> <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
