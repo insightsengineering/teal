@@ -96,7 +96,7 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws then qenv
       id = "test",
       data = teal_data_module(
         ui = function(id) div(),
-        server = function(id) reactive(teal_data() %>% within(stop("not good")))
+        server = function(id) reactive(within(teal_data(), stop("not good")))
       ),
       modules = modules(example_module())
     ),
