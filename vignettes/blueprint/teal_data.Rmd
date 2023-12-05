@@ -27,19 +27,19 @@ This includes data loading, preprocessing, filtering, transformations, and plott
 
 The `teal_data` object makes it easy for users to reproduce and validate the results of their analyses.
 
-```{dot qenv_dot_diagram, echo=FALSE}
+```{dot teal_data_dot_diagram, echo=FALSE}
 digraph G {
-    qenv [label = "qenv"];
+    teal_data [label = "teal_data"];
     node [shape=box];
     teal_modules [label = "teal modules analysis R code"];
     library [label = "R library() calls"];
     filter_states [label = "filter states R code"];
     data [label = "data preprocessing R code"];
-    teal_modules -> qenv;
-    library -> qenv;
+    teal_modules -> teal_data;
+    library -> teal_data;
     edge [dir="back"];
-    qenv -> filter_states;
-    qenv -> data;
+    teal_data -> filter_states;
+    teal_data -> data;
 }
 ```
 
