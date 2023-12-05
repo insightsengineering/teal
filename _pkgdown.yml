@@ -28,7 +28,7 @@ navbar:
         - text: Data Flow
           href: articles/blueprint/dataflow.html
         - text: Product Map
-          href: articles/blueprint/products_map.html
+          href: articles/blueprint/product_map.html
         - text: Features
           navbar: Features
         - text: "`qenv`"

@@ -1,9 +1,9 @@
 ---
-title: "Products Map"
+title: "Product Map"
 author: "NEST CoreDev"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Products Map}
+  %\VignetteIndexEntry{Product Map}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
