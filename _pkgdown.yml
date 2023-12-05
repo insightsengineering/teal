@@ -75,12 +75,12 @@ articles:
     - blueprint/intro
     - blueprint/actors
     - blueprint/dataflow
-    - blueprint/products_map
+    - blueprint/product_map
 - title: ""
   desc: >
     Features
   contents:
-  - blueprint/qenv
+  - blueprint/teal_data
   - blueprint/filter_panel
   - blueprint/ddl
   - blueprint/module_encapsulation
