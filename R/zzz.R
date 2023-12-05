@@ -32,3 +32,7 @@ setdiff_teal_slices <- getFromNamespace("setdiff_teal_slices", "teal.slice")
 coalesce_r <- getFromNamespace("coalesce_r", "teal.slice")
 # all *Block objects are private in teal.reporter
 RcodeBlock <- getFromNamespace("RcodeBlock", "teal.reporter") # nolint
+
+# Use non-exported function(s) from teal.code
+# This one is here because lang2calls should not be exported from teal.code
+lang2calls <- getFromNamespace("lang2calls", "teal.code")

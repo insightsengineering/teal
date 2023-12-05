@@ -15,6 +15,7 @@ vignette: >
 Proper functioning of any `teal` application requires presence of a `teal_data` object.
 Typically, a `teal_data` object created in the global environment will be passed to the `data` argument in `init`.
 This `teal_data` object should contain all elements necessary for successful execution of the application's modules. 
+
 In some scenarios, however, application developers may opt to postpone some data operations until the application run time.
 This can be done by passing a special _`shiny` module_ to the `data` argument.
 The `teal_data_module` function is used to build such a module from the following components:
@@ -67,7 +68,7 @@ if (interactive()) {
 ```
 
 
-## Modification Data In-App
+## Modification of Data In-App
 
 Another reason to postpone data operations is to allow the application user to act the preprocessing stage.
 An initial, constant form of the data can be created in the global environment and then modified once the app starts.
@@ -124,3 +125,36 @@ It is recommended to keep the constant code in the global environment and to mov
 
 When using `teal_data_module` to modify a pre-existing `teal_data` object it is crucial that the server function and the data object are defined in the same environment as otherwise the server function will not be able to access the data object.
 This means server functions defined in packages cannot be used.
+
+### Extending existing `teal_data_modules`
+
+The `teal_data_module` can be further modified outside of the initial `shiny` module and processed after user inputs.
+The `within` function allows to process at runtime the data in the `teal_data` object contained in `teal_data_module`.
+
+Building on the previous example, the `data_mod` is handled as a generic connector and here new columns are added once the data is retrieved.
+
+```{r}
+data_mod_2 <- within(
+  data_mod,
+  {
+    # Create new column with Ratio of Sepal.Width and Petal.Width
+    dataset1$Ratio.Sepal.Petal.Width <- round(dataset1$Sepal.Width / dataset1$Petal.Width, digits = 2L)
+    # Create new column that converts Miles per Galon to Liter per 100 Km
+    dataset2$lp100km <- round(dataset2$mpg * 0.42514371, digits = 2L)
+    dataset2 <- dplyr::relocate(
+      dataset2,
+      "lp100km",
+      .after = "mpg"
+    )
+  }
+)
+
+app <- init(
+  data = data_mod_2,
+  module = example_module()
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
