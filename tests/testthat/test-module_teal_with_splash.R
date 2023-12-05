@@ -96,7 +96,7 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws then qenv
       id = "test",
       data = teal_data_module(
         ui = function(id) div(),
-        server = function(id) reactive(teal_data() %>% within(stop("not good")))
+        server = function(id) reactive(within(teal_data(), stop("not good")))
       ),
       modules = modules(example_module())
     ),
@@ -175,3 +175,98 @@ testthat::test_that("srv_teal_with_splash gets observe event from srv_teal", {
     }
   )
 })
+
+testthat::test_that("srv_teal_with_splash accepts data after within.teal_data_module", {
+  tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(teal_data(IRIS = iris)))
+  tdm2 <- within(tdm, IRIS$id <- seq_len(NROW(IRIS$Species))) # nolint: object_name_linter.
+
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = srv_teal_with_splash,
+      args = list(
+        id = "id",
+        data = tdm2,
+        modules = modules(example_module())
+      ),
+      expr = {
+        testthat::expect_s3_class(teal_data_rv, "reactive")
+        testthat::expect_s3_class(teal_data_rv_validate, "reactive")
+        testthat::expect_s4_class(teal_data_rv_validate(), "teal_data")
+        testthat::expect_identical(
+          teal_data_rv_validate()[["IRIS"]],
+          within(iris, id <- seq_len(NROW(Species)))
+        )
+      }
+    )
+  )
+})
+
+testthat::test_that("srv_teal_with_splash throws error when within.teal_data_module returns qenv.error", {
+  tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(teal_data(IRIS = iris)))
+  tdm2 <- within(tdm, non_existing_var + 1)
+
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = srv_teal_with_splash,
+      args = list(
+        id = "id",
+        data = tdm2,
+        modules = modules(example_module())
+      ),
+      expr = {
+        testthat::expect_s3_class(teal_data_rv, "reactive")
+        testthat::expect_s3_class(teal_data_rv(), "qenv.error")
+        testthat::expect_s3_class(teal_data_rv_validate, "reactive")
+        testthat::expect_error(teal_data_rv_validate(), "when evaluating qenv code")
+      }
+    )
+  )
+})
+
+testthat::test_that("srv_teal_with_splash throws error when within.teal_data_module returns NULL", {
+  tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(NULL))
+  tdm2 <- within(tdm, within(1 + 1))
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = srv_teal_with_splash,
+      args = list(
+        id = "id",
+        data = tdm2,
+        modules = modules(example_module())
+      ),
+      expr = {
+        testthat::expect_s3_class(teal_data_rv, "reactive")
+        testthat::expect_null(teal_data_rv())
+        testthat::expect_s3_class(teal_data_rv_validate, "reactive")
+        testthat::expect_error(teal_data_rv_validate(), "`teal_data_module` did not return `teal_data` object ")
+      }
+    )
+  )
+})
+
+testthat::test_that(
+  paste(
+    "srv_teal_with_splash throws error when within.teal_data_module returns arbitrary object",
+    "(other than `teal_data` or `qenv.error`)"
+  ),
+  {
+    tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(NULL))
+    tdm2 <- within(tdm, 1 + 1)
+    testthat::expect_no_error(
+      shiny::testServer(
+        app = srv_teal_with_splash,
+        args = list(
+          id = "id",
+          data = tdm2,
+          modules = modules(example_module())
+        ),
+        expr = {
+          testthat::expect_s3_class(teal_data_rv, "reactive")
+          testthat::expect_null(teal_data_rv())
+          testthat::expect_s3_class(teal_data_rv_validate, "reactive")
+          testthat::expect_error(teal_data_rv_validate(), "`teal_data_module` did not return `teal_data` object ")
+        }
+      )
+    )
+  }
+)
