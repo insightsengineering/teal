@@ -212,13 +212,15 @@ testthat::test_that("srv_teal_with_splash gets observe event from srv_teal", {
 })
 
 testthat::test_that("srv_teal_with_splash accepts data after within.teal_data_module", {
+  tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(teal_data(IRIS = iris)))
+  tdm2 <- within(tdm, IRIS$id <- seq_len(NROW(IRIS$Species)))
+
   testthat::expect_no_error(
     shiny::testServer(
       app = srv_teal_with_splash,
       args = list(
         id = "id",
-        data = teal_data_module(ui = function(id) div(), server = function(id) reactive(teal_data(IRIS = iris))) %>%
-          within(IRIS$id <- seq_len(NROW(IRIS$Species))),
+        data = tdm2,
         modules = modules(example_module())
       ),
       expr = {
@@ -235,13 +237,15 @@ testthat::test_that("srv_teal_with_splash accepts data after within.teal_data_mo
 })
 
 testthat::test_that("srv_teal_with_splash throws error when within.teal_data_module returns qenv.error", {
+  tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(teal_data(IRIS = iris)))
+  tdm2 <- within(tdm, non_existing_var + 1)
+
   testthat::expect_no_error(
     shiny::testServer(
       app = srv_teal_with_splash,
       args = list(
         id = "id",
-        data = teal_data_module(ui = function(id) div(), server = function(id) reactive(teal_data(IRIS = iris))) %>%
-          within(non_existing_var + 1),
+        data = tdm2,
         modules = modules(example_module())
       ),
       expr = {
@@ -255,13 +259,14 @@ testthat::test_that("srv_teal_with_splash throws error when within.teal_data_mod
 })
 
 testthat::test_that("srv_teal_with_splash throws error when within.teal_data_module returns NULL", {
+  tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(NULL))
+  tdm2 <- within(tdm, within(1 + 1))
   testthat::expect_no_error(
     shiny::testServer(
       app = srv_teal_with_splash,
       args = list(
         id = "id",
-        data = teal_data_module(ui = function(id) div(), server = function(id) reactive(NULL)) %>%
-          within(1 + 1),
+        data = tdm2,
         modules = modules(example_module())
       ),
       expr = {
@@ -280,13 +285,14 @@ testthat::test_that(
     "(other than `teal_data` or `qenv.error`)"
   ),
   {
+    tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(NULL))
+    tdm2 <- within(tdm, 1 + 1)
     testthat::expect_no_error(
       shiny::testServer(
         app = srv_teal_with_splash,
         args = list(
           id = "id",
-          data = teal_data_module(ui = function(id) div(), server = function(id) reactive(NULL)) %>%
-            within(1 + 1),
+          data = tdm2,
           modules = modules(example_module())
         ),
         expr = {

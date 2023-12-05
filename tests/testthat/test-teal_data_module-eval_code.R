@@ -43,16 +43,17 @@ testthat::test_that("within.teal_data_module modifies the reactive tea_data obje
 
   tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name_linter.
 
-  shiny::testServer(
-    app = tdm2$server,
-    expr = {
-      testthat::expect_identical(
-        td()[["IRIS"]],
-        within(iris, id <- seq_len(NROW(Species)))
-      )
-    }
-  ) %>%
-    testthat::expect_no_error()
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = tdm2$server,
+      expr = {
+        testthat::expect_identical(
+          td()[["IRIS"]],
+          within(iris, id <- seq_len(NROW(Species)))
+        )
+      }
+    )
+  )
 })
 
 testthat::test_that("eval_code.teal_data_module will execute several times until error", {
@@ -65,17 +66,18 @@ testthat::test_that("eval_code.teal_data_module will execute several times until
     }
   )
 
-  tdm2 <- eval_code(tdm, quote(stop_me <- FALSE)) %>%
-    eval_code("stopifnot(previous_error = stop_me)")
+  tdm2 <- eval_code(tdm, quote(stop_me <- FALSE))
+  tdm2 <- eval_code(tdm2, "stopifnot(previous_error = stop_me)")
 
-  shiny::testServer(
-    app = tdm2$server,
-    expr = {
-      testthat::expect_s3_class(td(), "qenv.error")
-      testthat::expect_match(td()$message, "previous_error.*when evaluating qenv code")
-    }
-  ) %>%
-    testthat::expect_no_error()
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = tdm2$server,
+      expr = {
+        testthat::expect_s3_class(td(), "qenv.error")
+        testthat::expect_match(td()$message, "previous_error.*when evaluating qenv code")
+      }
+    )
+  )
 })
 
 testthat::test_that("eval_code.teal_data_module throws error when original teal_data_module result is not reactive", {
@@ -90,11 +92,13 @@ testthat::test_that("eval_code.teal_data_module throws error when original teal_
 
   tdm2 <- eval_code(tdm, "1 + 1")
 
-  shiny::testServer(
-    app = tdm2$server,
-    expr = {}
-  ) %>%
-    testthat::expect_error("The `teal_data_module` must return a reactive expression.")
+  testthat::expect_error(
+    shiny::testServer(
+      app = tdm2$server,
+      expr = {}
+    ),
+    "The `teal_data_module` must return a reactive expression."
+  )
 })
 
 testthat::test_that("eval_code.teal_data_module propagates qenv error from the original/first call", {
@@ -103,7 +107,7 @@ testthat::test_that("eval_code.teal_data_module propagates qenv error from the o
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         reactive(
-          teal_data(IRIS = iris) %>% within("non_existing_var + 1")
+          within(teal_data(IRIS = iris), "non_existing_var + 1")
         )
       })
     }
@@ -111,16 +115,17 @@ testthat::test_that("eval_code.teal_data_module propagates qenv error from the o
 
   tdm2 <- eval_code(tdm, "IRIS$const <- 1 + 1")
 
-  shiny::testServer(
-    app = tdm2$server,
-    expr = {
-      testthat::expect_s3_class(
-        td(),
-        "qenv.error"
-      )
-    }
-  ) %>%
-    testthat::expect_no_error()
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = tdm2$server,
+      expr = {
+        testthat::expect_s3_class(
+          td(),
+          "qenv.error"
+        )
+      }
+    )
+  )
 })
 
 testthat::test_that("eval_code.teal_data_module handles an arbitrary object (other than `teal_data` or `qenv.error`)", {
@@ -135,16 +140,17 @@ testthat::test_that("eval_code.teal_data_module handles an arbitrary object (oth
 
   tdm2 <- eval_code(tdm, "1 + 1")
 
-  shiny::testServer(
-    app = tdm2$server,
-    expr = {
-      testthat::expect_identical(
-        td(),
-        list()
-      )
-    }
-  ) %>%
-    testthat::expect_no_error()
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = tdm2$server,
+      expr = {
+        testthat::expect_identical(
+          td(),
+          list()
+        )
+      }
+    )
+  )
 })
 
 testthat::test_that("eval_code.teal_data_module handles a `NULL` result", {
@@ -159,11 +165,12 @@ testthat::test_that("eval_code.teal_data_module handles a `NULL` result", {
 
   tdm2 <- eval_code(tdm, "1 + 1")
 
-  shiny::testServer(
-    app = tdm2$server,
-    expr = {
-      testthat::expect_null(td())
-    }
-  ) %>%
-    testthat::expect_no_error()
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = tdm2$server,
+      expr = {
+        testthat::expect_null(td())
+      }
+    )
+  )
 })
