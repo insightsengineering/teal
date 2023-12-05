@@ -31,8 +31,8 @@ navbar:
           href: articles/blueprint/product_map.html
         - text: Features
           navbar: Features
-        - text: "`qenv`"
-          href: articles/blueprint/qenv.html
+        - text: teal_data
+          href: articles/blueprint/teal_data.html
         - text: Filter Panel
           href: articles/blueprint/filter_panel.html
         - text: Delayed Data Loading (DDL)
