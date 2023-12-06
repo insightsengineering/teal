@@ -15,7 +15,8 @@ Accurate and consistent results are essential to ensure high-quality research an
 By prioritizing reproducibility, researchers can validate their methods, confirm their findings, and contribute to the advancement of the field.
 
 The `teal.code` package provides the [`qenv` class](https://insightsengineering.github.io/teal.code/latest-tag/articles/qenv.html) that facilitates code reproducibility.
-Code is passed to a `qenv` object, where it is evaluated in a specific environment and stored, and can be retrieved on request.
+Code is passed to a `qenv` object, where is evaluated in a specific environment.
+`qenv` also stores the code so that it can be retrieved on request.
 
 The `teal_data` class, which serves as the primary data interface for `teal` applications, inherits this code tracking behavior from `qenv`.
 
