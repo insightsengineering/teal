@@ -28,7 +28,7 @@ All applications use the `teal_data` class as a data container.
 `teal_data` objects are passed to `init` to build the application, where they are modified by the filter panel (if applicable) and passed on to modules.
 Thus, the first step of building a `teal` app is creating a `teal_data` object.
 
-### General Data
+### General data
 
 A `teal_data` object is created by calling the `teal_data` function and passing data objects as `name:value` pairs.
 
@@ -54,7 +54,7 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-### Reproducible Data
+### Reproducible data
 
 A `teal_data` stores data in a separate environment.
 Therefore, modifying the stored datasets requires that code be evaluated in that environment.
@@ -93,7 +93,7 @@ data_from_file <- teal_data()
 data_from_file <- eval_code(data, readLines("<path_to_file>"))
 ```
 
-### Creating Data In-App
+### Creating data in-app
 
 The one departure from passing a `teal_data` object to `init` is when the data does not exist in the environment where the app is run, _e.g._ when it has to be pulled from a remote source.
 In those cases a `teal_data_module` must be used.
@@ -101,11 +101,11 @@ See [this vignette](data-as-shiny-module.html) for a detailed description.
 
 <br>
 
-## Clinical Data
+## Clinical data
 
 Currently `teal` supports two specialized data formats.
 
-### `ADaM` Data
+### `ADaM` data
 
 The `ADaM` data model specifies relationships between `CDISC` datasets.
 The `cdisc_data` function takes advantage of that fact to to automatically set default joining keys (see [`join_keys` property](#join_keys)).
@@ -128,7 +128,7 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-### `MultiAssayExperiment` Data
+### `MultiAssayExperiment` data
 
 The `MultiAssayExperiment` package offers a data structure for representing and analyzing multi-omics experiments: a biological analysis approach utilizing multiple types of observations, such as DNA mutations and abundance of RNA and proteins, in the same biological specimens.
 
@@ -241,6 +241,6 @@ For a detailed explanation of verification, see [this `teal.data` vignette](http
 
 <br>
 
-## Further Reading
+## Further reading
 
 For a complete guide to the `teal_data` class, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/latest-tag/).

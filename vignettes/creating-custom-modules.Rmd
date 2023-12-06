@@ -77,7 +77,7 @@ function(
 When used inside a `teal` application called with `init`, the `data` argument is a named list of reactive `data.frame`s containing the data after having been filtered through the filter panel.
 It is of the `tdata` type and can be created using the `new_tdata` function.
 
-## A More Complicated Example
+## A more complicated example
 
 The `teal` framework also provides:
 

@@ -25,7 +25,7 @@ The `teal_data_module` function is used to build such a module from the followin
 
 `teal` will run this module when the application starts and the resulting `teal_data` object that will be used throughout all `teal` (analytic) modules. 
 
-## Creating Data In-App
+## Creating data in-app
 
 One case for postponing data operations are data sets that are dynamic, frequently updated.
 Such data cannot be created once and kept in the global environment.
@@ -68,7 +68,7 @@ if (interactive()) {
 ```
 
 
-## Modification of Data In-App
+## Modification of data in-app
 
 Another reason to postpone data operations is to allow the application user to act the preprocessing stage.
 An initial, constant form of the data can be created in the global environment and then modified once the app starts.
