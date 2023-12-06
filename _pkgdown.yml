@@ -33,10 +33,10 @@ navbar:
           navbar: Features
         - text: teal_data
           href: articles/blueprint/teal_data.html
-        - text: Filter Panel
-          href: articles/blueprint/filter_panel.html
         - text: In-App Data
           href: articles/blueprint/in_app_data.html
+        - text: Filter Panel
+          href: articles/blueprint/filter_panel.html
         - text: Module and Encapsulation
           href: articles/blueprint/module_encapsulation.html
 
@@ -81,8 +81,8 @@ articles:
     Features
   contents:
   - blueprint/teal_data
-  - blueprint/filter_panel
   - blueprint/in_app_data
+  - blueprint/filter_panel
   - blueprint/module_encapsulation
 
 

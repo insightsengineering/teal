@@ -12,7 +12,7 @@ vignette: >
 
 Typically the data that is passed into a `teal` application is available before the app is run.
 However, this is not always true and in some cases the data will be built only after the app has started.
-A good example is pulling the data from an external repository, like a data base, or uploading a file.
+A good example is pulling the data from an external repository, like a database, or uploading a file.
 Additional authentication may be required.
 
 ### `teal_data_module`
