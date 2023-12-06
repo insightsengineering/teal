@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.632544378698225" branch-rate="0" lines-covered="1069" lines-valid="1690" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-12-06 10:11:19.642642">
+<coverage line-rate="0.632170313424009" branch-rate="0" lines-covered="1069" lines-valid="1691" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-12-06 14:02:37.153822">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
   <packages>
-    <package name="teal" line-rate="0.632544378698225" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.632170313424009" branch-rate="0" complexity="0">
       <classes>
         <class name="dummy_functions.R" filename="R/dummy_functions.R" line-rate="0.0927835051546392" branch-rate="0" complexity="0">
           <methods>
@@ -2288,7 +2288,7 @@
                 <line number="28" hits="0" branch="false"/>
                 <line number="29" hits="0" branch="false"/>
                 <line number="30" hits="0" branch="false"/>
-                <line number="32" hits="0" branch="false"/>
+                <line number="31" hits="0" branch="false"/>
                 <line number="33" hits="0" branch="false"/>
                 <line number="34" hits="0" branch="false"/>
                 <line number="35" hits="0" branch="false"/>
@@ -2301,6 +2301,7 @@
                 <line number="42" hits="0" branch="false"/>
                 <line number="43" hits="0" branch="false"/>
                 <line number="44" hits="0" branch="false"/>
+                <line number="45" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -2310,7 +2311,7 @@
             <line number="28" hits="0" branch="false"/>
             <line number="29" hits="0" branch="false"/>
             <line number="30" hits="0" branch="false"/>
-            <line number="32" hits="0" branch="false"/>
+            <line number="31" hits="0" branch="false"/>
             <line number="33" hits="0" branch="false"/>
             <line number="34" hits="0" branch="false"/>
             <line number="35" hits="0" branch="false"/>
@@ -2323,6 +2324,7 @@
             <line number="42" hits="0" branch="false"/>
             <line number="43" hits="0" branch="false"/>
             <line number="44" hits="0" branch="false"/>
+            <line number="45" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="modules.R" filename="R/modules.R" line-rate="0.832258064516129" branch-rate="0" complexity="0">
