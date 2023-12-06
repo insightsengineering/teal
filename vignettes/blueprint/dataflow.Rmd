@@ -33,7 +33,7 @@ The sequence diagram above illustrates the different stages that data goes throu
 
 1. Data is created and loaded into `teal` app;
     - Data sets are wrapped in a `teal_data` before being passed to the app;
-    - The [`teal_data` class](teal_data.html) facilitates reproducibility;
+    - The [`teal_data` class](input_data.html) facilitates reproducibility;
 2. Data is passed to the filter panel;
     - Users _(or app developers)_ can specify filters to apply;
     - Filters can be specified globally, for the whole app, or for specific modules;
