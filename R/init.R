@@ -149,12 +149,6 @@ init <- function(data,
     as.list(hashables$data@env)
   } else if (inherits(data, "teal_data_module")) {
     body(data$server)
-  } else if (hashables$data$is_pulled()) {
-    sapply(get_dataname(hashables$data), simplify = FALSE, function(dn) {
-      hashables$data$get_dataset(dn)$get_raw_data()
-    })
-  } else {
-    hashables$data$get_code()
   }
 
   attr(filter, "app_id") <- rlang::hash(hashables)
