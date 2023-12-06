@@ -24,14 +24,14 @@ The `teal` framework's functionality draws heavily from the following packages:
 
 | R package            | Description                                                             |
 |----------------------|:------------------------------------------------------------------------|
-|[`teal`](https://github.com/insightsengineering/teal)                     | `shiny`-based interactive exploration framework for analyzing data|
-|[`teal.widgets`](https://github.com/insightsengineering/teal.widgets)     | `shiny` UI components used within `teal`|
-|[`teal.data`](https://github.com/insightsengineering/teal.data)           | provides the data structure used in all `teal` applications|
-|[`teal.slice`](https://github.com/insightsengineering/teal.slice)         | provides the filter panel to allow dynamic filtering of data|
-|[`teal.code`](https://github.com/insightsengineering/teal.code)           | provides a mechanism for tracking code to reproduce an analysis|
-|[`teal.transform`](https://github.com/insightsengineering/teal.transform) | standardizes extracting and merging data|
-|[`teal.logger`](https://github.com/insightsengineering/teal.logger)       | standardizes logging within `teal` framework|
-|[`teal.reporter`](https://github.com/insightsengineering/teal.reporter)   | allows `teal` applications to generate reports|
+|[`teal`](https://insightsengineering.github.io/teal)                     | `shiny`-based interactive exploration framework for analyzing data|
+|[`teal.widgets`](https://insightsengineering.github.io/teal.widgets)     | `shiny` UI components used within `teal`|
+|[`teal.data`](https://insightsengineering.github.io/teal.data)           | provides the data structure used in all `teal` applications|
+|[`teal.slice`](https://insightsengineering.github.io/teal.slice)         | provides the filter panel to allow dynamic filtering of data|
+|[`teal.code`](https://insightsengineering.github.io/teal.code)           | provides a mechanism for tracking code to reproduce an analysis|
+|[`teal.transform`](https://insightsengineering.github.io/teal.transform) | standardizes extracting and merging data|
+|[`teal.logger`](https://insightsengineering.github.io/teal.logger)       | standardizes logging within `teal` framework|
+|[`teal.reporter`](https://insightsengineering.github.io/teal.reporter)   | allows `teal` applications to generate reports|
 
 Although these packages are mentioned in the material, we strongly recommend visiting their vignettes to learn more about them.
 
