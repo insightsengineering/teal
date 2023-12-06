@@ -35,7 +35,7 @@ module(
 \itemize{
 \item \code{id} - teal will set proper shiny namespace for this module (see \code{\link[shiny:moduleServer]{shiny::moduleServer()}}).
 \item \code{input}, \code{output}, \code{session} - (not recommended) then \code{\link[shiny:callModule]{shiny::callModule()}} will be used to call a module.
-\item \code{data} (optional) module will receive a \code{tdata} object, a list of reactive (filtered) data specified in
+\item \code{data} (optional) module will receive a \code{teal_data} object, a list of reactive (filtered) data specified in
 the \code{filters} argument.
 \item \code{datasets} (optional) module will receive \code{FilteredData}. (See \verb{[teal.slice::FilteredData]}).
 \item \code{reporter} (optional) module will receive \code{Reporter}. (See \link[teal.reporter:Reporter]{teal.reporter::Reporter}).
