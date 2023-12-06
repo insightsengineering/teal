@@ -1,9 +1,9 @@
 ---
-title: "teal_data"
+title: "Input Data"
 author: "NEST CoreDev"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{teal_data}
+  %\VignetteIndexEntry{Input Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
