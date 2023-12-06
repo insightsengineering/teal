@@ -25,6 +25,6 @@ By implementing the modular app technique from the shiny module into the creatio
   `teal` module developers can concentrate solely on refining parameters or encoding, and output aspects (such as data summarization and visualization) without the need to concern themselves with the intricacies of the teal framework. 
   When developed correctly, the module seamlessly integrates with `teal`.
 
-1. Facilitated Collaboration  
+1. Facilitated collaboration  
   `teal` module development becomes an accessible entry point for developers interested in collaborating. 
   This approach encourages user collaboration for the improvement of teal modules, as developers gain a deeper understanding of the mechanics of the teal framework.

@@ -13,7 +13,7 @@ There are two main actors in the `teal` development:
 * `teal` App Developer
 * `teal` Module Developer
 
-## `teal` App Developer
+## `teal` app developer
 
 ```{r, child="_setup.Rmd"}
 ```
@@ -44,7 +44,7 @@ When developing a `teal` app, the developer will select the most appropriate `te
 
 To learn more about the existing modules, visit [`teal.gallery`](https://insightsengineering.github.io/teal.gallery/) that contains several demo applications and their source code.
 
-## `teal` Module Developer
+## `teal` module developer
 
 ```{r actors_mermaid2, echo=FALSE}
 shiny::pre(
@@ -75,7 +75,7 @@ Ultimately, one or more `teal` modules are employed to construct a `teal` app.
 
 To learn more about creating custom modules follow the [Tutorial on Creating a Custom Module](https://insightsengineering.github.io/teal/latest-tag/articles/creating-custom-modules.html).
 
-## Workflow in a Clinical Trial Study
+## Workflow in a clinical trial study
 
 ```{r actors_mermaid3, echo=FALSE}
 shiny::pre(

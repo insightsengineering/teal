@@ -24,7 +24,7 @@ Moreover, users can activate or deactivate filter states interactively, either i
 
 <div style="clear: both"></div>
 
-## Filter Flow
+## Filter flow
 
 ```{r, child="_setup.Rmd"}
 ```

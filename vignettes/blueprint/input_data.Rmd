@@ -19,7 +19,7 @@ Code is passed to a `qenv` object, where it is evaluated in a specific environme
 
 The `teal_data` class, which serves as the primary data interface for `teal` applications, inherits this code tracking behavior from `qenv`.
 
-## `teal_data` in a `teal` application
+## Preparing data for a `teal` application
 
 All `teal` applications run on data provided in a `teal_data` object.
 Data objects are stored and modified within the environment of the `teal_data` object and all R code used is tracked, which allows for the code to be evaluated and executed in the `teal` application, and reproduced outside the `teal` application.
