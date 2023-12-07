@@ -17,9 +17,9 @@ Additional authentication may be required.
 
 ### `teal_data_module`
 
-Data can be created, fetched, or modified in-app using the `teal_data_module`.
+Preprocessing actions can be performed in-app using the `teal_data_module`.
 Rather than passing a `teal_data` object to the app, one may pass a _`shiny` module_ that _returns_ a `teal_data` object (wrapped in a reactive expression).
-This allows the app developer to include user actions in data preprocessing.
+This allows the app developer to include user actions data creation, fetching, and even pre-filtering modification.
 
 ## Further reading
 
