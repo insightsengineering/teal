@@ -28,15 +28,15 @@ navbar:
         - text: Data Flow
           href: articles/blueprint/dataflow.html
         - text: Product Map
-          href: articles/blueprint/products_map.html
+          href: articles/blueprint/product_map.html
         - text: Features
           navbar: Features
-        - text: "`qenv`"
-          href: articles/blueprint/qenv.html
+        - text: Input Data
+          href: articles/blueprint/input_data.html
+        - text: In-App Data
+          href: articles/blueprint/in_app_data.html
         - text: Filter Panel
           href: articles/blueprint/filter_panel.html
-        - text: Delayed Data Loading (DDL)
-          href: articles/blueprint/ddl.html
         - text: Module and Encapsulation
           href: articles/blueprint/module_encapsulation.html
 
@@ -75,14 +75,14 @@ articles:
     - blueprint/intro
     - blueprint/actors
     - blueprint/dataflow
-    - blueprint/products_map
+    - blueprint/product_map
 - title: ""
   desc: >
     Features
   contents:
-  - blueprint/qenv
+  - blueprint/input_data
+  - blueprint/in_app_data
   - blueprint/filter_panel
-  - blueprint/ddl
   - blueprint/module_encapsulation
 
 

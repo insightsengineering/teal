@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## `teal` Apps With the Filter Panel
+## `teal` apps with the filter panel
 
 The filter panel is an integral part of all `teal` applications and is included on the right side.
 Based on the selections made in the filter panel, filter expressions are executed before passing data to `teal` modules.

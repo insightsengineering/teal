@@ -76,7 +76,7 @@ In the example below:
 
 The key function to use to create your `teal` application is `init`, which requires two arguments: `data` and `modules`.
 
-### Application Data
+### Application data
 
 The `data` argument to the `init` function specifies the data used by your application.
 In the example above this is data that exists in the global environment.
@@ -95,7 +95,7 @@ The `modules` argument to `init` consists of a list of `teal` modules (which can
 We recommend creating applications using predefined `teal` modules.
 See the references below for links to these modules.
 
-### Defining Filters
+### Defining filters
 
 The optional `filter` argument in `init` allows you to initialize the application with predefined filters.
 See the documentation for `init` for further details.

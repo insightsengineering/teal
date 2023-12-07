@@ -28,7 +28,7 @@ options("teal.bs_theme" = bslib::bs_theme("Custom Options"))
 #######################
 ```
 
-### Bootstrap Version and Themes
+### Bootstrap version and themes
 
 The best and recommended ways to **explore** the Bootstrap themes are to use `bslib::run_with_themer(shinyApp(app$ui, app$server))` or `bslib::bs_theme_preview()`, both of which offer an interactive explore mode (not supported for Bootstrap 3). The `bslib::bs_theme_preview()` is recommended when the end user does not have any `shiny` app yet. When you already have a `shiny` app and you want to test different Bootstrap themes (and `CSS` styling) then `bslib::run_with_themer(shinyApp(app$ui, app$server))` is recommended.
 
@@ -54,11 +54,11 @@ options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "THEME NAM
 # or run the app inside bslib::run_with_themer
 ```
 
-### Reset the Bootstrap Theme
+### Reset the Bootstrap theme
 
 Please use the `options("teal.bs_theme" = NULL)` call to return to the default `shiny` Bootstrap for `teal` apps.
 
-### Theme Not Updated
+### Theme not updated
 
 One reason the theme is not updated could be that the web browser caches the previous one, especially different themes are run one after another. Please, use the `Cmd+Shift+R` (Mac) or `Ctrl+F5` (Windows) to hard refresh the webpage.
 
@@ -87,7 +87,7 @@ remotes::install_github("https://github.com/dreamRs/shinyWidgets@main")
 
 If you want to update the theme in a regular `shiny::fluidPage`-like app, you do not need the `teal.bs_theme` option. Simply provide the `bslib::bs_theme` directly: `shiny::fluidPage(theme = bslib::bs_theme(...), ...)`.
 
-### Interactive Theming Guide
+### Interactive theming guide
 
 In this section we provide a step-by-step guide to customizing a `teal` application theme interactively with `bslib::run_with_themer()`. We recommend starting with a simple case and once you are satisfied, verifying with your full application. To that end we will use the `teal` application below. For this example we assume that we want to use Bootstrap 5. To start, we launch the app with `bslib::run_with_themer(app$ui, app$server)` instead of `shiny::shinyApp`.
 

@@ -26,7 +26,7 @@ The responsibilities of a module developer include:
 
 The entire life cycle of objects involved in creating the report and configuring the module to preview the report is handled by `teal`.
 
-## Custom Module
+## Custom module
 
 Let us consider an example module, based on the example module from `teal`:
 ```{r, message=FALSE}
@@ -64,7 +64,7 @@ app <- init(
 if (interactive()) shinyApp(app$ui, app$server)
 ```
 
-## Add Support for Reporting
+## Add support for reporting
 
 ### Modify the declaration of the server function
 
