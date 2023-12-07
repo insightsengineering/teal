@@ -51,8 +51,6 @@ Imports:
     utils
 Suggests:
     bslib,
-    covr,
-    dplyr (>= 1.0.5),
     knitr (>= 1.42),
     MultiAssayExperiment,
     R6,
@@ -70,8 +68,8 @@ Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     mllg/checkmate, jeroen/jsonlite, r-lib/lifecycle, daroczig/logger,
     tidyverse/magrittr, r-lib/rlang, daattali/shinyjs,
     insightsengineering/teal.logger, insightsengineering/teal.reporter,
-    insightsengineering/teal.widgets, rstudio/bslib, r-lib/covr,
-    tidyverse/dplyr, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
+    insightsengineering/teal.widgets, rstudio/bslib,
+    yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
     rstudio/rmarkdown, rstudio/shinyvalidate,
     insightsengineering/teal.code, r-lib/testthat, r-lib/withr,
     yaml=vubiostat/r-yaml

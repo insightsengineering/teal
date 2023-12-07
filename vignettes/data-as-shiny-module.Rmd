@@ -141,11 +141,6 @@ data_mod_2 <- within(
     dataset1$Ratio.Sepal.Petal.Width <- round(dataset1$Sepal.Width / dataset1$Petal.Width, digits = 2L)
     # Create new column that converts Miles per Galon to Liter per 100 Km
     dataset2$lp100km <- round(dataset2$mpg * 0.42514371, digits = 2L)
-    dataset2 <- dplyr::relocate(
-      dataset2,
-      "lp100km",
-      .after = "mpg"
-    )
   }
 )
 
