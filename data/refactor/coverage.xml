@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.632170313424009" branch-rate="0" lines-covered="1069" lines-valid="1691" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-12-07 08:30:56.458609">
+<coverage line-rate="0.632170313424009" branch-rate="0" lines-covered="1069" lines-valid="1691" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-12-07 09:22:05.349388">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -69,10 +69,13 @@
             </method>
             <method name="example_module" signature="" line-rate="0.290322580645161" branch-rate="0" complexity="0">
               <lines>
+                <line number="89" hits="44" branch="false"/>
+                <line number="90" hits="44" branch="false"/>
+                <line number="91" hits="44" branch="false"/>
                 <line number="92" hits="44" branch="false"/>
-                <line number="93" hits="44" branch="false"/>
-                <line number="94" hits="44" branch="false"/>
-                <line number="95" hits="44" branch="false"/>
+                <line number="93" hits="0" branch="false"/>
+                <line number="94" hits="0" branch="false"/>
+                <line number="95" hits="0" branch="false"/>
                 <line number="96" hits="0" branch="false"/>
                 <line number="97" hits="0" branch="false"/>
                 <line number="98" hits="0" branch="false"/>
@@ -84,26 +87,26 @@
                 <line number="104" hits="0" branch="false"/>
                 <line number="105" hits="0" branch="false"/>
                 <line number="106" hits="0" branch="false"/>
-                <line number="107" hits="0" branch="false"/>
-                <line number="108" hits="0" branch="false"/>
+                <line number="107" hits="44" branch="false"/>
+                <line number="108" hits="44" branch="false"/>
                 <line number="109" hits="0" branch="false"/>
-                <line number="110" hits="44" branch="false"/>
-                <line number="111" hits="44" branch="false"/>
+                <line number="110" hits="0" branch="false"/>
+                <line number="111" hits="0" branch="false"/>
                 <line number="112" hits="0" branch="false"/>
                 <line number="113" hits="0" branch="false"/>
                 <line number="114" hits="0" branch="false"/>
                 <line number="115" hits="0" branch="false"/>
                 <line number="116" hits="0" branch="false"/>
-                <line number="117" hits="0" branch="false"/>
-                <line number="118" hits="0" branch="false"/>
-                <line number="119" hits="0" branch="false"/>
-                <line number="120" hits="44" branch="false"/>
-                <line number="121" hits="44" branch="false"/>
-                <line number="122" hits="44" branch="false"/>
+                <line number="117" hits="44" branch="false"/>
+                <line number="118" hits="44" branch="false"/>
+                <line number="119" hits="44" branch="false"/>
               </lines>
             </method>
             <method name="example_modules" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
+                <line number="131" hits="0" branch="false"/>
+                <line number="132" hits="0" branch="false"/>
+                <line number="133" hits="0" branch="false"/>
                 <line number="134" hits="0" branch="false"/>
                 <line number="135" hits="0" branch="false"/>
                 <line number="136" hits="0" branch="false"/>
@@ -117,9 +120,6 @@
                 <line number="144" hits="0" branch="false"/>
                 <line number="145" hits="0" branch="false"/>
                 <line number="146" hits="0" branch="false"/>
-                <line number="147" hits="0" branch="false"/>
-                <line number="148" hits="0" branch="false"/>
-                <line number="149" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -174,10 +174,13 @@
             <line number="69" hits="0" branch="false"/>
             <line number="70" hits="0" branch="false"/>
             <line number="71" hits="0" branch="false"/>
+            <line number="89" hits="44" branch="false"/>
+            <line number="90" hits="44" branch="false"/>
+            <line number="91" hits="44" branch="false"/>
             <line number="92" hits="44" branch="false"/>
-            <line number="93" hits="44" branch="false"/>
-            <line number="94" hits="44" branch="false"/>
-            <line number="95" hits="44" branch="false"/>
+            <line number="93" hits="0" branch="false"/>
+            <line number="94" hits="0" branch="false"/>
+            <line number="95" hits="0" branch="false"/>
             <line number="96" hits="0" branch="false"/>
             <line number="97" hits="0" branch="false"/>
             <line number="98" hits="0" branch="false"/>
@@ -189,22 +192,22 @@
             <line number="104" hits="0" branch="false"/>
             <line number="105" hits="0" branch="false"/>
             <line number="106" hits="0" branch="false"/>
-            <line number="107" hits="0" branch="false"/>
-            <line number="108" hits="0" branch="false"/>
+            <line number="107" hits="44" branch="false"/>
+            <line number="108" hits="44" branch="false"/>
             <line number="109" hits="0" branch="false"/>
-            <line number="110" hits="44" branch="false"/>
-            <line number="111" hits="44" branch="false"/>
+            <line number="110" hits="0" branch="false"/>
+            <line number="111" hits="0" branch="false"/>
             <line number="112" hits="0" branch="false"/>
             <line number="113" hits="0" branch="false"/>
             <line number="114" hits="0" branch="false"/>
             <line number="115" hits="0" branch="false"/>
             <line number="116" hits="0" branch="false"/>
-            <line number="117" hits="0" branch="false"/>
-            <line number="118" hits="0" branch="false"/>
-            <line number="119" hits="0" branch="false"/>
-            <line number="120" hits="44" branch="false"/>
-            <line number="121" hits="44" branch="false"/>
-            <line number="122" hits="44" branch="false"/>
+            <line number="117" hits="44" branch="false"/>
+            <line number="118" hits="44" branch="false"/>
+            <line number="119" hits="44" branch="false"/>
+            <line number="131" hits="0" branch="false"/>
+            <line number="132" hits="0" branch="false"/>
+            <line number="133" hits="0" branch="false"/>
             <line number="134" hits="0" branch="false"/>
             <line number="135" hits="0" branch="false"/>
             <line number="136" hits="0" branch="false"/>
@@ -218,9 +221,6 @@
             <line number="144" hits="0" branch="false"/>
             <line number="145" hits="0" branch="false"/>
             <line number="146" hits="0" branch="false"/>
-            <line number="147" hits="0" branch="false"/>
-            <line number="148" hits="0" branch="false"/>
-            <line number="149" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="get_rcode_utils.R" filename="R/get_rcode_utils.R" line-rate="0.967741935483871" branch-rate="0" complexity="0">
