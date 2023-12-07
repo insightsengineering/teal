@@ -78,10 +78,7 @@ example_datasets <- function() { # nolint
 #' @return A `teal` module which can be included in the `modules` argument to [teal::init()].
 #' @examples
 #' app <- init(
-#'   data = teal_data(
-#'     IRIS = iris,
-#'     MTCARS = mtcars
-#'   ),
+#'   data = teal_data(IRIS = iris, MTCARS = mtcars),
 #'   modules = example_module()
 #' )
 #' if (interactive()) {
