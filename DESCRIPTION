@@ -31,9 +31,9 @@ BugReports: https://github.com/insightsengineering/teal/issues
 Depends:
     R (>= 4.0),
     shiny (>= 1.7.0),
-    teal.data (>= 0.3.0.9011),
-    teal.slice (>= 0.4.0.9023),
-    teal.transform (>= 0.4.0.9007)
+    teal.data (>= 0.3.0.9017),
+    teal.slice (>= 0.4.0.9027),
+    teal.transform (>= 0.4.0.9010)
 Imports:
     checkmate (>= 2.1.0),
     jsonlite,
@@ -51,8 +51,6 @@ Imports:
     utils
 Suggests:
     bslib,
-    covr,
-    dplyr (>= 1.0.5),
     knitr (>= 1.42),
     MultiAssayExperiment,
     R6,
@@ -70,8 +68,8 @@ Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     mllg/checkmate, jeroen/jsonlite, r-lib/lifecycle, daroczig/logger,
     tidyverse/magrittr, r-lib/rlang, daattali/shinyjs,
     insightsengineering/teal.logger, insightsengineering/teal.reporter,
-    insightsengineering/teal.widgets, rstudio/bslib, r-lib/covr,
-    tidyverse/dplyr, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
+    insightsengineering/teal.widgets, rstudio/bslib,
+    yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
     rstudio/rmarkdown, rstudio/shinyvalidate,
     insightsengineering/teal.code, r-lib/testthat, r-lib/withr,
     yaml=vubiostat/r-yaml

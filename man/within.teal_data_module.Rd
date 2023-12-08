@@ -2,16 +2,16 @@
 % Please edit documentation in R/teal_data_module-eval_code.R
 \name{within.teal_data_module}
 \alias{within.teal_data_module}
-\title{Evaluate expression in \code{qenv} object.}
+\title{Code Tracking With \code{qenv} Object}
 \usage{
 \method{within}{teal_data_module}(data, expr, ...)
 }
 \arguments{
 \item{data}{(\code{teal_data_module}) object}
 
-\item{expr}{\code{expression} to evaluate}
+\item{expr}{(\code{expression}) to evaluate. Must be inline code, see \verb{Using language objects...}}
 
-\item{...}{\code{name:value} pairs to inject values into \code{expr}}
+\item{...}{see \code{Details}}
 }
 \value{
 Returns a \code{teal_data_module} object with a delayed evaluation of \code{expr}
@@ -22,10 +22,22 @@ Convenience function for evaluating inline code inside the environment of a
 \code{teal_data_module}
 }
 \details{
-This is a wrapper for \code{eval_code} that provides a simplified way of passing code for evaluation.
-It accepts only inline expressions (both simple and compound) and allows for injecting values into \code{expr}
-through the \code{...} argument: as \code{name:value} pairs are passed to \code{...},
-\code{name} in \code{expr} will be replaced with \code{value}.
+\code{qenv()} instantiates a \code{qenv} with an empty environment.
+Any changes must be made by evaluating code in it with \code{eval_code} or \code{within}, thereby ensuring reproducibility.
+
+\code{new_qenv()} (\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} and not recommended)
+can instantiate a \code{qenv} object with data in the environment and code registered.
+
+\code{eval_code} evaluates given code in the \code{qenv} environment and appends it to the \code{code} slot.
+Thus, if the \code{qenv} had been instantiated empty, contents of the environment are always a result of the stored code.
+
+\code{get_code} retrieves the code stored in the \code{qenv}. \code{...} passes arguments to methods.
+
+\code{within} is a convenience function for evaluating inline code inside the environment of a \code{qenv}.
+It is a method for the \code{base} generic that wraps \code{eval_code} to provide a simplified way of passing code.
+\code{within} accepts only inline expressions (both simple and compound) and allows for injecting values into \code{expr}
+through the \code{...} argument:
+as \code{name:value} pairs are passed to \code{...}, \code{name} in \code{expr} will be replaced with \code{value}.
 }
 \examples{
 tdm <- teal_data_module(

@@ -5,6 +5,13 @@
 * `data` argument in `init` now accepts `teal_data` and `teal_data_module`.
 * Added `landing_popup_module` function which creates a module that will display a popup when the app starts. The popup will block access to the app until it is dismissed.
 * Filter state snapshots can now be uploaded from file. See `?snapshot`.
+* Added `as_tdata` function to facilitate migration of modules to the new `teal_data` class.
+
+### Breaking changes
+
+* `tdata` has been deprecated and replaced with `teal_data`. Support for `tdata` passed to the `data` argument in `module(server)` will be removed in the next release.
+* `module(ui)` argument no longer accepts `data` and `datasets` arguments. All data dependent logic should be set in the `server` function.
+* `module(server)` argument deprecated `datasets` argument. `teal_module`s' `server` functions should accept `data` (`teal_data`) instead.
 
 ### Miscellaneous
 

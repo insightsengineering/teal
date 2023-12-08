@@ -22,23 +22,17 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  checkmate::assert_multi_class(data, c("TealData", "teal_data", "teal_data_module"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
-
   splash_ui <- if (inherits(data, "teal_data_module")) {
     data$ui(ns("teal_data_module"))
   } else if (inherits(data, "teal_data")) {
     div()
-  } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
-    div()
-  } else {
-    message("App was initialized with delayed data loading.")
-    data$get_ui(ns("startapp_module"))
   }
   ui_teal(
     id = ns("teal"),
@@ -64,7 +58,7 @@ ui_teal_with_splash <- function(id,
 #' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
-  checkmate::check_multi_class(data, c("TealData", "teal_data", "teal_data_module"))
+  checkmate::check_multi_class(data, c("teal_data", "teal_data_module"))
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_with_splash initializing module with data.")
@@ -83,41 +77,13 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       data
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
-    } else if (inherits(data, "TealDataAbstract") && teal.data::is_pulled(data)) {
-      new_data <- do.call(
-        teal.data::teal_data,
-        c(
-          lapply(data$get_datasets(), function(x) x$get_raw_data()),
-          list(code = data$get_code()),
-          list(join_keys = teal.data::join_keys(data))
-        )
-      )
-      reactiveVal(new_data) # will trigger by setting it
-    } else {
-      raw_data_old <- data$get_server()(id = "startapp_module")
-      raw_data <- reactive({
-        data <- raw_data_old()
-        if (!is.null(data)) {
-          # raw_data is a reactive which returns data only when submit button clicked
-          # otherwise it returns NULL
-          do.call(
-            teal.data::teal_data,
-            c(
-              lapply(data$get_datasets(), function(x) x$get_raw_data()),
-              list(code = data$get_code()),
-              list(join_keys = teal.data::join_keys(data))
-            )
-          )
-        }
-      })
-      raw_data
     }
 
     teal_data_rv_validate <- reactive({
       # custom module can return error
       data <- tryCatch(teal_data_rv(), error = function(e) e)
 
-      # there is an empty reactive event on init!
+      # there is an empty reactive cycle on init!
       if (inherits(data, "shiny.silent.error") && identical(data$message, "")) {
         return(NULL)
       }
@@ -183,7 +149,6 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       teal_data_rv_validate()
       NULL
     })
-
 
 
     res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter)

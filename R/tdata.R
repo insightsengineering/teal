@@ -1,5 +1,6 @@
 #' Create a `tdata` Object
 #'
+#' @description `r lifecycle::badge("deprecated")`
 #' Create a new object called `tdata` which contains `data`, a `reactive` list of data.frames
 #' (or `MultiAssayExperiment`), with attributes:
 #' \itemize{
@@ -20,6 +21,9 @@
 #' @param metadata A `named list` each element contains a list of metadata about the named data.frame
 #' Each element of these list should be atomic and length one.
 #' @return A `tdata` object
+#'
+#' @seealso `as_tdata`
+#'
 #' @examples
 #'
 #' data <- new_tdata(
@@ -34,13 +38,21 @@
 #' isolate(data[["iris"]]())
 #'
 #' # Get code
-#' isolate(get_code(data))
+#' isolate(get_code_tdata(data))
 #'
 #' # Get metadata
 #' get_metadata(data, "iris")
 #'
 #' @export
 new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
+  lifecycle::deprecate_soft(
+    when = "0.99.0",
+    what = "tdata()",
+    details = paste(
+      "tdata is deprecated and will be removed in the next release. Use `teal_data` instead.\n",
+      "Please follow migration instructions https://github.com/insightsengineering/teal/discussions/987."
+    )
+  )
   checkmate::assert_list(
     data,
     any.missing = FALSE, names = "unique",
@@ -51,7 +63,6 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
 
   checkmate::assert_list(metadata, names = "unique", null.ok = TRUE)
   checkmate::assert_subset(names(metadata), names(data))
-  for (m in metadata) teal.data::validate_metadata(m)
 
   if (is.reactive(code)) {
     isolate(checkmate::assert_class(code(), "character", .var.name = "code"))
@@ -101,15 +112,6 @@ tdata2env <- function(data) { # nolint
   list2env(lapply(data, function(x) if (is.reactive(x)) x() else x))
 }
 
-#' @rdname tdata
-#' @param x a `tdata` object
-#' @param ... additional arguments for the generic
-#' @export
-get_code.tdata <- function(x, ...) { # nolint
-  # note teal.data which teal depends on defines the get_code method
-  attr(x, "code")()
-}
-
 
 #' Wrapper for `get_code.tdata`
 #' This wrapper is to be used by downstream packages to extract the code of a `tdata` object
@@ -120,7 +122,7 @@ get_code.tdata <- function(x, ...) { # nolint
 #' @export
 get_code_tdata <- function(data) {
   checkmate::assert_class(data, "tdata")
-  get_code(data)
+  attr(data, "code")()
 }
 
 #' Extract `join_keys` from `tdata`
@@ -156,4 +158,49 @@ get_metadata.tdata <- function(data, dataname) {
 #' @export
 get_metadata.default <- function(data, dataname) {
   stop("get_metadata function not implemented for this object")
+}
+
+
+#' Downgrade `teal_data` objects in modules for compatibility.
+#'
+#' Convert `teal_data` to `tdata` in `teal` modules.
+#'
+#' Recent changes in `teal` cause modules to fail because modules expect a `tdata` object
+#' to be passed to the `data` argument but instead they receive a `teal_data` object,
+#' which is additionally wrapped in a reactive expression in the server functions.
+#' In order to easily adapt such modules without a proper refactor,
+#' use this function to downgrade the `data` argument.
+#'
+#' @param x data object, either `tdata` or `teal_data`, the latter possibly in a reactive expression
+#'
+#' @return Object of class `tdata`.
+#'
+#' @examples
+#' td <- teal_data()
+#' td <- within(td, iris <- iris) %>% within(mtcars <- mtcars)
+#' td
+#' as_tdata(td)
+#' as_tdata(reactive(td))
+#'
+#' @export
+#' @rdname tdata_deprecation
+#'
+as_tdata <- function(x) {
+  if (inherits(x, "tdata")) {
+    return(x)
+  }
+  if (is.reactive(x)) {
+    checkmate::assert_class(isolate(x()), "teal_data")
+    datanames <- isolate(teal.data::datanames(x()))
+    datasets <- sapply(datanames, function(dataname) reactive(x()[[dataname]]), simplify = FALSE)
+    code <- reactive(teal.code::get_code(x()))
+    join_keys <- isolate(teal.data::join_keys(x()))
+  } else if (inherits(x, "teal_data")) {
+    datanames <- teal.data::datanames(x)
+    datasets <- sapply(datanames, function(dataname) reactive(x[[dataname]]), simplify = FALSE)
+    code <- reactive(teal.code::get_code(x))
+    join_keys <- isolate(teal.data::join_keys(x))
+  }
+
+  new_tdata(data = datasets, code = code, join_keys = join_keys)
 }

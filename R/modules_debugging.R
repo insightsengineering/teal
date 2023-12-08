@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' app <- init(
-#'   data = list(iris = iris, mtcars = mtcars),
+#'   data = teal_data(iris = iris, mtcars = mtcars),
 #'   modules = teal:::filter_calls_module(),
 #'   header = "Simple teal app"
 #' )
@@ -27,10 +27,11 @@ filter_calls_module <- function(label = "Filter Calls Module") { # nolint
   module(
     label = label,
     server = function(input, output, session, data) {
-      checkmate::assert_class(data, "tdata")
+      checkmate::assert_class(data, "reactive")
+      checkmate::assert_class(isolate(data()), "teal_data")
 
       output$filter_calls <- renderText({
-        get_code_tdata(data)
+        teal.data::get_code(data())
       })
     },
     ui = function(id, ...) {

@@ -2,27 +2,20 @@
 % Please edit documentation in R/module_nested_tabs.R
 \name{.datasets_to_data}
 \alias{.datasets_to_data}
-\title{Convert \code{FilteredData} to reactive list of datasets of the \code{tdata} type.}
+\title{Convert \code{FilteredData} to reactive list of datasets of the \code{teal_data} type.}
 \usage{
-.datasets_to_data(module, datasets, trigger_data = reactiveVal(1L))
+.datasets_to_data(module, datasets)
 }
 \arguments{
 \item{module}{(\code{teal_module}) module where needed filters are taken from}
 
 \item{datasets}{(\code{FilteredData}) object where needed data are taken from}
-
-\item{trigger_data}{(\code{reactiveVal}) to trigger getting the filtered data}
 }
 \value{
-list of reactive datasets with following attributes:
-\itemize{
-\item \code{code} (\code{character}) containing datasets reproducible code.
-\item \code{join_keys} (\code{join_keys}) containing relationships between datasets.
-\item \code{metadata} (\code{list}) containing metadata of datasets.
-}
+A \code{teal_data} object.
 }
 \description{
-Converts \code{FilteredData} object to \code{tdata} object containing datasets needed for a specific module.
+Converts \code{FilteredData} object to \code{teal_data} object containing datasets needed for a specific module.
 Please note that if module needs dataset which has a parent, then parent will be also returned.
 A hash per \code{dataset} is calculated internally and returned in the code.
 }

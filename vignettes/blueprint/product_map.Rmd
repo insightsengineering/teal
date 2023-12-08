@@ -1,9 +1,9 @@
 ---
-title: "Products Map"
+title: "Product Map"
 author: "NEST CoreDev"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Products Map}
+  %\VignetteIndexEntry{Product Map}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -65,7 +65,7 @@ style modules fill:pink
 
 `teal` is a modular framework that relies on a suite of related R packages, as illustrated in the above diagram, to provide a wide range of functionalities.
 
-`teal`'s primary function is to create web app for analysing clinical trial data, but it **has** a multitude of features distributed across various R packages.
+`teal`'s primary function is to create web app for analysing clinical trial data but it **has** a multitude of features distributed across various R packages.
 
 Developers can selectively leverage these R packages, such as `teal.widgets`, `teal.code`, and `teal.logger`, to **build** `teal` modules for a `teal` app. This approach gives the developers the tools that speed up their work and avoid re-implementing existing logic and UI elements.
 

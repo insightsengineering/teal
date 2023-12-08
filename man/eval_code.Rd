@@ -16,7 +16,7 @@
 \arguments{
 \item{object}{(\code{teal_data_module})}
 
-\item{code}{(\code{character} or \code{language}) code to evaluate. Also accepts and stores comments}
+\item{code}{(\code{character} or \code{language}) code to evaluate. If \code{character}, comments are retained.}
 }
 \value{
 Returns a \code{teal_data_module} object.

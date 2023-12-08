@@ -1,5 +1,6 @@
 #' Data module for `teal` applications
 #'
+#' @description  `r lifecycle::badge("experimental")`
 #' Creates `teal_data_module` object - a `shiny` module to supply or modify data in a `teal` application.
 #'
 #' This function creates a `shiny` module that allows for running data pre-processing code after the app starts.
