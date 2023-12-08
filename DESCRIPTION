@@ -33,7 +33,7 @@ Depends:
     shiny (>= 1.7.0),
     teal.data (>= 0.3.0.9017),
     teal.slice (>= 0.4.0.9027),
-    teal.transform (>= 0.4.0.9007)
+    teal.transform (>= 0.4.0.9010)
 Imports:
     checkmate (>= 2.1.0),
     jsonlite,
