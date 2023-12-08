@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9025</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9026</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,25 +36,21 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item">
-  <a class="nav-link" href="../articles/teal.html">Get started</a>
-</li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="nav-item dropdown">
+<li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/getting-started-with-teal.html">Getting Started with teal</a>
+    <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Using teal</h6>
     <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
     <a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal Application With R Options</a>
-    <a class="dropdown-item" href="../articles/teal-bs-themes.html">Bootstrap Themes in teal</a>
+    <a class="dropdown-item" href="../articles/bootstrap-themes-in-teal.html">Bootstrap Themes in teal</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Data in teal Apps</h6>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Using ADaM Data in teal Applications</a>
-    <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Using General Data in teal Applications</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Using MultiAssayExperiment data in teal Applications</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing Data</a>
+    <a class="dropdown-item" href="../articles/including-data-in-teal-applications.html">Including Data in teal Applications</a>
     <a class="dropdown-item" href="../articles/data-as-shiny-module.html">Data as shiny Module</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Extending teal</h6>
@@ -71,11 +67,11 @@
     <a class="dropdown-item" href="../articles/blueprint/intro.html">Introduction</a>
     <a class="dropdown-item" href="../articles/blueprint/actors.html">Actors</a>
     <a class="dropdown-item" href="../articles/blueprint/dataflow.html">Data Flow</a>
-    <a class="dropdown-item" href="../articles/blueprint/products_map.html">Product Map</a>
+    <a class="dropdown-item" href="../articles/blueprint/product_map.html">Product Map</a>
     <h6 class="dropdown-header" data-toc-skip>Features</h6>
-    <a class="dropdown-item" href="../articles/blueprint/qenv.html">`qenv`</a>
+    <a class="dropdown-item" href="../articles/blueprint/input_data.html">Input Data</a>
+    <a class="dropdown-item" href="../articles/blueprint/in_app_data.html">In-App Data</a>
     <a class="dropdown-item" href="../articles/blueprint/filter_panel.html">Filter Panel</a>
-    <a class="dropdown-item" href="../articles/blueprint/ddl.html">Delayed Data Loading (DDL)</a>
     <a class="dropdown-item" href="../articles/blueprint/module_encapsulation.html">Module and Encapsulation</a>
   </div>
 </li>
@@ -118,8 +114,8 @@
 CoreDev</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/HEAD/vignettes/teal.Rmd" class="external-link"><code>vignettes/teal.Rmd</code></a></small>
-      <div class="d-none name"><code>teal.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/HEAD/vignettes/getting-started-with-teal.Rmd" class="external-link"><code>vignettes/getting-started-with-teal.Rmd</code></a></small>
+      <div class="d-none name"><code>getting-started-with-teal.Rmd</code></div>
     </div>
 
     
@@ -171,17 +167,24 @@ and <code>mtcars</code> datasets and displays their contents:</p>
 <p>As shown in the image above, this application consists of several
 distinct areas:</p>
 <ul>
-<li>Application header: the title of the application shown at the
-top.</li>
 <li>
-<code>teal</code> modules (bar at the top): in this case a simple
-module named “example teal module”.</li>
-<li>Encoding panel (panel on the left hand side): Module specific UI
-components, in this case a drop-down to select a dataset name.</li>
-<li>Main output panel (panel on the middle): The outputs of the module,
-for this example module the chosen dataset is displayed.</li>
-<li>Filter panel (panels on the right hand side): for filtering the data
-to be passed into all <code>teal</code> modules.</li>
+<span style="color: #FB6251;">Application Header</span> (title at
+the top): is the title of the application.</li>
+<li>
+<span style="color: #3A88FE;">Teal Modules</span> (bar under the
+title): in this case a simple module named “example teal module”.</li>
+<li>
+<span style="color: #BF37F3;">Encoding Panel</span> (panel on the
+left hand side): Module specific UI components, in this case a drop-down
+to select a dataset name.</li>
+<li>
+<span style="color: #96D35F;">Main Output Panel</span> (panel on the
+middle): The outputs of the module, for this example module the chosen
+dataset is displayed.</li>
+<li>
+<span style="color: #1DC6FC;">Filter Panel</span> (panel on the
+right hand side): for filtering the data to be passed into all
+<code>teal</code> modules.</li>
 </ul>
 <div class="section level3">
 <h3 id="encoding-panel">Encoding panel<a class="anchor" aria-label="anchor" href="#encoding-panel"></a>
@@ -212,7 +215,7 @@ keeping 50 rows.</li>
 condition <code>cyl %in% c(4, 6)</code> are included, thereby keeping 18
 rows.</li>
 </ul>
-<p><img src="images/filter_panel.png" alt="Example filter panel" style="width: 100%;"></p>
+<p><img src="images/filter_panel.png" alt="Example filter panel" style="display: block; margin: auto; width: 45%"></p>
 </div>
 </div>
 <div class="section level2">
@@ -222,20 +225,21 @@ rows.</li>
 is <code>init</code>, which requires two arguments: <code>data</code>
 and <code>modules</code>.</p>
 <div class="section level3">
-<h3 id="application-data">Application Data<a class="anchor" aria-label="anchor" href="#application-data"></a>
+<h3 id="application-data">Application data<a class="anchor" aria-label="anchor" href="#application-data"></a>
 </h3>
 <p>The <code>data</code> argument to the <code>init</code> function
-specifies the data used by your application. This can be data currently
-in your R session, as in the example above, but also
-<code>connectors</code>, which describe how to “pull” remote data when
-the application is run. Connectors can pull data from external sources,
-which may require authentication.</p>
-<p>In the example above we call <code>teal_data</code> to convert raw
-datasets into <code>teal</code> specific datasets and to bind them in
-one <code>R</code> object. This function can also be used to specify
-relationships between different datasets. In order to use
-<code>CDISC</code> clinical trial data in a <code>teal</code>
-application the <code>cdisc_data</code> function is used instead.</p>
+specifies the data used by your application. In the example above this
+is data that exists in the global environment. We call
+<code>teal_data</code> to bind all datasets into one R object of class
+<code>teal_data</code>. We could also specify relationships between the
+datasets using the <code>join_keys</code> argument but in this case the
+datasets are not related. If data is not available and has to be pulled
+from a remote source, <code>init</code> must receive a
+<code>teal_data_module</code> that specifies how to obtain the desired
+datasets and put them into a <code>teal_data</code> object. See <a href="data-as-shiny-module.html">this vignette</a> for details.</p>
+<p>In order to use <code>CDISC</code> clinical trial data in a
+<code>teal</code> application the <code>cdisc_data</code> function is
+used instead.</p>
 <p>For further details we recommend exploring the <a href="https://insightsengineering.github.io/teal.data/"><code>teal.data</code></a>
 package documentation.</p>
 </div>
@@ -249,7 +253,7 @@ using predefined <code>teal</code> modules. See the references below for
 links to these modules.</p>
 </div>
 <div class="section level3">
-<h3 id="defining-filters">Defining Filters<a class="anchor" aria-label="anchor" href="#defining-filters"></a>
+<h3 id="defining-filters">Defining filters<a class="anchor" aria-label="anchor" href="#defining-filters"></a>
 </h3>
 <p>The optional <code>filter</code> argument in <code>init</code> allows
 you to initialize the application with predefined filters. See the

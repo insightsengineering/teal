@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9025</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9026</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,25 +18,21 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/teal.html">Get started</a>
-</li>
-<li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/getting-started-with-teal.html">Getting Started with teal</a>
+    <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Using teal</h6>
     <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
     <a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal Application With R Options</a>
-    <a class="dropdown-item" href="../articles/teal-bs-themes.html">Bootstrap Themes in teal</a>
+    <a class="dropdown-item" href="../articles/bootstrap-themes-in-teal.html">Bootstrap Themes in teal</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Data in teal Apps</h6>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Using ADaM Data in teal Applications</a>
-    <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Using General Data in teal Applications</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Using MultiAssayExperiment data in teal Applications</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing Data</a>
+    <a class="dropdown-item" href="../articles/including-data-in-teal-applications.html">Including Data in teal Applications</a>
     <a class="dropdown-item" href="../articles/data-as-shiny-module.html">Data as shiny Module</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Extending teal</h6>
@@ -53,11 +49,11 @@
     <a class="dropdown-item" href="../articles/blueprint/intro.html">Introduction</a>
     <a class="dropdown-item" href="../articles/blueprint/actors.html">Actors</a>
     <a class="dropdown-item" href="../articles/blueprint/dataflow.html">Data Flow</a>
-    <a class="dropdown-item" href="../articles/blueprint/products_map.html">Product Map</a>
+    <a class="dropdown-item" href="../articles/blueprint/product_map.html">Product Map</a>
     <h6 class="dropdown-header" data-toc-skip>Features</h6>
-    <a class="dropdown-item" href="../articles/blueprint/qenv.html">`qenv`</a>
+    <a class="dropdown-item" href="../articles/blueprint/input_data.html">Input Data</a>
+    <a class="dropdown-item" href="../articles/blueprint/in_app_data.html">In-App Data</a>
     <a class="dropdown-item" href="../articles/blueprint/filter_panel.html">Filter Panel</a>
-    <a class="dropdown-item" href="../articles/blueprint/ddl.html">Delayed Data Loading (DDL)</a>
     <a class="dropdown-item" href="../articles/blueprint/module_encapsulation.html">Module and Encapsulation</a>
   </div>
 </li>
@@ -115,7 +111,7 @@
 
 
 <dt>code</dt>
-<dd><p>(<code>character</code> or <code>language</code>) code to evaluate. Also accepts and stores comments</p></dd>
+<dd><p>(<code>character</code> or <code>language</code>) code to evaluate. If <code>character</code>, comments are retained.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -141,7 +137,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>       ns &lt;- NS(id)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       object$ui(ns("mutate_inner"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55cf1d4f4f30&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x557872d7ea38&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $server</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function(id) {</span>
@@ -165,7 +161,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>         td</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55cf1d4f4f30&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x557872d7ea38&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "teal_data_module"</span>

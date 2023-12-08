@@ -5,24 +5,21 @@ articles:
   adding-support-for-reporting: adding-support-for-reporting.html
   actors: blueprint/actors.html
   dataflow: blueprint/dataflow.html
-  ddl: blueprint/ddl.html
   filter_panel: blueprint/filter_panel.html
+  in_app_data: blueprint/in_app_data.html
   index: blueprint/index.html
+  input_data: blueprint/input_data.html
   intro: blueprint/intro.html
   module_encapsulation: blueprint/module_encapsulation.html
-  products_map: blueprint/products_map.html
-  qenv: blueprint/qenv.html
+  product_map: blueprint/product_map.html
+  bootstrap-themes-in-teal: bootstrap-themes-in-teal.html
   creating-custom-modules: creating-custom-modules.html
   data-as-shiny-module: data-as-shiny-module.html
   filter-panel: filter-panel.html
-  including-adam-data-in-teal: including-adam-data-in-teal.html
-  including-general-data-in-teal: including-general-data-in-teal.html
-  including-mae-data-in-teal: including-mae-data-in-teal.html
-  preprocessing-data: preprocessing-data.html
-  teal-bs-themes: teal-bs-themes.html
+  getting-started-with-teal: getting-started-with-teal.html
+  including-data-in-teal-applications: including-data-in-teal-applications.html
   teal-options: teal-options.html
-  teal: teal.html
-last_built: 2023-12-05T08:47Z
+last_built: 2023-12-08T13:06Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles
