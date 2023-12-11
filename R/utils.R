@@ -228,14 +228,14 @@ check_filter_datanames <- function(filters, datanames) {
 #' @keywords internal
 update_default_dataname <- function(data) {
   if (length(teal.data::datanames(data)) == 0) {
-  warning("`data` object has no datanames. Default datanames are specified from environment.")
-  datanames <- ls(data@env)
-  classes = sapply(datanames, function(dn) class(data[[dn]]), simplify = "array")
-  valid_datanames <- datanames[classes %in% c("data.frame", "MultiAssayExperiment")]
-  if(length(valid_datanames) == 0) {
-    stop("Data environment does not contains valid data class. Contact app developer.")
-  }
-  teal.data::datanames(data) <- get_default_dataname(data)
+    warning("`data` object has no datanames. Default datanames are specified from environment.")
+    datanames <- ls(data@env)
+    classes <- sapply(datanames, function(dn) class(data[[dn]]), simplify = "array")
+    valid_datanames <- datanames[classes %in% c("data.frame", "MultiAssayExperiment")]
+    if (length(valid_datanames) == 0) {
+      stop("Data environment does not contains valid data class. Contact app developer.")
+    }
+    teal.data::datanames(data) <- get_default_dataname(data)
   }
   data
 }
