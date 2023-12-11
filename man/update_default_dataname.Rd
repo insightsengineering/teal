@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{update_default_dataname}
 \alias{update_default_dataname}
-\title{Retrieve Default Dataset Names from a Data Object}
+\title{Retrieve and Update Default Dataset Names from a Data Object}
 \usage{
 update_default_dataname(data)
 }

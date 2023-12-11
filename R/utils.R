@@ -216,7 +216,7 @@ check_filter_datanames <- function(filters, datanames) {
   }
 }
 
-#' Retrieve Default Dataset Names from a Data Object
+#' Retrieve and Update Default Dataset Names from a Data Object
 #'
 #' This function extracts dataset names from a `teal_data` object. If the object has no predefined
 #' dataset names.
