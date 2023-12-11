@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.632170313424009" branch-rate="0" lines-covered="1069" lines-valid="1691" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-12-11 10:56:39.282838">
+<coverage line-rate="0.632170313424009" branch-rate="0" lines-covered="1069" lines-valid="1691" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-12-11 11:54:55.950525">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
