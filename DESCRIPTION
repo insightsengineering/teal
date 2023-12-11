@@ -31,7 +31,7 @@ BugReports: https://github.com/insightsengineering/teal/issues
 Depends:
     R (>= 4.0),
     shiny (>= 1.7.0),
-    teal.data (>= 0.3.0.9017),
+    teal.data (>= 0.3.0.9019),
     teal.slice (>= 0.4.0.9027),
     teal.transform (>= 0.4.0.9010)
 Imports:
