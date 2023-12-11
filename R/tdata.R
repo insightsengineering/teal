@@ -72,13 +72,6 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   for (x in names(data)) {
     if (!is.reactive(data[[x]])) {
       data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
-    } else {
-      isolate(
-        checkmate::assert_multi_class(
-          data[[x]](), c("data.frame", "MultiAssayExperiment"),
-          .var.name = "data"
-        )
-      )
     }
   }
 
