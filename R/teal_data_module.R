@@ -1,15 +1,18 @@
-#' Data module for `teal` applications
+#' Data Module for `teal` Applications
 #'
-#' @description  `r lifecycle::badge("experimental")`
-#' Creates `teal_data_module` object - a `shiny` module to supply or modify data in a `teal` application.
+#' @description
+#' `r lifecycle::badge("experimental")`
 #'
-#' This function creates a `shiny` module that allows for running data pre-processing code after the app starts.
+#' Create a `teal_data_module` object and evaluate code on it with history tracking.
+#'
+#' @details
+#' `teal_data_module` creates a `shiny` module to supply or modify data in a `teal` application.
+#' The module allows for running data pre-processing code (creation _and_ some modification) after the app starts.
 #' The body of the server function will be run in the app rather than in the global environment.
-#' This means it will be run every time the app starts, so use sparingly.
-#'
+#' This means it will be run every time the app starts, so use sparingly.\cr
 #' Pass this module instead of a `teal_data` object in a call to [init()].
-#'
-#' See vignette \code{vignette("data-as-shiny-module", package = "teal")} for more details.
+#' Note that the server function must always return a `teal_data` object wrapped in a reactive expression.\cr
+#' See vignette `vignette("data-as-shiny-module", package = "teal")` for more details.
 #'
 #' @param ui (`function(id)`)\cr
 #'  `shiny` module `ui` function; must only take `id` argument
@@ -17,7 +20,8 @@
 #'  `shiny` module `ui` function; must only take `id` argument;
 #'  must return reactive expression containing `teal_data` object
 #'
-#' @return Object of class `teal_data_module`.
+#' @return
+#' `teal_data_module` returns an object of class `teal_data_module`.
 #'
 #' @examples
 #' data <- teal_data_module(
@@ -42,6 +46,12 @@
 #'     })
 #'   }
 #' )
+#'
+#' @name teal_data_module
+#' @rdname teal_data_module
+#'
+#' @seealso [`teal_data-class`]
+#'
 #' @export
 teal_data_module <- function(ui, server) {
   checkmate::assert_function(ui, args = "id", nargs = 1)
