@@ -28,72 +28,87 @@ body:
     validations:
       required: true
   - type: textarea
-    id: pre-requisites
+    id: pre-release
     attributes:
-      label: Pre-requisites
+      label: Pre-release
       description: Pre-requisites that must be fulfilled before initiating the release process.
       placeholder: Add your list of pre-requisites here.
       value: |
         - [ ] Make sure that high priority bugs (label "priority" + "bug") have been resolved before going into the release.
         - [ ] Review old/hanging PRs before going into the release.
         - [ ] Revisit R-package's lifecycle badges (Optional).
-        - [ ] Discuss package dependencies before going into release activities.
-        - [ ] Create a plan to sequentially close release activities and submit groups of packages for internal validation (Applicable only for regulatory release).
+        - [ ] Release Manager: Discuss package dependencies, create a plan to sequentially close release activities and submit groups of packages for internal validation (Applicable only for regulatory release).
+        - [ ] Check Validation Pipeline dry-run results for the package.
         - [ ] Make sure all relevant integration tests are green 2-3 days before the release. Look carefully through logs (check for warnings and notes).
-        - [ ] Check if a package is installable on our supported internal systems (Optional).
         - [ ] Inform about the soft code freeze, decide what gets merged in before starting release activities.
   - type: textarea
-    id: release-checklist
+    id: release
     attributes:
-      label: Release Checklist
+      label: Release
       description: The steps to be taken in order to create a release.
       placeholder: Steps to create a release.
       value: |
-        - [ ] Recurring tasks: Execute the manual tests on Shiny apps that are deployed on various hosting providers (Posit connect and shinyapps.io) - track the results in GitHub issue (Applicable only for frameworks that use Shiny).
-        - [ ] Recurring tasks: Monitor integration tests, if integration fails, create priority issues on the board.
-        - [ ] Sanity checks for Shiny applications e.g. checking if Shiny apps are deployable and making sure there are no errors/warnings.
+        ### Prepare the release
+
+        - [ ] Create a new release candidate branch
+        `git checkout -b release-candidate-vX.Y.Z`
         - [ ] Update NEWS.md file: make sure it reflects a holistic summary of what has changed in the package, check README.
-        - [ ] Remove the additional fields (`Remotes` and `Config/Needs/*`) from the DESCRIPTION file where applicable.
+        - [ ] Remove the additional fields (`Remotes`) from the DESCRIPTION file where applicable.
         - [ ] Make sure that the minimum dependency versions are updated in the DESCRIPTION file for the package.
-        - [ ] Increase versioned dependency on {package name} to >=X.X.X.
-        - [ ] Create a pull request to make necessary bug fixes/changes (add "[skip vbump]" in the PR title), and after merging the PR, tag the update(s) as a release candidate v < intended release version > -rc < release candidate iteration > on the main branch. Note that tags are created in GitHub and synchronized with GitLab automatically.
-        - [ ] The package is submitted for internal validation by Release Coordinator (Applicable only for regulatory release).
-        - [ ] Address any feedback (internal validation/user testing), retag the package as a release candidate vX.X.X-rc(n+1). Repeat the submission for internal validation if necessary.
-        - [ ] Get the package validated (Applicable only for regulatory release).
-        - [ ] If the additional fields were removed, add them back in a separate PR, and then merge the PR back to main (add "[skip vbump]" in the PR title).
-        - [ ] Create a git tag with the final version set to X.X.X on the main branch.
-        - [ ] Update downstream package dependencies to (>=X.X.X) in {package name}.
-  - type: textarea
-    id: testing
-    attributes:
-      label: Testing
-      description: Summary of testing activities - integration tests, UAT, other.
-      placeholder: Tests results
-      value: |
-        - [ ] Integration tests results - accepted.
-        - [ ] UAT results - accepted.
-        - [ ] Shiny apps test results - accepted (Applicable only for Shiny apps).
-        - [ ] Necessary testing on target environment - performed (up to ETL).
-  - type: textarea
-    id: feedback
-    attributes:
-      label: Release Feedback
-      description: Feedback received from internal validation/UAT testers.
-      placeholder: Feedback to be implemented after submission for internal validation/testing.
-      value: |
-        - [ ] Fix 1
-        - [ ] Enhancement 1
-        - [ ] Defect 1
+        - [ ] Increase versioned dependency on {package name} to >=X.Y.Z.
+        - [ ] Commit your changes and create the PR on GitHub (add "[skip vbump]" in the PR title). Add all updates, commit, and push changes:
+        `# Make the necessary modifications to your files
+        # Stage the changes
+        git add <files your modified>
+        # Commit the changes
+        git commit -m "[skip vbump] <Your commit message>"
+        git push origin release-candidate-vX.Y.Z`
+
+        ### Test the release
+
+        - [ ] Execute the manual tests on Shiny apps that are deployed on various hosting providers (Posit connect and shinyapps.io) - track the results in GitHub issue (Applicable only for frameworks that use Shiny).
+        - [ ] Monitor integration tests, if integration fails, create priority issues on the board.
+        - [ ] Execute UAT tests (Optional).
+
+        ### Validation loop
+
+        Note: This section is applicable only for regulatory packages.
+
+        - [ ] Tag the update(s) as a release candidate vX.Y.Z-rc<iteration-number> (e.g. v0.5.3-rc1) on the release candidate branch (release-candidate-vX.Y.Z).
+          `# Create rc tag for submission for internal validation
+          git tag vX.Y.Z-rc<iteration number>
+          git push origin vX.Y.Z-rc<iteration number>`
+        - [ ] Submit the package for internal validation.
+        - [ ] Address any feedback (internal validation/user testing), retag the package as a release candidate vX.Y.Z-rc(n+1). Repeat the submission for internal validation if necessary.
+        - [ ] Get the package validated.
+
+        ### Tag the release
+
+        - [ ] If the additional fields were removed, add them back in a separate PR, and then merge the PR back to main (add "[skip vbump]" in the PR title). If nothing was removed just merge the PR you created in the "Prepare the release" section to `main`. Note the commit hash of the merged commit. **Note:** additional commits might be added to the `main` branch by a bot or an automation - we do **NOT** want to tag this commit.
+
+        #### Make sure of the following before continuing with the release:
+
+        - [ ] CI checks are passing in GH.
+        - [ ] Shiny apps are deployable and there are no errors/warnings (Applicable only for frameworks that use Shiny).
+
+        - [ ] Create a git tag with the final version set to vX.Y.Z on the main branch. In order to do this:
+          1. Checkout the commit hash.
+          `git checkout <commit hash>`
+          2. Tag the hash with the release version (vX.Y.Z).
+          `git tag vX.Y.Z`
+          3. Push the tag to make the final release.
+          `git push origin vX.Y.Z`
+        - [ ] Update downstream package dependencies to (>=X.Y.Z) in {package name}.
+        Note: Once the release tag is created, the package is automatically published to internal repositories.
   - type: textarea
     id: post-release
     attributes:
-      label: Post-release Checklist
+      label: Post-release
       description: The list of activities to be completed after the release.
       placeholder: The steps that must be taken after the release.
       value: |
         - [ ] Make sure that the package is published to internal repositories (Validated and/or Non-Validated repository).
         - [ ] Review and update installation instructions for the package if needed.
-        - [ ] Verify if a new dev version (.9XXX) has been added to the NEWS.md file and DESCRIPTION file as a placeholder for release notes by automation.
         - [ ] Make sure internal documentation/documentation catalogs are up to date.
         - [ ] Notify the IDR team to start post-release/clean-up activities.
         - [ ] Announce the release on ________.
