@@ -76,7 +76,7 @@ slices_restore <- function(file) {
               slice[[field]]
             }
         } else {
-          slice[[field]] <- NULL
+          slice[[field]] <- character(0)
         }
       }
       slice
