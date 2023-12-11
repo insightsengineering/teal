@@ -183,9 +183,7 @@ init <- function(data,
   }
 
   if (inherits(data, "teal_data")) {
-    if (length(teal.data::datanames(data)) == 0) {
-      stop("`data` object has no datanames. Specify `datanames(data)` and try again.")
-    }
+    data <- update_default_dataname(data)
 
     # in case of teal_data_module this check is postponed to the srv_teal_with_splash
     is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
@@ -215,6 +213,7 @@ init <- function(data,
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
       filter <- deep_copy_filter(filter)
+      browser()
       srv_teal_with_splash(id = id, data = data, modules = modules, filter = filter)
     }
   )

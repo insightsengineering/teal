@@ -126,9 +126,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         )
       )
 
-      validate(need(teal.data::datanames(data), "Data has no datanames. Contact app developer."))
-
-
+      data <- update_default_dataname(data)
       is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
       validate(need(isTRUE(is_modules_ok), is_modules_ok))
 
