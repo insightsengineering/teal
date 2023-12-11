@@ -81,10 +81,21 @@ testthat::test_that("init filter accepts `teal_slices`", {
   )
 })
 
+testthat::test_that("init throws when datanames is specified from environment.", {
+  data <- within(teal_data(), {
+    Iris <- iris
+  })
+
+  testthat::expect_warning(
+    init(data = data, modules = list(example_module())),
+    "datanames are specified from environment"
+  )
+})
+
 testthat::test_that("init throws when data has no datanames", {
   testthat::expect_error(
     init(data = teal_data(), modules = list(example_module())),
-    "has no datanames"
+    "cannot assign datanames"
   )
 })
 

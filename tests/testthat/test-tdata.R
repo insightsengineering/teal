@@ -35,11 +35,6 @@ testthat::test_that("new_tdata throws error if contents of data list are not of 
   testthat::expect_error(
     new_tdata(list(x = 1)), "May only contain the following types: \\{data.frame,reactive,MultiAssayExperiment\\}"
   )
-
-  testthat::expect_error(
-    new_tdata(list(x = reactive(1))),
-    "Must inherit from class 'data.frame'/'MultiAssayExperiment'"
-  )
 })
 
 testthat::test_that("new_tdata throws error if code is not character or reactive character", {

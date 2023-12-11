@@ -66,7 +66,7 @@ testthat::test_that("srv_teal_with_splash throws when datanames are empty", {
       modules = modules(example_module())
     ),
     expr = {
-      testthat::expect_error(teal_data_rv_validate(), "Data has no datanames")
+      testthat::expect_error(teal_data_rv_validate(), "cannot assign datanames")
     }
   )
 })
