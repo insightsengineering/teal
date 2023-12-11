@@ -6,6 +6,8 @@ setOldClass("teal_data_module")
 #' `eval_code` evaluates given code in the environment of the `teal_data` object created by the `teal_data_module`.
 #' The code is added to the `@code` slot of the `teal_data`.
 #'
+#' @usage eval_code(object, code)
+#'
 #' @param object (`teal_data_module`)
 #' @inheritParams teal.code::eval_code
 #'
