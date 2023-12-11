@@ -83,7 +83,7 @@ testthat::test_that("init filter accepts `teal_slices`", {
 
 testthat::test_that("init throws when datanames is specified from environment.", {
   data <- within(teal_data(), {
-    Iris <- iris
+    iris <- iris
   })
 
   testthat::expect_warning(
