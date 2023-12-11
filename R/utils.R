@@ -215,3 +215,27 @@ check_filter_datanames <- function(filters, datanames) {
     TRUE
   }
 }
+
+#' Retrieve Default Dataset Names from a Data Object
+#'
+#' This function extracts dataset names from a `teal_data` object. If the object has no predefined
+#' dataset names, it fetches names from the object's environment for datasets of class `data.frame`
+#' or `MultiAssayExperiment`.
+#'
+#' @param tealData (`teal_data`) object
+#'
+#' @return A `teal_data` object.
+#' @keywords internal
+update_default_dataname <- function(data) {
+  if (length(teal.data::datanames(data)) == 0) {
+  warning("`data` object has no datanames. Default datanames are specified from environment.")
+  datanames <- ls(data@env)
+  classes = sapply(datanames, function(dn) class(data[[dn]]), simplify = "array")
+  valid_datanames <- datanames[classes %in% c("data.frame", "MultiAssayExperiment")]
+  if(length(valid_datanames) == 0) {
+    stop("Data environment does not contains valid data class. Contact app developer.")
+  }
+  teal.data::datanames(data) <- get_default_dataname(data)
+  }
+  data
+}

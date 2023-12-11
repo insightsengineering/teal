@@ -213,7 +213,6 @@ init <- function(data,
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
       filter <- deep_copy_filter(filter)
-      browser()
       srv_teal_with_splash(id = id, data = data, modules = modules, filter = filter)
     }
   )
