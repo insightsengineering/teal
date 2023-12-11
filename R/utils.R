@@ -227,12 +227,12 @@ check_filter_datanames <- function(filters, datanames) {
 #' @keywords internal
 update_default_dataname <- function(data) {
   if (length(teal.data::datanames(data)) == 0) {
-  warning("`data` object has no datanames. Default datanames are specified from environment.")
-  datanames <- ls(data@env)
-  if(length(datanames) == 0) {
-    stop("cannot assign datanames as `teal_data` environment is empty. Contact app developer.")
-  }
-  teal.data::datanames(data) <- datanames
+    warning("`data` object has no datanames. Default datanames are specified from environment.")
+    datanames <- ls(data@env)
+    if (length(datanames) == 0) {
+      stop("cannot assign datanames as `teal_data` environment is empty. Contact app developer.")
+    }
+    teal.data::datanames(data) <- datanames
   }
   data
 }
