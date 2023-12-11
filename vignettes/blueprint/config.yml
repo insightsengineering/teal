@@ -1,0 +1,52 @@
+default:
+  defaultOrg: insightsengineering
+  # All the repos are by assumed to live inside the org `defaultOrg` except for these exceptions
+  githubOrgExceptions:
+    - mmrm: openpharma
+  packages:
+    Teal:
+      color: "#258fdb"
+      packages:
+        - teal.logger
+        - teal.code
+        - teal.data
+        - teal.slice
+        - teal.transform
+        - teal.widgets
+        - teal.reporter
+        - teal
+    Modules:
+      color: "#f24b4b"
+      packages:
+        - teal.osprey
+        - teal.goshawk
+        - teal.modules.clinical
+        - teal.modules.helios
+        - teal.modules.hermes
+        - teal.modules.general
+    Analysis:
+      color: "#24ad95"
+      packages:
+        - rlistings
+        - rtables
+        - tern
+        - tern.mmrm
+        - tern.gee
+        - tern.rbmi
+        - mmrm
+        - helios
+        - goshawk
+        - osprey
+        - hermes
+    Others:
+      color: "#eda44e"
+      packages:
+        - scda
+        - scda.2022
+        - nestcolor
+        - formatters
+        - citril
+        - scda.test
+        - biomarker-catalog
+        - tlg-catalog
+        - chevron

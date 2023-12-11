@@ -81,3 +81,139 @@ By breaking down `teal` features, modules, and calculations into dedicated R pac
 Additionally, this separation allows for a clear distinction between the various roles and actors involved in the development of `teal`.
 
 To learn different roles/actors in `teal` development, visit [Actors](actors.html).
+
+## Dependencies of the packages
+
+Below, you can explore the network graph for a comprehensive list of the package dependencies that surround the Teal framework. Each node represents a package, and the connecting arrow depicts the dependency relationship from one package to another
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(purrr)
+library(config)
+library(dplyr)
+library(tidyr)
+library(visNetwork)
+library(httr)
+library(yaml)
+library(glue)
+
+get_github_token <- function() {
+  env_variables <- c("REPO_GITHUB_TOKEN", "GITHUB_TOKEN", "GITHUB_PAT")
+  for (env_var in env_variables) {
+    token <- Sys.getenv(env_var)
+    if (!is.null(token) && nchar(token) > 0) {
+      return(token)
+    }
+  }
+  stop(glue(
+    "No GitHub token found in the specified environment variables:
+    {paste(env_variables, collapse = ', ')}"
+  ))
+}
+
+get_staged_dependencies <- function(github_auth_token = get_github_token()) {
+  packages <- map(get("packages"), ~ unlist(.x$packages)) |>
+    unlist() |>
+    unname()
+  github_org_exceptions <- get("githubOrgExceptions") |> unlist()
+  package_orgs <- map_chr(packages, function(package) {
+    if (package %in% names(github_org_exceptions)) {
+      github_org_exceptions[[package]]
+    } else {
+      get("defaultOrg")
+    }
+  })
+  headers <- add_headers(c(Authorization = paste("token", github_auth_token)))
+  staged_dependencies <- map2(
+    packages, package_orgs,
+    .progress = TRUE,
+    function(repo, org) {
+      fil_path <- glue(
+        "https://raw.githubusercontent.com/{org}/{repo}/main/staged_dependencies.yaml"
+      )
+      if (repo == "tlg-catalog") {
+        fil_path <- glue(
+          "https://raw.githubusercontent.com/{org}/{repo}/main/package/staged_dependencies.yaml"
+        )
+      }
+      response <- GET(fil_path, headers)
+      if (response$status_code == 200) {
+        yaml.load(rawToChar(response$content))
+      } else {
+        stop(glue(
+          "Failed to retrieve YAML file. Status code: {response$status_code} for {repo}",
+        ))
+      }
+    }
+  )
+  names(staged_dependencies) <- packages
+  return(staged_dependencies)
+}
+
+parse_staged_dependencies <- function(staged_dependencies) {
+  config <- get("packages")
+  configs <- map2_df(
+    names(config), config,
+    function(x, y) {
+      tibble(
+        package = y$packages,
+        color = y$color,
+        group = x
+      )
+    }
+  )
+  groups <- map(config, function(x) {
+    list(color = x$color)
+  })
+  groups[["useDefaultGroups"]] <- TRUE
+  dep_mappings <- map_df(staged_dependencies, function(staged_deps) {
+    current_repo <- staged_deps$current_repo$repo
+    downstream_repos <- staged_deps$downstream_repo |> names()
+    upstream_repos <- staged_deps$upstream_repo |> names()
+    if (is.null(upstream_repos)) upstream_repos <- character(0)
+    if (is.null(downstream_repos)) downstream_repos <- character(0)
+    tibble(
+      from = current_repo,
+      to = downstream_repos
+    ) |>
+      rbind(
+        tibble(
+          from = upstream_repos,
+          to = current_repo
+        )
+      )
+  })
+  nodes <- tibble(
+    id = unique(c(dep_mappings$from, dep_mappings$to)),
+    label = basename(id)
+  ) |>
+    inner_join(configs, by = c("label" = "package"))
+  edges <- distinct(dep_mappings)
+  dependency_weight <- edges |>
+    count(from, sort = TRUE, name = "value") |>
+    mutate(value = log(value) + 1)
+  nodes <- nodes |>
+    left_join(dependency_weight, by = c("id" = "from")) |>
+    replace_na(list(value = 1))
+  list(nodes = nodes, edges = edges, groups = groups)
+}
+
+get_dep_network <- function(nodes, edges, groups, weighted = TRUE) {
+  if (!weighted) {
+    nodes$value <- NULL
+  }
+  network <- visNetwork(nodes, edges, height = "100vh", width = "100%") |>
+    visEdges(arrows = "to") |>
+    visOptions(highlightNearest = TRUE) |>
+    visLegend() |>
+    visPhysics(
+      solver = "forceAtlas2Based"
+    )
+  network$x$options$groups <- groups
+  return(network)
+}
+
+staged_dependencies <- get_staged_dependencies()
+deps <- parse_staged_dependencies(staged_dependencies)
+network <- get_dep_network(deps$nodes, deps$edges, deps$groups, weighted = FALSE)
+network
+```

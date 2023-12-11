@@ -51,12 +51,17 @@ Imports:
     utils
 Suggests:
     bslib,
+    config,
+    dplyr,
+    httr,
     knitr (>= 1.42),
     MultiAssayExperiment,
     R6,
     rmarkdown (>= 2.19),
     shinyvalidate,
     testthat (>= 3.1.5),
+    tidyr,
+    visNetwork,
     withr (>= 2.1.0),
     yaml (>= 1.1.0)
 VignetteBuilder:
