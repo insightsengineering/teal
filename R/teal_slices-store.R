@@ -63,7 +63,7 @@ slices_restore <- function(file) {
   tss_json$slices <-
     lapply(tss_json$slices, function(slice) {
       for (field in c("selected", "choices")) {
-        if (!is.null(slice[[field]])) {
+        if (length(slice[[field]]) > 0) {
           date_partial_regex <- "^[0-9]{4}-[0-9]{2}-[0-9]{2}"
           time_stamp_regex <- paste0(date_partial_regex, "\\s[0-9]{2}:[0-9]{2}:[0-9]{2}\\sUTC$")
 
@@ -75,6 +75,8 @@ slices_restore <- function(file) {
             } else {
               slice[[field]]
             }
+        } else {
+          slice[[field]] <- NULL
         }
       }
       slice
