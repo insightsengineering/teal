@@ -1,3 +1,45 @@
+testthat::test_that("teal_slice store/restore supports NULL and character(0) for choices and selected", {
+  slices_path <- withr::local_file("slices.json")
+  tss <- teal_slices(
+    teal_slice(
+      dataname = "data",
+      varname = "var",
+      choices = character(0),
+      selected = NULL
+    )
+  )
+  slices_store(tss, slices_path)
+  tss_restored <- teal:::slices_restore("file.json")
+
+  slices2_path <- withr::local_file("slices2.json")
+  tss2 <- teal_slices(
+    teal_slice(
+      dataname = "data",
+      varname = "var",
+      choices = NULL,
+      selected = NULL
+    )
+  )
+  slices_store(tss2, slices2_path)
+  tss2_restored <- slices_restore(slices2_path)
+
+  slices3_path <- withr::local_file("slices3.json")
+  tss3 <- teal_slices(
+    teal_slice(
+      dataname = "data",
+      varname = "var",
+      choices = character(0),
+      selected = character(0)
+    )
+  )
+  slices_store(tss3, slices3_path)
+  tss3_restored <- slices_restore(slices3_path)
+
+  teal.slice:::expect_identical_slice(tss[[1]], tss_restored[[1]])
+  teal.slice:::expect_identical_slice(tss2[[1]], tss2_restored[[1]])
+  teal.slice:::expect_identical_slice(tss3[[1]], tss3_restored[[1]])
+})
+
 testthat::test_that("teal_slice store/restore supports saving `POSIXct` timestamps in selected", {
   slices_path <- withr::local_file("slices.json")
 
