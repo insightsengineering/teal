@@ -76,12 +76,7 @@ slices_restore <- function(file) {
               slice[[field]]
             }
         } else {
-          slice[[field]] <-
-            if (field == "selected") {
-              character(0)
-            } else {
-              NULL
-            }
+          slice[[field]] <- switch(field, selected = character(0), NULL)
         }
       }
       slice
