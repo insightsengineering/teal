@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.633097762073027" branch-rate="0" lines-covered="1075" lines-valid="1698" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-12-11 14:07:43.50052">
+<coverage line-rate="0.632604843473125" branch-rate="0" lines-covered="1071" lines-valid="1693" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2023-12-12 08:06:18.421064">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
   <packages>
-    <package name="teal" line-rate="0.633097762073027" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.632604843473125" branch-rate="0" complexity="0">
       <classes>
         <class name="dummy_functions.R" filename="R/dummy_functions.R" line-rate="0.0927835051546392" branch-rate="0" complexity="0">
           <methods>
@@ -3205,7 +3205,7 @@
             <line number="157" hits="2" branch="false"/>
           </lines>
         </class>
-        <class name="teal_slices-store.R" filename="R/teal_slices-store.R" line-rate="0.96875" branch-rate="0" complexity="0">
+        <class name="teal_slices-store.R" filename="R/teal_slices-store.R" line-rate="1" branch-rate="0" complexity="0">
           <methods>
             <method name="slices_store" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
@@ -3214,7 +3214,7 @@
                 <line number="38" hits="6" branch="false"/>
               </lines>
             </method>
-            <method name="slices_restore" signature="" line-rate="0.96551724137931" branch-rate="0" complexity="0">
+            <method name="slices_restore" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
                 <line number="60" hits="6" branch="false"/>
                 <line number="62" hits="6" branch="false"/>
@@ -3234,17 +3234,12 @@
                 <line number="77" hits="6" branch="false"/>
                 <line number="78" hits="6" branch="false"/>
                 <line number="79" hits="3" branch="false"/>
-                <line number="80" hits="3" branch="false"/>
-                <line number="81" hits="0" branch="false"/>
-                <line number="82" hits="3" branch="false"/>
-                <line number="83" hits="3" branch="false"/>
-                <line number="84" hits="3" branch="false"/>
+                <line number="80" hits="6" branch="false"/>
+                <line number="81" hits="6" branch="false"/>
+                <line number="82" hits="6" branch="false"/>
+                <line number="83" hits="6" branch="false"/>
                 <line number="85" hits="6" branch="false"/>
-                <line number="86" hits="6" branch="false"/>
                 <line number="87" hits="6" branch="false"/>
-                <line number="88" hits="6" branch="false"/>
-                <line number="90" hits="6" branch="false"/>
-                <line number="92" hits="6" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -3270,17 +3265,12 @@
             <line number="77" hits="6" branch="false"/>
             <line number="78" hits="6" branch="false"/>
             <line number="79" hits="3" branch="false"/>
-            <line number="80" hits="3" branch="false"/>
-            <line number="81" hits="0" branch="false"/>
-            <line number="82" hits="3" branch="false"/>
-            <line number="83" hits="3" branch="false"/>
-            <line number="84" hits="3" branch="false"/>
+            <line number="80" hits="6" branch="false"/>
+            <line number="81" hits="6" branch="false"/>
+            <line number="82" hits="6" branch="false"/>
+            <line number="83" hits="6" branch="false"/>
             <line number="85" hits="6" branch="false"/>
-            <line number="86" hits="6" branch="false"/>
             <line number="87" hits="6" branch="false"/>
-            <line number="88" hits="6" branch="false"/>
-            <line number="90" hits="6" branch="false"/>
-            <line number="92" hits="6" branch="false"/>
           </lines>
         </class>
         <class name="teal_slices.R" filename="R/teal_slices.R" line-rate="0.796610169491525" branch-rate="0" complexity="0">
