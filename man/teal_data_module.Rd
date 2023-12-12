@@ -13,9 +13,9 @@
 \usage{
 teal_data_module(ui, server)
 
-eval_code(object, code)
+\S4method{eval_code}{teal_data_module,character}(object, code)
 
-within(data, expr, ...)
+\method{within}{teal_data_module}(data, expr, ...)
 }
 \arguments{
 \item{ui}{(\verb{function(id)})\cr

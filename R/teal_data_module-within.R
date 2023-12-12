@@ -3,8 +3,6 @@
 #' @details
 #' `within` is a convenience function for evaluating inline code inside the environment of a `teal_data_module`.
 #'
-#' @usage within(data, expr, ...)
-#'
 #' @param data (`teal_data_module`) object
 #' @param expr (`expression`) to evaluate. Must be inline code. See
 #' @param ... See `Details`.
