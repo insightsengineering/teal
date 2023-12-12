@@ -28,7 +28,6 @@ repos:
           - insightsengineering/teal.logger
           - insightsengineering/teal.reporter
           - insightsengineering/teal.slice
-          - insightsengineering/teal.transform
           - insightsengineering/teal.widgets
           - utils
       - id: spell-check

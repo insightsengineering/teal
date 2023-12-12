@@ -42,7 +42,6 @@ A lot of the functionality of the `teal` framework derives from the following pa
 -   [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/): shiny components used within `teal`.
 -   [`teal.slice`](https://insightsengineering.github.io/teal.slice/): provides a filtering panel to allow filtering of data.
 -   [`teal.code`](https://insightsengineering.github.io/teal.code/): handles reproducibility of outputs.
--   [`teal.transform`](https://insightsengineering.github.io/teal.transform/): standardizes extracting and merging data.
 -   [`teal.logger`](https://insightsengineering.github.io/teal.logger/): standardizes logging within `teal` framework.
 -   [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/): allows `teal` applications to generate reports.
 

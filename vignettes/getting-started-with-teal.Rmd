@@ -120,4 +120,3 @@ The packages which are of most interest when defining `teal`applications are:
 
 * [`teal.data`](https://insightsengineering.github.io/teal.data/): defining data for `teal` application.
 * [`teal.slice`](https://insightsengineering.github.io/teal.slice/): defining data filtering before passing into `teal` modules.
-* [`teal.transform`](https://insightsengineering.github.io/teal.transform/): defining the way arguments are passed into `teal` modules.
