@@ -10,8 +10,8 @@ ui_teal(
   id,
   splash_ui = tags$h2("Starting the Teal App"),
   title = NULL,
-  header = tags$p(""),
-  footer = tags$p("")
+  header = tags$p(),
+  footer = tags$p()
 )
 
 srv_teal(id, modules, teal_data_rv, filter = teal_slices())

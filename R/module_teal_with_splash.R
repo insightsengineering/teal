@@ -19,10 +19,15 @@
 #' @export
 ui_teal_with_splash <- function(id,
                                 data,
-                                title,
-                                header = tags$p("Add Title Here"),
-                                footer = tags$p("Add Footer Here")) {
+                                title = NULL,
+                                header = tags$p(),
+                                footer = tags$p()) {
+  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_multi_class(header, c("shiny.tag", "character"))
+  checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
+
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
@@ -58,7 +63,10 @@ ui_teal_with_splash <- function(id,
 #' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
+  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::check_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_class(filter, "teal_slices")
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_with_splash initializing module with data.")
@@ -72,7 +80,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     teal_data_rv <- if (inherits(data, "teal_data_module")) {
       data <- data$server(id = "teal_data_module")
       if (!is.reactive(data)) {
-        stop("The `teal_data_module` must return a reactive expression.", call. = FALSE)
+        stop("The `data` module must return a reactive expression.", call. = FALSE)
       }
       data
     } else if (inherits(data, "teal_data")) {
@@ -94,7 +102,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
           need(
             FALSE,
             paste(
-              "Error when executing `teal_data_module`:\n ",
+              "Error when executing `data` module:\n ",
               paste(data$message, collapse = "\n"),
               "\n Check your inputs or contact app developer if error persists."
             )
@@ -108,7 +116,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
           need(
             FALSE,
             paste(
-              "Error when executing `teal_data_module`:\n ",
+              "Error when executing `data` module:\n ",
               paste(data$message, collpase = "\n"),
               "\n Check your inputs or contact app developer if error persists."
             )
@@ -120,8 +128,10 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         need(
           inherits(data, "teal_data"),
           paste(
-            "Error: `teal_data_module` did not return `teal_data` object",
-            "\n Check your inputs or contact app developer if error persists"
+            "Error: `data` module did not return `teal_data` object but",
+            toString(sQuote(class(data))),
+            "instead.",
+            "\n Check your inputs or contact app developer if error persists."
           )
         )
       )

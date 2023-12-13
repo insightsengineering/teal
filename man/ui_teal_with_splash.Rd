@@ -7,9 +7,9 @@
 ui_teal_with_splash(
   id,
   data,
-  title,
-  header = tags$p("Add Title Here"),
-  footer = tags$p("Add Footer Here")
+  title = NULL,
+  header = tags$p(),
+  footer = tags$p()
 )
 }
 \arguments{

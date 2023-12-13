@@ -27,9 +27,9 @@ testthat::test_that("disabled validators raise warnings (individual validators)"
   }
 
   shiny::testServer(server, {
-    testthat::expect_output(
+    testthat::expect_warning(
       object = values(),
-      regexp = "\\[WARN\\].+Validator is disabled and will be omitted."
+      regexp = "Validator is disabled and will be omitted."
     )
   })
 })
@@ -52,9 +52,9 @@ testthat::test_that("disabled validators raise warnings (validator list)", {
   }
 
   shiny::testServer(server, {
-    testthat::expect_output(
+    testthat::expect_warning(
       object = values(),
-      regexp = "\\[WARN\\].+Validator is disabled and will be omitted."
+      regexp = "Validator is disabled and will be omitted."
     )
   })
 })
@@ -77,9 +77,9 @@ testthat::test_that("disabled validators raise warnings (nested validator list)"
   }
 
   shiny::testServer(server, {
-    testthat::expect_output(
+    testthat::expect_warning(
       object = values(),
-      regexp = "\\[WARN\\].+Validator is disabled and will be omitted."
+      regexp = "Validator is disabled and will be omitted."
     )
   })
 })

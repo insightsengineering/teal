@@ -62,31 +62,22 @@ NULL
 ui_teal <- function(id,
                     splash_ui = tags$h2("Starting the Teal App"),
                     title = NULL,
-                    header = tags$p(""),
-                    footer = tags$p("")) {
+                    header = tags$p(),
+                    footer = tags$p()) {
+  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
+  checkmate::assert_multi_class(splash_ui, c("shiny.tag", "shiny.tag.list", "html"))
+  checkmate::assert_string(title, null.ok = TRUE)
   if (checkmate::test_string(header)) {
     header <- tags$h1(header)
   }
+  checkmate::assert_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
   if (checkmate::test_string(footer)) {
     footer <- tags$p(footer)
   }
-  checkmate::assert(
-    checkmate::check_class(splash_ui, "shiny.tag"),
-    checkmate::check_class(splash_ui, "shiny.tag.list"),
-    checkmate::check_class(splash_ui, "html")
-  )
-  checkmate::assert(
-    checkmate::check_class(header, "shiny.tag"),
-    checkmate::check_class(header, "shiny.tag.list"),
-    checkmate::check_class(header, "html")
-  )
-  checkmate::assert(
-    checkmate::check_class(footer, "shiny.tag"),
-    checkmate::check_class(footer, "shiny.tag.list"),
-    checkmate::check_class(footer, "html")
-  )
+  checkmate::assert_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
 
   ns <- NS(id)
+
   # Once the data is loaded, we will remove this element and add the real teal UI instead
   splash_ui <- div(
     # id so we can remove the splash screen once ready, which is the first child of this container
@@ -146,7 +137,8 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
     )
 
     # `JavaScript` code
-    run_js_files(files = "init.js") # `JavaScript` code to make the clipboard accessible
+    run_js_files(files = "init.js")
+
     # set timezone in shiny app
     # timezone is set in the early beginning so it will be available also
     # for `DDL` and all shiny modules
