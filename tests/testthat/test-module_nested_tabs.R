@@ -147,12 +147,6 @@ out <- shiny::testServer(
     reporter = teal.reporter::Reporter$new()
   ),
   expr = {
-    # to adjust input modules to the active modules (server_args is dropped when NULL)
-    test_module1$server_args <- NULL
-    test_module2$server_args <- NULL
-    test_module3$server_args <- NULL
-    test_module4$server_args <- NULL
-
     testthat::test_that("modules_reactive is a list of reactives", {
       expect_is(modules_reactive, "list")
       expect_is(modules_reactive$tab1, "reactive")
