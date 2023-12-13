@@ -57,7 +57,7 @@ testthat::test_that("srv_teal_with_splash passes teal_data to reactive", {
   )
 })
 
-testthat::test_that("srv_teal_with_splash throws when datanames are empty", {
+testthat::test_that("srv_teal_with_splash passes when datanames are empty", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -66,7 +66,8 @@ testthat::test_that("srv_teal_with_splash throws when datanames are empty", {
       modules = modules(example_module())
     ),
     expr = {
-      testthat::expect_error(teal_data_rv_validate(), "cannot assign datanames")
+      testthat::expect_is(teal_data_rv_validate, "reactive")
+      testthat::expect_s4_class(teal_data_rv_validate(), "teal_data")
     }
   )
 })
@@ -128,7 +129,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when incompatible module's datanames", {
+testthat::test_that("srv_teal_with_splash teal_data_rv_validate passes with  when incompatible module's datanames", {
   shiny::testServer(
     app = srv_teal_with_splash,
     args = list(
@@ -138,7 +139,7 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when inco
     ),
     expr = {
       testthat::expect_is(teal_data_rv_validate, "reactive")
-      testthat::expect_error(
+      testthat::expect_output(
         teal_data_rv_validate(),
         "Module 'example teal module' uses datanames not available in 'data'"
       )
@@ -157,6 +158,10 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate returns teal_dat
     ),
     expr = {
       testthat::expect_is(teal_data_rv_validate, "reactive")
+      testthat::expect_output(
+        teal_data_rv_validate(),
+        "Filter 'iris Species' refers to dataname not available in 'data'"
+      )
       testthat::expect_s4_class(teal_data_rv_validate(), "teal_data")
     }
   )

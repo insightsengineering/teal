@@ -126,9 +126,15 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         )
       )
 
-      data <- update_default_dataname(data)
       is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
-      validate(need(isTRUE(is_modules_ok), is_modules_ok))
+      if (!isTRUE(is_modules_ok)) {
+        showNotification(
+          "Object datanames is not specified; defaults will be applied from the environment",
+          type = "warning",
+          duration = 10
+        )
+        logger::log_warn(is_modules_ok)
+      }
 
       is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
       if (!isTRUE(is_filter_ok)) {

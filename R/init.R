@@ -183,15 +183,12 @@ init <- function(data,
   }
 
   if (inherits(data, "teal_data")) {
-    data <- update_default_dataname(data)
-
     # in case of teal_data_module this check is postponed to the srv_teal_with_splash
     is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
     if (!isTRUE(is_modules_ok)) {
       logger::log_error(is_modules_ok)
-      checkmate::assert(is_modules_ok, .var.name = "modules")
+      # we allow app to continue if datanames are not available.
     }
-
 
     is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
     if (!isTRUE(is_filter_ok)) {

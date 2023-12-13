@@ -58,8 +58,16 @@ include_parent_datanames <- function(dataname, join_keys) {
 #' @keywords internal
 teal_data_to_filtered_data <- function(x, datanames = teal.data::datanames(x)) {
   checkmate::assert_class(x, "teal_data")
-  checkmate::assert_character(datanames, min.len = 1L, any.missing = FALSE)
-  checkmate::assert_subset(datanames, teal.data::datanames(x))
+  checkmate::assert_character(datanames, any.missing = FALSE)
+
+  if (length(datanames) == 0) {
+    datanames <- ls(x@env)
+    if (length(datanames) == 0) {
+      stop("cannot assign datanames as `teal_data` environment is empty. Contact app developer.")
+    }
+    teal.data::datanames(x) <- datanames
+    warning("`data` object has no datanames. Default datanames are specified from environment.")
+  }
 
   ans <- teal.slice::init_filtered_data(
     x = sapply(datanames, function(dn) x[[dn]], simplify = FALSE),
@@ -214,25 +222,4 @@ check_filter_datanames <- function(filters, datanames) {
   } else {
     TRUE
   }
-}
-
-#' Retrieve and Update Default Dataset Names from a Data Object
-#'
-#' This function extracts dataset names from a `teal_data` object. If the object has no predefined
-#' dataset names.
-#'
-#' @param tealData (`teal_data`) object
-#'
-#' @return A `teal_data` object.
-#' @keywords internal
-update_default_dataname <- function(data) {
-  if (length(teal.data::datanames(data)) == 0) {
-    datanames <- ls(data@env)
-    if (length(datanames) == 0) {
-      stop("cannot assign datanames as `teal_data` environment is empty. Contact app developer.")
-    }
-    teal.data::datanames(data) <- datanames
-    warning("`data` object has no datanames. Default datanames are specified from environment.")
-  }
-  data
 }
