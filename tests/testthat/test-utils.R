@@ -38,14 +38,6 @@ testthat::test_that("report_card_template function returns TealReportCard object
 })
 
 teal_data <- teal.data::teal_data()
-test_that("teal_data_to_filtered_data throw when teal_data is empty", {
-  teal_data <- teal.data::teal_data()
-  testthat::expect_error(
-    teal_data_to_filtered_data(teal_data),
-    "cannot assign datanames as `teal_data` environment is empty. Contact app developer"
-  )
-})
-
 test_that("teal_data_to_filtered_data throw when datanames are not specified", {
   teal_data <- within(teal_data, iris <- head(iris))
   testthat::expect_warning(

@@ -62,9 +62,6 @@ teal_data_to_filtered_data <- function(x, datanames = teal.data::datanames(x)) {
 
   if (length(datanames) == 0) {
     datanames <- ls(x@env)
-    if (length(datanames) == 0) {
-      stop("cannot assign datanames as `teal_data` environment is empty. Contact app developer.")
-    }
     teal.data::datanames(x) <- datanames
     warning("`data` object has no datanames. Default datanames are specified from environment.")
   }

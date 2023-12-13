@@ -81,6 +81,13 @@ testthat::test_that("init filter accepts `teal_slices`", {
   )
 })
 
+testthat::test_that("init throws when data has no datanames", {
+  testthat::expect_error(
+    init(data = teal_data(), modules = list(example_module())),
+    "`data` object has no datanames and its environment is empty"
+  )
+})
+
 testthat::test_that("init throws when incompatible module's datanames", {
   msg <- "Module 'example teal module' uses datanames not available in 'data'"
   testthat::expect_output(
