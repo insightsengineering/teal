@@ -52,6 +52,7 @@ jobs:
         checking R code for possible problems .* NOTE
         checking examples .* NOTE
         checking Rd line widths .* NOTE
+        checking top-level files .* NOTE
       unit-test-report-brand: >-
         https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/thumbs/teal.png
   coverage:
