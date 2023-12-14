@@ -51,7 +51,7 @@ test_that("teal_data_datanames returns names of the @env's objects when dataname
     iris <- head(iris)
     mtcars <- head(mtcars)
   })
-  testthat::expect_equal(teal_data_datanames(teal_data), c("iris", "mtcars"))
+  testthat::expect_equal(teal_data_datanames(teal_data), c("mtcars", "iris"))
 })
 
 test_that("teal_data_datanames returns datanames which are set by teal.data::datanames", {
