@@ -22,7 +22,7 @@
 #' library(shiny)
 #'
 #' app <- init(
-#'   data = teal_data(dataset("iris", iris)),
+#'   data = teal_data(iris = iris),
 #'   modules = modules(
 #'     label = "Modules",
 #'     modules(
@@ -63,7 +63,7 @@
 #'   )
 #' )
 #' if (interactive()) {
-#'   runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 modules <- function(..., label = "root") {
   checkmate::assert_string(label)
@@ -89,7 +89,7 @@ modules <- function(..., label = "root") {
   )
 }
 
-#' Function which appends a teal_module onto the children of a teal_modules object
+#' Append a `teal_module` to `children` of a `teal_modules` object
 #' @keywords internal
 #' @param modules `teal_modules`
 #' @param module `teal_module` object to be appended onto the children of `modules`
@@ -101,6 +101,43 @@ append_module <- function(modules, module) {
   labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
   names(modules$children) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
   modules
+}
+
+#' Extract/Remove module(s) of specific class
+#'
+#' Given a `teal_module` or a `teal_modules`, return the elements of the structure according to `class`.
+#'
+#' @param modules `teal_modules`
+#' @param class The class name of `teal_module` to be extracted or dropped.
+#' @keywords internal
+#' @return
+#' For `extract_module`, a `teal_module` of class `class` or `teal_modules` containing modules of class `class`.
+#' For `drop_module`, the opposite, which is all `teal_modules` of  class other than `class`.
+#' @rdname module_management
+extract_module <- function(modules, class) {
+  if (inherits(modules, class)) {
+    modules
+  } else if (inherits(modules, "teal_module")) {
+    NULL
+  } else if (inherits(modules, "teal_modules")) {
+    Filter(function(x) length(x) > 0L, lapply(modules$children, extract_module, class))
+  }
+}
+
+#' @keywords internal
+#' @return `teal_modules`
+#' @rdname module_management
+drop_module <- function(modules, class) {
+  if (inherits(modules, class)) {
+    NULL
+  } else if (inherits(modules, "teal_module")) {
+    modules
+  } else if (inherits(modules, "teal_modules")) {
+    do.call(
+      "modules",
+      c(Filter(function(x) length(x) > 0L, lapply(modules$children, drop_module, class)), label = modules$label)
+    )
+  }
 }
 
 #' Does the object make use of the `arg`
@@ -134,7 +171,7 @@ is_arg_used <- function(modules, arg) {
 #' @param server (`function`) `shiny` module with following arguments:
 #'  - `id` - teal will set proper shiny namespace for this module (see [shiny::moduleServer()]).
 #'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
-#'  - `data` (optional) module will receive a `tdata` object, a list of reactive (filtered) data specified in
+#'  - `data` (optional) module will receive a `teal_data` object, a list of reactive (filtered) data specified in
 #'     the `filters` argument.
 #'  - `datasets` (optional) module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
 #'  - `reporter` (optional) module will receive `Reporter`. (See [teal.reporter::Reporter]).
@@ -142,8 +179,6 @@ is_arg_used <- function(modules, arg) {
 #'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
 #' @param ui (`function`) Shiny `ui` module function with following arguments:
 #'  - `id` - teal will set proper shiny namespace for this module.
-#'  - `data` (optional)  module will receive list of reactive (filtered) data specified in the `filters` argument.
-#'  - `datasets` (optional)  module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
 #'  - `...` (optional) `ui_args` elements will be passed to the module named argument or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
 #' @param datanames (`character`) A vector with `datanames` that are relevant for the item. The
@@ -162,7 +197,7 @@ is_arg_used <- function(modules, arg) {
 #' library(shiny)
 #'
 #' app <- init(
-#'   data = teal_data(dataset("iris", iris)),
+#'   data = teal_data(iris = iris),
 #'   modules = list(
 #'     module(
 #'       label = "Module",
@@ -182,7 +217,7 @@ is_arg_used <- function(modules, arg) {
 #'   )
 #' )
 #' if (interactive()) {
-#'   runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 module <- function(label = "module",
                    server = function(id, ...) {
@@ -212,7 +247,18 @@ module <- function(label = "module",
   }
 
   if (label == "global_filters") {
-    stop("Label 'global_filters' is reserved in teal. Please change to something else.")
+    stop(
+      sprintf("module(label = \"%s\", ...\n  ", label),
+      "Label 'global_filters' is reserved in teal. Please change to something else.",
+      call. = FALSE
+    )
+  }
+  if (label == "Report previewer") {
+    stop(
+      sprintf("module(label = \"%s\", ...\n  ", label),
+      "Label 'Report previewer' is reserved in teal.",
+      call. = FALSE
+    )
   }
   server_formals <- names(formals(server))
   if (!(
@@ -236,6 +282,14 @@ module <- function(label = "module",
     message(sprintf("module \"%s\" server function takes no data so \"datanames\" will be ignored", label))
     datanames <- NULL
   }
+  if ("datasets" %in% server_formals) {
+    warning(
+      sprintf("Called from module(label = \"%s\", ...)\n  ", label),
+      "`datasets` argument in the `server` is deprecated and will be removed in the next release. ",
+      "Please use `data` instead.",
+      call. = FALSE
+    )
+  }
 
   srv_extra_args <- setdiff(names(server_args), server_formals)
   if (length(srv_extra_args) > 0 && !"..." %in% server_formals) {
@@ -251,10 +305,17 @@ module <- function(label = "module",
     stop(
       "\nmodule() `ui` argument requires a function with following arguments:",
       "\n - id - teal will set proper shiny namespace for this module.",
-      "\n\nFollowing arguments can be used optionaly:",
-      "\n - `data` - module will receive list of reactive (filtered) data specied in the `filters` argument",
-      "\n - `datasets` - module will receive `FilteredData`. See `help(teal.slice::FilteredData)`",
+      "\n\nFollowing arguments can be used optionally:",
       "\n - `...` ui_args elements will be passed to the module argument of the same name or to the `...`"
+    )
+  }
+
+  if (any(c("data", "datasets") %in% ui_formals)) {
+    stop(
+      sprintf("Called from module(label = \"%s\", ...)\n  ", label),
+      "`ui` with `data` or `datasets` argument is no longer accepted.\n  ",
+      "If some `ui` inputs depend on data, please move the logic to your `server` instead.\n  ",
+      "Possible solutions are renderUI() or updateXyzInput() functions."
     )
   }
 
@@ -270,7 +331,7 @@ module <- function(label = "module",
   structure(
     list(
       label = label,
-      server = server, ui = ui, datanames = datanames,
+      server = server, ui = ui, datanames = unique(datanames),
       server_args = server_args, ui_args = ui_args
     ),
     class = "teal_module"

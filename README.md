@@ -1,4 +1,4 @@
-# `teal`: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%;"/></a  >
+# `teal`: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%; max-height: 139px;"/></a  >
 
 <!-- start badges -->
 [![Check 🛠](https://github.com/insightsengineering/teal/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/teal/main/unit-test-report/)
@@ -28,7 +28,7 @@
     -    Related datasets, for example a set of `data.frames` with key columns to enable data joins
     -    `MultiAssayExperiment` objects which are R data structures for representing and analyzing multi-omics experiments
 -   `teal` modules:
-    -   `teal modules` are shiny modules built within the `teal` framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, lost of `teal` modules have been released and we recommend starting with modules found in the following packages:
+    -   `teal modules` are shiny modules built within the `teal` framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, many `teal` modules have been released and we recommend starting with modules found in the following packages:
         -   [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/): general modules for exploring relational/independent/`CDISC` data
         -   [`teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/): modules specific to `CDISC` data and clinical trial reporting
         -   [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/): modules for analyzing `MultiAssayExperiment` objects
@@ -42,7 +42,6 @@ A lot of the functionality of the `teal` framework derives from the following pa
 -   [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/): shiny components used within `teal`.
 -   [`teal.slice`](https://insightsengineering.github.io/teal.slice/): provides a filtering panel to allow filtering of data.
 -   [`teal.code`](https://insightsengineering.github.io/teal.code/): handles reproducibility of outputs.
--   [`teal.transform`](https://insightsengineering.github.io/teal.transform/): standardizes extracting and merging data.
 -   [`teal.logger`](https://insightsengineering.github.io/teal.logger/): standardizes logging within `teal` framework.
 -   [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/): allows `teal` applications to generate reports.
 
@@ -103,9 +102,9 @@ shinyApp(app$ui, app$server)
 
 ![App recording](man/figures/readme_app.gif)
 
-Please see [`teal` gallery](https://insightsengineering.github.io/teal.gallery) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog) to see examples of `teal` apps.
+Please see [`teal.gallery`](https://insightsengineering.github.io/teal.gallery) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog) to see examples of `teal` apps.
 
-Please start with the ["Getting Started" article](https://insightsengineering.github.io/teal/articles/teal.html) and then other [package vignettes](https://insightsengineering.github.io/teal/articles/index.html) for more detailed guide.
+Please start with the ["Technical Blueprint" article](https://insightsengineering.github.io/teal/latest-tag/articles/blueprint/index.html), ["Getting Started" article](https://insightsengineering.github.io/teal/latest-tag/articles/teal.html), and then other [package vignettes](https://insightsengineering.github.io/teal/latest-tag/articles/index.html) for more detailed guide.
 
 ## Getting help
 
@@ -123,8 +122,8 @@ This package is a result of a joint efforts by many developers and stakeholders.
 
 ### Stargazers
 
-[![Stargazers repo roster for @insightsengineering/teal](https://reporoster.com/stars/insightsengineering/teal)](https://github.com/insightsengineering/teal/stargazers)
+[![Stargazers repo roster for @insightsengineering/teal](http://reporoster.com/stars/insightsengineering/teal)](https://github.com/insightsengineering/teal/stargazers)
 
 ### Forkers
 
-[![Forkers repo roster for @insightsengineering/teal](https://reporoster.com/forks/insightsengineering/teal)](https://github.com/insightsengineering/teal/network/members)
+[![Forkers repo roster for @insightsengineering/teal](http://reporoster.com/forks/insightsengineering/teal)](https://github.com/insightsengineering/teal/network/members)

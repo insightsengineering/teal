@@ -4,7 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{\%>\%}
-\alias{deprecate_soft}
+\alias{badge}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -12,7 +12,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{lifecycle}{\code{\link[lifecycle]{deprecate_soft}}}
+  \item{lifecycle}{\code{\link[lifecycle]{badge}}}
 
   \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 }}

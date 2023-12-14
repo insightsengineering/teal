@@ -54,7 +54,7 @@
 #'   }
 #' )
 #' if (interactive()) {
-#'   runApp(app)
+#'   shinyApp(app$ui, app$server)
 #' }
 #' @keywords internal
 NULL
@@ -109,20 +109,10 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
 #' @rdname module_nested_tabs
 #' @export
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
-  checkmate::assert_class(datasets, class = "FilteredData")
+  checkmate::assert_class(datasets, classes = "FilteredData")
   ns <- NS(id)
 
-  args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
-  args <- c(list(id = ns("module")), args)
-
-  if (is_arg_used(modules$ui, "datasets")) {
-    args <- c(args, datasets = datasets)
-  }
-
-  if (is_arg_used(modules$ui, "data")) {
-    data <- .datasets_to_data(modules, datasets)
-    args <- c(args, data = list(data))
-  }
+  args <- c(list(id = ns("module")), modules$ui_args)
 
   teal_ui <- tags$div(
     id = id,
@@ -211,9 +201,8 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
 
   moduleServer(id = id, module = function(input, output, session) {
-    modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
     if (!is.null(modules$datanames) && is_module_specific) {
-      datasets$srv_filter_panel("module_filter_panel", active_datanames = reactive(modules$datanames))
+      datasets$srv_filter_panel("module_filter_panel")
     }
 
     # Create two triggers to limit reactivity between filter-panel and modules.
@@ -243,20 +232,13 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     if (is_arg_used(modules$server, "data")) {
-      data <- .datasets_to_data(modules, datasets, trigger_data)
+      data <- eventReactive(trigger_data(), .datasets_to_data(modules, datasets))
       args <- c(args, data = list(data))
     }
 
     if (is_arg_used(modules$server, "filter_panel_api")) {
       filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets)
       args <- c(args, filter_panel_api = filter_panel_api)
-    }
-
-    if (is_arg_used(modules$server, "datasets") && is_arg_used(modules$server, "data")) {
-      warning(
-        "Module '", modules$label, "' has `data` and `datasets` arguments in the formals.",
-        "\nIt's recommended to use `data` to work with filtered objects."
-      )
     }
 
     # observe the trigger_module above to induce the module once the renderUI is triggered
@@ -277,52 +259,41 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   })
 }
 
-#' Convert `FilteredData` to reactive list of datasets of the `tdata` type.
+#' Convert `FilteredData` to reactive list of datasets of the `teal_data` type.
 #'
-#' Converts `FilteredData` object to `tdata` object containing datasets needed for a specific module.
+#' Converts `FilteredData` object to `teal_data` object containing datasets needed for a specific module.
 #' Please note that if module needs dataset which has a parent, then parent will be also returned.
 #' A hash per `dataset` is calculated internally and returned in the code.
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
 #' @param datasets (`FilteredData`) object where needed data are taken from
-#' @param trigger_data (`reactiveVal`) to trigger getting the filtered data
-#' @return list of reactive datasets with following attributes:
-#' - `code` (`character`) containing datasets reproducible code.
-#' - `join_keys` (`JoinKeys`) containing relationships between datasets.
-#' - `metadata` (`list`) containing metadata of datasets.
+#' @return A `teal_data` object.
 #'
 #' @keywords internal
-.datasets_to_data <- function(module, datasets, trigger_data = reactiveVal(1L)) {
+.datasets_to_data <- function(module, datasets) {
   checkmate::assert_class(module, "teal_module")
   checkmate::assert_class(datasets, "FilteredData")
-  checkmate::assert_class(trigger_data, "reactiveVal")
 
-  datanames <- if (is.null(module$datanames)) datasets$datanames() else module$datanames
+  datanames <- if (is.null(module$datanames) || identical(module$datanames, "all")) {
+    datasets$datanames()
+  } else {
+    unique(module$datanames) # todo: include parents! unique shouldn't be needed here!
+  }
 
   # list of reactive filtered data
-  data <- sapply(
-    datanames,
-    function(x) eventReactive(trigger_data(), datasets$get_data(x, filtered = TRUE)),
-    simplify = FALSE
-  )
+  data <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
 
   hashes <- calculate_hashes(datanames, datasets)
-  metadata <- lapply(datanames, datasets$get_metadata)
-  names(metadata) <- datanames
 
-  new_tdata(
-    data,
-    eventReactive(
-      trigger_data(),
-      c(
-        get_rcode_str_install(),
-        get_rcode_libraries(),
-        get_datasets_code(datanames, datasets, hashes),
-        teal.slice::get_filter_expr(datasets, datanames)
-      )
-    ),
-    datasets$get_join_keys(),
-    metadata
+  code <- c(
+    get_rcode_str_install(),
+    get_rcode_libraries(),
+    get_datasets_code(datanames, datasets, hashes)
+  )
+
+  do.call(
+    teal.data::teal_data,
+    args = c(data, code = list(code), join_keys = list(datasets$get_join_keys()[datanames]))
   )
 }
 

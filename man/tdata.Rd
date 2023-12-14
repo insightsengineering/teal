@@ -3,12 +3,9 @@
 \name{tdata}
 \alias{tdata}
 \alias{new_tdata}
-\alias{get_code.tdata}
 \title{Create a \code{tdata} Object}
 \usage{
 new_tdata(data, code = "", join_keys = NULL, metadata = NULL)
-
-\method{get_code}{tdata}(x, ...)
 }
 \arguments{
 \item{data}{A \verb{named list} of \code{data.frames} (or \code{MultiAssayExperiment})
@@ -20,25 +17,22 @@ the code used to generate the data. This should be \code{reactive} if the code i
 during a reactive context (e.g. if filtering changes the code). Inside this
 object \code{code} will be made reactive}
 
-\item{join_keys}{A \code{teal.data::JoinKeys} object containing relationships between the
+\item{join_keys}{A \code{teal.data::join_keys} object containing relationships between the
 datasets.}
 
 \item{metadata}{A \verb{named list} each element contains a list of metadata about the named data.frame
 Each element of these list should be atomic and length one.}
-
-\item{x}{a \code{tdata} object}
-
-\item{...}{additional arguments for the generic}
 }
 \value{
 A \code{tdata} object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 Create a new object called \code{tdata} which contains \code{data}, a \code{reactive} list of data.frames
 (or \code{MultiAssayExperiment}), with attributes:
 \itemize{
 \item{\code{code} (\code{reactive}) containing code used to generate the data}
-\item{join_keys (\code{JoinKeys}) containing the relationships between the data}
+\item{join_keys (\code{join_keys}) containing the relationships between the data}
 \item{metadata (\verb{named list}) containing any metadata associated with the data frames}
 }
 }
@@ -56,9 +50,12 @@ data <- new_tdata(
 isolate(data[["iris"]]())
 
 # Get code
-isolate(get_code(data))
+isolate(get_code_tdata(data))
 
 # Get metadata
 get_metadata(data, "iris")
 
+}
+\seealso{
+\code{as_tdata}
 }
