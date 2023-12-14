@@ -107,7 +107,5 @@ within(tdm, IRIS <- subset(IRIS, Species == "virginica"))
 
 }
 \seealso{
-\code{\linkS4class{teal_data}}
-
-\code{\link[base:with]{base::within()}}, \code{\link[teal.code:qenv]{teal.code::within.qenv()}}
+\code{\linkS4class{teal_data}}, \code{\link[base:with]{base::within()}}, \code{\link[teal.code:qenv]{teal.code::within.qenv()}}
 }

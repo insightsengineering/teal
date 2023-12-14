@@ -50,7 +50,7 @@
 #' @name teal_data_module
 #' @rdname teal_data_module
 #'
-#' @seealso [`teal_data-class`]
+#' @seealso [`teal_data-class`], [`base::within()`], [`teal.code::within.qenv()`]
 #'
 #' @export
 teal_data_module <- function(ui, server) {

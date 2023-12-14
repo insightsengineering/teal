@@ -10,8 +10,6 @@
 #' @return
 #' `within` returns a `teal_data_module` object with a delayed evaluation of `expr` when the module is run.
 #'
-#' @seealso [`base::within()`], [`teal.code::within.qenv()`]
-#'
 #' @examples
 #' tdm <- teal_data_module(
 #'   ui = function(id) div(id = shiny::NS(id)("div_id")),
