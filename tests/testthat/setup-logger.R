@@ -1,1 +1,1 @@
-logger::log_threshold(logger::FATAL, namespace = "teal")
+logger::log_appender(\(...) {}, namespace = "teal")
