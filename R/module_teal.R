@@ -190,7 +190,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
           datanames <- if (is.null(modules$datanames) || modules$datanames == "all") {
             include_parent_datanames(
               teal_data_datanames(teal_data_rv()),
-              teal_data_rv()@join_keys
+              teal.data::join_keys(teal_data_rv())
             )
           } else {
             modules$datanames

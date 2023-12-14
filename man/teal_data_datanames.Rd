@@ -16,3 +16,4 @@ teal_data_datanames(data)
 Special function used in internals of \code{teal} to return names of datasets even if \code{datanames}
 has not been set.
 }
+\keyword{internal}

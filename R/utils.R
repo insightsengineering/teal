@@ -221,12 +221,12 @@ check_filter_datanames <- function(filters, datanames) {
 #' has not been set.
 #' @param data (`teal_data`)
 #' @return `character`
-# @keywords internal
+#' @keywords internal
 teal_data_datanames <- function(data) {
   checkmate::assert_class(data, "teal_data")
   if (length(teal.data::datanames(data))) {
     teal.data::datanames(data)
   } else {
-    ls(data@env)
+    names(data@env)
   }
 }
