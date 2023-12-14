@@ -1,1 +1,1 @@
-logger::log_appender(\(...) {}, namespace = "teal")
+logger::log_appender(function(...) {}, namespace = "teal")
