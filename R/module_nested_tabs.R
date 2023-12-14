@@ -112,8 +112,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
   checkmate::assert_class(datasets, classes = "FilteredData")
   ns <- NS(id)
 
-  args <- isolate(teal.transform::resolve_delayed(modules$ui_args, datasets))
-  args <- c(list(id = ns("module")), args)
+  args <- c(list(id = ns("module")), modules$ui_args)
 
   teal_ui <- tags$div(
     id = id,
@@ -202,7 +201,6 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
 
   moduleServer(id = id, module = function(input, output, session) {
-    modules$server_args <- teal.transform::resolve_delayed(modules$server_args, datasets)
     if (!is.null(modules$datanames) && is_module_specific) {
       datasets$srv_filter_panel("module_filter_panel")
     }

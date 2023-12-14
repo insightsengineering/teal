@@ -82,8 +82,6 @@ It is of the `tdata` type and can be created using the `new_tdata` function.
 The `teal` framework also provides:
 
 - A way to create modules which then generate the R code needed to reproduce their outputs; these modules use the [`teal.code`](https://insightsengineering.github.io/teal.code/) package.
-- A way extract from and merge related datasets using the [`teal.transform`](https://insightsengineering.github.io/teal.transform/) package.
-- A way to allow app creators to customize your modules also using `teal.transform`.
 
 The annotated example below demonstrates these features within a simple histogram module, allowing app developers to choose the data and columns that their app users can select for display in a histogram.
 

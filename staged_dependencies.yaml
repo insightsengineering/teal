@@ -15,9 +15,6 @@ upstream_repos:
   insightsengineering/teal.slice:
     repo: insightsengineering/teal.slice
     host: https://github.com
-  insightsengineering/teal.transform:
-    repo: insightsengineering/teal.transform
-    host: https://github.com
   insightsengineering/teal.logger:
     repo: insightsengineering/teal.logger
     host: https://github.com
