@@ -106,9 +106,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/dot-datasets_to_data.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/eval_code.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/example_cdisc_data.html</loc>
   </url>
   <url>
@@ -278,8 +275,5 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/validate_one_row_per_id.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/within.teal_data_module.html</loc>
   </url>
 </urlset>
