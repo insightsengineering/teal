@@ -187,13 +187,13 @@ init <- function(data,
       stop("`data` object has no datanames and its environment is empty. Specify `datanames(data)` and try again.")
     }
     # in case of teal_data_module this check is postponed to the srv_teal_with_splash
-    is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
+    is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
     if (!isTRUE(is_modules_ok)) {
       logger::log_error(is_modules_ok)
       # we allow app to continue if datanames are not available.
     }
 
-    is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+    is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
     if (!isTRUE(is_filter_ok)) {
       logger::log_warn(is_filter_ok)
       # we allow app to continue if applied filters are outside

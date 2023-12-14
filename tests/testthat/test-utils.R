@@ -37,18 +37,22 @@ testthat::test_that("report_card_template function returns TealReportCard object
   testthat::expect_length(card$get_content(), 1)
 })
 
-teal_data <- teal.data::teal_data()
-test_that("teal_data_to_filtered_data throw when datanames are not specified", {
-  teal_data <- within(teal_data, iris <- head(iris))
-  testthat::expect_warning(
-    teal_data_to_filtered_data(teal_data),
-    "`data` object has no datanames. Default datanames are specified from environment"
-  )
-})
-
 test_that("teal_data_to_filtered_data return FilteredData class", {
+  teal_data <- teal.data::teal_data()
   teal_data <- within(teal_data, iris <- head(iris))
   datanames(teal_data) <- "iris"
 
   testthat::expect_s3_class(teal_data_to_filtered_data(teal_data), "FilteredData")
+})
+
+test_that("teal_data_datanames return datanames", {
+  teal_data <- teal.data::teal_data()
+  teal_data <- within(teal_data, {
+    iris <- head(iris)
+    mtcars <- head(mtcars)
+  })
+  testthat::expect_equal(teal_data_datanames(teal_data), c("iris", "mtcars"))
+
+  datanames(teal_data) <- "iris"
+  testthat::expect_equal(teal_data_datanames(teal_data), "iris")
 })
