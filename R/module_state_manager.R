@@ -162,7 +162,7 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
 
 
 
-# utility functions ----
+## utility functions ----
 
 #' @keywords internal
 #'
@@ -174,42 +174,4 @@ get_master_session <- function() {
   } else {
     app_session
   }
-}
-
-
-# add bookmark and return URL to saved state
-# simplified from session$doBookmark
-# @param session a `session` object; use get_master_session for best results
-# @return URL pointing to a bookmarked application state
-#' @keywords internal
-#'
-grab_state <- function(session = shiny::getDefaultReactiveDomain()) {
-  if (getShinyOption("bookmarkStore", default = "disable") != "server") {
-    showNotification("Bookmarks have not been enabled for this application.")
-    return(invisible(NULL))
-  }
-  tryCatch(shiny:::withLogErrors({
-    saveState <- shiny:::ShinySaveState$new(
-      input = session$input,
-      exclude = session$getBookmarkExclude(),
-      onSave = function(state) {
-        session$.__enclos_env__$private$bookmarkCallbacks$invoke(state)
-      })
-    url <- shiny:::saveShinySaveState(saveState)
-    clientData <- session$clientData
-    url <- paste0(
-      clientData$url_protocol,
-      "//",
-      clientData$url_hostname,
-      if (nzchar(clientData$url_port)) paste0(":", clientData$url_port),
-      clientData$url_pathname,
-      "?",
-      url
-    )
-  }), error = function(e) {
-    msg <- paste0("Error bookmarking state: ", e$message)
-    shiny::showNotification(msg, duration = NULL, type = "error")
-  })
-
-  url
 }
