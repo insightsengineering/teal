@@ -49,9 +49,7 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
 
     # Store initial input states.
     grab_history <- reactiveVal({
-      list(
-        "Initial input state" = grab_state(get_master_session())
-      )
+      list()
     })
 
     # 3. arrange restoring filter state after restoring bookmark
@@ -133,7 +131,7 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
     divs <- reactiveValues()
 
     observeEvent(grab_history(), {
-      lapply(names(grab_history())[-1L], function(s) {
+      lapply(names(grab_history()), function(s) {
         id_rowme <- sprintf("rowme_%s", make.names(s))
 
         # Create a row for the grab table.
