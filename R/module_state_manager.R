@@ -35,6 +35,13 @@ state_manager_ui <- function(id) {
 #'
 state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_list, snapshot_history) {
   checkmate::assert_character(id)
+  checkmate::assert_true(is.reactive(slices_global))
+  checkmate::assert_class(isolate(slices_global()), "teal_slices")
+  checkmate::assert_true(is.reactive(mapping_matrix))
+  checkmate::assert_data_frame(isolate(mapping_matrix()), null.ok = TRUE)
+  checkmate::assert_list(filtered_data_list, types = "FilteredData", any.missing = FALSE, names = "named")
+  checkmate::assert_true(is.reactive(snapshot_history))
+  checkmate::assert_list(isolate(snapshot_history()), names = "unique")
 
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
