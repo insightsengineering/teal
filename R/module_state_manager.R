@@ -89,14 +89,14 @@ state_manager_srv <- function(id, slices_global, mapping_matrix) {
           ### smth like this should happen:
           snapshot <- as.list(slices_global(), recursive = TRUE)
           attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
-          state$filter_state_on_bookmark <- snapshot
+          state$values$filter_state_on_bookmark <- snapshot
           ### end; requires access to slices_global and mapping_matrix
-          state$snapshot_history <- snapshot_history()   # isolate this?
-          state$grab_history <- grab_history()           # isolate this?
+          state$values$snapshot_history <- snapshot_history()   # isolate this?
+          state$values$grab_history <- grab_history()           # isolate this?
         })
         sesh$onRestored(function(state) {
           ### smth like this should happen:
-          snapshot <- state$filter_state_on_bookmark
+          snapshot <- state$values$filter_state_on_bookmark
           snapshot_state <- as.teal_slices(snapshot)
           mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
           mapply(
@@ -110,8 +110,8 @@ state_manager_srv <- function(id, slices_global, mapping_matrix) {
           )
           slices_global(snapshot_state)
           ### end; requires access to slices_global and filtered_data_list
-          snapshot_history(state$snapshot_history)
-          grab_history(state$grab_history)
+          snapshot_history(state$values$snapshot_history)
+          grab_history(state$values$grab_history)
         })
         # 4. do bookmark
         url <- grab_state(sesh)
