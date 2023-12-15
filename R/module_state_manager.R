@@ -189,13 +189,13 @@ grab_state <- function(session = shiny::getDefaultReactiveDomain()) {
   }
   tryCatch(shiny:::withLogErrors({
     saveState <- shiny:::ShinySaveState$new(
-      input = session$.__enclos_env__$self$input,
-      exclude = session$.__enclos_env__$self$getBookmarkExclude(),
+      input = session$input,
+      exclude = session$getBookmarkExclude(),
       onSave = function(state) {
         session$.__enclos_env__$private$bookmarkCallbacks$invoke(state)
       })
     url <- shiny:::saveShinySaveState(saveState)
-    clientData <- session$.__enclos_env__$self$clientData
+    clientData <- session$clientData
     url <- paste0(
       clientData$url_protocol,
       "//",
