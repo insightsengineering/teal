@@ -13,8 +13,6 @@
 #'
 #' @author Aleksander Chlebowski
 #'
-#' @seealso [`app_state_grab`], [`app_state_store`], [`app_state_restore`]
-#'
 #' @rdname state_manager_module
 #' @keywords internal
 #'
