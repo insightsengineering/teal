@@ -35,7 +35,7 @@ state_manager_ui <- function(id) {
 #' @rdname state_manager_module
 #' @keywords internal
 #'
-state_manager_srv <- function(id, slices_global, mapping_matrix) {
+state_manager_srv <- function(id, slices_global, mapping_matrix, snapshot_history) {
   checkmate::assert_character(id)
 
   moduleServer(id, function(input, output, session) {
