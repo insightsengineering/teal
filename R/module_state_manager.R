@@ -57,12 +57,6 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
     # 3. arrange restoring filter state after restoring bookmark
     ### work in progress
     sesh$onBookmark(function(state) {
-      # 1. get input names and isolate filter panel
-      filter_panel_inputs <- grep("filter_panel", names(sesh$input), value = TRUE)
-      # 2. exclude filter panel from bookmark
-      sesh$setBookmarkExclude(character(0L))
-      sesh$setBookmarkExclude(filter_panel_inputs)
-
       ### smth like this should happen:
       snapshot <- as.list(slices_global(), recursive = TRUE)
       attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
