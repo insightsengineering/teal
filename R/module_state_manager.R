@@ -47,24 +47,22 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
     ns <- session$ns
     sesh <- get_master_session()
 
-    # Store initial input states.
+    # Store input states.
     grab_history <- reactiveVal({
       list()
     })
 
-    # 3. arrange restoring filter state after restoring bookmark
-    ### work in progress
     sesh$onBookmark(function(state) {
-      ### smth like this should happen:
+      # Add current filter state to bookmark.
       snapshot <- as.list(slices_global(), recursive = TRUE)
       attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
       state$values$filter_state_on_bookmark <- snapshot
-      ### end; requires access to slices_global and mapping_matrix
+      # Add snapshot history and grab history to bookmark.
       state$values$snapshot_history <- snapshot_history()   # isolate this?
       state$values$grab_history <- grab_history()           # isolate this?
     })
     sesh$onRestored(function(state) {
-      ### smth like this should happen:
+      # Restore filter state.
       snapshot <- state$values$filter_state_on_bookmark
       snapshot_state <- as.teal_slices(snapshot)
       mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
@@ -78,7 +76,7 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
         filter_ids = mapping_unfolded
       )
       slices_global(snapshot_state)
-      ### end; requires access to slices_global and filtered_data_list
+      # Restore snapshot history and grab history.
       snapshot_history(state$values$snapshot_history)
       grab_history(state$values$grab_history)
     })
@@ -100,14 +98,12 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
         updateTextInput(inputId = "grab_name", value = , placeholder = "Meaningful, unique name")
         unlink(strsplit(url, "_state_id_=")[[1L]][[2L]], recursive = TRUE, force = TRUE, expand = FALSE)
       } else {
-        # 5. add bookmark URL to grab history (with name)
+        # Add bookmark URL to grab history (with name).
         grab_update <- c(grab_history(), list(url))
         names(grab_update)[length(grab_update)] <- grab_name
         grab_history(grab_update)
-        # 6. remove modal
+
         removeModal()
-        # Reopen filter manager modal by clicking button in the main application.
-        shinyjs::click(id = "teal-main_ui-filter_manager-show", asis = TRUE)
       }
     })
 
@@ -117,7 +113,6 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
         modalDialog(
           textInput(ns("grab_name"), "Name the grab", width = "100%", placeholder = "Meaningful, unique name"),
           footer = tagList(
-            # actionButton(ns("grab_name_accept"), "Accept", icon = icon("thumbs-up")),
             bookmarkButton("Accept", icon = icon("thumbs-up")),
             modalButton(label = "Cancel", icon = icon("thumbs-down"))
           ),
