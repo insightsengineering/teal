@@ -35,7 +35,7 @@ state_manager_ui <- function(id) {
 #' @rdname state_manager_module
 #' @keywords internal
 #'
-state_manager_srv <- function(id, slices_global, mapping_matrix) {
+state_manager_srv <- function(id) {
   checkmate::assert_character(id)
 
   moduleServer(id, function(input, output, session) {
@@ -43,9 +43,7 @@ state_manager_srv <- function(id, slices_global, mapping_matrix) {
 
     # Store initial input states.
     grab_history <- reactiveVal({
-      list(
-        "Initial input state" = grab_state(get_master_session())
-      )
+      list()
     })
 
     # Grab current input state - name grab.
@@ -108,7 +106,7 @@ state_manager_srv <- function(id, slices_global, mapping_matrix) {
     divs <- reactiveValues()
 
     observeEvent(grab_history(), {
-      lapply(names(grab_history())[-1L], function(s) {
+      lapply(names(grab_history()), function(s) {
         id_rowme <- sprintf("rowme_%s", make.names(s))
 
         # Create a row for the grab table.

@@ -187,7 +187,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     snapshot_manager_srv("snapshot_manager", slices_global, mapping_matrix, filtered_data_list)
     # Call state manager.
     if (getShinyOption("bookmarkStore", default = "disable") == "server") {
-      state_manager_srv("state_manager", slices_global, mapping_matrix)
+      state_manager_srv("state_manager")
     }
 
     modules_out # returned for testing purpose
