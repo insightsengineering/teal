@@ -6,7 +6,7 @@ template:
 
 navbar:
   structure:
-    left: [intro, reference, articles, tutorials, news, reports]
+    left: [intro, reference, articles, blueprint, tutorials, news, reports]
     right: [search, github]
   components:
     reports:
@@ -16,54 +16,113 @@ navbar:
           href: coverage-report/
         - text: Unit test report
           href: unit-test-report/
+    blueprint:
+      text: Technical Blueprint
+      menu:
+        - text: About Blueprint
+          href: articles/blueprint/index.html
+        - text: Introduction
+          href: articles/blueprint/intro.html
+        - text: Actors
+          href: articles/blueprint/actors.html
+        - text: Data Flow
+          href: articles/blueprint/dataflow.html
+        - text: Product Map
+          href: articles/blueprint/product_map.html
+        - text: Features
+          navbar: Features
+        - text: Input Data
+          href: articles/blueprint/input_data.html
+        - text: In-App Data
+          href: articles/blueprint/in_app_data.html
+        - text: Filter Panel
+          href: articles/blueprint/filter_panel.html
+        - text: Module and Encapsulation
+          href: articles/blueprint/module_encapsulation.html
+
     github:
       icon: fa-github
       href: https://github.com/insightsengineering/teal
 
 articles:
-  - title: Articles
-    navbar: ~
-    contents:
-      - teal
-      - filter-panel
-      - including-general-data-in-teal
-      - including-adam-data-in-teal
-      - including-mae-data-in-teal
-      - preprocessing-data
-      - creating-custom-modules
-      - adding-support-for-reporting
-      - teal-options
-      - teal-bs-themes
+- title: Get Started
+  navbar: ~
+  contents:
+    - getting-started-with-teal
+- title: Using teal
+  navbar: Using teal
+  contents:
+    - filter-panel
+    - teal-options
+    - bootstrap-themes-in-teal
+- title: Data in teal Apps
+  navbar: Data in teal Apps
+  contents:
+    - including-data-in-teal-applications
+    - data-as-shiny-module
+- title: Extending teal
+  navbar: Extending teal
+  contents:
+    - creating-custom-modules
+    - adding-support-for-reporting
+- title: 📃 Technical Blueprint
+  desc: >
+    The purpose of the blueprint is to aid new developer’s comprehension of the
+    fundamental principles of the `teal` framework. We will explore crucial `teal`
+    concepts such as data flow, actors, and filter panel, among others.
+  contents:
+    - blueprint/index
+    - blueprint/intro
+    - blueprint/actors
+    - blueprint/dataflow
+    - blueprint/product_map
+- title: ""
+  desc: >
+    Features
+  contents:
+  - blueprint/input_data
+  - blueprint/in_app_data
+  - blueprint/filter_panel
+  - blueprint/module_encapsulation
+
 
 reference:
-  - title: teal Core Functions
-    desc: These are the main functions needed to build a teal app.
+  - title: Core `teal` Functions
+    desc: Main functions needed to build a `teal` app
     contents:
+      - teal_data_module
       - init
       - module
       - modules
       - srv_teal_with_splash
       - ui_teal_with_splash
       - teal_slices
-  - title: Example module
-    desc: A simple example teal module
+  - title: Example Module
+    desc: A simple `teal` module
     contents:
       - example_module
-  - title: Creating reports
+  - title: Creating Reports
     contents:
       - reporter_previewer_module
       - TealReportCard
-  - title: Functions for module developers
+      - report_card_template
+  - title: Landing Popup
     contents:
+      - landing_popup_module
+  - title: Functions for Module Developers
+    contents:
+      - as_tdata
       - tdata
       - get_code_tdata
-      - get_join_keys
       - get_metadata
       - tdata2env
+      - eval_code
+      - within.teal_data_module
       - show_rcode_modal
-  # - title: Functions moved to other packages
-    # desc: These functions have been moved from teal and will be deprecated.
+      - join_keys.tdata
+  # - title: Functions Moved to Other Packages
+    # desc: These functions have been moved from teal and will be deprecated
     # contents:
-  - title: Validation functions
+  - title: Validation Functions
     contents:
       - starts_with("validate_")

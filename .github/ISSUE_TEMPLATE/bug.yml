@@ -33,7 +33,7 @@ body:
     id: code-of-conduct
     attributes:
       label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct.](https://insightsengineering.github.io/teal/CODE_OF_CONDUCT.html)
+      description: By submitting this issue, you agree to follow our [Code of Conduct.](https://insightsengineering.github.io/teal/latest-tag/CODE_OF_CONDUCT.html)
       options:
         - label: I agree to follow this project's Code of Conduct.
           required: true
@@ -41,7 +41,7 @@ body:
     id: contributor-guidelines
     attributes:
       label: Contribution Guidelines
-      description: By submitting this issue, you agree to follow our [Contribution Guidelines.](https://insightsengineering.github.io/teal/CONTRIBUTING.html)
+      description: By submitting this issue, you agree to follow our [Contribution Guidelines.](https://insightsengineering.github.io/teal/latest-tag/CONTRIBUTING.html)
       options:
         - label: I agree to follow this project's Contribution Guidelines.
           required: true

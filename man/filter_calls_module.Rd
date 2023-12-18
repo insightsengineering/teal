@@ -16,12 +16,12 @@ and avoids session restarts!
 }
 \examples{
 app <- init(
-  data = list(iris = iris, mtcars = mtcars),
+  data = teal_data(iris = iris, mtcars = mtcars),
   modules = teal:::filter_calls_module(),
   header = "Simple teal app"
 )
 if (interactive()) {
-  runApp(app)
+  shinyApp(app$ui, app$server)
 }
 }
 \keyword{internal}

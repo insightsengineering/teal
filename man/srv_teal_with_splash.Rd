@@ -14,15 +14,10 @@ the server function must be called with \code{\link[shiny:moduleServer]{shiny::m
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 
-\item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
-or \code{MultiAssayExperiment})\cr
-\code{R6} object as returned by \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}}, \code{\link[teal.data:teal_data]{teal.data::teal_data()}},
-\code{\link[teal.data:cdisc_dataset]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:dataset]{teal.data::dataset()}}, \code{\link[teal.data:dataset_connector]{teal.data::dataset_connector()}} or
-\code{\link[teal.data:cdisc_dataset_connector]{teal.data::cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
-or a list of the previous objects or function returning a named list.
-NOTE: teal does not guarantee reproducibility of the code when names of the list elements
-do not match the original object names. To ensure reproducibility please use \code{\link[teal.data:teal_data]{teal.data::teal_data()}}
-or \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}} with \code{check = TRUE} enabled.}
+\item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})\cr
+\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or
+\code{teal_data_modules} or simply a list of a named list of objects
+(\code{data.frame} or \code{MultiAssayExperiment}).}
 
 \item{modules}{\code{teal_modules} object containing the output modules which
 will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
@@ -34,7 +29,8 @@ Old way of specifying filters through a list is deprecated and will be removed i
 next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
-\code{reactive}, return value of \code{\link[=srv_teal]{srv_teal()}}
+\code{reactive} containing \code{teal_data} object when data is loaded.
+If data is not loaded yet, \code{reactive} returns \code{NULL}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

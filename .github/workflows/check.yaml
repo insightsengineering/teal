@@ -37,6 +37,7 @@ jobs:
         checking S3 generic/method consistency .* NOTE
         checking Rd .usage sections .* NOTE
         checking for unstated dependencies in vignettes .* NOTE
+        checking top-level files .* NOTE
       unit-test-report-brand: >-
         https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/thumbs/teal.png
   coverage:

@@ -1,3 +1,4 @@
+LICENSE
 ^renv$
 ^renv\.lock$
 CODE_OF_CONDUCT.md
@@ -41,3 +42,4 @@ SECURITY.md
 ^templates$
 ^test_full_example$
 coverage.*
+^pkgdown$

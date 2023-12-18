@@ -22,23 +22,25 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  checkmate::assert_class(data, "TealDataAbstract")
-  is_pulled_data <- teal.data::is_pulled(data)
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
-  splash_ui <- if (is_pulled_data) {
-    # blank ui if data is already pulled
+  splash_ui <- if (inherits(data, "teal_data_module")) {
+    data$ui(ns("teal_data_module"))
+  } else if (inherits(data, "teal_data")) {
     div()
-  } else {
-    message("App was initialized with delayed data loading.")
-    data$get_ui(ns("startapp_module"))
   }
-
-  ui_teal(id = ns("teal"), splash_ui = splash_ui, title = title, header = header, footer = footer)
+  ui_teal(
+    id = ns("teal"),
+    splash_ui = div(splash_ui, uiOutput(ns("error"))),
+    title = title,
+    header = header,
+    footer = footer
+  )
 }
 
 #' Server function that loads the data through reactive loading and then delegates
@@ -52,36 +54,109 @@ ui_teal_with_splash <- function(id,
 #'   will be displayed in the teal application. See [modules()] and [module()] for
 #'   more details.
 #' @inheritParams shiny::moduleServer
-#' @return `reactive`, return value of [srv_teal()]
+#' @return `reactive` containing `teal_data` object when data is loaded.
+#' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
-  checkmate::assert_class(data, "TealDataAbstract")
+  checkmate::check_multi_class(data, c("teal_data", "teal_data_module"))
+
   moduleServer(id, function(input, output, session) {
-    logger::log_trace(
-      "srv_teal_with_splash initializing module with data { paste(data$get_datanames(), collapse = ' ')}."
-    )
+    logger::log_trace("srv_teal_with_splash initializing module with data.")
 
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
     }
 
-    is_pulled_data <- teal.data::is_pulled(data)
-    # raw_data contains TealDataAbstract, i.e. R6 object and container for data
-    # reactive to get data through delayed loading
-    # we must leave it inside the server because of callModule which needs to pick up the right session
-    if (is_pulled_data) {
-      raw_data <- reactiveVal(data) # will trigger by setting it
-    } else {
-      raw_data <- data$get_server()(id = "startapp_module")
-      if (!is.reactive(raw_data)) {
-        stop("The delayed loading module has to return a reactive object.")
+    # teal_data_rv contains teal_data object
+    # either passed to teal::init or returned from teal_data_module
+    teal_data_rv <- if (inherits(data, "teal_data_module")) {
+      data <- data$server(id = "teal_data_module")
+      if (!is.reactive(data)) {
+        stop("The `teal_data_module` must return a reactive expression.", call. = FALSE)
       }
+      data
+    } else if (inherits(data, "teal_data")) {
+      reactiveVal(data)
     }
 
-    res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
-    logger::log_trace(
-      "srv_teal_with_splash initialized the module with data { paste(data$get_datanames(), collapse = ' ') }."
-    )
+    teal_data_rv_validate <- reactive({
+      # custom module can return error
+      data <- tryCatch(teal_data_rv(), error = function(e) e)
+
+      # there is an empty reactive cycle on init!
+      if (inherits(data, "shiny.silent.error") && identical(data$message, "")) {
+        return(NULL)
+      }
+
+      # to handle qenv.error
+      if (inherits(data, "qenv.error")) {
+        validate(
+          need(
+            FALSE,
+            paste(
+              "Error when executing `teal_data_module`:\n ",
+              paste(data$message, collapse = "\n"),
+              "\n Check your inputs or contact app developer if error persists."
+            )
+          )
+        )
+      }
+
+      # to handle module non-qenv errors
+      if (inherits(data, "error")) {
+        validate(
+          need(
+            FALSE,
+            paste(
+              "Error when executing `teal_data_module`:\n ",
+              paste(data$message, collpase = "\n"),
+              "\n Check your inputs or contact app developer if error persists."
+            )
+          )
+        )
+      }
+
+      validate(
+        need(
+          inherits(data, "teal_data"),
+          paste(
+            "Error: `teal_data_module` did not return `teal_data` object",
+            "\n Check your inputs or contact app developer if error persists"
+          )
+        )
+      )
+
+      if (!length(teal.data::datanames(data))) {
+        warning("`data` object has no datanames. Default datanames are set using `teal_data`'s environment.")
+      }
+
+      is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
+      if (!isTRUE(is_modules_ok)) {
+        logger::log_warn(is_modules_ok)
+        validate(need(isTRUE(is_modules_ok), sprintf("%s. Contact app developer.", is_modules_ok)))
+      }
+
+      is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
+      if (!isTRUE(is_filter_ok)) {
+        showNotification(
+          "Some filters were not applied because of incompatibility with data. Contact app developer.",
+          type = "warning",
+          duration = 10
+        )
+        logger::log_warn(is_filter_ok)
+      }
+
+      teal_data_rv()
+    })
+
+    output$error <- renderUI({
+      teal_data_rv_validate()
+      NULL
+    })
+
+
+    res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter)
+    logger::log_trace("srv_teal_with_splash initialized module with data.")
     return(res)
   })
 }

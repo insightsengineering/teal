@@ -13,7 +13,8 @@ teal_slices(
   count_type = NULL,
   allow_add = TRUE,
   module_specific = FALSE,
-  mapping
+  mapping,
+  app_id = NULL
 )
 
 as.teal_slices(x)
@@ -40,12 +41,12 @@ Please make sure that adding new filters doesn't fail on target platform before 
 
 \item{allow_add}{(\code{logical(1)}) logical flag specifying whether the user will be able to add new filters}
 
-\item{module_specific}{(\code{logical(1)})\cr
+\item{module_specific}{optional (\code{logical(1)})\cr
 \itemize{
-\item \code{TRUE} when filter panel should be module-specific. All modules can have different set
-of filters specified - see \code{mapping} argument.
-\item \code{FALSE} when one filter panel needed to all modules. All filters will be shared
-by all modules.
+\item \code{FALSE} (default) when one filter panel applied to all modules.
+All filters will be shared by all modules.
+\item \code{TRUE} when filter panel module-specific.
+Modules can have different set of filters specified - see \code{mapping} argument.
 }}
 
 \item{mapping}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \emph{This is a new feature. Do kindly share your opinions.\cr}
@@ -58,10 +59,24 @@ If missing, all filters will be applied to all modules.
 If empty list, all filters will be available to all modules but will start inactive.
 If \code{module_specific} is \code{FALSE}, only \code{global_filters} will be active on start.}
 
+\item{app_id}{(\code{character(1)})\cr
+For internal use only, do not set manually.
+Added by \code{init} so that a \code{teal_slices} can be matched to the app in which it was used.
+Used for verifying snapshots uploaded from file. See \code{snapshot}.}
+
 \item{x}{(\code{list}) of lists to convert to \code{teal_slices}}
 }
+\value{
+A \code{teal_slices} object.
+}
 \description{
-Filter settings for teal applications
+Specify initial filter states and filtering settings for a \code{teal} app.
+}
+\details{
+Produces a \code{teal_slices} object.
+The \code{teal_slice} components will specify filter states that will be active when the app starts.
+Attributes (created with the named arguments) will configure the way the app applies filters.
+See argument descriptions for details.
 }
 \examples{
 filter <- teal_slices(
@@ -79,17 +94,20 @@ filter <- teal_slices(
 )
 
 app <- teal::init(
+  data = list(iris = iris, mtcars = mtcars),
   modules = list(
     module("module1"),
     module("module2")
   ),
-  data = list(iris, mtcars),
   filter = filter
 )
 
 if (interactive()) {
-  shiny::runApp(app)
+  shinyApp(app$ui, app$server)
 }
 
+}
+\seealso{
+\code{\link[teal.slice:teal_slices]{teal.slice::teal_slices}}, \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice}}, \code{\link{slices_store}}
 }
 \keyword{internal}

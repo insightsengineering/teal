@@ -14,10 +14,10 @@
 magrittr::`%>%`
 
 # Fix R CMD check notes
-#' @import shiny teal.data teal.slice teal.transform
+#' @import shiny teal.data teal.slice
 #' @importFrom stats setNames
 NULL
 
 # Fix R CMD check notes
-#' @importFrom lifecycle deprecate_soft
-lifecycle::deprecate_soft
+#' @importFrom lifecycle badge
+lifecycle::badge

@@ -23,14 +23,9 @@ example_cdisc_data <- function() { # nolint
   ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE) # nolint
   ADSL$SEX[c(2, 5)] <- NA # nolint
 
-  cdisc_data_obj <- teal.data::cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL),
-    cdisc_dataset(dataname = "ADTTE", x = ADTTE)
-  )
-
   res <- teal.data::cdisc_data(
-    teal.data::cdisc_dataset(dataname = "ADSL", x = ADSL),
-    teal.data::cdisc_dataset(dataname = "ADTTE", x = ADTTE),
+    ADSL = ADSL,
+    ADTTE = ADTTE,
     code = '
       ADSL <- data.frame(
         STUDYID = "study",
@@ -62,7 +57,7 @@ example_cdisc_data <- function() { # nolint
 #' @keywords internal
 example_datasets <- function() { # nolint
   dummy_cdisc_data <- example_cdisc_data()
-  datasets <- teal.slice::init_filtered_data(dummy_cdisc_data)
+  datasets <- teal_data_to_filtered_data(dummy_cdisc_data)
   list(
     "d2" = list(
       "d3" = list(
@@ -83,10 +78,7 @@ example_datasets <- function() { # nolint
 #' @return A `teal` module which can be included in the `modules` argument to [teal::init()].
 #' @examples
 #' app <- init(
-#'   data = teal_data(
-#'     dataset("IRIS", iris),
-#'     dataset("MTCARS", mtcars)
-#'   ),
+#'   data = teal_data(IRIS = iris, MTCARS = mtcars),
 #'   modules = example_module()
 #' )
 #' if (interactive()) {
@@ -98,16 +90,29 @@ example_module <- function(label = "example teal module", datanames = "all") {
   module(
     label,
     server = function(id, data) {
-      checkmate::assert_class(data, "tdata")
+      checkmate::assert_class(data(), "teal_data")
       moduleServer(id, function(input, output, session) {
-        output$text <- renderPrint(data[[input$dataname]]())
+        ns <- session$ns
+        updateSelectInput(session, "dataname", choices = isolate(teal.data::datanames(data())))
+        output$text <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
+        teal.widgets::verbatim_popup_srv(
+          id = "rcode",
+          verbatim_content = reactive(teal.code::get_code(data())),
+          title = "Association Plot"
+        )
       })
     },
-    ui = function(id, data) {
+    ui = function(id) {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = names(data))
+        encoding = div(
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
+          teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
+        )
       )
     },
     datanames = datanames
