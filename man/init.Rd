@@ -56,6 +56,10 @@ Named list containing \code{ui} and \code{server} functions.
 End-users: This is the most important function for you to start a
 teal app that is composed out of teal modules.
 }
+\details{
+When initializing the \code{teal} app, if \code{datanames} are not set for the \code{teal_data} object,
+defaults from the \code{teal_data} environment will be used.
+}
 \examples{
 app <- init(
   data = teal_data(
