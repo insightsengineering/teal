@@ -85,10 +85,10 @@ state_manager_srv <- function(id, slices_global, mapping_matrix) {
         sesh$setBookmarkExclude(filter_panel_inputs)
         # 3. arrange restoring grab state after restoring bookmark
         sesh$onBookmark(function(state) {
-          state$grab_history <- grab_history()           # isolate this?
+          state$values$grab_history <- grab_history()           # isolate this?
         })
         sesh$onRestored(function(state) {
-          grab_history(state$grab_history)
+          grab_history(state$values$grab_history)
         })
         # 4. do bookmark
         url <- grab_state(sesh)
