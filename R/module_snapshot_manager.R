@@ -65,19 +65,6 @@
 #' a `teal_slices` object. When a snapshot is restored from file, its `app_id` is compared to that
 #' of the current app state and only if the match is the snapshot admitted to the session.
 #'
-#' When a snapshot is uploaded, it will first be added to storage just like a newly created one,
-#' and then used to restore app state much like a snapshot taken from storage.
-#' Upon clicking the upload icon the user will be prompted for a file to upload
-#' and may choose to name the new snapshot. The name defaults to the name of the file (the extension is dropped)
-#' and normal naming rules apply. Loading the file yields a `teal_slices` object,
-#' which is disassembled for storage and used directly for restoring app state.
-#'
-#' @section Transferring snapshots:
-#' Snapshots uploaded from disk should only be used in the same application they come from.
-#' To ensure this is the case, `init` stamps `teal_slices` with an app id that is stored in the `app_id` attribute of
-#' a `teal_slices` object. When a snapshot is restored from file, its `app_id` is compared to that
-#' of the current app state and only if the match is the snapshot admitted to the session.
-#'
 #' @param id (`character(1)`) `shiny` module id
 #' @param slices_global (`reactiveVal`) that contains a `teal_slices` object
 #'                      containing all `teal_slice`s existing in the app, both active and inactive

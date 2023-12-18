@@ -149,21 +149,6 @@ c.teal_slices <- function(...) {
 }
 
 
-# this function must be defined in the `teal` namesspace so that it calls `teal::teal_slices`
-#' @noRd
-#' @keywords internal
-#'
-slices_restore <- function(file) {
-  checkmate::assert_file_exists(file, access = "r", extension = "json")
-
-  tss_json <- jsonlite::fromJSON(file, simplifyDataFrame = FALSE)
-
-  tss_elements <- lapply(tss_json$slices, as.teal_slice)
-
-  do.call(teal_slices, c(tss_elements, tss_json$attributes))
-}
-
-
 #' Deep copy `teal_slices`
 #'
 #' it's important to create a new copy of `teal_slices` when
