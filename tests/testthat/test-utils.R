@@ -36,3 +36,30 @@ testthat::test_that("report_card_template function returns TealReportCard object
   testthat::expect_equal(card$get_name(), "Card title")
   testthat::expect_length(card$get_content(), 1)
 })
+
+test_that("teal_data_to_filtered_data return FilteredData class", {
+  teal_data <- teal.data::teal_data()
+  teal_data <- within(teal_data, iris <- head(iris))
+  datanames(teal_data) <- "iris"
+
+  testthat::expect_s3_class(teal_data_to_filtered_data(teal_data), "FilteredData")
+})
+
+test_that("teal_data_datanames returns names of the @env's objects when datanames not set", {
+  teal_data <- teal.data::teal_data()
+  teal_data <- within(teal_data, {
+    iris <- head(iris)
+    mtcars <- head(mtcars)
+  })
+  testthat::expect_equal(teal_data_datanames(teal_data), c("mtcars", "iris"))
+})
+
+test_that("teal_data_datanames returns datanames which are set by teal.data::datanames", {
+  teal_data <- teal.data::teal_data()
+  teal_data <- within(teal_data, {
+    iris <- head(iris)
+    mtcars <- head(mtcars)
+  })
+  datanames(teal_data) <- "iris"
+  testthat::expect_equal(teal_data_datanames(teal_data), "iris")
+})
