@@ -160,10 +160,6 @@ get_master_session <- function() {
 #' @keywords internal
 #'
 grab_state <- function(session = shiny::getDefaultReactiveDomain()) {
-  if (getShinyOption("bookmarkStore", default = "disable") != "server") {
-    showNotification("Bookmarks have not been enabled for this application.")
-    return(invisible(NULL))
-  }
   tryCatch(shiny:::withLogErrors({
     saveState <- shiny:::ShinySaveState$new(
       input = session$.__enclos_env__$self$input,
