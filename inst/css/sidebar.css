@@ -47,3 +47,7 @@ a.disabled {
 .snapshot_manager_placeholder {
   margin-top: 1em;
 }
+
+.custom-modal {
+  min-height: 600px;
+}
