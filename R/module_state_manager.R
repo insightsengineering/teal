@@ -41,6 +41,34 @@ state_manager_srv <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+    sesh <- get_master_session()
+    # 1. get input names and isolate filter panel
+    filter_panel_inputs <- grep("filter_panel", names(sesh$input), value = TRUE)
+    # 2. exclude filter panel from bookmark
+    sesh$setBookmarkExclude(character(0L))
+    sesh$setBookmarkExclude(filter_panel_inputs)
+    # 3. arrange restoring grab state after restoring bookmark
+    sesh$onBookmark(function(state) {
+      logger::log_trace("teal bookmark is being saved")
+      message("teal bookmark is being saved")
+      message("session$userData$bookmarked = ", isTRUE(session$userData$bookmarked))
+      state$values$grab_history <- isolate(grab_history())           # isolate this?
+    })
+    sesh$onRestore(function(state) {
+      logger::log_trace("teal bookmark is being restored")
+      message("teal bookmark is being restored")
+      message("session$userData$bookmarked = ", isTRUE(session$userData$bookmarked))
+    })
+    sesh$onRestored(function(state) {
+# browser()
+      grab_history(state$values$grab_history)
+      logger::log_trace("teal bookmark has been restored")
+      session$userData$bookmarked <- TRUE
+      message("teal bookmark has been restored")
+      message("session$userData$bookmarked = ", isTRUE(session$userData$bookmarked))
+    })
+
+
     # Store initial input states.
     grab_history <- reactiveVal({
       list()
@@ -75,19 +103,7 @@ state_manager_srv <- function(id) {
         )
         updateTextInput(inputId = "grab_name", value = , placeholder = "Meaningful, unique name")
       } else {
-        sesh <- get_master_session()
-        # 1. get input names and isolate filter panel
-        filter_panel_inputs <- grep("filter_panel", names(sesh$input), value = TRUE)
-        # 2. exclude filter panel from bookmark
-        sesh$setBookmarkExclude(character(0L))
-        sesh$setBookmarkExclude(filter_panel_inputs)
-        # 3. arrange restoring grab state after restoring bookmark
-        sesh$onBookmark(function(state) {
-          state$values$grab_history <- grab_history()           # isolate this?
-        })
-        sesh$onRestored(function(state) {
-          grab_history(state$values$grab_history)
-        })
+        logger::log_trace("teal bookmark starting, store option is set to ", getShinyOption("bookmarkStore"))
         # 4. do bookmark
         url <- grab_state(sesh)
         # 5. add bookmark URL to grab history (with name)
