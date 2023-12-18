@@ -56,10 +56,9 @@ include_parent_datanames <- function(dataname, join_keys) {
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
 #' @return (`FilteredData`) object
 #' @keywords internal
-teal_data_to_filtered_data <- function(x, datanames = teal.data::datanames(x)) {
+teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   checkmate::assert_class(x, "teal_data")
-  checkmate::assert_character(datanames, min.len = 1L, any.missing = FALSE)
-  checkmate::assert_subset(datanames, teal.data::datanames(x))
+  checkmate::assert_character(datanames, min.chars = 1L, any.missing = FALSE)
 
   ans <- teal.slice::init_filtered_data(
     x = sapply(datanames, function(dn) x[[dn]], simplify = FALSE),
@@ -213,5 +212,21 @@ check_filter_datanames <- function(filters, datanames) {
     paste(out, collapse = "\n")
   } else {
     TRUE
+  }
+}
+
+#' Wrapper on `teal.data::datanames`
+#'
+#' Special function used in internals of `teal` to return names of datasets even if `datanames`
+#' has not been set.
+#' @param data (`teal_data`)
+#' @return `character`
+#' @keywords internal
+teal_data_datanames <- function(data) {
+  checkmate::assert_class(data, "teal_data")
+  if (length(teal.data::datanames(data))) {
+    teal.data::datanames(data)
+  } else {
+    ls(teal.code::get_env(data), all.names = TRUE)
   }
 }
