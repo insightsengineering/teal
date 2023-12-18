@@ -126,13 +126,17 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         )
       )
 
-      validate(need(teal.data::datanames(data), "Data has no datanames. Contact app developer."))
+      if (!length(teal.data::datanames(data))) {
+        warning("`data` object has no datanames. Default datanames are set using `teal_data`'s environment.")
+      }
 
+      is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
+      if (!isTRUE(is_modules_ok)) {
+        logger::log_warn(is_modules_ok)
+        validate(need(isTRUE(is_modules_ok), sprintf("%s. Contact app developer.", is_modules_ok)))
+      }
 
-      is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
-      validate(need(isTRUE(is_modules_ok), is_modules_ok))
-
-      is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+      is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
       if (!isTRUE(is_filter_ok)) {
         showNotification(
           "Some filters were not applied because of incompatibility with data. Contact app developer.",

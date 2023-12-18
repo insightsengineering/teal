@@ -72,13 +72,6 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   for (x in names(data)) {
     if (!is.reactive(data[[x]])) {
       data[[x]] <- do.call(reactive, list(as.name(x)), envir = list2env(data[x]))
-    } else {
-      isolate(
-        checkmate::assert_multi_class(
-          data[[x]](), c("data.frame", "MultiAssayExperiment"),
-          .var.name = "data"
-        )
-      )
     }
   }
 
@@ -191,12 +184,12 @@ as_tdata <- function(x) {
   }
   if (is.reactive(x)) {
     checkmate::assert_class(isolate(x()), "teal_data")
-    datanames <- isolate(teal.data::datanames(x()))
+    datanames <- isolate(teal_data_datanames(x()))
     datasets <- sapply(datanames, function(dataname) reactive(x()[[dataname]]), simplify = FALSE)
     code <- reactive(teal.code::get_code(x()))
     join_keys <- isolate(teal.data::join_keys(x()))
   } else if (inherits(x, "teal_data")) {
-    datanames <- teal.data::datanames(x)
+    datanames <- teal_data_datanames(x)
     datasets <- sapply(datanames, function(dataname) reactive(x[[dataname]]), simplify = FALSE)
     code <- reactive(teal.code::get_code(x))
     join_keys <- isolate(teal.data::join_keys(x))

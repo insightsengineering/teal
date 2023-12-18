@@ -10,6 +10,10 @@
 #' End-users: This is the most important function for you to start a
 #' teal app that is composed out of teal modules.
 #'
+#' @details
+#' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
+#' defaults from the `teal_data` environment will be used.
+#'
 #' @param data (`teal_data`, `teal_data_module`, `named list`)\cr
 #' `teal_data` object as returned by [teal.data::teal_data()] or
 #' `teal_data_modules` or simply a list of a named list of objects
@@ -183,19 +187,17 @@ init <- function(data,
   }
 
   if (inherits(data, "teal_data")) {
-    if (length(teal.data::datanames(data)) == 0) {
-      stop("`data` object has no datanames. Specify `datanames(data)` and try again.")
+    if (length(teal_data_datanames(data)) == 0) {
+      stop("`data` object has no datanames and its environment is empty. Specify `datanames(data)` and try again.")
     }
-
     # in case of teal_data_module this check is postponed to the srv_teal_with_splash
-    is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
+    is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
     if (!isTRUE(is_modules_ok)) {
       logger::log_error(is_modules_ok)
       checkmate::assert(is_modules_ok, .var.name = "modules")
     }
 
-
-    is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+    is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
     if (!isTRUE(is_filter_ok)) {
       logger::log_warn(is_filter_ok)
       # we allow app to continue if applied filters are outside

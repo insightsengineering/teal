@@ -57,17 +57,21 @@ testthat::test_that("srv_teal_with_splash passes teal_data to reactive", {
   )
 })
 
-testthat::test_that("srv_teal_with_splash throws when datanames are empty", {
-  shiny::testServer(
-    app = srv_teal_with_splash,
-    args = list(
-      id = "test",
-      data = teal_data(),
-      modules = modules(example_module())
+testthat::test_that("srv_teal_with_splash passes when datanames are empty with warning", {
+  testthat::expect_warning(
+    shiny::testServer(
+      app = srv_teal_with_splash,
+      args = list(
+        id = "test",
+        data = teal_data(),
+        modules = modules(example_module())
+      ),
+      expr = {
+        testthat::expect_is(teal_data_rv_validate, "reactive")
+        testthat::expect_s4_class(teal_data_rv_validate(), "teal_data")
+      }
     ),
-    expr = {
-      testthat::expect_error(teal_data_rv_validate(), "Data has no datanames")
-    }
+    "`data` object has no datanames. Default datanames are set using `teal_data`'s environment."
   )
 })
 
@@ -133,8 +137,8 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when inco
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data(mtcars = mtcars),
-      modules = modules(example_module(datanames = "iris"))
+      data = teal_data(mtcars = mtcars, iris = iris, npk = npk),
+      modules = modules(example_module(datanames = "non-existing"))
     ),
     expr = {
       testthat::expect_is(teal_data_rv_validate, "reactive")
@@ -157,6 +161,10 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate returns teal_dat
     ),
     expr = {
       testthat::expect_is(teal_data_rv_validate, "reactive")
+      testthat::expect_output(
+        teal_data_rv_validate(),
+        "Filter 'iris Species' refers to dataname not available in 'data'"
+      )
       testthat::expect_s4_class(teal_data_rv_validate(), "teal_data")
     }
   )
