@@ -10,6 +10,10 @@
 #' End-users: This is the most important function for you to start a
 #' teal app that is composed out of teal modules.
 #'
+#' @details
+#' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
+#' defaults from the `teal_data` environment will be used.
+#'
 #' @param data (`teal_data`, `teal_data_module`, `named list`)\cr
 #' `teal_data` object as returned by [teal.data::teal_data()] or
 #' `teal_data_modules` or simply a list of a named list of objects
