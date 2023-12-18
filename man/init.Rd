@@ -49,7 +49,7 @@ See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_t
 is then preferred to this function.}
 }
 \value{
-named list with \code{server} and \code{ui} function
+Named list containing \code{ui} and \code{server} functions.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

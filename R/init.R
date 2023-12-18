@@ -37,7 +37,7 @@
 #'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
 #'
-#' @return named list with `server` and `ui` function
+#' @return Named list containing `ui` and `server` functions.
 #'
 #' @export
 #'
@@ -207,8 +207,9 @@ init <- function(data,
   # rather than using `callModule` and creating a submodule of this module, we directly modify
   # the `ui` and `server` with `id = character(0)` and calling the server function directly
   # rather than through `callModule`
+  # UI must be a function to support bookmarking.
   res <- list(
-    ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
+    ui = function(request) ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
       if (length(landing) == 1L) {
         landing_module <- landing[[1L]]
