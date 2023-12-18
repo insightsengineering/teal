@@ -227,6 +227,6 @@ teal_data_datanames <- function(data) {
   if (length(teal.data::datanames(data))) {
     teal.data::datanames(data)
   } else {
-    names(data@env)
+    ls(teal.code::get_env(data), all.names = TRUE)
   }
 }
