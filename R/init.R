@@ -10,19 +10,10 @@
 #' End-users: This is the most important function for you to start a
 #' teal app that is composed out of teal modules.
 #'
-#' **Notes for developers**:
-#' This is a wrapper function around the `module_teal.R` functions. Unless you are
-#' an end-user, don't use this function, but instead this module.
-#'
-#' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`
-#' or `MultiAssayExperiment`)\cr
-#' `R6` object as returned by [teal.data::cdisc_data()], [teal.data::teal_data()],
-#' [teal.data::cdisc_dataset()], [teal.data::dataset()], [teal.data::dataset_connector()] or
-#' [teal.data::cdisc_dataset_connector()] or a single `data.frame` or a `MultiAssayExperiment`
-#' or a list of the previous objects or function returning a named list.
-#' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
-#' do not match the original object names. To ensure reproducibility please use [teal.data::teal_data()]
-#' or [teal.data::cdisc_data()] with `check = TRUE` enabled.
+#' @param data (`teal_data`, `teal_data_module`, `named list`)\cr
+#' `teal_data` object as returned by [teal.data::teal_data()] or
+#' `teal_data_modules` or simply a list of a named list of objects
+#' (`data.frame` or `MultiAssayExperiment`).
 #' @param modules (`list`, `teal_modules` or `teal_module`)\cr
 #'   nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
@@ -53,13 +44,10 @@
 #' @include modules.R
 #'
 #' @examples
-#' new_iris <- transform(iris, id = seq_len(nrow(iris)))
-#' new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
-#'
 #' app <- init(
 #'   data = teal_data(
-#'     dataset("new_iris", new_iris),
-#'     dataset("new_mtcars", new_mtcars),
+#'     new_iris = transform(iris, id = seq_len(nrow(iris))),
+#'     new_mtcars = transform(mtcars, id = seq_len(nrow(mtcars))),
 #'     code = "
 #'       new_iris <- transform(iris, id = seq_len(nrow(iris)))
 #'       new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
@@ -77,7 +65,7 @@
 #'       "Iris Sepal.Length histogram",
 #'       server = function(input, output, session, data) {
 #'         output$hist <- renderPlot(
-#'           hist(data[["new_iris"]]()$Sepal.Length)
+#'           hist(data()[["new_iris"]]$Sepal.Length)
 #'         )
 #'       },
 #'       ui = function(id, ...) {
@@ -114,9 +102,22 @@ init <- function(data,
                  footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  data <- teal.data::to_relational_data(data = data)
+  if (is.list(data) && !inherits(data, "teal_data_module")) {
+    checkmate::assert_list(data, names = "named")
+    data <- do.call(teal.data::teal_data, data)
+  }
+  if (inherits(data, "TealData")) {
+    lifecycle::deprecate_stop(
+      when = "0.99.0",
+      what = "init(data)",
+      paste(
+        "TealData is no longer supported. Use teal_data() instead.",
+        "Please follow migration instructions https://github.com/insightsengineering/teal/discussions/988."
+      )
+    )
+  }
 
-  checkmate::assert_class(data, "TealData")
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert(
@@ -136,55 +137,24 @@ init <- function(data,
     modules <- do.call(teal::modules, modules)
   }
 
-  # resolve modules datanames
-  datanames <- teal.data::get_dataname(data)
-  join_keys <- data$get_join_keys()
-  resolve_modules_datanames <- function(modules) {
-    if (inherits(modules, "teal_modules")) {
-      modules$children <- sapply(modules$children, resolve_modules_datanames, simplify = FALSE)
-      modules
-    } else {
-      modules$datanames <- if (identical(modules$datanames, "all")) {
-        datanames
-      } else if (is.character(modules$datanames)) {
-        datanames_adjusted <- intersect(modules$datanames, datanames)
-        include_parent_datanames(dataname = datanames_adjusted, join_keys = join_keys)
-      }
-      modules
-    }
-  }
-  modules <- resolve_modules_datanames(modules = modules)
+  landing <- extract_module(modules, "teal_module_landing")
+  if (length(landing) > 1L) stop("Only one `landing_popup_module` can be used.")
+  modules <- drop_module(modules, "teal_module_landing")
 
-  if (!inherits(filter, "teal_slices")) {
-    checkmate::assert_subset(names(filter), choices = datanames)
-    # list_to_teal_slices is lifted from teal.slice package, see zzz.R
-    # This is a temporary measure and will be removed two release cycles from now (now meaning 0.13.0).
-    filter <- list_to_teal_slices(filter)
-  }
-  # convert teal.slice::teal_slices to teal::teal_slices
-  filter <- as.teal_slices(as.list(filter))
-
-  # Calculate app hash to ensure snapshot compatibility. See ?snapshot. Raw data must be extracted from environments.
+  # Calculate app id that will be used to stamp filter state snapshots.
+  # App id is a hash of the app's data and modules.
+  # See "transferring snapshots" section in ?snapshot.
   hashables <- mget(c("data", "modules"))
-  hashables$data <- lapply(hashables$data$get_datanames(), function(dn) {
-    try(hashables$data$get_dataset(dn)$get_raw_data(), silent = TRUE)
-  }) # `try` handles errors from remote data
+  hashables$data <- if (inherits(hashables$data, "teal_data")) {
+    as.list(hashables$data@env)
+  } else if (inherits(data, "teal_data_module")) {
+    body(data$server)
+  }
+
   attr(filter, "app_id") <- rlang::hash(hashables)
 
-  # check teal_slices
-  for (i in seq_along(filter)) {
-    dataname_i <- shiny::isolate(filter[[i]]$dataname)
-    if (!dataname_i %in% datanames) {
-      stop(
-        sprintf(
-          "filter[[%s]] has a different dataname than available in a 'data':\n %s not in %s",
-          i,
-          dataname_i,
-          toString(datanames)
-        )
-      )
-    }
-  }
+  # convert teal.slice::teal_slices to teal::teal_slices
+  filter <- as.teal_slices(as.list(filter))
 
   if (isTRUE(attr(filter, "module_specific"))) {
     module_names <- unlist(c(module_labels(modules), "global_filters"))
@@ -212,6 +182,27 @@ init <- function(data,
     }
   }
 
+  if (inherits(data, "teal_data")) {
+    if (length(teal.data::datanames(data)) == 0) {
+      stop("`data` object has no datanames. Specify `datanames(data)` and try again.")
+    }
+
+    # in case of teal_data_module this check is postponed to the srv_teal_with_splash
+    is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
+    if (!isTRUE(is_modules_ok)) {
+      logger::log_error(is_modules_ok)
+      checkmate::assert(is_modules_ok, .var.name = "modules")
+    }
+
+
+    is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+    if (!isTRUE(is_filter_ok)) {
+      logger::log_warn(is_filter_ok)
+      # we allow app to continue if applied filters are outside
+      # of possible data range
+    }
+  }
+
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
   # the `ui` and `server` with `id = character(0)` and calling the server function directly
@@ -219,8 +210,10 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-      # copy object so that load won't be shared between the session
-      data <- data$copy(deep = TRUE)
+      if (length(landing) == 1L) {
+        landing_module <- landing[[1L]]
+        do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
+      }
       filter <- deep_copy_filter(filter)
       srv_teal_with_splash(id = id, data = data, modules = modules, filter = filter)
     }

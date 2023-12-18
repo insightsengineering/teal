@@ -42,7 +42,6 @@ A lot of the functionality of the `teal` framework derives from the following pa
 -   [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/): shiny components used within `teal`.
 -   [`teal.slice`](https://insightsengineering.github.io/teal.slice/): provides a filtering panel to allow filtering of data.
 -   [`teal.code`](https://insightsengineering.github.io/teal.code/): handles reproducibility of outputs.
--   [`teal.transform`](https://insightsengineering.github.io/teal.transform/): standardizes extracting and merging data.
 -   [`teal.logger`](https://insightsengineering.github.io/teal.logger/): standardizes logging within `teal` framework.
 -   [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/): allows `teal` applications to generate reports.
 
@@ -123,8 +122,8 @@ This package is a result of a joint efforts by many developers and stakeholders.
 
 ### Stargazers
 
-[![Stargazers repo roster for @insightsengineering/teal](https://reporoster.com/stars/insightsengineering/teal)](https://github.com/insightsengineering/teal/stargazers)
+[![Stargazers repo roster for @insightsengineering/teal](http://reporoster.com/stars/insightsengineering/teal)](https://github.com/insightsengineering/teal/stargazers)
 
 ### Forkers
 
-[![Forkers repo roster for @insightsengineering/teal](https://reporoster.com/forks/insightsengineering/teal)](https://github.com/insightsengineering/teal/network/members)
+[![Forkers repo roster for @insightsengineering/teal](http://reporoster.com/forks/insightsengineering/teal)](https://github.com/insightsengineering/teal/network/members)

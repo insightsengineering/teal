@@ -28,15 +28,15 @@ navbar:
         - text: Data Flow
           href: articles/blueprint/dataflow.html
         - text: Product Map
-          href: articles/blueprint/products_map.html
+          href: articles/blueprint/product_map.html
         - text: Features
           navbar: Features
-        - text: "`qenv`"
-          href: articles/blueprint/qenv.html
+        - text: Input Data
+          href: articles/blueprint/input_data.html
+        - text: In-App Data
+          href: articles/blueprint/in_app_data.html
         - text: Filter Panel
           href: articles/blueprint/filter_panel.html
-        - text: Delayed Data Loading (DDL)
-          href: articles/blueprint/ddl.html
         - text: Module and Encapsulation
           href: articles/blueprint/module_encapsulation.html
 
@@ -48,20 +48,18 @@ articles:
 - title: Get Started
   navbar: ~
   contents:
-    - teal
+    - getting-started-with-teal
 - title: Using teal
   navbar: Using teal
   contents:
     - filter-panel
     - teal-options
-    - teal-bs-themes
+    - bootstrap-themes-in-teal
 - title: Data in teal Apps
   navbar: Data in teal Apps
   contents:
-    - including-adam-data-in-teal
-    - including-general-data-in-teal
-    - including-mae-data-in-teal
-    - preprocessing-data
+    - including-data-in-teal-applications
+    - data-as-shiny-module
 - title: Extending teal
   navbar: Extending teal
   contents:
@@ -77,14 +75,14 @@ articles:
     - blueprint/intro
     - blueprint/actors
     - blueprint/dataflow
-    - blueprint/products_map
+    - blueprint/product_map
 - title: ""
   desc: >
     Features
   contents:
-  - blueprint/qenv
+  - blueprint/input_data
+  - blueprint/in_app_data
   - blueprint/filter_panel
-  - blueprint/ddl
   - blueprint/module_encapsulation
 
 
@@ -92,6 +90,7 @@ reference:
   - title: Core `teal` Functions
     desc: Main functions needed to build a `teal` app
     contents:
+      - teal_data_module
       - init
       - module
       - modules
@@ -107,14 +106,20 @@ reference:
       - reporter_previewer_module
       - TealReportCard
       - report_card_template
+  - title: Landing Popup
+    contents:
+      - landing_popup_module
   - title: Functions for Module Developers
     contents:
+      - as_tdata
       - tdata
       - get_code_tdata
-      - get_join_keys
       - get_metadata
       - tdata2env
+      - eval_code
+      - within.teal_data_module
       - show_rcode_modal
+      - join_keys.tdata
   # - title: Functions Moved to Other Packages
     # desc: These functions have been moved from teal and will be deprecated
     # contents:

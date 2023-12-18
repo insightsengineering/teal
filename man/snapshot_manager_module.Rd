@@ -81,7 +81,7 @@ and set anew according to the \code{mapping} attribute of the snapshot.
 The snapshot is then set as the current content of \code{slices_global}.
 
 To save a snapshot, the snapshot is retrieved and reassembled just like for restoring,
-and then saved to file with \code{\link[teal.slice:slices_store]{teal.slice::slices_store}}.
+and then saved to file with \code{\link{slices_store}}.
 
 When a snapshot is uploaded, it will first be added to storage just like a newly created one,
 and then used to restore app state much like a snapshot taken from storage.
@@ -93,7 +93,8 @@ which is disassembled for storage and used directly for restoring app state.
 
 \section{Transferring snapshots}{
 
-Snapshots uploaded from disk should only be used in the same application they come from.
+Snapshots uploaded from disk should only be used in the same application they come from,
+\emph{i.e.} an application that uses the same data and the same modules.
 To ensure this is the case, \code{init} stamps \code{teal_slices} with an app id that is stored in the \code{app_id} attribute of
 a \code{teal_slices} object. When a snapshot is restored from file, its \code{app_id} is compared to that
 of the current app state and only if the match is the snapshot admitted to the session.

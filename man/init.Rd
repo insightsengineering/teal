@@ -15,15 +15,10 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame}
-or \code{MultiAssayExperiment})\cr
-\code{R6} object as returned by \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}}, \code{\link[teal.data:teal_data]{teal.data::teal_data()}},
-\code{\link[teal.data:cdisc_dataset]{teal.data::cdisc_dataset()}}, \code{\link[teal.data:dataset]{teal.data::dataset()}}, \code{\link[teal.data:dataset_connector]{teal.data::dataset_connector()}} or
-\code{\link[teal.data:cdisc_dataset_connector]{teal.data::cdisc_dataset_connector()}} or a single \code{data.frame} or a \code{MultiAssayExperiment}
-or a list of the previous objects or function returning a named list.
-NOTE: teal does not guarantee reproducibility of the code when names of the list elements
-do not match the original object names. To ensure reproducibility please use \code{\link[teal.data:teal_data]{teal.data::teal_data()}}
-or \code{\link[teal.data:cdisc_data]{teal.data::cdisc_data()}} with \code{check = TRUE} enabled.}
+\item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})\cr
+\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or
+\code{teal_data_modules} or simply a list of a named list of objects
+(\code{data.frame} or \code{MultiAssayExperiment}).}
 
 \item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
@@ -60,19 +55,12 @@ named list with \code{server} and \code{ui} function
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 End-users: This is the most important function for you to start a
 teal app that is composed out of teal modules.
-
-\strong{Notes for developers}:
-This is a wrapper function around the \code{module_teal.R} functions. Unless you are
-an end-user, don't use this function, but instead this module.
 }
 \examples{
-new_iris <- transform(iris, id = seq_len(nrow(iris)))
-new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
-
 app <- init(
   data = teal_data(
-    dataset("new_iris", new_iris),
-    dataset("new_mtcars", new_mtcars),
+    new_iris = transform(iris, id = seq_len(nrow(iris))),
+    new_mtcars = transform(mtcars, id = seq_len(nrow(mtcars))),
     code = "
       new_iris <- transform(iris, id = seq_len(nrow(iris)))
       new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
@@ -90,7 +78,7 @@ app <- init(
       "Iris Sepal.Length histogram",
       server = function(input, output, session, data) {
         output$hist <- renderPlot(
-          hist(data[["new_iris"]]()$Sepal.Length)
+          hist(data()[["new_iris"]]$Sepal.Length)
         )
       },
       ui = function(id, ...) {

@@ -38,47 +38,39 @@ get_rcode_str_install <- function() {
 #' @param datasets (`FilteredData`) object
 #' @param hashes named (`list`) of hashes per dataset
 #'
-#' @return `character(3)` containing following elements:
-#'  - code from `CodeClass` (data loading code)
+#' @return Character string concatenated from the following elements:
+#'  - data pre-processing code (from `data` argument in `init`)
 #'  - hash check of loaded objects
+#'  - filter code (if any)
 #'
 #' @keywords internal
 get_datasets_code <- function(datanames, datasets, hashes) {
-  str_code <- datasets$get_code(datanames)
-  if (length(str_code) == 0 || (length(str_code) == 1 && str_code == "")) {
-    str_code <- "message('Preprocessing is empty')"
-  } else if (length(str_code) > 0) {
-    str_code <- paste0(str_code, "\n\n")
+  # preprocessing code
+  str_prepro <-
+    teal.data:::get_code_dependency(attr(datasets, "preprocessing_code"), names = datanames, check_names = FALSE)
+  if (length(str_prepro) == 0) {
+    str_prepro <- "message('Preprocessing is empty')"
+  } else {
+    str_prepro <- paste(str_prepro, collapse = "\n")
   }
 
-  if (!datasets$get_check()) {
-    check_note_string <- paste0(
-      c(
-        "message(paste(\"Reproducibility of data import and preprocessing was not explicitly checked\",",
-        "   \" ('check = FALSE' is set). Contact app developer if this is an issue.\n\"))"
-      ),
-      collapse = "\n"
+  # hash checks
+  str_hash <- vapply(datanames, function(dataname) {
+    sprintf(
+      "stopifnot(%s == %s)",
+      deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+      deparse1(hashes[[dataname]])
     )
-    str_code <- paste0(str_code, "\n\n", check_note_string)
+  }, character(1))
+  str_hash <- paste(str_hash, collapse = "\n")
+
+  # filter expressions
+  str_filter <- teal.slice::get_filter_expr(datasets, datanames)
+  if (str_filter == "") {
+    str_filter <- character(0)
   }
 
-  str_hash <- paste(
-    paste0(
-      vapply(
-        datanames,
-        function(dataname) {
-          sprintf(
-            "stopifnot(%s == %s)",
-            deparse1(bquote(rlang::hash(.(as.name(dataname))))),
-            deparse1(hashes[[dataname]])
-          )
-        },
-        character(1)
-      ),
-      collapse = "\n"
-    ),
-    "\n\n"
-  )
-
-  c(str_code, str_hash)
+  # concatenate all code
+  str_code <- paste(c(str_prepro, str_hash, str_filter), collapse = "\n\n")
+  sprintf("%s\n", str_code)
 }

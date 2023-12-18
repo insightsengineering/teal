@@ -6,7 +6,7 @@ default_language_version:
   python: python3
 repos:
   - repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.3.2.9021
+    rev: v0.3.2.9027
     hooks:
       - id: style-files
         name: Style code with `styler`
@@ -23,11 +23,11 @@ repos:
           - shiny
           - shinyjs
           - stats
+          - insightsengineering/teal.code
           - insightsengineering/teal.data
           - insightsengineering/teal.logger
           - insightsengineering/teal.reporter
           - insightsengineering/teal.slice
-          - insightsengineering/teal.transform
           - insightsengineering/teal.widgets
           - utils
       - id: spell-check
@@ -47,9 +47,9 @@ repos:
           .*\.sh|
           .*\.svg|
           .*\.xml|
-          (.*/|)\_pkgdown.y[a]ml|
+          (.*/|)\_pkgdown.y[a]?ml|
           (.*/|)\.gitignore|
-          (.*/|)\.gitlab-ci\.yml|
+          (.*/|)\.gitlab-ci\.y[a]?ml|
           (.*/|)\.lintr|
           (.*/|)\.pre-commit-.*|
           (.*/|)\.Rbuildignore|
@@ -59,9 +59,9 @@ repos:
           (.*/|)DESCRIPTION|
           (.*/|)LICENSE|
           (.*/|)NAMESPACE|
-          (.*/|)staged_dependencies\.yaml|
+          (.*/|)staged_dependencies\.y[a]?ml|
           (.*/|)WORDLIST|
-          \.github/.*\.yaml|
+          \.github/.*\.y[a]?ml|
           data/.*
           )$
       - id: no-browser-statement

@@ -49,7 +49,21 @@
 #' The snapshot is then set as the current content of `slices_global`.
 #'
 #' To save a snapshot, the snapshot is retrieved and reassembled just like for restoring,
-#' and then saved to file with [`teal.slice::slices_store`].
+#' and then saved to file with [`slices_store`].
+#'
+#' When a snapshot is uploaded, it will first be added to storage just like a newly created one,
+#' and then used to restore app state much like a snapshot taken from storage.
+#' Upon clicking the upload icon the user will be prompted for a file to upload
+#' and may choose to name the new snapshot. The name defaults to the name of the file (the extension is dropped)
+#' and normal naming rules apply. Loading the file yields a `teal_slices` object,
+#' which is disassembled for storage and used directly for restoring app state.
+#'
+#' @section Transferring snapshots:
+#' Snapshots uploaded from disk should only be used in the same application they come from,
+#' _i.e._ an application that uses the same data and the same modules.
+#' To ensure this is the case, `init` stamps `teal_slices` with an app id that is stored in the `app_id` attribute of
+#' a `teal_slices` object. When a snapshot is restored from file, its `app_id` is compared to that
+#' of the current app state and only if the match is the snapshot admitted to the session.
 #'
 #' When a snapshot is uploaded, it will first be added to storage just like a newly created one,
 #' and then used to restore app state much like a snapshot taken from storage.
@@ -167,9 +181,11 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       updateTextInput(session, "new_snapshot_name", value = "")
       shinyjs::runjs(paste0("$('#", ns("snapshot_name_modal"), "').modal('show')"))
     })
+
     observeEvent(input$snapshot_name_cancel, {
       shinyjs::runjs(paste0("$('#", ns("snapshot_name_modal"), "').modal('hide')"))
     })
+
     # Store snaphsot.
     observeEvent(input$snapshot_name_accept, {
       snapshot_name <- trimws(input$new_snapshot_name)
@@ -185,6 +201,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
           type = "message"
         )
         updateTextInput(inputId = "new_snapshot_name", value = "", placeholder = "Meaningful, unique name")
+        updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         snapshot <- as.list(slices_global(), recursive = TRUE)
         attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
@@ -213,6 +230,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
           type = "message"
         )
         updateTextInput(inputId = "new_file_snapshot_name", value = "", placeholder = "Meaningful, unique name")
+        updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         # Restore snapshot and verify app compatibility.
         snapshot_state <- try(slices_restore(input$snapshot_file$datapath))
@@ -319,7 +337,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
             content = function(file) {
               snapshot <- snapshot_history()[[s]]
               snapshot_state <- as.teal_slices(snapshot)
-              teal.slice::slices_store(tss = snapshot_state, file = file)
+              slices_store(tss = snapshot_state, file = file)
             }
           )
           handlers[[id_saveme]] <- id_saveme
