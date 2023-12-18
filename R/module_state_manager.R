@@ -83,34 +83,11 @@ state_manager_srv <- function(id, slices_global, mapping_matrix) {
         # 2. exclude filter panel from bookmark
         sesh$setBookmarkExclude(character(0L))
         sesh$setBookmarkExclude(filter_panel_inputs)
-        # 3. arrange restoring filter state after restoring bookmark
-        ### work in progress
+        # 3. arrange restoring grab state after restoring bookmark
         sesh$onBookmark(function(state) {
-          ### smth like this should happen:
-          snapshot <- as.list(slices_global(), recursive = TRUE)
-          attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
-          state$filter_state_on_bookmark <- snapshot
-          ### end; requires access to slices_global and mapping_matrix
-          state$snapshot_history <- snapshot_history()   # isolate this?
           state$grab_history <- grab_history()           # isolate this?
         })
         sesh$onRestored(function(state) {
-          ### smth like this should happen:
-          snapshot <- state$filter_state_on_bookmark
-          snapshot_state <- as.teal_slices(snapshot)
-          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
-          mapply(
-            function(filtered_data, filter_ids) {
-              filtered_data$clear_filter_states(force = TRUE)
-              slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
-              filtered_data$set_filter_state(slices)
-            },
-            filtered_data = filtered_data_list,
-            filter_ids = mapping_unfolded
-          )
-          slices_global(snapshot_state)
-          ### end; requires access to slices_global and filtered_data_list
-          snapshot_history(state$snapshot_history)
           grab_history(state$grab_history)
         })
         # 4. do bookmark
