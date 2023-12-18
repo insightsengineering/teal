@@ -5,17 +5,13 @@
 #' @return Character object contain code
 #' @keywords internal
 get_rcode_libraries <- function() {
-  vapply(
+  packages <- vapply(
     utils::sessionInfo()$otherPkgs,
-    function(x) {
-      paste0("library(", x$Package, ")")
-    },
+    function(x) paste0("library(", x$Package, ")"),
     character(1)
-  ) %>%
-    # put it into reverse order to correctly simulate executed code
-    rev() %>%
-    paste0(sep = "\n") %>%
-    paste0(collapse = "")
+  )
+  # put it into reverse order to correctly simulate executed code
+  paste(rev(packages), collapse = "\n")
 }
 
 
