@@ -34,13 +34,35 @@ testthat::test_that("With teal.load_nest_code option is not character get_rcode_
   )
 })
 
-
 testthat::test_that("get_rcode_libraries returns current session packages", {
-  testthat::expect_true(
-    setequal(
-      strsplit(gsub("library\\(|\\)", "", get_rcode_libraries()), "\n")[[1]],
-      vapply(sessionInfo()$otherPkgs, FUN = `[[`, index = "Package", FUN.VALUE = character(1), USE.NAMES = FALSE)
-    )
+  testthat::expect_setequal(
+    strsplit(gsub("library\\(|\\)", "", get_rcode_libraries()), "\n")[[1]],
+    vapply(sessionInfo()$otherPkgs, FUN = `[[`, index = "Package", FUN.VALUE = character(1))
+  )
+})
+
+testthat::test_that("get_rcode_libraries returns current session packages excluding testthat", {
+  # Make sure testthat is attached
+  require(testthat, quietly = TRUE)
+  testthat::expect_setequal(
+    setdiff(
+      vapply(sessionInfo()$otherPkgs, FUN = `[[`, index = "Package", FUN.VALUE = character(1)),
+      c(strsplit(gsub("library\\(|\\)", "", get_rcode_libraries("library(testthat)\n")), "\n")[[1]])
+    ),
+    "testthat"
+  )
+})
+
+testthat::test_that("get_rcode_libraries returns current session packages excluding testthat and teal", {
+  # Make sure testthat is attached
+  require(testthat, quietly = TRUE)
+  require(teal, quietly = TRUE)
+  testthat::expect_setequal(
+    setdiff(
+      vapply(sessionInfo()$otherPkgs, FUN = `[[`, index = "Package", FUN.VALUE = character(1)),
+      c(strsplit(gsub("library\\(|\\)", "", get_rcode_libraries("library(testthat)\nlibrary(teal)")), "\n")[[1]])
+    ),
+    c("testthat", "teal")
   )
 })
 

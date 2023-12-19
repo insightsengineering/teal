@@ -285,10 +285,15 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 
   hashes <- calculate_hashes(datanames, datasets)
 
+  # list of code
+  dataset_rcode <- get_datasets_code(datanames, datasets, hashes)
+  loaded_libs <- get_rcode_libraries(dataset_rcode)
+
   code <- c(
     get_rcode_str_install(),
-    get_rcode_libraries(),
-    get_datasets_code(datanames, datasets, hashes)
+    loaded_libs,
+    "",
+    dataset_rcode
   )
 
   do.call(

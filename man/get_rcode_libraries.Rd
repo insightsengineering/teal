@@ -4,7 +4,7 @@
 \alias{get_rcode_libraries}
 \title{Generates library calls from current session info}
 \usage{
-get_rcode_libraries()
+get_rcode_libraries(dataset_rcode)
 }
 \value{
 Character object contain code

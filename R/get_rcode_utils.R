@@ -4,17 +4,33 @@
 #'
 #' @return Character object contain code
 #' @keywords internal
-get_rcode_libraries <- function() {
-  packages <- vapply(
-    utils::sessionInfo()$otherPkgs,
-    function(x) paste0("library(", x$Package, ")"),
-    character(1)
-  )
+get_rcode_libraries <- function(dataset_rcode) {
+  packages <- rev(vapply(utils::sessionInfo()$otherPkgs, base::`[[`, character(1), "Package"))
+
+  parsed_libraries <- c()
+  if (!missing(dataset_rcode)) {
+    # Extract all lines with library()
+    #  TODO: remove strings first as this will pass "this is a string with library(something) in it"
+    user_libraries <- Filter(
+      function(.x) grepl("library\\(.*\\)$", .x),
+      vapply(strsplit(dataset_rcode, "\n")[[1]], trimws, character(1))
+    )
+
+    # Keep only library name
+    parsed_libraries <- gsub(
+      # library(...) must be located at beginning of line, or have a valid character before
+      "(^l|.*<-|.*[ ;=\\({]l)ibrary\\(([a-z][a-zA-Z0-9.]*)\\)$", "\\2",
+      # Strip out comments
+      vapply(user_libraries, function(.x) as.character(str2expression(.x)), character(1L))
+    )
+  }
+
   # put it into reverse order to correctly simulate executed code
-  paste(rev(packages), collapse = "\n")
+  paste(
+    "library(", Filter(Negate(function(.x) .x %in% parsed_libraries), packages), ")",
+    collapse = "\n", sep = ""
+  )
 }
-
-
 
 get_rcode_str_install <- function() {
   code_string <- getOption("teal.load_nest_code")
