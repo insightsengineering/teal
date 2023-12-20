@@ -60,14 +60,12 @@ state_manager_srv <- function(id) {
       message("session$userData$bookmarked = ", isTRUE(session$userData$bookmarked))
     })
     sesh$onRestored(function(state) {
-# browser()
       grab_history(state$values$grab_history)
       logger::log_trace("teal bookmark has been restored")
       session$userData$bookmarked <- TRUE
       message("teal bookmark has been restored")
       message("session$userData$bookmarked = ", isTRUE(session$userData$bookmarked))
     })
-
 
     # Store initial input states.
     grab_history <- reactiveVal({
