@@ -43,7 +43,7 @@ state_manager_srv <- function(id) {
 
     sesh <- get_master_session()
     # 1. get input names and isolate filter panel
-    filter_panel_inputs <- grep("filter_panel", names(sesh$input), value = TRUE)
+    filter_panel_inputs <- grep("filter_panel", isolate(names(sesh$input)), value = TRUE)
     # 2. exclude filter panel from bookmark
     sesh$setBookmarkExclude(character(0L))
     sesh$setBookmarkExclude(filter_panel_inputs)
