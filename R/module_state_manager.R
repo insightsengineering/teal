@@ -51,20 +51,16 @@ state_manager_srv <- function(id) {
     sesh$onBookmark(function(state) {
       logger::log_trace("teal bookmark is being saved")
       message("teal bookmark is being saved")
-      message("session$userData$bookmarked = ", isTRUE(session$userData$bookmarked))
-      state$values$grab_history <- isolate(grab_history())           # isolate this?
+      state$values$grab_history <- isolate(grab_history())
     })
     sesh$onRestore(function(state) {
       logger::log_trace("teal bookmark is being restored")
       message("teal bookmark is being restored")
-      message("session$userData$bookmarked = ", isTRUE(session$userData$bookmarked))
     })
     sesh$onRestored(function(state) {
       grab_history(state$values$grab_history)
       logger::log_trace("teal bookmark has been restored")
-      session$userData$bookmarked <- TRUE
       message("teal bookmark has been restored")
-      message("session$userData$bookmarked = ", isTRUE(session$userData$bookmarked))
     })
 
     # Store initial input states.
