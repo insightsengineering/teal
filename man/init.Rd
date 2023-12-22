@@ -27,7 +27,9 @@ will be displayed in the teal application. See \code{\link[=modules]{modules()}}
 more details.}
 
 \item{title}{(\code{shiny.tag} or \code{character})\cr
-The browser window title. Defaults to a title "Teal app" with the icon of NEST.}
+The browser window title. Defaults to a title "Teal app" with the icon of NEST.
+Can be created using the \code{build_app_title()} or
+by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
 \item{filter}{(\code{teal_slices})\cr
 Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.

@@ -22,7 +22,9 @@ module id}
 (\code{data.frame} or \code{MultiAssayExperiment}).}
 
 \item{title}{(\code{shiny.tag} or \code{character})\cr
-The browser window title. Defaults to a title "Teal app" with the icon of NEST.}
+The browser window title. Defaults to a title "Teal app" with the icon of NEST.
+Can be created using the \code{build_app_title()} or
+by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
 \item{header}{(\code{shiny.tag} or \code{character}) \cr
 the header of the app. Note shiny code placed here (and in the footer
