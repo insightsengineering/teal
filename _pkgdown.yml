@@ -97,7 +97,7 @@ reference:
       - srv_teal_with_splash
       - ui_teal_with_splash
       - teal_slices
-  - title: Helper functions
+  - title: Helper Functions
     desc: Helper functions for `teal`
     contents:
       - build_app_title
