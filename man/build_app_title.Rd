@@ -14,7 +14,7 @@ build_app_title(
 \item{title}{(\code{character}) The browser title for the teal app}
 
 \item{favicon}{(\code{character}) The path for the icon for the title.
-The image/icon path can be remote or the static path accessable by shiny, like the \verb{www/}}
+The image/icon path can be remote or the static path accessible by shiny, like the \verb{www/}}
 }
 \value{
 A \code{shiny.tag} containing the element that adds the title and logo to the shiny app
