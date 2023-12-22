@@ -7,17 +7,17 @@
 get_rcode_libraries <- function(dataset_rcode) {
   packages <- rev(vapply(utils::sessionInfo()$otherPkgs, base::`[[`, character(1), "Package"))
 
-  parsed_libraries <- c()
-  if (!missing(dataset_rcode)) {
+  parsed_libraries <- if (!missing(dataset_rcode)) {
     # Extract all lines with library()
     #  TODO: remove strings first as this will pass "this is a string with library(something) in it"
     user_libraries <- Filter(
-      function(.x) grepl("library\\(.*\\)$", .x),
+      function(.x) grepl("(^l|.*<-|.*[ ;=\\({]l)ibrary\\(([a-z][[:alnum:].]*)\\)$", .x),
+      # function(.x) grepl("library\\(.*\\)$", .x),
       vapply(strsplit(dataset_rcode, "\n")[[1]], trimws, character(1))
     )
 
     # Keep only library name
-    parsed_libraries <- gsub(
+    gsub(
       # library(...) must be located at beginning of line, or have a valid character before
       "(^l|.*<-|.*[ ;=\\({]l)ibrary\\(([a-z][a-zA-Z0-9.]*)\\)$", "\\2",
       # Strip out comments
@@ -26,10 +26,7 @@ get_rcode_libraries <- function(dataset_rcode) {
   }
 
   # put it into reverse order to correctly simulate executed code
-  paste(
-    "library(", Filter(Negate(function(.x) .x %in% parsed_libraries), packages), ")",
-    collapse = "\n", sep = ""
-  )
+  paste(c(sprintf("library(%s)", setdiff(packages, parsed_libraries)), "\n"), collapse = "\n")
 }
 
 get_rcode_str_install <- function() {

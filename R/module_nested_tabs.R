@@ -292,7 +292,6 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   code <- c(
     get_rcode_str_install(),
     loaded_libs,
-    "",
     dataset_rcode
   )
 
