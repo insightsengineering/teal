@@ -7,7 +7,7 @@
 init(
   data,
   modules,
-  title = NULL,
+  title = build_app_title(),
   filter = teal_slices(),
   header = tags$p(),
   footer = tags$p(),
@@ -26,8 +26,8 @@ nested list of \code{teal_modules} or \code{teal_module} objects or a single
 will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{title}{(\code{NULL} or \code{character})\cr
-The browser window title (defaults to the host URL of the page).}
+\item{title}{(\code{shiny.tag} or \code{character})\cr
+The browser window title. Defaults to a title "Teal app" with the icon of NEST.}
 
 \item{filter}{(\code{teal_slices})\cr
 Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.

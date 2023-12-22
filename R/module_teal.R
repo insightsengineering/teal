@@ -112,6 +112,7 @@ ui_teal <- function(id,
     title = title,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
+    title,
     tags$header(header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
@@ -189,8 +190,8 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
           # null controls a display of filter panel but data should be still passed
           datanames <- if (is.null(modules$datanames) || modules$datanames == "all") {
             include_parent_datanames(
-              teal_data_datanames(teal_data_rv()),
-              teal.data::join_keys(teal_data_rv())
+              teal.data::datanames(teal_data_rv()),
+              teal_data_rv()@join_keys
             )
           } else {
             modules$datanames

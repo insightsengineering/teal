@@ -230,3 +230,25 @@ teal_data_datanames <- function(data) {
     ls(teal.code::get_env(data), all.names = TRUE)
   }
 }
+
+#' Build an app title with a favicon
+#'
+#' A helper function to create the browser title along with a logo.
+#'
+#' @param title (`character`) The browser title for the teal app
+#' @param favicon (`character`) The path for the icon for the title.
+#' The image/icon path can be remote or the static path accessable by shiny, like the `www/`
+#'
+#' @return A `shiny.tag` containing the element that adds the title and logo to the shiny app
+build_app_title <- function(title = "Teal app", favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") { # nolint
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_string(favicon, null.ok = TRUE)
+  tags$head(
+    tags$title(title),
+    tags$link(
+      rel = "icon",
+      href = favicon,
+      sizes = "any"
+    )
+  )
+}

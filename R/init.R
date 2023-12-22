@@ -23,8 +23,8 @@
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
 #'   will be displayed in the teal application. See [modules()] and [module()] for
 #'   more details.
-#' @param title (`NULL` or `character`)\cr
-#'   The browser window title (defaults to the host URL of the page).
+#' @param title (`shiny.tag` or `character`)\cr
+#'   The browser window title. Defaults to a title "Teal app" with the icon of NEST.
 #' @param filter (`teal_slices`)\cr
 #'   Specification of initial filter. Filters can be specified using [teal::teal_slices()].
 #'   Old way of specifying filters through a list is deprecated and will be removed in the
@@ -100,7 +100,7 @@
 #'
 init <- function(data,
                  modules,
-                 title = NULL,
+                 title = build_app_title(),
                  filter = teal_slices(),
                  header = tags$p(),
                  footer = tags$p(),
@@ -123,16 +123,20 @@ init <- function(data,
 
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
-  checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert(
     checkmate::check_class(filter, "teal_slices"),
     checkmate::check_list(filter, names = "named")
   )
+  checkmate::assert_multi_class(title, c("shiny.tag", "character"))
   checkmate::assert_multi_class(header, c("shiny.tag", "character"))
   checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   teal.logger::log_system_info()
+
+  if (is.character(title)) {
+    title <- build_app_title(title)
+  }
 
   if (inherits(modules, "teal_module")) {
     modules <- list(modules)

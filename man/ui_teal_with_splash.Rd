@@ -21,8 +21,8 @@ module id}
 \code{teal_data_modules} or simply a list of a named list of objects
 (\code{data.frame} or \code{MultiAssayExperiment}).}
 
-\item{title}{(\code{NULL} or \code{character})\cr
-The browser window title (defaults to the host URL of the page).}
+\item{title}{(\code{shiny.tag} or \code{character})\cr
+The browser window title. Defaults to a title "Teal app" with the icon of NEST.}
 
 \item{header}{(\code{shiny.tag} or \code{character}) \cr
 the header of the app. Note shiny code placed here (and in the footer
