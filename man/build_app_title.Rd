@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{build_app_title}
 \alias{build_app_title}
-\title{Build an app title with a favicon}
+\title{Build app title with favicon}
 \usage{
 build_app_title(
   title = "Teal app",
