@@ -7,7 +7,7 @@
 validate_app_title_tag(shiny_tag)
 }
 \arguments{
-\item{shiny_tag}{(\code{shiny.tag})}
+\item{shiny_tag}{(\code{shiny.tag}) Object to validate for a valid title.}
 }
 \description{
 Checks if the input of the title from \code{teal::init} will create a valid title and favicon tag.
