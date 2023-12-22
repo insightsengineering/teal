@@ -25,6 +25,8 @@
 #'   more details.
 #' @param title (`shiny.tag` or `character`)\cr
 #'   The browser window title. Defaults to a title "Teal app" with the icon of NEST.
+#'   Can be created using the `build_app_title()` or
+#'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
 #' @param filter (`teal_slices`)\cr
 #'   Specification of initial filter. Filters can be specified using [teal::teal_slices()].
 #'   Old way of specifying filters through a list is deprecated and will be removed in the
@@ -136,6 +138,8 @@ init <- function(data,
 
   if (is.character(title)) {
     title <- build_app_title(title)
+  } else {
+    validate_app_title_tag(title)
   }
 
   if (inherits(modules, "teal_module")) {

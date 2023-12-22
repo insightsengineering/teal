@@ -231,6 +231,24 @@ teal_data_datanames <- function(data) {
   }
 }
 
+#' Validator for the title parameter of `teal::init`
+#'
+#' Checks if the input of the title from `teal::init` will create a valid title and favicon tag.
+#' @param shiny_tag (`shiny.tag`)
+#' @keywords internal
+validate_app_title_tag <- function(shiny_tag) {
+  checkmate::assert_class(shiny_tag, "shiny.tag")
+  checkmate::assert_true(shiny_tag$name == "head")
+  child_tags <- sapply(shiny_tag$children, function(child) child$name)
+  checkmate::assert_true(
+    all(
+      c("title", "link") %in% child_tags
+    )
+  )
+  link_tag <- shiny_tag$children[which(child_tags == "link")][[1]]
+  checkmate::assert_true(link_tag$attribs$rel %in% c("icon", "shortcut icon"))
+}
+
 #' Build app title with favicon
 #'
 #' A helper function to create the browser title along with a logo.
