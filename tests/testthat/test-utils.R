@@ -81,11 +81,17 @@ test_that("validate_app_title_tag works on validating the title tag", {
   icon_missing <- tags$head(
     tags$title(title)
   )
+  invalid_link <- tags$head(
+    tags$title("title"),
+    tags$link(href = "favicon.ico"),
+    tags$div("Secret")
+  )
 
   expect_silent(validate_app_title_tag(valid_title))
   expect_error(validate_app_title_tag(head_missing))
   expect_error(validate_app_title_tag(title_missing))
   expect_error(validate_app_title_tag(icon_missing))
+  expect_error(validate_app_title_tag(invalid_link))
 })
 
 test_that("build_app_title builts a valid tag", {
