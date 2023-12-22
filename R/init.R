@@ -16,7 +16,7 @@
 #'
 #' @param data (`teal_data`, `teal_data_module`, `named list`)\cr
 #' `teal_data` object as returned by [teal.data::teal_data()] or
-#' `teal_data_modules` or simply a list of a named list of objects
+#' `teal_data_module` or simply a list of a named list of objects
 #' (`data.frame` or `MultiAssayExperiment`).
 #' @param modules (`list`, `teal_modules` or `teal_module`)\cr
 #'   nested list of `teal_modules` or `teal_module` objects or a single
