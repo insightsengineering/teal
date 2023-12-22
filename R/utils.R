@@ -237,7 +237,7 @@ teal_data_datanames <- function(data) {
 #'
 #' @param title (`character`) The browser title for the teal app
 #' @param favicon (`character`) The path for the icon for the title.
-#' The image/icon path can be remote or the static path accessable by shiny, like the `www/`
+#' The image/icon path can be remote or the static path accessible by shiny, like the `www/`
 #'
 #' @return A `shiny.tag` containing the element that adds the title and logo to the shiny app
 build_app_title <- function(title = "Teal app", favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") { # nolint
