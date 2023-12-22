@@ -231,7 +231,7 @@ teal_data_datanames <- function(data) {
   }
 }
 
-#' Build an app title with a favicon
+#' Build app title with favicon
 #'
 #' A helper function to create the browser title along with a logo.
 #'
