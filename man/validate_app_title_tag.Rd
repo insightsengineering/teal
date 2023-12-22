@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{validate_app_title_tag}
 \alias{validate_app_title_tag}
-\title{Validator for the title parameter of \code{teal::init}}
+\title{Function for validating the title parameter of \code{teal::init}}
 \usage{
 validate_app_title_tag(shiny_tag)
 }

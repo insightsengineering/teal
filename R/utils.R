@@ -231,7 +231,7 @@ teal_data_datanames <- function(data) {
   }
 }
 
-#' Validator for the title parameter of `teal::init`
+#' Function for validating the title parameter of `teal::init`
 #'
 #' Checks if the input of the title from `teal::init` will create a valid title and favicon tag.
 #' @param shiny_tag (`shiny.tag`)
