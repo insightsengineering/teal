@@ -371,7 +371,7 @@ testthat::test_that(".datasets_to_data returns data which is filtered", {
   d1_filtered <- data[["d1"]]
   testthat::expect_equal(d1_filtered, data.frame(id = 1:2, pk = 2:3, val = 1:2))
   d2_filtered <- data[["d2"]]
-  testthat::expect_equal(d2_filtered, data.frame(id = 1:5, value = 1:5))
+  testthat::expect_equal(d2_filtered, data.frame(id = 2:3, value = 2:3))
 })
 
 
