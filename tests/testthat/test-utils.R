@@ -63,3 +63,40 @@ test_that("teal_data_datanames returns datanames which are set by teal.data::dat
   datanames(teal_data) <- "iris"
   testthat::expect_equal(teal_data_datanames(teal_data), "iris")
 })
+
+test_that("validate_app_title_tag works on validating the title tag", {
+  valid_title <- tags$head(
+    tags$title("title"),
+    tags$link(rel = "icon", href = "favicon.ico"),
+    tags$div("Secret")
+  )
+
+  head_missing <- tags$div(
+    tags$title(title),
+    tags$link(rel = "icon", href = "favicon.ico")
+  )
+  title_missing <- tags$head(
+    tags$link(rel = "icon", href = "favicon.ico")
+  )
+  icon_missing <- tags$head(
+    tags$title(title)
+  )
+  invalid_link <- tags$head(
+    tags$title("title"),
+    tags$link(href = "favicon.ico"),
+    tags$div("Secret")
+  )
+
+  expect_silent(validate_app_title_tag(valid_title))
+  expect_error(validate_app_title_tag(head_missing))
+  expect_error(validate_app_title_tag(title_missing))
+  expect_error(validate_app_title_tag(icon_missing))
+  expect_error(validate_app_title_tag(invalid_link))
+})
+
+test_that("build_app_title builts a valid tag", {
+  valid_title_local <- build_app_title("title", "logo.png")
+  valid_title_remote <- build_app_title("title", "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") # nolint
+  expect_silent(validate_app_title_tag(valid_title_local))
+  expect_silent(validate_app_title_tag(valid_title_remote))
+})

@@ -97,6 +97,10 @@ reference:
       - srv_teal_with_splash
       - ui_teal_with_splash
       - teal_slices
+  - title: Helper Functions
+    desc: Helper functions for `teal`
+    contents:
+      - build_app_title
   - title: Example Module
     desc: A simple `teal` module
     contents:

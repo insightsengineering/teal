@@ -16,7 +16,7 @@ is then preferred to this function.}
 
 \item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})\cr
 \code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or
-\code{teal_data_modules} or simply a list of a named list of objects
+\code{teal_data_module} or simply a list of a named list of objects
 (\code{data.frame} or \code{MultiAssayExperiment}).}
 
 \item{modules}{\code{teal_modules} object containing the output modules which
