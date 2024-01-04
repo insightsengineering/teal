@@ -258,6 +258,7 @@ validate_app_title_tag <- function(shiny_tag) {
 #' The image/icon path can be remote or the static path accessible by shiny, like the `www/`
 #'
 #' @return A `shiny.tag` containing the element that adds the title and logo to the shiny app
+#' @export
 build_app_title <- function(title = "Teal app", favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") { # nolint
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_string(favicon, null.ok = TRUE)
