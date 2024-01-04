@@ -113,7 +113,7 @@ Please start with the ["Technical Blueprint" article](https://insightsengineerin
 
 ## Getting help
 
-If you encounter a bug or you have a feature request - please file an issue. For questions, discussions and staying up to date, please use the "teal" channel in the [pharmaverse slack workspace](https://pharmaverse.slack.com).
+If you encounter a bug or have a feature request, please file an issue. For questions, discussions, and updates, use the `teal` channel in the [`pharmaverse` slack workspace](https://pharmaverse.slack.com).
 
 ## Acknowledgment
 
