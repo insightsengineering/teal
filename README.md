@@ -55,7 +55,7 @@ A lot of the functionality of the `teal` framework derives from the following pa
 ## Installation
 
 ```r
-install.packages("teal", repos = c("https://insightsengineering.r-universe.dev", getOption("repos")))
+install.packages("teal")
 
 # install.packages("pak")
 pak::pak("insightsengineering/teal@*release")
