@@ -12,15 +12,6 @@
 #' @param label `character` label of module
 #' @keywords internal
 #'
-#' @examples
-#' app <- init(
-#'   data = teal_data(iris = iris, mtcars = mtcars),
-#'   modules = teal:::filter_calls_module(),
-#'   header = "Simple teal app"
-#' )
-#' if (interactive()) {
-#'   shinyApp(app$ui, app$server)
-#' }
 filter_calls_module <- function(label = "Filter Calls Module") { # nolint
   checkmate::assert_string(label)
 

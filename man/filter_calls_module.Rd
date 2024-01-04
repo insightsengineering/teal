@@ -14,14 +14,4 @@ Please do not remove, this is useful for debugging teal without
 dependencies and simplifies \verb{\link[devtools]\{load_all\}} which otherwise fails
 and avoids session restarts!
 }
-\examples{
-app <- init(
-  data = teal_data(iris = iris, mtcars = mtcars),
-  modules = teal:::filter_calls_module(),
-  header = "Simple teal app"
-)
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-}
 \keyword{internal}

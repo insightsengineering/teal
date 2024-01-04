@@ -350,29 +350,6 @@ module <- function(label = "module",
 #' @return depth level for given module
 #' @keywords internal
 #'
-#' @examples
-#' mods <- modules(
-#'   label = "d1",
-#'   modules(
-#'     label = "d2",
-#'     modules(
-#'       label = "d3",
-#'       module(label = "aaa1"), module(label = "aaa2"), module(label = "aaa3")
-#'     ),
-#'     module(label = "bbb")
-#'   ),
-#'   module(label = "ccc")
-#' )
-#' stopifnot(teal:::modules_depth(mods) == 3L)
-#'
-#' mods <- modules(
-#'   label = "a",
-#'   modules(
-#'     label = "b1", module(label = "c")
-#'   ),
-#'   module(label = "b2")
-#' )
-#' stopifnot(teal:::modules_depth(mods) == 2L)
 modules_depth <- function(modules, depth = 0L) {
   checkmate::assert(
     checkmate::check_class(modules, "teal_module"),

@@ -69,11 +69,6 @@ run_js_files <- function(files) {
 #' Also initializes `shinyjs` so you can use it.
 #'
 #' @return HTML code to include
-#' @examples
-#' shiny_ui <- tagList(
-#'   teal:::include_teal_css_js(),
-#'   p("Hello")
-#' )
 #' @keywords internal
 include_teal_css_js <- function() {
   tagList(

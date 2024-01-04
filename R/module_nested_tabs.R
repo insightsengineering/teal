@@ -29,33 +29,6 @@
 #'     calling this function on it.\cr
 #' `srv_nested_tabs` returns a reactive which returns the active module that corresponds to the selected tab.
 #'
-#' @examples
-#' mods <- teal:::example_modules()
-#' datasets <- teal:::example_datasets()
-#' app <- shinyApp(
-#'   ui = function() {
-#'     tagList(
-#'       teal:::include_teal_css_js(),
-#'       textOutput("info"),
-#'       fluidPage( # needed for nice tabs
-#'         teal:::ui_nested_tabs("dummy", modules = mods, datasets = datasets)
-#'       )
-#'     )
-#'   },
-#'   server = function(input, output, session) {
-#'     active_module <- teal:::srv_nested_tabs(
-#'       "dummy",
-#'       datasets = datasets,
-#'       modules = mods
-#'     )
-#'     output$info <- renderText({
-#'       paste0("The currently active tab name is ", active_module()$label)
-#'     })
-#'   }
-#' )
-#' if (interactive()) {
-#'   shinyApp(app$ui, app$server)
-#' }
 #' @keywords internal
 NULL
 

@@ -67,19 +67,4 @@ of the tab.
 
 It is written as a Shiny module so it can be added into other apps as well.
 }
-\examples{
-mods <- teal:::example_modules()
-teal_data_rv <- reactive(teal:::example_cdisc_data())
-app <- shinyApp(
-  ui = function() {
-    teal:::ui_teal("dummy")
-  },
-  server = function(input, output, session) {
-    active_module <- teal:::srv_teal(id = "dummy", modules = mods, teal_data_rv = teal_data_rv)
-  }
-)
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-}
 \keyword{internal}

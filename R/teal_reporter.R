@@ -85,8 +85,6 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     #' @param style (`character(1)`) string specifying style to apply.
     #'
     #' @return `TealSlicesBlock`
-    #' @examples
-    #' block <- teal:::TealSlicesBlock$new()
     #'
     initialize = function(content = teal_slices(), style = "verbatim") {
       self$set_content(content)

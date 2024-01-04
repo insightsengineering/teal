@@ -14,10 +14,10 @@ setOldClass("teal_data_module")
 #'
 #' @examples
 #' tdm <- teal_data_module(
-#'   ui = function(id) div(id = shiny::NS(id)("div_id")),
+#'   ui = function(id) div(id = NS(id)("div_id")),
 #'   server = function(id) {
-#'     shiny::moduleServer(id, function(input, output, session) {
-#'       shiny::reactive(teal_data(IRIS = iris))
+#'     moduleServer(id, function(input, output, session) {
+#'       reactive(teal_data(IRIS = iris))
 #'     })
 #'   }
 #' )

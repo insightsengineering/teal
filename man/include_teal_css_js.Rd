@@ -16,10 +16,4 @@ This is also useful for running standalone modules in teal with the correct
 styles.
 Also initializes \code{shinyjs} so you can use it.
 }
-\examples{
-shiny_ui <- tagList(
-  teal:::include_teal_css_js(),
-  p("Hello")
-)
-}
 \keyword{internal}

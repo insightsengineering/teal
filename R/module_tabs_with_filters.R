@@ -27,32 +27,6 @@
 #'
 #' @keywords internal
 #'
-#' @examples
-#'
-#' mods <- teal:::example_modules()
-#' datasets <- teal:::example_datasets()
-#'
-#' app <- shinyApp(
-#'   ui = function() {
-#'     tagList(
-#'       teal:::include_teal_css_js(),
-#'       textOutput("info"),
-#'       fluidPage( # needed for nice tabs
-#'         ui_tabs_with_filters("dummy", modules = mods, datasets = datasets)
-#'       )
-#'     )
-#'   },
-#'   server = function(input, output, session) {
-#'     output$info <- renderText({
-#'       paste0("The currently active tab name is ", active_module()$label)
-#'     })
-#'     active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
-#'   }
-#' )
-#' if (interactive()) {
-#'   shinyApp(app$ui, app$server)
-#' }
-#'
 NULL
 
 #' @rdname module_tabs_with_filters
