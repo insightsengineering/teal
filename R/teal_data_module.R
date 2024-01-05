@@ -24,7 +24,7 @@
 #' `teal_data_module` returns an object of class `teal_data_module`.
 #'
 #' @examples
-#' data <- teal_data_module(
+#' teal_data_module(
 #'   ui = function(id) {
 #'     ns <- NS(id)
 #'     actionButton(ns("submit"), label = "Load data")

@@ -62,7 +62,7 @@ The code is added to the \verb{@code} slot of the \code{teal_data}.
 \code{within} is a convenience function for evaluating inline code inside the environment of a \code{teal_data_module}.
 }
 \examples{
-data <- teal_data_module(
+teal_data_module(
   ui = function(id) {
     ns <- NS(id)
     actionButton(ns("submit"), label = "Load data")

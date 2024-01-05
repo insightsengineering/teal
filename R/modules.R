@@ -33,7 +33,7 @@
 #'           moduleServer(
 #'             id,
 #'             module = function(input, output, session) {
-#'               output$data <- renderDataTable(data[["iris"]]())
+#'               output$data <- renderDataTable(data()[["iris"]])
 #'             }
 #'           )
 #'         },
@@ -205,7 +205,7 @@ is_arg_used <- function(modules, arg) {
 #'         moduleServer(
 #'           id,
 #'           module = function(input, output, session) {
-#'             output$data <- renderDataTable(data[["iris"]]())
+#'             output$data <- renderDataTable(data()[["iris"]])
 #'           }
 #'         )
 #'       },
