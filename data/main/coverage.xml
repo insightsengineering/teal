@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.638161721931355" branch-rate="0" lines-covered="1097" lines-valid="1719" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-01-02 20:00:37.35841">
+<coverage line-rate="0.638161721931355" branch-rate="0" lines-covered="1097" lines-valid="1719" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-01-05 13:10:18.482179">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -3590,7 +3590,6 @@
             </method>
             <method name="build_app_title" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="262" hits="16" branch="false"/>
                 <line number="263" hits="16" branch="false"/>
                 <line number="264" hits="16" branch="false"/>
                 <line number="265" hits="16" branch="false"/>
@@ -3600,6 +3599,7 @@
                 <line number="269" hits="16" branch="false"/>
                 <line number="270" hits="16" branch="false"/>
                 <line number="271" hits="16" branch="false"/>
+                <line number="272" hits="16" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -3725,7 +3725,6 @@
             <line number="247" hits="18" branch="false"/>
             <line number="248" hits="18" branch="false"/>
             <line number="249" hits="18" branch="false"/>
-            <line number="262" hits="16" branch="false"/>
             <line number="263" hits="16" branch="false"/>
             <line number="264" hits="16" branch="false"/>
             <line number="265" hits="16" branch="false"/>
@@ -3735,6 +3734,7 @@
             <line number="269" hits="16" branch="false"/>
             <line number="270" hits="16" branch="false"/>
             <line number="271" hits="16" branch="false"/>
+            <line number="272" hits="16" branch="false"/>
           </lines>
         </class>
         <class name="validate_inputs.R" filename="R/validate_inputs.R" line-rate="1" branch-rate="0" complexity="0">
