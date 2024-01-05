@@ -12,7 +12,7 @@ vignette: >
 
 ## Introduction
 
-Proper functioning of any `teal` application requires presence of a `teal_data` object.
+Proper functioning of any `teal` application requires the presence of a `teal_data` object.
 Typically, a `teal_data` object created in the global environment will be passed to the `data` argument in `init`.
 This `teal_data` object should contain all elements necessary for successful execution of the application's modules. 
 
@@ -27,9 +27,9 @@ The `teal_data_module` function is used to build such a module from the followin
 
 ## Creating data in-app
 
-One case for postponing data operations are data sets that are dynamic, frequently updated.
+One case for postponing data operations is datasets that are dynamic, and frequently updated.
 Such data cannot be created once and kept in the global environment.
-Using `teal_data_module` allows to create a data set from scratch every time the user starts the application.
+Using `teal_data_module` allows to create a dataset from scratch every time the user starts the application.
 
 ```{r, message = FALSE, warning = FALSE}
 library(teal)
