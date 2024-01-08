@@ -214,7 +214,7 @@ init <- function(data,
 
     is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
     if (!isTRUE(is_filter_ok)) {
-      logger::log_warn(is_filter_ok)
+      warning(is_filter_ok)
       # we allow app to continue if applied filters are outside
       # of possible data range
     }

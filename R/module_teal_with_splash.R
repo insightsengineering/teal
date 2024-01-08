@@ -142,7 +142,6 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
       is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
       if (!isTRUE(is_modules_ok)) {
-        warning(is_modules_ok)
         validate(need(isTRUE(is_modules_ok), sprintf("%s. Contact app developer.", is_modules_ok)))
       }
 
