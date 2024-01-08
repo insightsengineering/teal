@@ -271,3 +271,20 @@ build_app_title <- function(title = "Teal app", favicon = "https://raw.githubuse
     )
   )
 }
+
+#' Creates App ID as a hash of the input data and modules.
+#'
+#' @param data data object
+#' @param modules modules object
+#'
+#' @return character(1) with hash
+#' @keywords internal
+create_app_id <- function(data, modules) {
+  hashables <- c(data, modules)
+  hashables$data <- if (inherits(hashables$data, "teal_data")) {
+    as.list(hashables$data@env)
+  } else if (inherits(data, "teal_data_module")) {
+    body(data$server)
+  }
+  rlang::hash(hashables)
+}

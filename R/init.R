@@ -131,7 +131,7 @@ init <- function(data,
   if (inherits(modules, "teal_module")) {
     modules <- list(modules)
   }
-  if (inherits(modules, "list")) {
+  if (is.list(modules)) {
     modules <- do.call(teal::modules, modules)
   }
   checkmate::assert_class(modules, "teal_modules")
@@ -146,14 +146,13 @@ init <- function(data,
   checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
-  # log
-  teal.logger::log_system_info()
-
   if (is.character(title)) {
     title <- build_app_title(title)
-  } else {
-    validate_app_title_tag(title)
   }
+  validate_app_title_tag(title)
+
+  # log
+  teal.logger::log_system_info()
 
   # argument mutation
   ## `modules` - landing module
@@ -173,11 +172,11 @@ init <- function(data,
   # See "transferring snapshots" section in ?snapshot.
   attr(filter, "app_id") <- create_app_id(data, modules)
 
-  ## filter - convert teal.slice::teal_slices to teal::teal_slices
+  ## `filter` - convert teal.slice::teal_slices to teal::teal_slices
   filter <- as.teal_slices(as.list(filter))
 
   # argument checking (interdependent)
-  ## filter - module
+  ## `filter` - `modules`
   if (isTRUE(attr(filter, "module_specific"))) {
     module_names <- unlist(c(module_labels(modules), "global_filters"))
     failed_mod_names <- setdiff(names(attr(filter, "mapping")), module_names)
@@ -241,14 +240,4 @@ init <- function(data,
   logger::log_trace("init teal app has been initialized.")
 
   return(res)
-}
-
-create_app_id <- function(data, modules) {
-  hashables <- c(data, modules)
-  hashables$data <- if (inherits(hashables$data, "teal_data")) {
-    as.list(hashables$data@env)
-  } else if (inherits(data, "teal_data_module")) {
-    body(data$server)
-  }
-  rlang::hash(hashables)
 }
