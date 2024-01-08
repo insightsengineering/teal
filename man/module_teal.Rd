@@ -9,7 +9,7 @@
 ui_teal(
   id,
   splash_ui = tags$h2("Starting the Teal App"),
-  title = NULL,
+  title = build_app_title(),
   header = tags$p(),
   footer = tags$p()
 )

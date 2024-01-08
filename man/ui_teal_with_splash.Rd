@@ -7,7 +7,7 @@
 ui_teal_with_splash(
   id,
   data,
-  title = NULL,
+  title = build_app_title(),
   header = tags$p(),
   footer = tags$p()
 )

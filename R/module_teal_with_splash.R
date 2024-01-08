@@ -19,12 +19,12 @@
 #' @export
 ui_teal_with_splash <- function(id,
                                 data,
-                                title = NULL,
+                                title = build_app_title(),
                                 header = tags$p(),
                                 footer = tags$p()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
-  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_multi_class(title, c("shiny.tag", "character"))
   checkmate::assert_multi_class(header, c("shiny.tag", "character"))
   checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
 

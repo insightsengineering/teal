@@ -61,20 +61,28 @@ NULL
 #' @rdname module_teal
 ui_teal <- function(id,
                     splash_ui = tags$h2("Starting the Teal App"),
-                    title = NULL,
+                    title = build_app_title(),
                     header = tags$p(),
                     footer = tags$p()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
+
   checkmate::assert_multi_class(splash_ui, c("shiny.tag", "shiny.tag.list", "html"))
-  checkmate::assert_string(title, null.ok = TRUE)
+
+  if (is.character(title)) {
+    title <- build_app_title(title)
+  }
+  validate_app_title_tag(title)
+
   if (checkmate::test_string(header)) {
-    header <- tags$h1(header)
+    header <- tags$p(header)
   }
   checkmate::assert_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
+
   if (checkmate::test_string(footer)) {
     footer <- tags$p(footer)
   }
   checkmate::assert_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
+
 
   ns <- NS(id)
 

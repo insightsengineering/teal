@@ -131,7 +131,7 @@ init <- function(data,
   if (inherits(modules, "teal_module")) {
     modules <- list(modules)
   }
-  if (is.list(modules)) {
+  if (inherits(modules, "list")) {
     modules <- do.call(teal::modules, modules)
   }
   checkmate::assert_class(modules, "teal_modules")
@@ -141,15 +141,12 @@ init <- function(data,
     checkmate::check_class(filter, "teal_slices"),
     checkmate::check_list(filter, names = "named")
   )
+
+  ## all other arguments
   checkmate::assert_multi_class(title, c("shiny.tag", "character"))
   checkmate::assert_multi_class(header, c("shiny.tag", "character"))
   checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-
-  if (is.character(title)) {
-    title <- build_app_title(title)
-  }
-  validate_app_title_tag(title)
 
   # log
   teal.logger::log_system_info()
