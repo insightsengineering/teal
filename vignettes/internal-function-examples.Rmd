@@ -12,9 +12,8 @@ vignette: >
 
 ## Introduction
 
-This vignette contains examples for internal classes, methods, and functions of  `teal`. 
+This vignette contains examples for internal modules and functions of `teal`. 
 For developer use only.
-
 
 ## `module_teal`
 ```{r eval=FALSE}
@@ -64,8 +63,6 @@ if (interactive()) {
 }
 ```
 
-
-
 ## `module_tabs_with_filters`
 ```{r eval=FALSE}
 mods <- teal:::example_modules()
@@ -91,6 +88,7 @@ if (interactive()) {
   shinyApp(ui, server)
 }
 ```
+
 ## Functions
 ### `filter_calls_module`
 ```{r eval=FALSE}
