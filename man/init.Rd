@@ -7,7 +7,7 @@
 init(
   data,
   modules,
-  title = NULL,
+  title = build_app_title(),
   filter = teal_slices(),
   header = tags$p(),
   footer = tags$p(),
@@ -17,7 +17,7 @@ init(
 \arguments{
 \item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})\cr
 \code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or
-\code{teal_data_modules} or simply a list of a named list of objects
+\code{teal_data_module} or simply a list of a named list of objects
 (\code{data.frame} or \code{MultiAssayExperiment}).}
 
 \item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
@@ -26,8 +26,10 @@ nested list of \code{teal_modules} or \code{teal_module} objects or a single
 will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{title}{(\code{NULL} or \code{character})\cr
-The browser window title (defaults to the host URL of the page).}
+\item{title}{(\code{shiny.tag} or \code{character})\cr
+The browser window title. Defaults to a title "Teal app" with the icon of NEST.
+Can be created using the \code{build_app_title()} or
+by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
 \item{filter}{(\code{teal_slices})\cr
 Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
@@ -55,6 +57,10 @@ named list with \code{server} and \code{ui} function
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 End-users: This is the most important function for you to start a
 teal app that is composed out of teal modules.
+}
+\details{
+When initializing the \code{teal} app, if \code{datanames} are not set for the \code{teal_data} object,
+defaults from the \code{teal_data} environment will be used.
 }
 \examples{
 app <- init(

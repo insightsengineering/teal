@@ -10,17 +10,23 @@
 #' End-users: This is the most important function for you to start a
 #' teal app that is composed out of teal modules.
 #'
+#' @details
+#' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
+#' defaults from the `teal_data` environment will be used.
+#'
 #' @param data (`teal_data`, `teal_data_module`, `named list`)\cr
 #' `teal_data` object as returned by [teal.data::teal_data()] or
-#' `teal_data_modules` or simply a list of a named list of objects
+#' `teal_data_module` or simply a list of a named list of objects
 #' (`data.frame` or `MultiAssayExperiment`).
 #' @param modules (`list`, `teal_modules` or `teal_module`)\cr
 #'   nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
 #'   will be displayed in the teal application. See [modules()] and [module()] for
 #'   more details.
-#' @param title (`NULL` or `character`)\cr
-#'   The browser window title (defaults to the host URL of the page).
+#' @param title (`shiny.tag` or `character`)\cr
+#'   The browser window title. Defaults to a title "Teal app" with the icon of NEST.
+#'   Can be created using the `build_app_title()` or
+#'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
 #' @param filter (`teal_slices`)\cr
 #'   Specification of initial filter. Filters can be specified using [teal::teal_slices()].
 #'   Old way of specifying filters through a list is deprecated and will be removed in the
@@ -96,7 +102,7 @@
 #'
 init <- function(data,
                  modules,
-                 title = NULL,
+                 title = build_app_title(),
                  filter = teal_slices(),
                  header = tags$p(),
                  footer = tags$p(),
@@ -135,15 +141,19 @@ init <- function(data,
     checkmate::check_class(filter, "teal_slices"),
     checkmate::check_list(filter, names = "named")
   )
-
-  ## other
-  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_multi_class(title, c("shiny.tag", "character"))
   checkmate::assert_multi_class(header, c("shiny.tag", "character"))
   checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   # log
   teal.logger::log_system_info()
+
+  if (is.character(title)) {
+    title <- build_app_title(title)
+  } else {
+    validate_app_title_tag(title)
+  }
 
   # argument mutation
   ## `modules` - landing module
@@ -196,16 +206,17 @@ init <- function(data,
 
   ## `data` - `modules`
   if (inherits(data, "teal_data")) {
+    if (length(teal_data_datanames(data)) == 0) {
+      stop("`data` object has no datanames and its environment is empty. Specify `datanames(data)` and try again.")
+    }
     # in case of teal_data_module this check is postponed to the srv_teal_with_splash
-    is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
+    is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
     if (!isTRUE(is_modules_ok)) {
       logger::log_error(is_modules_ok)
       checkmate::assert(is_modules_ok, .var.name = "modules")
     }
-  }
-  ## `data` - `filter`
-  if (inherits(data, "teal_data")) {
-    is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data))
+
+    is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
     if (!isTRUE(is_filter_ok)) {
       logger::log_warn(is_filter_ok)
       # we allow app to continue if applied filters are outside
