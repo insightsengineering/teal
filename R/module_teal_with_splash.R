@@ -142,7 +142,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
       is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
       if (!isTRUE(is_modules_ok)) {
-        logger::log_warn(is_modules_ok)
+        warning(is_modules_ok)
         validate(need(isTRUE(is_modules_ok), sprintf("%s. Contact app developer.", is_modules_ok)))
       }
 
@@ -153,7 +153,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
           type = "warning",
           duration = 10
         )
-        logger::log_warn(is_filter_ok)
+        warning(is_filter_ok)
       }
 
       teal_data_rv()

@@ -161,7 +161,7 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate returns teal_dat
     ),
     expr = {
       testthat::expect_is(teal_data_rv_validate, "reactive")
-      testthat::expect_output(
+      testthat::expect_warning(
         teal_data_rv_validate(),
         "Filter 'iris Species' refers to dataname not available in 'data'"
       )
