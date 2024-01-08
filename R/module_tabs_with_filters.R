@@ -100,7 +100,10 @@ srv_tabs_with_filters <- function(id,
         if (identical(active_module()$datanames, "all")) {
           singleton$datanames()
         } else {
-          active_module()$datanames
+          include_parent_datanames(
+            active_module()$datanames,
+            singleton$get_join_keys()
+          )
         }
       })
       singleton <- unlist(datasets)[[1]]
