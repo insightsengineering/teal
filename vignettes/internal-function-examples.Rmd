@@ -15,7 +15,8 @@ vignette: >
 This vignette contains examples for internal modules and functions of `teal`. 
 For developer use only.
 
-## `module_teal`
+## Modules
+### `module_teal`
 ```{r eval=FALSE}
 mods <- teal:::example_modules()
 teal_data_rv <- reactive(teal:::example_cdisc_data())
@@ -33,7 +34,7 @@ if (interactive()) {
 }
 ```
 
-## `module_nested_tabs`
+### `module_nested_tabs`
 
 ```{r eval=FALSE}
 mods <- teal:::example_modules()
@@ -63,7 +64,7 @@ if (interactive()) {
 }
 ```
 
-## `module_tabs_with_filters`
+### `module_tabs_with_filters`
 ```{r eval=FALSE}
 mods <- teal:::example_modules()
 datasets <- teal:::example_datasets()
