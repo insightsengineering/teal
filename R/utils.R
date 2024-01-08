@@ -44,7 +44,7 @@ include_parent_datanames <- function(dataname, join_keys) {
     }
   }
 
-  return(unique(c(parents, dataname)))
+  unique(c(parents, dataname))
 }
 
 
