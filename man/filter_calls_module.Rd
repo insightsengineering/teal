@@ -14,4 +14,7 @@ Please do not remove, this is useful for debugging teal without
 dependencies and simplifies \verb{\link[devtools]\{load_all\}} which otherwise fails
 and avoids session restarts!
 }
+\seealso{
+examples found here: \code{vignette("internal_function_examples", package = "teal")}.
+}
 \keyword{internal}

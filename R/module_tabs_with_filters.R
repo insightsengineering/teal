@@ -24,7 +24,7 @@
 #' @return A `tagList` of The main menu, place holders for filters and
 #'   place holders for the teal modules
 #'
-#'
+#' @seealso examples found here: `vignette("internal_function_examples", package = "teal")`.
 #' @keywords internal
 #'
 NULL

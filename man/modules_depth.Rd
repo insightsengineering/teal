@@ -22,4 +22,7 @@ depth level for given module
 Depth starts at 0, so a single \code{teal.module} has depth 0.
 Nesting it increases overall depth by 1.
 }
+\seealso{
+examples found here: \code{vignette("internal_function_examples", package = "teal")}.
+}
 \keyword{internal}

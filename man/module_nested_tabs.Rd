@@ -103,4 +103,7 @@ is currently active.
 }
 }
 
+\seealso{
+examples found here: \code{vignette("internal_function_examples", package = "teal")}.
+}
 \keyword{internal}

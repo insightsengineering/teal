@@ -69,4 +69,7 @@ of the tab.
 
 It is written as a Shiny module so it can be added into other apps as well.
 }
+\seealso{
+examples found here: \code{vignette("internal_function_examples", package = "teal")}.
+}
 \keyword{internal}

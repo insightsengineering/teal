@@ -10,6 +10,7 @@
 #' and avoids session restarts!
 #'
 #' @param label `character` label of module
+#' @seealso examples found here: `vignette("internal_function_examples", package = "teal")`.
 #' @keywords internal
 #'
 filter_calls_module <- function(label = "Filter Calls Module") { # nolint

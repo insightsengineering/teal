@@ -348,6 +348,7 @@ module <- function(label = "module",
 #' @param depth optional, integer determining current depth level
 #'
 #' @return depth level for given module
+#' @seealso examples found here: `vignette("internal_function_examples", package = "teal")`.
 #' @keywords internal
 #'
 modules_depth <- function(modules, depth = 0L) {

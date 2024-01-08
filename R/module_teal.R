@@ -40,6 +40,7 @@
 #' `ui_teal` returns `HTML` for Shiny module UI.
 #' `srv_teal` returns `reactive` which returns the currently active module.
 #'
+#' @seealso examples found here: `vignette("internal_function_examples", package = "teal")`.
 #' @keywords internal
 #'
 NULL

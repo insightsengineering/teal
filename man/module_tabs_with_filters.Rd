@@ -44,4 +44,7 @@ all modules using the same \code{datasets} share the same filters.
 This works with nested modules of depth greater than 2, though the filter
 panel is inserted at the right of the modules at depth 1 and not at the leaves.
 }
+\seealso{
+examples found here: \code{vignette("internal_function_examples", package = "teal")}.
+}
 \keyword{internal}

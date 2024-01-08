@@ -28,7 +28,7 @@
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
 #'     calling this function on it.\cr
 #' `srv_nested_tabs` returns a reactive which returns the active module that corresponds to the selected tab.
-#'
+#' @seealso examples found here: `vignette("internal_function_examples", package = "teal")`.
 #' @keywords internal
 NULL
 
