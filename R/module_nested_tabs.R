@@ -251,7 +251,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     datasets$datanames()
   } else {
     include_parent_datanames(
-      unique(module$datanames),
+      module$datanames,
       datasets$get_join_keys()
     )
   }
