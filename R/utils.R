@@ -273,13 +273,13 @@ build_app_title <- function(title = "Teal app", favicon = "https://raw.githubuse
 }
 
 #' Application ID
-#' 
+#'
 #' Creates App ID used to match filter snapshots to application.
 #'
 #' Calculate app id that will be used to stamp filter state snapshots.
 #' App id is a hash of the app's data and modules.
 #' See "transferring snapshots" section in ?snapshot.
-#' 
+#'
 #' @param data `teal_data` or `teal_data_module` as accepted by `init`
 #' @param modules `teal_modules` object as accepted by `init`
 #'
