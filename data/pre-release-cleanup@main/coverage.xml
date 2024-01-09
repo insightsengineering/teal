@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.639420289855072" branch-rate="0" lines-covered="1103" lines-valid="1725" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-01-08 14:20:15.484237">
+<coverage line-rate="0.639420289855072" branch-rate="0" lines-covered="1103" lines-valid="1725" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-01-09 04:28:02.17566">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -339,12 +339,12 @@
             </method>
             <method name="include_teal_css_js" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="74" hits="12" branch="false"/>
                 <line number="75" hits="12" branch="false"/>
                 <line number="76" hits="12" branch="false"/>
-                <line number="78" hits="12" branch="false"/>
+                <line number="77" hits="12" branch="false"/>
                 <line number="79" hits="12" branch="false"/>
                 <line number="80" hits="12" branch="false"/>
+                <line number="81" hits="12" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -367,12 +367,12 @@
             <line number="58" hits="18" branch="false"/>
             <line number="59" hits="18" branch="false"/>
             <line number="60" hits="18" branch="false"/>
-            <line number="74" hits="12" branch="false"/>
             <line number="75" hits="12" branch="false"/>
             <line number="76" hits="12" branch="false"/>
-            <line number="78" hits="12" branch="false"/>
+            <line number="77" hits="12" branch="false"/>
             <line number="79" hits="12" branch="false"/>
             <line number="80" hits="12" branch="false"/>
+            <line number="81" hits="12" branch="false"/>
           </lines>
         </class>
         <class name="init.R" filename="R/init.R" line-rate="0.614457831325301" branch-rate="0" complexity="0">
