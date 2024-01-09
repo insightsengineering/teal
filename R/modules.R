@@ -374,10 +374,7 @@ module <- function(label = "module",
 #' )
 #' stopifnot(teal:::modules_depth(mods) == 2L)
 modules_depth <- function(modules, depth = 0L) {
-  checkmate::assert(
-    checkmate::check_class(modules, "teal_module"),
-    checkmate::check_class(modules, "teal_modules")
-  )
+  checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
   checkmate::assert_int(depth, lower = 0)
   if (inherits(modules, "teal_modules")) {
     max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
