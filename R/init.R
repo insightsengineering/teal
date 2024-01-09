@@ -164,9 +164,6 @@ init <- function(data,
   rm(landing)
 
   ## `filter` - app_id attribute
-  # Calculate app id that will be used to stamp filter state snapshots.
-  # App id is a hash of the app's data and modules.
-  # See "transferring snapshots" section in ?snapshot.
   attr(filter, "app_id") <- create_app_id(data, modules)
 
   ## `filter` - convert teal.slice::teal_slices to teal::teal_slices
