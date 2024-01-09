@@ -79,7 +79,7 @@ The key difference between `eval_code` and `within` is that the former accepts c
 See `?eval_code` for more details.
 
 Note that with `data` the code that created the data objects is unknown so the process cannot be reproduced.
-The necessary code can be added with the `code` argument of the `teal_data` function but in that case, the code may not reproduce the environment.
+The necessary code can be added with the `code` argument of the `teal_data` function but in that case the code may not reproduce the environment.
 Such an object is considered _unverified_ (see [`verified` property](#verified)).
 
 If reproducibility is required, we recommend creating `teal_data` empty and evaluating code.
