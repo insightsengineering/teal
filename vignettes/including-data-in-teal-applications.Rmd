@@ -191,7 +191,7 @@ For a detailed explanation of `datanames`, see [this `teal.data` vignette](https
 
 Using relational data requires specifying joining keys for each pair of datasets.
 Primary keys are unique row identifiers in individual datasets and thus should be specified for each dataset.
-Foreign keys describe the mapping of variables between datasets.
+Foreign keys describe mapping of variables between datasets.
 Joining keys are stored in the `join_keys` property, which can be set when creating a `teal_data` object, using the `join_keys` argument, or using the `join_keys` function.
 
 ```{r}
