@@ -74,7 +74,7 @@ ui <- function() {
     teal:::include_teal_css_js(),
     textOutput("info"),
     fluidPage( # needed for nice tabs
-      ui_tabs_with_filters("dummy", modules = mods, datasets = datasets)
+      teal:::ui_tabs_with_filters("dummy", modules = mods, datasets = datasets)
     )
   )
 }
@@ -82,7 +82,7 @@ server <- function(input, output, session) {
   output$info <- renderText({
     paste0("The currently active tab name is ", active_module()$label)
   })
-  active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
+  active_module <- teal:::srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
 }
 
 if (interactive()) {
@@ -114,12 +114,15 @@ filter <- teal_slices(
 ui <- fluidPage(
   teal:::filter_manager_modal_ui("manager")
 )
+
 server <- function(input, output, session) {
-  teal:::filter_manager_modal_srv(
+  observe({
+    teal:::filter_manager_modal_srv(
       "manager",
       filtered_data_list = list(module1 = fd1, module2 = fd2, module3 = fd3),
       filter = filter
     )
+  })
 }
 
 if (interactive()) {
