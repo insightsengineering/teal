@@ -28,4 +28,7 @@ next release. Please fix your applications to use \code{\link[=teal_slices]{teal
 \description{
 Opens modal containing the filter manager UI.
 }
+\seealso{
+examples found here: \code{vignette("internal_function_examples", package = "teal")}.
+}
 \keyword{internal}

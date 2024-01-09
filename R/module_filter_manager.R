@@ -4,7 +4,7 @@
 #'
 #' @name module_filter_manager_modal
 #' @inheritParams filter_manager_srv
-#'
+#' @seealso examples found here: `vignette("internal_function_examples", package = "teal")`.
 #' @keywords internal
 #'
 NULL
