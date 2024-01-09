@@ -136,6 +136,7 @@ init <- function(data,
 
   ## `filter`
   checkmate::assert(
+    .var.name = "filter",
     checkmate::check_class(filter, "teal_slices"),
     checkmate::check_list(filter, names = "named")
   )
