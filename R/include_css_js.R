@@ -69,6 +69,7 @@ run_js_files <- function(files) {
 #' Also initializes `shinyjs` so you can use it.
 #'
 #' Simply add `include_teal_css_js()` as one of the elements of the UI.
+#' Simply add `include_teal_css_js()` as one of the elements of the UI.
 #' @return A `shiny.tag.list`.
 #' @keywords internal
 include_teal_css_js <- function() {
