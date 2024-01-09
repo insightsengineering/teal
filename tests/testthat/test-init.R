@@ -100,7 +100,7 @@ testthat::test_that("init throws when incompatible module's datanames", {
 })
 
 testthat::test_that("init throws when incompatible filter's datanames", {
-  testthat::expect_output(
+  testthat::expect_warning(
     init(
       data = teal_data(mtcars = mtcars),
       modules = modules(example_module()),

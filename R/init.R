@@ -108,10 +108,9 @@ init <- function(data,
                  footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  if (is.list(data) && !inherits(data, "teal_data_module")) {
-    checkmate::assert_list(data, names = "named")
-    data <- do.call(teal.data::teal_data, data)
-  }
+
+  # argument checking (independent)
+  ## `data`
   if (inherits(data, "TealData")) {
     lifecycle::deprecate_stop(
       when = "0.99.0",
@@ -122,52 +121,56 @@ init <- function(data,
       )
     )
   }
-
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
-  checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
-  checkmate::assert(
-    checkmate::check_class(filter, "teal_slices"),
-    checkmate::check_list(filter, names = "named")
-  )
-  checkmate::assert_multi_class(title, c("shiny.tag", "character"))
-  checkmate::assert_multi_class(header, c("shiny.tag", "character"))
-  checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
-  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-
-  teal.logger::log_system_info()
-
-  if (is.character(title)) {
-    title <- build_app_title(title)
-  } else {
-    validate_app_title_tag(title)
+  if (is.list(data) && !inherits(data, "teal_data_module")) {
+    checkmate::assert_list(data, names = "named")
+    data <- do.call(teal.data::teal_data, data)
   }
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
 
+  ## `modules`
   if (inherits(modules, "teal_module")) {
     modules <- list(modules)
   }
   if (inherits(modules, "list")) {
     modules <- do.call(teal::modules, modules)
   }
+  checkmate::assert_class(modules, "teal_modules")
 
+  ## `filter`
+  checkmate::assert(
+    checkmate::check_class(filter, "teal_slices"),
+    checkmate::check_list(filter, names = "named")
+  )
+
+  ## all other arguments
+  checkmate::assert_multi_class(title, c("shiny.tag", "character"))
+  checkmate::assert_multi_class(header, c("shiny.tag", "character"))
+  checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
+  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
+
+  # log
+  teal.logger::log_system_info()
+
+  # argument mutation
+  ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
-  if (length(landing) > 1L) stop("Only one `landing_popup_module` can be used.")
-  modules <- drop_module(modules, "teal_module_landing")
-
-  # Calculate app id that will be used to stamp filter state snapshots.
-  # App id is a hash of the app's data and modules.
-  # See "transferring snapshots" section in ?snapshot.
-  hashables <- mget(c("data", "modules"))
-  hashables$data <- if (inherits(hashables$data, "teal_data")) {
-    as.list(hashables$data@env)
-  } else if (inherits(data, "teal_data_module")) {
-    body(data$server)
+  landing_module <- NULL
+  if (length(landing) > 1L) {
+    stop("Only one `landing_popup_module` can be used.")
+  } else if (length(landing) == 1) {
+    landing_module <- landing[[1L]]
   }
+  modules <- drop_module(modules, "teal_module_landing")
+  rm(landing)
 
-  attr(filter, "app_id") <- rlang::hash(hashables)
+  ## `filter` - app_id attribute
+  attr(filter, "app_id") <- create_app_id(data, modules)
 
-  # convert teal.slice::teal_slices to teal::teal_slices
+  ## `filter` - convert teal.slice::teal_slices to teal::teal_slices
   filter <- as.teal_slices(as.list(filter))
 
+  # argument checking (interdependent)
+  ## `filter` - `modules`
   if (isTRUE(attr(filter, "module_specific"))) {
     module_names <- unlist(c(module_labels(modules), "global_filters"))
     failed_mod_names <- setdiff(names(attr(filter, "mapping")), module_names)
@@ -194,6 +197,7 @@ init <- function(data,
     }
   }
 
+  ## `data` - `modules`
   if (inherits(data, "teal_data")) {
     if (length(teal_data_datanames(data)) == 0) {
       stop("`data` object has no datanames and its environment is empty. Specify `datanames(data)` and try again.")
@@ -207,7 +211,7 @@ init <- function(data,
 
     is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
     if (!isTRUE(is_filter_ok)) {
-      logger::log_warn(is_filter_ok)
+      warning(is_filter_ok)
       # we allow app to continue if applied filters are outside
       # of possible data range
     }
@@ -220,14 +224,14 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-      if (length(landing) == 1L) {
-        landing_module <- landing[[1L]]
+      if (!is.null(landing_module)) {
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
-      filter <- deep_copy_filter(filter)
-      srv_teal_with_splash(id = id, data = data, modules = modules, filter = filter)
+      srv_teal_with_splash(id = id, data = data, modules = modules, filter = deep_copy_filter(filter))
     }
   )
+
   logger::log_trace("init teal app has been initialized.")
+
   return(res)
 }
