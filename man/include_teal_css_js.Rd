@@ -7,7 +7,7 @@
 include_teal_css_js()
 }
 \value{
-HTML code to include
+A \code{shiny.tag.list}.
 }
 \description{
 This is useful when you want to use the same \code{JavaScript} and \code{CSS} files that are
@@ -15,5 +15,8 @@ used with the teal application.
 This is also useful for running standalone modules in teal with the correct
 styles.
 Also initializes \code{shinyjs} so you can use it.
+}
+\details{
+Simply add \code{include_teal_css_js()} as one of the elements of the UI.
 }
 \keyword{internal}
