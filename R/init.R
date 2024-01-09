@@ -32,11 +32,9 @@
 #'   Old way of specifying filters through a list is deprecated and will be removed in the
 #'   next release. Please fix your applications to use [teal::teal_slices()].
 #' @param header (`shiny.tag` or `character`) \cr
-#'   the header of the app. Note shiny code placed here (and in the footer
-#'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
-#'   (such as loading `CSS` via [htmltools::htmlDependency()]) should be included here.
+#'   The header of the app.
 #' @param footer (`shiny.tag` or `character`)\cr
-#'   the footer of the app
+#'   The footer of the app.
 #' @param id (`character`)\cr
 #'   module id to embed it, if provided,
 #'   the server function must be called with [shiny::moduleServer()];

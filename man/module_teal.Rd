@@ -30,12 +30,10 @@ Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
 \item{header}{(\code{shiny.tag} or \code{character}) \cr
-the header of the app. Note shiny code placed here (and in the footer
-argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
-(such as loading \code{CSS} via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
+The header of the app.}
 
 \item{footer}{(\code{shiny.tag} or \code{character})\cr
-the footer of the app}
+The footer of the app.}
 
 \item{teal_data_rv}{(\code{reactive})\cr
 returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}

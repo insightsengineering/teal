@@ -2,19 +2,24 @@
 % Please edit documentation in R/utils.R
 \name{create_app_id}
 \alias{create_app_id}
-\title{Creates App ID as a hash of the input data and modules.}
+\title{Application ID}
 \usage{
 create_app_id(data, modules)
 }
 \arguments{
-\item{data}{data object}
+\item{data}{\code{teal_data} or \code{teal_data_module} as accepted by \code{init}}
 
-\item{modules}{modules object}
+\item{modules}{\code{teal_modules} object as accepted by \code{init}}
 }
 \value{
-character(1) with hash
+A single character string.
 }
 \description{
-Creates App ID as a hash of the input data and modules.
+Creates App ID used to match filter snapshots to application.
+}
+\details{
+Calculate app ID that will be used to stamp filter state snapshots.
+App ID is a hash of the app's data and modules.
+See "transferring snapshots" section in ?snapshot.
 }
 \keyword{internal}
