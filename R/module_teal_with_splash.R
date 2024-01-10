@@ -24,9 +24,21 @@ ui_teal_with_splash <- function(id,
                                 footer = tags$p()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
-  checkmate::assert_multi_class(title, c("shiny.tag", "character"))
-  checkmate::assert_multi_class(header, c("shiny.tag", "character"))
-  checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
+  checkmate::assert(
+    .var.name = "title",
+    checkmate::check_string(title),
+    checkmate::check_multi_class(title, c("shiny.tag", "shiny.tag.list", "html"))
+  )
+  checkmate::assert(
+    .var.name = "header",
+    checkmate::check_string(header),
+    checkmate::check_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
+  )
+  checkmate::assert(
+    .var.name = "footer",
+    checkmate::check_string(footer),
+    checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
+  )
 
   ns <- NS(id)
 

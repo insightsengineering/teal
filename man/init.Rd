@@ -26,8 +26,8 @@ nested list of \code{teal_modules} or \code{teal_module} objects or a single
 will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{title}{(\code{shiny.tag} or \code{character})\cr
-The browser window title. Defaults to a title "Teal app" with the icon of NEST.
+\item{title}{(\code{shiny.tag} or \code{character(1)})\cr
+The browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
@@ -36,10 +36,10 @@ Specification of initial filter. Filters can be specified using \code{\link[=tea
 Old way of specifying filters through a list is deprecated and will be removed in the
 next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 
-\item{header}{(\code{shiny.tag} or \code{character}) \cr
+\item{header}{(\code{shiny.tag} or \code{character(1)}) \cr
 The header of the app.}
 
-\item{footer}{(\code{shiny.tag} or \code{character})\cr
+\item{footer}{(\code{shiny.tag} or \code{character(1)})\cr
 The footer of the app.}
 
 \item{id}{(\code{character})\cr

@@ -70,19 +70,27 @@ ui_teal <- function(id,
 
   if (is.character(title)) {
     title <- build_app_title(title)
+  } else {
+    validate_app_title_tag(title)
   }
-  validate_app_title_tag(title)
 
+  checkmate::assert(
+    .var.name = "header",
+    checkmate::check_string(header),
+    checkmate::check_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
+  )
   if (checkmate::test_string(header)) {
     header <- tags$p(header)
   }
-  checkmate::assert_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
 
+  checkmate::assert(
+    .var.name = "footer",
+    checkmate::check_string(footer),
+    checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
+  )
   if (checkmate::test_string(footer)) {
     footer <- tags$p(footer)
   }
-  checkmate::assert_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
-
 
   ns <- NS(id)
 

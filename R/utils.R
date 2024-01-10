@@ -243,7 +243,8 @@ validate_app_title_tag <- function(shiny_tag) {
   checkmate::assert_subset(c("title", "link"), child_names, .var.name = "child tags")
   rel_attr <- shiny_tag$children[[which(child_names == "link")]]$attribs$rel
   checkmate::assert_subset(
-    rel_attr, c("icon", "shortcut icon"),
+    rel_attr,
+    c("icon", "shortcut icon"),
     .var.name = "Link tag's rel attribute",
     empty.ok = FALSE
   )
@@ -259,7 +260,7 @@ validate_app_title_tag <- function(shiny_tag) {
 #'
 #' @return A `shiny.tag` containing the element that adds the title and logo to the shiny app
 #' @export
-build_app_title <- function(title = "Teal app", favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") { # nolint
+build_app_title <- function(title = "teal app", favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") { # nolint
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_string(favicon, null.ok = TRUE)
   tags$head(

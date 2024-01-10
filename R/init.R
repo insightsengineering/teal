@@ -23,17 +23,17 @@
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
 #'   will be displayed in the teal application. See [modules()] and [module()] for
 #'   more details.
-#' @param title (`shiny.tag` or `character`)\cr
-#'   The browser window title. Defaults to a title "Teal app" with the icon of NEST.
+#' @param title (`shiny.tag` or `character(1)`)\cr
+#'   The browser window title. Defaults to a title "teal app" with the icon of NEST.
 #'   Can be created using the `build_app_title()` or
 #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
 #' @param filter (`teal_slices`)\cr
 #'   Specification of initial filter. Filters can be specified using [teal::teal_slices()].
 #'   Old way of specifying filters through a list is deprecated and will be removed in the
 #'   next release. Please fix your applications to use [teal::teal_slices()].
-#' @param header (`shiny.tag` or `character`) \cr
+#' @param header (`shiny.tag` or `character(1)`) \cr
 #'   The header of the app.
-#' @param footer (`shiny.tag` or `character`)\cr
+#' @param footer (`shiny.tag` or `character(1)`)\cr
 #'   The footer of the app.
 #' @param id (`character`)\cr
 #'   module id to embed it, if provided,
@@ -105,7 +105,7 @@ init <- function(data,
                  header = tags$p(),
                  footer = tags$p(),
                  id = character(0)) {
-  logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
+  logger::log_trace("init initializing teal app with: data ({ toString(sQuote(class(data))) }).")
 
   # argument checking (independent)
   ## `data`
@@ -119,20 +119,26 @@ init <- function(data,
       )
     )
   }
+  checkmate::assert(
+    .var.name = "data",
+    checkmate::check_multi_class(data, c("teal_data", "teal_data_module")),
+    checkmate::check_list(data, names = "named")
+  )
   if (is.list(data) && !inherits(data, "teal_data_module")) {
-    checkmate::assert_list(data, names = "named")
     data <- do.call(teal.data::teal_data, data)
   }
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
 
   ## `modules`
+  checkmate::assert(
+    checkmate::check_multi_class(modules, c("teal_modules", "teal_module")),
+    checkmate::check_list(modules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
+  )
   if (inherits(modules, "teal_module")) {
     modules <- list(modules)
   }
-  if (inherits(modules, "list")) {
+  if (checkmate::test_list(modules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))) {
     modules <- do.call(teal::modules, modules)
   }
-  checkmate::assert_class(modules, "teal_modules")
 
   ## `filter`
   checkmate::assert(
@@ -142,25 +148,36 @@ init <- function(data,
   )
 
   ## all other arguments
-  checkmate::assert_multi_class(title, c("shiny.tag", "character"))
-  checkmate::assert_multi_class(header, c("shiny.tag", "character"))
-  checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
+  checkmate::assert(
+    .var.name = "title",
+    checkmate::check_string(title),
+    checkmate::check_multi_class(title, c("shiny.tag", "shiny.tag.list", "html"))
+  )
+  checkmate::assert(
+    .var.name = "header",
+    checkmate::check_string(header),
+    checkmate::check_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
+  )
+  checkmate::assert(
+    .var.name = "footer",
+    checkmate::check_string(footer),
+    checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
+  )
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   # log
   teal.logger::log_system_info()
 
-  # argument mutation
+  # argument transformations
   ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
   landing_module <- NULL
-  if (length(landing) > 1L) {
-    stop("Only one `landing_popup_module` can be used.")
-  } else if (length(landing) == 1) {
+  if (length(landing) == 1L) {
     landing_module <- landing[[1L]]
+    modules <- drop_module(modules, "teal_module_landing")
+  } else if (length(landing) > 1L) {
+    stop("Only one `landing_popup_module` can be used.")
   }
-  modules <- drop_module(modules, "teal_module_landing")
-  rm(landing)
 
   ## `filter` - app_id attribute
   attr(filter, "app_id") <- create_app_id(data, modules)
