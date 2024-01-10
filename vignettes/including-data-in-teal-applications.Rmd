@@ -63,13 +63,13 @@ This can be done using the `eval_code` function or, more conveniently, using the
 
 ```{r}
 # create empty object
-data0 <- teal_data()
+data_empty <- teal_data()
 
 # run code in the object
-data1 <- eval_code(data0, code = "iris <- iris
-                                  cars <- mtcars")
+data_populated_1 <- eval_code(data_empty, code = "iris <- iris
+                                                  cars <- mtcars")
 # alternative
-data2 <- within(data0, {
+data_populated_2 <- within(data_empty, {
   iris <- iris
   cars <- mtcars
 })
