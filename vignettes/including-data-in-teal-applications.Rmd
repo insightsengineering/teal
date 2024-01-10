@@ -76,7 +76,7 @@ data2 <- within(data0, {
 ```
 
 The key difference between `eval_code` and `within` is that the former accepts code as character vector or language objects (calls and expressions), while `within` accepts _only_ inline code.
-See `?eval_code` for more details.
+See `?qenv` for more details.
 
 Note that with `data` the code that created the data objects is unknown so the process cannot be reproduced.
 The necessary code can be added with the `code` argument of the `teal_data` function but in that case the code may not reproduce the environment.
