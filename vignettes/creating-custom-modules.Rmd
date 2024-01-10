@@ -120,11 +120,11 @@ srv_histogram_example <- function(id, data) {
 
     # update dataset and variable choices
     # each selection stored in separate reactive expression
-    updateSelectInput(session, "datasets", "select dataset", choices = isolate(datanames(data())))
+    updateSelectInput(inputId = "datasets", choices = isolate(datanames(data())))
     observe({
       req(dataset())
       nums <- vapply(data()[[dataset()]], is.numeric, logical(1L))
-      updateSelectInput(session, "numerics", "select numeric variable", choices = names(nums[nums]))
+      updateSelectInput(inputId = "numerics", choices = names(nums[nums]))
     })
     dataset <- reactive(input$datasets)
     selected <- reactive(input$numerics)
