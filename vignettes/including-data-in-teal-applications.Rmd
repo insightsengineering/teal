@@ -66,8 +66,8 @@ This can be done using the `eval_code` function or, more conveniently, using the
 data0 <- teal_data()
 
 # run code in the object
-data1 <- teal.code::eval_code(data0, code = "iris <- iris
-                                             cars <- mtcars")
+data1 <- eval_code(data0, code = "iris <- iris
+                                  cars <- mtcars")
 # alternative
 data2 <- within(data0, {
   iris <- iris
