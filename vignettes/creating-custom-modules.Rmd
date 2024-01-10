@@ -1,7 +1,9 @@
 ---
 title: "Creating Custom Modules"
 author: "NEST CoreDev"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Creating Custom Modules}
   %\VignetteEngine{knitr::rmarkdown}
