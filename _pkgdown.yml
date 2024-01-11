@@ -6,9 +6,12 @@ template:
 
 navbar:
   structure:
-    left: [intro, reference, articles, blueprint, tutorials, news, reports]
+    left: [get-started, reference, articles, blueprint, tutorials, news, reports]
     right: [search, github]
   components:
+    get-started:
+      text: Get Started
+      href: articles/getting-started-with-teal.html 
     reports:
       text: Reports
       menu:
@@ -48,7 +51,7 @@ articles:
 - title: Get Started
   navbar: ~
   contents:
-    - teal
+    - getting-started-with-teal
 - title: Using teal
   navbar: Using teal
   contents:
@@ -124,9 +127,6 @@ reference:
       - within.teal_data_module
       - show_rcode_modal
       - join_keys.tdata
-  # - title: Functions Moved to Other Packages
-    # desc: These functions have been moved from teal and will be deprecated
-    # contents:
   - title: Validation Functions
     contents:
       - starts_with("validate_")
