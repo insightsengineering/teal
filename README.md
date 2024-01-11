@@ -76,26 +76,27 @@ pak::pak("insightsengineering/teal")
 library(teal)
 
 app <- init(
-  data = teal_data(
-    dataset("iris", iris)
-  ),
+  data = teal_data(iris = iris),
   modules = list(
-    module(
-      "iris histogram",
+    module( 
+      label = "iris histogram",
       server = function(input, output, session, data) {
-        output$hist <- renderPlot(
-          hist(data[["iris"]]()[[input$var]])
-        )
+        updateSelectInput(session = session,
+                          inputId =  "var",
+                          choices = names(data()[["iris"]])[1:4])
+        
+        output$hist <- renderPlot({
+          req(input$var)
+          hist(x = data()[["iris"]][[input$var]])
+        })
       },
-      ui = function(id, data, ...) {
+      ui = function(id) {
         ns <- NS(id)
         list(
-          shiny::selectInput(
-            ns("var"),
-            "Column name",
-            names(data[["iris"]]())[1:4]
-          ),
-          plotOutput(ns("hist"))
+          selectInput(inputId = ns("var"),
+                      label =  "Column name",
+                      choices = NULL),
+          plotOutput(outputId = ns("hist"))
         )
       }
     )
