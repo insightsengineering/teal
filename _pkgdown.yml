@@ -10,7 +10,7 @@ navbar:
     right: [search, github]
   components:
     get-started:
-      text: Get Started
+      text: Get started
       href: articles/getting-started-with-teal.html 
     reports:
       text: Reports
@@ -48,8 +48,8 @@ navbar:
       href: https://github.com/insightsengineering/teal
 
 articles:
-- title: Get Started
-  navbar: ~
+- title: Get started
+  navbar: Get started
   contents:
     - getting-started-with-teal
 - title: Using teal
