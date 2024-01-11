@@ -125,10 +125,7 @@ init <- function(data,
 
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
-  checkmate::assert(
-    checkmate::check_class(filter, "teal_slices"),
-    checkmate::check_list(filter, names = "named")
-  )
+  checkmate::assert_class(filter, "teal_slices")
   checkmate::assert_multi_class(title, c("shiny.tag", "character"))
   checkmate::assert_multi_class(header, c("shiny.tag", "character"))
   checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
