@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9036</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9037</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,11 +37,15 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
+  <a class="nav-link" href="../articles/getting-started-with-teal.html">Get started</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>Get started</h6>
     <a class="dropdown-item" href="../articles/getting-started-with-teal.html">Getting Started with teal</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Using teal</h6>
@@ -78,16 +82,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -172,7 +166,7 @@ configuring the module to preview the report is handled by
 <span>    <span class="op">}</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://github.com/insightsengineering/teal.widgets/reference/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
+<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        encoding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
@@ -213,7 +207,7 @@ will be included when the module is called. See below:</p>
 <span>    <span class="op">}</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://github.com/insightsengineering/teal.widgets/reference/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
+<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        encoding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
@@ -262,7 +256,7 @@ into the module body.</p>
 <span>    <span class="op">}</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://github.com/insightsengineering/teal.widgets/reference/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
+<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
 <span>          <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_ui.html">simple_reporter_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"reporter"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span></span>
@@ -327,7 +321,7 @@ return the <code>card</code> object, otherwise errors may occur in
 <span>    <span class="op">}</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://github.com/insightsengineering/teal.widgets/reference/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
+<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
 <span>          <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/reference/simple_reporter_ui.html">simple_reporter_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"reporter"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span></span>
@@ -465,7 +459,7 @@ the table along with the table itself. To learn more about
 <span>    <span class="op">}</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://github.com/insightsengineering/teal.widgets/reference/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
+<span>      <span class="fu">teal.widgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teal.widgets/man/standard_layout.html" class="external-link">standard_layout</a></span><span class="op">(</span></span>
 <span>        output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">tableOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"table"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        encoding <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
 <span>          <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
