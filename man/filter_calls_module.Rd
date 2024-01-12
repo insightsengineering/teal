@@ -11,7 +11,7 @@ filter_calls_module(label = "Filter Calls Module")
 }
 \description{
 Please do not remove, this is useful for debugging \code{teal} without
-dependencies and simplifies \verb{\link[devtools]\{load_all\}} which otherwise fails
+dependencies and simplifies \code{\link[devtools:load_all]{devtools::load_all}} which otherwise fails
 and avoids session restarts!
 }
 \keyword{internal}

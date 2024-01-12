@@ -31,9 +31,9 @@ A \code{tdata} object
 Create a new object called \code{tdata} which contains \code{data}, a \code{reactive} list of \code{data.frames}
 (or \code{MultiAssayExperiment}), with attributes:
 \itemize{
-\item{\code{code} (\code{reactive}) containing code used to generate the data}
-\item{join_keys (\code{join_keys}) containing the relationships between the data}
-\item{metadata (\verb{named list}) containing any metadata associated with the data frames}
+\item \code{code} (\code{reactive}) containing code used to generate the data
+\item join_keys (\code{join_keys}) containing the relationships between the data
+\item metadata (\verb{named list}) containing any metadata associated with the data frames
 }
 }
 \examples{

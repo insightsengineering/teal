@@ -14,7 +14,7 @@
 #'
 #' @export
 #'
-#' @return object of class \code{teal_modules}. Object contains following fields
+#' @return object of class `teal_modules`. Object contains following fields
 #' - `label`: taken from the `label` argument
 #' - `children`: a list containing objects passed in `...`. List elements are named after
 #' their `label` attribute converted to a valid `shiny` id.

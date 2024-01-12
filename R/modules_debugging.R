@@ -6,7 +6,7 @@
 #'
 #'
 #' Please do not remove, this is useful for debugging `teal` without
-#' dependencies and simplifies `\link[devtools]{load_all}` which otherwise fails
+#' dependencies and simplifies [`devtools::load_all`] which otherwise fails
 #' and avoids session restarts!
 #'
 #' @param label `character` label of module
