@@ -116,7 +116,6 @@ srv_histogram_example <- function(id, data) {
   checkmate::assert_class(isolate(data()), "teal_data")
 
   moduleServer(id, function(input, output, session) {
-
     # update dataset and variable choices
     # each selection stored in separate reactive expression
     updateSelectInput(session, "datasets", "select dataset", choices = isolate(datanames(data())))
