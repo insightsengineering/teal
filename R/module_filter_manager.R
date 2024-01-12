@@ -156,7 +156,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     })
 
     # Call snapshot manager.
-    snapshot_history <- snapshot_manager_srv("snapshot_manager", slices_global, mapping_matrix, filtered_data_list)
+    snapshot_history <- snapshot_manager_srv("snapshot_manager")
     # Call state manager.
     state_manager_srv("state_manager", slices_global, mapping_matrix, filtered_data_list, snapshot_history)
 
@@ -272,7 +272,10 @@ create_mapping_matrix <- function(filtered_data_list, slices_global) {
 
 
 # ! this function is very impure, it depends on caller state and causes side effects in app session !
-set_intermodule_objects <- function(obj = c("slices_global", "filtered_data_list", "mapping_matrix")) {
+set_intermodule_objects <- function(
+    obj = c("slices_global", "filtered_data_list", "mapping_matrix", "snapshot_history")
+) {
+
   obj <- match.arg(obj)
   sesh <- get_master_session()
 
@@ -308,6 +311,20 @@ set_intermodule_objects <- function(obj = c("slices_global", "filtered_data_list
         sesh$userData$mapping_matrix <- create_mapping_matrix(filtered_data_list, slices_global)
       } else {
         sesh$userData$mapping_matrix
+      }
+    },
+
+    "snapshot_history" = { # `reactiveVal`
+      # restored from session OR created from slices_global and stored in session
+      if (is.null(sesh$userData$snapshot_history)) {
+        slices_global <- dynGet("slices_global")
+        sesh$userData$snapshot_history <- reactiveVal({
+          list(
+            "Initial application state" = as.list(isolate(slices_global()), recursive = TRUE)
+          )
+        })
+      } else {
+        sesh$userData$snapshot_history
       }
     }
 
