@@ -2,7 +2,7 @@
 % Please edit documentation in R/teal_slices-store.R
 \name{slices_store}
 \alias{slices_store}
-\title{Store teal_slices object to a file}
+\title{Store \code{teal_slices} object to a file}
 \usage{
 slices_store(tss, file)
 }

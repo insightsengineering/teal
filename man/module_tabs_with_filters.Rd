@@ -4,7 +4,7 @@
 \alias{module_tabs_with_filters}
 \alias{ui_tabs_with_filters}
 \alias{srv_tabs_with_filters}
-\title{Add right filter panel into each of the top-level \code{teal_modules} UIs.}
+\title{Add right filter panel into each of the top-level \code{teal_modules} \code{ui}s.}
 \usage{
 ui_tabs_with_filters(id, modules, datasets, filter = teal_slices())
 
@@ -30,10 +30,10 @@ When filter is not module-specific then list contains the same object in all ele
 }
 \value{
 A \code{tagList} of The main menu, place holders for filters and
-place holders for the teal modules
+place holders for the \code{teal} modules
 }
 \description{
-The \link{ui_nested_tabs} function returns a nested tabbed UI corresponding
+The \link{ui_nested_tabs} function returns a nested tabbed \code{ui} corresponding
 to the nested modules.
 This function adds the right filter panel to each main tab.
 }

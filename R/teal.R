@@ -1,6 +1,6 @@
-#' teal: Interactive Exploration of Clinical Trials Data
+#' `teal`: Interactive exploration of clinical trials data
 #'
-#' The teal package provides a shiny based framework for creating an
+#' The `teal` package provides a `shiny` based framework for creating an
 #' interactive data analysis environment.
 #'
 #' To learn mode about the package either read the project website at

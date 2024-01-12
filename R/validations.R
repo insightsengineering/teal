@@ -195,8 +195,8 @@ validate_has_elements <- function(x, msg) {
 #' Validates no intersection between two vectors
 #'
 #' @description `r lifecycle::badge("stable")`
-#' @param x vector
-#' @param y vector
+#' @param x `vector`
+#' @param y `vector`
 #' @param msg message to display if \code{x} and \code{y} intersect
 #'
 #' @details This function is a wrapper for `shiny::validate`.
@@ -248,7 +248,7 @@ validate_no_intersection <- function(x, y, msg) {
 #' Validates that dataset contains specific variable
 #'
 #' @description `r lifecycle::badge("stable")`
-#' @param data a data.frame
+#' @param data a `data.frame`
 #' @param varname name of variable in \code{data}
 #' @param msg message to display if \code{data} does not include \code{varname}
 #'

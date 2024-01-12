@@ -1,4 +1,4 @@
-#' Evaluate Expression on `teal_data_module`
+#' Evaluate expression on `teal_data_module`
 #'
 #' @details
 #' `within` is a convenience function for evaluating inline code inside the environment of a `teal_data_module`.

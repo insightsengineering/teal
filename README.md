@@ -1,4 +1,4 @@
-# `teal`: Interactive Exploratory Data Analysis with Shiny Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%; max-height: 139px;"/></a  >
+# `teal`: Interactive exploratory data analysis with shiny web-applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%; max-height: 139px;"/></a  >
 
 <!-- start badges -->
 [![CRAN Version](https://www.r-pkg.org/badges/version/teal?color=green)](https://cran.r-project.org/package=teal)
@@ -33,7 +33,7 @@
     -    Related datasets, for example a set of `data.frames` with key columns to enable data joins
     -    `MultiAssayExperiment` objects which are R data structures for representing and analyzing multi-omics experiments
 -   `teal` modules:
-    -   `teal modules` are shiny modules built within the `teal` framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, many `teal` modules have been released and we recommend starting with modules found in the following packages:
+    -   `teal modules` are `shiny` modules built within the `teal` framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, many `teal` modules have been released and we recommend starting with modules found in the following packages:
         -   [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/latest-tag/): general modules for exploring relational/independent/`CDISC` data
         -   [`teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/latest-tag/): modules specific to `CDISC` data and clinical trial reporting
         -   [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/latest-tag/): modules for analyzing `MultiAssayExperiment` objects
@@ -44,7 +44,7 @@ A lot of the functionality of the `teal` framework derives from the following pa
 
 <!-- markdownlint-disable MD007 MD030 -->
 -   [`teal.data`](https://insightsengineering.github.io/teal.data/latest-tag/): creating and loading the data needed for `teal` applications.
--   [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/latest-tag/): shiny components used within `teal`.
+-   [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/latest-tag/): `shiny` components used within `teal`.
 -   [`teal.slice`](https://insightsengineering.github.io/teal.slice/latest-tag/): provides a filtering panel to allow filtering of data.
 -   [`teal.code`](https://insightsengineering.github.io/teal.code/latest-tag/): handles reproducibility of outputs.
 -   [`teal.logger`](https://insightsengineering.github.io/teal.logger/latest-tag/): standardizes logging within `teal` framework.

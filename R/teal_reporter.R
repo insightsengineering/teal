@@ -1,7 +1,7 @@
 #' @title `TealReportCard`
 #' @description `r lifecycle::badge("experimental")`
-#' A child of [`ReportCard`] that is used for teal specific applications.
-#' In addition to the parent methods, it supports rendering teal specific elements such as
+#' A child of [`ReportCard`] that is used for `teal` specific applications.
+#' In addition to the parent methods, it supports rendering `teal` specific elements such as
 #' the source code, the encodings panel content and the filter panel content as part of the
 #' meta data.
 #' @export
@@ -46,7 +46,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name_linter.
     },
     #' @description Appends the encodings list to the `content` and `metadata` of this `TealReportCard`.
     #'
-    #' @param encodings (`list`) list of encodings selections of the teal app.
+    #' @param encodings (`list`) list of encodings selections of the `teal` app.
     #' @return invisibly self
     #' @examples
     #' card <- TealReportCard$new()$append_encodings(list(variable1 = "X"))

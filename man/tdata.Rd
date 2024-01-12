@@ -3,7 +3,7 @@
 \name{tdata}
 \alias{tdata}
 \alias{new_tdata}
-\title{Create a \code{tdata} Object}
+\title{Create a \code{tdata} object}
 \usage{
 new_tdata(data, code = "", join_keys = NULL, metadata = NULL)
 }
@@ -20,7 +20,7 @@ object \code{code} will be made reactive}
 \item{join_keys}{A \code{teal.data::join_keys} object containing relationships between the
 datasets.}
 
-\item{metadata}{A \verb{named list} each element contains a list of metadata about the named data.frame
+\item{metadata}{A \verb{named list} each element contains a list of metadata about the named \code{data.frame}
 Each element of these list should be atomic and length one.}
 }
 \value{
@@ -28,7 +28,7 @@ A \code{tdata} object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-Create a new object called \code{tdata} which contains \code{data}, a \code{reactive} list of data.frames
+Create a new object called \code{tdata} which contains \code{data}, a \code{reactive} list of \code{data.frames}
 (or \code{MultiAssayExperiment}), with attributes:
 \itemize{
 \item{\code{code} (\code{reactive}) containing code used to generate the data}

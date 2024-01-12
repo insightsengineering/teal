@@ -4,9 +4,9 @@
 \name{teal-package}
 \alias{teal}
 \alias{teal-package}
-\title{teal: Interactive Exploration of Clinical Trials Data}
+\title{\code{teal}: Interactive exploration of clinical trials data}
 \description{
-The teal package provides a shiny based framework for creating an
+The \code{teal} package provides a \code{shiny} based framework for creating an
 interactive data analysis environment.
 }
 \details{

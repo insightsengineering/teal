@@ -1,4 +1,4 @@
-#' Store teal_slices object to a file
+#' Store `teal_slices` object to a file
 #'
 #' This function takes a `teal_slices` object and saves it to a file in `JSON` format.
 #' The `teal_slices` object contains information about filter states and can be used to
@@ -26,7 +26,7 @@ slices_store <- function(tss, file) {
   cat(format(tss, trim_lines = FALSE), "\n", file = file)
 }
 
-#' Restore teal_slices object from a file
+#' Restore `teal_slices` object from a file
 #'
 #' This function takes a file path to a `JSON` file containing a `teal_slices` object
 #' and restores it to its original form. The restored `teal_slices` object can be used

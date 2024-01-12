@@ -7,7 +7,7 @@
 validate_has_variable(data, varname, msg)
 }
 \arguments{
-\item{data}{a data.frame}
+\item{data}{a \code{data.frame}}
 
 \item{varname}{name of variable in \code{data}}
 

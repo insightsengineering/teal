@@ -1,7 +1,7 @@
-#' Create a `tdata` Object
+#' Create a `tdata` object
 #'
 #' @description `r lifecycle::badge("deprecated")`
-#' Create a new object called `tdata` which contains `data`, a `reactive` list of data.frames
+#' Create a new object called `tdata` which contains `data`, a `reactive` list of `data.frames`
 #' (or `MultiAssayExperiment`), with attributes:
 #' \itemize{
 #'   \item{`code` (`reactive`) containing code used to generate the data}
@@ -18,7 +18,7 @@
 #'   object `code` will be made reactive
 #' @param join_keys A `teal.data::join_keys` object containing relationships between the
 #'   datasets.
-#' @param metadata A `named list` each element contains a list of metadata about the named data.frame
+#' @param metadata A `named list` each element contains a list of metadata about the named `data.frame`
 #' Each element of these list should be atomic and length one.
 #' @return A `tdata` object
 #'
@@ -86,7 +86,8 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
 }
 
 #' Function to convert a `tdata` object to an `environment`
-#' Any `reactives` inside `tdata` are first evaluated
+#'
+#' Any `reactives` inside `tdata` are first evaluated.
 #' @param data a `tdata` object
 #' @return an `environment`
 #' @examples
@@ -107,7 +108,8 @@ tdata2env <- function(data) { # nolint
 
 
 #' Wrapper for `get_code.tdata`
-#' This wrapper is to be used by downstream packages to extract the code of a `tdata` object
+#'
+#' This wrapper is to be used by downstream packages to extract the code of a `tdata` object.
 #'
 #' @param data (`tdata`) object
 #'
@@ -125,7 +127,6 @@ get_code_tdata <- function(data) {
 join_keys.tdata <- function(data, ...) {
   attr(data, "join_keys")
 }
-
 
 #' Function to get metadata from a `tdata` object
 #' @param data `tdata` - object to extract the data from
@@ -154,13 +155,13 @@ get_metadata.default <- function(data, dataname) {
 }
 
 
-#' Downgrade `teal_data` objects in modules for compatibility.
+#' Downgrade `teal_data` objects in modules for compatibility
 #'
 #' Convert `teal_data` to `tdata` in `teal` modules.
 #'
 #' Recent changes in `teal` cause modules to fail because modules expect a `tdata` object
 #' to be passed to the `data` argument but instead they receive a `teal_data` object,
-#' which is additionally wrapped in a reactive expression in the server functions.
+#' which is additionally wrapped in a reactive expression in the `server` functions.
 #' In order to easily adapt such modules without a proper refactor,
 #' use this function to downgrade the `data` argument.
 #'

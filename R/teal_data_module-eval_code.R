@@ -1,6 +1,6 @@
 setOldClass("teal_data_module")
 
-#' Evaluate Code on `teal_data_module`
+#' Evaluate code on `teal_data_module`
 #'
 #' @details
 #' `eval_code` evaluates given code in the environment of the `teal_data` object created by the `teal_data_module`.
