@@ -44,7 +44,7 @@ options("teal.bs_theme" = bslib::bs_theme_update(bslib::bs_theme(version = "5"),
 
 ### Default Bootstrap theme
 
-When using the default `bslib` theme for any version (3, 4 or 5), its styling might not be as expected. Please run the interactive `themer` (recommended) or apply a custom theme to explore all the theme options. **In many scenarios updating only the theme might not be enough and e.g. font color and other specifications should be updated too.**
+When using the default `bslib` theme for any version (3, 4 or 5), its styling might not be as expected. Please run the interactive themer (recommended) or apply a custom theme to explore all the theme options. **In many scenarios updating only the theme might not be enough and e.g. font color and other specifications should be updated too.**
 
 ```
 # instead of
@@ -89,7 +89,7 @@ If you want to update the theme in a regular `shiny::fluidPage`-like app, you do
 
 ### Interactive theming guide
 
-In this section, we provide a step-by-step guide to customizing a `teal` application theme interactively with `bslib::run_with_themer()`. We recommend starting with a simple case and once you are satisfied, verifying with your full application. To that end we will use the `teal` application below. For this example we assume that we want to use Bootstrap 5. To start, we launch the app with `bslib::run_with_themer(app$ui, app$server)` instead of `shiny::shinyApp`.
+In this section we provide a step-by-step guide to customizing a `teal` application theme interactively with `bslib::run_with_themer()`. We recommend starting with a simple case and once you are satisfied, verifying with your full application. To that end we will use the `teal` application below. For this example we assume that we want to use Bootstrap 5. To start, we launch the app with `bslib::run_with_themer(app$ui, app$server)` instead of `shiny::shinyApp`.
 
 ```{r, eval = FALSE}
 options("teal.bs_theme" = bslib::bs_theme(version = "5"))
@@ -141,7 +141,7 @@ As expected, our corners are no longer rounded. If we look at our R console, we 
 
 #### Apply the customized theme
 
-Once our customization is complete, we will apply the changes to our application. To do this, we use the option `teal.bs_theme` like before but this time we will expand on our `bslib::bs_theme` call to include our changes. Luckily, the arguments that were printed to the R console when running our app in the `themer` can be plugged right in.
+Once our customization is complete, we will apply the changes to our application. To do this, we use the option `teal.bs_theme` like before but this time we will expand on our `bslib::bs_theme` call to include our changes. Luckily, the arguments that were printed to the R console when running our app in the themer can be plugged right in.
 
 ```{r eval = FALSE}
 options(
@@ -168,7 +168,7 @@ Now the application has our custom theme applied.
 
 <img src="images/bs-final.png" style="width: 100%;"/>
 
-Please note the interactive `themer` only contains the most commonly applied options.
+Please note the interactive themer only contains the most commonly applied options.
 For more customization options, review the `bslib` documentation.
 
 

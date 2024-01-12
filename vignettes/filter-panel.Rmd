@@ -16,7 +16,7 @@ The technical details of the filter panel are extensively described in [`teal.sl
 
 By default, `init` initializes the filter panel without any active filters but allows the user to add filters on any column.
 To start a `teal` application with predefined filters, one must specify the `filter` argument.
-In the following example, four filters are specified using the `teal_slice` function and wrapped together with `teal_slices`.
+In the following example four filters are specified using the `teal_slice` function and wrapped together with `teal_slices`.
 
 ```r
 library(teal)

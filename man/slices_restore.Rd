@@ -2,7 +2,7 @@
 % Please edit documentation in R/teal_slices-store.R
 \name{slices_restore}
 \alias{slices_restore}
-\title{Restore teal_slices object from a file}
+\title{Restore \code{teal_slices} object from a file}
 \usage{
 slices_restore(file)
 }

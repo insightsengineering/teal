@@ -10,8 +10,8 @@ filter_calls_module(label = "Filter Calls Module")
 \item{label}{\code{character} label of module}
 }
 \description{
-Please do not remove, this is useful for debugging teal without
-dependencies and simplifies \verb{\link[devtools]\{load_all\}} which otherwise fails
+Please do not remove, this is useful for debugging \code{teal} without
+dependencies and simplifies \code{\link[devtools:load_all]{devtools::load_all}} which otherwise fails
 and avoids session restarts!
 }
 \seealso{

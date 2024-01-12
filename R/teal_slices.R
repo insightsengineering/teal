@@ -1,4 +1,4 @@
-#' Filter settings for teal applications
+#' Filter settings for `teal` applications
 #'
 #' Specify initial filter states and filtering settings for a `teal` app.
 #'
