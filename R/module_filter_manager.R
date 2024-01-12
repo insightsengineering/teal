@@ -117,39 +117,13 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     # Contains all available teal_slice objects available to all modules.
     # Passed whole to instances of FilteredData used for individual modules.
     # Down there a subset that pertains to the data sets used in that module is applied and displayed.
-    slices_global <- reactiveVal(filter)
-
-    filtered_data_list <-
-      if (!is_module_specific) {
-        # Retrieve the first FilteredData from potentially nested list.
-        # List of length one is named "global_filters" because that name is forbidden for a module label.
-        list(global_filters = unlist(filtered_data_list)[[1]])
-      } else {
-        # Flatten potentially nested list of FilteredData objects while maintaining useful names.
-        # Simply using `unlist` would result in concatenated names.
-        flatten_nested <- function(x, name = NULL) {
-          if (inherits(x, "FilteredData")) {
-            setNames(list(x), name)
-          } else {
-            unlist(lapply(names(x), function(name) flatten_nested(x[[name]], name)))
-          }
-        }
-        flatten_nested(filtered_data_list)
-      }
-
-    # Create mapping fo filters to modules in matrix form (presented as data.frame).
-    # Modules get NAs for filters that cannot be set for them.
-    mapping_matrix <- reactive({
-      state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
-      mapping_smooth <- lapply(filtered_data_list, function(x) {
-        state_ids_local <- vapply(x$get_filter_state(), `[[`, character(1L), "id")
-        state_ids_allowed <- vapply(x$get_available_teal_slices()(), `[[`, character(1L), "id")
-        states_active <- state_ids_global %in% state_ids_local
-        ifelse(state_ids_global %in% state_ids_allowed, states_active, NA)
-      })
-
-      as.data.frame(mapping_smooth, row.names = state_ids_global, check.names = FALSE)
-    })
+    slices_global <- set_intermodule_objects("slices_global")
+    # Prepare FilteredData object according to app type (global/module-specific).
+    filtered_data_list <- set_intermodule_objects("filtered_data_list")
+    # Represent mapping of modules to filters.
+    mapping_matrix <- set_intermodule_objects("mapping_matrix")
+    # The three objects above are also stored in the app session's userData.
+    # They will be used in other modules and stored when bookmarking.
 
     output$slices_table <- renderTable(
       expr = {
@@ -251,4 +225,91 @@ filter_manager_module_srv <- function(id, module_fd, slices_global) {
 
     slices_module # returned for testing purpose
   })
+}
+
+
+
+# Functions that prepare objects.
+# Objects are first scoped in sesion (userData) and if not found, created and stored.
+
+# Obtain appropriate structure of `FilteredData` objects.
+# For global app, list of length 1 named "global_filters".
+# For module-specific app, list of length one-per-module, named after modules.
+create_filtered_data_list <- function(filtered_data_list, module_specific) {
+  if (!module_specific) {
+    # Retrieve the first FilteredData from potentially nested list.
+    # List of length one is named "global_filters" because that name is forbidden for a module label.
+    list(global_filters = unlist(filtered_data_list)[[1]])
+  } else {
+    flatten_nested(filtered_data_list)
+  }
+}
+# Flatten potentially nested list of FilteredData objects while maintaining useful names.
+# Simply using `unlist` would result in concatenated names.
+flatten_nested <- function(x, name = NULL) {
+  if (inherits(x, "FilteredData")) {
+    setNames(list(x), name)
+  } else {
+    unlist(lapply(names(x), function(name) flatten_nested(x[[name]], name)))
+  }
+}
+
+# Create mapping fo filters to modules in matrix form (presented as data.frame).
+# Modules get NAs for filters that cannot be set for them.
+create_mapping_matrix <- function(filtered_data_list, slices_global) {
+  reactive({
+    state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
+    mapping_smooth <- lapply(filtered_data_list, function(x) {
+      state_ids_local <- vapply(x$get_filter_state(), `[[`, character(1L), "id")
+      state_ids_allowed <- vapply(x$get_available_teal_slices()(), `[[`, character(1L), "id")
+      states_active <- state_ids_global %in% state_ids_local
+      ifelse(state_ids_global %in% state_ids_allowed, states_active, NA)
+    })
+
+    as.data.frame(mapping_smooth, row.names = state_ids_global, check.names = FALSE)
+  })
+}
+
+
+# ! this function is very impure, it depends on caller state and causes side effects in app session !
+set_intermodule_objects <- function(obj = c("slices_global", "filtered_data_list", "mapping_matrix")) {
+  obj <- match.arg(obj)
+  sesh <- get_master_session()
+
+  switch(
+    obj,
+
+    "slices_global" = { # `reactiveVal`
+      # restored from session OR created from filter and stored in session
+      if (is.null(sesh$userData$slices_global)) {
+        filter <- dynGet("filter")
+        sesh$userData$slices_global <- reactiveVal(filter)
+      } else {
+        sesh$userData$slices_global
+      }
+    },
+
+    "filtered_data_list" = { # list of `FilteredData`
+      # restored from session OR created from filtered_data_list and is_module_specific and stored in session
+      if (is.null(sesh$userData$filtered_data_list)) {
+        filtered_data_list <- dynGet("filtered_data_list")
+        is_module_specific <- dynGet("is_module_specific")
+        sesh$userData$filtered_data_list <- create_filtered_data_list(filtered_data_list, is_module_specific)
+      } else {
+        sesh$userData$filtered_data_list
+      }
+    },
+
+    "mapping_matrix" = { # `reactive`
+      # restored from session OR created from filtered_data_list and slices global and stored in session
+      if (is.null(sesh$userData$mapping_matrix)) {
+        filtered_data_list <- dynGet("filtered_data_list")
+        slices_global <- dynGet("slices_global")
+        sesh$userData$mapping_matrix <- create_mapping_matrix(filtered_data_list, slices_global)
+      } else {
+        sesh$userData$mapping_matrix
+      }
+    }
+
+  )
 }
