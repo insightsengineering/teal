@@ -4,11 +4,11 @@
 # error messages.
 
 
-#' Create the Server and UI Function For the Shiny App
+#' Create the `server` and `ui` function for the `shiny` app
 #'
 #' @description `r lifecycle::badge("stable")`
 #' End-users: This is the most important function for you to start a
-#' teal app that is composed out of teal modules.
+#' `teal` app that is composed out of `teal` modules.
 #'
 #' @details
 #' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
@@ -21,7 +21,7 @@
 #' @param modules (`list`, `teal_modules` or `teal_module`)\cr
 #'   nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
-#'   will be displayed in the teal application. See [modules()] and [module()] for
+#'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
 #' @param title (`shiny.tag` or `character`)\cr
 #'   The browser window title. Defaults to a title "Teal app" with the icon of NEST.
@@ -32,14 +32,14 @@
 #'   Old way of specifying filters through a list is deprecated and will be removed in the
 #'   next release. Please fix your applications to use [teal::teal_slices()].
 #' @param header (`shiny.tag` or `character`) \cr
-#'   the header of the app. Note shiny code placed here (and in the footer
+#'   the header of the app. Note `shiny` code placed here (and in the footer
 #'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
 #'   (such as loading `CSS` via [htmltools::htmlDependency()]) should be included here.
 #' @param footer (`shiny.tag` or `character`)\cr
 #'   the footer of the app
 #' @param id (`character`)\cr
 #'   module id to embed it, if provided,
-#'   the server function must be called with [shiny::moduleServer()];
+#'   the `server` function must be called with [shiny::moduleServer()];
 #'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
 #'
@@ -212,7 +212,7 @@ init <- function(data,
 
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
-  # the `ui` and `server` with `id = character(0)` and calling the server function directly
+  # the `ui` and `server` with `id = character(0)` and calling the `server` function directly
   # rather than through `callModule`
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),

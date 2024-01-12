@@ -4,7 +4,7 @@
 \alias{teal_slices}
 \alias{as.teal_slices}
 \alias{c.teal_slices}
-\title{Filter settings for teal applications}
+\title{Filter settings for \code{teal} applications}
 \usage{
 teal_slices(
   ...,

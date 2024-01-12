@@ -7,9 +7,9 @@
 validate_no_intersection(x, y, msg)
 }
 \arguments{
-\item{x}{vector}
+\item{x}{\code{vector}}
 
-\item{y}{vector}
+\item{y}{\code{vector}}
 
 \item{msg}{message to display if \code{x} and \code{y} intersect}
 }

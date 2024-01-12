@@ -1,6 +1,6 @@
 #' Filter manager modal
 #'
-#' Opens modal containing the filter manager UI.
+#' Opens modal containing the filter manager `ui`.
 #'
 #' @name module_filter_manager_modal
 #' @inheritParams filter_manager_srv
