@@ -156,9 +156,9 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     })
 
     # Call snapshot manager.
-    snapshot_history <- snapshot_manager_srv("snapshot_manager")
+    snapshot_manager_srv("snapshot_manager")
     # Call state manager.
-    state_manager_srv("state_manager", slices_global, mapping_matrix, filtered_data_list, snapshot_history)
+    state_manager_srv("state_manager")
 
     modules_out # returned for testing purpose
   })
@@ -273,7 +273,7 @@ create_mapping_matrix <- function(filtered_data_list, slices_global) {
 
 # ! this function is very impure, it depends on caller state and causes side effects in app session !
 set_intermodule_objects <- function(
-    obj = c("slices_global", "filtered_data_list", "mapping_matrix", "snapshot_history")
+    obj = c("slices_global", "filtered_data_list", "mapping_matrix", "snapshot_history", "grab_history")
 ) {
 
   obj <- match.arg(obj)
@@ -325,6 +325,16 @@ set_intermodule_objects <- function(
         })
       } else {
         sesh$userData$snapshot_history
+      }
+    },
+
+    "grab_history" = {
+      if (is.null(sesh$userData$grab_history)) {
+        sesh$userData$grab_history <- reactiveVal({
+          list()
+        })
+      } else {
+        sesh$userData$grab_history
       }
     }
 

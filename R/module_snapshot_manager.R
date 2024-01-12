@@ -320,7 +320,6 @@ snapshot_manager_srv <- function(id) {
       }
     })
 
-    return(snapshot_history)
   })
 }
 
