@@ -24,7 +24,7 @@
 #' `teal_data_module` returns an object of class `teal_data_module`.
 #'
 #' @examples
-#' teal_data_module(
+#' tdm <- teal_data_module(
 #'   ui = function(id) {
 #'     ns <- NS(id)
 #'     actionButton(ns("submit"), label = "Load data")
@@ -50,7 +50,7 @@
 #' @name teal_data_module
 #' @rdname teal_data_module
 #'
-#' @seealso [`teal_data-class`], [`base::within()`], [`teal.code::within.qenv()`]
+#' @seealso [`teal_data-class`], [`teal.code::qenv()`]
 #'
 #' @export
 teal_data_module <- function(ui, server) {

@@ -11,15 +11,7 @@
 #' `within` returns a `teal_data_module` object with a delayed evaluation of `expr` when the module is run.
 #'
 #' @examples
-#' tdm <- teal_data_module(
-#'   ui = function(id) div(id = NS(id)("div_id")),
-#'   server = function(id) {
-#'     moduleServer(id, function(input, output, session) {
-#'       reactive(teal_data(IRIS = iris))
-#'     })
-#'   }
-#' )
-#' within(tdm, IRIS <- subset(IRIS, Species == "virginica"))
+#' within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 #'
 #' @include teal_data_module.R
 #' @name within

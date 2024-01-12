@@ -62,7 +62,7 @@ The code is added to the \verb{@code} slot of the \code{teal_data}.
 \code{within} is a convenience function for evaluating inline code inside the environment of a \code{teal_data_module}.
 }
 \examples{
-teal_data_module(
+tdm <- teal_data_module(
   ui = function(id) {
     ns <- NS(id)
     actionButton(ns("submit"), label = "Load data")
@@ -85,27 +85,11 @@ teal_data_module(
   }
 )
 
-tdm <- teal_data_module(
-  ui = function(id) div(id = NS(id)("div_id")),
-  server = function(id) {
-    moduleServer(id, function(input, output, session) {
-      reactive(teal_data(IRIS = iris))
-    })
-  }
-)
-eval_code(tdm, "IRIS <- subset(IRIS, Species == 'virginica')")
+eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 
-tdm <- teal_data_module(
-  ui = function(id) div(id = NS(id)("div_id")),
-  server = function(id) {
-    moduleServer(id, function(input, output, session) {
-      reactive(teal_data(IRIS = iris))
-    })
-  }
-)
-within(tdm, IRIS <- subset(IRIS, Species == "virginica"))
+within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 
 }
 \seealso{
-\code{\linkS4class{teal_data}}, \code{\link[base:with]{base::within()}}, \code{\link[teal.code:qenv]{teal.code::within.qenv()}}
+\code{\linkS4class{teal_data}}, \code{\link[teal.code:qenv]{teal.code::qenv()}}
 }
