@@ -4,7 +4,7 @@
 \alias{module_teal}
 \alias{ui_teal}
 \alias{srv_teal}
-\title{teal main app module}
+\title{\code{teal} main app module}
 \usage{
 ui_teal(
   id,
@@ -20,9 +20,9 @@ srv_teal(id, modules, teal_data_rv, filter = teal_slices())
 \item{id}{(\code{character(1)})\cr
 module id}
 
-\item{splash_ui}{(\code{shiny.tag})\cr UI to display initially,
-can be a splash screen or a Shiny module UI. For the latter, see
-\code{\link[=init]{init()}} about how to call the corresponding server function.}
+\item{splash_ui}{(\code{shiny.tag})\cr \code{ui} to display initially,
+can be a splash screen or a \code{shiny} module \code{ui}. For the latter, see
+\code{\link[=init]{init()}} about how to call the corresponding \code{server} function.}
 
 \item{title}{(\code{shiny.tag} or \code{character})\cr
 The browser window title. Defaults to a title "Teal app" with the icon of NEST.
@@ -30,7 +30,7 @@ Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
 \item{header}{(\code{shiny.tag} or \code{character}) \cr
-the header of the app. Note shiny code placed here (and in the footer
+the header of the app. Note \code{shiny} code placed here (and in the footer
 argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
 (such as loading \code{CSS} via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
 
@@ -41,47 +41,32 @@ the footer of the app}
 returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
 }
 \value{
-\code{ui_teal} returns \code{HTML} for Shiny module UI.
+\code{ui_teal} returns \code{HTML} for \code{shiny} module \code{ui}.
 \code{srv_teal} returns \code{reactive} which returns the currently active module.
 }
 \description{
-This is the main teal app that puts everything together.
+This is the main \code{teal} app that puts everything together.
 }
 \details{
-It displays the splash UI which is used to fetch the data, possibly
+It displays the splash \code{ui} which is used to fetch the data, possibly
 prompting for a password input to fetch the data. Once the data is ready,
-the splash screen is replaced by the actual teal UI that is tabsetted and
+the splash screen is replaced by the actual \code{teal} \code{ui} that is tabsetted and
 has a filter panel with \code{datanames} that are relevant for the current tab.
 Nested tabs are possible, but we limit it to two nesting levels for reasons
-of clarity of the UI.
+of clarity of the \code{ui}.
 
 The splash screen functionality can also be used
 for non-delayed data which takes time to load into memory, avoiding
-Shiny session timeouts.
+\code{shiny} session timeouts.
 
-Server evaluates the \code{teal_data_rv} (delayed data mechanism) and creates the
+\code{server} evaluates the \code{teal_data_rv} (delayed data mechanism) and creates the
 \code{datasets} object that is shared across modules.
 Once it is ready and non-\code{NULL}, the splash screen is replaced by the
-main teal UI that depends on the data.
+main \code{teal} \code{ui} that depends on the data.
 The currently active tab is tracked and the right filter panel
 updates the displayed datasets to filter for according to the active \code{datanames}
 of the tab.
 
-It is written as a Shiny module so it can be added into other apps as well.
-}
-\examples{
-mods <- teal:::example_modules()
-teal_data_rv <- reactive(teal:::example_cdisc_data())
-app <- shinyApp(
-  ui = function() {
-    teal:::ui_teal("dummy")
-  },
-  server = function(input, output, session) {
-    active_module <- teal:::srv_teal(id = "dummy", modules = mods, teal_data_rv = teal_data_rv)
-  }
-)
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
+It is written as a \code{shiny} module so it can be added into other apps as well.
 }
 \keyword{internal}

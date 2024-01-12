@@ -25,9 +25,11 @@ example_module <- function(label = "example teal module") {
       checkmate::assert_class(data, "reactive")
       checkmate::assert_class(isolate(data()), "teal_data")
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$text <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
@@ -49,7 +51,7 @@ which can be added into `teal` apps using `example_module(label = "Label for tab
 ### UI function
 
 This function contains the UI required for the module.
-It should be a function with at least the arguments `id`.
+It should be a function with at least the argument `id`.
 It can also contain the argument `data` for access to the application data.
 See the server section below for more details.
 
@@ -114,7 +116,6 @@ srv_histogram_example <- function(id, data) {
   checkmate::assert_class(isolate(data()), "teal_data")
 
   moduleServer(id, function(input, output, session) {
-    ns <- session$ns
 
     # update dataset and variable choices
     # each selection stored in separate reactive expression

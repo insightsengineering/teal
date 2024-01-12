@@ -36,9 +36,11 @@ example_module <- function(label = "example teal module") {
     label,
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$text <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
@@ -78,9 +80,11 @@ example_module_with_reporting <- function(label = "example teal module") {
     label,
     server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$text <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
@@ -125,9 +129,11 @@ example_module_with_reporting <- function(label = "example teal module") {
           reporter = reporter,
           card_fun = function(card) card
         )
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$text <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
@@ -186,9 +192,11 @@ example_module_with_reporting <- function(label = "example teal module") {
           reporter = reporter,
           card_fun = custom_function
         )
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$text <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
@@ -258,7 +266,6 @@ example_reporter_module <- function(label = "Example") {
     server = function(id, data, reporter, filter_panel_api) {
       with_filter <- !missing(filter_panel_api) && inherits(filter_panel_api, "FilterPanelApi")
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
         dat <- reactive(data()[[input$dataname]])
         observe({

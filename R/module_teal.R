@@ -1,61 +1,47 @@
 # This module is the main teal module that puts everything together.
 
-#' teal main app module
+#' `teal` main app module
 #'
-#' This is the main teal app that puts everything together.
+#' This is the main `teal` app that puts everything together.
 #'
-#' It displays the splash UI which is used to fetch the data, possibly
+#' It displays the splash `ui` which is used to fetch the data, possibly
 #' prompting for a password input to fetch the data. Once the data is ready,
-#' the splash screen is replaced by the actual teal UI that is tabsetted and
+#' the splash screen is replaced by the actual `teal` `ui` that is tabsetted and
 #' has a filter panel with `datanames` that are relevant for the current tab.
 #' Nested tabs are possible, but we limit it to two nesting levels for reasons
-#' of clarity of the UI.
+#' of clarity of the `ui`.
 #'
 #' The splash screen functionality can also be used
 #' for non-delayed data which takes time to load into memory, avoiding
-#' Shiny session timeouts.
+#' `shiny` session timeouts.
 #'
-#' Server evaluates the `teal_data_rv` (delayed data mechanism) and creates the
+#' `server` evaluates the `teal_data_rv` (delayed data mechanism) and creates the
 #' `datasets` object that is shared across modules.
 #' Once it is ready and non-`NULL`, the splash screen is replaced by the
-#' main teal UI that depends on the data.
+#' main `teal` `ui` that depends on the data.
 #' The currently active tab is tracked and the right filter panel
 #' updates the displayed datasets to filter for according to the active `datanames`
 #' of the tab.
 #'
-#' It is written as a Shiny module so it can be added into other apps as well.
+#' It is written as a `shiny` module so it can be added into other apps as well.
 #'
 #' @name module_teal
 #'
 #' @inheritParams ui_teal_with_splash
 #'
-#' @param splash_ui (`shiny.tag`)\cr UI to display initially,
-#'   can be a splash screen or a Shiny module UI. For the latter, see
-#'   [init()] about how to call the corresponding server function.
+#' @param splash_ui (`shiny.tag`)\cr `ui` to display initially,
+#'   can be a splash screen or a `shiny` module `ui`. For the latter, see
+#'   [init()] about how to call the corresponding `server` function.
 #'
 #' @param teal_data_rv (`reactive`)\cr
 #'   returns the `teal_data`, only evaluated once, `NULL` value is ignored
 #'
 #' @return
-#' `ui_teal` returns `HTML` for Shiny module UI.
+#' `ui_teal` returns `HTML` for `shiny` module `ui`.
 #' `srv_teal` returns `reactive` which returns the currently active module.
 #'
 #' @keywords internal
 #'
-#' @examples
-#' mods <- teal:::example_modules()
-#' teal_data_rv <- reactive(teal:::example_cdisc_data())
-#' app <- shinyApp(
-#'   ui = function() {
-#'     teal:::ui_teal("dummy")
-#'   },
-#'   server = function(input, output, session) {
-#'     active_module <- teal:::srv_teal(id = "dummy", modules = mods, teal_data_rv = teal_data_rv)
-#'   }
-#' )
-#' if (interactive()) {
-#'   shinyApp(app$ui, app$server)
-#' }
 NULL
 
 #' @rdname module_teal
@@ -96,7 +82,7 @@ ui_teal <- function(id,
     div(splash_ui)
   )
 
-  # show busy icon when shiny session is busy computing stuff
+  # show busy icon when `shiny` session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 #nolint
   shiny_busy_message_panel <- conditionalPanel(
     condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint

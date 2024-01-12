@@ -2,7 +2,7 @@
 % Please edit documentation in R/landing_popup_module.R
 \name{landing_popup_module}
 \alias{landing_popup_module}
-\title{Landing Popup Module}
+\title{Landing popup module}
 \usage{
 landing_popup_module(
   label = "Landing Popup",
@@ -31,10 +31,10 @@ This module is used to display a popup dialog when the application starts.
 The dialog blocks the access to the application and must be closed with a button before the application is viewed.
 }
 \examples{
-app1 <- teal::init(
+app1 <- init(
   data = teal_data(iris = iris),
-  modules = teal::modules(
-    teal::landing_popup_module(
+  modules = modules(
+    landing_popup_module(
       content = "A place for the welcome message or a disclaimer statement.",
       buttons = modalButton("Proceed")
     ),
@@ -45,10 +45,10 @@ if (interactive()) {
   shinyApp(app1$ui, app1$server)
 }
 
-app2 <- teal::init(
+app2 <- init(
   data = teal_data(iris = iris),
-  modules = teal::modules(
-    teal::landing_popup_module(
+  modules = modules(
+    landing_popup_module(
       title = "Welcome",
       content = tags$b(
         "A place for the welcome message or a disclaimer statement.",
