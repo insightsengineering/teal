@@ -130,6 +130,7 @@ init <- function(data,
 
   ## `modules`
   checkmate::assert(
+    .var.name = "modules",
     checkmate::check_multi_class(modules, c("teal_modules", "teal_module")),
     checkmate::check_list(modules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
   )
