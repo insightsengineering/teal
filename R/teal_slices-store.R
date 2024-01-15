@@ -17,6 +17,21 @@
 #'
 #' @return `NULL`, invisibly.
 #'
+#' @examples
+#' # use non-exported function from teal
+#' slices_store <- getFromNamespace("slices_store", "teal")
+#'
+#' # Create a teal_slices object
+#' tss <- teal_slices(
+#'   teal.slice::teal_slice(dataname = "data", varname = "var"),
+#'   teal.slice::teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
+#' )
+#'
+#' if (interactive()) {
+#'   # Store the teal_slices object to a file
+#'   slices_store(tss, "path/to/file.json")
+#' }
+#'
 #' @keywords internal
 #'
 slices_store <- function(tss, file) {
@@ -35,7 +50,14 @@ slices_store <- function(tss, file) {
 #' @param file Path to file where `teal_slices` is stored. Must have a `.json` extension and read access.
 #'
 #' @return A `teal_slices` object restored from the file.
+#' @examples
+#' # use non-exported function from teal
+#' slices_restore <- getFromNamespace("slices_restore", "teal")
 #'
+#' if (interactive()) {
+#'   # Restore a teal_slices object from a file
+#'   tss_restored <- slices_restore("path/to/file.json")
+#' }
 #' @keywords internal
 #'
 slices_restore <- function(file) {
