@@ -77,7 +77,7 @@ testthat::test_that("init filter accepts `teal_slices`", {
   testthat::expect_no_error(init(data = list(iris = iris), modules = modules(example_module()), filter = fs))
   testthat::expect_error(
     init(data = list(iris = iris), modules = modules(example_module()), filter = unclass(fs)),
-    "Assertion failed"
+    "Assertion on 'filter' failed"
   )
 })
 
@@ -100,7 +100,7 @@ testthat::test_that("init throws when incompatible module's datanames", {
 })
 
 testthat::test_that("init throws when incompatible filter's datanames", {
-  testthat::expect_output(
+  testthat::expect_warning(
     init(
       data = teal_data(mtcars = mtcars),
       modules = modules(example_module()),

@@ -107,7 +107,7 @@ testthat::test_that("module requires datanames argument to be a character or NUL
   testthat::expect_no_error(module(datanames = "all"))
   testthat::expect_no_error(module(datanames = ""))
   testthat::expect_no_error(module(datanames = NULL))
-  testthat::expect_error(module(datanames = NA_character_), "Contains missing values")
+  testthat::expect_error(module(server = function(id, data) NULL, datanames = NA_character_), "Contains missing values")
   testthat::expect_no_error(module(server = function(id, data) NULL, datanames = NULL))
 })
 

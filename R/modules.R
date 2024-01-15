@@ -230,22 +230,9 @@ module <- function(label = "module",
                    datanames = "all",
                    server_args = NULL,
                    ui_args = NULL) {
+  # argument checking (independent)
+  ## `label`
   checkmate::assert_string(label)
-  checkmate::assert_function(server)
-  checkmate::assert_function(ui)
-  checkmate::assert_character(datanames, min.len = 1, null.ok = TRUE, any.missing = FALSE)
-  checkmate::assert_list(server_args, null.ok = TRUE, names = "named")
-  checkmate::assert_list(ui_args, null.ok = TRUE, names = "named")
-
-  if (!missing(filters)) {
-    checkmate::assert_character(filters, min.len = 1, null.ok = TRUE, any.missing = FALSE)
-    datanames <- filters
-    msg <-
-      "The `filters` argument is deprecated and will be removed in the next release. Please use `datanames` instead."
-    logger::log_warn(msg)
-    warning(msg)
-  }
-
   if (label == "global_filters") {
     stop(
       sprintf("module(label = \"%s\", ...\n  ", label),
@@ -256,10 +243,13 @@ module <- function(label = "module",
   if (label == "Report previewer") {
     stop(
       sprintf("module(label = \"%s\", ...\n  ", label),
-      "Label 'Report previewer' is reserved in teal.",
+      "Label 'Report previewer' is reserved in teal. Please change to something else.",
       call. = FALSE
     )
   }
+
+  ## `server`
+  checkmate::assert_function(server)
   server_formals <- names(formals(server))
   if (!(
     "id" %in% server_formals ||
@@ -277,11 +267,6 @@ module <- function(label = "module",
       "\n - `...` server_args elements will be passed to the module named argument or to the `...`"
     )
   }
-
-  if (!is.element("data", server_formals) && !is.null(datanames)) {
-    message(sprintf("module \"%s\" server function takes no data so \"datanames\" will be ignored", label))
-    datanames <- NULL
-  }
   if ("datasets" %in% server_formals) {
     warning(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
@@ -291,15 +276,9 @@ module <- function(label = "module",
     )
   }
 
-  srv_extra_args <- setdiff(names(server_args), server_formals)
-  if (length(srv_extra_args) > 0 && !"..." %in% server_formals) {
-    stop(
-      "\nFollowing `server_args` elements have no equivalent in the formals of the `server`:\n",
-      paste(paste(" -", srv_extra_args), collapse = "\n"),
-      "\n\nUpdate the `server` arguments by including above or add `...`"
-    )
-  }
 
+  ## `ui`
+  checkmate::assert_function(ui)
   ui_formals <- names(formals(ui))
   if (!"id" %in% ui_formals) {
     stop(
@@ -309,7 +288,6 @@ module <- function(label = "module",
       "\n - `...` ui_args elements will be passed to the module argument of the same name or to the `...`"
     )
   }
-
   if (any(c("data", "datasets") %in% ui_formals)) {
     stop(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
@@ -319,6 +297,37 @@ module <- function(label = "module",
     )
   }
 
+
+  ## `filters`
+  if (!missing(filters)) {
+    datanames <- filters
+    msg <-
+      "The `filters` argument is deprecated and will be removed in the next release. Please use `datanames` instead."
+    logger::log_warn(msg)
+    warning(msg)
+  }
+
+  ## `datanames` (also including deprecated `filters`)
+  # please note a race condition between datanames set when filters is not missing and data arg in server function
+  if (!is.element("data", server_formals) && !is.null(datanames)) {
+    message(sprintf("module \"%s\" server function takes no data so \"datanames\" will be ignored", label))
+    datanames <- NULL
+  }
+  checkmate::assert_character(datanames, min.len = 1, null.ok = TRUE, any.missing = FALSE)
+
+  ## `server_args`
+  checkmate::assert_list(server_args, null.ok = TRUE, names = "named")
+  srv_extra_args <- setdiff(names(server_args), server_formals)
+  if (length(srv_extra_args) > 0 && !"..." %in% server_formals) {
+    stop(
+      "\nFollowing `server_args` elements have no equivalent in the formals of the `server`:\n",
+      paste(paste(" -", srv_extra_args), collapse = "\n"),
+      "\n\nUpdate the `server` arguments by including above or add `...`"
+    )
+  }
+
+  ## `ui_args`
+  checkmate::assert_list(ui_args, null.ok = TRUE, names = "named")
   ui_extra_args <- setdiff(names(ui_args), ui_formals)
   if (length(ui_extra_args) > 0 && !"..." %in% ui_formals) {
     stop(
@@ -374,10 +383,7 @@ module <- function(label = "module",
 #' )
 #' stopifnot(teal:::modules_depth(mods) == 2L)
 modules_depth <- function(modules, depth = 0L) {
-  checkmate::assert(
-    checkmate::check_class(modules, "teal_module"),
-    checkmate::check_class(modules, "teal_modules")
-  )
+  checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
   checkmate::assert_int(depth, lower = 0)
   if (inherits(modules, "teal_modules")) {
     max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
