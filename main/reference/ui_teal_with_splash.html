@@ -24,7 +24,7 @@ Please also refer to the doc of init()."><!-- mathjax --><script src="https://cd
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9037</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9038</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,9 +122,9 @@ a default splash screen is shown.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ui_teal_with_splash</span><span class="op">(</span></span>
 <span>  <span class="va">id</span>,</span>
 <span>  <span class="va">data</span>,</span>
-<span>  <span class="va">title</span>,</span>
-<span>  header <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"Add Title Here"</span><span class="op">)</span>,</span>
-<span>  footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"Add Footer Here"</span><span class="op">)</span></span>
+<span>  title <span class="op">=</span> <span class="fu"><a href="build_app_title.html">build_app_title</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  header <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -142,22 +142,20 @@ module id</p></dd>
 
 
 <dt>title</dt>
-<dd><p>(<code>shiny.tag</code> or <code>character</code>)<br>
-The browser window title. Defaults to a title "Teal app" with the icon of NEST.
+<dd><p>(<code>shiny.tag</code> or <code>character(1)</code>)<br>
+The browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the <code><a href="build_app_title.html">build_app_title()</a></code> or
 by passing a valid <code>shiny.tag</code> which is a head tag with title and link tag.</p></dd>
 
 
 <dt>header</dt>
-<dd><p>(<code>shiny.tag</code> or <code>character</code>) <br>
-the header of the app. Note shiny code placed here (and in the footer
-argument) will be placed in the app's <code>ui</code> function so code which needs to be placed in the <code>ui</code> function
-(such as loading <code>CSS</code> via <code><a href="https://rstudio.github.io/htmltools/reference/htmlDependency.html" class="external-link">htmltools::htmlDependency()</a></code>) should be included here.</p></dd>
+<dd><p>(<code>shiny.tag</code> or <code>character(1)</code>) <br>
+The header of the app.</p></dd>
 
 
 <dt>footer</dt>
-<dd><p>(<code>shiny.tag</code> or <code>character</code>)<br>
-the footer of the app</p></dd>
+<dd><p>(<code>shiny.tag</code> or <code>character(1)</code>)<br>
+The footer of the app.</p></dd>
 
 </dl></div>
 
