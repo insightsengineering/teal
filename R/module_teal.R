@@ -40,7 +40,28 @@
 #' `ui_teal` returns `HTML` for `shiny` module `ui`.
 #' `srv_teal` returns `reactive` which returns the currently active module.
 #'
-#' @seealso examples found here: `vignette("internal_function_examples", package = "teal")`.
+#' @examples
+#' # use non-exported function from teal
+#' example_modules <- getFromNamespace("example_modules", "teal")
+#' example_cdisc_data <- getFromNamespace("example_cdisc_data", "teal")
+#' ui_teal <- getFromNamespace("ui_teal", "teal")
+#' srv_teal <- getFromNamespace("srv_teal", "teal")
+#'
+#' mods <- example_modules()
+#' teal_data_rv <- reactive(example_cdisc_data())
+#'
+#' ui <- function() {
+#'   ui_teal("dummy")
+#' }
+#'
+#' server <- function(input, output, session) {
+#'   active_module <- srv_teal(id = "dummy", modules = mods, teal_data_rv = teal_data_rv)
+#' }
+#'
+#' if (interactive()) {
+#'   shinyApp(ui, server)
+#' }
+#'
 #' @keywords internal
 #'
 NULL

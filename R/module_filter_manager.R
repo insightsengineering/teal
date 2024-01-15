@@ -4,7 +4,48 @@
 #'
 #' @name module_filter_manager_modal
 #' @inheritParams filter_manager_srv
-#' @seealso examples found here: `vignette("internal_function_examples", package = "teal")`.
+#' @examples
+#' # use non-exported function from teal
+#' filter_manager_modal_ui <- getFromNamespace("filter_manager_modal_ui", "teal")
+#' filter_manager_modal_srv <- getFromNamespace("filter_manager_modal_srv", "teal")
+#'
+#' fd1 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
+#' fd2 <- teal.slice::init_filtered_data(
+#'   list(iris = list(dataset = iris), mtcars = list(dataset = mtcars))
+#' )
+#' fd3 <- teal.slice::init_filtered_data(
+#'   list(iris = list(dataset = iris), women = list(dataset = women))
+#' )
+#' filter <- teal_slices(
+#'   teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length"),
+#'   teal.slice::teal_slice(dataname = "iris", varname = "Species"),
+#'   teal.slice::teal_slice(dataname = "mtcars", varname = "mpg"),
+#'   teal.slice::teal_slice(dataname = "women", varname = "height"),
+#'   mapping = list(
+#'     module2 = c("mtcars mpg"),
+#'     module3 = c("women height"),
+#'     global_filters = "iris Species"
+#'   )
+#' )
+#'
+#' ui <- fluidPage(
+#'   filter_manager_modal_ui("manager")
+#' )
+#'
+#' server <- function(input, output, session) {
+#'   observe({
+#'     filter_manager_modal_srv(
+#'       "manager",
+#'       filtered_data_list = list(module1 = fd1, module2 = fd2, module3 = fd3),
+#'       filter = filter
+#'     )
+#'   })
+#' }
+#'
+#' if (interactive()) {
+#'   shinyApp(ui, server)
+#' }
+#'
 #' @keywords internal
 #'
 NULL

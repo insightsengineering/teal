@@ -10,7 +10,18 @@
 #' and avoids session restarts!
 #'
 #' @param label `character` label of module
-#' @seealso examples found here: `vignette("internal_function_examples", package = "teal")`.
+#' @examples
+#' # use non-exported function from teal
+#' filter_calls_module <- getFromNamespace("filter_calls_module", "teal")
+#'
+#' app <- init(
+#'   data = teal_data(iris = iris, mtcars = mtcars),
+#'   modules = filter_calls_module(),
+#'   header = "Simple teal app"
+#' )
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
 #' @keywords internal
 #'
 filter_calls_module <- function(label = "Filter Calls Module") { # nolint

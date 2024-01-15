@@ -103,7 +103,39 @@ is currently active.
 }
 }
 
-\seealso{
-examples found here: \code{vignette("internal_function_examples", package = "teal")}.
+\examples{
+# use non-exported function from teal
+example_modules <- getFromNamespace("example_modules", "teal")
+example_datasets <- getFromNamespace("example_datasets", "teal")
+include_teal_css_js <- getFromNamespace("include_teal_css_js", "teal")
+ui_nested_tabs <- getFromNamespace("ui_nested_tabs", "teal")
+srv_nested_tabs <- getFromNamespace("srv_nested_tabs", "teal")
+
+mods <- example_modules()
+datasets <- example_datasets()
+
+ui <-function() {
+  tagList(
+    include_teal_css_js(),
+    textOutput("info"),
+    fluidPage( # needed for nice tabs
+      ui_nested_tabs("dummy", modules = mods, datasets = datasets)
+    )
+  )
+}
+server <- function(input, output, session) {
+  active_module <- srv_nested_tabs(
+    "dummy",
+    datasets = datasets,
+    modules = mods
+  )
+  output$info <- renderText({
+    paste0("The currently active tab name is ", active_module()$label)
+  })
+}
+if (interactive()) {
+  shinyApp(ui, server)
+}
+
 }
 \keyword{internal}

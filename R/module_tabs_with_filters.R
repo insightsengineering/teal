@@ -24,7 +24,36 @@
 #' @return A `tagList` of The main menu, place holders for filters and
 #'   place holders for the `teal` modules
 #'
-#' @seealso examples found here: `vignette("internal_function_examples", package = "teal")`.
+#' @examples
+#' # use non-exported function from teal
+#' example_modules <- getFromNamespace("example_modules", "teal")
+#' example_datasets <- getFromNamespace("example_datasets", "teal")
+#' include_teal_css_js <- getFromNamespace("include_teal_css_js", "teal")
+#' ui_tabs_with_filters <- getFromNamespace("ui_tabs_with_filters", "teal")
+#' srv_tabs_with_filters <- getFromNamespace("srv_tabs_with_filters", "teal")
+#'
+#' mods <- example_modules()
+#' datasets <- example_datasets()
+#'
+#' ui <- function() {
+#'   tagList(
+#'     include_teal_css_js(),
+#'     textOutput("info"),
+#'     fluidPage( # needed for nice tabs
+#'       ui_tabs_with_filters("dummy", modules = mods, datasets = datasets)
+#'     )
+#'   )
+#' }
+#' server <- function(input, output, session) {
+#'   output$info <- renderText({
+#'     paste0("The currently active tab name is ", active_module()$label)
+#'   })
+#'   active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
+#' }
+#'
+#' if (interactive()) {
+#'   shinyApp(ui, server)
+#' }
 #' @keywords internal
 #'
 NULL
