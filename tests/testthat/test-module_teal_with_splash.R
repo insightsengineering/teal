@@ -126,7 +126,7 @@ testthat::test_that(
       ),
       expr = {
         testthat::expect_is(teal_data_rv_validate, "reactive")
-        testthat::expect_error(teal_data_rv_validate(), "did not return `teal_data`")
+        testthat::expect_error(teal_data_rv_validate(), "failed to return `teal_data`")
       }
     )
   }
@@ -248,7 +248,7 @@ testthat::test_that("srv_teal_with_splash throws error when within.teal_data_mod
         testthat::expect_s3_class(teal_data_rv_validate, "reactive")
         testthat::expect_error(
           teal_data_rv_validate(),
-          "`teal_data_module` passed to `data` did not return `teal_data` object"
+          "`teal_data_module` passed to `data` failed to return `teal_data` object"
         )
       }
     )
@@ -277,7 +277,7 @@ testthat::test_that(
           testthat::expect_s3_class(teal_data_rv_validate, "reactive")
           testthat::expect_error(
             teal_data_rv_validate(),
-            "`teal_data_module` passed to `data` did not return `teal_data` object"
+            "`teal_data_module` passed to `data` failed to return `teal_data` object"
           )
         }
       )
