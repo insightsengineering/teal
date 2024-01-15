@@ -10,7 +10,7 @@ run_js_files(files)
 \item{files}{(\code{character}) vector of filenames}
 }
 \description{
-This is triggered from the server to execute on the client
+This is triggered from the \code{server} to execute on the client
 rather than triggered directly on the client.
 Unlike \code{include_js_files} which includes \code{JavaScript} functions,
 the \code{run_js} actually executes \code{JavaScript} functions.
@@ -18,6 +18,6 @@ the \code{run_js} actually executes \code{JavaScript} functions.
 \details{
 \code{system.file} should not be used to access files in other packages, it does
 not work with \code{devtools}. Therefore, we redefine this method in each package
-as needed. Thus, we do not export this method
+as needed. Thus, we do not export this method.
 }
 \keyword{internal}

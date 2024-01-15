@@ -1,4 +1,4 @@
-#' Landing Popup Module
+#' Landing popup module
 #'
 #' @description Creates a landing welcome popup for `teal` applications.
 #'

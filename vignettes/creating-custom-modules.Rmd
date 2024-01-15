@@ -27,9 +27,11 @@ example_module <- function(label = "example teal module") {
       checkmate::assert_class(data, "reactive")
       checkmate::assert_class(isolate(data()), "teal_data")
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$text <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
@@ -116,8 +118,6 @@ srv_histogram_example <- function(id, data) {
   checkmate::assert_class(isolate(data()), "teal_data")
 
   moduleServer(id, function(input, output, session) {
-    ns <- session$ns
-
     # update dataset and variable choices
     # each selection stored in separate reactive expression
     updateSelectInput(inputId = "datasets", choices = isolate(datanames(data())))
@@ -187,14 +187,6 @@ if (interactive()) {
   shinyApp(app$ui, app$server)
 }
 ```
-
-## `shiny` input cycle
-
-When `teal` modules are run inside the `init` the initial shiny input cycle is empty for each of them.
-In practice, this means that some inputs might be initialized with `NULL` value, inadvertently triggering some observers.
-Module developers have to be aware of this situation as often it will require `shiny::req` or `ignoreInit` argument in observers or `reactive` expressions.
-This side effect is caused by the `shiny::insertUI` function.
-We are aware of this inconvenience and have already started to look for a solution.
 
 ## Adding reporting to a module
 Refer to `vignette("adding_support_for_reporting")` to read about adding support for reporting in your `teal` module.

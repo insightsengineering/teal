@@ -10,7 +10,7 @@ modules_depth(modules, depth = 0L)
 \item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
-will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
 \item{depth}{optional, integer determining current depth level}
