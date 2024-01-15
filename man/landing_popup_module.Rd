@@ -2,7 +2,7 @@
 % Please edit documentation in R/landing_popup_module.R
 \name{landing_popup_module}
 \alias{landing_popup_module}
-\title{Landing Popup Module}
+\title{Landing popup module}
 \usage{
 landing_popup_module(
   label = "Landing Popup",

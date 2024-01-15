@@ -2,7 +2,7 @@
 % Please edit documentation in R/module_teal_with_splash.R
 \name{ui_teal_with_splash}
 \alias{ui_teal_with_splash}
-\title{UI to show a splash screen in the beginning, then delegate to \code{\link[=srv_teal]{srv_teal()}}}
+\title{\code{ui} to show a splash screen in the beginning, then delegate to \code{\link[=srv_teal]{srv_teal()}}}
 \usage{
 ui_teal_with_splash(
   id,
@@ -27,7 +27,7 @@ Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
 \item{header}{(\code{shiny.tag} or \code{character}) \cr
-the header of the app. Note shiny code placed here (and in the footer
+the header of the app. Note \code{shiny} code placed here (and in the footer
 argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
 (such as loading \code{CSS} via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
 
@@ -39,7 +39,7 @@ the footer of the app}
 The splash screen could be used to query for a password to fetch the data.
 \code{\link[=init]{init()}} is a very thin wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.
-This function instead adheres to the Shiny module conventions.
+This function instead adheres to the \code{shiny} module conventions.
 
 If data is obtained through delayed loading, its splash screen is used. Otherwise,
 a default splash screen is shown.
