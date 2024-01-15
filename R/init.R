@@ -105,7 +105,7 @@ init <- function(data,
                  header = tags$p(),
                  footer = tags$p(),
                  id = character(0)) {
-  logger::log_trace("init initializing teal app with: data ({ toString(sQuote(class(data))) }).")
+  logger::log_trace("init initializing teal app with: data ('{ class(data) }').")
 
   # argument checking (independent)
   ## `data`
