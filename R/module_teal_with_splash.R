@@ -140,7 +140,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         need(
           inherits(data, "teal_data"),
           paste(
-            "Error: `teal_data_module` passed to `data` did not return `teal_data` object but",
+            "Error: `teal_data_module` passed to `data` failed to return `teal_data` object, returned",
             toString(sQuote(class(data))),
             "instead.",
             "\n Check your inputs or contact app developer if error persists."
