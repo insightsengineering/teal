@@ -45,7 +45,9 @@ The data that arrives in the module is a `teal_data` object, the data container 
 The `teal_data` class allows modules to track the R code that they execute so that module outputs can be reproduced.
 See the `teal.data` package for a [detailed explanation](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data-reproducibility.html).
 
-## Example module
+## Example modules
+
+### Vieving data
 
 Here is a minimal module that allows the user to select and view one dataset at a time.
 By default, filtering is enabled for all datasets.
@@ -82,7 +84,7 @@ example_module <- function(label = "example teal module") {
 }
 ```
 
-## Viewing code
+### Interacting with data and viewing code
 
 The example below allows the user to interact with the data to create a simple visualization.
 In addition, it prints the code that can be used to reproduce that visualization.
