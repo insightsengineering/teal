@@ -119,14 +119,7 @@ init <- function(data,
       )
     )
   }
-  checkmate::assert(
-    .var.name = "data",
-    checkmate::check_multi_class(data, c("teal_data", "teal_data_module")),
-    checkmate::check_list(data, names = "named")
-  )
-  if (is.list(data) && !inherits(data, "teal_data_module")) {
-    data <- do.call(teal.data::teal_data, data)
-  }
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
 
   ## `modules`
   checkmate::assert(
