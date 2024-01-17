@@ -19,6 +19,7 @@ functionality.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 This function wraps \code{\link[teal.reporter:reporter_previewer_ui]{teal.reporter::reporter_previewer_ui()}} and
 \code{\link[teal.reporter:reporter_previewer_srv]{teal.reporter::reporter_previewer_srv()}} into a \code{teal_module} to be
 used in \code{teal} applications.

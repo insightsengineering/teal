@@ -18,6 +18,7 @@ vector with R code to show inside the modal.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Use the \code{\link[shiny:showModal]{shiny::showModal()}} function to show the \code{R} code inside.
 }
 \references{

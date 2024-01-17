@@ -74,6 +74,7 @@ object of class \code{teal_module}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 This function embeds a \code{shiny} module inside a \code{teal} application. One \code{teal_module} maps to one \code{shiny} module.
 }
 \examples{

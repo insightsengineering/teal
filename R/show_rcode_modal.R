@@ -2,6 +2,7 @@
 #'
 #' @export
 #' @description `r lifecycle::badge("stable")`
+#'
 #' Use the [shiny::showModal()] function to show the `R` code inside.
 #'
 #' @param title (`character(1)`)\cr

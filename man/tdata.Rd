@@ -28,6 +28,7 @@ A \code{tdata} object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
 Create a new object called \code{tdata} which contains \code{data}, a \code{reactive} list of \code{data.frames}
 (or \code{MultiAssayExperiment}), with attributes:
 \itemize{

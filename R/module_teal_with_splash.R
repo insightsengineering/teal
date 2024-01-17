@@ -3,6 +3,7 @@
 #' `ui` to show a splash screen in the beginning, then delegate to [srv_teal()]
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' The splash screen could be used to query for a password to fetch the data.
 #' [init()] is a very thin wrapper around this module useful for end-users which
 #' assumes that it is a top-level module and cannot be embedded.
@@ -64,6 +65,7 @@ ui_teal_with_splash <- function(id,
 #' to [srv_teal()].
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' Please also refer to the doc of [init()].
 #'
 #' @inheritParams init

@@ -1,12 +1,12 @@
 #' Create a `tdata` object
 #'
 #' @description `r lifecycle::badge("deprecated")`
+#'
 #' Create a new object called `tdata` which contains `data`, a `reactive` list of `data.frames`
 #' (or `MultiAssayExperiment`), with attributes:
-#'
-#'   * `code` (`reactive`) containing code used to generate the data
-#'   * join_keys (`join_keys`) containing the relationships between the data
-#'   * metadata (`named list`) containing any metadata associated with the data frames
+#' - `code` (`reactive`) containing code used to generate the data
+#' - join_keys (`join_keys`) containing the relationships between the data
+#' - metadata (`named list`) containing any metadata associated with the data frames
 #'
 #' @name tdata
 #' @param data A `named list` of `data.frames` (or `MultiAssayExperiment`)

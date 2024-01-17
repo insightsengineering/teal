@@ -53,6 +53,7 @@ named list with \code{server} and \code{ui} function
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 End-users: This is the most important function for you to start a
 \code{teal} app that is composed out of \code{teal} modules.
 }

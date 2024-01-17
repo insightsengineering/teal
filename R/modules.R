@@ -1,6 +1,7 @@
 #' Creates a `teal_modules` object.
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' This function collects a list of `teal_modules` and `teal_module` objects and returns a `teal_modules` object
 #' containing the passed objects.
 #'
@@ -164,6 +165,7 @@ is_arg_used <- function(modules, arg) {
 #' Creates a `teal_module` object
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.
 #'
 #' @param label (`character(1)`) Label shown in the navigation item for the module. Any label possible except

@@ -7,6 +7,7 @@
 #' Create the `server` and `ui` function for the `shiny` app
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' End-users: This is the most important function for you to start a
 #' `teal` app that is composed out of `teal` modules.
 #'

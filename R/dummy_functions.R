@@ -1,6 +1,7 @@
 #' An example `teal` module
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("experimental")`
+#'
 #' @inheritParams module
 #' @return A `teal` module which can be included in the `modules` argument to [teal::init()].
 #' @examples

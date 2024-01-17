@@ -48,7 +48,6 @@
 #' )
 #'
 #' @name teal_data_module
-#' @rdname teal_data_module
 #'
 #' @seealso [`teal_data-class`], [`teal.code::qenv()`]
 #'

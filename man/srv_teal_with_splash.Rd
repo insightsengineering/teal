@@ -34,5 +34,6 @@ If data is not loaded yet, \code{reactive} returns \code{NULL}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Please also refer to the doc of \code{\link[=init]{init()}}.
 }
