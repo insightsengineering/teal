@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.668238067177372" branch-rate="0" lines-covered="1134" lines-valid="1697" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-01-17 09:02:14.799303">
+<coverage line-rate="0.668238067177372" branch-rate="0" lines-covered="1134" lines-valid="1697" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-01-17 14:51:38.510903">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -11,10 +11,11 @@
           <methods>
             <method name="example_module" signature="" line-rate="0.3" branch-rate="0" complexity="0">
               <lines>
+                <line number="16" hits="44" branch="false"/>
                 <line number="17" hits="44" branch="false"/>
                 <line number="18" hits="44" branch="false"/>
                 <line number="19" hits="44" branch="false"/>
-                <line number="20" hits="44" branch="false"/>
+                <line number="20" hits="0" branch="false"/>
                 <line number="21" hits="0" branch="false"/>
                 <line number="22" hits="0" branch="false"/>
                 <line number="23" hits="0" branch="false"/>
@@ -27,9 +28,9 @@
                 <line number="30" hits="0" branch="false"/>
                 <line number="31" hits="0" branch="false"/>
                 <line number="32" hits="0" branch="false"/>
-                <line number="33" hits="0" branch="false"/>
+                <line number="33" hits="44" branch="false"/>
                 <line number="34" hits="44" branch="false"/>
-                <line number="35" hits="44" branch="false"/>
+                <line number="35" hits="0" branch="false"/>
                 <line number="36" hits="0" branch="false"/>
                 <line number="37" hits="0" branch="false"/>
                 <line number="38" hits="0" branch="false"/>
@@ -37,18 +38,18 @@
                 <line number="40" hits="0" branch="false"/>
                 <line number="41" hits="0" branch="false"/>
                 <line number="42" hits="0" branch="false"/>
-                <line number="43" hits="0" branch="false"/>
+                <line number="43" hits="44" branch="false"/>
                 <line number="44" hits="44" branch="false"/>
                 <line number="45" hits="44" branch="false"/>
-                <line number="46" hits="44" branch="false"/>
               </lines>
             </method>
           </methods>
           <lines>
+            <line number="16" hits="44" branch="false"/>
             <line number="17" hits="44" branch="false"/>
             <line number="18" hits="44" branch="false"/>
             <line number="19" hits="44" branch="false"/>
-            <line number="20" hits="44" branch="false"/>
+            <line number="20" hits="0" branch="false"/>
             <line number="21" hits="0" branch="false"/>
             <line number="22" hits="0" branch="false"/>
             <line number="23" hits="0" branch="false"/>
@@ -61,9 +62,9 @@
             <line number="30" hits="0" branch="false"/>
             <line number="31" hits="0" branch="false"/>
             <line number="32" hits="0" branch="false"/>
-            <line number="33" hits="0" branch="false"/>
+            <line number="33" hits="44" branch="false"/>
             <line number="34" hits="44" branch="false"/>
-            <line number="35" hits="44" branch="false"/>
+            <line number="35" hits="0" branch="false"/>
             <line number="36" hits="0" branch="false"/>
             <line number="37" hits="0" branch="false"/>
             <line number="38" hits="0" branch="false"/>
@@ -71,10 +72,9 @@
             <line number="40" hits="0" branch="false"/>
             <line number="41" hits="0" branch="false"/>
             <line number="42" hits="0" branch="false"/>
-            <line number="43" hits="0" branch="false"/>
+            <line number="43" hits="44" branch="false"/>
             <line number="44" hits="44" branch="false"/>
             <line number="45" hits="44" branch="false"/>
-            <line number="46" hits="44" branch="false"/>
           </lines>
         </class>
         <class name="get_rcode_utils.R" filename="R/get_rcode_utils.R" line-rate="0.96875" branch-rate="0" complexity="0">
