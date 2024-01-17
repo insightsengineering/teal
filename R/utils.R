@@ -294,7 +294,7 @@ create_app_id <- function(data, modules) {
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_class(modules, "teal_modules")
 
-  hashables <- c(data, modules)
+  hashables <- list(data = data, modules = modules)
   hashables$data <- if (inherits(hashables$data, "teal_data")) {
     as.list(hashables$data@env)
   } else if (inherits(data, "teal_data_module")) {
