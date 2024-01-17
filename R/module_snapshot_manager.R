@@ -328,9 +328,6 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
   })
 }
 
-
-
-
 ### utility functions ----
 
 #' Explicitly enumerate global filters.

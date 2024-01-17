@@ -1,6 +1,5 @@
 #' Show `R` code modal
 #'
-#' @export
 #' @description `r lifecycle::badge("stable")`
 #'
 #' Use the [shiny::showModal()] function to show the `R` code inside.
@@ -13,6 +12,7 @@
 #'  `shiny` session object, if missing then [shiny::getDefaultReactiveDomain()] is used.
 #'
 #' @references [shiny::showModal()]
+#' @export
 show_rcode_modal <- function(title = NULL, rcode, session = getDefaultReactiveDomain()) {
   rcode <- paste(rcode, collapse = "\n")
 
