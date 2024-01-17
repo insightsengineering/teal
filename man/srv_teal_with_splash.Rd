@@ -2,7 +2,7 @@
 % Please edit documentation in R/module_teal_with_splash.R
 \name{srv_teal_with_splash}
 \alias{srv_teal_with_splash}
-\title{Server function that loads the data through reactive loading and then delegates
+\title{\code{server} function that loads the data through reactive loading and then delegates
 to \code{\link[=srv_teal]{srv_teal()}}.}
 \usage{
 srv_teal_with_splash(id, data, modules, filter = teal_slices())
@@ -10,7 +10,7 @@ srv_teal_with_splash(id, data, modules, filter = teal_slices())
 \arguments{
 \item{id}{(\code{character})\cr
 module id to embed it, if provided,
-the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
+the \code{server} function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 
@@ -20,7 +20,7 @@ is then preferred to this function.}
 (\code{data.frame} or \code{MultiAssayExperiment}).}
 
 \item{modules}{\code{teal_modules} object containing the output modules which
-will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
 \item{filter}{(\code{teal_slices})\cr

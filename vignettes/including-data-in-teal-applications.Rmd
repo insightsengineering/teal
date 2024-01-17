@@ -86,7 +86,7 @@ If reproducibility is required, we recommend creating `teal_data` empty and eval
 
 ###### code from file
 
-The ability to pass code as character vector to `eval_code` opens the door to using code stored in a file.
+The ability to pass code as a character vector to `eval_code` opens the door to using code stored in a file.
 ```{r, eval=FALSE}
 # not run
 data_from_file <- teal_data()
@@ -108,7 +108,7 @@ Currently `teal` supports two specialized data formats.
 ### `ADaM` data
 
 The `ADaM` data model specifies relationships between `CDISC` datasets.
-The `cdisc_data` function takes advantage of that fact to to automatically set default joining keys (see [`join_keys` property](#join_keys)).
+The `cdisc_data` function takes advantage of that fact to automatically set default joining keys (see [`join_keys` property](#join_keys)).
 In the example below, two standard `CDISC` datasets (`ADSL` and `ADTTE`) are passed to `cdisc_data`.
 
 ```{r}

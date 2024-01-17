@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{init}
 \alias{init}
-\title{Create the Server and UI Function For the Shiny App}
+\title{Create the \code{server} and \code{ui} function for the \code{shiny} app}
 \usage{
 init(
   data,
@@ -23,7 +23,7 @@ init(
 \item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
-will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
 \item{title}{(\code{shiny.tag} or \code{character(1)})\cr
@@ -44,7 +44,7 @@ The footer of the app.}
 
 \item{id}{(\code{character})\cr
 module id to embed it, if provided,
-the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
+the \code{server} function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 }
@@ -54,7 +54,7 @@ named list with \code{server} and \code{ui} function
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 End-users: This is the most important function for you to start a
-teal app that is composed out of teal modules.
+\code{teal} app that is composed out of \code{teal} modules.
 }
 \details{
 When initializing the \code{teal} app, if \code{datanames} are not set for the \code{teal_data} object,
