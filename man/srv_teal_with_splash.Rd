@@ -8,13 +8,13 @@ to \code{\link[=srv_teal]{srv_teal()}}.}
 srv_teal_with_splash(id, data, modules, filter = teal_slices())
 }
 \arguments{
-\item{id}{(\code{character})\cr
+\item{id}{(\code{character})
 module id to embed it, if provided,
 the \code{server} function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 
-\item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})\cr
+\item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})
 \code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or
 \code{teal_data_module} or simply a list of a named list of objects
 (\code{data.frame} or \code{MultiAssayExperiment}).}
@@ -23,7 +23,7 @@ is then preferred to this function.}
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{filter}{(\code{teal_slices})\cr
+\item{filter}{(\code{teal_slices})
 Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
 Old way of specifying filters through a list is deprecated and will be removed in the
 next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}

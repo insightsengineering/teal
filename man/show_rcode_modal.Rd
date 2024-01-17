@@ -7,13 +7,13 @@
 show_rcode_modal(title = NULL, rcode, session = getDefaultReactiveDomain())
 }
 \arguments{
-\item{title}{(\code{character(1)})\cr
+\item{title}{(\code{character(1)})
 Title of the modal, displayed in the first comment of the \code{R}-code.}
 
-\item{rcode}{(\code{character})\cr
+\item{rcode}{(\code{character})
 vector with R code to show inside the modal.}
 
-\item{session}{(\code{ShinySession} optional)\cr
+\item{session}{(\code{ShinySession} optional)
 \code{shiny} session object, if missing then \code{\link[shiny:domains]{shiny::getDefaultReactiveDomain()}} is used.}
 }
 \description{

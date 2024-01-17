@@ -14,7 +14,7 @@
 #'
 #' Please also refer to the doc of [init()].
 #'
-#' @param id (`character(1)`)\cr
+#' @param id (`character(1)`)
 #'   module id
 #' @inheritParams init
 #' @export

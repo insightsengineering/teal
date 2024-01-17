@@ -9,9 +9,9 @@
 #'
 #' @name module_filter_manager
 #'
-#' @param id (`character(1)`)\cr
+#' @param id (`character(1)`)
 #'  `shiny` module id.
-#' @param filtered_data_list (`named list`)\cr
+#' @param filtered_data_list (`named list`)
 #'  A list, possibly nested, of `FilteredData` objects.
 #'  Each `FilteredData` will be served to one module in the `teal` application.
 #'  The structure of the list must reflect the nesting of modules in tabs
@@ -165,11 +165,11 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 #' and from there become available in other modules
 #' by setting `private$available_teal_slices` in each `FilteredData`.
 #'
-#' @param id (`character(1)`)\cr
+#' @param id (`character(1)`)
 #'  `shiny` module id.
-#' @param module_fd (`FilteredData`)\cr
+#' @param module_fd (`FilteredData`)
 #'   object to filter data in the teal-module
-#' @param slices_global (`reactiveVal`)\cr
+#' @param slices_global (`reactiveVal`)
 #'   stores `teal_slices` with all available filters; allows the following actions:
 #'   - to disable/enable a specific filter in a module
 #'   - to restore saved filter settings
