@@ -14,10 +14,8 @@
 #' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
 #' defaults from the `teal_data` environment will be used.
 #'
-#' @param data (`teal_data`, `teal_data_module`, `named list`)\cr
-#' `teal_data` object as returned by [teal.data::teal_data()] or
-#' `teal_data_module` or simply a list of a named list of objects
-#' (`data.frame` or `MultiAssayExperiment`).
+#' @param data (`teal_data`, `teal_data_module`)\cr
+#' `teal_data` object as returned by [teal.data::teal_data()] or `teal_data_module`.
 #' @param modules (`list`, `teal_modules` or `teal_module`)\cr
 #'   nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
