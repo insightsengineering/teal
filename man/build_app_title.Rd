@@ -5,7 +5,7 @@
 \title{Build app title with favicon}
 \usage{
 build_app_title(
-  title = "Teal app",
+  title = "teal app",
   favicon =
     "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png"
 )

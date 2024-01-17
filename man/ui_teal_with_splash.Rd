@@ -7,32 +7,28 @@
 ui_teal_with_splash(
   id,
   data,
-  title,
-  header = tags$p("Add Title Here"),
-  footer = tags$p("Add Footer Here")
+  title = build_app_title(),
+  header = tags$p(),
+  footer = tags$p()
 )
 }
 \arguments{
 \item{id}{(\code{character(1)})\cr
 module id}
 
-\item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})\cr
-\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or
-\code{teal_data_module} or simply a list of a named list of objects
-(\code{data.frame} or \code{MultiAssayExperiment}).}
+\item{data}{(\code{teal_data}, \code{teal_data_module})\cr
+\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
 
-\item{title}{(\code{shiny.tag} or \code{character})\cr
-The browser window title. Defaults to a title "Teal app" with the icon of NEST.
+\item{title}{(\code{shiny.tag} or \code{character(1)})\cr
+The browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
-\item{header}{(\code{shiny.tag} or \code{character}) \cr
-the header of the app. Note \code{shiny} code placed here (and in the footer
-argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
-(such as loading \code{CSS} via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
+\item{header}{(\code{shiny.tag} or \code{character(1)}) \cr
+The header of the app.}
 
-\item{footer}{(\code{shiny.tag} or \code{character})\cr
-the footer of the app}
+\item{footer}{(\code{shiny.tag} or \code{character(1)})\cr
+The footer of the app.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

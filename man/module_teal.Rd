@@ -9,9 +9,9 @@
 ui_teal(
   id,
   splash_ui = tags$h2("Starting the Teal App"),
-  title = NULL,
-  header = tags$p(""),
-  footer = tags$p("")
+  title = build_app_title(),
+  header = tags$p(),
+  footer = tags$p()
 )
 
 srv_teal(id, modules, teal_data_rv, filter = teal_slices())
@@ -24,18 +24,16 @@ module id}
 can be a splash screen or a \code{shiny} module \code{ui}. For the latter, see
 \code{\link[=init]{init()}} about how to call the corresponding \code{server} function.}
 
-\item{title}{(\code{shiny.tag} or \code{character})\cr
-The browser window title. Defaults to a title "Teal app" with the icon of NEST.
+\item{title}{(\code{shiny.tag} or \code{character(1)})\cr
+The browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
-\item{header}{(\code{shiny.tag} or \code{character}) \cr
-the header of the app. Note \code{shiny} code placed here (and in the footer
-argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
-(such as loading \code{CSS} via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
+\item{header}{(\code{shiny.tag} or \code{character(1)}) \cr
+The header of the app.}
 
-\item{footer}{(\code{shiny.tag} or \code{character})\cr
-the footer of the app}
+\item{footer}{(\code{shiny.tag} or \code{character(1)})\cr
+The footer of the app.}
 
 \item{teal_data_rv}{(\code{reactive})\cr
 returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}

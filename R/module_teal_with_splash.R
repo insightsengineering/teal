@@ -19,10 +19,27 @@
 #' @export
 ui_teal_with_splash <- function(id,
                                 data,
-                                title,
-                                header = tags$p("Add Title Here"),
-                                footer = tags$p("Add Footer Here")) {
+                                title = build_app_title(),
+                                header = tags$p(),
+                                footer = tags$p()) {
+  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert(
+    .var.name = "title",
+    checkmate::check_string(title),
+    checkmate::check_multi_class(title, c("shiny.tag", "shiny.tag.list", "html"))
+  )
+  checkmate::assert(
+    .var.name = "header",
+    checkmate::check_string(header),
+    checkmate::check_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
+  )
+  checkmate::assert(
+    .var.name = "footer",
+    checkmate::check_string(footer),
+    checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
+  )
+
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
@@ -58,7 +75,10 @@ ui_teal_with_splash <- function(id,
 #' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
+  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::check_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_class(filter, "teal_slices")
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_with_splash initializing module with data.")
@@ -72,7 +92,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     teal_data_rv <- if (inherits(data, "teal_data_module")) {
       data <- data$server(id = "teal_data_module")
       if (!is.reactive(data)) {
-        stop("The `teal_data_module` must return a reactive expression.", call. = FALSE)
+        stop("The `teal_data_module` passed to `data` must return a reactive expression.", call. = FALSE)
       }
       data
     } else if (inherits(data, "teal_data")) {
@@ -94,7 +114,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
           need(
             FALSE,
             paste(
-              "Error when executing `teal_data_module`:\n ",
+              "Error when executing `teal_data_module` passed to `data`:\n ",
               paste(data$message, collapse = "\n"),
               "\n Check your inputs or contact app developer if error persists."
             )
@@ -108,7 +128,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
           need(
             FALSE,
             paste(
-              "Error when executing `teal_data_module`:\n ",
+              "Error when executing `teal_data_module` passed to `data`:\n ",
               paste(data$message, collpase = "\n"),
               "\n Check your inputs or contact app developer if error persists."
             )
@@ -120,8 +140,10 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
         need(
           inherits(data, "teal_data"),
           paste(
-            "Error: `teal_data_module` did not return `teal_data` object",
-            "\n Check your inputs or contact app developer if error persists"
+            "Error: `teal_data_module` passed to `data` failed to return `teal_data` object, returned",
+            toString(sQuote(class(data))),
+            "instead.",
+            "\n Check your inputs or contact app developer if error persists."
           )
         )
       )
@@ -132,7 +154,6 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
       is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
       if (!isTRUE(is_modules_ok)) {
-        logger::log_warn(is_modules_ok)
         validate(need(isTRUE(is_modules_ok), sprintf("%s. Contact app developer.", is_modules_ok)))
       }
 
@@ -143,7 +164,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
           type = "warning",
           duration = 10
         )
-        logger::log_warn(is_filter_ok)
+        warning(is_filter_ok)
       }
 
       teal_data_rv()
