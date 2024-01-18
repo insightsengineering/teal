@@ -7,7 +7,11 @@
 #' This function dictates what modules are included in a `teal` application. The internal structure of `teal_modules`
 #' shapes the navigation panel of a `teal` application.
 #'
-#' @param ... (`teal_module` or `teal_modules`) see [module()] and [modules()] for more details
+#' @param ...
+#' - For `modules()`: (`teal_module` or `teal_modules`) see [module()] and [modules()] for more details.
+#' - For `toString()`: (optional) additional parameters to pass to recursive calls of `toString`.
+#' - For `print()`: parameters passed to `toString`.
+#'
 #' @param label (`character(1)`) label of modules collection (default `"root"`).
 #' If using the `label` argument then it must be explicitly named.
 #' For example `modules("lab", ...)` should be converted to `modules(label = "lab", ...)`
@@ -406,7 +410,6 @@ module_labels <- function(modules) {
 #' @param x (`teal_modules`) to print
 #' @param indent (`integer`) indent level;
 #'   each `submodule` is indented one level more
-#' @param ... (optional) additional parameters to pass to recursive calls of `toString`
 #' @return (`character`)
 #' @export
 #' @rdname modules
@@ -422,7 +425,6 @@ toString.teal_modules <- function(x, indent = 0, ...) { # nolint
 #'
 #' @inheritParams toString.teal_modules
 #' @param x `teal_module`
-#' @param ... ignored
 #' @export
 #' @rdname module
 toString.teal_module <- function(x, indent = 0, ...) { # nolint
@@ -431,7 +433,6 @@ toString.teal_module <- function(x, indent = 0, ...) { # nolint
 
 #' Prints `teal_modules`
 #' @param x `teal_modules`
-#' @param ... parameters passed to `toString`
 #' @export
 #' @rdname modules
 print.teal_modules <- function(x, ...) {
@@ -446,3 +447,4 @@ print.teal_modules <- function(x, ...) {
 #' @export
 #' @rdname module
 print.teal_module <- print.teal_modules
+
