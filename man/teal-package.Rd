@@ -4,14 +4,14 @@
 \name{teal-package}
 \alias{teal}
 \alias{teal-package}
-\title{teal: Interactive Exploration of Clinical Trials Data}
+\title{\code{teal}: Interactive exploration of clinical trials data}
 \description{
-The teal package provides a shiny based framework for creating an
+The \code{teal} package provides a \code{shiny} based framework for creating an
 interactive data analysis environment.
 }
 \details{
 To learn mode about the package either read the project website at
-\url{Project Website} or read the \code{\link{init}} manual pages.
+\href{https://insightsengineering.github.io/teal/latest-tag/}{project website} or read the \code{\link{init}} manual pages.
 }
 \seealso{
 Useful links:

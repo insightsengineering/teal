@@ -1,12 +1,12 @@
 # This file adds a splash screen for delayed data loading on top of teal
 
-#' UI to show a splash screen in the beginning, then delegate to [srv_teal()]
+#' `ui` to show a splash screen in the beginning, then delegate to [srv_teal()]
 #'
 #' @description `r lifecycle::badge("stable")`
 #' The splash screen could be used to query for a password to fetch the data.
 #' [init()] is a very thin wrapper around this module useful for end-users which
 #' assumes that it is a top-level module and cannot be embedded.
-#' This function instead adheres to the Shiny module conventions.
+#' This function instead adheres to the `shiny` module conventions.
 #'
 #' If data is obtained through delayed loading, its splash screen is used. Otherwise,
 #' a default splash screen is shown.
@@ -60,7 +60,7 @@ ui_teal_with_splash <- function(id,
   )
 }
 
-#' Server function that loads the data through reactive loading and then delegates
+#' `server` function that loads the data through reactive loading and then delegates
 #' to [srv_teal()].
 #'
 #' @description `r lifecycle::badge("stable")`
@@ -68,7 +68,7 @@ ui_teal_with_splash <- function(id,
 #'
 #' @inheritParams init
 #' @param modules `teal_modules` object containing the output modules which
-#'   will be displayed in the teal application. See [modules()] and [module()] for
+#'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
 #' @inheritParams shiny::moduleServer
 #' @return `reactive` containing `teal_data` object when data is loaded.

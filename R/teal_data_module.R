@@ -1,4 +1,4 @@
-#' Data Module for `teal` Applications
+#' Data module for `teal` applications
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
@@ -8,10 +8,10 @@
 #' @details
 #' `teal_data_module` creates a `shiny` module to supply or modify data in a `teal` application.
 #' The module allows for running data pre-processing code (creation _and_ some modification) after the app starts.
-#' The body of the server function will be run in the app rather than in the global environment.
+#' The body of the `server` function will be run in the app rather than in the global environment.
 #' This means it will be run every time the app starts, so use sparingly.\cr
 #' Pass this module instead of a `teal_data` object in a call to [init()].
-#' Note that the server function must always return a `teal_data` object wrapped in a reactive expression.\cr
+#' Note that the `server` function must always return a `teal_data` object wrapped in a reactive expression.\cr
 #' See vignette `vignette("data-as-shiny-module", package = "teal")` for more details.
 #'
 #' @param ui (`function(id)`)\cr
@@ -24,7 +24,7 @@
 #' `teal_data_module` returns an object of class `teal_data_module`.
 #'
 #' @examples
-#' data <- teal_data_module(
+#' tdm <- teal_data_module(
 #'   ui = function(id) {
 #'     ns <- NS(id)
 #'     actionButton(ns("submit"), label = "Load data")
@@ -50,7 +50,7 @@
 #' @name teal_data_module
 #' @rdname teal_data_module
 #'
-#' @seealso [`teal_data-class`], [`base::within()`], [`teal.code::within.qenv()`]
+#' @seealso [`teal_data-class`], [`teal.code::qenv()`]
 #'
 #' @export
 teal_data_module <- function(ui, server) {

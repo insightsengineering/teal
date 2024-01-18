@@ -2,8 +2,7 @@
 % Please edit documentation in R/tdata.R
 \name{tdata2env}
 \alias{tdata2env}
-\title{Function to convert a \code{tdata} object to an \code{environment}
-Any \code{reactives} inside \code{tdata} are first evaluated}
+\title{Function to convert a \code{tdata} object to an \code{environment}}
 \usage{
 tdata2env(data)
 }
@@ -14,8 +13,7 @@ tdata2env(data)
 an \code{environment}
 }
 \description{
-Function to convert a \code{tdata} object to an \code{environment}
-Any \code{reactives} inside \code{tdata} are first evaluated
+Any \code{reactives} inside \code{tdata} are first evaluated.
 }
 \examples{
 

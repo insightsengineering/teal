@@ -9,7 +9,7 @@
 \alias{eval_code,teal_data_module,expression-method}
 \alias{within}
 \alias{within.teal_data_module}
-\title{Data Module for \code{teal} Applications}
+\title{Data module for \code{teal} applications}
 \usage{
 teal_data_module(ui, server)
 
@@ -50,19 +50,21 @@ Create a \code{teal_data_module} object and evaluate code on it with history tra
 \details{
 \code{teal_data_module} creates a \code{shiny} module to supply or modify data in a \code{teal} application.
 The module allows for running data pre-processing code (creation \emph{and} some modification) after the app starts.
-The body of the server function will be run in the app rather than in the global environment.
+The body of the \code{server} function will be run in the app rather than in the global environment.
 This means it will be run every time the app starts, so use sparingly.\cr
 Pass this module instead of a \code{teal_data} object in a call to \code{\link[=init]{init()}}.
-Note that the server function must always return a \code{teal_data} object wrapped in a reactive expression.\cr
+Note that the \code{server} function must always return a \code{teal_data} object wrapped in a reactive expression.\cr
 See vignette \code{vignette("data-as-shiny-module", package = "teal")} for more details.
 
 \code{eval_code} evaluates given code in the environment of the \code{teal_data} object created by the \code{teal_data_module}.
 The code is added to the \verb{@code} slot of the \code{teal_data}.
 
 \code{within} is a convenience function for evaluating inline code inside the environment of a \code{teal_data_module}.
+It accepts only inline expressions (both simple and compound) and allows for injecting values into \code{expr} through
+the \code{...} argument: as \code{name:value} pairs are passed to \code{...}, \code{name} in \code{expr} will be replaced with \code{value.}
 }
 \examples{
-data <- teal_data_module(
+tdm <- teal_data_module(
   ui = function(id) {
     ns <- NS(id)
     actionButton(ns("submit"), label = "Load data")
@@ -85,27 +87,14 @@ data <- teal_data_module(
   }
 )
 
-tdm <- teal_data_module(
-  ui = function(id) div(id = shiny::NS(id)("div_id")),
-  server = function(id) {
-    shiny::moduleServer(id, function(input, output, session) {
-      shiny::reactive(teal_data(IRIS = iris))
-    })
-  }
-)
-eval_code(tdm, "IRIS <- subset(IRIS, Species == 'virginica')")
+eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 
-tdm <- teal_data_module(
-  ui = function(id) div(id = shiny::NS(id)("div_id")),
-  server = function(id) {
-    shiny::moduleServer(id, function(input, output, session) {
-      shiny::reactive(teal_data(IRIS = iris))
-    })
-  }
-)
-within(tdm, IRIS <- subset(IRIS, Species == "virginica"))
+within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
+
+# in an app, use input-derived value in the expression
+within(tdm, dataset1 <- subset(dataset1, Species == species), species = input$species)
 
 }
 \seealso{
-\code{\linkS4class{teal_data}}, \code{\link[base:with]{base::within()}}, \code{\link[teal.code:qenv]{teal.code::within.qenv()}}
+\code{\linkS4class{teal_data}}, \code{\link[teal.code:qenv]{teal.code::qenv()}}
 }

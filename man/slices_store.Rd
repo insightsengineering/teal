@@ -2,7 +2,7 @@
 % Please edit documentation in R/teal_slices-store.R
 \name{slices_store}
 \alias{slices_store}
-\title{Store teal_slices object to a file}
+\title{Store \code{teal_slices} object to a file}
 \usage{
 slices_store(tss, file)
 }
@@ -27,18 +27,5 @@ character by using \code{format.POSIX*t(usetz = TRUE, tz = "UTC")} (\verb{YYYY-M
 \verb{\{N\} = [0-9]} is a number and \code{UTC} is \verb{Coordinated Universal Time} timezone short-code).
 This format is assumed during \code{slices_restore}. All \code{POSIX*t} objects in \code{selected} or \code{choices} fields of
 \code{teal_slice} objects are always printed in \code{UTC} timezone as well.
-}
-\examples{
-# Create a teal_slices object
-tss <- teal_slices(
-  teal_slice(dataname = "data", varname = "var"),
-  teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
-)
-
-if (interactive()) {
-  # Store the teal_slices object to a file
-  slices_store(tss, "path/to/file.json")
-}
-
 }
 \keyword{internal}

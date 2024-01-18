@@ -32,23 +32,27 @@ Let us consider an example module, based on the example module from `teal`:
 ```{r, message=FALSE}
 library(teal)
 example_module <- function(label = "example teal module") {
-  module(
-    label,
+    module(
+    label = label,
     server = function(id, data) {
+      checkmate::assert_class(data, "reactive")
+      checkmate::assert_class(isolate(data()), "teal_data")
+      
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
       ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
+      sidebarLayout(
+        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
+        mainPanel(verbatimTextOutput(ns("dataset")))
       )
-    },
-    datanames = "all"
+    }
   )
 }
 ```
@@ -75,22 +79,23 @@ See below:
 ```{r}
 example_module_with_reporting <- function(label = "example teal module") {
   module(
-    label,
+    label = label,
     server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
       ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
+      sidebarLayout(
+        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
+        mainPanel(verbatimTextOutput(ns("dataset")))
       )
-    },
-    datanames = "all"
+    }
   )
 }
 ```
@@ -117,7 +122,7 @@ The UI and the server logic necessary for adding cards from `example_module_with
 ```{r}
 example_module_with_reporting <- function(label = "example teal module") {
   module(
-    label,
+    label = label,
     server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
         teal.reporter::simple_reporter_srv(
@@ -125,22 +130,23 @@ example_module_with_reporting <- function(label = "example teal module") {
           reporter = reporter,
           card_fun = function(card) card
         )
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
       ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = tagList(
+      sidebarLayout(
+        sidebarPanel(
           teal.reporter::simple_reporter_ui(ns("reporter")),
-          verbatimTextOutput(ns("text"))
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
         ),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
+        mainPanel(verbatimTextOutput(ns("dataset")))
       )
-    },
-    datanames = "all"
+    }
   )
 }
 ```
@@ -178,7 +184,7 @@ custom_function <- function(card = teal.reporter::ReportCard$new()) {
 
 example_module_with_reporting <- function(label = "example teal module") {
   module(
-    label,
+    label = label,
     server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
         teal.reporter::simple_reporter_srv(
@@ -186,22 +192,23 @@ example_module_with_reporting <- function(label = "example teal module") {
           reporter = reporter,
           card_fun = custom_function
         )
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
       ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = tagList(
+      sidebarLayout(
+        sidebarPanel(
           teal.reporter::simple_reporter_ui(ns("reporter")),
-          verbatimTextOutput(ns("text"))
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
         ),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
+        mainPanel(verbatimTextOutput(ns("dataset")))
       )
-    },
-    datanames = "all"
+    }
   )
 }
 ```
@@ -254,11 +261,10 @@ library(teal.reporter)
 
 example_reporter_module <- function(label = "Example") {
   module(
-    label,
+    label = label,
     server = function(id, data, reporter, filter_panel_api) {
       with_filter <- !missing(filter_panel_api) && inherits(filter_panel_api, "FilterPanelApi")
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
         dat <- reactive(data()[[input$dataname]])
         observe({
@@ -318,9 +324,17 @@ example_reporter_module <- function(label = "Example") {
     },
     ui = function(id) {
       ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = tableOutput(ns("table")),
-        encoding = tagList(
+      
+      sidebarLayout(
+        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
+        mainPanel(
+          teal.reporter::simple_reporter_ui(ns("reporter")),
+          verbatimTextOutput(ns("dataset"))
+        )
+      )
+      
+      sidebarLayout(
+        sidebarPanel(
           div(
             teal.reporter::add_card_button_ui(ns("addReportCard")),
             teal.reporter::download_report_button_ui(ns("downloadButton")),
@@ -328,10 +342,10 @@ example_reporter_module <- function(label = "Example") {
           ),
           selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
           sliderInput(ns("nrow"), "Number of rows", min = 1, max = 1, value = 1, step = 1)
-        )
+        ),
+        mainPanel(tableOutput(ns("table")))
       )
-    },
-    datanames = "all"
+    }
   )
 }
 

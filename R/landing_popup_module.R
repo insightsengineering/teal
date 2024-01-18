@@ -1,4 +1,4 @@
-#' Landing Popup Module
+#' Landing popup module
 #'
 #' @description Creates a landing welcome popup for `teal` applications.
 #'
@@ -14,10 +14,10 @@
 #' @return A `teal_module` (extended with `teal_landing_module` class) to be used in `teal` applications.
 #'
 #' @examples
-#' app1 <- teal::init(
+#' app1 <- init(
 #'   data = teal_data(iris = iris),
-#'   modules = teal::modules(
-#'     teal::landing_popup_module(
+#'   modules = modules(
+#'     landing_popup_module(
 #'       content = "A place for the welcome message or a disclaimer statement.",
 #'       buttons = modalButton("Proceed")
 #'     ),
@@ -28,10 +28,10 @@
 #'   shinyApp(app1$ui, app1$server)
 #' }
 #'
-#' app2 <- teal::init(
+#' app2 <- init(
 #'   data = teal_data(iris = iris),
-#'   modules = teal::modules(
-#'     teal::landing_popup_module(
+#'   modules = modules(
+#'     landing_popup_module(
 #'       title = "Welcome",
 #'       content = tags$b(
 #'         "A place for the welcome message or a disclaimer statement.",
