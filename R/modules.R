@@ -9,9 +9,7 @@
 #'
 #' @param ...
 #' - For `modules()`: (`teal_module` or `teal_modules`) see [module()] and [modules()] for more details.
-#' - For `toString()`: (optional) additional parameters to pass to recursive calls of `toString`.
-#' - For `print()`: parameters passed to `toString`.
-#'
+#' - For `format()` and `print()`: (optional) additional parameters to pass to recursive calls of `format`.
 #' @param label (`character(1)`) label of modules collection (default `"root"`).
 #' If using the `label` argument then it must be explicitly named.
 #' For example `modules("lab", ...)` should be converted to `modules(label = "lab", ...)`
@@ -413,21 +411,21 @@ module_labels <- function(modules) {
 #' @return (`character`)
 #' @export
 #' @rdname modules
-toString.teal_modules <- function(x, indent = 0, ...) { # nolint
+format.teal_modules <- function(x, indent = 0, ...) { # nolint
   # argument must be `x` to be consistent with base method
   paste(c(
     paste0(rep(" ", indent), "+ ", x$label),
-    unlist(lapply(x$children, toString, indent = indent + 1, ...))
+    unlist(lapply(x$children, format, indent = indent + 1, ...))
   ), collapse = "\n")
 }
 
 #' Converts `teal_module` to a string
 #'
-#' @inheritParams toString.teal_modules
+#' @inheritParams format.teal_modules
 #' @param x `teal_module`
 #' @export
 #' @rdname module
-toString.teal_module <- function(x, indent = 0, ...) { # nolint
+format.teal_module <- function(x, indent = 0, ...) { # nolint
   paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, collapse = "")
 }
 
@@ -436,14 +434,14 @@ toString.teal_module <- function(x, indent = 0, ...) { # nolint
 #' @export
 #' @rdname modules
 print.teal_modules <- function(x, ...) {
-  s <- toString(x, ...)
+  s <- format(x, ...)
   cat(s)
   return(invisible(s))
 }
 
 #' Prints `teal_module`
 #' @param x `teal_module`
-#' @param ... parameters passed to `toString`
+#' @param ... parameters passed to `format`
 #' @export
 #' @rdname module
 print.teal_module <- print.teal_modules
