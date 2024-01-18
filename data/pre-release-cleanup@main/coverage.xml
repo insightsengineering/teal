@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.667652276759314" branch-rate="0" lines-covered="1129" lines-valid="1691" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-01-17 16:01:03.852286">
+<coverage line-rate="0.667652276759314" branch-rate="0" lines-covered="1129" lines-valid="1691" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-01-18 13:16:24.054102">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -81,24 +81,24 @@
           <methods>
             <method name="get_rcode_libraries" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="8" hits="5" branch="false"/>
-                <line number="9" hits="5" branch="false"/>
-                <line number="10" hits="5" branch="false"/>
-                <line number="11" hits="5" branch="false"/>
-                <line number="12" hits="5" branch="false"/>
-                <line number="13" hits="5" branch="false"/>
-                <line number="14" hits="5" branch="false"/>
-                <line number="16" hits="5" branch="false"/>
-                <line number="17" hits="5" branch="false"/>
-                <line number="18" hits="5" branch="false"/>
+                <line number="8" hits="6" branch="false"/>
+                <line number="9" hits="6" branch="false"/>
+                <line number="10" hits="6" branch="false"/>
+                <line number="11" hits="6" branch="false"/>
+                <line number="12" hits="6" branch="false"/>
+                <line number="13" hits="6" branch="false"/>
+                <line number="14" hits="6" branch="false"/>
+                <line number="16" hits="6" branch="false"/>
+                <line number="17" hits="6" branch="false"/>
+                <line number="18" hits="6" branch="false"/>
               </lines>
             </method>
             <method name="get_rcode_str_install" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="24" hits="9" branch="false"/>
-                <line number="26" hits="9" branch="false"/>
+                <line number="24" hits="10" branch="false"/>
+                <line number="26" hits="10" branch="false"/>
                 <line number="27" hits="2" branch="false"/>
-                <line number="30" hits="7" branch="false"/>
+                <line number="30" hits="8" branch="false"/>
               </lines>
             </method>
             <method name="get_datasets_code" signature="" line-rate="0.944444444444444" branch-rate="0" complexity="0">
@@ -125,20 +125,20 @@
             </method>
           </methods>
           <lines>
-            <line number="8" hits="5" branch="false"/>
-            <line number="9" hits="5" branch="false"/>
-            <line number="10" hits="5" branch="false"/>
-            <line number="11" hits="5" branch="false"/>
-            <line number="12" hits="5" branch="false"/>
-            <line number="13" hits="5" branch="false"/>
-            <line number="14" hits="5" branch="false"/>
-            <line number="16" hits="5" branch="false"/>
-            <line number="17" hits="5" branch="false"/>
-            <line number="18" hits="5" branch="false"/>
-            <line number="24" hits="9" branch="false"/>
-            <line number="26" hits="9" branch="false"/>
+            <line number="8" hits="6" branch="false"/>
+            <line number="9" hits="6" branch="false"/>
+            <line number="10" hits="6" branch="false"/>
+            <line number="11" hits="6" branch="false"/>
+            <line number="12" hits="6" branch="false"/>
+            <line number="13" hits="6" branch="false"/>
+            <line number="14" hits="6" branch="false"/>
+            <line number="16" hits="6" branch="false"/>
+            <line number="17" hits="6" branch="false"/>
+            <line number="18" hits="6" branch="false"/>
+            <line number="24" hits="10" branch="false"/>
+            <line number="26" hits="10" branch="false"/>
             <line number="27" hits="2" branch="false"/>
-            <line number="30" hits="7" branch="false"/>
+            <line number="30" hits="8" branch="false"/>
             <line number="49" hits="4" branch="false"/>
             <line number="50" hits="4" branch="false"/>
             <line number="51" hits="4" branch="false"/>
