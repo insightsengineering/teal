@@ -32,12 +32,12 @@ Let us consider an example module, based on the example module from `teal`:
 ```{r, message=FALSE}
 library(teal)
 example_module <- function(label = "example teal module") {
-    module(
+  module(
     label = label,
     server = function(id, data) {
       checkmate::assert_class(data, "reactive")
       checkmate::assert_class(isolate(data()), "teal_data")
-      
+
       moduleServer(id, function(input, output, session) {
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
         output$dataset <- renderPrint({
@@ -324,7 +324,7 @@ example_reporter_module <- function(label = "Example") {
     },
     ui = function(id) {
       ns <- NS(id)
-      
+
       sidebarLayout(
         sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
         mainPanel(
@@ -332,7 +332,7 @@ example_reporter_module <- function(label = "Example") {
           verbatimTextOutput(ns("dataset"))
         )
       )
-      
+
       sidebarLayout(
         sidebarPanel(
           div(
