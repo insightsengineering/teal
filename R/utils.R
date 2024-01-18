@@ -53,7 +53,8 @@ include_parent_datanames <- function(dataname, join_keys) {
 
 #' Create a `FilteredData`
 #'
-#' Create a `FilteredData` object from a `teal_data` object
+#' Create a `FilteredData` object from a `teal_data` object.
+#'
 #' @param x (`teal_data`) object
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
 #' @return (`FilteredData`) object
