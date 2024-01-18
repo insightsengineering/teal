@@ -447,4 +447,3 @@ print.teal_modules <- function(x, ...) {
 #' @export
 #' @rdname module
 print.teal_module <- print.teal_modules
-
