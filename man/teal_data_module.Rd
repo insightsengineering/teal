@@ -60,6 +60,8 @@ See vignette \code{vignette("data-as-shiny-module", package = "teal")} for more 
 The code is added to the \verb{@code} slot of the \code{teal_data}.
 
 \code{within} is a convenience function for evaluating inline code inside the environment of a \code{teal_data_module}.
+It accepts only inline expressions (both simple and compound) and allows for injecting values into \code{expr} through
+the \code{...} argument: as \code{name:value} pairs are passed to \code{...}, \code{name} in \code{expr} will be replaced with \code{value.}
 }
 \examples{
 tdm <- teal_data_module(
@@ -88,6 +90,9 @@ tdm <- teal_data_module(
 eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 
 within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
+
+# in an app, use input-derived value in the expression
+within(tdm, dataset1 <- subset(dataset1, Species == species), species = input$species)
 
 }
 \seealso{
