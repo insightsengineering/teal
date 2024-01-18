@@ -29,7 +29,7 @@ The `teal_data_module` function is used to build such a module from the followin
 
 One case for postponing data operations is datasets that are dynamic, frequently updated.
 Such data cannot be created once and kept in the global environment.
-Using `teal_data_module` allows to create a dataset from scratch every time the user starts the application.
+Using `teal_data_module` will allow dataset creation from scratch every time the user starts the application.
 
 ```{r, message = FALSE, warning = FALSE}
 library(teal)
@@ -123,15 +123,15 @@ It is recommended to keep the constant code in the global environment and to mov
 
 ###### WARNING
 
-When using `teal_data_module` to modify a pre-existing `teal_data` object it is crucial that the server function and the data object are defined in the same environment as otherwise the server function will not be able to access the data object.
-This means server functions defined in packages cannot be used.
+When using `teal_data_module` to modify a pre-existing `teal_data` object, it is crucial that the server function and the data object are defined in the same environment, otherwise the server function will not be able to access the data object.
+This means server functions defined in packages cannot be used directly.
 
 ### Extending existing `teal_data_modules`
 
 The `teal_data_module` can be further modified outside of the initial `shiny` module and processed after user inputs.
-The `within` function allows to process at runtime the data in the `teal_data` object contained in `teal_data_module`.
+The `within` function allows the data in the `teal_data` object contained in `teal_data_module` to be processed at runtime.
 
-Building on the previous example, the `data_mod` is handled as a generic connector and here new columns are added once the data is retrieved.
+Building on the previous example, the `data_mod` is handled as a generic connector, and here, new columns are added once the data is retrieved.
 
 ```{r}
 data_mod_2 <- within(

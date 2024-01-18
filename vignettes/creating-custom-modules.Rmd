@@ -12,7 +12,7 @@ vignette: >
 
 ## Introduction
 
-The `teal` framework provides a large number of analysis modules to be incorporated into `teal` applications.
+The `teal` framework provides a large catalog of plug-in-ready analysis modules to be incorporated into `teal` applications.
 However, it is also possible to create your own modules using the `module` function.
 
 ## Components of a module
@@ -40,14 +40,14 @@ function(
 }
 ```
 
-The data that arrives in the module is a `teal_data` object, the data container used throughout the `teal` application.
+The input data to a module must be a `teal_data` object, the data container used throughout the `teal` application.
 `teal_data` is passed to the `init` function when building the application and, after filtering by the filter panel, it is passed to modules, wrapped in a reactive expression.
 The `teal_data` class allows modules to track the R code that they execute so that module outputs can be reproduced.
 See the `teal.data` package for a [detailed explanation](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data-reproducibility.html).
 
 ## Example modules
 
-### Vieving data
+### Viewing data
 
 Here is a minimal module that allows the user to select and view one dataset at a time.
 By default, filtering is enabled for all datasets.
