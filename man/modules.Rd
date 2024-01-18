@@ -13,7 +13,11 @@ modules(..., label = "root")
 \method{print}{teal_modules}(x, ...)
 }
 \arguments{
-\item{...}{parameters passed to \code{toString}}
+\item{...}{\itemize{
+\item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) see \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}} for more details.
+\item For \code{toString()}: (optional) additional parameters to pass to recursive calls of \code{toString}.
+\item For \code{print()}: parameters passed to \code{toString}.
+}}
 
 \item{label}{(\code{character(1)}) label of modules collection (default \code{"root"}).
 If using the \code{label} argument then it must be explicitly named.
