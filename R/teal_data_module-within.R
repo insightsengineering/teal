@@ -2,6 +2,8 @@
 #'
 #' @details
 #' `within` is a convenience function for evaluating inline code inside the environment of a `teal_data_module`.
+#' It accepts only inline expressions (both simple and compound) and allows for injecting values into `expr` through
+#' the `...` argument: as `name:value` pairs are passed to `...`, `name` in `expr` will be replaced with `value.`
 #'
 #' @param data (`teal_data_module`) object
 #' @param expr (`expression`) to evaluate. Must be inline code. See
@@ -12,6 +14,9 @@
 #'
 #' @examples
 #' within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
+#'
+#' # in an app, use input-derived value in the expression
+#' within(tdm, dataset1 <- subset(dataset1, Species == species), species = input$species)
 #'
 #' @include teal_data_module.R
 #' @name within
