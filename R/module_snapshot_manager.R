@@ -108,7 +108,7 @@ snapshot_manager_srv <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    # Retrieve intermodule objects ----
+    # Retrieve global objects ----
     slices_global <- GS$set_global("slices_global")
     filtered_data_list <- GS$set_global("filtered_data_list")
     mapping_matrix <- GS$set_global("mapping_matrix")

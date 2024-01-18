@@ -40,7 +40,7 @@ state_manager_srv <- function(id) {
     ns <- session$ns
     sesh <- get_master_session()
 
-    # Retrieve intermodule objects ----
+    # Retrieve global objects ----
     slices_global <- GS$set_global("slices_global")
     filtered_data_list <- GS$set_global("filtered_data_list")
     mapping_matrix <- GS$set_global("mapping_matrix")
@@ -48,17 +48,9 @@ state_manager_srv <- function(id) {
 
     # Register setter for global grab history ----
     GS$add_setter("grab_history", setter_grab_history)
+
     # Store global filter states ----
     grab_history <- GS$set_global("grab_history")
-
-    # Retrieve intermodule objects ----
-    # slices_global <- set_intermodule_objects("slices_global")
-    # filtered_data_list <- set_intermodule_objects("filtered_data_list")
-    # mapping_matrix <- set_intermodule_objects("mapping_matrix")
-    # snapshot_history <- set_intermodule_objects("snapshot_history")
-    #
-    # # Store input states ----
-    # grab_history <- set_intermodule_objects("grab_history")
 
     sesh$onBookmark(function(state) {
       # Add current filter state to bookmark.
