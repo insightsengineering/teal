@@ -109,11 +109,14 @@ snapshot_manager_srv <- function(id) {
     ns <- session$ns
 
     # Retrieve intermodule objects ----
-    slices_global <- set_intermodule_objects("slices_global")
-    filtered_data_list <- set_intermodule_objects("filtered_data_list")
-    mapping_matrix <- set_intermodule_objects("mapping_matrix")
+    slices_global <- GS$set_global("slices_global")
+    filtered_data_list <- GS$set_global("filtered_data_list")
+    mapping_matrix <- GS$set_global("mapping_matrix")
+
+    # Register setter for global snapshot history ----
+    GS$add_setter("snapshot_history", setter_snapshot_history)
     # Store global filter states ----
-    snapshot_history <- set_intermodule_objects("snapshot_history")
+    snapshot_history <- GS$set_global("snapshot_history")
 
     # Snapshot current application state ----
     # Name snaphsot.
@@ -326,7 +329,7 @@ snapshot_manager_srv <- function(id) {
 
 
 
-### utility functions ----
+# utility functions ----
 
 #' Explicitly enumerate global filters.
 #'
@@ -336,6 +339,7 @@ snapshot_manager_srv <- function(id) {
 #' @param module_names (`character`) vector containing names of all modules in the app
 #' @return A `named_list` with one element per module, each element containing all filters applied to that module.
 #' @keywords internal
+#' @noRd
 #'
 unfold_mapping <- function(mapping, module_names) {
   module_names <- structure(module_names, names = module_names)
@@ -353,6 +357,7 @@ unfold_mapping <- function(mapping, module_names) {
 #'                       columns represent modules and row represent `teal_slice`s
 #' @return `named list` like that in the `mapping` attribute of a `teal_slices` object.
 #' @keywords internal
+#' @noRd
 #'
 matrix_to_mapping <- function(mapping_matrix) {
   mapping_matrix[] <- lapply(mapping_matrix, function(x) x | is.na(x))
@@ -362,4 +367,23 @@ matrix_to_mapping <- function(mapping_matrix) {
 
   mapping <- c(lapply(local_filters, function(x) rownames(local_filters)[x]), list(global_filters = global_filters))
   Filter(function(x) length(x) != 0L, mapping)
+}
+
+
+
+# setter for global variable ----
+#' @keywords internal
+#' @noRd
+setter_snapshot_history <- function() {
+  sesh <- getDefaultReactiveDomain()
+  if (is.null(sesh$userData$snapshot_history)) {
+    slices_global <- dynGet("slices_global")
+    sesh$userData$snapshot_history <- reactiveVal({
+      list(
+        "Initial application state" = as.list(isolate(slices_global()), recursive = TRUE)
+      )
+    })
+  } else {
+    sesh$userData$snapshot_history
+  }
 }

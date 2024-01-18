@@ -113,17 +113,25 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 
     is_module_specific <- isTRUE(attr(filter, "module_specific"))
 
-    # Create global list of slices.
-    # Contains all available teal_slice objects available to all modules.
-    # Passed whole to instances of FilteredData used for individual modules.
-    # Down there a subset that pertains to the data sets used in that module is applied and displayed.
-    slices_global <- set_intermodule_objects("slices_global")
-    # Prepare FilteredData object according to app type (global/module-specific).
-    filtered_data_list <- set_intermodule_objects("filtered_data_list")
-    # Represent mapping of modules to filters.
-    mapping_matrix <- set_intermodule_objects("mapping_matrix")
-    # The three objects above are also stored in the app session's userData.
-    # They will be used in other modules and stored when bookmarking.
+    GS$add_setter("slices_global", setter_slices_global)
+    GS$add_setter("filtered_data_list", setter_filtered_data_list)
+    GS$add_setter("mapping_matrix", setter_mapping_matrix)
+
+    slices_global <- GS$set_global("slices_global")
+    filtered_data_list <- GS$set_global("filtered_data_list")
+    mapping_matrix <- GS$set_global("mapping_matrix")
+
+    # # Create global list of slices.
+    # # Contains all available teal_slice objects available to all modules.
+    # # Passed whole to instances of FilteredData used for individual modules.
+    # # Down there a subset that pertains to the data sets used in that module is applied and displayed.
+    # slices_global <- set_intermodule_objects("slices_global")
+    # # Prepare FilteredData object according to app type (global/module-specific).
+    # filtered_data_list <- set_intermodule_objects("filtered_data_list")
+    # # Represent mapping of modules to filters.
+    # mapping_matrix <- set_intermodule_objects("mapping_matrix")
+    # # The three objects above are also stored in the app session's userData.
+    # # They will be used in other modules and stored when bookmarking.
 
     output$slices_table <- renderTable(
       expr = {
@@ -229,12 +237,17 @@ filter_manager_module_srv <- function(id, module_fd, slices_global) {
 
 
 
+# utility functions ----
+
 # Functions that prepare objects.
 # Objects are first scoped in sesion (userData) and if not found, created and stored.
 
 # Obtain appropriate structure of `FilteredData` objects.
 # For global app, list of length 1 named "global_filters".
 # For module-specific app, list of length one-per-module, named after modules.
+#' @keywords internal
+#' @noRd
+#'
 create_filtered_data_list <- function(filtered_data_list, module_specific) {
   if (!module_specific) {
     # Retrieve the first FilteredData from potentially nested list.
@@ -246,6 +259,9 @@ create_filtered_data_list <- function(filtered_data_list, module_specific) {
 }
 # Flatten potentially nested list of FilteredData objects while maintaining useful names.
 # Simply using `unlist` would result in concatenated names.
+#' @keywords internal
+#' @noRd
+#'
 flatten_nested <- function(x, name = NULL) {
   if (inherits(x, "FilteredData")) {
     setNames(list(x), name)
@@ -256,6 +272,9 @@ flatten_nested <- function(x, name = NULL) {
 
 # Create mapping fo filters to modules in matrix form (presented as data.frame).
 # Modules get NAs for filters that cannot be set for them.
+#' @keywords internal
+#' @noRd
+#'
 create_mapping_matrix <- function(filtered_data_list, slices_global) {
   reactive({
     state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
@@ -271,72 +290,109 @@ create_mapping_matrix <- function(filtered_data_list, slices_global) {
 }
 
 
-# ! this function is very impure, it depends on caller state and causes side effects in app session !
-set_intermodule_objects <- function(
-    obj = c("slices_global", "filtered_data_list", "mapping_matrix", "snapshot_history", "grab_history")
-) {
+# # ! this function is very impure, it depends on caller state and causes side effects in app session !
+# set_intermodule_objects <- function(
+#     obj = c("slices_global", "filtered_data_list", "mapping_matrix", "snapshot_history", "grab_history")
+# ) {
+#
+#   obj <- match.arg(obj)
+#   sesh <- get_master_session()
+#
+#   switch(
+#     obj,
+#
+#     "slices_global" = { # `reactiveVal`
+#       # restored from session OR created from filter and stored in session
+#       if (is.null(sesh$userData$slices_global)) {
+#         filter <- dynGet("filter")
+#         sesh$userData$slices_global <- reactiveVal(filter)
+#       } else {
+#         sesh$userData$slices_global
+#       }
+#     },
+#
+#     "filtered_data_list" = { # list of `FilteredData`
+#       # restored from session OR created from filtered_data_list and is_module_specific and stored in session
+#       if (is.null(sesh$userData$filtered_data_list)) {
+#         filtered_data_list <- dynGet("filtered_data_list")
+#         is_module_specific <- dynGet("is_module_specific")
+#         sesh$userData$filtered_data_list <- create_filtered_data_list(filtered_data_list, is_module_specific)
+#       } else {
+#         sesh$userData$filtered_data_list
+#       }
+#     },
+#
+#     "mapping_matrix" = { # `reactive`
+#       # restored from session OR created from filtered_data_list and slices global and stored in session
+#       if (is.null(sesh$userData$mapping_matrix)) {
+#         filtered_data_list <- dynGet("filtered_data_list")
+#         slices_global <- dynGet("slices_global")
+#         sesh$userData$mapping_matrix <- create_mapping_matrix(filtered_data_list, slices_global)
+#       } else {
+#         sesh$userData$mapping_matrix
+#       }
+#     },
+#
+#     "snapshot_history" = { # `reactiveVal`
+#       # restored from session OR created from slices_global and stored in session
+#       if (is.null(sesh$userData$snapshot_history)) {
+#         slices_global <- dynGet("slices_global")
+#         sesh$userData$snapshot_history <- reactiveVal({
+#           list(
+#             "Initial application state" = as.list(isolate(slices_global()), recursive = TRUE)
+#           )
+#         })
+#       } else {
+#         sesh$userData$snapshot_history
+#       }
+#     },
+#
+#     "grab_history" = {
+#       if (is.null(sesh$userData$grab_history)) {
+#         sesh$userData$grab_history <- reactiveVal({
+#           list()
+#         })
+#       } else {
+#         sesh$userData$grab_history
+#       }
+#     }
+#
+#   )
+# }
 
-  obj <- match.arg(obj)
-  sesh <- get_master_session()
-
-  switch(
-    obj,
-
-    "slices_global" = { # `reactiveVal`
-      # restored from session OR created from filter and stored in session
-      if (is.null(sesh$userData$slices_global)) {
-        filter <- dynGet("filter")
-        sesh$userData$slices_global <- reactiveVal(filter)
-      } else {
-        sesh$userData$slices_global
-      }
-    },
-
-    "filtered_data_list" = { # list of `FilteredData`
-      # restored from session OR created from filtered_data_list and is_module_specific and stored in session
-      if (is.null(sesh$userData$filtered_data_list)) {
-        filtered_data_list <- dynGet("filtered_data_list")
-        is_module_specific <- dynGet("is_module_specific")
-        sesh$userData$filtered_data_list <- create_filtered_data_list(filtered_data_list, is_module_specific)
-      } else {
-        sesh$userData$filtered_data_list
-      }
-    },
-
-    "mapping_matrix" = { # `reactive`
-      # restored from session OR created from filtered_data_list and slices global and stored in session
-      if (is.null(sesh$userData$mapping_matrix)) {
-        filtered_data_list <- dynGet("filtered_data_list")
-        slices_global <- dynGet("slices_global")
-        sesh$userData$mapping_matrix <- create_mapping_matrix(filtered_data_list, slices_global)
-      } else {
-        sesh$userData$mapping_matrix
-      }
-    },
-
-    "snapshot_history" = { # `reactiveVal`
-      # restored from session OR created from slices_global and stored in session
-      if (is.null(sesh$userData$snapshot_history)) {
-        slices_global <- dynGet("slices_global")
-        sesh$userData$snapshot_history <- reactiveVal({
-          list(
-            "Initial application state" = as.list(isolate(slices_global()), recursive = TRUE)
-          )
-        })
-      } else {
-        sesh$userData$snapshot_history
-      }
-    },
-
-    "grab_history" = {
-      if (is.null(sesh$userData$grab_history)) {
-        sesh$userData$grab_history <- reactiveVal({
-          list()
-        })
-      } else {
-        sesh$userData$grab_history
-      }
-    }
-
-  )
+# setter for global variable ----
+#' @keywords internal
+#' @noRd
+setter_slices_global <- function() {
+  sesh <- getDefaultReactiveDomain()
+  if (is.null(sesh$userData$slices_global)) {
+    filter <- dynGet("filter")
+    sesh$userData$slices_global <- reactiveVal(filter)
+  } else {
+    sesh$userData$slices_global
+  }
+}
+#' @keywords internal
+#' @noRd
+setter_filtered_data_list <- function() {
+  sesh <- getDefaultReactiveDomain()
+  if (is.null(sesh$userData$filtered_data_list)) {
+    filtered_data_list <- dynGet("filtered_data_list")
+    is_module_specific <- dynGet("is_module_specific")
+    sesh$userData$filtered_data_list <- create_filtered_data_list(filtered_data_list, is_module_specific)
+  } else {
+    sesh$userData$filtered_data_list
+  }
+}
+#' @keywords internal
+#' @noRd
+setter_mapping_matrix <- function() {
+  sesh <- getDefaultReactiveDomain()
+  if (is.null(sesh$userData$mapping_matrix)) {
+    filtered_data_list <- dynGet("filtered_data_list")
+    slices_global <- dynGet("slices_global")
+    sesh$userData$mapping_matrix <- create_mapping_matrix(filtered_data_list, slices_global)
+  } else {
+    sesh$userData$mapping_matrix
+  }
 }
