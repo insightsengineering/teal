@@ -12,14 +12,14 @@ landing_popup_module(
 )
 }
 \arguments{
-\item{label}{\code{character(1)} the label of the module.}
+\item{label}{(\code{character(1)}) the label of the module.}
 
-\item{title}{\code{character(1)} the text to be displayed as a title of the popup.}
+\item{title}{(\code{character(1)}) the text to be displayed as a title of the popup.}
 
 \item{content}{The content of the popup. Passed to \code{...} of \code{shiny::modalDialog}. Can be a \code{character}
 or a list of \code{shiny.tag}s. See examples.}
 
-\item{buttons}{\code{shiny.tag} or a list of tags (\code{tagList}). Typically a \code{modalButton} or \code{actionButton}. See examples.}
+\item{buttons}{(\code{shiny.tag}) or a list of tags (\code{tagList}). Typically a \code{modalButton} or \code{actionButton}. See examples.}
 }
 \value{
 A \code{teal_module} (extended with \code{teal_landing_module} class) to be used in \code{teal} applications.

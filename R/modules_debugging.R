@@ -8,7 +8,7 @@
 #' dependencies and simplifies [`devtools::load_all`] which otherwise fails
 #' and avoids session restarts!
 #'
-#' @param label `character` label of module
+#' @param label (`character`) label of module
 #' @keywords internal
 #'
 filter_calls_module <- function(label = "Filter Calls Module") { # nolint

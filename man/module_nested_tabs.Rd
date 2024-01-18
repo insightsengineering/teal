@@ -56,7 +56,7 @@ srv_nested_tabs(
 \item{id}{(\code{character(1)})
 module id}
 
-\item{datasets}{(\verb{named list} of \code{FilteredData})
+\item{datasets}{(named \code{list} of \code{FilteredData})
 object to store filter state and filtered datasets, shared across modules. For more
 details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}. Structure of the list must be the same as structure
 of the \code{modules} argument and list names must correspond to the labels in \code{modules}.

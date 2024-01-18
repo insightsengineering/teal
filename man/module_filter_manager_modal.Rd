@@ -14,7 +14,7 @@ filter_manager_modal_srv(id, filtered_data_list, filter)
 \item{id}{(\code{character(1)})
 \code{shiny} module id.}
 
-\item{filtered_data_list}{(\verb{named list})
+\item{filtered_data_list}{(named \code{list})
 A list, possibly nested, of \code{FilteredData} objects.
 Each \code{FilteredData} will be served to one module in the \code{teal} application.
 The structure of the list must reflect the nesting of modules in tabs

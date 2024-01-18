@@ -15,10 +15,10 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{teal_data}, \code{teal_data_module})
+\item{data}{(\code{teal_data} or \code{teal_data_module})
 \code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
 
-\item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})
+\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for

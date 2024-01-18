@@ -285,8 +285,8 @@ build_app_title <- function(title = "teal app", favicon = "https://raw.githubuse
 #' App ID is a hash of the app's data and modules.
 #' See "transferring snapshots" section in ?snapshot.
 #'
-#' @param data `teal_data` or `teal_data_module` as accepted by `init`
-#' @param modules `teal_modules` object as accepted by `init`
+#' @param data (`teal_data` or `teal_data_module`) as accepted by `init`
+#' @param modules (`teal_modules`) object as accepted by `init`
 #'
 #' @return A single character string.
 #'

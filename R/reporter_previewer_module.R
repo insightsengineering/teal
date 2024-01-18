@@ -11,7 +11,7 @@
 #' support report generation.
 #'
 #' @inheritParams module
-#' @param server_args (`named list`)
+#' @param server_args (named `list`)
 #'  Arguments passed to [teal.reporter::reporter_previewer_srv()].
 #' @return `teal_module` (extended with `teal_module_previewer` class) containing the `teal.reporter` previewer
 #' functionality.

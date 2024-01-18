@@ -11,7 +11,7 @@
 #'
 #' @param id (`character(1)`)
 #'  `shiny` module id.
-#' @param filtered_data_list (`named list`)
+#' @param filtered_data_list (named `list`)
 #'  A list, possibly nested, of `FilteredData` objects.
 #'  Each `FilteredData` will be served to one module in the `teal` application.
 #'  The structure of the list must reflect the nesting of modules in tabs

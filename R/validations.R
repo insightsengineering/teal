@@ -4,10 +4,10 @@
 #'
 #' This function is a wrapper for `shiny::validate`.
 #'
-#' @param x a data.frame
+#' @param x (`data.frame`)
 #' @param min_nrow minimum number of rows in `x`
-#' @param complete `logical` default `FALSE` when set to `TRUE` then complete cases are checked.
-#' @param allow_inf `logical` default `TRUE` when set to `FALSE` then error thrown if any values are
+#' @param complete (`logical(1)`) default `FALSE` when set to `TRUE` then complete cases are checked.
+#' @param allow_inf (`logical(1)`) default `TRUE` when set to `FALSE` then error thrown if any values are
 #'   infinite.
 #' @param msg (`character(1)`) additional message to display alongside the default message.
 #'
@@ -78,7 +78,7 @@ validate_has_data <- function(x,
 #'
 #' This function is a wrapper for `shiny::validate`.
 #'
-#' @param x a data.frame
+#' @param x (`data.frame`)
 #' @param key a vector of ID variables from `x` that identify unique records
 #'
 #' @export
@@ -202,8 +202,8 @@ validate_has_elements <- function(x, msg) {
 #'
 #' This function is a wrapper for `shiny::validate`.
 #'
-#' @param x `vector`
-#' @param y `vector`
+#' @param x vector
+#' @param y vector
 #' @param msg message to display if `x` and `y` intersect
 #'
 #' @export
@@ -256,7 +256,7 @@ validate_no_intersection <- function(x, y, msg) {
 #'
 #' This function is a wrapper for `shiny::validate`.
 #'
-#' @param data a `data.frame`
+#' @param data (`data.frame`)
 #' @param varname name of variable in `data`
 #' @param msg message to display if `data` does not include `varname`
 #'

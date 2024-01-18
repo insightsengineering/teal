@@ -62,7 +62,7 @@ a subset of datasets which are appended to the \code{data} argument in \code{ser
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the
 \code{ui} function.}
 
-\item{x}{\code{teal_module}}
+\item{x}{(\code{teal_module})}
 
 \item{indent}{(\code{integer}) indent level;
 each \code{submodule} is indented one level more}

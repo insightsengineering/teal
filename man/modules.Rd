@@ -19,7 +19,7 @@ modules(..., label = "root")
 If using the \code{label} argument then it must be explicitly named.
 For example \code{modules("lab", ...)} should be converted to \code{modules(label = "lab", ...)}}
 
-\item{x}{\code{teal_modules}}
+\item{x}{(\code{teal_modules})}
 
 \item{indent}{(\code{integer}) indent level;
 each \code{submodule} is indented one level more}
