@@ -10,7 +10,7 @@ run_js_files(files)
 \item{files}{(\code{character}) vector of filenames}
 }
 \description{
-This is triggered from the \code{server} to execute on the client
+This is triggered from the server to execute on the client
 rather than triggered directly on the client.
 Unlike \code{include_js_files} which includes \code{JavaScript} functions,
 the \code{run_js} actually executes \code{JavaScript} functions.

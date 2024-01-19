@@ -26,7 +26,7 @@ Old way of specifying filters through a list is deprecated and will be removed i
 next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \description{
-Opens modal containing the filter manager \code{ui}.
+Opens modal containing the filter manager UI.
 }
 \examples{
 # use non-exported function from teal

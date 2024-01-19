@@ -4,21 +4,21 @@
 #'
 #' This is the main `teal` app that puts everything together.
 #'
-#' It displays the splash `ui` which is used to fetch the data, possibly
+#' It displays the splash UI which is used to fetch the data, possibly
 #' prompting for a password input to fetch the data. Once the data is ready,
-#' the splash screen is replaced by the actual `teal` `ui` that is tabsetted and
+#' the splash screen is replaced by the actual `teal` UI that is tabsetted and
 #' has a filter panel with `datanames` that are relevant for the current tab.
 #' Nested tabs are possible, but we limit it to two nesting levels for reasons
-#' of clarity of the `ui`.
+#' of clarity of the UI.
 #'
 #' The splash screen functionality can also be used
 #' for non-delayed data which takes time to load into memory, avoiding
 #' `shiny` session timeouts.
 #'
-#' `server` evaluates the `teal_data_rv` (delayed data mechanism) and creates the
+#' Server evaluates the `teal_data_rv` (delayed data mechanism) and creates the
 #' `datasets` object that is shared across modules.
 #' Once it is ready and non-`NULL`, the splash screen is replaced by the
-#' main `teal` `ui` that depends on the data.
+#' main `teal` UI that depends on the data.
 #' The currently active tab is tracked and the right filter panel
 #' updates the displayed datasets to filter for according to the active `datanames`
 #' of the tab.
@@ -29,15 +29,15 @@
 #'
 #' @inheritParams ui_teal_with_splash
 #'
-#' @param splash_ui (`shiny.tag`)\cr `ui` to display initially,
-#'   can be a splash screen or a `shiny` module `ui`. For the latter, see
-#'   [init()] about how to call the corresponding `server` function.
+#' @param splash_ui (`shiny.tag`)\cr UI to display initially,
+#'   can be a splash screen or a `shiny` module UI. For the latter, see
+#'   [init()] about how to call the corresponding server function.
 #'
 #' @param teal_data_rv (`reactive`)\cr
 #'   returns the `teal_data`, only evaluated once, `NULL` value is ignored
 #'
 #' @return
-#' `ui_teal` returns `HTML` for `shiny` module `ui`.
+#' `ui_teal` returns `HTML` for `shiny` UI module.
 #' `srv_teal` returns `reactive` which returns the currently active module.
 #'
 #' @examples
@@ -69,32 +69,39 @@ NULL
 #' @rdname module_teal
 ui_teal <- function(id,
                     splash_ui = tags$h2("Starting the Teal App"),
-                    title = NULL,
-                    header = tags$p(""),
-                    footer = tags$p("")) {
-  if (checkmate::test_string(header)) {
-    header <- tags$h1(header)
+                    title = build_app_title(),
+                    header = tags$p(),
+                    footer = tags$p()) {
+  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
+
+  checkmate::assert_multi_class(splash_ui, c("shiny.tag", "shiny.tag.list", "html"))
+
+  if (is.character(title)) {
+    title <- build_app_title(title)
+  } else {
+    validate_app_title_tag(title)
   }
+
+  checkmate::assert(
+    .var.name = "header",
+    checkmate::check_string(header),
+    checkmate::check_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
+  )
+  if (checkmate::test_string(header)) {
+    header <- tags$p(header)
+  }
+
+  checkmate::assert(
+    .var.name = "footer",
+    checkmate::check_string(footer),
+    checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
+  )
   if (checkmate::test_string(footer)) {
     footer <- tags$p(footer)
   }
-  checkmate::assert(
-    checkmate::check_class(splash_ui, "shiny.tag"),
-    checkmate::check_class(splash_ui, "shiny.tag.list"),
-    checkmate::check_class(splash_ui, "html")
-  )
-  checkmate::assert(
-    checkmate::check_class(header, "shiny.tag"),
-    checkmate::check_class(header, "shiny.tag.list"),
-    checkmate::check_class(header, "html")
-  )
-  checkmate::assert(
-    checkmate::check_class(footer, "shiny.tag"),
-    checkmate::check_class(footer, "shiny.tag.list"),
-    checkmate::check_class(footer, "html")
-  )
 
   ns <- NS(id)
+
   # Once the data is loaded, we will remove this element and add the real teal UI instead
   splash_ui <- div(
     # id so we can remove the splash screen once ready, which is the first child of this container
@@ -154,7 +161,8 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
     )
 
     # `JavaScript` code
-    run_js_files(files = "init.js") # `JavaScript` code to make the clipboard accessible
+    run_js_files(files = "init.js")
+
     # set timezone in shiny app
     # timezone is set in the early beginning so it will be available also
     # for `DDL` and all shiny modules

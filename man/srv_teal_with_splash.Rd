@@ -2,7 +2,7 @@
 % Please edit documentation in R/module_teal_with_splash.R
 \name{srv_teal_with_splash}
 \alias{srv_teal_with_splash}
-\title{\code{server} function that loads the data through reactive loading and then delegates
+\title{Server function that loads the data through reactive loading and then delegates
 to \code{\link[=srv_teal]{srv_teal()}}.}
 \usage{
 srv_teal_with_splash(id, data, modules, filter = teal_slices())
@@ -10,14 +10,12 @@ srv_teal_with_splash(id, data, modules, filter = teal_slices())
 \arguments{
 \item{id}{(\code{character})\cr
 module id to embed it, if provided,
-the \code{server} function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
+the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 
-\item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})\cr
-\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or
-\code{teal_data_module} or simply a list of a named list of objects
-(\code{data.frame} or \code{MultiAssayExperiment}).}
+\item{data}{(\code{teal_data}, \code{teal_data_module})\cr
+\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
 
 \item{modules}{\code{teal_modules} object containing the output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for

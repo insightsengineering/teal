@@ -8,16 +8,16 @@
 #' @details
 #' `teal_data_module` creates a `shiny` module to supply or modify data in a `teal` application.
 #' The module allows for running data pre-processing code (creation _and_ some modification) after the app starts.
-#' The body of the `server` function will be run in the app rather than in the global environment.
+#' The body of the server function will be run in the app rather than in the global environment.
 #' This means it will be run every time the app starts, so use sparingly.\cr
 #' Pass this module instead of a `teal_data` object in a call to [init()].
-#' Note that the `server` function must always return a `teal_data` object wrapped in a reactive expression.\cr
+#' Note that the server function must always return a `teal_data` object wrapped in a reactive expression.\cr
 #' See vignette `vignette("data-as-shiny-module", package = "teal")` for more details.
 #'
 #' @param ui (`function(id)`)\cr
-#'  `shiny` module `ui` function; must only take `id` argument
+#'  `shiny` module UI function; must only take `id` argument
 #' @param server (`function(id)`)\cr
-#'  `shiny` module `ui` function; must only take `id` argument;
+#'  `shiny` module server function; must only take `id` argument;
 #'  must return reactive expression containing `teal_data` object
 #'
 #' @return

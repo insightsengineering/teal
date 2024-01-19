@@ -17,7 +17,7 @@ styles.
 Also initializes \code{shinyjs} so you can use it.
 }
 \details{
-Simply add \code{include_teal_css_js()} as one of the elements of the \code{ui}.
+Simply add \code{include_teal_css_js()} as one of the UI elements.
 }
 \examples{
 # use non-exported function from teal

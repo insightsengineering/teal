@@ -94,7 +94,7 @@ filter <- teal_slices(
 )
 
 app <- init(
-  data = list(iris = iris, mtcars = mtcars),
+  data = teal_data(iris = iris, mtcars = mtcars),
   modules = list(
     module("module1"),
     module("module2")

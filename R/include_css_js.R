@@ -41,7 +41,7 @@ include_js_files <- function(pattern = NULL, except = NULL) {
 
 #' Run `JS` file from `/inst/js/` package directory
 #'
-#' This is triggered from the `server` to execute on the client
+#' This is triggered from the server to execute on the client
 #' rather than triggered directly on the client.
 #' Unlike `include_js_files` which includes `JavaScript` functions,
 #' the `run_js` actually executes `JavaScript` functions.
@@ -68,7 +68,7 @@ run_js_files <- function(files) {
 #' styles.
 #' Also initializes `shinyjs` so you can use it.
 #'
-#' Simply add `include_teal_css_js()` as one of the elements of the `ui`.
+#' Simply add `include_teal_css_js()` as one of the UI elements.
 #' @return A `shiny.tag.list`.
 #' @examples
 #' # use non-exported function from teal

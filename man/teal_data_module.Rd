@@ -19,10 +19,10 @@ teal_data_module(ui, server)
 }
 \arguments{
 \item{ui}{(\verb{function(id)})\cr
-\code{shiny} module \code{ui} function; must only take \code{id} argument}
+\code{shiny} module UI function; must only take \code{id} argument}
 
 \item{server}{(\verb{function(id)})\cr
-\code{shiny} module \code{ui} function; must only take \code{id} argument;
+\code{shiny} module server function; must only take \code{id} argument;
 must return reactive expression containing \code{teal_data} object}
 
 \item{object}{(\code{teal_data_module})}
@@ -50,16 +50,18 @@ Create a \code{teal_data_module} object and evaluate code on it with history tra
 \details{
 \code{teal_data_module} creates a \code{shiny} module to supply or modify data in a \code{teal} application.
 The module allows for running data pre-processing code (creation \emph{and} some modification) after the app starts.
-The body of the \code{server} function will be run in the app rather than in the global environment.
+The body of the server function will be run in the app rather than in the global environment.
 This means it will be run every time the app starts, so use sparingly.\cr
 Pass this module instead of a \code{teal_data} object in a call to \code{\link[=init]{init()}}.
-Note that the \code{server} function must always return a \code{teal_data} object wrapped in a reactive expression.\cr
+Note that the server function must always return a \code{teal_data} object wrapped in a reactive expression.\cr
 See vignette \code{vignette("data-as-shiny-module", package = "teal")} for more details.
 
 \code{eval_code} evaluates given code in the environment of the \code{teal_data} object created by the \code{teal_data_module}.
 The code is added to the \verb{@code} slot of the \code{teal_data}.
 
 \code{within} is a convenience function for evaluating inline code inside the environment of a \code{teal_data_module}.
+It accepts only inline expressions (both simple and compound) and allows for injecting values into \code{expr} through
+the \code{...} argument: as \code{name:value} pairs are passed to \code{...}, \code{name} in \code{expr} will be replaced with \code{value.}
 }
 \examples{
 tdm <- teal_data_module(
@@ -88,6 +90,9 @@ tdm <- teal_data_module(
 eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 
 within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
+
+# in an app, use input-derived value in the expression
+within(tdm, dataset1 <- subset(dataset1, Species == species), species = input$species)
 
 }
 \seealso{

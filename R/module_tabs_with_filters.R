@@ -1,6 +1,6 @@
-#' Add right filter panel into each of the top-level `teal_modules` `ui`s.
+#' Add right filter panel into each of the top-level `teal_modules` UIs.
 #'
-#' The [ui_nested_tabs] function returns a nested tabbed `ui` corresponding
+#' The [ui_nested_tabs] function returns a nested tabbed UI corresponding
 #' to the nested modules.
 #' This function adds the right filter panel to each main tab.
 #'
