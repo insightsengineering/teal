@@ -495,3 +495,20 @@ testthat::test_that("append_module produces teal_modules with unique named child
   mod_names <- names(appended_mods$children)
   testthat::expect_equal(mod_names, unique(mod_names))
 })
+
+
+# format ----------------------------------------------------------------------------------------------------------
+
+testthat::test_that("format.teal_modules returns proper structure", {
+  mod <- module(label = "a")
+  mod2 <- module(label = "c")
+  mods <- modules(label = "c", mod, mod2)
+  mod3 <- module(label = "c")
+
+  appended_mods <- append_module(mods, mod3)
+
+  testthat::expect_equal(
+    format(appended_mods),
+    "+ c\n + a\n + c\n + c"
+  )
+})

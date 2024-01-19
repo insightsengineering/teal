@@ -2,7 +2,7 @@
 % Please edit documentation in R/modules.R
 \name{module}
 \alias{module}
-\alias{toString.teal_module}
+\alias{format.teal_module}
 \alias{print.teal_module}
 \title{Creates a \code{teal_module} object.}
 \usage{
@@ -23,7 +23,7 @@ module(
   ui_args = NULL
 )
 
-\method{toString}{teal_module}(x, indent = 0, ...)
+\method{format}{teal_module}(x, indent = 0, ...)
 
 \method{print}{teal_module}(x, ...)
 }
@@ -67,7 +67,7 @@ a subset of datasets which are appended to the \code{data} argument in \code{ser
 \item{indent}{(\code{integer}) indent level;
 each \code{submodule} is indented one level more}
 
-\item{...}{parameters passed to \code{toString}}
+\item{...}{arguments passed to \code{format}}
 }
 \value{
 object of class \code{teal_module}.
