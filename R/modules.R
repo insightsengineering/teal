@@ -9,7 +9,7 @@
 #'
 #' @param ...
 #' - For `modules()`: (`teal_module` or `teal_modules`) see [module()] and [modules()] for more details.
-#' - For `format()` and `print()`: (optional) additional parameters to pass to recursive calls of `format`.
+#' - For `format()` and `print()`: arguments passed to other methods.
 #' @param label (`character(1)`) label of modules collection (default `"root"`).
 #' If using the `label` argument then it must be explicitly named.
 #' For example `modules("lab", ...)` should be converted to `modules(label = "lab", ...)`

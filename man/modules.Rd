@@ -15,7 +15,7 @@ modules(..., label = "root")
 \arguments{
 \item{...}{\itemize{
 \item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) see \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}} for more details.
-\item For \code{format()} and \code{print()}: (optional) additional parameters to pass to recursive calls of \code{format}.
+\item For \code{format()} and \code{print()}: arguments passed to other methods.
 }}
 
 \item{label}{(\code{character(1)}) label of modules collection (default \code{"root"}).
