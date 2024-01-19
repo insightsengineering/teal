@@ -408,7 +408,7 @@ module_labels <- function(modules) {
 #'
 #' @param x (`teal_modules`) to print
 #' @param indent (`integer`) indent level;
-#'   each `submodule` is indented one level more
+#'   each nested `teal_modules` or `teal_module` is indented one level more
 #' @return (`character`)
 #' @export
 #' @rdname modules

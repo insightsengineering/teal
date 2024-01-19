@@ -25,7 +25,7 @@ For example \code{modules("lab", ...)} should be converted to \code{modules(labe
 \item{x}{\code{teal_modules}}
 
 \item{indent}{(\code{integer}) indent level;
-each \code{submodule} is indented one level more}
+each nested \code{teal_modules} or \code{teal_module} is indented one level more}
 }
 \value{
 object of class \code{teal_modules}. Object contains following fields
