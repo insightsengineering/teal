@@ -123,7 +123,7 @@ Currently `teal` supports two specialized data formats.
 
 ### `ADaM` data
 
-The `ADaM` data model, defined in `CDISC` standards, specifies relationships between the subject-level parent dataset and observation-level child datasets.
+The `ADaM` data model, defined in CDISC standards, specifies relationships between the subject-level parent dataset and observation-level child datasets.
 The `cdisc_data` function takes advantage of that fact to automatically set default joining keys (see [`join_keys` property](#join_keys)).
 In the example below, two standard `ADaM` datasets (`ADSL` and `ADTTE`) are passed to `cdisc_data`.
 
