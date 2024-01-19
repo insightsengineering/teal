@@ -1,6 +1,7 @@
 #' Creates a `teal_modules` object.
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' This function collects a list of `teal_modules` and `teal_module` objects and returns a `teal_modules` object
 #' containing the passed objects.
 #'
