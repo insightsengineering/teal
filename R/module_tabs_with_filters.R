@@ -26,14 +26,43 @@
 #'
 #' @examples
 #' # use non-exported function from teal
-#' example_modules <- getFromNamespace("example_modules", "teal")
-#' example_datasets <- getFromNamespace("example_datasets", "teal")
 #' include_teal_css_js <- getFromNamespace("include_teal_css_js", "teal")
+#' teal_data_to_filtered_data <- getFromNamespace("teal_data_to_filtered_data", "teal")
 #' ui_tabs_with_filters <- getFromNamespace("ui_tabs_with_filters", "teal")
 #' srv_tabs_with_filters <- getFromNamespace("srv_tabs_with_filters", "teal")
 #'
-#' mods <- example_modules()
-#' datasets <- example_datasets()
+#' # creates `teal_data`
+#' data <- teal_data(iris = iris, mtcars = mtcars)
+#' datanames <- datanames(data)
+#'
+#' # creates a hierarchy of `teal_modules` from which a `teal` app can be created.
+#' mods <- modules(
+#'   label = "d1",
+#'   modules(
+#'     label = "d2",
+#'     modules(
+#'       label = "d3",
+#'       example_module(label = "aaa1", datanames = datanames),
+#'       example_module(label = "aaa2", datanames = datanames)
+#'     ),
+#'     example_module(label = "bbb", datanames = datanames)
+#'   ),
+#'   example_module(label = "ccc", datanames = datanames)
+#' )
+#'
+#' # creates nested list aligned with the module hierarchy created above,
+#' # each leaf holding the same `FilteredData` object.
+#' datasets <- teal_data_to_filtered_data(data)
+#' datasets <-list(
+#'   "d2" = list(
+#'     "d3" = list(
+#'       "aaa1" = datasets,
+#'       "aaa2" = datasets
+#'     ),
+#'     "bbb" = datasets
+#'   ),
+#'   "ccc" = datasets
+#' )
 #'
 #' ui <- function() {
 #'   tagList(

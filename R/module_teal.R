@@ -42,13 +42,15 @@
 #'
 #' @examples
 #' # use non-exported function from teal
-#' example_modules <- getFromNamespace("example_modules", "teal")
-#' example_cdisc_data <- getFromNamespace("example_cdisc_data", "teal")
 #' ui_teal <- getFromNamespace("ui_teal", "teal")
 #' srv_teal <- getFromNamespace("srv_teal", "teal")
 #'
-#' mods <- example_modules()
-#' teal_data_rv <- reactive(example_cdisc_data())
+#' mods <- modules(
+#'   label = "example app",
+#'   example_module(label = "example dataset", datanames = c("iris", "mtcars"))
+#' )
+#'
+#' teal_data_rv <- reactive(teal_data(iris = iris, mtcars = mtcars))
 #'
 #' ui <- function() {
 #'   ui_teal("dummy")
