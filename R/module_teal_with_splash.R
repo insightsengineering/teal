@@ -1,6 +1,6 @@
 # This file adds a splash screen for delayed data loading on top of teal
 
-#' `ui` to show a splash screen in the beginning, then delegate to [srv_teal()]
+#' UI to show a splash screen in the beginning, then delegate to [srv_teal()]
 #'
 #' @description `r lifecycle::badge("stable")`
 #'
@@ -61,7 +61,7 @@ ui_teal_with_splash <- function(id,
   )
 }
 
-#' `server` function that loads the data through reactive loading and then delegates
+#' Server function that loads the data through reactive loading and then delegates
 #' to [srv_teal()].
 #'
 #' @description `r lifecycle::badge("stable")`

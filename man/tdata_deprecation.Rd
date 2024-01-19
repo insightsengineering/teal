@@ -18,7 +18,7 @@ Convert \code{teal_data} to \code{tdata} in \code{teal} modules.
 \details{
 Recent changes in \code{teal} cause modules to fail because modules expect a \code{tdata} object
 to be passed to the \code{data} argument but instead they receive a \code{teal_data} object,
-which is additionally wrapped in a reactive expression in the \code{server} functions.
+which is additionally wrapped in a reactive expression in the server functions.
 In order to easily adapt such modules without a proper refactor,
 use this function to downgrade the \code{data} argument.
 }

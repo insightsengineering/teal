@@ -24,7 +24,7 @@ NULL
 
 #' Filter manager modal
 #'
-#' Opens modal containing the filter manager `ui`.
+#' Opens modal containing the filter manager UI.
 #'
 #' @name module_filter_manager_modal
 #' @inheritParams module_filter_manager

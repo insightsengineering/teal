@@ -42,7 +42,7 @@ the \code{filters} argument.
 \item \code{...} (optional) \code{server_args} elements will be passed to the module named argument or to the \code{...}.
 }}
 
-\item{ui}{(\code{function}) \code{shiny} \code{ui} module function with following arguments:
+\item{ui}{(\code{function}) \code{shiny} UI module function with following arguments:
 \itemize{
 \item \code{id} - \code{teal} will set proper \code{shiny} namespace for this module.
 \item \code{...} (optional) \code{ui_args} elements will be passed to the module named argument or to the \code{...}.
@@ -54,13 +54,13 @@ the \code{filters} argument.
 filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
 and the keyword \code{'all'} will show filters of all datasets. \code{datanames} also determines
-a subset of datasets which are appended to the \code{data} argument in \code{server} function.}
+a subset of datasets which are appended to the \code{data} argument in server function.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the
-\code{server} function.}
+server function.}
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the
-\code{ui} function.}
+UI function.}
 
 \item{x}{(\code{teal_module})}
 

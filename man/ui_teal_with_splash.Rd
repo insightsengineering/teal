@@ -2,7 +2,7 @@
 % Please edit documentation in R/module_teal_with_splash.R
 \name{ui_teal_with_splash}
 \alias{ui_teal_with_splash}
-\title{\code{ui} to show a splash screen in the beginning, then delegate to \code{\link[=srv_teal]{srv_teal()}}}
+\title{UI to show a splash screen in the beginning, then delegate to \code{\link[=srv_teal]{srv_teal()}}}
 \usage{
 ui_teal_with_splash(
   id,

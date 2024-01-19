@@ -28,7 +28,7 @@ example_module <- function(label = "example teal module", datanames = "all") {
         teal.widgets::verbatim_popup_srv(
           id = "rcode",
           verbatim_content = reactive(teal.code::get_code(data())),
-          title = "Association Plot"
+          title = "Example Code"
         )
       })
     },

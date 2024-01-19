@@ -1,11 +1,11 @@
 #' Get client timezone
 #'
-#' Local timezone in the browser may differ from the system timezone from the `server`.
+#' Local timezone in the browser may differ from the system timezone from the server.
 #'   This script can be run to register a `shiny` input which contains information about
 #'   the timezone in the browser.
 #'
 #' @param ns (`function`) namespace function passed from the `session` object in the
-#'   `shiny` `server`. For `shiny` modules this will allow for proper name spacing of the
+#'   `shiny` server. For `shiny` modules this will allow for proper name spacing of the
 #'   registered input.
 #'
 #' @return (`Shiny`) input variable accessible with `input$tz` which is a (`character`)
