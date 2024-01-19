@@ -185,4 +185,4 @@ if (interactive()) {
 <img src="images/custom_app.png" alt="Teal Duck" style="width: 100%;"/>
 
 ## Adding reporting to a module
-Refer to `vignette("adding_support_for_reporting")` to read about adding support for reporting in your `teal` module.
+Refer to [this vignette](adding-support-for-reporting.html)` to read about adding support for reporting in your `teal` module.
