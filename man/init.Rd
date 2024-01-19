@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{init}
 \alias{init}
-\title{Create the \code{server} and \code{ui} function for the \code{shiny} app}
+\title{Create the server and UI function for the \code{shiny} app}
 \usage{
 init(
   data,
@@ -42,12 +42,12 @@ The footer of the app.}
 
 \item{id}{(\code{character})\cr
 module id to embed it, if provided,
-the \code{server} function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
+the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 }
 \value{
-named list with \code{server} and \code{ui} function
+named list with server and UI function
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

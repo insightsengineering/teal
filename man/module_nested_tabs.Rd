@@ -10,7 +10,7 @@
 \alias{srv_nested_tabs.default}
 \alias{srv_nested_tabs.teal_modules}
 \alias{srv_nested_tabs.teal_module}
-\title{Create a \code{ui} of nested tabs of \code{teal_modules}}
+\title{Create a UI of nested tabs of \code{teal_modules}}
 \usage{
 ui_nested_tabs(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
 
@@ -74,20 +74,20 @@ When set to \code{TRUE}, a filter panel is called inside of each module tab.}
 \value{
 depending on class of \code{modules}, \code{ui_nested_tabs} returns:
 \itemize{
-\item \code{teal_module}: instantiated \code{ui} of the module
+\item \code{teal_module}: instantiated UI of the module
 \item \code{teal_modules}: \code{tabsetPanel} with each tab corresponding to recursively
 calling this function on it.\cr
 \code{srv_nested_tabs} returns a reactive which returns the active module that corresponds to the selected tab.
 }
 }
 \description{
-Create a \code{ui} of nested tabs of \code{teal_modules}
+Create a UI of nested tabs of \code{teal_modules}
 }
 \section{\code{ui_nested_tabs}}{
 
 Each \code{teal_modules} is translated to a \code{tabsetPanel} and each
-of its children is another tab-module called recursively. The \code{ui} of a
-\code{teal_module} is obtained by calling the \code{ui} function on it.
+of its children is another tab-module called recursively. The UI of a
+\code{teal_module} is obtained by calling the UI function on it.
 
 The \code{datasets} argument is required to resolve the \code{teal} arguments in an
 isolated context (with respect to reactivity)

@@ -14,7 +14,7 @@ example_module(label = "example teal module", datanames = "all")
 filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
 and the keyword \code{'all'} will show filters of all datasets. \code{datanames} also determines
-a subset of datasets which are appended to the \code{data} argument in \code{server} function.}
+a subset of datasets which are appended to the \code{data} argument in server function.}
 }
 \value{
 A \code{teal} module which can be included in the \code{modules} argument to \code{\link[=init]{init()}}.

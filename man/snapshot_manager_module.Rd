@@ -52,7 +52,7 @@ cannot be stored as is. Therefore, \code{teal_slices} are reversibly converted t
 Snapshots are stored in a \code{reactiveVal} as a named list.
 The first snapshot is the initial state of the application and the user can add a snapshot whenever they see fit.
 
-For every snapshot except the initial one, a piece of \code{ui} is generated that contains
+For every snapshot except the initial one, a piece of UI is generated that contains
 the snapshot name, a select button to restore that snapshot, and a save button to save it to a file.
 The initial snapshot is restored by a separate "reset" button.
 It cannot be saved directly but a user is welcome to capture the initial state as a snapshot and save that.

@@ -4,21 +4,21 @@
 #'
 #' This is the main `teal` app that puts everything together.
 #'
-#' It displays the splash `ui` which is used to fetch the data, possibly
+#' It displays the splash UI which is used to fetch the data, possibly
 #' prompting for a password input to fetch the data. Once the data is ready,
-#' the splash screen is replaced by the actual `teal` `ui` that is tabsetted and
+#' the splash screen is replaced by the actual `teal` UI that is tabsetted and
 #' has a filter panel with `datanames` that are relevant for the current tab.
 #' Nested tabs are possible, but we limit it to two nesting levels for reasons
-#' of clarity of the `ui`.
+#' of clarity of the UI.
 #'
 #' The splash screen functionality can also be used
 #' for non-delayed data which takes time to load into memory, avoiding
 #' `shiny` session timeouts.
 #'
-#' `server` evaluates the `teal_data_rv` (delayed data mechanism) and creates the
+#' Server evaluates the `teal_data_rv` (delayed data mechanism) and creates the
 #' `datasets` object that is shared across modules.
 #' Once it is ready and non-`NULL`, the splash screen is replaced by the
-#' main `teal` `ui` that depends on the data.
+#' main `teal` UI that depends on the data.
 #' The currently active tab is tracked and the right filter panel
 #' updates the displayed datasets to filter for according to the active `datanames`
 #' of the tab.
@@ -29,15 +29,15 @@
 #'
 #' @inheritParams ui_teal_with_splash
 #'
-#' @param splash_ui (`shiny.tag`)\cr `ui` to display initially,
-#'   can be a splash screen or a `shiny` module `ui`. For the latter, see
-#'   [init()] about how to call the corresponding `server` function.
+#' @param splash_ui (`shiny.tag`)\cr UI to display initially,
+#'   can be a splash screen or a `shiny` module UI. For the latter, see
+#'   [init()] about how to call the corresponding server function.
 #'
 #' @param teal_data_rv (`reactive`)\cr
 #'   returns the `teal_data`, only evaluated once, `NULL` value is ignored
 #'
 #' @return
-#' `ui_teal` returns `HTML` for `shiny` module `ui`.
+#' `ui_teal` returns `HTML` for `shiny` UI module.
 #' `srv_teal` returns `reactive` which returns the currently active module.
 #'
 #' @keywords internal

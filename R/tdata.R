@@ -161,7 +161,7 @@ get_metadata.default <- function(data, dataname) {
 #'
 #' Recent changes in `teal` cause modules to fail because modules expect a `tdata` object
 #' to be passed to the `data` argument but instead they receive a `teal_data` object,
-#' which is additionally wrapped in a reactive expression in the `server` functions.
+#' which is additionally wrapped in a reactive expression in the server functions.
 #' In order to easily adapt such modules without a proper refactor,
 #' use this function to downgrade the `data` argument.
 #'

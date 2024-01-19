@@ -4,7 +4,7 @@
 # error messages.
 
 
-#' Create the `server` and `ui` function for the `shiny` app
+#' Create the server and UI function for the `shiny` app
 #'
 #' @description `r lifecycle::badge("stable")`
 #' End-users: This is the most important function for you to start a
@@ -35,11 +35,11 @@
 #'   The footer of the app.
 #' @param id (`character`)\cr
 #'   module id to embed it, if provided,
-#'   the `server` function must be called with [shiny::moduleServer()];
+#'   the server function must be called with [shiny::moduleServer()];
 #'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
 #'
-#' @return named list with `server` and `ui` function
+#' @return named list with server and UI function
 #'
 #' @export
 #'
@@ -227,7 +227,7 @@ init <- function(data,
 
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
-  # the `ui` and `server` with `id = character(0)` and calling the `server` function directly
+  # the UI and server with `id = character(0)` and calling the server function directly
   # rather than through `callModule`
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),

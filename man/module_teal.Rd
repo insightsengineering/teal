@@ -20,9 +20,9 @@ srv_teal(id, modules, teal_data_rv, filter = teal_slices())
 \item{id}{(\code{character(1)})\cr
 module id}
 
-\item{splash_ui}{(\code{shiny.tag})\cr \code{ui} to display initially,
-can be a splash screen or a \code{shiny} module \code{ui}. For the latter, see
-\code{\link[=init]{init()}} about how to call the corresponding \code{server} function.}
+\item{splash_ui}{(\code{shiny.tag})\cr UI to display initially,
+can be a splash screen or a \code{shiny} module UI. For the latter, see
+\code{\link[=init]{init()}} about how to call the corresponding server function.}
 
 \item{title}{(\code{shiny.tag} or \code{character(1)})\cr
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
@@ -39,28 +39,28 @@ The footer of the app.}
 returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
 }
 \value{
-\code{ui_teal} returns \code{HTML} for \code{shiny} module \code{ui}.
+\code{ui_teal} returns \code{HTML} for \code{shiny} UI module.
 \code{srv_teal} returns \code{reactive} which returns the currently active module.
 }
 \description{
 This is the main \code{teal} app that puts everything together.
 }
 \details{
-It displays the splash \code{ui} which is used to fetch the data, possibly
+It displays the splash UI which is used to fetch the data, possibly
 prompting for a password input to fetch the data. Once the data is ready,
-the splash screen is replaced by the actual \code{teal} \code{ui} that is tabsetted and
+the splash screen is replaced by the actual \code{teal} UI that is tabsetted and
 has a filter panel with \code{datanames} that are relevant for the current tab.
 Nested tabs are possible, but we limit it to two nesting levels for reasons
-of clarity of the \code{ui}.
+of clarity of the UI.
 
 The splash screen functionality can also be used
 for non-delayed data which takes time to load into memory, avoiding
 \code{shiny} session timeouts.
 
-\code{server} evaluates the \code{teal_data_rv} (delayed data mechanism) and creates the
+Server evaluates the \code{teal_data_rv} (delayed data mechanism) and creates the
 \code{datasets} object that is shared across modules.
 Once it is ready and non-\code{NULL}, the splash screen is replaced by the
-main \code{teal} \code{ui} that depends on the data.
+main \code{teal} UI that depends on the data.
 The currently active tab is tracked and the right filter panel
 updates the displayed datasets to filter for according to the active \code{datanames}
 of the tab.

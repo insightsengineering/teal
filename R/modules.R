@@ -177,7 +177,7 @@ is_arg_used <- function(modules, arg) {
 #'  - `reporter` (optional) module will receive `Reporter`. (See [teal.reporter::Reporter]).
 #   - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).
 #'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
-#' @param ui (`function`) `shiny` `ui` module function with following arguments:
+#' @param ui (`function`) `shiny` UI module function with following arguments:
 #'  - `id` - `teal` will set proper `shiny` namespace for this module.
 #'  - `...` (optional) `ui_args` elements will be passed to the module named argument or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
@@ -185,11 +185,11 @@ is_arg_used <- function(modules, arg) {
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed datasets. `NULL` will hide the filter panel,
 #'   and the keyword `'all'` will show filters of all datasets. `datanames` also determines
-#'   a subset of datasets which are appended to the `data` argument in `server` function.
+#'   a subset of datasets which are appended to the `data` argument in server function.
 #' @param server_args (named `list`) with additional arguments passed on to the
-#'   `server` function.
+#'   server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the
-#'   `ui` function.
+#'   UI function.
 #'
 #' @return object of class `teal_module`.
 #' @export
@@ -248,7 +248,7 @@ module <- function(label = "module",
     )
   }
 
-  ## `server`
+  ## server
   checkmate::assert_function(server)
   server_formals <- names(formals(server))
   if (!(
@@ -270,14 +270,14 @@ module <- function(label = "module",
   if ("datasets" %in% server_formals) {
     warning(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
-      "`datasets` argument in the `server` is deprecated and will be removed in the next release. ",
+      "`datasets` argument in the server is deprecated and will be removed in the next release. ",
       "Please use `data` instead.",
       call. = FALSE
     )
   }
 
 
-  ## `ui`
+  ## UI
   checkmate::assert_function(ui)
   ui_formals <- names(formals(ui))
   if (!"id" %in% ui_formals) {
@@ -291,8 +291,8 @@ module <- function(label = "module",
   if (any(c("data", "datasets") %in% ui_formals)) {
     stop(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
-      "`ui` with `data` or `datasets` argument is no longer accepted.\n  ",
-      "If some `ui` inputs depend on data, please move the logic to your `server` instead.\n  ",
+      "UI with `data` or `datasets` argument is no longer accepted.\n  ",
+      "If some UI inputs depend on data, please move the logic to your server instead.\n  ",
       "Possible solutions are renderUI() or updateXyzInput() functions."
     )
   }
@@ -320,9 +320,9 @@ module <- function(label = "module",
   srv_extra_args <- setdiff(names(server_args), server_formals)
   if (length(srv_extra_args) > 0 && !"..." %in% server_formals) {
     stop(
-      "\nFollowing `server_args` elements have no equivalent in the formals of the `server`:\n",
+      "\nFollowing `server_args` elements have no equivalent in the formals of the server:\n",
       paste(paste(" -", srv_extra_args), collapse = "\n"),
-      "\n\nUpdate the `server` arguments by including above or add `...`"
+      "\n\nUpdate the server arguments by including above or add `...`"
     )
   }
 
@@ -331,9 +331,9 @@ module <- function(label = "module",
   ui_extra_args <- setdiff(names(ui_args), ui_formals)
   if (length(ui_extra_args) > 0 && !"..." %in% ui_formals) {
     stop(
-      "\nFollowing `ui_args` elements have no equivalent in the formals of `ui`:\n",
+      "\nFollowing `ui_args` elements have no equivalent in the formals of UI:\n",
       paste(paste(" -", ui_extra_args), collapse = "\n"),
-      "\n\nUpdate the `ui` arguments by including above or add `...`"
+      "\n\nUpdate the UI arguments by including above or add `...`"
     )
   }
 
