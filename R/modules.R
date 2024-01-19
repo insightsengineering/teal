@@ -434,9 +434,8 @@ format.teal_module <- function(x, indent = 0, ...) { # nolint
 #' @export
 #' @rdname modules
 print.teal_modules <- function(x, ...) {
-  s <- format(x, ...)
-  cat(s)
-  return(invisible(s))
+  cat(format(x, ...))
+  invisible(x)
 }
 
 #' Prints `teal_module`
