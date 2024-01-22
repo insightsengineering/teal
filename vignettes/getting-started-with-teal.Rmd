@@ -46,7 +46,7 @@ if (interactive()) {
 }
 ```
 
-<img src="images/example_app.png" alt="Example application" style="width: 100%;"/>
+<img src="images/teal-app-components.svg" alt="Example application" style="width: 100%;"/>
 
 Every `teal` application is composed of following elements, which all can be controlled by app developer by passing arguments to `init` function:
 
