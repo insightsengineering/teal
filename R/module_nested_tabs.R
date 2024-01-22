@@ -3,9 +3,9 @@
 #' @section `ui_nested_tabs`:
 #' Each `teal_modules` is translated to a `tabsetPanel` and each
 #' of its children is another tab-module called recursively. The UI of a
-#' `teal_module` is obtained by calling the `ui` function on it.
+#' `teal_module` is obtained by calling the UI function on it.
 #'
-#' The `datasets` argument is required to resolve the teal arguments in an
+#' The `datasets` argument is required to resolve the `teal` arguments in an
 #' isolated context (with respect to reactivity)
 #'
 #' @section `srv_nested_tabs`:
@@ -29,33 +29,6 @@
 #'     calling this function on it.\cr
 #' `srv_nested_tabs` returns a reactive which returns the active module that corresponds to the selected tab.
 #'
-#' @examples
-#' mods <- teal:::example_modules()
-#' datasets <- teal:::example_datasets()
-#' app <- shinyApp(
-#'   ui = function() {
-#'     tagList(
-#'       teal:::include_teal_css_js(),
-#'       textOutput("info"),
-#'       fluidPage( # needed for nice tabs
-#'         teal:::ui_nested_tabs("dummy", modules = mods, datasets = datasets)
-#'       )
-#'     )
-#'   },
-#'   server = function(input, output, session) {
-#'     active_module <- teal:::srv_nested_tabs(
-#'       "dummy",
-#'       datasets = datasets,
-#'       modules = mods
-#'     )
-#'     output$info <- renderText({
-#'       paste0("The currently active tab name is ", active_module()$label)
-#'     })
-#'   }
-#' )
-#' if (interactive()) {
-#'   shinyApp(app$ui, app$server)
-#' }
 #' @keywords internal
 NULL
 
@@ -277,7 +250,10 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   datanames <- if (is.null(module$datanames) || identical(module$datanames, "all")) {
     datasets$datanames()
   } else {
-    unique(module$datanames) # todo: include parents! unique shouldn't be needed here!
+    include_parent_datanames(
+      module$datanames,
+      datasets$get_join_keys()
+    )
   }
 
   # list of reactive filtered data

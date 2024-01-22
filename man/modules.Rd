@@ -57,7 +57,7 @@ app <- init(
           moduleServer(
             id,
             module = function(input, output, session) {
-              output$data <- renderDataTable(data[["iris"]]())
+              output$data <- renderDataTable(data()[["iris"]])
             }
           )
         },

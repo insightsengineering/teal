@@ -4,7 +4,7 @@
 \alias{teal_slices}
 \alias{as.teal_slices}
 \alias{c.teal_slices}
-\title{Filter settings for teal applications}
+\title{Filter settings for \code{teal} applications}
 \usage{
 teal_slices(
   ...,
@@ -80,12 +80,12 @@ See argument descriptions for details.
 }
 \examples{
 filter <- teal_slices(
-  teal.slice::teal_slice(dataname = "iris", varname = "Species", id = "species"),
-  teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length", id = "sepal_length"),
-  teal.slice::teal_slice(
+  teal_slice(dataname = "iris", varname = "Species", id = "species"),
+  teal_slice(dataname = "iris", varname = "Sepal.Length", id = "sepal_length"),
+  teal_slice(
     dataname = "iris", id = "long_petals", title = "Long petals", expr = "Petal.Length > 5"
   ),
-  teal.slice::teal_slice(dataname = "mtcars", varname = "mpg", id = "mtcars_mpg"),
+  teal_slice(dataname = "mtcars", varname = "mpg", id = "mtcars_mpg"),
   mapping = list(
     module1 = c("species", "sepal_length"),
     module2 = c("mtcars_mpg"),
@@ -93,8 +93,8 @@ filter <- teal_slices(
   )
 )
 
-app <- teal::init(
-  data = list(iris = iris, mtcars = mtcars),
+app <- init(
+  data = teal_data(iris = iris, mtcars = mtcars),
   modules = list(
     module("module1"),
     module("module2")

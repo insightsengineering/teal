@@ -16,10 +16,8 @@ ui_teal_with_splash(
 \item{id}{(\code{character(1)})\cr
 module id}
 
-\item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})\cr
-\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or
-\code{teal_data_module} or simply a list of a named list of objects
-(\code{data.frame} or \code{MultiAssayExperiment}).}
+\item{data}{(\code{teal_data}, \code{teal_data_module})\cr
+\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
 
 \item{title}{(\code{shiny.tag} or \code{character(1)})\cr
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
@@ -37,7 +35,7 @@ The footer of the app.}
 The splash screen could be used to query for a password to fetch the data.
 \code{\link[=init]{init()}} is a very thin wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.
-This function instead adheres to the Shiny module conventions.
+This function instead adheres to the \code{shiny} module conventions.
 
 If data is obtained through delayed loading, its splash screen is used. Otherwise,
 a default splash screen is shown.

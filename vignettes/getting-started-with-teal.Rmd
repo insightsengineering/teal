@@ -87,7 +87,7 @@ See [this vignette](data-as-shiny-module.html) for details.
 
 In order to use `CDISC` clinical trial data in a `teal` application the `cdisc_data` function is used instead.
 
-For further details we recommend exploring the [`teal.data`](https://insightsengineering.github.io/teal.data/) package documentation.
+For further details, we recommend exploring the [`teal.data`](https://insightsengineering.github.io/teal.data/) package documentation.
 
 ### Modules
 
