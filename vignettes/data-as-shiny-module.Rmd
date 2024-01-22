@@ -20,8 +20,8 @@ In some scenarios, however, application developers may opt to postpone some data
 This can be done by passing a special _`shiny` module_ to the `data` argument.
 The `teal_data_module` function is used to build such a module from the following components:
 
-- a `ui` function; accepts only one argument, `id`; defines user interface elements for the data module
-- a `server` function: accepts only one argument, `id`; defines server logic for the data module, including data creation; must return a reactive expression containing a `teal_data` object
+- a UI function; accepts only one argument, `id`; defines user interface elements for the data module
+- a server function: accepts only one argument, `id`; defines server logic for the data module, including data creation; must return a reactive expression containing a `teal_data` object
 
 `teal` will run this module when the application starts and the resulting `teal_data` object that will be used throughout all `teal` (analytic) modules. 
 

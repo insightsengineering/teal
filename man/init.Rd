@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{init}
 \alias{init}
-\title{Create the \code{server} and \code{ui} function for the \code{shiny} app}
+\title{Create the server and UI function for the \code{shiny} app}
 \usage{
 init(
   data,
@@ -15,10 +15,8 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})\cr
-\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or
-\code{teal_data_module} or simply a list of a named list of objects
-(\code{data.frame} or \code{MultiAssayExperiment}).}
+\item{data}{(\code{teal_data}, \code{teal_data_module})\cr
+\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
 
 \item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
@@ -26,8 +24,8 @@ nested list of \code{teal_modules} or \code{teal_module} objects or a single
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{title}{(\code{shiny.tag} or \code{character})\cr
-The browser window title. Defaults to a title "Teal app" with the icon of NEST.
+\item{title}{(\code{shiny.tag} or \code{character(1)})\cr
+The browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
@@ -36,22 +34,20 @@ Specification of initial filter. Filters can be specified using \code{\link[=tea
 Old way of specifying filters through a list is deprecated and will be removed in the
 next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 
-\item{header}{(\code{shiny.tag} or \code{character}) \cr
-the header of the app. Note \code{shiny} code placed here (and in the footer
-argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
-(such as loading \code{CSS} via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
+\item{header}{(\code{shiny.tag} or \code{character(1)}) \cr
+The header of the app.}
 
-\item{footer}{(\code{shiny.tag} or \code{character})\cr
-the footer of the app}
+\item{footer}{(\code{shiny.tag} or \code{character(1)})\cr
+The footer of the app.}
 
 \item{id}{(\code{character})\cr
 module id to embed it, if provided,
-the \code{server} function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
+the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 }
 \value{
-named list with \code{server} and \code{ui} function
+named list with server and UI function
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

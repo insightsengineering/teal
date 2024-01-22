@@ -1,4 +1,3 @@
-
 #' An example `teal` module
 #'
 #' @description `r lifecycle::badge("experimental")`

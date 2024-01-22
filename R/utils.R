@@ -1,11 +1,11 @@
 #' Get client timezone
 #'
-#' Local timezone in the browser may differ from the system timezone from the `server`.
+#' Local timezone in the browser may differ from the system timezone from the server.
 #'   This script can be run to register a `shiny` input which contains information about
 #'   the timezone in the browser.
 #'
 #' @param ns (`function`) namespace function passed from the `session` object in the
-#'   `shiny` `server`. For `shiny` modules this will allow for proper name spacing of the
+#'   `shiny` server. For `shiny` modules this will allow for proper name spacing of the
 #'   registered input.
 #'
 #' @return (`Shiny`) input variable accessible with `input$tz` which is a (`character`)
@@ -246,7 +246,8 @@ validate_app_title_tag <- function(shiny_tag) {
   checkmate::assert_subset(c("title", "link"), child_names, .var.name = "child tags")
   rel_attr <- shiny_tag$children[[which(child_names == "link")]]$attribs$rel
   checkmate::assert_subset(
-    rel_attr, c("icon", "shortcut icon"),
+    rel_attr,
+    c("icon", "shortcut icon"),
     .var.name = "Link tag's rel attribute",
     empty.ok = FALSE
   )
@@ -262,7 +263,7 @@ validate_app_title_tag <- function(shiny_tag) {
 #'
 #' @return A `shiny.tag` containing the element that adds the title and logo to the `shiny` app
 #' @export
-build_app_title <- function(title = "Teal app", favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") { # nolint
+build_app_title <- function(title = "teal app", favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") { # nolint
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_string(favicon, null.ok = TRUE)
   tags$head(
@@ -273,4 +274,31 @@ build_app_title <- function(title = "Teal app", favicon = "https://raw.githubuse
       sizes = "any"
     )
   )
+}
+
+#' Application ID
+#'
+#' Creates App ID used to match filter snapshots to application.
+#'
+#' Calculate app ID that will be used to stamp filter state snapshots.
+#' App ID is a hash of the app's data and modules.
+#' See "transferring snapshots" section in ?snapshot.
+#'
+#' @param data `teal_data` or `teal_data_module` as accepted by `init`
+#' @param modules `teal_modules` object as accepted by `init`
+#'
+#' @return A single character string.
+#'
+#' @keywords internal
+create_app_id <- function(data, modules) {
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_class(modules, "teal_modules")
+
+  hashables <- list(data = data, modules = modules)
+  hashables$data <- if (inherits(hashables$data, "teal_data")) {
+    as.list(hashables$data@env)
+  } else if (inherits(data, "teal_data_module")) {
+    body(data$server)
+  }
+  rlang::hash(hashables)
 }

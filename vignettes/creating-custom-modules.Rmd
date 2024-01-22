@@ -103,7 +103,7 @@ ui_histogram_example <- function(id) {
     ),
     mainPanel(
       plotOutput(ns("plot")),
-      verbatimTextOutput(ns("code"))  
+      verbatimTextOutput(ns("code"))
     ),
   )
 }
