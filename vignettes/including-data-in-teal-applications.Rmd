@@ -90,9 +90,11 @@ Inspecting code the in the app created above reveals a note that the preprocessi
 The necessary code can be supplied to the `code` argument of the `teal_data` function.
 
 ```{r}
-data_with_code <- teal_data(iris = iris, cars = mtcars,
-                            code = "iris <- iris
-                                    cars <- mtcars")
+data_with_code <- teal_data(
+  iris = iris, cars = mtcars,
+  code = "iris <- iris
+                                    cars <- mtcars"
+)
 ```
 
 <img src="images/show_code_prepro_present.png" style = "display: block; margin: auto; width: 75%"/>

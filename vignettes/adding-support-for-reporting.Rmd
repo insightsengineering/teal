@@ -37,7 +37,7 @@ example_module <- function(label = "example teal module") {
     server = function(id, data) {
       checkmate::assert_class(data, "reactive")
       checkmate::assert_class(isolate(data()), "teal_data")
-      
+
       moduleServer(id, function(input, output, session) {
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
         output$dataset <- renderPrint({
@@ -324,7 +324,7 @@ example_reporter_module <- function(label = "Example") {
     },
     ui = function(id) {
       ns <- NS(id)
-      
+
       sidebarLayout(
         sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
         mainPanel(
