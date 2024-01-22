@@ -40,9 +40,9 @@ app <- init(
     example_module("Module 2")
   ),
   filter = teal_slices(
-    teal_slice(dataname = "iris", varname = "Species", selected = "setosa")
+    teal_slice(dataname = "IRIS", varname = "Species", selected = "setosa")
   ),
-  title = "My first teal application",
+  title = build_app_title(title = "My first teal application"),
   header = h3("My first teal application"),
   footer = div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/"))
 )
