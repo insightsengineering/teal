@@ -35,7 +35,13 @@ library(teal)
 
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = example_module(),
+  modules = modules(
+    example_module("Module 1"),
+    example_module("Module 2")
+  ),
+  filters = teal_slices(
+    teal_slice(dataname = "iris", varname = "Species", selected = "setosa")
+  ),
   title = "My first teal application",
   header = h3("My first teal application"),
   footer = div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/"))
@@ -50,11 +56,11 @@ if (interactive()) {
 
 Every `teal` application is composed of following elements, which all can be controlled by app developer by passing arguments to `init` function:
 
-* <span style="color: #9f84ff;">Application Title</span> (browser's tab title): is the title of the application.
-* <span style="color: #FB6251;">Application Header and Footer</span> (The top and the bottom of the app): any content to be put on top and on the bottom of the application.
-* <span style="color: #3A88FE;">Teal Modules</span> (tabs under the header): tab for each module included in the application. In this case a simple module named "example teal module".
-* <span style="color: #96D35F;">Module Content</span> (panel on the middle): The outputs of the module, for this example side bar panel with encodings and module the chosen dataset is displayed.
-* <span style="color: #1DC6FC;">Filter Panel</span> (panel on the right hand side): for filtering the data to be passed into all `teal` modules.
+* Application Title (browser's tab title): is the title of the application.
+* Application Header and Footer (The top and the bottom of the app): any content to be put on top and on the bottom of the application.
+* Teal Modules (tabs under the header): tab for each module included in the application. In this case two modules named "Module 1" and "Module 2".
+* Module Content (panel on the middle): The outputs of currently active the module.
+* Filter Panel (panel on the right hand side): for filtering the data to be passed into all `teal` modules. In this case the filter panel will be initialized with a filter for the `Species` variable in the `iris` dataset.
 
 ## Creating your own applications
 
@@ -75,12 +81,12 @@ For further details, we recommend exploring the [`teal.data`](https://insightsen
 
 ### Modules
 
-The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`). Core `teal` developers created several universal `teal` modules which can be helpful for any `teal` application. See the references below for links to these modules.
+The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`). Core `teal` developers created several universal `teal` modules which can be helpful for any `teal` application. To learn how to create own modules please explore [Creating Custom Modules vignette](creating-custom-modules.html). To use our predefined modules see the references below for links to these modules.
 
 ### Defining filters
 
 The optional `filter` argument in `init` allows you to initialize the application with predefined filters.
-See the documentation for `init` for further details.
+For further details see [Filter Panel vignette](filter-panel.html) .
 
 ### Reporting
 
