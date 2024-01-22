@@ -93,7 +93,7 @@ The necessary code can be supplied to the `code` argument of the `teal_data` fun
 data_with_code <- teal_data(
   iris = iris, cars = mtcars,
   code = "iris <- iris
-                                    cars <- mtcars"
+          cars <- mtcars"
 )
 ```
 
