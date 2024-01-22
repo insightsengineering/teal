@@ -39,7 +39,7 @@ app <- init(
     example_module("Module 1"),
     example_module("Module 2")
   ),
-  filters = teal_slices(
+  filter = teal_slices(
     teal_slice(dataname = "iris", varname = "Species", selected = "setosa")
   ),
   title = "My first teal application",
