@@ -52,10 +52,22 @@ if (interactive()) {
 }
 ```
 
-<span onmouseover="this.querySelector('img').src='images/teal-app-components-hover.svg'" onmouseout="this.querySelector('img').src='images/teal-app-components.svg'">
-  <img src="images/teal-app-components.svg" alt="Example application" style="width: 100%;" />
-</span>
+<style>
+  .teal-example {
+    display: none;
+  }
+  span:hover .teal-components {
+    display: none;
+  }
+  span:hover .teal-example {
+    display: inline-block;
+  }
+</style>
 
+<span>
+  <img class="teal-components" src="images/teal-app-components.svg" alt="Example application" style="width: 100%;" />
+  <img class="teal-example" src="images/teal-app-components-hover.svg" alt="Example application (hover)" style="width: 100%;" />
+</span>
 
 Every `teal` application is composed of following elements, which all can be controlled by app developer by passing arguments to `init` function:
 
