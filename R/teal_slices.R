@@ -15,7 +15,8 @@
 #'  - `TRUE` when filter panel module-specific.
 #'  Modules can have different set of filters specified - see `mapping` argument.
 #' @param mapping `r lifecycle::badge("experimental")`
-#' _This is a new feature. Do kindly share your opinions on [`teal`'s GitHub repository](https://github.com/insightsengineering/teal/)._
+#' _This is a new feature. Do kindly share your opinions on
+#' [`teal`'s GitHub repository](https://github.com/insightsengineering/teal/)._
 #'
 #'  (named `list`) specifies which filters will be active in which modules on app start.
 #'  Elements should contain character vector of `teal_slice` `id`s (see [teal.slice::teal_slice()]).

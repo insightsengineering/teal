@@ -25,11 +25,14 @@ as.teal_slices(x)
 \item{...}{any number of \code{teal_slice} objects. For \code{print} and \code{format},
 additional arguments passed to other functions.}
 
-\item{include_varnames, exclude_varnames}{(\verb{named list}s of \code{character}) where list names
+\item{include_varnames, exclude_varnames}{(named \code{list}s of \code{character}) where list names
 match names of data sets and vector elements match variable names in respective data sets;
 specify which variables are allowed to be filtered; see \code{Details}}
 
-\item{count_type}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \emph{This is a new feature. Do kindly share your opinions.\cr}
+\item{count_type}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\emph{This is a new feature. Do kindly share your opinions on
+\href{https://github.com/insightsengineering/teal.slice/}{\code{teal.slice}'s GitHub repository}.}
+
 (\code{character(1)}) string specifying how observations are tallied by these filter states.
 Possible options:
 \itemize{
@@ -50,7 +53,8 @@ Modules can have different set of filters specified - see \code{mapping} argumen
 }}
 
 \item{mapping}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-\emph{This is a new feature. Do kindly share your opinions on \href{https://github.com/insightsengineering/teal/}{\code{teal}'s GitHub repository}.}
+\emph{This is a new feature. Do kindly share your opinions on
+\href{https://github.com/insightsengineering/teal/}{\code{teal}'s GitHub repository}.}
 
 (named \code{list}) specifies which filters will be active in which modules on app start.
 Elements should contain character vector of \code{teal_slice} \code{id}s (see \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice()}}).
