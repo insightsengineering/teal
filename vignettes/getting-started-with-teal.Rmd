@@ -42,7 +42,7 @@ app <- init(
   filter = teal_slices(
     teal_slice(dataname = "IRIS", varname = "Species", selected = "setosa")
   ),
-  title = build_app_title(title = "My first teal application"),
+  title = build_app_title(title = "My first teal app"),
   header = h3("My first teal application"),
   footer = div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/"))
 )
@@ -52,7 +52,10 @@ if (interactive()) {
 }
 ```
 
-<img src="images/teal-app-components.svg" alt="Example application" style="width: 100%;"/>
+<span onmouseover="this.querySelector('img').src='images/teal-app-components-hover.svg'" onmouseout="this.querySelector('img').src='images/teal-app-components.svg'">
+  <img src="images/teal-app-components.svg" alt="Example application" style="width: 100%;" />
+</span>
+
 
 Every `teal` application is composed of following elements, which all can be controlled by app developer by passing arguments to `init` function:
 
