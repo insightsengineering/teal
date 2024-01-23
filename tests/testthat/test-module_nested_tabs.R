@@ -227,7 +227,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes data to the server modul
     moduleServer(id, function(input, output, session) checkmate::assert_list(data, "reactive"))
   })
 
-  testthat::expect_error(
+  testthat::expect_no_error(
     shiny::testServer(
       app = srv_nested_tabs,
       args = list(
@@ -237,8 +237,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes data to the server modul
         reporter = teal.reporter::Reporter$new()
       ),
       expr = NULL
-    ),
-    NA
+    )
   )
 })
 
@@ -249,7 +248,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes (deprecated) datasets to
     })
   )
 
-  testthat::expect_error(
+  testthat::expect_no_error(
     shiny::testServer(
       app = srv_nested_tabs,
       args = list(
@@ -259,8 +258,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes (deprecated) datasets to
         reporter = teal.reporter::Reporter$new()
       ),
       expr = NULL
-    ),
-    NA
+    )
   )
 })
 
@@ -270,7 +268,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes server_args to the ...",
     moduleServer(id, function(input, output, session) stopifnot(identical(list(...), server_args)))
   })
 
-  testthat::expect_error(
+  testthat::expect_no_error(
     shiny::testServer(
       app = srv_nested_tabs,
       args = list(
@@ -280,8 +278,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes server_args to the ...",
         reporter = teal.reporter::Reporter$new()
       ),
       expr = NULL
-    ),
-    NA
+    )
   )
 })
 
@@ -342,7 +339,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the 
     moduleServer(id, function(input, output, session) checkmate::assert_class(filter_panel_api, "FilterPanelAPI"))
   })
 
-  testthat::expect_error(
+  testthat::expect_no_error(
     shiny::testServer(
       app = srv_nested_tabs,
       args = list(
@@ -352,8 +349,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the 
         reporter = teal.reporter::Reporter$new()
       ),
       expr = NULL
-    ),
-    NA
+    )
   )
 })
 
@@ -426,7 +422,7 @@ testthat::test_that("calculate_hashes takes a FilteredData and vector of datanam
     )
   )
 
-  testthat::expect_error(calculate_hashes(datanames = c("ADSL", "ADAE", "ADTTE"), datasets = datasets), NA)
+  testthat::expect_no_error(calculate_hashes(datanames = c("ADSL", "ADAE", "ADTTE"), datasets = datasets))
 })
 
 testthat::test_that("calculate_hashes returns a named list", {
