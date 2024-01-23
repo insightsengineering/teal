@@ -87,16 +87,16 @@ test_that("validate_app_title_tag works on validating the title tag", {
     tags$div("Secret")
   )
 
-  expect_silent(validate_app_title_tag(valid_title))
-  expect_error(validate_app_title_tag(head_missing))
-  expect_error(validate_app_title_tag(title_missing))
-  expect_error(validate_app_title_tag(icon_missing))
-  expect_error(validate_app_title_tag(invalid_link))
+  testthat::expect_silent(validate_app_title_tag(valid_title))
+  testthat::expect_error(validate_app_title_tag(head_missing))
+  testthat::expect_error(validate_app_title_tag(title_missing))
+  testthat::expect_error(validate_app_title_tag(icon_missing))
+  testthat::expect_error(validate_app_title_tag(invalid_link))
 })
 
 test_that("build_app_title builts a valid tag", {
   valid_title_local <- build_app_title("title", "logo.png")
   valid_title_remote <- build_app_title("title", "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") # nolint
-  expect_silent(validate_app_title_tag(valid_title_local))
-  expect_silent(validate_app_title_tag(valid_title_remote))
+  testthat::expect_silent(validate_app_title_tag(valid_title_local))
+  testthat::expect_silent(validate_app_title_tag(valid_title_remote))
 })
