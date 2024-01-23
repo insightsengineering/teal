@@ -4,7 +4,7 @@ testthat::test_that("report_previewer_module throws error if label is not string
 })
 
 testthat::test_that("report_previewer_module throws no error and stores label if label is string", {
-  expect_error(r_p_m <- reporter_previewer_module(label = "My label"), NA)
+  expect_no_error(r_p_m <- reporter_previewer_module(label = "My label"))
   expect_equal(r_p_m$label, "My label")
 })
 
