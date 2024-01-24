@@ -25,6 +25,7 @@ subgraph features
   teal.code
   teal.logger
   teal.widgets
+  teal.reporter
 end
 subgraph modules
   direction RL
