@@ -17,25 +17,25 @@ ui_teal(
 srv_teal(id, modules, teal_data_rv, filter = teal_slices())
 }
 \arguments{
-\item{id}{(\code{character(1)})\cr
+\item{id}{(\code{character(1)})
 module id}
 
-\item{splash_ui}{(\code{shiny.tag})\cr UI to display initially,
+\item{splash_ui}{(\code{shiny.tag}) UI to display initially,
 can be a splash screen or a \code{shiny} module UI. For the latter, see
 \code{\link[=init]{init()}} about how to call the corresponding server function.}
 
-\item{title}{(\code{shiny.tag} or \code{character(1)})\cr
+\item{title}{(\code{shiny.tag} or \code{character(1)})
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
-\item{header}{(\code{shiny.tag} or \code{character(1)}) \cr
+\item{header}{(\code{shiny.tag} or \code{character(1)})
 The header of the app.}
 
-\item{footer}{(\code{shiny.tag} or \code{character(1)})\cr
+\item{footer}{(\code{shiny.tag} or \code{character(1)})
 The footer of the app.}
 
-\item{teal_data_rv}{(\code{reactive})\cr
+\item{teal_data_rv}{(\code{reactive})
 returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
 }
 \value{

@@ -7,6 +7,7 @@
 #' Create the server and UI function for the `shiny` app
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' End-users: This is the most important function for you to start a
 #' `teal` app that is composed out of `teal` modules.
 #'
@@ -14,26 +15,26 @@
 #' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
 #' defaults from the `teal_data` environment will be used.
 #'
-#' @param data (`teal_data`, `teal_data_module`)\cr
+#' @param data (`teal_data` or `teal_data_module`)
 #' `teal_data` object as returned by [teal.data::teal_data()] or `teal_data_module`.
-#' @param modules (`list`, `teal_modules` or `teal_module`)\cr
+#' @param modules (`list` or `teal_modules` or `teal_module`)
 #'   nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
 #'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
-#' @param title (`shiny.tag` or `character(1)`)\cr
+#' @param title (`shiny.tag` or `character(1)`)
 #'   The browser window title. Defaults to a title "teal app" with the icon of NEST.
 #'   Can be created using the `build_app_title()` or
 #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
-#' @param filter (`teal_slices`)\cr
+#' @param filter (`teal_slices`)
 #'   Specification of initial filter. Filters can be specified using [teal::teal_slices()].
 #'   Old way of specifying filters through a list is deprecated and will be removed in the
 #'   next release. Please fix your applications to use [teal::teal_slices()].
-#' @param header (`shiny.tag` or `character(1)`) \cr
+#' @param header (`shiny.tag` or `character(1)`)
 #'   The header of the app.
-#' @param footer (`shiny.tag` or `character(1)`)\cr
+#' @param footer (`shiny.tag` or `character(1)`)
 #'   The footer of the app.
-#' @param id (`character`)\cr
+#' @param id (`character`)
 #'   module id to embed it, if provided,
 #'   the server function must be called with [shiny::moduleServer()];
 #'   See the vignette for an example. However, [ui_teal_with_splash()]

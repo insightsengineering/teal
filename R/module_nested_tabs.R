@@ -18,15 +18,15 @@
 #'
 #' @inheritParams module_tabs_with_filters
 #'
-#' @param depth (`integer(1)`)\cr
+#' @param depth (`integer(1)`)
 #'  number which helps to determine depth of the modules nesting.
-#' @param is_module_specific (`logical(1)`)\cr
+#' @param is_module_specific (`logical(1)`)
 #'  flag determining if the filter panel is global or module-specific.
 #'  When set to `TRUE`, a filter panel is called inside of each module tab.
 #' @return depending on class of `modules`, `ui_nested_tabs` returns:
 #'   - `teal_module`: instantiated UI of the module
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
-#'     calling this function on it.\cr
+#'     calling this function on it.
 #' `srv_nested_tabs` returns a reactive which returns the active module that corresponds to the selected tab.
 #'
 #' @examples

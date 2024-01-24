@@ -1,3 +1,27 @@
+#' Manage multiple `FilteredData` objects
+#'
+#' Oversee filter states in the whole application.
+#'
+#' This module observes the changes of the filters in each `FilteredData` object
+#' and keeps track of all filters used. A mapping of filters to modules
+#' is kept in the `mapping_matrix` object (which is actually a `data.frame`)
+#' that tracks which filters (rows) are active in which modules (columns).
+#'
+#' @name module_filter_manager
+#'
+#' @param id (`character(1)`)
+#'  `shiny` module id.
+#' @param filtered_data_list (named `list`)
+#'  A list, possibly nested, of `FilteredData` objects.
+#'  Each `FilteredData` will be served to one module in the `teal` application.
+#'  The structure of the list must reflect the nesting of modules in tabs
+#'  and names of the list must be the same as labels of their respective modules.
+#' @inheritParams init
+#' @return A list of `reactive`s, each holding a `teal_slices`, as returned by `filter_manager_module_srv`.
+#' @keywords internal
+#'
+NULL
+
 #' Filter manager modal
 #'
 #' Opens modal containing the filter manager UI.
@@ -90,28 +114,7 @@ filter_manager_ui <- function(id) {
   )
 }
 
-#' Manage multiple `FilteredData` objects
-#'
-#' Oversee filter states in the whole application.
-#'
 #' @rdname module_filter_manager
-#' @details
-#' This module observes the changes of the filters in each `FilteredData` object
-#' and keeps track of all filters used. A mapping of filters to modules
-#' is kept in the `mapping_matrix` object (which is actually a `data.frame`)
-#' that tracks which filters (rows) are active in which modules (columns).
-#'
-#' @param id (`character(1)`)\cr
-#'  `shiny` module id.
-#' @param filtered_data_list (`named list`)\cr
-#'  A list, possibly nested, of `FilteredData` objects.
-#'  Each `FilteredData` will be served to one module in the `teal` application.
-#'  The structure of the list must reflect the nesting of modules in tabs
-#'  and names of the list must be the same as labels of their respective modules.
-#' @inheritParams init
-#' @return A list of `reactive`s, each holding a `teal_slices`, as returned by `filter_manager_module_srv`.
-#' @keywords internal
-#'
 filter_manager_srv <- function(id, filtered_data_list, filter) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("filter_manager_srv initializing for: { paste(names(filtered_data_list), collapse = ', ')}.")
@@ -203,11 +206,11 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 #' and from there become available in other modules
 #' by setting `private$available_teal_slices` in each `FilteredData`.
 #'
-#' @param id (`character(1)`)\cr
+#' @param id (`character(1)`)
 #'  `shiny` module id.
-#' @param module_fd (`FilteredData`)\cr
+#' @param module_fd (`FilteredData`)
 #'   object to filter data in the teal-module
-#' @param slices_global (`reactiveVal`)\cr
+#' @param slices_global (`reactiveVal`)
 #'   stores `teal_slices` with all available filters; allows the following actions:
 #'   - to disable/enable a specific filter in a module
 #'   - to restore saved filter settings

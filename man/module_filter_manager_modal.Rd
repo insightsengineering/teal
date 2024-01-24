@@ -11,16 +11,16 @@ filter_manager_modal_ui(id)
 filter_manager_modal_srv(id, filtered_data_list, filter)
 }
 \arguments{
-\item{id}{(\code{character(1)})\cr
+\item{id}{(\code{character(1)})
 \code{shiny} module id.}
 
-\item{filtered_data_list}{(\verb{named list})\cr
+\item{filtered_data_list}{(named \code{list})
 A list, possibly nested, of \code{FilteredData} objects.
 Each \code{FilteredData} will be served to one module in the \code{teal} application.
 The structure of the list must reflect the nesting of modules in tabs
 and names of the list must be the same as labels of their respective modules.}
 
-\item{filter}{(\code{teal_slices})\cr
+\item{filter}{(\code{teal_slices})
 Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
 Old way of specifying filters through a list is deprecated and will be removed in the
 next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}

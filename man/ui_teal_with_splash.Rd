@@ -13,25 +13,26 @@ ui_teal_with_splash(
 )
 }
 \arguments{
-\item{id}{(\code{character(1)})\cr
+\item{id}{(\code{character(1)})
 module id}
 
-\item{data}{(\code{teal_data}, \code{teal_data_module})\cr
+\item{data}{(\code{teal_data} or \code{teal_data_module})
 \code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
 
-\item{title}{(\code{shiny.tag} or \code{character(1)})\cr
+\item{title}{(\code{shiny.tag} or \code{character(1)})
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
-\item{header}{(\code{shiny.tag} or \code{character(1)}) \cr
+\item{header}{(\code{shiny.tag} or \code{character(1)})
 The header of the app.}
 
-\item{footer}{(\code{shiny.tag} or \code{character(1)})\cr
+\item{footer}{(\code{shiny.tag} or \code{character(1)})
 The footer of the app.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 The splash screen could be used to query for a password to fetch the data.
 \code{\link[=init]{init()}} is a very thin wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.
