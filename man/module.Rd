@@ -77,8 +77,6 @@ object of class \code{teal_module}.
 This function embeds a \code{shiny} module inside a \code{teal} application. One \code{teal_module} maps to one \code{shiny} module.
 }
 \examples{
-library(shiny)
-
 app <- init(
   data = teal_data(iris = iris),
   modules = list(

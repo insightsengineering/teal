@@ -31,7 +31,6 @@ infinite.}
 This function is a wrapper for \code{shiny::validate}.
 }
 \examples{
-library(teal)
 ui <- fluidPage(
   sliderInput("len", "Max Length of Sepal",
     min = 4.3, max = 7.9, value = 5

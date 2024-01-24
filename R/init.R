@@ -26,9 +26,9 @@
 #'   Can be created using the `build_app_title()` or
 #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
 #' @param filter (`teal_slices`)\cr
-#'   Specification of initial filter. Filters can be specified using [teal::teal_slices()].
+#'   Specification of initial filter. Filters can be specified using [teal_slices()].
 #'   Old way of specifying filters through a list is deprecated and will be removed in the
-#'   next release. Please fix your applications to use [teal::teal_slices()].
+#'   next release. Please fix your applications to use [teal_slices()].
 #' @param header (`shiny.tag` or `character(1)`) \cr
 #'   The header of the app.
 #' @param footer (`shiny.tag` or `character(1)`)\cr

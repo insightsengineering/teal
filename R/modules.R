@@ -12,15 +12,14 @@
 #' If using the `label` argument then it must be explicitly named.
 #' For example `modules("lab", ...)` should be converted to `modules(label = "lab", ...)`
 #'
-#' @export
-#'
 #' @return object of class `teal_modules`. Object contains following fields
 #' - `label`: taken from the `label` argument
 #' - `children`: a list containing objects passed in `...`. List elements are named after
 #' their `label` attribute converted to a valid `shiny` id.
-#' @examples
-#' library(shiny)
 #'
+#' @export
+#'
+#' @examples
 #' app <- init(
 #'   data = teal_data(iris = iris),
 #'   modules = modules(
@@ -167,7 +166,7 @@ is_arg_used <- function(modules, arg) {
 #' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.
 #'
 #' @param label (`character(1)`) Label shown in the navigation item for the module. Any label possible except
-#'  `"global_filters"` - read more in `mapping` argument of [teal::teal_slices].
+#'  `"global_filters"` - read more in `mapping` argument of [teal_slices].
 #' @param server (`function`) `shiny` module with following arguments:
 #'  - `id` - `teal` will set proper `shiny` namespace for this module (see [shiny::moduleServer()]).
 #'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
@@ -192,10 +191,10 @@ is_arg_used <- function(modules, arg) {
 #'   UI function.
 #'
 #' @return object of class `teal_module`.
-#' @export
-#' @examples
-#' library(shiny)
 #'
+#' @export
+#'
+#' @examples
 #' app <- init(
 #'   data = teal_data(iris = iris),
 #'   modules = list(

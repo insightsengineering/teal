@@ -16,7 +16,6 @@ an \code{environment}
 Any \code{reactives} inside \code{tdata} are first evaluated.
 }
 \examples{
-
 data <- new_tdata(
   data = list(iris = iris, mtcars = reactive(mtcars)),
   code = "iris <- iris

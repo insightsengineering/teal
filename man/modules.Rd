@@ -43,8 +43,6 @@ This function dictates what modules are included in a \code{teal} application. T
 shapes the navigation panel of a \code{teal} application.
 }
 \examples{
-library(shiny)
-
 app <- init(
   data = teal_data(iris = iris),
   modules = modules(

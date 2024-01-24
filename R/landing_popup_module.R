@@ -13,6 +13,8 @@
 #'
 #' @return A `teal_module` (extended with `teal_landing_module` class) to be used in `teal` applications.
 #'
+#' @export
+#'
 #' @examples
 #' app1 <- init(
 #'   data = teal_data(iris = iris),
@@ -53,7 +55,6 @@
 #'   shinyApp(app2$ui, app2$server)
 #' }
 #'
-#' @export
 landing_popup_module <- function(label = "Landing Popup",
                                  title = NULL,
                                  content = NULL,

@@ -5,7 +5,7 @@
 #' [teal.reporter::reporter_previewer_srv()] into a `teal_module` to be
 #' used in `teal` applications.
 #'
-#' If you are creating a `teal` application using [teal::init()] then this
+#' If you are creating a `teal` application using [init()] then this
 #' module will be added to your application automatically if any of your `teal modules`
 #' support report generation.
 #'

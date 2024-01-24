@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{validate_app_title_tag}
 \alias{validate_app_title_tag}
-\title{Function for validating the title parameter of \code{teal::init}}
+\title{Function for validating the title parameter of \code{init}}
 \usage{
 validate_app_title_tag(shiny_tag)
 }
@@ -10,6 +10,6 @@ validate_app_title_tag(shiny_tag)
 \item{shiny_tag}{(\code{shiny.tag}) Object to validate for a valid title.}
 }
 \description{
-Checks if the input of the title from \code{teal::init} will create a valid title and favicon tag.
+Checks if the input of the title from \code{init} will create a valid title and favicon tag.
 }
 \keyword{internal}

@@ -2,7 +2,8 @@
 #'
 #' @description `r lifecycle::badge("experimental")`
 #' @inheritParams module
-#' @return A `teal` module which can be included in the `modules` argument to [teal::init()].
+#' @return A `teal` module which can be included in the `modules` argument to [init()].
+#' @export
 #' @examples
 #' app <- init(
 #'   data = teal_data(IRIS = iris, MTCARS = mtcars),
@@ -11,7 +12,6 @@
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
 #' }
-#' @export
 example_module <- function(label = "example teal module", datanames = "all") {
   checkmate::assert_string(label)
   module(

@@ -13,7 +13,6 @@
 #' @export
 #'
 #' @examples
-#' library(teal)
 #' ui <- fluidPage(
 #'   sliderInput("len", "Max Length of Sepal",
 #'     min = 4.3, max = 7.9, value = 5

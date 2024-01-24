@@ -25,7 +25,6 @@
 #' @seealso `as_tdata`
 #'
 #' @examples
-#'
 #' data <- new_tdata(
 #'   data = list(iris = iris, mtcars = reactive(mtcars), dd = data.frame(x = 1:10)),
 #'   code = "iris <- iris
@@ -91,7 +90,6 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
 #' @param data a `tdata` object
 #' @return an `environment`
 #' @examples
-#'
 #' data <- new_tdata(
 #'   data = list(iris = iris, mtcars = reactive(mtcars)),
 #'   code = "iris <- iris

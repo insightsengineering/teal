@@ -33,6 +33,8 @@
 #' @return
 #' A `teal_slices` object.
 #'
+#' @export
+#'
 #' @seealso [`teal.slice::teal_slices`], [`teal.slice::teal_slice`], [`slices_store`]
 #'
 #' @examples
@@ -63,7 +65,6 @@
 #'   shinyApp(app$ui, app$server)
 #' }
 #'
-#' @export
 teal_slices <- function(...,
                         exclude_varnames = NULL,
                         include_varnames = NULL,

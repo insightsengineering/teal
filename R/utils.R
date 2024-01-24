@@ -93,7 +93,7 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
   checkmate::assert_flag(with_filter)
   checkmate::assert_class(filter_panel_api, classes = "FilterPanelAPI")
 
-  card <- teal::TealReportCard$new()
+  card <- TealReportCard$new()
   title <- if (label == "") title else label
   card$set_name(title)
   card$append_text(title, "header2")
@@ -234,9 +234,9 @@ teal_data_datanames <- function(data) {
   }
 }
 
-#' Function for validating the title parameter of `teal::init`
+#' Function for validating the title parameter of `init`
 #'
-#' Checks if the input of the title from `teal::init` will create a valid title and favicon tag.
+#' Checks if the input of the title from `init` will create a valid title and favicon tag.
 #' @param shiny_tag (`shiny.tag`) Object to validate for a valid title.
 #' @keywords internal
 validate_app_title_tag <- function(shiny_tag) {

@@ -37,7 +37,6 @@ Create a new object called \code{tdata} which contains \code{data}, a \code{reac
 }
 }
 \examples{
-
 data <- new_tdata(
   data = list(iris = iris, mtcars = reactive(mtcars), dd = data.frame(x = 1:10)),
   code = "iris <- iris
