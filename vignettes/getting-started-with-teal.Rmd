@@ -123,6 +123,12 @@ For example see:
 * [clinical trial reporting modules](https://insightsengineering.github.io/teal.modules.clinical/)
 * [modules for analyzing `MultiAssayExperiment` objects](https://insightsengineering.github.io/teal.modules.hermes/)
 
+For a demo of `teal` apps see:
+
+* [The gallery of sample apps based on teal](https://insightsengineering.github.io/teal.gallery/)
+* [A catalog of Tables, Listings and Graphs](https://insightsengineering.github.io/tlg-catalog/)
+* [A catalog of Biomarker Analysis Templates of Tables And Graphs](https://insightsengineering.github.io/biomarker-catalog/)
+
 The `teal` framework relies on a set of supporting packages whose documentation provides more in-depth information.
 The packages which are of most interest when defining `teal`applications are:
 
