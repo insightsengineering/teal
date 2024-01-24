@@ -2,7 +2,7 @@
 % Please edit documentation in R/teal_slices-store.R
 \name{slices_restore}
 \alias{slices_restore}
-\title{Restore teal_slices object from a file}
+\title{Restore \code{teal_slices} object from a file}
 \usage{
 slices_restore(file)
 }
@@ -16,12 +16,5 @@ A \code{teal_slices} object restored from the file.
 This function takes a file path to a \code{JSON} file containing a \code{teal_slices} object
 and restores it to its original form. The restored \code{teal_slices} object can be used
 to access filter states and their corresponding attributes.
-}
-\examples{
-if (interactive()) {
-  # Restore a teal_slices object from a file
-  tss_restored <- slices_restore("path/to/file.json")
-}
-
 }
 \keyword{internal}

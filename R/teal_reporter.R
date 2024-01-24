@@ -1,7 +1,7 @@
 #' @title `TealReportCard`
 #' @description `r lifecycle::badge("experimental")`
-#' A child of [`ReportCard`] that is used for teal specific applications.
-#' In addition to the parent methods, it supports rendering teal specific elements such as
+#' A child of [`ReportCard`] that is used for `teal` specific applications.
+#' In addition to the parent methods, it supports rendering `teal` specific elements such as
 #' the source code, the encodings panel content and the filter panel content as part of the
 #' meta data.
 #' @export
@@ -13,7 +13,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name_linter.
     #' @description Appends the source code to the `content` meta data of this `TealReportCard`.
     #'
     #' @param src (`character(1)`) code as text.
-    #' @param ... any `rmarkdown` R chunk parameter and its value.
+    #' @param ... any `rmarkdown` `R` chunk parameter and its value.
     #' But `eval` parameter is always set to `FALSE`.
     #' @return invisibly self
     #' @examples
@@ -46,7 +46,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name_linter.
     },
     #' @description Appends the encodings list to the `content` and `metadata` of this `TealReportCard`.
     #'
-    #' @param encodings (`list`) list of encodings selections of the teal app.
+    #' @param encodings (`list`) list of encodings selections of the `teal` app.
     #' @return invisibly self
     #' @examples
     #' card <- TealReportCard$new()$append_encodings(list(variable1 = "X"))
@@ -85,8 +85,6 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     #' @param style (`character(1)`) string specifying style to apply.
     #'
     #' @return `TealSlicesBlock`
-    #' @examples
-    #' block <- teal:::TealSlicesBlock$new()
     #'
     initialize = function(content = teal_slices(), style = "verbatim") {
       self$set_content(content)
@@ -141,7 +139,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
       invisible(self)
     },
     #' @description Create the `RcodeBlock` from a list.
-    #' @param x `named list` with two fields `c("text", "params")`.
+    #' @param x (named `list`) with two fields `c("text", "params")`.
     #' Use the `get_available_params` method to get all possible parameters.
     #' @return invisibly self
     from_list = function(x) {
@@ -151,7 +149,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
       invisible(self)
     },
     #' @description Convert the `RcodeBlock` to a list.
-    #' @return `named list` with a text and `params`.
+    #' @return named `list` with a text and `params`.
 
     to_list = function() {
       list(teal_slices = private$teal_slices)

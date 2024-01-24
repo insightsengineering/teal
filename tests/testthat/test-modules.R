@@ -27,7 +27,7 @@ testthat::test_that("module requires label argument to be a string different tha
 testthat::test_that("module warns when server contains datasets argument", {
   testthat::expect_warning(
     module(server = function(id, datasets) NULL),
-    "`datasets` argument in the `server` is deprecated"
+    "`datasets` argument in the server is deprecated"
   )
 })
 
@@ -66,7 +66,7 @@ testthat::test_that("module expects all server_args being a server arguments or 
 
   testthat::expect_error(
     module(server = function(id) NULL, server_args = list(arg1 = NULL)),
-    "Following `server_args` elements have no equivalent in the formals of the `server`"
+    "Following `server_args` elements have no equivalent in the formals of the server"
   )
 })
 
@@ -99,7 +99,7 @@ testthat::test_that("module expects all ui_args being a ui arguments or passed t
 
   testthat::expect_error(
     module(ui = function(id) NULL, ui_args = list(arg1 = NULL)),
-    "Following `ui_args` elements have no equivalent in the formals of `ui`"
+    "Following `ui_args` elements have no equivalent in the formals of UI"
   )
 })
 

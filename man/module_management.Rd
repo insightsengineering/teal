@@ -10,7 +10,7 @@ extract_module(modules, class)
 drop_module(modules, class)
 }
 \arguments{
-\item{modules}{\code{teal_modules}}
+\item{modules}{(\code{teal_modules})}
 
 \item{class}{The class name of \code{teal_module} to be extracted or dropped.}
 }

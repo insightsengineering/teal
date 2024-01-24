@@ -2,7 +2,7 @@
 #'
 #' `system.file` should not be used to access files in other packages, it does
 #' not work with `devtools`. Therefore, we redefine this method in each package
-#' as needed. Thus, we do not export this method
+#' as needed. Thus, we do not export this method.
 #'
 #' @param pattern (`character`) pattern of files to be included
 #'
@@ -48,7 +48,7 @@ include_js_files <- function(pattern = NULL, except = NULL) {
 #'
 #' `system.file` should not be used to access files in other packages, it does
 #' not work with `devtools`. Therefore, we redefine this method in each package
-#' as needed. Thus, we do not export this method
+#' as needed. Thus, we do not export this method.
 #'
 #' @param files (`character`) vector of filenames
 #' @keywords internal
@@ -60,20 +60,16 @@ run_js_files <- function(files) {
   return(invisible(NULL))
 }
 
-#' Code to include teal `CSS` and `JavaScript` files
+#' Code to include `teal` `CSS` and `JavaScript` files
 #'
 #' This is useful when you want to use the same `JavaScript` and `CSS` files that are
-#' used with the teal application.
-#' This is also useful for running standalone modules in teal with the correct
+#' used with the `teal` application.
+#' This is also useful for running standalone modules in `teal` with the correct
 #' styles.
 #' Also initializes `shinyjs` so you can use it.
 #'
-#' @return HTML code to include
-#' @examples
-#' shiny_ui <- tagList(
-#'   teal:::include_teal_css_js(),
-#'   p("Hello")
-#' )
+#' Simply add `include_teal_css_js()` as one of the UI elements.
+#' @return A `shiny.tag.list`.
 #' @keywords internal
 include_teal_css_js <- function() {
   tagList(

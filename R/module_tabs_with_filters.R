@@ -14,7 +14,7 @@
 #'
 #' @inheritParams module_teal
 #'
-#' @param datasets (`named list` of `FilteredData`)\cr
+#' @param datasets (named `list` of `FilteredData`)
 #'   object to store filter state and filtered datasets, shared across modules. For more
 #'   details see [`teal.slice::FilteredData`]. Structure of the list must be the same as structure
 #'   of the `modules` argument and list names must correspond to the labels in `modules`.
@@ -22,36 +22,10 @@
 #' @param reporter (`Reporter`) object from `teal.reporter`
 #'
 #' @return A `tagList` of The main menu, place holders for filters and
-#'   place holders for the teal modules
+#'   place holders for the `teal` modules
 #'
 #'
 #' @keywords internal
-#'
-#' @examples
-#'
-#' mods <- teal:::example_modules()
-#' datasets <- teal:::example_datasets()
-#'
-#' app <- shinyApp(
-#'   ui = function() {
-#'     tagList(
-#'       teal:::include_teal_css_js(),
-#'       textOutput("info"),
-#'       fluidPage( # needed for nice tabs
-#'         ui_tabs_with_filters("dummy", modules = mods, datasets = datasets)
-#'       )
-#'     )
-#'   },
-#'   server = function(input, output, session) {
-#'     output$info <- renderText({
-#'       paste0("The currently active tab name is ", active_module()$label)
-#'     })
-#'     active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
-#'   }
-#' )
-#' if (interactive()) {
-#'   shinyApp(app$ui, app$server)
-#' }
 #'
 NULL
 
@@ -126,7 +100,10 @@ srv_tabs_with_filters <- function(id,
         if (identical(active_module()$datanames, "all")) {
           singleton$datanames()
         } else {
-          active_module()$datanames
+          include_parent_datanames(
+            active_module()$datanames,
+            singleton$get_join_keys()
+          )
         }
       })
       singleton <- unlist(datasets)[[1]]
