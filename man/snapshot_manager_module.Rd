@@ -22,7 +22,7 @@ containing all \code{teal_slice}s existing in the app, both active and inactive}
 of the mapping of filter state ids (rows) to modules labels (columns);
 all columns are \code{logical} vectors}
 
-\item{filtered_data_list}{non-nested (\verb{named list}) that contains \code{FilteredData} objects}
+\item{filtered_data_list}{non-nested (named \code{list}) that contains \code{FilteredData} objects}
 }
 \value{
 Nothing is returned.

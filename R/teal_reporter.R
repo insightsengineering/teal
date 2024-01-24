@@ -139,7 +139,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
       invisible(self)
     },
     #' @description Create the `RcodeBlock` from a list.
-    #' @param x `named list` with two fields `c("text", "params")`.
+    #' @param x (named `list`) with two fields `c("text", "params")`.
     #' Use the `get_available_params` method to get all possible parameters.
     #' @return invisibly self
     from_list = function(x) {
@@ -149,7 +149,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
       invisible(self)
     },
     #' @description Convert the `RcodeBlock` to a list.
-    #' @return `named list` with a text and `params`.
+    #' @return named `list` with a text and `params`.
 
     to_list = function() {
       list(teal_slices = private$teal_slices)

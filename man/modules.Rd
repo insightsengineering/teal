@@ -19,7 +19,7 @@ modules(..., label = "root")
 If using the \code{label} argument then it must be explicitly named.
 For example \code{modules("lab", ...)} should be converted to \code{modules(label = "lab", ...)}}
 
-\item{x}{\code{teal_modules}}
+\item{x}{(\code{teal_modules})}
 
 \item{indent}{(\code{integer}) indent level;
 each \code{submodule} is indented one level more}
@@ -36,6 +36,7 @@ their \code{label} attribute converted to a valid \code{shiny} id.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 This function collects a list of \code{teal_modules} and \code{teal_module} objects and returns a \code{teal_modules} object
 containing the passed objects.
 

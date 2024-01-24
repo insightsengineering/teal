@@ -15,6 +15,6 @@ teal_data_to_filtered_data(x, datanames = teal_data_datanames(x))
 (\code{FilteredData}) object
 }
 \description{
-Create a \code{FilteredData} object from a \code{teal_data} object
+Create a \code{FilteredData} object from a \code{teal_data} object.
 }
 \keyword{internal}

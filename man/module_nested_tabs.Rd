@@ -53,19 +53,19 @@ srv_nested_tabs(
 )
 }
 \arguments{
-\item{id}{(\code{character(1)})\cr
+\item{id}{(\code{character(1)})
 module id}
 
-\item{datasets}{(\verb{named list} of \code{FilteredData})\cr
+\item{datasets}{(named \code{list} of \code{FilteredData})
 object to store filter state and filtered datasets, shared across modules. For more
 details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}. Structure of the list must be the same as structure
 of the \code{modules} argument and list names must correspond to the labels in \code{modules}.
 When filter is not module-specific then list contains the same object in all elements.}
 
-\item{depth}{(\code{integer(1)})\cr
+\item{depth}{(\code{integer(1)})
 number which helps to determine depth of the modules nesting.}
 
-\item{is_module_specific}{(\code{logical(1)})\cr
+\item{is_module_specific}{(\code{logical(1)})
 flag determining if the filter panel is global or module-specific.
 When set to \code{TRUE}, a filter panel is called inside of each module tab.}
 
@@ -76,7 +76,7 @@ depending on class of \code{modules}, \code{ui_nested_tabs} returns:
 \itemize{
 \item \code{teal_module}: instantiated UI of the module
 \item \code{teal_modules}: \code{tabsetPanel} with each tab corresponding to recursively
-calling this function on it.\cr
+calling this function on it.
 \code{srv_nested_tabs} returns a reactive which returns the active module that corresponds to the selected tab.
 }
 }

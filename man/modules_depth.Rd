@@ -7,7 +7,7 @@
 modules_depth(modules, depth = 0L)
 }
 \arguments{
-\item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
+\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for

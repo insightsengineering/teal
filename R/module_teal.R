@@ -29,11 +29,11 @@
 #'
 #' @inheritParams ui_teal_with_splash
 #'
-#' @param splash_ui (`shiny.tag`)\cr UI to display initially,
+#' @param splash_ui (`shiny.tag`) UI to display initially,
 #'   can be a splash screen or a `shiny` module UI. For the latter, see
 #'   [init()] about how to call the corresponding server function.
 #'
-#' @param teal_data_rv (`reactive`)\cr
+#' @param teal_data_rv (`reactive`)
 #'   returns the `teal_data`, only evaluated once, `NULL` value is ignored
 #'
 #' @return

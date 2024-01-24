@@ -14,7 +14,7 @@
 #'
 #' @inheritParams module_teal
 #'
-#' @param datasets (`named list` of `FilteredData`)\cr
+#' @param datasets (named `list` of `FilteredData`)
 #'   object to store filter state and filtered datasets, shared across modules. For more
 #'   details see [`teal.slice::FilteredData`]. Structure of the list must be the same as structure
 #'   of the `modules` argument and list names must correspond to the labels in `modules`.

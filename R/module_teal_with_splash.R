@@ -3,6 +3,7 @@
 #' UI to show a splash screen in the beginning, then delegate to [srv_teal()]
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' The splash screen could be used to query for a password to fetch the data.
 #' [init()] is a very thin wrapper around this module useful for end-users which
 #' assumes that it is a top-level module and cannot be embedded.
@@ -13,7 +14,7 @@
 #'
 #' Please also refer to the doc of [init()].
 #'
-#' @param id (`character(1)`)\cr
+#' @param id (`character(1)`)
 #'   module id
 #' @inheritParams init
 #' @export
@@ -64,10 +65,11 @@ ui_teal_with_splash <- function(id,
 #' to [srv_teal()].
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' Please also refer to the doc of [init()].
 #'
 #' @inheritParams init
-#' @param modules `teal_modules` object containing the output modules which
+#' @param modules (`teal_modules`) object containing the output modules which
 #'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
 #' @inheritParams shiny::moduleServer

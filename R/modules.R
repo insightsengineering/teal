@@ -1,6 +1,7 @@
 #' Creates a `teal_modules` object.
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' This function collects a list of `teal_modules` and `teal_module` objects and returns a `teal_modules` object
 #' containing the passed objects.
 #'
@@ -91,8 +92,8 @@ modules <- function(..., label = "root") {
 
 #' Append a `teal_module` to `children` of a `teal_modules` object
 #' @keywords internal
-#' @param modules `teal_modules`
-#' @param module `teal_module` object to be appended onto the children of `modules`
+#' @param modules (`teal_modules`)
+#' @param module (`teal_module`) object to be appended onto the children of `modules`
 #' @return `teal_modules` object with `module` appended
 append_module <- function(modules, module) {
   checkmate::assert_class(modules, "teal_modules")
@@ -107,7 +108,7 @@ append_module <- function(modules, module) {
 #'
 #' Given a `teal_module` or a `teal_modules`, return the elements of the structure according to `class`.
 #'
-#' @param modules `teal_modules`
+#' @param modules (`teal_modules`)
 #' @param class The class name of `teal_module` to be extracted or dropped.
 #' @keywords internal
 #' @return
@@ -164,6 +165,7 @@ is_arg_used <- function(modules, arg) {
 #' Creates a `teal_module` object
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.
 #'
 #' @param label (`character(1)`) Label shown in the navigation item for the module. Any label possible except
@@ -370,7 +372,7 @@ modules_depth <- function(modules, depth = 0L) {
 
 #' Retrieve labels from `teal_modules`
 #'
-#' @param modules `teal_modules`
+#' @param modules (`teal_modules`)
 #' @return A `list` containing the labels of the modules. If the modules are nested,
 #' the function returns a nested `list` of labels.
 #' @keywords internal
@@ -402,7 +404,7 @@ toString.teal_modules <- function(x, indent = 0, ...) { # nolint
 #' Converts `teal_module` to a string
 #'
 #' @inheritParams toString.teal_modules
-#' @param x `teal_module`
+#' @param x (`teal_module`)
 #' @param ... ignored
 #' @export
 #' @rdname module
@@ -411,7 +413,7 @@ toString.teal_module <- function(x, indent = 0, ...) { # nolint
 }
 
 #' Prints `teal_modules`
-#' @param x `teal_modules`
+#' @param x (`teal_modules`)
 #' @param ... parameters passed to `toString`
 #' @export
 #' @rdname modules
@@ -422,7 +424,7 @@ print.teal_modules <- function(x, ...) {
 }
 
 #' Prints `teal_module`
-#' @param x `teal_module`
+#' @param x (`teal_module`)
 #' @param ... parameters passed to `toString`
 #' @export
 #' @rdname module

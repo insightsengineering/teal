@@ -53,7 +53,8 @@ include_parent_datanames <- function(dataname, join_keys) {
 
 #' Create a `FilteredData`
 #'
-#' Create a `FilteredData` object from a `teal_data` object
+#' Create a `FilteredData` object from a `teal_data` object.
+#'
 #' @param x (`teal_data`) object
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
 #' @return (`FilteredData`) object
@@ -284,8 +285,8 @@ build_app_title <- function(title = "teal app", favicon = "https://raw.githubuse
 #' App ID is a hash of the app's data and modules.
 #' See "transferring snapshots" section in ?snapshot.
 #'
-#' @param data `teal_data` or `teal_data_module` as accepted by `init`
-#' @param modules `teal_modules` object as accepted by `init`
+#' @param data (`teal_data` or `teal_data_module`) as accepted by `init`
+#' @param modules (`teal_modules`) object as accepted by `init`
 #'
 #' @return A single character string.
 #'
