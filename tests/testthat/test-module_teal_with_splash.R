@@ -23,7 +23,7 @@ testthat::test_that("srv_teal_with_splash throws when teal_data_module doesn't r
       ),
       expr = {}
     ),
-    "The `teal_data_module` must return a reactive expression."
+    "The `teal_data_module` passed to `data` must return a reactive expression."
   )
 })
 
@@ -57,17 +57,21 @@ testthat::test_that("srv_teal_with_splash passes teal_data to reactive", {
   )
 })
 
-testthat::test_that("srv_teal_with_splash throws when datanames are empty", {
-  shiny::testServer(
-    app = srv_teal_with_splash,
-    args = list(
-      id = "test",
-      data = teal_data(),
-      modules = modules(example_module())
+testthat::test_that("srv_teal_with_splash passes when datanames are empty with warning", {
+  testthat::expect_warning(
+    shiny::testServer(
+      app = srv_teal_with_splash,
+      args = list(
+        id = "test",
+        data = teal_data(),
+        modules = modules(example_module())
+      ),
+      expr = {
+        testthat::expect_is(teal_data_rv_validate, "reactive")
+        testthat::expect_s4_class(teal_data_rv_validate(), "teal_data")
+      }
     ),
-    expr = {
-      testthat::expect_error(teal_data_rv_validate(), "Data has no datanames")
-    }
+    "`data` object has no datanames. Default datanames are set using `teal_data`'s environment."
   )
 })
 
@@ -122,7 +126,7 @@ testthat::test_that(
       ),
       expr = {
         testthat::expect_is(teal_data_rv_validate, "reactive")
-        testthat::expect_error(teal_data_rv_validate(), "did not return `teal_data`")
+        testthat::expect_error(teal_data_rv_validate(), "failed to return `teal_data`")
       }
     )
   }
@@ -133,8 +137,8 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when inco
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data(mtcars = mtcars),
-      modules = modules(example_module(datanames = "iris"))
+      data = teal_data(mtcars = mtcars, iris = iris, npk = npk),
+      modules = modules(example_module(datanames = "non-existing"))
     ),
     expr = {
       testthat::expect_is(teal_data_rv_validate, "reactive")
@@ -157,6 +161,10 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate returns teal_dat
     ),
     expr = {
       testthat::expect_is(teal_data_rv_validate, "reactive")
+      testthat::expect_warning(
+        teal_data_rv_validate(),
+        "Filter 'iris Species' refers to dataname not available in 'data'"
+      )
       testthat::expect_s4_class(teal_data_rv_validate(), "teal_data")
     }
   )
@@ -238,7 +246,10 @@ testthat::test_that("srv_teal_with_splash throws error when within.teal_data_mod
         testthat::expect_s3_class(teal_data_rv, "reactive")
         testthat::expect_null(teal_data_rv())
         testthat::expect_s3_class(teal_data_rv_validate, "reactive")
-        testthat::expect_error(teal_data_rv_validate(), "`teal_data_module` did not return `teal_data` object ")
+        testthat::expect_error(
+          teal_data_rv_validate(),
+          "`teal_data_module` passed to `data` failed to return `teal_data` object"
+        )
       }
     )
   )
@@ -264,7 +275,10 @@ testthat::test_that(
           testthat::expect_s3_class(teal_data_rv, "reactive")
           testthat::expect_null(teal_data_rv())
           testthat::expect_s3_class(teal_data_rv_validate, "reactive")
-          testthat::expect_error(teal_data_rv_validate(), "`teal_data_module` did not return `teal_data` object ")
+          testthat::expect_error(
+            teal_data_rv_validate(),
+            "`teal_data_module` passed to `data` failed to return `teal_data` object"
+          )
         }
       )
     )

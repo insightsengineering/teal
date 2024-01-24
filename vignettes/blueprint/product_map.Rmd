@@ -22,7 +22,6 @@ subgraph features
   direction LR
   teal.data
   teal.slice
-  teal.transform
   teal.code
   teal.logger
   teal.widgets

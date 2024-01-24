@@ -56,10 +56,9 @@ include_parent_datanames <- function(dataname, join_keys) {
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
 #' @return (`FilteredData`) object
 #' @keywords internal
-teal_data_to_filtered_data <- function(x, datanames = teal.data::datanames(x)) {
+teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   checkmate::assert_class(x, "teal_data")
-  checkmate::assert_character(datanames, min.len = 1L, any.missing = FALSE)
-  checkmate::assert_subset(datanames, teal.data::datanames(x))
+  checkmate::assert_character(datanames, min.chars = 1L, any.missing = FALSE)
 
   ans <- teal.slice::init_filtered_data(
     x = sapply(datanames, function(dn) x[[dn]], simplify = FALSE),
@@ -214,4 +213,89 @@ check_filter_datanames <- function(filters, datanames) {
   } else {
     TRUE
   }
+}
+
+#' Wrapper on `teal.data::datanames`
+#'
+#' Special function used in internals of `teal` to return names of datasets even if `datanames`
+#' has not been set.
+#' @param data (`teal_data`)
+#' @return `character`
+#' @keywords internal
+teal_data_datanames <- function(data) {
+  checkmate::assert_class(data, "teal_data")
+  if (length(teal.data::datanames(data))) {
+    teal.data::datanames(data)
+  } else {
+    ls(teal.code::get_env(data), all.names = TRUE)
+  }
+}
+
+#' Function for validating the title parameter of `teal::init`
+#'
+#' Checks if the input of the title from `teal::init` will create a valid title and favicon tag.
+#' @param shiny_tag (`shiny.tag`) Object to validate for a valid title.
+#' @keywords internal
+validate_app_title_tag <- function(shiny_tag) {
+  checkmate::assert_class(shiny_tag, "shiny.tag")
+  checkmate::assert_true(shiny_tag$name == "head")
+  child_names <- vapply(shiny_tag$children, `[[`, character(1L), "name")
+  checkmate::assert_subset(c("title", "link"), child_names, .var.name = "child tags")
+  rel_attr <- shiny_tag$children[[which(child_names == "link")]]$attribs$rel
+  checkmate::assert_subset(
+    rel_attr,
+    c("icon", "shortcut icon"),
+    .var.name = "Link tag's rel attribute",
+    empty.ok = FALSE
+  )
+}
+
+#' Build app title with favicon
+#'
+#' A helper function to create the browser title along with a logo.
+#'
+#' @param title (`character`) The browser title for the teal app
+#' @param favicon (`character`) The path for the icon for the title.
+#' The image/icon path can be remote or the static path accessible by shiny, like the `www/`
+#'
+#' @return A `shiny.tag` containing the element that adds the title and logo to the shiny app
+#' @export
+build_app_title <- function(title = "teal app", favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") { # nolint
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_string(favicon, null.ok = TRUE)
+  tags$head(
+    tags$title(title),
+    tags$link(
+      rel = "icon",
+      href = favicon,
+      sizes = "any"
+    )
+  )
+}
+
+#' Application ID
+#'
+#' Creates App ID used to match filter snapshots to application.
+#'
+#' Calculate app ID that will be used to stamp filter state snapshots.
+#' App ID is a hash of the app's data and modules.
+#' See "transferring snapshots" section in ?snapshot.
+#'
+#' @param data `teal_data` or `teal_data_module` as accepted by `init`
+#' @param modules `teal_modules` object as accepted by `init`
+#'
+#' @return A single character string.
+#'
+#' @keywords internal
+create_app_id <- function(data, modules) {
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_class(modules, "teal_modules")
+
+  hashables <- c(data, modules)
+  hashables$data <- if (inherits(hashables$data, "teal_data")) {
+    as.list(hashables$data@env)
+  } else if (inherits(data, "teal_data_module")) {
+    body(data$server)
+  }
+  rlang::hash(hashables)
 }

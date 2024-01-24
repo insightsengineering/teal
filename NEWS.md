@@ -1,4 +1,4 @@
-# teal 0.14.0.9027
+# teal 0.14.0.9040
 
 ### New features
 
@@ -6,6 +6,7 @@
 * Added `landing_popup_module` function which creates a module that will display a popup when the app starts. The popup will block access to the app until it is dismissed.
 * Filter state snapshots can now be uploaded from file. See `?snapshot`.
 * Added `as_tdata` function to facilitate migration of modules to the new `teal_data` class.
+* Added `build_app_title` function to facilitate adding favicons to app title.
 
 ### Breaking changes
 

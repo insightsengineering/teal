@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.14.0.9027
-Date: 2023-12-08
+Version: 0.14.0.9040
+Date: 2024-01-23
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
     person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
@@ -32,8 +32,7 @@ Depends:
     R (>= 4.0),
     shiny (>= 1.7.0),
     teal.data (>= 0.3.0.9017),
-    teal.slice (>= 0.4.0.9027),
-    teal.transform (>= 0.4.0.9010)
+    teal.slice (>= 0.4.0.9027)
 Imports:
     checkmate (>= 2.1.0),
     jsonlite,
@@ -70,20 +69,20 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
-    insightsengineering/teal.slice, insightsengineering/teal.transform,
-    mllg/checkmate, jeroen/jsonlite, r-lib/lifecycle, daroczig/logger,
-    tidyverse/magrittr, r-lib/rlang, daattali/shinyjs,
-    insightsengineering/teal.logger, insightsengineering/teal.reporter,
-    insightsengineering/teal.widgets, rstudio/bslib, yihui/knitr,
-    bioc::MultiAssayExperiment, r-lib/R6, rstudio/rmarkdown,
-    rstudio/shinyvalidate, insightsengineering/teal.code, r-lib/testthat,
-    r-lib/withr, yaml=vubiostat/r-yaml
+    insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
+    r-lib/lifecycle, daroczig/logger, tidyverse/magrittr, r-lib/rlang,
+    daattali/shinyjs, insightsengineering/teal.logger,
+    insightsengineering/teal.reporter, insightsengineering/teal.widgets,
+    rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
+    rstudio/rmarkdown, rstudio/shinyvalidate,
+    insightsengineering/teal.code, r-lib/testthat, r-lib/withr,
+    yaml=vubiostat/r-yaml
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Collate:
     'dummy_functions.R'
     'get_rcode_utils.R'
@@ -102,8 +101,9 @@ Collate:
     'show_rcode_modal.R'
     'tdata.R'
     'teal.R'
-    'teal_data_module-eval_code.R'
     'teal_data_module.R'
+    'teal_data_module-eval_code.R'
+    'teal_data_module-within.R'
     'teal_reporter.R'
     'teal_slices-store.R'
     'teal_slices.R'

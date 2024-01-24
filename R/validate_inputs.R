@@ -152,7 +152,7 @@ gather_messages <- function(iv) {
     failing_inputs <- Filter(Negate(is.null), status)
     unique(lapply(failing_inputs, function(x) x[["message"]]))
   } else {
-    logger::log_warn("Validator is disabled and will be omitted.")
+    warning("Validator is disabled and will be omitted.")
     list()
   }
 }
