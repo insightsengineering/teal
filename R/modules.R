@@ -176,7 +176,7 @@ is_arg_used <- function(modules, arg) {
 #'  - `data` (optional) module will receive a `teal_data` object, a list of reactive (filtered) data specified in
 #'     the `filters` argument.
 #'  - `datasets` (optional) module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
-#'  - `reporter` (optional) module will receive `Reporter`. (See [teal.reporter::Reporter]).
+#'  - `reporter` (optional) module will receive `Reporter`. (See [`teal.reporter::Reporter`]).
 #   - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).
 #'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
 #' @param ui (`function`) `shiny` UI module function with following arguments:
@@ -285,7 +285,7 @@ module <- function(label = "module",
   if (!"id" %in% ui_formals) {
     stop(
       "\nmodule() `ui` argument requires a function with following arguments:",
-      "\n - id - `teal` will set proper shiny namespace for this module.",
+      "\n - id - `teal` will set proper `shiny` namespace for this module.",
       "\n\nFollowing arguments can be used optionally:",
       "\n - `...` ui_args elements will be passed to the module argument of the same name or to the `...`"
     )

@@ -2,8 +2,8 @@
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' This function wraps [teal.reporter::reporter_previewer_ui()] and
-#' [teal.reporter::reporter_previewer_srv()] into a `teal_module` to be
+#' This function wraps [`teal.reporter::reporter_previewer_ui()`] and
+#' [`teal.reporter::reporter_previewer_srv()`] into a `teal_module` to be
 #' used in `teal` applications.
 #'
 #' If you are creating a `teal` application using [teal::init()] then this
@@ -12,7 +12,7 @@
 #'
 #' @inheritParams module
 #' @param server_args (named `list`)
-#'  Arguments passed to [teal.reporter::reporter_previewer_srv()].
+#'  Arguments passed to [`teal.reporter::reporter_previewer_srv()`].
 #' @return `teal_module` (extended with `teal_module_previewer` class) containing the `teal.reporter` previewer
 #' functionality.
 #' @export

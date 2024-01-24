@@ -13,7 +13,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name_linter.
     #' @description Appends the source code to the `content` meta data of this `TealReportCard`.
     #'
     #' @param src (`character(1)`) code as text.
-    #' @param ... any `rmarkdown` R chunk parameter and its value.
+    #' @param ... any `rmarkdown` `R` chunk parameter and its value.
     #' But `eval` parameter is always set to `FALSE`.
     #' @return invisibly self
     #' @examples

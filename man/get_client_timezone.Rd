@@ -12,7 +12,7 @@ get_client_timezone(ns)
 registered input.}
 }
 \value{
-(\code{Shiny}) input variable accessible with \code{input$tz} which is a (\code{character})
+(\code{shiny}) input variable accessible with \code{input$tz} which is a (\code{character})
 string containing the timezone of the browser/client.
 }
 \description{

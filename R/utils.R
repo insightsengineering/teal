@@ -8,7 +8,7 @@
 #'   `shiny` server. For `shiny` modules this will allow for proper name spacing of the
 #'   registered input.
 #'
-#' @return (`Shiny`) input variable accessible with `input$tz` which is a (`character`)
+#' @return (`shiny`) input variable accessible with `input$tz` which is a (`character`)
 #'  string containing the timezone of the browser/client.
 #' @keywords internal
 get_client_timezone <- function(ns) {

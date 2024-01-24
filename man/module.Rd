@@ -38,7 +38,7 @@ module(
 \item \code{data} (optional) module will receive a \code{teal_data} object, a list of reactive (filtered) data specified in
 the \code{filters} argument.
 \item \code{datasets} (optional) module will receive \code{FilteredData}. (See \verb{[teal.slice::FilteredData]}).
-\item \code{reporter} (optional) module will receive \code{Reporter}. (See \link[teal.reporter:Reporter]{teal.reporter::Reporter}).
+\item \code{reporter} (optional) module will receive \code{Reporter}. (See \code{\link[teal.reporter:Reporter]{teal.reporter::Reporter}}).
 \item \code{...} (optional) \code{server_args} elements will be passed to the module named argument or to the \code{...}.
 }}
 
