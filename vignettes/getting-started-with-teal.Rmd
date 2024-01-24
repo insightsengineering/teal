@@ -72,10 +72,10 @@ if (interactive()) {
 Every `teal` application is composed of the following elements, all of which can be controlled by the app developer by passing arguments to the `init` function:
 
 * <span style="color: #BF37F3;">Application Title</span> (browser's tab title): is the title of the application.
-* <span style="color: #FB6251;">Application Header and Footer</span> (The top and the bottom of the app): any content to be put on top and on the bottom of the application.
-* <span style="color: #f2b73f;">Teal Modules</span> (tabs under the header): tab for each module included in the application. In this case two modules named "Module 1" and "Module 2".
-* <span style="color: #83cc41;">Module Content</span> (panel on the middle): The outputs of currently active the module.
-* <span style="color: #3A88FE;">Filter Panel</span> (panel on the right hand side): for filtering the data to be passed into all `teal` modules. In this case the filter panel will be initialized with a filter for the `Species` variable in the `iris` dataset.
+* <span style="color: #FB6251;">Application Header and Footer</span> (the top and the bottom of the app): any content to be placed at the top and bottom of the application.
+* <span style="color: #f2b73f;">Teal Modules</span> (tabs under the header): tab for each module included in the application. In this case, there are two modules named "Module 1" and "Module 2".
+* <span style="color: #83cc41;">Module Content</span> (panel on the middle): the outputs of the currently active module.
+* <span style="color: #3A88FE;">Filter Panel</span> (panel on the right hand side): for filtering the data to be passed into all `teal` modules. In this case, the filter panel will be initialized with a filter for the `Species` variable in the `iris` dataset.
 
 ## Creating your own applications
 
