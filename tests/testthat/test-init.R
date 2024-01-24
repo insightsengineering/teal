@@ -52,7 +52,7 @@ testthat::test_that("init filter accepts `teal_slices`", {
 testthat::test_that("init throws when an empty `data` is used", {
   testthat::expect_error(
     init(data = teal_data(), modules = list(example_module())),
-    "`data` object has no datanames and its environment is empty"
+    "The environment of `data` is empty."
   )
 })
 
