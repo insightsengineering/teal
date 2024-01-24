@@ -27,7 +27,7 @@ NULL
 #' Opens modal containing the filter manager UI.
 #'
 #' @name module_filter_manager_modal
-#' @inheritParams filter_manager_srv
+#' @inheritParams module_filter_manager
 #' @examples
 #' # use non-exported function from teal
 #' filter_manager_modal_ui <- getFromNamespace("filter_manager_modal_ui", "teal")
