@@ -76,6 +76,7 @@ One possible scenario is depicted in the figure below:
 - `filter 4` is used only by `module 1`
 - `filter 5` and `filter 6` are not active in any of the modules
 
+<!-- This image is generated using the diagram inside `inst/design`  -->
 ![](./images/filters-mapping.svg)
 
 To achieve the described setup, one must set the `module_specific` argument to `TRUE` and use the `mapping` argument to match filters to modules.
