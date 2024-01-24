@@ -83,7 +83,7 @@ To learn different roles/actors in `teal` development, visit [Actors](actors.htm
 
 ## Dependencies of the `teal` packages
 
-Below, you can explore the network graph for the dependencies of the `teal` packages which shows the inter-dependencies between the core teal packages.
+Below, you can explore the network graph for the dependencies of the `teal` packages which shows the nodes representing the R packages. The arrow indicate that the package is being imported or depends on the other package.
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(pkgdepends)
@@ -95,7 +95,7 @@ teal_packages <- c(
   "teal.logger", "teal.code", "teal.data", "teal.slice",
   "teal.widgets", "teal.reporter", "teal", "teal.transform"
 )
-teal_deps <- pkgdepends::new_pkg_deps(
+teal_deps <- new_pkg_deps(
   paste0("insightsengineering/", teal_packages)
 )
 teal_deps$solve()
@@ -104,26 +104,29 @@ resolved_teal_deps <- teal_deps$get_resolution()[, c("package", "direct", "deps"
 
 nodes <- tibble(
   id = teal_packages,
-  label = teal_packages
+  label = teal_packages,
+  shape = "box"
 )
-edges <- purrr::map_df(teal_packages, function(pkg) {
+edges <- map_df(teal_packages, function(pkg) {
   dependent_pkgs <- resolved_teal_deps |>
     filter(package == pkg) |>
     pull(deps) |>
     bind_rows() |>
-    filter(ref %in% teal_packages) |>
-    pull(ref)
+    mutate(type = tolower(type)) |>
+    filter(ref %in% teal_packages, type %in% c("imports", "depends"))
   tibble(
-    from = dependent_pkgs,
-    to = pkg
+    from = pkg,
+    to = dependent_pkgs$ref,
+    label = dependent_pkgs$type,
+    color = if_else(dependent_pkgs$type == "imports", "lightblue", "lightgreen")
   )
 })
 
 visNetwork(nodes, edges, height = "100vh", width = "100%") |>
-  visEdges(arrows = "to") |>
+  visEdges(arrows = "to", smooth = TRUE, font = list(color = "#6b6b6b")) |>
   visOptions(highlightNearest = TRUE) |>
-  visLegend() |>
   visPhysics(
-    solver = "forceAtlas2Based"
+    solver = "forceAtlas2Based",
+    forceAtlas2Based = list(gravitationalConstant = -100)
   )
 ```
