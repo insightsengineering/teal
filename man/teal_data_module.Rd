@@ -93,9 +93,9 @@ eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 
 within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 
-# in an app, use input-derived value in the expression
-within(tdm, dataset1 <- subset(dataset1, Species == species), species = input$species)
-
+# use additional parameter for expression value substitution.
+valid_species = "versicolor"
+within(tdm, dataset1 <- subset(dataset1, Species \%in\% species), species = valid_species)
 }
 \seealso{
 \code{\linkS4class{teal_data}}, \code{\link[teal.code:qenv]{teal.code::qenv()}}
