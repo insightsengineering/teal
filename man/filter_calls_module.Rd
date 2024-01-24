@@ -7,7 +7,7 @@
 filter_calls_module(label = "Filter Calls Module")
 }
 \arguments{
-\item{label}{(\code{character}) label of module}
+\item{label}{\code{character} label of module}
 }
 \description{
 Please do not remove, this is useful for debugging \code{teal} without
@@ -26,5 +26,6 @@ app <- init(
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
+
 }
 \keyword{internal}
