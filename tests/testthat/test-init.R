@@ -81,7 +81,7 @@ testthat::test_that("init filter accepts `teal_slices`", {
   )
 })
 
-testthat::test_that("init throws when data has no datanames", {
+testthat::test_that("init throws when an empty teal_data is used", {
   testthat::expect_error(
     init(data = teal_data(), modules = list(example_module())),
     "`data` object has no datanames and its environment is empty"
