@@ -100,7 +100,7 @@ teal_deps <- new_pkg_deps(
   paste0("insightsengineering/", teal_packages)
 )
 teal_deps$solve()
-resolved_teal_deps <- teal_deps$get_resolution()[, c("package", "direct", "deps")] |>
+resolved_teal_deps <- teal_deps$get_resolution()[, c("package", "direct", "deps")] %>%
   filter(package %in% teal_packages)
 
 nodes <- tibble(
@@ -109,11 +109,11 @@ nodes <- tibble(
   shape = "box"
 )
 edges <- map_df(teal_packages, function(pkg) {
-  dependent_pkgs <- resolved_teal_deps |>
-    filter(package == pkg) |>
-    pull(deps) |>
-    bind_rows() |>
-    mutate(type = tolower(type)) |>
+  dependent_pkgs <- resolved_teal_deps %>%
+    filter(package == pkg) %>%
+    pull(deps) %>%
+    bind_rows() %>%
+    mutate(type = tolower(type)) %>%
     filter(ref %in% teal_packages, type %in% c("imports", "depends"))
   tibble(
     from = pkg,
@@ -123,9 +123,9 @@ edges <- map_df(teal_packages, function(pkg) {
   )
 })
 
-visNetwork(nodes, edges, height = "100vh", width = "100%") |>
-  visEdges(arrows = "to", smooth = TRUE, font = list(color = "#6b6b6b")) |>
-  visOptions(highlightNearest = TRUE) |>
+visNetwork(nodes, edges, height = "100vh", width = "100%") %>%
+  visEdges(arrows = "to", smooth = TRUE, font = list(color = "#6b6b6b")) %>%
+  visOptions(highlightNearest = TRUE) %>%
   visPhysics(
     solver = "forceAtlas2Based",
     forceAtlas2Based = list(gravitationalConstant = -100)
