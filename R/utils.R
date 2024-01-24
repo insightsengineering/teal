@@ -1,11 +1,11 @@
-#' Get Client Timezone
+#' Get client timezone
 #'
 #' Local timezone in the browser may differ from the system timezone from the server.
-#'   This script can be run to register a shiny input which contains information about
+#'   This script can be run to register a `shiny` input which contains information about
 #'   the timezone in the browser.
 #'
 #' @param ns (`function`) namespace function passed from the `session` object in the
-#'   Shiny server. For Shiny modules this will allow for proper name spacing of the
+#'   `shiny` server. For `shiny` modules this will allow for proper name spacing of the
 #'   registered input.
 #'
 #' @return (`Shiny`) input variable accessible with `input$tz` which is a (`character`)
@@ -21,6 +21,7 @@ get_client_timezone <- function(ns) {
 }
 
 #' Resolve the expected bootstrap theme
+#' @noRd
 #' @keywords internal
 get_teal_bs_theme <- function() {
   bs_theme <- getOption("teal.bs_theme")
@@ -34,6 +35,9 @@ get_teal_bs_theme <- function() {
   }
 }
 
+#' Return parentnames along with datanames.
+#' @noRd
+#' @keywords internal
 include_parent_datanames <- function(dataname, join_keys) {
   parents <- character(0)
   for (i in dataname) {
@@ -44,10 +48,8 @@ include_parent_datanames <- function(dataname, join_keys) {
     }
   }
 
-  return(unique(c(parents, dataname)))
+  unique(c(parents, dataname))
 }
-
-
 
 #' Create a `FilteredData`
 #'
@@ -69,7 +71,7 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   ans
 }
 
-#' Template Function for `TealReportCard` Creation and Customization
+#' Template function for `TealReportCard` creation and customization
 #'
 #' This function generates a report card with a title,
 #' an optional description, and the option to append the filter state list.
@@ -99,6 +101,7 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
   if (with_filter) card$append_fs(filter_panel_api$get_filter_state())
   card
 }
+
 #' Resolve `datanames` for the modules
 #'
 #' Modifies `module$datanames` to include names of the parent dataset (taken from `join_keys`).
@@ -181,7 +184,7 @@ check_modules_datanames <- function(modules, datanames) {
 #' Check `datanames` in filters
 #'
 #' This function checks whether `datanames` in filters correspond to those in `data`,
-#' returning character vector with error messages or TRUE if all checks pass.
+#' returning character vector with error messages or `TRUE` if all checks pass.
 #'
 #' @param filters (`teal_slices`) object
 #' @param datanames (`character`) names of datasets available in the `data` object
@@ -254,11 +257,11 @@ validate_app_title_tag <- function(shiny_tag) {
 #'
 #' A helper function to create the browser title along with a logo.
 #'
-#' @param title (`character`) The browser title for the teal app
+#' @param title (`character`) The browser title for the `teal` app
 #' @param favicon (`character`) The path for the icon for the title.
-#' The image/icon path can be remote or the static path accessible by shiny, like the `www/`
+#' The image/icon path can be remote or the static path accessible by `shiny`, like the `www/`
 #'
-#' @return A `shiny.tag` containing the element that adds the title and logo to the shiny app
+#' @return A `shiny.tag` containing the element that adds the title and logo to the `shiny` app
 #' @export
 build_app_title <- function(title = "teal app", favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") { # nolint
   checkmate::assert_string(title, null.ok = TRUE)
@@ -291,7 +294,7 @@ create_app_id <- function(data, modules) {
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_class(modules, "teal_modules")
 
-  hashables <- c(data, modules)
+  hashables <- list(data = data, modules = modules)
   hashables$data <- if (inherits(hashables$data, "teal_data")) {
     as.list(hashables$data@env)
   } else if (inherits(data, "teal_data_module")) {

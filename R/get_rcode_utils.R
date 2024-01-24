@@ -18,8 +18,8 @@ get_rcode_libraries <- function() {
     paste0(collapse = "")
 }
 
-
-
+#' @noRd
+#' @keywords internal
 get_rcode_str_install <- function() {
   code_string <- getOption("teal.load_nest_code")
 

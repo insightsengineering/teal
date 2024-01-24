@@ -5,8 +5,8 @@
 \title{\code{TealReportCard}}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-A child of \code{\link{ReportCard}} that is used for teal specific applications.
-In addition to the parent methods, it supports rendering teal specific elements such as
+A child of \code{\link{ReportCard}} that is used for \code{teal} specific applications.
+In addition to the parent methods, it supports rendering \code{teal} specific elements such as
 the source code, the encodings panel content and the filter panel content as part of the
 meta data.
 }
@@ -130,7 +130,7 @@ Appends the encodings list to the \code{content} and \code{metadata} of this \co
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{encodings}}{(\code{list}) list of encodings selections of the teal app.}
+\item{\code{encodings}}{(\code{list}) list of encodings selections of the \code{teal} app.}
 }
 \if{html}{\out{</div>}}
 }

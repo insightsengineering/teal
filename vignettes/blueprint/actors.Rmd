@@ -42,7 +42,7 @@ These modules are designed with a focus on standardization and versatility, maki
 
 When developing a `teal` app, the developer will select the most appropriate `teal` modules and integrate them into the app's interface to ensure seamless usability for end-users.
 
-To learn more about the existing modules, visit [`teal.gallery`](https://insightsengineering.github.io/teal.gallery/) that contains several demo applications and their source code.
+To learn more about the existing modules, visit [`teal.gallery`](https://insightsengineering.github.io/teal.gallery/), which contains several demo applications and their source code.
 
 ## `teal` module developer
 
@@ -73,7 +73,7 @@ However, developers have the freedom to create a `teal` module that is customize
 
 Ultimately, one or more `teal` modules are employed to construct a `teal` app.
 
-To learn more about creating custom modules follow the [Tutorial on Creating a Custom Module](https://insightsengineering.github.io/teal/latest-tag/articles/creating-custom-modules.html).
+To learn more about creating custom modules follow the [Tutorial on Creating a Custom Module](creating-custom-modules.html).
 
 ## Workflow in a clinical trial study
 

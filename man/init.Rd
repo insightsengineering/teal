@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{init}
 \alias{init}
-\title{Create the Server and UI Function For the Shiny App}
+\title{Create the server and UI function for the \code{shiny} app}
 \usage{
 init(
   data,
@@ -15,15 +15,13 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{teal_data}, \code{teal_data_module}, \verb{named list})\cr
-\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or
-\code{teal_data_module} or simply a list of a named list of objects
-(\code{data.frame} or \code{MultiAssayExperiment}).}
+\item{data}{(\code{teal_data}, \code{teal_data_module})\cr
+\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
 
 \item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
-will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
 \item{title}{(\code{shiny.tag} or \code{character(1)})\cr
@@ -49,12 +47,12 @@ See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_t
 is then preferred to this function.}
 }
 \value{
-named list with \code{server} and \code{ui} function
+named list with server and UI function
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 End-users: This is the most important function for you to start a
-teal app that is composed out of teal modules.
+\code{teal} app that is composed out of \code{teal} modules.
 }
 \details{
 When initializing the \code{teal} app, if \code{datanames} are not set for the \code{teal_data} object,

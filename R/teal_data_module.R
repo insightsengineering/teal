@@ -1,4 +1,4 @@
-#' Data Module for `teal` Applications
+#' Data module for `teal` applications
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
@@ -15,16 +15,16 @@
 #' See vignette `vignette("data-as-shiny-module", package = "teal")` for more details.
 #'
 #' @param ui (`function(id)`)\cr
-#'  `shiny` module `ui` function; must only take `id` argument
+#'  `shiny` module UI function; must only take `id` argument
 #' @param server (`function(id)`)\cr
-#'  `shiny` module `ui` function; must only take `id` argument;
+#'  `shiny` module server function; must only take `id` argument;
 #'  must return reactive expression containing `teal_data` object
 #'
 #' @return
 #' `teal_data_module` returns an object of class `teal_data_module`.
 #'
 #' @examples
-#' data <- teal_data_module(
+#' tdm <- teal_data_module(
 #'   ui = function(id) {
 #'     ns <- NS(id)
 #'     actionButton(ns("submit"), label = "Load data")
@@ -50,7 +50,7 @@
 #' @name teal_data_module
 #' @rdname teal_data_module
 #'
-#' @seealso [`teal_data-class`], [`base::within()`], [`teal.code::within.qenv()`]
+#' @seealso [`teal_data-class`], [`teal.code::qenv()`]
 #'
 #' @export
 teal_data_module <- function(ui, server) {
