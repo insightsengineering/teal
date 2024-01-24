@@ -21,8 +21,12 @@ knitr::opts_chunk$set(
 
 ## Data in `teal` Applications
 
-While the `teal` framework is mainly geared towards clinical data that conforms to the `ADaM` standard, general, non-relational data is handled just as well and the mechanism of passing data to applications is virtually the same.
-Moreover, modules in `teal.modules.general` are designed to work with general data.
+The `teal` framework readily accepts general, non-relational data.
+Modules defined in the `teal.modules.general` package are designed to work well with that kind of data.
+Relational data is handled just as well and the mechanism of passing data to applications is virtually the same.
+This includes clinical data that conforms to the `ADaM` standard.
+We are working on making the framework extendable so that support for other data structures can be added with relative ease.
+Currently some support is offered for the `MultiAssayExperiment` class.
 
 All applications use the `teal_data` class as a data container.
 `teal_data` objects are passed to `init` to build the application, where they are modified by the filter panel (if applicable) and passed on to modules.
@@ -89,7 +93,7 @@ The necessary code can be supplied to the `code` argument of the `teal_data` fun
 data_with_code <- teal_data(
   iris = iris, cars = mtcars,
   code = "iris <- iris
-                                    cars <- mtcars"
+          cars <- mtcars"
 )
 ```
 
