@@ -209,10 +209,8 @@ init <- function(data,
   if (inherits(data, "teal_data")) {
     if (length(teal_data_datanames(data)) == 0) {
       stop(
-        paste0(
           "`data` object has no datanames and its environment is empty.\n",
           "Specify `datanames(data)` or make sure that the `data` object is not empty."
-        )
       )
     }
     # in case of teal_data_module this check is postponed to the srv_teal_with_splash
