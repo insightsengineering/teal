@@ -67,7 +67,7 @@ a subset of datasets which are appended to the \code{data} argument in \code{ser
 \item{indent}{(\code{integer}) indent level;
 each nested \code{teal_modules} or \code{teal_module} is indented one level more}
 
-\item{...}{arguments passed to \code{format}}
+\item{...}{arguments passed to other methods.}
 }
 \value{
 object of class \code{teal_module}.
