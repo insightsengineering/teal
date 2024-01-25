@@ -9,7 +9,7 @@
 #' shapes the navigation panel of a `teal` application.
 #'
 #' @param ...
-#' - For `modules()`: (`teal_module` or `teal_modules`) see [module()] and [modules()] for more details.
+#' - For `modules()`: (`teal_module` or `teal_modules`) objects to wrap into a tab.
 #' - For `format()` and `print()`: arguments passed to other methods.
 #' @param label (`character(1)`) label of modules collection (default `"root"`).
 #' If using the `label` argument then it must be explicitly named.
