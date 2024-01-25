@@ -4,44 +4,43 @@
 # error messages.
 
 
-#' Create the Server and UI Function For the Shiny App
+#' Create the server and UI function for the `shiny` app
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' End-users: This is the most important function for you to start a
-#' teal app that is composed out of teal modules.
+#' `teal` app that is composed out of `teal` modules.
 #'
 #' @details
 #' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
 #' defaults from the `teal_data` environment will be used.
 #'
-#' @param data (`teal_data`, `teal_data_module`, `named list`)\cr
-#' `teal_data` object as returned by [teal.data::teal_data()] or
-#' `teal_data_module` or simply a list of a named list of objects
-#' (`data.frame` or `MultiAssayExperiment`).
-#' @param modules (`list`, `teal_modules` or `teal_module`)\cr
+#' @param data (`teal_data` or `teal_data_module`)
+#' `teal_data` object as returned by [`teal.data::teal_data()`] or `teal_data_module`.
+#' @param modules (`list` or `teal_modules` or `teal_module`)
 #'   nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
-#'   will be displayed in the teal application. See [modules()] and [module()] for
+#'   will be displayed in the `teal` application. See [`modules()`] and [`module()`] for
 #'   more details.
-#' @param title (`shiny.tag` or `character(1)`)\cr
+#' @param title (`shiny.tag` or `character(1)`)
 #'   The browser window title. Defaults to a title "teal app" with the icon of NEST.
 #'   Can be created using the `build_app_title()` or
 #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
-#' @param filter (`teal_slices`)\cr
-#'   Specification of initial filter. Filters can be specified using [teal::teal_slices()].
+#' @param filter (`teal_slices`)
+#'   Specification of initial filter. Filters can be specified using [`teal::teal_slices()`].
 #'   Old way of specifying filters through a list is deprecated and will be removed in the
-#'   next release. Please fix your applications to use [teal::teal_slices()].
-#' @param header (`shiny.tag` or `character(1)`) \cr
+#'   next release. Please fix your applications to use [`teal::teal_slices()`].
+#' @param header (`shiny.tag` or `character(1)`)
 #'   The header of the app.
-#' @param footer (`shiny.tag` or `character(1)`)\cr
+#' @param footer (`shiny.tag` or `character(1)`)
 #'   The footer of the app.
-#' @param id (`character`)\cr
+#' @param id (`character`)
 #'   module id to embed it, if provided,
 #'   the server function must be called with [shiny::moduleServer()];
 #'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
 #'
-#' @return named list with `server` and `ui` function
+#' @return named list with server and UI function
 #'
 #' @export
 #'
@@ -119,14 +118,7 @@ init <- function(data,
       )
     )
   }
-  checkmate::assert(
-    .var.name = "data",
-    checkmate::check_multi_class(data, c("teal_data", "teal_data_module")),
-    checkmate::check_list(data, names = "named")
-  )
-  if (is.list(data) && !inherits(data, "teal_data_module")) {
-    data <- do.call(teal.data::teal_data, data)
-  }
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
 
   ## `modules`
   checkmate::assert(
@@ -217,7 +209,7 @@ init <- function(data,
   ## `data` - `modules`
   if (inherits(data, "teal_data")) {
     if (length(teal_data_datanames(data)) == 0) {
-      stop("`data` object has no datanames and its environment is empty. Specify `datanames(data)` and try again.")
+      stop("The environment of `data` is empty.")
     }
     # in case of teal_data_module this check is postponed to the srv_teal_with_splash
     is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
@@ -236,7 +228,7 @@ init <- function(data,
 
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
-  # the `ui` and `server` with `id = character(0)` and calling the server function directly
+  # the UI and server with `id = character(0)` and calling the server function directly
   # rather than through `callModule`
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),

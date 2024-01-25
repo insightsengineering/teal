@@ -7,9 +7,9 @@
 append_module(modules, module)
 }
 \arguments{
-\item{modules}{\code{teal_modules}}
+\item{modules}{(\code{teal_modules})}
 
-\item{module}{\code{teal_module} object to be appended onto the children of \code{modules}}
+\item{module}{(\code{teal_module}) object to be appended onto the children of \code{modules}}
 }
 \value{
 \code{teal_modules} object with \code{module} appended

@@ -7,7 +7,7 @@
 validate_one_row_per_id(x, key = c("USUBJID", "STUDYID"))
 }
 \arguments{
-\item{x}{a data.frame}
+\item{x}{(\code{data.frame})}
 
 \item{key}{a vector of ID variables from \code{x} that identify unique records}
 }

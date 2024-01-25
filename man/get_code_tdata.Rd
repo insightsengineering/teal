@@ -2,8 +2,7 @@
 % Please edit documentation in R/tdata.R
 \name{get_code_tdata}
 \alias{get_code_tdata}
-\title{Wrapper for \code{get_code.tdata}
-This wrapper is to be used by downstream packages to extract the code of a \code{tdata} object}
+\title{Wrapper for \code{get_code.tdata}}
 \usage{
 get_code_tdata(data)
 }
@@ -14,6 +13,5 @@ get_code_tdata(data)
 (\code{character}) code used in the \code{tdata} object.
 }
 \description{
-Wrapper for \code{get_code.tdata}
-This wrapper is to be used by downstream packages to extract the code of a \code{tdata} object
+This wrapper is to be used by downstream packages to extract the code of a \code{tdata} object.
 }

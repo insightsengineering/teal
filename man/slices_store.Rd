@@ -2,7 +2,7 @@
 % Please edit documentation in R/teal_slices-store.R
 \name{slices_store}
 \alias{slices_store}
-\title{Store teal_slices object to a file}
+\title{Store \code{teal_slices} object to a file}
 \usage{
 slices_store(tss, file)
 }
@@ -29,10 +29,13 @@ This format is assumed during \code{slices_restore}. All \code{POSIX*t} objects 
 \code{teal_slice} objects are always printed in \code{UTC} timezone as well.
 }
 \examples{
+# use non-exported function from teal
+slices_store <- getFromNamespace("slices_store", "teal")
+
 # Create a teal_slices object
 tss <- teal_slices(
-  teal_slice(dataname = "data", varname = "var"),
-  teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
+  teal.slice::teal_slice(dataname = "data", varname = "var"),
+  teal.slice::teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
 )
 
 if (interactive()) {

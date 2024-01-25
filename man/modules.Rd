@@ -22,7 +22,7 @@ modules(..., label = "root")
 If using the \code{label} argument then it must be explicitly named.
 For example \code{modules("lab", ...)} should be converted to \code{modules(label = "lab", ...)}}
 
-\item{x}{\code{teal_modules}}
+\item{x}{(\code{teal_modules})}
 
 \item{indent}{(\code{integer}) indent level;
 each nested \code{teal_modules} or \code{teal_module} is indented one level more}
@@ -61,7 +61,7 @@ app <- init(
           moduleServer(
             id,
             module = function(input, output, session) {
-              output$data <- renderDataTable(data[["iris"]]())
+              output$data <- renderDataTable(data()[["iris"]])
             }
           )
         },

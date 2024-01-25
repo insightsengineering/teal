@@ -2,7 +2,7 @@
 % Please edit documentation in R/teal_slices-store.R
 \name{slices_restore}
 \alias{slices_restore}
-\title{Restore teal_slices object from a file}
+\title{Restore \code{teal_slices} object from a file}
 \usage{
 slices_restore(file)
 }
@@ -18,10 +18,12 @@ and restores it to its original form. The restored \code{teal_slices} object can
 to access filter states and their corresponding attributes.
 }
 \examples{
+# use non-exported function from teal
+slices_restore <- getFromNamespace("slices_restore", "teal")
+
 if (interactive()) {
   # Restore a teal_slices object from a file
   tss_restored <- slices_restore("path/to/file.json")
 }
-
 }
 \keyword{internal}

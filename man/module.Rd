@@ -4,7 +4,7 @@
 \alias{module}
 \alias{format.teal_module}
 \alias{print.teal_module}
-\title{Creates a \code{teal_module} object.}
+\title{Creates a \code{teal_module} object}
 \usage{
 module(
   label = "module",
@@ -29,22 +29,23 @@ module(
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module. Any label possible except
-\code{"global_filters"} - read more in \code{mapping} argument of \link{teal_slices}.}
+\code{"global_filters"} - read more in \code{mapping} argument of \code{\link{teal_slices}}.}
 
 \item{server}{(\code{function}) \code{shiny} module with following arguments:
 \itemize{
-\item \code{id} - teal will set proper shiny namespace for this module (see \code{\link[shiny:moduleServer]{shiny::moduleServer()}}).
+\item \code{id} - \code{teal} will set proper \code{shiny} namespace for this module (see \code{\link[shiny:moduleServer]{shiny::moduleServer()}}).
 \item \code{input}, \code{output}, \code{session} - (not recommended) then \code{\link[shiny:callModule]{shiny::callModule()}} will be used to call a module.
 \item \code{data} (optional) module will receive a \code{teal_data} object, a list of reactive (filtered) data specified in
 the \code{filters} argument.
-\item \code{datasets} (optional) module will receive \code{FilteredData}. (See \verb{[teal.slice::FilteredData]}).
-\item \code{reporter} (optional) module will receive \code{Reporter}. (See \link[teal.reporter:Reporter]{teal.reporter::Reporter}).
+\item \code{datasets} (optional) module will receive \code{FilteredData}. (See \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}).
+\item \code{reporter} (optional) module will receive \code{Reporter}. (See \code{\link[teal.reporter:Reporter]{teal.reporter::Reporter}}).
+\item \code{filter_panel_api} (optional) module will receive \code{FilterPanelAPI}. (See \code{\link[teal.slice:FilterPanelAPI]{teal.slice::FilterPanelAPI}}).
 \item \code{...} (optional) \code{server_args} elements will be passed to the module named argument or to the \code{...}.
 }}
 
-\item{ui}{(\code{function}) Shiny \code{ui} module function with following arguments:
+\item{ui}{(\code{function}) \code{shiny} UI module function with following arguments:
 \itemize{
-\item \code{id} - teal will set proper shiny namespace for this module.
+\item \code{id} - \code{teal} will set proper \code{shiny} namespace for this module.
 \item \code{...} (optional) \code{ui_args} elements will be passed to the module named argument or to the \code{...}.
 }}
 
@@ -54,15 +55,15 @@ the \code{filters} argument.
 filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
 and the keyword \code{'all'} will show filters of all datasets. \code{datanames} also determines
-a subset of datasets which are appended to the \code{data} argument in \code{server} function.}
+a subset of datasets which are appended to the \code{data} argument in server function.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the
-\code{server} function.}
+server function.}
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the
-\code{ui} function.}
+UI function.}
 
-\item{x}{\code{teal_module}}
+\item{x}{(\code{teal_module})}
 
 \item{indent}{(\code{integer}) indent level;
 each nested \code{teal_modules} or \code{teal_module} is indented one level more}
@@ -89,7 +90,7 @@ app <- init(
         moduleServer(
           id,
           module = function(input, output, session) {
-            output$data <- renderDataTable(data[["iris"]]())
+            output$data <- renderDataTable(data()[["iris"]])
           }
         )
       },

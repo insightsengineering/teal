@@ -10,18 +10,22 @@ filter_calls_module(label = "Filter Calls Module")
 \item{label}{\code{character} label of module}
 }
 \description{
-Please do not remove, this is useful for debugging teal without
-dependencies and simplifies \verb{\link[devtools]\{load_all\}} which otherwise fails
+Please do not remove, this is useful for debugging \code{teal} without
+dependencies and simplifies \code{\link[devtools:load_all]{devtools::load_all}} which otherwise fails
 and avoids session restarts!
 }
 \examples{
+# use non-exported function from teal
+filter_calls_module <- getFromNamespace("filter_calls_module", "teal")
+
 app <- init(
   data = teal_data(iris = iris, mtcars = mtcars),
-  modules = teal:::filter_calls_module(),
+  modules = filter_calls_module(),
   header = "Simple teal app"
 )
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
+
 }
 \keyword{internal}

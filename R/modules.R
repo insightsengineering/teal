@@ -17,7 +17,7 @@
 #'
 #' @export
 #'
-#' @return object of class \code{teal_modules}. Object contains following fields
+#' @return object of class `teal_modules`. Object contains following fields
 #' - `label`: taken from the `label` argument
 #' - `children`: a list containing objects passed in `...`. List elements are named after
 #' their `label` attribute converted to a valid `shiny` id.
@@ -36,7 +36,7 @@
 #'           moduleServer(
 #'             id,
 #'             module = function(input, output, session) {
-#'               output$data <- renderDataTable(data[["iris"]]())
+#'               output$data <- renderDataTable(data()[["iris"]])
 #'             }
 #'           )
 #'         },
@@ -94,8 +94,8 @@ modules <- function(..., label = "root") {
 
 #' Append a `teal_module` to `children` of a `teal_modules` object
 #' @keywords internal
-#' @param modules `teal_modules`
-#' @param module `teal_module` object to be appended onto the children of `modules`
+#' @param modules (`teal_modules`)
+#' @param module (`teal_module`) object to be appended onto the children of `modules`
 #' @return `teal_modules` object with `module` appended
 append_module <- function(modules, module) {
   checkmate::assert_class(modules, "teal_modules")
@@ -110,7 +110,7 @@ append_module <- function(modules, module) {
 #'
 #' Given a `teal_module` or a `teal_modules`, return the elements of the structure according to `class`.
 #'
-#' @param modules `teal_modules`
+#' @param modules (`teal_modules`)
 #' @param class The class name of `teal_module` to be extracted or dropped.
 #' @keywords internal
 #' @return
@@ -164,36 +164,36 @@ is_arg_used <- function(modules, arg) {
 }
 
 
-#' Creates a `teal_module` object.
+#' Creates a `teal_module` object
 #'
 #' @description `r lifecycle::badge("stable")`
 #'
 #' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.
 #'
 #' @param label (`character(1)`) Label shown in the navigation item for the module. Any label possible except
-#'  `"global_filters"` - read more in `mapping` argument of [teal::teal_slices].
+#'  `"global_filters"` - read more in `mapping` argument of [`teal::teal_slices`].
 #' @param server (`function`) `shiny` module with following arguments:
-#'  - `id` - teal will set proper shiny namespace for this module (see [shiny::moduleServer()]).
-#'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
+#'  - `id` - `teal` will set proper `shiny` namespace for this module (see [`shiny::moduleServer()`]).
+#'  - `input`, `output`, `session` - (not recommended) then [`shiny::callModule()`] will be used to call a module.
 #'  - `data` (optional) module will receive a `teal_data` object, a list of reactive (filtered) data specified in
 #'     the `filters` argument.
-#'  - `datasets` (optional) module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
-#'  - `reporter` (optional) module will receive `Reporter`. (See [teal.reporter::Reporter]).
-#   - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).
+#'  - `datasets` (optional) module will receive `FilteredData`. (See [`teal.slice::FilteredData`]).
+#'  - `reporter` (optional) module will receive `Reporter`. (See [`teal.reporter::Reporter`]).
+#'  - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [`teal.slice::FilterPanelAPI`]).
 #'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
-#' @param ui (`function`) Shiny `ui` module function with following arguments:
-#'  - `id` - teal will set proper shiny namespace for this module.
+#' @param ui (`function`) `shiny` UI module function with following arguments:
+#'  - `id` - `teal` will set proper `shiny` namespace for this module.
 #'  - `...` (optional) `ui_args` elements will be passed to the module named argument or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
 #' @param datanames (`character`) A vector with `datanames` that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed datasets. `NULL` will hide the filter panel,
 #'   and the keyword `'all'` will show filters of all datasets. `datanames` also determines
-#'   a subset of datasets which are appended to the `data` argument in `server` function.
+#'   a subset of datasets which are appended to the `data` argument in server function.
 #' @param server_args (named `list`) with additional arguments passed on to the
-#'   `server` function.
+#'   server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the
-#'   `ui` function.
+#'   UI function.
 #'
 #' @return object of class `teal_module`.
 #' @export
@@ -209,7 +209,7 @@ is_arg_used <- function(modules, arg) {
 #'         moduleServer(
 #'           id,
 #'           module = function(input, output, session) {
-#'             output$data <- renderDataTable(data[["iris"]]())
+#'             output$data <- renderDataTable(data()[["iris"]])
 #'           }
 #'         )
 #'       },
@@ -252,7 +252,7 @@ module <- function(label = "module",
     )
   }
 
-  ## `server`
+  ## server
   checkmate::assert_function(server)
   server_formals <- names(formals(server))
   if (!(
@@ -261,8 +261,8 @@ module <- function(label = "module",
   )) {
     stop(
       "\nmodule() `server` argument requires a function with following arguments:",
-      "\n - id - teal will set proper shiny namespace for this module.",
-      "\n - input, output, session (not recommended) - then shiny::callModule will be used to call a module.",
+      "\n - id - `teal` will set proper `shiny` namespace for this module.",
+      "\n - input, output, session (not recommended) - then `shiny::callModule` will be used to call a module.",
       "\n\nFollowing arguments can be used optionaly:",
       "\n - `data` - module will receive list of reactive (filtered) data specified in the `filters` argument",
       "\n - `datasets` - module will receive `FilteredData`. See `help(teal.slice::FilteredData)`",
@@ -274,20 +274,20 @@ module <- function(label = "module",
   if ("datasets" %in% server_formals) {
     warning(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
-      "`datasets` argument in the `server` is deprecated and will be removed in the next release. ",
+      "`datasets` argument in the server is deprecated and will be removed in the next release. ",
       "Please use `data` instead.",
       call. = FALSE
     )
   }
 
 
-  ## `ui`
+  ## UI
   checkmate::assert_function(ui)
   ui_formals <- names(formals(ui))
   if (!"id" %in% ui_formals) {
     stop(
       "\nmodule() `ui` argument requires a function with following arguments:",
-      "\n - id - teal will set proper shiny namespace for this module.",
+      "\n - id - `teal` will set proper `shiny` namespace for this module.",
       "\n\nFollowing arguments can be used optionally:",
       "\n - `...` ui_args elements will be passed to the module argument of the same name or to the `...`"
     )
@@ -295,8 +295,8 @@ module <- function(label = "module",
   if (any(c("data", "datasets") %in% ui_formals)) {
     stop(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
-      "`ui` with `data` or `datasets` argument is no longer accepted.\n  ",
-      "If some `ui` inputs depend on data, please move the logic to your `server` instead.\n  ",
+      "UI with `data` or `datasets` argument is no longer accepted.\n  ",
+      "If some UI inputs depend on data, please move the logic to your server instead.\n  ",
       "Possible solutions are renderUI() or updateXyzInput() functions."
     )
   }
@@ -324,9 +324,9 @@ module <- function(label = "module",
   srv_extra_args <- setdiff(names(server_args), server_formals)
   if (length(srv_extra_args) > 0 && !"..." %in% server_formals) {
     stop(
-      "\nFollowing `server_args` elements have no equivalent in the formals of the `server`:\n",
+      "\nFollowing `server_args` elements have no equivalent in the formals of the server:\n",
       paste(paste(" -", srv_extra_args), collapse = "\n"),
-      "\n\nUpdate the `server` arguments by including above or add `...`"
+      "\n\nUpdate the server arguments by including above or add `...`"
     )
   }
 
@@ -335,9 +335,9 @@ module <- function(label = "module",
   ui_extra_args <- setdiff(names(ui_args), ui_formals)
   if (length(ui_extra_args) > 0 && !"..." %in% ui_formals) {
     stop(
-      "\nFollowing `ui_args` elements have no equivalent in the formals of `ui`:\n",
+      "\nFollowing `ui_args` elements have no equivalent in the formals of UI:\n",
       paste(paste(" -", ui_extra_args), collapse = "\n"),
-      "\n\nUpdate the `ui` arguments by including above or add `...`"
+      "\n\nUpdate the UI arguments by including above or add `...`"
     )
   }
 
@@ -361,9 +361,10 @@ module <- function(label = "module",
 #' @param depth optional, integer determining current depth level
 #'
 #' @return depth level for given module
-#' @keywords internal
-#'
 #' @examples
+#' # use non-exported function from teal
+#' modules_depth <- getFromNamespace("modules_depth", "teal")
+#'
 #' mods <- modules(
 #'   label = "d1",
 #'   modules(
@@ -376,7 +377,7 @@ module <- function(label = "module",
 #'   ),
 #'   module(label = "ccc")
 #' )
-#' stopifnot(teal:::modules_depth(mods) == 3L)
+#' stopifnot(modules_depth(mods) == 3L)
 #'
 #' mods <- modules(
 #'   label = "a",
@@ -385,7 +386,8 @@ module <- function(label = "module",
 #'   ),
 #'   module(label = "b2")
 #' )
-#' stopifnot(teal:::modules_depth(mods) == 2L)
+#' stopifnot(modules_depth(mods) == 2L)
+#' @keywords internal
 modules_depth <- function(modules, depth = 0L) {
   checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
   checkmate::assert_int(depth, lower = 0)
@@ -396,7 +398,12 @@ modules_depth <- function(modules, depth = 0L) {
   }
 }
 
-
+#' Retrieve labels from `teal_modules`
+#'
+#' @param modules (`teal_modules`)
+#' @return A `list` containing the labels of the modules. If the modules are nested,
+#' the function returns a nested `list` of labels.
+#' @keywords internal
 module_labels <- function(modules) {
   if (inherits(modules, "teal_modules")) {
     lapply(modules$children, module_labels)
@@ -424,7 +431,7 @@ format.teal_modules <- function(x, indent = 0, ...) { # nolint
 #' Converts `teal_module` to a string
 #'
 #' @inheritParams format.teal_modules
-#' @param x `teal_module`
+#' @param x (`teal_module`)
 #' @export
 #' @rdname module
 format.teal_module <- function(x, indent = 0, ...) { # nolint
@@ -432,7 +439,7 @@ format.teal_module <- function(x, indent = 0, ...) { # nolint
 }
 
 #' Prints `teal_modules`
-#' @param x `teal_modules`
+#' @param x (`teal_modules`)
 #' @export
 #' @rdname modules
 print.teal_modules <- function(x, ...) {
@@ -441,7 +448,7 @@ print.teal_modules <- function(x, ...) {
 }
 
 #' Prints `teal_module`
-#' @param x `teal_module`
+#' @param x (`teal_module`)
 #' @param ... arguments passed to other methods.
 #' @export
 #' @rdname module
