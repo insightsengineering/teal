@@ -4,12 +4,15 @@
 \alias{.datasets_to_data}
 \title{Convert \code{FilteredData} to reactive list of datasets of the \code{teal_data} type.}
 \usage{
-.datasets_to_data(module, datasets, check)
+.datasets_to_data(module, datasets, check = FALSE)
 }
 \arguments{
 \item{module}{(\code{teal_module}) module where needed filters are taken from}
 
 \item{datasets}{(\code{FilteredData}) object where needed data are taken from}
+
+\item{check}{(\code{logical}) reproducibility check - whether to perform a check that the data creation
+code included in the object definitions actually produces those objects.}
 }
 \value{
 A \code{teal_data} object.

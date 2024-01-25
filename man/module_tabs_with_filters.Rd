@@ -28,6 +28,9 @@ of the \code{modules} argument and list names must correspond to the labels in \
 When filter is not module-specific then list contains the same object in all elements.}
 
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
+
+\item{check}{(\code{logical}) reproducibility check - whether to perform a check that the data creation
+code included in the object definitions actually produces those objects.}
 }
 \value{
 A \code{tagList} of The main menu, place holders for filters and

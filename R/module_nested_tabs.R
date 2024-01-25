@@ -23,6 +23,9 @@
 #' @param is_module_specific (`logical(1)`)\cr
 #'  flag determining if the filter panel is global or module-specific.
 #'  When set to `TRUE`, a filter panel is called inside of each module tab.
+#' @param check (`logical`) reproducibility check - whether to perform a check that the data creation
+#'  code included in the object definitions actually produces those objects.
+#'
 #' @return depending on class of `modules`, `ui_nested_tabs` returns:
 #'   - `teal_module`: instantiated UI of the module
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
@@ -268,10 +271,12 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
 #' @param datasets (`FilteredData`) object where needed data are taken from
+#' @param check (`logical`) reproducibility check - whether to perform a check that the data creation
+#'  code included in the object definitions actually produces those objects.
 #' @return A `teal_data` object.
 #'
 #' @keywords internal
-.datasets_to_data <- function(module, datasets, check) {
+.datasets_to_data <- function(module, datasets, check = FALSE) {
   checkmate::assert_class(module, "teal_module")
   checkmate::assert_class(datasets, "FilteredData")
 
