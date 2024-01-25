@@ -231,7 +231,7 @@ init <- function(data,
   }
 
   # Note regarding case `id = character(0)`:
-  # rather than using `shiny::moduleServer` and creating a submodule of this module, we directly modify
+  # rather than creating a submodule of this module, we directly modify
   # the UI and server with `id = character(0)` and calling the server function directly
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
