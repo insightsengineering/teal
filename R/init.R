@@ -36,8 +36,8 @@
 #'   The footer of the app.
 #' @param id optional (`character`)
 #'   specifying the module id to be used when embedding the teal app within another `shiny` app as a module.
-#'   - If an id is provided, the server function must be called using [shiny::moduleServer()] with the specified id.
-#'   However, for better integration use [ui_teal_with_splash()] and [srv_teal_with_splash()].
+#'   - If an id is provided, the server function must be called using [`shiny::moduleServer()`] with the specified id.
+#'   However, for better integration use [`ui_teal_with_splash()`] and [`srv_teal_with_splash()`].
 #'   - If no id is given (i.e., `id = character(0)`), the teal app runs as a standalone application without submodule integration.
 #'
 #' @return named list with server and UI function
