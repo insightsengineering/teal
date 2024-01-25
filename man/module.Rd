@@ -68,7 +68,7 @@ UI function.}
 \item{indent}{(\code{integer}) indent level;
 each nested \code{teal_modules} or \code{teal_module} is indented one level more}
 
-\item{...}{arguments passed to other methods.}
+\item{...}{ignored}
 }
 \value{
 object of class \code{teal_module}.
