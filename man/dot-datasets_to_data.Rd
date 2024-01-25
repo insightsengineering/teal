@@ -4,7 +4,7 @@
 \alias{.datasets_to_data}
 \title{Convert \code{FilteredData} to reactive list of datasets of the \code{teal_data} type.}
 \usage{
-.datasets_to_data(module, datasets)
+.datasets_to_data(module, datasets, check)
 }
 \arguments{
 \item{module}{(\code{teal_module}) module where needed filters are taken from}

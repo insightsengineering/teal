@@ -13,7 +13,8 @@ srv_tabs_with_filters(
   datasets,
   modules,
   reporter = teal.reporter::Reporter$new(),
-  filter = teal_slices()
+  filter = teal_slices(),
+  check = FALSE
 )
 }
 \arguments{

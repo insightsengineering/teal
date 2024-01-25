@@ -25,7 +25,8 @@ srv_nested_tabs(
   datasets,
   modules,
   is_module_specific = FALSE,
-  reporter = teal.reporter::Reporter$new()
+  reporter = teal.reporter::Reporter$new(),
+  check = FALSE
 )
 
 \method{srv_nested_tabs}{default}(
@@ -33,7 +34,8 @@ srv_nested_tabs(
   datasets,
   modules,
   is_module_specific = FALSE,
-  reporter = teal.reporter::Reporter$new()
+  reporter = teal.reporter::Reporter$new(),
+  check = FALSE
 )
 
 \method{srv_nested_tabs}{teal_modules}(
@@ -41,7 +43,8 @@ srv_nested_tabs(
   datasets,
   modules,
   is_module_specific = FALSE,
-  reporter = teal.reporter::Reporter$new()
+  reporter = teal.reporter::Reporter$new(),
+  check = FALSE
 )
 
 \method{srv_nested_tabs}{teal_module}(
@@ -49,7 +52,8 @@ srv_nested_tabs(
   datasets,
   modules,
   is_module_specific = TRUE,
-  reporter = teal.reporter::Reporter$new()
+  reporter = teal.reporter::Reporter$new(),
+  check = FALSE
 )
 }
 \arguments{
