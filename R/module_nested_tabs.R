@@ -276,7 +276,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   )
 
   data@verified <- attr(datasets, "verification_status")
-  return(data)
+  data
 }
 
 #' Get the hash of a dataset
