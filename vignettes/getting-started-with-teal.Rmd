@@ -113,6 +113,79 @@ This report can then be downloaded and a special _Report Previewer_ module will 
 `teal` hands over data with reproducible code to every module included in the application. `teal` doesn't display the code it is module's responsibility to render it. For example, the `example_module` function used above shows the code
 in the main panel together with other outputs. For more details see [this vignette](reproducible-code.html).
 
+## Embedding `teal` with other `shiny` applications
+`teal` can be seamlessly integrated into other `shiny` applications, enabling the creation of complex interfaces by combining multiple `teal` applications with other `shiny` elements. 
+
+### Example: Side-by-side `teal` applications
+This section demonstrates how to embed two independent `teal` applications within a single `shiny` app, using the `id` argument in the `init` function to ensure distinct identification. This approach can be generalized for embedding teal into various `shiny` modules.
+```{r, message=FALSE}
+app1 <- init(
+  data = teal_data(iris = iris),
+  modules = modules(
+    example_module("mod1"),
+    example_module("mod2")
+  ),
+  id = "app1"
+)
+
+app2 <- init(
+  data = teal_data(mtcars = mtcars),
+  modules = modules(
+    example_module("mod3"),
+    example_module("mod4")
+  ),
+  id = "app2"
+)
+
+ui <- fluidPage(
+  fluidRow(
+    column(6, app1$ui),
+    column(6, app2$ui)
+  )
+)
+
+server <- function(input, output, session) {
+  app1$server(input, output, session)
+  app2$server(input, output, session)
+}
+
+if (interactive()) {
+  shinyApp(ui, server)
+}
+```
+
+### Recommended approach for module integration
+For a more modular and consistent integration, similar to standard `shiny` modules, it is advisable to use `ui_teal_with_splash` and `srv_teal_with_splash`.
+
+```{r, eval = FALSE}
+teal_modules <- modules(example_module())
+
+# Shiny app with modular integration of teal
+ui <- fluidPage(
+  fluidRow(
+    column(6, ui_teal_with_splash(id = "app1", data = teal_data())),
+    column(6, ui_teal_with_splash(id = "app2", data = teal_data()))
+  )
+)
+
+server <- function(input, output, session) {
+  srv_teal_with_splash(
+    id = "app1", 
+    data = teal_data(iris = iris),
+    modules = teal_modules
+  )
+  srv_teal_with_splash(
+    id = "app2", 
+    data = teal_data(mtcars = mtcars),
+    modules = teal_modules
+  )
+}
+
+if (interactive()) {
+  shinyApp(ui, server)
+}
+```
+
 ## Where to go next
 
 To learn more about the `teal` framework we recommend first exploring some of the available analysis modules.
