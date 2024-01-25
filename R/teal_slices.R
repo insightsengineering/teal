@@ -19,7 +19,7 @@
 #' [`teal`'s GitHub repository](https://github.com/insightsengineering/teal/)._
 #'
 #'  (named `list`) specifies which filters will be active in which modules on app start.
-#'  Elements should contain character vector of `teal_slice` `id`s (see [teal.slice::teal_slice()]).
+#'  Elements should contain character vector of `teal_slice` `id`s (see [`teal.slice::teal_slice()`]).
 #'  Names of the list should correspond to `teal_module` `label` set in [module()] function.
 #'  - `id`s listed under `"global_filters` will be active in all modules.
 #'  - If missing, all filters will be applied to all modules.
