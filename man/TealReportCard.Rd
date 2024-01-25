@@ -75,7 +75,7 @@ Appends the source code to the \code{content} meta data of this \code{TealReport
 \describe{
 \item{\code{src}}{(\code{character(1)}) code as text.}
 
-\item{\code{...}}{any \code{rmarkdown} R chunk parameter and its value.
+\item{\code{...}}{any \code{rmarkdown} \code{R} chunk parameter and its value.
 But \code{eval} parameter is always set to \code{FALSE}.}
 }
 \if{html}{\out{</div>}}

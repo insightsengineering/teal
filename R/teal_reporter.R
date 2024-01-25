@@ -13,7 +13,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name_linter.
     #' @description Appends the source code to the `content` meta data of this `TealReportCard`.
     #'
     #' @param src (`character(1)`) code as text.
-    #' @param ... any `rmarkdown` R chunk parameter and its value.
+    #' @param ... any `rmarkdown` `R` chunk parameter and its value.
     #' But `eval` parameter is always set to `FALSE`.
     #' @return invisibly self
     #' @examples
@@ -36,7 +36,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name_linter.
     #'  the default `yaml::as.yaml` to format the list.
     #'  If the filter state list is empty, nothing is appended to the `content`.
     #'
-    #' @param fs (`teal_slices`) object returned from [teal_slices()] function.
+    #' @param fs (`teal_slices`) object returned from [`teal_slices()`] function.
     #' @return invisibly self
     append_fs = function(fs) {
       checkmate::assert_class(fs, "teal_slices")
@@ -81,7 +81,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     #'
     #' @details Returns a `TealSlicesBlock` object with no content and no parameters.
     #'
-    #' @param content (`teal_slices`) object returned from [teal_slices()] function.
+    #' @param content (`teal_slices`) object returned from [`teal_slices()`] function.
     #' @param style (`character(1)`) string specifying style to apply.
     #'
     #' @return `TealSlicesBlock`
@@ -99,7 +99,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     #' When `selected` field in `teal_slice` object is a range, then it is displayed as a "min"
     #'
     #'
-    #' @param content (`teal_slices`) object returned from [teal_slices()] function.
+    #' @param content (`teal_slices`) object returned from [`teal_slices()`] function.
     #' @return invisibly self
     set_content = function(content) {
       checkmate::assert_class(content, "teal_slices")

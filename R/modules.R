@@ -169,15 +169,15 @@ is_arg_used <- function(modules, arg) {
 #' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.
 #'
 #' @param label (`character(1)`) Label shown in the navigation item for the module. Any label possible except
-#'  `"global_filters"` - read more in `mapping` argument of [teal::teal_slices].
+#'  `"global_filters"` - read more in `mapping` argument of [`teal::teal_slices`].
 #' @param server (`function`) `shiny` module with following arguments:
-#'  - `id` - `teal` will set proper `shiny` namespace for this module (see [shiny::moduleServer()]).
-#'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
+#'  - `id` - `teal` will set proper `shiny` namespace for this module (see [`shiny::moduleServer()`]).
+#'  - `input`, `output`, `session` - (not recommended) then [`shiny::callModule()`] will be used to call a module.
 #'  - `data` (optional) module will receive a `teal_data` object, a list of reactive (filtered) data specified in
 #'     the `filters` argument.
-#'  - `datasets` (optional) module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
-#'  - `reporter` (optional) module will receive `Reporter`. (See [teal.reporter::Reporter]).
-#   - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).
+#'  - `datasets` (optional) module will receive `FilteredData`. (See [`teal.slice::FilteredData`]).
+#'  - `reporter` (optional) module will receive `Reporter`. (See [`teal.reporter::Reporter`]).
+#'  - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [`teal.slice::FilterPanelAPI`]).
 #'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
 #' @param ui (`function`) `shiny` UI module function with following arguments:
 #'  - `id` - `teal` will set proper `shiny` namespace for this module.
@@ -285,7 +285,7 @@ module <- function(label = "module",
   if (!"id" %in% ui_formals) {
     stop(
       "\nmodule() `ui` argument requires a function with following arguments:",
-      "\n - id - `teal` will set proper shiny namespace for this module.",
+      "\n - id - `teal` will set proper `shiny` namespace for this module.",
       "\n\nFollowing arguments can be used optionally:",
       "\n - `...` ui_args elements will be passed to the module argument of the same name or to the `...`"
     )

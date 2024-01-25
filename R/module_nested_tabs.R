@@ -23,6 +23,7 @@
 #' @param is_module_specific (`logical(1)`)
 #'  flag determining if the filter panel is global or module-specific.
 #'  When set to `TRUE`, a filter panel is called inside of each module tab.
+#'
 #' @return depending on class of `modules`, `ui_nested_tabs` returns:
 #'   - `teal_module`: instantiated UI of the module
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
@@ -303,6 +304,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
 #' @param datasets (`FilteredData`) object where needed data are taken from
+#'
 #' @return A `teal_data` object.
 #'
 #' @keywords internal
@@ -330,10 +332,14 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     get_datasets_code(datanames, datasets, hashes)
   )
 
-  do.call(
+
+  data <- do.call(
     teal.data::teal_data,
     args = c(data, code = list(code), join_keys = list(datasets$get_join_keys()[datanames]))
   )
+
+  data@verified <- attr(datasets, "verification_status")
+  data
 }
 
 #' Get the hash of a dataset

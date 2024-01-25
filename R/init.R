@@ -16,20 +16,20 @@
 #' defaults from the `teal_data` environment will be used.
 #'
 #' @param data (`teal_data` or `teal_data_module`)
-#' `teal_data` object as returned by [teal.data::teal_data()] or `teal_data_module`.
+#' `teal_data` object as returned by [`teal.data::teal_data()`] or `teal_data_module`.
 #' @param modules (`list` or `teal_modules` or `teal_module`)
 #'   nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
-#'   will be displayed in the `teal` application. See [modules()] and [module()] for
+#'   will be displayed in the `teal` application. See [`modules()`] and [`module()`] for
 #'   more details.
 #' @param title (`shiny.tag` or `character(1)`)
 #'   The browser window title. Defaults to a title "teal app" with the icon of NEST.
 #'   Can be created using the `build_app_title()` or
 #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
 #' @param filter (`teal_slices`)
-#'   Specification of initial filter. Filters can be specified using [teal::teal_slices()].
+#'   Specification of initial filter. Filters can be specified using [`teal::teal_slices()`].
 #'   Old way of specifying filters through a list is deprecated and will be removed in the
-#'   next release. Please fix your applications to use [teal::teal_slices()].
+#'   next release. Please fix your applications to use [`teal::teal_slices()`].
 #' @param header (`shiny.tag` or `character(1)`)
 #'   The header of the app.
 #' @param footer (`shiny.tag` or `character(1)`)
@@ -209,7 +209,7 @@ init <- function(data,
   ## `data` - `modules`
   if (inherits(data, "teal_data")) {
     if (length(teal_data_datanames(data)) == 0) {
-      stop("`data` object has no datanames and its environment is empty. Specify `datanames(data)` and try again.")
+      stop("The environment of `data` is empty.")
     }
     # in case of teal_data_module this check is postponed to the srv_teal_with_splash
     is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))

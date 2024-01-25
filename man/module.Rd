@@ -29,7 +29,7 @@ module(
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module. Any label possible except
-\code{"global_filters"} - read more in \code{mapping} argument of \link{teal_slices}.}
+\code{"global_filters"} - read more in \code{mapping} argument of \code{\link{teal_slices}}.}
 
 \item{server}{(\code{function}) \code{shiny} module with following arguments:
 \itemize{
@@ -37,8 +37,9 @@ module(
 \item \code{input}, \code{output}, \code{session} - (not recommended) then \code{\link[shiny:callModule]{shiny::callModule()}} will be used to call a module.
 \item \code{data} (optional) module will receive a \code{teal_data} object, a list of reactive (filtered) data specified in
 the \code{filters} argument.
-\item \code{datasets} (optional) module will receive \code{FilteredData}. (See \verb{[teal.slice::FilteredData]}).
-\item \code{reporter} (optional) module will receive \code{Reporter}. (See \link[teal.reporter:Reporter]{teal.reporter::Reporter}).
+\item \code{datasets} (optional) module will receive \code{FilteredData}. (See \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}).
+\item \code{reporter} (optional) module will receive \code{Reporter}. (See \code{\link[teal.reporter:Reporter]{teal.reporter::Reporter}}).
+\item \code{filter_panel_api} (optional) module will receive \code{FilterPanelAPI}. (See \code{\link[teal.slice:FilterPanelAPI]{teal.slice::FilterPanelAPI}}).
 \item \code{...} (optional) \code{server_args} elements will be passed to the module named argument or to the \code{...}.
 }}
 

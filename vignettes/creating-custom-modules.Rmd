@@ -42,7 +42,7 @@ function(
 
 The data that arrives in the module is a `teal_data` object, the data container used throughout the `teal` application.
 `teal_data` is passed to the `init` function when building the application and, after filtering by the filter panel, it is passed to modules, wrapped in a reactive expression.
-The `teal_data` class allows modules to track the R code that they execute so that module outputs can be reproduced.
+The `teal_data` class allows modules to track the `R` code that they execute so that module outputs can be reproduced.
 See the `teal.data` package for a [detailed explanation](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data-reproducibility.html).
 
 ## Example modules

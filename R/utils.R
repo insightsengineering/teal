@@ -8,7 +8,7 @@
 #'   `shiny` server. For `shiny` modules this will allow for proper name spacing of the
 #'   registered input.
 #'
-#' @return (`Shiny`) input variable accessible with `input$tz` which is a (`character`)
+#' @return (`shiny`) input variable accessible with `input$tz` which is a (`character`)
 #'  string containing the timezone of the browser/client.
 #' @keywords internal
 get_client_timezone <- function(ns) {
@@ -69,6 +69,7 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   )
   # Piggy-back entire pre-processing code so that filtering code can be appended later.
   attr(ans, "preprocessing_code") <- teal.code::get_code(x)
+  attr(ans, "verification_status") <- x@verified
   ans
 }
 
