@@ -67,4 +67,29 @@ of the tab.
 
 It is written as a \code{shiny} module so it can be added into other apps as well.
 }
+\examples{
+# use non-exported function from teal
+ui_teal <- getFromNamespace("ui_teal", "teal")
+srv_teal <- getFromNamespace("srv_teal", "teal")
+
+mods <- modules(
+  label = "example app",
+  example_module(label = "example dataset", datanames = c("iris", "mtcars"))
+)
+
+teal_data_rv <- reactive(teal_data(iris = iris, mtcars = mtcars))
+
+ui <- function() {
+  ui_teal("dummy")
+}
+
+server <- function(input, output, session) {
+  active_module <- srv_teal(id = "dummy", modules = mods, teal_data_rv = teal_data_rv)
+}
+
+if (interactive()) {
+  shinyApp(ui, server)
+}
+
+}
 \keyword{internal}

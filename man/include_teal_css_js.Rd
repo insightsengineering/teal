@@ -19,4 +19,13 @@ Also initializes \code{shinyjs} so you can use it.
 \details{
 Simply add \code{include_teal_css_js()} as one of the UI elements.
 }
+\examples{
+# use non-exported function from teal
+include_teal_css_js <- getFromNamespace("include_teal_css_js", "teal")
+shiny_ui <- tagList(
+  include_teal_css_js(),
+  p("Hello")
+)
+
+}
 \keyword{internal}

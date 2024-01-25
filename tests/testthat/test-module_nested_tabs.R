@@ -396,7 +396,6 @@ testthat::test_that(".datasets_to_data returns teal_data object", {
     teal.code::get_code(data),
     paste(
       c(
-        "warning('Code was not verified for reproducibility.')",
         get_rcode_str_install(),
         get_rcode_libraries(),
         "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)",

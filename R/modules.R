@@ -169,15 +169,15 @@ is_arg_used <- function(modules, arg) {
 #' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.
 #'
 #' @param label (`character(1)`) Label shown in the navigation item for the module. Any label possible except
-#'  `"global_filters"` - read more in `mapping` argument of [teal::teal_slices].
+#'  `"global_filters"` - read more in `mapping` argument of [`teal::teal_slices`].
 #' @param server (`function`) `shiny` module with following arguments:
-#'  - `id` - `teal` will set proper `shiny` namespace for this module (see [shiny::moduleServer()]).
-#'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
+#'  - `id` - `teal` will set proper `shiny` namespace for this module (see [`shiny::moduleServer()`]).
+#'  - `input`, `output`, `session` - (not recommended) then [`shiny::callModule()`] will be used to call a module.
 #'  - `data` (optional) module will receive a `teal_data` object, a list of reactive (filtered) data specified in
 #'     the `filters` argument.
-#'  - `datasets` (optional) module will receive `FilteredData`. (See `[teal.slice::FilteredData]`).
+#'  - `datasets` (optional) module will receive `FilteredData`. (See [`teal.slice::FilteredData`]).
 #'  - `reporter` (optional) module will receive `Reporter`. (See [`teal.reporter::Reporter`]).
-#   - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [teal.slice::FilterPanelAPI]).
+#'  - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [`teal.slice::FilterPanelAPI`]).
 #'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
 #' @param ui (`function`) `shiny` UI module function with following arguments:
 #'  - `id` - `teal` will set proper `shiny` namespace for this module.
@@ -359,6 +359,32 @@ module <- function(label = "module",
 #' @param depth optional, integer determining current depth level
 #'
 #' @return depth level for given module
+#' @examples
+#' # use non-exported function from teal
+#' modules_depth <- getFromNamespace("modules_depth", "teal")
+#'
+#' mods <- modules(
+#'   label = "d1",
+#'   modules(
+#'     label = "d2",
+#'     modules(
+#'       label = "d3",
+#'       module(label = "aaa1"), module(label = "aaa2"), module(label = "aaa3")
+#'     ),
+#'     module(label = "bbb")
+#'   ),
+#'   module(label = "ccc")
+#' )
+#' stopifnot(modules_depth(mods) == 3L)
+#'
+#' mods <- modules(
+#'   label = "a",
+#'   modules(
+#'     label = "b1", module(label = "c")
+#'   ),
+#'   module(label = "b2")
+#' )
+#' stopifnot(modules_depth(mods) == 2L)
 #' @keywords internal
 modules_depth <- function(modules, depth = 0L) {
   checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
