@@ -18,6 +18,6 @@ the \code{run_js} actually executes \code{JavaScript} functions.
 \details{
 \code{system.file} should not be used to access files in other packages, it does
 not work with \code{devtools}. Therefore, we redefine this method in each package
-as needed. Thus, we do not export this method
+as needed. Thus, we do not export this method.
 }
 \keyword{internal}
