@@ -2,18 +2,21 @@
 % Please edit documentation in R/modules.R
 \name{modules}
 \alias{modules}
-\alias{toString.teal_modules}
+\alias{format.teal_modules}
 \alias{print.teal_modules}
 \title{Creates a \code{teal_modules} object.}
 \usage{
 modules(..., label = "root")
 
-\method{toString}{teal_modules}(x, indent = 0, ...)
+\method{format}{teal_modules}(x, indent = 0, ...)
 
 \method{print}{teal_modules}(x, ...)
 }
 \arguments{
-\item{...}{parameters passed to \code{toString}}
+\item{...}{\itemize{
+\item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) see \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}} for more details.
+\item For \code{format()} and \code{print()}: arguments passed to other methods.
+}}
 
 \item{label}{(\code{character(1)}) label of modules collection (default \code{"root"}).
 If using the \code{label} argument then it must be explicitly named.
@@ -22,7 +25,7 @@ For example \code{modules("lab", ...)} should be converted to \code{modules(labe
 \item{x}{(\code{teal_modules})}
 
 \item{indent}{(\code{integer}) indent level;
-each \code{submodule} is indented one level more}
+each nested \code{teal_modules} or \code{teal_module} is indented one level more}
 }
 \value{
 object of class \code{teal_modules}. Object contains following fields

@@ -8,7 +8,9 @@
 #' This function dictates what modules are included in a `teal` application. The internal structure of `teal_modules`
 #' shapes the navigation panel of a `teal` application.
 #'
-#' @param ... (`teal_module` or `teal_modules`) see [module()] and [modules()] for more details
+#' @param ...
+#' - For `modules()`: (`teal_module` or `teal_modules`) see [module()] and [modules()] for more details.
+#' - For `format()` and `print()`: arguments passed to other methods.
 #' @param label (`character(1)`) label of modules collection (default `"root"`).
 #' If using the `label` argument then it must be explicitly named.
 #' For example `modules("lab", ...)` should be converted to `modules(label = "lab", ...)`
@@ -414,44 +416,40 @@ module_labels <- function(modules) {
 #'
 #' @param x (`teal_modules`) to print
 #' @param indent (`integer`) indent level;
-#'   each `submodule` is indented one level more
-#' @param ... (optional) additional parameters to pass to recursive calls of `toString`
+#'   each nested `teal_modules` or `teal_module` is indented one level more
 #' @return (`character`)
 #' @export
 #' @rdname modules
-toString.teal_modules <- function(x, indent = 0, ...) { # nolint
+format.teal_modules <- function(x, indent = 0, ...) { # nolint
   # argument must be `x` to be consistent with base method
   paste(c(
     paste0(rep(" ", indent), "+ ", x$label),
-    unlist(lapply(x$children, toString, indent = indent + 1, ...))
+    unlist(lapply(x$children, format, indent = indent + 1, ...))
   ), collapse = "\n")
 }
 
 #' Converts `teal_module` to a string
 #'
-#' @inheritParams toString.teal_modules
+#' @inheritParams format.teal_modules
 #' @param x (`teal_module`)
-#' @param ... ignored
 #' @export
 #' @rdname module
-toString.teal_module <- function(x, indent = 0, ...) { # nolint
+format.teal_module <- function(x, indent = 0, ...) { # nolint
   paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, collapse = "")
 }
 
 #' Prints `teal_modules`
 #' @param x (`teal_modules`)
-#' @param ... parameters passed to `toString`
 #' @export
 #' @rdname modules
 print.teal_modules <- function(x, ...) {
-  s <- toString(x, ...)
-  cat(s)
-  return(invisible(s))
+  cat(format(x, ...))
+  invisible(x)
 }
 
 #' Prints `teal_module`
 #' @param x (`teal_module`)
-#' @param ... parameters passed to `toString`
+#' @param ... arguments passed to other methods.
 #' @export
 #' @rdname module
 print.teal_module <- print.teal_modules
