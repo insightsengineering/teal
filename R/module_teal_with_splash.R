@@ -9,7 +9,7 @@
 #' user interaction, particularly during the initial heavy data processing or
 #' when querying for a password to fetch data.
 #'
-#' [`init()`] is a very wrapper around this module useful for end-users which
+#' [`init()`] is a wrapper around this module useful for end-users which
 #' assumes that it is a top-level module and cannot be embedded.
 #' This function instead adheres to the `shiny` module conventions.
 #'

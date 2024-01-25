@@ -38,7 +38,7 @@ for delayed data loading and a default splash screen.This helps ensure smooth
 user interaction, particularly during the initial heavy data processing or
 when querying for a password to fetch data.
 
-\code{\link[=init]{init()}} is a very wrapper around this module useful for end-users which
+\code{\link[=init]{init()}} is a wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.
 This function instead adheres to the \code{shiny} module conventions.
 
