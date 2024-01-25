@@ -16,8 +16,8 @@
 #' defaults from the `teal_data` environment will be used.
 #'
 #' The `id` parameter is used for identifying a distinct `teal` instance for embedding it in different
-#' `shiny` elements. However, recommended approch is to use [`ui_teal_with_splash()`] and [`srv_teal_with_splash()`].
-#' See [vignette](getting-started-with-teal.html) for examples.
+#' `shiny` elements. However, its recommended to use [`ui_teal_with_splash()`] and [`srv_teal_with_splash()`].
+#' See vignette `vignette("getting-started-with-teal", package = "teal")` for examples.
 #' If no `id` is given (i.e., `id = character(0)`), the teal app runs as a standalone application without submodule integration.
 #'
 #'

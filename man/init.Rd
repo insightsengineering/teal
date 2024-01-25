@@ -58,8 +58,8 @@ When initializing the \code{teal} app, if \code{datanames} are not set for the \
 defaults from the \code{teal_data} environment will be used.
 
 The \code{id} parameter is used for identifying a distinct \code{teal} instance for embedding it in different
-\code{shiny} elements. However, recommended approch is to use \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}} and \code{\link[=srv_teal_with_splash]{srv_teal_with_splash()}}.
-See \href{getting-started-with-teal.html}{vignette} for examples.
+\code{shiny} elements. However, its recommended to use \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}} and \code{\link[=srv_teal_with_splash]{srv_teal_with_splash()}}.
+See vignette \code{vignette("getting-started-with-teal", package = "teal")} for examples.
 If no \code{id} is given (i.e., \code{id = character(0)}), the teal app runs as a standalone application without submodule integration.
 }
 \examples{
