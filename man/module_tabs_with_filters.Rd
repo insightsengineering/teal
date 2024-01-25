@@ -73,7 +73,7 @@ mods <- modules(
 # creates nested list aligned with the module hierarchy created above,
 # each leaf holding the same `FilteredData` object.
 datasets <- teal_data_to_filtered_data(data)
-datasets <-list(
+datasets <- list(
   "d2" = list(
     "d3" = list(
       "aaa1" = datasets,
