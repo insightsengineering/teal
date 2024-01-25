@@ -262,7 +262,8 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
         datasets = datasets,
         modules = modules,
         reporter = reporter,
-        filter = filter
+        filter = filter,
+        check = teal_data_rv()@verified
       )
       return(active_module)
     })

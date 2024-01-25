@@ -140,7 +140,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
 
 #' @rdname module_nested_tabs
 srv_nested_tabs <- function(id, datasets, modules, is_module_specific = FALSE,
-                            reporter = teal.reporter::Reporter$new()) {
+                            reporter = teal.reporter::Reporter$new(), check = FALSE) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(reporter, "Reporter")
   UseMethod("srv_nested_tabs", modules)
@@ -149,14 +149,14 @@ srv_nested_tabs <- function(id, datasets, modules, is_module_specific = FALSE,
 #' @rdname module_nested_tabs
 #' @export
 srv_nested_tabs.default <- function(id, datasets, modules, is_module_specific = FALSE,
-                                    reporter = teal.reporter::Reporter$new()) {
+                                    reporter = teal.reporter::Reporter$new(), check = FALSE) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname module_nested_tabs
 #' @export
 srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specific = FALSE,
-                                         reporter = teal.reporter::Reporter$new()) {
+                                         reporter = teal.reporter::Reporter$new(), check = FALSE) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
 
   moduleServer(id = id, module = function(input, output, session) {
@@ -171,7 +171,8 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
           datasets = datasets[[labels[module_id]]],
           modules = modules$children[[module_id]],
           is_module_specific = is_module_specific,
-          reporter = reporter
+          reporter = reporter,
+          check = check
         )
       },
       simplify = FALSE
@@ -196,7 +197,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
 #' @rdname module_nested_tabs
 #' @export
 srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specific = TRUE,
-                                        reporter = teal.reporter::Reporter$new()) {
+                                        reporter = teal.reporter::Reporter$new(), check = FALSE) {
   checkmate::assert_class(datasets, "FilteredData")
   logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
 
@@ -232,7 +233,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     if (is_arg_used(modules$server, "data")) {
-      data <- eventReactive(trigger_data(), .datasets_to_data(modules, datasets))
+      data <- eventReactive(trigger_data(), .datasets_to_data(modules, datasets, check))
       args <- c(args, data = list(data))
     }
 
@@ -270,7 +271,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #' @return A `teal_data` object.
 #'
 #' @keywords internal
-.datasets_to_data <- function(module, datasets) {
+.datasets_to_data <- function(module, datasets, check) {
   checkmate::assert_class(module, "teal_module")
   checkmate::assert_class(datasets, "FilteredData")
 
@@ -291,9 +292,10 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     get_datasets_code(datanames, datasets, hashes)
   )
 
+
   do.call(
     teal.data::teal_data,
-    args = c(data, code = list(code), join_keys = list(datasets$get_join_keys()[datanames]))
+    args = c(data, code = list(code), join_keys = list(datasets$get_join_keys()[datanames]), check = check)
   )
 }
 

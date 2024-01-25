@@ -101,7 +101,8 @@ srv_tabs_with_filters <- function(id,
                                   datasets,
                                   modules,
                                   reporter = teal.reporter::Reporter$new(),
-                                  filter = teal_slices()) {
+                                  filter = teal_slices(),
+                                  check = FALSE) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   checkmate::assert_class(reporter, "Reporter")
@@ -118,7 +119,8 @@ srv_tabs_with_filters <- function(id,
       datasets = datasets,
       modules = modules,
       reporter = reporter,
-      is_module_specific = is_module_specific
+      is_module_specific = is_module_specific,
+      check = check
     )
 
     if (!is_module_specific) {
