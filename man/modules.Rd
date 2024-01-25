@@ -4,7 +4,7 @@
 \alias{modules}
 \alias{format.teal_modules}
 \alias{print.teal_modules}
-\title{Creates a \code{teal_modules} object.}
+\title{Create a \code{teal_modules} object.}
 \usage{
 modules(..., label = "root")
 
@@ -40,14 +40,12 @@ their \code{label} attribute converted to a valid \code{shiny} id.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-This function collects a list of \code{teal_modules} and \code{teal_module} objects and returns a \code{teal_modules} object
-containing the passed objects.
-
-This function dictates what modules are included in a \code{teal} application. The internal structure of \code{teal_modules}
-shapes the navigation panel of a \code{teal} application.
-
-\code{modules()} can nest another \code{modules()} and \code{module()} in a nested structure representing nested tabs in the final
-\code{teal} application.
+Collects \code{teal_module} or \code{teal_modules} objects to build the nested tab structure of the \code{teal} application.
+}
+\details{
+\code{modules()} shapes the internal structure of a \code{teal} application by organizing \code{teal} modules in the navigation
+panel. It wraps \code{teal_module} and \code{teal_modules} objects in a \code{teal_modules} object,
+which results in a nested structure corresponding to the nested tabs in the final application.
 }
 \examples{
 library(shiny)
