@@ -452,7 +452,7 @@ print.teal_modules <- function(x, ...) {
 
 #' Prints `teal_module`
 #' @param x (`teal_module`)
-#' @param ... ignored
+#' @param ... arguments passed to other methods.
 #' @export
 #' @rdname module
 print.teal_module <- print.teal_modules
