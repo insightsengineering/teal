@@ -8,6 +8,9 @@
 #' This function dictates what modules are included in a `teal` application. The internal structure of `teal_modules`
 #' shapes the navigation panel of a `teal` application.
 #'
+#' `modules()` can nest another `modules()` and `module()` in a nested structure representing nested tabs in the final
+#' `teal` application.
+#'
 #' @param ...
 #' - For `modules()`: (`teal_module` or `teal_modules`) objects to wrap into a tab.
 #' - For `format()` and `print()`: arguments passed to other methods.

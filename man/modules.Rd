@@ -14,7 +14,7 @@ modules(..., label = "root")
 }
 \arguments{
 \item{...}{\itemize{
-\item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) see \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}} for more details.
+\item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) objects to wrap into a tab.
 \item For \code{format()} and \code{print()}: arguments passed to other methods.
 }}
 
@@ -45,6 +45,9 @@ containing the passed objects.
 
 This function dictates what modules are included in a \code{teal} application. The internal structure of \code{teal_modules}
 shapes the navigation panel of a \code{teal} application.
+
+\code{modules()} can nest another \code{modules()} and \code{module()} in a nested structure representing nested tabs in the final
+\code{teal} application.
 }
 \examples{
 library(shiny)
