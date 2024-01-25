@@ -1,15 +1,17 @@
-#' Creates a `teal_modules` object.
+#' Create a `teal_modules` object.
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description
+#' `r lifecycle::badge("stable")`
 #'
-#' This function collects a list of `teal_modules` and `teal_module` objects and returns a `teal_modules` object
-#' containing the passed objects.
+#' Collects `teal_module` or `teal_modules` objects to build the nested tab structure of the `teal` application.
 #'
-#' This function dictates what modules are included in a `teal` application. The internal structure of `teal_modules`
-#' shapes the navigation panel of a `teal` application.
+#' @details
+#' `modules()` shapes the internal structure of a `teal` application by organizing `teal` modules in the navigation
+#' panel. It wraps `teal_module` and `teal_modules` objects in a `teal_modules` object,
+#' which results in a nested structure corresponding to the nested tabs in the final application.
 #'
 #' @param ...
-#' - For `modules()`: (`teal_module` or `teal_modules`) see [module()] and [modules()] for more details.
+#' - For `modules()`: (`teal_module` or `teal_modules`) objects to wrap into a tab.
 #' - For `format()` and `print()`: arguments passed to other methods.
 #' @param label (`character(1)`) label of modules collection (default `"root"`).
 #' If using the `label` argument then it must be explicitly named.
