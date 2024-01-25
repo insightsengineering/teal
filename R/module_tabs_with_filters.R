@@ -20,8 +20,6 @@
 #'   of the `modules` argument and list names must correspond to the labels in `modules`.
 #'   When filter is not module-specific then list contains the same object in all elements.
 #' @param reporter (`Reporter`) object from `teal.reporter`
-#' @param check (`logical`) reproducibility check - whether to perform a check that the data creation
-#'  code included in the object definitions actually produces those objects.
 #'
 #' @return A `tagList` of The main menu, place holders for filters and
 #'   place holders for the teal modules
@@ -103,8 +101,7 @@ srv_tabs_with_filters <- function(id,
                                   datasets,
                                   modules,
                                   reporter = teal.reporter::Reporter$new(),
-                                  filter = teal_slices(),
-                                  check = FALSE) {
+                                  filter = teal_slices()) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   checkmate::assert_class(reporter, "Reporter")
@@ -121,8 +118,7 @@ srv_tabs_with_filters <- function(id,
       datasets = datasets,
       modules = modules,
       reporter = reporter,
-      is_module_specific = is_module_specific,
-      check = check
+      is_module_specific = is_module_specific
     )
 
     if (!is_module_specific) {

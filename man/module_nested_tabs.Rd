@@ -25,8 +25,7 @@ srv_nested_tabs(
   datasets,
   modules,
   is_module_specific = FALSE,
-  reporter = teal.reporter::Reporter$new(),
-  check = FALSE
+  reporter = teal.reporter::Reporter$new()
 )
 
 \method{srv_nested_tabs}{default}(
@@ -34,8 +33,7 @@ srv_nested_tabs(
   datasets,
   modules,
   is_module_specific = FALSE,
-  reporter = teal.reporter::Reporter$new(),
-  check = FALSE
+  reporter = teal.reporter::Reporter$new()
 )
 
 \method{srv_nested_tabs}{teal_modules}(
@@ -43,8 +41,7 @@ srv_nested_tabs(
   datasets,
   modules,
   is_module_specific = FALSE,
-  reporter = teal.reporter::Reporter$new(),
-  check = FALSE
+  reporter = teal.reporter::Reporter$new()
 )
 
 \method{srv_nested_tabs}{teal_module}(
@@ -52,8 +49,7 @@ srv_nested_tabs(
   datasets,
   modules,
   is_module_specific = TRUE,
-  reporter = teal.reporter::Reporter$new(),
-  check = FALSE
+  reporter = teal.reporter::Reporter$new()
 )
 }
 \arguments{
@@ -74,9 +70,6 @@ flag determining if the filter panel is global or module-specific.
 When set to \code{TRUE}, a filter panel is called inside of each module tab.}
 
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
-
-\item{check}{(\code{logical}) reproducibility check - whether to perform a check that the data creation
-code included in the object definitions actually produces those objects.}
 }
 \value{
 depending on class of \code{modules}, \code{ui_nested_tabs} returns:

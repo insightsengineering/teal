@@ -23,8 +23,6 @@
 #' @param is_module_specific (`logical(1)`)\cr
 #'  flag determining if the filter panel is global or module-specific.
 #'  When set to `TRUE`, a filter panel is called inside of each module tab.
-#' @param check (`logical`) reproducibility check - whether to perform a check that the data creation
-#'  code included in the object definitions actually produces those objects.
 #'
 #' @return depending on class of `modules`, `ui_nested_tabs` returns:
 #'   - `teal_module`: instantiated UI of the module
@@ -143,7 +141,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
 
 #' @rdname module_nested_tabs
 srv_nested_tabs <- function(id, datasets, modules, is_module_specific = FALSE,
-                            reporter = teal.reporter::Reporter$new(), check = FALSE) {
+                            reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(reporter, "Reporter")
   UseMethod("srv_nested_tabs", modules)
@@ -152,14 +150,14 @@ srv_nested_tabs <- function(id, datasets, modules, is_module_specific = FALSE,
 #' @rdname module_nested_tabs
 #' @export
 srv_nested_tabs.default <- function(id, datasets, modules, is_module_specific = FALSE,
-                                    reporter = teal.reporter::Reporter$new(), check = FALSE) {
+                                    reporter = teal.reporter::Reporter$new()) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname module_nested_tabs
 #' @export
 srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specific = FALSE,
-                                         reporter = teal.reporter::Reporter$new(), check = FALSE) {
+                                         reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
 
   moduleServer(id = id, module = function(input, output, session) {
@@ -174,8 +172,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
           datasets = datasets[[labels[module_id]]],
           modules = modules$children[[module_id]],
           is_module_specific = is_module_specific,
-          reporter = reporter,
-          check = check
+          reporter = reporter
         )
       },
       simplify = FALSE
@@ -200,7 +197,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
 #' @rdname module_nested_tabs
 #' @export
 srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specific = TRUE,
-                                        reporter = teal.reporter::Reporter$new(), check = FALSE) {
+                                        reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_class(datasets, "FilteredData")
   logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
 
@@ -236,7 +233,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     if (is_arg_used(modules$server, "data")) {
-      data <- eventReactive(trigger_data(), .datasets_to_data(modules, datasets, check))
+      data <- eventReactive(trigger_data(), .datasets_to_data(modules, datasets))
       args <- c(args, data = list(data))
     }
 
@@ -271,12 +268,11 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
 #' @param datasets (`FilteredData`) object where needed data are taken from
-#' @param check (`logical`) reproducibility check - whether to perform a check that the data creation
-#'  code included in the object definitions actually produces those objects.
+#'
 #' @return A `teal_data` object.
 #'
 #' @keywords internal
-.datasets_to_data <- function(module, datasets, check = FALSE) {
+.datasets_to_data <- function(module, datasets) {
   checkmate::assert_class(module, "teal_module")
   checkmate::assert_class(datasets, "FilteredData")
 
@@ -298,10 +294,13 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   )
 
 
-  do.call(
+  data <- do.call(
     teal.data::teal_data,
-    args = c(data, code = list(code), join_keys = list(datasets$get_join_keys()[datanames]), check = check)
+    args = c(data, code = list(code), join_keys = list(datasets$get_join_keys()[datanames]))
   )
+
+  data@verified <- attr(datasets, "verification_status")
+  return(data)
 }
 
 #' Get the hash of a dataset
