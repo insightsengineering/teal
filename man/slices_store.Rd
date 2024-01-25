@@ -28,4 +28,20 @@ character by using \code{format.POSIX*t(usetz = TRUE, tz = "UTC")} (\verb{YYYY-M
 This format is assumed during \code{slices_restore}. All \code{POSIX*t} objects in \code{selected} or \code{choices} fields of
 \code{teal_slice} objects are always printed in \code{UTC} timezone as well.
 }
+\examples{
+# use non-exported function from teal
+slices_store <- getFromNamespace("slices_store", "teal")
+
+# Create a teal_slices object
+tss <- teal_slices(
+  teal.slice::teal_slice(dataname = "data", varname = "var"),
+  teal.slice::teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
+)
+
+if (interactive()) {
+  # Store the teal_slices object to a file
+  slices_store(tss, "path/to/file.json")
+}
+
+}
 \keyword{internal}
