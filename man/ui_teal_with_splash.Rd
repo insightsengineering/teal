@@ -2,7 +2,7 @@
 % Please edit documentation in R/module_teal_with_splash.R
 \name{ui_teal_with_splash}
 \alias{ui_teal_with_splash}
-\title{UI to show a splash screen in the beginning, then delegate to \code{\link[=srv_teal]{srv_teal()}}}
+\title{UI to show a splash screen in the beginning, then delegate to \code{\link[=ui_teal]{ui_teal()}}}
 \usage{
 ui_teal_with_splash(
   id,
@@ -33,13 +33,14 @@ The footer of the app.}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-The splash screen could be used to query for a password to fetch the data.
-\code{\link[=init]{init()}} is a very thin wrapper around this module useful for end-users which
+UI function offers the dynamic display that switches between a custom splash screen
+for delayed data loading and a default splash screen.This helps ensure smooth
+user interaction, particularly during the initial heavy data processing or
+when querying for a password to fetch data.
+
+\code{\link[=init]{init()}} is a very wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.
 This function instead adheres to the \code{shiny} module conventions.
-
-If data is obtained through delayed loading, its splash screen is used. Otherwise,
-a default splash screen is shown.
 
 Please also refer to the doc of \code{\link[=init]{init()}}.
 }

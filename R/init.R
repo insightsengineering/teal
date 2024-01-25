@@ -34,11 +34,11 @@
 #'   The header of the app.
 #' @param footer (`shiny.tag` or `character(1)`)
 #'   The footer of the app.
-#' @param id (`character`)
-#'   module id to embed it, if provided,
-#'   the server function must be called with [shiny::moduleServer()];
-#'   See the vignette for an example. However, [ui_teal_with_splash()]
-#'   is then preferred to this function.
+#' @param id optional (`character`)
+#'   specifying the module id to be used when embedding the teal app within another `shiny` app as a module.
+#'   - If an id is provided, the server function must be called using [shiny::moduleServer()] with the specified id.
+#'   However, for better integration use [ui_teal_with_splash()] and [srv_teal_with_splash()].
+#'   - If no id is given (i.e., `id = character(0)`), the teal app runs as a standalone application without submodule integration.
 #'
 #' @return named list with server and UI function
 #'
@@ -227,9 +227,8 @@ init <- function(data,
   }
 
   # Note regarding case `id = character(0)`:
-  # rather than using `callModule` and creating a submodule of this module, we directly modify
+  # rather than using `shiny::moduleServer` and creating a submodule of this module, we directly modify
   # the UI and server with `id = character(0)` and calling the server function directly
-  # rather than through `callModule`
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {

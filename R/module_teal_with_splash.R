@@ -1,16 +1,17 @@
 # This file adds a splash screen for delayed data loading on top of teal
 
-#' UI to show a splash screen in the beginning, then delegate to [srv_teal()]
+#' UI to show a splash screen in the beginning, then delegate to [ui_teal()]
 #'
 #' @description `r lifecycle::badge("stable")`
 #'
-#' The splash screen could be used to query for a password to fetch the data.
-#' [init()] is a very thin wrapper around this module useful for end-users which
+#' UI function offers the dynamic display that switches between a custom splash screen
+#' for delayed data loading and a default splash screen.This helps ensure smooth
+#' user interaction, particularly during the initial heavy data processing or
+#' when querying for a password to fetch data.
+#'
+#' [init()] is a very wrapper around this module useful for end-users which
 #' assumes that it is a top-level module and cannot be embedded.
 #' This function instead adheres to the `shiny` module conventions.
-#'
-#' If data is obtained through delayed loading, its splash screen is used. Otherwise,
-#' a default splash screen is shown.
 #'
 #' Please also refer to the doc of [init()].
 #'
