@@ -10,7 +10,7 @@ slices_store(tss, file)
 slices_restore(file)
 }
 \arguments{
-\item{tss}{(\code{teal_slices}) object to be stored.}
+\item{tss}{(\code{teal_slices}) Object to be stored.}
 
 \item{file}{(\code{character(1)}) The file path where \code{teal_slices} object will be
 saved and restored. The file extension should be \code{".json"}.}
@@ -21,8 +21,8 @@ saved and restored. The file extension should be \code{".json"}.}
 \code{slices_restore} returns a \code{teal_slices} object restored from the file.
 }
 \description{
-Functions that serialize a \code{teal_slices} object to and from a file in
-\code{JSON} format.
+Functions that write a \code{teal_slices} object to a file in the \code{JSON} format,
+and also restore the object from disk."
 }
 \details{
 Date and date time objects are stored in the following formats:
@@ -43,7 +43,7 @@ slices_store <- getFromNamespace("slices_store", "teal")
 
 # Create a teal_slices object
 tss <- teal_slices(
-  teal.slice::teal_slice(dataname = "data", varname = "var"),
+  teal_slice(dataname = "data", varname = "var"),
   teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
 )
 

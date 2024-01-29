@@ -1,7 +1,7 @@
 #' Store and restore `teal_slices` object
 #'
-#' Functions that serialize a `teal_slices` object to and from a file in
-#' `JSON` format.
+#' Functions that write a `teal_slices` object to a file in the `JSON` format,
+#' and also restore the object from disk."
 #'
 #' Date and date time objects are stored in the following formats:
 #'
@@ -14,7 +14,7 @@
 #' `selected` or `choices` fields of `teal_slice` objects are always printed in
 #' `UTC` timezone as well.
 #'
-#' @param tss (`teal_slices`) object to be stored.
+#' @param tss (`teal_slices`) Object to be stored.
 #' @param file (`character(1)`) The file path where `teal_slices` object will be
 #' saved and restored. The file extension should be `".json"`.
 #'
@@ -28,7 +28,7 @@
 #'
 #' # Create a teal_slices object
 #' tss <- teal_slices(
-#'   teal.slice::teal_slice(dataname = "data", varname = "var"),
+#'   teal_slice(dataname = "data", varname = "var"),
 #'   teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
 #' )
 #'
