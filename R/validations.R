@@ -1,14 +1,15 @@
 #' Validate that dataset has a minimum number of observations
 #'
-#' @description `r lifecycle::badge("stable")`
-#' @param x a data.frame
+#' `r lifecycle::badge("stable")`
+#'
+#' This function is a wrapper for `shiny::validate`.
+#'
+#' @param x (`data.frame`)
 #' @param min_nrow minimum number of rows in `x`
-#' @param complete `logical` default `FALSE` when set to `TRUE` then complete cases are checked.
-#' @param allow_inf `logical` default `TRUE` when set to `FALSE` then error thrown if any values are
+#' @param complete (`logical(1)`) default `FALSE` when set to `TRUE` then complete cases are checked.
+#' @param allow_inf (`logical(1)`) default `TRUE` when set to `FALSE` then error thrown if any values are
 #'   infinite.
 #' @param msg (`character(1)`) additional message to display alongside the default message.
-#'
-#' @details This function is a wrapper for `shiny::validate`.
 #'
 #' @export
 #'
@@ -72,11 +73,12 @@ validate_has_data <- function(x,
 
 #' Validate that dataset has unique rows for key variables
 #'
-#' @description `r lifecycle::badge("stable")`
-#' @param x a data.frame
-#' @param key a vector of ID variables from `x` that identify unique records
+#' `r lifecycle::badge("stable")`
 #'
-#' @details This function is a wrapper for `shiny::validate`.
+#' This function is a wrapper for `shiny::validate`.
+#'
+#' @param x (`data.frame`)
+#' @param key a vector of ID variables from `x` that identify unique records
 #'
 #' @export
 #'
@@ -110,12 +112,13 @@ validate_one_row_per_id <- function(x, key = c("USUBJID", "STUDYID")) {
 
 #' Validates that vector includes all expected values
 #'
-#' @description `r lifecycle::badge("stable")`
+#' `r lifecycle::badge("stable")`
+#'
+#' This function is a wrapper for `shiny::validate`.
+#'
 #' @param x values to test. All must be in `choices`
 #' @param choices a vector to test for values of `x`
 #' @param msg warning message to display
-#'
-#' @details This function is a wrapper for `shiny::validate`.
 #'
 #' @export
 #'
@@ -147,11 +150,12 @@ validate_in <- function(x, choices, msg) {
 
 #' Validates that vector has length greater than 0
 #'
-#' @description `r lifecycle::badge("stable")`
+#' `r lifecycle::badge("stable")`
+#'
+#' This function is a wrapper for `shiny::validate`.
+#'
 #' @param x vector
 #' @param msg message to display
-#'
-#' @details This function is a wrapper for `shiny::validate`.
 #'
 #' @export
 #'
@@ -193,12 +197,13 @@ validate_has_elements <- function(x, msg) {
 
 #' Validates no intersection between two vectors
 #'
-#' @description `r lifecycle::badge("stable")`
-#' @param x `vector`
-#' @param y `vector`
-#' @param msg message to display if `x` and `y` intersect
+#' `r lifecycle::badge("stable")`
 #'
-#' @details This function is a wrapper for `shiny::validate`.
+#' This function is a wrapper for `shiny::validate`.
+#'
+#' @param x vector
+#' @param y vector
+#' @param msg message to display if `x` and `y` intersect
 #'
 #' @export
 #'
@@ -246,12 +251,13 @@ validate_no_intersection <- function(x, y, msg) {
 
 #' Validates that dataset contains specific variable
 #'
-#' @description `r lifecycle::badge("stable")`
-#' @param data a `data.frame`
+#' `r lifecycle::badge("stable")`
+#'
+#' This function is a wrapper for `shiny::validate`.
+#'
+#' @param data (`data.frame`)
 #' @param varname name of variable in `data`
 #' @param msg message to display if `data` does not include `varname`
-#'
-#' @details This function is a wrapper for `shiny::validate`.
 #'
 #' @export
 #'
@@ -298,17 +304,18 @@ validate_has_variable <- function(data, varname, msg) {
 
 #' Validate that variables has expected number of levels
 #'
-#' @description `r lifecycle::badge("stable")`
+#' `r lifecycle::badge("stable")`
+#'
+#' If the number of levels of `x` is less than `min_levels`
+#' or greater than `max_levels` the validation will fail.
+#' This function is a wrapper for `shiny::validate`.
+#'
 #' @param x variable name. If `x` is not a factor, the unique values
 #'   are treated as levels.
 #' @param min_levels cutoff for minimum number of levels of `x`
 #' @param max_levels cutoff for maximum number of levels of `x`
 #' @param var_name name of variable being validated for use in
 #'   validation message
-#'
-#' @details If the number of levels of `x` is less than `min_levels`
-#'   or greater than `max_levels` the validation will fail.
-#'   This function is a wrapper for `shiny::validate`.
 #'
 #' @export
 #' @examples

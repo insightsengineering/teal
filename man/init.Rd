@@ -15,16 +15,16 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{teal_data}, \code{teal_data_module})\cr
+\item{data}{(\code{teal_data} or \code{teal_data_module})
 \code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
 
-\item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
+\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{title}{(\code{shiny.tag} or \code{character(1)})\cr
+\item{title}{(\code{shiny.tag} or \code{character(1)})
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
@@ -37,10 +37,10 @@ next release. Please fix your applications to use \code{\link[=teal_slices]{teal
 \item{header}{(\code{shiny.tag} or \code{character(1)}) \cr
 The header of the app.}
 
-\item{footer}{(\code{shiny.tag} or \code{character(1)})\cr
+\item{footer}{(\code{shiny.tag} or \code{character(1)})
 The footer of the app.}
 
-\item{id}{(\code{character})\cr
+\item{id}{(\code{character})
 module id to embed it, if provided,
 the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
@@ -51,6 +51,7 @@ named list with server and UI function
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 End-users: This is the most important function for you to start a
 \code{teal} app that is composed out of \code{teal} modules.
 }

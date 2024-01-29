@@ -4,7 +4,7 @@ withr::local_options(lifecycle_verbosity = "quiet")
 testthat::test_that("new_tdata accepts reactive and not reactive MAE and data.frames", {
   utils::data(miniACC, package = "MultiAssayExperiment")
 
-  testthat::expect_error(
+  testthat::expect_no_error(
     new_tdata(
       list(
         a = reactive(data.frame(x = 1:10)),
@@ -12,8 +12,7 @@ testthat::test_that("new_tdata accepts reactive and not reactive MAE and data.fr
         c = reactive(miniACC),
         d = miniACC
       )
-    ),
-    NA
+    )
   )
 })
 
@@ -50,12 +49,12 @@ testthat::test_that("new_tdata throws error if code is not character or reactive
 })
 
 testthat::test_that("new_tdata accepts character and reactive characters for code argument", {
-  testthat::expect_error(
-    new_tdata(list(x = iris, y = mtcars), code = c("x <- iris", "y <- mtcars")), NA
+  testthat::expect_no_error(
+    new_tdata(list(x = iris, y = mtcars), code = c("x <- iris", "y <- mtcars"))
   )
 
-  testthat::expect_error(
-    new_tdata(list(x = iris, y = mtcars), code = reactive(c("x <- iris", "y <- mtcars"))), NA
+  testthat::expect_no_error(
+    new_tdata(list(x = iris, y = mtcars), code = reactive(c("x <- iris", "y <- mtcars")))
   )
 })
 
@@ -67,9 +66,8 @@ testthat::test_that("new_tdata throws error if join_keys is not of class join_ke
 })
 
 testthat::test_that("new_tdata throws no error if join_keys is of class join_keys", {
-  testthat::expect_error(
-    new_tdata(list(x = iris), join_keys = teal.data::join_keys()),
-    NA
+  testthat::expect_no_error(
+    new_tdata(list(x = iris), join_keys = teal.data::join_keys())
   )
 })
 
@@ -96,9 +94,8 @@ testthat::test_that(
 )
 
 testthat::test_that("new_tdata does not throw error with valid metadata", {
-  testthat::expect_error(
-    new_tdata(list(x = iris, y = mtcars), metadata = list(x = list(A = 1), y = list(B = 1))),
-    NA
+  testthat::expect_no_error(
+    new_tdata(list(x = iris, y = mtcars), metadata = list(x = list(A = 1), y = list(B = 1)))
   )
 })
 
@@ -160,7 +157,7 @@ testthat::test_that("get_code returns character of code if tdata object has code
 
 testthat::test_that("get_code_tdata accepts tdata", {
   data <- new_tdata(data = list(iris = iris), code = "iris <- iris")
-  testthat::expect_error(isolate(get_code_tdata(data)), NA)
+  testthat::expect_no_error(isolate(get_code_tdata(data)))
 })
 
 testthat::test_that("get_code_tdata throws error when input is not tdata", {

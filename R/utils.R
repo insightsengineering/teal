@@ -8,7 +8,7 @@
 #'   `shiny` server. For `shiny` modules this will allow for proper name spacing of the
 #'   registered input.
 #'
-#' @return (`Shiny`) input variable accessible with `input$tz` which is a (`character`)
+#' @return (`shiny`) input variable accessible with `input$tz` which is a (`character`)
 #'  string containing the timezone of the browser/client.
 #' @keywords internal
 get_client_timezone <- function(ns) {
@@ -53,7 +53,8 @@ include_parent_datanames <- function(dataname, join_keys) {
 
 #' Create a `FilteredData`
 #'
-#' Create a `FilteredData` object from a `teal_data` object
+#' Create a `FilteredData` object from a `teal_data` object.
+#'
 #' @param x (`teal_data`) object
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
 #' @return (`FilteredData`) object
@@ -68,6 +69,7 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   )
   # Piggy-back entire pre-processing code so that filtering code can be appended later.
   attr(ans, "preprocessing_code") <- teal.code::get_code(x)
+  attr(ans, "verification_status") <- x@verified
   ans
 }
 
@@ -284,8 +286,8 @@ build_app_title <- function(title = "teal app", favicon = "https://raw.githubuse
 #' App ID is a hash of the app's data and modules.
 #' See "transferring snapshots" section in ?snapshot.
 #'
-#' @param data `teal_data` or `teal_data_module` as accepted by `init`
-#' @param modules `teal_modules` object as accepted by `init`
+#' @param data (`teal_data` or `teal_data_module`) as accepted by `init`
+#' @param modules (`teal_modules`) object as accepted by `init`
 #'
 #' @return A single character string.
 #'
@@ -294,11 +296,10 @@ create_app_id <- function(data, modules) {
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_class(modules, "teal_modules")
 
-  hashables <- list(data = data, modules = modules)
-  hashables$data <- if (inherits(hashables$data, "teal_data")) {
-    as.list(hashables$data@env)
+  data <- if (inherits(data, "teal_data")) {
+    as.list(data@env)
   } else if (inherits(data, "teal_data_module")) {
     body(data$server)
   }
-  rlang::hash(hashables)
+  rlang::hash(list(data = data, modules = modules))
 }

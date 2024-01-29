@@ -5,11 +5,12 @@
 #' This module is used to display a popup dialog when the application starts.
 #' The dialog blocks the access to the application and must be closed with a button before the application is viewed.
 #'
-#' @param label `character(1)` the label of the module.
-#' @param title `character(1)` the text to be displayed as a title of the popup.
+#' @param label (`character(1)`) the label of the module.
+#' @param title (`character(1)`) the text to be displayed as a title of the popup.
 #' @param content The content of the popup. Passed to `...` of `shiny::modalDialog`. Can be a `character`
 #' or a list of `shiny.tag`s. See examples.
-#' @param buttons `shiny.tag` or a list of tags (`tagList`). Typically a `modalButton` or `actionButton`. See examples.
+#' @param buttons (`shiny.tag`) or a list of tags (`tagList`).
+#' Typically a `modalButton` or `actionButton`.See examples.
 #'
 #' @return A `teal_module` (extended with `teal_landing_module` class) to be used in `teal` applications.
 #'

@@ -8,16 +8,16 @@ to \code{\link[=srv_teal]{srv_teal()}}.}
 srv_teal_with_splash(id, data, modules, filter = teal_slices())
 }
 \arguments{
-\item{id}{(\code{character})\cr
+\item{id}{(\code{character})
 module id to embed it, if provided,
 the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 
-\item{data}{(\code{teal_data}, \code{teal_data_module})\cr
+\item{data}{(\code{teal_data} or \code{teal_data_module})
 \code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
 
-\item{modules}{\code{teal_modules} object containing the output modules which
+\item{modules}{(\code{teal_modules}) object containing the output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
@@ -32,5 +32,6 @@ If data is not loaded yet, \code{reactive} returns \code{NULL}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Please also refer to the doc of \code{\link[=init]{init()}}.
 }

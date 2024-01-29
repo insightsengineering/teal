@@ -17,10 +17,10 @@ srv_tabs_with_filters(
 )
 }
 \arguments{
-\item{id}{(\code{character(1)})\cr
+\item{id}{(\code{character(1)})
 module id}
 
-\item{datasets}{(\verb{named list} of \code{FilteredData})\cr
+\item{datasets}{(named \code{list} of \code{FilteredData})
 object to store filter state and filtered datasets, shared across modules. For more
 details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}. Structure of the list must be the same as structure
 of the \code{modules} argument and list names must correspond to the labels in \code{modules}.
@@ -43,5 +43,65 @@ all modules using the same \code{datasets} share the same filters.
 
 This works with nested modules of depth greater than 2, though the filter
 panel is inserted at the right of the modules at depth 1 and not at the leaves.
+}
+\examples{
+# use non-exported function from teal
+include_teal_css_js <- getFromNamespace("include_teal_css_js", "teal")
+teal_data_to_filtered_data <- getFromNamespace("teal_data_to_filtered_data", "teal")
+ui_tabs_with_filters <- getFromNamespace("ui_tabs_with_filters", "teal")
+srv_tabs_with_filters <- getFromNamespace("srv_tabs_with_filters", "teal")
+
+# creates `teal_data`
+data <- teal_data(iris = iris, mtcars = mtcars)
+datanames <- datanames(data)
+
+# creates a hierarchy of `teal_modules` from which a `teal` app can be created.
+mods <- modules(
+  label = "d1",
+  modules(
+    label = "d2",
+    modules(
+      label = "d3",
+      example_module(label = "aaa1", datanames = datanames),
+      example_module(label = "aaa2", datanames = datanames)
+    ),
+    example_module(label = "bbb", datanames = datanames)
+  ),
+  example_module(label = "ccc", datanames = datanames)
+)
+
+# creates nested list aligned with the module hierarchy created above,
+# each leaf holding the same `FilteredData` object.
+datasets <- teal_data_to_filtered_data(data)
+datasets <- list(
+  "d2" = list(
+    "d3" = list(
+      "aaa1" = datasets,
+      "aaa2" = datasets
+    ),
+    "bbb" = datasets
+  ),
+  "ccc" = datasets
+)
+
+ui <- function() {
+  tagList(
+    include_teal_css_js(),
+    textOutput("info"),
+    fluidPage( # needed for nice tabs
+      ui_tabs_with_filters("dummy", modules = mods, datasets = datasets)
+    )
+  )
+}
+server <- function(input, output, session) {
+  output$info <- renderText({
+    paste0("The currently active tab name is ", active_module()$label)
+  })
+  active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
+}
+
+if (interactive()) {
+  shinyApp(ui, server)
+}
 }
 \keyword{internal}

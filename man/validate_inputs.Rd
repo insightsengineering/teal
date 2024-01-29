@@ -11,7 +11,7 @@ validate_inputs(..., header = "Some inputs require attention")
 or an optionally named, possibly nested \code{list} of \code{InputValidator}
 objects, see \code{Details}}
 
-\item{header}{\code{character(1)} generic validation message; set to NULL to omit}
+\item{header}{(\code{character(1)}) generic validation message; set to NULL to omit}
 }
 \value{
 Returns NULL if the final validation call passes and a \code{shiny.silent.error} if it fails.

@@ -29,16 +29,40 @@
 #'
 #' @inheritParams ui_teal_with_splash
 #'
-#' @param splash_ui (`shiny.tag`)\cr UI to display initially,
+#' @param splash_ui (`shiny.tag`) UI to display initially,
 #'   can be a splash screen or a `shiny` module UI. For the latter, see
 #'   [init()] about how to call the corresponding server function.
 #'
-#' @param teal_data_rv (`reactive`)\cr
+#' @param teal_data_rv (`reactive`)
 #'   returns the `teal_data`, only evaluated once, `NULL` value is ignored
 #'
 #' @return
 #' `ui_teal` returns `HTML` for `shiny` UI module.
 #' `srv_teal` returns `reactive` which returns the currently active module.
+#'
+#' @examples
+#' # use non-exported function from teal
+#' ui_teal <- getFromNamespace("ui_teal", "teal")
+#' srv_teal <- getFromNamespace("srv_teal", "teal")
+#'
+#' mods <- modules(
+#'   label = "example app",
+#'   example_module(label = "example dataset", datanames = c("iris", "mtcars"))
+#' )
+#'
+#' teal_data_rv <- reactive(teal_data(iris = iris, mtcars = mtcars))
+#'
+#' ui <- function() {
+#'   ui_teal("dummy")
+#' }
+#'
+#' server <- function(input, output, session) {
+#'   active_module <- srv_teal(id = "dummy", modules = mods, teal_data_rv = teal_data_rv)
+#' }
+#'
+#' if (interactive()) {
+#'   shinyApp(ui, server)
+#' }
 #'
 #' @keywords internal
 #'

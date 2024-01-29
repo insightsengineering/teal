@@ -2,7 +2,7 @@
 % Please edit documentation in R/modules.R
 \name{module}
 \alias{module}
-\alias{toString.teal_module}
+\alias{format.teal_module}
 \alias{print.teal_module}
 \title{Creates a \code{teal_module} object}
 \usage{
@@ -23,13 +23,13 @@ module(
   ui_args = NULL
 )
 
-\method{toString}{teal_module}(x, indent = 0, ...)
+\method{format}{teal_module}(x, indent = 0, ...)
 
 \method{print}{teal_module}(x, ...)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module. Any label possible except
-\code{"global_filters"} - read more in \code{mapping} argument of \link{teal_slices}.}
+\code{"global_filters"} - read more in \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}.}
 
 \item{server}{(\code{function}) \code{shiny} module with following arguments:
 \itemize{
@@ -37,8 +37,9 @@ module(
 \item \code{input}, \code{output}, \code{session} - (not recommended) then \code{\link[shiny:callModule]{shiny::callModule()}} will be used to call a module.
 \item \code{data} (optional) module will receive a \code{teal_data} object, a list of reactive (filtered) data specified in
 the \code{filters} argument.
-\item \code{datasets} (optional) module will receive \code{FilteredData}. (See \verb{[teal.slice::FilteredData]}).
-\item \code{reporter} (optional) module will receive \code{Reporter}. (See \link[teal.reporter:Reporter]{teal.reporter::Reporter}).
+\item \code{datasets} (optional) module will receive \code{FilteredData}. (See \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}).
+\item \code{reporter} (optional) module will receive \code{Reporter}. (See \code{\link[teal.reporter:Reporter]{teal.reporter::Reporter}}).
+\item \code{filter_panel_api} (optional) module will receive \code{FilterPanelAPI}. (See \code{\link[teal.slice:FilterPanelAPI]{teal.slice::FilterPanelAPI}}).
 \item \code{...} (optional) \code{server_args} elements will be passed to the module named argument or to the \code{...}.
 }}
 
@@ -62,18 +63,19 @@ server function.}
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the
 UI function.}
 
-\item{x}{\code{teal_module}}
+\item{x}{(\code{teal_module})}
 
 \item{indent}{(\code{integer}) indent level;
-each \code{submodule} is indented one level more}
+each nested \code{teal_modules} or \code{teal_module} is indented one level more}
 
-\item{...}{parameters passed to \code{toString}}
+\item{...}{arguments passed to other methods.}
 }
 \value{
 object of class \code{teal_module}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 This function embeds a \code{shiny} module inside a \code{teal} application. One \code{teal_module} maps to one \code{shiny} module.
 }
 \examples{

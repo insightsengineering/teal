@@ -24,7 +24,7 @@
 #' @param ... either any number of `InputValidator` objects
 #'            or an optionally named, possibly nested `list` of `InputValidator`
 #'            objects, see `Details`
-#' @param header `character(1)` generic validation message; set to NULL to omit
+#' @param header (`character(1)`) generic validation message; set to NULL to omit
 #'
 #' @return
 #' Returns NULL if the final validation call passes and a `shiny.silent.error` if it fails.

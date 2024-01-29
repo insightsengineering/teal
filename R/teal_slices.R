@@ -9,21 +9,23 @@
 #'
 #' @inheritParams teal.slice::teal_slices
 #'
-#' @param module_specific optional (`logical(1)`)\cr
+#' @param module_specific optional (`logical(1)`)
 #'  - `FALSE` (default) when one filter panel applied to all modules.
 #'  All filters will be shared by all modules.
 #'  - `TRUE` when filter panel module-specific.
 #'  Modules can have different set of filters specified - see `mapping` argument.
-#' @param mapping `r lifecycle::badge("experimental")` _This is a new feature. Do kindly share your opinions.\cr_
-#'  (`named list`)\cr
-#'  Specifies which filters will be active in which modules on app start.
-#'  Elements should contain character vector of `teal_slice` `id`s (see [teal.slice::teal_slice()]).
+#' @param mapping `r lifecycle::badge("experimental")`
+#' _This is a new feature. Do kindly share your opinions on
+#' [`teal`'s GitHub repository](https://github.com/insightsengineering/teal/)._
+#'
+#'  (named `list`) specifies which filters will be active in which modules on app start.
+#'  Elements should contain character vector of `teal_slice` `id`s (see [`teal.slice::teal_slice()`]).
 #'  Names of the list should correspond to `teal_module` `label` set in [module()] function.
-#'  `id`s listed under `"global_filters` will be active in all modules.
-#'  If missing, all filters will be applied to all modules.
-#'  If empty list, all filters will be available to all modules but will start inactive.
-#'  If `module_specific` is `FALSE`, only `global_filters` will be active on start.
-#' @param app_id (`character(1)`)\cr
+#'  - `id`s listed under `"global_filters` will be active in all modules.
+#'  - If missing, all filters will be applied to all modules.
+#'  - If empty list, all filters will be available to all modules but will start inactive.
+#'  - If `module_specific` is `FALSE`, only `global_filters` will be active on start.
+#' @param app_id (`character(1)`)
 #'  For internal use only, do not set manually.
 #'  Added by `init` so that a `teal_slices` can be matched to the app in which it was used.
 #'  Used for verifying snapshots uploaded from file. See `snapshot`.

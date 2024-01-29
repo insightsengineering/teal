@@ -13,13 +13,13 @@ validate_has_data(
 )
 }
 \arguments{
-\item{x}{a data.frame}
+\item{x}{(\code{data.frame})}
 
 \item{min_nrow}{minimum number of rows in \code{x}}
 
-\item{complete}{\code{logical} default \code{FALSE} when set to \code{TRUE} then complete cases are checked.}
+\item{complete}{(\code{logical(1)}) default \code{FALSE} when set to \code{TRUE} then complete cases are checked.}
 
-\item{allow_inf}{\code{logical} default \code{TRUE} when set to \code{FALSE} then error thrown if any values are
+\item{allow_inf}{(\code{logical(1)}) default \code{TRUE} when set to \code{FALSE} then error thrown if any values are
 infinite.}
 
 \item{msg}{(\code{character(1)}) additional message to display alongside the default message.}

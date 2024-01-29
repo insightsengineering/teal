@@ -71,7 +71,7 @@
 #' @param mapping_matrix (`reactive`) that contains a `data.frame` representation
 #'                       of the mapping of filter state ids (rows) to modules labels (columns);
 #'                       all columns are `logical` vectors
-#' @param filtered_data_list non-nested (`named list`) that contains `FilteredData` objects
+#' @param filtered_data_list non-nested (named `list`) that contains `FilteredData` objects
 #'
 #' @return Nothing is returned.
 #'
@@ -328,16 +328,13 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
   })
 }
 
-
-
-
 ### utility functions ----
 
 #' Explicitly enumerate global filters.
 #'
 #' Transform module mapping such that global filters are explicitly specified for every module.
 #'
-#' @param mapping (`named list`) as stored in mapping parameter of `teal_slices`
+#' @param mapping (named `list`) as stored in mapping parameter of `teal_slices`
 #' @param module_names (`character`) vector containing names of all modules in the app
 #' @return A `named_list` with one element per module, each element containing all filters applied to that module.
 #' @keywords internal
@@ -356,7 +353,7 @@ unfold_mapping <- function(mapping, module_names) {
 #'
 #' @param mapping_matrix (`data.frame`) of logical vectors where
 #'                       columns represent modules and row represent `teal_slice`s
-#' @return `named list` like that in the `mapping` attribute of a `teal_slices` object.
+#' @return named `list` like that in the `mapping` attribute of a `teal_slices` object.
 #' @keywords internal
 #'
 matrix_to_mapping <- function(mapping_matrix) {

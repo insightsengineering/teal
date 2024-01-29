@@ -1,9 +1,74 @@
+#' Manage multiple `FilteredData` objects
+#'
+#' Oversee filter states in the whole application.
+#'
+#' This module observes the changes of the filters in each `FilteredData` object
+#' and keeps track of all filters used. A mapping of filters to modules
+#' is kept in the `mapping_matrix` object (which is actually a `data.frame`)
+#' that tracks which filters (rows) are active in which modules (columns).
+#'
+#' @name module_filter_manager
+#'
+#' @param id (`character(1)`)
+#'  `shiny` module id.
+#' @param filtered_data_list (named `list`)
+#'  A list, possibly nested, of `FilteredData` objects.
+#'  Each `FilteredData` will be served to one module in the `teal` application.
+#'  The structure of the list must reflect the nesting of modules in tabs
+#'  and names of the list must be the same as labels of their respective modules.
+#' @inheritParams init
+#' @return A list of `reactive`s, each holding a `teal_slices`, as returned by `filter_manager_module_srv`.
+#' @keywords internal
+#'
+NULL
+
 #' Filter manager modal
 #'
 #' Opens modal containing the filter manager UI.
 #'
 #' @name module_filter_manager_modal
-#' @inheritParams filter_manager_srv
+#' @inheritParams module_filter_manager
+#' @examples
+#' # use non-exported function from teal
+#' filter_manager_modal_ui <- getFromNamespace("filter_manager_modal_ui", "teal")
+#' filter_manager_modal_srv <- getFromNamespace("filter_manager_modal_srv", "teal")
+#'
+#' fd1 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
+#' fd2 <- teal.slice::init_filtered_data(
+#'   list(iris = list(dataset = iris), mtcars = list(dataset = mtcars))
+#' )
+#' fd3 <- teal.slice::init_filtered_data(
+#'   list(iris = list(dataset = iris), women = list(dataset = women))
+#' )
+#' filter <- teal_slices(
+#'   teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length"),
+#'   teal.slice::teal_slice(dataname = "iris", varname = "Species"),
+#'   teal.slice::teal_slice(dataname = "mtcars", varname = "mpg"),
+#'   teal.slice::teal_slice(dataname = "women", varname = "height"),
+#'   mapping = list(
+#'     module2 = c("mtcars mpg"),
+#'     module3 = c("women height"),
+#'     global_filters = "iris Species"
+#'   )
+#' )
+#'
+#' ui <- fluidPage(
+#'   filter_manager_modal_ui("manager")
+#' )
+#'
+#' server <- function(input, output, session) {
+#'   observe({
+#'     filter_manager_modal_srv(
+#'       "manager",
+#'       filtered_data_list = list(module1 = fd1, module2 = fd2, module3 = fd3),
+#'       filter = filter
+#'     )
+#'   })
+#' }
+#'
+#' if (interactive()) {
+#'   shinyApp(ui, server)
+#' }
 #'
 #' @keywords internal
 #'
@@ -49,28 +114,7 @@ filter_manager_ui <- function(id) {
   )
 }
 
-#' Manage multiple `FilteredData` objects
-#'
-#' Oversee filter states in the whole application.
-#'
 #' @rdname module_filter_manager
-#' @details
-#' This module observes the changes of the filters in each `FilteredData` object
-#' and keeps track of all filters used. A mapping of filters to modules
-#' is kept in the `mapping_matrix` object (which is actually a `data.frame`)
-#' that tracks which filters (rows) are active in which modules (columns).
-#'
-#' @param id (`character(1)`)\cr
-#'  `shiny` module id.
-#' @param filtered_data_list (`named list`)\cr
-#'  A list, possibly nested, of `FilteredData` objects.
-#'  Each `FilteredData` will be served to one module in the `teal` application.
-#'  The structure of the list must reflect the nesting of modules in tabs
-#'  and names of the list must be the same as labels of their respective modules.
-#' @inheritParams init
-#' @return A list of `reactive`s, each holding a `teal_slices`, as returned by `filter_manager_module_srv`.
-#' @keywords internal
-#'
 filter_manager_srv <- function(id, filtered_data_list, filter) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("filter_manager_srv initializing for: { paste(names(filtered_data_list), collapse = ', ')}.")
@@ -162,11 +206,11 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 #' and from there become available in other modules
 #' by setting `private$available_teal_slices` in each `FilteredData`.
 #'
-#' @param id (`character(1)`)\cr
+#' @param id (`character(1)`)
 #'  `shiny` module id.
-#' @param module_fd (`FilteredData`)\cr
+#' @param module_fd (`FilteredData`)
 #'   object to filter data in the teal-module
-#' @param slices_global (`reactiveVal`)\cr
+#' @param slices_global (`reactiveVal`)
 #'   stores `teal_slices` with all available filters; allows the following actions:
 #'   - to disable/enable a specific filter in a module
 #'   - to restore saved filter settings

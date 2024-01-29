@@ -7,7 +7,7 @@
 tdata2env(data)
 }
 \arguments{
-\item{data}{a \code{tdata} object}
+\item{data}{(\code{tdata}) object}
 }
 \value{
 an \code{environment}

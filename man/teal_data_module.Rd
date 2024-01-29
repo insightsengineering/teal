@@ -18,10 +18,10 @@ teal_data_module(ui, server)
 \method{within}{teal_data_module}(data, expr, ...)
 }
 \arguments{
-\item{ui}{(\verb{function(id)})\cr
+\item{ui}{(\verb{function(id)})
 \code{shiny} module UI function; must only take \code{id} argument}
 
-\item{server}{(\verb{function(id)})\cr
+\item{server}{(\verb{function(id)})
 \code{shiny} module server function; must only take \code{id} argument;
 must return reactive expression containing \code{teal_data} object}
 
@@ -51,9 +51,11 @@ Create a \code{teal_data_module} object and evaluate code on it with history tra
 \code{teal_data_module} creates a \code{shiny} module to supply or modify data in a \code{teal} application.
 The module allows for running data pre-processing code (creation \emph{and} some modification) after the app starts.
 The body of the server function will be run in the app rather than in the global environment.
-This means it will be run every time the app starts, so use sparingly.\cr
+This means it will be run every time the app starts, so use sparingly.
+
 Pass this module instead of a \code{teal_data} object in a call to \code{\link[=init]{init()}}.
-Note that the server function must always return a \code{teal_data} object wrapped in a reactive expression.\cr
+Note that the server function must always return a \code{teal_data} object wrapped in a reactive expression.
+
 See vignette \code{vignette("data-as-shiny-module", package = "teal")} for more details.
 
 \code{eval_code} evaluates given code in the environment of the \code{teal_data} object created by the \code{teal_data_module}.
@@ -91,9 +93,9 @@ eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 
 within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 
-# in an app, use input-derived value in the expression
-within(tdm, dataset1 <- subset(dataset1, Species == species), species = input$species)
-
+# use additional parameter for expression value substitution.
+valid_species <- "versicolor"
+within(tdm, dataset1 <- subset(dataset1, Species \%in\% species), species = valid_species)
 }
 \seealso{
 \code{\linkS4class{teal_data}}, \code{\link[teal.code:qenv]{teal.code::qenv()}}
