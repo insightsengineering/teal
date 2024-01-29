@@ -5,10 +5,10 @@
 #' The `teal_slices` object contains information about filter states and can be used to
 #' create, modify, and delete filter states.
 #'
-#' Date formats are converted in the following way:
+#' Date and date time objects are stored in the following formats:
 #'
-#' - `Date` class is stored in `"ISO8601"` format (`YYYY-MM-DD`).
-#' - `POSIX*t` classes are converted to a character by using
+#' - `Date` class is converted to the `"ISO8601"` standard (`YYYY-MM-DD`).
+#' - `POSIX*t` classes are converted to character by using
 #' `format.POSIX*t(usetz = TRUE, tz = "UTC")` (`YYYY-MM-DD {N}{N}:{N}{N}:{N}{N} UTC`,
 #' where `{N} = [0-9]` is a number and `UTC` is `Coordinated Universal Time`
 #' timezone short-code).
