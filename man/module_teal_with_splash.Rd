@@ -44,8 +44,11 @@ Old way of specifying filters through a list is deprecated and will be removed i
 next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
-\code{reactive} containing \code{teal_data} object when data is loaded.
+\itemize{
+\item \code{ui_teal_with_splash} returns \code{HTML} for \code{shiny} UI module.
+\item \code{srv_teal_with_splash} returns \code{reactive} containing \code{teal_data} object when data is loaded.
 If data is not loaded yet, \code{reactive} returns \code{NULL}.
+}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

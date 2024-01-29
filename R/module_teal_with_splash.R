@@ -23,9 +23,10 @@
 #'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
 #' @inheritParams shiny::moduleServer
-#' @return `reactive` containing `teal_data` object when data is loaded.
+#' @return
+#' - `ui_teal_with_splash` returns `HTML` for `shiny` UI module.
+#' - `srv_teal_with_splash` returns `reactive` containing `teal_data` object when data is loaded.
 #' If data is not loaded yet, `reactive` returns `NULL`.
-#'
 #' @name module_teal_with_splash
 #' @examples
 #' teal_modules <- modules(example_module())

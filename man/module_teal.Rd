@@ -35,12 +35,23 @@ The header of the app.}
 \item{footer}{(\code{shiny.tag} or \code{character(1)})
 The footer of the app.}
 
+\item{modules}{(\code{teal_modules}) object containing the output modules which
+will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+more details.}
+
 \item{teal_data_rv}{(\code{reactive})
 returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
+
+\item{filter}{(\code{teal_slices})
+Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
+Old way of specifying filters through a list is deprecated and will be removed in the
+next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
-\code{ui_teal} returns \code{HTML} for \code{shiny} UI module.
-\code{srv_teal} returns \code{reactive} which returns the currently active module.
+\itemize{
+\item \code{ui_teal} returns \code{HTML} for \code{shiny} UI module.
+\item \code{srv_teal} returns \code{reactive} which returns the currently active module.
+}
 }
 \description{
 This is the main \code{teal} app that puts everything together.

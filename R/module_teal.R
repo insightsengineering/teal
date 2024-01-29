@@ -27,7 +27,7 @@
 #'
 #' @name module_teal
 #'
-#' @inheritParams ui_teal_with_splash
+#' @inheritParams module_teal_with_splash
 #'
 #' @param splash_ui (`shiny.tag`) UI to display initially,
 #'   can be a splash screen or a `shiny` module UI. For the latter, see
@@ -37,8 +37,8 @@
 #'   returns the `teal_data`, only evaluated once, `NULL` value is ignored
 #'
 #' @return
-#' `ui_teal` returns `HTML` for `shiny` UI module.
-#' `srv_teal` returns `reactive` which returns the currently active module.
+#' - `ui_teal` returns `HTML` for `shiny` UI module.
+#' - `srv_teal` returns `reactive` which returns the currently active module.
 #'
 #' @examples
 #' # use non-exported function from teal
