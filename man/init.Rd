@@ -15,7 +15,8 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{teal_data} or \code{teal_data_module})}
+\item{data}{(\code{teal_data} or \code{teal_data_module})
+For constructing the data object, refer to \code{\link[=teal_data]{teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
@@ -29,7 +30,7 @@ Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
 \item{filter}{(\code{teal_slices})
-Initial filter specification.}
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 
 \item{header}{(\code{shiny.tag} or \code{character(1)})
 The header of the app.}

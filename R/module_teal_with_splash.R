@@ -14,7 +14,7 @@
 #' assumes that it is a top-level module and cannot be embedded.
 #' This function instead adheres to the `shiny` module conventions.
 #'
-#' Please also refer to the doc of [init()].
+#' @seealso [init()]
 #'
 #' @param id (`character(1)`)
 #'   module id

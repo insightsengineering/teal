@@ -31,9 +31,7 @@ of the \code{modules} argument and list names must correspond to the labels in \
 When filter is not module-specific then list contains the same object in all elements.}
 
 \item{filter}{(\code{teal_slices})
-Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
-Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
 }

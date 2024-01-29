@@ -43,9 +43,7 @@ more details.}
 returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
 
 \item{filter}{(\code{teal_slices})
-Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
-Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 \itemize{

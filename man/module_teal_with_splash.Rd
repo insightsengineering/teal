@@ -21,7 +21,7 @@ srv_teal_with_splash(id, data, modules, filter = teal_slices())
 module id}
 
 \item{data}{(\code{teal_data} or \code{teal_data_module})
-\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
+For constructing the data object, refer to \code{\link[=teal_data]{teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.}
 
 \item{title}{(\code{shiny.tag} or \code{character(1)})
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
@@ -39,9 +39,7 @@ will be displayed in the \code{teal} application. See \code{\link[=modules]{modu
 more details.}
 
 \item{filter}{(\code{teal_slices})
-Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
-Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 \itemize{
@@ -62,8 +60,6 @@ when querying for a password to fetch data.
 \code{\link[=init]{init()}} is a wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.
 This function instead adheres to the \code{shiny} module conventions.
-
-Please also refer to the doc of \code{\link[=init]{init()}}.
 }
 \examples{
 teal_modules <- modules(example_module())
@@ -84,4 +80,7 @@ if (interactive()) {
   shinyApp(ui, server)
 }
 
+}
+\seealso{
+\code{\link[=init]{init()}}
 }
