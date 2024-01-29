@@ -14,14 +14,15 @@ the server function must be called with \code{\link[shiny:moduleServer]{shiny::m
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 
-\item{data}{(\code{teal_data} or \code{teal_data_module})}
+\item{data}{(\code{teal_data} or \code{teal_data_module})
+For constructing the data object, refer to \code{\link[=teal_data]{teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.}
 
 \item{modules}{(\code{teal_modules}) object containing the output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
 \item{filter}{(\code{teal_slices})
-Initial filter specification.}
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 \code{reactive} containing \code{teal_data} object when data is loaded.

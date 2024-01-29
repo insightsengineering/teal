@@ -16,7 +16,8 @@ ui_teal_with_splash(
 \item{id}{(\code{character(1)})
 module id}
 
-\item{data}{(\code{teal_data} or \code{teal_data_module})}
+\item{data}{(\code{teal_data} or \code{teal_data_module})
+For constructing the data object, refer to \code{\link[=teal_data]{teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.}
 
 \item{title}{(\code{shiny.tag} or \code{character(1)})
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
