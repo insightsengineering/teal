@@ -2,16 +2,13 @@
 #'
 #' Functions that serialize a `teal_slices` object to and from a file in
 #' `JSON` format.
-#' The `teal_slices` object contains information about filter states and can be used to
-#' create, modify, and delete filter states.
 #'
 #' Date and date time objects are stored in the following formats:
 #'
 #' - `Date` class is converted to the `"ISO8601"` standard (`YYYY-MM-DD`).
 #' - `POSIX*t` classes are converted to character by using
-#' `format.POSIX*t(usetz = TRUE, tz = "UTC")` (`YYYY-MM-DD {N}{N}:{N}{N}:{N}{N} UTC`,
-#' where `{N} = [0-9]` is a number and `UTC` is `Coordinated Universal Time`
-#' timezone short-code).
+#' `format.POSIX*t(usetz = TRUE, tz = "UTC")` (`YYYY-MM-DD HH:MM:SS UTC`, where
+#' `UTC` is the `Coordinated Universal Time` timezone short-code).
 #'
 #' This format is assumed during `slices_restore`. All `POSIX*t` objects in
 #' `selected` or `choices` fields of `teal_slice` objects are always printed in
@@ -22,7 +19,10 @@
 #' saved and restored. The file extension should be `".json"`.
 #'
 #' @return `slices_store` returns `NULL`, invisibly.
-#' @examplesIf requireNamespace("withr")
+#'
+#' @seealso [`teal_slices()`]
+#'
+#' @examples
 #' # use non-exported function from teal
 #' slices_store <- getFromNamespace("slices_store", "teal")
 #'
@@ -32,14 +32,11 @@
 #'   teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
 #' )
 #'
+#' slices_path <- tempfile(pattern = "teal_slices", fileext = ".json")
+#' print(slices_path)
+#'
 #' # Store the teal_slices object to a file
-#' slices_store(tss, withr::local_file("file.json"))
-#'
-#' # use non-exported function from teal
-#' slices_restore <- getFromNamespace("slices_restore", "teal")
-#'
-#' # Restore a teal_slices object from a file
-#' tss_restored <- slices_restore(withr::local_file("file.json"))
+#' slices_store(tss, slices_path)
 #' @keywords internal
 #'
 slices_store <- function(tss, file) {
@@ -51,8 +48,14 @@ slices_store <- function(tss, file) {
 
 #' @rdname slices_store
 #' @return `slices_restore` returns a `teal_slices` object restored from the file.
-#' @keywords internal
+#' @examples
+#' # use non-exported function from teal
+#' slices_restore <- getFromNamespace("slices_restore", "teal")
 #'
+#' # Restore a teal_slices object from a file
+#' tss_restored <- slices_restore(slices_path)
+#'
+#' @keywords internal
 slices_restore <- function(file) {
   checkmate::assert_file_exists(file, access = "r", extension = "json")
 

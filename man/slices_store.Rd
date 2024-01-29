@@ -23,17 +23,14 @@ saved and restored. The file extension should be \code{".json"}.}
 \description{
 Functions that serialize a \code{teal_slices} object to and from a file in
 \code{JSON} format.
-The \code{teal_slices} object contains information about filter states and can be used to
-create, modify, and delete filter states.
 }
 \details{
-Date formats are converted in the following way:
+Date and date time objects are stored in the following formats:
 \itemize{
-\item \code{Date} class is stored in \code{"ISO8601"} format (\code{YYYY-MM-DD}).
-\item \code{POSIX*t} classes are converted to a character by using
-\code{format.POSIX*t(usetz = TRUE, tz = "UTC")} (\verb{YYYY-MM-DD \{N\}\{N\}:\{N\}\{N\}:\{N\}\{N\} UTC},
-where \verb{\{N\} = [0-9]} is a number and \code{UTC} is \verb{Coordinated Universal Time}
-timezone short-code).
+\item \code{Date} class is converted to the \code{"ISO8601"} standard (\code{YYYY-MM-DD}).
+\item \code{POSIX*t} classes are converted to character by using
+\code{format.POSIX*t(usetz = TRUE, tz = "UTC")} (\verb{YYYY-MM-DD HH:MM:SS UTC}, where
+\code{UTC} is the \verb{Coordinated Universal Time} timezone short-code).
 }
 
 This format is assumed during \code{slices_restore}. All \code{POSIX*t} objects in
@@ -41,24 +38,28 @@ This format is assumed during \code{slices_restore}. All \code{POSIX*t} objects 
 \code{UTC} timezone as well.
 }
 \examples{
-\dontshow{if (requireNamespace("withr")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # use non-exported function from teal
 slices_store <- getFromNamespace("slices_store", "teal")
 
 # Create a teal_slices object
 tss <- teal_slices(
   teal.slice::teal_slice(dataname = "data", varname = "var"),
-  teal.slice::teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
+  teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
 )
 
-# Store the teal_slices object to a file
-slices_store(tss, withr::local_file("file.json"))
+slices_path <- tempfile(pattern = "teal_slices", fileext = ".json")
+print(slices_path)
 
+# Store the teal_slices object to a file
+slices_store(tss, slices_path)
 # use non-exported function from teal
 slices_restore <- getFromNamespace("slices_restore", "teal")
 
 # Restore a teal_slices object from a file
-tss_restored <- slices_restore(withr::local_file("file.json"))
-\dontshow{\}) # examplesIf}
+tss_restored <- slices_restore(slices_path)
+
+}
+\seealso{
+\code{\link[=teal_slices]{teal_slices()}}
 }
 \keyword{internal}
