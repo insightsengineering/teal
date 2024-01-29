@@ -14,8 +14,8 @@
 #' `selected` or `choices` fields of `teal_slice` objects are always printed in
 #' `UTC` timezone as well.
 #'
-#' @param tss (`teal_slices`) Object to be stored.
-#' @param file (`character(1)`) The file path where `teal_slices` object will be
+#' @param tss (`teal_slices`) object to be stored.
+#' @param file (`character(1)`) file path where `teal_slices` object will be
 #' saved and restored. The file extension should be `".json"`.
 #'
 #' @return `slices_store` returns `NULL`, invisibly.

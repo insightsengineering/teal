@@ -10,9 +10,9 @@ slices_store(tss, file)
 slices_restore(file)
 }
 \arguments{
-\item{tss}{(\code{teal_slices}) Object to be stored.}
+\item{tss}{(\code{teal_slices}) object to be stored.}
 
-\item{file}{(\code{character(1)}) The file path where \code{teal_slices} object will be
+\item{file}{(\code{character(1)}) file path where \code{teal_slices} object will be
 saved and restored. The file extension should be \code{".json"}.}
 }
 \value{
