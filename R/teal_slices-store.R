@@ -20,7 +20,7 @@
 #'
 #' @return `slices_store` returns `NULL`, invisibly.
 #'
-#' @seealso [`teal_slices()`]
+#' @seealso [teal_slices()]
 #'
 #' @examples
 #' # use non-exported function from teal
