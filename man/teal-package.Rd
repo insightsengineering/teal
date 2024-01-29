@@ -11,7 +11,7 @@ interactive data analysis environment.
 }
 \details{
 To learn mode about the package either read the project website at
-\href{https://insightsengineering.github.io/teal/latest-tag/}{project website} or read the \code{\link{init}} manual pages.
+\href{https://insightsengineering.github.io/teal/latest-tag/}{project website} or read the \code{\link[=init]{init()}} manual pages.
 }
 \seealso{
 Useful links:

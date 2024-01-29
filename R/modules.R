@@ -173,10 +173,10 @@ is_arg_used <- function(modules, arg) {
 #' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.
 #'
 #' @param label (`character(1)`) Label shown in the navigation item for the module. Any label possible except
-#'  `"global_filters"` - read more in `mapping` argument of [`teal::teal_slices`].
+#'  `"global_filters"` - read more in `mapping` argument of [teal_slices()].
 #' @param server (`function`) `shiny` module with following arguments:
-#'  - `id` - `teal` will set proper `shiny` namespace for this module (see [`shiny::moduleServer()`]).
-#'  - `input`, `output`, `session` - (not recommended) then [`shiny::callModule()`] will be used to call a module.
+#'  - `id` - `teal` will set proper `shiny` namespace for this module (see [shiny::moduleServer()]).
+#'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
 #'  - `data` (optional) module will receive a `teal_data` object, a list of reactive (filtered) data specified in
 #'     the `filters` argument.
 #'  - `datasets` (optional) module will receive `FilteredData`. (See [`teal.slice::FilteredData`]).

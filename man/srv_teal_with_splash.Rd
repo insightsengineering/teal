@@ -14,8 +14,7 @@ the server function must be called with \code{\link[shiny:moduleServer]{shiny::m
 See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 
-\item{data}{(\code{teal_data} or \code{teal_data_module})
-\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
+\item{data}{(\code{teal_data} or \code{teal_data_module})}
 
 \item{modules}{(\code{teal_modules}) object containing the output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
