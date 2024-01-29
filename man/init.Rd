@@ -16,7 +16,7 @@ init(
 }
 \arguments{
 \item{data}{(\code{teal_data} or \code{teal_data_module})
-\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
+For constructing the data object, refer to \code{\link[=teal_data]{teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
@@ -30,9 +30,7 @@ Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
 \item{filter}{(\code{teal_slices})
-Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
-Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 
 \item{header}{(\code{shiny.tag} or \code{character(1)})
 The header of the app.}
@@ -58,6 +56,10 @@ End-users: This is the most important function for you to start a
 \details{
 When initializing the \code{teal} app, if \code{datanames} are not set for the \code{teal_data} object,
 defaults from the \code{teal_data} environment will be used.
+
+Note: the older method of filter specification via a list is deprecated and
+will be discontinued in next release. Users are encouraged to update their applications
+using \code{\link[=teal_slices]{teal_slices()}}.
 }
 \examples{
 app <- init(

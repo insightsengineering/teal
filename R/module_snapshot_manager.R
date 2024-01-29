@@ -40,7 +40,7 @@
 #' The snapshot contains the `mapping` attribute of the initial application state
 #' (or one that has been restored), which may not reflect the current one,
 #' so `mapping_matrix` is transformed to obtain the current mapping, i.e. a list that,
-#' when passed to the `mapping` argument of [`teal::teal_slices`], would result in the current mapping.
+#' when passed to the `mapping` argument of [teal_slices()], would result in the current mapping.
 #' This is substituted as the snapshot's `mapping` attribute and the snapshot is added to the snapshot list.
 #'
 #' To restore app state, a snapshot is retrieved from storage and rebuilt into a `teal_slices` object.
@@ -49,7 +49,7 @@
 #' The snapshot is then set as the current content of `slices_global`.
 #'
 #' To save a snapshot, the snapshot is retrieved and reassembled just like for restoring,
-#' and then saved to file with [`slices_store`].
+#' and then saved to file with [slices_store()].
 #'
 #' When a snapshot is uploaded, it will first be added to storage just like a newly created one,
 #' and then used to restore app state much like a snapshot taken from storage.

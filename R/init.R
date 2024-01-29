@@ -15,21 +15,23 @@
 #' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
 #' defaults from the `teal_data` environment will be used.
 #'
+#' Note: the older method of filter specification via a list is deprecated and
+#' will be discontinued in next release. Users are encouraged to update their applications
+#' using [teal_slices()].
+#'
 #' @param data (`teal_data` or `teal_data_module`)
-#' `teal_data` object as returned by [`teal.data::teal_data()`] or `teal_data_module`.
+#' For constructing the data object, refer to [teal_data()] and [teal_data_module()].
 #' @param modules (`list` or `teal_modules` or `teal_module`)
 #'   nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
-#'   will be displayed in the `teal` application. See [`modules()`] and [`module()`] for
+#'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
 #' @param title (`shiny.tag` or `character(1)`)
 #'   The browser window title. Defaults to a title "teal app" with the icon of NEST.
 #'   Can be created using the `build_app_title()` or
 #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
 #' @param filter (`teal_slices`)
-#'   Specification of initial filter. Filters can be specified using [`teal::teal_slices()`].
-#'   Old way of specifying filters through a list is deprecated and will be removed in the
-#'   next release. Please fix your applications to use [`teal::teal_slices()`].
+#'   Specifies the initial filter using [teal_slices()].
 #' @param header (`shiny.tag` or `character(1)`)
 #'   The header of the app.
 #' @param footer (`shiny.tag` or `character(1)`)

@@ -21,9 +21,7 @@ The structure of the list must reflect the nesting of modules in tabs
 and names of the list must be the same as labels of their respective modules.}
 
 \item{filter}{(\code{teal_slices})
-Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
-Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \description{
 Opens modal containing the filter manager UI.

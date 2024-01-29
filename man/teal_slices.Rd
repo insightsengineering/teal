@@ -54,7 +54,7 @@ Modules can have different set of filters specified - see \code{mapping} argumen
 \href{https://github.com/insightsengineering/teal/}{\code{teal}'s GitHub repository}.}
 
 (named \code{list}) specifies which filters will be active in which modules on app start.
-Elements should contain character vector of \code{teal_slice} \code{id}s (see \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice()}}).
+Elements should contain character vector of \code{teal_slice} \code{id}s (see \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice}}).
 Names of the list should correspond to \code{teal_module} \code{label} set in \code{\link[=module]{module()}} function.
 \itemize{
 \item \code{id}s listed under \verb{"global_filters} will be active in all modules.
@@ -112,6 +112,6 @@ if (interactive()) {
 
 }
 \seealso{
-\code{\link[teal.slice:teal_slices]{teal.slice::teal_slices}}, \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice}}, \code{\link{slices_store}}
+\code{\link[teal.slice:teal_slices]{teal.slice::teal_slices}}, \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice}}, \code{\link[=slices_store]{slices_store()}}
 }
 \keyword{internal}
