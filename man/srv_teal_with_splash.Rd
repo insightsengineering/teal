@@ -21,9 +21,7 @@ will be displayed in the \code{teal} application. See \code{\link[=modules]{modu
 more details.}
 
 \item{filter}{(\code{teal_slices})
-Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
-Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
+Initial filter specification.}
 }
 \value{
 \code{reactive} containing \code{teal_data} object when data is loaded.
