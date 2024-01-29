@@ -29,7 +29,7 @@
 #' # Create a teal_slices object
 #' tss <- teal_slices(
 #'   teal.slice::teal_slice(dataname = "data", varname = "var"),
-#'   teal.slice::teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
+#'   teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
 #' )
 #'
 #' # Store the teal_slices object to a file
