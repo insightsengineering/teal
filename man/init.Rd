@@ -56,10 +56,6 @@ End-users: This is the most important function for you to start a
 \details{
 When initializing the \code{teal} app, if \code{datanames} are not set for the \code{teal_data} object,
 defaults from the \code{teal_data} environment will be used.
-
-Note: the older method of filter specification via a list is deprecated and
-will be discontinued in next release. Users are encouraged to update their applications
-using \code{\link[=teal_slices]{teal_slices()}}.
 }
 \examples{
 app <- init(
