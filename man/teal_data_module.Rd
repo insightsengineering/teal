@@ -98,5 +98,5 @@ valid_species <- "versicolor"
 within(tdm, dataset1 <- subset(dataset1, Species \%in\% species), species = valid_species)
 }
 \seealso{
-\code{\linkS4class{teal_data}}, \code{\link[teal.code:qenv]{teal.code::qenv()}}
+, \code{\link[teal.code:qenv]{teal.code::qenv()}}
 }

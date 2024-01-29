@@ -4,7 +4,7 @@
 #' interactive data analysis environment.
 #'
 #' To learn mode about the package either read the project website at
-#' [project website](https://insightsengineering.github.io/teal/latest-tag/) or read the [`init`] manual pages.
+#' [project website](https://insightsengineering.github.io/teal/latest-tag/) or read the [init()] manual pages.
 #'
 #' @keywords internal
 "_PACKAGE"

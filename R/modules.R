@@ -1,14 +1,18 @@
-#' Creates a `teal_modules` object.
+#' Create a `teal_modules` object.
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description
+#' `r lifecycle::badge("stable")`
 #'
-#' This function collects a list of `teal_modules` and `teal_module` objects and returns a `teal_modules` object
-#' containing the passed objects.
+#' Collects `teal_module` or `teal_modules` objects to build the nested tab structure of the `teal` application.
 #'
-#' This function dictates what modules are included in a `teal` application. The internal structure of `teal_modules`
-#' shapes the navigation panel of a `teal` application.
+#' @details
+#' `modules()` shapes the internal structure of a `teal` application by organizing `teal` modules in the navigation
+#' panel. It wraps `teal_module` and `teal_modules` objects in a `teal_modules` object,
+#' which results in a nested structure corresponding to the nested tabs in the final application.
 #'
-#' @param ... (`teal_module` or `teal_modules`) see [module()] and [modules()] for more details
+#' @param ...
+#' - For `modules()`: (`teal_module` or `teal_modules`) objects to wrap into a tab.
+#' - For `format()` and `print()`: arguments passed to other methods.
 #' @param label (`character(1)`) label of modules collection (default `"root"`).
 #' If using the `label` argument then it must be explicitly named.
 #' For example `modules("lab", ...)` should be converted to `modules(label = "lab", ...)`
@@ -169,10 +173,10 @@ is_arg_used <- function(modules, arg) {
 #' This function embeds a `shiny` module inside a `teal` application. One `teal_module` maps to one `shiny` module.
 #'
 #' @param label (`character(1)`) Label shown in the navigation item for the module. Any label possible except
-#'  `"global_filters"` - read more in `mapping` argument of [`teal::teal_slices`].
+#'  `"global_filters"` - read more in `mapping` argument of [teal_slices()].
 #' @param server (`function`) `shiny` module with following arguments:
-#'  - `id` - `teal` will set proper `shiny` namespace for this module (see [`shiny::moduleServer()`]).
-#'  - `input`, `output`, `session` - (not recommended) then [`shiny::callModule()`] will be used to call a module.
+#'  - `id` - `teal` will set proper `shiny` namespace for this module (see [shiny::moduleServer()]).
+#'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
 #'  - `data` (optional) module will receive a `teal_data` object, a list of reactive (filtered) data specified in
 #'     the `filters` argument.
 #'  - `datasets` (optional) module will receive `FilteredData`. (See [`teal.slice::FilteredData`]).
@@ -414,44 +418,40 @@ module_labels <- function(modules) {
 #'
 #' @param x (`teal_modules`) to print
 #' @param indent (`integer`) indent level;
-#'   each `submodule` is indented one level more
-#' @param ... (optional) additional parameters to pass to recursive calls of `toString`
+#'   each nested `teal_modules` or `teal_module` is indented one level more
 #' @return (`character`)
 #' @export
 #' @rdname modules
-toString.teal_modules <- function(x, indent = 0, ...) { # nolint
+format.teal_modules <- function(x, indent = 0, ...) { # nolint
   # argument must be `x` to be consistent with base method
   paste(c(
     paste0(rep(" ", indent), "+ ", x$label),
-    unlist(lapply(x$children, toString, indent = indent + 1, ...))
+    unlist(lapply(x$children, format, indent = indent + 1, ...))
   ), collapse = "\n")
 }
 
 #' Converts `teal_module` to a string
 #'
-#' @inheritParams toString.teal_modules
+#' @inheritParams format.teal_modules
 #' @param x (`teal_module`)
-#' @param ... ignored
 #' @export
 #' @rdname module
-toString.teal_module <- function(x, indent = 0, ...) { # nolint
+format.teal_module <- function(x, indent = 0, ...) { # nolint
   paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, collapse = "")
 }
 
 #' Prints `teal_modules`
 #' @param x (`teal_modules`)
-#' @param ... parameters passed to `toString`
 #' @export
 #' @rdname modules
 print.teal_modules <- function(x, ...) {
-  s <- toString(x, ...)
-  cat(s)
-  return(invisible(s))
+  cat(format(x, ...))
+  invisible(x)
 }
 
 #' Prints `teal_module`
 #' @param x (`teal_module`)
-#' @param ... parameters passed to `toString`
+#' @param ... arguments passed to other methods.
 #' @export
 #' @rdname module
 print.teal_module <- print.teal_modules

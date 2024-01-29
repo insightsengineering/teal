@@ -2,7 +2,7 @@
 % Please edit documentation in R/modules.R
 \name{module}
 \alias{module}
-\alias{toString.teal_module}
+\alias{format.teal_module}
 \alias{print.teal_module}
 \title{Creates a \code{teal_module} object}
 \usage{
@@ -23,13 +23,13 @@ module(
   ui_args = NULL
 )
 
-\method{toString}{teal_module}(x, indent = 0, ...)
+\method{format}{teal_module}(x, indent = 0, ...)
 
 \method{print}{teal_module}(x, ...)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module. Any label possible except
-\code{"global_filters"} - read more in \code{mapping} argument of \code{\link{teal_slices}}.}
+\code{"global_filters"} - read more in \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}.}
 
 \item{server}{(\code{function}) \code{shiny} module with following arguments:
 \itemize{
@@ -66,9 +66,9 @@ UI function.}
 \item{x}{(\code{teal_module})}
 
 \item{indent}{(\code{integer}) indent level;
-each \code{submodule} is indented one level more}
+each nested \code{teal_modules} or \code{teal_module} is indented one level more}
 
-\item{...}{parameters passed to \code{toString}}
+\item{...}{arguments passed to other methods.}
 }
 \value{
 object of class \code{teal_module}.
