@@ -9,8 +9,7 @@ srv_teal_with_splash(id, data, modules, filter = teal_slices())
 }
 \arguments{
 \item{id}{optional (\code{character})
-specifying the module id to be used when embedding the teal app within another \code{shiny} app as a module.
-For more details, see details.}
+specifying the module id to be used when embedding the teal app within another \code{shiny} app as a module.}
 
 \item{data}{(\code{teal_data} or \code{teal_data_module})
 \code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}

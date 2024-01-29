@@ -15,12 +15,6 @@
 #' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
 #' defaults from the `teal_data` environment will be used.
 #'
-#' The `id` parameter is used for identifying a distinct `teal` instance for embedding it in different
-#' `shiny` elements. However, its recommended to use [`ui_teal_with_splash()`] and [`srv_teal_with_splash()`].
-#' See vignette `vignette("getting-started-with-teal", package = "teal")` for examples.
-#' If no `id` is given (i.e., `id = character(0)`), the teal app runs as a standalone application without submodule integration.
-#'
-#'
 #' @param data (`teal_data` or `teal_data_module`)
 #' `teal_data` object as returned by [`teal.data::teal_data()`] or `teal_data_module`.
 #' @param modules (`list` or `teal_modules` or `teal_module`)
@@ -42,7 +36,6 @@
 #'   The footer of the app.
 #' @param id optional (`character`)
 #'   specifying the module id to be used when embedding the teal app within another `shiny` app as a module.
-#'   For more details, see details.
 #'
 #' @return named list with server and UI function
 #'
