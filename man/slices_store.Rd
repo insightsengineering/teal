@@ -22,7 +22,7 @@ saved and restored. The file extension should be \code{".json"}.}
 }
 \description{
 Functions that write a \code{teal_slices} object to a file in the \code{JSON} format,
-and also restore the object from disk."
+and also restore the object from disk.
 }
 \details{
 Date and date time objects are stored in the following formats:
@@ -52,6 +52,7 @@ print(slices_path)
 
 # Store the teal_slices object to a file
 slices_store(tss, slices_path)
+
 # use non-exported function from teal
 slices_restore <- getFromNamespace("slices_restore", "teal")
 
