@@ -2,27 +2,30 @@
 % Please edit documentation in R/modules.R
 \name{modules}
 \alias{modules}
-\alias{toString.teal_modules}
+\alias{format.teal_modules}
 \alias{print.teal_modules}
-\title{Creates a \code{teal_modules} object.}
+\title{Create a \code{teal_modules} object.}
 \usage{
 modules(..., label = "root")
 
-\method{toString}{teal_modules}(x, indent = 0, ...)
+\method{format}{teal_modules}(x, indent = 0, ...)
 
 \method{print}{teal_modules}(x, ...)
 }
 \arguments{
-\item{...}{parameters passed to \code{toString}}
+\item{...}{\itemize{
+\item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) objects to wrap into a tab.
+\item For \code{format()} and \code{print()}: arguments passed to other methods.
+}}
 
 \item{label}{(\code{character(1)}) label of modules collection (default \code{"root"}).
 If using the \code{label} argument then it must be explicitly named.
 For example \code{modules("lab", ...)} should be converted to \code{modules(label = "lab", ...)}}
 
-\item{x}{\code{teal_modules}}
+\item{x}{(\code{teal_modules})}
 
 \item{indent}{(\code{integer}) indent level;
-each \code{submodule} is indented one level more}
+each nested \code{teal_modules} or \code{teal_module} is indented one level more}
 }
 \value{
 object of class \code{teal_modules}. Object contains following fields
@@ -36,11 +39,13 @@ their \code{label} attribute converted to a valid \code{shiny} id.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-This function collects a list of \code{teal_modules} and \code{teal_module} objects and returns a \code{teal_modules} object
-containing the passed objects.
 
-This function dictates what modules are included in a \code{teal} application. The internal structure of \code{teal_modules}
-shapes the navigation panel of a \code{teal} application.
+Collects \code{teal_module} or \code{teal_modules} objects to build the nested tab structure of the \code{teal} application.
+}
+\details{
+\code{modules()} shapes the internal structure of a \code{teal} application by organizing \code{teal} modules in the navigation
+panel. It wraps \code{teal_module} and \code{teal_modules} objects in a \code{teal_modules} object,
+which results in a nested structure corresponding to the nested tabs in the final application.
 }
 \examples{
 library(shiny)
@@ -57,7 +62,7 @@ app <- init(
           moduleServer(
             id,
             module = function(input, output, session) {
-              output$data <- renderDataTable(data[["iris"]]())
+              output$data <- renderDataTable(data()[["iris"]])
             }
           )
         },
