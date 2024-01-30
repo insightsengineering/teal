@@ -49,7 +49,7 @@ slices_store <- function(tss, file) {
 #' @rdname slices_store
 #' @return `slices_restore` returns a `teal_slices` object restored from the file.
 #' @examples
-#' 
+#'
 #' # use non-exported function from teal
 #' slices_restore <- getFromNamespace("slices_restore", "teal")
 #'
