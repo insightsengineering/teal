@@ -1,7 +1,7 @@
 #' Store and restore `teal_slices` object
 #'
 #' Functions that write a `teal_slices` object to a file in the `JSON` format,
-#' and also restore the object from disk."
+#' and also restore the object from disk.
 #'
 #' Date and date time objects are stored in the following formats:
 #'
@@ -49,6 +49,7 @@ slices_store <- function(tss, file) {
 #' @rdname slices_store
 #' @return `slices_restore` returns a `teal_slices` object restored from the file.
 #' @examples
+#' 
 #' # use non-exported function from teal
 #' slices_restore <- getFromNamespace("slices_restore", "teal")
 #'
