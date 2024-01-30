@@ -8,10 +8,11 @@ get_rcode_libraries <- function(dataset_rcode) {
   packages <- rev(vapply(utils::sessionInfo()$otherPkgs, base::`[[`, character(1), "Package"))
 
   parsed_libraries <- if (!missing(dataset_rcode)) {
-    # Extract all lines with library()
-    #  TODO: remove strings first as this will pass "this is a string with library(something) in it"
+    # Extract all lines that start with library()
+    library_regex <- "(^l|.*<-|.*[ ;=\\({]l)ibrary\\(([[:alpha:]][[:alnum:].]*)\\)$"
+
     user_libraries <- Filter(
-      function(.x) grepl("(^l|.*<-|.*[ ;=\\({]l)ibrary\\(([a-z][[:alnum:].]*)\\)$", .x),
+      function(.x) grepl(library_regex, .x),
       # function(.x) grepl("library\\(.*\\)$", .x),
       vapply(strsplit(dataset_rcode, "\n")[[1]], trimws, character(1))
     )
@@ -19,7 +20,7 @@ get_rcode_libraries <- function(dataset_rcode) {
     # Keep only library name
     gsub(
       # library(...) must be located at beginning of line, or have a valid character before
-      "(^l|.*<-|.*[ ;=\\({]l)ibrary\\(([a-z][a-zA-Z0-9.]*)\\)$", "\\2",
+      library_regex, "\\2",
       # Strip out comments
       vapply(user_libraries, function(.x) as.character(str2expression(.x)), character(1L))
     )
