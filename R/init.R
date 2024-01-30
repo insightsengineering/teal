@@ -15,10 +15,6 @@
 #' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
 #' defaults from the `teal_data` environment will be used.
 #'
-#' Note: the older method of filter specification via a list is deprecated and
-#' will be discontinued in next release. Users are encouraged to update their applications
-#' using [teal_slices()].
-#'
 #' @param data (`teal_data` or `teal_data_module`)
 #' For constructing the data object, refer to [teal_data()] and [teal_data_module()].
 #' @param modules (`list` or `teal_modules` or `teal_module`)

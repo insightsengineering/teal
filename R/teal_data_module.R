@@ -51,7 +51,9 @@
 #'
 #' @name teal_data_module
 #'
-#' @seealso [teal.data::`teal_data-class`], [teal.code::qenv()]
+#'
+
+#' @seealso [`teal.data::teal_data-class`], [teal.code::qenv()]
 #'
 #' @export
 teal_data_module <- function(ui, server) {
