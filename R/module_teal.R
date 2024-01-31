@@ -37,8 +37,7 @@
 #'   returns the `teal_data`, only evaluated once, `NULL` value is ignored
 #'
 #' @return
-#' - `ui_teal` returns `HTML` for `shiny` UI module.
-#' - `srv_teal` returns `reactive` which returns the currently active module.
+#'   Returns `reactive` which returns the currently active module.
 #'
 #' @examples
 #' # use non-exported function from teal

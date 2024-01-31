@@ -46,10 +46,7 @@ returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
-\itemize{
-\item \code{ui_teal} returns \code{HTML} for \code{shiny} UI module.
-\item \code{srv_teal} returns \code{reactive} which returns the currently active module.
-}
+Returns \code{reactive} which returns the currently active module.
 }
 \description{
 This is the main \code{teal} app that puts everything together.

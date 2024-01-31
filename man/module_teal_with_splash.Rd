@@ -4,7 +4,7 @@
 \alias{module_teal_with_splash}
 \alias{ui_teal_with_splash}
 \alias{srv_teal_with_splash}
-\title{\code{teal} module integration with splash screen}
+\title{Add splash screen to \code{teal} application.}
 \usage{
 ui_teal_with_splash(
   id,
@@ -42,24 +42,24 @@ more details.}
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
-\itemize{
-\item \code{ui_teal_with_splash} returns \code{HTML} for \code{shiny} UI module.
-\item \code{srv_teal_with_splash} returns \code{reactive} containing \code{teal_data} object when data is loaded.
+Returns \code{reactive} containing \code{teal_data} object when data is loaded.
 If data is not loaded yet, \code{reactive} returns \code{NULL}.
-}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-Module offers the dynamic display that switches between a custom splash screen
-for delayed data loading and a default splash screen.This helps ensure smooth
-user interaction, particularly during the initial heavy data processing or
-when querying for a password to fetch data.
+Displays custom splash screen during initial delayed data loading.
 }
 \details{
-\code{\link[=init]{init()}} is a wrapper around this module useful for end-users which
-assumes that it is a top-level module and cannot be embedded.
-This function instead adheres to the \code{shiny} module conventions.
+This module pauses app initialization pending delayed data loading.
+This is necessary because the filter panel and modules depend on the data to initialize.
+
+\code{teal_with_splash} follows the \code{shiny} module convention.
+\code{\link[=init]{init()}} is a wrapper around this that assumes that \code{teal} it is
+the top-level module and cannot be embedded.
+
+Note: It is no longer recommended to embed \code{teal} in \code{shiny} apps as a module.
+but rather use \code{init} to create a standalone application.
 }
 \examples{
 teal_modules <- modules(example_module())

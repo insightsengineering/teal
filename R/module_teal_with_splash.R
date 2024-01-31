@@ -1,18 +1,21 @@
 # This file adds a splash screen for delayed data loading on top of teal
 
-#' `teal` module integration with splash screen
+#' Add splash screen to `teal` application.
 #'
 #' @description `r lifecycle::badge("stable")`
 #'
-#' Module offers the dynamic display that switches between a custom splash screen
-#' for delayed data loading and a default splash screen.This helps ensure smooth
-#' user interaction, particularly during the initial heavy data processing or
-#' when querying for a password to fetch data.
+#' Displays custom splash screen during initial delayed data loading.
 #'
 #' @details
-#' [`init()`] is a wrapper around this module useful for end-users which
-#' assumes that it is a top-level module and cannot be embedded.
-#' This function instead adheres to the `shiny` module conventions.
+#' This module pauses app initialization pending delayed data loading.
+#' This is necessary because the filter panel and modules depend on the data to initialize.
+#'
+#' `teal_with_splash` follows the `shiny` module convention.
+#' [`init()`] is a wrapper around this that assumes that `teal` it is
+#' the top-level module and cannot be embedded.
+#'
+#' Note: It is no longer recommended to embed `teal` in `shiny` apps as a module.
+#' but rather use `init` to create a standalone application.
 #'
 #' @seealso [init()]
 #'
@@ -24,9 +27,8 @@
 #'   more details.
 #' @inheritParams shiny::moduleServer
 #' @return
-#' - `ui_teal_with_splash` returns `HTML` for `shiny` UI module.
-#' - `srv_teal_with_splash` returns `reactive` containing `teal_data` object when data is loaded.
-#' If data is not loaded yet, `reactive` returns `NULL`.
+#'   Returns `reactive` containing `teal_data` object when data is loaded.
+#'   If data is not loaded yet, `reactive` returns `NULL`.
 #' @name module_teal_with_splash
 #' @examples
 #' teal_modules <- modules(example_module())
