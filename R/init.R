@@ -36,8 +36,9 @@
 #'   The header of the app.
 #' @param footer (`shiny.tag` or `character(1)`)
 #'   The footer of the app.
-#' @param id optional (`character`)
-#'   specifying the module id to be used when embedding the teal app within another `shiny` app as a module.
+#' @param id (`character`) 
+#'   Optional string specifying the `shiny` for `teal` in cases it is used as a module 
+#'   rather than a standalone `shiny` app. This is a legacy feature.
 #'
 #' @return named list with server and UI function
 #'
