@@ -15,9 +15,8 @@
 #' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
 #' defaults from the `teal_data` environment will be used.
 #'
-#' Note: the older method of filter specification via a list is deprecated and
-#' will be discontinued in next release. Users are encouraged to update their applications
-#' using [teal_slices()].
+#' Note: The previous method of filter specification through a list is now deprecated.
+#' Users are advised to update their applications to use the [teal_slices()] function.
 #'
 #' @param data (`teal_data` or `teal_data_module`)
 #' For constructing the data object, refer to [teal_data()] and [teal_data_module()].
@@ -36,8 +35,8 @@
 #'   The header of the app.
 #' @param footer (`shiny.tag` or `character(1)`)
 #'   The footer of the app.
-#' @param id (`character`) 
-#'   Optional string specifying the `shiny` for `teal` in cases it is used as a module 
+#' @param id (`character`)
+#'   Optional string specifying the `shiny` for `teal` in cases it is used as a module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
 #'
 #' @return named list with server and UI function
@@ -134,11 +133,7 @@ init <- function(data,
   }
 
   ## `filter`
-  checkmate::assert(
-    .var.name = "filter",
-    checkmate::check_class(filter, "teal_slices"),
-    checkmate::check_list(filter, names = "named")
-  )
+  checkmate::check_class(filter, "teal_slices")
 
   ## all other arguments
   checkmate::assert(

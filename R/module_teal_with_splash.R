@@ -27,8 +27,7 @@
 #'   more details.
 #' @inheritParams shiny::moduleServer
 #' @return
-#'   Returns `reactive` containing `teal_data` object when data is loaded.
-#'   If data is not loaded yet, `reactive` returns `NULL`.
+#' Returns `reactive` containing a `teal_data` object when data is loaded or `NULL` when it is not.
 #' @name module_teal_with_splash
 #' @examples
 #' teal_modules <- modules(example_module())
