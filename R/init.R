@@ -33,10 +33,8 @@
 #' @param footer (`shiny.tag` or `character(1)`)
 #'   The footer of the app.
 #' @param id (`character`)
-#'   module id to embed it, if provided,
-#'   the server function must be called with [shiny::moduleServer()];
-#'   See the vignette for an example. However, [ui_teal_with_splash()]
-#'   is then preferred to this function.
+#'   Optional string specifying the `shiny` for `teal` in cases it is used as a module
+#'   rather than a standalone `shiny` app. This is a legacy feature.
 #'
 #' @return named list with server and UI function
 #'
@@ -132,11 +130,7 @@ init <- function(data,
   }
 
   ## `filter`
-  checkmate::assert(
-    .var.name = "filter",
-    checkmate::check_class(filter, "teal_slices"),
-    checkmate::check_list(filter, names = "named")
-  )
+  checkmate::check_class(filter, "teal_slices")
 
   ## all other arguments
   checkmate::assert(
@@ -225,9 +219,8 @@ init <- function(data,
   }
 
   # Note regarding case `id = character(0)`:
-  # rather than using `callModule` and creating a submodule of this module, we directly modify
+  # rather than creating a submodule of this module, we directly modify
   # the UI and server with `id = character(0)` and calling the server function directly
-  # rather than through `callModule`
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {

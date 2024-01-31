@@ -39,10 +39,8 @@ The header of the app.}
 The footer of the app.}
 
 \item{id}{(\code{character})
-module id to embed it, if provided,
-the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
-See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
-is then preferred to this function.}
+Optional string specifying the \code{shiny} for \code{teal} in cases it is used as a module
+rather than a standalone \code{shiny} app. This is a legacy feature.}
 }
 \value{
 named list with server and UI function
