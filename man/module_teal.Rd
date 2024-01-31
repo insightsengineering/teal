@@ -46,7 +46,7 @@ returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
-Returns \code{reactive} which returns the currently active module.
+Returns a \code{reactive} expression which returns the currently active module.
 }
 \description{
 This is the main \code{teal} app that puts everything together.
