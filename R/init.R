@@ -130,7 +130,7 @@ init <- function(data,
   }
 
   ## `filter`
-  checkmate::check_class(filter, "teal_slices")
+  checkmate::assert_class(filter, "teal_slices")
 
   ## all other arguments
   checkmate::assert(
