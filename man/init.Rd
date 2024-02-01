@@ -7,8 +7,8 @@
 init(
   data,
   modules,
-  title = build_app_title(),
   filter = teal_slices(),
+  title = build_app_title(),
   header = tags$p(),
   footer = tags$p(),
   id = character(0)
@@ -24,13 +24,13 @@ nested list of \code{teal_modules} or \code{teal_module} objects or a single
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
+\item{filter}{(\code{teal_slices})
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
+
 \item{title}{(\code{shiny.tag} or \code{character(1)})
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
-
-\item{filter}{(\code{teal_slices})
-Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 
 \item{header}{(\code{shiny.tag} or \code{character(1)})
 The header of the app.}
@@ -87,7 +87,6 @@ app <- init(
       datanames = "new_iris"
     )
   ),
-  title = "App title",
   filter = teal_slices(
     teal_slice(dataname = "new_iris", varname = "Species"),
     teal_slice(dataname = "new_iris", varname = "Sepal.Length"),
@@ -99,11 +98,19 @@ app <- init(
       global_filters = "new_mtcars cyl"
     )
   ),
+  title = "App title",
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2023")
 )
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
+
+# this is run
+print("ok")
+\dontrun{
+ stop("nooo")
+}
+
 
 }

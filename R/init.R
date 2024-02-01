@@ -22,12 +22,12 @@
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
 #'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
+#' @param filter (`teal_slices`)
+#'   Specifies the initial filter using [teal_slices()].
 #' @param title (`shiny.tag` or `character(1)`)
 #'   The browser window title. Defaults to a title "teal app" with the icon of NEST.
 #'   Can be created using the `build_app_title()` or
 #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
-#' @param filter (`teal_slices`)
-#'   Specifies the initial filter using [teal_slices()].
 #' @param header (`shiny.tag` or `character(1)`)
 #'   The header of the app.
 #' @param footer (`shiny.tag` or `character(1)`)
@@ -74,7 +74,6 @@
 #'       datanames = "new_iris"
 #'     )
 #'   ),
-#'   title = "App title",
 #'   filter = teal_slices(
 #'     teal_slice(dataname = "new_iris", varname = "Species"),
 #'     teal_slice(dataname = "new_iris", varname = "Sepal.Length"),
@@ -86,6 +85,7 @@
 #'       global_filters = "new_mtcars cyl"
 #'     )
 #'   ),
+#'   title = "App title",
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2023")
 #' )
@@ -95,8 +95,8 @@
 #'
 init <- function(data,
                  modules,
-                 title = build_app_title(),
                  filter = teal_slices(),
+                 title = build_app_title(),
                  header = tags$p(),
                  footer = tags$p(),
                  id = character(0)) {
