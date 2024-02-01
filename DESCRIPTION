@@ -44,7 +44,7 @@ Imports:
     shinyjs,
     stats,
     teal.code (>= 0.3.0.9009),
-    teal.logger (>= 0.1.1),
+    teal.logger (>= 0.1.3.9010),
     teal.reporter (>= 0.2.0),
     teal.widgets (>= 0.4.0),
     utils

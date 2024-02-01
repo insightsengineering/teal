@@ -66,7 +66,7 @@ landing_popup_module <- function(label = "Landing Popup",
   )
   checkmate::assert_multi_class(buttons, classes = c("shiny.tag", "shiny.tag.list"))
 
-  logger::log_info("Initializing landing_popup_module")
+  message("Initializing landing_popup_module")
 
   module <- module(
     label = label,
