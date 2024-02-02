@@ -314,6 +314,8 @@ flatten_modules <- function(modules) {
     list(modules)
   } else if (inherits(modules, "teal_modules")) {
     unlist(lapply(modules$children, flatten_modules), recursive = FALSE)
+  } else {
+    stop("flatten_modules accepts only 'teal_module' and 'teal_modules' objects")
   }
 }
 #' Go through list and extract bodies of encountered functions as string, recursively.
