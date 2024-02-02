@@ -299,7 +299,32 @@ create_app_id <- function(data, modules) {
   data <- if (inherits(data, "teal_data")) {
     as.list(data@env)
   } else if (inherits(data, "teal_data_module")) {
-    body(data$server)
+    deparse1(body(data$server))
   }
+  modules <- lapply(flatten_modules(modules), function(x) lapply(x, defunction))
+
   rlang::hash(list(data = data, modules = modules))
+}
+
+#' Flatten `teal_modules` to a list of `teal_module`s.
+#' @keywords internal
+#' @noRd
+flatten_modules <- function(modules) {
+  if (inherits(modules, "teal_module")) {
+    list(modules)
+  } else if (inherits(modules, "teal_modules")) {
+    unlist(lapply(modules$children, flatten_modules), recursive = FALSE)
+  }
+}
+#' Go through list and extract bodies of encountered functions as string, recursively.
+#' @keywords internal
+#' @noRd
+defunction <- function(x) {
+  if (is.function(x)) {
+    deparse1(body(x))
+  } else if (is.list(x)) {
+    lapply(x, defunction)
+  } else {
+    x
+  }
 }
