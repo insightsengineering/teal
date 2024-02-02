@@ -69,6 +69,8 @@ if (interactive()) {
   <img class="teal-example" src="images/teal-app-components-hover.svg" alt="Example application (hover)" style="width: 100%;" />
 </span>
 
+<div style="text-align: center;">_hover over the image to see a sample screenshot of a teal application_</div>
+
 Every `teal` application is composed of the following elements, all of which can be controlled by the app developer by passing arguments to the `init` function:
 
 * <span style="color: #BF37F3;">Application Title</span> (browser's tab title): is the title of the application.
