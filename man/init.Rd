@@ -106,11 +106,4 @@ if (interactive()) {
   shinyApp(app$ui, app$server)
 }
 
-# this is run
-print("ok")
-\dontrun{
- stop("nooo")
-}
-
-
 }
