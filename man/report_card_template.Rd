@@ -25,7 +25,7 @@ report_card_template(
 of the filter state in the report}
 }
 \value{
-(\code{TealReportCard}) populated with a title, description and filter state
+(\code{TealReportCard}) populated with a title, description and filter state.
 }
 \description{
 This function generates a report card with a title,

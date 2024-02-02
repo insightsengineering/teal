@@ -71,7 +71,7 @@ each nested \code{teal_modules} or \code{teal_module} is indented one level more
 \item{...}{arguments passed to other methods.}
 }
 \value{
-object of class \code{teal_module}.
+Object of class \code{teal_module}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

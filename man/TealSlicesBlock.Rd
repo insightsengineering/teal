@@ -55,7 +55,7 @@ Returns a \code{TealSlicesBlock} object with no content and no parameters.
 }
 
 \subsection{Returns}{
-\code{TealSlicesBlock}
+Object of class \code{TealSlicesBlock}, invisibly.
 }
 }
 \if{html}{\out{<hr>}}
@@ -79,7 +79,7 @@ When \code{selected} field in \code{teal_slice} object is a range, then it is di
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-invisibly self
+\code{self}, invisibly.
 }
 }
 \if{html}{\out{<hr>}}
@@ -100,7 +100,7 @@ Use the \code{get_available_params} method to get all possible parameters.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-invisibly self
+\code{self}, invisibly.
 }
 }
 \if{html}{\out{<hr>}}

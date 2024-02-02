@@ -57,7 +57,7 @@ include_parent_datanames <- function(dataname, join_keys) {
 #'
 #' @param x (`teal_data`) object
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
-#' @return (`FilteredData`) object
+#' @return A `FilteredData` object.
 #' @keywords internal
 teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   checkmate::assert_class(x, "teal_data")
@@ -85,7 +85,7 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
 #' @param filter_panel_api (`FilterPanelAPI`) object with API that allows the generation
 #' of the filter state in the report
 #'
-#' @return (`TealReportCard`) populated with a title, description and filter state
+#' @return (`TealReportCard`) populated with a title, description and filter state.
 #'
 #' @export
 report_card_template <- function(title, label, description = NULL, with_filter, filter_panel_api) {
@@ -111,7 +111,7 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
 #' @param modules (`teal_modules`) object
 #' @param datanames (`character`) names of datasets available in the `data` object
 #' @param join_keys (`join_keys`) object
-#' @return `teal_modules` with resolved `datanames`
+#' @return `teal_modules` with resolved `datanames`.
 #' @keywords internal
 resolve_modules_datanames <- function(modules, datanames, join_keys) {
   if (inherits(modules, "teal_modules")) {
@@ -263,7 +263,7 @@ validate_app_title_tag <- function(shiny_tag) {
 #' @param favicon (`character`) The path for the icon for the title.
 #' The image/icon path can be remote or the static path accessible by `shiny`, like the `www/`
 #'
-#' @return A `shiny.tag` containing the element that adds the title and logo to the `shiny` app
+#' @return A `shiny.tag` containing the element that adds the title and logo to the `shiny` app.
 #' @export
 build_app_title <- function(title = "teal app", favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") { # nolint
   checkmate::assert_string(title, null.ok = TRUE)

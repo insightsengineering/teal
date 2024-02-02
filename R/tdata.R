@@ -20,7 +20,7 @@
 #'   datasets.
 #' @param metadata (named `list`) each element contains a list of metadata about the named `data.frame`
 #' Each element of these list should be atomic and length one.
-#' @return A `tdata` object
+#' @return A `tdata` object.
 #'
 #' @seealso `as_tdata`
 #'
@@ -89,7 +89,7 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
 #'
 #' Any `reactives` inside `tdata` are first evaluated.
 #' @param data (`tdata`) object
-#' @return an `environment`
+#' @return an `environment` object.
 #' @examples
 #'
 #' data <- new_tdata(
@@ -131,7 +131,7 @@ join_keys.tdata <- function(data, ...) {
 #' Function to get metadata from a `tdata` object
 #' @param data (`tdata` - object) to extract the data from
 #' @param dataname (`character(1)`) the dataset name whose metadata is requested
-#' @return Either list of metadata or NULL if no metadata
+#' @return Either list of metadata or NULL if no metadata.
 #' @export
 get_metadata <- function(data, dataname) {
   checkmate::assert_string(dataname)

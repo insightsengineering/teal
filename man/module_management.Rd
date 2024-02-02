@@ -15,8 +15,10 @@ drop_module(modules, class)
 \item{class}{The class name of \code{teal_module} to be extracted or dropped.}
 }
 \value{
-For \code{extract_module}, a \code{teal_module} of class \code{class} or \code{teal_modules} containing modules of class \code{class}.
-For \code{drop_module}, the opposite, which is all \code{teal_modules} of  class other than \code{class}.
+\itemize{
+\item For \code{extract_module}, a \code{teal_module} of class \code{class} or \code{teal_modules} containing modules of class \code{class}.
+\item For \code{drop_module}, the opposite, which is all \code{teal_modules} of  class other than \code{class}.
+}
 
 \code{teal_modules}
 }

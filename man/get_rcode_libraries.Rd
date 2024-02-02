@@ -7,7 +7,7 @@
 get_rcode_libraries()
 }
 \value{
-Character object contain code
+Character object contain code.
 }
 \description{
 Function to create multiple library calls out of current session info to make reproducible code works.

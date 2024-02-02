@@ -22,7 +22,7 @@
 #' @param reporter (`Reporter`) object from `teal.reporter`
 #'
 #' @return A `tagList` of The main menu, place holders for filters and
-#'   place holders for the `teal` modules
+#'   place holders for the `teal` modules.
 #'
 #' @examples
 #' # use non-exported function from teal

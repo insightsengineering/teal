@@ -15,7 +15,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name_linter.
     #' @param src (`character(1)`) code as text.
     #' @param ... any `rmarkdown` `R` chunk parameter and its value.
     #' But `eval` parameter is always set to `FALSE`.
-    #' @return invisibly self
+    #' @return Object of class `TealReportCard`, invisibly.
     #' @examples
     #' card <- TealReportCard$new()$append_src(
     #'   "plot(iris)"
@@ -37,7 +37,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name_linter.
     #'  If the filter state list is empty, nothing is appended to the `content`.
     #'
     #' @param fs (`teal_slices`) object returned from [teal_slices()] function.
-    #' @return invisibly self
+    #' @return `self`, invisibly.
     append_fs = function(fs) {
       checkmate::assert_class(fs, "teal_slices")
       self$append_text("Filter State", "header3")
@@ -47,7 +47,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name_linter.
     #' @description Appends the encodings list to the `content` and `metadata` of this `TealReportCard`.
     #'
     #' @param encodings (`list`) list of encodings selections of the `teal` app.
-    #' @return invisibly self
+    #' @return `self`, invisibly.
     #' @examples
     #' card <- TealReportCard$new()$append_encodings(list(variable1 = "X"))
     #' card$get_content()[[1]]$get_content()
@@ -84,7 +84,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     #' @param content (`teal_slices`) object returned from [teal_slices()] function.
     #' @param style (`character(1)`) string specifying style to apply.
     #'
-    #' @return `TealSlicesBlock`
+    #' @return Object of class `TealSlicesBlock`, invisibly.
     #'
     initialize = function(content = teal_slices(), style = "verbatim") {
       self$set_content(content)
@@ -100,7 +100,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     #'
     #'
     #' @param content (`teal_slices`) object returned from [teal_slices()] function.
-    #' @return invisibly self
+    #' @return `self`, invisibly.
     set_content = function(content) {
       checkmate::assert_class(content, "teal_slices")
       if (length(content) != 0) {
@@ -141,7 +141,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     #' @description Create the `RcodeBlock` from a list.
     #' @param x (named `list`) with two fields `c("text", "params")`.
     #' Use the `get_available_params` method to get all possible parameters.
-    #' @return invisibly self
+    #' @return `self`, invisibly.
     from_list = function(x) {
       checkmate::assert_list(x)
       checkmate::assert_names(names(x), must.include = c("teal_slices"))

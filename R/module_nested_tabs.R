@@ -25,7 +25,7 @@
 #'  When set to `TRUE`, a filter panel is called inside of each module tab.
 #'
 #' @return depending on class of `modules`, `ui_nested_tabs` returns:
-#'   - `teal_module`: instantiated UI of the module
+#'   - `teal_module`: instantiated UI of the module.
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
 #'     calling this function on it.
 #' `srv_nested_tabs` returns a reactive which returns the active module that corresponds to the selected tab.
@@ -347,7 +347,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #' @param datanames (`character`) names of datasets
 #' @param datasets (`FilteredData`) object holding the data
 #'
-#' @return A list of hashes per dataset
+#' @return A list of hashes per dataset.
 #' @keywords internal
 #'
 calculate_hashes <- function(datanames, datasets) {

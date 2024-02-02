@@ -36,7 +36,7 @@
 #'   Optional string specifying the `shiny` for `teal` in cases it is used as a module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
 #'
-#' @return named list with server and UI function
+#' @return Named list with server and UI function.
 #'
 #' @export
 #'

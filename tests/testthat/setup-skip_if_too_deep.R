@@ -39,7 +39,7 @@ testing_depth <- function() { # nolint # nousage
 #'   So e.g. `0` means run it always and `5` means a heavy test which should be run rarely.
 #'   If the `depth` argument is larger than `TESTING_DEPTH` then the test is skipped.
 #' @importFrom testthat skip
-#' @return `NULL` or invoke an error produced by `testthat::skip`
+#' @return `NULL` or invoke an error produced by `testthat::skip`.
 #' @note By default `TESTING_DEPTH` is equal to 3 if there is no environment variable for it.
 #' By default `depth` argument lower or equal to 3 will not be skipped because by default `TESTING_DEPTH`
 #' is equal to 3. To skip <= 3 depth tests then the environment variable has to be lower than 3 respectively.

@@ -6,7 +6,7 @@
 #'
 #' @param pattern (`character`) pattern of files to be included
 #'
-#' @return HTML code that includes `CSS` files
+#' @return HTML code that includes `CSS` files.
 #' @keywords internal
 include_css_files <- function(pattern = "*") {
   css_files <- list.files(
@@ -28,7 +28,7 @@ include_css_files <- function(pattern = "*") {
 #' @param pattern (`character`) pattern of files to be included, passed to `system.file`
 #' @param except (`character`) vector of basename filenames to be excluded
 #'
-#' @return HTML code that includes `JS` files
+#' @return HTML code that includes `JS` files.
 #' @keywords internal
 include_js_files <- function(pattern = NULL, except = NULL) {
   checkmate::assert_character(except, min.len = 1, any.missing = FALSE, null.ok = TRUE)

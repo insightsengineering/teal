@@ -43,7 +43,7 @@ Optional string specifying the \code{shiny} for \code{teal} in cases it is used 
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 }
 \value{
-named list with server and UI function
+Named list with server and UI function.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

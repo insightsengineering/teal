@@ -17,7 +17,7 @@ build_app_title(
 The image/icon path can be remote or the static path accessible by \code{shiny}, like the \verb{www/}}
 }
 \value{
-A \code{shiny.tag} containing the element that adds the title and logo to the \code{shiny} app
+A \code{shiny.tag} containing the element that adds the title and logo to the \code{shiny} app.
 }
 \description{
 A helper function to create the browser title along with a logo.
