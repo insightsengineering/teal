@@ -13,10 +13,9 @@ include_css_files <- function(pattern = "*") {
     system.file("css", package = "teal", mustWork = TRUE),
     pattern = pattern, full.names = TRUE
   )
-  return(
-    shiny::singleton(
-      shiny::tags$head(lapply(css_files, shiny::includeCSS))
-    )
+
+  shiny::singleton(
+    shiny::tags$head(lapply(css_files, shiny::includeCSS))
   )
 }
 
@@ -36,7 +35,7 @@ include_js_files <- function(pattern = NULL, except = NULL) {
   js_files <- list.files(system.file("js", package = "teal", mustWork = TRUE), pattern = pattern, full.names = TRUE)
   js_files <- js_files[!(basename(js_files) %in% except)] # no-op if except is NULL
 
-  return(singleton(lapply(js_files, includeScript)))
+  singleton(lapply(js_files, includeScript))
 }
 
 #' Run `JS` file from `/inst/js/` package directory
@@ -57,7 +56,7 @@ run_js_files <- function(files) {
   lapply(files, function(file) {
     shinyjs::runjs(paste0(readLines(system.file("js", file, package = "teal", mustWork = TRUE)), collapse = "\n"))
   })
-  return(invisible(NULL))
+  invisible(NULL)
 }
 
 #' Code to include `teal` `CSS` and `JavaScript` files

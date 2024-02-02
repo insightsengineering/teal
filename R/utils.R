@@ -17,7 +17,7 @@ get_client_timezone <- function(ns) {
     ns("timezone")
   )
   shinyjs::runjs(script) # function does not return anything
-  return(invisible(NULL))
+  invisible(NULL)
 }
 
 #' Resolve the expected bootstrap theme

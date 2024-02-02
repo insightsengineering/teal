@@ -201,6 +201,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
     res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter)
     logger::log_trace("srv_teal_with_splash initialized module with data.")
-    return(res)
+
+    res
   })
 }

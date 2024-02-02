@@ -185,6 +185,7 @@ srv_tabs_with_filters <- function(id,
 
     showNotification("Data loaded - App fully started up")
     logger::log_trace("srv_tabs_with_filters initialized the module")
-    return(active_module)
+
+    active_module
   })
 }
