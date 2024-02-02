@@ -99,7 +99,7 @@ ui_teal_with_splash <- function(id,
 #' @rdname module_teal_with_splash
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::check_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
