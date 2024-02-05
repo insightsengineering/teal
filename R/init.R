@@ -1,15 +1,14 @@
 # This is the main function from teal to be used by the end-users. Although it delegates
-# directly to `module_teal_with_splash.R`, we keep it in a separate file because its doc is quite large
+# directly to `module_teal_with_splash.R`, we keep it in a separate file because its documentation is quite large
 # and it is very end-user oriented. It may also perform more argument checking with more informative
 # error messages.
-
 
 #' Create the server and UI function for the `shiny` app
 #'
 #' @description `r lifecycle::badge("stable")`
 #'
 #' End-users: This is the most important function for you to start a
-#' `teal` app that is composed out of `teal` modules.
+#' `teal` app that is composed of `teal` modules.
 #'
 #' @details
 #' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
@@ -33,7 +32,7 @@
 #' @param footer (`shiny.tag` or `character(1)`)
 #'   The footer of the app.
 #' @param id (`character`)
-#'   Optional string specifying the `shiny` for `teal` in cases it is used as a module
+#'   Optional string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
 #'
 #' @return Named list with server and UI function.

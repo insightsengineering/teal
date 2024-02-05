@@ -20,7 +20,7 @@ landing_popup_module(
 or a list of \code{shiny.tag}s. See examples.}
 
 \item{buttons}{(\code{shiny.tag}) or a list of tags (\code{tagList}).
-Typically a \code{modalButton} or \code{actionButton}.See examples.}
+Typically a \code{modalButton} or \code{actionButton}. See examples.}
 }
 \value{
 A \code{teal_module} (extended with \code{teal_landing_module} class) to be used in \code{teal} applications.
@@ -29,7 +29,7 @@ A \code{teal_module} (extended with \code{teal_landing_module} class) to be used
 Creates a landing welcome popup for \code{teal} applications.
 
 This module is used to display a popup dialog when the application starts.
-The dialog blocks the access to the application and must be closed with a button before the application is viewed.
+The dialog blocks access to the application and must be closed with a button before the application can be viewed.
 }
 \examples{
 app1 <- init(

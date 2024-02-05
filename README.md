@@ -28,14 +28,14 @@
 
 <!-- markdownlint-disable MD007 MD030 -->
 -   Data, which can be:
-    -    `CDISC` data, commonly used for clinical trial reporting
+    -    CDISC data, commonly used for clinical trial reporting
     -    Independent datasets, for example from a `data.frame`
     -    Related datasets, for example a set of `data.frames` with key columns to enable data joins
     -    `MultiAssayExperiment` objects which are `R` data structures for representing and analyzing multi-omics experiments
 -   `teal` modules:
-    -   `teal` modules are `shiny` modules built within the `teal` framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, many `teal` modules have been released and we recommend starting with modules found in the following packages:
-        -   [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/latest-tag/): general modules for exploring relational/independent/`CDISC` data
-        -   [`teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/latest-tag/): modules specific to `CDISC` data and clinical trial reporting
+    -   `teal modules` are `shiny` modules built within the `teal` framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, many `teal` modules have been released and we recommend starting with modules found in the following packages:
+        -   [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/latest-tag/): general modules for exploring relational/independent/CDISC data
+        -   [`teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/latest-tag/): modules specific to CDISC data and clinical trial reporting
         -   [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/latest-tag/): modules for analyzing `MultiAssayExperiment` objects
 
 <!-- markdownlint-enable MD007 MD030 -->
@@ -106,7 +106,7 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-![App recording](man/figures/readme_app.gif)
+![App recording](man/figures/readme_app.webp)
 
 Please see [`teal.gallery`](https://insightsengineering.github.io/teal.gallery) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog) to see examples of `teal` apps.
 
