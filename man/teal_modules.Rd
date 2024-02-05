@@ -7,6 +7,7 @@
 \alias{modules}
 \alias{format.teal_module}
 \alias{print.teal_module}
+\alias{format.teal_modules}
 \alias{print.teal_modules}
 \title{Create \code{teal_module} and \code{teal_modules} objects.}
 \usage{
@@ -33,17 +34,13 @@ modules(..., label = "root")
 
 \method{print}{teal_module}(x, ...)
 
+\method{format}{teal_modules}(x, indent = 0, ...)
+
 \method{print}{teal_modules}(x, ...)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
-For \code{modules()} defaults to \code{"root"}.
-Note that for \code{modules()} \code{label} comes after \code{...}, so it must be passed as a named argument,
-otherwise it will be captured by \code{...}.
-
-\code{"global_filters"} is reserved - see \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}.
-
-\code{"Report previewer"} is reserved - see \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}.}
+For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 
 \item{server}{(\code{function}) \code{shiny} module with following arguments:
 \itemize{
@@ -68,19 +65,21 @@ the \code{filters} argument.
 \item{datanames}{(\code{character}) A vector with \code{datanames} that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
-and the keyword \code{'all'} will show filters of all datasets. \code{datanames} also determines
+and the keyword \code{"all"} will show filters of all datasets. \code{datanames} also determines
 a subset of datasets which are appended to the \code{data} argument in server function.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the server function.}
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
 
-\item{...}{arguments passed to other methods.}
+\item{...}{\itemize{
+\item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) Objects to wrap into a tab.
+\item For \code{format()} and \code{print()}: Arguments passed to other methods.
+}}
 
-\item{x}{(\code{teal_modules})}
+\item{x}{(\code{teal_module} or \code{teal_modules}) Object to format/print.}
 
-\item{indent}{(\code{integer}) indent level;
-each nested \code{teal_modules} or \code{teal_module} is indented one level more}
+\item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
 }
 \value{
 \code{module()} returns an object of class \code{teal_module}.
@@ -102,6 +101,13 @@ Create a nested tab structure to embed modules in a \code{teal} application.
 \code{modules()} shapes the structure of a the application by organizing \code{teal_module} within the navigation panel.
 It wraps \code{teal_module} and \code{teal_modules} objects in a \code{teal_modules} object,
 which results in a nested structure corresponding to the nested tabs in the final application.
+
+Note that for \code{modules()} \code{label} comes after \code{...}, so it must be passed as a named argument,
+otherwise it will be captured by \code{...}.
+
+The labels \code{"global_filters"} and \code{"Report previewer"} are reserved
+because they are used by the \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}
+and the report previewer module \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}, respectively.
 }
 \examples{
 library(shiny)

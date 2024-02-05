@@ -8,18 +8,12 @@ example_module(label = "example teal module", datanames = "all")
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
-For \code{modules()} defaults to \code{"root"}.
-Note that for \code{modules()} \code{label} comes after \code{...}, so it must be passed as a named argument,
-otherwise it will be captured by \code{...}.
-
-\code{"global_filters"} is reserved - see \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}.
-
-\code{"Report previewer"} is reserved - see \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}.}
+For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 
 \item{datanames}{(\code{character}) A vector with \code{datanames} that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
-and the keyword \code{'all'} will show filters of all datasets. \code{datanames} also determines
+and the keyword \code{"all"} will show filters of all datasets. \code{datanames} also determines
 a subset of datasets which are appended to the \code{data} argument in server function.}
 }
 \value{

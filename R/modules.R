@@ -11,14 +11,15 @@
 #' It wraps `teal_module` and `teal_modules` objects in a `teal_modules` object,
 #' which results in a nested structure corresponding to the nested tabs in the final application.
 #'
+#' Note that for `modules()` `label` comes after `...`, so it must be passed as a named argument,
+#' otherwise it will be captured by `...`.
+#'
+#' The labels `"global_filters"` and `"Report previewer"` are reserved
+#' because they are used by the `mapping` argument of [teal_slices()]
+#' and the report previewer module [reporter_previewer_module()], respectively.
+#'
 #' @param label (`character(1)`) Label shown in the navigation item for the module or module group.
-#'   For `modules()` defaults to `"root"`.
-#'   Note that for `modules()` `label` comes after `...`, so it must be passed as a named argument,
-#'   otherwise it will be captured by `...`.
-#'
-#'   `"global_filters"` is reserved - see `mapping` argument of [teal_slices()].
-#'
-#'   `"Report previewer"` is reserved - see [reporter_previewer_module()].
+#'   For `modules()` defaults to `"root"`. See `Details`.
 #' @param server (`function`) `shiny` module with following arguments:
 #'  - `id` - `teal` will set proper `shiny` namespace for this module (see [shiny::moduleServer()]).
 #'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
@@ -35,13 +36,15 @@
 #' @param datanames (`character`) A vector with `datanames` that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed datasets. `NULL` will hide the filter panel,
-#'   and the keyword `'all'` will show filters of all datasets. `datanames` also determines
+#'   and the keyword `"all"` will show filters of all datasets. `datanames` also determines
 #'   a subset of datasets which are appended to the `data` argument in server function.
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
+#' @param x (`teal_module` or `teal_modules`) Object to format/print.
+#' @param indent (`integer(1)`) Indention level; each nested element is indented one level more.
 #' @param ...
-#' - For `modules()`: (`teal_module` or `teal_modules`) objects to wrap into a tab.
-#' - For `format()` and `print()`: arguments passed to other methods.
+#' - For `modules()`: (`teal_module` or `teal_modules`) Objects to wrap into a tab.
+#' - For `format()` and `print()`: Arguments passed to other methods.
 #'
 #' @return
 #' `module()` returns an object of class `teal_module`.
@@ -270,10 +273,6 @@ modules <- function(..., label = "root") {
 
 # printing methods ----
 
-#' Converts `teal_module` to a string
-#'
-#' @inheritParams format.teal_modules
-#' @param x (`teal_module`)
 #' @rdname teal_modules
 #' @export
 format.teal_module <- function(x, indent = 0, ...) { # nolint
@@ -281,9 +280,6 @@ format.teal_module <- function(x, indent = 0, ...) { # nolint
 }
 
 
-#' Prints `teal_module`
-#' @param x (`teal_module`)
-#' @param ... arguments passed to other methods.
 #' @rdname teal_modules
 #' @export
 print.teal_module <- function(x, ...) {
@@ -292,25 +288,19 @@ print.teal_module <- function(x, ...) {
 }
 
 
-#' Converts `teal_modules` to a string
-#'
-#' @param x (`teal_modules`) to print
-#' @param indent (`integer`) indent level;
-#'   each nested `teal_modules` or `teal_module` is indented one level more
-#' @return (`character`)
 #' @rdname teal_modules
 #' @export
 format.teal_modules <- function(x, indent = 0, ...) { # nolint
-  # argument must be `x` to be consistent with base method
-  paste(c(
-    paste0(rep(" ", indent), "+ ", x$label, "\n"),
-    unlist(lapply(x$children, format, indent = indent + 1, ...))
-  ), collapse = "")
+  paste(
+    c(
+      paste0(rep(" ", indent), "+ ", x$label, "\n"),
+      unlist(lapply(x$children, format, indent = indent + 1, ...))
+    ),
+    collapse = ""
+  )
 }
 
 
-#' Prints `teal_modules`
-#' @param x (`teal_modules`)
 #' @rdname teal_modules
 #' @export
 print.teal_modules <- print.teal_module

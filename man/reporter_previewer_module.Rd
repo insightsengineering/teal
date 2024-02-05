@@ -8,13 +8,7 @@ reporter_previewer_module(label = "Report previewer", server_args = list())
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
-For \code{modules()} defaults to \code{"root"}.
-Note that for \code{modules()} \code{label} comes after \code{...}, so it must be passed as a named argument,
-otherwise it will be captured by \code{...}.
-
-\code{"global_filters"} is reserved - see \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}.
-
-\code{"Report previewer"} is reserved - see \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}.}
+For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 
 \item{server_args}{(named \code{list})
 Arguments passed to \code{\link[teal.reporter:reporter_previewer_srv]{teal.reporter::reporter_previewer_srv()}}.}
