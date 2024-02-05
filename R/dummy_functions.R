@@ -2,7 +2,7 @@
 #'
 #' `r lifecycle::badge("experimental")`
 #'
-#' @inheritParams module
+#' @inheritParams teal_modules
 #' @return A `teal` module which can be included in the `modules` argument to [init()].
 #' @examples
 #' app <- init(
