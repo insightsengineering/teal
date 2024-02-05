@@ -298,7 +298,7 @@ print.teal_module <- function(x, ...) {
 #' @param indent (`integer`) indent level;
 #'   each nested `teal_modules` or `teal_module` is indented one level more
 #' @return (`character`)
-#' @rdname modules
+#' @rdname teal_modules
 #' @export
 format.teal_modules <- function(x, indent = 0, ...) { # nolint
   # argument must be `x` to be consistent with base method
