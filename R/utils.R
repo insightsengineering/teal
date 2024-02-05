@@ -322,10 +322,10 @@ flatten_modules <- function(modules) {
 #' @keywords internal
 #' @noRd
 defunction <- function(x) {
-  if (is.function(x)) {
-    deparse1(body(x))
-  } else if (is.list(x)) {
+  if (is.list(x)) {
     lapply(x, defunction)
+  } else if (is.function(x)) {
+    deparse1(body(x))
   } else {
     x
   }
