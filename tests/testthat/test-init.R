@@ -1,4 +1,4 @@
-example_module <- teal:::example_module
+example_module <- teal::example_module
 
 # data ----
 testthat::test_that("init data accepts teal_data object", {
@@ -14,7 +14,7 @@ testthat::test_that("init data accepts teal_data_module", {
   testthat::expect_no_error(
     init(
       data = teal_data_module(ui = function(id) div(), server = function(id) NULL),
-      modules = modules(teal:::example_module())
+      modules = modules(example_module())
     )
   )
 })
