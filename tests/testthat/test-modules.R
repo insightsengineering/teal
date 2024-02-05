@@ -509,6 +509,6 @@ testthat::test_that("format.teal_modules returns proper structure", {
 
   testthat::expect_equal(
     format(appended_mods),
-    "+ c\n + a\n + c\n + c"
+    "+ c\n + a\n + c\n + c\n"
   )
 })
