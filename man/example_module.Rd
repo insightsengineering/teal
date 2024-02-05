@@ -7,8 +7,14 @@
 example_module(label = "example teal module", datanames = "all")
 }
 \arguments{
-\item{label}{(\code{character(1)}) Label shown in the navigation item for the module. Any label possible except
-\code{"global_filters"} - read more in \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}.}
+\item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
+For \code{modules()} defaults to \code{"root"}.
+Note that for \code{modules()} \code{label} comes after \code{...}, so it must be passed as a named argument,
+otherwise it will be captured by \code{...}.
+
+\code{"global_filters"} is reserved - see \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}.
+
+\code{"Report previewer"} is reserved - see \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}.}
 
 \item{datanames}{(\code{character}) A vector with \code{datanames} that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
