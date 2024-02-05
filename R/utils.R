@@ -299,7 +299,22 @@ create_app_id <- function(data, modules) {
   data <- if (inherits(data, "teal_data")) {
     as.list(data@env)
   } else if (inherits(data, "teal_data_module")) {
-    body(data$server)
+    deparse1(body(data$server))
   }
+  modules <- lapply(modules, defunction)
+
   rlang::hash(list(data = data, modules = modules))
+}
+
+#' Go through list and extract bodies of encountered functions as string, recursively.
+#' @keywords internal
+#' @noRd
+defunction <- function(x) {
+  if (is.list(x)) {
+    lapply(x, defunction)
+  } else if (is.function(x)) {
+    deparse1(body(x))
+  } else {
+    x
+  }
 }
