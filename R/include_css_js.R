@@ -6,17 +6,16 @@
 #'
 #' @param pattern (`character`) pattern of files to be included
 #'
-#' @return HTML code that includes `CSS` files
+#' @return HTML code that includes `CSS` files.
 #' @keywords internal
 include_css_files <- function(pattern = "*") {
   css_files <- list.files(
     system.file("css", package = "teal", mustWork = TRUE),
     pattern = pattern, full.names = TRUE
   )
-  return(
-    shiny::singleton(
-      shiny::tags$head(lapply(css_files, shiny::includeCSS))
-    )
+
+  shiny::singleton(
+    shiny::tags$head(lapply(css_files, shiny::includeCSS))
   )
 }
 
@@ -29,19 +28,19 @@ include_css_files <- function(pattern = "*") {
 #' @param pattern (`character`) pattern of files to be included, passed to `system.file`
 #' @param except (`character`) vector of basename filenames to be excluded
 #'
-#' @return HTML code that includes `JS` files
+#' @return HTML code that includes `JS` files.
 #' @keywords internal
 include_js_files <- function(pattern = NULL, except = NULL) {
   checkmate::assert_character(except, min.len = 1, any.missing = FALSE, null.ok = TRUE)
   js_files <- list.files(system.file("js", package = "teal", mustWork = TRUE), pattern = pattern, full.names = TRUE)
   js_files <- js_files[!(basename(js_files) %in% except)] # no-op if except is NULL
 
-  return(singleton(lapply(js_files, includeScript)))
+  singleton(lapply(js_files, includeScript))
 }
 
 #' Run `JS` file from `/inst/js/` package directory
 #'
-#' This is triggered from the `server` to execute on the client
+#' This is triggered from the server to execute on the client
 #' rather than triggered directly on the client.
 #' Unlike `include_js_files` which includes `JavaScript` functions,
 #' the `run_js` actually executes `JavaScript` functions.
@@ -57,7 +56,7 @@ run_js_files <- function(files) {
   lapply(files, function(file) {
     shinyjs::runjs(paste0(readLines(system.file("js", file, package = "teal", mustWork = TRUE)), collapse = "\n"))
   })
-  return(invisible(NULL))
+  invisible(NULL)
 }
 
 #' Code to include `teal` `CSS` and `JavaScript` files
@@ -68,8 +67,16 @@ run_js_files <- function(files) {
 #' styles.
 #' Also initializes `shinyjs` so you can use it.
 #'
-#' Simply add `include_teal_css_js()` as one of the elements of the `ui`.
+#' Simply add `include_teal_css_js()` as one of the UI elements.
 #' @return A `shiny.tag.list`.
+#' @examples
+#' # use non-exported function from teal
+#' include_teal_css_js <- getFromNamespace("include_teal_css_js", "teal")
+#' shiny_ui <- tagList(
+#'   include_teal_css_js(),
+#'   p("Hello")
+#' )
+#'
 #' @keywords internal
 include_teal_css_js <- function() {
   tagList(

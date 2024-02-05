@@ -2,55 +2,52 @@
 % Please edit documentation in R/init.R
 \name{init}
 \alias{init}
-\title{Create the \code{server} and \code{ui} function for the \code{shiny} app}
+\title{Create the server and UI function for the \code{shiny} app}
 \usage{
 init(
   data,
   modules,
-  title = build_app_title(),
   filter = teal_slices(),
+  title = build_app_title(),
   header = tags$p(),
   footer = tags$p(),
   id = character(0)
 )
 }
 \arguments{
-\item{data}{(\code{teal_data}, \code{teal_data_module})\cr
-\code{teal_data} object as returned by \code{\link[teal.data:teal_data]{teal.data::teal_data()}} or \code{teal_data_module}.}
+\item{data}{(\code{teal_data} or \code{teal_data_module})
+For constructing the data object, refer to \code{\link[=teal_data]{teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.}
 
-\item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
+\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{title}{(\code{shiny.tag} or \code{character(1)})\cr
+\item{filter}{(\code{teal_slices})
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
+
+\item{title}{(\code{shiny.tag} or \code{character(1)})
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
-\item{filter}{(\code{teal_slices})\cr
-Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
-Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
-
-\item{header}{(\code{shiny.tag} or \code{character(1)}) \cr
+\item{header}{(\code{shiny.tag} or \code{character(1)})
 The header of the app.}
 
-\item{footer}{(\code{shiny.tag} or \code{character(1)})\cr
+\item{footer}{(\code{shiny.tag} or \code{character(1)})
 The footer of the app.}
 
-\item{id}{(\code{character})\cr
-module id to embed it, if provided,
-the \code{server} function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
-See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
-is then preferred to this function.}
+\item{id}{(\code{character})
+Optional string specifying the \code{shiny} for \code{teal} in cases it is used as a module
+rather than a standalone \code{shiny} app. This is a legacy feature.}
 }
 \value{
-named list with \code{server} and \code{ui} function
+Named list with server and UI function.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 End-users: This is the most important function for you to start a
 \code{teal} app that is composed out of \code{teal} modules.
 }
@@ -90,7 +87,6 @@ app <- init(
       datanames = "new_iris"
     )
   ),
-  title = "App title",
   filter = teal_slices(
     teal_slice(dataname = "new_iris", varname = "Species"),
     teal_slice(dataname = "new_iris", varname = "Sepal.Length"),
@@ -102,6 +98,7 @@ app <- init(
       global_filters = "new_mtcars cyl"
     )
   ),
+  title = "App title",
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2023")
 )

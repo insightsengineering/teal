@@ -10,7 +10,7 @@ include_css_files(pattern = "*")
 \item{pattern}{(\code{character}) pattern of files to be included}
 }
 \value{
-HTML code that includes \code{CSS} files
+HTML code that includes \code{CSS} files.
 }
 \description{
 \code{system.file} should not be used to access files in other packages, it does

@@ -7,13 +7,13 @@
 filter_manager_module_srv(id, module_fd, slices_global)
 }
 \arguments{
-\item{id}{(\code{character(1)})\cr
+\item{id}{(\code{character(1)})
 \code{shiny} module id.}
 
-\item{module_fd}{(\code{FilteredData})\cr
+\item{module_fd}{(\code{FilteredData})
 object to filter data in the teal-module}
 
-\item{slices_global}{(\code{reactiveVal})\cr
+\item{slices_global}{(\code{reactiveVal})
 stores \code{teal_slices} with all available filters; allows the following actions:
 \itemize{
 \item to disable/enable a specific filter in a module

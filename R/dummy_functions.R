@@ -1,8 +1,9 @@
 #' An example `teal` module
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("experimental")`
+#'
 #' @inheritParams module
-#' @return A `teal` module which can be included in the `modules` argument to [teal::init()].
+#' @return A `teal` module which can be included in the `modules` argument to [init()].
 #' @examples
 #' app <- init(
 #'   data = teal_data(IRIS = iris, MTCARS = mtcars),

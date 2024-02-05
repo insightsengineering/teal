@@ -27,9 +27,12 @@ additional arguments passed to other functions.}
 
 \item{include_varnames, exclude_varnames}{(\verb{named list}s of \code{character}) where list names
 match names of data sets and vector elements match variable names in respective data sets;
-specify which variables are allowed to be filtered; see \code{Details}}
+specify which variables are allowed to be filtered; see \code{Details}.}
 
-\item{count_type}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \emph{This is a new feature. Do kindly share your opinions.\cr}
+\item{count_type}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\emph{This is a new feature. Do kindly share your opinions on
+\href{https://github.com/insightsengineering/teal.slice/}{\code{teal.slice}'s GitHub repository}.}
+
 (\code{character(1)}) string specifying how observations are tallied by these filter states.
 Possible options:
 \itemize{
@@ -41,7 +44,7 @@ Please make sure that adding new filters doesn't fail on target platform before 
 
 \item{allow_add}{(\code{logical(1)}) logical flag specifying whether the user will be able to add new filters}
 
-\item{module_specific}{optional (\code{logical(1)})\cr
+\item{module_specific}{optional (\code{logical(1)})
 \itemize{
 \item \code{FALSE} (default) when one filter panel applied to all modules.
 All filters will be shared by all modules.
@@ -49,17 +52,21 @@ All filters will be shared by all modules.
 Modules can have different set of filters specified - see \code{mapping} argument.
 }}
 
-\item{mapping}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \emph{This is a new feature. Do kindly share your opinions.\cr}
-(\verb{named list})\cr
-Specifies which filters will be active in which modules on app start.
-Elements should contain character vector of \code{teal_slice} \code{id}s (see \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice()}}).
-Names of the list should correspond to \code{teal_module} \code{label} set in \code{\link[=module]{module()}} function.
-\code{id}s listed under \verb{"global_filters} will be active in all modules.
-If missing, all filters will be applied to all modules.
-If empty list, all filters will be available to all modules but will start inactive.
-If \code{module_specific} is \code{FALSE}, only \code{global_filters} will be active on start.}
+\item{mapping}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\emph{This is a new feature. Do kindly share your opinions on
+\href{https://github.com/insightsengineering/teal/}{\code{teal}'s GitHub repository}.}
 
-\item{app_id}{(\code{character(1)})\cr
+(named \code{list}) specifies which filters will be active in which modules on app start.
+Elements should contain character vector of \code{teal_slice} \code{id}s (see \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice}}).
+Names of the list should correspond to \code{teal_module} \code{label} set in \code{\link[=module]{module()}} function.
+\itemize{
+\item \code{id}s listed under \verb{"global_filters} will be active in all modules.
+\item If missing, all filters will be applied to all modules.
+\item If empty list, all filters will be available to all modules but will start inactive.
+\item If \code{module_specific} is \code{FALSE}, only \code{global_filters} will be active on start.
+}}
+
+\item{app_id}{(\code{character(1)})
 For internal use only, do not set manually.
 Added by \code{init} so that a \code{teal_slices} can be matched to the app in which it was used.
 Used for verifying snapshots uploaded from file. See \code{snapshot}.}
@@ -108,6 +115,6 @@ if (interactive()) {
 
 }
 \seealso{
-\code{\link[teal.slice:teal_slices]{teal.slice::teal_slices}}, \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice}}, \code{\link{slices_store}}
+\code{\link[teal.slice:teal_slices]{teal.slice::teal_slices}}, \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice}}, \code{\link[=slices_store]{slices_store()}}
 }
 \keyword{internal}

@@ -8,15 +8,15 @@ get_client_timezone(ns)
 }
 \arguments{
 \item{ns}{(\code{function}) namespace function passed from the \code{session} object in the
-\code{shiny} \code{server}. For \code{shiny} modules this will allow for proper name spacing of the
+\code{shiny} server. For \code{shiny} modules this will allow for proper name spacing of the
 registered input.}
 }
 \value{
-(\code{Shiny}) input variable accessible with \code{input$tz} which is a (\code{character})
+(\code{shiny}) input variable accessible with \code{input$tz} which is a (\code{character})
 string containing the timezone of the browser/client.
 }
 \description{
-Local timezone in the browser may differ from the system timezone from the \code{server}.
+Local timezone in the browser may differ from the system timezone from the server.
 This script can be run to register a \code{shiny} input which contains information about
 the timezone in the browser.
 }

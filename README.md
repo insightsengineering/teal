@@ -1,4 +1,4 @@
-# `teal`: Interactive exploratory data analysis with shiny web-applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%; max-height: 139px;"/></a  >
+# `teal`: Interactive Exploratory Data Analysis with `Shiny` Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%; max-height: 139px;"/></a  >
 
 <!-- start badges -->
 [![CRAN Version](https://www.r-pkg.org/badges/version/teal?color=green)](https://cran.r-project.org/package=teal)
@@ -24,14 +24,14 @@
 [![Open Issues](https://img.shields.io/github/issues-raw/insightsengineering/teal?color=red\&label=open%20issues)](https://github.com/insightsengineering/teal/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 <!-- end badges -->
 
-`teal` is a shiny-based interactive exploration framework for analyzing data. `teal` applications require app developers to specify:
+`teal` is a `shiny`-based interactive exploration framework for analyzing data. `teal` applications require app developers to specify:
 
 <!-- markdownlint-disable MD007 MD030 -->
 -   Data, which can be:
     -    CDISC data, commonly used for clinical trial reporting
     -    Independent datasets, for example from a `data.frame`
     -    Related datasets, for example a set of `data.frames` with key columns to enable data joins
-    -    `MultiAssayExperiment` objects which are R data structures for representing and analyzing multi-omics experiments
+    -    `MultiAssayExperiment` objects which are `R` data structures for representing and analyzing multi-omics experiments
 -   `teal` modules:
     -   `teal modules` are `shiny` modules built within the `teal` framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, many `teal` modules have been released and we recommend starting with modules found in the following packages:
         -   [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/latest-tag/): general modules for exploring relational/independent/CDISC data

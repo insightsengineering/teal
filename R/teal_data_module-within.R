@@ -15,9 +15,9 @@
 #' @examples
 #' within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 #'
-#' # in an app, use input-derived value in the expression
-#' within(tdm, dataset1 <- subset(dataset1, Species == species), species = input$species)
-#'
+#' # use additional parameter for expression value substitution.
+#' valid_species <- "versicolor"
+#' within(tdm, dataset1 <- subset(dataset1, Species %in% species), species = valid_species)
 #' @include teal_data_module.R
 #' @name within
 #' @rdname teal_data_module

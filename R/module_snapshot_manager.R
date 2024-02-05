@@ -22,7 +22,7 @@
 #' Snapshots are stored in a `reactiveVal` as a named list.
 #' The first snapshot is the initial state of the application and the user can add a snapshot whenever they see fit.
 #'
-#' For every snapshot except the initial one, a piece of `ui` is generated that contains
+#' For every snapshot except the initial one, a piece of UI is generated that contains
 #' the snapshot name, a select button to restore that snapshot, and a save button to save it to a file.
 #' The initial snapshot is restored by a separate "reset" button.
 #' It cannot be saved directly but a user is welcome to capture the initial state as a snapshot and save that.
@@ -40,7 +40,7 @@
 #' The snapshot contains the `mapping` attribute of the initial application state
 #' (or one that has been restored), which may not reflect the current one,
 #' so `mapping_matrix` is transformed to obtain the current mapping, i.e. a list that,
-#' when passed to the `mapping` argument of [`teal::teal_slices`], would result in the current mapping.
+#' when passed to the `mapping` argument of [teal_slices()], would result in the current mapping.
 #' This is substituted as the snapshot's `mapping` attribute and the snapshot is added to the snapshot list.
 #'
 #' To restore app state, a snapshot is retrieved from storage and rebuilt into a `teal_slices` object.
@@ -49,7 +49,7 @@
 #' The snapshot is then set as the current content of `slices_global`.
 #'
 #' To save a snapshot, the snapshot is retrieved and reassembled just like for restoring,
-#' and then saved to file with [`slices_store`].
+#' and then saved to file with [slices_store()].
 #'
 #' When a snapshot is uploaded, it will first be added to storage just like a newly created one,
 #' and then used to restore app state much like a snapshot taken from storage.
@@ -71,7 +71,7 @@
 #' @param mapping_matrix (`reactive`) that contains a `data.frame` representation
 #'                       of the mapping of filter state ids (rows) to modules labels (columns);
 #'                       all columns are `logical` vectors
-#' @param filtered_data_list non-nested (`named list`) that contains `FilteredData` objects
+#' @param filtered_data_list non-nested (named `list`) that contains `FilteredData` objects
 #'
 #' @return Nothing is returned.
 #'
@@ -253,7 +253,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
     })
 
     # Build snapshot table ----
-    # Create `ui` elements and `server` logic for the snapshot table.
+    # Create UI elements and server logic for the snapshot table.
     # Observers must be tracked to avoid duplication and excess reactivity.
     # Remaining elements are tracked likewise for consistency and a slight speed margin.
     observers <- reactiveValues()
@@ -328,16 +328,13 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
   })
 }
 
-
-
-
 ### utility functions ----
 
 #' Explicitly enumerate global filters.
 #'
 #' Transform module mapping such that global filters are explicitly specified for every module.
 #'
-#' @param mapping (`named list`) as stored in mapping parameter of `teal_slices`
+#' @param mapping (named `list`) as stored in mapping parameter of `teal_slices`
 #' @param module_names (`character`) vector containing names of all modules in the app
 #' @return A `named_list` with one element per module, each element containing all filters applied to that module.
 #' @keywords internal
@@ -356,7 +353,7 @@ unfold_mapping <- function(mapping, module_names) {
 #'
 #' @param mapping_matrix (`data.frame`) of logical vectors where
 #'                       columns represent modules and row represent `teal_slice`s
-#' @return `named list` like that in the `mapping` attribute of a `teal_slices` object.
+#' @return Named `list` like that in the `mapping` attribute of a `teal_slices` object.
 #' @keywords internal
 #'
 matrix_to_mapping <- function(mapping_matrix) {

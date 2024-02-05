@@ -55,7 +55,7 @@ Returns a \code{TealSlicesBlock} object with no content and no parameters.
 }
 
 \subsection{Returns}{
-\code{TealSlicesBlock}
+Object of class \code{TealSlicesBlock}, invisibly.
 }
 }
 \if{html}{\out{<hr>}}
@@ -79,7 +79,7 @@ When \code{selected} field in \code{teal_slice} object is a range, then it is di
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-invisibly self
+\code{self}, invisibly.
 }
 }
 \if{html}{\out{<hr>}}
@@ -94,13 +94,13 @@ Create the \code{RcodeBlock} from a list.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{\verb{named list} with two fields \code{c("text", "params")}.
+\item{\code{x}}{(named \code{list}) with two fields \code{c("text", "params")}.
 Use the \code{get_available_params} method to get all possible parameters.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-invisibly self
+\code{self}, invisibly.
 }
 }
 \if{html}{\out{<hr>}}
@@ -113,7 +113,7 @@ Convert the \code{RcodeBlock} to a list.
 }
 
 \subsection{Returns}{
-\verb{named list} with a text and \code{params}.
+named \code{list} with a text and \code{params}.
 }
 }
 \if{html}{\out{<hr>}}
