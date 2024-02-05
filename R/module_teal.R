@@ -1,61 +1,70 @@
 # This module is the main teal module that puts everything together.
 
-#' teal main app module
+#' `teal` main app module
 #'
-#' This is the main teal app that puts everything together.
+#' This is the main `teal` app that puts everything together.
 #'
 #' It displays the splash UI which is used to fetch the data, possibly
 #' prompting for a password input to fetch the data. Once the data is ready,
-#' the splash screen is replaced by the actual teal UI that is tabsetted and
+#' the splash screen is replaced by the actual `teal` UI that is tabsetted and
 #' has a filter panel with `datanames` that are relevant for the current tab.
 #' Nested tabs are possible, but we limit it to two nesting levels for reasons
 #' of clarity of the UI.
 #'
 #' The splash screen functionality can also be used
 #' for non-delayed data which takes time to load into memory, avoiding
-#' Shiny session timeouts.
+#' `shiny` session timeouts.
 #'
 #' Server evaluates the `teal_data_rv` (delayed data mechanism) and creates the
 #' `datasets` object that is shared across modules.
 #' Once it is ready and non-`NULL`, the splash screen is replaced by the
-#' main teal UI that depends on the data.
+#' main `teal` UI that depends on the data.
 #' The currently active tab is tracked and the right filter panel
 #' updates the displayed datasets to filter for according to the active `datanames`
 #' of the tab.
 #'
-#' It is written as a Shiny module so it can be added into other apps as well.
+#' It is written as a `shiny` module so it can be added into other apps as well.
 #'
 #' @name module_teal
 #'
-#' @inheritParams ui_teal_with_splash
+#' @inheritParams module_teal_with_splash
 #'
-#' @param splash_ui (`shiny.tag`)\cr UI to display initially,
-#'   can be a splash screen or a Shiny module UI. For the latter, see
+#' @param splash_ui (`shiny.tag`) UI to display initially,
+#'   can be a splash screen or a `shiny` module UI. For the latter, see
 #'   [init()] about how to call the corresponding server function.
 #'
-#' @param teal_data_rv (`reactive`)\cr
+#' @param teal_data_rv (`reactive`)
 #'   returns the `teal_data`, only evaluated once, `NULL` value is ignored
 #'
 #' @return
-#' `ui_teal` returns `HTML` for Shiny module UI.
-#' `srv_teal` returns `reactive` which returns the currently active module.
+#' Returns a `reactive` expression which returns the currently active module.
+#'
+#' @examples
+#' # use non-exported function from teal
+#' ui_teal <- getFromNamespace("ui_teal", "teal")
+#' srv_teal <- getFromNamespace("srv_teal", "teal")
+#'
+#' mods <- modules(
+#'   label = "example app",
+#'   example_module(label = "example dataset", datanames = c("iris", "mtcars"))
+#' )
+#'
+#' teal_data_rv <- reactive(teal_data(iris = iris, mtcars = mtcars))
+#'
+#' ui <- function() {
+#'   ui_teal("dummy")
+#' }
+#'
+#' server <- function(input, output, session) {
+#'   active_module <- srv_teal(id = "dummy", modules = mods, teal_data_rv = teal_data_rv)
+#' }
+#'
+#' if (interactive()) {
+#'   shinyApp(ui, server)
+#' }
 #'
 #' @keywords internal
 #'
-#' @examples
-#' mods <- teal:::example_modules()
-#' teal_data_rv <- reactive(teal:::example_cdisc_data())
-#' app <- shinyApp(
-#'   ui = function() {
-#'     teal:::ui_teal("dummy")
-#'   },
-#'   server = function(input, output, session) {
-#'     active_module <- teal:::srv_teal(id = "dummy", modules = mods, teal_data_rv = teal_data_rv)
-#'   }
-#' )
-#' if (interactive()) {
-#'   shinyApp(app$ui, app$server)
-#' }
 NULL
 
 #' @rdname module_teal
@@ -103,7 +112,7 @@ ui_teal <- function(id,
     div(splash_ui)
   )
 
-  # show busy icon when shiny session is busy computing stuff
+  # show busy icon when `shiny` session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 #nolint
   shiny_busy_message_panel <- conditionalPanel(
     condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint
@@ -115,7 +124,7 @@ ui_teal <- function(id,
     )
   )
 
-  res <- fluidPage(
+  fluidPage(
     title = title,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
@@ -132,7 +141,6 @@ ui_teal <- function(id,
       )
     )
   )
-  return(res)
 }
 
 
@@ -257,14 +265,13 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
 
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)
-      active_module <- srv_tabs_with_filters(
+      srv_tabs_with_filters(
         id = "main_ui",
         datasets = datasets,
         modules = modules,
         reporter = reporter,
         filter = filter
       )
-      return(active_module)
     })
   })
 }

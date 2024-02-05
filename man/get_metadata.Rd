@@ -13,12 +13,12 @@ get_metadata(data, dataname)
 \method{get_metadata}{default}(data, dataname)
 }
 \arguments{
-\item{data}{\code{tdata} - object to extract the data from}
+\item{data}{(\code{tdata} - object) to extract the data from}
 
-\item{dataname}{\code{character(1)} the dataset name whose metadata is requested}
+\item{dataname}{(\code{character(1)}) the dataset name whose metadata is requested}
 }
 \value{
-Either list of metadata or NULL if no metadata
+Either list of metadata or NULL if no metadata.
 }
 \description{
 Function to get metadata from a \code{tdata} object
