@@ -10,6 +10,6 @@ get_rcode_libraries()
 Character object contain code.
 }
 \description{
-Function to create multiple library calls out of current session info to make reproducible code works.
+Function to create multiple library calls out of current session info to ensure reproducible code works.
 }
 \keyword{internal}

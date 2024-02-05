@@ -39,7 +39,7 @@ The header of the app.}
 The footer of the app.}
 
 \item{id}{(\code{character})
-Optional string specifying the \code{shiny} for \code{teal} in cases it is used as a module
+Optional string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 }
 \value{
@@ -49,7 +49,7 @@ Named list with server and UI function.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 End-users: This is the most important function for you to start a
-\code{teal} app that is composed out of \code{teal} modules.
+\code{teal} app that is composed of \code{teal} modules.
 }
 \details{
 When initializing the \code{teal} app, if \code{datanames} are not set for the \code{teal_data} object,

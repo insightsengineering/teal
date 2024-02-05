@@ -18,7 +18,7 @@ filter_manager_srv(id, filtered_data_list, filter)
 A list, possibly nested, of \code{FilteredData} objects.
 Each \code{FilteredData} will be served to one module in the \code{teal} application.
 The structure of the list must reflect the nesting of modules in tabs
-and names of the list must be the same as labels of their respective modules.}
+and the names of the list must match the labels of their respective modules.}
 
 \item{filter}{(\code{teal_slices})
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
@@ -27,10 +27,10 @@ Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 A list of \code{reactive}s, each holding a \code{teal_slices}, as returned by \code{filter_manager_module_srv}.
 }
 \description{
-Oversee filter states in the whole application.
+Oversee filter states across the entire application.
 }
 \details{
-This module observes the changes of the filters in each \code{FilteredData} object
+This module observes changes in the filters of each \code{FilteredData} object
 and keeps track of all filters used. A mapping of filters to modules
 is kept in the \code{mapping_matrix} object (which is actually a \code{data.frame})
 that tracks which filters (rows) are active in which modules (columns).

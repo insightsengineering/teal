@@ -1,8 +1,8 @@
 #' Manage multiple `FilteredData` objects
 #'
-#' Oversee filter states in the whole application.
+#' Oversee filter states across the entire application.
 #'
-#' This module observes the changes of the filters in each `FilteredData` object
+#' This module observes changes in the filters of each `FilteredData` object
 #' and keeps track of all filters used. A mapping of filters to modules
 #' is kept in the `mapping_matrix` object (which is actually a `data.frame`)
 #' that tracks which filters (rows) are active in which modules (columns).
@@ -15,7 +15,7 @@
 #'  A list, possibly nested, of `FilteredData` objects.
 #'  Each `FilteredData` will be served to one module in the `teal` application.
 #'  The structure of the list must reflect the nesting of modules in tabs
-#'  and names of the list must be the same as labels of their respective modules.
+#'  and the names of the list must match the labels of their respective modules.
 #' @inheritParams init
 #' @return A list of `reactive`s, each holding a `teal_slices`, as returned by `filter_manager_module_srv`.
 #' @keywords internal
@@ -24,7 +24,7 @@ NULL
 
 #' Filter manager modal
 #'
-#' Opens modal containing the filter manager UI.
+#' Opens a modal containing the filter manager UI.
 #'
 #' @name module_filter_manager_modal
 #' @inheritParams module_filter_manager
@@ -121,7 +121,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 
     is_module_specific <- isTRUE(attr(filter, "module_specific"))
 
-    # Create global list of slices.
+    # Create a global list of slices.
     # Contains all available teal_slice objects available to all modules.
     # Passed whole to instances of FilteredData used for individual modules.
     # Down there a subset that pertains to the data sets used in that module is applied and displayed.
@@ -145,7 +145,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
         flatten_nested(filtered_data_list)
       }
 
-    # Create mapping fo filters to modules in matrix form (presented as data.frame).
+    # Create mapping of filters to modules in matrix form (presented as data.frame).
     # Modules get NAs for filters that cannot be set for them.
     mapping_matrix <- reactive({
       state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
@@ -198,7 +198,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 
 #' Module specific filter manager
 #'
-#' Track filter states in single module.
+#' Tracks filter states in a single module.
 #'
 #' This module tracks the state of a single `FilteredData` object and global `teal_slices`
 #' and updates both objects as necessary. Filter states added in different modules
