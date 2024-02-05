@@ -249,7 +249,7 @@ function call.
 
 ### Enhancements
 * Released `snowflake` connection and connectors.
-* Changed ordering of datasets to be more intuitive (topologically first for `CDISC` datasets only and then according to input datasets order).
+* Changed ordering of datasets to be more intuitive (topologically first for CDISC datasets only and then according to input datasets order).
 * When closing a `teal` app (ending a user `shiny` session), all `DataConnection`s will now try to close their connections.
 * Added `ADHY` keys to configuration file.
 * Extended the `filter_spec` function: the parameter `choices` is no longer mandatory (the function will take all possible choices by default) and the `vars` parameter additionally accepts the `choices_selected` and allows to change the variables for filtering using the UI elements in the encoding panel.

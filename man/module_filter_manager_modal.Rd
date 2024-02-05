@@ -18,13 +18,13 @@ filter_manager_modal_srv(id, filtered_data_list, filter)
 A list, possibly nested, of \code{FilteredData} objects.
 Each \code{FilteredData} will be served to one module in the \code{teal} application.
 The structure of the list must reflect the nesting of modules in tabs
-and names of the list must be the same as labels of their respective modules.}
+and the names of the list must match the labels of their respective modules.}
 
 \item{filter}{(\code{teal_slices})
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \description{
-Opens modal containing the filter manager UI.
+Opens a modal containing the filter manager UI.
 }
 \examples{
 # use non-exported function from teal
