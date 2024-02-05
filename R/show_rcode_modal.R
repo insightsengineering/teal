@@ -34,6 +34,4 @@ show_rcode_modal <- function(title = NULL, rcode, session = getDefaultReactiveDo
     size = "l",
     easyClose = TRUE
   ))
-
-  return(NULL)
 }

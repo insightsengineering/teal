@@ -16,7 +16,7 @@ more details.}
 \item{depth}{optional, integer determining current depth level}
 }
 \value{
-depth level for given module
+Depth level for given module.
 }
 \description{
 Depth starts at 0, so a single \code{teal.module} has depth 0.

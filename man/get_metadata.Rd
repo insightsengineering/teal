@@ -18,7 +18,7 @@ get_metadata(data, dataname)
 \item{dataname}{(\code{character(1)}) the dataset name whose metadata is requested}
 }
 \value{
-Either list of metadata or NULL if no metadata
+Either list of metadata or NULL if no metadata.
 }
 \description{
 Function to get metadata from a \code{tdata} object

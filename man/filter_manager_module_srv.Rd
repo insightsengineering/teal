@@ -25,7 +25,7 @@ stores \code{teal_slices} with all available filters; allows the following actio
 A \code{reactive} expression containing the slices active in this module.
 }
 \description{
-Track filter states in single module.
+Tracks filter states in a single module.
 }
 \details{
 This module tracks the state of a single \code{FilteredData} object and global \code{teal_slices}

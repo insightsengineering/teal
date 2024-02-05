@@ -28,9 +28,9 @@ For example \code{modules("lab", ...)} should be converted to \code{modules(labe
 each nested \code{teal_modules} or \code{teal_module} is indented one level more}
 }
 \value{
-object of class \code{teal_modules}. Object contains following fields
+A \code{teal_modules} object which contains following fields
 \itemize{
-\item \code{label}: taken from the \code{label} argument
+\item \code{label}: taken from the \code{label} argument.
 \item \code{children}: a list containing objects passed in \code{...}. List elements are named after
 their \code{label} attribute converted to a valid \code{shiny} id.
 }

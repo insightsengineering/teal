@@ -37,7 +37,7 @@ Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 A \code{tagList} of The main menu, place holders for filters and
-place holders for the \code{teal} modules
+place holders for the \code{teal} modules.
 }
 \description{
 The \link{ui_nested_tabs} function returns a nested tabbed UI corresponding

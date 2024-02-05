@@ -124,7 +124,7 @@ ui_teal <- function(id,
     )
   )
 
-  res <- fluidPage(
+  fluidPage(
     title = title,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
@@ -141,7 +141,6 @@ ui_teal <- function(id,
       )
     )
   )
-  return(res)
 }
 
 
@@ -266,14 +265,13 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
 
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)
-      active_module <- srv_tabs_with_filters(
+      srv_tabs_with_filters(
         id = "main_ui",
         datasets = datasets,
         modules = modules,
         reporter = reporter,
         filter = filter
       )
-      return(active_module)
     })
   })
 }

@@ -24,7 +24,7 @@ datasets.}
 Each element of these list should be atomic and length one.}
 }
 \value{
-A \code{tdata} object
+A \code{tdata} object.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}

@@ -15,10 +15,14 @@ repos:
       - id: roxygenize
         name: Regenerate package documentation
         additional_dependencies:
+          - davidgohel/flextable # Error: package 'flextable' is not available
+          - davidgohel/gdtools # for flextable
           - checkmate
+          - jsonlite
           - lifecycle
           - logger
           - magrittr
+          - methods
           - rlang
           - shiny
           - shinyjs

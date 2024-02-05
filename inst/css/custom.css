@@ -72,3 +72,8 @@ footer {
 #shiny-modal:has(> .modal-dialog > .modal-content > #landingpopup) {
   backdrop-filter: blur(10px);
 }
+
+body:not(.modal-open) {
+  padding-right: 0 !important;
+  overflow: auto !important;
+}

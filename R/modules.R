@@ -19,8 +19,8 @@
 #'
 #' @export
 #'
-#' @return object of class `teal_modules`. Object contains following fields
-#' - `label`: taken from the `label` argument
+#' @return A `teal_modules` object which contains following fields
+#' - `label`: taken from the `label` argument.
 #' - `children`: a list containing objects passed in `...`. List elements are named after
 #' their `label` attribute converted to a valid `shiny` id.
 #' @examples
@@ -98,7 +98,7 @@ modules <- function(..., label = "root") {
 #' @keywords internal
 #' @param modules (`teal_modules`)
 #' @param module (`teal_module`) object to be appended onto the children of `modules`
-#' @return `teal_modules` object with `module` appended
+#' @return A `teal_modules` object with `module` appended.
 append_module <- function(modules, module) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(module, "teal_module")
@@ -116,8 +116,8 @@ append_module <- function(modules, module) {
 #' @param class The class name of `teal_module` to be extracted or dropped.
 #' @keywords internal
 #' @return
-#' For `extract_module`, a `teal_module` of class `class` or `teal_modules` containing modules of class `class`.
-#' For `drop_module`, the opposite, which is all `teal_modules` of  class other than `class`.
+#' - For `extract_module`, a `teal_module` of class `class` or `teal_modules` containing modules of class `class`.
+#' - For `drop_module`, the opposite, which is all `teal_modules` of  class other than `class`.
 #' @rdname module_management
 extract_module <- function(modules, class) {
   if (inherits(modules, class)) {
@@ -149,7 +149,7 @@ drop_module <- function(modules, class) {
 #'
 #' @param modules (`teal_module` or `teal_modules`) object
 #' @param arg (`character(1)`) names of the arguments to be checked against formals of `teal` modules.
-#' @return `logical` whether the object makes use of `arg`
+#' @return `logical` whether the object makes use of `arg`.
 #' @rdname is_arg_used
 #' @keywords internal
 is_arg_used <- function(modules, arg) {
@@ -197,7 +197,7 @@ is_arg_used <- function(modules, arg) {
 #' @param ui_args (named `list`) with additional arguments passed on to the
 #'   UI function.
 #'
-#' @return object of class `teal_module`.
+#' @return Object of class `teal_module`.
 #' @export
 #' @examples
 #' library(shiny)
@@ -362,7 +362,7 @@ module <- function(label = "module",
 #' @inheritParams init
 #' @param depth optional, integer determining current depth level
 #'
-#' @return depth level for given module
+#' @return Depth level for given module.
 #' @examples
 #' # use non-exported function from teal
 #' modules_depth <- getFromNamespace("modules_depth", "teal")

@@ -76,9 +76,9 @@ When set to \code{TRUE}, a filter panel is called inside of each module tab.}
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
 }
 \value{
-depending on class of \code{modules}, \code{ui_nested_tabs} returns:
+depending on the class of \code{modules}, \code{ui_nested_tabs} returns:
 \itemize{
-\item \code{teal_module}: instantiated UI of the module
+\item \code{teal_module}: instantiated UI of the module.
 \item \code{teal_modules}: \code{tabsetPanel} with each tab corresponding to recursively
 calling this function on it.
 \code{srv_nested_tabs} returns a reactive which returns the active module that corresponds to the selected tab.
@@ -99,7 +99,7 @@ isolated context (with respect to reactivity)
 
 \section{\code{srv_nested_tabs}}{
 
-This module calls recursively all elements of the \code{modules} returns one which
+This module calls recursively all elements of the \code{modules} and returns the one which
 is currently active.
 \itemize{
 \item \code{teal_module} returns self as a active module.

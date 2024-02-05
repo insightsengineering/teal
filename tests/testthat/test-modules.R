@@ -376,12 +376,12 @@ testthat::test_that("modules_depth increases depth by 1 for each teal_modules", 
 
 # is_arg_used -----
 get_srv_and_ui <- function() {
-  return(list(
+  list(
     server_fun = function(id, datasets) {}, # nolint
     ui_fun = function(id, ...) {
       tags$p(paste0("id: ", id))
     }
-  ))
+  )
 }
 
 testthat::test_that("is_arg_used throws error if object is not teal_module or teal_modules", {

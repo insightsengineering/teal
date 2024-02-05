@@ -353,7 +353,7 @@ unfold_mapping <- function(mapping, module_names) {
 #'
 #' @param mapping_matrix (`data.frame`) of logical vectors where
 #'                       columns represent modules and row represent `teal_slice`s
-#' @return named `list` like that in the `mapping` attribute of a `teal_slices` object.
+#' @return Named `list` like that in the `mapping` attribute of a `teal_slices` object.
 #' @keywords internal
 #'
 matrix_to_mapping <- function(mapping_matrix) {

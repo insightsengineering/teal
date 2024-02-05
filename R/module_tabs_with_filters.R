@@ -22,7 +22,7 @@
 #' @param reporter (`Reporter`) object from `teal.reporter`
 #'
 #' @return A `tagList` of The main menu, place holders for filters and
-#'   place holders for the `teal` modules
+#'   place holders for the `teal` modules.
 #'
 #' @examples
 #' # use non-exported function from teal
@@ -185,6 +185,7 @@ srv_tabs_with_filters <- function(id,
 
     showNotification("Data loaded - App fully started up")
     logger::log_trace("srv_tabs_with_filters initialized the module")
-    return(active_module)
+
+    active_module
   })
 }
