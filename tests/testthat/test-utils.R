@@ -128,11 +128,7 @@ testthat::test_that("create_app_id: 'modules' accepts modules", {
 })
 
 testthat::test_that("create_app_id returns a character string", {
-  testthat::expect_true(
-    checkmate::test_string(
-      create_app_id(teal.data::teal_data(), modules(example_module()))
-    )
-  )
+  checkmate::expect_string(create_app_id(teal.data::teal_data(), modules(example_module())))
 })
 
 testthat::test_that("create_app_id returns different hash for different data", {
@@ -149,11 +145,7 @@ testthat::test_that("create_app_id returns different hash for different modules"
 
 ## defunction ----
 testthat::test_that("defunction returns a string when passed a function", {
-  testthat::expect_true(
-    checkmate::test_string(
-      defunction(init)
-    )
-  )
+  checkmate::expect_string(defunction(init))
 })
 
 testthat::test_that("defunction returns non-function atomic as is", {
