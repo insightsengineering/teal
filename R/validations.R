@@ -79,7 +79,7 @@ validate_has_data <- function(x,
 #' This function is a wrapper for `shiny::validate`.
 #'
 #' @param x (`data.frame`)
-#' @param key a vector of ID variables from `x` that identify unique records
+#' @param key (`character`) Vector of ID variables from `x` that identify unique records.
 #'
 #' @export
 #'
