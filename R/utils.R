@@ -267,8 +267,7 @@ validate_app_title_tag <- function(shiny_tag) {
 #' @export
 build_app_title <- function(
     title = "teal app",
-    favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png"
-) {
+    favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_string(favicon, null.ok = TRUE)
   tags$head(
