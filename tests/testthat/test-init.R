@@ -1,4 +1,3 @@
-
 # data ----
 testthat::test_that("init data accepts teal_data object", {
   testthat::expect_no_error(
