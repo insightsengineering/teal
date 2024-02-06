@@ -12,7 +12,7 @@
 #' @param data A named `list` of `data.frames` (or `MultiAssayExperiment`)
 #'  which optionally can be `reactive`.
 #'   Inside this object all of these items will be made `reactive`.
-#' @param code A `character` (or `reactive` which evaluates to a `character`) containing
+#' @param code (`character` or `reactive` which evaluates to a `character`) containing
 #'   the code used to generate the data. This should be `reactive` if the code is changing
 #'   during a reactive context (e.g. if filtering changes the code). Inside this
 #'   object `code` will be made reactive
