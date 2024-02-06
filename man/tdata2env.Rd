@@ -10,10 +10,10 @@ tdata2env(data)
 \item{data}{(\code{tdata}) object}
 }
 \value{
-an \code{environment} object.
+An \code{environment}.
 }
 \description{
-Any \code{reactives} inside \code{tdata} are first evaluated.
+Any \code{reactive} expressions inside \code{tdata} are evaluated first.
 }
 \examples{
 

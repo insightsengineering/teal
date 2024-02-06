@@ -8,7 +8,7 @@
 new_tdata(data, code = "", join_keys = NULL, metadata = NULL)
 }
 \arguments{
-\item{data}{A named \code{list} of \code{data.frames} (or \code{MultiAssayExperiment})
+\item{data}{(named \code{list}) A list of \code{data.frame} or \code{MultiAssayExperiment} objects,
 which optionally can be \code{reactive}.
 Inside this object all of these items will be made \code{reactive}.}
 

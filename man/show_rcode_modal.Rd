@@ -8,7 +8,7 @@ show_rcode_modal(title = NULL, rcode, session = getDefaultReactiveDomain())
 }
 \arguments{
 \item{title}{(\code{character(1)})
-Title of the modal, displayed in the first comment of the \code{R}-code.}
+Title of the modal, displayed in the first comment of the \code{R} code.}
 
 \item{rcode}{(\code{character})
 vector with \code{R} code to show inside the modal.}

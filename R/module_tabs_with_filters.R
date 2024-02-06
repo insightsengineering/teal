@@ -21,8 +21,8 @@
 #'   When filter is not module-specific then list contains the same object in all elements.
 #' @param reporter (`Reporter`) object from `teal.reporter`
 #'
-#' @return A `tagList` of The main menu, place holders for filters and
-#'   place holders for the `teal` modules.
+#' @return
+#' A `shiny.tag.list` containing the main menu, placeholders for filters and placeholders for the `teal` modules.
 #'
 #' @examples
 #' # use non-exported function from teal

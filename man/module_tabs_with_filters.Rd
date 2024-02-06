@@ -36,8 +36,7 @@ Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
 }
 \value{
-A \code{tagList} of The main menu, place holders for filters and
-place holders for the \code{teal} modules.
+A \code{shiny.tag.list} containing the main menu, placeholders for filters and placeholders for the \code{teal} modules.
 }
 \description{
 The \link{ui_nested_tabs} function returns a nested tabbed UI corresponding
