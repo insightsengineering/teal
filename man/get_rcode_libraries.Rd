@@ -7,9 +7,9 @@
 get_rcode_libraries()
 }
 \value{
-Character object contain code
+Character vector of \verb{library(<package>)} calls.
 }
 \description{
-Function to create multiple library calls out of current session info to make reproducible code works.
+Function to create multiple library calls out of current session info to ensure reproducible code works.
 }
 \keyword{internal}

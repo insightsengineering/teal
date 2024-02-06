@@ -1,14 +1,14 @@
-#' Get Client Timezone
+#' Get client timezone
 #'
 #' Local timezone in the browser may differ from the system timezone from the server.
-#'   This script can be run to register a shiny input which contains information about
+#'   This script can be run to register a `shiny` input which contains information about
 #'   the timezone in the browser.
 #'
 #' @param ns (`function`) namespace function passed from the `session` object in the
-#'   Shiny server. For Shiny modules this will allow for proper name spacing of the
+#'   `shiny` server. For `shiny` modules this will allow for proper name spacing of the
 #'   registered input.
 #'
-#' @return (`Shiny`) input variable accessible with `input$tz` which is a (`character`)
+#' @return (`shiny`) input variable accessible with `input$tz` which is a (`character`)
 #'  string containing the timezone of the browser/client.
 #' @keywords internal
 get_client_timezone <- function(ns) {
@@ -17,10 +17,11 @@ get_client_timezone <- function(ns) {
     ns("timezone")
   )
   shinyjs::runjs(script) # function does not return anything
-  return(invisible(NULL))
+  invisible(NULL)
 }
 
 #' Resolve the expected bootstrap theme
+#' @noRd
 #' @keywords internal
 get_teal_bs_theme <- function() {
   bs_theme <- getOption("teal.bs_theme")
@@ -34,6 +35,9 @@ get_teal_bs_theme <- function() {
   }
 }
 
+#' Return parentnames along with datanames.
+#' @noRd
+#' @keywords internal
 include_parent_datanames <- function(dataname, join_keys) {
   parents <- character(0)
   for (i in dataname) {
@@ -44,17 +48,16 @@ include_parent_datanames <- function(dataname, join_keys) {
     }
   }
 
-  return(unique(c(parents, dataname)))
+  unique(c(parents, dataname))
 }
-
-
 
 #' Create a `FilteredData`
 #'
-#' Create a `FilteredData` object from a `teal_data` object
+#' Create a `FilteredData` object from a `teal_data` object.
+#'
 #' @param x (`teal_data`) object
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
-#' @return (`FilteredData`) object
+#' @return A `FilteredData` object.
 #' @keywords internal
 teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   checkmate::assert_class(x, "teal_data")
@@ -70,7 +73,7 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   ans
 }
 
-#' Template Function for `TealReportCard` Creation and Customization
+#' Template function for `TealReportCard` creation and customization
 #'
 #' This function generates a report card with a title,
 #' an optional description, and the option to append the filter state list.
@@ -82,7 +85,7 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
 #' @param filter_panel_api (`FilterPanelAPI`) object with API that allows the generation
 #' of the filter state in the report
 #'
-#' @return (`TealReportCard`) populated with a title, description and filter state
+#' @return (`TealReportCard`) populated with a title, description and filter state.
 #'
 #' @export
 report_card_template <- function(title, label, description = NULL, with_filter, filter_panel_api) {
@@ -100,6 +103,7 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
   if (with_filter) card$append_fs(filter_panel_api$get_filter_state())
   card
 }
+
 #' Resolve `datanames` for the modules
 #'
 #' Modifies `module$datanames` to include names of the parent dataset (taken from `join_keys`).
@@ -107,7 +111,7 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
 #' @param modules (`teal_modules`) object
 #' @param datanames (`character`) names of datasets available in the `data` object
 #' @param join_keys (`join_keys`) object
-#' @return `teal_modules` with resolved `datanames`
+#' @return `teal_modules` with resolved `datanames`.
 #' @keywords internal
 resolve_modules_datanames <- function(modules, datanames, join_keys) {
   if (inherits(modules, "teal_modules")) {
@@ -182,7 +186,7 @@ check_modules_datanames <- function(modules, datanames) {
 #' Check `datanames` in filters
 #'
 #' This function checks whether `datanames` in filters correspond to those in `data`,
-#' returning character vector with error messages or TRUE if all checks pass.
+#' returning character vector with error messages or `TRUE` if all checks pass.
 #'
 #' @param filters (`teal_slices`) object
 #' @param datanames (`character`) names of datasets available in the `data` object
@@ -255,13 +259,16 @@ validate_app_title_tag <- function(shiny_tag) {
 #'
 #' A helper function to create the browser title along with a logo.
 #'
-#' @param title (`character`) The browser title for the teal app
+#' @param title (`character`) The browser title for the `teal` app
 #' @param favicon (`character`) The path for the icon for the title.
-#' The image/icon path can be remote or the static path accessible by shiny, like the `www/`
+#' The image/icon path can be remote or the static path accessible by `shiny`, like the `www/`
 #'
-#' @return A `shiny.tag` containing the element that adds the title and logo to the shiny app
+#' @return A `shiny.tag` containing the element that adds the title and logo to the `shiny` app.
 #' @export
-build_app_title <- function(title = "teal app", favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") { # nolint
+build_app_title <- function(
+    title = "teal app",
+    favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png"
+) {
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_string(favicon, null.ok = TRUE)
   tags$head(
@@ -282,8 +289,8 @@ build_app_title <- function(title = "teal app", favicon = "https://raw.githubuse
 #' App ID is a hash of the app's data and modules.
 #' See "transferring snapshots" section in ?snapshot.
 #'
-#' @param data `teal_data` or `teal_data_module` as accepted by `init`
-#' @param modules `teal_modules` object as accepted by `init`
+#' @param data (`teal_data` or `teal_data_module`) as accepted by `init`
+#' @param modules (`teal_modules`) object as accepted by `init`
 #'
 #' @return A single character string.
 #'
@@ -292,11 +299,25 @@ create_app_id <- function(data, modules) {
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_class(modules, "teal_modules")
 
-  hashables <- c(data, modules)
-  hashables$data <- if (inherits(hashables$data, "teal_data")) {
-    as.list(hashables$data@env)
+  data <- if (inherits(data, "teal_data")) {
+    as.list(data@env)
   } else if (inherits(data, "teal_data_module")) {
-    body(data$server)
+    deparse1(body(data$server))
   }
-  rlang::hash(hashables)
+  modules <- lapply(modules, defunction)
+
+  rlang::hash(list(data = data, modules = modules))
+}
+
+#' Go through list and extract bodies of encountered functions as string, recursively.
+#' @keywords internal
+#' @noRd
+defunction <- function(x) {
+  if (is.list(x)) {
+    lapply(x, defunction)
+  } else if (is.function(x)) {
+    deparse1(body(x))
+  } else {
+    x
+  }
 }

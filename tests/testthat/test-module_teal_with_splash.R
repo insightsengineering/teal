@@ -47,7 +47,7 @@ testthat::test_that("srv_teal_with_splash passes teal_data to reactive", {
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data(iris = iris),
+      data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     ),
     expr = {
@@ -63,7 +63,7 @@ testthat::test_that("srv_teal_with_splash passes when datanames are empty with w
       app = srv_teal_with_splash,
       args = list(
         id = "test",
-        data = teal_data(),
+        data = teal.data::teal_data(),
         modules = modules(example_module())
       ),
       expr = {
@@ -100,7 +100,7 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws then qenv
       id = "test",
       data = teal_data_module(
         ui = function(id) div(),
-        server = function(id) reactive(within(teal_data(), stop("not good")))
+        server = function(id) reactive(within(teal.data::teal_data(), stop("not good")))
       ),
       modules = modules(example_module())
     ),
@@ -137,7 +137,7 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when inco
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data(mtcars = mtcars, iris = iris, npk = npk),
+      data = teal.data::teal_data(mtcars = mtcars, iris = iris, npk = npk),
       modules = modules(example_module(datanames = "non-existing"))
     ),
     expr = {
@@ -155,7 +155,7 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate returns teal_dat
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data(mtcars = mtcars),
+      data = teal.data::teal_data(mtcars = mtcars),
       modules = modules(example_module(datanames = "mtcars")),
       filter = teal_slices(teal_slice(dataname = "iris", varname = "Species"))
     ),
@@ -175,7 +175,7 @@ testthat::test_that("srv_teal_with_splash gets observe event from srv_teal", {
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data(),
+      data = teal.data::teal_data(),
       modules = modules(example_module())
     ),
     expr = {

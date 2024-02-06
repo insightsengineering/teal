@@ -16,7 +16,7 @@ A \code{teal_data} object.
 }
 \description{
 Converts \code{FilteredData} object to \code{teal_data} object containing datasets needed for a specific module.
-Please note that if module needs dataset which has a parent, then parent will be also returned.
+Please note that if a module needs a dataset which has a parent, then the parent will also be returned.
 A hash per \code{dataset} is calculated internally and returned in the code.
 }
 \keyword{internal}

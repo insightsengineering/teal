@@ -7,9 +7,9 @@
 validate_one_row_per_id(x, key = c("USUBJID", "STUDYID"))
 }
 \arguments{
-\item{x}{a data.frame}
+\item{x}{(\code{data.frame})}
 
-\item{key}{a vector of ID variables from \code{x} that identify unique records}
+\item{key}{(\code{character}) Vector of ID variables from \code{x} that identify unique records.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
