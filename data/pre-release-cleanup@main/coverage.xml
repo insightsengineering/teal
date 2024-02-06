@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.680215182307233" branch-rate="0" lines-covered="1138" lines-valid="1673" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-02-06 14:49:45.613545">
+<coverage line-rate="0.680215182307233" branch-rate="0" lines-covered="1138" lines-valid="1673" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-02-06 14:54:35.13042">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -411,15 +411,14 @@
           <methods>
             <method name="landing_popup_module" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="60" hits="0" branch="false"/>
                 <line number="61" hits="0" branch="false"/>
                 <line number="62" hits="0" branch="false"/>
                 <line number="63" hits="0" branch="false"/>
                 <line number="64" hits="0" branch="false"/>
                 <line number="65" hits="0" branch="false"/>
                 <line number="66" hits="0" branch="false"/>
-                <line number="68" hits="0" branch="false"/>
-                <line number="70" hits="0" branch="false"/>
+                <line number="67" hits="0" branch="false"/>
+                <line number="69" hits="0" branch="false"/>
                 <line number="71" hits="0" branch="false"/>
                 <line number="72" hits="0" branch="false"/>
                 <line number="73" hits="0" branch="false"/>
@@ -436,19 +435,19 @@
                 <line number="84" hits="0" branch="false"/>
                 <line number="85" hits="0" branch="false"/>
                 <line number="86" hits="0" branch="false"/>
+                <line number="87" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="60" hits="0" branch="false"/>
             <line number="61" hits="0" branch="false"/>
             <line number="62" hits="0" branch="false"/>
             <line number="63" hits="0" branch="false"/>
             <line number="64" hits="0" branch="false"/>
             <line number="65" hits="0" branch="false"/>
             <line number="66" hits="0" branch="false"/>
-            <line number="68" hits="0" branch="false"/>
-            <line number="70" hits="0" branch="false"/>
+            <line number="67" hits="0" branch="false"/>
+            <line number="69" hits="0" branch="false"/>
             <line number="71" hits="0" branch="false"/>
             <line number="72" hits="0" branch="false"/>
             <line number="73" hits="0" branch="false"/>
@@ -465,6 +464,7 @@
             <line number="84" hits="0" branch="false"/>
             <line number="85" hits="0" branch="false"/>
             <line number="86" hits="0" branch="false"/>
+            <line number="87" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="module_filter_manager.R" filename="R/module_filter_manager.R" line-rate="0.663551401869159" branch-rate="0" complexity="0">
