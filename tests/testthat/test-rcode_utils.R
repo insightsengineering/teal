@@ -22,7 +22,7 @@ testthat::test_that("With teal.load_nest_code option set to character get_rcode_
 
 testthat::test_that(
   paste(
-    "With teal.load_nest_code option is not character",
+    "When teal.load_nest_code option is not character",
     "get_rcode_str_install (silently) returns default string"
   ),
   {
