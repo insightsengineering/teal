@@ -218,7 +218,7 @@ testthat::test_that("join_keys returns join_keys object if it exists inside tdat
 code <- c("iris <- iris", "mtcars <- mtcars")
 data_tdata <- teal::new_tdata(list(iris = iris, mtcars = mtcars), code)
 data_teal_data <- teal.data::teal_data(iris = iris, mtcars = mtcars, code = code)
-data_reactive <- reactive(teal.data::teal_data(iris = iris, mtcars = mtcars, code = code))
+data_reactive <- shiny::reactive(teal.data::teal_data(iris = iris, mtcars = mtcars, code = code))
 
 testthat::test_that("as_tdata accepts all possible inputs", {
   testthat::expect_no_error(as_tdata(data_tdata))
