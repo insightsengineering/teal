@@ -35,7 +35,7 @@
 #'   Optional string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
 #'
-#' @return Named list with server and UI function.
+#' @return Named list with server and UI functions.
 #'
 #' @export
 #'

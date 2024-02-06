@@ -209,7 +209,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 #' @param id (`character(1)`)
 #'  `shiny` module id.
 #' @param module_fd (`FilteredData`)
-#'   object to filter data in the teal-module
+#'   Object containing the data to be filtered in a single `teal` module.
 #' @param slices_global (`reactiveVal`)
 #'   stores `teal_slices` with all available filters; allows the following actions:
 #'   - to disable/enable a specific filter in a module

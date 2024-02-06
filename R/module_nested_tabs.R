@@ -3,7 +3,7 @@
 #' @section `ui_nested_tabs`:
 #' Each `teal_modules` is translated to a `tabsetPanel` and each
 #' of its children is another tab-module called recursively. The UI of a
-#' `teal_module` is obtained by calling the UI function on it.
+#' `teal_module` is obtained by calling its UI function.
 #'
 #' The `datasets` argument is required to resolve the `teal` arguments in an
 #' isolated context (with respect to reactivity)
