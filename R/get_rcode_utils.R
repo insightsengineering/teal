@@ -22,17 +22,16 @@ get_rcode_libraries <- function() {
 #' @keywords internal
 get_rcode_str_install <- function() {
   code_string <- getOption("teal.load_nest_code")
-
-  if (!is.null(code_string) && is.character(code_string)) {
-    return(code_string)
+  if (is.character(code_string)) {
+    code_string
+  } else {
+    "# Add any code to install/load your NEST environment here\n"
   }
-
-  return("# Add any code to install/load your NEST environment here\n")
 }
 
 #' Get datasets code
 #'
-#' Get combined code from `FilteredData` and from `CodeClass` object.
+#' Retrieve complete code to create, verify, and filter a dataset.
 #'
 #' @param datanames (`character`) names of datasets to extract code from
 #' @param datasets (`FilteredData`) object
