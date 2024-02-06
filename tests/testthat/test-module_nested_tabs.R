@@ -357,8 +357,8 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the 
 testthat::test_that(".datasets_to_data returns data which is filtered", {
   datasets <- get_example_filtered_data()
   datasets$set_filter_state(
-    teal.slice:::teal_slices(
-      teal.slice:::teal_slice(dataname = "d1", varname = "val", selected = c(1, 2))
+    teal.slice::teal_slices(
+      teal.slice::teal_slice(dataname = "d1", varname = "val", selected = c(1, 2))
     )
   )
   module <- test_module_wdata(datanames = c("d1", "d2"))
@@ -459,9 +459,9 @@ testthat::test_that("calculate_hashes returns the hash of the non Filtered datas
     list(iris = list(dataset = iris))
   )
 
-  fs <- teal.slice:::teal_slices(
-    teal.slice:::teal_slice(dataname = "iris", varname = "Sepal.Length", selected = c(5.1, 6.4)),
-    teal.slice:::teal_slice(dataname = "iris", varname = "Species", selected = c("setosa", "versicolor"))
+  fs <- teal.slice::teal_slices(
+    teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length", selected = c(5.1, 6.4)),
+    teal.slice::teal_slice(dataname = "iris", varname = "Species", selected = c("setosa", "versicolor"))
   )
 
   shiny::isolate(datasets$set_filter_state(state = fs))
