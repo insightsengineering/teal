@@ -12,7 +12,7 @@ new_tdata(data, code = "", join_keys = NULL, metadata = NULL)
 which optionally can be \code{reactive}.
 Inside this object all of these items will be made \code{reactive}.}
 
-\item{code}{A \code{character} (or \code{reactive} which evaluates to a \code{character}) containing
+\item{code}{(\code{character} or \code{reactive} which evaluates to a \code{character}) containing
 the code used to generate the data. This should be \code{reactive} if the code is changing
 during a reactive context (e.g. if filtering changes the code). Inside this
 object \code{code} will be made reactive}
