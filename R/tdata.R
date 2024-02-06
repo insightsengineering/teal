@@ -9,7 +9,7 @@
 #' - metadata (named `list`) containing any metadata associated with the data frames
 #'
 #' @name tdata
-#' @param data A named `list` of `data.frames` (or `MultiAssayExperiment`)
+#' @param data (named `list`) A list of `data.frame` or `MultiAssayExperiment` objects,
 #'  which optionally can be `reactive`.
 #'   Inside this object all of these items will be made `reactive`.
 #' @param code (`character` or `reactive` which evaluates to a `character`) containing
