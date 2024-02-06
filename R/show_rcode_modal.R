@@ -5,7 +5,7 @@
 #' Use the [shiny::showModal()] function to show the `R` code inside.
 #'
 #' @param title (`character(1)`)
-#'  Title of the modal, displayed in the first comment of the `R`-code.
+#'  Title of the modal, displayed in the first comment of the `R` code.
 #' @param rcode (`character`)
 #'  vector with `R` code to show inside the modal.
 #' @param session (`ShinySession` optional)
