@@ -5,11 +5,10 @@
 #' This function is a wrapper for `shiny::validate`.
 #'
 #' @param x (`data.frame`)
-#' @param min_nrow minimum number of rows in `x`
-#' @param complete (`logical(1)`) default `FALSE` when set to `TRUE` then complete cases are checked.
-#' @param allow_inf (`logical(1)`) default `TRUE` when set to `FALSE` then error thrown if any values are
-#'   infinite.
-#' @param msg (`character(1)`) additional message to display alongside the default message.
+#' @param min_nrow (`numeric(1)`) Minimum allowed number of rows in `x`.
+#' @param complete (`logical(1)`) Flag specifying whether to check only complete cases. Defaults to `FALSE`.
+#' @param allow_inf (`logical(1)`) Flag specifying whether to allow infinite values. Defaults to `TRUE`.
+#' @param msg (`character(1)`) Additional message to display alongside the default message.
 #'
 #' @export
 #'
