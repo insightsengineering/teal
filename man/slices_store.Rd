@@ -37,29 +37,6 @@ This format is assumed during \code{slices_restore}. All \code{POSIX*t} objects 
 \code{selected} or \code{choices} fields of \code{teal_slice} objects are always printed in
 \code{UTC} timezone as well.
 }
-\examples{
-# use non-exported function from teal
-slices_store <- getFromNamespace("slices_store", "teal")
-
-# Create a teal_slices object
-tss <- teal_slices(
-  teal_slice(dataname = "data", varname = "var"),
-  teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
-)
-
-slices_path <- tempfile(pattern = "teal_slices", fileext = ".json")
-print(slices_path)
-
-# Store the teal_slices object to a file
-slices_store(tss, slices_path)
-
-# use non-exported function from teal
-slices_restore <- getFromNamespace("slices_restore", "teal")
-
-# Restore a teal_slices object from a file
-tss_restored <- slices_restore(slices_path)
-
-}
 \seealso{
 \code{\link[=teal_slices]{teal_slices()}}
 }
