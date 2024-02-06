@@ -15,14 +15,13 @@ validate_has_data(
 \arguments{
 \item{x}{(\code{data.frame})}
 
-\item{min_nrow}{minimum number of rows in \code{x}}
+\item{min_nrow}{(\code{numeric(1)}) Minimum allowed number of rows in \code{x}.}
 
-\item{complete}{(\code{logical(1)}) default \code{FALSE} when set to \code{TRUE} then complete cases are checked.}
+\item{complete}{(\code{logical(1)}) Flag specifying whether to check only complete cases. Defaults to \code{FALSE}.}
 
-\item{allow_inf}{(\code{logical(1)}) default \code{TRUE} when set to \code{FALSE} then error thrown if any values are
-infinite.}
+\item{allow_inf}{(\code{logical(1)}) Flag specifying whether to allow infinite values. Defaults to \code{TRUE}.}
 
-\item{msg}{(\code{character(1)}) additional message to display alongside the default message.}
+\item{msg}{(\code{character(1)}) Additional message to display alongside the default message.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
