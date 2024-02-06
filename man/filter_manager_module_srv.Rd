@@ -11,7 +11,7 @@ filter_manager_module_srv(id, module_fd, slices_global)
 \code{shiny} module id.}
 
 \item{module_fd}{(\code{FilteredData})
-object to filter data in the teal-module}
+Object containing the data to be filtered in a single \code{teal} module.}
 
 \item{slices_global}{(\code{reactiveVal})
 stores \code{teal_slices} with all available filters; allows the following actions:

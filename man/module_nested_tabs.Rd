@@ -91,16 +91,15 @@ Create a UI of nested tabs of \code{teal_modules}
 
 Each \code{teal_modules} is translated to a \code{tabsetPanel} and each
 of its children is another tab-module called recursively. The UI of a
-\code{teal_module} is obtained by calling the UI function on it.
+\code{teal_module} is obtained by calling its UI function.
 
 The \code{datasets} argument is required to resolve the \code{teal} arguments in an
-isolated context (with respect to reactivity)
+isolated context (with respect to reactivity).
 }
 
 \section{\code{srv_nested_tabs}}{
 
-This module calls recursively all elements of the \code{modules} and returns the one which
-is currently active.
+This module recursively calls all elements of \code{modules} and returns currently active one.
 \itemize{
 \item \code{teal_module} returns self as a active module.
 \item \code{teal_modules} also returns module active within self which is determined by the \code{input$active_tab}.
@@ -114,7 +113,7 @@ teal_data_to_filtered_data <- getFromNamespace("teal_data_to_filtered_data", "te
 ui_nested_tabs <- getFromNamespace("ui_nested_tabs", "teal")
 srv_nested_tabs <- getFromNamespace("srv_nested_tabs", "teal")
 
-# creates `teal_data`
+# create `teal_data`
 data <- teal_data(iris = iris, mtcars = mtcars)
 datanames <- datanames(data)
 

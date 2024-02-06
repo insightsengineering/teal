@@ -43,7 +43,7 @@ Optional string specifying the \code{shiny} module id in cases it is used as a \
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 }
 \value{
-Named list with server and UI function.
+Named list with server and UI functions.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
