@@ -10,8 +10,8 @@ The \code{teal} package provides a \code{shiny} based framework for creating an
 interactive data analysis environment.
 }
 \details{
-To learn mode about the package either read the project website at
-\href{https://insightsengineering.github.io/teal/latest-tag/}{project website} or read the \code{\link[=init]{init()}} manual pages.
+To learn mode about the package, visit the \href{https://insightsengineering.github.io/teal/latest-tag/}{project website}
+or read the \code{\link[=init]{init()}} manual page.
 }
 \seealso{
 Useful links:

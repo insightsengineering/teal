@@ -133,8 +133,8 @@ validator_enabled <- function(x) {
   x$.__enclos_env__$private$enabled
 }
 
-#' Recursively extract messages from validator `list`
-#' Returns character vector or a list of character vectors, possibly nested and named
+#' Recursively extract messages from validator list
+#' @return A character vector or a list of character vectors, possibly nested and named.
 #' @noRd
 #' @keywords internal
 extract_validator <- function(iv, header) {

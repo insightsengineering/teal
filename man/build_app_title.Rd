@@ -11,7 +11,7 @@ build_app_title(
 )
 }
 \arguments{
-\item{title}{(\code{character}) The browser title for the \code{teal} app}
+\item{title}{(\code{character}) The browser title for the \code{teal} app.}
 
 \item{favicon}{(\code{character}) The path for the icon for the title.
 The image/icon path can be remote or the static path accessible by \code{shiny}, like the \verb{www/}}
