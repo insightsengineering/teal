@@ -23,10 +23,12 @@
 #'  flag determining if the filter panel is global or module-specific.
 #'  When set to `TRUE`, a filter panel is called inside of each module tab.
 #'
-#' @return depending on the class of `modules`, `ui_nested_tabs` returns:
+#' @return
+#' Depending on the class of `modules`, `ui_nested_tabs` returns:
 #'   - `teal_module`: instantiated UI of the module.
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
 #'     calling this function on it.
+#'
 #' `srv_nested_tabs` returns a reactive which returns the active module that corresponds to the selected tab.
 #'
 #' @examples
