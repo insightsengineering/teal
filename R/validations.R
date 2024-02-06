@@ -117,9 +117,9 @@ validate_one_row_per_id <- function(x, key = c("USUBJID", "STUDYID")) {
 #'
 #' This function is a wrapper for `shiny::validate`.
 #'
-#' @param x values to test. All must be in `choices`
-#' @param choices a vector to test for values of `x`
-#' @param msg warning message to display
+#' @param x Vector of values to test.
+#' @param choices Vector to test against.
+#' @param msg (`character(1)`) Error message to display if some elements of `x` are not elements of `choices`.
 #'
 #' @export
 #'
@@ -204,7 +204,7 @@ validate_has_elements <- function(x, msg) {
 #'
 #' @param x vector
 #' @param y vector
-#' @param msg message to display if `x` and `y` intersect
+#' @param msg (`character(1)`) message to display if `x` and `y` intersect
 #'
 #' @export
 #'
@@ -257,8 +257,8 @@ validate_no_intersection <- function(x, y, msg) {
 #' This function is a wrapper for `shiny::validate`.
 #'
 #' @param data (`data.frame`)
-#' @param varname name of variable in `data`
-#' @param msg message to display if `data` does not include `varname`
+#' @param varname (`character(1)`) name of variable to check for in `data`
+#' @param msg (`character(1)`) message to display if `data` does not include `varname`
 #'
 #' @export
 #'

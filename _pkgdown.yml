@@ -91,7 +91,7 @@ articles:
 
 reference:
   - title: Core `teal` functions
-    desc: Main functions needed to build a `teal` app.
+    desc: Main functions needed to build a `teal` app
     contents:
       - init
       - teal_data_module
@@ -101,7 +101,7 @@ reference:
       - ui_teal_with_splash
       - teal_slices
   - title: Helper Functions
-    desc: Helper functions for `teal`.
+    desc: Helper functions for `teal`
     contents:
       - build_app_title
   - title: Example module
