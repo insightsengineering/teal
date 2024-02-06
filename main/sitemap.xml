@@ -112,19 +112,7 @@
     <loc>https://insightsengineering.github.io/teal/reference/dot-datasets_to_data.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/example_cdisc_data.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/example_datasets.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/example_module.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/example_modules.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/filter_calls_module.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/filter_manager_module_srv.html</loc>
@@ -143,9 +131,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_rcode_libraries.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_teal_bs_theme.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/include_css_files.html</loc>
@@ -175,13 +160,13 @@
     <loc>https://insightsengineering.github.io/teal/reference/matrix_to_mapping.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/module_filter_manager.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/module_filter_manager_modal.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/module_labels.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/module_management.html</loc>
@@ -196,7 +181,7 @@
     <loc>https://insightsengineering.github.io/teal/reference/module_teal.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/modules.html</loc>
+    <loc>https://insightsengineering.github.io/teal/reference/module_teal_with_splash.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/modules_depth.html</loc>
@@ -220,16 +205,10 @@
     <loc>https://insightsengineering.github.io/teal/reference/show_rcode_modal.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/slices_restore.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/slices_store.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/snapshot_manager_module.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/srv_teal_with_splash.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/tdata.html</loc>
@@ -253,10 +232,10 @@
     <loc>https://insightsengineering.github.io/teal/reference/teal_data_to_filtered_data.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/teal_slices.html</loc>
+    <loc>https://insightsengineering.github.io/teal/reference/teal_modules.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/ui_teal_with_splash.html</loc>
+    <loc>https://insightsengineering.github.io/teal/reference/teal_slices.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/unfold_mapping.html</loc>
