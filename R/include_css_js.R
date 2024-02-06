@@ -71,14 +71,6 @@ run_js_files <- function(files) {
 #'
 #' Simply add `include_teal_css_js()` as one of the UI elements.
 #' @return A `shiny.tag.list`.
-#' @examples
-#' # use non-exported function from teal
-#' include_teal_css_js <- getFromNamespace("include_teal_css_js", "teal")
-#' shiny_ui <- tagList(
-#'   include_teal_css_js(),
-#'   p("Hello")
-#' )
-#'
 #' @keywords internal
 include_teal_css_js <- function() {
   tagList(
