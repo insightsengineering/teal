@@ -6,11 +6,10 @@
 #' `teal_module` is obtained by calling its UI function.
 #'
 #' The `datasets` argument is required to resolve the `teal` arguments in an
-#' isolated context (with respect to reactivity)
+#' isolated context (with respect to reactivity).
 #'
 #' @section `srv_nested_tabs`:
-#' This module calls recursively all elements of the `modules` and returns the one which
-#' is currently active.
+#' This module recursively calls all elements of `modules` and returns currently active one.
 #' - `teal_module` returns self as a active module.
 #' - `teal_modules` also returns module active within self which is determined by the `input$active_tab`.
 #'
@@ -37,7 +36,7 @@
 #' ui_nested_tabs <- getFromNamespace("ui_nested_tabs", "teal")
 #' srv_nested_tabs <- getFromNamespace("srv_nested_tabs", "teal")
 #'
-#' # creates `teal_data`
+#' # create `teal_data`
 #' data <- teal_data(iris = iris, mtcars = mtcars)
 #' datanames <- datanames(data)
 #'

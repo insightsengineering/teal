@@ -1,6 +1,6 @@
 #' @title `TealReportCard`
 #' @description `r lifecycle::badge("experimental")`
-#' A child of [`ReportCard`] that is used for `teal` specific applications.
+#' Child class of [`ReportCard`] that is used for `teal` specific applications.
 #' In addition to the parent methods, it supports rendering `teal` specific elements such as
 #' the source code, the encodings panel content and the filter panel content as part of the
 #' meta data.
