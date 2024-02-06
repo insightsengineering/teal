@@ -2,7 +2,7 @@
 #'
 #' Function to create multiple library calls out of current session info to ensure reproducible code works.
 #'
-#' @return Character object contain code.
+#' @return Character vector of `library(<package>)` calls.
 #' @keywords internal
 get_rcode_libraries <- function() {
   vapply(
