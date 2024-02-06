@@ -8,8 +8,7 @@
 #' @param label (`character(1)`) Label of the module.
 #' @param title (`character(1)`) Text to be displayed as popup title.
 #' @param content (`character(1)`, `shiny.tag` or `shiny.tag.list`) with the content of the popup. Passed to `...` of `shiny::modalDialog`. See examples.
-#' @param buttons (`shiny.tag`) or a list of tags (`tagList`).
-#' Typically a `modalButton` or `actionButton`. See examples.
+#' @param buttons (`shiny.tag` or `shiny.tag.list`) Typically a `modalButton` or `actionButton`. See examples.
 #'
 #' @return A `teal_module` (extended with `teal_landing_module` class) to be used in `teal` applications.
 #'
