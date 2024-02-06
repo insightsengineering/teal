@@ -5,8 +5,8 @@
 #' This module is used to display a popup dialog when the application starts.
 #' The dialog blocks access to the application and must be closed with a button before the application can be viewed.
 #'
-#' @param label (`character(1)`) the label of the module.
-#' @param title (`character(1)`) the text to be displayed as a title of the popup.
+#' @param label (`character(1)`) Label of the module.
+#' @param title (`character(1)`) Text to be displayed as popup title.
 #' @param content (`character(1)`, `shiny.tag` or `shiny.tag.list`) with the content of the popup. Passed to `...` of `shiny::modalDialog`. See examples.
 #' @param buttons (`shiny.tag`) or a list of tags (`tagList`).
 #' Typically a `modalButton` or `actionButton`. See examples.
