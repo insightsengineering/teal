@@ -16,7 +16,8 @@ landing_popup_module(
 
 \item{title}{(\code{character(1)}) Text to be displayed as popup title.}
 
-\item{content}{(\code{character(1)}, \code{shiny.tag} or \code{shiny.tag.list}) with the content of the popup. Passed to \code{...} of \code{shiny::modalDialog}. See examples.}
+\item{content}{(\code{character(1)}, \code{shiny.tag} or \code{shiny.tag.list}) with the content of the popup.
+Passed to \code{...} of \code{shiny::modalDialog}. See examples.}
 
 \item{buttons}{(\code{shiny.tag} or \code{shiny.tag.list}) Typically a \code{modalButton} or \code{actionButton}. See examples.}
 }
