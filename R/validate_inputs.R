@@ -146,7 +146,8 @@ extract_validator <- function(iv, header) {
   }
 }
 
-#' Collate failing messages from validator and returns `list`
+#' Collate failing messages from validator.
+#' @return `list`
 #' @noRd
 #' @keywords internal
 gather_messages <- function(iv) {
