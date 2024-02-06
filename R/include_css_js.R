@@ -14,8 +14,8 @@ include_css_files <- function(pattern = "*") {
     pattern = pattern, full.names = TRUE
   )
 
-  shiny::singleton(
-    shiny::tags$head(lapply(css_files, shiny::includeCSS))
+  singleton(
+    tags$head(lapply(css_files, includeCSS))
   )
 }
 
@@ -49,7 +49,9 @@ include_js_files <- function(pattern = NULL, except = NULL) {
 #' not work with `devtools`. Therefore, we redefine this method in each package
 #' as needed. Thus, we do not export this method.
 #'
-#' @param files (`character`) vector of filenames
+#' @param files (`character`) vector of filenames.
+#'
+#' @return returns `NULL`, invisibly.
 #' @keywords internal
 run_js_files <- function(files) {
   checkmate::assert_character(files, min.len = 1, any.missing = FALSE)

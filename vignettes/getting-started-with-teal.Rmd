@@ -98,7 +98,10 @@ For further details, we recommend exploring the [`teal.data`](https://insightsen
 
 ### Modules
 
-The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`). Core `teal` developers created several universal `teal` modules which can be helpful for any `teal` application. To learn how to create own modules please explore [Creating Custom Modules vignette](creating-custom-modules.html). To use our predefined modules see the references below for links to these modules.
+The `modules` argument to `init` consists of a list of `teal` modules (which can be wrapped together using the function `modules`).
+Core `teal` developers have created several universal `teal` modules that can be useful in any `teal` application.
+To learn how to create your own modules, please explore [Creating Custom Modules vignette](creating-custom-modules.html).
+To use our predefined modules, see the references below for links to these modules.
 
 ### Defining filters
 
@@ -113,8 +116,10 @@ This report can then be downloaded and a special _Report Previewer_ module will 
 
 ### Reproducible code
 
-`teal` hands over data with reproducible code to every module included in the application. `teal` doesn't display the code it is module's responsibility to render it. For example, the `example_module` function used above shows the code
-in the main panel together with other outputs. For more details see [this vignette](reproducible-code.html).
+`teal` hands over data with reproducible code to every module included in the application.
+Note that `teal` does not display the code, that is the modules' responsibility.
+For example, the `example_module` function used above shows the code in the main panel together with other outputs.
+For more details see [this vignette](reproducible-code.html).
 
 ## Where to go next
 
