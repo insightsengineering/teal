@@ -7,9 +7,9 @@
 create_app_id(data, modules)
 }
 \arguments{
-\item{data}{\code{teal_data} or \code{teal_data_module} as accepted by \code{init}}
+\item{data}{(\code{teal_data} or \code{teal_data_module}) as accepted by \code{init}}
 
-\item{modules}{\code{teal_modules} object as accepted by \code{init}}
+\item{modules}{(\code{teal_modules}) object as accepted by \code{init}}
 }
 \value{
 A single character string.

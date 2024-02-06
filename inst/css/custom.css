@@ -68,3 +68,12 @@ footer {
 #teal_secondary_col .well {
   margin: 0  0 15px 0;
 }
+
+#shiny-modal:has(> .modal-dialog > .modal-content > #landingpopup) {
+  backdrop-filter: blur(10px);
+}
+
+body:not(.modal-open) {
+  padding-right: 0 !important;
+  overflow: auto !important;
+}

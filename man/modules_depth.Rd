@@ -7,22 +7,25 @@
 modules_depth(modules, depth = 0L)
 }
 \arguments{
-\item{modules}{(\code{list}, \code{teal_modules} or \code{teal_module})\cr
+\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
-will be displayed in the teal application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
 \item{depth}{optional, integer determining current depth level}
 }
 \value{
-depth level for given module
+Depth level for given module.
 }
 \description{
 Depth starts at 0, so a single \code{teal.module} has depth 0.
 Nesting it increases overall depth by 1.
 }
 \examples{
+# use non-exported function from teal
+modules_depth <- getFromNamespace("modules_depth", "teal")
+
 mods <- modules(
   label = "d1",
   modules(
@@ -35,7 +38,7 @@ mods <- modules(
   ),
   module(label = "ccc")
 )
-stopifnot(teal:::modules_depth(mods) == 3L)
+stopifnot(modules_depth(mods) == 3L)
 
 mods <- modules(
   label = "a",
@@ -44,6 +47,6 @@ mods <- modules(
   ),
   module(label = "b2")
 )
-stopifnot(teal:::modules_depth(mods) == 2L)
+stopifnot(modules_depth(mods) == 2L)
 }
 \keyword{internal}
