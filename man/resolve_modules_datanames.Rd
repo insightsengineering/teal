@@ -14,7 +14,7 @@ resolve_modules_datanames(modules, datanames, join_keys)
 \item{join_keys}{(\code{join_keys}) object}
 }
 \value{
-\code{teal_modules} with resolved \code{datanames}
+\code{teal_modules} with resolved \code{datanames}.
 }
 \description{
 Modifies \code{module$datanames} to include names of the parent dataset (taken from \code{join_keys}).

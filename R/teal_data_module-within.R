@@ -1,7 +1,9 @@
-#' Evaluate Expression on `teal_data_module`
+#' Evaluate expression on `teal_data_module`
 #'
 #' @details
 #' `within` is a convenience function for evaluating inline code inside the environment of a `teal_data_module`.
+#' It accepts only inline expressions (both simple and compound) and allows for injecting values into `expr` through
+#' the `...` argument: as `name:value` pairs are passed to `...`, `name` in `expr` will be replaced with `value.`
 #'
 #' @param data (`teal_data_module`) object
 #' @param expr (`expression`) to evaluate. Must be inline code. See
@@ -11,16 +13,11 @@
 #' `within` returns a `teal_data_module` object with a delayed evaluation of `expr` when the module is run.
 #'
 #' @examples
-#' tdm <- teal_data_module(
-#'   ui = function(id) div(id = shiny::NS(id)("div_id")),
-#'   server = function(id) {
-#'     shiny::moduleServer(id, function(input, output, session) {
-#'       shiny::reactive(teal_data(IRIS = iris))
-#'     })
-#'   }
-#' )
-#' within(tdm, IRIS <- subset(IRIS, Species == "virginica"))
+#' within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 #'
+#' # use additional parameter for expression value substitution.
+#' valid_species <- "versicolor"
+#' within(tdm, dataset1 <- subset(dataset1, Species %in% species), species = valid_species)
 #' @include teal_data_module.R
 #' @name within
 #' @rdname teal_data_module

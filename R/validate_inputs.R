@@ -24,7 +24,7 @@
 #' @param ... either any number of `InputValidator` objects
 #'            or an optionally named, possibly nested `list` of `InputValidator`
 #'            objects, see `Details`
-#' @param header `character(1)` generic validation message; set to NULL to omit
+#' @param header (`character(1)`) generic validation message; set to NULL to omit
 #'
 #' @return
 #' Returns NULL if the final validation call passes and a `shiny.silent.error` if it fails.
@@ -116,6 +116,7 @@ validate_inputs <- function(..., header = "Some inputs require attention") {
 
 ### internal functions
 
+#' @noRd
 #' @keywords internal
 # recursive object type test
 # returns logical of length 1
@@ -123,6 +124,7 @@ is_validators <- function(x) {
   all(if (is.list(x)) unlist(lapply(x, is_validators)) else inherits(x, "InputValidator"))
 }
 
+#' @noRd
 #' @keywords internal
 # test if an InputValidator object is enabled
 # returns logical of length 1
@@ -131,9 +133,10 @@ validator_enabled <- function(x) {
   x$.__enclos_env__$private$enabled
 }
 
+#' Recursively extract messages from validator list
+#' @return A character vector or a list of character vectors, possibly nested and named.
+#' @noRd
 #' @keywords internal
-# recursively extract messages from validator list
-# returns character vector or a list of character vectors, possibly nested and named
 extract_validator <- function(iv, header) {
   if (inherits(iv, "InputValidator")) {
     add_header(gather_messages(iv), header)
@@ -143,9 +146,10 @@ extract_validator <- function(iv, header) {
   }
 }
 
+#' Collate failing messages from validator.
+#' @return `list`
+#' @noRd
 #' @keywords internal
-# collate failing messages from validator
-# returns list
 gather_messages <- function(iv) {
   if (validator_enabled(iv)) {
     status <- iv$validate()
@@ -157,8 +161,9 @@ gather_messages <- function(iv) {
   }
 }
 
+#' Add optional header to failing messages
+#' @noRd
 #' @keywords internal
-# add optional header to failing messages
 add_header <- function(messages, header = "") {
   ans <- unlist(messages)
   if (length(ans) != 0L && isTRUE(nchar(header) > 0L)) {
@@ -167,8 +172,9 @@ add_header <- function(messages, header = "") {
   ans
 }
 
+#' Recursively check if the object contains a named list
+#' @noRd
 #' @keywords internal
-# recursively check if the object contains a named list
 any_names <- function(x) {
   any(
     if (is.list(x)) {

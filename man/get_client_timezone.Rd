@@ -2,22 +2,20 @@
 % Please edit documentation in R/utils.R
 \name{get_client_timezone}
 \alias{get_client_timezone}
-\title{Get Client Timezone}
+\title{Get client timezone}
 \usage{
 get_client_timezone(ns)
 }
 \arguments{
-\item{ns}{(\code{function}) namespace function passed from the \code{session} object in the
-Shiny server. For Shiny modules this will allow for proper name spacing of the
-registered input.}
+\item{ns}{(\code{function}) namespace function passed from the \code{session} object in the \code{shiny} server.
+For \code{shiny} modules this will allow for proper name spacing of the registered input.}
 }
 \value{
-(\code{Shiny}) input variable accessible with \code{input$tz} which is a (\code{character})
+(\code{shiny}) input variable accessible with \code{input$tz} which is a (\code{character})
 string containing the timezone of the browser/client.
 }
 \description{
-Local timezone in the browser may differ from the system timezone from the server.
-This script can be run to register a shiny input which contains information about
-the timezone in the browser.
+User timezone in the browser may be different to the one on the server.
+This script can be run to register a \code{shiny} input which contains information about the timezone in the browser.
 }
 \keyword{internal}
