@@ -168,11 +168,10 @@ testthat::test_that("defunction returns non-function atomic as is", {
 })
 
 testthat::test_that("defunction recursively goes down a list", {
+  # styler: off
   x <- list(
     "character" = "character",
-    "function1" = function(x) {
-      return(x)
-    },
+    "function1" = function(x) return(x),
     "list2" = list(
       "function2" = function(x) mean(x),
       "list3" = list(
@@ -180,6 +179,7 @@ testthat::test_that("defunction recursively goes down a list", {
       )
     )
   )
+  # styler: on
   y <- list(
     "character" = "character",
     "function1" = "return(x)",
