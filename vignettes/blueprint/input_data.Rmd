@@ -48,7 +48,7 @@ Learn more about the use of `teal_data` in the [`teal.data` package vignettes](h
 
 ## `Show R Code` and `Reporter`
 
-In both the `teal.modules.clinical` and `teal.modules.general` `R` packages, you'll find that most modules include a convenient `Show R Code` button.
+In both the `teal.modules.clinical` and `teal.modules.general` packages, you'll find that most modules include a convenient `Show R Code` button.
 When this button is clicked, a modal window appears, revealing the `R` code responsible for generating the module's output.
 This functionality is achieved by inspecting the `teal_data` object and retrieving code from it.
 With the `Show R Code` button, users can easily copy and independently run the code to reproduce the analysis presented in the teal module.
