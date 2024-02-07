@@ -31,7 +31,6 @@
 #'
 #' `srv_nested_tabs` returns a reactive which returns the active module that corresponds to the selected tab.
 #'
-#' @examples
 #' @keywords internal
 NULL
 
