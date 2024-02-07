@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9042</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9043</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,16 +82,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -124,8 +114,8 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Modifying a teal Application With R Options</h1>
-                        <h4 data-toc-skip class="author">Paweł
-Rucki</h4>
+                        <h4 data-toc-skip class="author">NEST
+CoreDev</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/HEAD/vignettes/teal-options.Rmd" class="external-link"><code>vignettes/teal-options.Rmd</code></a></small>
@@ -138,17 +128,16 @@ Rucki</h4>
 <h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
 </h2>
 <p>Some <code>R</code> packages use <code>options</code> to modify their
-runtime behavior. These usually specify default values for internal
-functions or determine responses to users actions. For example,
-<code>testthat</code> uses an option
+runtime behavior. They usually specify sensible default values for
+internal function arguments or determine responses to users actions. For
+example, <code>testthat</code> uses an option
 <code>testthat.progress.max_fails</code> to define a default number of
 failed expectations before the testing functions terminate execution.
 While some of these adjustable values can be exposed as function
 parameters, some are confined to an option. This vignette details the
-options available to users of <code>teal</code>,
-<code>teal.logger</code>, <code>teal.widgets</code>,
-<code>teal.modules.general</code>,
-<code>teal.modules.clinical</code>.</p>
+options available in the package <code>teal</code> and it’s supporting
+packages <code>teal.logger</code>, <code>teal.widgets</code>, and
+<code>teal.slice</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="setting-an-option">Setting an option<a class="anchor" aria-label="anchor" href="#setting-an-option"></a>
@@ -178,6 +167,75 @@ overwrite your custom values.</p>
 <div class="section level2">
 <h2 id="options-used-in-a-teal-application">Options used in a <code>teal</code> application<a class="anchor" aria-label="anchor" href="#options-used-in-a-teal-application"></a>
 </h2>
+<div class="section level4">
+<h4 id="teal-bs_theme-bslibbs_theme-object">
+<code>teal.bs_theme</code> (<code>bslib::bs_theme</code>
+object)<a class="anchor" aria-label="anchor" href="#teal-bs_theme-bslibbs_theme-object"></a>
+</h4>
+<p>This option controls the bootstrap theme and version used in
+<code>teal</code> apps. Achieve better UX with the customized UI of an
+app. Please see the <a href="bootstrap-themes-in-teal.html">vignette on
+Bootstrap themes</a> to read more about the functionality.</p>
+<p>Default: <code>NULL</code></p>
+</div>
+<div class="section level4">
+<h4 id="teal-load_nest_code-character">
+<code>teal.load_nest_code</code> (<code>character</code>)<a class="anchor" aria-label="anchor" href="#teal-load_nest_code-character"></a>
+</h4>
+<p>The value of this option is appended to the top of the code rendered
+when using the <code>Show R Code</code> modal button.</p>
+<p>Default:
+<code>"# Add any code to install/load your NEST environment here"</code>.</p>
+</div>
+<div class="section level4">
+<h4 id="teal-threshold_slider_vs_checkboxgroup-numeric">
+<code>teal.threshold_slider_vs_checkboxgroup</code>
+(<code>numeric</code>)<a class="anchor" aria-label="anchor" href="#teal-threshold_slider_vs_checkboxgroup-numeric"></a>
+</h4>
+<p>This is the threshold that determines if a variable is treated as a
+factor in the filter panel. If the number of unique values of a variable
+is less than this threshold the variable will be treated as a factor
+instead of its original class. As an example, imagine
+<code>teal.threshold_slider_vs_checkboxgroup</code> equals to 2. Then a
+numeric variable <code>c(1, 1, 1)</code>, which has only one unique
+value, is treated as a factor in the filter panel (and in the filter
+panel only!). The filter panel creates a checkbox widget to filter
+values from this variable, as it would for a factor variable, instead of
+the usual numeric range selector.</p>
+<p>Default: 5.</p>
+</div>
+<div class="section level4">
+<h4 id="teal-basic_table_args-basic_table_args-object">
+<code>teal.basic_table_args</code> (<code>basic_table_args</code>
+object)<a class="anchor" aria-label="anchor" href="#teal-basic_table_args-basic_table_args-object"></a>
+</h4>
+<p>This specifies the list of arguments passed to every call to
+<code><a href="https://rdrr.io/pkg/rtables/man/basic_table.html" class="external-link">rtables::basic_table</a></code> made in a <code>teal</code>
+application. This can be used to format <code>rtables</code> without
+making any changes to the application code. See the documentation of
+<code><a href="https://rdrr.io/pkg/teal.widgets/man/basic_table_args.html" class="external-link">teal.widgets::basic_table_args</a></code> for more information.</p>
+<p>Default: <code><a href="https://rdrr.io/pkg/teal.widgets/man/basic_table_args.html" class="external-link">teal.widgets::basic_table_args()</a></code>.</p>
+</div>
+<div class="section level4">
+<h4 id="teal-ggplot2_args-ggplot2_args-object">
+<code>teal.ggplot2_args</code> (<code>ggplot2_args</code>
+object)<a class="anchor" aria-label="anchor" href="#teal-ggplot2_args-ggplot2_args-object"></a>
+</h4>
+<p>This option allows modifying labels and themes of all
+<code>ggplot2</code> plots in a <code>teal</code> application. See the
+documentation of <code><a href="https://rdrr.io/pkg/teal.widgets/man/ggplot2_args.html" class="external-link">teal.widgets::ggplot2_args</a></code> for more
+information.</p>
+<p>Default: <code><a href="https://rdrr.io/pkg/teal.widgets/man/ggplot2_args.html" class="external-link">teal.widgets::ggplot2_args()</a></code>.</p>
+</div>
+<div class="section level4">
+<h4 id="teal-plot_dpi-integer-value-24-or-larger">
+<code>teal.plot_dpi</code> (integer value 24 or larger)<a class="anchor" aria-label="anchor" href="#teal-plot_dpi-integer-value-24-or-larger"></a>
+</h4>
+<p>This option controls the dots per inch of the graphs rendered and
+downloaded when using the module <code>plot_with_settings</code> from
+the <code>teal.widgets</code> package.</p>
+<p>Default: 72</p>
+</div>
 <div class="section level4">
 <h4 id="teal-log_layout-character">
 <code>teal.log_layout</code> (<code>character</code>)<a class="anchor" aria-label="anchor" href="#teal-log_layout-character"></a>
@@ -211,18 +269,6 @@ log level from the default to <code>"TRACE"</code>, the least severe log
 level.</p>
 </div>
 <div class="section level4">
-<h4 id="teal_logging">
-<code>teal_logging</code><a class="anchor" aria-label="anchor" href="#teal_logging"></a>
-</h4>
-<p>Deprecated.</p>
-</div>
-<div class="section level4">
-<h4 id="teal_show_js_log">
-<code>teal_show_js_log</code><a class="anchor" aria-label="anchor" href="#teal_show_js_log"></a>
-</h4>
-<p>Deprecated in favor of <code>teal.show_js_log</code> (see below).</p>
-</div>
-<div class="section level4">
 <h4 id="teal-show_js_log-logical">
 <code>teal.show_js_log</code> (<code>logical</code>)<a class="anchor" aria-label="anchor" href="#teal-show_js_log-logical"></a>
 </h4>
@@ -231,79 +277,22 @@ logs to the <code>R</code> console. If set to <code>TRUE</code>, the
 logs will be printed; otherwise, they won’t.</p>
 <p>Default: <code>FALSE</code>.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="deprecated-options">Deprecated options<a class="anchor" aria-label="anchor" href="#deprecated-options"></a>
+</h2>
 <div class="section level4">
-<h4 id="teal-threshold_slider_vs_checkboxgroup-numeric">
-<code>teal.threshold_slider_vs_checkboxgroup</code>
-(<code>numeric</code>)<a class="anchor" aria-label="anchor" href="#teal-threshold_slider_vs_checkboxgroup-numeric"></a>
+<h4 id="teal_logging">
+<code>teal_logging</code><a class="anchor" aria-label="anchor" href="#teal_logging"></a>
 </h4>
-<p>This is the threshold that determines if a variable is treated as a
-factor in the filter panel. If the number of unique values of a variable
-is less than this threshold the variable will be treated as a factor
-instead of its original class. As an example, imagine
-<code>teal.threshold_slider_vs_checkboxgroup</code> equals to 2. Then a
-numeric variable <code>c(1, 1, 1)</code>, which has only one unique
-value, is treated as a factor in the filter panel (and in the filter
-panel only!). The filter panel creates a checkbox widget to filter
-values from this variable, as it would for a factor variable, instead of
-the usual numeric range selector.</p>
-<p>Default: 5.</p>
+<p>Deprecated in favor of using the <code>teal.logger</code> package for
+logging.</p>
 </div>
 <div class="section level4">
-<h4 id="teal-load_nest_code-character">
-<code>teal.load_nest_code</code> (<code>character</code>)<a class="anchor" aria-label="anchor" href="#teal-load_nest_code-character"></a>
+<h4 id="teal_show_js_log">
+<code>teal_show_js_log</code><a class="anchor" aria-label="anchor" href="#teal_show_js_log"></a>
 </h4>
-<p>The value of this option is appended to the top of the code rendered
-when using the <code>Show R Code</code> modal button. See the
-documentation of <code>teal::get_rcode</code> for more information.</p>
-<p>Default:
-<code>"# Add any code to install/load your NEST environment here"</code>.</p>
-</div>
-<div class="section level3">
-<h3 id="teal-widgets-package">
-<code>teal.widgets</code> package<a class="anchor" aria-label="anchor" href="#teal-widgets-package"></a>
-</h3>
-<div class="section level4">
-<h4 id="teal-basic_table_args-basic_table_args-object">
-<code>teal.basic_table_args</code> (<code>basic_table_args</code>
-object)<a class="anchor" aria-label="anchor" href="#teal-basic_table_args-basic_table_args-object"></a>
-</h4>
-<p>This specifies the list of arguments passed to every call to
-<code><a href="https://rdrr.io/pkg/rtables/man/basic_table.html" class="external-link">rtables::basic_table</a></code> made in a <code>teal</code>
-application. This can be used to format <code>rtables</code> without
-making any changes to the application code. See the documentation of
-<code><a href="https://rdrr.io/pkg/teal.widgets/man/basic_table_args.html" class="external-link">teal.widgets::basic_table_args</a></code> for more information.</p>
-<p>Default: <code><a href="https://rdrr.io/pkg/teal.widgets/man/basic_table_args.html" class="external-link">teal.widgets::basic_table_args()</a></code>.</p>
-</div>
-<div class="section level4">
-<h4 id="teal-ggplot2_args-ggplot2_args-object">
-<code>teal.ggplot2_args</code> (<code>ggplot2_args</code>
-object)<a class="anchor" aria-label="anchor" href="#teal-ggplot2_args-ggplot2_args-object"></a>
-</h4>
-<p>This option allows modifying labels and themes of all
-<code>ggplot2</code> plots in a <code>teal</code> application. See the
-documentation of <code><a href="https://rdrr.io/pkg/teal.widgets/man/ggplot2_args.html" class="external-link">teal.widgets::ggplot2_args</a></code> for more
-information.</p>
-<p>Default: <code><a href="https://rdrr.io/pkg/teal.widgets/man/ggplot2_args.html" class="external-link">teal.widgets::ggplot2_args()</a></code>.</p>
-</div>
-<div class="section level4">
-<h4 id="teal-plot_dpi-integer-value-24-or-larger">
-<code>teal.plot_dpi</code> (integer value 24 or larger)<a class="anchor" aria-label="anchor" href="#teal-plot_dpi-integer-value-24-or-larger"></a>
-</h4>
-<p>This option controls the dots per inch of the graphs rendered and
-downloaded when using <code>plot_with_settings</code>.</p>
-<p>Default: 72</p>
-</div>
-<div class="section level4">
-<h4 id="teal-bs_theme-bslibbs_theme-object">
-<code>teal.bs_theme</code> (<code>bslib::bs_theme</code>
-object)<a class="anchor" aria-label="anchor" href="#teal-bs_theme-bslibbs_theme-object"></a>
-</h4>
-<p>This option controls the bootstrap theme and version used in
-<code>teal</code> apps. Achieve better UX with the customized UI of an
-app. Please visit the vignette on Bootstrap themes to read more about
-the functionality.</p>
-<p>Default: <code>NULL</code></p>
-</div>
+<p>Deprecated in favor of <code>teal.show_js_log</code> (see above).</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
