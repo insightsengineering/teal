@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
-#' Create a nested tab structure to embed modules in a `teal` application.
+#' Create a nested tab structure to embed modules in a `teal` application
 #'
 #' @details
 #' `module()` creates an instance of a `teal_module` that can be placed in a `teal` application.
@@ -23,15 +23,15 @@
 #' @param server (`function`) `shiny` module with following arguments:
 #'  - `id` - `teal` will set proper `shiny` namespace for this module (see [shiny::moduleServer()]).
 #'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
-#'  - `data` (optional) module will receive a `teal_data` object, a list of reactive (filtered) data specified in
+#'  - `data` (optional) If present, module will receive a `teal_data` object, a list of reactive (filtered) data specified in
 #'     the `filters` argument.
-#'  - `datasets` (optional) module will receive `FilteredData`. (See [`teal.slice::FilteredData`]).
-#'  - `reporter` (optional) module will receive `Reporter`. (See [`teal.reporter::Reporter`]).
-#'  - `filter_panel_api` (optional) module will receive `FilterPanelAPI`. (See [`teal.slice::FilterPanelAPI`]).
-#'  - `...` (optional) `server_args` elements will be passed to the module named argument or to the `...`.
+#'  - `datasets` (optional) If present, module will receive `FilteredData`. (See [`teal.slice::FilteredData`]).
+#'  - `reporter` (optional) If present, module will receive `Reporter`. (See [`teal.reporter::Reporter`]).
+#'  - `filter_panel_api` (optional) If present, module will receive `FilterPanelAPI`. (See [`teal.slice::FilterPanelAPI`]).
+#'  - `...` (optional) If present, `server_args` elements will be passed to the module named argument or to the `...`.
 #' @param ui (`function`) `shiny` UI module function with following arguments:
 #'  - `id` - `teal` will set proper `shiny` namespace for this module.
-#'  - `...` (optional) `ui_args` elements will be passed to the module named argument or to the `...`.
+#'  - `...` (optional) If present, `ui_args` elements will be passed to the module named argument or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
 #' @param datanames (`character`) A vector with `datanames` that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
