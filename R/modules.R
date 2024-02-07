@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
-#' Create a nested tab structure to embed modules in a `teal` application
+#' Create a nested tab structure to embed modules in a `teal` application.
 #'
 #' @details
 #' `module()` creates an instance of a `teal_module` that can be placed in a `teal` application.
