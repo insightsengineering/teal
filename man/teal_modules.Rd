@@ -9,7 +9,7 @@
 \alias{print.teal_module}
 \alias{format.teal_modules}
 \alias{print.teal_modules}
-\title{Create \code{teal_module} and \code{teal_modules} objects.}
+\title{Create \code{teal_module} and \code{teal_modules} objects}
 \usage{
 module(
   label = "module",

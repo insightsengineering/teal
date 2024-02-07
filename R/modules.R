@@ -1,4 +1,4 @@
-#' Create `teal_module` and `teal_modules` objects.
+#' Create `teal_module` and `teal_modules` objects
 #'
 #' @description
 #' `r lifecycle::badge("stable")`

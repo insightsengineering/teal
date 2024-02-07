@@ -1,6 +1,6 @@
 # This file adds a splash screen for delayed data loading on top of teal
 
-#' Add splash screen to `teal` application.
+#' Add splash screen to `teal` application
 #'
 #' @description `r lifecycle::badge("stable")`
 #'
