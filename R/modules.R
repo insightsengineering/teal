@@ -23,11 +23,12 @@
 #' @param server (`function`) `shiny` module with following arguments:
 #'  - `id` - `teal` will set proper `shiny` namespace for this module (see [shiny::moduleServer()]).
 #'  - `input`, `output`, `session` - (not recommended) then [shiny::callModule()] will be used to call a module.
-#'  - `data` (optional) If present, module will receive a `teal_data` object, a list of reactive (filtered) data specified in
-#'     the `filters` argument.
+#'  - `data` (optional) If present, module will receive a `teal_data` object, a list of reactive (filtered)
+#'     data specified in the `filters` argument.
 #'  - `datasets` (optional) If present, module will receive `FilteredData`. (See [`teal.slice::FilteredData`]).
 #'  - `reporter` (optional) If present, module will receive `Reporter`. (See [`teal.reporter::Reporter`]).
-#'  - `filter_panel_api` (optional) If present, module will receive `FilterPanelAPI`. (See [`teal.slice::FilterPanelAPI`]).
+#'  - `filter_panel_api` (optional) If present, module will receive `FilterPanelAPI`.
+#'     (See [`teal.slice::FilterPanelAPI`]).
 #'  - `...` (optional) If present, `server_args` elements will be passed to the module named argument or to the `...`.
 #' @param ui (`function`) `shiny` UI module function with following arguments:
 #'  - `id` - `teal` will set proper `shiny` namespace for this module.
