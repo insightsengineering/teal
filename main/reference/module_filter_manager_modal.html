@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9043</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9044</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,16 +64,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -134,51 +124,6 @@ Specifies the initial filter using <code><a href="teal_slices.html">teal_slices(
 
 </dl></div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># use non-exported function from teal</span></span></span>
-<span class="r-in"><span><span class="va">filter_manager_modal_ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/getFromNamespace.html" class="external-link">getFromNamespace</a></span><span class="op">(</span><span class="st">"filter_manager_modal_ui"</span>, <span class="st">"teal"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">filter_manager_modal_srv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/getFromNamespace.html" class="external-link">getFromNamespace</a></span><span class="op">(</span><span class="st">"filter_manager_modal_srv"</span>, <span class="st">"teal"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">fd1</span> <span class="op">&lt;-</span> <span class="fu">teal.slice</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/init_filtered_data.html">init_filtered_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">fd2</span> <span class="op">&lt;-</span> <span class="fu">teal.slice</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/init_filtered_data.html">init_filtered_data</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>, mtcars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">fd3</span> <span class="op">&lt;-</span> <span class="fu">teal.slice</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/init_filtered_data.html">init_filtered_data</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>, women <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dataset <span class="op">=</span> <span class="va">women</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">filter</span> <span class="op">&lt;-</span> <span class="fu"><a href="teal_slices.html">teal_slices</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu">teal.slice</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"iris"</span>, varname <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu">teal.slice</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"iris"</span>, varname <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu">teal.slice</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu">teal.slice</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"women"</span>, varname <span class="op">=</span> <span class="st">"height"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  mapping <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    module2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mtcars mpg"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    module3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"women height"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    global_filters <span class="op">=</span> <span class="st">"iris Species"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu">filter_manager_modal_ui</span><span class="op">(</span><span class="st">"manager"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observe.html" class="external-link">observe</a></span><span class="op">(</span><span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="fu">filter_manager_modal_srv</span><span class="op">(</span></span></span>
-<span class="r-in"><span>      <span class="st">"manager"</span>,</span></span>
-<span class="r-in"><span>      filtered_data_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>module1 <span class="op">=</span> <span class="va">fd1</span>, module2 <span class="op">=</span> <span class="va">fd2</span>, module3 <span class="op">=</span> <span class="va">fd3</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>      filter <span class="op">=</span> <span class="va">filter</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="op">}</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
