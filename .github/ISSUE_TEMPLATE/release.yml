@@ -63,10 +63,12 @@ body:
           git push origin release-candidate-vX.Y.Z
           ```
 
+
         #### Test the release
         - [ ] Execute the manual tests on Shiny apps that are deployed on various hosting providers (Posit connect and shinyapps.io) - track the results in GitHub issue (Applicable only for frameworks that use Shiny).
         - [ ] Monitor integration tests, if integration fails, create priority issues on the board.
         - [ ] Execute UAT tests (Optional).
+
 
         #### Validation loop
 
