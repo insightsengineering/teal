@@ -10,7 +10,7 @@ vignette: >
 
 ## Introduction
 
-`teal` is a shiny-based interactive exploration framework for analyzing data, with particular emphasis on CDISC clinical trial data. 
+`teal` is a shiny-based interactive exploration framework for analyzing data, with particular emphasis on CDISC clinical trial data.
 `teal` applications allow their users to:
 
 * "Pull" in data from external data sources
@@ -92,7 +92,7 @@ It is also possible to specify relationships between the datasets using the `joi
 If data is not available and has to be pulled from a remote source, `init` must receive a `teal_data_module` that specifies how to obtain the desired datasets and put them into a `teal_data` object.
 See [this vignette](data-as-shiny-module.html) for details.
 
-In order to use CDISC clinical trial data in a `teal` application the `cdisc_data` function is used instead. 
+In order to use CDISC clinical trial data in a `teal` application the `cdisc_data` function is used instead.
 Custom `SDTM` standards can be handled with `teal_data` and `join_keys`.
 
 For further details, we recommend exploring the [`teal.data`](https://insightsengineering.github.io/teal.data/) package documentation.
@@ -120,7 +120,7 @@ This report can then be downloaded and a special _Report Previewer_ module will 
 `teal` hands over data with reproducible code to every module included in the application.
 Note that `teal` does not display the code, that is the modules' responsibility.
 For example, the `example_module` function used above shows the code in the main panel together with other outputs.
-For more details see [this vignette](reproducible-code.html).
+For more details see [this vignette](including-data-in-teal-applications.html).
 
 ## Where to go next
 

@@ -46,7 +46,7 @@
 #' @export
 new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
   lifecycle::deprecate_soft(
-    when = "0.99.0",
+    when = "0.15.0",
     what = "tdata()",
     details = paste(
       "tdata is deprecated and will be removed in the next release. Use `teal_data` instead.\n",

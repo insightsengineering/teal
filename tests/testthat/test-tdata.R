@@ -2,6 +2,7 @@ withr::local_options(lifecycle_verbosity = "quiet")
 
 # ---- constructor ----
 testthat::test_that("new_tdata accepts reactive and not reactive MAE and data.frames", {
+  testthat::skip_if_not_installed("MultiAssayExperiment")
   utils::data(miniACC, package = "MultiAssayExperiment")
 
   testthat::expect_no_error(
@@ -179,6 +180,7 @@ testthat::test_that("get_code_tdata returns character code", {
 
 # ---- tdata2env ----
 testthat::test_that("tdata2env returns environment containing tdata contents ", {
+  testthat::skip_if_not_installed("MultiAssayExperiment")
   utils::data(miniACC, package = "MultiAssayExperiment")
   my_tdata <- new_tdata(data = list(iris = iris, mae = reactive(miniACC)))
 
