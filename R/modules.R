@@ -392,32 +392,6 @@ is_arg_used <- function(modules, arg) {
 #' @param depth optional, integer determining current depth level
 #'
 #' @return Depth level for given module.
-#' @examples
-#' # use non-exported function from teal
-#' modules_depth <- getFromNamespace("modules_depth", "teal")
-#'
-#' mods <- modules(
-#'   label = "d1",
-#'   modules(
-#'     label = "d2",
-#'     modules(
-#'       label = "d3",
-#'       module(label = "aaa1"), module(label = "aaa2"), module(label = "aaa3")
-#'     ),
-#'     module(label = "bbb")
-#'   ),
-#'   module(label = "ccc")
-#' )
-#' stopifnot(modules_depth(mods) == 3L)
-#'
-#' mods <- modules(
-#'   label = "a",
-#'   modules(
-#'     label = "b1", module(label = "c")
-#'   ),
-#'   module(label = "b2")
-#' )
-#' stopifnot(modules_depth(mods) == 2L)
 #' @keywords internal
 modules_depth <- function(modules, depth = 0L) {
   checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))

@@ -22,21 +22,6 @@
 #'
 #' @seealso [teal_slices()]
 #'
-#' @examples
-#' # use non-exported function from teal
-#' slices_store <- getFromNamespace("slices_store", "teal")
-#'
-#' # Create a teal_slices object
-#' tss <- teal_slices(
-#'   teal_slice(dataname = "data", varname = "var"),
-#'   teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
-#' )
-#'
-#' slices_path <- tempfile(pattern = "teal_slices", fileext = ".json")
-#' print(slices_path)
-#'
-#' # Store the teal_slices object to a file
-#' slices_store(tss, slices_path)
 #' @keywords internal
 #'
 slices_store <- function(tss, file) {
@@ -48,14 +33,6 @@ slices_store <- function(tss, file) {
 
 #' @rdname slices_store
 #' @return `slices_restore` returns a `teal_slices` object restored from the file.
-#' @examples
-#'
-#' # use non-exported function from teal
-#' slices_restore <- getFromNamespace("slices_restore", "teal")
-#'
-#' # Restore a teal_slices object from a file
-#' tss_restored <- slices_restore(slices_path)
-#'
 #' @keywords internal
 slices_restore <- function(file) {
   checkmate::assert_file_exists(file, access = "r", extension = "json")
