@@ -8,8 +8,8 @@
 <meta name="description" content="teal">
 <title>Filter Panel • teal</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Filter Panel">
 <meta property="og:description" content="teal">
@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
-  <a class="nav-link" href="../articles/teal.html">Get started</a>
+  <a class="nav-link" href="../articles/getting-started-with-teal.html">Get started</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -45,15 +45,38 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>Get started</h6>
+    <a class="dropdown-item" href="../articles/getting-started-with-teal.html">Getting Started with teal</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Using `teal`</h6>
     <a class="dropdown-item" href="../articles/filter-panel.html">Filter Panel</a>
-    <a class="dropdown-item" href="../articles/including-general-data-in-teal.html">Input general data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-adam-data-in-teal.html">Input `ADaM` data in a teal application</a>
-    <a class="dropdown-item" href="../articles/including-mae-data-in-teal.html">Input `MultiAssayExperiment` data in a teal application</a>
-    <a class="dropdown-item" href="../articles/preprocessing-data.html">Preprocessing data</a>
+    <a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal Application With R Options</a>
+    <a class="dropdown-item" href="../articles/bootstrap-themes-in-teal.html">Bootstrap Themes in teal</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Data in `teal` apps</h6>
+    <a class="dropdown-item" href="../articles/including-data-in-teal-applications.html">Including Data in teal Applications</a>
+    <a class="dropdown-item" href="../articles/data-as-shiny-module.html">Data as shiny Module</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Extending `teal`</h6>
     <a class="dropdown-item" href="../articles/creating-custom-modules.html">Creating Custom Modules</a>
-    <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding support for Reporting to custom modules</a>
-    <a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal application with R options</a>
-    <a class="dropdown-item" href="../articles/teal-bs-themes.html">teal and Bootstrap Themes</a>
+    <a class="dropdown-item" href="../articles/adding-support-for-reporting.html">Adding Support for Reporting to Custom Modules</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-technical-blueprint">Technical blueprint</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-technical-blueprint">
+    <a class="dropdown-item" href="../articles/blueprint/index.html">About blueprint</a>
+    <a class="dropdown-item" href="../articles/blueprint/intro.html">Introduction</a>
+    <a class="dropdown-item" href="../articles/blueprint/actors.html">Actors</a>
+    <a class="dropdown-item" href="../articles/blueprint/dataflow.html">Data flow</a>
+    <a class="dropdown-item" href="../articles/blueprint/product_map.html">Product map</a>
+    <h6 class="dropdown-header" data-toc-skip>Features</h6>
+    <a class="dropdown-item" href="../articles/blueprint/input_data.html">Input data</a>
+    <a class="dropdown-item" href="../articles/blueprint/in_app_data.html">In-app data</a>
+    <a class="dropdown-item" href="../articles/blueprint/filter_panel.html">Filter panel</a>
+    <a class="dropdown-item" href="../articles/blueprint/module_encapsulation.html">Module and encapsulation</a>
   </div>
 </li>
 <li class="nav-item">
@@ -67,6 +90,7 @@
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
@@ -106,9 +130,8 @@
                         <h4 data-toc-skip class="author">NEST
 CoreDev</h4>
             
-            <h4 data-toc-skip class="date">2023-07-12</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/HEAD/vignettes/filter-panel.Rmd" class="external-link"><code>vignettes/filter-panel.Rmd</code></a></small>
       <div class="d-none name"><code>filter-panel.Rmd</code></div>
     </div>
 
@@ -124,32 +147,28 @@ made in the filter panel, filter expressions are executed before passing
 data to <code>teal</code> modules. The technical details of the filter
 panel are extensively described in <a href="https://insightsengineering.github.io/teal.slice/latest-tag/"><code>teal.slice</code>
 documentation</a>.</p>
-<p>By default, <code><a href="../reference/init.html">teal::init</a></code> initializes the filter panel
-without any active filters but allows the user to add filters on any
-column. To start a <code>teal</code> application with predefined
-filters, one must to specify the <code>filter</code> argument. In the
-following example four filters are specified using the
-<code>teal_slice</code> function and wrapped together with
-<code>teal_slices</code>.</p>
+<p>By default, <code>init</code> initializes the filter panel without
+any active filters but allows the user to add filters on any column. To
+start a <code>teal</code> application with predefined filters, one must
+specify the <code>filter</code> argument. In the following example four
+filters are specified using the <code>teal_slice</code> function and
+wrapped together with <code>teal_slices</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://insightsengineering.github.io/teal/">teal</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span>, code <span class="op">=</span> <span class="st">"IRIS &lt;- iris"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"CARS"</span>, <span class="va">mtcars</span>, code <span class="op">=</span> <span class="st">"CARS &lt;- mtcars"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span>IRIS <span class="op">=</span> <span class="va">iris</span>, CARS <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
 <span>  modules <span class="op">=</span> <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  filter <span class="op">=</span> <span class="fu"><a href="../reference/teal_slices.html">teal_slices</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"IRIS"</span>, varname <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"IRIS"</span>, varname <span class="op">=</span> <span class="st">"Species"</span>, selected <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"CARS"</span>, varname <span class="op">=</span> <span class="st">"mpg"</span>, selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"CARS"</span>, expr <span class="op">=</span> <span class="st">"qsec &lt; 20"</span>, title <span class="op">=</span> <span class="st">"1/4 mile under 20 sec"</span>, id <span class="op">=</span> <span class="st">"qsec_20"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"IRIS"</span>, varname <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"IRIS"</span>, varname <span class="op">=</span> <span class="st">"Species"</span>, selected <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"CARS"</span>, varname <span class="op">=</span> <span class="st">"mpg"</span>, selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"CARS"</span>, expr <span class="op">=</span> <span class="st">"qsec &lt; 20"</span>, title <span class="op">=</span> <span class="st">"1/4 mile under 20 sec"</span>, id <span class="op">=</span> <span class="st">"qsec_20"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -158,19 +177,16 @@ following example four filters are specified using the
 <div class="section level3">
 <h3 id="filter-panel-respective-to-teal_module">Filter panel respective to <code>teal_module</code><a class="anchor" aria-label="anchor" href="#filter-panel-respective-to-teal_module"></a>
 </h3>
-<p>Each <code>teal_module</code> (see <code><a href="../reference/module.html">?module</a></code>) object
-contains the <code>filters</code> attribute that determines which data
+<p>Each <code>teal_module</code> (see <code><a href="../reference/teal_modules.html">?module</a></code>) object
+contains the <code>datanames</code> attribute that determines which data
 sets are to be sent to that module. The filter panel will display only
 those data sets and hide the rest when this module is active.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://insightsengineering.github.io/teal/">teal</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"IRIS"</span>, <span class="va">iris</span>, code <span class="op">=</span> <span class="st">"IRIS &lt;- iris"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.data/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span><span class="st">"CARS"</span>, <span class="va">mtcars</span>, code <span class="op">=</span> <span class="st">"CARS &lt;- mtcars"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span>IRIS <span class="op">=</span> <span class="va">iris</span>, CARS <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>  modules <span class="op">=</span> <span class="fu"><a href="../reference/teal_modules.html">modules</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"all datasets"</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"IRIS only"</span>, datanames <span class="op">=</span> <span class="st">"IRIS"</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"CARS only"</span>, datanames <span class="op">=</span> <span class="st">"CARS"</span><span class="op">)</span>,</span>
@@ -178,7 +194,7 @@ those data sets and hide the rest when this module is active.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -188,12 +204,12 @@ those data sets and hide the rest when this module is active.</p>
 extends the original <code>teal_slices</code> found in
 <code>teal.slice</code> by adding two arguments:
 <code>module_specific</code> and <code>mapping</code>. By default
-<code><a href="../reference/init.html">teal::init</a></code> initializes app with a “global” filter panel,
+<code>init</code> initializes the app with a “global” filter panel,
 where all modules use the same filters. Setting
 <code>module_specific = TRUE</code> switches to a “module-specific”
 filter panel, where each module can have a different set of filters
-active. It is still possible to set global filters that will be shared
-among modules.</p>
+active at any time. It is still possible to set global filters that will
+be shared among modules.</p>
 <p>One possible scenario is depicted in the figure below:</p>
 <ul>
 <li>
@@ -212,22 +228,23 @@ among modules.</p>
 <code>filter 5</code> and <code>filter 6</code> are not active in
 any of the modules</li>
 </ul>
-<p><img src="images/filters_mapping.jpg"></p>
-<p>To achieve the described setup, one must use the <code>mapping</code>
-argument to appropriately match each <code>teal_module</code> with its
-respective <code>teal_slice</code>. <code>mapping</code> takes a named
-list where each element is named with a module’s <code>label</code> and
-contains a vector of <code>teal_slice</code> <code>id</code>s. These
-elements will active in that module at startup. In addition,
-<code>teal_slice</code>s whose <code>id</code>s are enumerated in the
-<code>global_filters</code> element of <code>mapping</code> will be
-applied to all modules in the app.</p>
+<!-- This image is generated using the diagram inside `inst/design`  --><p><img src="images/filters-mapping.svg"></p>
+<p>To achieve the described setup, one must set the
+<code>module_specific</code> argument to <code>TRUE</code> and use the
+<code>mapping</code> argument to match filters to modules.
+<code>mapping</code> takes a named list where element names correspond
+to module labels, and elements are vectors of <code>teal_slice</code>
+<code>id</code>s applied to that module at startup.
+<code>teal_slice</code>s listed the element called
+<code>"global_filters"</code> will be applied to all modules.</p>
+<p>For a detailed explanation about the filter states, see <a href="https://insightsengineering.github.io/teal.slice/latest-tag/articles/filter-panel-for-developers.html">this
+<code>teal.slice</code> vignette</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://insightsengineering.github.io/teal/">teal</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mtcars <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
-<span>  modules <span class="op">=</span> <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span>mtcars <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>  modules <span class="op">=</span> <span class="fu"><a href="../reference/teal_modules.html">modules</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"module 1"</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"module 2"</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"module 3"</span><span class="op">)</span>,</span>
@@ -235,13 +252,14 @@ applied to all modules in the app.</p>
 <span>  <span class="op">)</span>,</span>
 <span>  filter <span class="op">=</span> <span class="fu"><a href="../reference/teal_slices.html">teal_slices</a></span><span class="op">(</span></span>
 <span>    <span class="co"># filters created with id</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"mpg"</span>, id <span class="op">=</span> <span class="st">"filter 1"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"cyl"</span>, id <span class="op">=</span> <span class="st">"filter 2"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"disp"</span>, id <span class="op">=</span> <span class="st">"filter 3"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"hp"</span>, id <span class="op">=</span> <span class="st">"filter 4"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"drat"</span>, id <span class="op">=</span> <span class="st">"filter 5"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/teal.slice/man/teal_slice.html" class="external-link">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"wt"</span>, id <span class="op">=</span> <span class="st">"filter 6"</span><span class="op">)</span>,</span>
-<span></span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"mpg"</span>, id <span class="op">=</span> <span class="st">"filter 1"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"cyl"</span>, id <span class="op">=</span> <span class="st">"filter 2"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"disp"</span>, id <span class="op">=</span> <span class="st">"filter 3"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"hp"</span>, id <span class="op">=</span> <span class="st">"filter 4"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"drat"</span>, id <span class="op">=</span> <span class="st">"filter 5"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"wt"</span>, id <span class="op">=</span> <span class="st">"filter 6"</span><span class="op">)</span>,</span>
+<span>    <span class="co"># module-specific filtering enabled</span></span>
+<span>    module_specific <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    <span class="co"># filters mapped to modules</span></span>
 <span>    mapping <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      <span class="st">"module 1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"filter 2"</span>, <span class="st">"filter 4"</span><span class="op">)</span>,</span>
@@ -253,7 +271,7 @@ applied to all modules in the app.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
