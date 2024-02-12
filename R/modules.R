@@ -22,20 +22,23 @@
 #'   For `modules()` defaults to `"root"`. See `Details`.
 #' @param server (`function`) `shiny` module with following arguments:
 #'  - `id` - `teal` will set proper `shiny` namespace for this module (see [shiny::moduleServer()]).
-#'  - `input`, `output`, `session` - (optional; not recommended) If present, then [shiny::callModule()] will be used to call a module.
-#'    From `shiny` 1.5.0, the recommended way is to use [shiny::moduleServer()] instead which doesn't require these arguments.
-#'  - `data` (optional) If present, the module will be called with `teal_data` object (i.e. a list of reactive (filtered)
-#'    data specified in the `filters` argument) as the value of this argument.
-#'  - `datasets` (optional) If present, the module will be called with `FilteredData` object as the value of this argument.
-#'    (See [`teal.slice::FilteredData`]).
-#'  - `reporter` (optional) If present, the module will be called with `Reporter` object as the value of this argument.
-#'    (See [`teal.reporter::Reporter`]).
-#'  - `filter_panel_api` (optional) If present, the module will be called with `FilterPanelAPI` object as the value of this argument.
-#'    (See [`teal.slice::FilterPanelAPI`]).
-#'  - `...` (optional) If present, `server_args` elements will be passed to the module named argument or to the `...`.
+#'  - `input`, `output`, `session` - (optional; not recommended) If present, then [shiny::callModule()]
+#'    will be used to call a module. From `shiny` 1.5.0, the recommended way is to use
+#'    [shiny::moduleServer()] instead which doesn't require these arguments.
+#'  - `data` (optional) If present, the module will be called with `teal_data` object (i.e. a list of
+#'    reactive (filtered) data specified in the `filters` argument) as the value of this argument.
+#'  - `datasets` (optional) If present, the module will be called with `FilteredData` object as the
+#'    value of this argument. (See [`teal.slice::FilteredData`]).
+#'  - `reporter` (optional) If present, the module will be called with `Reporter` object as the value
+#'    of this argument. (See [`teal.reporter::Reporter`]).
+#'  - `filter_panel_api` (optional) If present, the module will be called with `FilterPanelAPI` object
+#'    as the value of this argument. (See [`teal.slice::FilterPanelAPI`]).
+#'  - `...` (optional) If present, `server_args` elements will be passed to the module named argument
+#'    or to the `...`.
 #' @param ui (`function`) `shiny` UI module function with following arguments:
 #'  - `id` - `teal` will set proper `shiny` namespace for this module.
-#'  - `...` (optional) If present, `ui_args` elements will be passed to the module named argument or to the `...`.
+#'  - `...` (optional) If present, `ui_args` elements will be passed to the module named argument
+#'    or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
 #' @param datanames (`character`) A vector with `datanames` that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
