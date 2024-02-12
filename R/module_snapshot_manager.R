@@ -1,4 +1,4 @@
-#' Filter state snapshot management.
+#' Filter state snapshot management
 #'
 #' Capture and restore snapshots of the global (app) filter state.
 #'
