@@ -105,7 +105,7 @@ init <- function(data,
   ## `data`
   if (inherits(data, "TealData")) {
     lifecycle::deprecate_stop(
-      when = "0.99.0",
+      when = "0.15.0",
       what = "init(data)",
       paste(
         "TealData is no longer supported. Use teal_data() instead.",

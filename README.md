@@ -78,13 +78,13 @@ library(teal)
 app <- init(
   data = teal_data(iris = iris),
   modules = list(
-    module( 
+    module(
       label = "iris histogram",
       server = function(input, output, session, data) {
         updateSelectInput(session = session,
                           inputId =  "var",
                           choices = names(data()[["iris"]])[1:4])
-        
+
         output$hist <- renderPlot({
           req(input$var)
           hist(x = data()[["iris"]][[input$var]])
@@ -108,7 +108,7 @@ shinyApp(app$ui, app$server)
 
 ![App recording](man/figures/readme_app.webp)
 
-Please see [`teal.gallery`](https://insightsengineering.github.io/teal.gallery) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog) to see examples of `teal` apps.
+Please see [`teal.gallery`](https://insightsengineering.github.io/teal.gallery/) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog/) to see examples of `teal` apps.
 
 Please start with the ["Technical Blueprint" article](https://insightsengineering.github.io/teal/latest-tag/articles/blueprint/index.html), ["Getting Started" article](https://insightsengineering.github.io/teal/latest-tag/articles/teal.html), and then other [package vignettes](https://insightsengineering.github.io/teal/latest-tag/articles/index.html) for more detailed guide.
 
