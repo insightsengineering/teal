@@ -1,4 +1,4 @@
-#' Send input validation messages to output.
+#' Send input validation messages to output
 #'
 #' Captures messages from `InputValidator` objects and collates them
 #' into one message passed to `validate`.

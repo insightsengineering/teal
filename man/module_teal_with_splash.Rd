@@ -4,7 +4,7 @@
 \alias{module_teal_with_splash}
 \alias{ui_teal_with_splash}
 \alias{srv_teal_with_splash}
-\title{Add splash screen to \code{teal} application.}
+\title{Add splash screen to \code{teal} application}
 \usage{
 ui_teal_with_splash(
   id,

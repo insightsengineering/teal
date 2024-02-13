@@ -6,7 +6,7 @@
 \alias{snapshot}
 \alias{snapshot_manager}
 \alias{snapshot_manager_srv}
-\title{Filter state snapshot management.}
+\title{Filter state snapshot management}
 \usage{
 snapshot_manager_ui(id)
 
