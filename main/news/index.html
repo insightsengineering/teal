@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.9000</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,19 +64,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -104,6 +91,9 @@
       <small>Source: <a href="https://github.com/insightsengineering/teal/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.15.0.9000" id="teal-01509000">teal 0.15.0.9000<a class="anchor" aria-label="anchor" href="#teal-01509000"></a></h2>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.15.0" id="teal-0150">teal 0.15.0<a class="anchor" aria-label="anchor" href="#teal-0150"></a></h2><p class="text-muted">CRAN release: 2024-02-08</p>
 <div class="section level4">
@@ -315,7 +305,7 @@
 </ul></div>
 <div class="section level4">
 <h4 id="miscellaneous-0-10-1">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-10-1"></a></h4>
-<ul><li>Soft-deprecate <code><a href="https://insightsengineering.github.io/teal.data/reference/TealData.html">mae_dataset()</a></code> in favor of more general <code><a href="https://insightsengineering.github.io/teal.data/reference/TealData.html">dataset()</a></code> constructor.</li>
+<ul><li>Soft-deprecate <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/TealData.html">mae_dataset()</a></code> in favor of more general <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/TealData.html">dataset()</a></code> constructor.</li>
 <li>Added a vignette describing the modifications to <code>teal</code> applications users can apply using <code>R</code> options.</li>
 <li>Added default values to the <code>label</code> argument of <code>select_spec</code> and <code>filter_spec</code>.</li>
 <li>Added validation to <code>FilteredDataset::get_data</code> to accept logical input only.</li>
@@ -417,15 +407,15 @@
 <div class="section level4">
 <h4 id="new-features-0-9-3">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-3"></a></h4>
 <ul><li>Support for data-standard independent input and filtering. That includes refactor of the all data and dataset structures together with refactor of <code>FilteredData</code> class.</li>
-<li>New <code>JoinKeys</code> class (with <code><a href="https://insightsengineering.github.io/teal.data/reference/join_keys.html">join_keys()</a></code> constructors and <code><a href="https://insightsengineering.github.io/teal.data/reference/join_key.html">join_key()</a></code> constructor for its elements) to store joining key columns between datasets.</li>
-<li>Refactored the most basic <code><a href="https://insightsengineering.github.io/teal.data/reference/TealData.html">dataset()</a></code> constructor, added <code><a href="https://insightsengineering.github.io/teal.data/reference/TealData.html">cdisc_dataset()</a></code> constructor and <code><a href="https://insightsengineering.github.io/teal.data/reference/TealData.html">as_cdisc()</a></code> conversion function.</li>
+<li>New <code>JoinKeys</code> class (with <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/join_keys.html">join_keys()</a></code> constructors and <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/join_key.html">join_key()</a></code> constructor for its elements) to store joining key columns between datasets.</li>
+<li>Refactored the most basic <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/TealData.html">dataset()</a></code> constructor, added <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/TealData.html">cdisc_dataset()</a></code> constructor and <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/TealData.html">as_cdisc()</a></code> conversion function.</li>
 <li>Soft-deprecate removed class constructors and obsolete functions (e.g. <code>keys()</code>).</li>
-<li>Added <code><a href="https://insightsengineering.github.io/teal.data/reference/TealData.html">get_keys()</a></code> and <code><a href="https://insightsengineering.github.io/teal.data/reference/TealData.html">set_keys()</a></code> functions to extract and manipulate datasets primary keys respectively.</li>
+<li>Added <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/TealData.html">get_keys()</a></code> and <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/TealData.html">set_keys()</a></code> functions to extract and manipulate datasets primary keys respectively.</li>
 <li>Unexported <code>filtered_data_new</code>, <code>filtered_data_set</code> and <code>filtered_data_set_filters</code>.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="bug-fixes-0-9-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-3"></a></h4>
-<ul><li>Duplicated lines of code passed to <code><a href="https://insightsengineering.github.io/teal.data/reference/TealData.html">teal::cdisc_dataset</a></code> and other <code>teal::RelationalDataset</code> constructors should now be shown when getting the code from <code><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_data.html">teal::cdisc_data</a></code> objects and other <code>teal::RelationalData</code> objects.</li>
+<ul><li>Duplicated lines of code passed to <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/TealData.html">teal::cdisc_dataset</a></code> and other <code>teal::RelationalDataset</code> constructors should now be shown when getting the code from <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/cdisc_data.html">teal::cdisc_data</a></code> objects and other <code>teal::RelationalData</code> objects.</li>
 <li>Added ability to press “Enter” key without having to set focus to the Submit button for delayed data loading.</li>
 <li>Allow <code>variable_choices</code> to use datasets with missing labels.</li>
 <li>Fixed bug that ignores input of <code>NULL</code> to <code>selected</code> argument of <code>select_spec</code> function.</li>
@@ -508,7 +498,7 @@
 <ul><li>
 <code>FilteredData</code> is now fully reactive. Now filtered data is lazy evaluated as per need. This further opens the door to bookmarking <code>teal</code> apps (bookmarking currently works for the right filtering panel, but we will make this feature more sophisticated in a future release, each module must be reviewed and adapted if it contains <code>reactiveValues</code>).</li>
 <li>Datasets and materialized connectors are provided to <code>FilteredData</code> by <code>set_datasets_data</code> function located in <code>init_datasets.R</code> file.</li>
-<li>Renamed <code><a href="https://insightsengineering.github.io/teal.data/reference/TealData.html">get_dataset()</a></code> method to <code>get_data()</code>.</li>
+<li>Renamed <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/TealData.html">get_dataset()</a></code> method to <code>get_data()</code>.</li>
 <li>Renamed <code>get_filter_call()</code> method to <code><a href="https://insightsengineering.github.io/teal.slice/reference/get_filter_expr.html">get_filter_expr()</a></code>; returns an expression rather than a list.</li>
 <li>Removed argument <code>isolate</code> from <code>get_data()</code> method and similar methods. You must <code>isolate</code> it yourself as needed. If you want to temporarily deactivate <code>shiny</code> errors due to missing errors, you can set <code>options(shiny.suppressMissingContextError = TRUE)</code>. In general, avoid <code>isolate</code> as this breaks reactivity.</li>
 <li>We added a development module to add several filters at once, e.g. safety filters. This is to be evaluated before it is converted into a proper module and made available to end-users.</li>
