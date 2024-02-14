@@ -9,7 +9,7 @@
 \alias{print.teal_module}
 \alias{format.teal_modules}
 \alias{print.teal_modules}
-\title{Create \code{teal_module} and \code{teal_modules} objects.}
+\title{Create \code{teal_module} and \code{teal_modules} objects}
 \usage{
 module(
   label = "module",
@@ -45,19 +45,26 @@ For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 \item{server}{(\code{function}) \code{shiny} module with following arguments:
 \itemize{
 \item \code{id} - \code{teal} will set proper \code{shiny} namespace for this module (see \code{\link[shiny:moduleServer]{shiny::moduleServer()}}).
-\item \code{input}, \code{output}, \code{session} - (not recommended) then \code{\link[shiny:callModule]{shiny::callModule()}} will be used to call a module.
-\item \code{data} (optional) module will receive a \code{teal_data} object, a list of reactive (filtered) data specified in
-the \code{filters} argument.
-\item \code{datasets} (optional) module will receive \code{FilteredData}. (See \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}).
-\item \code{reporter} (optional) module will receive \code{Reporter}. (See \code{\link[teal.reporter:Reporter]{teal.reporter::Reporter}}).
-\item \code{filter_panel_api} (optional) module will receive \code{FilterPanelAPI}. (See \code{\link[teal.slice:FilterPanelAPI]{teal.slice::FilterPanelAPI}}).
-\item \code{...} (optional) \code{server_args} elements will be passed to the module named argument or to the \code{...}.
+\item \code{input}, \code{output}, \code{session} - (optional; not recommended) When provided, then \code{\link[shiny:callModule]{shiny::callModule()}}
+will be used to call a module. From \code{shiny} 1.5.0, the recommended way is to use
+\code{\link[shiny:moduleServer]{shiny::moduleServer()}} instead which doesn't require these arguments.
+\item \code{data} (optional) When provided, the module will be called with \code{teal_data} object (i.e. a list of
+reactive (filtered) data specified in the \code{filters} argument) as the value of this argument.
+\item \code{datasets} (optional) When provided, the module will be called with \code{FilteredData} object as the
+value of this argument. (See \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}).
+\item \code{reporter} (optional) When provided, the module will be called with \code{Reporter} object as the value
+of this argument. (See \code{\link[teal.reporter:Reporter]{teal.reporter::Reporter}}).
+\item \code{filter_panel_api} (optional) When provided, the module will be called with \code{FilterPanelAPI} object
+as the value of this argument. (See \code{\link[teal.slice:FilterPanelAPI]{teal.slice::FilterPanelAPI}}).
+\item \code{...} (optional) When provided, \code{server_args} elements will be passed to the module named argument
+or to the \code{...}.
 }}
 
 \item{ui}{(\code{function}) \code{shiny} UI module function with following arguments:
 \itemize{
 \item \code{id} - \code{teal} will set proper \code{shiny} namespace for this module.
-\item \code{...} (optional) \code{ui_args} elements will be passed to the module named argument or to the \code{...}.
+\item \code{...} (optional) When provided, \code{ui_args} elements will be passed to the module named argument
+or to the \code{...}.
 }}
 
 \item{filters}{(\code{character}) Deprecated. Use \code{datanames} instead.}
