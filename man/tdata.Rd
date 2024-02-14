@@ -3,37 +3,38 @@
 \name{tdata}
 \alias{tdata}
 \alias{new_tdata}
-\title{Create a \code{tdata} Object}
+\title{Create a \code{tdata} object}
 \usage{
 new_tdata(data, code = "", join_keys = NULL, metadata = NULL)
 }
 \arguments{
-\item{data}{A \verb{named list} of \code{data.frames} (or \code{MultiAssayExperiment})
+\item{data}{(named \code{list}) A list of \code{data.frame} or \code{MultiAssayExperiment} objects,
 which optionally can be \code{reactive}.
 Inside this object all of these items will be made \code{reactive}.}
 
-\item{code}{A \code{character} (or \code{reactive} which evaluates to a \code{character}) containing
+\item{code}{(\code{character} or \code{reactive} which evaluates to a \code{character}) containing
 the code used to generate the data. This should be \code{reactive} if the code is changing
 during a reactive context (e.g. if filtering changes the code). Inside this
 object \code{code} will be made reactive}
 
-\item{join_keys}{A \code{teal.data::join_keys} object containing relationships between the
+\item{join_keys}{(\code{teal.data::join_keys}) object containing relationships between the
 datasets.}
 
-\item{metadata}{A \verb{named list} each element contains a list of metadata about the named data.frame
+\item{metadata}{(named \code{list}) each element contains a list of metadata about the named \code{data.frame}
 Each element of these list should be atomic and length one.}
 }
 \value{
-A \code{tdata} object
+A \code{tdata} object.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-Create a new object called \code{tdata} which contains \code{data}, a \code{reactive} list of data.frames
+
+Create a new object called \code{tdata} which contains \code{data}, a \code{reactive} list of \code{data.frames}
 (or \code{MultiAssayExperiment}), with attributes:
 \itemize{
-\item{\code{code} (\code{reactive}) containing code used to generate the data}
-\item{join_keys (\code{join_keys}) containing the relationships between the data}
-\item{metadata (\verb{named list}) containing any metadata associated with the data frames}
+\item \code{code} (\code{reactive}) containing code used to generate the data
+\item join_keys (\code{join_keys}) containing the relationships between the data
+\item metadata (named \code{list}) containing any metadata associated with the data frames
 }
 }
 \examples{

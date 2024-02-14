@@ -1,22 +1,57 @@
 # This file adds a splash screen for delayed data loading on top of teal
 
-#' UI to show a splash screen in the beginning, then delegate to [srv_teal()]
+#' Add splash screen to `teal` application
 #'
 #' @description `r lifecycle::badge("stable")`
-#' The splash screen could be used to query for a password to fetch the data.
-#' [init()] is a very thin wrapper around this module useful for end-users which
-#' assumes that it is a top-level module and cannot be embedded.
-#' This function instead adheres to the Shiny module conventions.
 #'
-#' If data is obtained through delayed loading, its splash screen is used. Otherwise,
-#' a default splash screen is shown.
+#' Displays custom splash screen during initial delayed data loading.
 #'
-#' Please also refer to the doc of [init()].
+#' @details
+#' This module pauses app initialization pending delayed data loading.
+#' This is necessary because the filter panel and modules depend on the data to initialize.
 #'
-#' @param id (`character(1)`)\cr
+#' `teal_with_splash` follows the `shiny` module convention.
+#' [`init()`] is a wrapper around this that assumes that `teal` it is
+#' the top-level module and cannot be embedded.
+#'
+#' Note: It is no longer recommended to embed `teal` in `shiny` apps as a module.
+#' but rather use `init` to create a standalone application.
+#'
+#' @seealso [init()]
+#'
+#' @param id (`character(1)`)
 #'   module id
 #' @inheritParams init
+#' @param modules (`teal_modules`) object containing the output modules which
+#'   will be displayed in the `teal` application. See [modules()] and [module()] for
+#'   more details.
+#' @inheritParams shiny::moduleServer
+#' @return
+#' Returns a `reactive` expression containing a `teal_data` object when data is loaded or `NULL` when it is not.
+#' @name module_teal_with_splash
+#' @examples
+#' teal_modules <- modules(example_module())
+#' # Shiny app with modular integration of teal
+#' ui <- fluidPage(
+#'   ui_teal_with_splash(id = "app1", data = teal_data())
+#' )
+#'
+#' server <- function(input, output, session) {
+#'   srv_teal_with_splash(
+#'     id = "app1",
+#'     data = teal_data(iris = iris),
+#'     modules = teal_modules
+#'   )
+#' }
+#'
+#' if (interactive()) {
+#'   shinyApp(ui, server)
+#' }
+#'
+NULL
+
 #' @export
+#' @rdname module_teal_with_splash
 ui_teal_with_splash <- function(id,
                                 data,
                                 title = build_app_title(),
@@ -60,23 +95,11 @@ ui_teal_with_splash <- function(id,
   )
 }
 
-#' Server function that loads the data through reactive loading and then delegates
-#' to [srv_teal()].
-#'
-#' @description `r lifecycle::badge("stable")`
-#' Please also refer to the doc of [init()].
-#'
-#' @inheritParams init
-#' @param modules `teal_modules` object containing the output modules which
-#'   will be displayed in the teal application. See [modules()] and [module()] for
-#'   more details.
-#' @inheritParams shiny::moduleServer
-#' @return `reactive` containing `teal_data` object when data is loaded.
-#' If data is not loaded yet, `reactive` returns `NULL`.
 #' @export
+#' @rdname module_teal_with_splash
 srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::check_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
@@ -178,6 +201,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
 
     res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter)
     logger::log_trace("srv_teal_with_splash initialized module with data.")
-    return(res)
+
+    res
   })
 }

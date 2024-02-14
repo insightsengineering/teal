@@ -11,7 +11,7 @@ matrix_to_mapping(mapping_matrix)
 columns represent modules and row represent \code{teal_slice}s}
 }
 \value{
-\verb{named list} like that in the \code{mapping} attribute of a \code{teal_slices} object.
+Named \code{list} like that in the \code{mapping} attribute of a \code{teal_slices} object.
 }
 \description{
 Transform a mapping matrix, i.e. a data frame that maps each filter state to each module,

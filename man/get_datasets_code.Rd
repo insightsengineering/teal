@@ -22,6 +22,6 @@ Character string concatenated from the following elements:
 }
 }
 \description{
-Get combined code from \code{FilteredData} and from \code{CodeClass} object.
+Retrieve complete code to create, verify, and filter a dataset.
 }
 \keyword{internal}

@@ -21,8 +21,12 @@ knitr::opts_chunk$set(
 
 ## Data in `teal` Applications
 
-While the `teal` framework is mainly geared towards clinical data that conforms to the `ADaM` standard, general, non-relational data is handled just as well and the mechanism of passing data to applications is virtually the same.
-Also, modules in `teal.modules.general` have been designed to work with general data.
+The `teal` framework readily accepts general, non-relational data.
+Modules defined in the `teal.modules.general` package are designed to work well with that kind of data.
+Relational data is handled just as well and the mechanism of passing data to applications is virtually the same.
+This includes clinical data that conforms to the `ADaM` standard.
+We are working on making the framework extendable so that support for other data structures can be added with relative ease.
+Currently some support is offered for the `MultiAssayExperiment` class.
 
 All applications use the `teal_data` class as a data container.
 `teal_data` objects are passed to `init` to build the application, where they are modified by the filter panel (if applicable) and passed on to modules.
@@ -56,37 +60,53 @@ shinyApp(app$ui, app$server)
 
 ### Reproducible data
 
-A `teal_data` stores data in a separate environment.
-Therefore, modifying the stored datasets requires that code be evaluated in that environment.
+A `teal_data` object stores data in a separate environment.
+Therefore, modifying the stored datasets requires that processing code be evaluated in that environment.
 Following that logic, one can create an empty `teal_data` object and populate it by evaluating code.
 This can be done using the `eval_code` function or, more conveniently, using the `within` function.
 
 ```{r}
 # create empty object
-data0 <- teal_data()
+data_empty <- teal_data()
 
 # run code in the object
-data1 <- teal.code::eval_code(data0, code = "iris <- iris
-                                             cars <- mtcars")
+data_populated_1 <- eval_code(data_empty, code = "iris <- iris
+                                                  cars <- mtcars")
 # alternative
-data2 <- within(data0, {
+data_populated_2 <- within(data_empty, {
   iris <- iris
   cars <- mtcars
 })
 ```
 
 The key difference between `eval_code` and `within` is that the former accepts code as character vector or language objects (calls and expressions), while `within` accepts _only_ inline code.
-See `?eval_code` for more details.
+See `?qenv` for more details.
 
-Note that with `data` the code that created the data objects is unknown so the process cannot be reproduced.
-The necessary code can be added with the `code` argument of the `teal_data` function but in that case the code may not reproduce the environment.
+Note that in the first example `data` was created by passing data objects, so the code that was used to create the data objects is unknown and therefore the process cannot be reproduced.
+Inspecting code the in the app created above reveals a note that the preprocessing code is absent.
+
+<img src="images/show_code_prepro_missing.png" style = "display: block; margin: auto; width: 75%"/>
+
+The necessary code can be supplied to the `code` argument of the `teal_data` function.
+
+```{r}
+data_with_code <- teal_data(
+  iris = iris, cars = mtcars,
+  code = "iris <- iris
+          cars <- mtcars"
+)
+```
+
+<img src="images/show_code_prepro_present.png" style = "display: block; margin: auto; width: 75%"/>
+
+Keep in mind this code is not executed in the `teal_data`'s environment, so it may not reproduce the environment.
 Such an object is considered _unverified_ (see [`verified` property](#verified)).
 
-If reproducibility is required, we recommend creating `teal_data` empty and evaluating code.
+If reproducibility is required, we recommend creating an empty `teal_data` object and then evaluating code.
 
-###### code from file
+#### code from file
 
-The ability to pass code as character vector to `eval_code` opens the door to using code stored in a file.
+The ability to pass code as a character vector to `eval_code` opens the door to using code stored in a file.
 ```{r, eval=FALSE}
 # not run
 data_from_file <- teal_data()
@@ -107,9 +127,9 @@ Currently `teal` supports two specialized data formats.
 
 ### `ADaM` data
 
-The `ADaM` data model specifies relationships between `CDISC` datasets.
-The `cdisc_data` function takes advantage of that fact to to automatically set default joining keys (see [`join_keys` property](#join_keys)).
-In the example below, two standard `CDISC` datasets (`ADSL` and `ADTTE`) are passed to `cdisc_data`.
+The `ADaM` data model, defined in CDISC standards, specifies relationships between the subject-level parent dataset and observation-level child datasets.
+The `cdisc_data` function takes advantage of that fact to automatically set default joining keys (see [`join_keys` property](#join_keys)).
+In the example below, two standard `ADaM` datasets (`ADSL` and `ADTTE`) are passed to `cdisc_data`.
 
 ```{r}
 # create cdisc_data
@@ -130,7 +150,7 @@ shinyApp(app$ui, app$server)
 
 ### `MultiAssayExperiment` data
 
-The `MultiAssayExperiment` package offers a data structure for representing and analyzing multi-omics experiments: a biological analysis approach utilizing multiple types of observations, such as DNA mutations and abundance of RNA and proteins, in the same biological specimens.
+The `MultiAssayExperiment` package offers a data structure for representing and analyzing multi-omics experiments that involve multi-modal, high-dimensionality data, such as DNA mutations, protein or RNA abundance, chromatin occupancy, etc., in the same biological specimens.
 
 The `MultiAssayExperiment` class is described in detail [here](https://www.bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/MultiAssayExperiment.html).
 
@@ -149,7 +169,7 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-Note that due to the unique structure of a MAE `teal` requires special considerations when building `teal` modules.
+Due to the unique structure of a MAE, `teal` requires special considerations when building `teal` modules.
 Therefore, we cannot guarantee that all modules will work properly with MAEs.
 The package [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/latest-tag/) has been developed specifically with MAE in mind and will be more reliable.
 
@@ -161,10 +181,11 @@ The filter panel supports MAEs out of the box.
 
 ##### `datanames`
 
-The `datanames` property lists the objects stored in the `teal_data` that constitute datasets of interest.
+The `datanames` property lists the objects stored in the `teal_data` environment that constitute datasets of interest.
 Objects passed to `teal_data` become automatically listed in the `datanames` property of the resulting object.
 Objects created in `teal_data` by evaluating code need not be data objects of interest and as such they are not automatically added to `datanames`.
-Use the `datanames` function to modify the `datanames` property.
+For convenience, an empty `datanames` property is considered to mean "all objects in the container".
+`datanames` can be read or modified with the `datanames` function.
 
 ```{r}
 data_with_objects <- teal_data(iris = iris, cars = mtcars)
@@ -180,8 +201,12 @@ datanames(data_with_code) <- c("iris", "cars")
 datanames(data_with_code)
 ```
 
-All `teal` modules take a `datanames` argument that determines which datasets they are to have access to.
-Only objects enumerated in the `datanames` property of the `teal_data` object can be used.
+The `datanames` property serves as a communication bridge between the data container and modules in a `teal` application.
+In `teal` all modules are called with a `datanames` argument that determines which of the variables in the `teal_data` object they are to access.
+Only variables enumerated in the `datanames` property are eligible for use in modules.
+
+Note that specifying `datanames` in `teal_data` is optional; if the property is empty, all objects are considered eligible.
+Likewise, the `datanames` argument in the module call defaults to `"all"`, which means that module will attempt to access all eligible variables in the `teal_data` object.
 
 For a detailed explanation of `datanames`, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data.html).
 
@@ -219,10 +244,10 @@ For a detailed explanation of join keys, see [this `teal.data` vignette](https:/
 
 ##### `verified`
 
-`teal_data` allows for tracking code from data creation through filtering through analysis so that the whole process can be reproduced.
+`teal_data` allows for tracking code from data creation through data filtering through data analysis so that the whole process can be reproduced.
 The `verified` property designates whether or not reproducibility has been confirmed.
-`teal_data` objects that are created empty and are only modified by evaluating code in them are verified by default.
-Ones created with data objects alone or with data objects and code are not verified by default but can become verified by running the `verify` function.
+`teal_data` objects that are created empty and only modified by evaluating code within them are considered verified by default.
+Those created with data objects alone or with data objects and code are not verified by default, but can become verified by running the `verify` function.
 
 ```{r}
 data_with_code

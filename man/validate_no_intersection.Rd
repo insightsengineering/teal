@@ -11,7 +11,7 @@ validate_no_intersection(x, y, msg)
 
 \item{y}{vector}
 
-\item{msg}{message to display if \code{x} and \code{y} intersect}
+\item{msg}{(\code{character(1)}) message to display if \code{x} and \code{y} intersect}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

@@ -100,3 +100,98 @@ test_that("build_app_title builts a valid tag", {
   testthat::expect_silent(validate_app_title_tag(valid_title_local))
   testthat::expect_silent(validate_app_title_tag(valid_title_remote))
 })
+
+
+# create_app_id ----
+testthat::test_that("create_app_id: 'data' accepts teal_data or teal_data_module", {
+  testthat::expect_no_error(create_app_id(teal.data::teal_data(), modules(example_module())))
+
+  tdm <- teal_data_module(
+    ui = function(id) div(),
+    server = function(id) NULL
+  )
+  testthat::expect_no_error(create_app_id(tdm, modules(example_module())))
+
+  testthat::expect_error(
+    create_app_id(iris, modules(example_module())),
+    "Assertion on 'data' failed: Must inherit from class 'teal_data'/'teal_data_module'"
+  )
+})
+
+testthat::test_that("create_app_id: 'modules' accepts modules", {
+  testthat::expect_no_error(create_app_id(teal.data::teal_data(), modules(example_module())))
+
+  testthat::expect_error(
+    create_app_id(teal.data::teal_data(), example_module()),
+    "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
+  )
+})
+
+testthat::test_that("create_app_id returns a character string", {
+  checkmate::expect_string(create_app_id(teal.data::teal_data(), modules(example_module())))
+})
+
+testthat::test_that("create_app_id returns different hash for different data", {
+  hash1 <- create_app_id(teal.data::teal_data(i = iris), modules(example_module()))
+  hash2 <- create_app_id(teal.data::teal_data(i = mtcars), modules(example_module()))
+  testthat::expect_failure(testthat::expect_identical(hash1, hash2))
+})
+
+testthat::test_that("create_app_id returns different hash for different modules", {
+  hash1 <- create_app_id(teal.data::teal_data(i = iris), modules(example_module()))
+  hash2 <- create_app_id(teal.data::teal_data(i = iris), modules(example_module(), example_module()))
+  testthat::expect_failure(testthat::expect_identical(hash1, hash2))
+})
+
+## defunction ----
+testthat::test_that("defunction returns a string when passed a function", {
+  checkmate::expect_string(defunction(init))
+})
+
+testthat::test_that("defunction returns non-function atomic as is", {
+  testthat::expect_identical(
+    defunction("character"),
+    "character"
+  )
+  testthat::expect_identical(
+    defunction(c(TRUE, FALSE)),
+    c(TRUE, FALSE)
+  )
+  testthat::expect_identical(
+    defunction(1:3),
+    1:3
+  )
+  testthat::expect_identical(
+    defunction(1:3 * 1),
+    1:3 * 1
+  )
+})
+
+testthat::test_that("defunction recursively goes down a list", {
+  # styler: off
+  x <- list(
+    "character" = "character",
+    "function1" = function(x) return(x),
+    "list2" = list(
+      "function2" = function(x) mean(x),
+      "list3" = list(
+        "function3" = function(data) summary(data)
+      )
+    )
+  )
+  # styler: on
+  y <- list(
+    "character" = "character",
+    "function1" = "return(x)",
+    "list2" = list(
+      "function2" = "mean(x)",
+      "list3" = list(
+        "function3" = "summary(data)"
+      )
+    )
+  )
+  testthat::expect_identical(
+    defunction(x),
+    y
+  )
+})

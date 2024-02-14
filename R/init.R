@@ -1,47 +1,41 @@
 # This is the main function from teal to be used by the end-users. Although it delegates
-# directly to `module_teal_with_splash.R`, we keep it in a separate file because its doc is quite large
+# directly to `module_teal_with_splash.R`, we keep it in a separate file because its documentation is quite large
 # and it is very end-user oriented. It may also perform more argument checking with more informative
 # error messages.
 
-
-#' Create the Server and UI Function For the Shiny App
+#' Create the server and UI function for the `shiny` app
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' End-users: This is the most important function for you to start a
-#' teal app that is composed out of teal modules.
+#' `teal` app that is composed of `teal` modules.
 #'
 #' @details
 #' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
 #' defaults from the `teal_data` environment will be used.
 #'
-#' @param data (`teal_data`, `teal_data_module`, `named list`)\cr
-#' `teal_data` object as returned by [teal.data::teal_data()] or
-#' `teal_data_module` or simply a list of a named list of objects
-#' (`data.frame` or `MultiAssayExperiment`).
-#' @param modules (`list`, `teal_modules` or `teal_module`)\cr
+#' @param data (`teal_data` or `teal_data_module`)
+#' For constructing the data object, refer to [teal_data()] and [teal_data_module()].
+#' @param modules (`list` or `teal_modules` or `teal_module`)
 #'   nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
-#'   will be displayed in the teal application. See [modules()] and [module()] for
+#'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
-#' @param title (`shiny.tag` or `character(1)`)\cr
+#' @param filter (`teal_slices`)
+#'   Specifies the initial filter using [teal_slices()].
+#' @param title (`shiny.tag` or `character(1)`)
 #'   The browser window title. Defaults to a title "teal app" with the icon of NEST.
 #'   Can be created using the `build_app_title()` or
 #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
-#' @param filter (`teal_slices`)\cr
-#'   Specification of initial filter. Filters can be specified using [teal::teal_slices()].
-#'   Old way of specifying filters through a list is deprecated and will be removed in the
-#'   next release. Please fix your applications to use [teal::teal_slices()].
-#' @param header (`shiny.tag` or `character(1)`) \cr
+#' @param header (`shiny.tag` or `character(1)`)
 #'   The header of the app.
-#' @param footer (`shiny.tag` or `character(1)`)\cr
+#' @param footer (`shiny.tag` or `character(1)`)
 #'   The footer of the app.
-#' @param id (`character`)\cr
-#'   module id to embed it, if provided,
-#'   the server function must be called with [shiny::moduleServer()];
-#'   See the vignette for an example. However, [ui_teal_with_splash()]
-#'   is then preferred to this function.
+#' @param id (`character`)
+#'   Optional string specifying the `shiny` module id in cases it is used as a `shiny` module
+#'   rather than a standalone `shiny` app. This is a legacy feature.
 #'
-#' @return named list with `server` and `ui` function
+#' @return Named list with server and UI functions.
 #'
 #' @export
 #'
@@ -79,7 +73,6 @@
 #'       datanames = "new_iris"
 #'     )
 #'   ),
-#'   title = "App title",
 #'   filter = teal_slices(
 #'     teal_slice(dataname = "new_iris", varname = "Species"),
 #'     teal_slice(dataname = "new_iris", varname = "Sepal.Length"),
@@ -91,6 +84,7 @@
 #'       global_filters = "new_mtcars cyl"
 #'     )
 #'   ),
+#'   title = "App title",
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2023")
 #' )
@@ -100,8 +94,8 @@
 #'
 init <- function(data,
                  modules,
-                 title = build_app_title(),
                  filter = teal_slices(),
+                 title = build_app_title(),
                  header = tags$p(),
                  footer = tags$p(),
                  id = character(0)) {
@@ -111,7 +105,7 @@ init <- function(data,
   ## `data`
   if (inherits(data, "TealData")) {
     lifecycle::deprecate_stop(
-      when = "0.99.0",
+      when = "0.15.0",
       what = "init(data)",
       paste(
         "TealData is no longer supported. Use teal_data() instead.",
@@ -119,14 +113,7 @@ init <- function(data,
       )
     )
   }
-  checkmate::assert(
-    .var.name = "data",
-    checkmate::check_multi_class(data, c("teal_data", "teal_data_module")),
-    checkmate::check_list(data, names = "named")
-  )
-  if (is.list(data) && !inherits(data, "teal_data_module")) {
-    data <- do.call(teal.data::teal_data, data)
-  }
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
 
   ## `modules`
   checkmate::assert(
@@ -142,11 +129,7 @@ init <- function(data,
   }
 
   ## `filter`
-  checkmate::assert(
-    .var.name = "filter",
-    checkmate::check_class(filter, "teal_slices"),
-    checkmate::check_list(filter, names = "named")
-  )
+  checkmate::assert_class(filter, "teal_slices")
 
   ## all other arguments
   checkmate::assert(
@@ -217,7 +200,7 @@ init <- function(data,
   ## `data` - `modules`
   if (inherits(data, "teal_data")) {
     if (length(teal_data_datanames(data)) == 0) {
-      stop("`data` object has no datanames and its environment is empty. Specify `datanames(data)` and try again.")
+      stop("The environment of `data` is empty.")
     }
     # in case of teal_data_module this check is postponed to the srv_teal_with_splash
     is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
@@ -235,9 +218,8 @@ init <- function(data,
   }
 
   # Note regarding case `id = character(0)`:
-  # rather than using `callModule` and creating a submodule of this module, we directly modify
-  # the `ui` and `server` with `id = character(0)` and calling the server function directly
-  # rather than through `callModule`
+  # rather than creating a submodule of this module, we directly modify
+  # the UI and server with `id = character(0)` and calling the server function directly
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
@@ -250,5 +232,5 @@ init <- function(data,
 
   logger::log_trace("init teal app has been initialized.")
 
-  return(res)
+  res
 }

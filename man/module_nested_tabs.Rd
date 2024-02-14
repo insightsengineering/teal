@@ -53,32 +53,37 @@ srv_nested_tabs(
 )
 }
 \arguments{
-\item{id}{(\code{character(1)})\cr
+\item{id}{(\code{character(1)})
 module id}
 
-\item{datasets}{(\verb{named list} of \code{FilteredData})\cr
+\item{modules}{(\code{teal_modules}) object containing the output modules which
+will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+more details.}
+
+\item{datasets}{(named \code{list} of \code{FilteredData})
 object to store filter state and filtered datasets, shared across modules. For more
 details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}. Structure of the list must be the same as structure
 of the \code{modules} argument and list names must correspond to the labels in \code{modules}.
 When filter is not module-specific then list contains the same object in all elements.}
 
-\item{depth}{(\code{integer(1)})\cr
+\item{depth}{(\code{integer(1)})
 number which helps to determine depth of the modules nesting.}
 
-\item{is_module_specific}{(\code{logical(1)})\cr
+\item{is_module_specific}{(\code{logical(1)})
 flag determining if the filter panel is global or module-specific.
 When set to \code{TRUE}, a filter panel is called inside of each module tab.}
 
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
 }
 \value{
-depending on class of \code{modules}, \code{ui_nested_tabs} returns:
+Depending on the class of \code{modules}, \code{ui_nested_tabs} returns:
 \itemize{
-\item \code{teal_module}: instantiated UI of the module
+\item \code{teal_module}: instantiated UI of the module.
 \item \code{teal_modules}: \code{tabsetPanel} with each tab corresponding to recursively
-calling this function on it.\cr
-\code{srv_nested_tabs} returns a reactive which returns the active module that corresponds to the selected tab.
+calling this function on it.
 }
+
+\code{srv_nested_tabs} returns a reactive which returns the active module that corresponds to the selected tab.
 }
 \description{
 Create a UI of nested tabs of \code{teal_modules}
@@ -87,48 +92,19 @@ Create a UI of nested tabs of \code{teal_modules}
 
 Each \code{teal_modules} is translated to a \code{tabsetPanel} and each
 of its children is another tab-module called recursively. The UI of a
-\code{teal_module} is obtained by calling the \code{ui} function on it.
+\code{teal_module} is obtained by calling its UI function.
 
-The \code{datasets} argument is required to resolve the teal arguments in an
-isolated context (with respect to reactivity)
+The \code{datasets} argument is required to resolve the \code{teal} arguments in an
+isolated context (with respect to reactivity).
 }
 
 \section{\code{srv_nested_tabs}}{
 
-This module calls recursively all elements of the \code{modules} returns one which
-is currently active.
+This module recursively calls all elements of \code{modules} and returns currently active one.
 \itemize{
 \item \code{teal_module} returns self as a active module.
 \item \code{teal_modules} also returns module active within self which is determined by the \code{input$active_tab}.
 }
 }
 
-\examples{
-mods <- teal:::example_modules()
-datasets <- teal:::example_datasets()
-app <- shinyApp(
-  ui = function() {
-    tagList(
-      teal:::include_teal_css_js(),
-      textOutput("info"),
-      fluidPage( # needed for nice tabs
-        teal:::ui_nested_tabs("dummy", modules = mods, datasets = datasets)
-      )
-    )
-  },
-  server = function(input, output, session) {
-    active_module <- teal:::srv_nested_tabs(
-      "dummy",
-      datasets = datasets,
-      modules = mods
-    )
-    output$info <- renderText({
-      paste0("The currently active tab name is ", active_module()$label)
-    })
-  }
-)
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-}
 \keyword{internal}

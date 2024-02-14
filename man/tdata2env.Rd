@@ -2,20 +2,18 @@
 % Please edit documentation in R/tdata.R
 \name{tdata2env}
 \alias{tdata2env}
-\title{Function to convert a \code{tdata} object to an \code{environment}
-Any \code{reactives} inside \code{tdata} are first evaluated}
+\title{Function to convert a \code{tdata} object to an \code{environment}}
 \usage{
 tdata2env(data)
 }
 \arguments{
-\item{data}{a \code{tdata} object}
+\item{data}{(\code{tdata}) object}
 }
 \value{
-an \code{environment}
+An \code{environment}.
 }
 \description{
-Function to convert a \code{tdata} object to an \code{environment}
-Any \code{reactives} inside \code{tdata} are first evaluated
+Any \code{reactive} expressions inside \code{tdata} are evaluated first.
 }
 \examples{
 
