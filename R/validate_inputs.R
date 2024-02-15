@@ -58,12 +58,12 @@
 #'   # set up input validation
 #'   iv <- InputValidator$new()
 #'   iv$add_rule("letter", sv_in_set(LETTERS, "choose a capital letter"))
-#'   iv$add_rule("number", ~ if (as.integer(.data$.) %% 2L == 1L) "choose an even number")
+#'   iv$add_rule("number", function(x) if (as.integer(x) %% 2L == 1L) "choose an even number")
 #'   iv$enable()
 #'   # more input validation
 #'   iv_par <- InputValidator$new()
 #'   iv_par$add_rule("color", sv_required(message = "choose a color"))
-#'   iv_par$add_rule("color", ~ if (length(.data$.) > 1L) "choose only one color")
+#'   iv_par$add_rule("color", function(x) if (length(x) > 1L) "choose only one color")
 #'   iv_par$add_rule(
 #'     "size",
 #'     sv_between(
@@ -87,7 +87,7 @@
 #'       ))
 #'     )
 #'
-#'     plot(.data$eruptions ~ .data$waiting, faithful,
+#'     plot(faithful$eruptions ~ faithful$waiting,
 #'       las = 1, pch = 16,
 #'       col = input[["color"]], cex = input[["size"]]
 #'     )
