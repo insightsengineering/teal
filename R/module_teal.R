@@ -89,7 +89,7 @@ ui_teal <- function(id,
   )
 
   # show busy icon when `shiny` session is busy computing stuff
-  # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 #nolint
+  # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint
   shiny_busy_message_panel <- conditionalPanel(
     condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint
     div(
