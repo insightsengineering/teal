@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.9003</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,19 +82,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -160,10 +147,10 @@ wrapped together with <code>teal_slices</code>.</p>
 <span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>IRIS <span class="op">=</span> <span class="va">iris</span>, CARS <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
 <span>  modules <span class="op">=</span> <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  filter <span class="op">=</span> <span class="fu"><a href="../reference/teal_slices.html">teal_slices</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"IRIS"</span>, varname <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"IRIS"</span>, varname <span class="op">=</span> <span class="st">"Species"</span>, selected <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"CARS"</span>, varname <span class="op">=</span> <span class="st">"mpg"</span>, selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"CARS"</span>, expr <span class="op">=</span> <span class="st">"qsec &lt; 20"</span>, title <span class="op">=</span> <span class="st">"1/4 mile under 20 sec"</span>, id <span class="op">=</span> <span class="st">"qsec_20"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"IRIS"</span>, varname <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"IRIS"</span>, varname <span class="op">=</span> <span class="st">"Species"</span>, selected <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"CARS"</span>, varname <span class="op">=</span> <span class="st">"mpg"</span>, selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"CARS"</span>, expr <span class="op">=</span> <span class="st">"qsec &lt; 20"</span>, title <span class="op">=</span> <span class="st">"1/4 mile under 20 sec"</span>, id <span class="op">=</span> <span class="st">"qsec_20"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -252,12 +239,12 @@ to module labels, and elements are vectors of <code>teal_slice</code>
 <span>  <span class="op">)</span>,</span>
 <span>  filter <span class="op">=</span> <span class="fu"><a href="../reference/teal_slices.html">teal_slices</a></span><span class="op">(</span></span>
 <span>    <span class="co"># filters created with id</span></span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"mpg"</span>, id <span class="op">=</span> <span class="st">"filter 1"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"cyl"</span>, id <span class="op">=</span> <span class="st">"filter 2"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"disp"</span>, id <span class="op">=</span> <span class="st">"filter 3"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"hp"</span>, id <span class="op">=</span> <span class="st">"filter 4"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"drat"</span>, id <span class="op">=</span> <span class="st">"filter 5"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"wt"</span>, id <span class="op">=</span> <span class="st">"filter 6"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"mpg"</span>, id <span class="op">=</span> <span class="st">"filter 1"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"cyl"</span>, id <span class="op">=</span> <span class="st">"filter 2"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"disp"</span>, id <span class="op">=</span> <span class="st">"filter 3"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"hp"</span>, id <span class="op">=</span> <span class="st">"filter 4"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"drat"</span>, id <span class="op">=</span> <span class="st">"filter 5"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"mtcars"</span>, varname <span class="op">=</span> <span class="st">"wt"</span>, id <span class="op">=</span> <span class="st">"filter 6"</span><span class="op">)</span>,</span>
 <span>    <span class="co"># module-specific filtering enabled</span></span>
 <span>    module_specific <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    <span class="co"># filters mapped to modules</span></span>
