@@ -1,4 +1,10 @@
-# teal 0.15.0.9005
+# teal 0.15.1
+
+### Bug fixes
+* Fixed a bug that stopped the `module_specific` feature from working when a teal module has more than one dataname.
+
+### Miscellaneous
+* Update links in vignettes
 
 # teal 0.15.0
 
