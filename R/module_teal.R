@@ -179,7 +179,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
         } else if (isTRUE(attr(filter, "module_specific"))) {
           # we should create FilteredData even if modules$datanames is null
           # null controls a display of filter panel but data should be still passed
-          datanames <- if (is.null(modules$datanames) || all(modules$datanames == "all")) {
+          datanames <- if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
             include_parent_datanames(
               teal_data_datanames(teal_data_rv()),
               teal.data::join_keys(teal_data_rv())
