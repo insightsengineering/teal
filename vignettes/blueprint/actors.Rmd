@@ -73,7 +73,7 @@ However, developers have the freedom to create a `teal` module that is customize
 
 Ultimately, one or more `teal` modules are employed to construct a `teal` app.
 
-To learn more about creating custom modules follow the [Tutorial on Creating a Custom Module](creating-custom-modules.html).
+To learn more about creating custom modules follow the [Tutorial on Creating a Custom Module](../creating-custom-modules.html).
 
 ## Workflow in a clinical trial study
 

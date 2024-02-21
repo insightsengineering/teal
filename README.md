@@ -110,7 +110,7 @@ shinyApp(app$ui, app$server)
 
 Please see [`teal.gallery`](https://insightsengineering.github.io/teal.gallery/) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog/) to see examples of `teal` apps.
 
-Please start with the ["Technical Blueprint" article](https://insightsengineering.github.io/teal/latest-tag/articles/blueprint/index.html), ["Getting Started" article](https://insightsengineering.github.io/teal/latest-tag/articles/teal.html), and then other [package vignettes](https://insightsengineering.github.io/teal/latest-tag/articles/index.html) for more detailed guide.
+Please start with the ["Technical Blueprint" article](https://insightsengineering.github.io/teal/latest-tag/articles/blueprint/index.html), ["Getting Started" article](https://insightsengineering.github.io/teal/latest-tag/articles/getting-started-with-teal.html), and then other [package vignettes](https://insightsengineering.github.io/teal/latest-tag/articles/index.html) for more detailed guide.
 
 ## Getting help
 

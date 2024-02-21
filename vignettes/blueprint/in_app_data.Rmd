@@ -23,4 +23,4 @@ This allows the app developer to include user actions data creation, fetching, a
 
 ## Further reading
 
-A complete explanation of using the `teal_data_module` can be found in [this `teal` vignette](data-as-shiny-module.html)
+A complete explanation of using the `teal_data_module` can be found in [this `teal` vignette](../data-as-shiny-module.html)
