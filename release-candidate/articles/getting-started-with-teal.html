@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.1</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,6 +89,7 @@
           id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
@@ -169,13 +170,13 @@ and <code>mtcars</code> datasets and displays their contents:</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://insightsengineering.github.io/teal/">teal</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span>IRIS <span class="op">=</span> <span class="va">iris</span>, MTCARS <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>IRIS <span class="op">=</span> <span class="va">iris</span>, MTCARS <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
 <span>  modules <span class="op">=</span> <span class="fu"><a href="../reference/teal_modules.html">modules</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span><span class="st">"Module 1"</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span><span class="st">"Module 2"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  filter <span class="op">=</span> <span class="fu"><a href="../reference/teal_slices.html">teal_slices</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"IRIS"</span>, varname <span class="op">=</span> <span class="st">"Species"</span>, selected <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"IRIS"</span>, varname <span class="op">=</span> <span class="st">"Species"</span>, selected <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  title <span class="op">=</span> <span class="fu"><a href="../reference/build_app_title.html">build_app_title</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"My first teal app"</span><span class="op">)</span>,</span>
 <span>  header <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">h3</a></span><span class="op">(</span><span class="st">"My first teal application"</span><span class="op">)</span>,</span>
