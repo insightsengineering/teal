@@ -39,6 +39,7 @@ Authors:
   \item Maciej Nasinski
   \item Konrad Pagacz
   \item Junlue Zhao
+  \item Tadeusz Lewandowski
 }
 
 Other contributors:
