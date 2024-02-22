@@ -20,7 +20,7 @@ A Shiny Application created with `teal` offers users the ability to:
 Moreover, the `teal` framework provides application developers with a wide range of customizable standard analysis modules to integrate into their applications, along with a logging framework that facilitates debugging.
 Additionally, advanced users of the framework can develop new analysis modules and easily integrate them into any `teal` application.
 
-The `teal` framework's functionality draws heavily from the following packages:  
+The `teal` framework's functionality draws heavily from the following packages:
 
 | R package            | Description                                                             |
 |----------------------|:------------------------------------------------------------------------|
@@ -34,4 +34,4 @@ The `teal` framework's functionality draws heavily from the following packages:
 
 Although these packages are mentioned in the material, we strongly recommend visiting their vignettes to learn more about them.
 
-Learn on how to make your first `teal` application [here](getting-started-with-teal.html)!
+Learn on how to make your first `teal` application [here](../getting-started-with-teal.html)!
