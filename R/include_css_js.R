@@ -4,7 +4,7 @@
 #' not work with `devtools`. Therefore, we redefine this method in each package
 #' as needed. Thus, we do not export this method.
 #'
-#' @param pattern (`character`) pattern of files to be included
+#' @param pattern (`character`) pattern of files to be included for CSS
 #'
 #' @return HTML code that includes `CSS` files.
 #' @keywords internal
@@ -73,11 +73,10 @@ run_js_files <- function(files) {
 #' @return A `shiny.tag.list`.
 #' @keywords internal
 include_teal_css_js <- function() {
-  tagList(
-    shinyjs::useShinyjs(),
+  tagList(shinyjs::useShinyjs(),
     include_css_files(),
     # init.js is executed from the server
     include_js_files(except = "init.js"),
     shinyjs::hidden(icon("gear")), # add hidden icon to load font-awesome css for icons
-  )
+          )
 }
