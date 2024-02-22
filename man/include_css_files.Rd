@@ -7,7 +7,7 @@
 include_css_files(pattern = "*")
 }
 \arguments{
-\item{pattern}{(\code{character}) pattern of files to be included}
+\item{pattern}{(\code{character}) pattern of files to be included for CSS}
 }
 \value{
 HTML code that includes \code{CSS} files.

@@ -73,10 +73,11 @@ run_js_files <- function(files) {
 #' @return A `shiny.tag.list`.
 #' @keywords internal
 include_teal_css_js <- function() {
-  tagList(shinyjs::useShinyjs(),
+  tagList(
+    shinyjs::useShinyjs(),
     include_css_files(),
     # init.js is executed from the server
     include_js_files(except = "init.js"),
     shinyjs::hidden(icon("gear")), # add hidden icon to load font-awesome css for icons
-          )
+  )
 }
