@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.1</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,7 @@
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1">v0.15.1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
@@ -166,7 +167,7 @@ first step of building a <code>teal</code> app is creating a
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://insightsengineering.github.io/teal/">teal</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create teal_data</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="va">iris</span>, cars <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="va">iris</span>, cars <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></code></pre></div>
 <p>Note that <code>iris</code> and <code>cars</code> have been added to
 the <code>datanames</code> property of <code>data</code> (see <a href="#datanames"><code>datanames</code> property</a>).</p>
 <p>This is sufficient to run a <code>teal</code> app.</p>
@@ -192,7 +193,7 @@ function or, more conveniently, using the <code>within</code>
 function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create empty object</span></span>
-<span><span class="va">data_empty</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">data_empty</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># run code in the object</span></span>
 <span><span class="va">data_populated_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/teal_data_module.html">eval_code</a></span><span class="op">(</span><span class="va">data_empty</span>, code <span class="op">=</span> <span class="st">"iris &lt;- iris</span></span>
@@ -216,7 +217,7 @@ preprocessing code is absent.</p>
 <p>The necessary code can be supplied to the <code>code</code> argument
 of the <code>teal_data</code> function.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_with_code</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">data_with_code</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span></span>
 <span>  iris <span class="op">=</span> <span class="va">iris</span>, cars <span class="op">=</span> <span class="va">mtcars</span>,</span>
 <span>  code <span class="op">=</span> <span class="st">"iris &lt;- iris</span></span>
 <span><span class="st">          cars &lt;- mtcars"</span></span>
@@ -235,7 +236,7 @@ environment. Such an object is considered <em>unverified</em> (see <a href="#ver
 file.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># not run</span></span>
-<span><span class="va">data_from_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">data_from_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">data_from_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/teal_data_module.html">eval_code</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="st">"&lt;path_to_file&gt;"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -270,11 +271,11 @@ example below, two standard <code>ADaM</code> datasets
 <code>cdisc_data</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create cdisc_data</span></span>
-<span><span class="va">data_cdisc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.data/reference/rADSL.html">rADSL</a></span>, ADTTE <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.data/reference/rADSL.html">rADSL</a></span><span class="op">)</span></span>
+<span><span class="va">data_cdisc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/rADSL.html">rADSL</a></span>, ADTTE <span class="op">=</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/rADSL.html">rADSL</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/datanames.html">datanames</a></span><span class="op">(</span><span class="va">data_cdisc</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/datanames.html">datanames</a></span><span class="op">(</span><span class="va">data_cdisc</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "ADSL"  "ADTTE"</span></span>
-<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/join_keys.html">join_keys</a></span><span class="op">(</span><span class="va">data_cdisc</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/join_keys.html">join_keys</a></span><span class="op">(</span><span class="va">data_cdisc</span><span class="op">)</span></span>
 <span><span class="co">#&gt; A join_keys object containing foreign keys between 2 datasets:</span></span>
 <span><span class="co">#&gt; ADSL: [STUDYID, USUBJID]</span></span>
 <span><span class="co">#&gt;   &lt;-- ADTTE: [STUDYID, USUBJID]</span></span>
@@ -303,7 +304,7 @@ specimens.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://waldronlab.io/MultiAssayExperiment/" class="external-link">MultiAssayExperiment</a></span><span class="op">)</span></span>
 <span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">miniACC</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">data_mae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span>MAE <span class="op">=</span> <span class="va">miniACC</span><span class="op">)</span></span>
+<span><span class="va">data_mae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>MAE <span class="op">=</span> <span class="va">miniACC</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">data_mae</span>,</span>
@@ -339,19 +340,19 @@ property is considered to mean “all objects in the container”.
 <code>datanames</code> can be read or modified with the
 <code>datanames</code> function.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_with_objects</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="va">iris</span>, cars <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span><span class="va">data_with_code</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">data_with_objects</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="va">iris</span>, cars <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="va">data_with_code</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>    <span class="va">iris</span> <span class="op">&lt;-</span> <span class="va">iris</span></span>
 <span>    <span class="va">cars</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span>
 <span>    <span class="va">not_a_dataset</span> <span class="op">&lt;-</span> <span class="st">"data source credits"</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/datanames.html">datanames</a></span><span class="op">(</span><span class="va">data_with_objects</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/datanames.html">datanames</a></span><span class="op">(</span><span class="va">data_with_objects</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "iris" "cars"</span></span>
-<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/datanames.html">datanames</a></span><span class="op">(</span><span class="va">data_with_code</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/datanames.html">datanames</a></span><span class="op">(</span><span class="va">data_with_code</span><span class="op">)</span></span>
 <span><span class="co">#&gt; character(0)</span></span>
-<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/datanames.html">datanames</a></span><span class="op">(</span><span class="va">data_with_code</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iris"</span>, <span class="st">"cars"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/datanames.html">datanames</a></span><span class="op">(</span><span class="va">data_with_code</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/datanames.html">datanames</a></span><span class="op">(</span><span class="va">data_with_code</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iris"</span>, <span class="st">"cars"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/datanames.html">datanames</a></span><span class="op">(</span><span class="va">data_with_code</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "iris" "cars"</span></span></code></pre></div>
 <p>The <code>datanames</code> property serves as a communication bridge
 between the data container and modules in a <code>teal</code>
@@ -390,14 +391,14 @@ argument, or using the <code>join_keys</code> function.</p>
 <span>  group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,</span>
 <span>  condition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"condition1"</span>, <span class="st">"condition2"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">keys</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/join_keys.html">join_keys</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/join_key.html">join_key</a></span><span class="op">(</span><span class="st">"DS1"</span>, keys <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/join_key.html">join_key</a></span><span class="op">(</span><span class="st">"DS2"</span>, keys <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/join_key.html">join_key</a></span><span class="op">(</span><span class="st">"DS1"</span>, <span class="st">"DS2"</span>, keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span> <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">keys</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/join_keys.html">join_keys</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/join_key.html">join_key</a></span><span class="op">(</span><span class="st">"DS1"</span>, keys <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/join_key.html">join_key</a></span><span class="op">(</span><span class="st">"DS2"</span>, keys <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/join_key.html">join_key</a></span><span class="op">(</span><span class="st">"DS1"</span>, <span class="st">"DS2"</span>, keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span> <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">data_relational1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span>DS1 <span class="op">=</span> <span class="va">ds1</span>, DS2 <span class="op">=</span> <span class="va">ds2</span>, join_keys <span class="op">=</span> <span class="va">keys</span><span class="op">)</span></span>
-<span><span class="va">data_relational2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span>DS1 <span class="op">=</span> <span class="va">ds1</span>, DS2 <span class="op">=</span> <span class="va">ds2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/join_keys.html">join_keys</a></span><span class="op">(</span><span class="va">data_relational2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">keys</span></span></code></pre></div>
+<span><span class="va">data_relational1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>DS1 <span class="op">=</span> <span class="va">ds1</span>, DS2 <span class="op">=</span> <span class="va">ds2</span>, join_keys <span class="op">=</span> <span class="va">keys</span><span class="op">)</span></span>
+<span><span class="va">data_relational2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>DS1 <span class="op">=</span> <span class="va">ds1</span>, DS2 <span class="op">=</span> <span class="va">ds2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/join_keys.html">join_keys</a></span><span class="op">(</span><span class="va">data_relational2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">keys</span></span></code></pre></div>
 <p>For a detailed explanation of join keys, see <a href="https://insightsengineering.github.io/teal.data/latest-tag/articles/join-keys.html">this
 <code>teal.data</code> vignette</a>.</p>
 <p><a href="#adam-data">(back to <code>ADaM</code> Data)</a></p>
@@ -417,26 +418,26 @@ but can become verified by running the <code>verify</code> function.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_with_code</span></span>
 <span><span class="co">#&gt; ✅︎ verified teal_data object</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x55914df04e30&gt;</span><span style="font-weight: bold;"> [L]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x557df7753d38&gt;</span><span style="font-weight: bold;"> [L]</span></span></span>
 <span><span class="co">#&gt; Parent: &lt;environment: package:teal&gt;</span></span>
 <span><span class="co">#&gt; Bindings:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> not_a_dataset: &lt;chr&gt; [L]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> cars: &lt;df[,11]&gt; [L]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> iris: &lt;df[,5]&gt; [L]</span></span>
 <span></span>
-<span><span class="va">data_with_objects_and_code</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/teal_data.html">teal_data</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="va">iris</span>, cars <span class="op">=</span> <span class="va">mtcars</span>, code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">iris</span> <span class="op">&lt;-</span> <span class="va">iris</span>, <span class="va">cars</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">data_with_objects_and_code</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="va">iris</span>, cars <span class="op">=</span> <span class="va">mtcars</span>, code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">iris</span> <span class="op">&lt;-</span> <span class="va">iris</span>, <span class="va">cars</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">data_with_objects_and_code</span></span>
 <span><span class="co">#&gt; ✖ unverified teal_data object</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x55914e3a9cd8&gt;</span><span style="font-weight: bold;"> [L]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x557df7bfa450&gt;</span><span style="font-weight: bold;"> [L]</span></span></span>
 <span><span class="co">#&gt; Parent: &lt;environment: package:teal&gt;</span></span>
 <span><span class="co">#&gt; Bindings:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> cars: &lt;df[,11]&gt; [L]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> iris: &lt;df[,5]&gt; [L]</span></span>
 <span></span>
-<span><span class="va">data_with_objects_and_code_ver</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/reference/verify.html">verify</a></span><span class="op">(</span><span class="va">data_with_objects_and_code</span><span class="op">)</span></span>
+<span><span class="va">data_with_objects_and_code_ver</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/verify.html">verify</a></span><span class="op">(</span><span class="va">data_with_objects_and_code</span><span class="op">)</span></span>
 <span><span class="va">data_with_objects_and_code_ver</span></span>
 <span><span class="co">#&gt; ✅︎ verified teal_data object</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x55914e3a9cd8&gt;</span><span style="font-weight: bold;"> [L]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x557df7bfa450&gt;</span><span style="font-weight: bold;"> [L]</span></span></span>
 <span><span class="co">#&gt; Parent: &lt;environment: package:teal&gt;</span></span>
 <span><span class="co">#&gt; Bindings:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> cars: &lt;df[,11]&gt; [L]</span></span>
