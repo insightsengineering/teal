@@ -68,7 +68,7 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
     join_keys = teal.data::join_keys(x)
   )
   # Piggy-back entire pre-processing code so that filtering code can be appended later.
-  attr(ans, "preprocessing_code") <- teal.code::get_code(x)
+  attr(ans, "preprocessing_code") <- teal.data::get_code(x, datanames = datanames, check_names = FALSE)
   attr(ans, "verification_status") <- x@verified
   ans
 }
