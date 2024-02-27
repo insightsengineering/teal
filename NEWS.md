@@ -1,4 +1,12 @@
-# teal 0.15.0.9005
+# teal 0.15.1.9002
+
+# teal 0.15.1
+
+### Bug fixes
+* Fixed a bug that stopped the `module_specific` feature when a `teal` module specified `datanames` of length more than 1.
+
+### Miscellaneous
+* Updated links in vignettes
 
 # teal 0.15.0
 
