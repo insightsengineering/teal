@@ -35,6 +35,9 @@ modules_datasets <- function(data, modules, filter, filtered_data_singleton = te
             x$id %in% unique(unlist(attr(filter, "mapping")[modules$label])))
       })
     })
+    # 2a. subset include/exclude varnames
+    slices$include_varnames <- attr(slices, "include_varnames")[names(attr(slices, "include_varnames")) %in% datanames]
+    slices$exclude_varnames <- attr(slices, "exclude_varnames")[names(attr(slices, "exclude_varnames")) %in% datanames]
 
     # 3. instantiate FilteredData
     filtered_data <- teal_data_to_filtered_data(data, datanames)
@@ -43,13 +46,16 @@ modules_datasets <- function(data, modules, filter, filtered_data_singleton = te
     # 5. return
     return(filtered_data)
   } else if (inherits(modules, "teal_modules")) {
-    return(lapply(
+    ans <- lapply(
       modules$children,
       modules_datasets,
       data = data,
       filter = filter,
       filtered_data_singleton = filtered_data_singleton
-    ))
+    )
+    names(ans) <- vapply(modules$children, `[[`, character(1), "label")
+
+    return(ans)
   }
 
   stop("something's not right")
@@ -60,20 +66,23 @@ modules_structure <- function(modules, value = TRUE) {
   if (inherits(modules, "teal_module")) {
     return(value)
   } else {
-    lapply(modules$children, modules_structure, value)
+    stats::setNames(
+      lapply(modules$children, modules_structure, value),
+      vapply(modules$children, `[[`, character(1), "label")
+    )
   }
 }
 
 
-# testing ----
-# ## create data ----
+# # testing ----
+# # ## create data ----
 # data <- teal_data() %>%
 #   within({
 #     iris <- iris
 #     mtcars <- mtcars
 #     women <- women
 #   })
-# ## create modules ----
+# # ## create modules ----
 # modules <- modules(
 #   label = "one",
 #   modules(
@@ -87,20 +96,27 @@ modules_structure <- function(modules, value = TRUE) {
 #   ),
 #   example_module("example one", "iris")
 # )
-# ## create filters ----
+# # ## create filters ----
 # filter <- teal_slices(
 #   teal_slice("iris", "Species"),
 #   teal_slice("iris", "Sepal.Length"),
 #   teal_slice("mtcars", "mpg"),
 #   teal_slice("mtcars", "cyl"),
 #   teal_slice("mtcars", "gear"),
-#   module_specific = FALSE,
+#   module_specific = TRUE,
 #   mapping = list(
 #     "example one" = "iris Species",
 #     "example four" = "mtcars mpg",
 #     global_filters = "mtcars cyl"
 #   )
 # )
+#
+# runApp(init(data, modules, filter))
+
+
+
+# # create singleton and set state ----
+# singleton <- teal_data_to_filtered_data(data)
 #
 # # execute and inspect filters ----
 # modules_datasets(data, modules, filter) %>%
