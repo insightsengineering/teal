@@ -66,7 +66,10 @@ modules_structure <- function(modules, value = TRUE) {
   if (inherits(modules, "teal_module")) {
     return(value)
   } else {
-    lapply(modules$children, modules_structure, value)
+    stats::setNames(
+      lapply(modules$children, modules_structure, value),
+      vapply(modules$children, `[[`, character(1), "label")
+    )
   }
 }
 
