@@ -2,7 +2,7 @@
 
 # returns list of same shape as `modules`, containing `FilteredData` at every leaf
 # if module specific, each leaf contains different instance, otherwise every leaf contains `filtered_data_singleton`
-modules_datasets <- function(data, modules, filter, filtered_data_singleton) {
+modules_datasets <- function(data, modules, filter, filtered_data_singleton = teal_data_to_filtered_data(data)) {
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(filter, "modules_teal_slices")
@@ -98,9 +98,6 @@ modules_structure <- function(modules, value = TRUE) {
 #   )
 # )
 #
-# # create singleton and set state ----
-# singleton <- teal_data_to_filtered_data(data)
-#
 # # execute and inspect filters ----
-# modules_datasets(data, modules, filter, singleton) %>%
+# modules_datasets(data, modules, filter) %>%
 #   rapply(., function(x) isolate(x$get_filter_state() %>% sapply(`[[`, "id")), how = "replace")
