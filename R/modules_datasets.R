@@ -12,7 +12,7 @@ modules_datasets <- function(data, modules, filter, filtered_data_singleton) {
     slices <- shiny::isolate({
       Filter(function(x) x$id %in% attr(filter, "mapping")$global_filters, filter)
     })
-    singleton$set_filter_state(slices)
+    filtered_data_singleton$set_filter_state(slices)
     return(modules_structure(modules, filtered_data_singleton))
   }
 
@@ -65,15 +65,15 @@ modules_structure <- function(modules, value = TRUE) {
 }
 
 
-# testing ----
-# ## create data ----
+# # testing ----
+# # ## create data ----
 # data <- teal_data() %>%
 #   within({
 #     iris <- iris
 #     mtcars <- mtcars
 #     women <- women
 #   })
-# ## create modules ----
+# # ## create modules ----
 # modules <- modules(
 #   label = "one",
 #   modules(
@@ -87,7 +87,7 @@ modules_structure <- function(modules, value = TRUE) {
 #   ),
 #   example_module("example one", "iris")
 # )
-# ## create filters ----
+# # ## create filters ----
 # filter <- teal_slices(
 #   teal_slice("iris", "Species"),
 #   teal_slice("iris", "Sepal.Length"),
@@ -101,10 +101,10 @@ modules_structure <- function(modules, value = TRUE) {
 #     global_filters = "mtcars cyl"
 #   )
 # )
-#
-# # create singleton and set state ----
+# #
+# # # create singleton and set state ----
 # singleton <- teal_data_to_filtered_data(data)
-#
+# #
 # # execute and inspect filters ----
 # modules_datasets(data, modules, filter, singleton) %>%
 #   rapply(., function(x) isolate(x$get_filter_state() %>% sapply(`[[`, "id")), how = "replace")
