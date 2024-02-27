@@ -32,7 +32,7 @@ modules_datasets <- function(data, modules, filter, filtered_data_singleton = te
       Filter(x = filter, f = function(x) {
         x$dataname %in% datanames &&
           (x$id %in% attr(filter, "mapping")$global_filters ||
-             x$id %in% unique(unlist(attr(filter, "mapping")[modules$label])))
+            x$id %in% unique(unlist(attr(filter, "mapping")[modules$label])))
       })
     })
 
@@ -57,7 +57,11 @@ modules_datasets <- function(data, modules, filter, filtered_data_singleton = te
 
 # returns nested list of same shape as `modules` with `value` at every leaf
 modules_structure <- function(modules, value = TRUE) {
-  if (inherits(modules, "teal_module")) return(value) else lapply(modules$children, modules_structure, value)
+  if (inherits(modules, "teal_module")) {
+    return(value)
+  } else {
+    lapply(modules$children, modules_structure, value)
+  }
 }
 
 
