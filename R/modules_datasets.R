@@ -12,7 +12,7 @@ modules_datasets <- function(data, modules, filter, filtered_data_singleton = te
     slices <- shiny::isolate({
       Filter(function(x) x$id %in% attr(filter, "mapping")$global_filters, filter)
     })
-    singleton$set_filter_state(slices)
+    filtered_data_singleton$set_filter_state(slices)
     return(modules_structure(modules, filtered_data_singleton))
   }
 
