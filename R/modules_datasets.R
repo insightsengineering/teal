@@ -103,17 +103,21 @@ modules_structure <- function(modules, value = TRUE) {
 #   teal_slice("mtcars", "mpg"),
 #   teal_slice("mtcars", "cyl"),
 #   teal_slice("mtcars", "gear"),
-#   module_specific = FALSE,
+#   module_specific = TRUE,
 #   mapping = list(
 #     "example one" = "iris Species",
 #     "example four" = "mtcars mpg",
 #     global_filters = "mtcars cyl"
 #   )
 # )
-# #
-# # # create singleton and set state ----
+#
+# runApp(init(data, modules, filter))
+
+
+
+# # create singleton and set state ----
 # singleton <- teal_data_to_filtered_data(data)
-# #
+#
 # # execute and inspect filters ----
 # modules_datasets(data, modules, filter, singleton) %>%
 #   rapply(., function(x) isolate(x$get_filter_state() %>% sapply(`[[`, "id")), how = "replace")
