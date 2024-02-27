@@ -35,6 +35,9 @@ modules_datasets <- function(data, modules, filter, filtered_data_singleton) {
             x$id %in% unique(unlist(attr(filter, "mapping")[modules$label])))
       })
     })
+    # 2a. subset include/exclude varnames
+    slices$include_varnames <- attr(slices, "include_varnames")[names(attr(slices, "include_varnames")) %in% datanames]
+    slices$exclude_varnames <- attr(slices, "exclude_varnames")[names(attr(slices, "exclude_varnames")) %in% datanames]
 
     # 3. instantiate FilteredData
     filtered_data <- teal_data_to_filtered_data(data, datanames)
@@ -43,13 +46,16 @@ modules_datasets <- function(data, modules, filter, filtered_data_singleton) {
     # 5. return
     return(filtered_data)
   } else if (inherits(modules, "teal_modules")) {
-    return(lapply(
+    ans <- lapply(
       modules$children,
       modules_datasets,
       data = data,
       filter = filter,
       filtered_data_singleton = filtered_data_singleton
-    ))
+    )
+    names(ans) <- vapply(modules$children, `[[`, character(1), "label")
+
+    return(ans)
   }
 
   stop("something's not right")
