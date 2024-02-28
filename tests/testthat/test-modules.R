@@ -8,7 +8,8 @@ ui_fun1 <- function(id, ...) {
   tags$p(paste0("id: ", id))
 }
 
-testthat::test_that("Calling module() does not throw", {
+# module ----
+testthat::test_that("module() does not raise error", {
   testthat::expect_no_error(suppressMessages(module()))
 })
 
@@ -111,7 +112,7 @@ testthat::test_that("module requires datanames argument to be a character or NUL
   testthat::expect_no_error(module(server = function(id, data) NULL, datanames = NULL))
 })
 
-testthat::test_that("module() returns list of class 'teal_module' containing input objects", {
+testthat::test_that("module returns list of class 'teal_module' containing input objects", {
   test_module <- module(
     label = "aaa1",
     server = call_module_server_fun,
@@ -121,15 +122,17 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
     ui_args = NULL
   )
   testthat::expect_s3_class(test_module, "teal_module")
-  testthat::expect_named(test_module, c("label", "server", "ui", "datanames", "server_args", "ui_args"))
-  testthat::expect_identical(test_module$label, "aaa1")
+  testthat::expect_named(test_module, c("server", "ui", "datanames", "server_args", "ui_args"))
   testthat::expect_identical(test_module$server, call_module_server_fun)
   testthat::expect_identical(test_module$ui, ui_fun1)
   testthat::expect_identical(test_module$datanames, "all")
   testthat::expect_identical(test_module$server_args, NULL)
   testthat::expect_identical(test_module$ui_args, NULL)
+
+  testthat::expect_identical(attr(test_module, which = "label", exact = TRUE), "aaa1")
 })
 
+# modules ----
 testthat::test_that("modules gives error if no arguments other than label are used", {
   testthat::expect_error(modules(label = "my label"))
   testthat::expect_error(modules()) # using default label argument
@@ -199,7 +202,7 @@ testthat::test_that("modules does not accept objects other than teal_module(s) i
   )
 })
 
-testthat::test_that("modules returns teal_modules object with label and children slot", {
+testthat::test_that("modules returns teal_modules object with label attribute", {
   test_module <- module(
     label = "label",
     server = module_server_fun,
@@ -208,10 +211,13 @@ testthat::test_that("modules returns teal_modules object with label and children
   )
   out <- modules(label = "label2", test_module)
   testthat::expect_s3_class(out, "teal_modules")
-  testthat::expect_named(out, c("label", "children"))
+  testthat::expect_contains(
+    attributes(out),
+    list("label" = "label2")
+  )
 })
 
-testthat::test_that("modules returns children as list with list named after label attributes", {
+testthat::test_that("modules returns list named after labels of elements", {
   test_module <- module(
     label = "module",
     server = module_server_fun,
@@ -219,8 +225,8 @@ testthat::test_that("modules returns children as list with list named after labe
     datanames = ""
   )
   test_modules <- modules(label = "modules", test_module)
-  out <- modules(label = "tabs", test_module, test_modules)$children
-  testthat::expect_named(out, c("module", "modules"))
+  out <- modules(label = "tabs", test_module, test_modules)
+  checkmate::expect_list(out)
   testthat::expect_identical(out$module, test_module)
   testthat::expect_identical(out$modules, test_modules)
 })
@@ -240,7 +246,7 @@ testthat::test_that("modules returns useful error message if label argument not 
 })
 
 
-testthat::test_that("modules returns children as list with unique names if labels are duplicated", {
+testthat::test_that("modules returns list with unique names if labels are duplicated", {
   test_module <- module(
     label = "module",
     server = module_server_fun,
@@ -248,13 +254,14 @@ testthat::test_that("modules returns children as list with unique names if label
     datanames = ""
   )
   test_modules <- modules(label = "module", test_module)
-  out <- modules(label = "tabs", test_module, test_modules)$children
+  out <- modules(label = "tabs", test_module, test_modules)
   testthat::expect_named(out, c("module", "module_1"))
   testthat::expect_identical(out$module, test_module)
   testthat::expect_identical(out$module_1, test_modules)
 })
 
 
+# modules_depth ----
 testthat::test_that("modules_depth accepts depth as integer", {
   testthat::expect_no_error(
     modules_depth(
@@ -435,7 +442,7 @@ testthat::test_that("is_arg_used accepts `arg` to be a string only", {
 })
 
 
-# ---- append_module
+# append_module ----
 testthat::test_that("append_module throws error when modules is not inherited from teal_modules", {
   testthat::expect_error(
     append_module(module(), module()),
@@ -463,18 +470,19 @@ testthat::test_that("append_module throws error is module is not inherited from 
   )
 })
 
-testthat::test_that("append_module appends a module to children of not nested teal_modules", {
+testthat::test_that("append_module appends a module to unnested teal_modules", {
   mod <- module(label = "a")
   mod2 <- module(label = "b")
   mods <- modules(label = "c", mod, mod2)
   mod3 <- module(label = "d")
 
   appended_mods <- append_module(mods, mod3)
-  testthat::expect_equal(appended_mods$children, list(a = mod, b = mod2, d = mod3))
+  expected <- structure(list(a = mod, b = mod2, d = mod3), label = "c", class = "teal_modules")
+  testthat::expect_identical(appended_mods, expected)
 })
 
 
-testthat::test_that("append_module appends a module to children of nested teal_modules", {
+testthat::test_that("append_module appends a module to nested teal_modules", {
   mod <- module(label = "a")
   mod2 <- module(label = "b")
   mods <- modules(label = "c", mod)
@@ -482,17 +490,18 @@ testthat::test_that("append_module appends a module to children of nested teal_m
   mod3 <- module(label = "d")
 
   appended_mods <- append_module(mods2, mod3)
-  testthat::expect_equal(appended_mods$children, list(c = mods, b = mod2, d = mod3))
+  expected <- structure(list(c = mods, b = mod2, d = mod3), label = "e", class = "teal_modules")
+  testthat::expect_identical(appended_mods, expected)
 })
 
-testthat::test_that("append_module produces teal_modules with unique named children", {
+testthat::test_that("append_module produces teal_modules with unique names", {
   mod <- module(label = "a")
   mod2 <- module(label = "c")
   mods <- modules(label = "c", mod, mod2)
   mod3 <- module(label = "c")
 
   appended_mods <- append_module(mods, mod3)
-  mod_names <- names(appended_mods$children)
+  mod_names <- names(appended_mods)
   testthat::expect_equal(mod_names, unique(mod_names))
 })
 

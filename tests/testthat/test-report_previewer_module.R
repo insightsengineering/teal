@@ -9,10 +9,10 @@ testthat::test_that("report_previewer_module throws error if label is not string
 
 testthat::test_that("report_previewer_module throws no error and stores label if label is string", {
   testthat::expect_no_error(r_p_m <- reporter_previewer_module(label = "My label"))
-  testthat::expect_equal(r_p_m$label, "My label")
+  testthat::expect_equal(attr(r_p_m, which = "label", exact = TRUE), "My label")
 })
 
 testthat::test_that("report_previewer_module default label is Report previewer ", {
   r_p_m <- reporter_previewer_module()
-  testthat::expect_equal(r_p_m$label, "Report previewer")
+  testthat::expect_equal(attr(r_p_m, which = "label", exact = TRUE), "Report previewer")
 })
