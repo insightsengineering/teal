@@ -58,18 +58,18 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
       # by giving an id, we can reactively respond to tab changes
       list(
         id = ns("active_tab"),
-        type = if (modules$label == "root") "pills" else "tabs"
+        type = if (attr(modules, which = "label", exact = TRUE) == "root") "pills" else "tabs"
       ),
       lapply(
-        names(modules$children),
+        names(modules),
         function(module_id) {
-          module_label <- modules$children[[module_id]]$label
+          module_label <- attr(modules[[module_id]], which = "label", exact = TRUE)
           tabPanel(
             title = module_label,
             value = module_id, # when clicked this tab value changes input$<tabset panel id>
             ui_nested_tabs(
               id = ns(module_id),
-              modules = modules$children[[module_id]],
+              modules = modules[[module_id]],
               datasets = datasets[[module_label]],
               depth = depth + 1L,
               is_module_specific = is_module_specific
@@ -135,16 +135,16 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
 
   moduleServer(id = id, module = function(input, output, session) {
-    logger::log_trace("srv_nested_tabs.teal_modules initializing the module { deparse1(modules$label) }.")
+    logger::log_trace("srv_nested_tabs.teal_modules initializing the module { deparse1(attr(modules, which = \"label\", exact = TRUE)) }.") # nolint: line_length.
 
-    labels <- vapply(modules$children, `[[`, character(1), "label")
+    labels <- vapply(modules, attr, character(1), which = "label", exact = TRUE)
     modules_reactive <- sapply(
-      names(modules$children),
+      names(modules),
       function(module_id) {
         srv_nested_tabs(
           id = module_id,
           datasets = datasets[[labels[module_id]]],
-          modules = modules$children[[module_id]],
+          modules = modules[[module_id]],
           is_module_specific = is_module_specific,
           reporter = reporter
         )
@@ -155,7 +155,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
     # when not ready input$active_tab would return NULL - this would fail next reactive
     input_validated <- eventReactive(input$active_tab, input$active_tab, ignoreNULL = TRUE)
     get_active_module <- reactive({
-      if (length(modules$children) == 1L) {
+      if (length(modules) == 1L) {
         # single tab is active by default
         modules_reactive[[1]]()
       } else {
@@ -173,7 +173,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
 srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specific = TRUE,
                                         reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_class(datasets, "FilteredData")
-  logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
+  logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(attr(modules, which = \"label\", exact = TRUE)) }.") # nolint: line_length.
 
   moduleServer(id = id, module = function(input, output, session) {
     if (!is.null(modules$datanames) && is_module_specific) {
