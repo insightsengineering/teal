@@ -382,9 +382,9 @@ resolve_modules_datanames <- function(modules, datanames, join_keys) {
     sapply(
       modules,
       resolve_modules_datanames,
-      simplify = FALSE,
       datanames = datanames,
-      join_keys = join_keys
+      join_keys = join_keys,
+      simplify = FALSE
     )
   } else {
     modules$datanames <- if (identical(modules$datanames, "all")) {
