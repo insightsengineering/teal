@@ -62,15 +62,15 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
       ),
       lapply(
         names(modules),
-        function(module_id) {
-          module_label <- attr(modules[[module_id]], which = "label", exact = TRUE)
+        function(modules_name) {
+          modules_label <- attr(modules[[modules_name]], which = "label", exact = TRUE)
           tabPanel(
-            title = module_label,
-            value = module_id, # when clicked this tab value changes input$<tabset panel id>
+            title = modules_label,
+            value = modules_name, # when clicked this tab value changes input$<tabset panel id>
             ui_nested_tabs(
-              id = ns(module_id),
-              modules = modules[[module_id]],
-              datasets = datasets[[module_label]],
+              id = ns(modules_name),
+              modules = modules[[modules_name]],
+              datasets = datasets[[modules_label]],
               depth = depth + 1L,
               is_module_specific = is_module_specific
             )
@@ -137,14 +137,14 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_trace("srv_nested_tabs.teal_modules initializing the module { deparse1(attr(modules, which = \"label\", exact = TRUE)) }.") # nolint: line_length.
 
-    labels <- vapply(modules, attr, character(1), which = "label", exact = TRUE)
     modules_reactive <- sapply(
       names(modules),
-      function(module_id) {
+      function(modules_name) {
+        modules_label <- attr(modules[[modules_name]], which = "label", exact = TRUE)
         srv_nested_tabs(
-          id = module_id,
-          datasets = datasets[[labels[module_id]]],
-          modules = modules[[module_id]],
+          id = modules_name,
+          datasets = datasets[[modules_label]],
+          modules = modules[[modules_name]],
           is_module_specific = is_module_specific,
           reporter = reporter
         )
