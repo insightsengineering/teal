@@ -102,14 +102,13 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
 #' @keywords internal
 resolve_modules_datanames <- function(modules, datanames, join_keys) {
   if (inherits(modules, "teal_modules")) {
-    modules$children <- sapply(
-      modules$children,
+    sapply(
+      modules,
       resolve_modules_datanames,
       simplify = FALSE,
       datanames = datanames,
       join_keys = join_keys
     )
-    modules
   } else {
     modules$datanames <- if (identical(modules$datanames, "all")) {
       datanames
@@ -119,7 +118,7 @@ resolve_modules_datanames <- function(modules, datanames, join_keys) {
         stop(
           sprintf(
             "Module %s has datanames that are not available in a 'data':\n %s not in %s",
-            modules$label,
+            attr(modules, which = "label", exact = TRUE),
             toString(extra_datanames),
             toString(datanames)
           )
@@ -149,13 +148,13 @@ check_modules_datanames <- function(modules, datanames) {
   recursive_check_datanames <- function(modules, datanames) {
     # check teal_modules against datanames
     if (inherits(modules, "teal_modules")) {
-      sapply(modules$children, function(module) recursive_check_datanames(module, datanames = datanames))
+      sapply(modules, function(module) recursive_check_datanames(module, datanames = datanames))
     } else {
       extra_datanames <- setdiff(modules$datanames, c("all", datanames))
       if (length(extra_datanames)) {
         sprintf(
           "- Module '%s' uses datanames not available in 'data': (%s) not in (%s)",
-          modules$label,
+          attr(modules, which = "label", exact = TRUE),
           toString(dQuote(extra_datanames, q = FALSE)),
           toString(dQuote(datanames, q = FALSE))
         )
