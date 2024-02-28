@@ -220,6 +220,87 @@ check_filter_datanames <- function(filters, datanames) {
   }
 }
 
+
+#' Extract datasets for modules
+#'
+#' @param data (`teal_data`)
+#' @param modules (`teal_modules`) object
+#' @param filters (`teal_slices`) object
+#' @param filtered_data_singleton A result of `teal_data_to_filtered_data` applied to `data`.
+#' @return Returns list of same shape as `modules`, containing `FilteredData` at every leaf.
+#' If module specific, each leaf contains different instance, otherwise every leaf contains `filtered_data_singleton`.
+#' @keywords internal
+modules_datasets <- function(data, modules, filters, filtered_data_singleton = teal_data_to_filtered_data(data)) {
+  checkmate::assert_class(data, "teal_data")
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+  checkmate::assert_class(filters, "modules_teal_slices")
+  checkmate::assert_r6(filtered_data_singleton, "FilteredData")
+
+  if (!isTRUE(attr(filters, "module_specific"))) {
+    slices <- shiny::isolate({
+      Filter(function(x) x$id %in% attr(filters, "mapping")$global_filters, filters)
+    })
+    filtered_data_singleton$set_filter_state(slices)
+    return(modules_structure(modules, filtered_data_singleton))
+  }
+
+  if (inherits(modules, "teal_module")) {
+    # 1. get datanames
+    datanames <-
+      if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
+        include_parent_datanames(
+          teal_data_datanames(data),
+          teal.data::join_keys(data)
+        )
+      } else {
+        modules$datanames
+      }
+    # 2. subset filters (global + dedicated)
+    slices <- shiny::isolate({
+      Filter(x = filters, f = function(x) {
+        x$dataname %in% datanames &&
+          (x$id %in% attr(filters, "mapping")$global_filters ||
+             x$id %in% unique(unlist(attr(filters, "mapping")[modules$label])))
+      })
+    })
+    # 2a. subset include/exclude varnames
+    slices$include_varnames <- attr(slices, "include_varnames")[names(attr(slices, "include_varnames")) %in% datanames]
+    slices$exclude_varnames <- attr(slices, "exclude_varnames")[names(attr(slices, "exclude_varnames")) %in% datanames]
+
+    # 3. instantiate FilteredData
+    filtered_data <- teal_data_to_filtered_data(data, datanames)
+    # 4. set state
+    filtered_data$set_filter_state(slices)
+    # 5. return
+    return(filtered_data)
+  } else if (inherits(modules, "teal_modules")) {
+    ans <- lapply(
+      modules$children,
+      modules_datasets,
+      data = data,
+      filters = filters,
+      filtered_data_singleton = filtered_data_singleton
+    )
+    names(ans) <- vapply(modules$children, `[[`, character(1), "label")
+
+    return(ans)
+  }
+
+  stop("something is not right")
+}
+
+# Returns nested list of same shape as `modules` with `value` at every leaf.
+modules_structure <- function(modules, value = TRUE) {
+  if (inherits(modules, "teal_module")) {
+    return(value)
+  } else {
+    stats::setNames(
+      lapply(modules$children, modules_structure, value),
+      vapply(modules$children, `[[`, character(1), "label")
+    )
+  }
+}
+
 #' Wrapper on `teal.data::datanames`
 #'
 #' Special function used in internals of `teal` to return names of datasets even if `datanames`
