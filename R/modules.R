@@ -269,7 +269,7 @@ modules <- function(..., label = "root") {
   labels <- vapply(submodules, attr, character(1L), which = "label", exact = TRUE)
   names(submodules) <- make.unique(gsub("[^[:alnum:]]+", "_", labels), sep = "_")
   structure(
-    list(submodules),
+    submodules,
     label = label,
     class = "teal_modules"
   )
