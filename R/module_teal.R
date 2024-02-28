@@ -172,9 +172,8 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
 
       module_datasets <- function(modules) {
         if (inherits(modules, "teal_modules")) {
-          datasets <- lapply(modules$children, module_datasets)
-          labels <- vapply(modules$children, `[[`, character(1), "label")
-          names(datasets) <- labels
+          datasets <- lapply(modules, module_datasets)
+          names(datasets) <- vapply(modules, attr, character(1L), which = "label", exact = TRUE)
           datasets
         } else if (isTRUE(attr(filter, "module_specific"))) {
           # we should create FilteredData even if modules$datanames is null
@@ -193,7 +192,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
           # set initial filters
           #  - filtering filters for this module
           slices <- Filter(x = filter, f = function(x) {
-            x$id %in% unique(unlist(attr(filter, "mapping")[c(modules$label, "global_filters")])) &&
+            x$id %in% unique(unlist(attr(filter, "mapping")[c(attr(modules, "label", TRUE), "global_filters")])) &&
               x$dataname %in% datanames
           })
           include_varnames <- attr(slices, "include_varnames")[names(attr(slices, "include_varnames")) %in% datanames]
