@@ -1,55 +1,4 @@
-#' Get client timezone
-#'
-#' User timezone in the browser may be different to the one on the server.
-#' This script can be run to register a `shiny` input which contains information about the timezone in the browser.
-#'
-#' @param ns (`function`) namespace function passed from the `session` object in the `shiny` server.
-#'  For `shiny` modules this will allow for proper name spacing of the registered input.
-#'
-#' @return (`shiny`) input variable accessible with `input$tz` which is a (`character`)
-#'  string containing the timezone of the browser/client.
-#'
-#' @keywords internal
-#'
-get_client_timezone <- function(ns) {
-  script <- sprintf(
-    "Shiny.setInputValue(`%s`, Intl.DateTimeFormat().resolvedOptions().timeZone)",
-    ns("timezone")
-  )
-  shinyjs::runjs(script) # function does not return anything
-  invisible(NULL)
-}
-
-#' Resolve the expected bootstrap theme
-#' @noRd
-#' @keywords internal
-get_teal_bs_theme <- function() {
-  bs_theme <- getOption("teal.bs_theme")
-  if (is.null(bs_theme)) {
-    NULL
-  } else if (!inherits(bs_theme, "bs_theme")) {
-    warning("teal.bs_theme has to be of a bslib::bs_theme class, the default shiny bootstrap is used.")
-    NULL
-  } else {
-    bs_theme
-  }
-}
-
-#' Return parentnames along with datanames.
-#' @noRd
-#' @keywords internal
-include_parent_datanames <- function(dataname, join_keys) {
-  parents <- character(0)
-  for (i in dataname) {
-    while (length(i) > 0) {
-      parent_i <- teal.data::parent(join_keys, i)
-      parents <- c(parent_i, parents)
-      i <- parent_i
-    }
-  }
-
-  unique(c(parents, dataname))
-}
+# teal_data class handlers ----
 
 #' Create a `FilteredData`
 #'
@@ -72,6 +21,41 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   attr(ans, "verification_status") <- x@verified
   ans
 }
+
+#' Wrapper on `teal.data::datanames`
+#'
+#' Special function used in internals of `teal` to return names of datasets even if `datanames`
+#' has not been set.
+#' @param data (`teal_data`)
+#' @return `character`
+#' @keywords internal
+teal_data_datanames <- function(data) {
+  checkmate::assert_class(data, "teal_data")
+  if (length(teal.data::datanames(data))) {
+    teal.data::datanames(data)
+  } else {
+    ls(teal.code::get_env(data), all.names = TRUE)
+  }
+}
+
+#' Return names of parent datasets in datanames.
+#' @noRd
+#' @keywords internal
+include_parent_datanames <- function(dataname, join_keys) {
+  parents <- character(0)
+  for (i in dataname) {
+    while (length(i) > 0) {
+      parent_i <- teal.data::parent(join_keys, i)
+      parents <- c(parent_i, parents)
+      i <- parent_i
+    }
+  }
+
+  unique(c(parents, dataname))
+}
+
+
+# reporter ----
 
 #' Template function for `TealReportCard` creation and customization
 #'
@@ -103,6 +87,9 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
   if (with_filter) card$append_fs(filter_panel_api$get_filter_state())
   card
 }
+
+
+# modules ----
 
 #' Resolve `datanames` for the modules
 #'
@@ -183,58 +170,8 @@ check_modules_datanames <- function(modules, datanames) {
   }
 }
 
-#' Check `datanames` in filters
-#'
-#' This function checks whether `datanames` in filters correspond to those in `data`,
-#' returning character vector with error messages or `TRUE` if all checks pass.
-#'
-#' @param filters (`teal_slices`) object
-#' @param datanames (`character`) names of datasets available in the `data` object
-#'
-#' @return A `character(1)` containing error message or TRUE if validation passes.
-#' @keywords internal
-check_filter_datanames <- function(filters, datanames) {
-  checkmate::assert_class(filters, "teal_slices")
-  checkmate::assert_character(datanames)
 
-  # check teal_slices against datanames
-  out <- unlist(sapply(
-    filters, function(filter) {
-      dataname <- shiny::isolate(filter$dataname)
-      if (!dataname %in% datanames) {
-        sprintf(
-          "- Filter '%s' refers to dataname not available in 'data':\n %s not in (%s)",
-          shiny::isolate(filter$id),
-          dQuote(dataname, q = FALSE),
-          toString(dQuote(datanames, q = FALSE))
-        )
-      }
-    }
-  ))
-
-
-  if (length(out)) {
-    paste(out, collapse = "\n")
-  } else {
-    TRUE
-  }
-}
-
-#' Wrapper on `teal.data::datanames`
-#'
-#' Special function used in internals of `teal` to return names of datasets even if `datanames`
-#' has not been set.
-#' @param data (`teal_data`)
-#' @return `character`
-#' @keywords internal
-teal_data_datanames <- function(data) {
-  checkmate::assert_class(data, "teal_data")
-  if (length(teal.data::datanames(data))) {
-    teal.data::datanames(data)
-  } else {
-    ls(teal.code::get_env(data), all.names = TRUE)
-  }
-}
+# application title ----
 
 #' Function for validating the title parameter of `teal::init`
 #'
@@ -280,6 +217,10 @@ build_app_title <- function(
   )
 }
 
+
+# application id stamp ----
+# used in snapshot manager
+
 #' Application ID
 #'
 #' Creates App ID used to match filter snapshots to application.
@@ -318,5 +259,81 @@ defunction <- function(x) {
     deparse1(body(x))
   } else {
     x
+  }
+}
+
+
+# miscellaneous ----
+
+#' Get client timezone
+#'
+#' User timezone in the browser may be different to the one on the server.
+#' This script can be run to register a `shiny` input which contains information about the timezone in the browser.
+#'
+#' @param ns (`function`) namespace function passed from the `session` object in the `shiny` server.
+#'  For `shiny` modules this will allow for proper name spacing of the registered input.
+#'
+#' @return (`shiny`) input variable accessible with `input$tz` which is a (`character`)
+#'  string containing the timezone of the browser/client.
+#'
+#' @keywords internal
+#'
+get_client_timezone <- function(ns) {
+  script <- sprintf(
+    "Shiny.setInputValue(`%s`, Intl.DateTimeFormat().resolvedOptions().timeZone)",
+    ns("timezone")
+  )
+  shinyjs::runjs(script) # function does not return anything
+  invisible(NULL)
+}
+
+#' Resolve the expected bootstrap theme
+#' @noRd
+#' @keywords internal
+get_teal_bs_theme <- function() {
+  bs_theme <- getOption("teal.bs_theme")
+  if (is.null(bs_theme)) {
+    NULL
+  } else if (!inherits(bs_theme, "bs_theme")) {
+    warning("teal.bs_theme has to be of a bslib::bs_theme class, the default shiny bootstrap is used.")
+    NULL
+  } else {
+    bs_theme
+  }
+}
+
+#' Check `datanames` in filters
+#'
+#' This function checks whether `datanames` in filters correspond to those in `data`,
+#' returning character vector with error messages or `TRUE` if all checks pass.
+#'
+#' @param filters (`teal_slices`) object
+#' @param datanames (`character`) names of datasets available in the `data` object
+#'
+#' @return A `character(1)` containing error message or TRUE if validation passes.
+#' @keywords internal
+check_filter_datanames <- function(filters, datanames) {
+  checkmate::assert_class(filters, "teal_slices")
+  checkmate::assert_character(datanames)
+
+  # check teal_slices against datanames
+  out <- unlist(sapply(
+    filters, function(filter) {
+      dataname <- shiny::isolate(filter$dataname)
+      if (!dataname %in% datanames) {
+        sprintf(
+          "- Filter '%s' refers to dataname not available in 'data':\n %s not in (%s)",
+          shiny::isolate(filter$id),
+          dQuote(dataname, q = FALSE),
+          toString(dQuote(datanames, q = FALSE))
+        )
+      }
+    }
+  ))
+
+  if (length(out)) {
+    paste(out, collapse = "\n")
+  } else {
+    TRUE
   }
 }
