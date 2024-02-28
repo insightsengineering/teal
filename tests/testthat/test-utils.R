@@ -104,7 +104,7 @@ test_that("modules_datasets returns correct structure", {
     rapply(
       modules_datasets(data, modules, filters),
       function(x) {
-        isolate(sapply(x$get_filter_state() , `[[`, "id"))
+        isolate(sapply(x$get_filter_state(), `[[`, "id"))
       },
       how = "replace"
     )
