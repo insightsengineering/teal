@@ -321,10 +321,14 @@ print.teal_modules <- print.teal_module
 append_module <- function(modules, module) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(module, "teal_module")
-  modules <- c(modules, list(module))
-  labels <- vapply(modules, attr, character(1L), which = "label", exact = TRUE)
-  names(modules) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
-  modules
+  ans <- c(modules, list(module))
+  labels <- vapply(ans, attr, character(1L), which = "label", exact = TRUE)
+  structure(
+    ans,
+    names = make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_"),
+    label = attr(modules, which = "label", exact = TRUE),
+    class = "teal_modules"
+  )
 }
 
 #' Extract/Remove module(s) of specific class
