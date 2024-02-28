@@ -100,27 +100,23 @@ test_that("modules_datasets returns correct structure", {
     )
   )
 
-  modules_structure <-
-    rapply(
-      modules_datasets(data, modules, filters),
-      function(x) {
-        isolate(sapply(x$get_filter_state(), `[[`, "id"))
-      },
-      how = "replace"
-    )
-  expected_structure <-
-    list(
-      two =
-        list(
-          `example two` = "mtcars cyl",
-          three =
-            list(
-              `example three` = list(),
-              `example four` = c("mtcars mpg", "mtcars cyl")
-            )
-        ),
-      `example one` = "iris Species"
-    )
+  modules_structure <- rapply(
+    modules_datasets(data, modules, filters),
+    function(x) {
+      isolate(sapply(x$get_filter_state(), `[[`, "id"))
+    },
+    how = "replace"
+  )
+  expected_structure <- list(
+    two = list(
+      `example two` = "mtcars cyl",
+      three = list(
+        `example three` = list(),
+        `example four` = c("mtcars mpg", "mtcars cyl")
+      )
+    ),
+    `example one` = "iris Species"
+  )
 
   testthat::expect_equal(modules_structure, expected_structure)
 })
