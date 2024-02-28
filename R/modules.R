@@ -242,10 +242,10 @@ module <- function(label = "module",
 
   structure(
     list(
-      label = label,
       server = server, ui = ui, datanames = unique(datanames),
       server_args = server_args, ui_args = ui_args
     ),
+    label = label,
     class = "teal_module"
   )
 }
@@ -263,16 +263,14 @@ modules <- function(..., label = "root") {
     )
   }
 
-  checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
+  checkmate::assert_list(submodules, min.len = 1L, any.missing = FALSE, types = c("teal_module", "teal_modules"))
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
-  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
+  labels <- vapply(submodules, attr, character(1L), which = "label", exact = TRUE)
   names(submodules) <- make.unique(gsub("[^[:alnum:]]+", "_", labels), sep = "_")
   structure(
-    list(
-      label = label,
-      children = submodules
-    ),
+    list(submodules),
+    label = label,
     class = "teal_modules"
   )
 }
@@ -282,7 +280,7 @@ modules <- function(..., label = "root") {
 #' @rdname teal_modules
 #' @export
 format.teal_module <- function(x, indent = 0, ...) { # nolint
-  paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, "\n", collapse = "")
+  paste0(paste(rep(" ", indent), collapse = ""), "+ ", attr(x, "label", exact = TRUE), "\n", collapse = "")
 }
 
 
@@ -299,8 +297,8 @@ print.teal_module <- function(x, ...) {
 format.teal_modules <- function(x, indent = 0, ...) { # nolint
   paste(
     c(
-      paste0(rep(" ", indent), "+ ", x$label, "\n"),
-      unlist(lapply(x$children, format, indent = indent + 1, ...))
+      paste0(rep(" ", indent), "+ ", attr(x, "label", exact = TRUE), "\n"),
+      unlist(lapply(x, format, indent = indent + 1, ...))
     ),
     collapse = ""
   )
@@ -323,9 +321,9 @@ print.teal_modules <- print.teal_module
 append_module <- function(modules, module) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(module, "teal_module")
-  modules$children <- c(modules$children, list(module))
-  labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
-  names(modules$children) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
+  modules <- c(modules, list(module))
+  labels <- vapply(modules, attr, character(1L), which = "label", exact = TRUE)
+  names(modules) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
   modules
 }
 
@@ -346,7 +344,7 @@ extract_module <- function(modules, class) {
   } else if (inherits(modules, "teal_module")) {
     NULL
   } else if (inherits(modules, "teal_modules")) {
-    Filter(function(x) length(x) > 0L, lapply(modules$children, extract_module, class))
+    Filter(function(x) length(x) > 0L, lapply(modules, extract_module, class))
   }
 }
 
@@ -361,7 +359,7 @@ drop_module <- function(modules, class) {
   } else if (inherits(modules, "teal_modules")) {
     do.call(
       "modules",
-      c(Filter(function(x) length(x) > 0L, lapply(modules$children, drop_module, class)), label = modules$label)
+      c(Filter(function(x) length(x) > 0L, lapply(modules, drop_module, class)), label = attr(modules, "label", TRUE))
     )
   }
 }
@@ -378,7 +376,7 @@ drop_module <- function(modules, class) {
 is_arg_used <- function(modules, arg) {
   checkmate::assert_string(arg)
   if (inherits(modules, "teal_modules")) {
-    any(unlist(lapply(modules$children, is_arg_used, arg)))
+    any(unlist(lapply(modules, is_arg_used, arg)))
   } else if (inherits(modules, "teal_module")) {
     is_arg_used(modules$server, arg) || is_arg_used(modules$ui, arg)
   } else if (is.function(modules)) {
@@ -403,7 +401,7 @@ modules_depth <- function(modules, depth = 0L) {
   checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
   checkmate::assert_int(depth, lower = 0)
   if (inherits(modules, "teal_modules")) {
-    max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
+    max(vapply(modules, modules_depth, integer(1), depth = depth + 1L))
   } else {
     depth
   }
@@ -417,8 +415,8 @@ modules_depth <- function(modules, depth = 0L) {
 #' @keywords internal
 module_labels <- function(modules) {
   if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, module_labels)
+    lapply(modules, module_labels)
   } else {
-    modules$label
+    attr(modules, which = "label", exact = TRUE)
   }
 }
