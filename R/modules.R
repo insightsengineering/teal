@@ -266,7 +266,7 @@ modules <- function(..., label = "root") {
   checkmate::assert_list(submodules, min.len = 1L, any.missing = FALSE, types = c("teal_module", "teal_modules"))
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
-  labels <- vapply(submodules, attr, character(1L), which = "label", exact = TRUE)
+  labels <- vapply(submodules, module_label, character(1L))
   names(submodules) <- make.unique(gsub("[^[:alnum:]]+", "_", labels), sep = "_")
   structure(
     submodules,
@@ -322,11 +322,11 @@ append_module <- function(modules, module) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(module, "teal_module")
   ans <- c(modules, list(module))
-  labels <- vapply(ans, attr, character(1L), which = "label", exact = TRUE)
+  labels <- vapply(ans, module_label, character(1L))
   structure(
     ans,
     names = make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_"),
-    label = attr(modules, which = "label", exact = TRUE),
+    label = module_label(modules),
     class = "teal_modules"
   )
 }
@@ -395,7 +395,7 @@ resolve_modules_datanames <- function(modules, datanames, join_keys) {
         stop(
           sprintf(
             "Module %s has datanames that are not available in a 'data':\n %s not in %s",
-            attr(modules, which = "label", exact = TRUE),
+            module_label(modules),
             toString(extra_datanames),
             toString(datanames)
           )
@@ -502,7 +502,7 @@ check_modules_datanames <- function(modules, datanames) {
       if (length(extra_datanames)) {
         sprintf(
           "- Module '%s' uses datanames not available in 'data': (%s) not in (%s)",
-          attr(modules, which = "label", exact = TRUE),
+          module_label(modules),
           toString(dQuote(extra_datanames, q = FALSE)),
           toString(dQuote(datanames, q = FALSE))
         )

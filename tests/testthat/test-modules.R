@@ -129,7 +129,7 @@ testthat::test_that("module returns list of class 'teal_module' containing input
   testthat::expect_identical(test_module$server_args, NULL)
   testthat::expect_identical(test_module$ui_args, NULL)
 
-  testthat::expect_identical(attr(test_module, which = "label", exact = TRUE), "aaa1")
+  testthat::expect_identical(module_label(test_module), "aaa1")
 })
 
 # modules ----

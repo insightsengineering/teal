@@ -58,12 +58,12 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
       # by giving an id, we can reactively respond to tab changes
       list(
         id = ns("active_tab"),
-        type = if (attr(modules, which = "label", exact = TRUE) == "root") "pills" else "tabs"
+        type = if (module_label(modules) == "root") "pills" else "tabs"
       ),
       lapply(
         names(modules),
         function(modules_name) {
-          modules_label <- attr(modules[[modules_name]], which = "label", exact = TRUE)
+          modules_label <- module_label(modules[[modules_name]])
           tabPanel(
             title = modules_label,
             value = modules_name, # when clicked this tab value changes input$<tabset panel id>
@@ -135,12 +135,12 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
 
   moduleServer(id = id, module = function(input, output, session) {
-    logger::log_trace("srv_nested_tabs.teal_modules initializing the module { deparse1(attr(modules, which = \"label\", exact = TRUE)) }.") # nolint: line_length.
+    logger::log_trace("srv_nested_tabs.teal_modules initializing the module { deparse1(module_label(modules)) }.")
 
     modules_reactive <- sapply(
       names(modules),
       function(modules_name) {
-        modules_label <- attr(modules[[modules_name]], which = "label", exact = TRUE)
+        modules_label <- module_label(modules[[modules_name]])
         srv_nested_tabs(
           id = modules_name,
           datasets = datasets[[modules_label]],
@@ -173,7 +173,7 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
 srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specific = TRUE,
                                         reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_class(datasets, "FilteredData")
-  logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(attr(modules, which = \"label\", exact = TRUE)) }.") # nolint: line_length.
+  logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(module_label(modules)) }.")
 
   moduleServer(id = id, module = function(input, output, session) {
     if (!is.null(modules$datanames) && is_module_specific) {

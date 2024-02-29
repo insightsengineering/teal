@@ -173,7 +173,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       module_datasets <- function(modules) {
         if (inherits(modules, "teal_modules")) {
           datasets <- lapply(modules, module_datasets)
-          names(datasets) <- vapply(modules, attr, character(1L), which = "label", exact = TRUE)
+          names(datasets) <- vapply(modules, module_label, character(1L))
           datasets
         } else if (isTRUE(attr(filter, "module_specific"))) {
           # we should create FilteredData even if modules$datanames is null
