@@ -95,7 +95,48 @@ snapshot_manager_ui <- function(id) {
       actionLink(ns("snapshot_reset"), label = NULL, icon = icon("undo"), title = "reset initial state"),
       NULL
     ),
-    uiOutput(ns("snapshot_list"))
+    uiOutput(ns("snapshot_list")),
+    teal.widgets::nested_closeable_modal(
+      id = ns("snapshot_name_modal"),
+      modal_args = list(
+        size = "s",
+        footer = NULL,
+        easyClose = TRUE
+      ),
+      div(
+        textInput(
+          ns("new_snapshot_name"),
+          "Name the snapshot",
+          width = "100%",
+          placeholder = "Meaningful, unique name"
+        ),
+        div(
+          actionButton(ns("snapshot_name_accept"), "Accept", icon = icon("thumbs-up")),
+          actionButton(ns("snapshot_name_cancel"), label = "Cancel", icon = icon("thumbs-down"))
+        )
+      )
+    ),
+    teal.widgets::nested_closeable_modal(
+      id = ns("snapshot_file_modal"),
+      modal_args = list(
+        size = "s",
+        footer = NULL,
+        easyClose = TRUE
+      ),
+      div(
+        fileInput(ns("snapshot_file"), "Choose snapshot file", accept = ".json", width = "100%"),
+        textInput(
+          ns("new_file_snapshot_name"),
+          "Name the snapshot (optional)",
+          width = "100%",
+          placeholder = "Meaningful, unique name"
+        ),
+        div(
+          actionButton(ns("snaphot_file_accept"), "Accept", icon = icon("thumbs-up")),
+          actionButton(ns("snaphot_file_cancel"), label = "Cancel", icon = icon("thumbs-down"))
+        )
+      )
+    )
   )
 }
 
@@ -124,31 +165,29 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
     # Snapshot current application state ----
     # Name snaphsot.
     observeEvent(input$snapshot_add, {
-      showModal(
-        modalDialog(
-          textInput(ns("snapshot_name"), "Name the snapshot", width = "100%", placeholder = "Meaningful, unique name"),
-          footer = tagList(
-            actionButton(ns("snapshot_name_accept"), "Accept", icon = icon("thumbs-up")),
-            modalButton(label = "Cancel", icon = icon("thumbs-down"))
-          ),
-          size = "s"
-        )
-      )
+      updateTextInput(session, "new_snapshot_name", value = "")
+      shinyjs::runjs(paste0("$('#", ns("snapshot_name_modal"), "').modal('show')"))
     })
+
+    observeEvent(input$snapshot_name_cancel, {
+      shinyjs::runjs(paste0("$('#", ns("snapshot_name_modal"), "').modal('hide')"))
+    })
+
     # Store snaphsot.
     observeEvent(input$snapshot_name_accept, {
-      snapshot_name <- trimws(input$snapshot_name)
+      snapshot_name <- trimws(input$new_snapshot_name)
       if (identical(snapshot_name, "")) {
         showNotification(
           "Please name the snapshot.",
           type = "message"
         )
-        updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
+        updateTextInput(inputId = "new_snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else if (is.element(make.names(snapshot_name), make.names(names(snapshot_history())))) {
         showNotification(
           "This name is in conflict with other snapshot names. Please choose a different one.",
           type = "message"
         )
+        updateTextInput(inputId = "new_snapshot_name", value = "", placeholder = "Meaningful, unique name")
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         snapshot <- as.list(slices_global(), recursive = TRUE)
@@ -156,34 +195,19 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
         snapshot_history(snapshot_update)
-        removeModal()
-        # Reopen filter manager modal by clicking button in the main application.
-        shinyjs::click(id = "teal-main_ui-filter_manager-show", asis = TRUE)
+        shinyjs::runjs(paste0("$('#", ns("snapshot_name_modal"), "').modal('hide')"))
       }
     })
 
     # Upload a snapshot file ----
     # Select file.
     observeEvent(input$snapshot_load, {
-      showModal(
-        modalDialog(
-          fileInput(ns("snapshot_file"), "Choose snapshot file", accept = ".json", width = "100%"),
-          textInput(
-            ns("snapshot_name"),
-            "Name the snapshot (optional)",
-            width = "100%",
-            placeholder = "Meaningful, unique name"
-          ),
-          footer = tagList(
-            actionButton(ns("snaphot_file_accept"), "Accept", icon = icon("thumbs-up")),
-            modalButton(label = "Cancel", icon = icon("thumbs-down"))
-          )
-        )
-      )
+      updateTextInput(session, "new_file_snapshot_name", value = "")
+      shinyjs::runjs(paste0("$('#", ns("snapshot_file_modal"), "').modal('show')"))
     })
     # Store new snapshot to list and restore filter states.
     observeEvent(input$snaphot_file_accept, {
-      snapshot_name <- trimws(input$snapshot_name)
+      snapshot_name <- trimws(input$new_file_snapshot_name)
       if (identical(snapshot_name, "")) {
         snapshot_name <- tools::file_path_sans_ext(input$snapshot_file$name)
       }
@@ -192,6 +216,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
           "This name is in conflict with other snapshot names. Please choose a different one.",
           type = "message"
         )
+        updateTextInput(inputId = "new_file_snapshot_name", value = "", placeholder = "Meaningful, unique name")
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         # Restore snapshot and verify app compatibility.
@@ -228,6 +253,9 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
           ### End  simplified restore procedure. ###
         }
       }
+    })
+    observeEvent(input$snaphot_file_cancel, {
+      shinyjs::runjs(paste0("$('#", ns("snapshot_file_modal"), "').modal('hide')"))
     })
     # Apply newly added snapshot.
 
