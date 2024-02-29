@@ -260,7 +260,7 @@ modules_datasets <- function(data, modules, filters, filtered_data_singleton = t
       Filter(x = filters, f = function(x) {
         x$dataname %in% datanames &&
           (x$id %in% attr(filters, "mapping")$global_filters ||
-            x$id %in% unique(unlist(attr(filters, "mapping")[modules$label])))
+            x$id %in% unique(unlist(attr(filters, "mapping")[modules$label]))) # nolint
       })
     })
     # 2a. subset include/exclude varnames
