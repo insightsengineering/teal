@@ -239,6 +239,7 @@ modules_datasets <- function(data, modules, filters, filtered_data_singleton = t
   checkmate::assert_r6(filtered_data_singleton, "FilteredData")
 
   if (!isTRUE(attr(filters, "module_specific"))) {
+    # subset global filters
     slices <- shiny::isolate({
       Filter(function(x) x$id %in% attr(filters, "mapping")$global_filters, filters)
     })
