@@ -452,11 +452,24 @@ modules_depth <- function(modules, depth = 0L) {
   }
 }
 
-#' Retrieve labels from `teal_modules`
+#' Retrieve labels from `teal_modules` or `teal_module`
 #'
-#' @param modules (`teal_modules`)
-#' @return A `list` containing the labels of the modules. If the modules are nested,
-#' the function returns a nested `list` of labels.
+#' @details
+#' `module_label` returns the `label` attribute of the top-most item in a `teal_modules` or of a single `teal_module`.
+#' `module_labels` returns the `label` attbitutes of all elements of `modules`.
+#'
+#' @param modules (`teal_modules` or `teal_module`)
+#' @return
+#' For `module_label`, a character string.
+#'
+#' For `module_labels`, a `list` of the same shape a `modules`, with single character strings as bottom elements.
+#' @rdname module_labels
+#' @keywords internal
+module_label <- function(modules) {
+  attr(modules, which = "label", exact = TRUE)
+}
+
+#' @rdname module_labels
 #' @keywords internal
 module_labels <- function(modules) {
   if (inherits(modules, "teal_modules")) {
