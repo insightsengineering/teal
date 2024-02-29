@@ -45,8 +45,7 @@ get_rcode_str_install <- function() {
 #' @keywords internal
 get_datasets_code <- function(datanames, datasets, hashes) {
   # preprocessing code
-  str_prepro <-
-    teal.data:::get_code_dependency(attr(datasets, "preprocessing_code"), names = datanames, check_names = FALSE)
+  str_prepro <- attr(datasets, "preprocessing_code")
   if (length(str_prepro) == 0) {
     str_prepro <- "message('Preprocessing is empty')"
   } else {

@@ -162,51 +162,8 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       env$progress <- shiny::Progress$new(session)
       env$progress$set(0.25, message = "Setting data")
 
-      # create a list of data following structure of the nested modules list structure.
-      # Because it's easier to unpack modules and datasets when they follow the same nested structure.
-      datasets_singleton <- teal_data_to_filtered_data(teal_data_rv())
-
-      # Singleton starts with only global filters active.
-      filter_global <- Filter(function(x) x$id %in% attr(filter, "mapping")$global_filters, filter)
-      datasets_singleton$set_filter_state(filter_global)
-
-      module_datasets <- function(modules) {
-        if (inherits(modules, "teal_modules")) {
-          datasets <- lapply(modules$children, module_datasets)
-          labels <- vapply(modules$children, `[[`, character(1), "label")
-          names(datasets) <- labels
-          datasets
-        } else if (isTRUE(attr(filter, "module_specific"))) {
-          # we should create FilteredData even if modules$datanames is null
-          # null controls a display of filter panel but data should be still passed
-          datanames <- if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-            include_parent_datanames(
-              teal_data_datanames(teal_data_rv()),
-              teal.data::join_keys(teal_data_rv())
-            )
-          } else {
-            modules$datanames
-          }
-          # todo: subset teal_data to datanames
-          datasets_module <- teal_data_to_filtered_data(teal_data_rv(), datanames = datanames)
-
-          # set initial filters
-          #  - filtering filters for this module
-          slices <- Filter(x = filter, f = function(x) {
-            x$id %in% unique(unlist(attr(filter, "mapping")[c(modules$label, "global_filters")])) &&
-              x$dataname %in% datanames
-          })
-          include_varnames <- attr(slices, "include_varnames")[names(attr(slices, "include_varnames")) %in% datanames]
-          exclude_varnames <- attr(slices, "exclude_varnames")[names(attr(slices, "exclude_varnames")) %in% datanames]
-          slices$include_varnames <- include_varnames
-          slices$exclude_varnames <- exclude_varnames
-          datasets_module$set_filter_state(slices)
-          datasets_module
-        } else {
-          datasets_singleton
-        }
-      }
-      module_datasets(modules)
+      # Create list of `FilteredData` objects that reflects structure of `modules`.
+      modules_datasets(teal_data_rv(), modules, filter, teal_data_to_filtered_data(teal_data_rv()))
     })
 
     # Replace splash / welcome screen once data is loaded ----
