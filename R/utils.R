@@ -221,7 +221,9 @@ check_filter_datanames <- function(filters, datanames) {
 }
 
 
-#' Extract datasets for modules
+#' Create filterable data for modules
+#' 
+#' Converts input data to a `FilteredData` object(s) to allow filtering before passing data to individual modules.
 #'
 #' @param data (`teal_data`)
 #' @param modules (`teal_modules`) object
