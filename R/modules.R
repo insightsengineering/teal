@@ -242,10 +242,10 @@ module <- function(label = "module",
 
   structure(
     list(
-      label = label,
       server = server, ui = ui, datanames = unique(datanames),
       server_args = server_args, ui_args = ui_args
     ),
+    label = label,
     class = "teal_module"
   )
 }
@@ -263,16 +263,14 @@ modules <- function(..., label = "root") {
     )
   }
 
-  checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
+  checkmate::assert_list(submodules, min.len = 1L, any.missing = FALSE, types = c("teal_module", "teal_modules"))
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
-  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
+  labels <- vapply(submodules, module_label, character(1L))
   names(submodules) <- make.unique(gsub("[^[:alnum:]]+", "_", labels), sep = "_")
   structure(
-    list(
-      label = label,
-      children = submodules
-    ),
+    submodules,
+    label = label,
     class = "teal_modules"
   )
 }
@@ -282,7 +280,7 @@ modules <- function(..., label = "root") {
 #' @rdname teal_modules
 #' @export
 format.teal_module <- function(x, indent = 0, ...) { # nolint
-  paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, "\n", collapse = "")
+  paste0(paste(rep(" ", indent), collapse = ""), "+ ", attr(x, "label", exact = TRUE), "\n", collapse = "")
 }
 
 
@@ -299,8 +297,8 @@ print.teal_module <- function(x, ...) {
 format.teal_modules <- function(x, indent = 0, ...) { # nolint
   paste(
     c(
-      paste0(rep(" ", indent), "+ ", x$label, "\n"),
-      unlist(lapply(x$children, format, indent = indent + 1, ...))
+      paste0(rep(" ", indent), "+ ", attr(x, "label", exact = TRUE), "\n"),
+      unlist(lapply(x, format, indent = indent + 1, ...))
     ),
     collapse = ""
   )
@@ -323,10 +321,14 @@ print.teal_modules <- print.teal_module
 append_module <- function(modules, module) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(module, "teal_module")
-  modules$children <- c(modules$children, list(module))
-  labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
-  names(modules$children) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
-  modules
+  ans <- c(modules, list(module))
+  labels <- vapply(ans, module_label, character(1L))
+  structure(
+    ans,
+    names = make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_"),
+    label = module_label(modules),
+    class = "teal_modules"
+  )
 }
 
 #' Extract/Remove module(s) of specific class
@@ -346,7 +348,7 @@ extract_module <- function(modules, class) {
   } else if (inherits(modules, "teal_module")) {
     NULL
   } else if (inherits(modules, "teal_modules")) {
-    Filter(function(x) length(x) > 0L, lapply(modules$children, extract_module, class))
+    Filter(function(x) length(x) > 0L, lapply(modules, extract_module, class))
   }
 }
 
@@ -361,10 +363,51 @@ drop_module <- function(modules, class) {
   } else if (inherits(modules, "teal_modules")) {
     do.call(
       "modules",
-      c(Filter(function(x) length(x) > 0L, lapply(modules$children, drop_module, class)), label = modules$label)
+      c(Filter(function(x) length(x) > 0L, lapply(modules, drop_module, class)), label = attr(modules, "label", TRUE))
     )
   }
 }
+
+#' Resolve `datanames` for the modules
+#'
+#' Modifies `module$datanames` to include names of the parent dataset (taken from `join_keys`).
+#' When `datanames` is set to `"all"` it is replaced with all available datasets names.
+#' @param modules (`teal_modules`) object
+#' @param datanames (`character`) names of datasets available in the `data` object
+#' @param join_keys (`join_keys`) object
+#' @return `teal_modules` with resolved `datanames`.
+#' @keywords internal
+resolve_modules_datanames <- function(modules, datanames, join_keys) {
+  if (inherits(modules, "teal_modules")) {
+    sapply(
+      modules,
+      resolve_modules_datanames,
+      datanames = datanames,
+      join_keys = join_keys,
+      simplify = FALSE
+    )
+  } else {
+    modules$datanames <- if (identical(modules$datanames, "all")) {
+      datanames
+    } else if (is.character(modules$datanames)) {
+      extra_datanames <- setdiff(modules$datanames, datanames)
+      if (length(extra_datanames)) {
+        stop(
+          sprintf(
+            "Module %s has datanames that are not available in a 'data':\n %s not in %s",
+            module_label(modules),
+            toString(extra_datanames),
+            toString(datanames)
+          )
+        )
+      }
+      datanames_adjusted <- intersect(modules$datanames, datanames)
+      include_parent_datanames(dataname = datanames_adjusted, join_keys = join_keys)
+    }
+    modules
+  }
+}
+
 
 ## read modules ----
 
@@ -378,7 +421,7 @@ drop_module <- function(modules, class) {
 is_arg_used <- function(modules, arg) {
   checkmate::assert_string(arg)
   if (inherits(modules, "teal_modules")) {
-    any(unlist(lapply(modules$children, is_arg_used, arg)))
+    any(unlist(lapply(modules, is_arg_used, arg)))
   } else if (inherits(modules, "teal_module")) {
     is_arg_used(modules$server, arg) || is_arg_used(modules$ui, arg)
   } else if (is.function(modules)) {
@@ -403,22 +446,73 @@ modules_depth <- function(modules, depth = 0L) {
   checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
   checkmate::assert_int(depth, lower = 0)
   if (inherits(modules, "teal_modules")) {
-    max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
+    max(vapply(modules, modules_depth, integer(1), depth = depth + 1L))
   } else {
     depth
   }
 }
 
-#' Retrieve labels from `teal_modules`
+#' Retrieve labels from `teal_modules` or `teal_module`
 #'
-#' @param modules (`teal_modules`)
-#' @return A `list` containing the labels of the modules. If the modules are nested,
-#' the function returns a nested `list` of labels.
+#' @details
+#' `module_label` returns the `label` attribute of the top-most item in a `teal_modules` or of a single `teal_module`.
+#' `module_labels` returns the `label` attbitutes of all elements of `modules`.
+#'
+#' @param modules (`teal_modules` or `teal_module`)
+#' @return
+#' For `module_label`, a character string.
+#'
+#' For `module_labels`, a `list` of the same shape a `modules`, with single character strings as bottom elements.
+#' @rdname module_labels
+#' @keywords internal
+module_label <- function(modules) {
+  attr(modules, which = "label", exact = TRUE)
+}
+
+#' @rdname module_labels
 #' @keywords internal
 module_labels <- function(modules) {
   if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, module_labels)
+    lapply(modules, module_labels)
   } else {
-    modules$label
+    attr(modules, which = "label", exact = TRUE)
+  }
+}
+
+#' Check `datanames` in modules
+#'
+#' This function ensures specified `datanames` in modules match those in the data object,
+#' returning error messages or `TRUE` for successful validation.
+#'
+#' @param modules (`teal_modules`) object
+#' @param datanames (`character`) names of datasets available in the `data` object
+#'
+#' @return A `character(1)` containing error message or `TRUE` if validation passes.
+#' @keywords internal
+check_modules_datanames <- function(modules, datanames) {
+  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_character(datanames)
+
+  recursive_check_datanames <- function(modules, datanames) {
+    # check teal_modules against datanames
+    if (inherits(modules, "teal_modules")) {
+      sapply(modules, function(module) recursive_check_datanames(module, datanames = datanames))
+    } else {
+      extra_datanames <- setdiff(modules$datanames, c("all", datanames))
+      if (length(extra_datanames)) {
+        sprintf(
+          "- Module '%s' uses datanames not available in 'data': (%s) not in (%s)",
+          module_label(modules),
+          toString(dQuote(extra_datanames, q = FALSE)),
+          toString(dQuote(datanames, q = FALSE))
+        )
+      }
+    }
+  }
+  check_datanames <- unlist(recursive_check_datanames(modules, datanames))
+  if (length(check_datanames)) {
+    paste(check_datanames, collapse = "\n")
+  } else {
+    TRUE
   }
 }
