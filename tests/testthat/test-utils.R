@@ -118,7 +118,7 @@ test_that("modules_datasets returns correct structure", {
     `example one` = "iris Species"
   )
 
-  testthat::expect_equal(modules_structure, expected_structure)
+  testthat::expect_identical(modules_structure, expected_structure)
 })
 
 test_that("validate_app_title_tag works on validating the title tag", {
