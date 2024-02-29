@@ -222,7 +222,7 @@ check_filter_datanames <- function(filters, datanames) {
 
 
 #' Create filterable data for modules
-#' 
+#'
 #' Converts input data to a `FilteredData` object(s) to allow filtering before passing data to individual modules.
 #'
 #' @param data (`teal_data`)
@@ -262,7 +262,7 @@ modules_datasets <- function(data, modules, filters, filtered_data_singleton = t
       Filter(x = filters, f = function(x) {
         x$dataname %in% datanames &&
           (x$id %in% attr(filters, "mapping")$global_filters ||
-            x$id %in% unique(unlist(attr(filters, "mapping")[modules$label]))) # nolint
+            x$id %in% unique(unlist(attr(filters, "mapping")[modules$label]))) # nolint: styler_linter_collision.
       })
     })
     # 2a. subset include/exclude varnames
