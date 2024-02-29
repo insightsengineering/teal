@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{modules_datasets}
 \alias{modules_datasets}
-\title{Extract datasets for modules}
+\title{Create filterable data for modules}
 \usage{
 modules_datasets(
   data,
@@ -25,6 +25,6 @@ Returns list of same shape as \code{modules}, containing \code{FilteredData} at 
 If module specific, each leaf contains different instance, otherwise every leaf contains \code{filtered_data_singleton}.
 }
 \description{
-Extract datasets for modules
+Converts input data to a \code{FilteredData} object(s) to allow filtering before passing data to individual modules.
 }
 \keyword{internal}
