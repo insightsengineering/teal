@@ -101,7 +101,7 @@ new_tdata <- function(data, code = "", join_keys = NULL, metadata = NULL) {
 #' my_env <- isolate(tdata2env(data))
 #'
 #' @export
-tdata2env <- function(data) { # nolint
+tdata2env <- function(data) {
   checkmate::assert_class(data, "tdata")
   list2env(lapply(data, function(x) if (is.reactive(x)) x() else x))
 }

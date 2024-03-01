@@ -186,7 +186,7 @@ testthat::test_that("srv_teal_with_splash gets observe event from srv_teal", {
 
 testthat::test_that("srv_teal_with_splash accepts data after within.teal_data_module", {
   tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(teal_data(IRIS = iris)))
-  tdm2 <- within(tdm, IRIS$id <- seq_len(NROW(IRIS$Species))) # nolint: object_name_linter.
+  tdm2 <- within(tdm, IRIS$id <- seq_len(NROW(IRIS$Species))) # nolint: object_name.
 
   testthat::expect_no_error(
     shiny::testServer(

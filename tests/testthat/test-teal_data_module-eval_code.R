@@ -8,7 +8,7 @@ testthat::test_that("within.teal_data_module returns an object with teal_data_mo
     }
   )
 
-  tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name_linter.
+  tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name.
 
   testthat::expect_s3_class(tdm2, "teal_data_module")
 })
@@ -41,7 +41,7 @@ testthat::test_that("within.teal_data_module modifies the reactive tea_data obje
     }
   )
 
-  tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name_linter.
+  tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name.
 
   testthat::expect_no_error(
     shiny::testServer(
