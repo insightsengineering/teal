@@ -263,7 +263,7 @@ modules_datasets <- function(data, modules, filters, filtered_data_singleton = t
       Filter(x = filters, f = function(x) {
         x$dataname %in% datanames &&
           (x$id %in% attr(filters, "mapping")$global_filters ||
-            x$id %in% unique(unlist(attr(filters, "mapping")[modules$label]))) # nolint: styler_linter_collision.
+            x$id %in% unique(unlist(attr(filters, "mapping")[modules$label]))) # nolint: indentation_linter.
       })
     })
     # 2a. subset include/exclude varnames
