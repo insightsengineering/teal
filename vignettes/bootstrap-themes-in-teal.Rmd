@@ -8,6 +8,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include=FALSE}
+knitr::opts_template$set(
+  remove_linter_comments = list(tidy = function(code, ...) gsub(pattern = "#\\s?nolint.*", replacement = "", code))
+)
+```
+
+
 ## Introduction
 
 We offer an easy application of a custom Bootstrap theme in a `teal` app. `teal` uses the `bslib` `R` package which provides tools for customizing Bootstrap themes, including those of `shiny` apps.
@@ -91,13 +98,14 @@ If you want to update the theme in a regular `shiny::fluidPage`-like app, you do
 
 In this section we provide a step-by-step guide to customizing a `teal` application theme interactively with `bslib::run_with_themer()`. We recommend starting with a simple case and once you are satisfied, verifying with your full application. To that end we will use the `teal` application below. For this example we assume that we want to use Bootstrap 5. To start, we launch the app with `bslib::run_with_themer(app$ui, app$server)` instead of `shiny::shinyApp`.
 
-```{r, eval = FALSE}
+
+```{r, eval = FALSE, opts.label=c("remove_linter_comments")}
 options("teal.bs_theme" = bslib::bs_theme(version = "5"))
 
 library(teal)
 
 app <- init(
-  data = teal_data(IRIS = iris), # nolint
+  data = teal_data(IRIS = iris), # nolint: line_length.
   filter = teal_slices(teal_slice("IRIS", "Sepal.Length", selected = c(5, 7))),
   modules = modules(example_module(), example_module()),
   header = "My first teal application"

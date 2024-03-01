@@ -6,7 +6,7 @@
 #' meta data.
 #' @export
 #'
-TealReportCard <- R6::R6Class( # nolint: object_name_linter.
+TealReportCard <- R6::R6Class( # nolint: object_name.
   classname = "TealReportCard",
   inherit = teal.reporter::ReportCard,
   public = list(

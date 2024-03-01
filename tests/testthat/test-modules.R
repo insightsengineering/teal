@@ -377,7 +377,7 @@ testthat::test_that("modules_depth increases depth by 1 for each teal_modules", 
 # is_arg_used -----
 get_srv_and_ui <- function() {
   list(
-    server_fun = function(id, datasets) {}, # nolint
+    server_fun = function(id, datasets) {},
     ui_fun = function(id, ...) {
       tags$p(paste0("id: ", id))
     }

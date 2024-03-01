@@ -119,7 +119,7 @@ teal_slices <- function(...,
 #' @export
 #' @keywords internal
 #'
-as.teal_slices <- function(x) { # nolint
+as.teal_slices <- function(x) { # nolint: object_name.
   checkmate::assert_list(x)
   lapply(x, checkmate::assert_list, names = "named", .var.name = "list element")
 

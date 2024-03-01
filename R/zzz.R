@@ -1,4 +1,4 @@
-.onLoad <- function(libname, pkgname) { # nolint
+.onLoad <- function(libname, pkgname) {
   # adapted from https://github.com/r-lib/devtools/blob/master/R/zzz.R
   teal_default_options <- list(teal.show_js_log = FALSE)
 
@@ -14,7 +14,7 @@
   invisible()
 }
 
-.onAttach <- function(libname, pkgname) { # nolint
+.onAttach <- function(libname, pkgname) {
   packageStartupMessage(
     "\nYou are using teal version ",
     # `system.file` uses the `shim` of `system.file` by `teal`
@@ -28,7 +28,7 @@ setdiff_teal_slices <- getFromNamespace("setdiff_teal_slices", "teal.slice")
 # This one is here because it is needed by c.teal_slices but we don't want it exported from teal.slice.
 coalesce_r <- getFromNamespace("coalesce_r", "teal.slice")
 # all *Block objects are private in teal.reporter
-RcodeBlock <- getFromNamespace("RcodeBlock", "teal.reporter") # nolint
+RcodeBlock <- getFromNamespace("RcodeBlock", "teal.reporter") # nolint: object_name.
 
 # Use non-exported function(s) from teal.code
 # This one is here because lang2calls should not be exported from teal.code
