@@ -138,21 +138,15 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
       private$teal_slices <- content
       invisible(self)
     },
-    #' @description Create the `RcodeBlock` from a list.
-    #' @param x (named `list`) with two fields `c("text", "params")`.
-    #' Use the `get_available_params` method to get all possible parameters.
-    #' @return `self`, invisibly.
+    to_list = function() {
+      list(text = self$get_content(), style = self$get_style())
+    },
     from_list = function(x) {
       checkmate::assert_list(x)
-      checkmate::assert_names(names(x), must.include = c("teal_slices"))
-      self$set_content(x$teal_slices)
+      checkmate::assert_names(names(x), must.include = c("text", "style"))
+      super$set_content(x$text)
+      super$set_style(x$style)
       invisible(self)
-    },
-    #' @description Convert the `RcodeBlock` to a list.
-    #' @return named `list` with a text and `params`.
-
-    to_list = function() {
-      list(teal_slices = private$teal_slices)
     }
   ),
   private = list(
