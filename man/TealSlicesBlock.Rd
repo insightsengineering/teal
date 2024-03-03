@@ -13,8 +13,8 @@ Specialized \code{TealSlicesBlock} block for managing filter panel content in re
 ## Method `TealSlicesBlock$from_list`
 ## ------------------------------------------------
 
-TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal.reporter")
-block <- TextBlock$new()
+TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal")
+block <- TealSlicesBlock$new()
 block$from_list(list(text = "sth", style = "default"))
 
 
@@ -22,8 +22,8 @@ block$from_list(list(text = "sth", style = "default"))
 ## Method `TealSlicesBlock$to_list`
 ## ------------------------------------------------
 
-TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal.reporter")
-block <- TextBlock$new()
+TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal")
+block <- TealSlicesBlock$new()
 block$to_list()
 
 }
@@ -122,8 +122,8 @@ Use the \code{get_available_styles} method to get all possible styles.}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal.reporter")
-block <- TextBlock$new()
+\preformatted{TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal")
+block <- TealSlicesBlock$new()
 block$from_list(list(text = "sth", style = "default"))
 
 }
@@ -146,8 +146,8 @@ Convert the \code{TealSlicesBlock} to a list.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal.reporter")
-block <- TextBlock$new()
+\preformatted{TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal")
+block <- TealSlicesBlock$new()
 block$to_list()
 
 }

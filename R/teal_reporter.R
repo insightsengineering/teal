@@ -149,8 +149,8 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     #'
     #' @return `self`, invisibly.
     #' @examples
-    #' TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal.reporter")
-    #' block <- TextBlock$new()
+    #' TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal")
+    #' block <- TealSlicesBlock$new()
     #' block$from_list(list(text = "sth", style = "default"))
     #'
     from_list = function(x) {
@@ -164,8 +164,8 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     #'
     #' @return `named list` with a text and style.
     #' @examples
-    #' TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal.reporter")
-    #' block <- TextBlock$new()
+    #' TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal")
+    #' block <- TealSlicesBlock$new()
     #' block$to_list()
     #'
     to_list = function() {
