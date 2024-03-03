@@ -71,8 +71,12 @@ TealReportCard <- R6::R6Class( # nolint: object_name_linter.
   private = list()
 )
 
-#' @title `RcodeBlock`
-#' @keywords internal
+#' @title `TealSlicesBlock`
+#' @docType class
+#' @description
+#' Specialized `TealSlicesBlock` block for managing filter panel content in reports.
+#'
+#' @export
 TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
   classname = "TealSlicesBlock",
   inherit = teal.reporter:::TextBlock,
@@ -138,15 +142,34 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
       private$teal_slices <- content
       invisible(self)
     },
-    to_list = function() {
-      list(text = self$get_content(), style = self$get_style())
-    },
+    #' @description Create the `TealSlicesBlock` from a list.
+    #'
+    #' @param x (`named list`) with two fields `text` and `style`.
+    #' Use the `get_available_styles` method to get all possible styles.
+    #'
+    #' @return `self`, invisibly.
+    #' @examples
+    #' TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal.reporter")
+    #' block <- TextBlock$new()
+    #' block$from_list(list(text = "sth", style = "default"))
+    #'
     from_list = function(x) {
       checkmate::assert_list(x)
       checkmate::assert_names(names(x), must.include = c("text", "style"))
       super$set_content(x$text)
       super$set_style(x$style)
       invisible(self)
+    },
+    #' @description Convert the `TealSlicesBlock` to a list.
+    #'
+    #' @return `named list` with a text and style.
+    #' @examples
+    #' TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal.reporter")
+    #' block <- TextBlock$new()
+    #' block$to_list()
+    #'
+    to_list = function() {
+      list(text = self$get_content(), style = self$get_style())
     }
   ),
   private = list(
