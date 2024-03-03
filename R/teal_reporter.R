@@ -169,7 +169,11 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     #' block$to_list()
     #'
     to_list = function() {
-      list(text = self$get_content(), style = self$get_style())
+      content <- self$get_content()
+      list(
+        text = if (length(content)) content else "",
+        style = self$get_style()
+      )
     }
   ),
   private = list(
