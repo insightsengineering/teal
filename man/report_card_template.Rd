@@ -17,7 +17,7 @@ report_card_template(
 
 \item{label}{(\code{character(1)}) label provided by the user when adding the card}
 
-\item{description}{(\code{character(1)}) optional additional description}
+\item{description}{(\code{character(1)}) optional, additional description}
 
 \item{with_filter}{(\code{logical(1)}) flag indicating to add filter state}
 

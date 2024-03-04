@@ -80,7 +80,7 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
 #'
 #' @param title (`character(1)`) title of the card (unless overwritten by label)
 #' @param label (`character(1)`) label provided by the user when adding the card
-#' @param description (`character(1)`) optional additional description
+#' @param description (`character(1)`) optional, additional description
 #' @param with_filter (`logical(1)`) flag indicating to add filter state
 #' @param filter_panel_api (`FilterPanelAPI`) object with API that allows the generation
 #' of the filter state in the report
