@@ -60,6 +60,8 @@ Suggests:
     MultiAssayExperiment,
     R6,
     rmarkdown (>= 2.19),
+    rvest,
+    shinytest2,
     shinyvalidate,
     testthat (>= 3.1.5),
     withr (>= 2.1.0),
