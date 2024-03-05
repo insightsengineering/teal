@@ -9,7 +9,7 @@
 #' @param rcode (`character`)
 #'  vector with `R` code to show inside the modal.
 #' @param session (`ShinySession`) optional,
-#'  `shiny` session object, if missing then [shiny::getDefaultReactiveDomain()] is used.
+#'  `shiny` session object, defaults to [shiny::getDefaultReactiveDomain()].
 #'
 #' @references [shiny::showModal()]
 #' @export
