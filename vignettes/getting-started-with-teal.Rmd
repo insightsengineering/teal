@@ -43,7 +43,7 @@ app <- init(
   ),
   title = build_app_title(title = "My first teal app"),
   header = h3("My first teal application"),
-  footer = shiny::tags$div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/"))
+  footer = tags$div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/"))
 )
 
 if (interactive()) {

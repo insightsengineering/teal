@@ -36,7 +36,7 @@ example_module <- function(label = "example teal module", datanames = "all") {
       ns <- NS(id)
       teal.widgets::standard_layout(
         output = verbatimTextOutput(ns("text")),
-        encoding = shiny::tags$div(
+        encoding = tags$div(
           selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
           teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
         )

@@ -89,12 +89,12 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
 
   args <- c(list(id = ns("module")), modules$ui_args)
 
-  teal_ui <- shiny::tags$div(
+  teal_ui <- tags$div(
     id = id,
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
-      if (depth >= 2L) shiny::tags$div(style = "mt-6"),
+      if (depth >= 2L) tags$div(style = "mt-6"),
       do.call(modules$ui, args)
     )
   )

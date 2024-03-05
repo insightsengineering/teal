@@ -55,8 +55,8 @@ NULL
 ui_teal_with_splash <- function(id,
                                 data,
                                 title = build_app_title(),
-                                header = shiny::tags$p(),
-                                footer = shiny::tags$p()) {
+                                header = tags$p(),
+                                footer = tags$p()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert(
@@ -84,11 +84,11 @@ ui_teal_with_splash <- function(id,
   splash_ui <- if (inherits(data, "teal_data_module")) {
     data$ui(ns("teal_data_module"))
   } else if (inherits(data, "teal_data")) {
-    shiny::tags$div()
+    tags$div()
   }
   ui_teal(
     id = ns("teal"),
-    splash_ui = shiny::tags$div(splash_ui, uiOutput(ns("error"))),
+    splash_ui = tags$div(splash_ui, uiOutput(ns("error"))),
     title = title,
     header = header,
     footer = footer

@@ -8,10 +8,10 @@
 \usage{
 ui_teal(
   id,
-  splash_ui = shiny::tags$h2("Starting the Teal App"),
+  splash_ui = tags$h2("Starting the Teal App"),
   title = build_app_title(),
-  header = shiny::tags$p(),
-  footer = shiny::tags$p()
+  header = tags$p(),
+  footer = tags$p()
 )
 
 srv_teal(id, modules, teal_data_rv, filter = teal_slices())

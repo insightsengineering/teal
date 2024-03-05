@@ -354,9 +354,9 @@ build_app_title <- function(
     favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_string(favicon, null.ok = TRUE)
-  shiny::tags$head(
-    shiny::tags$title(title),
-    shiny::tags$link(
+  tags$head(
+    tags$title(title),
+    tags$link(
       rel = "icon",
       href = favicon,
       sizes = "any"

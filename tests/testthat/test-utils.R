@@ -122,26 +122,26 @@ test_that("modules_datasets returns correct structure", {
 })
 
 test_that("validate_app_title_tag works on validating the title tag", {
-  valid_title <- shiny::tags$head(
-    shiny::tags$title("title"),
-    shiny::tags$link(rel = "icon", href = "favicon.ico"),
-    shiny::tags$div("Secret")
+  valid_title <- tags$head(
+    tags$title("title"),
+    tags$link(rel = "icon", href = "favicon.ico"),
+    tags$div("Secret")
   )
 
-  head_missing <- shiny::tags$div(
-    shiny::tags$title(title),
-    shiny::tags$link(rel = "icon", href = "favicon.ico")
+  head_missing <- tags$div(
+    tags$title(title),
+    tags$link(rel = "icon", href = "favicon.ico")
   )
-  title_missing <- shiny::tags$head(
-    shiny::tags$link(rel = "icon", href = "favicon.ico")
+  title_missing <- tags$head(
+    tags$link(rel = "icon", href = "favicon.ico")
   )
-  icon_missing <- shiny::tags$head(
-    shiny::tags$title(title)
+  icon_missing <- tags$head(
+    tags$title(title)
   )
-  invalid_link <- shiny::tags$head(
-    shiny::tags$title("title"),
-    shiny::tags$link(href = "favicon.ico"),
-    shiny::tags$div("Secret")
+  invalid_link <- tags$head(
+    tags$title("title"),
+    tags$link(href = "favicon.ico"),
+    tags$div("Secret")
   )
 
   testthat::expect_silent(validate_app_title_tag(valid_title))
@@ -164,7 +164,7 @@ testthat::test_that("create_app_id: 'data' accepts teal_data or teal_data_module
   testthat::expect_no_error(create_app_id(teal.data::teal_data(), modules(example_module())))
 
   tdm <- teal_data_module(
-    ui = function(id) shiny::tags$div(),
+    ui = function(id) tags$div(),
     server = function(id) NULL
   )
   testthat::expect_no_error(create_app_id(tdm, modules(example_module())))

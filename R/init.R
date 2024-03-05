@@ -96,8 +96,8 @@ init <- function(data,
                  modules,
                  filter = teal_slices(),
                  title = build_app_title(),
-                 header = shiny::tags$p(),
-                 footer = shiny::tags$p(),
+                 header = tags$p(),
+                 footer = tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ('{ class(data) }').")
 

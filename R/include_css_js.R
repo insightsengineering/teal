@@ -15,7 +15,7 @@ include_css_files <- function(pattern = "*") {
   )
 
   singleton(
-    shiny::tags$head(lapply(css_files, includeCSS))
+    tags$head(lapply(css_files, includeCSS))
   )
 }
 

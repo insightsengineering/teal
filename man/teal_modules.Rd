@@ -19,9 +19,9 @@ module(
        })
  },
   ui = function(id, ...) {
-     shiny::tags$p(paste0("This module has no UI (id: ", id,
-    " )"))
- },
+     tags$p(paste0("This module has no UI (id: ", id, " )"))
+
+    },
   filters,
   datanames = "all",
   server_args = NULL,
