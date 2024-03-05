@@ -50,7 +50,7 @@ app2 <- init(
   modules = modules(
     landing_popup_module(
       title = "Welcome",
-      content = shiny::tags$b(
+      content = tags$b(
         "A place for the welcome message or a disclaimer statement.",
         style = "color: red;"
       ),

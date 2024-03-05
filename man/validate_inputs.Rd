@@ -49,7 +49,7 @@ ui <- fluidPage(
     sidebarPanel(
       selectInput("letter", "select a letter:", c(letters[1:3], LETTERS[4:6])),
       selectInput("number", "select a number:", 1:6),
-      shiny::tags$br(),
+      tags$br(),
       selectInput("color", "select a color:",
         c("black", "indianred2", "springgreen2", "cornflowerblue"),
         multiple = TRUE
