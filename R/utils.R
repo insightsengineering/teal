@@ -256,7 +256,10 @@ modules_datasets <- function(data, modules, filters, filtered_data_singleton = t
           teal.data::join_keys(data)
         )
       } else {
-        modules$datanames
+        include_parent_datanames(
+          modules$datanames,
+          teal.data::join_keys(data)
+        )
       }
     # 2. subset filters (global + dedicated)
     slices <- shiny::isolate({
