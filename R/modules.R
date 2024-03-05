@@ -127,7 +127,7 @@ module <- function(label = "module",
                      moduleServer(id, function(input, output, session) {})
                    },
                    ui = function(id, ...) {
-                     tags$p(paste0("This module has no UI (id: ", id, " )"))
+                     shiny::tags$p(paste0("This module has no UI (id: ", id, " )"))
                    },
                    filters,
                    datanames = "all",

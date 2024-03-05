@@ -335,7 +335,7 @@ example_reporter_module <- function(label = "Example") {
 
       sidebarLayout(
         sidebarPanel(
-          tags$div(
+          shiny::tags$div(
             teal.reporter::add_card_button_ui(ns("addReportCard")),
             teal.reporter::download_report_button_ui(ns("downloadButton")),
             teal.reporter::reset_report_button_ui(ns("resetButton"))

@@ -45,10 +45,10 @@ NULL
 
 #' @rdname module_teal
 ui_teal <- function(id,
-                    splash_ui = tags$h2("Starting the Teal App"),
+                    splash_ui = shiny::tags$h2("Starting the Teal App"),
                     title = build_app_title(),
-                    header = tags$p(),
-                    footer = tags$p()) {
+                    header = shiny::tags$p(),
+                    footer = shiny::tags$p()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   checkmate::assert_multi_class(splash_ui, c("shiny.tag", "shiny.tag.list", "html"))
@@ -65,7 +65,7 @@ ui_teal <- function(id,
     checkmate::check_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
   )
   if (checkmate::test_string(header)) {
-    header <- tags$p(header)
+    header <- shiny::tags$p(header)
   }
 
   checkmate::assert(
@@ -74,25 +74,25 @@ ui_teal <- function(id,
     checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
   )
   if (checkmate::test_string(footer)) {
-    footer <- tags$p(footer)
+    footer <- shiny::tags$p(footer)
   }
 
   ns <- NS(id)
 
   # Once the data is loaded, we will remove this element and add the real teal UI instead
-  splash_ui <- tags$div(
+  splash_ui <- shiny::tags$div(
     # id so we can remove the splash screen once ready, which is the first child of this container
     id = ns("main_ui_container"),
     # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
     # just the first item of the tagList)
-    tags$div(splash_ui)
+    shiny::tags$div(splash_ui)
   )
 
   # show busy icon when `shiny` session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
   shiny_busy_message_panel <- conditionalPanel(
     condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
-    tags$div(
+    shiny::tags$div(
       icon("arrows-rotate", "spin fa-spin"),
       "Computing ...",
       # CSS defined in `custom.css`
@@ -104,13 +104,13 @@ ui_teal <- function(id,
     title = title,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
-    tags$header(header),
-    tags$hr(class = "my-2"),
+    shiny::tags$header(header),
+    shiny::tags$hr(class = "my-2"),
     shiny_busy_message_panel,
     splash_ui,
-    tags$hr(),
-    tags$footer(
-      tags$div(
+    shiny::tags$hr(),
+    shiny::tags$footer(
+      shiny::tags$div(
         footer,
         teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
         textOutput(ns("identifier"))
@@ -185,7 +185,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
         where = "beforeEnd",
         # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
         # just the first item of the tagList)
-        ui = tags$div(ui_tabs_with_filters(
+        ui = shiny::tags$div(ui_tabs_with_filters(
           session$ns("main_ui"),
           modules = modules,
           datasets = datasets,

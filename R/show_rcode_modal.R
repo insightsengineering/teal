@@ -19,12 +19,12 @@ show_rcode_modal <- function(title = NULL, rcode, session = getDefaultReactiveDo
   ns <- session$ns
   showModal(modalDialog(
     tagList(
-      tags$div(
+      shiny::tags$div(
         actionButton(ns("copyRCode"), "Copy to Clipboard", `data-clipboard-target` = paste0("#", ns("r_code"))),
         modalButton("Dismiss"),
         style = "mb-4"
       ),
-      tags$div(tags$pre(id = ns("r_code"), rcode)),
+      shiny::tags$div(shiny::tags$pre(id = ns("r_code"), rcode)),
     ),
     title = title,
     footer = tagList(

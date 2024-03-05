@@ -38,9 +38,9 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices()) 
   is_module_specific <- isTRUE(attr(filter, "module_specific"))
 
   teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets, is_module_specific = is_module_specific)
-  filter_panel_btns <- tags$li(
+  filter_panel_btns <- shiny::tags$li(
     class = "flex-grow",
-    tags$button(
+    shiny::tags$button(
       class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
       href = "javascript:void(0)",
       onclick = "toggleFilterPanel();", # see sidebar.js
@@ -58,7 +58,7 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices()) 
     filter_ui <- unlist(datasets)[[1]]$ui_filter_panel(ns("filter_panel"))
     list(
       tabset_bar,
-      tags$hr(class = "my-2"),
+      shiny::tags$hr(class = "my-2"),
       fluidRow(
         column(width = 9, teal_modules, class = "teal_primary_col"),
         column(width = 3, filter_ui, class = "teal_secondary_col")

@@ -11,7 +11,7 @@ testthat::test_that("init data accepts teal_data object", {
 testthat::test_that("init data accepts teal_data_module", {
   testthat::expect_no_error(
     init(
-      data = teal_data_module(ui = function(id) tags$div(), server = function(id) NULL),
+      data = teal_data_module(ui = function(id) shiny::tags$div(), server = function(id) NULL),
       modules = modules(example_module())
     )
   )

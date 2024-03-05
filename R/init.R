@@ -55,7 +55,7 @@
 #'     module(
 #'       label = "data source",
 #'       server = function(input, output, session, data) {},
-#'       ui = function(id, ...) tags$div(p("information about data source")),
+#'       ui = function(id, ...) shiny::tags$div(p("information about data source")),
 #'       datanames = "all"
 #'     ),
 #'     example_module(label = "example teal module"),
@@ -85,8 +85,8 @@
 #'     )
 #'   ),
 #'   title = "App title",
-#'   header = tags$h1("Sample App"),
-#'   footer = tags$p("Copyright 2017 - 2023")
+#'   header = shiny::tags$h1("Sample App"),
+#'   footer = shiny::tags$p("Copyright 2017 - 2023")
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
@@ -96,8 +96,8 @@ init <- function(data,
                  modules,
                  filter = teal_slices(),
                  title = build_app_title(),
-                 header = tags$p(),
-                 footer = tags$p(),
+                 header = shiny::tags$p(),
+                 footer = shiny::tags$p(),
                  id = character(0)) {
   logger::log_trace("init initializing teal app with: data ('{ class(data) }').")
 

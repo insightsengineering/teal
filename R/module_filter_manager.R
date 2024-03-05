@@ -35,7 +35,7 @@ NULL
 #' @rdname module_filter_manager_modal
 filter_manager_modal_ui <- function(id) {
   ns <- NS(id)
-  tags$button(
+  shiny::tags$button(
     id = ns("show"),
     class = "btn action-button filter_manager_button",
     title = "Show filters manager modal",
@@ -65,7 +65,7 @@ filter_manager_modal_srv <- function(id, filtered_data_list, filter) {
 #' @rdname module_filter_manager
 filter_manager_ui <- function(id) {
   ns <- NS(id)
-  tags$div(
+  shiny::tags$div(
     class = "filter_manager_content",
     tableOutput(ns("slices_table")),
     snapshot_manager_ui(ns("snapshot_manager"))

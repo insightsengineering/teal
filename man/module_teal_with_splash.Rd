@@ -10,8 +10,8 @@ ui_teal_with_splash(
   id,
   data,
   title = build_app_title(),
-  header = tags$p(),
-  footer = tags$p()
+  header = shiny::tags$p(),
+  footer = shiny::tags$p()
 )
 
 srv_teal_with_splash(id, data, modules, filter = teal_slices())

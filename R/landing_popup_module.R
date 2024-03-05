@@ -33,7 +33,7 @@
 #'   modules = modules(
 #'     landing_popup_module(
 #'       title = "Welcome",
-#'       content = tags$b(
+#'       content = shiny::tags$b(
 #'         "A place for the welcome message or a disclaimer statement.",
 #'         style = "color: red;"
 #'       ),

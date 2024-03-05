@@ -5,7 +5,7 @@ module_server_fun <- function(id, data) {
 }
 
 ui_fun1 <- function(id, ...) {
-  tags$p(paste0("id: ", id))
+  shiny::tags$p(paste0("id: ", id))
 }
 
 testthat::test_that("Calling module() does not throw", {
@@ -379,7 +379,7 @@ get_srv_and_ui <- function() {
   list(
     server_fun = function(id, datasets) {},
     ui_fun = function(id, ...) {
-      tags$p(paste0("id: ", id))
+      shiny::tags$p(paste0("id: ", id))
     }
   )
 }
