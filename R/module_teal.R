@@ -80,19 +80,19 @@ ui_teal <- function(id,
   ns <- NS(id)
 
   # Once the data is loaded, we will remove this element and add the real teal UI instead
-  splash_ui <- div(
+  splash_ui <- tags$div(
     # id so we can remove the splash screen once ready, which is the first child of this container
     id = ns("main_ui_container"),
     # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
     # just the first item of the tagList)
-    div(splash_ui)
+    tags$div(splash_ui)
   )
 
   # show busy icon when `shiny` session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
   shiny_busy_message_panel <- conditionalPanel(
     condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
-    div(
+    tags$div(
       icon("arrows-rotate", "spin fa-spin"),
       "Computing ...",
       # CSS defined in `custom.css`
@@ -110,7 +110,7 @@ ui_teal <- function(id,
     splash_ui,
     tags$hr(),
     tags$footer(
-      div(
+      tags$div(
         footer,
         teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
         textOutput(ns("identifier"))
@@ -185,7 +185,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
         where = "beforeEnd",
         # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
         # just the first item of the tagList)
-        ui = div(ui_tabs_with_filters(
+        ui = tags$div(ui_tabs_with_filters(
           session$ns("main_ui"),
           modules = modules,
           datasets = datasets,
