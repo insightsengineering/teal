@@ -230,6 +230,39 @@ test_that("module with a reporter creates the reporter tab", {
 })
 
 
+test_that("show/hide hamburger works as expected", {
+  app <- get_test_app_object(
+    data = simple_teal_data,
+    modules = example_module()
+  )
+
+  get_class_attributes <- function(app, selector) {
+    element <- app$get_html(selector = selector) |>
+      rvest::read_html() |>
+      html_nodes(selector)
+    list(
+      class = element |>
+        html_attr("class"),
+      style = element |>
+        html_attr("style")
+    )
+  }
+
+  primary_attrs <- get_class_attributes(app, ".teal_primary_col")
+  secondary_attrs <- get_class_attributes(app, ".teal_secondary_col")
+
+  expect_true(grepl("col-sm-9", primary_attrs$class))
+  expect_true(grepl("", secondary_attrs$style))
+
+  app$click(selector = ".btn.action-button.filter_hamburger")
+  app$wait_for_idle(timeout = default_idle_timeout)
+  primary_attrs <- get_class_attributes(app, ".teal_primary_col")
+  secondary_attrs <- get_class_attributes(app, ".teal_secondary_col")
+
+  expect_true(grepl("col-sm-12", primary_attrs$class))
+  expect_true(grepl("display: none;", secondary_attrs$style))
+})
+
 test_that("check the teal app", {
   app <- get_test_app_object(simple_teal_data, all_modules)
 
