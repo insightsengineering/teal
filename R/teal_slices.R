@@ -9,7 +9,7 @@
 #'
 #' @inheritParams teal.slice::teal_slices
 #'
-#' @param module_specific optional (`logical(1)`)
+#' @param module_specific (`logical(1)`) optional,
 #'  - `FALSE` (default) when one filter panel applied to all modules.
 #'  All filters will be shared by all modules.
 #'  - `TRUE` when filter panel module-specific.
