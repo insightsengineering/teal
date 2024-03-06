@@ -272,3 +272,86 @@ test_that("show/hide hamburger works as expected", {
   expect_true(grepl("display: none;", secondary_attrs$style))
   app$stop()
 })
+
+test_that("filter panel only shows the data supplied using datanames", {
+  app <- get_test_app_object(
+    data = simple_teal_data,
+    modules = modules(
+      example_module(label = "mtcars", datanames = "mtcars")
+    )
+  )
+  app$view()
+  app$wait_for_idle(timeout = default_idle_timeout)
+
+  expect_identical(
+    get_active_filter_vars(app),
+    "mtcars"
+  )
+  app$stop()
+})
+
+test_that("filter panel shows all the datasets when datanames is all", {
+  app <- get_test_app_object(
+    data = simple_teal_data,
+    modules = modules(
+      example_module(label = "all", datanames = "all"),
+      example_module(label = "NULL", datanames = NULL)
+    )
+  )
+  app$view()
+  app$wait_for_idle(timeout = default_idle_timeout)
+
+  expect_identical(
+    get_active_filter_vars(app),
+    "mtcars"
+  )
+  app$stop()
+})
+
+test_that("filter panel is not created when datanames is NULL", {
+  app <- get_test_app_object(
+    data = simple_teal_data,
+    modules = modules(
+      example_module(label = "NULL", datanames = NULL)
+    )
+  )
+  app$view()
+  app$wait_for_idle(timeout = default_idle_timeout)
+
+  expect_identical(
+    app$get_html(selector = "#teal-main_ui-root-example_module-datanames") |>
+      rvest::read_html() |>
+      rvest::html_text(),
+    "iris, mtcars"
+  )
+  app$stop()
+})
+
+
+
+test_that("all the nested teal modules are initiated as expected", {
+  app <- get_test_app_object(
+    data = simple_teal_data,
+    modules = modules(
+      example_module(label = "Example Module"),
+      modules(
+        label = "Nested Modules",
+        example_module(label = "Nested 1"),
+        example_module(label = "Nested 2"),
+        modules(
+          label = "Sub Nested Modules",
+          example_module(label = "Nested 1"),
+          example_module(label = "Nested 1")
+        )
+      )
+    )
+  )
+  app_modules <- get_app_modules(app)
+  expect_identical(
+    app_modules$tab_name,
+    c(
+      "Example Module", "Nested Modules", "Nested 1", "Nested 2",
+      "Sub Nested Modules", "Nested 1", "Nested 1"
+    )
+  )
+})
