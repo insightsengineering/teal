@@ -35,6 +35,16 @@ report_module <- function(label = "example teal module") {
 }
 
 test_that("teal app initializes with no errors", {
+  app <- get_test_app_object(
+    data = simple_teal_data,
+    modules = example_module(label = "Example Module")
+  )
+  app$wait_for_idle(timeout = default_idle_timeout)
+  expect_no_shiny_error(app)
+  app$stop()
+})
+
+test_that("UI parameters of init creates the expected UI", {
   app_title <- "Custom Teal App Title"
   app_favicon <- "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
   app_header <- "Custom Teal App Header"
@@ -50,7 +60,6 @@ test_that("teal app initializes with no errors", {
     footer = app_footer
   )
   app$wait_for_idle(timeout = default_idle_timeout)
-  expect_no_shiny_error(app)
 
   expect_equal(
     app$get_html("head > title")[1] |>
@@ -84,8 +93,7 @@ test_that("teal app initializes with no errors", {
   app$stop()
 })
 
-
-test_that("teal filters are initialized as expected", {
+test_that("expected teal filters are initialized when module specific filters are created", {
   # App with module specific filters
   app <- get_test_app_object(
     data = simple_teal_data,
@@ -148,8 +156,9 @@ test_that("teal filters are initialized as expected", {
     "setosa"
   )
   app$stop()
+})
 
-  # App with global filters
+test_that("expected teal filters are initialized when global filters are created", {
   app <- get_test_app_object(
     data = simple_teal_data,
     modules = modules(
@@ -187,8 +196,8 @@ test_that("teal filters are initialized as expected", {
   app$stop()
 })
 
-test_that("module with a reporter creates the reporter tab", {
-  app_no_reporter <- get_test_app_object(
+test_that("reporter tab is only created when a module has reporter", {
+  app_without_reporter <- get_test_app_object(
     data = simple_teal_data,
     modules = example_module(label = "Example Module")
   )
@@ -206,7 +215,7 @@ test_that("module with a reporter creates the reporter tab", {
     teal_tabs %>%
       rvest::html_text()
   )
-  teal_tabs <- app_no_reporter$get_html(selector = "#teal-main_ui-root-active_tab") %>%
+  teal_tabs <- app_without_reporter$get_html(selector = "#teal-main_ui-root-active_tab") %>%
     rvest::read_html() %>%
     html_nodes("a")
   non_reporter_tabs <- setNames(
@@ -225,7 +234,7 @@ test_that("module with a reporter creates the reporter tab", {
     c("Module with Reporter" = "module_with_reporter", "Report previewer" = "report_previewer")
   )
 
-  app_no_reporter$stop()
+  app_without_reporter$stop()
   app_with_reporter$stop()
 })
 
@@ -252,7 +261,7 @@ test_that("show/hide hamburger works as expected", {
   secondary_attrs <- get_class_attributes(app, ".teal_secondary_col")
 
   expect_true(grepl("col-sm-9", primary_attrs$class))
-  expect_true(grepl("", secondary_attrs$style))
+  expect_false(isTruthy(secondary_attrs$style))
 
   app$click(selector = ".btn.action-button.filter_hamburger")
   app$wait_for_idle(timeout = default_idle_timeout)
@@ -261,108 +270,5 @@ test_that("show/hide hamburger works as expected", {
 
   expect_true(grepl("col-sm-12", primary_attrs$class))
   expect_true(grepl("display: none;", secondary_attrs$style))
-})
-
-test_that("check the teal app", {
-  app <- get_test_app_object(simple_teal_data, all_modules)
-
-  app$wait_for_idle(timeout = default_idle_timeout)
-  app$get_url()
-  app$view()
-
   app$stop()
-
-  ns <- module_ns_shiny2(app)
-
-  app$get_value(input = "teal-main_ui-root-active_tab")
-  app$get_html(selector = "#teal-main_ui-root-active_tab")
-
-  app$set_inputs(
-    !!"teal-main_ui-root-active_tab" := get_unique_labels("Nested_Modules")
-  )
-  app$set_inputs(
-    !!"teal-main_ui-root-active_tab" := get_unique_labels("Module_with_Report")
-  )
-
-  app$stop()
-
-
-  root <- "root"
-  teal_tabs <- app$get_html(selector = paste0("#teal-main_ui-", root, "-active_tab")) %>%
-    rvest::read_html() %>%
-    html_nodes("a")
-
-  tab_selections <- setNames(
-    teal_tabs %>%
-      rvest::html_attr("data-value"),
-    teal_tabs %>%
-      rvest::html_text()
-  )
-
-  app$set_inputs(
-    !!"teal-main_ui-root-active_tab" := tab_selections[["Example_Module"]]
-  )
-
-
-  root <- tab_selections[["Root"]]
-  nested_tabs <- app$get_html(
-    selector = paste0("#teal-main_ui-root-", root, "-active_tab")
-  )
-  if (!is.null(nested_tabs)) {
-    tabs <- nested_tabs %>%
-      rvest::read_html() %>%
-      html_nodes("a")
-    nested_tabs <- setNames(
-      tabs %>%
-        rvest::html_attr("data-value"),
-      tabs %>%
-        rvest::html_text()
-    )
-    app$set_inputs(
-      !!paste0("teal-main_ui-root-", root, "-active_tab") := nested_tabs[["Nested_1"]]
-    )
-    app$set_inputs(
-      !!(paste0("teal-main_ui-root-", root, "-active_tab")) := nested_tabs[["Nested_2"]]
-    )
-  }
-
-
-
-  app$set_inputs(
-    !!paste0("teal-main_ui-root-", root, "-active_tab") := nested_tabs[["Nested_1"]]
-  )
-  app$set_inputs(
-    !!(paste0("teal-main_ui-root-", root, "-active_tab")) := nested_tabs[["Nested_2"]]
-  )
-
-
-
-  "#teal-main_ui-root-nested_modules-active_tab"
-
-  str(asdf)
-
-  htmltools::tagQuery(asdf, "a")
-
-
-  app$set_inputs(
-    !!"teal-main_ui-root-active_tab" := tab_selections[["Nested_Modules"]]
-  )
-
-
-
-
-
-
-  # Add a new filter variable
-  add_new_filter_var(app, "data_frame", "id")
-  remove_filter_var(app, "data_frame", "id")
-
-  get_active_selection_value(app, "data_frame", "logical")
-  set_active_selection_value(app, "data_frame", "logical", c("FALSE"))
-  remove_active_selection(app, "data_frame", "logical")
-
-  res <- app$get_value(output = ns("text"))
-  expect_identical(digest::digest(res), "75998fe20286e4767586546ceb01539e")
-  # Show R code
-  app$click(input = ns("rcode-button"))
 })
