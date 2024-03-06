@@ -92,8 +92,22 @@ example_module <- function(label = "example teal module", datanames = "all") {
     server = function(id, data) {
       checkmate::assert_class(data(), "teal_data")
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
+        logger::log_trace("example_module initialized")
+        # update choices on init
         updateSelectInput(session, "dataname", choices = isolate(teal.data::datanames(data())))
+
+        # restore bookmarking needed because of updateSelectInput
+        onBookmark(function(state) {
+          logger::log_trace("example_module@onBookmark")
+          state$values$dataname <- input$dataname
+        })
+        onRestored(function(state) {
+          # needs to be onRestored as onRestore triggers to early so the selectInput is not yet updated
+          logger::log_trace("example_module@onRestored")
+          updateSelectInput(session, "dataname", selected = state$values$dataname)
+        })
+
+
         output$text <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]

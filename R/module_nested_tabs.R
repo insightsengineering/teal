@@ -242,18 +242,26 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     # observe the trigger_module above to induce the module once the renderUI is triggered
-    observeEvent(
-      ignoreNULL = TRUE,
-      once = TRUE,
-      eventExpr = trigger_module(),
-      handlerExpr = {
-        module_output <- if (is_arg_used(modules$server, "id")) {
-          do.call(modules$server, args)
-        } else {
-          do.call(callModule, c(args, list(module = modules$server)))
-        }
+    call_module <- function() {
+      if (is_arg_used(modules$server, "id")) {
+        do.call(modules$server, args)
+      } else {
+        do.call(callModule, c(args, list(module = modules$server)))
       }
-    )
+    }
+    if (grepl("\\?_state_id_\\=", session$clientData$url_search)) {
+      # when restoring from a bookmarking all modules need to be initialized at once
+      call_module()
+    } else {
+      # when not restoring then modules can be initialized when tab is clicked
+      # this saves app initialization time (see trigger_module above)
+      observeEvent(
+        ignoreNULL = TRUE,
+        once = TRUE,
+        eventExpr = trigger_module(),
+        handlerExpr = call_module()
+      )
+    }
 
     reactive(modules)
   })

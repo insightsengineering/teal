@@ -53,15 +53,21 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
     })
 
     sesh$onBookmark(function(state) {
+      logger::log_trace("state_manager_srv@onBookmark initialized")
       # Add current filter state to bookmark.
       snapshot <- as.list(slices_global(), recursive = TRUE)
       attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
       state$values$filter_state_on_bookmark <- snapshot
       # Add snapshot history and grab history to bookmark.
-      state$values$snapshot_history <- snapshot_history()   # isolate this?
-      state$values$grab_history <- grab_history()           # isolate this?
+      state$values$snapshot_history <- snapshot_history() # isolate this?
+      state$values$grab_history <- grab_history() # isolate this?
+    })
+    sesh$onRestore(function(state) {
+      logger::log_trace("state_manager_srv@onRestore initialized")
+      sesh$userData$is_restored <- TRUE
     })
     sesh$onRestored(function(state) {
+      logger::log_trace("state_manager_srv@onRestored initialized")
       # Restore filter state.
       snapshot <- state$values$filter_state_on_bookmark
       snapshot_state <- as.teal_slices(snapshot)
@@ -82,6 +88,7 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
     })
 
     sesh$onBookmarked(function(url) {
+      logger::log_trace("state_manager_srv@onBookmarked initialized")
       grab_name <- trimws(input$grab_name)
       if (identical(grab_name, "")) {
         showNotification(
