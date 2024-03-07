@@ -117,17 +117,26 @@ get_active_ns <- function(app, component = c("module", "filter_panel")) {
 }
 
 #' Get the input from the module in the `AppDriver` object.
-#' This funciton will only access inputs from the name space of the current active teal module.
+#' This function will only access inputs from the name space of the current active teal module.
 get_module_input <- function(app, input_id) {
   active_ns <- get_active_ns(app, "module")
   app$get_value(input = sprintf("%s-%s", active_ns, input_id))
 }
 
 #' Get the output from the module in the `AppDriver` object.
-#' This funciton will only access outputs from the name space of the current active teal module.
+#' This function will only access outputs from the name space of the current active teal module.
 get_module_output <- function(app, output_id) {
   active_ns <- get_active_ns(app, "module")
   app$get_value(output = sprintf("%s-%s", active_ns, output_id))
+}
+
+#' Set the input in the module in the `AppDriver` object.
+#' This function will only set inputs in the name space of the current active teal module.
+set_module_input <- function(app, input_id, value) {
+  active_ns <- get_active_ns(app, "module")
+  app$set_inputs(
+    !!sprintf("%s-%s", active_ns, input_id) := value
+  )
 }
 
 
