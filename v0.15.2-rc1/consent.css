@@ -1,0 +1,28 @@
+.cookie-consent {
+    position: fixed;
+    bottom: 8px;
+    left: 20px;
+    width: 260px;
+    color: #fff;
+    line-height: 20px;
+    padding-block: 7px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 14px;
+    background: #292929;
+    z-index: 120;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.cookie-button {
+    height: 20px;
+    width: 104px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 10px;
+    border-radius: 3px;
+    border: 1px solid grey;
+    background-color: grey;
+    margin-inline: auto;
+}
