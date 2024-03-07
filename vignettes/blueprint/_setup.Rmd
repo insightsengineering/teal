@@ -6,5 +6,6 @@ pre.mermaid {
 ```
 
 ```{r, echo=FALSE}
+library(teal)
 tags$script(type = "module", "import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/+esm'")
 ```
