@@ -14,11 +14,12 @@ testthat::test_that("e2e: Create empty snapshot", {
 
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
+
   app$set_inputs(!!ns("snapshot_name") := "Empty_Snapshot")
 
   app$click(ns("snapshot_name_accept"))
-
   app$wait_for_idle(500)
+
   testthat::expect_equal(
     app$get_text(selector = ".snapshot_table_row span h5"),
     "Empty_Snapshot"
@@ -44,13 +45,15 @@ testthat::test_that("e2e: Downloads empty snapshot", {
 
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
+
   app$set_inputs(
     !!ns("snapshot_name") := "Empty_Snapshot"
   )
 
   app$click(ns("snapshot_name_accept"))
-
   app$wait_for_idle(500)
+
+  # Path for downloaded file
   local_snapshot <- withr::local_tempfile(fileext = ".json")
   app$get_download(
     output = ns("saveme_Empty_Snapshot"),
@@ -82,11 +85,13 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
 
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
+
   app$set_inputs(!!ns("snapshot_name") := "A_Snapshot")
 
   app$click(ns("snapshot_name_accept"))
-
   app$wait_for_idle(500)
+
+  # Path for downloaded file
   local_snapshot <- withr::local_tempfile(fileext = ".json")
   app$get_download(
     output = ns("saveme_A_Snapshot"),
@@ -140,6 +145,7 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
 
   app$click(ns("snapshot_load"))
   app$wait_for_idle(500)
+
   app$upload_file(
     !!ns("snapshot_file") := local_snapshot
   )
