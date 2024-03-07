@@ -210,7 +210,7 @@ get_active_data_filters <- function(app, data_name) {
 }
 
 #' Get the active filter values from a dataset in the `AppDriver` object.
-get_active_selection_value <- function(app, data_name, filter_name, is_numeric = FALSE) {
+get_active_selection_value <- function(app, data_name, var_name, is_numeric = FALSE) {
   selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
   app$get_value(
     input = sprintf(
@@ -218,7 +218,7 @@ get_active_selection_value <- function(app, data_name, filter_name, is_numeric =
       get_active_ns(app, "filter"),
       data_name,
       data_name,
-      filter_name,
+      var_name,
       selection_suffix
     )
   )
@@ -236,20 +236,20 @@ add_filter_var <- function(app, data_name, var_name) {
 }
 
 #' Remove a filter variable from the filter panel in the `AppDriver` object.
-remove_filter_var <- function(app, data_name, filter_name) {
+remove_filter_var <- function(app, data_name, var_name) {
   app$click(
     selector = sprintf(
       "#%s-active-%s-filter-%s_%s-remove",
       get_active_ns(app, "filter"),
       data_name,
       data_name,
-      filter_name
+      var_name
     )
   )
 }
 
 #' Set the active filter values for a dataset in the `AppDriver` object.
-set_active_selection_value <- function(app, data_name, filter_name, input, is_numeric = FALSE) {
+set_active_selection_value <- function(app, data_name, var_name, input, is_numeric = FALSE) {
   selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
   app$set_inputs(
     !!sprintf(
@@ -257,7 +257,7 @@ set_active_selection_value <- function(app, data_name, filter_name, input, is_nu
       get_active_ns(app, "filter"),
       data_name,
       data_name,
-      filter_name,
+      var_name,
       selection_suffix
     ) := input
   )
