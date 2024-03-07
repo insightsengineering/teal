@@ -96,7 +96,8 @@ app <- init(
       `example teal module` = "new_iris Species",
       `Iris Sepal.Length histogram` = "new_iris Species",
       global_filters = "new_mtcars cyl"
-    )
+    ),
+    module_specific = TRUE
   ),
   title = "App title",
   header = tags$h1("Sample App"),
