@@ -4,14 +4,13 @@ testthat::test_that("e2e: Create empty snapshot", {
     modules = example_module(label = "Example Module")
   )
 
-  active_ns <- get_active_ns(app, "filter_manager")
-  ns <- helper_NS(active_ns)
+  open_filter_manager(app)
 
-  app$click(ns("show"))
-  app$wait_for_idle(500)
-
-  active_ns <- ns("filter_manager", "snapshot_manager")
-  ns <- helper_NS(active_ns)
+  ns <- helper_NS(
+    get_active_ns(app, "filter_manager"),
+    "filter_manager",
+    "snapshot_manager"
+  )
 
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
@@ -35,14 +34,13 @@ testthat::test_that("e2e: Downloads empty snapshot", {
     modules = example_module(label = "Example Module")
   )
 
-  active_ns <- get_active_ns(app, "filter_manager")
-  ns <- helper_NS(active_ns)
+  open_filter_manager(app)
 
-  app$click(ns("show"))
-  app$wait_for_idle(500)
-
-  active_ns <- ns("filter_manager", "snapshot_manager")
-  ns <- helper_NS(active_ns)
+  ns <- helper_NS(
+    get_active_ns(app, "filter_manager"),
+    "filter_manager",
+    "snapshot_manager"
+  )
 
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
@@ -74,14 +72,13 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
   add_filter_var(app, "iris", "Species")
   set_active_selection_value(app, "iris", "Species", c("setosa", "virginica"))
 
-  active_ns <- get_active_ns(app, "filter_manager")
-  ns <- helper_NS(active_ns)
-  app$wait_for_idle(500)
+  open_filter_manager(app)
 
-  app$click(ns("show"))
-
-  active_ns <- ns("filter_manager", "snapshot_manager")
-  ns <- helper_NS(active_ns)
+  ns <- helper_NS(
+    get_active_ns(app, "filter_manager"),
+    "filter_manager",
+    "snapshot_manager"
+  )
 
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
@@ -133,14 +130,13 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
   local_snapshot <- withr::local_file("temp_slices.json")
   slices_store(tss, local_snapshot)
 
-  active_ns <- get_active_ns(app, "filter_manager")
-  ns <- helper_NS(active_ns)
+  open_filter_manager(app)
 
-  app$click(ns("show"))
-  app$wait_for_idle(500)
-
-  active_ns <- ns("filter_manager", "snapshot_manager")
-  ns <- helper_NS(active_ns)
+  ns <- helper_NS(
+    get_active_ns(app, "filter_manager"),
+    "filter_manager",
+    "snapshot_manager"
+  )
 
   app$click(ns("snapshot_load"))
   app$wait_for_idle(500)
@@ -170,13 +166,15 @@ testthat::test_that("e2e: Snapshot manager can reset the state", {
   add_filter_var(app, "iris", "Species")
   set_active_selection_value(app, "iris", "Species", c("setosa", "virginica"))
 
-  active_ns <- get_active_ns(app, "filter_manager")
-  ns <- helper_NS(active_ns)
+  open_filter_manager(app)
 
-  app$click(ns("show"))
-  app$wait_for_idle(500)
+  ns <- helper_NS(
+    get_active_ns(app, "filter_manager"),
+    "filter_manager",
+    "snapshot_manager"
+  )
 
-  app$click(ns("filter_manager", "snapshot_manager", "snapshot_reset"))
+  app$click(ns("snapshot_reset"))
   app$wait_for_idle(500)
 
   testthat::expect_length(get_active_data_filters(app, "iris"), 0)

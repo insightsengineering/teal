@@ -122,15 +122,33 @@ get_active_ns <- function(app, component = c("module", "filter_panel", "filter_m
   sprintf("%s-%s", active_ns, component)
 }
 
-helper_NS <- function(id) { # nolint: object_name_linter.
+#' Advance utility to help in creating namespace and CSS selectors for Shiny UI.
+#'
+#' It is similar with [shiny::NS()] by returning a function that can be used
+#' to create a namespace for the shiny UI.
+#'
+#' This namespace can be enriched with a prefix and suffix to create a CSS selector.
+#'
+#' @param namespace (`character(1)`) The base id to be used for the namespace.
+#' @param ... (`character`) The additional ids to be appended to `namespace`.
+#'
+#' @return A function similar to [shiny::NS()] that is used to create a `character`
+#' namespace for the shiny UI.
+#'
+helper_NS <- function(namespace, ...) { # nolint: object_name_linter.
+  dots <- rlang::list2(...)
+  checkmate::assert_list(dots, types = "character")
+  base_id <- id
+  if (length(dots) > 0) base_id <- paste(c(id, dots), collapse = shiny::ns.sep)
+
   function(..., .css_prefix = "", .css_suffix = "") {
     dots <- rlang::list2(...)
     checkmate::assert_list(dots, types = "character")
-    base_string <- sprintf("%s%s%s", .css_prefix, id, .css_suffix)
+    base_string <- sprintf("%s%s%s", .css_prefix, base_id, .css_suffix)
     if (length(dots) == 0) {
       return(base_string)
     }
-    (shiny::NS(base_string))(paste(dots, collapse = "-"))
+    (shiny::NS(base_string))(paste(dots, collapse = shiny::ns.sep))
   }
 }
 
@@ -288,4 +306,14 @@ set_active_selection_value <- function(app, data_name, var_name, input, is_numer
       selection_suffix
     ) := input
   )
+}
+
+#' Click on the filter manager show button
+open_filter_manager <- function(app) {
+  active_ns <- get_active_ns(app, "filter_manager")
+  ns <- helper_NS(active_ns)
+
+  app$click(ns("show"))
+  app$wait_for_idle(500)
+  app
 }
