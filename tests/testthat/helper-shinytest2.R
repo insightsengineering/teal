@@ -62,7 +62,13 @@ expect_validation_error <- function(app) {
   )
 }
 
-# navigate_teal_tab(app, c("Nested Modules", "Sub Nested Modules", "Nested 4"))
+#' Navigate the teal tabs in the `AppDriver` object.
+#'
+#' @param tabs (character) The tabs to navigate to. The order of the tabs is important,
+#' and it should start with the most parent level tab.
+#' Note: In case the teal tab group has duplicate names, the first tab will be selected,
+#' If you wish to select the second tab with the same name, use the suffix "_1".
+#' If you wish to select the third tab with the same name, use the siffix "_2" and so on.
 navigate_teal_tab <- function(app, tabs) {
   root <- "root"
   for (tab in tabs) {
@@ -74,8 +80,9 @@ navigate_teal_tab <- function(app, tabs) {
   }
 }
 
-
-#' @param component (character) The component to interact with. Can be `module` or `filter`.
+#' Get the active shiny name space for the Module content and the Filter panel.
+#' Note that in the case of the filter panel, the name space is constant when it is not moudle specific.
+#' However, module specific filter panel will have the name space linked with the module name space.
 get_active_ns <- function(app, component = c("module", "filter_panel")) {
   component <- match.arg(component)
 
@@ -109,20 +116,23 @@ get_active_ns <- function(app, component = c("module", "filter_panel")) {
   sprintf("%s-%s", active_ns, component)
 }
 
-# get_module_input(app, "dataname")
+#' Get the input from the module in the `AppDriver` object.
+#' This funciton will only access inputs from the name space of the current active teal module.
 get_module_input <- function(app, input_id) {
   active_ns <- get_active_ns(app, "module")
   app$get_value(input = sprintf("%s-%s", active_ns, input_id))
 }
 
-# get_module_output(app, "text")
+#' Get the output from the module in the `AppDriver` object.
+#' This funciton will only access outputs from the name space of the current active teal module.
 get_module_output <- function(app, output_id) {
   active_ns <- get_active_ns(app, "module")
   app$get_value(output = sprintf("%s-%s", active_ns, output_id))
 }
 
 
-# get_app_modules(app)
+#' Get all the module tabs in the `AppDriver` object along with their
+#' root_ids and module_ids used for name spacing in the shiny ui.
 get_app_module_tabs <- function(app) {
   lapply(
     app$get_html(selector = "ul.shiny-bound-input"),
@@ -148,7 +158,7 @@ get_app_module_tabs <- function(app) {
     do.call(what = rbind)
 }
 
-# get_active_filter_vars(app)
+#' Get the active datasets that can be accessed via the filter panel.
 get_active_filter_vars <- function(app) {
   displayed_data_index <- sapply(
     app$get_html(
@@ -179,7 +189,7 @@ get_active_filter_vars <- function(app) {
   available_data[displayed_data_index]
 }
 
-# get_active_data_filters(app, "mtcars")
+#' Get the active filter variables from a dataset in the `AppDriver` object.
 get_active_data_filters <- function(app, data_name) {
   sapply(
     app$get_html(
@@ -199,7 +209,7 @@ get_active_data_filters <- function(app, data_name) {
     unname()
 }
 
-# get_active_selection_value(app, "iris", "Species")
+#' Get the active filter values from a dataset in the `AppDriver` object.
 get_active_selection_value <- function(app, data_name, filter_name, is_numeric = FALSE) {
   selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
   app$get_value(
@@ -214,7 +224,7 @@ get_active_selection_value <- function(app, data_name, filter_name, is_numeric =
   )
 }
 
-# add_filter_var(app, "mtcars", "wt")
+#' Add a filter variable to the filter panel in the `AppDriver` object.
 add_filter_var <- function(app, data_name, var_name) {
   app$set_inputs(
     !!sprintf(
@@ -225,7 +235,7 @@ add_filter_var <- function(app, data_name, var_name) {
   )
 }
 
-# remove_filter_var(app, "mtcars", "wt")
+#' Remove a filter variable from the filter panel in the `AppDriver` object.
 remove_filter_var <- function(app, data_name, filter_name) {
   app$click(
     selector = sprintf(
@@ -238,7 +248,7 @@ remove_filter_var <- function(app, data_name, filter_name) {
   )
 }
 
-# set_active_selection_value(app, "mtcars", "cyl", "4")
+#' Set the active filter values for a dataset in the `AppDriver` object.
 set_active_selection_value <- function(app, data_name, filter_name, input, is_numeric = FALSE) {
   selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
   app$set_inputs(
