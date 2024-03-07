@@ -83,16 +83,22 @@ navigate_teal_tab <- function(app, tabs) {
 #' Get the active shiny name space for the Module content and the Filter panel.
 #' Note that in the case of the filter panel, the name space is constant when it is not moudle specific.
 #' However, module specific filter panel will have the name space linked with the module name space.
-get_active_ns <- function(app, component = c("module", "filter_panel")) {
+get_active_ns <- function(app, component = c("module", "filter_panel", "filter_manager")) {
   component <- match.arg(component)
 
-  if (component == "filter_panel") {
-    if (!is.null(app$get_html("#teal-main_ui-filter_panel"))) {
-      return("teal-main_ui-filter_panel")
+  if (component %in% c("filter_manager", "filter_panel")) {
+    component_selector <- if (identical(component, "filter_manager")) {
+      sprintf("#teal-main_ui-%s-show", component)
     } else {
-      component <- sprintf("module_%s", component)
+      sprintf("#teal-main_ui-%s", component)
     }
+
+    if (!is.null(app$get_html(component_selector))) {
+      return(sprintf("teal-main_ui-%s", component))
+    }
+    component <- sprintf("module_%s", component)
   }
+
   all_inputs <- app$get_values()$input
   active_tab_inputs <- all_inputs[grepl("-active_tab$", names(all_inputs))]
 
@@ -114,6 +120,18 @@ get_active_ns <- function(app, component = c("module", "filter_panel")) {
     }
   }
   sprintf("%s-%s", active_ns, component)
+}
+
+helper_NS <- function(id) { # nolint: object_name_linter.
+  function(..., .css_prefix = "", .css_suffix = "") {
+    dots <- rlang::list2(...)
+    checkmate::assert_list(dots, types = "character")
+    base_string <- sprintf("%s%s%s", .css_prefix, id, .css_suffix)
+    if (length(dots) == 0) {
+      return(base_string)
+    }
+    (shiny::NS(base_string))(paste(dots, collapse = "-"))
+  }
 }
 
 #' Get the input from the module in the `AppDriver` object.
@@ -173,7 +191,7 @@ get_active_filter_vars <- function(app) {
     app$get_html(
       sprintf(
         "#%s-active-filter_active_vars_contents > span",
-        get_active_ns(app, "filter")
+        get_active_ns(app, "filter_panel")
       )
     ),
     function(x) {
@@ -189,7 +207,7 @@ get_active_filter_vars <- function(app) {
   available_data <- app$get_html(
     sprintf(
       "#%s-active-filter_active_vars_contents",
-      get_active_ns(app, "filter")
+      get_active_ns(app, "filter_panel")
     )
   ) %>%
     read_html() %>%
@@ -204,7 +222,7 @@ get_active_data_filters <- function(app, data_name) {
     app$get_html(
       sprintf(
         "#%s-active-%s-filter-cards .filter-card-varname",
-        get_active_ns(app, "filter"),
+        get_active_ns(app, "filter_panel"),
         data_name
       )
     ),
@@ -224,7 +242,7 @@ get_active_selection_value <- function(app, data_name, var_name, is_numeric = FA
   app$get_value(
     input = sprintf(
       "%s-active-%s-filter-%s_%s-inputs-%s",
-      get_active_ns(app, "filter"),
+      get_active_ns(app, "filter_panel"),
       data_name,
       data_name,
       var_name,
@@ -238,7 +256,7 @@ add_filter_var <- function(app, data_name, var_name) {
   app$set_inputs(
     !!sprintf(
       "%s-add-%s-filter-var_to_add",
-      get_active_ns(app, "filter"),
+      get_active_ns(app, "filter_panel"),
       data_name
     ) := var_name
   )
@@ -249,7 +267,7 @@ remove_filter_var <- function(app, data_name, var_name) {
   app$click(
     selector = sprintf(
       "#%s-active-%s-filter-%s_%s-remove",
-      get_active_ns(app, "filter"),
+      get_active_ns(app, "filter_panel"),
       data_name,
       data_name,
       var_name
@@ -263,7 +281,7 @@ set_active_selection_value <- function(app, data_name, var_name, input, is_numer
   app$set_inputs(
     !!sprintf(
       "%s-active-%s-filter-%s_%s-inputs-%s",
-      get_active_ns(app, "filter"),
+      get_active_ns(app, "filter_panel"),
       data_name,
       data_name,
       var_name,
