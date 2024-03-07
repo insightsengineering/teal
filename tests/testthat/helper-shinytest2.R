@@ -2,16 +2,6 @@ library(shinytest2)
 library(glue)
 library(rvest)
 
-module_ns_shiny2 <- function(app) {
-  source <- app$get_html("html", outer_html = TRUE)
-  module_id <- rvest::html_attr(
-    rvest::html_node(rvest::read_html(source), css = ".teal_module"),
-    "id"
-  )
-  NS(paste0(module_id, "-module"))
-}
-
-global_fns <- NS("teal-main_ui-filter_panel")
 default_idle_timeout <- 20000
 
 #' Get the `AppDriver` to test the app created from `init`
@@ -72,152 +62,193 @@ expect_validation_error <- function(app) {
   )
 }
 
-add_new_filter_var <- function(app, data_name, var_name, module_id = "") {
-  fns <- ifelse(
-    module_id == "",
-    global_fns,
-    NS(glue("teal-main_ui-root-{module_id}-module_filter_panel"))
-  )
-  app$set_inputs(
-    !!fns(
-      glue("add-{data_name}-filter-var_to_add")
-    ) := var_name
-  )
-}
-
-remove_filter_var <- function(app, data_name, var_name, module_id = "") {
-  fns <- ifelse(
-    module_id == "",
-    global_fns,
-    NS(glue("teal-main_ui-root-{module_id}-module_filter_panel"))
-  )
-  app$click(
-    fns(
-      glue("active-{data_name}-filter-{data_name}_{var_name}-remove")
-    )
-  )
-}
-
-get_active_selection_value <- function(app, data_name, filter_name, is_numeric = FALSE, module_id = "") {
-  selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-  fns <- ifelse(
-    module_id == "",
-    global_fns,
-    NS(glue("teal-main_ui-root-{module_id}-module_filter_panel"))
-  )
-  app$get_value(
-    input = fns(
-      glue(
-        "active-{data_name}-filter-{data_name}_{filter_name}-inputs-{selection_suffix}"
-      )
-    )
-  )
-}
-
-get_active_filter_vars <- function(app, module_id = "") {
-  var_content_id <- ifelse(
-    module_id == "",
-    "#teal-main_ui-filter_panel-active-filter_active_vars_contents",
-    paste0("#teal-main_ui-", module_id, "-module_filter_panel-active-filter_active_vars_contents")
-  )
-  app$get_html(var_content_id) |>
-    read_html() |>
-    html_nodes(".filter_panel_dataname") |>
-    html_text()
-}
-
-# When a module specific filter panel is created, Every module gets it's own name-spaced filter panel
-# So, the `module_id` is needed to interact with the filter panel in that case.
-get_active_data_filters <- function(app, data_name, module_id = "") {
-  filter_id <- ifelse(
-    module_id == "",
-    "filter_panel",
-    glue("root-{module_id}-module_filter_panel")
-  )
-
-  sapply(
-    app$get_html(
-      glue(
-        "#teal-main_ui-{filter_id}-active-{data_name}-filter-cards .filter-card-varname"
-      )
-    ),
-    function(x) {
-      x |>
-        rvest::read_html() |>
-        rvest::html_text() |>
-        gsub(pattern = "\\s", replacement = "")
-    }
-  ) |>
-    unname()
-}
-
-set_active_selection_value <- function(app, data_name, filter_name, input, is_numeric = FALSE, module_id = "") {
-  selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-  fns <- ifelse(
-    module_id == "",
-    global_fns,
-    NS(glue("teal-main_ui-root-{module_id}-module_filter_panel"))
-  )
-  app$set_inputs(
-    !!fns(
-      glue(
-        "active-{data_name}-filter-{data_name}_{filter_name}-inputs-{selection_suffix}"
-      )
-    ) := input
-  )
-}
-
-remove_active_selection <- function(app, data_name, filter_name, module_id = "") {
-  fns <- ifelse(
-    module_id == "",
-    global_fns,
-    NS(glue("teal-main_ui-root-{module_id}-module_filter_panel"))
-  )
-  app$click(
-    fns(
-      glue("active-{data_name}-filter-{data_name}_{filter_name}-remove")
-    )
-  )
-}
-
+# navigate_teal_tab(app, c("Nested Modules", "Sub Nested Modules", "Nested 4"))
 navigate_teal_tab <- function(app, tabs) {
   root <- "root"
   for (tab in tabs) {
     app$set_inputs(
-      !!(paste0("teal-main_ui-", root, "-active_tab")) := tab,
+      !!(paste0("teal-main_ui-", root, "-active_tab")) := get_unique_labels(tab),
       wait_ = FALSE
     )
-    root <- glue("{root}-{tab}")
+    root <- sprintf("%s-%s", root, get_unique_labels(tab))
   }
 }
 
 
-get_app_modules <- function(app) {
+#' @param component (character) The component to interact with. Can be `module` or `filter`.
+get_active_ns <- function(app, component = c("module", "filter_panel")) {
+  component <- match.arg(component)
+
+  if (component == "filter_panel") {
+    if (!is.null(app$get_html("#teal-main_ui-filter_panel"))) {
+      return("teal-main_ui-filter_panel")
+    } else {
+      component <- sprintf("module_%s", component)
+    }
+  }
+  all_inputs <- app$get_values()$input
+  active_tab_inputs <- all_inputs[grepl("-active_tab$", names(all_inputs))]
+
+  tab_ns <- lapply(names(active_tab_inputs), function(name) {
+    gsub(
+      pattern = "-active_tab$",
+      replacement = sprintf("-%s", active_tab_inputs[[name]]),
+      name
+    )
+  }) %>%
+    unlist()
+  active_ns <- tab_ns[1]
+  if (length(tab_ns) > 1) {
+    for (i in 2:length(tab_ns)) {
+      next_ns <- tab_ns[i]
+      if (grepl(pattern = active_ns, next_ns)) {
+        active_ns <- next_ns
+      }
+    }
+  }
+  sprintf("%s-%s", active_ns, component)
+}
+
+# get_module_input(app, "dataname")
+get_module_input <- function(app, input_id) {
+  active_ns <- get_active_ns(app, "module")
+  app$get_value(input = sprintf("%s-%s", active_ns, input_id))
+}
+
+# get_module_output(app, "text")
+get_module_output <- function(app, output_id) {
+  active_ns <- get_active_ns(app, "module")
+  app$get_value(output = sprintf("%s-%s", active_ns, output_id))
+}
+
+
+# get_app_modules(app)
+get_app_module_tabs <- function(app) {
   lapply(
     app$get_html(selector = "ul.shiny-bound-input"),
     function(x) {
       el <- rvest::read_html(x)
-      root_id <- el |>
-        html_node("ul") |>
-        html_attr("id") |>
+      root_id <- el %>%
+        html_node("ul") %>%
+        html_attr("id") %>%
         gsub(pattern = "(^teal-main_ui-)|(-active_tab$)", replacement = "")
-      tab_id <- el |>
-        html_nodes("li a") |>
+      tab_id <- el %>%
+        html_nodes("li a") %>%
         html_attr("data-value")
-      tab_name <- el |>
-        html_nodes("li a") |>
+      tab_name <- el %>%
+        html_nodes("li a") %>%
         html_text()
       data.frame(
         root_id = root_id,
         tab_id = tab_id,
-        tab_name = tab_name,
-        shiny_ns = paste0("teal-main_ui-", root_id, "-", tab_id)
+        tab_name = tab_name
       )
     }
   ) %>%
     do.call(what = rbind)
 }
 
-get_module_name_space <- function(app, tabs) {
-  NS(paste0("teal-main_ui-root", paste0(tabs, collapse = "-"), "-module"))
+# get_active_filter_vars(app)
+get_active_filter_vars <- function(app) {
+  displayed_data_index <- sapply(
+    app$get_html(
+      sprintf(
+        "#%s-active-filter_active_vars_contents > span",
+        get_active_ns(app, "filter")
+      )
+    ),
+    function(x) {
+      style <- x %>%
+        rvest::read_html() %>%
+        rvest::html_node("span") %>%
+        rvest::html_attr("style")
+      style <- ifelse(is.na(style), "", style)
+      style != "display: none;"
+    }
+  ) %>%
+    unname()
+  available_data <- app$get_html(
+    sprintf(
+      "#%s-active-filter_active_vars_contents",
+      get_active_ns(app, "filter")
+    )
+  ) %>%
+    read_html() %>%
+    html_nodes(".filter_panel_dataname") %>%
+    html_text()
+  available_data[displayed_data_index]
+}
+
+# get_active_data_filters(app, "mtcars")
+get_active_data_filters <- function(app, data_name) {
+  sapply(
+    app$get_html(
+      sprintf(
+        "#%s-active-%s-filter-cards .filter-card-varname",
+        get_active_ns(app, "filter"),
+        data_name
+      )
+    ),
+    function(x) {
+      x %>%
+        rvest::read_html() %>%
+        rvest::html_text() %>%
+        gsub(pattern = "\\s", replacement = "")
+    }
+  ) %>%
+    unname()
+}
+
+# get_active_selection_value(app, "iris", "Species")
+get_active_selection_value <- function(app, data_name, filter_name, is_numeric = FALSE) {
+  selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
+  app$get_value(
+    input = sprintf(
+      "%s-active-%s-filter-%s_%s-inputs-%s",
+      get_active_ns(app, "filter"),
+      data_name,
+      data_name,
+      filter_name,
+      selection_suffix
+    )
+  )
+}
+
+# add_filter_var(app, "mtcars", "wt")
+add_filter_var <- function(app, data_name, var_name) {
+  app$set_inputs(
+    !!sprintf(
+      "%s-add-%s-filter-var_to_add",
+      get_active_ns(app, "filter"),
+      data_name
+    ) := var_name
+  )
+}
+
+# remove_filter_var(app, "mtcars", "wt")
+remove_filter_var <- function(app, data_name, filter_name) {
+  app$click(
+    selector = sprintf(
+      "#%s-active-%s-filter-%s_%s-remove",
+      get_active_ns(app, "filter"),
+      data_name,
+      data_name,
+      filter_name
+    )
+  )
+}
+
+# set_active_selection_value(app, "mtcars", "cyl", "4")
+set_active_selection_value <- function(app, data_name, filter_name, input, is_numeric = FALSE) {
+  selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
+  app$set_inputs(
+    !!sprintf(
+      "%s-active-%s-filter-%s_%s-inputs-%s",
+      get_active_ns(app, "filter"),
+      data_name,
+      data_name,
+      filter_name,
+      selection_suffix
+    ) := input
+  )
 }

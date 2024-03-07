@@ -62,31 +62,31 @@ test_that("UI parameters of init creates the expected UI", {
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_equal(
-    app$get_html("head > title")[1] |>
-      rvest::read_html() |>
+    app$get_html("head > title")[1] %>%
+      rvest::read_html() %>%
       rvest::html_text(),
     app_title
   )
   expect_equal(
-    app$get_html("head > link[rel='icon']") |>
-      rvest::read_html() |>
-      rvest::html_elements("link") |>
+    app$get_html("head > link[rel='icon']") %>%
+      rvest::read_html() %>%
+      rvest::html_elements("link") %>%
       rvest::html_attr("href"),
     app_favicon
   )
   expect_true(
     grepl(
       app_header,
-      app$get_html("header") |>
-        rvest::read_html() |>
+      app$get_html("header") %>%
+        rvest::read_html() %>%
         rvest::html_text()
     )
   )
   expect_true(
     grepl(
       app_footer,
-      app$get_html("footer") |>
-        rvest::read_html() |>
+      app$get_html("footer") %>%
+        rvest::read_html() %>%
         rvest::html_text()
     )
   )
@@ -115,44 +115,44 @@ test_that("expected teal filters are initialized when module specific filters ar
   )
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  expect_identical(get_active_data_filters(app, "iris", module_id = "module_1"), "Species")
-  expect_identical(get_active_data_filters(app, "mtcars", module_id = "module_1"), "cyl")
+  expect_identical(get_active_data_filters(app, "iris"), "Species")
+  expect_identical(get_active_data_filters(app, "mtcars"), "cyl")
   expect_identical(
-    get_active_selection_value(app, "iris", "Species", module_id = "module_1"),
+    get_active_selection_value(app, "iris", "Species"),
     c("setosa", "versicolor", "virginica")
   )
   expect_identical(
-    get_active_selection_value(app, "mtcars", "cyl", module_id = "module_1"),
+    get_active_selection_value(app, "mtcars", "cyl"),
     c("4", "6")
   )
-  expect_null(get_active_selection_value(app, "mtcars", "drat", is_numeric = TRUE, module_id = "module_1"))
-  expect_null(get_active_selection_value(app, "mtcars", "gear", module_id = "module_1"))
+  expect_null(get_active_selection_value(app, "mtcars", "drat", is_numeric = TRUE))
+  expect_null(get_active_selection_value(app, "mtcars", "gear"))
 
-  navigate_teal_tab(app, "module_2")
+  navigate_teal_tab(app, "Module_2")
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  expect_identical(get_active_data_filters(app, "iris", module_id = "module_2"), "Species")
-  expect_identical(get_active_data_filters(app, "mtcars", module_id = "module_2"), c("drat", "gear"))
+  expect_identical(get_active_data_filters(app, "iris"), "Species")
+  expect_identical(get_active_data_filters(app, "mtcars"), c("drat", "gear"))
   expect_identical(
-    get_active_selection_value(app, "iris", "Species", module_id = "module_2"),
+    get_active_selection_value(app, "iris", "Species"),
     c("setosa", "versicolor", "virginica")
   )
   expect_identical(
-    get_active_selection_value(app, "mtcars", "drat", is_numeric = TRUE, module_id = "module_2"),
+    get_active_selection_value(app, "mtcars", "drat", is_numeric = TRUE),
     c(3, 4)
   )
   expect_identical(
-    get_active_selection_value(app, "mtcars", "gear", module_id = "module_2"),
+    get_active_selection_value(app, "mtcars", "gear"),
     c("3", "4", "5")
   )
-  expect_null(get_active_selection_value(app, "mtcars", "cyl", module_id = "module_2"))
+  expect_null(get_active_selection_value(app, "mtcars", "cyl"))
 
-  set_active_selection_value(app, "iris", "Species", "setosa", module_id = "module_2")
-  navigate_teal_tab(app, "module_1")
+  set_active_selection_value(app, "iris", "Species", "setosa")
+  navigate_teal_tab(app, "Module_1")
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_identical(
-    get_active_selection_value(app, "iris", "Species", module_id = "module_1"),
+    get_active_selection_value(app, "iris", "Species"),
     "setosa"
   )
   app$stop()
@@ -238,7 +238,6 @@ test_that("reporter tab is only created when a module has reporter", {
   app_with_reporter$stop()
 })
 
-
 test_that("show/hide hamburger works as expected", {
   app <- get_test_app_object(
     data = simple_teal_data,
@@ -246,13 +245,13 @@ test_that("show/hide hamburger works as expected", {
   )
 
   get_class_attributes <- function(app, selector) {
-    element <- app$get_html(selector = selector) |>
-      rvest::read_html() |>
+    element <- app$get_html(selector = selector) %>%
+      rvest::read_html() %>%
       html_nodes(selector)
     list(
-      class = element |>
+      class = element %>%
         html_attr("class"),
-      style = element |>
+      style = element %>%
         html_attr("style")
     )
   }
@@ -280,7 +279,6 @@ test_that("filter panel only shows the data supplied using datanames", {
       example_module(label = "mtcars", datanames = "mtcars")
     )
   )
-  app$view()
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_identical(
@@ -294,16 +292,14 @@ test_that("filter panel shows all the datasets when datanames is all", {
   app <- get_test_app_object(
     data = simple_teal_data,
     modules = modules(
-      example_module(label = "all", datanames = "all"),
-      example_module(label = "NULL", datanames = NULL)
+      example_module(label = "all", datanames = "all")
     )
   )
-  app$view()
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_identical(
     get_active_filter_vars(app),
-    "mtcars"
+    c("iris", "mtcars")
   )
   app$stop()
 })
@@ -315,19 +311,18 @@ test_that("filter panel is not created when datanames is NULL", {
       example_module(label = "NULL", datanames = NULL)
     )
   )
-  app$view()
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_identical(
-    app$get_html(selector = "#teal-main_ui-root-example_module-datanames") |>
-      rvest::read_html() |>
-      rvest::html_text(),
-    "iris, mtcars"
+    app$get_html(".teal_secondary_col") %>%
+      rvest::read_html() %>%
+      rvest::html_node("div") %>%
+      rvest::html_attr("style"),
+    "display: none;"
   )
+
   app$stop()
 })
-
-
 
 test_that("all the nested teal modules are initiated as expected", {
   app <- get_test_app_object(
@@ -346,7 +341,7 @@ test_that("all the nested teal modules are initiated as expected", {
       )
     )
   )
-  app_modules <- get_app_modules(app)
+  app_modules <- get_app_module_tabs(app)
   expect_identical(
     app_modules$tab_name,
     c(
@@ -354,4 +349,5 @@ test_that("all the nested teal modules are initiated as expected", {
       "Sub Nested Modules", "Nested 1", "Nested 1"
     )
   )
+  app$stop()
 })
