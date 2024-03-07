@@ -138,8 +138,8 @@ get_active_ns <- function(app, component = c("module", "filter_panel", "filter_m
 helper_NS <- function(namespace, ...) { # nolint: object_name_linter.
   dots <- rlang::list2(...)
   checkmate::assert_list(dots, types = "character")
-  base_id <- id
-  if (length(dots) > 0) base_id <- paste(c(id, dots), collapse = shiny::ns.sep)
+  base_id <- namespace
+  if (length(dots) > 0) base_id <- paste(c(namespace, dots), collapse = shiny::ns.sep)
 
   function(..., .css_prefix = "", .css_suffix = "") {
     dots <- rlang::list2(...)
