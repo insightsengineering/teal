@@ -1,4 +1,6 @@
-# teal 0.15.1.9008
+# teal 0.15.2.9000
+
+# teal 0.15.2
 
 ### Bug fixes
 * Fixed a bug in handling `datanames` of modules that crashed module-specific applications when filtering child datasets.
