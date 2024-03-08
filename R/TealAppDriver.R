@@ -161,7 +161,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @return A function similar to [shiny::NS()] that is used to create a `character`
     #' namespace for the shiny UI.
     #'
-    helper_NS = function(namespace, ...) { # nolint: object_name_linter.
+    helper_NS = function(namespace, ...) { # nolint: object_name.
       dots <- rlang::list2(...)
       checkmate::assert_list(dots, types = "character")
       base_id <- namespace
