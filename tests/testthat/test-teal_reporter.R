@@ -99,7 +99,7 @@ testthat::test_that("TealSlicesBlock$to_list returns list containing teal_slices
   block <- TealSlicesBlock$new(tss)
   testthat::expect_identical(
     block$to_list(),
-    list(teal_slices = tss)
+    list(text = "- Dataset name: a\n  Variable name: b\n", style = "verbatim")
   )
 })
 
@@ -110,3 +110,4 @@ testthat::test_that("TealSlicesBlock$from_list retains states from a list", {
   block2$from_list(block1$to_list())
   testthat::expect_identical(block1$get_content(), block2$get_content())
 })
+
