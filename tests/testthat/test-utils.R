@@ -164,7 +164,7 @@ testthat::test_that("create_app_id: 'data' accepts teal_data or teal_data_module
   testthat::expect_no_error(create_app_id(teal.data::teal_data(), modules(example_module())))
 
   tdm <- teal_data_module(
-    ui = function(id) div(),
+    ui = function(id) tags$div(),
     server = function(id) NULL
   )
   testthat::expect_no_error(create_app_id(tdm, modules(example_module())))
