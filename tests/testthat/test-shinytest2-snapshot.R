@@ -1,0 +1,190 @@
+testthat::test_that("e2e: Create empty snapshot", {
+  app <- get_test_app_object(
+    data = simple_teal_data,
+    modules = example_module(label = "Example Module")
+  )
+
+  open_filter_manager(app)
+
+  ns <- helper_NS(
+    get_active_ns(app, "filter_manager"),
+    "filter_manager",
+    "snapshot_manager"
+  )
+
+  app$click(ns("snapshot_add"))
+  app$wait_for_idle(500)
+
+  app$set_inputs(!!ns("snapshot_name") := "Empty_Snapshot")
+
+  app$click(ns("snapshot_name_accept"))
+  app$wait_for_idle(500)
+
+  testthat::expect_equal(
+    app$get_text(selector = ".snapshot_table_row span h5"),
+    "Empty_Snapshot"
+  )
+  app$stop()
+})
+
+testthat::test_that("e2e: Downloads empty snapshot", {
+  skip_if_not_installed("withr")
+
+  app <- get_test_app_object(
+    data = simple_teal_data,
+    modules = example_module(label = "Example Module")
+  )
+
+  open_filter_manager(app)
+
+  ns <- helper_NS(
+    get_active_ns(app, "filter_manager"),
+    "filter_manager",
+    "snapshot_manager"
+  )
+
+  app$click(ns("snapshot_add"))
+  app$wait_for_idle(500)
+
+  app$set_inputs(
+    !!ns("snapshot_name") := "Empty_Snapshot"
+  )
+
+  app$click(ns("snapshot_name_accept"))
+  app$wait_for_idle(500)
+
+  # Path for downloaded file
+  local_snapshot <- withr::local_tempfile(fileext = ".json")
+  app$get_download(
+    output = ns("saveme_Empty_Snapshot"),
+    filename = local_snapshot
+  )
+
+  tss <- slices_restore(local_snapshot)
+  testthat::expect_length(tss, 0)
+
+  app$stop()
+})
+
+testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
+  app <- get_test_app_object(
+    data = simple_teal_data,
+    modules = example_module(label = "Example Module")
+  )
+
+  add_filter_var(app, "iris", "Species")
+  set_active_selection_value(app, "iris", "Species", c("setosa", "virginica"))
+
+  open_filter_manager(app)
+
+  ns <- helper_NS(
+    get_active_ns(app, "filter_manager"),
+    "filter_manager",
+    "snapshot_manager"
+  )
+
+  app$click(ns("snapshot_add"))
+  app$wait_for_idle(500)
+
+  app$set_inputs(!!ns("snapshot_name") := "A_Snapshot")
+
+  app$click(ns("snapshot_name_accept"))
+  app$wait_for_idle(500)
+
+  # Path for downloaded file
+  local_snapshot <- withr::local_tempfile(fileext = ".json")
+  app$get_download(
+    output = ns("saveme_A_Snapshot"),
+    filename = local_snapshot
+  )
+
+  tss <- slices_restore(local_snapshot)
+  testthat::expect_setequal(
+    shiny::isolate(tss[[1]]$selected),
+    c("setosa", "virginica")
+  )
+
+  app$stop()
+})
+
+testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
+  skip_if_not_installed("withr")
+
+  data <- simple_teal_data
+  mods <- example_module(label = "module1")
+
+  app <- get_test_app_object(
+    data = data,
+    modules = mods
+  )
+
+  # Build and save to file a valid teal_slice
+  tss <- teal_slices(
+    teal_slice(dataname = "iris", varname = "Species", id = "species"),
+    teal_slice(dataname = "iris", varname = "Sepal.Length", id = "sepal_length"),
+    teal_slice(
+      dataname = "iris", id = "long_petals", title = "Long petals", expr = "Petal.Length > 5"
+    ),
+    teal_slice(dataname = "mtcars", varname = "mpg", id = "mtcars_mpg"),
+    app_id = create_app_id(data, modules(mods))
+  )
+
+  # Slices need to be in a file on the current directory as it doesn't accept
+  # absolute path despite the documentation:
+  # https://rstudio.github.io/shinytest2/articles/in-depth.html?q=file_upload#uploading-files
+  local_snapshot <- withr::local_file("temp_slices.json")
+  slices_store(tss, local_snapshot)
+
+  open_filter_manager(app)
+
+  ns <- helper_NS(
+    get_active_ns(app, "filter_manager"),
+    "filter_manager",
+    "snapshot_manager"
+  )
+
+  app$click(ns("snapshot_load"))
+  app$wait_for_idle(500)
+
+  app$upload_file(
+    !!ns("snapshot_file") := local_snapshot
+  )
+
+  app$click(ns("snaphot_file_accept"))
+  app$wait_for_idle(500)
+
+  testthat::expect_setequal(
+    get_active_data_filters(app, "iris"),
+    c("Species", "Sepal.Length", "long_petals")
+  )
+
+  app$stop()
+})
+
+testthat::test_that("e2e: Snapshot manager can reset the state", {
+  skip_if_not_installed("withr")
+
+  app <- get_test_app_object(
+    data = simple_teal_data,
+    modules = example_module(label = "module1")
+  )
+
+  add_filter_var(app, "iris", "Species")
+  set_active_selection_value(app, "iris", "Species", c("setosa", "virginica"))
+
+  open_filter_manager(app)
+
+  ns <- helper_NS(
+    get_active_ns(app, "filter_manager"),
+    "filter_manager",
+    "snapshot_manager"
+  )
+
+  app$click(ns("snapshot_reset"))
+  app$wait_for_idle(500)
+
+  testthat::expect_length(get_active_data_filters(app, "iris"), 0)
+  testthat::expect_length(get_active_data_filters(app, "mtcars"), 0)
+
+  app$stop()
+})

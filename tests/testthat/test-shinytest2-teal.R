@@ -1,56 +1,20 @@
-simple_teal_data <- within(teal_data(), {
-  iris <- iris
-  mtcars <- mtcars
-})
-datanames(simple_teal_data) <- c("iris", "mtcars")
-
-report_module <- function(label = "example teal module") {
-  module(
-    label = label,
-    server = function(id, data, reporter) {
-      moduleServer(id, function(input, output, session) {
-        teal.reporter::simple_reporter_srv(
-          id = "reporter",
-          reporter = reporter,
-          card_fun = function(card) card
-        )
-        updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$dataset <- renderPrint({
-          req(input$dataname)
-          data()[[input$dataname]]
-        })
-      })
-    },
-    ui = function(id) {
-      ns <- NS(id)
-      sidebarLayout(
-        sidebarPanel(
-          teal.reporter::simple_reporter_ui(ns("reporter")),
-          selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
-        ),
-        mainPanel(verbatimTextOutput(ns("dataset")))
-      )
-    }
-  )
-}
-
 test_that("teal app initializes with no errors", {
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
   app$wait_for_idle(timeout = default_idle_timeout)
-  expect_no_shiny_error(app)
+  app$expect_no_shiny_error()
   app$stop()
 })
 
-test_that("UI parameters of init creates the expected UI", {
+test_that("init creates UI containing specified title, favicon, header and footer", {
   app_title <- "Custom Teal App Title"
   app_favicon <- "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
   app_header <- "Custom Teal App Header"
   app_footer <- "Custom Teal App Footer"
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = example_module(label = "Example Module"),
     title = build_app_title(
       app_title,
@@ -95,8 +59,8 @@ test_that("UI parameters of init creates the expected UI", {
 
 test_that("expected teal filters are initialized when module specific filters are created", {
   # App with module specific filters
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = modules(
       example_module(label = "Module_1"),
       example_module(label = "Module_2")
@@ -115,52 +79,52 @@ test_that("expected teal filters are initialized when module specific filters ar
   )
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  expect_identical(get_active_data_filters(app, "iris"), "Species")
-  expect_identical(get_active_data_filters(app, "mtcars"), "cyl")
+  expect_identical(app$get_active_data_filters("iris"), "Species")
+  expect_identical(app$get_active_data_filters("mtcars"), "cyl")
   expect_identical(
-    get_active_selection_value(app, "iris", "Species"),
+    app$get_filter_selection_value("iris", "Species"),
     c("setosa", "versicolor", "virginica")
   )
   expect_identical(
-    get_active_selection_value(app, "mtcars", "cyl"),
+    app$get_filter_selection_value("mtcars", "cyl"),
     c("4", "6")
   )
-  expect_null(get_active_selection_value(app, "mtcars", "drat", is_numeric = TRUE))
-  expect_null(get_active_selection_value(app, "mtcars", "gear"))
+  expect_null(app$get_filter_selection_value("mtcars", "drat", is_numeric = TRUE))
+  expect_null(app$get_filter_selection_value("mtcars", "gear"))
 
-  navigate_teal_tab(app, "Module_2")
+  app$navigate_teal_tab("Module_2")
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  expect_identical(get_active_data_filters(app, "iris"), "Species")
-  expect_identical(get_active_data_filters(app, "mtcars"), c("drat", "gear"))
+  expect_identical(app$get_active_data_filters("iris"), "Species")
+  expect_identical(app$get_active_data_filters("mtcars"), c("drat", "gear"))
   expect_identical(
-    get_active_selection_value(app, "iris", "Species"),
+    app$get_filter_selection_value("iris", "Species"),
     c("setosa", "versicolor", "virginica")
   )
   expect_identical(
-    get_active_selection_value(app, "mtcars", "drat", is_numeric = TRUE),
+    app$get_filter_selection_value("mtcars", "drat", is_numeric = TRUE),
     c(3, 4)
   )
   expect_identical(
-    get_active_selection_value(app, "mtcars", "gear"),
+    app$get_filter_selection_value("mtcars", "gear"),
     c("3", "4", "5")
   )
-  expect_null(get_active_selection_value(app, "mtcars", "cyl"))
+  expect_null(app$get_filter_selection_value("mtcars", "cyl"))
 
-  set_active_selection_value(app, "iris", "Species", "setosa")
-  navigate_teal_tab(app, "Module_1")
+  app$set_filter_selection_value("iris", "Species", "setosa")
+  app$navigate_teal_tab("Module_1")
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_identical(
-    get_active_selection_value(app, "iris", "Species"),
+    app$get_filter_selection_value("iris", "Species"),
     "setosa"
   )
   app$stop()
 })
 
 test_that("expected teal filters are initialized when global filters are created", {
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = modules(
       example_module(label = "Module_1"),
       example_module(label = "Module_2")
@@ -175,34 +139,34 @@ test_that("expected teal filters are initialized when global filters are created
 
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  expect_identical(get_active_data_filters(app, "iris"), "Species")
-  expect_identical(get_active_data_filters(app, "mtcars"), c("cyl", "drat", "gear"))
+  expect_identical(app$get_active_data_filters("iris"), "Species")
+  expect_identical(app$get_active_data_filters("mtcars"), c("cyl", "drat", "gear"))
   expect_identical(
-    get_active_selection_value(app, "iris", "Species"),
+    app$get_filter_selection_value("iris", "Species"),
     c("setosa", "versicolor", "virginica")
   )
   expect_identical(
-    get_active_selection_value(app, "mtcars", "cyl"),
+    app$get_filter_selection_value("mtcars", "cyl"),
     c("4", "6")
   )
   expect_identical(
-    get_active_selection_value(app, "mtcars", "drat", is_numeric = TRUE),
+    app$get_filter_selection_value("mtcars", "drat", is_numeric = TRUE),
     c(3, 4)
   )
   expect_identical(
-    get_active_selection_value(app, "mtcars", "gear"),
+    app$get_filter_selection_value("mtcars", "gear"),
     c("3", "4", "5")
   )
   app$stop()
 })
 
 test_that("reporter tab is only created when a module has reporter", {
-  app_without_reporter <- get_test_app_object(
-    data = simple_teal_data,
+  app_without_reporter <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-  app_with_reporter <- get_test_app_object(
-    data = simple_teal_data,
+  app_with_reporter <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = report_module(label = "Module with Reporter")
   )
 
@@ -239,8 +203,8 @@ test_that("reporter tab is only created when a module has reporter", {
 })
 
 test_that("show/hide hamburger works as expected", {
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = example_module()
   )
 
@@ -250,9 +214,9 @@ test_that("show/hide hamburger works as expected", {
       html_nodes(selector)
     list(
       class = element %>%
-        html_attr("class"),
+        rvest::html_attr("class"),
       style = element %>%
-        html_attr("style")
+        rvest::html_attr("style")
     )
   }
 
@@ -273,8 +237,8 @@ test_that("show/hide hamburger works as expected", {
 })
 
 test_that("filter panel only shows the data supplied using datanames", {
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = modules(
       example_module(label = "mtcars", datanames = "mtcars")
     )
@@ -282,15 +246,15 @@ test_that("filter panel only shows the data supplied using datanames", {
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_identical(
-    get_active_filter_vars(app),
+    app$get_active_filter_vars(),
     "mtcars"
   )
   app$stop()
 })
 
 test_that("filter panel shows all the datasets when datanames is all", {
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = modules(
       example_module(label = "all", datanames = "all")
     )
@@ -298,15 +262,15 @@ test_that("filter panel shows all the datasets when datanames is all", {
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_identical(
-    get_active_filter_vars(app),
+    app$get_active_filter_vars(),
     c("iris", "mtcars")
   )
   app$stop()
 })
 
 test_that("filter panel is not created when datanames is NULL", {
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = modules(
       example_module(label = "NULL", datanames = NULL)
     )
@@ -325,8 +289,8 @@ test_that("filter panel is not created when datanames is NULL", {
 })
 
 test_that("all the nested teal modules are initiated as expected", {
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = modules(
       example_module(label = "Example Module"),
       modules(
