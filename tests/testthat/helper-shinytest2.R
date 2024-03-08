@@ -1,83 +1,75 @@
 library(shinytest2)
-library(glue)
 library(rvest)
 
 default_idle_timeout <- 20000
 
-#' Get the `AppDriver` to test the app created from `init`
-#'
-#' Create the `AppDriver` using the `init` parameters of `teal` to help with testing.
-#'
-#' @inheritParams init
-#' @keywords internal
-#' @return  (`AppDriver`) object which can be used to test the app using `shinytest2`.
-get_test_app_object <- function(data,
-                                modules,
-                                filter = teal_slices(),
-                                title = build_app_title(),
-                                header = tags$p(),
-                                footer = tags$p(),
-                                id = character(0)) {
-  app <- init(
-    data = data,
-    modules = modules,
-    filter = filter,
-    title = title,
-    header = header,
-    footer = footer,
-    id = id
-  )
-  suppressWarnings(
-    AppDriver$new(
-      shinyApp(app$ui, app$server),
-      name = "teal",
-      variant = platform_variant(),
-      load_timeout = 300000,
-      seed = 123
-    )
+
+default_idle_timeout <- 20000
+
+simple_teal_data <- function() {
+  data <- within(teal_data(), {
+    iris <- iris
+    mtcars <- mtcars
+  })
+  datanames(data) <- c("iris", "mtcars")
+  data
+}
+
+report_module <- function(label = "example teal module") {
+  module(
+    label = label,
+    server = function(id, data, reporter) {
+      moduleServer(id, function(input, output, session) {
+        teal.reporter::simple_reporter_srv(
+          id = "reporter",
+          reporter = reporter,
+          card_fun = function(card) card
+        )
+        updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
+      })
+    },
+    ui = function(id) {
+      ns <- NS(id)
+      sidebarLayout(
+        sidebarPanel(
+          teal.reporter::simple_reporter_ui(ns("reporter")),
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
+        ),
+        mainPanel(verbatimTextOutput(ns("dataset")))
+      )
+    }
   )
 }
 
-# Check if the app has shiny errors
-expect_no_shiny_error <- function(app) {
-  expect_null(
-    app$get_html(".shiny-output-error:not(.shiny-output-error-validation)"),
-    info = "Shiny error is observed"
-  )
-}
-
-# Check if the app has no validation errors
-expect_no_validation_error <- function(app) {
-  expect_null(
-    app$get_html(".shiny-output-error-validation"),
-    info = "No validation error is observed"
-  )
-}
-
-# Check if the app has validation errors
-expect_validation_error <- function(app) {
-  expect_true(
-    !is.null(app$get_html(".shiny-output-error-validation")),
-    info = "Validation error is observed"
-  )
-}
-
-#' Navigate the teal tabs in the `AppDriver` object.
-#'
-#' @param tabs (character) The tabs to navigate to. The order of the tabs is important,
-#' and it should start with the most parent level tab.
-#' Note: In case the teal tab group has duplicate names, the first tab will be selected,
-#' If you wish to select the second tab with the same name, use the suffix "_1".
-#' If you wish to select the third tab with the same name, use the siffix "_2" and so on.
-navigate_teal_tab <- function(app, tabs) {
-  root <- "root"
-  for (tab in tabs) {
-    app$set_inputs(
-      !!(paste0("teal-main_ui-", root, "-active_tab")) := get_unique_labels(tab),
-      wait_ = FALSE
-    )
-    root <- sprintf("%s-%s", root, get_unique_labels(tab))
-  }
+#' Get all the module tabs in the `AppDriver` object along with their
+#' root_ids and module_ids used for name spacing in the shiny ui.
+get_app_module_tabs <- function(app) {
+  lapply(
+    app$get_html(selector = "ul.shiny-bound-input"),
+    function(x) {
+      el <- rvest::read_html(x)
+      root_id <- el %>%
+        rvest::html_node("ul") %>%
+        rvest::html_attr("id") %>%
+        gsub(pattern = "(^teal-main_ui-)|(-active_tab$)", replacement = "")
+      tab_id <- el %>%
+        rvest::html_nodes("li a") %>%
+        rvest::html_attr("data-value")
+      tab_name <- el %>%
+        rvest::html_nodes("li a") %>%
+        rvest::html_text()
+      data.frame(
+        root_id = root_id,
+        tab_id = tab_id,
+        tab_name = tab_name
+      )
+    }
+  ) %>%
+    do.call(what = rbind)
 }
 
 #' Get the active shiny name space for the Module content and the Filter panel.
@@ -120,200 +112,4 @@ get_active_ns <- function(app, component = c("module", "filter_panel", "filter_m
     }
   }
   sprintf("%s-%s", active_ns, component)
-}
-
-#' Advance utility to help in creating namespace and CSS selectors for Shiny UI.
-#'
-#' It is similar with [shiny::NS()] by returning a function that can be used
-#' to create a namespace for the shiny UI.
-#'
-#' This namespace can be enriched with a prefix and suffix to create a CSS selector.
-#'
-#' @param namespace (`character(1)`) The base id to be used for the namespace.
-#' @param ... (`character`) The additional ids to be appended to `namespace`.
-#'
-#' @return A function similar to [shiny::NS()] that is used to create a `character`
-#' namespace for the shiny UI.
-#'
-helper_NS <- function(namespace, ...) { # nolint: object_name_linter.
-  dots <- rlang::list2(...)
-  checkmate::assert_list(dots, types = "character")
-  base_id <- namespace
-  if (length(dots) > 0) base_id <- paste(c(namespace, dots), collapse = shiny::ns.sep)
-
-  function(..., .css_prefix = "", .css_suffix = "") {
-    dots <- rlang::list2(...)
-    checkmate::assert_list(dots, types = "character")
-    base_string <- sprintf("%s%s%s", .css_prefix, base_id, .css_suffix)
-    if (length(dots) == 0) {
-      return(base_string)
-    }
-    (shiny::NS(base_string))(paste(dots, collapse = shiny::ns.sep))
-  }
-}
-
-#' Get the input from the module in the `AppDriver` object.
-#' This function will only access inputs from the name space of the current active teal module.
-get_module_input <- function(app, input_id) {
-  active_ns <- get_active_ns(app, "module")
-  app$get_value(input = sprintf("%s-%s", active_ns, input_id))
-}
-
-#' Get the output from the module in the `AppDriver` object.
-#' This function will only access outputs from the name space of the current active teal module.
-get_module_output <- function(app, output_id) {
-  active_ns <- get_active_ns(app, "module")
-  app$get_value(output = sprintf("%s-%s", active_ns, output_id))
-}
-
-#' Set the input in the module in the `AppDriver` object.
-#' This function will only set inputs in the name space of the current active teal module.
-set_module_input <- function(app, input_id, value) {
-  active_ns <- get_active_ns(app, "module")
-  app$set_inputs(
-    !!sprintf("%s-%s", active_ns, input_id) := value
-  )
-}
-
-
-#' Get all the module tabs in the `AppDriver` object along with their
-#' root_ids and module_ids used for name spacing in the shiny ui.
-get_app_module_tabs <- function(app) {
-  lapply(
-    app$get_html(selector = "ul.shiny-bound-input"),
-    function(x) {
-      el <- rvest::read_html(x)
-      root_id <- el %>%
-        html_node("ul") %>%
-        html_attr("id") %>%
-        gsub(pattern = "(^teal-main_ui-)|(-active_tab$)", replacement = "")
-      tab_id <- el %>%
-        html_nodes("li a") %>%
-        html_attr("data-value")
-      tab_name <- el %>%
-        html_nodes("li a") %>%
-        html_text()
-      data.frame(
-        root_id = root_id,
-        tab_id = tab_id,
-        tab_name = tab_name
-      )
-    }
-  ) %>%
-    do.call(what = rbind)
-}
-
-#' Get the active datasets that can be accessed via the filter panel.
-get_active_filter_vars <- function(app) {
-  displayed_data_index <- sapply(
-    app$get_html(
-      sprintf(
-        "#%s-active-filter_active_vars_contents > span",
-        get_active_ns(app, "filter_panel")
-      )
-    ),
-    function(x) {
-      style <- x %>%
-        rvest::read_html() %>%
-        rvest::html_node("span") %>%
-        rvest::html_attr("style")
-      style <- ifelse(is.na(style), "", style)
-      style != "display: none;"
-    }
-  ) %>%
-    unname()
-  available_data <- app$get_html(
-    sprintf(
-      "#%s-active-filter_active_vars_contents",
-      get_active_ns(app, "filter_panel")
-    )
-  ) %>%
-    read_html() %>%
-    html_nodes(".filter_panel_dataname") %>%
-    html_text()
-  available_data[displayed_data_index]
-}
-
-#' Get the active filter variables from a dataset in the `AppDriver` object.
-get_active_data_filters <- function(app, data_name) {
-  sapply(
-    app$get_html(
-      sprintf(
-        "#%s-active-%s-filter-cards .filter-card-varname",
-        get_active_ns(app, "filter_panel"),
-        data_name
-      )
-    ),
-    function(x) {
-      x %>%
-        rvest::read_html() %>%
-        rvest::html_text() %>%
-        gsub(pattern = "\\s", replacement = "")
-    }
-  ) %>%
-    unname()
-}
-
-#' Get the active filter values from a dataset in the `AppDriver` object.
-get_active_selection_value <- function(app, data_name, var_name, is_numeric = FALSE) {
-  selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-  app$get_value(
-    input = sprintf(
-      "%s-active-%s-filter-%s_%s-inputs-%s",
-      get_active_ns(app, "filter_panel"),
-      data_name,
-      data_name,
-      var_name,
-      selection_suffix
-    )
-  )
-}
-
-#' Add a filter variable to the filter panel in the `AppDriver` object.
-add_filter_var <- function(app, data_name, var_name) {
-  app$set_inputs(
-    !!sprintf(
-      "%s-add-%s-filter-var_to_add",
-      get_active_ns(app, "filter_panel"),
-      data_name
-    ) := var_name
-  )
-}
-
-#' Remove a filter variable from the filter panel in the `AppDriver` object.
-remove_filter_var <- function(app, data_name, var_name) {
-  app$click(
-    selector = sprintf(
-      "#%s-active-%s-filter-%s_%s-remove",
-      get_active_ns(app, "filter_panel"),
-      data_name,
-      data_name,
-      var_name
-    )
-  )
-}
-
-#' Set the active filter values for a dataset in the `AppDriver` object.
-set_active_selection_value <- function(app, data_name, var_name, input, is_numeric = FALSE) {
-  selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-  app$set_inputs(
-    !!sprintf(
-      "%s-active-%s-filter-%s_%s-inputs-%s",
-      get_active_ns(app, "filter_panel"),
-      data_name,
-      data_name,
-      var_name,
-      selection_suffix
-    ) := input
-  )
-}
-
-#' Click on the filter manager show button
-open_filter_manager <- function(app) {
-  active_ns <- get_active_ns(app, "filter_manager")
-  ns <- helper_NS(active_ns)
-
-  app$click(ns("show"))
-  app$wait_for_idle(500)
-  app
 }
