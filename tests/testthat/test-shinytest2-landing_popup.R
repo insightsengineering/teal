@@ -157,7 +157,6 @@ test_that("e2e: app with customized landing_popup_module creates modal containin
 })
 
 test_that("e2e: when customized button in landing_popup_module is clicked, it redirects to a certain page", {
-
   skip("It actually did not clicked the button.")
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -179,5 +178,4 @@ test_that("e2e: when customized button in landing_popup_module is clicked, it re
   )
 
   app$stop()
-
 })
