@@ -37,6 +37,30 @@ test_that("e2e: app with default landing_popup_module creates modal containing a
   app$stop()
 })
 
+test_that("e2e: when default landing_popup_module is closed, it shows the underlying teal app", {
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
+    modules = modules(
+      landing_popup_module(),
+      example_module()
+    )
+  )
+  app$wait_for_idle(timeout = default_idle_timeout)
+
+  app$click(selector = ".btn-default:nth-child(1)")
+
+  # QUESTION: Is there a better way of checking the name of current module?
+  expect_equal(
+    app$get_html("#teal-main_ui-root-active_tab") %>%
+      rvest::read_html() %>%
+      rvest::html_node("a") %>%
+      rvest::html_attr("data-value"),
+    "example_teal_data"
+  )
+
+  app$stop()
+})
+
 
 # customized landing_popup_module ---------------------------------------------------------------------------------
 
@@ -55,30 +79,6 @@ extract_text <- function(id) {
 }
 phash <- function(text) paste0("#", text)
 
-test_that("e2e: when default landing_popup_module is closed, it shows the underlying teal app", {
-  app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      landing_popup_module(),
-      example_module()
-    )
-  )
-  app$wait_for_idle(timeout = default_idle_timeout)
-
-  # TODO: Unsure it actually clicks the Approve button of landing_popup_module()
-  app$click(selector = ".btn-default:nth-child(1)")
-
-  # QUESTION: Is there a better way of checking the name of current module?
-  expect_equal(
-    app$get_html("#teal-main_ui-root-active_tab") %>%
-      rvest::read_html() %>%
-      rvest::html_node("a") %>%
-      rvest::html_attr("data-value"),
-    "example_teal_data"
-  )
-
-  app$stop()
-})
 
 test_that("e2e: app with customized landing_popup_module creates modal containing specified title, content and buttons", {
   modal_title <- "Custom Landing Popup Module Title"
