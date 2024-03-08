@@ -367,3 +367,16 @@ defunction <- function(x) {
     x
   }
 }
+
+#' Get unique labels
+#'
+#' Get unique labels for the modules to avoid namespace conflicts.
+#'
+#' @param labels (`character`) vector of labels
+#'
+#' @return (`character`) vector of unique labels
+#'
+#' @keywords internal
+get_unique_labels <- function(labels) {
+  make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
+}

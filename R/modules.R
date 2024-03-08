@@ -267,7 +267,7 @@ modules <- function(..., label = "root") {
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
   labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  names(submodules) <- make.unique(gsub("[^[:alnum:]]+", "_", labels), sep = "_")
+  names(submodules) <- get_unique_labels(labels)
   structure(
     list(
       label = label,
@@ -325,7 +325,7 @@ append_module <- function(modules, module) {
   checkmate::assert_class(module, "teal_module")
   modules$children <- c(modules$children, list(module))
   labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
-  names(modules$children) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
+  names(modules$children) <- get_unique_labels(labels)
   modules
 }
 
