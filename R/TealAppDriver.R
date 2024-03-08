@@ -391,37 +391,3 @@ TealAppDriver <- R6::R6Class( # nolint
     }
   )
 )
-
-error_module <- function(label = "example teal module", datanames = "all") {
-  checkmate::assert_string(label)
-  module(
-    label,
-    server = function(id, data) {
-      checkmate::assert_class(data(), "teal_data")
-      moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(teal.data::datanames(data())))
-        output$text <- renderPrint({
-          req(input$dataname)
-          print(error)
-          data()[[input$dataname]]
-        })
-        teal.widgets::verbatim_popup_srv(
-          id = "rcode",
-          verbatim_content = reactive(teal.code::get_code(data())),
-          title = "Example Code"
-        )
-      })
-    },
-    ui = function(id) {
-      ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = verbatimTextOutput(ns("text")),
-        encoding = div(
-          selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
-          teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
-        )
-      )
-    },
-    datanames = datanames
-  )
-}
