@@ -93,6 +93,21 @@ TealAppDriver <- R6::R6Class( # nolint
       )
     },
     #' @description
+    #' Set the input in the `teal` app.
+    #'
+    #' @param input_id (character) The shiny input id with it's complete name space.
+    #' @param value The value to set the input to.
+    #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
+    #'
+    #' @return The `TealAppDriver` object invisibly.
+    set_input = function(input_id, value, ...) {
+      do.call(
+        self$app$set_inputs,
+        c(setNames(list(value), input_id), list(...))
+      )
+      invisible(self$app)
+    },
+    #' @description
     #' Navigate the teal tabs in the `teal` app.
     #'
     #' @param tabs (character) The tabs to navigate to. The order of the tabs is important,
@@ -105,8 +120,9 @@ TealAppDriver <- R6::R6Class( # nolint
     navigate_teal_tab = function(tabs) {
       root <- "root"
       for (tab in tabs) {
-        self$app$set_inputs(
-          !!(sprintf("teal-main_ui-%s-active_tab", root)) := get_unique_labels(tab),
+        self$set_input(
+          sprintf("teal-main_ui-%s-active_tab", root),
+          get_unique_labels(tab),
           wait_ = FALSE
         )
         root <- sprintf("%s-%s", root, get_unique_labels(tab))
@@ -277,12 +293,13 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     add_filter_var = function(dataset_name, var_name) {
-      self$app$set_inputs(
-        !!sprintf(
+      self$set_input(
+        sprintf(
           "%s-add-%s-filter-var_to_add",
           self$get_active_ns("filter_panel"),
           dataset_name
-        ) := var_name
+        ),
+        var_name
       )
       invisible(self$app)
     },
