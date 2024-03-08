@@ -268,7 +268,7 @@ test_that("filter panel shows all the datasets when datanames is all", {
   app$stop()
 })
 
-test_that("filter panel is not created when datanames is NULL", {
+test_that("filter panel is not displayed when datanames is NULL", {
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
