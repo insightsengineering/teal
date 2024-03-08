@@ -16,20 +16,6 @@ testthat::test_that("e2e: teal app with landing_popup_module initializes with no
   app$stop()
 })
 
-extract_onclick <- function(id) {
-  app$get_html(id) %>%
-    rvest::read_html() %>%
-    rvest::html_nodes("button") %>%
-    rvest::html_attr("onclick")
-}
-extract_text <- function(id) {
-  app$get_html(id) %>%
-    rvest::read_html() %>%
-    rvest::html_text() %>%
-    trimws()
-}
-phash <- function(text) paste0("#", text)
-
 test_that("e2e: app with default landing_popup_module creates modal containing a button", {
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -50,6 +36,24 @@ test_that("e2e: app with default landing_popup_module creates modal containing a
 
   app$stop()
 })
+
+
+# customized landing_popup_module ---------------------------------------------------------------------------------
+
+
+extract_onclick <- function(id) {
+  app$get_html(id) %>%
+    rvest::read_html() %>%
+    rvest::html_nodes("button") %>%
+    rvest::html_attr("onclick")
+}
+extract_text <- function(id) {
+  app$get_html(id) %>%
+    rvest::read_html() %>%
+    rvest::html_text() %>%
+    trimws()
+}
+phash <- function(text) paste0("#", text)
 
 test_that("e2e: when default landing_popup_module is closed, it shows the underlying teal app", {
   app <- TealAppDriver$new(
