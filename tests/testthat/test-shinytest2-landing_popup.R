@@ -30,7 +30,7 @@ extract_text <- function(id) {
 }
 phash <- function(text) paste0("#", text)
 
-test_that("e2e: app with default landing_popup_module creates modal containing specified title, content and buttons", {
+test_that("e2e: app with default landing_popup_module creates modal containing a button", {
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
