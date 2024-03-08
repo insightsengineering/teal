@@ -92,6 +92,7 @@ app <- init(
     teal_slice(dataname = "new_iris", varname = "Sepal.Length"),
     teal_slice(dataname = "new_mtcars", varname = "cyl"),
     exclude_varnames = list(new_iris = c("Sepal.Width", "Petal.Width")),
+    module_specific = TRUE,
     mapping = list(
       `example teal module` = "new_iris Species",
       `Iris Sepal.Length histogram` = "new_iris Species",
