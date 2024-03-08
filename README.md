@@ -13,6 +13,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/insightsengineering/teal?style=social)
 ![GitHub repo stars](https://img.shields.io/github/stars/insightsengineering/teal?style=social)
 
+
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/insightsengineering/teal)
 ![GitHub contributors](https://img.shields.io/github/contributors/insightsengineering/teal)
 ![GitHub last commit](https://img.shields.io/github/last-commit/insightsengineering/teal)
