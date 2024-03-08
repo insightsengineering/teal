@@ -172,7 +172,7 @@ test_that("reporter tab is only created when a module has reporter", {
 
   teal_tabs <- app_with_reporter$get_html(selector = "#teal-main_ui-root-active_tab") %>%
     rvest::read_html() %>%
-    html_nodes("a")
+    rvest::html_elements("a")
   reporter_tabs <- setNames(
     teal_tabs %>%
       rvest::html_attr("data-value"),
@@ -181,7 +181,7 @@ test_that("reporter tab is only created when a module has reporter", {
   )
   teal_tabs <- app_without_reporter$get_html(selector = "#teal-main_ui-root-active_tab") %>%
     rvest::read_html() %>%
-    html_nodes("a")
+    rvest::html_elements("a")
   non_reporter_tabs <- setNames(
     teal_tabs %>%
       rvest::html_attr("data-value"),
@@ -211,7 +211,7 @@ test_that("show/hide hamburger works as expected", {
   get_class_attributes <- function(app, selector) {
     element <- app$get_html(selector = selector) %>%
       rvest::read_html() %>%
-      html_nodes(selector)
+      rvest::html_elements(selector)
     list(
       class = element %>%
         rvest::html_attr("class"),
@@ -280,7 +280,7 @@ test_that("filter panel is not displayed when datanames is NULL", {
   expect_identical(
     app$get_html(".teal_secondary_col") %>%
       rvest::read_html() %>%
-      rvest::html_node("div") %>%
+      rvest::html_element("div") %>%
       rvest::html_attr("style"),
     "display: none;"
   )

@@ -224,7 +224,7 @@ TealAppDriver <- R6::R6Class( # nolint
         function(x) {
           style <- x %>%
             rvest::read_html() %>%
-            rvest::html_node("span") %>%
+            rvest::html_element("span") %>%
             rvest::html_attr("style")
           style <- ifelse(is.na(style), "", style)
           style != "display: none;"
@@ -238,7 +238,7 @@ TealAppDriver <- R6::R6Class( # nolint
         )
       ) %>%
         read_html() %>%
-        html_nodes(".filter_panel_dataname") %>%
+        html_elements(".filter_panel_dataname") %>%
         html_text()
       available_datasets[displayed_datasets_index]
     },

@@ -53,14 +53,14 @@ get_app_module_tabs <- function(app) {
     function(x) {
       el <- rvest::read_html(x)
       root_id <- el %>%
-        rvest::html_node("ul") %>%
+        rvest::html_element("ul") %>%
         rvest::html_attr("id") %>%
         gsub(pattern = "(^teal-main_ui-)|(-active_tab$)", replacement = "")
       tab_id <- el %>%
-        rvest::html_nodes("li a") %>%
+        rvest::html_elements("li a") %>%
         rvest::html_attr("data-value")
       tab_name <- el %>%
-        rvest::html_nodes("li a") %>%
+        rvest::html_elements("li a") %>%
         rvest::html_text()
       data.frame(
         root_id = root_id,
