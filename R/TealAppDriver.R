@@ -10,8 +10,6 @@ TealAppDriver <- R6::R6Class( # nolint
   "TealAppDriver",
   inherit = shinytest2::AppDriver,
   public = list(
-    #' @field app The instance of the `TealAppDriver` object
-    app = NULL,
     #' @description
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
@@ -53,7 +51,7 @@ TealAppDriver <- R6::R6Class( # nolint
         header = header,
         footer = footer
       )
-      self$app <- suppressWarnings(
+      suppressWarnings(
         super$initialize(
           shinyApp(app$ui, app$server),
           name = "teal",
@@ -61,8 +59,10 @@ TealAppDriver <- R6::R6Class( # nolint
           ...
         )
       )
+
       private$set_active_ns()
-      self$app
+
+      self
     },
     #' @description
     #' Check if the app has shiny errors. This checks for global shiny errors.
@@ -72,7 +72,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' Although, this catches errors hidden in the other module tabs if they are already rendered.
     expect_no_shiny_error = function() {
       expect_null(
-        self$app$get_html(".shiny-output-error:not(.shiny-output-error-validation)"),
+        self$get_html(".shiny-output-error:not(.shiny-output-error-validation)"),
         info = "Shiny error is observed"
       )
     },
@@ -80,7 +80,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' Check if the app has no validation errors. This checks for global shiny validation errors.
     expect_no_validation_error = function() {
       expect_null(
-        self$app$get_html(".shiny-output-error-validation"),
+        self$get_html(".shiny-output-error-validation"),
         info = "No validation error is observed"
       )
     },
@@ -88,7 +88,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' Check if the app has validation errors. This checks for global shiny validation errors.
     expect_validation_error = function() {
       expect_true(
-        !is.null(self$app$get_html(".shiny-output-error-validation")),
+        !is.null(self$get_html(".shiny-output-error-validation")),
         info = "Validation error is not observed"
       )
     },
@@ -102,10 +102,10 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @return The `TealAppDriver` object invisibly.
     set_input = function(input_id, value, ...) {
       do.call(
-        self$app$set_inputs,
+        self$set_inputs,
         c(setNames(list(value), input_id), list(...))
       )
-      invisible(self$app)
+      invisible(self)
     },
     #' @description
     #' Navigate the teal tabs in the `teal` app.
@@ -127,9 +127,9 @@ TealAppDriver <- R6::R6Class( # nolint
         )
         root <- sprintf("%s-%s", root, get_unique_labels(tab))
       }
-      self$app$wait_for_idle(timeout = private$idle_timeout)
+      self$wait_for_idle(timeout = private$idle_timeout)
       private$set_active_ns()
-      invisible(self$app)
+      invisible(self)
     },
     #' @description
     #' Get the active shiny name space for the Module content and the Filter panel.
@@ -185,7 +185,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The value of the shiny input.
     get_module_input = function(input_id) {
-      self$app$get_value(input = sprintf("%s-%s", self$get_active_ns("module"), input_id))
+      self$get_value(input = sprintf("%s-%s", self$get_active_ns("module"), input_id))
     },
     #' @description
     #' Get the output from the module in the `teal` app.
@@ -195,7 +195,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The value of the shiny output.
     get_module_output = function(output_id) {
-      self$app$get_value(output = sprintf("%s-%s", self$get_active_ns("module"), output_id))
+      self$get_value(output = sprintf("%s-%s", self$get_active_ns("module"), output_id))
     },
     #' @description
     #' Set the input in the module in the `teal` app.
@@ -206,16 +206,16 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     set_module_input = function(input_id, value) {
-      self$app$set_inputs(
+      self$set_inputs(
         !!sprintf("%s-%s", self$get_active_ns("module"), input_id) := value
       )
-      invisible(self$app)
+      invisible(self)
     },
     #' @description
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
       displayed_datasets_index <- sapply(
-        self$app$get_html(
+        self$get_html(
           sprintf(
             "#%s-active-filter_active_vars_contents > span",
             self$get_active_ns("filter_panel")
@@ -231,7 +231,7 @@ TealAppDriver <- R6::R6Class( # nolint
         }
       ) %>%
         unname()
-      available_datasets <- self$app$get_html(
+      available_datasets <- self$get_html(
         sprintf(
           "#%s-active-filter_active_vars_contents",
           self$get_active_ns("filter_panel")
@@ -248,7 +248,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @param dataset_name (character) The name of the dataset to get the filter variables from.
     get_active_data_filters = function(dataset_name) {
       sapply(
-        self$app$get_html(
+        self$get_html(
           sprintf(
             "#%s-active-%s-filter-cards .filter-card-varname",
             self$get_active_ns("filter_panel"),
@@ -274,7 +274,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @return The value of the active filter selection.
     get_filter_selection_value = function(dataset_name, var_name, is_numeric = FALSE) {
       selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-      self$app$get_value(
+      self$get_value(
         input = sprintf(
           "%s-active-%s-filter-%s_%s-inputs-%s",
           self$get_active_ns("filter_panel"),
@@ -301,7 +301,7 @@ TealAppDriver <- R6::R6Class( # nolint
         ),
         var_name
       )
-      invisible(self$app)
+      invisible(self)
     },
     #' @description
     #' Remove an active filter variable of a dataset from the active filter variables panel.
@@ -311,7 +311,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     remove_filter_var = function(dataset_name, var_name) {
-      self$app$click(
+      self$click(
         selector = sprintf(
           "#%s-active-%s-filter-%s_%s-remove",
           self$get_active_ns("filter_panel"),
@@ -320,7 +320,7 @@ TealAppDriver <- R6::R6Class( # nolint
           var_name
         )
       )
-      invisible(self$app)
+      invisible(self)
     },
     #' @description
     #' Set the active filter values for a variable of a dataset in the active filter variable panel.
@@ -333,7 +333,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @return The `TealAppDriver` object invisibly.
     set_filter_selection_value = function(dataset_name, var_name, input, is_numeric = FALSE) {
       selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-      self$app$set_inputs(
+      self$set_inputs(
         !!sprintf(
           "%s-active-%s-filter-%s_%s-inputs-%s",
           self$get_active_ns("filter_panel"),
@@ -343,7 +343,7 @@ TealAppDriver <- R6::R6Class( # nolint
           selection_suffix
         ) := input
       )
-      invisible(self$app)
+      invisible(self)
     },
     #' @description
     #' Click on the filter manager show button.
@@ -353,9 +353,9 @@ TealAppDriver <- R6::R6Class( # nolint
       active_ns <- self$get_active_ns("filter_manager")
       ns <- self$helper_NS(active_ns)
 
-      self$app$click(ns("show"))
-      self$app$wait_for_idle(500)
-      invisible(self$app)
+      self$click(ns("show"))
+      self$wait_for_idle(500)
+      invisible(self)
     }
   ),
   private = list(
@@ -370,7 +370,7 @@ TealAppDriver <- R6::R6Class( # nolint
     idle_timeout = 20000, # 20 seconds
     load_timeout = 100000, # 100 seconds
     set_active_ns = function() {
-      all_inputs <- self$app$get_values()$input
+      all_inputs <- self$get_values()$input
       active_tab_inputs <- all_inputs[grepl("-active_tab$", names(all_inputs))]
 
       tab_ns <- lapply(names(active_tab_inputs), function(name) {
@@ -393,14 +393,14 @@ TealAppDriver <- R6::R6Class( # nolint
       private$active_ns$module <- sprintf("%s-%s", active_ns, "module")
 
       component <- "filter_panel"
-      if (!is.null(self$app$get_html(sprintf("#teal-main_ui-%s", component)))) {
+      if (!is.null(self$get_html(sprintf("#teal-main_ui-%s", component)))) {
         private$active_ns[[component]] <- sprintf("teal-main_ui-%s", component)
       } else {
         private$active_ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
       }
 
       component <- "filter_manager"
-      if (!is.null(self$app$get_html(sprintf("#teal-main_ui-%s-show", component)))) {
+      if (!is.null(self$get_html(sprintf("#teal-main_ui-%s-show", component)))) {
         private$active_ns[[component]] <- sprintf("teal-main_ui-%s", component)
       } else {
         private$active_ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
