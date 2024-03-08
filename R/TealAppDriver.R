@@ -106,7 +106,7 @@ TealAppDriver <- R6::R6Class( # nolint
       root <- "root"
       for (tab in tabs) {
         self$app$set_inputs(
-          !!(paste0("teal-main_ui-", root, "-active_tab")) := get_unique_labels(tab),
+          !!(sprintf("teal-main_ui-%s-active_tab", root)) := get_unique_labels(tab),
           wait_ = FALSE
         )
         root <- sprintf("%s-%s", root, get_unique_labels(tab))

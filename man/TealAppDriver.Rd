@@ -33,6 +33,7 @@ on a \code{teal} application for implementing \code{shinytest2} tests.
 \item \href{#method-TealAppDriver-expect_validation_error}{\code{TealAppDriver$expect_validation_error()}}
 \item \href{#method-TealAppDriver-navigate_teal_tab}{\code{TealAppDriver$navigate_teal_tab()}}
 \item \href{#method-TealAppDriver-get_active_ns}{\code{TealAppDriver$get_active_ns()}}
+\item \href{#method-TealAppDriver-helper_NS}{\code{TealAppDriver$helper_NS()}}
 \item \href{#method-TealAppDriver-get_module_input}{\code{TealAppDriver$get_module_input()}}
 \item \href{#method-TealAppDriver-get_module_output}{\code{TealAppDriver$get_module_output()}}
 \item \href{#method-TealAppDriver-set_module_input}{\code{TealAppDriver$set_module_input()}}
@@ -42,6 +43,7 @@ on a \code{teal} application for implementing \code{shinytest2} tests.
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_filter_selection_value}{\code{TealAppDriver$set_filter_selection_value()}}
+\item \href{#method-TealAppDriver-open_filter_manager}{\code{TealAppDriver$open_filter_manager()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
 }
 }
@@ -206,12 +208,39 @@ However, module specific filter panel will have the name space linked with the m
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{component}}{(character) The component to get the active name space for.
-Currently supported components are "module" and "filter_panel".}
+Currently supported components are "module", "filter_panel", and "filter_manager".}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 The active shiny name space of the component.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-helper_NS"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-helper_NS}{}}}
+\subsection{Method \code{helper_NS()}}{
+Advance utility to help in creating namespace and CSS selectors for Shiny UI.
+It is similar with \code{\link[shiny:NS]{shiny::NS()}} by returning a function that can be used
+to create a namespace for the shiny UI.
+
+This namespace can be enriched with a prefix and suffix to create a CSS selector.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$helper_NS(namespace, ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{namespace}}{(\code{character(1)}) The base id to be used for the namespace.}
+
+\item{\code{...}}{(\code{character}) The additional ids to be appended to \code{namespace}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A function similar to \code{\link[shiny:NS]{shiny::NS()}} that is used to create a \code{character}
+namespace for the shiny UI.
 }
 }
 \if{html}{\out{<hr>}}
@@ -405,6 +434,19 @@ Set the active filter values for a variable of a dataset in the active filter va
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-open_filter_manager"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-open_filter_manager}{}}}
+\subsection{Method \code{open_filter_manager()}}{
+Click on the filter manager show button.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$open_filter_manager()}\if{html}{\out{</div>}}
+}
+
 \subsection{Returns}{
 The \code{TealAppDriver} object invisibly.
 }
