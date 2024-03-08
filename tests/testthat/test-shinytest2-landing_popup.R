@@ -16,17 +16,29 @@ testthat::test_that("e2e: teal app with landing_popup_module initializes with no
   app$stop()
 })
 
-test_that("e2e: app with landing_popup_module creates modal containing specified title, content and button", {
+test_that("e2e: app with landing_popup_module creates modal containing specified title, content and buttons", {
   modal_title <- "Custom Landing Popup Module Title"
   modal_content_message <- "A welcome message!"
   modal_content <- tags$b(modal_content_message, style = "color: red;")
 
-  modal_buttons_texts <- c("Proceed", "Read more", "Reject")
+  modal_btns <- list(
+    list(text = "Proceed"),
+    list(text = "Read more", onclick = "window.open('http://google.com', '_blank')", id = "read"),
+    list(text = "Reject", onclick = "window.close()", id = "close")
+  )
   modal_buttons <-
     tagList(
-      modalButton(modal_buttons_texts[1]),
-      actionButton("read", modal_buttons_texts[2], onclick = "window.open('http://google.com', '_blank')"),
-      actionButton("close", modal_buttons_texts[3], onclick = "window.close()")
+      modalButton(modal_btns[[1]]$text),
+      actionButton(
+        modal_btns[[2]]$id,
+        label = modal_btns[[2]]$text,
+        onclick = modal_btns[[2]]$onclick
+      ),
+      actionButton(
+        modal_btns[[3]]$id,
+        label = modal_btns[[3]]$text,
+        onclick = modal_btns[[3]]$onclick
+      )
     )
 
   app <- TealAppDriver$new(
@@ -43,39 +55,53 @@ test_that("e2e: app with landing_popup_module creates modal containing specified
 
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  expect_equal(
-    app$get_html(".modal-title") %>%
+  extract_onclick <- function(id) {
+    app$get_html(id) %>%
       rvest::read_html() %>%
-      rvest::html_text(),
-    modal_title
-  )
-  expect_equal(
-    app$get_html(".modal-body") %>%
+      rvest::html_nodes("button") %>%
+      rvest::html_attr("onclick")
+  }
+  extract_text <- function(id) {
+    app$get_html(id) %>%
       rvest::read_html() %>%
       rvest::html_text() %>%
-      trimws(),
+      trimws()
+  }
+  phash <- function(text) paste0("#", text)
+
+  expect_equal(
+    extract_text(".modal-title"),
+    modal_title
+  )
+
+  expect_equal(
+    extract_text(".modal-body"),
     modal_content_message
   )
 
   expect_equal(
-    app$get_html(".btn-default:nth-child(1)") %>%
-      rvest::read_html() %>%
-      rvest::html_text(),
-      modal_buttons_texts[1]
+    extract_text(".btn-default:nth-child(1)"),
+    modal_btns[[1]]$text
   )
 
   expect_equal(
-    app$get_html("#read") %>%
-      rvest::read_html() %>%
-      rvest::html_text(),
-    modal_buttons_texts[2]
+    extract_text(phash(modal_btns[[2]]$id)),
+    modal_btns[[2]]$text
   )
 
   expect_equal(
-    app$get_html("#close") %>%
-      rvest::read_html() %>%
-      rvest::html_text(),
-    modal_buttons_texts[3]
+    extract_onclick(phash(modal_btns[[2]]$id)),
+    modal_btns[[2]]$onclick
+  )
+
+  expect_equal(
+    extract_text(phash(modal_btns[[3]]$id)),
+    modal_btns[[3]]$text
+  )
+
+  expect_equal(
+    extract_onclick(phash(modal_btns[[3]]$id)),
+    modal_btns[[3]]$onclick
   )
 
   app$stop()
