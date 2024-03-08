@@ -55,7 +55,7 @@
 #'     module(
 #'       label = "data source",
 #'       server = function(input, output, session, data) {},
-#'       ui = function(id, ...) div(p("information about data source")),
+#'       ui = function(id, ...) tags$div(p("information about data source")),
 #'       datanames = "all"
 #'     ),
 #'     example_module(label = "example teal module"),

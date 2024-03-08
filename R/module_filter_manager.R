@@ -65,7 +65,7 @@ filter_manager_modal_srv <- function(id, filtered_data_list, filter) {
 #' @rdname module_filter_manager
 filter_manager_ui <- function(id) {
   ns <- NS(id)
-  div(
+  tags$div(
     class = "filter_manager_content",
     tableOutput(ns("slices_table")),
     snapshot_manager_ui(ns("snapshot_manager"))

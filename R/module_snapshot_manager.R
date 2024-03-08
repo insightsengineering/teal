@@ -85,11 +85,11 @@
 #'
 snapshot_manager_ui <- function(id) {
   ns <- NS(id)
-  div(
+  tags$div(
     class = "snapshot_manager_content",
-    div(
+    tags$div(
       class = "snapshot_table_row",
-      span(tags$b("Snapshot manager")),
+      tags$span(tags$b("Snapshot manager")),
       actionLink(ns("snapshot_add"), label = NULL, icon = icon("camera"), title = "add snapshot"),
       actionLink(ns("snapshot_load"), label = NULL, icon = icon("upload"), title = "upload snapshot"),
       actionLink(ns("snapshot_reset"), label = NULL, icon = icon("undo"), title = "reset initial state"),
@@ -303,9 +303,9 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         }
         # Create a row for the snapshot table.
         if (!is.element(id_rowme, names(divs))) {
-          divs[[id_rowme]] <- div(
+          divs[[id_rowme]] <- tags$div(
             class = "snapshot_table_row",
-            span(h5(s)),
+            tags$span(tags$h5(s)),
             actionLink(inputId = ns(id_pickme), label = icon("circle-check"), title = "select"),
             downloadLink(outputId = ns(id_saveme), label = icon("save"), title = "save to file")
           )
@@ -317,7 +317,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
     output$snapshot_list <- renderUI({
       rows <- lapply(rev(reactiveValuesToList(divs)), function(d) d)
       if (length(rows) == 0L) {
-        div(
+        tags$div(
           class = "snapshot_manager_placeholder",
           "Snapshots will appear here."
         )
