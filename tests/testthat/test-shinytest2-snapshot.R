@@ -1,13 +1,13 @@
 testthat::test_that("e2e: Create empty snapshot", {
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
 
-  open_filter_manager(app)
+  app$open_filter_manager()
 
-  ns <- helper_NS(
-    get_active_ns(app, "filter_manager"),
+  ns <- app$helper_NS(
+    app$get_active_ns("filter_manager"),
     "filter_manager",
     "snapshot_manager"
   )
@@ -30,15 +30,15 @@ testthat::test_that("e2e: Create empty snapshot", {
 testthat::test_that("e2e: Downloads empty snapshot", {
   skip_if_not_installed("withr")
 
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
 
-  open_filter_manager(app)
+  app$open_filter_manager()
 
-  ns <- helper_NS(
-    get_active_ns(app, "filter_manager"),
+  ns <- app$helper_NS(
+    app$get_active_ns("filter_manager"),
     "filter_manager",
     "snapshot_manager"
   )
@@ -67,18 +67,18 @@ testthat::test_that("e2e: Downloads empty snapshot", {
 })
 
 testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
 
-  add_filter_var(app, "iris", "Species")
-  set_active_selection_value(app, "iris", "Species", c("setosa", "virginica"))
+  app$add_filter_var("iris", "Species")
+  app$set_filter_selection_value("iris", "Species", c("setosa", "virginica"))
 
-  open_filter_manager(app)
+  app$open_filter_manager()
 
-  ns <- helper_NS(
-    get_active_ns(app, "filter_manager"),
+  ns <- app$helper_NS(
+    app$get_active_ns("filter_manager"),
     "filter_manager",
     "snapshot_manager"
   )
@@ -110,10 +110,10 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
 testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
   skip_if_not_installed("withr")
 
-  data <- simple_teal_data
+  data <- simple_teal_data()
   mods <- example_module(label = "module1")
 
-  app <- get_test_app_object(
+  app <- TealAppDriver$new(
     data = data,
     modules = mods
   )
@@ -135,10 +135,10 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
   local_snapshot <- withr::local_file("temp_slices.json")
   slices_store(tss, local_snapshot)
 
-  open_filter_manager(app)
+  app$open_filter_manager()
 
-  ns <- helper_NS(
-    get_active_ns(app, "filter_manager"),
+  ns <- app$helper_NS(
+    app$get_active_ns("filter_manager"),
     "filter_manager",
     "snapshot_manager"
   )
@@ -154,7 +154,7 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
   app$wait_for_idle(500)
 
   testthat::expect_setequal(
-    get_active_data_filters(app, "iris"),
+    app$get_active_data_filters("iris"),
     c("Species", "Sepal.Length", "long_petals")
   )
 
@@ -164,18 +164,18 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
 testthat::test_that("e2e: Snapshot manager can reset the state", {
   skip_if_not_installed("withr")
 
-  app <- get_test_app_object(
-    data = simple_teal_data,
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
     modules = example_module(label = "module1")
   )
 
-  add_filter_var(app, "iris", "Species")
-  set_active_selection_value(app, "iris", "Species", c("setosa", "virginica"))
+  app$add_filter_var("iris", "Species")
+  app$set_filter_selection_value("iris", "Species", c("setosa", "virginica"))
 
-  open_filter_manager(app)
+  app$open_filter_manager()
 
-  ns <- helper_NS(
-    get_active_ns(app, "filter_manager"),
+  ns <- app$helper_NS(
+    app$get_active_ns("filter_manager"),
     "filter_manager",
     "snapshot_manager"
   )
@@ -183,8 +183,8 @@ testthat::test_that("e2e: Snapshot manager can reset the state", {
   app$click(ns("snapshot_reset"))
   app$wait_for_idle(500)
 
-  testthat::expect_length(get_active_data_filters(app, "iris"), 0)
-  testthat::expect_length(get_active_data_filters(app, "mtcars"), 0)
+  testthat::expect_length(app$get_active_data_filters("iris"), 0)
+  testthat::expect_length(app$get_active_data_filters("mtcars"), 0)
 
   app$stop()
 })
