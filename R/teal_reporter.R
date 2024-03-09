@@ -6,7 +6,7 @@
 #' meta data.
 #' @export
 #'
-TealReportCard <- R6::R6Class( # nolint: object_name_linter.
+TealReportCard <- R6::R6Class( # nolint: object_name.
   classname = "TealReportCard",
   inherit = teal.reporter::ReportCard,
   public = list(
@@ -41,7 +41,11 @@ TealReportCard <- R6::R6Class( # nolint: object_name_linter.
     append_fs = function(fs) {
       checkmate::assert_class(fs, "teal_slices")
       self$append_text("Filter State", "header3")
-      self$append_content(TealSlicesBlock$new(fs))
+      if (length(fs)) {
+        self$append_content(TealSlicesBlock$new(fs))
+      } else {
+        self$append_text("No filters specified.")
+      }
       invisible(self)
     },
     #' @description Appends the encodings list to the `content` and `metadata` of this `TealReportCard`.

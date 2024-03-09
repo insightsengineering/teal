@@ -55,7 +55,7 @@
 #'     module(
 #'       label = "data source",
 #'       server = function(input, output, session, data) {},
-#'       ui = function(id, ...) div(p("information about data source")),
+#'       ui = function(id, ...) tags$div(p("information about data source")),
 #'       datanames = "all"
 #'     ),
 #'     example_module(label = "example teal module"),
@@ -78,6 +78,7 @@
 #'     teal_slice(dataname = "new_iris", varname = "Sepal.Length"),
 #'     teal_slice(dataname = "new_mtcars", varname = "cyl"),
 #'     exclude_varnames = list(new_iris = c("Sepal.Width", "Petal.Width")),
+#'     module_specific = TRUE,
 #'     mapping = list(
 #'       `example teal module` = "new_iris Species",
 #'       `Iris Sepal.Length histogram` = "new_iris Species",

@@ -124,7 +124,7 @@
 #'
 module <- function(label = "module",
                    server = function(id, ...) {
-                     moduleServer(id, function(input, output, session) {}) # nolint
+                     moduleServer(id, function(input, output, session) {})
                    },
                    ui = function(id, ...) {
                      tags$p(paste0("This module has no UI (id: ", id, " )"))
@@ -281,7 +281,7 @@ modules <- function(..., label = "root") {
 
 #' @rdname teal_modules
 #' @export
-format.teal_module <- function(x, indent = 0, ...) { # nolint
+format.teal_module <- function(x, indent = 0, ...) {
   paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, "\n", collapse = "")
 }
 
@@ -296,7 +296,7 @@ print.teal_module <- function(x, ...) {
 
 #' @rdname teal_modules
 #' @export
-format.teal_modules <- function(x, indent = 0, ...) { # nolint
+format.teal_modules <- function(x, indent = 0, ...) {
   paste(
     c(
       paste0(rep(" ", indent), "+ ", x$label, "\n"),

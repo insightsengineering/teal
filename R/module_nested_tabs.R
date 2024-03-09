@@ -94,7 +94,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
-      if (depth >= 2L) div(style = "mt-6"),
+      if (depth >= 2L) tags$div(style = "mt-6"),
       do.call(modules$ui, args)
     )
   )
