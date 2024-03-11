@@ -28,11 +28,8 @@ test_that("e2e: app with default landing_popup_module creates modal containing a
   )
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  expect_equal(
-    app$get_html(".btn-default") %>%
-      grep("Accept", x = ., value = TRUE) %>%
-      rvest::read_html() %>%
-      rvest::html_text(),
+  testthat::expect_equal(
+    app$get_text("#shiny-modal-wrapper .btn-default"),
     "Accept"
   )
 
