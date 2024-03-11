@@ -45,7 +45,6 @@ TealAppDriver <- R6::R6Class( # nolint
       )
 
       private$set_active_ns()
-
     },
     #' @description
     #' Check if the app has shiny errors. This checks for global shiny errors.
@@ -54,7 +53,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' So, navigate to the module tab you want to test before calling this function.
     #' Although, this catches errors hidden in the other module tabs if they are already rendered.
     expect_no_shiny_error = function() {
-      expect_null(
+      testthat::expect_null(
         self$get_html(".shiny-output-error:not(.shiny-output-error-validation)"),
         info = "Shiny error is observed"
       )
@@ -62,7 +61,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @description
     #' Check if the app has no validation errors. This checks for global shiny validation errors.
     expect_no_validation_error = function() {
-      expect_null(
+      testthat::expect_null(
         self$get_html(".shiny-output-error-validation"),
         info = "No validation error is observed"
       )
@@ -70,7 +69,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @description
     #' Check if the app has validation errors. This checks for global shiny validation errors.
     expect_validation_error = function() {
-      expect_true(
+      testthat::expect_true(
         !is.null(self$get_html(".shiny-output-error-validation")),
         info = "Validation error is not observed"
       )
