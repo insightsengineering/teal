@@ -5,8 +5,8 @@
 \title{\code{TealReportCard}}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-A child of \code{\link{ReportCard}} that is used for teal specific applications.
-In addition to the parent methods, it supports rendering teal specific elements such as
+Child class of \code{\link{ReportCard}} that is used for \code{teal} specific applications.
+In addition to the parent methods, it supports rendering \code{teal} specific elements such as
 the source code, the encodings panel content and the filter panel content as part of the
 meta data.
 }
@@ -75,13 +75,13 @@ Appends the source code to the \code{content} meta data of this \code{TealReport
 \describe{
 \item{\code{src}}{(\code{character(1)}) code as text.}
 
-\item{\code{...}}{any \code{rmarkdown} R chunk parameter and its value.
+\item{\code{...}}{any \code{rmarkdown} \code{R} chunk parameter and its value.
 But \code{eval} parameter is always set to \code{FALSE}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-invisibly self
+Object of class \code{TealReportCard}, invisibly.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
@@ -115,7 +115,7 @@ If the filter state list is empty, nothing is appended to the \code{content}.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-invisibly self
+\code{self}, invisibly.
 }
 }
 \if{html}{\out{<hr>}}
@@ -130,12 +130,12 @@ Appends the encodings list to the \code{content} and \code{metadata} of this \co
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{encodings}}{(\code{list}) list of encodings selections of the teal app.}
+\item{\code{encodings}}{(\code{list}) list of encodings selections of the \code{teal} app.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-invisibly self
+\code{self}, invisibly.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}

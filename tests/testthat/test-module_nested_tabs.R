@@ -357,8 +357,8 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the 
 testthat::test_that(".datasets_to_data returns data which is filtered", {
   datasets <- get_example_filtered_data()
   datasets$set_filter_state(
-    teal.slice:::teal_slices(
-      teal.slice:::teal_slice(dataname = "d1", varname = "val", selected = c(1, 2))
+    teal.slice::teal_slices(
+      teal.slice::teal_slice(dataname = "d1", varname = "val", selected = c(1, 2))
     )
   )
   module <- test_module_wdata(datanames = c("d1", "d2"))
@@ -392,19 +392,22 @@ testthat::test_that(".datasets_to_data returns teal_data object", {
   )
 
   # code
-  skip("skipped until we resolve handling code in teal.data:::new_teal_data")
   testthat::expect_equal(
     teal.code::get_code(data),
-    c(
-      get_rcode_str_install(),
-      get_rcode_libraries(),
-      "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\n\n",
-      "d2 <- data.frame(id = 1:5, value = 1:5)\n\n",
-      paste0(
-        "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")\n",
-        "stopifnot(rlang::hash(d2) == \"6e30be195b7d914a1311672c3ebf4e4f\") \n\n"
+    paste(
+      c(
+        get_rcode_str_install(),
+        get_rcode_libraries(),
+        "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)",
+        "d2 <- data.frame(id = 1:5, value = 1:5)",
+        "",
+        "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")",
+        "stopifnot(rlang::hash(d2) == \"6e30be195b7d914a1311672c3ebf4e4f\")",
+        "",
+        "d2 <- dplyr::inner_join(x = d2, y = d1[, c(\"pk\"), drop = FALSE], by = c(id = \"pk\"))",
+        ""
       ),
-      ""
+      collapse = "\n"
     )
   )
 })
@@ -456,9 +459,9 @@ testthat::test_that("calculate_hashes returns the hash of the non Filtered datas
     list(iris = list(dataset = iris))
   )
 
-  fs <- teal.slice:::teal_slices(
-    teal.slice:::teal_slice(dataname = "iris", varname = "Sepal.Length", selected = c(5.1, 6.4)),
-    teal.slice:::teal_slice(dataname = "iris", varname = "Species", selected = c("setosa", "versicolor"))
+  fs <- teal.slice::teal_slices(
+    teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length", selected = c(5.1, 6.4)),
+    teal.slice::teal_slice(dataname = "iris", varname = "Species", selected = c("setosa", "versicolor"))
   )
 
   shiny::isolate(datasets$set_filter_state(state = fs))

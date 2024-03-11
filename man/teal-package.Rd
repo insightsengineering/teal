@@ -4,14 +4,14 @@
 \name{teal-package}
 \alias{teal}
 \alias{teal-package}
-\title{teal: Interactive Exploration of Clinical Trials Data}
+\title{\code{teal}: Interactive exploration of clinical trials data}
 \description{
-The teal package provides a shiny based framework for creating an
+The \code{teal} package provides a \code{shiny} based framework for creating an
 interactive data analysis environment.
 }
 \details{
-To learn mode about the package either read the project website at
-\url{Project Website} or read the \code{\link{init}} manual pages.
+To learn mode about the package, visit the \href{https://insightsengineering.github.io/teal/latest-tag/}{project website}
+or read the \code{\link[=init]{init()}} manual page.
 }
 \seealso{
 Useful links:
@@ -23,13 +23,15 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Dawid Kaledkowski \email{dawid.kaledkowski@roche.com}
+\strong{Maintainer}: Dawid Kaledkowski \email{dawid.kaledkowski@roche.com} (\href{https://orcid.org/0000-0001-9533-457X}{ORCID})
 
 Authors:
 \itemize{
   \item Pawel Rucki \email{pawel.rucki@roche.com}
-  \item Aleksander Chlebowski \email{aleksander.chlebowski@contractors.roche.com}
+  \item Aleksander Chlebowski \email{aleksander.chlebowski@contractors.roche.com} (\href{https://orcid.org/0000-0001-5018-6294}{ORCID})
+  \item Andre Verissimo \email{andre.verissimo@roche.com} (\href{https://orcid.org/0000-0002-2212-339X}{ORCID})
   \item Kartikeya Kirar \email{kartikeya.kirar@businesspartner.roche.com}
+  \item Vedha Viyash \email{vedha.viyash@roche.com}
   \item Marcin Kosinski \email{marcin.kosinski.mk1@roche.com}
   \item Adrian Waddell \email{adrian.waddell@gene.com}
   \item Nikolas Burkoff
@@ -37,6 +39,7 @@ Authors:
   \item Maciej Nasinski
   \item Konrad Pagacz
   \item Junlue Zhao
+  \item Tadeusz Lewandowski
 }
 
 Other contributors:

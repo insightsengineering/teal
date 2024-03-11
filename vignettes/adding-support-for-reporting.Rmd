@@ -33,22 +33,26 @@ Let us consider an example module, based on the example module from `teal`:
 library(teal)
 example_module <- function(label = "example teal module") {
   module(
-    label,
+    label = label,
     server = function(id, data) {
+      checkmate::assert_class(data, "reactive")
+      checkmate::assert_class(isolate(data()), "teal_data")
+
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
       ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
+      sidebarLayout(
+        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
+        mainPanel(verbatimTextOutput(ns("dataset")))
       )
-    },
-    datanames = "all"
+    }
   )
 }
 ```
@@ -75,22 +79,23 @@ See below:
 ```{r}
 example_module_with_reporting <- function(label = "example teal module") {
   module(
-    label,
+    label = label,
     server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
       ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
+      sidebarLayout(
+        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
+        mainPanel(verbatimTextOutput(ns("dataset")))
       )
-    },
-    datanames = "all"
+    }
   )
 }
 ```
@@ -108,7 +113,7 @@ if (interactive()) shinyApp(app$ui, app$server)
 
 `teal` adds another tab to the application, titled `Report previewer`.
 However, there is no visible change in how the module operates and appears and the user cannot add content to the report from this module.
-That requires inserting `ui` and `server` elements of the `teal.reporter` module into the module body.
+That requires inserting UI and server elements of the `teal.reporter` module into the module body.
 
 ### Insert `teal.reporter` module
 
@@ -117,7 +122,7 @@ The UI and the server logic necessary for adding cards from `example_module_with
 ```{r}
 example_module_with_reporting <- function(label = "example teal module") {
   module(
-    label,
+    label = label,
     server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
         teal.reporter::simple_reporter_srv(
@@ -125,22 +130,23 @@ example_module_with_reporting <- function(label = "example teal module") {
           reporter = reporter,
           card_fun = function(card) card
         )
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
       ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = tagList(
+      sidebarLayout(
+        sidebarPanel(
           teal.reporter::simple_reporter_ui(ns("reporter")),
-          verbatimTextOutput(ns("text"))
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
         ),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
+        mainPanel(verbatimTextOutput(ns("dataset")))
       )
-    },
-    datanames = "all"
+    }
   )
 }
 ```
@@ -178,7 +184,7 @@ custom_function <- function(card = teal.reporter::ReportCard$new()) {
 
 example_module_with_reporting <- function(label = "example teal module") {
   module(
-    label,
+    label = label,
     server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
         teal.reporter::simple_reporter_srv(
@@ -186,22 +192,23 @@ example_module_with_reporting <- function(label = "example teal module") {
           reporter = reporter,
           card_fun = custom_function
         )
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
       })
     },
     ui = function(id) {
       ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = tagList(
+      sidebarLayout(
+        sidebarPanel(
           teal.reporter::simple_reporter_ui(ns("reporter")),
-          verbatimTextOutput(ns("text"))
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
         ),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
+        mainPanel(verbatimTextOutput(ns("dataset")))
       )
-    },
-    datanames = "all"
+    }
   )
 }
 ```
@@ -241,10 +248,10 @@ Without this definition, the API of `TealReportCard` will not be available withi
 ## Example
 
 In conclusion, we have demonstrated how to build a standard `teal` app with code reproducibility and reporter functionalities.
-Note that the `server` function requires the `filter_panel_api` argument so that the filter panel state can be added to the report.
+Note that the server function requires the `filter_panel_api` argument so that the filter panel state can be added to the report.
 
 In the final example, we have incorporated `teal.code` snippets.
-`teal.code` is an R library that offers utilities for storing code and associating it with an execution environment.
+`teal.code` is an `R` library that offers utilities for storing code and associating it with an execution environment.
 This allows `ReporterCard` to store the code necessary to generate the table along with the table itself.
 To learn more about `teal.code` see the vignette _`qenv`_ in  `teal.code`.
 
@@ -254,11 +261,10 @@ library(teal.reporter)
 
 example_reporter_module <- function(label = "Example") {
   module(
-    label,
+    label = label,
     server = function(id, data, reporter, filter_panel_api) {
       with_filter <- !missing(filter_panel_api) && inherits(filter_panel_api, "FilterPanelApi")
       moduleServer(id, function(input, output, session) {
-        ns <- session$ns
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
         dat <- reactive(data()[[input$dataname]])
         observe({
@@ -318,20 +324,28 @@ example_reporter_module <- function(label = "Example") {
     },
     ui = function(id) {
       ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = tableOutput(ns("table")),
-        encoding = tagList(
-          div(
+
+      sidebarLayout(
+        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
+        mainPanel(
+          teal.reporter::simple_reporter_ui(ns("reporter")),
+          verbatimTextOutput(ns("dataset"))
+        )
+      )
+
+      sidebarLayout(
+        sidebarPanel(
+          tags$div(
             teal.reporter::add_card_button_ui(ns("addReportCard")),
             teal.reporter::download_report_button_ui(ns("downloadButton")),
             teal.reporter::reset_report_button_ui(ns("resetButton"))
           ),
           selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
           sliderInput(ns("nrow"), "Number of rows", min = 1, max = 1, value = 1, step = 1)
-        )
+        ),
+        mainPanel(tableOutput(ns("table")))
       )
-    },
-    datanames = "all"
+    }
   )
 }
 

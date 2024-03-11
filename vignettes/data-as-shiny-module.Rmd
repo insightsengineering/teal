@@ -12,24 +12,24 @@ vignette: >
 
 ## Introduction
 
-Proper functioning of any `teal` application requires presence of a `teal_data` object.
+Proper functioning of any `teal` application requires the presence of a `teal_data` object.
 Typically, a `teal_data` object created in the global environment will be passed to the `data` argument in `init`.
 This `teal_data` object should contain all elements necessary for successful execution of the application's modules. 
 
-In some scenarios, however, application developers may opt to postpone some data operations until the application run time.
+In some scenarios, however, application developers may opt to postpone some data operations until the application runtime.
 This can be done by passing a special _`shiny` module_ to the `data` argument.
 The `teal_data_module` function is used to build such a module from the following components:
 
-- a `ui` function; accepts only one argument, `id`; defines user interface elements for the data module
-- a `server` function: accepts only one argument, `id`; defines server logic for the data module, including data creation; must return a reactive expression containing a `teal_data` object
+- a UI function; accepts only one argument, `id`; defines user interface elements for the data module
+- a server function: accepts only one argument, `id`; defines server logic for the data module, including data creation; must return a reactive expression containing a `teal_data` object
 
 `teal` will run this module when the application starts and the resulting `teal_data` object that will be used throughout all `teal` (analytic) modules. 
 
 ## Creating data in-app
 
-One case for postponing data operations are data sets that are dynamic, frequently updated.
+One case for postponing data operations is datasets that are dynamic, frequently updated.
 Such data cannot be created once and kept in the global environment.
-Using `teal_data_module` allows to create a data set from scratch every time the user starts the application.
+Using `teal_data_module` enables creating a dataset from scratch every time the user starts the application.
 
 ```{r, message = FALSE, warning = FALSE}
 library(teal)
@@ -37,8 +37,8 @@ library(teal)
 
 
 ```{r}
-data_mod <- teal_data_module(
-  ui = function(id) div(),
+data_module <- teal_data_module(
+  ui = function(id) tags$div(),
   server = function(id) {
     moduleServer(id, function(input, output, session) {
       reactive({
@@ -49,7 +49,7 @@ data_mod <- teal_data_module(
             dataset2 <- mtcars
           }
         )
-        datanames(data) <- c("dataset1", "dataset2")
+        datanames(data) <- c("dataset1", "dataset2") # optional
         data
       })
     })
@@ -58,8 +58,8 @@ data_mod <- teal_data_module(
 
 
 app <- init(
-  data = data_mod,
-  module = example_module()
+  data = data_module,
+  modules = example_module()
 )
 
 if (interactive()) {
@@ -67,10 +67,11 @@ if (interactive()) {
 }
 ```
 
+_See `?qenv` for a detailed explanation of how to use the `within` method._ 
 
 ## Modification of data in-app
 
-Another reason to postpone data operations is to allow the application user to act the preprocessing stage.
+Another reason to postpone data operations is to involve the application user in the preprocessing stage.
 An initial, constant form of the data can be created in the global environment and then modified once the app starts.
 
 The following example illustrates how `teal_data_module` can be utilized to subset data based on the user inputs:
@@ -82,11 +83,11 @@ data <- within(teal_data(), {
 })
 datanames(data) <- c("dataset1", "dataset2")
 
-data_mod <- teal_data_module(
+data_module <- teal_data_module(
   ui = function(id) {
     ns <- NS(id)
-    div(
-      selectInput(ns("species"), "Select species to filter",
+    tags$div(
+      selectInput(ns("species"), "Select species to keep",
         choices = unique(iris$Species), multiple = TRUE
       ),
       actionButton(ns("submit"), "Submit")
@@ -107,8 +108,8 @@ data_mod <- teal_data_module(
 )
 
 app <- init(
-  data = data_mod,
-  module = example_module()
+  data = data_module,
+  modules = example_module()
 )
 
 if (interactive()) {
@@ -116,26 +117,25 @@ if (interactive()) {
 }
 ```
 
-_See `?within.qenv` for a detailed explanation of how to use the `within` method._
-
 Note that running preprocessing code in a module as opposed to the global environment will increase app loading times.
 It is recommended to keep the constant code in the global environment and to move only the dynamic parts to a data module.
 
 ###### WARNING
 
-When using `teal_data_module` to modify a pre-existing `teal_data` object it is crucial that the server function and the data object are defined in the same environment as otherwise the server function will not be able to access the data object.
+When using `teal_data_module` to modify a pre-existing `teal_data` object, it is crucial that the server function and the data object are defined in the same environment, otherwise the server function will not be able to access the data object.
 This means server functions defined in packages cannot be used.
 
 ### Extending existing `teal_data_modules`
 
-The `teal_data_module` can be further modified outside of the initial `shiny` module and processed after user inputs.
-The `within` function allows to process at runtime the data in the `teal_data` object contained in `teal_data_module`.
+The server logic of a `teal_data_module` can be modified before it is used in an app, using the `within` function.
+This allows the `teal_data` object that is created in the `teal_data_module` to be processed further.
 
-Building on the previous example, the `data_mod` is handled as a generic connector and here new columns are added once the data is retrieved.
+In the previous example, `data_module` takes a predefined `teal_data` object and allows the app user to select a subset.
+The following example modifies `data_module` so that new columns are added once the data is retrieved.
 
 ```{r}
-data_mod_2 <- within(
-  data_mod,
+data_module_2 <- within(
+  data_module,
   {
     # Create new column with Ratio of Sepal.Width and Petal.Width
     dataset1$Ratio.Sepal.Petal.Width <- round(dataset1$Sepal.Width / dataset1$Petal.Width, digits = 2L)
@@ -145,8 +145,8 @@ data_mod_2 <- within(
 )
 
 app <- init(
-  data = data_mod_2,
-  module = example_module()
+  data = data_module_2,
+  modules = example_module()
 )
 
 if (interactive()) {

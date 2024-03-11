@@ -3,14 +3,13 @@
 #' @section `ui_nested_tabs`:
 #' Each `teal_modules` is translated to a `tabsetPanel` and each
 #' of its children is another tab-module called recursively. The UI of a
-#' `teal_module` is obtained by calling the `ui` function on it.
+#' `teal_module` is obtained by calling its UI function.
 #'
-#' The `datasets` argument is required to resolve the teal arguments in an
-#' isolated context (with respect to reactivity)
+#' The `datasets` argument is required to resolve the `teal` arguments in an
+#' isolated context (with respect to reactivity).
 #'
 #' @section `srv_nested_tabs`:
-#' This module calls recursively all elements of the `modules` returns one which
-#' is currently active.
+#' This module recursively calls all elements of `modules` and returns currently active one.
 #' - `teal_module` returns self as a active module.
 #' - `teal_modules` also returns module active within self which is determined by the `input$active_tab`.
 #'
@@ -18,45 +17,20 @@
 #'
 #' @inheritParams module_tabs_with_filters
 #'
-#' @param depth (`integer(1)`)\cr
+#' @param depth (`integer(1)`)
 #'  number which helps to determine depth of the modules nesting.
-#' @param is_module_specific (`logical(1)`)\cr
+#' @param is_module_specific (`logical(1)`)
 #'  flag determining if the filter panel is global or module-specific.
 #'  When set to `TRUE`, a filter panel is called inside of each module tab.
 #'
-#' @return depending on class of `modules`, `ui_nested_tabs` returns:
-#'   - `teal_module`: instantiated UI of the module
+#' @return
+#' Depending on the class of `modules`, `ui_nested_tabs` returns:
+#'   - `teal_module`: instantiated UI of the module.
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
-#'     calling this function on it.\cr
+#'     calling this function on it.
+#'
 #' `srv_nested_tabs` returns a reactive which returns the active module that corresponds to the selected tab.
 #'
-#' @examples
-#' mods <- teal:::example_modules()
-#' datasets <- teal:::example_datasets()
-#' app <- shinyApp(
-#'   ui = function() {
-#'     tagList(
-#'       teal:::include_teal_css_js(),
-#'       textOutput("info"),
-#'       fluidPage( # needed for nice tabs
-#'         teal:::ui_nested_tabs("dummy", modules = mods, datasets = datasets)
-#'       )
-#'     )
-#'   },
-#'   server = function(input, output, session) {
-#'     active_module <- teal:::srv_nested_tabs(
-#'       "dummy",
-#'       datasets = datasets,
-#'       modules = mods
-#'     )
-#'     output$info <- renderText({
-#'       paste0("The currently active tab name is ", active_module()$label)
-#'     })
-#'   }
-#' )
-#' if (interactive()) {
-#'   shinyApp(app$ui, app$server)
-#' }
 #' @keywords internal
 NULL
 
@@ -120,7 +94,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
-      if (depth >= 2L) div(style = "mt-6"),
+      if (depth >= 2L) tags$div(style = "mt-6"),
       do.call(modules$ui, args)
     )
   )
@@ -263,7 +237,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #' Convert `FilteredData` to reactive list of datasets of the `teal_data` type.
 #'
 #' Converts `FilteredData` object to `teal_data` object containing datasets needed for a specific module.
-#' Please note that if module needs dataset which has a parent, then parent will be also returned.
+#' Please note that if a module needs a dataset which has a parent, then the parent will also be returned.
 #' A hash per `dataset` is calculated internally and returned in the code.
 #'
 #' @param module (`teal_module`) module where needed filters are taken from
@@ -279,7 +253,10 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   datanames <- if (is.null(module$datanames) || identical(module$datanames, "all")) {
     datasets$datanames()
   } else {
-    unique(module$datanames) # todo: include parents! unique shouldn't be needed here!
+    include_parent_datanames(
+      module$datanames,
+      datasets$get_join_keys()
+    )
   }
 
   # list of reactive filtered data
@@ -300,7 +277,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   )
 
   data@verified <- attr(datasets, "verification_status")
-  return(data)
+  data
 }
 
 #' Get the hash of a dataset
@@ -308,7 +285,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
 #' @param datanames (`character`) names of datasets
 #' @param datasets (`FilteredData`) object holding the data
 #'
-#' @return A list of hashes per dataset
+#' @return A list of hashes per dataset.
 #' @keywords internal
 #'
 calculate_hashes <- function(datanames, datasets) {

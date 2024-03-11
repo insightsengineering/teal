@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_inputs.R
 \name{validate_inputs}
 \alias{validate_inputs}
-\title{Send input validation messages to output.}
+\title{Send input validation messages to output}
 \usage{
 validate_inputs(..., header = "Some inputs require attention")
 }
@@ -11,7 +11,7 @@ validate_inputs(..., header = "Some inputs require attention")
 or an optionally named, possibly nested \code{list} of \code{InputValidator}
 objects, see \code{Details}}
 
-\item{header}{\code{character(1)} generic validation message; set to NULL to omit}
+\item{header}{(\code{character(1)}) generic validation message; set to NULL to omit}
 }
 \value{
 Returns NULL if the final validation call passes and a \code{shiny.silent.error} if it fails.
@@ -49,7 +49,7 @@ ui <- fluidPage(
     sidebarPanel(
       selectInput("letter", "select a letter:", c(letters[1:3], LETTERS[4:6])),
       selectInput("number", "select a number:", 1:6),
-      br(),
+      tags$br(),
       selectInput("color", "select a color:",
         c("black", "indianred2", "springgreen2", "cornflowerblue"),
         multiple = TRUE
@@ -66,12 +66,16 @@ server <- function(input, output) {
   # set up input validation
   iv <- InputValidator$new()
   iv$add_rule("letter", sv_in_set(LETTERS, "choose a capital letter"))
-  iv$add_rule("number", ~ if (as.integer(.) \%\% 2L == 1L) "choose an even number")
+  iv$add_rule("number", function(x) {
+    if (as.integer(x) \%\% 2L == 1L) "choose an even number"
+  })
   iv$enable()
   # more input validation
   iv_par <- InputValidator$new()
   iv_par$add_rule("color", sv_required(message = "choose a color"))
-  iv_par$add_rule("color", ~ if (length(.) > 1L) "choose only one color")
+  iv_par$add_rule("color", function(x) {
+    if (length(x) > 1L) "choose only one color"
+  })
   iv_par$add_rule(
     "size",
     sv_between(
@@ -95,7 +99,7 @@ server <- function(input, output) {
       ))
     )
 
-    plot(eruptions ~ waiting, faithful,
+    plot(faithful$eruptions ~ faithful$waiting,
       las = 1, pch = 16,
       col = input[["color"]], cex = input[["size"]]
     )

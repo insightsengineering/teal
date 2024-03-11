@@ -13,16 +13,15 @@ validate_has_data(
 )
 }
 \arguments{
-\item{x}{a data.frame}
+\item{x}{(\code{data.frame})}
 
-\item{min_nrow}{minimum number of rows in \code{x}}
+\item{min_nrow}{(\code{numeric(1)}) Minimum allowed number of rows in \code{x}.}
 
-\item{complete}{\code{logical} default \code{FALSE} when set to \code{TRUE} then complete cases are checked.}
+\item{complete}{(\code{logical(1)}) Flag specifying whether to check only complete cases. Defaults to \code{FALSE}.}
 
-\item{allow_inf}{\code{logical} default \code{TRUE} when set to \code{FALSE} then error thrown if any values are
-infinite.}
+\item{allow_inf}{(\code{logical(1)}) Flag specifying whether to allow infinite values. Defaults to \code{TRUE}.}
 
-\item{msg}{(\code{character(1)}) additional message to display alongside the default message.}
+\item{msg}{(\code{character(1)}) Additional message to display alongside the default message.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -41,15 +40,15 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$plot <- renderPlot({
-    df <- iris[iris$Sepal.Length <= input$len, ]
+    iris_df <- iris[iris$Sepal.Length <= input$len, ]
     validate_has_data(
-      iris_f,
+      iris_df,
       min_nrow = 10,
       complete = FALSE,
       msg = "Please adjust Max Length of Sepal"
     )
 
-    hist(iris_f$Sepal.Length, breaks = 5)
+    hist(iris_df$Sepal.Length, breaks = 5)
   })
 }
 if (interactive()) {

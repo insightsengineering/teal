@@ -1,6 +1,6 @@
 testthat::test_that("within.teal_data_module returns an object with teal_data_module class", {
   tdm <- teal_data_module(
-    ui = function(id) div(),
+    ui = function(id) tags$div(),
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         shiny::reactive(teal.data::teal_data(IRIS = iris))
@@ -8,7 +8,7 @@ testthat::test_that("within.teal_data_module returns an object with teal_data_mo
     }
   )
 
-  tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name_linter.
+  tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name.
 
   testthat::expect_s3_class(tdm2, "teal_data_module")
 })
@@ -17,7 +17,7 @@ testthat::test_that("eval_code.teal_data_module ui has modified namespace for id
   tdm <- teal_data_module(
     ui = function(id) {
       ns <- NS(id)
-      div(id = ns("element"))
+      tags$div(id = ns("element"))
     },
     server = function(id) NULL
   )
@@ -33,7 +33,7 @@ testthat::test_that("eval_code.teal_data_module ui has modified namespace for id
 
 testthat::test_that("within.teal_data_module modifies the reactive tea_data object", {
   tdm <- teal_data_module(
-    ui = function(id) div(),
+    ui = function(id) tags$div(),
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         shiny::reactive(teal.data::teal_data(IRIS = iris))
@@ -41,7 +41,7 @@ testthat::test_that("within.teal_data_module modifies the reactive tea_data obje
     }
   )
 
-  tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name_linter.
+  tdm2 <- within(tdm, IRIS$id <- seq_len(nrow(IRIS))) # nolint: object_name.
 
   testthat::expect_no_error(
     shiny::testServer(
@@ -58,7 +58,7 @@ testthat::test_that("within.teal_data_module modifies the reactive tea_data obje
 
 testthat::test_that("eval_code.teal_data_module will execute several times until error", {
   tdm <- teal_data_module(
-    ui = function(id) div(),
+    ui = function(id) tags$div(),
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         shiny::reactive(teal.data::teal_data(IRIS = iris))
@@ -82,7 +82,7 @@ testthat::test_that("eval_code.teal_data_module will execute several times until
 
 testthat::test_that("eval_code.teal_data_module throws error when original teal_data_module result is not reactive", {
   tdm <- teal_data_module(
-    ui = function(id) div(),
+    ui = function(id) tags$div(),
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         "I am not reactive, I am a string"
@@ -103,11 +103,11 @@ testthat::test_that("eval_code.teal_data_module throws error when original teal_
 
 testthat::test_that("eval_code.teal_data_module propagates qenv error from the original/first call", {
   tdm <- teal_data_module(
-    ui = function(id) div(),
+    ui = function(id) tags$div(),
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         reactive(
-          within(teal_data(IRIS = iris), "non_existing_var + 1")
+          within(teal.data::teal_data(IRIS = iris), "non_existing_var + 1")
         )
       })
     }
@@ -130,7 +130,7 @@ testthat::test_that("eval_code.teal_data_module propagates qenv error from the o
 
 testthat::test_that("eval_code.teal_data_module handles an arbitrary object (other than `teal_data` or `qenv.error`)", {
   tdm <- teal_data_module(
-    ui = function(id) div(),
+    ui = function(id) tags$div(),
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         reactive(list())
@@ -155,7 +155,7 @@ testthat::test_that("eval_code.teal_data_module handles an arbitrary object (oth
 
 testthat::test_that("eval_code.teal_data_module handles a `NULL` result", {
   tdm <- teal_data_module(
-    ui = function(id) div(),
+    ui = function(id) tags$div(),
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         reactive(NULL)

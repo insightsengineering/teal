@@ -2,6 +2,7 @@ withr::local_options(lifecycle_verbosity = "quiet")
 
 # ---- constructor ----
 testthat::test_that("new_tdata accepts reactive and not reactive MAE and data.frames", {
+  testthat::skip_if_not_installed("MultiAssayExperiment")
   utils::data(miniACC, package = "MultiAssayExperiment")
 
   testthat::expect_no_error(
@@ -179,6 +180,7 @@ testthat::test_that("get_code_tdata returns character code", {
 
 # ---- tdata2env ----
 testthat::test_that("tdata2env returns environment containing tdata contents ", {
+  testthat::skip_if_not_installed("MultiAssayExperiment")
   utils::data(miniACC, package = "MultiAssayExperiment")
   my_tdata <- new_tdata(data = list(iris = iris, mae = reactive(miniACC)))
 
@@ -218,7 +220,7 @@ testthat::test_that("join_keys returns join_keys object if it exists inside tdat
 code <- c("iris <- iris", "mtcars <- mtcars")
 data_tdata <- teal::new_tdata(list(iris = iris, mtcars = mtcars), code)
 data_teal_data <- teal.data::teal_data(iris = iris, mtcars = mtcars, code = code)
-data_reactive <- reactive(teal.data::teal_data(iris = iris, mtcars = mtcars, code = code))
+data_reactive <- shiny::reactive(teal.data::teal_data(iris = iris, mtcars = mtcars, code = code))
 
 testthat::test_that("as_tdata accepts all possible inputs", {
   testthat::expect_no_error(as_tdata(data_tdata))
@@ -250,9 +252,8 @@ testthat::test_that("datasets are maintained during conversion", {
   testthat::expect_identical(datasets_teal_data, datasets_tdata)
 })
 
-testthat::test_that("code is maintained during conversion", {
+testthat::test_that("as_tdata maintains code during conversion", {
   data_teal_data_downgraded <- as_tdata(data_teal_data)
-  skip("skipped until we resolve handling code in teal.data:::new_teal_data")
   testthat::expect_identical(
     teal.code::get_code(data_teal_data),
     shiny::isolate(attr(data_teal_data_downgraded, "code")())

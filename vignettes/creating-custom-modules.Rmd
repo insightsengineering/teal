@@ -1,7 +1,9 @@
 ---
 title: "Creating Custom Modules"
 author: "NEST CoreDev"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Creating Custom Modules}
   %\VignetteEngine{knitr::rmarkdown}
@@ -10,61 +12,25 @@ vignette: >
 
 ## Introduction
 
-The `teal` framework provides a large number of analysis modules to be incorporated into `teal` applications.
+The `teal` framework provides a large catalog of plug-in-ready analysis modules to be incorporated into `teal` applications.
 However, it is also possible to create your own modules using the `module` function.
-
-Here is an implementation of a simple module:
-
-```{r, message=FALSE}
-library(teal)
-example_module <- function(label = "example teal module") {
-  checkmate::assert_string(label)
-  module(
-    label,
-    server = function(id, data) {
-      checkmate::assert_class(data, "reactive")
-      checkmate::assert_class(isolate(data()), "teal_data")
-      moduleServer(id, function(input, output, session) {
-        ns <- session$ns
-        updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
-        output$text <- renderPrint(data()[[input$dataname]])
-      })
-    },
-    ui = function(id) {
-      ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = verbatimTextOutput(ns("text")),
-        encoding = selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
-      )
-    },
-    datanames = "all"
-  )
-}
-```
-
-which can be added into `teal` apps using `example_module(label = "Label for tab")`.
 
 ## Components of a module
 
 ### UI function
 
 This function contains the UI required for the module.
-It should be a function with at least the arguments `id`.
-It can also contain the argument `data` for access to the application data.
+It should be a function with at least the argument `id`.
 See the server section below for more details.
-
-The UI function can contain standard UI components alongside additional widgets provided by the `teal.widgets` package.
-In the example above we are using the `standard_layout` function of `teal.widgets` which generates a layout
-including an encoding panel on the left and main output covering the rest of the module's UI.
 
 ### Server function
 
-This function contains the shiny server logic for the module and should be of the form:
+This function contains the `shiny` server logic for the module and should be of the form:
 
 ```{r, eval=FALSE}
 function(
     id,
-    data, # optional; use if module needs access application data
+    data, # optional; use if module needs access to application data
     filter_panel_api, # optional; use if module needs access to filter panel; see teal.slice
     reporter, # optional; use if module supports reporting; see reporting vignette
     ...) {
@@ -74,18 +40,54 @@ function(
 }
 ```
 
-When used inside a `teal` application called with `init`, the `data` argument is a named list of reactive `data.frame`s containing the data after having been filtered through the filter panel.
-It is of the `tdata` type and can be created using the `new_tdata` function.
+The data that arrives in the module is a `teal_data` object, the data container used throughout the `teal` application.
+`teal_data` is passed to the `init` function when building the application and, after filtering by the filter panel, it is passed to modules, wrapped in a reactive expression.
+The `teal_data` class allows modules to track the `R` code that they execute so that module outputs can be reproduced.
+See the `teal.data` package for a [detailed explanation](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data-reproducibility.html).
 
-## A more complicated example
+## Example modules
 
-The `teal` framework also provides:
+### Viewing data
 
-- A way to create modules which then generate the R code needed to reproduce their outputs; these modules use the [`teal.code`](https://insightsengineering.github.io/teal.code/) package.
+Here is a minimal module that allows the user to select and view one dataset at a time.
+By default, filtering is enabled for all datasets.
+Note that dataset choices are specified by the `datanames` property of the `teal_data` container.
 
-The annotated example below demonstrates these features within a simple histogram module, allowing app developers to choose the data and columns that their app users can select for display in a histogram.
+```{r, message=FALSE}
+library(teal)
 
-See the package and function documentation for further details.
+example_module <- function(label = "example teal module") {
+  checkmate::assert_string(label)
+
+  module(
+    label = label,
+    server = function(id, data) {
+      checkmate::assert_class(data, "reactive")
+      checkmate::assert_class(isolate(data()), "teal_data")
+
+      moduleServer(id, function(input, output, session) {
+        updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
+      })
+    },
+    ui = function(id) {
+      ns <- NS(id)
+      sidebarLayout(
+        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
+        mainPanel(verbatimTextOutput(ns("dataset")))
+      )
+    }
+  )
+}
+```
+
+### Interacting with data and viewing code
+
+The example below allows the user to interact with the data to create a simple visualization.
+In addition, it prints the code that can be used to reproduce that visualization.
 
 ```{r}
 library(teal)
@@ -94,35 +96,34 @@ library(teal)
 # allows for selecting dataset and one of its numeric variables
 ui_histogram_example <- function(id) {
   ns <- NS(id)
-  teal.widgets::standard_layout(
-    output = plotOutput(ns("plot")),
-    encoding = div(
+  sidebarLayout(
+    sidebarPanel(
       selectInput(ns("datasets"), "select dataset", choices = NULL),
       selectInput(ns("numerics"), "select numeric variable", choices = NULL)
     ),
-    # we have a show R code button to show the code needed
-    # to generate the histogram
-    forms = teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
+    mainPanel(
+      plotOutput(ns("plot")),
+      verbatimTextOutput(ns("code"))
+    ),
   )
 }
 
 # server function for the module
 # presents datasets and numeric variables for selection
 # displays a histogram of the selected variable
+# displays code to reproduce the histogram
 srv_histogram_example <- function(id, data) {
   checkmate::assert_class(data, "reactive")
   checkmate::assert_class(isolate(data()), "teal_data")
 
   moduleServer(id, function(input, output, session) {
-    ns <- session$ns
-
     # update dataset and variable choices
     # each selection stored in separate reactive expression
-    updateSelectInput(session, "datasets", "select dataset", choices = isolate(datanames(data())))
+    updateSelectInput(inputId = "datasets", choices = isolate(datanames(data())))
     observe({
       req(dataset())
       nums <- vapply(data()[[dataset()]], is.numeric, logical(1L))
-      updateSelectInput(session, "numerics", "select numeric variable", choices = names(nums[nums]))
+      updateSelectInput(inputId = "numerics", choices = names(nums[nums]))
     })
     dataset <- reactive(input$datasets)
     selected <- reactive(input$numerics)
@@ -147,12 +148,12 @@ srv_histogram_example <- function(id, data) {
       plot_code_q()[["p"]]
     })
 
-    # code upon clicking 'Show R Code' button
-    teal.widgets::verbatim_popup_srv(
-      id = "rcode",
-      verbatim_content = reactive(teal.code::get_code(plot_code_q())),
-      title = "R Code"
-    )
+    # view code
+    output$code <- renderPrint({
+      plot_code_q() %>%
+        get_code() %>%
+        cat()
+    })
   })
 }
 
@@ -167,14 +168,9 @@ tm_histogram_example <- function(label) {
 }
 ```
 
-An example `teal` application using this module is shown below:
-
-<img src="images/custom_app.png" alt="Teal Duck" style="width: 100%;"/>
-
+This module is ready to be used in a `teal` app.
 
 ```{r}
-library(teal)
-
 app <- init(
   data = teal_data(IRIS = iris, NPK = npk),
   modules = tm_histogram_example(label = "Histogram Module"),
@@ -186,13 +182,11 @@ if (interactive()) {
 }
 ```
 
-## `shiny` input cycle
-
-When `teal` modules are run inside the `init` the initial shiny input cycle is empty for each of them.
-In practice, this means that some inputs might be initialized with `NULL` value, unnecessary triggering some observers.
-A developer has to be aware of this situation as often it will require `shiny::req` or `ignoreInit` argument in observers or `reactive` expressions.
-This side effect is caused by the `shiny::insertUI` function.
-We are aware of this inconvenience and have already started to look for a solution.
+<img src="images/custom_app.png" alt="Teal Duck" style="width: 100%;"/>
 
 ## Adding reporting to a module
-Refer to `vignette("adding_support_for_reporting")` to read about adding support for reporting in your `teal` module.
+Refer to [this vignette](adding-support-for-reporting.html) to read about adding support for reporting in your `teal` module.
+
+## Using standard widgets in your custom module
+
+The [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/latest-tag/) package provides various widgets which can be leveraged to quickly create standard elements in your custom module.
