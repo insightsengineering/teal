@@ -321,13 +321,14 @@ Get the active datasets that can be accessed via the filter panel of the current
 \subsection{Method \code{get_active_data_filters()}}{
 Get the active filter variables from a dataset in the \code{teal} app.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_data_filters(dataset_name)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_data_filters(dataset_name = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataset_name}}{(character) The name of the dataset to get the filter variables from.}
+\item{\code{dataset_name}}{(character) The name of the dataset to get the filter variables from.
+If \code{NULL}, the filter variables for all the datasets will be returned in a list.}
 }
 \if{html}{\out{</div>}}
 }
