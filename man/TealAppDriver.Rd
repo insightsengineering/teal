@@ -17,13 +17,6 @@ on a \code{teal} application for implementing \code{shinytest2} tests.
 \section{Super class}{
 \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} -> \code{TealAppDriver}
 }
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{app}}{The instance of the \code{TealAppDriver} object}
-}
-\if{html}{\out{</div>}}
-}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -31,6 +24,7 @@ on a \code{teal} application for implementing \code{shinytest2} tests.
 \item \href{#method-TealAppDriver-expect_no_shiny_error}{\code{TealAppDriver$expect_no_shiny_error()}}
 \item \href{#method-TealAppDriver-expect_no_validation_error}{\code{TealAppDriver$expect_no_validation_error()}}
 \item \href{#method-TealAppDriver-expect_validation_error}{\code{TealAppDriver$expect_validation_error()}}
+\item \href{#method-TealAppDriver-set_input}{\code{TealAppDriver$set_input()}}
 \item \href{#method-TealAppDriver-navigate_teal_tab}{\code{TealAppDriver$navigate_teal_tab()}}
 \item \href{#method-TealAppDriver-get_active_ns}{\code{TealAppDriver$get_active_ns()}}
 \item \href{#method-TealAppDriver-helper_NS}{\code{TealAppDriver$helper_NS()}}
@@ -140,7 +134,7 @@ Object of class \code{TealAppDriver}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-expect_no_shiny_error}{}}}
 \subsection{Method \code{expect_no_shiny_error()}}{
 Check if the app has shiny errors. This checks for global shiny errors.
-Note that any shiny errors dependant on shiny server render will only be captured after the teal module tab
+Note that any shiny errors dependent on shiny server render will only be captured after the teal module tab
 is visited because shiny will not trigger server computations when the tab is invisible.
 So, navigate to the module tab you want to test before calling this function.
 Although, this catches errors hidden in the other module tabs if they are already rendered.
@@ -170,6 +164,30 @@ Check if the app has validation errors. This checks for global shiny validation 
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-set_input"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-set_input}{}}}
+\subsection{Method \code{set_input()}}{
+Set the input in the \code{teal} app.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_input(input_id, value, ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input_id}}{(character) The shiny input id with it's complete name space.}
+
+\item{\code{value}}{The value to set the input to.}
+
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-navigate_teal_tab"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-navigate_teal_tab}{}}}
 \subsection{Method \code{navigate_teal_tab()}}{
@@ -185,7 +203,7 @@ Navigate the teal tabs in the \code{teal} app.
 and it should start with the most parent level tab.
 Note: In case the teal tab group has duplicate names, the first tab will be selected,
 If you wish to select the second tab with the same name, use the suffix "_1".
-If you wish to select the third tab with the same name, use the siffix "_2" and so on.}
+If you wish to select the third tab with the same name, use the suffix "_2" and so on.}
 }
 \if{html}{\out{</div>}}
 }
@@ -198,7 +216,7 @@ The \code{TealAppDriver} object invisibly.
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_ns}{}}}
 \subsection{Method \code{get_active_ns()}}{
 Get the active shiny name space for the Module content and the Filter panel.
-Note that in the case of the filter panel, the name space is constant when it is not moudle specific.
+Note that in the case of the filter panel, the name space is constant when it is not module specific.
 However, module specific filter panel will have the name space linked with the module name space.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_ns(component)}\if{html}{\out{</div>}}

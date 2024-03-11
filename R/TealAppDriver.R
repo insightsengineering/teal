@@ -66,7 +66,7 @@ TealAppDriver <- R6::R6Class( # nolint
     },
     #' @description
     #' Check if the app has shiny errors. This checks for global shiny errors.
-    #' Note that any shiny errors dependant on shiny server render will only be captured after the teal module tab
+    #' Note that any shiny errors dependent on shiny server render will only be captured after the teal module tab
     #' is visited because shiny will not trigger server computations when the tab is invisible.
     #' So, navigate to the module tab you want to test before calling this function.
     #' Although, this catches errors hidden in the other module tabs if they are already rendered.
@@ -114,7 +114,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' and it should start with the most parent level tab.
     #' Note: In case the teal tab group has duplicate names, the first tab will be selected,
     #' If you wish to select the second tab with the same name, use the suffix "_1".
-    #' If you wish to select the third tab with the same name, use the siffix "_2" and so on.
+    #' If you wish to select the third tab with the same name, use the suffix "_2" and so on.
     #'
     #' @return The `TealAppDriver` object invisibly.
     navigate_teal_tab = function(tabs) {
@@ -133,7 +133,7 @@ TealAppDriver <- R6::R6Class( # nolint
     },
     #' @description
     #' Get the active shiny name space for the Module content and the Filter panel.
-    #' Note that in the case of the filter panel, the name space is constant when it is not moudle specific.
+    #' Note that in the case of the filter panel, the name space is constant when it is not module specific.
     #' However, module specific filter panel will have the name space linked with the module name space.
     #'
     #' @param component (character) The component to get the active name space for.
