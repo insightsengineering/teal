@@ -11,7 +11,10 @@ testthat::test_that("e2e: teal app with landing_popup_module initializes with no
   )
 
   app$wait_for_idle(timeout = default_idle_timeout)
-  app$expect_no_shiny_error()
+  testthat::expect_equal(
+    app$get_text("#landingpopup b"),
+    "A welcome message!"
+  )
   app$stop()
 })
 
