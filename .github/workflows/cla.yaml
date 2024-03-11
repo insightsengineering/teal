@@ -4,7 +4,7 @@ on:
   issue_comment:
     types:
       - created
-  # For PRs originating from forks
+  # For PRs that originate from forks
   pull_request_target:
     types:
       - opened
