@@ -18,19 +18,19 @@ testthat::test_that("e2e: teal_slices filters are initialized when global filter
   testthat::expect_identical(app$get_active_data_filters("iris"), "Species")
   testthat::expect_identical(app$get_active_data_filters("mtcars"), c("cyl", "drat", "gear"))
   testthat::expect_identical(
-    app$get_filter_selection_value("iris", "Species"),
+    app$get_active_filter_selection("iris", "Species"),
     c("setosa", "versicolor", "virginica")
   )
   testthat::expect_identical(
-    app$get_filter_selection_value("mtcars", "cyl"),
+    app$get_active_filter_selection("mtcars", "cyl"),
     c("4", "6")
   )
   testthat::expect_identical(
-    app$get_filter_selection_value("mtcars", "drat", is_numeric = TRUE),
+    app$get_active_filter_selection("mtcars", "drat", is_numeric = TRUE),
     c(3, 4)
   )
   testthat::expect_identical(
-    app$get_filter_selection_value("mtcars", "gear"),
+    app$get_active_filter_selection("mtcars", "gear"),
     c("3", "4", "5")
   )
   app$stop()
@@ -60,15 +60,15 @@ testthat::test_that("e2e: teal_slices filters are initialized when module specif
   testthat::expect_identical(app$get_active_data_filters("iris"), "Species")
   testthat::expect_identical(app$get_active_data_filters("mtcars"), "cyl")
   testthat::expect_identical(
-    app$get_filter_selection_value("iris", "Species"),
+    app$get_active_filter_selection("iris", "Species"),
     c("setosa", "versicolor", "virginica")
   )
   testthat::expect_identical(
-    app$get_filter_selection_value("mtcars", "cyl"),
+    app$get_active_filter_selection("mtcars", "cyl"),
     c("4", "6")
   )
-  testthat::expect_null(app$get_filter_selection_value("mtcars", "drat", is_numeric = TRUE))
-  testthat::expect_null(app$get_filter_selection_value("mtcars", "gear"))
+  testthat::expect_null(app$get_active_filter_selection("mtcars", "drat", is_numeric = TRUE))
+  testthat::expect_null(app$get_active_filter_selection("mtcars", "gear"))
 
   app$navigate_teal_tab("Module_2")
   app$wait_for_idle(timeout = default_idle_timeout)
@@ -76,25 +76,25 @@ testthat::test_that("e2e: teal_slices filters are initialized when module specif
   testthat::expect_identical(app$get_active_data_filters("iris"), "Species")
   testthat::expect_identical(app$get_active_data_filters("mtcars"), c("drat", "gear"))
   testthat::expect_identical(
-    app$get_filter_selection_value("iris", "Species"),
+    app$get_active_filter_selection("iris", "Species"),
     c("setosa", "versicolor", "virginica")
   )
   testthat::expect_identical(
-    app$get_filter_selection_value("mtcars", "drat", is_numeric = TRUE),
+    app$get_active_filter_selection("mtcars", "drat", is_numeric = TRUE),
     c(3, 4)
   )
   testthat::expect_identical(
-    app$get_filter_selection_value("mtcars", "gear"),
+    app$get_active_filter_selection("mtcars", "gear"),
     c("3", "4", "5")
   )
-  testthat::expect_null(app$get_filter_selection_value("mtcars", "cyl"))
+  testthat::expect_null(app$get_active_filter_selection("mtcars", "cyl"))
 
-  app$set_filter_selection_value("iris", "Species", "setosa")
+  app$set_active_filter_selection("iris", "Species", "setosa")
   app$navigate_teal_tab("Module_1")
   app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_identical(
-    app$get_filter_selection_value("iris", "Species"),
+    app$get_active_filter_selection("iris", "Species"),
     "setosa"
   )
   app$stop()

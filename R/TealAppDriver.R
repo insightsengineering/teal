@@ -166,7 +166,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @param input_id (character) The shiny input id to get the value from.
     #'
     #' @return The value of the shiny input.
-    get_module_input = function(input_id) {
+    get_active_module_input = function(input_id) {
       self$get_value(input = sprintf("%s-%s", self$get_active_ns("module"), input_id))
     },
     #' @description
@@ -176,7 +176,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @param output_id (character) The shiny output id to get the value from.
     #'
     #' @return The value of the shiny output.
-    get_module_output = function(output_id) {
+    get_active_module_output = function(output_id) {
       self$get_value(output = sprintf("%s-%s", self$get_active_ns("module"), output_id))
     },
     #' @description
@@ -257,7 +257,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @param is_numeric (logical) If the variable is numeric or not.
     #'
     #' @return The value of the active filter selection.
-    get_filter_selection_value = function(dataset_name, var_name, is_numeric = FALSE) {
+    get_active_filter_selection = function(dataset_name, var_name, is_numeric = FALSE) {
       selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
       self$get_value(
         input = sprintf(
@@ -332,7 +332,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @param is_numeric (logical) If the variable is numeric or not.
     #'
     #' @return The `TealAppDriver` object invisibly.
-    set_filter_selection_value = function(dataset_name, var_name, input, is_numeric = FALSE) {
+    set_active_filter_selection = function(dataset_name, var_name, input, is_numeric = FALSE) {
       selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
       self$set_inputs(
         !!sprintf(

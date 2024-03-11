@@ -73,7 +73,7 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
   )
 
   app$add_filter_var("iris", "Species")
-  app$set_filter_selection_value("iris", "Species", c("setosa", "virginica"))
+  app$set_active_filter_selection("iris", "Species", c("setosa", "virginica"))
 
   app$open_filter_manager()
 
@@ -170,7 +170,7 @@ testthat::test_that("e2e: Snapshot manager can reset the state", {
   )
 
   app$add_filter_var("iris", "Species")
-  app$set_filter_selection_value("iris", "Species", c("setosa", "virginica"))
+  app$set_active_filter_selection("iris", "Species", c("setosa", "virginica"))
 
   app$open_filter_manager()
 
