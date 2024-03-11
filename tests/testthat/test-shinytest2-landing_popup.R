@@ -11,14 +11,14 @@ testthat::test_that("e2e: teal app with landing_popup_module initializes with no
   )
 
   app$wait_for_idle(timeout = default_idle_timeout)
-  testthat::expect_equal(
+  testthat::testthat::expect_equal(
     app$get_text("#landingpopup b"),
     "A welcome message!"
   )
   app$stop()
 })
 
-test_that("e2e: app with default landing_popup_module creates modal containing a button", {
+testthat::test_that("e2e: app with default landing_popup_module creates modal containing a button", {
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
@@ -28,7 +28,7 @@ test_that("e2e: app with default landing_popup_module creates modal containing a
   )
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  testthat::expect_equal(
+  testthat::testthat::expect_equal(
     app$get_text("#shiny-modal-wrapper .btn-default"),
     "Accept"
   )
@@ -36,7 +36,7 @@ test_that("e2e: app with default landing_popup_module creates modal containing a
   app$stop()
 })
 
-test_that("e2e: when default landing_popup_module is closed, it shows the underlying teal app", {
+testthat::test_that("e2e: when default landing_popup_module is closed, it shows the underlying teal app", {
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
@@ -68,7 +68,7 @@ extract_onclick <- function(id) {
 phash <- function(text) paste0("#", text)
 
 
-test_that("e2e: app with customized landing_popup_module creates modal containing specified title, content and buttons", {
+testthat::test_that("e2e: app with customized landing_popup_module creates modal containing specified title, content and buttons", {
   modal_title <- "Custom Landing Popup Module Title"
   modal_content_message <- "A welcome message!"
   modal_content <- tags$b(modal_content_message, style = "color: red;")
@@ -80,13 +80,13 @@ test_that("e2e: app with customized landing_popup_module creates modal containin
   )
   modal_buttons <-
     tagList(
-      modalButton(modal_btns[[1]]$text),
-      actionButton(
+      shiny::modalButton(modal_btns[[1]]$text),
+      shiny::actionButton(
         modal_btns[[2]]$id,
         label = modal_btns[[2]]$text,
         onclick = modal_btns[[2]]$onclick
       ),
-      actionButton(
+      shiny::actionButton(
         modal_btns[[3]]$id,
         label = modal_btns[[3]]$text,
         onclick = modal_btns[[3]]$onclick
@@ -107,37 +107,37 @@ test_that("e2e: app with customized landing_popup_module creates modal containin
 
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  expect_equal(
+  testthat::expect_equal(
     app$get_text(".modal-title"),
     modal_title
   )
 
-  expect_equal(
+  testthat::expect_equal(
     trimws(app$get_text(".modal-body")),
     modal_content_message
   )
 
-  expect_equal(
+  testthat::expect_equal(
     app$get_text(".btn-default:nth-child(1)"),
     modal_btns[[1]]$text
   )
 
-  expect_equal(
+  testthat::expect_equal(
     app$get_text(phash(modal_btns[[2]]$id)),
     modal_btns[[2]]$text
   )
 
-  expect_equal(
+  testthat::expect_equal(
     extract_onclick(phash(modal_btns[[2]]$id)),
     modal_btns[[2]]$onclick
   )
 
-  expect_equal(
+  testthat::expect_equal(
     app$get_text(phash(modal_btns[[3]]$id)),
     modal_btns[[3]]$text
   )
 
-  expect_equal(
+  testthat::expect_equal(
     extract_onclick(phash(modal_btns[[3]]$id)),
     modal_btns[[3]]$onclick
   )
@@ -145,7 +145,7 @@ test_that("e2e: app with customized landing_popup_module creates modal containin
   app$stop()
 })
 
-test_that("e2e: when customized button in landing_popup_module is clicked, it redirects to a certain page", {
+testthat::test_that("e2e: when customized button in landing_popup_module is clicked, it redirects to a certain page", {
   skip("It actually did not clicked the button.")
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -161,7 +161,7 @@ test_that("e2e: when customized button in landing_popup_module is clicked, it re
   app$click(selector = "#read")
   # app$get_screenshot() still shows the app... :/
 
-  expect_equal(
+  testthat::expect_equal(
     app$get_url(),
     "https://www.google.com/"
   )
