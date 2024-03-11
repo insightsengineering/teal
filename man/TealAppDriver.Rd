@@ -98,28 +98,7 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{(\code{teal_data} or \code{teal_data_module})
-For constructing the data object, refer to \code{\link[=teal_data]{teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.}
-
-\item{\code{modules}}{(\code{list} or \code{teal_modules} or \code{teal_module})
-nested list of \code{teal_modules} or \code{teal_module} objects or a single
-\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
-will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
-more details.}
-
-\item{\code{filter}}{(\code{teal_slices})
-Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
-
-\item{\code{title}}{(\code{shiny.tag} or \code{character(1)})
-The browser window title. Defaults to a title "teal app" with the icon of NEST.
-Can be created using the \code{build_app_title()} or
-by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
-
-\item{\code{header}}{(\code{shiny.tag} or \code{character(1)})
-The header of the app.}
-
-\item{\code{footer}}{(\code{shiny.tag} or \code{character(1)})
-The footer of the app.}
+\item{\code{data, modules, filter, title, header, footer}}{arguments passed to \code{init}}
 
 \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$new}}
 }
@@ -409,15 +388,17 @@ The \code{TealAppDriver} object invisibly.
 \subsection{Method \code{remove_filter_var()}}{
 Remove an active filter variable of a dataset from the active filter variables panel.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$remove_filter_var(dataset_name, var_name)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$remove_filter_var(dataset_name = NULL, var_name = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataset_name}}{(character) The name of the dataset to remove the filter variable from.}
+\item{\code{dataset_name}}{(character) The name of the dataset to remove the filter variable from.
+If \code{NULL}, all the filter variables will be removed.}
 
-\item{\code{var_name}}{(character) The name of the variable to remove from the filter panel.}
+\item{\code{var_name}}{(character) The name of the variable to remove from the filter panel.
+If \code{NULL}, all the filter variables of the dataset will be removed.}
 }
 \if{html}{\out{</div>}}
 }

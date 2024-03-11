@@ -13,23 +13,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @description
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
-    #' @param data (`teal_data` or `teal_data_module`)
-    #' For constructing the data object, refer to [teal_data()] and [teal_data_module()].
-    #' @param modules (`list` or `teal_modules` or `teal_module`)
-    #'   nested list of `teal_modules` or `teal_module` objects or a single
-    #'   `teal_modules` or `teal_module` object. These are the specific output modules which
-    #'   will be displayed in the `teal` application. See [modules()] and [module()] for
-    #'   more details.
-    #' @param filter (`teal_slices`)
-    #'   Specifies the initial filter using [teal_slices()].
-    #' @param title (`shiny.tag` or `character(1)`)
-    #'   The browser window title. Defaults to a title "teal app" with the icon of NEST.
-    #'   Can be created using the `build_app_title()` or
-    #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
-    #' @param header (`shiny.tag` or `character(1)`)
-    #'   The header of the app.
-    #' @param footer (`shiny.tag` or `character(1)`)
-    #'   The footer of the app.
+    #' @param data,modules,filter,title,header,footer arguments passed to `init`
     #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$new`
     #'
     #' @return  Object of class `TealAppDriver`
@@ -62,7 +46,6 @@ TealAppDriver <- R6::R6Class( # nolint
 
       private$set_active_ns()
 
-      self
     },
     #' @description
     #' Check if the app has shiny errors. This checks for global shiny errors.
@@ -214,7 +197,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @description
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
-      displayed_datasets_index <- sapply(
+      displayed_datasets_index <- vapply(
         self$get_html(
           sprintf(
             "#%s-active-filter_active_vars_contents > span",
@@ -228,9 +211,11 @@ TealAppDriver <- R6::R6Class( # nolint
             rvest::html_attr("style")
           style <- ifelse(is.na(style), "", style)
           style != "display: none;"
-        }
+        },
+        logical(1)
       ) %>%
         unname()
+
       available_datasets <- self$get_html(
         sprintf(
           "#%s-active-filter_active_vars_contents",
@@ -247,7 +232,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @param dataset_name (character) The name of the dataset to get the filter variables from.
     get_active_data_filters = function(dataset_name) {
-      sapply(
+      vapply(
         self$get_html(
           sprintf(
             "#%s-active-%s-filter-cards .filter-card-varname",
@@ -260,7 +245,8 @@ TealAppDriver <- R6::R6Class( # nolint
             rvest::read_html() %>%
             rvest::html_text() %>%
             gsub(pattern = "\\s", replacement = "")
-        }
+        },
+        character(1)
       ) %>%
         unname()
     },
@@ -307,18 +293,34 @@ TealAppDriver <- R6::R6Class( # nolint
     #' Remove an active filter variable of a dataset from the active filter variables panel.
     #'
     #' @param dataset_name (character) The name of the dataset to remove the filter variable from.
+    #' If `NULL`, all the filter variables will be removed.
     #' @param var_name (character) The name of the variable to remove from the filter panel.
+    #' If `NULL`, all the filter variables of the dataset will be removed.
     #'
     #' @return The `TealAppDriver` object invisibly.
-    remove_filter_var = function(dataset_name, var_name) {
-      self$click(
-        selector = sprintf(
+    remove_filter_var = function(dataset_name = NULL, var_name = NULL) {
+      if (is.null(dataset_name)) {
+        remove_selector <- sprintf(
+          "#%s-active-remove_all_filters",
+          self$get_active_ns("filter_panel")
+        )
+      } else if (is.null(var_name)) {
+        remove_selector <- sprintf(
+          "#%s-active-%s-remove_filters",
+          self$get_active_ns("filter_panel"),
+          dataset_name
+        )
+      } else {
+        remove_selector <- sprintf(
           "#%s-active-%s-filter-%s_%s-remove",
           self$get_active_ns("filter_panel"),
           dataset_name,
           dataset_name,
           var_name
         )
+      }
+      self$click(
+        selector = remove_selector
       )
       invisible(self)
     },
