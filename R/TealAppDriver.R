@@ -231,24 +231,31 @@ TealAppDriver <- R6::R6Class( # nolint
     #' Get the active filter variables from a dataset in the `teal` app.
     #'
     #' @param dataset_name (character) The name of the dataset to get the filter variables from.
-    get_active_data_filters = function(dataset_name) {
-      vapply(
-        self$get_html(
-          sprintf(
-            "#%s-active-%s-filter-cards .filter-card-varname",
-            self$get_active_ns("filter_panel"),
-            dataset_name
-          )
-        ),
+    #' If `NULL`, the filter variables for all the datasets will be returned in a list.
+    get_active_data_filters = function(dataset_name = NULL) {
+      datasets <- self$get_active_filter_vars()
+      checkmate::assert_subset(dataset_name, datasets)
+      active_filters <- lapply(
+        datasets,
         function(x) {
-          x %>%
-            rvest::read_html() %>%
-            rvest::html_text() %>%
+          self$get_html(
+            sprintf(
+              "#%s-active-%s-filters",
+              self$get_active_ns("filter_panel"),
+              x
+            )
+          ) |>
+            read_html() |>
+            html_nodes(".filter-card-varname") |>
+            html_text() |>
             gsub(pattern = "\\s", replacement = "")
-        },
-        character(1)
-      ) %>%
-        unname()
+        }
+      )
+      names(active_filters) <- datasets
+      if (!is.null(dataset_name)) {
+        active_filters <- active_filters[[dataset_name]]
+      }
+      active_filters
     },
     #' @description
     #' Get the active filter values from the active filter selection of dataset from the filter panel.
