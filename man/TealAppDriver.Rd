@@ -178,7 +178,7 @@ Navigate the teal tabs in the \code{teal} app.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tabs}}{(character) The tabs to navigate to. The order of the tabs is important,
+\item{\code{tabs}}{(character) Labels of tabs to navigate to. The order of the tabs is important,
 and it should start with the most parent level tab.
 Note: In case the teal tab group has duplicate names, the first tab will be selected,
 If you wish to select the second tab with the same name, use the suffix "_1".

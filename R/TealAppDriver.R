@@ -95,7 +95,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @description
     #' Navigate the teal tabs in the `teal` app.
     #'
-    #' @param tabs (character) The tabs to navigate to. The order of the tabs is important,
+    #' @param tabs (character) Labels of tabs to navigate to. The order of the tabs is important,
     #' and it should start with the most parent level tab.
     #' Note: In case the teal tab group has duplicate names, the first tab will be selected,
     #' If you wish to select the second tab with the same name, use the suffix "_1".
@@ -103,14 +103,13 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     navigate_teal_tab = function(tabs) {
-      root <- "root"
       for (tab in tabs) {
         self$set_input(
-          sprintf("teal-main_ui-%s-active_tab", root),
+          sprintf("teal-main_ui-%s-active_tab", private$modules$label),
           get_unique_labels(tab),
           wait_ = FALSE
         )
-        root <- sprintf("%s-%s", root, get_unique_labels(tab))
+        root <- sprintf("%s-%s", private$modules$label, get_unique_labels(tab))
       }
       self$wait_for_idle(timeout = private$idle_timeout)
       private$set_active_ns()
