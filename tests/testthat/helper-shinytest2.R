@@ -3,9 +3,6 @@ library(rvest)
 
 default_idle_timeout <- 20000
 
-
-default_idle_timeout <- 20000
-
 simple_teal_data <- function() {
   data <- within(teal_data(), {
     iris <- iris
