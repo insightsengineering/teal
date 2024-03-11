@@ -11,7 +11,7 @@ testthat::test_that("e2e: teal app with landing_popup_module initializes with no
   )
 
   app$wait_for_idle(timeout = default_idle_timeout)
-  testthat::testthat::expect_equal(
+  testthat::expect_equal(
     app$get_text("#landingpopup b"),
     "A welcome message!"
   )
@@ -28,7 +28,7 @@ testthat::test_that("e2e: app with default landing_popup_module creates modal co
   )
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  testthat::testthat::expect_equal(
+  testthat::expect_equal(
     app$get_text("#shiny-modal-wrapper .btn-default"),
     "Accept"
   )
@@ -68,7 +68,8 @@ extract_onclick <- function(id) {
 phash <- function(text) paste0("#", text)
 
 
-testthat::test_that("e2e: app with customized landing_popup_module creates modal containing specified title, content and buttons", {
+testthat::test_that(
+  "e2e: app with customized landing_popup_module creates modal containing specified title, content and buttons", {
   modal_title <- "Custom Landing Popup Module Title"
   modal_content_message <- "A welcome message!"
   modal_content <- tags$b(modal_content_message, style = "color: red;")
