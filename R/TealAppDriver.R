@@ -214,9 +214,9 @@ TealAppDriver <- R6::R6Class( # nolint
           style <- ifelse(is.na(style), "", style)
           style != "display: none;"
         },
-        logical(1)
-      ) %>%
-        unname()
+        logical(1),
+        USE.NAMES = FALSE
+      )
 
       available_datasets <- self$get_html(
         sprintf(
