@@ -46,16 +46,11 @@ test_that("e2e: when default landing_popup_module is closed, it shows the underl
   )
   app$wait_for_idle(timeout = default_idle_timeout)
 
+  # Button is clicked.
   app$click(selector = "#shiny-modal-wrapper button[data-dismiss='modal']")
 
-  # QUESTION: Is there a better way of checking the name of current module?
-  expect_equal(
-    app$get_html("#teal-main_ui-root-active_tab") %>%
-      rvest::read_html() %>%
-      rvest::html_node("a") %>%
-      rvest::html_attr("data-value"),
-    "example_teal_module"
-  )
+  # There is no more modal displayed.
+  testthat::expect_null(app$get_html("#shiny-modal-wrapper"))
 
   app$stop()
 })
