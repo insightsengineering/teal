@@ -188,8 +188,9 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     set_module_input = function(input_id, value) {
-      self$set_inputs(
-        !!sprintf("%s-%s", self$get_active_ns("module"), input_id) := value
+      self$set_input(
+        sprintf("%s-%s", self$get_active_ns("module"), input_id),
+        value
       )
       invisible(self)
     },
@@ -334,15 +335,16 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @return The `TealAppDriver` object invisibly.
     set_active_filter_selection = function(dataset_name, var_name, input, is_numeric = FALSE) {
       selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-      self$set_inputs(
-        !!sprintf(
+      self$set_input(
+        sprintf(
           "%s-active-%s-filter-%s_%s-inputs-%s",
           self$get_active_ns("filter_panel"),
           dataset_name,
           dataset_name,
           var_name,
           selection_suffix
-        ) := input
+        ),
+        input
       )
       invisible(self)
     },

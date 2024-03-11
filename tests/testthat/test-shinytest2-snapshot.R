@@ -15,7 +15,7 @@ testthat::test_that("e2e: Create empty snapshot", {
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
 
-  app$set_inputs(!!ns("snapshot_name") := "Empty_Snapshot")
+  app$set_input(ns("snapshot_name"), "Empty_Snapshot")
 
   app$click(ns("snapshot_name_accept"))
   app$wait_for_idle(500)
@@ -46,9 +46,7 @@ testthat::test_that("e2e: Downloads empty snapshot", {
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
 
-  app$set_inputs(
-    !!ns("snapshot_name") := "Empty_Snapshot"
-  )
+  app$set_input(ns("snapshot_name"), "Empty_Snapshot")
 
   app$click(ns("snapshot_name_accept"))
   app$wait_for_idle(500)
@@ -86,7 +84,7 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
 
-  app$set_inputs(!!ns("snapshot_name") := "A_Snapshot")
+  app$set_input(ns("snapshot_name"), "A_Snapshot")
 
   app$click(ns("snapshot_name_accept"))
   app$wait_for_idle(500)
