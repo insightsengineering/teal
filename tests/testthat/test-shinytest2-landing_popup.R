@@ -54,7 +54,7 @@ test_that("e2e: when default landing_popup_module is closed, it shows the underl
       rvest::read_html() %>%
       rvest::html_node("a") %>%
       rvest::html_attr("data-value"),
-    "example_teal_data"
+    "example_teal_module"
   )
 
   app$stop()
@@ -69,12 +69,6 @@ extract_onclick <- function(id) {
     rvest::read_html() %>%
     rvest::html_nodes("button") %>%
     rvest::html_attr("onclick")
-}
-extract_text <- function(id) {
-  app$get_html(id) %>%
-    rvest::read_html() %>%
-    rvest::html_text() %>%
-    trimws()
 }
 phash <- function(text) paste0("#", text)
 
@@ -119,22 +113,22 @@ test_that("e2e: app with customized landing_popup_module creates modal containin
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_equal(
-    extract_text(".modal-title"),
+    app$get_text(".modal-title"),
     modal_title
   )
 
   expect_equal(
-    extract_text(".modal-body"),
+    trimws(app$get_text(".modal-body")),
     modal_content_message
   )
 
   expect_equal(
-    extract_text(".btn-default:nth-child(1)"),
+    app$get_text(".btn-default:nth-child(1)"),
     modal_btns[[1]]$text
   )
 
   expect_equal(
-    extract_text(phash(modal_btns[[2]]$id)),
+    app$get_text(phash(modal_btns[[2]]$id)),
     modal_btns[[2]]$text
   )
 
@@ -144,7 +138,7 @@ test_that("e2e: app with customized landing_popup_module creates modal containin
   )
 
   expect_equal(
-    extract_text(phash(modal_btns[[3]]$id)),
+    app$get_text(phash(modal_btns[[3]]$id)),
     modal_btns[[3]]$text
   )
 
