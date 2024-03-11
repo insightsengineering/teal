@@ -46,7 +46,7 @@ test_that("e2e: when default landing_popup_module is closed, it shows the underl
   )
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  app$click(selector = ".btn-default:nth-child(1)")
+  app$click(selector = "#shiny-modal-wrapper button[data-dismiss='modal']")
 
   # QUESTION: Is there a better way of checking the name of current module?
   expect_equal(
