@@ -1,3 +1,5 @@
+# FilteredData ------
+
 #' Drive a `teal` application
 #'
 #' This class inherits the `shinytest2::AppDriver` class and has additional
@@ -9,6 +11,7 @@
 TealAppDriver <- R6::R6Class( # nolint
   "TealAppDriver",
   inherit = shinytest2::AppDriver,
+  # public methods ----
   public = list(
     #' @description
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
@@ -368,7 +371,9 @@ TealAppDriver <- R6::R6Class( # nolint
       invisible(self)
     }
   ),
+  # private members ----
   private = list(
+    # private attributes ----
     data = NULL,
     modules = NULL,
     filter = teal_slices(),
@@ -379,6 +384,7 @@ TealAppDriver <- R6::R6Class( # nolint
     ),
     idle_timeout = 20000, # 20 seconds
     load_timeout = 100000, # 100 seconds
+    # private methods ----
     set_active_ns = function() {
       all_inputs <- self$get_values()$input
       active_tab_inputs <- all_inputs[grepl("-active_tab$", names(all_inputs))]
