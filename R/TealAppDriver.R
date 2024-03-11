@@ -72,8 +72,8 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @description
     #' Check if the app has validation errors. This checks for global shiny validation errors.
     expect_validation_error = function() {
-      testthat::expect_true(
-        !is.null(self$get_html(".shiny-output-error-validation")),
+      testthat::expect_false(
+        is.null(self$get_html(".shiny-output-error-validation")),
         info = "Validation error is not observed"
       )
     },
