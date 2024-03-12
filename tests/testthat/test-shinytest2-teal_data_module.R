@@ -27,13 +27,8 @@ testthat::test_that("e2e: teal_data_module will have a delayed load of datasets"
   )
 
   app$click("teal_data_module-submit")
-
   app$wait_for_idle(timeout = default_idle_timeout)
-
-  testthat::expect_setequal(
-    app$get_active_filter_vars(),
-    c("dataset1", "dataset2")
-  )
+  testthat::expect_setequal(app$get_active_filter_vars(), c("dataset1", "dataset2"))
 
   app$stop()
 })
@@ -53,15 +48,8 @@ testthat::test_that("e2e: teal_data_module fails to proceed without input", {
           shiny::validate(
             shiny::need(input$new_column, "Please provide a new column name")
           )
-          data <- within(
-            teal_data(),
-            {
-              dataset1 <- iris
-              dataset2 <- mtcars
-            }
-          )
-          datanames(data) <- c("dataset1", "dataset2")
-
+          data <- within(teal_data(), dataset1 <- iris)
+          datanames(data) <- c("dataset1")
           data
         })
       })
@@ -97,9 +85,10 @@ testthat::test_that("e2e: teal_data_module adds new column to datasets", {
           )
           data <- within(
             teal_data(),
-            {
-              dataset1 <- dplyr::mutate(iris, !!new_column := sprintf("%s new", .data$Species))
-            },
+            dataset1 <- dplyr::mutate(
+              iris,
+              !!new_column := sprintf("%s new", .data$Species)
+            ),
             new_column = input$new_column
           )
           datanames(data) <- c("dataset1")
