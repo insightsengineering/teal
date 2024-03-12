@@ -149,7 +149,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @return (`string`) The active shiny name space of the snapshot manager
     snapshot_manager_ns = function() {
       sprintf(
-        "%s-%s-%s", app$filter_manager_ns(), "filter_manager", "snapshot_manager"
+        "%s-%s-%s", self$filter_manager_ns(), "filter_manager", "snapshot_manager"
       )
     },
     #' @description
@@ -353,9 +353,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     open_filter_manager = function() {
-      ns <- shiny::NS(self$filter_manager_ns())
-
-      self$click(ns("show"))
+      self$click(shiny::NS(self$filter_manager_ns(), "show"))
       self$wait_for_idle(500)
       invisible(self)
     }
