@@ -59,7 +59,7 @@ testthat::test_that("e2e: when default landing_popup_module is closed, it shows 
 # customized landing_popup_module ---------------------------------------------------------------------------------
 
 
-extract_onclick <- function(id) {
+extract_onclick <- function(app, id) {
   app$get_html(id) %>%
     rvest::read_html() %>%
     rvest::html_nodes("button") %>%
