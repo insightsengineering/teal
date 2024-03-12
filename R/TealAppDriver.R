@@ -120,6 +120,9 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return (`list`) The list of active shiny name space of the teal components.
     active_ns = function() {
+      if (identical(private$ns$module, character(0))) {
+        private$set_active_ns()
+      }
       private$ns
     },
     #' @description
@@ -127,6 +130,9 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return (`string`) The active shiny name space of the component.
     active_module_ns = function() {
+      if (identical(private$ns$module, character(0))) {
+        private$set_active_ns()
+      }
       private$ns$module
     },
     #' @description
@@ -134,6 +140,9 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return (`string`) The active shiny name space of the component.
     active_filters_ns = function() {
+      if (identical(private$ns$filter_panel, character(0))) {
+        private$set_active_ns()
+      }
       private$ns$filter_panel
     },
     #' @description
@@ -141,6 +150,9 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return (`string`) The active shiny name space of the component.
     filter_manager_ns = function() {
+      if (identical(private$ns$filter_manager, character(0))) {
+        private$set_active_ns()
+      }
       private$ns$filter_manager
     },
     #' @description
@@ -388,9 +400,9 @@ TealAppDriver <- R6::R6Class( # nolint
     modules = NULL,
     filter = teal_slices(),
     ns = list(
-      module = NULL,
-      filter_panel = NULL,
-      filter_manager = NULL
+      module = character(0),
+      filter_panel = character(0),
+      filter_manager = character(0)
     ),
     idle_timeout = 20000, # 20 seconds
     load_timeout = 100000, # 100 seconds
