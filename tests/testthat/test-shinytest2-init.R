@@ -46,3 +46,57 @@ testthat::test_that("e2e: init creates UI containing specified title, favicon, h
   )
   app$stop()
 })
+
+testthat::test_that("e2e: teal app initializes with Show R Code modal", {
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
+    modules = example_module(label = "Example Module")
+  )
+  app$wait_for_idle(timeout = default_idle_timeout)
+
+  # Check if button exists.
+  button_selector <- "#teal-main_ui-root-example_module-module-rcode-button"
+  testthat::expect_equal(
+    app$get_text(button_selector),
+    "Show R code"
+  )
+
+  app$click(selector = button_selector)
+
+  # Check header and title content.
+  testthat::expect_equal(
+    app$get_text("#shiny-modal > div > div > div.modal-header > h4"),
+    "Example Code"
+  )
+  testthat::expect_equal(
+    app$get_text("#teal-main_ui-root-example_module-module-rcode-copy_button1"),
+    "Copy to Clipboard"
+  )
+  testthat::expect_equal(
+    app$get_text("#shiny-modal > div > div > div.modal-body > div > button:nth-child(2)"),
+    "Dismiss"
+  )
+
+  # Check R code output.
+  r_code <- app$get_text("#teal-main_ui-root-example_module-module-rcode-verbatim_content")
+
+  greplf <- function(text, content = r_code) {
+    grepl(text, content, fixed = TRUE)
+  }
+
+  testthat::expect_true(greplf("# Add any code to install/load your NEST environment here"))
+  testthat::expect_true(greplf("library(teal.code)"))
+  testthat::expect_true(greplf("stopifnot(rlang::hash("))
+
+  # Check footer buttons.
+  testthat::expect_equal(
+    app$get_text("#teal-main_ui-root-example_module-module-rcode-copy_button2"),
+    "Copy to Clipboard"
+  )
+  testthat::expect_equal(
+    app$get_text("#shiny-modal > div > div > div.modal-footer > button:nth-child(2)"),
+    "Dismiss"
+  )
+
+  app$stop()
+})
