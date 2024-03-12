@@ -104,8 +104,9 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @return The `TealAppDriver` object invisibly.
     navigate_teal_tab = function(tabs) {
       for (tab in tabs) {
+        root <- "root"
         self$set_input(
-          sprintf("teal-main_ui-%s-active_tab", private$modules$label),
+          sprintf("teal-main_ui-%s-active_tab", root),
           get_unique_labels(tab),
           wait_ = FALSE
         )
