@@ -26,9 +26,7 @@ testthat::test_that("e2e: init creates UI containing specified title, favicon, h
   app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_equal(
-    app$get_html("head > title")[1] %>%
-      rvest::read_html() %>%
-      rvest::html_text(),
+    app$get_text("head > title")[1],
     app_title
   )
   testthat::expect_equal(
@@ -38,21 +36,13 @@ testthat::test_that("e2e: init creates UI containing specified title, favicon, h
       rvest::html_attr("href"),
     app_favicon
   )
-  testthat::expect_true(
-    grepl(
-      app_header,
-      app$get_html("header") %>%
-        rvest::read_html() %>%
-        rvest::html_text()
-    )
+  testthat::expect_match(
+    app$get_text("header"),
+    app_header
   )
-  testthat::expect_true(
-    grepl(
-      app_footer,
-      app$get_html("footer") %>%
-        rvest::read_html() %>%
-        rvest::html_text()
-    )
+  testthat::expect_match(
+    app$get_text("footer"),
+    app_footer
   )
   app$stop()
 })

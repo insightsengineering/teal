@@ -221,15 +221,12 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         USE.NAMES = FALSE
       )
 
-      available_datasets <- self$get_html(
+      available_datasets <- self$get_text(
         sprintf(
-          "#%s-active-filter_active_vars_contents",
+          "#%s-active-filter_active_vars_contents .filter_panel_dataname",
           self$active_filters_ns()
         )
-      ) %>%
-        read_html() %>%
-        html_elements(".filter_panel_dataname") %>%
-        html_text()
+      )
       available_datasets[displayed_datasets_index]
     },
     #' @description
@@ -243,16 +240,13 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       active_filters <- lapply(
         datasets,
         function(x) {
-          self$get_html(
+          self$get_text(
             sprintf(
-              "#%s-active-%s-filters",
+              "#%s-active-%s-filters .filter-card-varname",
               self$active_filters_ns(),
               x
             )
-          ) %>%
-            read_html() %>%
-            html_nodes(".filter-card-varname") %>%
-            html_text() %>%
+          ) |>
             gsub(pattern = "\\s", replacement = "")
         }
       )

@@ -12,19 +12,15 @@ testthat::test_that("e2e: reporter tab is only created when a module has reporte
     rvest::read_html() %>%
     rvest::html_elements("a")
   reporter_tabs <- setNames(
-    teal_tabs %>%
-      rvest::html_attr("data-value"),
-    teal_tabs %>%
-      rvest::html_text()
+    rvest::html_attr(teal_tabs, "data-value"),
+    rvest::html_text(teal_tabs)
   )
   teal_tabs <- app_without_reporter$get_html(selector = "#teal-main_ui-root-active_tab") %>%
     rvest::read_html() %>%
     rvest::html_elements("a")
   non_reporter_tabs <- setNames(
-    teal_tabs %>%
-      rvest::html_attr("data-value"),
-    teal_tabs %>%
-      rvest::html_text()
+    rvest::html_attr(teal_tabs, "data-value"),
+    rvest::html_text(teal_tabs)
   )
 
   testthat::expect_identical(

@@ -105,17 +105,7 @@ testthat::test_that("e2e: all the nested teal modules are initiated as expected"
       )
     )
   )
-  app_modules <- sapply(
-    app$get_html(selector = "ul.shiny-bound-input"),
-    function(x) {
-      el <- rvest::read_html(x)
-      el %>%
-        rvest::html_elements("li a") %>%
-        rvest::html_text()
-    },
-    USE.NAMES = FALSE
-  ) %>%
-    unlist()
+  app_modules <- app$get_text(selector = "ul.shiny-bound-input li a")
   testthat::expect_identical(
     app_modules,
     c(
