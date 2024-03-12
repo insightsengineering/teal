@@ -67,9 +67,19 @@ testthat::test_that("e2e: all the nested teal modules are initiated as expected"
       )
     )
   )
-  app_modules <- get_app_module_tabs(app)
+  app_modules <- sapply(
+    app$get_html(selector = "ul.shiny-bound-input"),
+    function(x) {
+      el <- rvest::read_html(x)
+      el %>%
+        rvest::html_elements("li a") %>%
+        rvest::html_text()
+    },
+    USE.NAMES = FALSE
+  ) %>%
+    unlist()
   testthat::expect_identical(
-    app_modules$tab_name,
+    app_modules,
     c(
       "Example Module", "Nested Modules", "Nested 1", "Nested 2",
       "Sub Nested Modules", "Nested 1", "Nested 1"

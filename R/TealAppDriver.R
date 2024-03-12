@@ -257,10 +257,10 @@ TealAppDriver <- R6::R6Class( # nolint
               self$active_filters_ns(),
               x
             )
-          ) |>
-            read_html() |>
-            html_nodes(".filter-card-varname") |>
-            html_text() |>
+          ) %>%
+            read_html() %>%
+            html_nodes(".filter-card-varname") %>%
+            html_text() %>%
             gsub(pattern = "\\s", replacement = "")
         }
       )
