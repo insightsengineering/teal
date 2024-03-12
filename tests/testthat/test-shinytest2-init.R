@@ -23,6 +23,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   )
 
   app$click(selector = button_selector)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Check header and title content.
   testthat::expect_equal(
@@ -30,7 +31,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
     "SessionInfo"
   )
   testthat::expect_equal(
-    app$get_text(sprintf("#%s-copy_button1", app$active_module_ns())),
+    app$get_text("#teal-sessionInfo-copy_button1"),
     "Copy to Clipboard"
   )
   testthat::expect_equal(
@@ -39,7 +40,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   )
 
   # Check session info output.
-  session_info <- app$get_text(sprintf("#%s-verbatim_content", app$active_module_ns()))
+  session_info <- app$get_text("#teal-sessionInfo-verbatim_content")
 
   greplf <- function(text, content = session_info) {
     grepl(text, content, fixed = TRUE)
@@ -55,7 +56,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
 
   # Check footer buttons.
   testthat::expect_equal(
-    app$get_text(sprintf("#%s-copy_button2", app$active_module_ns())),
+    app$get_text("#teal-sessionInfo-copy_button2"),
     "Copy to Clipboard"
   )
   testthat::expect_equal(
