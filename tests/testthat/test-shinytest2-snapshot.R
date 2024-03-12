@@ -3,18 +3,18 @@ testthat::test_that("e2e: Create empty snapshot", {
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-
+  app$wait_for_idle(timeout = default_idle_timeout)
   app$open_filter_manager()
 
   ns <- shiny::NS(app$snapshot_manager_ns())
 
   app$click(ns("snapshot_add"))
-  app$wait_for_idle(500)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   app$set_input(ns("snapshot_name"), "Empty_Snapshot")
 
   app$click(ns("snapshot_name_accept"))
-  app$wait_for_idle(500)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_equal(
     app$get_text(selector = ".snapshot_table_row span h5"),
@@ -28,18 +28,18 @@ testthat::test_that("e2e: Downloads empty snapshot", {
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-
+  app$wait_for_idle(timeout = default_idle_timeout)
   app$open_filter_manager()
 
   ns <- shiny::NS(app$snapshot_manager_ns())
 
   app$click(ns("snapshot_add"))
-  app$wait_for_idle(500)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   app$set_input(ns("snapshot_name"), "Empty_Snapshot")
 
   app$click(ns("snapshot_name_accept"))
-  app$wait_for_idle(500)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Path for downloaded file
   local_snapshot <- withr::local_tempfile(fileext = ".json")
@@ -59,7 +59,7 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-
+  app$wait_for_idle(timeout = default_idle_timeout)
   app$add_filter_var("iris", "Species")
   app$set_active_filter_selection("iris", "Species", c("setosa", "virginica"))
 
@@ -68,12 +68,12 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
   ns <- shiny::NS(app$snapshot_manager_ns())
 
   app$click(ns("snapshot_add"))
-  app$wait_for_idle(500)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   app$set_input(ns("snapshot_name"), "A_Snapshot")
 
   app$click(ns("snapshot_name_accept"))
-  app$wait_for_idle(500)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Path for downloaded file
   local_snapshot <- withr::local_tempfile(fileext = ".json")
@@ -99,6 +99,7 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
     data = data,
     modules = mods
   )
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Build and save to file a valid teal_slice
   tss <- teal_slices(
@@ -122,14 +123,14 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
   ns <- shiny::NS(app$snapshot_manager_ns())
 
   app$click(ns("snapshot_load"))
-  app$wait_for_idle(500)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   app$upload_file(
     !!ns("snapshot_file") := local_snapshot
   )
 
   app$click(ns("snaphot_file_accept"))
-  app$wait_for_idle(500)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_setequal(
     app$get_active_data_filters("iris"),
@@ -144,6 +145,7 @@ testthat::test_that("e2e: Snapshot manager can reset the state", {
     data = simple_teal_data(),
     modules = example_module(label = "module1")
   )
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   app$add_filter_var("iris", "Species")
   app$set_active_filter_selection("iris", "Species", c("setosa", "virginica"))
@@ -153,7 +155,7 @@ testthat::test_that("e2e: Snapshot manager can reset the state", {
   ns <- shiny::NS(app$snapshot_manager_ns())
 
   app$click(ns("snapshot_reset"))
-  app$wait_for_idle(500)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_length(app$get_active_data_filters("iris"), 0)
   testthat::expect_length(app$get_active_data_filters("mtcars"), 0)
