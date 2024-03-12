@@ -6,11 +6,7 @@ testthat::test_that("e2e: Create empty snapshot", {
 
   app$open_filter_manager()
 
-  ns <- app$helper_NS(
-    app$filter_manager_ns(),
-    "filter_manager",
-    "snapshot_manager"
-  )
+  ns <- shiny::NS(app$snapshot_manager_ns())
 
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
@@ -28,8 +24,6 @@ testthat::test_that("e2e: Create empty snapshot", {
 })
 
 testthat::test_that("e2e: Downloads empty snapshot", {
-  skip_if_not_installed("withr")
-
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
@@ -37,11 +31,7 @@ testthat::test_that("e2e: Downloads empty snapshot", {
 
   app$open_filter_manager()
 
-  ns <- app$helper_NS(
-    app$filter_manager_ns(),
-    "filter_manager",
-    "snapshot_manager"
-  )
+  ns <- shiny::NS(app$snapshot_manager_ns())
 
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
@@ -75,11 +65,7 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
 
   app$open_filter_manager()
 
-  ns <- app$helper_NS(
-    app$filter_manager_ns(),
-    "filter_manager",
-    "snapshot_manager"
-  )
+  ns <- shiny::NS(app$snapshot_manager_ns())
 
   app$click(ns("snapshot_add"))
   app$wait_for_idle(500)
@@ -106,8 +92,6 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
 })
 
 testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
-  skip_if_not_installed("withr")
-
   data <- simple_teal_data()
   mods <- example_module(label = "module1")
 
@@ -135,11 +119,7 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
 
   app$open_filter_manager()
 
-  ns <- app$helper_NS(
-    app$filter_manager_ns(),
-    "filter_manager",
-    "snapshot_manager"
-  )
+  ns <- shiny::NS(app$snapshot_manager_ns())
 
   app$click(ns("snapshot_load"))
   app$wait_for_idle(500)
@@ -160,8 +140,6 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
 })
 
 testthat::test_that("e2e: Snapshot manager can reset the state", {
-  skip_if_not_installed("withr")
-
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "module1")
@@ -172,11 +150,7 @@ testthat::test_that("e2e: Snapshot manager can reset the state", {
 
   app$open_filter_manager()
 
-  ns <- app$helper_NS(
-    app$filter_manager_ns(),
-    "filter_manager",
-    "snapshot_manager"
-  )
+  ns <- shiny::NS(app$snapshot_manager_ns())
 
   app$click(ns("snapshot_reset"))
   app$wait_for_idle(500)
