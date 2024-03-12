@@ -111,7 +111,7 @@ testthat::test_that("e2e: teal_data_module adds new column to datasets", {
 
   testthat::expect_setequal(
     app$get_active_filter_selection("dataset1", "A_New_Column"),
-    unique(sprintf("%s new", .data$Species))
+    unique(sprintf("%s new", iris$Species))
   )
 
   app$stop()
