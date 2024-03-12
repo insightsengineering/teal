@@ -55,7 +55,7 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
   app$wait_for_idle(timeout = default_idle_timeout)
 
   # Check if button exists.
-  button_selector <- "#teal-main_ui-root-example_module-module-rcode-button"
+  button_selector <- sprintf("#%s-rcode-button", app$active_module_ns())
   testthat::expect_equal(
     app$get_text(button_selector),
     "Show R code"
@@ -69,7 +69,7 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
     "Example Code"
   )
   testthat::expect_equal(
-    app$get_text("#teal-main_ui-root-example_module-module-rcode-copy_button1"),
+    app$get_text(sprintf("#%s-rcode-copy_button1", app$active_module_ns())),
     "Copy to Clipboard"
   )
   testthat::expect_equal(
@@ -78,7 +78,7 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
   )
 
   # Check R code output.
-  r_code <- app$get_text("#teal-main_ui-root-example_module-module-rcode-verbatim_content")
+  r_code <- app$get_text(sprintf("#%s-rcode-verbatim_content", app$active_module_ns()))
 
   greplf <- function(text, content = r_code) {
     grepl(text, content, fixed = TRUE)
@@ -90,7 +90,7 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
 
   # Check footer buttons.
   testthat::expect_equal(
-    app$get_text("#teal-main_ui-root-example_module-module-rcode-copy_button2"),
+    app$get_text(sprintf("#%s-rcode-copy_button2", app$active_module_ns())),
     "Copy to Clipboard"
   )
   testthat::expect_equal(
