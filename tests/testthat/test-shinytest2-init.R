@@ -16,12 +16,13 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   app$wait_for_idle(timeout = default_idle_timeout)
 
   # Check if button exists.
+  button_selector <- "#teal-sessionInfo-button"
   testthat::expect_equal(
-    app$get_text("#teal-sessionInfo-button"),
+    app$get_text(button_selector),
     "Session Info"
   )
 
-  app$click(selector = "#teal-sessionInfo-button")
+  app$click(selector = button_selector)
 
   # Check header and title content.
   testthat::expect_equal(
