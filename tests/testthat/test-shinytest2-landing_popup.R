@@ -48,6 +48,7 @@ testthat::test_that("e2e: when default landing_popup_module is closed, it shows 
 
   # Button is clicked.
   app$click(selector = "#shiny-modal-wrapper button[data-dismiss='modal']")
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   # There is no more modal displayed.
   testthat::expect_null(app$get_html("#shiny-modal-wrapper"))
