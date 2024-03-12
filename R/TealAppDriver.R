@@ -8,7 +8,7 @@
 #'
 #' @keywords internal
 #'
-TealAppDriver <- R6::R6Class( # nolint
+TealAppDriver <- R6::R6Class( # nolint: object_name.
   "TealAppDriver",
   inherit = shinytest2::AppDriver,
   # public methods ----
