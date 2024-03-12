@@ -2,43 +2,42 @@
 % Please edit documentation in R/teal_slices-store.R
 \name{slices_store}
 \alias{slices_store}
-\title{Store teal_slices object to a file}
+\alias{slices_restore}
+\title{Store and restore \code{teal_slices} object}
 \usage{
 slices_store(tss, file)
+
+slices_restore(file)
 }
 \arguments{
 \item{tss}{(\code{teal_slices}) object to be stored.}
 
-\item{file}{(\code{character(1)}) The file path where \code{teal_slices} object will be saved.
-The file extension should be \code{".json"}.}
+\item{file}{(\code{character(1)}) file path where \code{teal_slices} object will be
+saved and restored. The file extension should be \code{".json"}.}
 }
 \value{
-\code{NULL}, invisibly.
+\code{slices_store} returns \code{NULL}, invisibly.
+
+\code{slices_restore} returns a \code{teal_slices} object restored from the file.
 }
 \description{
-This function takes a \code{teal_slices} object and saves it to a file in \code{JSON} format.
-The \code{teal_slices} object contains information about filter states and can be used to
-create, modify, and delete filter states. The saved file can be later loaded using
-the \code{slices_restore} function.
+Functions that write a \code{teal_slices} object to a file in the \code{JSON} format,
+and also restore the object from disk.
 }
 \details{
-\code{Date} class is stored in \code{"ISO8601"} format (\code{YYYY-MM-DD}). \code{POSIX*t} classes are converted to a
-character by using \code{format.POSIX*t(usetz = TRUE, tz = "UTC")} (\verb{YYYY-MM-DD \{N\}\{N\}:\{N\}\{N\}:\{N\}\{N\} UTC}, where
-\verb{\{N\} = [0-9]} is a number and \code{UTC} is \verb{Coordinated Universal Time} timezone short-code).
-This format is assumed during \code{slices_restore}. All \code{POSIX*t} objects in \code{selected} or \code{choices} fields of
-\code{teal_slice} objects are always printed in \code{UTC} timezone as well.
-}
-\examples{
-# Create a teal_slices object
-tss <- teal_slices(
-  teal_slice(dataname = "data", varname = "var"),
-  teal_slice(dataname = "data", expr = "x > 0", id = "positive_x", title = "Positive x")
-)
-
-if (interactive()) {
-  # Store the teal_slices object to a file
-  slices_store(tss, "path/to/file.json")
+Date and date time objects are stored in the following formats:
+\itemize{
+\item \code{Date} class is converted to the \code{"ISO8601"} standard (\code{YYYY-MM-DD}).
+\item \code{POSIX*t} classes are converted to character by using
+\code{format.POSIX*t(usetz = TRUE, tz = "UTC")} (\verb{YYYY-MM-DD HH:MM:SS UTC}, where
+\code{UTC} is the \verb{Coordinated Universal Time} timezone short-code).
 }
 
+This format is assumed during \code{slices_restore}. All \code{POSIX*t} objects in
+\code{selected} or \code{choices} fields of \code{teal_slice} objects are always printed in
+\code{UTC} timezone as well.
+}
+\seealso{
+\code{\link[=teal_slices]{teal_slices()}}
 }
 \keyword{internal}

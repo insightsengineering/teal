@@ -4,7 +4,7 @@ testthat::test_that("srv_teal fails when teal_data_rv is not reactive", {
       app = srv_teal,
       args = list(
         id = "test",
-        teal_data_rv = teal_data(iris = iris),
+        teal_data_rv = teal.data::teal_data(iris = iris),
         modules = modules(example_module())
       ),
       expr = NULL
@@ -14,7 +14,7 @@ testthat::test_that("srv_teal fails when teal_data_rv is not reactive", {
 })
 
 testthat::test_that("srv_teal when teal_data_rv changes, datasets_reactive is initialized as list of FilteredData", {
-  data <- teal_data(iris1 = iris, mtcars1 = mtcars)
+  data <- teal.data::teal_data(iris1 = iris, mtcars1 = mtcars)
   shiny::testServer(
     app = srv_teal,
     args = list(
@@ -33,7 +33,7 @@ testthat::test_that("srv_teal when teal_data_rv changes, datasets_reactive is in
 })
 
 testthat::test_that("srv_teal initialized datasets_reactive (list) reflects modules structure", {
-  data <- teal_data(iris1 = iris, mtcars1 = mtcars)
+  data <- teal.data::teal_data(iris1 = iris, mtcars1 = mtcars)
   shiny::testServer(
     app = srv_teal,
     args = list(
@@ -53,7 +53,7 @@ testthat::test_that("srv_teal initialized datasets_reactive (list) reflects modu
 })
 
 testthat::test_that("srv_teal initialized data containing same FilteredData when the filter is global", {
-  data <- teal_data(iris1 = iris, mtcars1 = mtcars)
+  data <- teal.data::teal_data(iris1 = iris, mtcars1 = mtcars)
   shiny::testServer(
     app = srv_teal,
     args = list(
@@ -75,7 +75,7 @@ testthat::test_that("srv_teal initialized data containing same FilteredData when
 })
 
 testthat::test_that("srv_teal initialized data containing different FilteredData when the filter is module_specific", {
-  data <- teal_data(iris1 = iris, mtcars1 = mtcars)
+  data <- teal.data::teal_data(iris1 = iris, mtcars1 = mtcars)
   shiny::testServer(
     app = srv_teal,
     args = list(

@@ -27,7 +27,7 @@ testthat::test_that("module requires label argument to be a string different tha
 testthat::test_that("module warns when server contains datasets argument", {
   testthat::expect_warning(
     module(server = function(id, datasets) NULL),
-    "`datasets` argument in the `server` is deprecated"
+    "`datasets` argument in the server is deprecated"
   )
 })
 
@@ -66,7 +66,7 @@ testthat::test_that("module expects all server_args being a server arguments or 
 
   testthat::expect_error(
     module(server = function(id) NULL, server_args = list(arg1 = NULL)),
-    "Following `server_args` elements have no equivalent in the formals of the `server`"
+    "Following `server_args` elements have no equivalent in the formals of the server"
   )
 })
 
@@ -99,7 +99,7 @@ testthat::test_that("module expects all ui_args being a ui arguments or passed t
 
   testthat::expect_error(
     module(ui = function(id) NULL, ui_args = list(arg1 = NULL)),
-    "Following `ui_args` elements have no equivalent in the formals of `ui`"
+    "Following `ui_args` elements have no equivalent in the formals of UI"
   )
 })
 
@@ -107,7 +107,7 @@ testthat::test_that("module requires datanames argument to be a character or NUL
   testthat::expect_no_error(module(datanames = "all"))
   testthat::expect_no_error(module(datanames = ""))
   testthat::expect_no_error(module(datanames = NULL))
-  testthat::expect_error(module(datanames = NA_character_), "Contains missing values")
+  testthat::expect_error(module(server = function(id, data) NULL, datanames = NA_character_), "Contains missing values")
   testthat::expect_no_error(module(server = function(id, data) NULL, datanames = NULL))
 })
 
@@ -376,12 +376,12 @@ testthat::test_that("modules_depth increases depth by 1 for each teal_modules", 
 
 # is_arg_used -----
 get_srv_and_ui <- function() {
-  return(list(
-    server_fun = function(id, datasets) {}, # nolint
+  list(
+    server_fun = function(id, datasets) {},
     ui_fun = function(id, ...) {
       tags$p(paste0("id: ", id))
     }
-  ))
+  )
 }
 
 testthat::test_that("is_arg_used throws error if object is not teal_module or teal_modules", {
@@ -494,4 +494,21 @@ testthat::test_that("append_module produces teal_modules with unique named child
   appended_mods <- append_module(mods, mod3)
   mod_names <- names(appended_mods$children)
   testthat::expect_equal(mod_names, unique(mod_names))
+})
+
+
+# format ----------------------------------------------------------------------------------------------------------
+
+testthat::test_that("format.teal_modules returns proper structure", {
+  mod <- module(label = "a")
+  mod2 <- module(label = "c")
+  mods <- modules(label = "c", mod, mod2)
+  mod3 <- module(label = "c")
+
+  appended_mods <- append_module(mods, mod3)
+
+  testthat::expect_equal(
+    format(appended_mods),
+    "+ c\n + a\n + c\n + c\n"
+  )
 })

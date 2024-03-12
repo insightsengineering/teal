@@ -12,7 +12,7 @@ calculate_hashes(datanames, datasets)
 \item{datasets}{(\code{FilteredData}) object holding the data}
 }
 \value{
-A list of hashes per dataset
+A list of hashes per dataset.
 }
 \description{
 Get the hash of a dataset

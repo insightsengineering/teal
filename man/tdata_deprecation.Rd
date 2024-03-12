@@ -2,7 +2,7 @@
 % Please edit documentation in R/tdata.R
 \name{as_tdata}
 \alias{as_tdata}
-\title{Downgrade \code{teal_data} objects in modules for compatibility.}
+\title{Downgrade \code{teal_data} objects in modules for compatibility}
 \usage{
 as_tdata(x)
 }

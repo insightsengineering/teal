@@ -9,7 +9,7 @@ testthat::test_that("teal_slice store/restore supports NULL and character(0) for
     )
   )
   slices_store(tss, slices_path)
-  tss_restored <- teal:::slices_restore(slices_path)
+  tss_restored <- slices_restore(slices_path)
 
   slices2_path <- withr::local_file("slices2.json")
   tss2 <- teal_slices(

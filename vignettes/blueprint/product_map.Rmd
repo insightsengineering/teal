@@ -62,21 +62,18 @@ style modules fill:pink
 )
 ```
 
-`teal` is a modular framework that relies on a suite of related R packages, as illustrated in the above diagram, to provide a wide range of functionalities.
+`teal` is a modular framework that relies on a suite of related packages, as illustrated in the above diagram, to provide a wide range of functionalities.
 
-`teal`'s primary function is to create web app for analysing clinical trial data but it **has** a multitude of features distributed across various R packages.
+`teal`'s primary function is to create web app for analyzing clinical trial data but it **has** a multitude of features distributed across various packages.
 
-Developers can selectively leverage these R packages, such as `teal.widgets`, `teal.code`, and `teal.logger`, to **build** `teal` modules for a `teal` app. This approach gives the developers the tools that speed up their work and avoid re-implementing existing logic and UI elements.
+Developers can selectively leverage these packages, such as `teal.widgets`, `teal.code`, and `teal.logger`, to **build** `teal` modules for a `teal` app. 
+This approach gives the developers the tools that speed up their work and avoid re-implementing existing logic and UI elements.
 
-The `teal` modules utilize various R packages such as `tern`, `osprey`, and `goshawk` to perform calculations and analyses.
-These R packages provide **support** to the `teal` modules by performing all computations while the modules only have to focus on how to wrap the input options and the output.
+The `teal` modules utilize various packages such as `tern`, `osprey`, and `goshawk` to perform calculations and analyses.
+These packages provide **support** to the `teal` modules by performing all computations while the modules only have to focus on how to wrap the input options and the output.
 
 Once developed, new and existing modules can be integrated into `teal` to **create** a functional `teal` app.
 
-## Why so many R packages?
+## Why so many packages?
 
-By breaking down `teal` features, modules, and calculations into dedicated R packages, maintenance is made significantly more manageable.
-
-Additionally, this separation allows for a clear distinction between the various roles and actors involved in the development of `teal`.
-
-To learn different roles/actors in `teal` development, visit [Actors](actors.html).
+By breaking down `teal` features, modules, and calculations into dedicated packages, maintenance is made significantly more manageable.

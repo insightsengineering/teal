@@ -6,7 +6,7 @@ default_language_version:
   python: python3
 repos:
   - repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.3.2.9027
+    rev: v0.4.0
     hooks:
       - id: style-files
         name: Style code with `styler`
@@ -15,10 +15,14 @@ repos:
       - id: roxygenize
         name: Regenerate package documentation
         additional_dependencies:
+          - davidgohel/flextable # Error: package 'flextable' is not available
+          - davidgohel/gdtools # for flextable
           - checkmate
+          - jsonlite
           - lifecycle
           - logger
           - magrittr
+          - methods
           - rlang
           - shiny
           - shinyjs

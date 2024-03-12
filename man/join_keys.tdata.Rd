@@ -7,7 +7,7 @@
 \method{join_keys}{tdata}(data, ...)
 }
 \arguments{
-\item{data}{A \code{tdata} object}
+\item{data}{(\code{tdata}) object}
 
 \item{...}{Additional arguments (not used)}
 }

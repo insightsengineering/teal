@@ -1,26 +1,27 @@
-#' Get Client Timezone
+#' Get client timezone
 #'
-#' Local timezone in the browser may differ from the system timezone from the server.
-#'   This script can be run to register a shiny input which contains information about
-#'   the timezone in the browser.
+#' User timezone in the browser may be different to the one on the server.
+#' This script can be run to register a `shiny` input which contains information about the timezone in the browser.
 #'
-#' @param ns (`function`) namespace function passed from the `session` object in the
-#'   Shiny server. For Shiny modules this will allow for proper name spacing of the
-#'   registered input.
+#' @param ns (`function`) namespace function passed from the `session` object in the `shiny` server.
+#'  For `shiny` modules this will allow for proper name spacing of the registered input.
 #'
-#' @return (`Shiny`) input variable accessible with `input$tz` which is a (`character`)
+#' @return (`shiny`) input variable accessible with `input$tz` which is a (`character`)
 #'  string containing the timezone of the browser/client.
+#'
 #' @keywords internal
+#'
 get_client_timezone <- function(ns) {
   script <- sprintf(
     "Shiny.setInputValue(`%s`, Intl.DateTimeFormat().resolvedOptions().timeZone)",
     ns("timezone")
   )
   shinyjs::runjs(script) # function does not return anything
-  return(invisible(NULL))
+  invisible(NULL)
 }
 
 #' Resolve the expected bootstrap theme
+#' @noRd
 #' @keywords internal
 get_teal_bs_theme <- function() {
   bs_theme <- getOption("teal.bs_theme")
@@ -34,6 +35,9 @@ get_teal_bs_theme <- function() {
   }
 }
 
+#' Return parentnames along with datanames.
+#' @noRd
+#' @keywords internal
 include_parent_datanames <- function(dataname, join_keys) {
   parents <- character(0)
   for (i in dataname) {
@@ -44,17 +48,16 @@ include_parent_datanames <- function(dataname, join_keys) {
     }
   }
 
-  return(unique(c(parents, dataname)))
+  unique(c(parents, dataname))
 }
-
-
 
 #' Create a `FilteredData`
 #'
-#' Create a `FilteredData` object from a `teal_data` object
+#' Create a `FilteredData` object from a `teal_data` object.
+#'
 #' @param x (`teal_data`) object
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
-#' @return (`FilteredData`) object
+#' @return A `FilteredData` object.
 #' @keywords internal
 teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   checkmate::assert_class(x, "teal_data")
@@ -64,12 +67,13 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
     x = sapply(datanames, function(dn) x[[dn]], simplify = FALSE),
     join_keys = teal.data::join_keys(x)
   )
-  # Piggy-back entire pre-processing code so that filtering code can be appended later.
-  attr(ans, "preprocessing_code") <- teal.code::get_code(x)
+  # Piggy-back pre-processing code for datasets of interest so that filtering code can be appended later.
+  attr(ans, "preprocessing_code") <- teal.data::get_code(x, datanames = datanames, check_names = FALSE)
+  attr(ans, "verification_status") <- x@verified
   ans
 }
 
-#' Template Function for `TealReportCard` Creation and Customization
+#' Template function for `TealReportCard` creation and customization
 #'
 #' This function generates a report card with a title,
 #' an optional description, and the option to append the filter state list.
@@ -81,7 +85,7 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
 #' @param filter_panel_api (`FilterPanelAPI`) object with API that allows the generation
 #' of the filter state in the report
 #'
-#' @return (`TealReportCard`) populated with a title, description and filter state
+#' @return (`TealReportCard`) populated with a title, description and filter state.
 #'
 #' @export
 report_card_template <- function(title, label, description = NULL, with_filter, filter_panel_api) {
@@ -99,46 +103,7 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
   if (with_filter) card$append_fs(filter_panel_api$get_filter_state())
   card
 }
-#' Resolve `datanames` for the modules
-#'
-#' Modifies `module$datanames` to include names of the parent dataset (taken from `join_keys`).
-#' When `datanames` is set to `"all"` it is replaced with all available datasets names.
-#' @param modules (`teal_modules`) object
-#' @param datanames (`character`) names of datasets available in the `data` object
-#' @param join_keys (`join_keys`) object
-#' @return `teal_modules` with resolved `datanames`
-#' @keywords internal
-resolve_modules_datanames <- function(modules, datanames, join_keys) {
-  if (inherits(modules, "teal_modules")) {
-    modules$children <- sapply(
-      modules$children,
-      resolve_modules_datanames,
-      simplify = FALSE,
-      datanames = datanames,
-      join_keys = join_keys
-    )
-    modules
-  } else {
-    modules$datanames <- if (identical(modules$datanames, "all")) {
-      datanames
-    } else if (is.character(modules$datanames)) {
-      extra_datanames <- setdiff(modules$datanames, datanames)
-      if (length(extra_datanames)) {
-        stop(
-          sprintf(
-            "Module %s has datanames that are not available in a 'data':\n %s not in %s",
-            modules$label,
-            toString(extra_datanames),
-            toString(datanames)
-          )
-        )
-      }
-      datanames_adjusted <- intersect(modules$datanames, datanames)
-      include_parent_datanames(dataname = datanames_adjusted, join_keys = join_keys)
-    }
-    modules
-  }
-}
+
 
 #' Check `datanames` in modules
 #'
@@ -181,7 +146,7 @@ check_modules_datanames <- function(modules, datanames) {
 #' Check `datanames` in filters
 #'
 #' This function checks whether `datanames` in filters correspond to those in `data`,
-#' returning character vector with error messages or TRUE if all checks pass.
+#' returning character vector with error messages or `TRUE` if all checks pass.
 #'
 #' @param filters (`teal_slices`) object
 #' @param datanames (`character`) names of datasets available in the `data` object
@@ -215,6 +180,93 @@ check_filter_datanames <- function(filters, datanames) {
   }
 }
 
+
+#' Create filterable data for modules
+#'
+#' Converts input data to a `FilteredData` object(s) to allow filtering before passing data to individual modules.
+#'
+#' @param data (`teal_data`)
+#' @param modules (`teal_modules`) object
+#' @param filters (`teal_slices`) object
+#' @param filtered_data_singleton A result of `teal_data_to_filtered_data` applied to `data`.
+#' @return Returns list of same shape as `modules`, containing `FilteredData` at every leaf.
+#' If module specific, each leaf contains different instance, otherwise every leaf contains `filtered_data_singleton`.
+#' @keywords internal
+modules_datasets <- function(data, modules, filters, filtered_data_singleton = teal_data_to_filtered_data(data)) {
+  checkmate::assert_class(data, "teal_data")
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+  checkmate::assert_class(filters, "modules_teal_slices")
+  checkmate::assert_r6(filtered_data_singleton, "FilteredData")
+
+  if (!isTRUE(attr(filters, "module_specific"))) {
+    # subset global filters
+    slices <- shiny::isolate({
+      Filter(function(x) x$id %in% attr(filters, "mapping")$global_filters, filters)
+    })
+    filtered_data_singleton$set_filter_state(slices)
+    return(modules_structure(modules, filtered_data_singleton))
+  }
+
+  if (inherits(modules, "teal_module")) {
+    # 1. get datanames
+    datanames <-
+      if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
+        include_parent_datanames(
+          teal_data_datanames(data),
+          teal.data::join_keys(data)
+        )
+      } else {
+        include_parent_datanames(
+          modules$datanames,
+          teal.data::join_keys(data)
+        )
+      }
+    # 2. subset filters (global + dedicated)
+    slices <- shiny::isolate({
+      Filter(x = filters, f = function(x) {
+        x$dataname %in% datanames &&
+          (x$id %in% attr(filters, "mapping")$global_filters ||
+            x$id %in% unique(unlist(attr(filters, "mapping")[modules$label]))) # nolint: indentation_linter.
+      })
+    })
+    # 2a. subset include/exclude varnames
+    slices$include_varnames <- attr(slices, "include_varnames")[names(attr(slices, "include_varnames")) %in% datanames]
+    slices$exclude_varnames <- attr(slices, "exclude_varnames")[names(attr(slices, "exclude_varnames")) %in% datanames]
+
+    # 3. instantiate FilteredData
+    filtered_data <- teal_data_to_filtered_data(data, datanames)
+    # 4. set state
+    filtered_data$set_filter_state(slices)
+    # 5. return
+    return(filtered_data)
+  } else if (inherits(modules, "teal_modules")) {
+    ans <- lapply(
+      modules$children,
+      modules_datasets,
+      data = data,
+      filters = filters,
+      filtered_data_singleton = filtered_data_singleton
+    )
+    names(ans) <- vapply(modules$children, `[[`, character(1), "label")
+
+    return(ans)
+  }
+
+  stop("something is not right")
+}
+
+# Returns nested list of same shape as `modules` with `value` at every leaf.
+modules_structure <- function(modules, value = TRUE) {
+  if (inherits(modules, "teal_module")) {
+    return(value)
+  } else {
+    stats::setNames(
+      lapply(modules$children, modules_structure, value),
+      vapply(modules$children, `[[`, character(1), "label")
+    )
+  }
+}
+
 #' Wrapper on `teal.data::datanames`
 #'
 #' Special function used in internals of `teal` to return names of datasets even if `datanames`
@@ -228,5 +280,90 @@ teal_data_datanames <- function(data) {
     teal.data::datanames(data)
   } else {
     ls(teal.code::get_env(data), all.names = TRUE)
+  }
+}
+
+#' Function for validating the title parameter of `teal::init`
+#'
+#' Checks if the input of the title from `teal::init` will create a valid title and favicon tag.
+#' @param shiny_tag (`shiny.tag`) Object to validate for a valid title.
+#' @keywords internal
+validate_app_title_tag <- function(shiny_tag) {
+  checkmate::assert_class(shiny_tag, "shiny.tag")
+  checkmate::assert_true(shiny_tag$name == "head")
+  child_names <- vapply(shiny_tag$children, `[[`, character(1L), "name")
+  checkmate::assert_subset(c("title", "link"), child_names, .var.name = "child tags")
+  rel_attr <- shiny_tag$children[[which(child_names == "link")]]$attribs$rel
+  checkmate::assert_subset(
+    rel_attr,
+    c("icon", "shortcut icon"),
+    .var.name = "Link tag's rel attribute",
+    empty.ok = FALSE
+  )
+}
+
+#' Build app title with favicon
+#'
+#' A helper function to create the browser title along with a logo.
+#'
+#' @param title (`character`) The browser title for the `teal` app.
+#' @param favicon (`character`) The path for the icon for the title.
+#' The image/icon path can be remote or the static path accessible by `shiny`, like the `www/`
+#'
+#' @return A `shiny.tag` containing the element that adds the title and logo to the `shiny` app.
+#' @export
+build_app_title <- function(
+    title = "teal app",
+    favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_string(favicon, null.ok = TRUE)
+  tags$head(
+    tags$title(title),
+    tags$link(
+      rel = "icon",
+      href = favicon,
+      sizes = "any"
+    )
+  )
+}
+
+#' Application ID
+#'
+#' Creates App ID used to match filter snapshots to application.
+#'
+#' Calculate app ID that will be used to stamp filter state snapshots.
+#' App ID is a hash of the app's data and modules.
+#' See "transferring snapshots" section in ?snapshot.
+#'
+#' @param data (`teal_data` or `teal_data_module`) as accepted by `init`
+#' @param modules (`teal_modules`) object as accepted by `init`
+#'
+#' @return A single character string.
+#'
+#' @keywords internal
+create_app_id <- function(data, modules) {
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_class(modules, "teal_modules")
+
+  data <- if (inherits(data, "teal_data")) {
+    as.list(data@env)
+  } else if (inherits(data, "teal_data_module")) {
+    deparse1(body(data$server))
+  }
+  modules <- lapply(modules, defunction)
+
+  rlang::hash(list(data = data, modules = modules))
+}
+
+#' Go through list and extract bodies of encountered functions as string, recursively.
+#' @keywords internal
+#' @noRd
+defunction <- function(x) {
+  if (is.list(x)) {
+    lapply(x, defunction)
+  } else if (is.function(x)) {
+    deparse1(body(x))
+  } else {
+    x
   }
 }

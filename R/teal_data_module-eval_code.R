@@ -1,6 +1,6 @@
 setOldClass("teal_data_module")
 
-#' Evaluate Code on `teal_data_module`
+#' Evaluate code on `teal_data_module`
 #'
 #' @details
 #' `eval_code` evaluates given code in the environment of the `teal_data` object created by the `teal_data_module`.
@@ -13,15 +13,7 @@ setOldClass("teal_data_module")
 #' `eval_code` returns a `teal_data_module` object with a delayed evaluation of `code` when the module is run.
 #'
 #' @examples
-#' tdm <- teal_data_module(
-#'   ui = function(id) div(id = shiny::NS(id)("div_id")),
-#'   server = function(id) {
-#'     shiny::moduleServer(id, function(input, output, session) {
-#'       shiny::reactive(teal_data(IRIS = iris))
-#'     })
-#'   }
-#' )
-#' eval_code(tdm, "IRIS <- subset(IRIS, Species == 'virginica')")
+#' eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 #'
 #' @include teal_data_module.R
 #' @name eval_code

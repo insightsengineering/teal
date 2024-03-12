@@ -29,7 +29,7 @@ sequenceDiagram;
 )
 ```
 
-The sequence diagram above illustrates the different stages that data goes through within the `teal` framework, supported by the `teal.slice` R package:
+The sequence diagram above illustrates the different stages that data goes through within the `teal` framework, supported by the `teal.slice` package:
 
 1. Data is created and loaded into `teal` app;
     - Data sets are wrapped in a `teal_data` before being passed to the app;
