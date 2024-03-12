@@ -98,7 +98,7 @@ testthat::test_that("e2e: teal_data_module adds new column to datasets", {
           data <- within(
             teal_data(),
             {
-              dataset1 <- dplyr::mutate(iris, !!new_column := paste(.data$Species, " new"))
+              dataset1 <- dplyr::mutate(iris, !!new_column := sprintf("%s new", .data$Species))
             },
             new_column = input$new_column
           )
@@ -122,7 +122,7 @@ testthat::test_that("e2e: teal_data_module adds new column to datasets", {
 
   testthat::expect_setequal(
     app$get_active_filter_selection("dataset1", "A_New_Column"),
-    unique(paste(iris$Species, " new"))
+    unique(sprintf("%s new", .data$Species))
   )
 
   app$stop()
