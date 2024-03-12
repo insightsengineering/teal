@@ -26,7 +26,10 @@ on a \code{teal} application for implementing \code{shinytest2} tests.
 \item \href{#method-TealAppDriver-expect_validation_error}{\code{TealAppDriver$expect_validation_error()}}
 \item \href{#method-TealAppDriver-set_input}{\code{TealAppDriver$set_input()}}
 \item \href{#method-TealAppDriver-navigate_teal_tab}{\code{TealAppDriver$navigate_teal_tab()}}
-\item \href{#method-TealAppDriver-get_active_ns}{\code{TealAppDriver$get_active_ns()}}
+\item \href{#method-TealAppDriver-active_ns}{\code{TealAppDriver$active_ns()}}
+\item \href{#method-TealAppDriver-active_module_ns}{\code{TealAppDriver$active_module_ns()}}
+\item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
+\item \href{#method-TealAppDriver-filter_manager_ns}{\code{TealAppDriver$filter_manager_ns()}}
 \item \href{#method-TealAppDriver-helper_NS}{\code{TealAppDriver$helper_NS()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
@@ -191,26 +194,55 @@ The \code{TealAppDriver} object invisibly.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-get_active_ns"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_ns}{}}}
-\subsection{Method \code{get_active_ns()}}{
-Get the active shiny name space for the Module content and the Filter panel.
-Note that in the case of the filter panel, the name space is constant when it is not module specific.
-However, module specific filter panel will have the name space linked with the module name space.
+\if{html}{\out{<a id="method-TealAppDriver-active_ns"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-active_ns}{}}}
+\subsection{Method \code{active_ns()}}{
+Get the active shiny name space for different components of the teal app.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_ns(component)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_ns()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{component}}{(character) The component to get the active name space for.
-Currently supported components are "module", "filter_panel", and "filter_manager".}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
-The active shiny name space of the component.
+(\code{list}) The list of active shiny name space of the teal components.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-active_module_ns"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-active_module_ns}{}}}
+\subsection{Method \code{active_module_ns()}}{
+Get the active shiny name space for interacting with the module content.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_module_ns()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{string}) The active shiny name space of the component.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-active_filters_ns"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-active_filters_ns}{}}}
+\subsection{Method \code{active_filters_ns()}}{
+Get the active shiny name space for interacting with the filter panel.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_filters_ns()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{string}) The active shiny name space of the component.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-filter_manager_ns"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-filter_manager_ns}{}}}
+\subsection{Method \code{filter_manager_ns()}}{
+Get the active shiny name space for interacting with the filter panel.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$filter_manager_ns()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{string}) The active shiny name space of the component.
 }
 }
 \if{html}{\out{<hr>}}

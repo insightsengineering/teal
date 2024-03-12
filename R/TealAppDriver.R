@@ -116,21 +116,32 @@ TealAppDriver <- R6::R6Class( # nolint
       invisible(self)
     },
     #' @description
-    #' Get the active shiny name space for the Module content and the Filter panel.
-    #' Note that in the case of the filter panel, the name space is constant when it is not module specific.
-    #' However, module specific filter panel will have the name space linked with the module name space.
+    #' Get the active shiny name space for different components of the teal app.
     #'
-    #' @param component (character) The component to get the active name space for.
-    #' Currently supported components are "module", "filter_panel", and "filter_manager".
+    #' @return (`list`) The list of active shiny name space of the teal components.
+    active_ns = function() {
+      private$ns
+    },
+    #' @description
+    #' Get the active shiny name space for interacting with the module content.
     #'
-    #' @return The active shiny name space of the component.
-    get_active_ns = function(component) {
-      switch(component,
-        "module" = private$active_ns$module,
-        "filter_panel" = private$active_ns$filter_panel,
-        "filter_manager" = private$active_ns$filter_manager,
-        stop("Unsupported component passed. Supported components are 'module', 'filter_panel', or 'filter_manager'.")
-      )
+    #' @return (`string`) The active shiny name space of the component.
+    active_module_ns = function() {
+      private$ns$module
+    },
+    #' @description
+    #' Get the active shiny name space for interacting with the filter panel.
+    #'
+    #' @return (`string`) The active shiny name space of the component.
+    active_filters_ns = function() {
+      private$ns$filter_panel
+    },
+    #' @description
+    #' Get the active shiny name space for interacting with the filter panel.
+    #'
+    #' @return (`string`) The active shiny name space of the component.
+    filter_manager_ns = function() {
+      private$ns$filter_manager
     },
     #' @description
     #' Advance utility to help in creating namespace and CSS selectors for Shiny UI.
@@ -169,7 +180,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The value of the shiny input.
     get_active_module_input = function(input_id) {
-      self$get_value(input = sprintf("%s-%s", self$get_active_ns("module"), input_id))
+      self$get_value(input = sprintf("%s-%s", self$active_module_ns(), input_id))
     },
     #' @description
     #' Get the output from the module in the `teal` app.
@@ -179,7 +190,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The value of the shiny output.
     get_active_module_output = function(output_id) {
-      self$get_value(output = sprintf("%s-%s", self$get_active_ns("module"), output_id))
+      self$get_value(output = sprintf("%s-%s", self$active_module_ns(), output_id))
     },
     #' @description
     #' Set the input in the module in the `teal` app.
@@ -191,7 +202,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @return The `TealAppDriver` object invisibly.
     set_module_input = function(input_id, value) {
       self$set_input(
-        sprintf("%s-%s", self$get_active_ns("module"), input_id),
+        sprintf("%s-%s", self$active_module_ns(), input_id),
         value
       )
       invisible(self)
@@ -203,7 +214,7 @@ TealAppDriver <- R6::R6Class( # nolint
         self$get_html(
           sprintf(
             "#%s-active-filter_active_vars_contents > span",
-            self$get_active_ns("filter_panel")
+            self$active_filters_ns()
           )
         ),
         function(x) {
@@ -221,7 +232,7 @@ TealAppDriver <- R6::R6Class( # nolint
       available_datasets <- self$get_html(
         sprintf(
           "#%s-active-filter_active_vars_contents",
-          self$get_active_ns("filter_panel")
+          self$active_filters_ns()
         )
       ) %>%
         read_html() %>%
@@ -243,7 +254,7 @@ TealAppDriver <- R6::R6Class( # nolint
           self$get_html(
             sprintf(
               "#%s-active-%s-filters",
-              self$get_active_ns("filter_panel"),
+              self$active_filters_ns(),
               x
             )
           ) |>
@@ -272,7 +283,7 @@ TealAppDriver <- R6::R6Class( # nolint
       self$get_value(
         input = sprintf(
           "%s-active-%s-filter-%s_%s-inputs-%s",
-          self$get_active_ns("filter_panel"),
+          self$active_filters_ns(),
           dataset_name,
           dataset_name,
           var_name,
@@ -291,7 +302,7 @@ TealAppDriver <- R6::R6Class( # nolint
       self$set_input(
         sprintf(
           "%s-add-%s-filter-var_to_add",
-          self$get_active_ns("filter_panel"),
+          self$active_filters_ns(),
           dataset_name
         ),
         var_name
@@ -311,18 +322,18 @@ TealAppDriver <- R6::R6Class( # nolint
       if (is.null(dataset_name)) {
         remove_selector <- sprintf(
           "#%s-active-remove_all_filters",
-          self$get_active_ns("filter_panel")
+          self$active_filters_ns()
         )
       } else if (is.null(var_name)) {
         remove_selector <- sprintf(
           "#%s-active-%s-remove_filters",
-          self$get_active_ns("filter_panel"),
+          self$active_filters_ns(),
           dataset_name
         )
       } else {
         remove_selector <- sprintf(
           "#%s-active-%s-filter-%s_%s-remove",
-          self$get_active_ns("filter_panel"),
+          self$active_filters_ns(),
           dataset_name,
           dataset_name,
           var_name
@@ -347,7 +358,7 @@ TealAppDriver <- R6::R6Class( # nolint
       self$set_input(
         sprintf(
           "%s-active-%s-filter-%s_%s-inputs-%s",
-          self$get_active_ns("filter_panel"),
+          self$active_filters_ns(),
           dataset_name,
           dataset_name,
           var_name,
@@ -362,7 +373,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     open_filter_manager = function() {
-      active_ns <- self$get_active_ns("filter_manager")
+      active_ns <- self$filter_manager_ns()
       ns <- self$helper_NS(active_ns)
 
       self$click(ns("show"))
@@ -376,7 +387,7 @@ TealAppDriver <- R6::R6Class( # nolint
     data = NULL,
     modules = NULL,
     filter = teal_slices(),
-    active_ns = list(
+    ns = list(
       module = NULL,
       filter_panel = NULL,
       filter_manager = NULL
@@ -405,20 +416,20 @@ TealAppDriver <- R6::R6Class( # nolint
           }
         }
       }
-      private$active_ns$module <- sprintf("%s-%s", active_ns, "module")
+      private$ns$module <- sprintf("%s-%s", active_ns, "module")
 
       component <- "filter_panel"
       if (!is.null(self$get_html(sprintf("#teal-main_ui-%s", component)))) {
-        private$active_ns[[component]] <- sprintf("teal-main_ui-%s", component)
+        private$ns[[component]] <- sprintf("teal-main_ui-%s", component)
       } else {
-        private$active_ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
+        private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
       }
 
       component <- "filter_manager"
       if (!is.null(self$get_html(sprintf("#teal-main_ui-%s-show", component)))) {
-        private$active_ns[[component]] <- sprintf("teal-main_ui-%s", component)
+        private$ns[[component]] <- sprintf("teal-main_ui-%s", component)
       } else {
-        private$active_ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
+        private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
       }
     }
   )
