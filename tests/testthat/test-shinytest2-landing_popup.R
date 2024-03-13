@@ -148,24 +148,23 @@ testthat::test_that(
 })
 
 testthat::test_that("e2e: when customized button in landing_popup_module is clicked, it redirects to a certain page", {
-  skip("It actually did not clicked the button.")
+
+  onclick_text <- "window.open('http://google.com', '_blank')"
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
       landing_popup_module(
-        buttons = actionButton("read", "Read more", onclick = "window.open('http://google.com', '_blank')")
+        buttons = actionButton("read", "Read more", onclick = onclick_text)
       ),
       example_module()
     )
   )
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  app$click(selector = "#read")
-  # app$get_screenshot() still shows the app... :/
+  onclick_text_app <- app$get_js("document.getElementById(\"read\").onclick.toString()")
 
-  testthat::expect_equal(
-    app$get_url(),
-    "https://www.google.com/"
+  testthat::expect_true(
+    grepl(onclick_text, onclick_text_app, fixed = TRUE)
   )
 
   app$stop()
