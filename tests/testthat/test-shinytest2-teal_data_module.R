@@ -109,6 +109,7 @@ testthat::test_that("e2e: teal_data_module adds new column to datasets", {
   # This may fail if teal_data_module does not perform the transformation
   testthat::expect_no_error(app$add_filter_var("dataset1", "A_New_Column"))
 
+  app$wait_for_idle(timeout = default_idle_timeout)
   testthat::expect_setequal(
     app$get_active_filter_selection("dataset1", "A_New_Column"),
     unique(sprintf("%s new", iris$Species))
