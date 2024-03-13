@@ -248,14 +248,14 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @param dataset_name (character) The name of the dataset to get the filter values from.
     #' @param var_name (character) The name of the variable to get the filter values from.
-    #' @param is_numeric (logical) If the variable is numeric or not.
+    #' @param type (character) The type of the filter to get the value from. Default is `categorical`.
     #'
     #' @return The value of the active filter selection.
-    get_active_filter_selection = function(dataset_name, var_name, is_numeric = FALSE) {
+    get_active_filter_selection = function(dataset_name, var_name, type = c("categorical", "range")) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
-      checkmate::check_flag(is_numeric)
-      selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
+      type <- match.arg(type)
+
       self$get_value(
         input = sprintf(
           "%s-active-%s-filter-%s_%s-inputs-%s",
@@ -263,7 +263,11 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           dataset_name,
           dataset_name,
           var_name,
-          selection_suffix
+          switch(type,
+            categorical = "selection",
+            range = "selection_manual",
+            stop("Not supported.")
+          )
         )
       )
     },
@@ -330,27 +334,44 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param dataset_name (character) The name of the dataset to set the filter value for.
     #' @param var_name (character) The name of the variable to set the filter value for.
     #' @param input The value to set the filter to.
-    #' @param is_numeric (logical) If the variable is numeric or not.
+    #' @param type (character) The type of the filter to get the value from. Default is `categorical`.
     #'
     #' @return The `TealAppDriver` object invisibly.
-    set_active_filter_selection = function(dataset_name, var_name, input, is_numeric = FALSE) {
+    set_active_filter_selection = function(dataset_name, var_name, input, type = c("categorical", "range")) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
       checkmate::check_string(input)
-      checkmate::check_flag(is_numeric)
+      type <- match.arg(type)
 
-      selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-      self$set_input(
-        sprintf(
-          "%s-active-%s-filter-%s_%s-inputs-%s",
-          self$active_filters_ns(),
-          dataset_name,
-          dataset_name,
-          var_name,
-          selection_suffix
-        ),
-        input
+      # Convert to `teal_slices` naming
+      slices_suffix <- switch(type,
+        categorical = "selection",
+        range = "selection_manual",
+        stop("Not supported.")
       )
+      # Generate correct namespace
+      slices_input_id <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs-%s",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name,
+        slices_suffix
+      )
+
+      if (identical(slices_suffix, "selection_manual")) {
+        checkmate::assert_numeric(input, len = 2)
+        self$run_js(
+          sprintf(
+            "Shiny.setInputValue('%s:sw.numericRange', [%f, %f], {priority: 'event'})",
+            slices_input_id,
+            input[[1]],
+            input[[2]]
+          )
+        )
+      } else if (identical(slices_suffix, "selection")) {
+        self$set_input(slices_input_id, input)
+      }
       invisible(self)
     },
     #' @description

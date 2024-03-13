@@ -26,7 +26,7 @@ testthat::test_that("e2e: teal_slices filters are initialized when global filter
     c("4", "6")
   )
   testthat::expect_identical(
-    app$get_active_filter_selection("mtcars", "drat", is_numeric = TRUE),
+    app$get_active_filter_selection("mtcars", "drat", type = "range"),
     c(3, 4)
   )
   testthat::expect_identical(
@@ -67,7 +67,7 @@ testthat::test_that("e2e: teal_slices filters are initialized when module specif
     app$get_active_filter_selection("mtcars", "cyl"),
     c("4", "6")
   )
-  testthat::expect_null(app$get_active_filter_selection("mtcars", "drat", is_numeric = TRUE))
+  testthat::expect_null(app$get_active_filter_selection("mtcars", "drat", type = "range"))
   testthat::expect_null(app$get_active_filter_selection("mtcars", "gear"))
 
   app$navigate_teal_tab("Module_2")
@@ -80,7 +80,7 @@ testthat::test_that("e2e: teal_slices filters are initialized when module specif
     c("setosa", "versicolor", "virginica")
   )
   testthat::expect_identical(
-    app$get_active_filter_selection("mtcars", "drat", is_numeric = TRUE),
+    app$get_active_filter_selection("mtcars", "drat", type = "range"),
     c(3, 4)
   )
   testthat::expect_identical(
@@ -97,5 +97,27 @@ testthat::test_that("e2e: teal_slices filters are initialized when module specif
     app$get_active_filter_selection("iris", "Species"),
     "setosa"
   )
+  app$stop()
+})
+
+testthat::test_that("e2e: Set numeric filter state", {
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
+    modules = example_module(label = "Example Module"),
+    timeout = default_idle_timeout
+  )
+
+  app$wait_for_idle()
+
+  app$add_filter_var("iris", "Sepal.Length")
+  app$wait_for_idle()
+
+  app$set_active_filter_selection("iris", "Sepal_Length", c(5, 6), type = "range")
+  app$wait_for_idle()
+  testthat::expect_equal(
+    app$get_active_filter_selection("iris", "Sepal_Length", type = "range"),
+    c(5, 6)
+  )
+
   app$stop()
 })

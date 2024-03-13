@@ -352,7 +352,7 @@ Get the active filter values from the active filter selection of dataset from th
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filter_selection(
   dataset_name,
   var_name,
-  is_numeric = FALSE
+  type = c("categorical", "range")
 )}\if{html}{\out{</div>}}
 }
 
@@ -363,7 +363,7 @@ Get the active filter values from the active filter selection of dataset from th
 
 \item{\code{var_name}}{(character) The name of the variable to get the filter values from.}
 
-\item{\code{is_numeric}}{(logical) If the variable is numeric or not.}
+\item{\code{type}}{(character) The type of the filter to get the value from. Default is \code{categorical}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -427,7 +427,7 @@ Set the active filter values for a variable of a dataset in the active filter va
   dataset_name,
   var_name,
   input,
-  is_numeric = FALSE
+  type = c("categorical", "range")
 )}\if{html}{\out{</div>}}
 }
 
@@ -440,7 +440,7 @@ Set the active filter values for a variable of a dataset in the active filter va
 
 \item{\code{input}}{The value to set the filter to.}
 
-\item{\code{is_numeric}}{(logical) If the variable is numeric or not.}
+\item{\code{type}}{(character) The type of the filter to get the value from. Default is \code{categorical}.}
 }
 \if{html}{\out{</div>}}
 }
