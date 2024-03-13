@@ -45,14 +45,14 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
 
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    sesh <- get_master_session()
+    app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
 
     # Store input states.
     grab_history <- reactiveVal({
       list()
     })
 
-    sesh$onBookmark(function(state) {
+    app_session$onBookmark(function(state) {
       # Add current filter state to bookmark.
       snapshot <- as.list(slices_global(), recursive = TRUE)
       attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
@@ -61,7 +61,7 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
       state$values$snapshot_history <- snapshot_history()   # isolate this?
       state$values$grab_history <- grab_history()           # isolate this?
     })
-    sesh$onRestored(function(state) {
+    app_session$onRestored(function(state) {
       # Restore filter state.
       snapshot <- state$values$filter_state_on_bookmark
       snapshot_state <- as.teal_slices(snapshot)
@@ -81,7 +81,7 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
       grab_history(state$values$grab_history)
     })
 
-    sesh$onBookmarked(function(url) {
+    app_session$onBookmarked(function(url) {
       grab_name <- trimws(input$grab_name)
       if (identical(grab_name, "")) {
         showNotification(
@@ -154,20 +154,4 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
 
     grab_history
   })
-}
-
-
-
-## utility functions ----
-
-#' @keywords internal
-#'
-get_master_session <- function() {
-  local_session <- shiny::getDefaultReactiveDomain()
-  app_session <- .subset2(local_session, "parent")
-  if (is.null(app_session)) {
-    local_session
-  } else {
-    app_session
-  }
 }
