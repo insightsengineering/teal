@@ -23,7 +23,7 @@ state_manager_ui <- function(id) {
     div(
       class = "snapshot_table_row",
       span(tags$b("State manager")),
-      actionLink(ns("grab_add"), label = NULL, icon = suppressMessages(icon("solid fa-bookmark")), title = "grab input state"),
+      actionLink(ns("grab_add"), NULL, icon = suppressMessages(icon("solid fa-bookmark")), title = "grab input state"),
       NULL
     ),
     uiOutput(ns("grab_list"))
