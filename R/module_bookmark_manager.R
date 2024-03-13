@@ -23,10 +23,10 @@ bookmark_manager_ui <- function(id) {
     div(
       class = "snapshot_table_row",
       span(tags$b("Bookmark manager")),
-      actionLink(ns("grab_add"), NULL, icon = suppressMessages(icon("solid fa-bookmark")), title = "grab input state"),
+      actionLink(ns("bookmark_add"), NULL, icon = suppressMessages(icon("solid fa-bookmark")), title = "add bookmark"),
       NULL
     ),
-    uiOutput(ns("grab_list"))
+    uiOutput(ns("bookmark_list"))
   )
 }
 
@@ -48,7 +48,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
     app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
 
     # Store input states.
-    grab_history <- reactiveVal({
+    bookmark_history <- reactiveVal({
       list()
     })
 
@@ -57,9 +57,9 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       snapshot <- as.list(slices_global(), recursive = TRUE)
       attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
       state$values$filter_state_on_bookmark <- snapshot
-      # Add snapshot history and grab history to bookmark.
+      # Add snapshot history and bookmark history to bookmark.
       state$values$snapshot_history <- snapshot_history()   # isolate this?
-      state$values$grab_history <- grab_history()           # isolate this?
+      state$values$bookmark_history <- bookmark_history()   # isolate this?
     })
     app_session$onRestored(function(state) {
       # Restore filter state.
@@ -76,42 +76,42 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         filter_ids = mapping_unfolded
       )
       slices_global(snapshot_state)
-      # Restore snapshot history and grab history.
+      # Restore snapshot history and bookmark history.
       snapshot_history(state$values$snapshot_history)
-      grab_history(state$values$grab_history)
+      bookmark_history(state$values$bookmark_history)
     })
 
     app_session$onBookmarked(function(url) {
-      grab_name <- trimws(input$grab_name)
-      if (identical(grab_name, "")) {
+      bookmark_name <- trimws(input$bookmark_name)
+      if (identical(bookmark_name, "")) {
         showNotification(
-          "Please name the grab.",
+          "Please name the bookmark.",
           type = "message"
         )
-        updateTextInput(inputId = "grab_name", value = "", placeholder = "Meaningful, unique name")
+        updateTextInput(inputId = "bookmark_name", value = "", placeholder = "Meaningful, unique name")
         unlink(strsplit(url, "_state_id_=")[[1L]][[2L]], recursive = TRUE, force = TRUE, expand = FALSE)
-      } else if (is.element(make.names(grab_name), make.names(names(grab_history())))) {
+      } else if (is.element(make.names(bookmark_name), make.names(names(bookmark_history())))) {
         showNotification(
-          "This name is in conflict with other grab names. Please choose a different one.",
+          "This name is in conflict with other bookmark names. Please choose a different one.",
           type = "message"
         )
-        updateTextInput(inputId = "grab_name", value = , placeholder = "Meaningful, unique name")
+        updateTextInput(inputId = "bookmark_name", value = , placeholder = "Meaningful, unique name")
         unlink(strsplit(url, "_state_id_=")[[1L]][[2L]], recursive = TRUE, force = TRUE, expand = FALSE)
       } else {
-        # Add bookmark URL to grab history (with name).
-        grab_update <- c(grab_history(), list(url))
-        names(grab_update)[length(grab_update)] <- grab_name
-        grab_history(grab_update)
+        # Add bookmark URL to bookmark history (with name).
+        bookmark_update <- c(bookmark_history(), list(url))
+        names(bookmark_update)[length(bookmark_update)] <- bookmark_name
+        bookmark_history(bookmark_update)
 
         removeModal()
       }
     })
 
-    # Grab current input state - name grab.
-    observeEvent(input$grab_add, {
+    # Bookmark current input state - name bookmark.
+    observeEvent(input$bookmark_add, {
       showModal(
         modalDialog(
-          textInput(ns("grab_name"), "Name the grab", width = "100%", placeholder = "Meaningful, unique name"),
+          textInput(ns("bookmark_name"), "Name the bookmark", width = "100%", placeholder = "Meaningful, unique name"),
           footer = tagList(
             bookmarkButton("Accept", icon = icon("thumbs-up")),
             modalButton(label = "Cancel", icon = icon("thumbs-down"))
@@ -121,37 +121,37 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       )
     })
 
-    # Create UI elements and server logic for the grab table.
+    # Create UI elements and server logic for the bookmark table.
     # Divs are tracked for a slight speed margin.
     divs <- reactiveValues()
 
-    observeEvent(grab_history(), {
-      lapply(names(grab_history()), function(s) {
+    observeEvent(bookmark_history(), {
+      lapply(names(bookmark_history()), function(s) {
         id_rowme <- sprintf("rowme_%s", make.names(s))
 
-        # Create a row for the grab table.
+        # Create a row for the bookmark table.
         if (!is.element(id_rowme, names(divs))) {
           divs[[id_rowme]] <- div(
             class = "snapshot_table_row",
-            a(h5(s), title = "restore bookmark", href = grab_history()[[s]], target = "blank")
+            a(h5(s), title = "go to bookmark", href = bookmark_history()[[s]], target = "blank")
           )
         }
       })
     })
 
-    # Create table to display list of grabs and their actions.
-    output$grab_list <- renderUI({
+    # Create table to display list of bookmarks and their actions.
+    output$bookmark_list <- renderUI({
       rows <- lapply(rev(reactiveValuesToList(divs)), function(d) d)
       if (length(rows) == 0L) {
         div(
           class = "snapshot_manager_placeholder",
-          "Input states will appear here."
+          "Bookmarks will appear here."
         )
       } else {
         rows
       }
     })
 
-    grab_history
+    bookmark_history
   })
 }
