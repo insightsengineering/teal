@@ -8,21 +8,21 @@
 #'
 #' @return Nothing is returned.
 #'
-#' @name state_manager_module
-#' @aliases grab grab_manager state_manager
+#' @name bookmark_manager_module
+#' @aliases bookmark bookmark_manager
 #'
 #' @author Aleksander Chlebowski
 #'
-#' @rdname state_manager_module
+#' @rdname bookmark_manager_module
 #' @keywords internal
 #'
-state_manager_ui <- function(id) {
+bookmark_manager_ui <- function(id) {
   ns <- NS(id)
   div(
     class = "snapshot_manager_content",
     div(
       class = "snapshot_table_row",
-      span(tags$b("State manager")),
+      span(tags$b("Bookmark manager")),
       actionLink(ns("grab_add"), NULL, icon = suppressMessages(icon("solid fa-bookmark")), title = "grab input state"),
       NULL
     ),
@@ -30,10 +30,10 @@ state_manager_ui <- function(id) {
   )
 }
 
-#' @rdname state_manager_module
+#' @rdname bookmark_manager_module
 #' @keywords internal
 #'
-state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_list, snapshot_history) {
+bookmark_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_list, snapshot_history) {
   checkmate::assert_character(id)
   checkmate::assert_true(is.reactive(slices_global))
   checkmate::assert_class(isolate(slices_global()), "teal_slices")

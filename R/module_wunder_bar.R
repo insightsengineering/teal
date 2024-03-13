@@ -26,9 +26,9 @@ wunder_bar_ui <- function(id) {
         icon("camera")
       ),
       tags$button(
-        id = ns("show_state_manager"),
+        id = ns("show_bookmark_manager"),
         class = "btn action-button wunder_bar_button",
-        title = "Show state manager modal",
+        title = "Show bookmark manager modal",
         suppressMessages(icon("solid fa-bookmark"))
       )
     )
@@ -65,11 +65,11 @@ wunder_bar_srv <- function(id, filtered_data_list, filter) {
       )
     })
 
-    observeEvent(input$show_state_manager, {
-      logger::log_trace("wunder_bar_srv@1 show_state_manager button has been clicked.")
+    observeEvent(input$show_bookmark_manager, {
+      logger::log_trace("wunder_bar_srv@1 show_bookmark_manager button has been clicked.")
       showModal(
         modalDialog(
-          state_manager_ui(ns("state_manager")),
+          bookmark_manager_ui(ns("bookmark_manager")),
           size = "m",
           footer = NULL,
           easyClose = TRUE
@@ -88,8 +88,8 @@ wunder_bar_srv <- function(id, filtered_data_list, filter) {
       mapping_matrix = filtrer_manager_results$mapping_matrix,
       filtered_data_list = filtrer_manager_results$filtered_data_list
     )
-    state_manager_srv(
-      id = "state_manager",
+    bookmark_manager_srv(
+      id = "bookmark_manager",
       slices_global = filtrer_manager_results$slices_global,
       mapping_matrix = filtrer_manager_results$mapping_matrix,
       filtered_data_list = filtrer_manager_results$filtered_data_list,
