@@ -79,3 +79,38 @@ testthat::test_that(
 
   app$stop()
 })
+
+testthat::test_that(
+  "e2e: teal.widgets::table_with_settings is initialized with a button that opens a modal with a verbatim text", {
+
+  # This should probably be moved to teal.widgets directly.
+  testthat::skip_if_not_installed(c("rtables", "formatters"))
+
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
+    modules = modules(
+      module(
+        label = "Module with table_with_settings",
+        ui = function(id) {
+          teal.widgets::table_with_settings_ui(id = id)
+        },
+        server <- function(id, input, output, session) {
+          table_r <- reactive({
+            layout <- rtables::basic_table() %>%
+              rtables::split_cols_by("ARM") %>%
+              rtables::analyze(c("SEX", "AGE"))
+
+            rtables::build_table(layout, formatters::DM)
+          })
+
+          teal.widgets::table_with_settings_srv(id = id, table_r = table_r)
+        }
+      )
+    )
+  )
+  # TBA
+
+  app$stop()
+
+})
+
