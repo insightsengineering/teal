@@ -9,25 +9,25 @@
 NULL
 
 #' @rdname module_filter_manager_modal
-manager_manager_ui <- function(id) {
+wunder_bar_ui <- function(id) {
   ns <- NS(id)
   rev( # Reversing order because buttons show up in UI from right to left.
     tagList(
       tags$button(
         id = ns("show_filter_manager"),
-        class = "btn action-button manager_manager_button",
+        class = "btn action-button wunder_bar_button",
         title = "Show filter manager modal",
         suppressMessages(icon("solid fa-filter"))
       ),
       tags$button(
         id = ns("show_snapshot_manager"),
-        class = "btn action-button manager_manager_button",
+        class = "btn action-button wunder_bar_button",
         title = "Show snapshot manager modal",
         icon("camera")
       ),
       tags$button(
         id = ns("show_state_manager"),
-        class = "btn action-button manager_manager_button",
+        class = "btn action-button wunder_bar_button",
         title = "Show state manager modal",
         suppressMessages(icon("solid fa-bookmark"))
       )
@@ -36,13 +36,13 @@ manager_manager_ui <- function(id) {
 }
 
 #' @rdname module_filter_manager_modal
-manager_manager_srv <- function(id, filtered_data_list, filter) {
+wunder_bar_srv <- function(id, filtered_data_list, filter) {
   moduleServer(id, function(input, output, session) {
 
     ns <- session$ns
 
     observeEvent(input$show_filter_manager, {
-      logger::log_trace("manager_manager_modal_srv@1 show_filter_manager button has been clicked.")
+      logger::log_trace("wunder_bar_srv@1 show_filter_manager button has been clicked.")
       showModal(
         modalDialog(
           filter_manager_ui(ns("filter_manager")),
@@ -54,7 +54,7 @@ manager_manager_srv <- function(id, filtered_data_list, filter) {
     })
 
     observeEvent(input$show_snapshot_manager, {
-      logger::log_trace("manager_manager_modal_srv@1 show_snapshot_manager button has been clicked.")
+      logger::log_trace("wunder_bar_srv@1 show_snapshot_manager button has been clicked.")
       showModal(
         modalDialog(
           snapshot_manager_ui(ns("snapshot_manager")),
@@ -66,7 +66,7 @@ manager_manager_srv <- function(id, filtered_data_list, filter) {
     })
 
     observeEvent(input$show_state_manager, {
-      logger::log_trace("manager_manager_modal_srv@1 show_state_manager button has been clicked.")
+      logger::log_trace("wunder_bar_srv@1 show_state_manager button has been clicked.")
       showModal(
         modalDialog(
           state_manager_ui(ns("state_manager")),
