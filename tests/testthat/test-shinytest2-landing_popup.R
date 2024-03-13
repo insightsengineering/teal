@@ -148,7 +148,6 @@ testthat::test_that(
 })
 
 testthat::test_that("e2e: when customized button in landing_popup_module is clicked, it redirects to a certain page", {
-
   onclick_text <- "window.open('http://google.com', '_blank')"
   app <- TealAppDriver$new(
     data = simple_teal_data(),
