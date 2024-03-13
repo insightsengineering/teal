@@ -151,6 +151,8 @@ state_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_l
         rows
       }
     })
+
+    grab_history
   })
 }
 

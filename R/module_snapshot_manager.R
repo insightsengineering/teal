@@ -326,7 +326,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       }
     })
 
-    return(snapshot_history)
+    snapshot_history
   })
 }
 

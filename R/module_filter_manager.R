@@ -153,7 +153,12 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     # Call state manager.
     state_manager_srv("state_manager", slices_global, mapping_matrix, filtered_data_list, snapshot_history)
 
-    modules_out # returned for testing purpose
+    list(
+      slices_global = slices_global,
+      mapping_matrix = mapping_matrix,
+      filtered_data_list = filtered_data_list,
+      modules_out = modules_out # returned for testing purpose
+    )
   })
 }
 
