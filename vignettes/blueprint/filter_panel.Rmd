@@ -49,7 +49,7 @@ The filter panel creates subsets of data. Subsetting is achieved by creating fil
 
 The process is entirely interactive. Filter states can be created, removed, and changed at will, however, the app developer may choose to constrain or even restrict them.
 
-When a filter state is created, the filter panel generates a _filter card_ with `shiny` inputs appropriate to the type of the variable, e.g. range selectors for numeric columns and sets of checkboxes or dropdown menus for categorical ones. 
+When a filter state is created, the filter panel generates a _filter card_ with `shiny` inputs appropriate to the type of the variable, e.g. range selectors for numeric columns and sets of checkboxes or drop-down menus for categorical ones. 
 
 As users interact with the filter cards, the subsetting complete expression is updated and filtered data is recomputed.
 

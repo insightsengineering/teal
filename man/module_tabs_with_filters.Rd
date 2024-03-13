@@ -4,7 +4,7 @@
 \alias{module_tabs_with_filters}
 \alias{ui_tabs_with_filters}
 \alias{srv_tabs_with_filters}
-\title{Add right filter panel into each of the top-level \code{teal_modules} UIs.}
+\title{Add right filter panel into each of the top-level \code{teal_modules} UIs}
 \usage{
 ui_tabs_with_filters(id, modules, datasets, filter = teal_slices())
 
@@ -17,20 +17,26 @@ srv_tabs_with_filters(
 )
 }
 \arguments{
-\item{id}{(\code{character(1)})\cr
+\item{id}{(\code{character(1)})
 module id}
 
-\item{datasets}{(\verb{named list} of \code{FilteredData})\cr
+\item{modules}{(\code{teal_modules}) object containing the output modules which
+will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+more details.}
+
+\item{datasets}{(named \code{list} of \code{FilteredData})
 object to store filter state and filtered datasets, shared across modules. For more
 details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}. Structure of the list must be the same as structure
 of the \code{modules} argument and list names must correspond to the labels in \code{modules}.
 When filter is not module-specific then list contains the same object in all elements.}
 
+\item{filter}{(\code{teal_slices})
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
+
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
 }
 \value{
-A \code{tagList} of The main menu, place holders for filters and
-place holders for the teal modules
+A \code{shiny.tag.list} containing the main menu, placeholders for filters and placeholders for the \code{teal} modules.
 }
 \description{
 The \link{ui_nested_tabs} function returns a nested tabbed UI corresponding
@@ -43,32 +49,5 @@ all modules using the same \code{datasets} share the same filters.
 
 This works with nested modules of depth greater than 2, though the filter
 panel is inserted at the right of the modules at depth 1 and not at the leaves.
-}
-\examples{
-
-mods <- teal:::example_modules()
-datasets <- teal:::example_datasets()
-
-app <- shinyApp(
-  ui = function() {
-    tagList(
-      teal:::include_teal_css_js(),
-      textOutput("info"),
-      fluidPage( # needed for nice tabs
-        ui_tabs_with_filters("dummy", modules = mods, datasets = datasets)
-      )
-    )
-  },
-  server = function(input, output, session) {
-    output$info <- renderText({
-      paste0("The currently active tab name is ", active_module()$label)
-    })
-    active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
-  }
-)
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-
 }
 \keyword{internal}

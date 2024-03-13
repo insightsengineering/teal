@@ -6,9 +6,12 @@ template:
 
 navbar:
   structure:
-    left: [intro, reference, articles, blueprint, tutorials, news, reports]
+    left: [get-started, reference, articles, blueprint, tutorials, news, reports]
     right: [search, github]
   components:
+    get-started:
+      text: Get started
+      href: articles/getting-started-with-teal.html
     reports:
       text: Reports
       menu:
@@ -17,27 +20,27 @@ navbar:
         - text: Unit test report
           href: unit-test-report/
     blueprint:
-      text: Technical Blueprint
+      text: Technical blueprint
       menu:
-        - text: About Blueprint
+        - text: About blueprint
           href: articles/blueprint/index.html
         - text: Introduction
           href: articles/blueprint/intro.html
         - text: Actors
           href: articles/blueprint/actors.html
-        - text: Data Flow
+        - text: Data flow
           href: articles/blueprint/dataflow.html
-        - text: Product Map
+        - text: Product map
           href: articles/blueprint/product_map.html
         - text: Features
           navbar: Features
-        - text: Input Data
+        - text: Input data
           href: articles/blueprint/input_data.html
-        - text: In-App Data
+        - text: In-app data
           href: articles/blueprint/in_app_data.html
-        - text: Filter Panel
+        - text: Filter panel
           href: articles/blueprint/filter_panel.html
-        - text: Module and Encapsulation
+        - text: Module and encapsulation
           href: articles/blueprint/module_encapsulation.html
 
     github:
@@ -45,27 +48,27 @@ navbar:
       href: https://github.com/insightsengineering/teal
 
 articles:
-- title: Get Started
-  navbar: ~
+- title: Get started
+  navbar: Get started
   contents:
     - getting-started-with-teal
-- title: Using teal
-  navbar: Using teal
+- title: Using `teal`
+  navbar: Using `teal`
   contents:
     - filter-panel
     - teal-options
     - bootstrap-themes-in-teal
-- title: Data in teal Apps
-  navbar: Data in teal Apps
+- title: Data in `teal` apps
+  navbar: Data in `teal` apps
   contents:
     - including-data-in-teal-applications
     - data-as-shiny-module
-- title: Extending teal
-  navbar: Extending teal
+- title: Extending `teal`
+  navbar: Extending `teal`
   contents:
     - creating-custom-modules
     - adding-support-for-reporting
-- title: 📃 Technical Blueprint
+- title: 📃 Technical blueprint
   desc: >
     The purpose of the blueprint is to aid new developer’s comprehension of the
     fundamental principles of the `teal` framework. We will explore crucial `teal`
@@ -78,7 +81,7 @@ articles:
     - blueprint/product_map
 - title: ""
   desc: >
-    Features
+    Features.
   contents:
   - blueprint/input_data
   - blueprint/in_app_data
@@ -87,29 +90,33 @@ articles:
 
 
 reference:
-  - title: Core `teal` Functions
+  - title: Core `teal` functions
     desc: Main functions needed to build a `teal` app
     contents:
-      - teal_data_module
       - init
+      - teal_data_module
       - module
       - modules
       - srv_teal_with_splash
       - ui_teal_with_splash
       - teal_slices
-  - title: Example Module
+  - title: Helper Functions
+    desc: Helper functions for `teal`
+    contents:
+      - build_app_title
+  - title: Example module
     desc: A simple `teal` module
     contents:
       - example_module
-  - title: Creating Reports
+  - title: Creating reports
     contents:
       - reporter_previewer_module
       - TealReportCard
       - report_card_template
-  - title: Landing Popup
+  - title: Landing popup
     contents:
       - landing_popup_module
-  - title: Functions for Module Developers
+  - title: Functions for module developers
     contents:
       - as_tdata
       - tdata
@@ -120,9 +127,6 @@ reference:
       - within.teal_data_module
       - show_rcode_modal
       - join_keys.tdata
-  # - title: Functions Moved to Other Packages
-    # desc: These functions have been moved from teal and will be deprecated
-    # contents:
-  - title: Validation Functions
+  - title: Validation functions
     contents:
       - starts_with("validate_")

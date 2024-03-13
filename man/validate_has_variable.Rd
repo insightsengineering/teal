@@ -7,11 +7,11 @@
 validate_has_variable(data, varname, msg)
 }
 \arguments{
-\item{data}{a data.frame}
+\item{data}{(\code{data.frame})}
 
-\item{varname}{name of variable in \code{data}}
+\item{varname}{(\code{character(1)}) name of variable to check for in \code{data}}
 
-\item{msg}{message to display if \code{data} does not include \code{varname}}
+\item{msg}{(\code{character(1)}) message to display if \code{data} does not include \code{varname}}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

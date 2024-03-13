@@ -2,24 +2,21 @@
 % Please edit documentation in R/include_css_js.R
 \name{include_teal_css_js}
 \alias{include_teal_css_js}
-\title{Code to include teal \code{CSS} and \code{JavaScript} files}
+\title{Code to include \code{teal} \code{CSS} and \code{JavaScript} files}
 \usage{
 include_teal_css_js()
 }
 \value{
-HTML code to include
+A \code{shiny.tag.list}.
 }
 \description{
 This is useful when you want to use the same \code{JavaScript} and \code{CSS} files that are
-used with the teal application.
-This is also useful for running standalone modules in teal with the correct
+used with the \code{teal} application.
+This is also useful for running standalone modules in \code{teal} with the correct
 styles.
 Also initializes \code{shinyjs} so you can use it.
 }
-\examples{
-shiny_ui <- tagList(
-  teal:::include_teal_css_js(),
-  p("Hello")
-)
+\details{
+Simply add \code{include_teal_css_js()} as one of the UI elements.
 }
 \keyword{internal}

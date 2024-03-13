@@ -1,4 +1,4 @@
-#' Filter state snapshot management.
+#' Filter state snapshot management
 #'
 #' Capture and restore snapshots of the global (app) filter state.
 #'
@@ -40,7 +40,7 @@
 #' The snapshot contains the `mapping` attribute of the initial application state
 #' (or one that has been restored), which may not reflect the current one,
 #' so `mapping_matrix` is transformed to obtain the current mapping, i.e. a list that,
-#' when passed to the `mapping` argument of [`teal::teal_slices`], would result in the current mapping.
+#' when passed to the `mapping` argument of [teal_slices()], would result in the current mapping.
 #' This is substituted as the snapshot's `mapping` attribute and the snapshot is added to the snapshot list.
 #'
 #' To restore app state, a snapshot is retrieved from storage and rebuilt into a `teal_slices` object.
@@ -49,7 +49,7 @@
 #' The snapshot is then set as the current content of `slices_global`.
 #'
 #' To save a snapshot, the snapshot is retrieved and reassembled just like for restoring,
-#' and then saved to file with [`slices_store`].
+#' and then saved to file with [slices_store()].
 #'
 #' When a snapshot is uploaded, it will first be added to storage just like a newly created one,
 #' and then used to restore app state much like a snapshot taken from storage.
@@ -71,7 +71,7 @@
 #' @param mapping_matrix (`reactive`) that contains a `data.frame` representation
 #'                       of the mapping of filter state ids (rows) to modules labels (columns);
 #'                       all columns are `logical` vectors
-#' @param filtered_data_list non-nested (`named list`) that contains `FilteredData` objects
+#' @param filtered_data_list non-nested (named `list`) that contains `FilteredData` objects
 #'
 #' @return Nothing is returned.
 #'
@@ -85,11 +85,11 @@
 #'
 snapshot_manager_ui <- function(id) {
   ns <- NS(id)
-  div(
+  tags$div(
     class = "snapshot_manager_content",
-    div(
+    tags$div(
       class = "snapshot_table_row",
-      span(tags$b("Snapshot manager")),
+      tags$span(tags$b("Snapshot manager")),
       actionLink(ns("snapshot_add"), label = NULL, icon = icon("camera"), title = "add snapshot"),
       actionLink(ns("snapshot_load"), label = NULL, icon = icon("upload"), title = "upload snapshot"),
       actionLink(ns("snapshot_reset"), label = NULL, icon = icon("undo"), title = "reset initial state"),
@@ -303,9 +303,9 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         }
         # Create a row for the snapshot table.
         if (!is.element(id_rowme, names(divs))) {
-          divs[[id_rowme]] <- div(
+          divs[[id_rowme]] <- tags$div(
             class = "snapshot_table_row",
-            span(h5(s)),
+            tags$span(tags$h5(s)),
             actionLink(inputId = ns(id_pickme), label = icon("circle-check"), title = "select"),
             downloadLink(outputId = ns(id_saveme), label = icon("save"), title = "save to file")
           )
@@ -317,7 +317,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
     output$snapshot_list <- renderUI({
       rows <- lapply(rev(reactiveValuesToList(divs)), function(d) d)
       if (length(rows) == 0L) {
-        div(
+        tags$div(
           class = "snapshot_manager_placeholder",
           "Snapshots will appear here."
         )
@@ -330,16 +330,13 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
   })
 }
 
-
-
-
 ### utility functions ----
 
 #' Explicitly enumerate global filters.
 #'
 #' Transform module mapping such that global filters are explicitly specified for every module.
 #'
-#' @param mapping (`named list`) as stored in mapping parameter of `teal_slices`
+#' @param mapping (named `list`) as stored in mapping parameter of `teal_slices`
 #' @param module_names (`character`) vector containing names of all modules in the app
 #' @return A `named_list` with one element per module, each element containing all filters applied to that module.
 #' @keywords internal
@@ -358,7 +355,7 @@ unfold_mapping <- function(mapping, module_names) {
 #'
 #' @param mapping_matrix (`data.frame`) of logical vectors where
 #'                       columns represent modules and row represent `teal_slice`s
-#' @return `named list` like that in the `mapping` attribute of a `teal_slices` object.
+#' @return Named `list` like that in the `mapping` attribute of a `teal_slices` object.
 #' @keywords internal
 #'
 matrix_to_mapping <- function(mapping_matrix) {

@@ -20,19 +20,23 @@ testthat::test_that("With teal.load_nest_code option set to character get_rcode_
 })
 
 
-testthat::test_that("With teal.load_nest_code option is not character get_rcode_str_install (silently) returns
-          default string", {
-  withr::with_options(
-    list(teal.load_nest_code = TRUE),
-    testthat::expect_equal(get_rcode_str_install(), "# Add any code to install/load your NEST environment here\n")
-  )
+testthat::test_that(
+  paste(
+    "When teal.load_nest_code option is not character",
+    "get_rcode_str_install (silently) returns default string"
+  ),
+  {
+    withr::with_options(
+      list(teal.load_nest_code = TRUE),
+      testthat::expect_equal(get_rcode_str_install(), "# Add any code to install/load your NEST environment here\n")
+    )
 
-
-  withr::with_options(
-    list(teal.load_nest_code = list(x = "boo")),
-    testthat::expect_equal(get_rcode_str_install(), "# Add any code to install/load your NEST environment here\n")
-  )
-})
+    withr::with_options(
+      list(teal.load_nest_code = list(x = "boo")),
+      testthat::expect_equal(get_rcode_str_install(), "# Add any code to install/load your NEST environment here\n")
+    )
+  }
+)
 
 
 testthat::test_that("get_rcode_libraries returns current session packages", {

@@ -6,7 +6,7 @@
 \alias{snapshot}
 \alias{snapshot_manager}
 \alias{snapshot_manager_srv}
-\title{Filter state snapshot management.}
+\title{Filter state snapshot management}
 \usage{
 snapshot_manager_ui(id)
 
@@ -22,7 +22,7 @@ containing all \code{teal_slice}s existing in the app, both active and inactive}
 of the mapping of filter state ids (rows) to modules labels (columns);
 all columns are \code{logical} vectors}
 
-\item{filtered_data_list}{non-nested (\verb{named list}) that contains \code{FilteredData} objects}
+\item{filtered_data_list}{non-nested (named \code{list}) that contains \code{FilteredData} objects}
 }
 \value{
 Nothing is returned.
@@ -72,7 +72,7 @@ Once a name has been accepted, \code{slices_global} is converted to a list of li
 The snapshot contains the \code{mapping} attribute of the initial application state
 (or one that has been restored), which may not reflect the current one,
 so \code{mapping_matrix} is transformed to obtain the current mapping, i.e. a list that,
-when passed to the \code{mapping} argument of \code{\link{teal_slices}}, would result in the current mapping.
+when passed to the \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}, would result in the current mapping.
 This is substituted as the snapshot's \code{mapping} attribute and the snapshot is added to the snapshot list.
 
 To restore app state, a snapshot is retrieved from storage and rebuilt into a \code{teal_slices} object.
@@ -81,7 +81,7 @@ and set anew according to the \code{mapping} attribute of the snapshot.
 The snapshot is then set as the current content of \code{slices_global}.
 
 To save a snapshot, the snapshot is retrieved and reassembled just like for restoring,
-and then saved to file with \code{\link{slices_store}}.
+and then saved to file with \code{\link[=slices_store]{slices_store()}}.
 
 When a snapshot is uploaded, it will first be added to storage just like a newly created one,
 and then used to restore app state much like a snapshot taken from storage.

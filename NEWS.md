@@ -1,17 +1,34 @@
-# teal 0.14.0.9034
+# teal 0.15.2.9003
+
+# teal 0.15.2
+
+### Bug fixes
+* Fixed a bug in handling `datanames` of modules that crashed module-specific applications when filtering child datasets.
+
+# teal 0.15.1
+
+### Bug fixes
+* Fixed a bug that stopped the `module_specific` feature when a `teal` module specified `datanames` of length more than 1.
+
+### Miscellaneous
+* Updated links in vignettes
+
+# teal 0.15.0
 
 ### New features
 
-* `data` argument in `init` now accepts `teal_data` and `teal_data_module`.
 * Added `landing_popup_module` function which creates a module that will display a popup when the app starts. The popup will block access to the app until it is dismissed.
 * Filter state snapshots can now be uploaded from file. See `?snapshot`.
 * Added `as_tdata` function to facilitate migration of modules to the new `teal_data` class.
+* Added `build_app_title` function to facilitate adding favicons to app title.
 
 ### Breaking changes
 
+* `data` argument in `init` now accepts only `teal_data` and `teal_data_module`.
 * `tdata` has been deprecated and replaced with `teal_data`. Support for `tdata` passed to the `data` argument in `module(server)` will be removed in the next release.
-* `module(ui)` argument no longer accepts `data` and `datasets` arguments. All data dependent logic should be set in the `server` function.
-* `module(server)` argument deprecated `datasets` argument. `teal_module`s' `server` functions should accept `data` (`teal_data`) instead.
+* `module(ui)` argument no longer accepts `data` and `datasets` arguments. All data dependent logic should be set in the server function.
+* `module(server)` argument deprecated `datasets` argument. `teal_module`s' server functions should accept `data` (`teal_data`) instead.
+* Changed the order of formal arguments in `init`. `filter` now comes directly after `modules`, before `title`.
 
 ### Miscellaneous
 
@@ -55,7 +72,7 @@
 
 * Added the `validate_inputs` function that transfers input validation messages to app output.
 * `modules` argument of `init` accepts `teal_module` type of object. There is no need to wrap up a single module in `modules()` or `list()`.
-* Updated `module_nested_tabs` so that only active modules are calculated in a teal app.
+* Updated `module_nested_tabs` so that only active modules are calculated in a `teal` app.
 
 ### Miscellaneous
 
@@ -95,10 +112,10 @@
 ### Enhancements
 * Added new function `reporter_previewer_module` to wrap the `teal.reporter` package previewer functionality as a `teal` module.
 * Updated `teal` to support `modules` which include reporting. If any `module` which supports reporting is included then a `reporter_previewer_module` is included.
-* Added default arguments to `module()` and the `server` argument is now a function where the second argument can be `...` or `datasets`.
+* Added default arguments to `module()` and the server argument is now a function where the second argument can be `...` or `datasets`.
 
 ### Breaking changes
-* Deprecated `bookmarkableShinyApp`. In future releases the `teal` framework will stop supporting shiny bookmarking (which has not officially been supported); it may be officially supported in the future. Note the filter panel in `teal.slice` retains its ability to save and restore its state if used in a standalone `shiny` app with bookmarking.
+* Deprecated `bookmarkableShinyApp`. In future releases the `teal` framework will stop supporting `shiny` bookmarking (which has not officially been supported); it may be officially supported in the future. Note the filter panel in `teal.slice` retains its ability to save and restore its state if used in a standalone `shiny` app with bookmarking.
 
 ### Miscellaneous
 * Added a template to the `pkgdown` configuration.
@@ -109,7 +126,7 @@
 # teal 0.11.0
 
 * `teal.data`: creating and loading the data needed for `teal` applications.
-* `teal.widgets`: shiny components used within `teal`.
+* `teal.widgets`: `shiny` components used within `teal`.
 * `teal.slice`: provides a filtering panel to allow filtering of data.
 * `teal.code`: handles reproducibility of outputs.
 * `teal.transform`: standardizes extracting and merging data.
@@ -127,7 +144,7 @@ The `teal` package contains the code to create apps (`teal::init`), to create a 
 * Due to deprecation of `root_modules` any `label` argument to `modules` must be explicitly named. For example `modules("lab", mod1, mod2)` should be replaced with `modules(label = "lab", mod1, mod2)`.
 
 ### Miscellaneous
-* Minor changes to internals of `teal`: main module panel now has fixed shiny name `root` and the active tab is named `active_tab` not `Active_tab`.
+* Minor changes to internals of `teal`: main module panel now has fixed `shiny` name `root` and the active tab is named `active_tab` not `Active_tab`.
 * `MultiAssayExperiment` is now suggested packages, not required. Objects dependent on `MultiAssayExperiment` are changed to lazy-load this now suggested package.
 
 ### Bug fixes
@@ -148,7 +165,7 @@ The `teal` package contains the code to create apps (`teal::init`), to create a 
 * Added support for logging using the `logger` package.
 * Added a new function `register_logger`, which registers a logger in a given namespace.
 * Added trace and info levels log messages to the `teal` framework.
-* Added `pid` and shiny session token into footnote so app developers can identify logs for apps.
+* Added `pid` and `shiny` session token into footnote so app developers can identify logs for apps.
 
 #### Other
 * Added print methods to the `DatasetConnector`, `RelationalData`, `RelationalDataconnector` and `JoinKeys` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
@@ -156,7 +173,7 @@ The `teal` package contains the code to create apps (`teal::init`), to create a 
 * Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
 * Modified `data_extract_spec` to allow both the `filter` and `select` parameters to be `NULL`, which results in the `data_extract_ui` acting as if a `filter_spec` with all variables as possible choices had been supplied as the `filter` argument and a `select_spec` with the `multiple` parameter set to `TRUE` had been supplied as the `select` argument.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
-* Added support for `shiny::moduleServer` passed to the `server` parameter of `teal::module`.
+* Added support for `shiny::moduleServer` passed to the server parameter of `teal::module`.
 * Added `teal.threshold_slider_vs_checkboxgroup` as an R option: if a categorical variable has more than this number of unique values, the filter panel uses a drop-down select input instead of a checkbox group.
 * Extended the `FilteredData` API to allow managing filter states programmatically and not only from the UI of a `teal` application.
 * Hid the buttons to remove filters from all datasets and each dataset when there are no active filters.
@@ -237,7 +254,7 @@ function call.
 * Changed the displayed format of the data name and the column name in `data_extract_spec` UI elements. Both are now compressed to `<data name>.<column name>` if they don't change during runtime of the app.
 * Added `ADSAFTTE` to the list of recognized `ADaM` dataset names.
 * Added another example to `data_extract_spec`'s doc string showcasing app users can choose a variable used for filtering in the encoding panel.
-* Added CSS styling to tool tips in teal modules.
+* Added CSS styling to tool tips in `teal` modules.
 
 ### Bug fixes
 * Fixed an edge case error when creating a filter on variable with all missing values crashed the app.
@@ -247,8 +264,8 @@ function call.
 
 ### Enhancements
 * Released `snowflake` connection and connectors.
-* Changed ordering of datasets to be more intuitive (topologically first for `CDISC` datasets only and then according to input datasets order).
-* When closing a teal app (ending a user shiny session), all `DataConnection`s will now try to close their connections.
+* Changed ordering of datasets to be more intuitive (topologically first for CDISC datasets only and then according to input datasets order).
+* When closing a `teal` app (ending a user `shiny` session), all `DataConnection`s will now try to close their connections.
 * Added `ADHY` keys to configuration file.
 * Extended the `filter_spec` function: the parameter `choices` is no longer mandatory (the function will take all possible choices by default) and the `vars` parameter additionally accepts the `choices_selected` and allows to change the variables for filtering using the UI elements in the encoding panel.
 
@@ -289,7 +306,7 @@ function call.
 * Fixed lack of labels for `character` and `factor` variables in the Filter Panel.
 * All variables are now displayed in `module_filter_panel`, not only those of types `numeric`, `logical`, `factor`, `character` and `Date`
 * Fixed `mutate_data` to accept the whole scope of objects for `vars`.
-* Clarified `teal::init` function documentation to state that custom `CSS` loading code with `htmltools::htmlDependency` should be included in the `header` argument rather than inside `ui` arguments of modules.
+* Clarified `teal::init` function documentation to state that custom `CSS` loading code with `htmltools::htmlDependency` should be included in the `header` argument rather than inside UI arguments of modules.
 * Enabled empty select field inside `data_extract_spec`.
 * Added new argument `drop_keys` to `filter_spec` to decide whether to drop or keep keys columns on single filter on those columns.
 * Added a new optional argument `keys` to `variable_choices`. `keys` specifies the names of the variables, which should have the new key icon shown next to them in the variable drop down menus in the left-hand side encoding panels instead of the icon appropriate for their original R variable type. `variable_choices` now also works with `RelationalDataset` and `RelationalDatasetConnector` objects.
@@ -305,7 +322,7 @@ function call.
 * Added `lifecycle` badges to all exported functions.
 * Added new `code_dataset_connector` and `code_cdisc_dataset_connector` functions which enable the creation of new delayed data objects given a string of code.
 * Added new functions `csv_dataset_connector` and `csv_cdisc_dataset_connector`.
-* Updated `set_ui_input` method of `RawDatasetConnector` and `NamedDatasetConnector` to handle user defined shiny inputs.
+* Updated `set_ui_input` method of `RawDatasetConnector` and `NamedDatasetConnector` to handle user defined `shiny` inputs.
 * Include `Keep Inf` checkbox for numerical filter items. `Keep NA` and `Keep Inf` checkbox doesn't appear if there are no missing or infinite values.
 * Replace existing `RelationalData` class with abstract class `RelationalDataCollection` and rename `RelationalDataList` class as `RelationalData`. The `data` argument to `teal::init` is now always a `RelationalData` object.
 * Added `fun_cdisc_dataset_connector` to enable providing a custom function which returning a dataset.
@@ -318,8 +335,8 @@ function call.
 # teal 0.9.0
 
 * `cdisc_dataset` and `dataset` now return R6 class objects (`RelationalDataset`).
-* A new `teal_data` function to include datasets and connectors into teal application.
-* `cdisc_data` function to include datasets and connectors into teal application where a `check` argument still could be used and other consistency tests are performed.
+* A new `teal_data` function to include datasets and connectors into `teal` application.
+* `cdisc_data` function to include datasets and connectors into `teal` application where a `check` argument still could be used and other consistency tests are performed.
 * `get_raw_data` can be used to derive raw data from R6 objects e.g. (`RelationalDataset`).
 * `RawDatasetConnector`, `NamedDatasetConnector` and `RelationalDatasetConnector` to execute custom function call in order to get data from connection.
 * `CodeClass` to manage reproducibility of the data and relationships between datasets. Not directly exposed to the public interface.
@@ -331,11 +348,11 @@ function call.
 `variable_choices` as S3 class applied on `data.frame` and also on delayed data.
 
 * You can no longer modify the `app$datasets`, but must instead use argument `filter` in the `init` function.
-* New modules were created to create a module of nested teal modules, then another one that adds the right filter pane to each tab. The `teal::init` function stays unchanged.
-* The `teal::init` function now returns a `UI` function with an optional `id` argument. This allows to embed it into other applications. A split view of two teal applications side-by-side is one such example and shown in a vignette. `teal::init` was turned into a wrapper function around `module_teal_with_splash.R` and developers that want to embed teal as a Shiny module should directly work with these functions (`ui_teal_with_splash` and `srv_teal_with_splash`) instead of `teal::init`.
+* New modules were created to create a module of nested `teal` modules, then another one that adds the right filter pane to each tab. The `teal::init` function stays unchanged.
+* The `teal::init` function now returns a UI function with an optional `id` argument. This allows to embed it into other applications. A split view of two `teal` applications side-by-side is one such example and shown in a vignette. `teal::init` was turned into a wrapper function around `module_teal_with_splash.R` and developers that want to embed `teal` as a `shiny` module should directly work with these functions (`ui_teal_with_splash` and `srv_teal_with_splash`) instead of `teal::init`.
 * The `teal::init` function now has a title parameter to set the title of the browser window.
 * Missing data `NA` is now explicitly addressed in the filter panel: `NA`s are excluded by default and a checkbox to include them was added.
-* Statistics of the data are visually depicted in terms of histograms or bar charts overlayed onto the Shiny input elements.
+* Statistics of the data are visually depicted in terms of histograms or bar charts overlayed onto the `shiny` input elements.
 * Added buttons to remove all filters applied to a dataset.
 * Restored the functionality to hide the filter panel for a module when it was constructed with `filters = NULL`.
 * Moved helper functions into `utils.nest` and removed unused functions `set_labels_df` and `get_labels_df`.
@@ -347,7 +364,7 @@ function call.
 * Datasets and materialized connectors are provided to `FilteredData` by `set_datasets_data` function located in `init_datasets.R` file.
 * Renamed `get_dataset()` method to `get_data()`.
 * Renamed `get_filter_call()` method to `get_filter_expr()`; returns an expression rather than a list.
-* Removed argument `isolate` from `get_data()` method and similar methods. You must `isolate` it yourself as needed. If you want to temporarily deactivate Shiny errors due to missing errors, you can set `options(shiny.suppressMissingContextError = TRUE)`. In general, avoid `isolate` as this breaks reactivity.
+* Removed argument `isolate` from `get_data()` method and similar methods. You must `isolate` it yourself as needed. If you want to temporarily deactivate `shiny` errors due to missing errors, you can set `options(shiny.suppressMissingContextError = TRUE)`. In general, avoid `isolate` as this breaks reactivity.
 * We added a development module to add several filters at once, e.g. safety filters. This is to be evaluated before it is converted into a proper module and made available to end-users.
 
 
@@ -365,11 +382,11 @@ function call.
 
 # teal 0.8.3
 
-* Enable `teal` app to initialize without data. The data are then loaded from within the teal app.
+* Enable `teal` app to initialize without data. The data are then loaded from within the `teal` app.
 * New classes (`DatasetConnector`, `DataConnector`) to connect to various data sources, including:
         * connector to `rice` API - `rice_data` and `rice_dataset_connector`
         * connector to `RDS` files - `rds_data` and `rds_dataset_connector`
-* Message appears at bottom right of Shiny app when Shiny is busy to update the views.
+* Message appears at bottom right of `shiny` app when `shiny` is busy to update the views.
 * Remove `labels` argument of `cdisc_data` function. Labels should now already be present in the data passed to the  `cdisc_data` function. This can be achieved using the `var_relabel` function.
 
 # teal 0.8.2
@@ -411,7 +428,7 @@ function call.
 
 # teal 0.0.4
 
-* Bug fix where teal crashes when a filter variable gets added that has many decimal places.
+* Bug fix where `teal` crashes when a filter variable gets added that has many decimal places.
 
 # teal 0.0.3
 

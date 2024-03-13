@@ -16,6 +16,6 @@ A \code{character(1)} containing error message or TRUE if validation passes.
 }
 \description{
 This function checks whether \code{datanames} in filters correspond to those in \code{data},
-returning character vector with error messages or TRUE if all checks pass.
+returning character vector with error messages or \code{TRUE} if all checks pass.
 }
 \keyword{internal}

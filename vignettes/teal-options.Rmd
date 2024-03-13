@@ -1,6 +1,6 @@
 ---
 title: "Modifying a teal Application With R Options"
-author: "Paweł Rucki"
+author: "NEST CoreDev"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Modifying a teal Application With R Options}
@@ -11,7 +11,7 @@ editor_options:
 ---
 
 # Motivation
-Some `R` packages use `options` to modify their runtime behavior. These usually specify default values for internal functions or determine responses to users actions. For example, `testthat` uses an option `testthat.progress.max_fails` to define a default number of failed expectations before the testing functions terminate execution. While some of these adjustable values can be exposed as function parameters, some are confined to an option. This vignette details the options available to users of `teal`, `teal.logger`, `teal.widgets`, `teal.modules.general`, `teal.modules.clinical`.
+Some `R` packages use `options` to modify their runtime behavior. They usually specify sensible default values for internal function arguments or determine responses to users actions. For example, `testthat` uses an option `testthat.progress.max_fails` to define a default number of failed expectations before the testing functions terminate execution. While some of these adjustable values can be exposed as function parameters, some are confined to an option. This vignette details the options available in the package `teal` and it's supporting packages `teal.logger`, `teal.widgets`, and `teal.slice`.
 
 # Setting an option
 At any time during an interactive session, you can change an option using:
@@ -33,6 +33,38 @@ getOption("option_to_set")
 Once set, the value of an option persists during a session, but it returns to the default value in a new session. Make sure to change the options after all the `teal`-related packages are loaded because some of them initialize the options themselves and will overwrite your custom values.
 
 # Options used in a `teal` application
+
+### `teal.bs_theme` (`bslib::bs_theme` object)
+This option controls the bootstrap theme and version used in `teal` apps. Achieve better UX with the customized UI of an app.
+Please see the [vignette on Bootstrap themes](bootstrap-themes-in-teal.html) to read more about the functionality.
+
+Default: `NULL`
+
+### `teal.load_nest_code` (`character`)
+The value of this option is appended to the top of the code rendered when using the `Show R Code` modal button.
+
+Default: `"# Add any code to install/load your NEST environment here"`.
+
+### `teal.threshold_slider_vs_checkboxgroup` (`numeric`)
+This is the threshold that determines if a variable is treated as a factor in the filter panel. If the number of unique values of a variable is less than this threshold the variable will be treated as a factor instead of its original class. As an example, imagine `teal.threshold_slider_vs_checkboxgroup` equals to 2. Then a numeric variable `c(1, 1, 1)`, which has only one unique value, is treated as a factor in the filter panel (and in the filter panel only!). The filter panel creates a checkbox widget to filter values from this variable, as it would for a factor variable, instead of the usual numeric range selector.
+
+Default: 5.
+
+### `teal.basic_table_args` (`basic_table_args` object)
+This specifies the list of arguments passed to every call to `rtables::basic_table` made in a `teal` application. This can be used to format `rtables` without making any changes to the application code. See the documentation of `teal.widgets::basic_table_args` for more information.
+
+Default: `teal.widgets::basic_table_args()`.
+
+### `teal.ggplot2_args` (`ggplot2_args` object)
+This option allows modifying labels and themes of all `ggplot2` plots in a `teal` application. See the documentation of `teal.widgets::ggplot2_args` for more information.
+
+Default: `teal.widgets::ggplot2_args()`.
+
+### `teal.plot_dpi` (integer value 24 or larger)
+This option controls the dots per inch of the graphs rendered and downloaded when using the module `plot_with_settings` from the `teal.widgets` package.
+
+Default: 72
+
 ### `teal.log_layout` (`character`)
 This defines the layout of a log message used in a `teal` application. `teal` uses this layout to format the emitted log messages. Read the documentation of `teal.logger::register_logger` for more information.
 
@@ -47,45 +79,16 @@ Default: `"INFO"`.
 
 Note that there are two levels considered less severe than `"INFO"`: `"DEBUG"` and `"TRACE"`. In order to see the log messages for these two levels as well, change the log level from the default to `"TRACE"`, the least severe log level.
 
-### `teal_logging`
-Deprecated.
-
-### `teal_show_js_log`
-Deprecated in favor of `teal.show_js_log` (see below).
-
 ### `teal.show_js_log` (`logical`)
 This indicates whether to print the `JavaScript` console logs to the `R` console. If set to `TRUE`, the logs will be printed; otherwise, they won't.
 
 Default: `FALSE`.
 
-### `teal.threshold_slider_vs_checkboxgroup` (`numeric`)
-This is the threshold that determines if a variable is treated as a factor in the filter panel. If the number of unique values of a variable is less than this threshold the variable will be treated as a factor instead of its original class. As an example, imagine `teal.threshold_slider_vs_checkboxgroup` equals to 2. Then a numeric variable `c(1, 1, 1)`, which has only one unique value, is treated as a factor in the filter panel (and in the filter panel only!). The filter panel creates a checkbox widget to filter values from this variable, as it would for a factor variable, instead of the usual numeric range selector.
 
-Default: 5.
+# Deprecated options
 
-### `teal.load_nest_code` (`character`)
-The value of this option is appended to the top of the code rendered when using the `Show R Code` modal button. See the documentation of `teal::get_rcode` for more information.
+### `teal_logging`
+Deprecated in favor of using the `teal.logger` package for logging.
 
-Default: `"# Add any code to install/load your NEST environment here"`.
-
-## `teal.widgets` package
-### `teal.basic_table_args` (`basic_table_args` object)
-This specifies the list of arguments passed to every call to `rtables::basic_table` made in a `teal` application. This can be used to format `rtables` without making any changes to the application code. See the documentation of `teal.widgets::basic_table_args` for more information.
-
-Default: `teal.widgets::basic_table_args()`.
-
-### `teal.ggplot2_args` (`ggplot2_args` object)
-This option allows modifying labels and themes of all `ggplot2` plots in a `teal` application. See the documentation of `teal.widgets::ggplot2_args` for more information.
-
-Default: `teal.widgets::ggplot2_args()`.
-
-### `teal.plot_dpi` (integer value 24 or larger)
-This option controls the dots per inch of the graphs rendered and downloaded when using `plot_with_settings`.
-
-Default: 72
-
-### `teal.bs_theme` (`bslib::bs_theme` object)
-This option controls the bootstrap theme and version used in `teal` apps. Achieve better UX with the customized UI of an app.
-Please visit the vignette on Bootstrap themes to read more about the functionality.
-
-Default: `NULL`
+### `teal_show_js_log`
+Deprecated in favor of `teal.show_js_log` (see above).

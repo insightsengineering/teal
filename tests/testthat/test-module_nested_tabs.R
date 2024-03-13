@@ -148,29 +148,29 @@ out <- shiny::testServer(
   ),
   expr = {
     testthat::test_that("modules_reactive is a list of reactives", {
-      expect_is(modules_reactive, "list")
-      expect_is(modules_reactive$tab1, "reactive")
-      expect_is(modules_reactive$tab2, "reactive")
+      testthat::expect_is(modules_reactive, "list")
+      testthat::expect_is(modules_reactive$tab1, "reactive")
+      testthat::expect_is(modules_reactive$tab2, "reactive")
     })
 
     testthat::test_that("modules_reactive returns modules according to selection in the nested tabs", {
       session$setInputs(`tab1-active_tab` = "test2") # active tab in tab1
       session$setInputs(`tab2-active_tab` = "test3") # active tab in tab2
       nested_active_modules <- lapply(modules_reactive, function(child) child())
-      expect_identical(nested_active_modules, list(tab1 = test_module2, tab2 = test_module3))
+      testthat::expect_identical(nested_active_modules, list(tab1 = test_module2, tab2 = test_module3))
 
       session$setInputs(`tab1-active_tab` = "test1") # active tab in tab1
       session$setInputs(`tab2-active_tab` = "test4") # active tab in tab2
       nested_active_modules <- lapply(modules_reactive, function(child) child())
-      expect_identical(nested_active_modules, list(tab1 = test_module1, tab2 = test_module4))
+      testthat::expect_identical(nested_active_modules, list(tab1 = test_module1, tab2 = test_module4))
     })
 
     testthat::test_that("Change of this tab returns active module from this tab", {
       session$setInputs(`active_tab` = "tab1")
-      expect_identical(get_active_module(), test_module1)
+      testthat::expect_identical(get_active_module(), test_module1)
 
       session$setInputs(`active_tab` = "tab2")
-      expect_identical(get_active_module(), test_module4)
+      testthat::expect_identical(get_active_module(), test_module4)
     })
   }
 )
@@ -227,7 +227,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes data to the server modul
     moduleServer(id, function(input, output, session) checkmate::assert_list(data, "reactive"))
   })
 
-  testthat::expect_error(
+  testthat::expect_no_error(
     shiny::testServer(
       app = srv_nested_tabs,
       args = list(
@@ -237,8 +237,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes data to the server modul
         reporter = teal.reporter::Reporter$new()
       ),
       expr = NULL
-    ),
-    NA
+    )
   )
 })
 
@@ -249,7 +248,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes (deprecated) datasets to
     })
   )
 
-  testthat::expect_error(
+  testthat::expect_no_error(
     shiny::testServer(
       app = srv_nested_tabs,
       args = list(
@@ -259,8 +258,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes (deprecated) datasets to
         reporter = teal.reporter::Reporter$new()
       ),
       expr = NULL
-    ),
-    NA
+    )
   )
 })
 
@@ -270,7 +268,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes server_args to the ...",
     moduleServer(id, function(input, output, session) stopifnot(identical(list(...), server_args)))
   })
 
-  testthat::expect_error(
+  testthat::expect_no_error(
     shiny::testServer(
       app = srv_nested_tabs,
       args = list(
@@ -280,8 +278,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes server_args to the ...",
         reporter = teal.reporter::Reporter$new()
       ),
       expr = NULL
-    ),
-    NA
+    )
   )
 })
 
@@ -342,7 +339,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the 
     moduleServer(id, function(input, output, session) checkmate::assert_class(filter_panel_api, "FilterPanelAPI"))
   })
 
-  testthat::expect_error(
+  testthat::expect_no_error(
     shiny::testServer(
       app = srv_nested_tabs,
       args = list(
@@ -352,8 +349,7 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the 
         reporter = teal.reporter::Reporter$new()
       ),
       expr = NULL
-    ),
-    NA
+    )
   )
 })
 
@@ -361,8 +357,8 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the 
 testthat::test_that(".datasets_to_data returns data which is filtered", {
   datasets <- get_example_filtered_data()
   datasets$set_filter_state(
-    teal.slice:::teal_slices(
-      teal.slice:::teal_slice(dataname = "d1", varname = "val", selected = c(1, 2))
+    teal.slice::teal_slices(
+      teal.slice::teal_slice(dataname = "d1", varname = "val", selected = c(1, 2))
     )
   )
   module <- test_module_wdata(datanames = c("d1", "d2"))
@@ -371,7 +367,7 @@ testthat::test_that(".datasets_to_data returns data which is filtered", {
   d1_filtered <- data[["d1"]]
   testthat::expect_equal(d1_filtered, data.frame(id = 1:2, pk = 2:3, val = 1:2))
   d2_filtered <- data[["d2"]]
-  testthat::expect_equal(d2_filtered, data.frame(id = 1:5, value = 1:5))
+  testthat::expect_equal(d2_filtered, data.frame(id = 2:3, value = 2:3))
 })
 
 
@@ -396,19 +392,22 @@ testthat::test_that(".datasets_to_data returns teal_data object", {
   )
 
   # code
-  skip("skipped until we resolve handling code in teal.data:::new_teal_data")
   testthat::expect_equal(
     teal.code::get_code(data),
-    c(
-      get_rcode_str_install(),
-      get_rcode_libraries(),
-      "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)\n\n",
-      "d2 <- data.frame(id = 1:5, value = 1:5)\n\n",
-      paste0(
-        "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")\n",
-        "stopifnot(rlang::hash(d2) == \"6e30be195b7d914a1311672c3ebf4e4f\") \n\n"
+    paste(
+      c(
+        get_rcode_str_install(),
+        get_rcode_libraries(),
+        "d1 <- data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5)",
+        "d2 <- data.frame(id = 1:5, value = 1:5)",
+        "",
+        "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")",
+        "stopifnot(rlang::hash(d2) == \"6e30be195b7d914a1311672c3ebf4e4f\")",
+        "",
+        "d2 <- dplyr::inner_join(x = d2, y = d1[, c(\"pk\"), drop = FALSE], by = c(id = \"pk\"))",
+        ""
       ),
-      ""
+      collapse = "\n"
     )
   )
 })
@@ -426,7 +425,7 @@ testthat::test_that("calculate_hashes takes a FilteredData and vector of datanam
     )
   )
 
-  testthat::expect_error(calculate_hashes(datanames = c("ADSL", "ADAE", "ADTTE"), datasets = datasets), NA)
+  testthat::expect_no_error(calculate_hashes(datanames = c("ADSL", "ADAE", "ADTTE"), datasets = datasets))
 })
 
 testthat::test_that("calculate_hashes returns a named list", {
@@ -460,9 +459,9 @@ testthat::test_that("calculate_hashes returns the hash of the non Filtered datas
     list(iris = list(dataset = iris))
   )
 
-  fs <- teal.slice:::teal_slices(
-    teal.slice:::teal_slice(dataname = "iris", varname = "Sepal.Length", selected = c(5.1, 6.4)),
-    teal.slice:::teal_slice(dataname = "iris", varname = "Species", selected = c("setosa", "versicolor"))
+  fs <- teal.slice::teal_slices(
+    teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length", selected = c(5.1, 6.4)),
+    teal.slice::teal_slice(dataname = "iris", varname = "Species", selected = c("setosa", "versicolor"))
   )
 
   shiny::isolate(datasets$set_filter_state(state = fs))

@@ -12,7 +12,7 @@ is_arg_used(modules, arg)
 \item{arg}{(\code{character(1)}) names of the arguments to be checked against formals of \code{teal} modules.}
 }
 \value{
-\code{logical} whether the object makes use of \code{arg}
+\code{logical} whether the object makes use of \code{arg}.
 }
 \description{
 Does the object make use of the \code{arg}

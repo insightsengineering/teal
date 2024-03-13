@@ -12,7 +12,7 @@ include_js_files(pattern = NULL, except = NULL)
 \item{except}{(\code{character}) vector of basename filenames to be excluded}
 }
 \value{
-HTML code that includes \code{JS} files
+HTML code that includes \code{JS} files.
 }
 \description{
 \code{system.file} should not be used to access files in other packages, it does

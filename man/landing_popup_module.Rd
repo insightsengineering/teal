@@ -2,7 +2,7 @@
 % Please edit documentation in R/landing_popup_module.R
 \name{landing_popup_module}
 \alias{landing_popup_module}
-\title{Landing Popup Module}
+\title{Landing popup module}
 \usage{
 landing_popup_module(
   label = "Landing Popup",
@@ -12,14 +12,14 @@ landing_popup_module(
 )
 }
 \arguments{
-\item{label}{\code{character(1)} the label of the module.}
+\item{label}{(\code{character(1)}) Label of the module.}
 
-\item{title}{\code{character(1)} the text to be displayed as a title of the popup.}
+\item{title}{(\code{character(1)}) Text to be displayed as popup title.}
 
-\item{content}{The content of the popup. Passed to \code{...} of \code{shiny::modalDialog}. Can be a \code{character}
-or a list of \code{shiny.tag}s. See examples.}
+\item{content}{(\code{character(1)}, \code{shiny.tag} or \code{shiny.tag.list}) with the content of the popup.
+Passed to \code{...} of \code{shiny::modalDialog}. See examples.}
 
-\item{buttons}{\code{shiny.tag} or a list of tags (\code{tagList}). Typically a \code{modalButton} or \code{actionButton}. See examples.}
+\item{buttons}{(\code{shiny.tag} or \code{shiny.tag.list}) Typically a \code{modalButton} or \code{actionButton}. See examples.}
 }
 \value{
 A \code{teal_module} (extended with \code{teal_landing_module} class) to be used in \code{teal} applications.
@@ -28,13 +28,13 @@ A \code{teal_module} (extended with \code{teal_landing_module} class) to be used
 Creates a landing welcome popup for \code{teal} applications.
 
 This module is used to display a popup dialog when the application starts.
-The dialog blocks the access to the application and must be closed with a button before the application is viewed.
+The dialog blocks access to the application and must be closed with a button before the application can be viewed.
 }
 \examples{
-app1 <- teal::init(
+app1 <- init(
   data = teal_data(iris = iris),
-  modules = teal::modules(
-    teal::landing_popup_module(
+  modules = modules(
+    landing_popup_module(
       content = "A place for the welcome message or a disclaimer statement.",
       buttons = modalButton("Proceed")
     ),
@@ -45,10 +45,10 @@ if (interactive()) {
   shinyApp(app1$ui, app1$server)
 }
 
-app2 <- teal::init(
+app2 <- init(
   data = teal_data(iris = iris),
-  modules = teal::modules(
-    teal::landing_popup_module(
+  modules = modules(
+    landing_popup_module(
       title = "Welcome",
       content = tags$b(
         "A place for the welcome message or a disclaimer statement.",

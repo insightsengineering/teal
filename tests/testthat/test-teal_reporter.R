@@ -1,5 +1,5 @@
 testthat::test_that("TealReportCard object can be initialized", {
-  testthat::expect_error(TealReportCard$new(), regexp = NA)
+  testthat::expect_no_error(TealReportCard$new())
 })
 
 testthat::test_that("TealReportCard inherits from ReportCard", {
@@ -24,7 +24,7 @@ testthat::test_that("TealReportCard$get_content returns content with metadata", 
 
 testthat::test_that("TealReportCard$append_src accepts a character", {
   card <- TealReportCard$new()
-  testthat::expect_error(card$append_src("test"), regexp = NA)
+  testthat::expect_no_error(card$append_src("test"))
 })
 
 testthat::test_that("TealReportCard$append_src returns self", {
@@ -40,7 +40,7 @@ testthat::test_that("TealReportCard$append_src returns title and content", {
 
 testthat::test_that("TealReportCard$append_encodings accepts list of character", {
   card <- TealReportCard$new()
-  testthat::expect_error(card$append_encodings(list(a = "test")), NA)
+  testthat::expect_no_error(card$append_encodings(list(a = "test")))
 })
 
 testthat::test_that("TealReportCard$append_encodings returns self", {
@@ -60,11 +60,10 @@ testthat::test_that("TealReportCard$append_fs accepts only a teal_slices", {
   testthat::expect_error(card$append_fs(c(a = 1, b = 2)),
     regexp = "Assertion on 'fs' failed: Must inherit from class 'teal_slices', but has class 'numeric'."
   )
-  testthat::expect_error(
+  testthat::expect_no_error(
     card$append_fs(
       teal.slice::teal_slices(teal.slice::teal_slice(dataname = "a", varname = "b"))
-    ),
-    regexp = NA
+    )
   )
 })
 
@@ -84,7 +83,7 @@ testthat::test_that("TealReportCard$append_fs returns title and content", {
 })
 
 testthat::test_that("TealSlicesBlock$new accepts teal_slices only", {
-  testthat::expect_error(TealSlicesBlock$new(teal_slices()), NA)
+  testthat::expect_no_error(TealSlicesBlock$new(teal_slices()))
   testthat::expect_error(TealSlicesBlock$new(list()), "Assertion on 'content'")
 })
 

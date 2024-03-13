@@ -4,7 +4,7 @@ testthat::test_that("srv_teal_with_splash data accepts a teal_data_module", {
       app = srv_teal_with_splash,
       args = list(
         id = "id",
-        data = teal_data_module(ui = function(id) div(), server = function(id) reactive(NULL)),
+        data = teal_data_module(ui = function(id) tags$div(), server = function(id) reactive(NULL)),
         modules = modules(example_module())
       ),
       expr = {}
@@ -18,12 +18,12 @@ testthat::test_that("srv_teal_with_splash throws when teal_data_module doesn't r
       app = srv_teal_with_splash,
       args = list(
         id = "id",
-        data = teal_data_module(ui = function(id) div(), server = function(id) NULL),
+        data = teal_data_module(ui = function(id) tags$div(), server = function(id) NULL),
         modules = modules(example_module())
       ),
       expr = {}
     ),
-    "The `teal_data_module` must return a reactive expression."
+    "The `teal_data_module` passed to `data` must return a reactive expression."
   )
 })
 
@@ -32,7 +32,7 @@ testthat::test_that("srv_teal_with_splash teal_data_rv evaluates the server of t
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data_module(ui = function(id) div(), server = function(id) reactive("whatever")),
+      data = teal_data_module(ui = function(id) tags$div(), server = function(id) reactive("whatever")),
       modules = modules(example_module())
     ),
     expr = {
@@ -47,7 +47,7 @@ testthat::test_that("srv_teal_with_splash passes teal_data to reactive", {
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data(iris = iris),
+      data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     ),
     expr = {
@@ -63,7 +63,7 @@ testthat::test_that("srv_teal_with_splash passes when datanames are empty with w
       app = srv_teal_with_splash,
       args = list(
         id = "test",
-        data = teal_data(),
+        data = teal.data::teal_data(),
         modules = modules(example_module())
       ),
       expr = {
@@ -81,7 +81,7 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when teal
     args = list(
       id = "test",
       data = teal_data_module(
-        ui = function(id) div(),
+        ui = function(id) tags$div(),
         server = function(id) reactive(stop("this error"))
       ),
       modules = modules(example_module())
@@ -99,8 +99,8 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws then qenv
     args = list(
       id = "test",
       data = teal_data_module(
-        ui = function(id) div(),
-        server = function(id) reactive(within(teal_data(), stop("not good")))
+        ui = function(id) tags$div(),
+        server = function(id) reactive(within(teal.data::teal_data(), stop("not good")))
       ),
       modules = modules(example_module())
     ),
@@ -119,14 +119,14 @@ testthat::test_that(
       args = list(
         id = "test",
         data = teal_data_module(
-          ui = function(id) div(),
+          ui = function(id) tags$div(),
           server = function(id) reactive(data.frame())
         ),
         modules = modules(example_module())
       ),
       expr = {
         testthat::expect_is(teal_data_rv_validate, "reactive")
-        testthat::expect_error(teal_data_rv_validate(), "did not return `teal_data`")
+        testthat::expect_error(teal_data_rv_validate(), "failed to return `teal_data`")
       }
     )
   }
@@ -137,7 +137,7 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate throws when inco
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data(mtcars = mtcars, iris = iris, npk = npk),
+      data = teal.data::teal_data(mtcars = mtcars, iris = iris, npk = npk),
       modules = modules(example_module(datanames = "non-existing"))
     ),
     expr = {
@@ -155,13 +155,13 @@ testthat::test_that("srv_teal_with_splash teal_data_rv_validate returns teal_dat
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data(mtcars = mtcars),
+      data = teal.data::teal_data(mtcars = mtcars),
       modules = modules(example_module(datanames = "mtcars")),
       filter = teal_slices(teal_slice(dataname = "iris", varname = "Species"))
     ),
     expr = {
       testthat::expect_is(teal_data_rv_validate, "reactive")
-      testthat::expect_output(
+      testthat::expect_warning(
         teal_data_rv_validate(),
         "Filter 'iris Species' refers to dataname not available in 'data'"
       )
@@ -175,7 +175,7 @@ testthat::test_that("srv_teal_with_splash gets observe event from srv_teal", {
     app = srv_teal_with_splash,
     args = list(
       id = "test",
-      data = teal_data(),
+      data = teal.data::teal_data(),
       modules = modules(example_module())
     ),
     expr = {
@@ -185,8 +185,8 @@ testthat::test_that("srv_teal_with_splash gets observe event from srv_teal", {
 })
 
 testthat::test_that("srv_teal_with_splash accepts data after within.teal_data_module", {
-  tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(teal_data(IRIS = iris)))
-  tdm2 <- within(tdm, IRIS$id <- seq_len(NROW(IRIS$Species))) # nolint: object_name_linter.
+  tdm <- teal_data_module(ui = function(id) tags$div(), server = function(id) reactive(teal_data(IRIS = iris)))
+  tdm2 <- within(tdm, IRIS$id <- seq_len(NROW(IRIS$Species))) # nolint: object_name.
 
   testthat::expect_no_error(
     shiny::testServer(
@@ -210,7 +210,7 @@ testthat::test_that("srv_teal_with_splash accepts data after within.teal_data_mo
 })
 
 testthat::test_that("srv_teal_with_splash throws error when within.teal_data_module returns qenv.error", {
-  tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(teal_data(IRIS = iris)))
+  tdm <- teal_data_module(ui = function(id) tags$div(), server = function(id) reactive(teal_data(IRIS = iris)))
   tdm2 <- within(tdm, non_existing_var + 1)
 
   testthat::expect_no_error(
@@ -232,7 +232,7 @@ testthat::test_that("srv_teal_with_splash throws error when within.teal_data_mod
 })
 
 testthat::test_that("srv_teal_with_splash throws error when within.teal_data_module returns NULL", {
-  tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(NULL))
+  tdm <- teal_data_module(ui = function(id) tags$div(), server = function(id) reactive(NULL))
   tdm2 <- within(tdm, within(1 + 1))
   testthat::expect_no_error(
     shiny::testServer(
@@ -246,7 +246,10 @@ testthat::test_that("srv_teal_with_splash throws error when within.teal_data_mod
         testthat::expect_s3_class(teal_data_rv, "reactive")
         testthat::expect_null(teal_data_rv())
         testthat::expect_s3_class(teal_data_rv_validate, "reactive")
-        testthat::expect_error(teal_data_rv_validate(), "`teal_data_module` did not return `teal_data` object ")
+        testthat::expect_error(
+          teal_data_rv_validate(),
+          "`teal_data_module` passed to `data` failed to return `teal_data` object"
+        )
       }
     )
   )
@@ -258,7 +261,7 @@ testthat::test_that(
     "(other than `teal_data` or `qenv.error`)"
   ),
   {
-    tdm <- teal_data_module(ui = function(id) div(), server = function(id) reactive(NULL))
+    tdm <- teal_data_module(ui = function(id) tags$div(), server = function(id) reactive(NULL))
     tdm2 <- within(tdm, 1 + 1)
     testthat::expect_no_error(
       shiny::testServer(
@@ -272,7 +275,10 @@ testthat::test_that(
           testthat::expect_s3_class(teal_data_rv, "reactive")
           testthat::expect_null(teal_data_rv())
           testthat::expect_s3_class(teal_data_rv_validate, "reactive")
-          testthat::expect_error(teal_data_rv_validate(), "`teal_data_module` did not return `teal_data` object ")
+          testthat::expect_error(
+            teal_data_rv_validate(),
+            "`teal_data_module` passed to `data` failed to return `teal_data` object"
+          )
         }
       )
     )

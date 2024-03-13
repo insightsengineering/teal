@@ -7,7 +7,7 @@
 unfold_mapping(mapping, module_names)
 }
 \arguments{
-\item{mapping}{(\verb{named list}) as stored in mapping parameter of \code{teal_slices}}
+\item{mapping}{(named \code{list}) as stored in mapping parameter of \code{teal_slices}}
 
 \item{module_names}{(\code{character}) vector containing names of all modules in the app}
 }

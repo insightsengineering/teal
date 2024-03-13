@@ -11,58 +11,19 @@ filter_manager_modal_ui(id)
 filter_manager_modal_srv(id, filtered_data_list, filter)
 }
 \arguments{
-\item{id}{(\code{character(1)})\cr
+\item{id}{(\code{character(1)})
 \code{shiny} module id.}
 
-\item{filtered_data_list}{(\verb{named list})\cr
+\item{filtered_data_list}{(named \code{list})
 A list, possibly nested, of \code{FilteredData} objects.
 Each \code{FilteredData} will be served to one module in the \code{teal} application.
 The structure of the list must reflect the nesting of modules in tabs
-and names of the list must be the same as labels of their respective modules.}
+and the names of the list must match the labels of their respective modules.}
 
-\item{filter}{(\code{teal_slices})\cr
-Specification of initial filter. Filters can be specified using \code{\link[=teal_slices]{teal_slices()}}.
-Old way of specifying filters through a list is deprecated and will be removed in the
-next release. Please fix your applications to use \code{\link[=teal_slices]{teal_slices()}}.}
+\item{filter}{(\code{teal_slices})
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \description{
-Opens modal containing the filter manager UI.
-}
-\examples{
-fd1 <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
-fd2 <- teal.slice::init_filtered_data(
-  list(iris = list(dataset = iris), mtcars = list(dataset = mtcars))
-)
-fd3 <- teal.slice::init_filtered_data(
-  list(iris = list(dataset = iris), women = list(dataset = women))
-)
-filter <- teal_slices(
-  teal.slice::teal_slice(dataname = "iris", varname = "Sepal.Length"),
-  teal.slice::teal_slice(dataname = "iris", varname = "Species"),
-  teal.slice::teal_slice(dataname = "mtcars", varname = "mpg"),
-  teal.slice::teal_slice(dataname = "women", varname = "height"),
-  mapping = list(
-    module2 = c("mtcars mpg"),
-    module3 = c("women height"),
-    global_filters = "iris Species"
-  )
-)
-
-app <- shinyApp(
-  ui = fluidPage(
-    teal:::filter_manager_modal_ui("manager")
-  ),
-  server = function(input, output, session) {
-    teal:::filter_manager_modal_srv(
-      "manager",
-      filtered_data_list = list(module1 = fd1, module2 = fd2, module3 = fd3),
-      filter = filter
-    )
-  }
-)
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-
+Opens a modal containing the filter manager UI.
 }
 \keyword{internal}

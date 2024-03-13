@@ -1,47 +1,41 @@
 # This is the main function from teal to be used by the end-users. Although it delegates
-# directly to `module_teal_with_splash.R`, we keep it in a separate file because its doc is quite large
+# directly to `module_teal_with_splash.R`, we keep it in a separate file because its documentation is quite large
 # and it is very end-user oriented. It may also perform more argument checking with more informative
 # error messages.
 
-
-#' Create the Server and UI Function For the Shiny App
+#' Create the server and UI function for the `shiny` app
 #'
 #' @description `r lifecycle::badge("stable")`
+#'
 #' End-users: This is the most important function for you to start a
-#' teal app that is composed out of teal modules.
+#' `teal` app that is composed of `teal` modules.
 #'
 #' @details
 #' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
 #' defaults from the `teal_data` environment will be used.
 #'
-#' @param data (`teal_data`, `teal_data_module`, `named list`)\cr
-#' `teal_data` object as returned by [teal.data::teal_data()] or
-#' `teal_data_modules` or simply a list of a named list of objects
-#' (`data.frame` or `MultiAssayExperiment`).
-#' @param modules (`list`, `teal_modules` or `teal_module`)\cr
+#' @param data (`teal_data` or `teal_data_module`)
+#' For constructing the data object, refer to [teal_data()] and [teal_data_module()].
+#' @param modules (`list` or `teal_modules` or `teal_module`)
 #'   nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
-#'   will be displayed in the teal application. See [modules()] and [module()] for
+#'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
-#' @param title (`NULL` or `character`)\cr
-#'   The browser window title (defaults to the host URL of the page).
-#' @param filter (`teal_slices`)\cr
-#'   Specification of initial filter. Filters can be specified using [teal::teal_slices()].
-#'   Old way of specifying filters through a list is deprecated and will be removed in the
-#'   next release. Please fix your applications to use [teal::teal_slices()].
-#' @param header (`shiny.tag` or `character`) \cr
-#'   the header of the app. Note shiny code placed here (and in the footer
-#'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
-#'   (such as loading `CSS` via [htmltools::htmlDependency()]) should be included here.
-#' @param footer (`shiny.tag` or `character`)\cr
-#'   the footer of the app
-#' @param id (`character`)\cr
-#'   module id to embed it, if provided,
-#'   the server function must be called with [shiny::moduleServer()];
-#'   See the vignette for an example. However, [ui_teal_with_splash()]
-#'   is then preferred to this function.
+#' @param filter (`teal_slices`)
+#'   Specifies the initial filter using [teal_slices()].
+#' @param title (`shiny.tag` or `character(1)`)
+#'   The browser window title. Defaults to a title "teal app" with the icon of NEST.
+#'   Can be created using the `build_app_title()` or
+#'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
+#' @param header (`shiny.tag` or `character(1)`)
+#'   The header of the app.
+#' @param footer (`shiny.tag` or `character(1)`)
+#'   The footer of the app.
+#' @param id (`character`)
+#'   Optional string specifying the `shiny` module id in cases it is used as a `shiny` module
+#'   rather than a standalone `shiny` app. This is a legacy feature.
 #'
-#' @return Named list containing `ui` and `server` functions.
+#' @return Named list containing server and UI functions.
 #'
 #' @export
 #'
@@ -61,7 +55,7 @@
 #'     module(
 #'       label = "data source",
 #'       server = function(input, output, session, data) {},
-#'       ui = function(id, ...) div(p("information about data source")),
+#'       ui = function(id, ...) tags$div(p("information about data source")),
 #'       datanames = "all"
 #'     ),
 #'     example_module(label = "example teal module"),
@@ -79,18 +73,19 @@
 #'       datanames = "new_iris"
 #'     )
 #'   ),
-#'   title = "App title",
 #'   filter = teal_slices(
 #'     teal_slice(dataname = "new_iris", varname = "Species"),
 #'     teal_slice(dataname = "new_iris", varname = "Sepal.Length"),
 #'     teal_slice(dataname = "new_mtcars", varname = "cyl"),
 #'     exclude_varnames = list(new_iris = c("Sepal.Width", "Petal.Width")),
+#'     module_specific = TRUE,
 #'     mapping = list(
 #'       `example teal module` = "new_iris Species",
 #'       `Iris Sepal.Length histogram` = "new_iris Species",
 #'       global_filters = "new_mtcars cyl"
 #'     )
 #'   ),
+#'   title = "App title",
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2023")
 #' )
@@ -100,19 +95,18 @@
 #'
 init <- function(data,
                  modules,
-                 title = NULL,
                  filter = teal_slices(),
+                 title = build_app_title(),
                  header = tags$p(),
                  footer = tags$p(),
                  id = character(0)) {
-  logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
-  if (is.list(data) && !inherits(data, "teal_data_module")) {
-    checkmate::assert_list(data, names = "named")
-    data <- do.call(teal.data::teal_data, data)
-  }
+  logger::log_trace("init initializing teal app with: data ('{ class(data) }').")
+
+  # argument checking (independent)
+  ## `data`
   if (inherits(data, "TealData")) {
     lifecycle::deprecate_stop(
-      when = "0.99.0",
+      when = "0.15.0",
       what = "init(data)",
       paste(
         "TealData is no longer supported. Use teal_data() instead.",
@@ -120,46 +114,64 @@ init <- function(data,
       )
     )
   }
-
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
-  checkmate::assert_multi_class(modules, c("teal_module", "list", "teal_modules"))
-  checkmate::assert_string(title, null.ok = TRUE)
+
+  ## `modules`
   checkmate::assert(
-    checkmate::check_class(filter, "teal_slices"),
-    checkmate::check_list(filter, names = "named")
+    .var.name = "modules",
+    checkmate::check_multi_class(modules, c("teal_modules", "teal_module")),
+    checkmate::check_list(modules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
   )
-  checkmate::assert_multi_class(header, c("shiny.tag", "character"))
-  checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
-  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-
-  teal.logger::log_system_info()
-
   if (inherits(modules, "teal_module")) {
     modules <- list(modules)
   }
-  if (inherits(modules, "list")) {
+  if (checkmate::test_list(modules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))) {
     modules <- do.call(teal::modules, modules)
   }
 
-  landing <- extract_module(modules, "teal_module_landing")
-  if (length(landing) > 1L) stop("Only one `landing_popup_module` can be used.")
-  modules <- drop_module(modules, "teal_module_landing")
+  ## `filter`
+  checkmate::assert_class(filter, "teal_slices")
 
-  # Calculate app id that will be used to stamp filter state snapshots.
-  # App id is a hash of the app's data and modules.
-  # See "transferring snapshots" section in ?snapshot.
-  hashables <- mget(c("data", "modules"))
-  hashables$data <- if (inherits(hashables$data, "teal_data")) {
-    as.list(hashables$data@env)
-  } else if (inherits(data, "teal_data_module")) {
-    body(data$server)
+  ## all other arguments
+  checkmate::assert(
+    .var.name = "title",
+    checkmate::check_string(title),
+    checkmate::check_multi_class(title, c("shiny.tag", "shiny.tag.list", "html"))
+  )
+  checkmate::assert(
+    .var.name = "header",
+    checkmate::check_string(header),
+    checkmate::check_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
+  )
+  checkmate::assert(
+    .var.name = "footer",
+    checkmate::check_string(footer),
+    checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
+  )
+  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
+
+  # log
+  teal.logger::log_system_info()
+
+  # argument transformations
+  ## `modules` - landing module
+  landing <- extract_module(modules, "teal_module_landing")
+  landing_module <- NULL
+  if (length(landing) == 1L) {
+    landing_module <- landing[[1L]]
+    modules <- drop_module(modules, "teal_module_landing")
+  } else if (length(landing) > 1L) {
+    stop("Only one `landing_popup_module` can be used.")
   }
 
-  attr(filter, "app_id") <- rlang::hash(hashables)
+  ## `filter` - app_id attribute
+  attr(filter, "app_id") <- create_app_id(data, modules)
 
-  # convert teal.slice::teal_slices to teal::teal_slices
+  ## `filter` - convert teal.slice::teal_slices to teal::teal_slices
   filter <- as.teal_slices(as.list(filter))
 
+  # argument checking (interdependent)
+  ## `filter` - `modules`
   if (isTRUE(attr(filter, "module_specific"))) {
     module_names <- unlist(c(module_labels(modules), "global_filters"))
     failed_mod_names <- setdiff(names(attr(filter, "mapping")), module_names)
@@ -186,9 +198,10 @@ init <- function(data,
     }
   }
 
+  ## `data` - `modules`
   if (inherits(data, "teal_data")) {
     if (length(teal_data_datanames(data)) == 0) {
-      stop("`data` object has no datanames and its environment is empty. Specify `datanames(data)` and try again.")
+      stop("The environment of `data` is empty.")
     }
     # in case of teal_data_module this check is postponed to the srv_teal_with_splash
     is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
@@ -199,28 +212,27 @@ init <- function(data,
 
     is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
     if (!isTRUE(is_filter_ok)) {
-      logger::log_warn(is_filter_ok)
+      warning(is_filter_ok)
       # we allow app to continue if applied filters are outside
       # of possible data range
     }
   }
 
   # Note regarding case `id = character(0)`:
-  # rather than using `callModule` and creating a submodule of this module, we directly modify
-  # the `ui` and `server` with `id = character(0)` and calling the server function directly
-  # rather than through `callModule`
-  # UI must be a function to support bookmarking.
+  # rather than creating a submodule of this module, we directly modify
+  # the UI and server with `id = character(0)` and calling the server function directly
+  # Note: UI must be a function to support bookmarking.
   res <- list(
     ui = function(request) ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-      if (length(landing) == 1L) {
-        landing_module <- landing[[1L]]
+      if (!is.null(landing_module)) {
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
-      filter <- deep_copy_filter(filter)
-      srv_teal_with_splash(id = id, data = data, modules = modules, filter = filter)
+      srv_teal_with_splash(id = id, data = data, modules = modules, filter = deep_copy_filter(filter))
     }
   )
+
   logger::log_trace("init teal app has been initialized.")
-  return(res)
+
+  res
 }

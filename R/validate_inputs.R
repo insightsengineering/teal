@@ -1,4 +1,4 @@
-#' Send input validation messages to output.
+#' Send input validation messages to output
 #'
 #' Captures messages from `InputValidator` objects and collates them
 #' into one message passed to `validate`.
@@ -24,7 +24,7 @@
 #' @param ... either any number of `InputValidator` objects
 #'            or an optionally named, possibly nested `list` of `InputValidator`
 #'            objects, see `Details`
-#' @param header `character(1)` generic validation message; set to NULL to omit
+#' @param header (`character(1)`) generic validation message; set to NULL to omit
 #'
 #' @return
 #' Returns NULL if the final validation call passes and a `shiny.silent.error` if it fails.
@@ -41,7 +41,7 @@
 #'     sidebarPanel(
 #'       selectInput("letter", "select a letter:", c(letters[1:3], LETTERS[4:6])),
 #'       selectInput("number", "select a number:", 1:6),
-#'       br(),
+#'       tags$br(),
 #'       selectInput("color", "select a color:",
 #'         c("black", "indianred2", "springgreen2", "cornflowerblue"),
 #'         multiple = TRUE
@@ -58,12 +58,16 @@
 #'   # set up input validation
 #'   iv <- InputValidator$new()
 #'   iv$add_rule("letter", sv_in_set(LETTERS, "choose a capital letter"))
-#'   iv$add_rule("number", ~ if (as.integer(.) %% 2L == 1L) "choose an even number")
+#'   iv$add_rule("number", function(x) {
+#'     if (as.integer(x) %% 2L == 1L) "choose an even number"
+#'   })
 #'   iv$enable()
 #'   # more input validation
 #'   iv_par <- InputValidator$new()
 #'   iv_par$add_rule("color", sv_required(message = "choose a color"))
-#'   iv_par$add_rule("color", ~ if (length(.) > 1L) "choose only one color")
+#'   iv_par$add_rule("color", function(x) {
+#'     if (length(x) > 1L) "choose only one color"
+#'   })
 #'   iv_par$add_rule(
 #'     "size",
 #'     sv_between(
@@ -87,7 +91,7 @@
 #'       ))
 #'     )
 #'
-#'     plot(eruptions ~ waiting, faithful,
+#'     plot(faithful$eruptions ~ faithful$waiting,
 #'       las = 1, pch = 16,
 #'       col = input[["color"]], cex = input[["size"]]
 #'     )
@@ -116,6 +120,7 @@ validate_inputs <- function(..., header = "Some inputs require attention") {
 
 ### internal functions
 
+#' @noRd
 #' @keywords internal
 # recursive object type test
 # returns logical of length 1
@@ -123,6 +128,7 @@ is_validators <- function(x) {
   all(if (is.list(x)) unlist(lapply(x, is_validators)) else inherits(x, "InputValidator"))
 }
 
+#' @noRd
 #' @keywords internal
 # test if an InputValidator object is enabled
 # returns logical of length 1
@@ -131,9 +137,10 @@ validator_enabled <- function(x) {
   x$.__enclos_env__$private$enabled
 }
 
+#' Recursively extract messages from validator list
+#' @return A character vector or a list of character vectors, possibly nested and named.
+#' @noRd
 #' @keywords internal
-# recursively extract messages from validator list
-# returns character vector or a list of character vectors, possibly nested and named
 extract_validator <- function(iv, header) {
   if (inherits(iv, "InputValidator")) {
     add_header(gather_messages(iv), header)
@@ -143,22 +150,24 @@ extract_validator <- function(iv, header) {
   }
 }
 
+#' Collate failing messages from validator.
+#' @return `list`
+#' @noRd
 #' @keywords internal
-# collate failing messages from validator
-# returns list
 gather_messages <- function(iv) {
   if (validator_enabled(iv)) {
     status <- iv$validate()
     failing_inputs <- Filter(Negate(is.null), status)
     unique(lapply(failing_inputs, function(x) x[["message"]]))
   } else {
-    logger::log_warn("Validator is disabled and will be omitted.")
+    warning("Validator is disabled and will be omitted.")
     list()
   }
 }
 
+#' Add optional header to failing messages
+#' @noRd
 #' @keywords internal
-# add optional header to failing messages
 add_header <- function(messages, header = "") {
   ans <- unlist(messages)
   if (length(ans) != 0L && isTRUE(nchar(header) > 0L)) {
@@ -167,8 +176,9 @@ add_header <- function(messages, header = "") {
   ans
 }
 
+#' Recursively check if the object contains a named list
+#' @noRd
 #' @keywords internal
-# recursively check if the object contains a named list
 any_names <- function(x) {
   any(
     if (is.list(x)) {
