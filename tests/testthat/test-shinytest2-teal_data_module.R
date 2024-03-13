@@ -91,7 +91,7 @@ testthat::test_that("e2e: teal_data_module adds new column to datasets", {
             teal_data(),
             {
               dataset1 <- iris
-              dataset[[new_column]] <- sprintf("%s new", .data$Species)
+              dataset1[[new_column]] <- sprintf("%s new", dataset1$Species)
             },
             new_column = input$new_column
           )
