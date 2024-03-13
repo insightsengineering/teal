@@ -23,11 +23,13 @@ testthat::test_that("e2e: teal_data_module will have a delayed load of datasets"
   )
 
   app <- TealAppDriver$new(
-    data = tdm, modules = example_module(label = "Example Module")
+    data = tdm,
+    modules = example_module(label = "Example Module"),
+    timeout = default_idle_timeout
   )
 
   app$click("teal_data_module-submit")
-  app$wait_for_idle(timeout = default_idle_timeout)
+  app$wait_for_idle()
   testthat::expect_setequal(app$get_active_filter_vars(), c("dataset1", "dataset2"))
 
   app$stop()
@@ -57,9 +59,11 @@ testthat::test_that("e2e: teal_data_module fails to proceed without input", {
   )
 
   app <- TealAppDriver$new(
-    data = tdm, modules = example_module(label = "Example Module")
+    data = tdm,
+    modules = example_module(label = "Example Module"),
+    timeout = default_idle_timeout
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
+  app$wait_for_idle()
 
   app$click("teal_data_module-submit")
 
@@ -85,10 +89,10 @@ testthat::test_that("e2e: teal_data_module adds new column to datasets", {
           )
           data <- within(
             teal_data(),
-            dataset1 <- dplyr::mutate(
-              iris,
-              !!new_column := sprintf("%s new", .data$Species)
-            ),
+            {
+              dataset1 <- iris
+              dataset[[new_column]] <- sprintf("%s new", .data$Species)
+            },
             new_column = input$new_column
           )
           datanames(data) <- c("dataset1")
@@ -100,16 +104,18 @@ testthat::test_that("e2e: teal_data_module adds new column to datasets", {
   )
 
   app <- TealAppDriver$new(
-    data = tdm, modules = example_module(label = "Example Module")
+    data = tdm,
+    modules = example_module(label = "Example Module"),
+    timeout = default_idle_timeout
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
+  app$wait_for_idle()
   app$set_input("teal_data_module-new_column", "A_New_Column")
   app$click("teal_data_module-submit")
 
   # This may fail if teal_data_module does not perform the transformation
   testthat::expect_no_error(app$add_filter_var("dataset1", "A_New_Column"))
 
-  app$wait_for_idle(timeout = default_idle_timeout)
+  app$wait_for_idle()
   testthat::expect_setequal(
     app$get_active_filter_selection("dataset1", "A_New_Column"),
     unique(sprintf("%s new", iris$Species))
