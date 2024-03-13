@@ -12,8 +12,6 @@ testthat::test_that(
   modal_title <- "My custom title"
   verbatim_content_text <- "if (TRUE) { print('Popups are the best') }"
 
-
-
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
@@ -75,6 +73,7 @@ testthat::test_that(
   # Modal is closed, once the button is clicked.
   app$click(selector = "#shiny-modal-wrapper button[data-dismiss='modal']")
   # So far there are two Dismiss buttons, but will open an issue to fix this.
+  # https://github.com/insightsengineering/teal.widgets/issues/233
   app$wait_for_idle(timeout = default_idle_timeout)
   testthat::expect_null(app$get_html("#shiny-modal-wrapper"))
 
