@@ -38,6 +38,8 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
+\item \href{#method-TealAppDriver-open_filter_manager}{\code{TealAppDriver$open_filter_manager()}}
+\item \href{#method-TealAppDriver-get_onclick}{\code{TealAppDriver$get_onclick()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
 }
@@ -446,6 +448,39 @@ Set the active filter values for a variable of a dataset in the active filter va
 }
 \subsection{Returns}{
 The \code{TealAppDriver} object invisibly.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-open_filter_manager"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-open_filter_manager}{}}}
+\subsection{Method \code{open_filter_manager()}}{
+Wrapper around \code{get_url()} method that opens the app in the browser.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$open_filter_manager()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-get_onclick"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-get_onclick}{}}}
+\subsection{Method \code{get_onclick()}}{
+Extract \code{onlick} attribute from a \code{button} (found by \code{selector}).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_onclick(selector)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{(\code{character(1)}) specifying the selector to be used to get the content of a \code{button}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{character} vector.
 }
 }
 \if{html}{\out{<hr>}}

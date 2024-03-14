@@ -59,15 +59,7 @@ testthat::test_that("e2e: when default landing_popup_module is closed, it shows 
 
 # customized landing_popup_module ---------------------------------------------------------------------------------
 
-
-extract_onclick <- function(app, id) {
-  app$get_html(id) %>%
-    rvest::read_html() %>%
-    rvest::html_nodes("button") %>%
-    rvest::html_attr("onclick")
-}
 phash <- function(text) paste0("#", text)
-
 
 testthat::test_that(
   "e2e: app with customized landing_popup_module creates modal containing specified title, content and buttons", {
@@ -161,7 +153,7 @@ testthat::test_that("e2e: when customized button in landing_popup_module is clic
   app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_equal(
-    extract_onclick(app, "#read"),
+    app$get_onclick("#read"),
     onclick_text
   )
 
