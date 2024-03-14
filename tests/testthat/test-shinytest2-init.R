@@ -81,13 +81,9 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
   # Check R code output.
   r_code <- app$get_text(sprintf("#%s-rcode-verbatim_content", app$active_module_ns()))
 
-  greplf <- function(text, content = r_code) {
-    grepl(text, content, fixed = TRUE)
-  }
-
-  testthat::expect_true(greplf("# Add any code to install/load your NEST environment here"))
-  testthat::expect_true(greplf("library(teal.code)"))
-  testthat::expect_true(greplf("stopifnot(rlang::hash("))
+  testthat::expect_match(r_code, "# Add any code to install/load your NEST environment here", fixed = TRUE)
+  testthat::expect_match(r_code, "library(teal.code)", fixed = TRUE)
+  testthat::expect_match(r_code, "stopifnot(rlang::hash(", fixed = TRUE)
 
   # Check footer buttons.
   testthat::expect_equal(
