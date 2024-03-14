@@ -171,10 +171,13 @@ filter_manager_module_srv <- function(id, module_fd, slices_global) {
 
 # utilities ----
 
-# Retrieve the first FilteredData from potentially nested list.
-# List of length one is named "Global Filters" because that name used in the mapping matrix display.
-# Flatten potentially nested list of FilteredData objects while maintaining useful names.
-# Simply using `unlist` would result in concatenated names.
+#' Flatten potentially nested list of FilteredData objects while maintaining useful names.
+#' Simply using `unlist` would result in concatenated names.
+#' A single `FilteredData` will result in a list named "Global Filters"
+#' because that name used in the mapping matrix display.
+#' @param x `FilteredData` or a `list` thereof
+#' @param name (`character(1)`) string used to name `x` in the resulting list
+#' @return Unnested named list of `FilteredData` objects.
 #' @keywords internal
 #' @noRd
 #'
