@@ -33,13 +33,13 @@ bookmark_manager_ui <- function(id) {
 #' @rdname bookmark_manager_module
 #' @keywords internal
 #'
-bookmark_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_list, snapshot_history) {
+bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, snapshot_history) {
   checkmate::assert_character(id)
   checkmate::assert_true(is.reactive(slices_global))
   checkmate::assert_class(isolate(slices_global()), "teal_slices")
   checkmate::assert_true(is.reactive(mapping_matrix))
   checkmate::assert_data_frame(isolate(mapping_matrix()), null.ok = TRUE)
-  checkmate::assert_list(filtered_data_list, types = "FilteredData", any.missing = FALSE, names = "named")
+  checkmate::assert_list(datasets, types = "FilteredData", any.missing = FALSE, names = "named")
   checkmate::assert_true(is.reactive(snapshot_history))
   checkmate::assert_list(isolate(snapshot_history()), names = "unique")
 
@@ -65,14 +65,14 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       # Restore filter state.
       snapshot <- state$values$filter_state_on_bookmark
       snapshot_state <- as.teal_slices(snapshot)
-      mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+      mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
       mapply(
         function(filtered_data, filter_ids) {
           filtered_data$clear_filter_states(force = TRUE)
           slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
           filtered_data$set_filter_state(slices)
         },
-        filtered_data = filtered_data_list,
+        filtered_data = datasets,
         filter_ids = mapping_unfolded
       )
       slices_global(snapshot_state)

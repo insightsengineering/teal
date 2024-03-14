@@ -11,7 +11,7 @@
 #'
 #' @param id (`character(1)`)
 #'  `shiny` module id.
-#' @param filtered_data_list (named `list`)
+#' @param datasets (named `list`)
 #'  A list, possibly nested, of `FilteredData` objects.
 #'  Each `FilteredData` will be served to one module in the `teal` application.
 #'  The structure of the list must reflect the nesting of modules in tabs
@@ -33,9 +33,9 @@ filter_manager_ui <- function(id) {
 }
 
 #' @rdname module_filter_manager
-filter_manager_srv <- function(id, filtered_data_list, filter) {
+filter_manager_srv <- function(id, datasets, filter) {
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("filter_manager_srv initializing for: { paste(names(filtered_data_list), collapse = ', ')}.")
+    logger::log_trace("filter_manager_srv initializing for: { paste(names(datasets), collapse = ', ')}.")
 
     is_module_specific <- isTRUE(attr(filter, "module_specific"))
 
@@ -47,9 +47,9 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
 
     filtered_data_flat <-
       if (!is_module_specific) {
-        flatten_filtered_data_list(unlist(filtered_data_list)[[1]])
+        flatten_filtered_data_list(unlist(datasets)[[1]])
       } else {
-        flatten_filtered_data_list(filtered_data_list)
+        flatten_filtered_data_list(datasets)
       }
 
     # Create mapping of filters to modules in matrix form (presented as data.frame).

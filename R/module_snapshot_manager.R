@@ -44,7 +44,7 @@
 #' This is substituted as the snapshot's `mapping` attribute and the snapshot is added to the snapshot list.
 #'
 #' To restore app state, a snapshot is retrieved from storage and rebuilt into a `teal_slices` object.
-#' Then state of all `FilteredData` objects (provided in `filtered_data_list`) is cleared
+#' Then state of all `FilteredData` objects (provided in `datasets`) is cleared
 #' and set anew according to the `mapping` attribute of the snapshot.
 #' The snapshot is then set as the current content of `slices_global`.
 #'
@@ -71,7 +71,7 @@
 #' @param mapping_matrix (`reactive`) that contains a `data.frame` representation
 #'                       of the mapping of filter state ids (rows) to modules labels (columns);
 #'                       all columns are `logical` vectors
-#' @param filtered_data_list non-nested (named `list`) that contains `FilteredData` objects
+#' @param datasets non-nested (named `list`) that contains `FilteredData` objects
 #'
 #' @return Nothing is returned.
 #'
@@ -102,13 +102,13 @@ snapshot_manager_ui <- function(id) {
 #' @rdname snapshot_manager_module
 #' @keywords internal
 #'
-snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_list) {
+snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
   checkmate::assert_character(id)
   checkmate::assert_true(is.reactive(slices_global))
   checkmate::assert_class(isolate(slices_global()), "teal_slices")
   checkmate::assert_true(is.reactive(mapping_matrix))
   checkmate::assert_data_frame(isolate(mapping_matrix()), null.ok = TRUE)
-  checkmate::assert_list(filtered_data_list, types = "FilteredData", any.missing = FALSE, names = "named")
+  checkmate::assert_list(datasets, types = "FilteredData", any.missing = FALSE, names = "named")
 
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -213,14 +213,14 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
           names(snapshot_update)[length(snapshot_update)] <- snapshot_name
           snapshot_history(snapshot_update)
           ### Begin simplified restore procedure. ###
-          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
           mapply(
             function(filtered_data, filter_ids) {
               filtered_data$clear_filter_states(force = TRUE)
               slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
               filtered_data$set_filter_state(slices)
             },
-            filtered_data = filtered_data_list,
+            filtered_data = datasets,
             filter_ids = mapping_unfolded
           )
           slices_global(snapshot_state)
@@ -237,14 +237,14 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
       ### Begin restore procedure. ###
       snapshot <- snapshot_history()[[s]]
       snapshot_state <- as.teal_slices(snapshot)
-      mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+      mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
       mapply(
         function(filtered_data, filter_ids) {
           filtered_data$clear_filter_states(force = TRUE)
           slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
           filtered_data$set_filter_state(slices)
         },
-        filtered_data = filtered_data_list,
+        filtered_data = datasets,
         filter_ids = mapping_unfolded
       )
       slices_global(snapshot_state)
@@ -272,14 +272,14 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
             ### Begin restore procedure. ###
             snapshot <- snapshot_history()[[s]]
             snapshot_state <- as.teal_slices(snapshot)
-            mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+            mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
             mapply(
               function(filtered_data, filter_ids) {
                 filtered_data$clear_filter_states(force = TRUE)
                 slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
                 filtered_data$set_filter_state(slices)
               },
-              filtered_data = filtered_data_list,
+              filtered_data = datasets,
               filter_ids = mapping_unfolded
             )
             slices_global(snapshot_state)

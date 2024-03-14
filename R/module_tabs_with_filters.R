@@ -84,7 +84,7 @@ srv_tabs_with_filters <- function(id,
     logger::log_trace("srv_tabs_with_filters initializing the module.")
 
     is_module_specific <- isTRUE(attr(filter, "module_specific"))
-    wunder_bar_out <- wunder_bar_srv("wunder_bar", filtered_data_list = datasets, filter = filter)
+    wunder_bar_out <- wunder_bar_srv("wunder_bar", datasets, filter)
 
     active_module <- srv_nested_tabs(
       id = "root",

@@ -36,7 +36,7 @@ wunder_bar_ui <- function(id) {
 }
 
 #' @rdname module_filter_manager_modal
-wunder_bar_srv <- function(id, filtered_data_list, filter) {
+wunder_bar_srv <- function(id, datasets, filter) {
   moduleServer(id, function(input, output, session) {
 
     ns <- session$ns
@@ -79,20 +79,20 @@ wunder_bar_srv <- function(id, filtered_data_list, filter) {
 
     filter_manager_results <- filter_manager_srv(
       id = "filter_manager",
-      filtered_data_list = filtered_data_list,
+      datasets = datasets,
       filter = filter
     )
     snapshot_history <- snapshot_manager_srv(
       id = "snapshot_manager",
       slices_global = filter_manager_results$slices_global,
       mapping_matrix = filter_manager_results$mapping_matrix,
-      filtered_data_list = filter_manager_results$filtered_data_list
+      datasets = filter_manager_results$filtered_data_flat
     )
     bookmark_manager_srv(
       id = "bookmark_manager",
       slices_global = filter_manager_results$slices_global,
       mapping_matrix = filter_manager_results$mapping_matrix,
-      filtered_data_list = filter_manager_results$filtered_data_list,
+      datasets = filter_manager_results$filtered_data_flat,
       snapshot_history = snapshot_history
     )
 
