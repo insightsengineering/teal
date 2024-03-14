@@ -77,22 +77,22 @@ wunder_bar_srv <- function(id, filtered_data_list, filter) {
       )
     })
 
-    filtrer_manager_results <- filter_manager_srv(
+    filter_manager_results <- filter_manager_srv(
       id = "filter_manager",
       filtered_data_list = filtered_data_list,
       filter = filter
     )
     snapshot_history <- snapshot_manager_srv(
       id = "snapshot_manager",
-      slices_global = filtrer_manager_results$slices_global,
-      mapping_matrix = filtrer_manager_results$mapping_matrix,
-      filtered_data_list = filtrer_manager_results$filtered_data_list
+      slices_global = filter_manager_results$slices_global,
+      mapping_matrix = filter_manager_results$mapping_matrix,
+      filtered_data_list = filter_manager_results$filtered_data_list
     )
     bookmark_manager_srv(
       id = "bookmark_manager",
-      slices_global = filtrer_manager_results$slices_global,
-      mapping_matrix = filtrer_manager_results$mapping_matrix,
-      filtered_data_list = filtrer_manager_results$filtered_data_list,
+      slices_global = filter_manager_results$slices_global,
+      mapping_matrix = filter_manager_results$mapping_matrix,
+      filtered_data_list = filter_manager_results$filtered_data_list,
       snapshot_history = snapshot_history
     )
 
