@@ -69,13 +69,23 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
     app$get_text("#shiny-modal div.modal-header > h4"),
     "Example Code"
   )
+
+  # There are two Dismiss buttons with similar id and the same label.
+  testthat::expect_setequal(
+    testthat::expect_length(
+      app$get_text("#shiny-modal button[data-dismiss]"),
+      2
+    ),
+    "Dismiss"
+  )
+  # Check for Copy buttons.
   testthat::expect_equal(
     app$get_text(sprintf("#%s-rcode-copy_button1", app$active_module_ns())),
     "Copy to Clipboard"
   )
   testthat::expect_equal(
-    app$get_text("#shiny-modal div.modal-footer button[data-dismiss]"),
-    "Dismiss"
+    app$get_text(sprintf("#%s-rcode-copy_button2", app$active_module_ns())),
+    "Copy to Clipboard"
   )
 
   # Check R code output.
@@ -84,16 +94,6 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
   testthat::expect_match(r_code, "# Add any code to install/load your NEST environment here", fixed = TRUE)
   testthat::expect_match(r_code, "library(teal.code)", fixed = TRUE)
   testthat::expect_match(r_code, "stopifnot(rlang::hash(", fixed = TRUE)
-
-  # Check footer buttons.
-  testthat::expect_equal(
-    app$get_text(sprintf("#%s-rcode-copy_button2", app$active_module_ns())),
-    "Copy to Clipboard"
-  )
-  testthat::expect_equal(
-    app$get_text("#shiny-modal div.modal-footer button[data-dismiss]"),
-    "Dismiss"
-  )
 
   app$stop()
 })
