@@ -59,13 +59,14 @@ testthat::test_that("e2e: when default landing_popup_module is closed, it shows 
 
 # customized landing_popup_module ---------------------------------------------------------------------------------
 
-phash <- function(text) paste0("#", text)
-
 testthat::test_that(
-  "e2e: app with customized landing_popup_module creates modal containing specified title, content and buttons", {
-  modal_title <- "Custom Landing Popup Module Title"
-  modal_content_message <- "A welcome message!"
-  modal_content <- tags$b(modal_content_message, style = "color: red;")
+  "e2e: app with customized landing_popup_module creates modal containing specified title, content and buttons",
+  {
+    phash <- function(text) paste0("#", text)
+
+    modal_title <- "Custom Landing Popup Module Title"
+    modal_content_message <- "A welcome message!"
+    modal_content <- tags$b(modal_content_message, style = "color: red;")
 
   modal_btns <- list(
     list(text = "Proceed"),
