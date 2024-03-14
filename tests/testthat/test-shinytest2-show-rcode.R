@@ -1,4 +1,3 @@
-
 testthat::test_that("e2e: teal app initializes with Show R Code modal", {
   app <- TealAppDriver$new(
     data = simple_teal_data(),
