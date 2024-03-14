@@ -29,7 +29,7 @@ testthat::test_that("e2e: app with default landing_popup_module creates modal co
   app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_equal(
-    app$get_text("#shiny-modal-wrapper .btn-default"),
+    app$get_text("#shiny-modal-wrapper button"),
     "Accept"
   )
 
