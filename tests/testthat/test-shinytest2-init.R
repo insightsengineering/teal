@@ -30,12 +30,23 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
     app$get_text("#shiny-modal > div > div > div.modal-header > h4"),
     "SessionInfo"
   )
-  testthat::expect_equal(
-    app$get_text("#teal-sessionInfo-copy_button1"),
+
+  # There are two buttons with similar id and the same label.
+  testthat::expect_setequal(
+    testthat::expect_length(
+      app$get_text(
+        "#shiny-modal [id^='teal-sessionInfo-copy_button']"
+      ),
+      2
+    ),
     "Copy to Clipboard"
   )
-  testthat::expect_equal(
-    app$get_text("#shiny-modal > div > div > div.modal-body > div > button:nth-child(2)"),
+
+  testthat::expect_setequal(
+    testthat::expect_length(
+      app$get_text("#shiny-modal button[data-dismiss]"),
+      2
+    ),
     "Dismiss"
   )
 
