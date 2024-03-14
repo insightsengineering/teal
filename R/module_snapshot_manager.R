@@ -194,7 +194,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
       logger::log_trace("snapshot_manager_srv: snapshot_file_accept button clicked")
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
-        logger::log_trace("snapshot_manager_srv: snapshot name rejected")
+        logger::log_trace("snapshot_manager_srv: no snapshot name provided, naming after file")
         snapshot_name <- tools::file_path_sans_ext(input$snapshot_file$name)
       }
       if (is.element(make.names(snapshot_name), make.names(names(snapshot_history())))) {
