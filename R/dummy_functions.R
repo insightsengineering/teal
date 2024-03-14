@@ -20,7 +20,11 @@ example_module <- function(label = "example teal module", datanames = "all") {
     server = function(id, data) {
       checkmate::assert_class(data(), "teal_data")
       moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(teal.data::datanames(data())))
+        updateSelectInput(
+          inputId = "dataname",
+          choices = isolate(teal.data::datanames(data())),
+          selected = restoreInput(session$ns("dataname"), NULL)
+        )
         output$text <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]
