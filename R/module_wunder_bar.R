@@ -38,6 +38,7 @@ wunder_bar_ui <- function(id) {
 #' @rdname module_filter_manager_modal
 wunder_bar_srv <- function(id, datasets, filter) {
   moduleServer(id, function(input, output, session) {
+    logger::log_trace("wunder_bar_srv initializing")
 
     ns <- session$ns
 

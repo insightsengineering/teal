@@ -44,6 +44,8 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
   checkmate::assert_list(isolate(snapshot_history()), names = "unique")
 
   moduleServer(id, function(input, output, session) {
+    logger::log_trace("bookmark_manager_srv initializing")
+
     ns <- session$ns
     app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
 
@@ -54,15 +56,18 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
 
     app_session$onBookmark(function(state) {
       # Add current filter state to bookmark.
+      logger::log_trace("bookmark_manager_srv: onBookmark hook: storing filter state")
       snapshot <- as.list(slices_global(), recursive = TRUE)
       attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
       state$values$filter_state_on_bookmark <- snapshot
       # Add snapshot history and bookmark history to bookmark.
+      logger::log_trace("bookmark_manager_srv: onBookmark hook: storing snapshot and bookmark history")
       state$values$snapshot_history <- snapshot_history()   # isolate this?
       state$values$bookmark_history <- bookmark_history()   # isolate this?
     })
     app_session$onRestored(function(state) {
       # Restore filter state.
+      logger::log_trace("bookmark_manager_srv: onRestored hook: restoring filter state")
       snapshot <- state$values$filter_state_on_bookmark
       snapshot_state <- as.teal_slices(snapshot)
       mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
@@ -77,13 +82,16 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
       )
       slices_global(snapshot_state)
       # Restore snapshot history and bookmark history.
+      logger::log_trace("bookmark_manager_srv: onRestored hook: restoring snapshot and bookmark history")
       snapshot_history(state$values$snapshot_history)
       bookmark_history(state$values$bookmark_history)
     })
 
     app_session$onBookmarked(function(url) {
+      logger::log_trace("bookmark_manager_srv: onBookmarked hook: bookmark button clicked, registering bookmark")
       bookmark_name <- trimws(input$bookmark_name)
       if (identical(bookmark_name, "")) {
+        logger::log_trace("bookmark_manager_srv: onBookmarked hook: bookmark name rejected")
         showNotification(
           "Please name the bookmark.",
           type = "message"
@@ -91,6 +99,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
         updateTextInput(inputId = "bookmark_name", value = "", placeholder = "Meaningful, unique name")
         unlink(strsplit(url, "_state_id_=")[[1L]][[2L]], recursive = TRUE, force = TRUE, expand = FALSE)
       } else if (is.element(make.names(bookmark_name), make.names(names(bookmark_history())))) {
+        logger::log_trace("bookmark_manager_srv: onBookmarked hook: bookmark name rejected")
         showNotification(
           "This name is in conflict with other bookmark names. Please choose a different one.",
           type = "message"
@@ -99,6 +108,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
         unlink(strsplit(url, "_state_id_=")[[1L]][[2L]], recursive = TRUE, force = TRUE, expand = FALSE)
       } else {
         # Add bookmark URL to bookmark history (with name).
+        logger::log_trace("bookmark_manager_srv: onBookmarked hook: bookmark name accepted, adding to history")
         bookmark_update <- c(bookmark_history(), list(url))
         names(bookmark_update)[length(bookmark_update)] <- bookmark_name
         bookmark_history(bookmark_update)
@@ -109,6 +119,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
 
     # Bookmark current input state - name bookmark.
     observeEvent(input$bookmark_add, {
+      logger::log_trace("bookmark_manager_srv: bookmark_add button clicked")
       showModal(
         modalDialog(
           textInput(ns("bookmark_name"), "Name the bookmark", width = "100%", placeholder = "Meaningful, unique name"),
@@ -126,6 +137,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
     divs <- reactiveValues()
 
     observeEvent(bookmark_history(), {
+      logger::log_trace("bookmark_manager_srv: bookmark history changed, updating bookmark list")
       lapply(names(bookmark_history()), function(s) {
         id_rowme <- sprintf("rowme_%s", make.names(s))
 
