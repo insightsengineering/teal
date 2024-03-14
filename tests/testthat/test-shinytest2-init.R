@@ -31,7 +31,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
     "SessionInfo"
   )
 
-  # There are two buttons with similar id and the same label.
+  # There are two Copy buttons with similar id and the same label.
   testthat::expect_setequal(
     testthat::expect_length(
       app$get_text(
@@ -41,7 +41,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
     ),
     "Copy to Clipboard"
   )
-
+  # There are two Dismiss buttons with similar id and the same label.
   testthat::expect_setequal(
     testthat::expect_length(
       app$get_text("#shiny-modal button[data-dismiss]"),
@@ -60,16 +60,6 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   testthat::expect_match(session_info, "shiny", fixed = TRUE)
   testthat::expect_match(session_info, "teal.slice", fixed = TRUE)
   testthat::expect_match(session_info, "teal.reporter", fixed = TRUE)
-
-  # Check footer buttons.
-  testthat::expect_equal(
-    app$get_text("#teal-sessionInfo-copy_button2"),
-    "Copy to Clipboard"
-  )
-  testthat::expect_equal(
-    app$get_text("#shiny-modal > div > div > div.modal-footer > button:nth-child(2)"),
-    "Dismiss"
-  )
 
   app$stop()
 })
