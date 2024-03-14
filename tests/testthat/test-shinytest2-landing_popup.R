@@ -160,10 +160,9 @@ testthat::test_that("e2e: when customized button in landing_popup_module is clic
   )
   app$wait_for_idle(timeout = default_idle_timeout)
 
-  onclick_text_app <- app$get_js("document.getElementById(\"read\").onclick.toString()")
-
-  testthat::expect_true(
-    grepl(onclick_text, onclick_text_app, fixed = TRUE)
+  testthat::expect_equal(
+    extract_onclick(app, "#read"),
+    onclick_text
   )
 
   app$stop()
