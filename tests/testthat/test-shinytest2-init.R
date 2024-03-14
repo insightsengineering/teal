@@ -66,7 +66,7 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
 
   # Check header and title content.
   testthat::expect_equal(
-    app$get_text("#shiny-modal > div > div > div.modal-header > h4"),
+    app$get_text("#shiny-modal div.modal-header > h4"),
     "Example Code"
   )
   testthat::expect_equal(
