@@ -51,15 +51,6 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
         # List of length one is named "global_filters" because that name is forbidden for a module label.
         list(global_filters = unlist(filtered_data_list)[[1]])
       } else {
-        # Flatten potentially nested list of FilteredData objects while maintaining useful names.
-        # Simply using `unlist` would result in concatenated names.
-        flatten_nested <- function(x, name = NULL) {
-          if (inherits(x, "FilteredData")) {
-            setNames(list(x), name)
-          } else {
-            unlist(lapply(names(x), function(name) flatten_nested(x[[name]], name)))
-          }
-        }
         flatten_nested(filtered_data_list)
       }
 
@@ -178,3 +169,39 @@ filter_manager_module_srv <- function(id, module_fd, slices_global) {
     slices_module # returned for testing purpose
   })
 }
+
+
+
+# utilities ----
+
+# Flatten potentially nested list of FilteredData objects while maintaining useful names.
+# Simply using `unlist` would result in concatenated names.
+#' @keywords internal
+#' @noRd
+#'
+flatten_nested <- function(x, name = NULL) {
+  if (inherits(x, "FilteredData")) {
+    setNames(list(x), name)
+  } else {
+    unlist(lapply(names(x), function(name) flatten_nested(x[[name]], name)))
+  }
+}
+
+#' # Create mapping fo filters to modules in matrix form (presented as data.frame).
+#' # Modules get NAs for filters that cannot be set for them.
+#' #' @keywords internal
+#' #' @noRd
+#' #'
+#' create_mapping_matrix <- function(filtered_data_list, slices_global) {
+#'   reactive({
+#'     state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
+#'     mapping_smooth <- lapply(filtered_data_list, function(x) {
+#'       state_ids_local <- vapply(x$get_filter_state(), `[[`, character(1L), "id")
+#'       state_ids_allowed <- vapply(x$get_available_teal_slices()(), `[[`, character(1L), "id")
+#'       states_active <- state_ids_global %in% state_ids_local
+#'       ifelse(state_ids_global %in% state_ids_allowed, states_active, NA)
+#'     })
+#'
+#'     as.data.frame(mapping_smooth, row.names = state_ids_global, check.names = FALSE)
+#'   })
+#' }
