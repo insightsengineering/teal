@@ -54,6 +54,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
       list()
     })
 
+    # These exclusions ensure the right modals open in bookmarked app.
     setBookmarkExclude(c("bookmark_name", "bookmark_add"))
     app_session$onBookmark(function(state) {
       # Add current filter state to bookmark.
