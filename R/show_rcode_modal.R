@@ -8,7 +8,7 @@
 #'  Title of the modal, displayed in the first comment of the `R` code.
 #' @param rcode (`character`)
 #'  vector with `R` code to show inside the modal.
-#' @param session (`ShinySession`) optional,
+#' @param session (`ShinySession`) optional
 #'  `shiny` session object, defaults to [shiny::getDefaultReactiveDomain()].
 #'
 #' @references [shiny::showModal()]

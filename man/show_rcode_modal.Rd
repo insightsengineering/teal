@@ -13,7 +13,7 @@ Title of the modal, displayed in the first comment of the \code{R} code.}
 \item{rcode}{(\code{character})
 vector with \code{R} code to show inside the modal.}
 
-\item{session}{(\code{ShinySession}) optional,
+\item{session}{(\code{ShinySession}) optional
 \code{shiny} session object, defaults to \code{\link[shiny:domains]{shiny::getDefaultReactiveDomain()}}.}
 }
 \description{
