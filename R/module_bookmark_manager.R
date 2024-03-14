@@ -104,7 +104,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
           "This name is in conflict with other bookmark names. Please choose a different one.",
           type = "message"
         )
-        updateTextInput(inputId = "bookmark_name", value = , placeholder = "Meaningful, unique name")
+        updateTextInput(inputId = "bookmark_name", value = "", placeholder = "Meaningful, unique name")
         unlink(strsplit(url, "_state_id_=")[[1L]][[2L]], recursive = TRUE, force = TRUE, expand = FALSE)
       } else {
         # Add bookmark URL to bookmark history (with name).
