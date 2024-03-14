@@ -54,6 +54,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
       list()
     })
 
+    setBookmarkExclude(c("bookmark_name", "bookmark_add"))
     app_session$onBookmark(function(state) {
       # Add current filter state to bookmark.
       logger::log_trace("bookmark_manager_srv@onBookmark: storing filter state")
