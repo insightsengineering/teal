@@ -48,8 +48,8 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     filtered_data_list <-
       if (!is_module_specific) {
         # Retrieve the first FilteredData from potentially nested list.
-        # List of length one is named "global_filters" because that name is forbidden for a module label.
-        list(global_filters = unlist(filtered_data_list)[[1]])
+        # List of length one is named "Global Filters" because that name used in the mapping matrix display.
+        list("Global Filters" = unlist(filtered_data_list)[[1]])
       } else {
         flatten_nested(filtered_data_list)
       }
@@ -74,7 +74,6 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
         mm <- mapping_matrix()
         mm[] <- lapply(mm, ifelse, yes = intToUtf8(9989), no = intToUtf8(10060))
         mm[] <- lapply(mm, function(x) ifelse(is.na(x), intToUtf8(128306), x))
-        if (!is_module_specific) colnames(mm) <- "Global Filters"
 
         # Display placeholder if no filters defined.
         if (nrow(mm) == 0L) {
