@@ -42,17 +42,13 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   # Check session info output.
   session_info <- app$get_text("#teal-sessionInfo-verbatim_content")
 
-  greplf <- function(text, content = session_info) {
-    grepl(text, content, fixed = TRUE)
-  }
+  testthat::expect_match(session_info, "R version", fixed = TRUE)
+  testthat::expect_match(session_info, "attached base packages:", fixed = TRUE)
+  testthat::expect_match(session_info, "loaded via a namespace (and not attached):", fixed = TRUE)
 
-  testthat::expect_true(greplf("R version"))
-  testthat::expect_true(greplf("attached base packages:"))
-  testthat::expect_true(greplf("loaded via a namespace (and not attached):"))
-
-  testthat::expect_true(greplf("shiny"))
-  testthat::expect_true(greplf("teal.slice"))
-  testthat::expect_true(greplf("teal.reporter"))
+  testthat::expect_match(session_info, "shiny", fixed = TRUE)
+  testthat::expect_match(session_info, "teal.slice", fixed = TRUE)
+  testthat::expect_match(session_info, "teal.reporter", fixed = TRUE)
 
   # Check footer buttons.
   testthat::expect_equal(
