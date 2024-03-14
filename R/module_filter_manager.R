@@ -45,20 +45,18 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     # Down there a subset that pertains to the data sets used in that module is applied and displayed.
     slices_global <- reactiveVal(filter)
 
-    filtered_data_list <-
+    filtered_data_flat <-
       if (!is_module_specific) {
-        # Retrieve the first FilteredData from potentially nested list.
-        # List of length one is named "Global Filters" because that name used in the mapping matrix display.
-        list("Global Filters" = unlist(filtered_data_list)[[1]])
+        flatten_filtered_data_list(unlist(filtered_data_list)[[1]])
       } else {
-        flatten_nested(filtered_data_list)
+        flatten_filtered_data_list(filtered_data_list)
       }
 
     # Create mapping of filters to modules in matrix form (presented as data.frame).
     # Modules get NAs for filters that cannot be set for them.
     mapping_matrix <- reactive({
       state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
-      mapping_smooth <- lapply(filtered_data_list, function(x) {
+      mapping_smooth <- lapply(filtered_data_flat, function(x) {
         state_ids_local <- vapply(x$get_filter_state(), `[[`, character(1L), "id")
         state_ids_allowed <- vapply(x$get_available_teal_slices()(), `[[`, character(1L), "id")
         states_active <- state_ids_global %in% state_ids_local
@@ -84,15 +82,15 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
         # Report Previewer will not be displayed.
         mm[names(mm) != "Report previewer"]
       },
-      align = paste(c("l", rep("c", sum(names(filtered_data_list) != "Report previewer"))), collapse = ""),
+      align = paste(c("l", rep("c", sum(names(filtered_data_flat) != "Report previewer"))), collapse = ""),
       rownames = TRUE
     )
 
     # Create list of module calls.
-    modules_out <- lapply(names(filtered_data_list), function(module_name) {
+    modules_out <- lapply(names(filtered_data_flat), function(module_name) {
       filter_manager_module_srv(
         id = module_name,
-        module_fd = filtered_data_list[[module_name]],
+        module_fd = filtered_data_flat[[module_name]],
         slices_global = slices_global
       )
     })
@@ -100,7 +98,7 @@ filter_manager_srv <- function(id, filtered_data_list, filter) {
     list(
       slices_global = slices_global,
       mapping_matrix = mapping_matrix,
-      filtered_data_list = filtered_data_list,
+      filtered_data_flat = filtered_data_flat,
       modules_out = modules_out # returned for testing purpose
     )
   })
@@ -173,34 +171,17 @@ filter_manager_module_srv <- function(id, module_fd, slices_global) {
 
 # utilities ----
 
+# Retrieve the first FilteredData from potentially nested list.
+# List of length one is named "Global Filters" because that name used in the mapping matrix display.
 # Flatten potentially nested list of FilteredData objects while maintaining useful names.
 # Simply using `unlist` would result in concatenated names.
 #' @keywords internal
 #' @noRd
 #'
-flatten_nested <- function(x, name = NULL) {
+flatten_filtered_data_list <- function(x, name = "Global Filters") {
   if (inherits(x, "FilteredData")) {
     setNames(list(x), name)
   } else {
-    unlist(lapply(names(x), function(name) flatten_nested(x[[name]], name)))
+    unlist(lapply(names(x), function(name) flatten_filtered_data_list(x[[name]], name)))
   }
 }
-
-#' # Create mapping fo filters to modules in matrix form (presented as data.frame).
-#' # Modules get NAs for filters that cannot be set for them.
-#' #' @keywords internal
-#' #' @noRd
-#' #'
-#' create_mapping_matrix <- function(filtered_data_list, slices_global) {
-#'   reactive({
-#'     state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
-#'     mapping_smooth <- lapply(filtered_data_list, function(x) {
-#'       state_ids_local <- vapply(x$get_filter_state(), `[[`, character(1L), "id")
-#'       state_ids_allowed <- vapply(x$get_available_teal_slices()(), `[[`, character(1L), "id")
-#'       states_active <- state_ids_global %in% state_ids_local
-#'       ifelse(state_ids_global %in% state_ids_allowed, states_active, NA)
-#'     })
-#'
-#'     as.data.frame(mapping_smooth, row.names = state_ids_global, check.names = FALSE)
-#'   })
-#' }
