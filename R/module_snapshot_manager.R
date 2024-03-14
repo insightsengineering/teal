@@ -165,7 +165,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
         snapshot_history(snapshot_update)
         removeModal()
         # Reopen filter manager modal by clicking button in the main application.
-        shinyjs::click(id = "teal-main_ui-filter_manager-show", asis = TRUE)
+        shinyjs::click(id = "teal-main_ui-wunder_bar-show_snapshot_manager", asis = TRUE)
       }
     })
 
