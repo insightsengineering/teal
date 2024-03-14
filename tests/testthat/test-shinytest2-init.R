@@ -74,7 +74,7 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
     "Copy to Clipboard"
   )
   testthat::expect_equal(
-    app$get_text("#shiny-modal > div > div > div.modal-body > div > button:nth-child(2)"),
+    app$get_text("#shiny-modal div.modal-footer button[data-dismiss]")
     "Dismiss"
   )
 
