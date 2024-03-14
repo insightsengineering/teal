@@ -45,18 +45,18 @@ filter_manager_srv <- function(id, datasets, filter) {
     # Down there a subset that pertains to the data sets used in that module is applied and displayed.
     slices_global <- reactiveVal(filter)
 
-    filtered_data_flat <-
+    datasets_flat <-
       if (!is_module_specific) {
-        flatten_filtered_data_list(unlist(datasets)[[1]])
+        flatten_datasets(unlist(datasets)[[1]])
       } else {
-        flatten_filtered_data_list(datasets)
+        flatten_datasets(datasets)
       }
 
     # Create mapping of filters to modules in matrix form (presented as data.frame).
     # Modules get NAs for filters that cannot be set for them.
     mapping_matrix <- reactive({
       state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
-      mapping_smooth <- lapply(filtered_data_flat, function(x) {
+      mapping_smooth <- lapply(datasets_flat, function(x) {
         state_ids_local <- vapply(x$get_filter_state(), `[[`, character(1L), "id")
         state_ids_allowed <- vapply(x$get_available_teal_slices()(), `[[`, character(1L), "id")
         states_active <- state_ids_global %in% state_ids_local
@@ -82,15 +82,15 @@ filter_manager_srv <- function(id, datasets, filter) {
         # Report Previewer will not be displayed.
         mm[names(mm) != "Report previewer"]
       },
-      align = paste(c("l", rep("c", sum(names(filtered_data_flat) != "Report previewer"))), collapse = ""),
+      align = paste(c("l", rep("c", sum(names(datasets_flat) != "Report previewer"))), collapse = ""),
       rownames = TRUE
     )
 
     # Create list of module calls.
-    modules_out <- lapply(names(filtered_data_flat), function(module_name) {
+    modules_out <- lapply(names(datasets_flat), function(module_name) {
       filter_manager_module_srv(
         id = module_name,
-        module_fd = filtered_data_flat[[module_name]],
+        module_fd = datasets_flat[[module_name]],
         slices_global = slices_global
       )
     })
@@ -98,7 +98,7 @@ filter_manager_srv <- function(id, datasets, filter) {
     list(
       slices_global = slices_global,
       mapping_matrix = mapping_matrix,
-      filtered_data_flat = filtered_data_flat,
+      datasets_flat = datasets_flat,
       modules_out = modules_out # returned for testing purpose
     )
   })
@@ -178,10 +178,10 @@ filter_manager_module_srv <- function(id, module_fd, slices_global) {
 #' @keywords internal
 #' @noRd
 #'
-flatten_filtered_data_list <- function(x, name = "Global Filters") {
+flatten_datasets <- function(x, name = "Global Filters") {
   if (inherits(x, "FilteredData")) {
     setNames(list(x), name)
   } else {
-    unlist(lapply(names(x), function(name) flatten_filtered_data_list(x[[name]], name)))
+    unlist(lapply(names(x), function(name) flatten_datasets(x[[name]], name)))
   }
 }
