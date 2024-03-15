@@ -488,7 +488,7 @@ The \code{TealAppDriver} object invisibly.
 \if{html}{\out{<a id="method-TealAppDriver-open_url"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-open_url}{}}}
 \subsection{Method \code{open_url()}}{
-Wrapper around \code{get_url}that opens the app in the browser.
+Wrapper around \code{get_url()} method that opens the app in the browser.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$open_url()}\if{html}{\out{</div>}}
 }
