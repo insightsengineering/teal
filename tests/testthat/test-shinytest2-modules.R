@@ -78,8 +78,7 @@ testthat::test_that("e2e: filter panel is not displayed when datanames is NULL",
   app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_identical(
-    app$get_html(".teal_secondary_col") %>%
-      rvest::read_html() %>%
+    app$read_html(".teal_secondary_col") %>%
       rvest::html_element("div") %>%
       rvest::html_attr("style"),
     "display: none;"
