@@ -17,15 +17,8 @@ a.disabled {
 
 .filter_manager_content {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  align-items: flex-start;
   justify-content: center;
-}
-.filter_manager_content > * {
-  flex: 1 1 auto;
-  padding: 0em 1em;
-  width: min-content;
 }
 
 .snapshot_table_row {
