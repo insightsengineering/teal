@@ -157,16 +157,6 @@ TealAppDriver <- R6::R6Class( # nolint
       private$ns$filter_panel
     },
     #' @description
-    #' Get the active shiny name space for interacting with the filter panel.
-    #'
-    #' @return (`string`) The active shiny name space of the component.
-    filter_manager_ns = function() {
-      if (identical(private$ns$filter_manager, character(0))) {
-        private$set_active_ns()
-      }
-      private$ns$filter_manager
-    },
-    #' @description
     #' Advance utility to help in creating namespace and CSS selectors for Shiny UI.
     #' It is similar with [shiny::NS()] by returning a function that can be used
     #' to create a namespace for the shiny UI.
@@ -386,18 +376,6 @@ TealAppDriver <- R6::R6Class( # nolint
       invisible(self)
     },
     #' @description
-    #' Click on the filter manager show button.
-    #'
-    #' @return The `TealAppDriver` object invisibly.
-    open_filter_manager = function() {
-      active_ns <- self$filter_manager_ns()
-      ns <- self$helper_NS(active_ns)
-
-      self$click(ns("show"))
-      self$wait_for_idle(500)
-      invisible(self)
-    },
-    #' @description
     #' Wrapper around `get_url()` method that opens the app in the browser.
     #'
     #' @return Nothing. Opens the underlying teal app in the browser.
@@ -413,8 +391,7 @@ TealAppDriver <- R6::R6Class( # nolint
     filter = teal_slices(),
     ns = list(
       module = character(0),
-      filter_panel = character(0),
-      filter_manager = character(0)
+      filter_panel = character(0)
     ),
     idle_timeout = 20000, # 20 seconds
     load_timeout = 100000, # 100 seconds
@@ -444,13 +421,6 @@ TealAppDriver <- R6::R6Class( # nolint
 
       component <- "filter_panel"
       if (!is.null(self$get_html(sprintf("#teal-main_ui-%s", component)))) {
-        private$ns[[component]] <- sprintf("teal-main_ui-%s", component)
-      } else {
-        private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
-      }
-
-      component <- "filter_manager"
-      if (!is.null(self$get_html(sprintf("#teal-main_ui-%s-show", component)))) {
         private$ns[[component]] <- sprintf("teal-main_ui-%s", component)
       } else {
         private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
