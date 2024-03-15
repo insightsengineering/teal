@@ -108,7 +108,36 @@ testthat::test_that(
       )
     )
   )
-  # TBA
+  table_buttons <- sprintf("#%s-%s", app$active_module_ns(), "table-with-settings > div.table-settings-buttons")
+  app$get_html(table_buttons) %>%
+    rvest::read_html() %>%
+    rvest::html_elements("button")
+
+  # There is a button allowing to download the table.
+  dwnl_button <- sprintf("#%s-%s", app$active_module_ns(), "downbutton-dwnl")
+  testhat::expect_equal(
+    app$get_html(dwnl_button) %>%
+    rvest::read_html() %>%
+    rvest::html_element("i") %>%
+    rvest::html_attr("aria-label"),
+    "download icon"
+  )
+
+  app$click(paste0(dwnl_button, " > i"))
+  # Button is a dropdown.
+  testhat::expect_equal(
+    app$get_html(dwnl_button) %>%
+      rvest::read_html() %>%
+      rvest::html_element("") %>%
+      rvest::html_attr("aria-label"),
+    "download icon"
+  )
+
+  app$get_text(
+    sprintf("#%s-%s", app$active_module_ns(), "downbutton-dwnl > i")
+  )
+
+  app$open_url()
 
   app$stop()
 
