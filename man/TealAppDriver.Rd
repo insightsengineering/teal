@@ -9,9 +9,8 @@ Drive a \code{teal} application
 Drive a \code{teal} application
 }
 \details{
-This class inherits the \code{shinytest2::AppDriver} class and has additional
-helper functions to help in driving a \code{teal} application for performing interactions
-on a \code{teal} application for implementing \code{shinytest2} tests.
+Extension of the \code{shinytest2::AppDriver} class with methods for
+driving a teal application for performing interactions for \code{shinytest2} tests.
 }
 \keyword{internal}
 \section{Super class}{

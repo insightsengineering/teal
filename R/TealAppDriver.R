@@ -2,9 +2,8 @@
 
 #' Drive a `teal` application
 #'
-#' This class inherits the `shinytest2::AppDriver` class and has additional
-#' helper functions to help in driving a `teal` application for performing interactions
-#' on a `teal` application for implementing `shinytest2` tests.
+#' Extension of the `shinytest2::AppDriver` class with methods for
+#' driving a teal application for performing interactions for `shinytest2` tests.
 #'
 #' @keywords internal
 #'
