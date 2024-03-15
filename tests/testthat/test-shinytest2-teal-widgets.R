@@ -32,9 +32,6 @@ testthat::test_that(
       )
     )
   )
-  sprintf2 <- function(x, y = app$active_module_ns()){
-    sprintf("#%s-%s", y, x)
-  }
 
   app$wait_for_idle(timeout = default_idle_timeout)
 
@@ -43,7 +40,7 @@ testthat::test_that(
     app$get_text("#teal-main_ui-root-active_tab > li.active > a"),
     module_label
   )
-  popup_button_element <- sprintf2("button")
+  popup_button_element <- app$active_module_element("button")
   testthat::expect_equal(
     app$get_text(popup_button_element),
     ui_popup_button_label
@@ -58,7 +55,8 @@ testthat::test_that(
     modal_title
   )
   testthat::expect_equal(
-    app$get_text(sprintf2("copy_button1")),
+    app$active_module_element("copy_button1") %>%
+    app$get_text(),
     "Copy to Clipboard"
   )
   testthat::expect_equal(
@@ -66,7 +64,8 @@ testthat::test_that(
     "Dismiss"
   )
   testthat::expect_equal(
-    app$get_text(sprintf2("verbatim_content")),
+    app$active_module_element("verbatim_content") %>%
+    app$get_text(),
     verbatim_content_text
   )
 
@@ -109,7 +108,7 @@ testthat::test_that(
     )
   )
   # Check if there are two buttons above the table.
-  table_buttons_selector <- sprintf("#%s-%s", app$active_module_ns(), "table-with-settings > div.table-settings-buttons")
+  table_buttons_selector <- app$active_module_element("table-with-settings > div.table-settings-buttons")
   table_buttons <-
     app$get_html(table_buttons_selector) %>%
     rvest::read_html() %>%
@@ -122,7 +121,7 @@ testthat::test_that(
     "dropdown"
   )
   # First button has specific font-awesome icon.
-  dwnl_button <- sprintf("#%s-%s", app$active_module_ns(), "downbutton-dwnl")
+  dwnl_button <- sapp$active_module_element("downbutton-dwnl")
   testhat::expect_equal(
     app$get_html(dwnl_button) %>%
       rvest::read_html() %>%
