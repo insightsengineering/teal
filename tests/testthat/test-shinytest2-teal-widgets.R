@@ -82,7 +82,7 @@ testthat::test_that(
 })
 
 testthat::test_that(
-  "e2e: teal.widgets::table_with_settings is initialized with a button that opens a modal with a verbatim text", {
+  "e2e: teal.widgets::table_with_settings is initialized with two buttons and a table", {
 
   # This should probably be moved to teal.widgets directly.
   testthat::skip_if_not_installed(c("rtables", "formatters"))
