@@ -54,8 +54,8 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
       list()
     })
 
-    # These exclusions ensure the right modals open in bookmarked app.
-    setBookmarkExclude(c("bookmark_name", "bookmark_add"))
+    # These exclusions are to ensure the right modals open in bookmarked app (first 2) and for extra security (3rd).
+    setBookmarkExclude(c("bookmark_add", "bookmark_name", "bookmark_accept"))
     app_session$onBookmark(function(state) {
       # Add current filter state to bookmark.
       logger::log_trace("bookmark_manager_srv@onBookmark: storing filter state")
@@ -126,12 +126,17 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
         modalDialog(
           textInput(ns("bookmark_name"), "Name the bookmark", width = "100%", placeholder = "Meaningful, unique name"),
           footer = tagList(
-            bookmarkButton("Accept", icon = icon("thumbs-up")),
+            actionButton(ns("bookmark_accept"), label = "Accept", icon = icon("thumbs-up")),
             modalButton(label = "Cancel", icon = icon("thumbs-down"))
           ),
           size = "s"
         )
       )
+    })
+
+    # Initiate bookmarking with normal action button b/c `bookmarkButton` may not work on Windows.
+    observeEvent(input$bookmark_accept, {
+      app_session$doBookmark()
     })
 
     # Create UI elements and server logic for the bookmark table.
