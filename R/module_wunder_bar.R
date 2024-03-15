@@ -1,14 +1,25 @@
-#' Filter manager modal
+#' Manager bar module
 #'
-#' Opens a modal containing the filter manager UI.
+#' Bar of buttons that open modal dialogs.
 #'
-#' @name module_filter_manager_modal
+#' Creates a bar of buttons that open modal dialogs where manager modules reside.
+#' Currently contains three modules:
+#' - [`module_filter_manager`]
+#' - [`module_snapshot_manager`]
+#' - [`module_bookmark_manager`]
+#'
+#' The bar is placed in the `teal` app UI, next to the filter panel hamburger.
+#'
+#' @name module_wunder_bar
+#' @aliases wunder_bar wunder_bar_module
+#'
+#' @param id (`character(1)`) `shiny` module instance id.
 #' @inheritParams module_filter_manager
-#' @keywords internal
 #'
-NULL
+#' @return Nothing is returned.
 
-#' @rdname module_filter_manager_modal
+#' @rdname module_wunder_bar
+#' @keywords internal
 wunder_bar_ui <- function(id) {
   ns <- NS(id)
   rev( # Reversing order because buttons show up in UI from right to left.
@@ -35,7 +46,8 @@ wunder_bar_ui <- function(id) {
   )
 }
 
-#' @rdname module_filter_manager_modal
+#' @rdname module_wunder_bar
+#' @keywords internal
 wunder_bar_srv <- function(id, datasets, filter) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("wunder_bar_srv initializing")

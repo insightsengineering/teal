@@ -7,7 +7,7 @@
 #' as well as to save it to file in order to share it with an app developer or other users,
 #' who in turn can upload it to their own session.
 #'
-#' The snapshot manager is accessed through the filter manager, with the cog icon in the top right corner.
+#' The snapshot manager is accessed with the camera icon in the [`wunder_bar`].
 #' At the beginning of a session it presents three icons: a camera, an upload, and an circular arrow.
 #' Clicking the camera captures a snapshot, clicking the upload adds a snapshot from a file
 #' and applies the filter states therein, and clicking the arrow resets initial application state.
@@ -65,22 +65,24 @@
 #' a `teal_slices` object. When a snapshot is restored from file, its `app_id` is compared to that
 #' of the current app state and only if the match is the snapshot admitted to the session.
 #'
-#' @param id (`character(1)`) `shiny` module id
+#' @param id (`character(1)`) `shiny` module instance id.
 #' @param slices_global (`reactiveVal`) that contains a `teal_slices` object
-#'                      containing all `teal_slice`s existing in the app, both active and inactive
+#'                      containing all `teal_slice`s existing in the app, both active and inactive.
 #' @param mapping_matrix (`reactive`) that contains a `data.frame` representation
 #'                       of the mapping of filter state ids (rows) to modules labels (columns);
-#'                       all columns are `logical` vectors
-#' @param datasets non-nested (named `list`) that contains `FilteredData` objects
+#'                       all columns are `logical` vectors.
+#' @param datasets non-nested (named `list`) of `FilteredData` objects.
 #'
-#' @return Nothing is returned.
+#' @return `list` containing the snapshot histtory, where each element is an unlisted `teal_slices` object.
 #'
-#' @name snapshot_manager_module
-#' @aliases snapshot snapshot_manager
+#' @name module_snapshot_manager
+#' @aliases snapshot snapshot_manager snapshot_manager_module
 #'
 #' @author Aleksander Chlebowski
 #'
-#' @rdname snapshot_manager_module
+
+
+#' @rdname module_snapshot_manager
 #' @keywords internal
 #'
 snapshot_manager_ui <- function(id) {
@@ -99,7 +101,7 @@ snapshot_manager_ui <- function(id) {
   )
 }
 
-#' @rdname snapshot_manager_module
+#' @rdname module_snapshot_manager
 #' @keywords internal
 #'
 snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
@@ -357,6 +359,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
 #' @param mapping (named `list`) as stored in mapping parameter of `teal_slices`
 #' @param module_names (`character`) vector containing names of all modules in the app
 #' @return A `named_list` with one element per module, each element containing all filters applied to that module.
+#'
 #' @keywords internal
 #'
 unfold_mapping <- function(mapping, module_names) {
@@ -374,6 +377,7 @@ unfold_mapping <- function(mapping, module_names) {
 #' @param mapping_matrix (`data.frame`) of logical vectors where
 #'                       columns represent modules and row represent `teal_slice`s
 #' @return Named `list` like that in the `mapping` attribute of a `teal_slices` object.
+#'
 #' @keywords internal
 #'
 matrix_to_mapping <- function(mapping_matrix) {

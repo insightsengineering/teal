@@ -2,18 +2,64 @@
 #'
 #' Capture and restore the global (app) input state.
 #'
-#' This is a work in progress.
+#' This module introduces bookmarks into `teal` apps: the `shiny` bookmarking mechanism becomes enabled
+#' and server-side bookmarks can be created.
 #'
-#' @param id (`character(1)`) `shiny` module id
+#' The bookmark manager is accessed with the bookmark icon in the [`wunder_bar`].
+#' The manager's header contains a title and a bookmark icon. Clicking the icon creates a bookmark.
+#' As bookmarks are added, they will show up as rows in a table, each being a link that, when clicked,
+#' will open the bookmarked application in a new window.
 #'
-#' @return Nothing is returned.
+#' @section Server logic:
+#' A bookmark is a URL that contains the app address with a `/?_state_id_=<bookmark_dir>` suffix.
+#' `<bookmark_dir>` is a directory created on the server, where the state of the application is saved.
+#' Accessing the bookmark URL opens a new session of the app that starts in the previously saved state.
 #'
-#' @name bookmark_manager_module
-#' @aliases bookmark bookmark_manager
+#' Bookmarks are stored in a `reactiveVal` as a named list.
+#' For every bookmark created a piece of HTML is created that contains a link,
+#' whose text is the name of the bookmark and whose href is the bookmark URL.
 #'
-#' @author Aleksander Chlebowski
+#' @section Bookmark mechanics:
+#' When a bookmark is added, the user is prompted to name it.
+#' New bookmark names are validated so that thy are unique. Leading and trailing white space is trimmed.
 #'
-#' @rdname bookmark_manager_module
+#' Once a bookmark name has been accepted, the app state is saved: values of all inputs,
+#' which are kept in the `input` slot of the `session` object, are dumped into the `input.rds` file
+#' in the `<bookmark_dir>` directory on the server.
+#' This is out of the box behavior that permeates the entire app, no adjustments to modules are necessary.
+#' An additional `onBookmark` callback creates a snapshot of the current filter state
+#' (the module has access to the filter state of the application through `slices_global` and `mapping_matrix`).
+#' Then that snapshot, the previous snapshot history (which is passed to this module as argument),
+#' and the previous bookmark history are dumped into the `values.rds` file in `<bookmark_dir>`.
+#'
+#' Finally, an `onBookmarked` callback adds the newly created bookmark to the bookmark history.
+#' Notably, this occurs _after_ creating the bookmark is concluded so the bookmark history that was stored
+#' does not include the newly added bookmark.
+#'
+#' When starting the app from a bookmark, `shiny` recognizes that the app is being restored,
+#' locates the bookmark directory and loads both `.rds` file.
+#' Values stored in `input.rds` are automatically set to their corresponding inputs.
+#' The filter state that the app had upon bookmarking, which was saved as a separate snapshot, is restored.
+#' This is done in the same manner as in the `snapshot_manager` module and thus requires access to `datasets_flat`,
+#' which is passed to this module as argument.
+#' Finally, snapshot history and bookmark history are loaded from `values.rds` and set to appropriate `reactiveVal`s.
+#'
+#' @section Note:
+#' All `teal` apps are inherently bookmarkable. Normal `shiny` apps require that `enableBookmarking` be set to "server",
+#' either by setting an argument in a `shinyApp` call or by calling a special function. In `teal` bookmarks are enabled
+#' by automatically setting an option when the apckage is loaded.
+#'
+#' @param id (`character(1)`) `shiny` module instance id.
+#' @inheritParams module_snapshot_manager
+#' @param snapshot_history (named `list`) of unlisted `teal_slices` objects, as returned by the `snapshot_manager`.
+#'
+#' @return `reactiveVal` containing a named list of bookmark URLs.
+#'
+#' @name module_bookmark_manager
+#' @aliases bookmark bookmark_manager bookmark_manager_module
+#'
+
+#' @rdname module_bookmark_manager
 #' @keywords internal
 #'
 bookmark_manager_ui <- function(id) {
@@ -30,7 +76,7 @@ bookmark_manager_ui <- function(id) {
   )
 }
 
-#' @rdname bookmark_manager_module
+#' @rdname module_bookmark_manager
 #' @keywords internal
 #'
 bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, snapshot_history) {

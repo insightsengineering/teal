@@ -7,23 +7,33 @@
 #' is kept in the `mapping_matrix` object (which is actually a `data.frame`)
 #' that tracks which filters (rows) are active in which modules (columns).
 #'
-#' @name module_filter_manager
-#'
 #' @param id (`character(1)`)
-#'  `shiny` module id.
+#'  `shiny` module instance id.
 #' @param datasets (named `list`)
 #'  A list, possibly nested, of `FilteredData` objects.
 #'  Each `FilteredData` will be served to one module in the `teal` application.
 #'  The structure of the list must reflect the nesting of modules in tabs
 #'  and the names of the list must match the labels of their respective modules.
 #' @inheritParams init
-#' @return A list of `reactive`s, each holding a `teal_slices`, as returned by `filter_manager_module_srv`.
-#' @keywords internal
 #'
-NULL
-
+#' @return
+#' A `list` containing:
+#'
+#' objects used by other manager modules
+#' - `datasets_flat`: named list of `FilteredData` objects,
+#' - `mapping_matrix`: `reactive` containing a `data.frame`,
+#' - `slices_global`: `reactiveVal` containing a `teal_slices` object,
+#'
+#' objects used for testing
+#' - modules_out: `list` of `reactive`s, each holding a `teal_slices`, as returned by `filter_manager_module_srv`.
+#'
+#' @name module_filter_manager
+#' @aliases filter_manager filter_manager_module
+#'
 
 #' @rdname module_filter_manager
+#' @keywords internal
+#'
 filter_manager_ui <- function(id) {
   ns <- NS(id)
   tags$div(
@@ -33,6 +43,8 @@ filter_manager_ui <- function(id) {
 }
 
 #' @rdname module_filter_manager
+#' @keywords internal
+#'
 filter_manager_srv <- function(id, datasets, filter) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("filter_manager_srv initializing for: { paste(names(datasets), collapse = ', ')}.")
@@ -123,7 +135,7 @@ filter_manager_srv <- function(id, datasets, filter) {
 #'   - to disable/enable a specific filter in a module
 #'   - to restore saved filter settings
 #'   - to save current filter panel settings
-#' @return A `reactive` expression containing the slices active in this module.
+#' @return A `reactive` expression containing a `teal_slices` with the slices active in this module.
 #' @keywords internal
 #'
 filter_manager_module_srv <- function(id, module_fd, slices_global) {
