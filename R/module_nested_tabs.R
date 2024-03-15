@@ -232,7 +232,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
       call_module()
     } else {
       # When app starts normally, modules are initialized only when corresponding tabs are clicked.
-      # This is done by observing trigger_module (see above) to induce the module only when renderUI is triggered.
+      # Observing trigger_module() induces the module only when output$data_reactive is triggered (see above).
       observeEvent(
         ignoreNULL = TRUE,
         once = TRUE,
