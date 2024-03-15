@@ -30,18 +30,17 @@ on a \code{teal} application for implementing \code{shinytest2} tests.
 \item \href{#method-TealAppDriver-active_module_ns}{\code{TealAppDriver$active_module_ns()}}
 \item \href{#method-TealAppDriver-active_module_element}{\code{TealAppDriver$active_module_element()}}
 \item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
-\item \href{#method-TealAppDriver-filter_manager_ns}{\code{TealAppDriver$filter_manager_ns()}}
 \item \href{#method-TealAppDriver-helper_NS}{\code{TealAppDriver$helper_NS()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
 \item \href{#method-TealAppDriver-set_module_input}{\code{TealAppDriver$set_module_input()}}
+\item \href{#method-TealAppDriver-get_active_filters}{\code{TealAppDriver$get_active_filters()}}
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
 \item \href{#method-TealAppDriver-get_active_filter_selection}{\code{TealAppDriver$get_active_filter_selection()}}
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
-\item \href{#method-TealAppDriver-open_filter_manager}{\code{TealAppDriver$open_filter_manager()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
 }
@@ -255,19 +254,6 @@ Get the active shiny name space for interacting with the filter panel.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-filter_manager_ns"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-filter_manager_ns}{}}}
-\subsection{Method \code{filter_manager_ns()}}{
-Get the active shiny name space for interacting with the filter panel.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$filter_manager_ns()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(\code{string}) The active shiny name space of the component.
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-helper_NS"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-helper_NS}{}}}
 \subsection{Method \code{helper_NS()}}{
@@ -358,6 +344,16 @@ This function will only set inputs in the name space of the current active teal 
 \subsection{Returns}{
 The \code{TealAppDriver} object invisibly.
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-get_active_filters"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_filters}{}}}
+\subsection{Method \code{get_active_filters()}}{
+Get the active selections from all the active filters.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filters()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_filter_vars"></a>}}
@@ -493,19 +489,6 @@ The \code{TealAppDriver} object invisibly.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-open_filter_manager"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-open_filter_manager}{}}}
-\subsection{Method \code{open_filter_manager()}}{
-Click on the filter manager show button.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$open_filter_manager()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-The \code{TealAppDriver} object invisibly.
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-open_url"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-open_url}{}}}
 \subsection{Method \code{open_url()}}{
@@ -515,7 +498,7 @@ Wrapper around \code{get_url()} method that opens the app in the browser.
 }
 
 \subsection{Returns}{
-Nothing. Opens a browser.
+Nothing. Opens the underlying teal app in the browser.
 }
 }
 \if{html}{\out{<hr>}}
