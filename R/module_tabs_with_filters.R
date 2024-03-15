@@ -44,7 +44,7 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices()) 
       class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
       href = "javascript:void(0)",
       onclick = "toggleFilterPanel();", # see sidebar.js
-      title = "Toggle filter panels",
+      title = "Toggle filter panel",
       icon("fas fa-bars")
     ),
     wunder_bar_ui(ns("wunder_bar"))

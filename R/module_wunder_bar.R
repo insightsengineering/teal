@@ -16,19 +16,19 @@ wunder_bar_ui <- function(id) {
       tags$button(
         id = ns("show_filter_manager"),
         class = "btn action-button wunder_bar_button",
-        title = "Show filter manager modal",
-        suppressMessages(icon("solid fa-filter"))
+        title = "View filter mapping",
+        suppressMessages(icon("solid fa-grip"))
       ),
       tags$button(
         id = ns("show_snapshot_manager"),
         class = "btn action-button wunder_bar_button",
-        title = "Show snapshot manager modal",
+        title = "Manage filter state snapshots",
         icon("camera")
       ),
       tags$button(
         id = ns("show_bookmark_manager"),
         class = "btn action-button wunder_bar_button",
-        title = "Show bookmark manager modal",
+        title = "Manage bookmarks",
         suppressMessages(icon("solid fa-bookmark"))
       )
     )
