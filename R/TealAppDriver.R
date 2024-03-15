@@ -103,6 +103,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     navigate_teal_tab = function(tabs) {
+      checkmate::check_character(tabs, min.len = 1)
       for (tab in tabs) {
         root <- "root"
         self$set_input(
@@ -193,6 +194,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The value of the shiny input.
     get_active_module_input = function(input_id) {
+      checkmate::check_string(input_id)
       self$get_value(input = sprintf("%s-%s", self$active_module_ns(), input_id))
     },
     #' @description
@@ -203,6 +205,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The value of the shiny output.
     get_active_module_output = function(output_id) {
+      checkmate::check_string(output_id)
       self$get_value(output = sprintf("%s-%s", self$active_module_ns(), output_id))
     },
     #' @description
@@ -214,6 +217,8 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     set_module_input = function(input_id, value) {
+      checkmate::check_string(input_id)
+      checkmate::check_string(value)
       self$set_input(
         sprintf("%s-%s", self$active_module_ns(), input_id),
         value
@@ -256,6 +261,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @param dataset_name (character) The name of the dataset to get the filter variables from.
     #' If `NULL`, the filter variables for all the datasets will be returned in a list.
     get_active_data_filters = function(dataset_name = NULL) {
+      checkmate::check_string(dataset_name, null.ok = TRUE)
       datasets <- self$get_active_filter_vars()
       checkmate::assert_subset(dataset_name, datasets)
       active_filters <- lapply(
@@ -286,6 +292,9 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The value of the active filter selection.
     get_active_filter_selection = function(dataset_name, var_name, is_numeric = FALSE) {
+      checkmate::check_string(dataset_name)
+      checkmate::check_string(var_name)
+      checkmate::check_flag(is_numeric)
       selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
       self$get_value(
         input = sprintf(
@@ -306,6 +315,8 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     add_filter_var = function(dataset_name, var_name) {
+      checkmate::check_string(dataset_name)
+      checkmate::check_string(var_name)
       self$set_input(
         sprintf(
           "%s-add-%s-filter-var_to_add",
@@ -326,6 +337,8 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     remove_filter_var = function(dataset_name = NULL, var_name = NULL) {
+      checkmate::check_string(dataset_name, null.ok = TRUE)
+      checkmate::check_string(var_name, null.ok = TRUE)
       if (is.null(dataset_name)) {
         remove_selector <- sprintf(
           "#%s-active-remove_all_filters",
@@ -361,6 +374,11 @@ TealAppDriver <- R6::R6Class( # nolint
     #'
     #' @return The `TealAppDriver` object invisibly.
     set_active_filter_selection = function(dataset_name, var_name, input, is_numeric = FALSE) {
+      checkmate::check_string(dataset_name)
+      checkmate::check_string(var_name)
+      checkmate::check_string(input)
+      checkmate::check_flag(is_numeric)
+
       selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
       self$set_input(
         sprintf(
