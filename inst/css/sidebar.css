@@ -30,8 +30,8 @@ a.disabled {
   flex: 1 1 80%;
 }
 .manager_table_row * + * {
-  flex: 1 0 50px;
-  padding: 0em 1em;
+  flex: 0 0 0px;
+  padding: 0em 1.5em;
 }
 .manager_placeholder {
   margin-top: 1em;
