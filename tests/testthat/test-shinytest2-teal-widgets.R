@@ -121,7 +121,7 @@ testthat::test_that(
     "dropdown"
   )
   # First button has specific font-awesome icon.
-  dwnl_button <- sapp$active_module_element("downbutton-dwnl")
+  dwnl_button <- app$active_module_element("downbutton-dwnl")
   testhat::expect_equal(
     app$get_html(dwnl_button) %>%
       rvest::read_html() %>%
