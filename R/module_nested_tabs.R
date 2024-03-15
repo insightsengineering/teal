@@ -226,7 +226,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     # Call modules.
-    if (.subset2(session, "parent")$restoreContext$active) {
+    if (session$restoreContext$active) {
       # When restoring bookmark, all modules must be initialized on app start.
       # Delayed module initiation (below) precludes restoring state b/c inputs do not exist when restoring occurs.
       call_module()
