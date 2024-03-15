@@ -108,36 +108,40 @@ testthat::test_that(
       )
     )
   )
-  table_buttons <- sprintf("#%s-%s", app$active_module_ns(), "table-with-settings > div.table-settings-buttons")
-  app$get_html(table_buttons) %>%
+  # Check if there are two buttons above the table.
+  table_buttons_selector <- sprintf("#%s-%s", app$active_module_ns(), "table-with-settings > div.table-settings-buttons")
+  table_buttons <-
+    app$get_html(table_buttons_selector) %>%
     rvest::read_html() %>%
     rvest::html_elements("button")
-
-  # There is a button allowing to download the table.
+  testthat::expect_length(table_buttons, 2)
+  # Check is the first one is a toggle button.
+  testthat::expect_equal(
+    table_buttons[[1]] %>%
+      html_attr("data-toggle"),
+    "dropdown"
+  )
+  # First button has specific font-awesome icon.
   dwnl_button <- sprintf("#%s-%s", app$active_module_ns(), "downbutton-dwnl")
   testhat::expect_equal(
     app$get_html(dwnl_button) %>%
-    rvest::read_html() %>%
-    rvest::html_element("i") %>%
-    rvest::html_attr("aria-label"),
-    "download icon"
-  )
-
-  app$click(paste0(dwnl_button, " > i"))
-  # Button is a dropdown.
-  testhat::expect_equal(
-    app$get_html(dwnl_button) %>%
       rvest::read_html() %>%
-      rvest::html_element("") %>%
-      rvest::html_attr("aria-label"),
-    "download icon"
+      rvest::html_element("i") %>%
+      rvest::html_attr("class"),
+    "fas fa-download"
   )
 
-  app$get_text(
-    sprintf("#%s-%s", app$active_module_ns(), "downbutton-dwnl > i")
-  )
+  # Click the first button.
 
-  app$open_url()
+  # Review the content of the toggle.
+
+  # Click the second button.
+
+  # Review the modal content.
+
+  # Close modal.
+
+  # Review the table content.
 
   app$stop()
 
