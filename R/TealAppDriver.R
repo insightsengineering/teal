@@ -359,6 +359,25 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return Nothing. Opens the underlying teal app in the browser.
     open_url = function() {
       browseURL(self$get_url())
+    },
+    #' @return The `TealAppDriver` object invisibly.
+    open_filter_manager = function() {
+      active_ns <- self$filter_manager_ns()
+      ns <- self$helper_NS(active_ns)
+
+      self$click(ns("show"))
+      self$wait_for_idle(500)
+      invisible(self)
+    },
+    #' @description
+    #' Wrapper around `get_html` that passes the output directly to `rvest::read_html`.
+    #'
+    #' @param selector `(character(1))` passed to `get_html`.
+    #'
+    #' @return An XML document.
+    read_html = function(selector) {
+      self$get_html(selector) %>%
+        rvest::read_html()
     }
   ),
   # private members ----
