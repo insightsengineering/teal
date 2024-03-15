@@ -390,7 +390,7 @@ TealAppDriver <- R6::R6Class( # nolint
     #' @description
     #' Wrapper around `get_url()` method that opens the app in the browser.
     #'
-    #' @return Nothing. Opens a browser.
+    #' @return Nothing. Opens the underlying teal app in the browser.
     open_url = function() {
       browseURL(self$get_url())
     }
