@@ -44,7 +44,7 @@ Please make sure that adding new filters doesn't fail on target platform before 
 
 \item{allow_add}{(\code{logical(1)}) logical flag specifying whether the user will be able to add new filters}
 
-\item{module_specific}{optional (\code{logical(1)})
+\item{module_specific}{(\code{logical(1)}) optional,
 \itemize{
 \item \code{FALSE} (default) when one filter panel applied to all modules.
 All filters will be shared by all modules.
