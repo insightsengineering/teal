@@ -41,6 +41,7 @@ on a \code{teal} application for implementing \code{shinytest2} tests.
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
 \item \href{#method-TealAppDriver-open_filter_manager}{\code{TealAppDriver$open_filter_manager()}}
+\item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
 }
 }
@@ -481,6 +482,19 @@ Click on the filter manager show button.
 
 \subsection{Returns}{
 The \code{TealAppDriver} object invisibly.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-open_url"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-open_url}{}}}
+\subsection{Method \code{open_url()}}{
+Wrapper around \code{get_url()} method that opens the app in the browser.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$open_url()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Nothing. Opens a browser.
 }
 }
 \if{html}{\out{<hr>}}
