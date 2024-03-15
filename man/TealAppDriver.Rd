@@ -34,7 +34,6 @@ on a \code{teal} application for implementing \code{shinytest2} tests.
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
 \item \href{#method-TealAppDriver-set_module_input}{\code{TealAppDriver$set_module_input()}}
-\item \href{#method-TealAppDriver-get_active_filters}{\code{TealAppDriver$get_active_filters()}}
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
 \item \href{#method-TealAppDriver-get_active_filter_selection}{\code{TealAppDriver$get_active_filter_selection()}}
@@ -344,16 +343,6 @@ This function will only set inputs in the name space of the current active teal 
 \subsection{Returns}{
 The \code{TealAppDriver} object invisibly.
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-get_active_filters"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_filters}{}}}
-\subsection{Method \code{get_active_filters()}}{
-Get the active selections from all the active filters.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filters()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_filter_vars"></a>}}

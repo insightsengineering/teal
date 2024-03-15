@@ -226,24 +226,6 @@ TealAppDriver <- R6::R6Class( # nolint
       invisible(self)
     },
     #' @description
-    #'
-    #' Get the active selections from all the active filters.
-    get_active_filters = function() {
-      self$get_active_filter_vars()
-      active_filters <- list()
-      for (dataset_name in names(my_list)) {
-        for (var_name in my_list[[dataset_name]]) {
-          if (!is.null(value)) {
-            active_filters[[dataset_name]][[var_name]] <- self$get_active_filter_selection(
-              dataset_name,
-              var_name
-            )
-          }
-        }
-      }
-      return(active_filters)
-    },
-    #' @description
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
       displayed_datasets_index <- vapply(
