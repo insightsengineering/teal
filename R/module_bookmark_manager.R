@@ -19,9 +19,9 @@
 bookmark_manager_ui <- function(id) {
   ns <- NS(id)
   div(
-    class = "snapshot_manager_content",
+    class = "manager_content",
     div(
-      class = "snapshot_table_row",
+      class = "manager_table_row",
       span(tags$b("Bookmark manager")),
       actionLink(ns("bookmark_add"), NULL, icon = suppressMessages(icon("solid fa-bookmark")), title = "add bookmark"),
       NULL
@@ -146,7 +146,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
         # Create a row for the bookmark table.
         if (!is.element(id_rowme, names(divs))) {
           divs[[id_rowme]] <- div(
-            class = "snapshot_table_row",
+            class = "manager_table_row",
             a(h5(s), title = "go to bookmark", href = bookmark_history()[[s]], target = "blank")
           )
         }
@@ -158,7 +158,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
       rows <- lapply(rev(reactiveValuesToList(divs)), function(d) d)
       if (length(rows) == 0L) {
         div(
-          class = "snapshot_manager_placeholder",
+          class = "manager_placeholder",
           "Bookmarks will appear here."
         )
       } else {

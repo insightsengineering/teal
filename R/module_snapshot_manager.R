@@ -86,9 +86,9 @@
 snapshot_manager_ui <- function(id) {
   ns <- NS(id)
   tags$div(
-    class = "snapshot_manager_content",
+    class = "manager_content",
     tags$div(
-      class = "snapshot_table_row",
+      class = "manager_table_row",
       tags$span(tags$b("Snapshot manager")),
       actionLink(ns("snapshot_add"), label = NULL, icon = icon("camera"), title = "add snapshot"),
       actionLink(ns("snapshot_load"), label = NULL, icon = icon("upload"), title = "upload snapshot"),
@@ -322,7 +322,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
         # Create a row for the snapshot table.
         if (!is.element(id_rowme, names(divs))) {
           divs[[id_rowme]] <- tags$div(
-            class = "snapshot_table_row",
+            class = "manager_table_row",
             tags$span(tags$h5(s)),
             actionLink(inputId = ns(id_pickme), label = icon("circle-check"), title = "select"),
             downloadLink(outputId = ns(id_saveme), label = icon("save"), title = "save to file")
@@ -336,7 +336,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
       rows <- lapply(rev(reactiveValuesToList(divs)), function(d) d)
       if (length(rows) == 0L) {
         tags$div(
-          class = "snapshot_manager_placeholder",
+          class = "manager_placeholder",
           "Snapshots will appear here."
         )
       } else {

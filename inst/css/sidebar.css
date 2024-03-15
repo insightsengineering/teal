@@ -21,18 +21,18 @@ a.disabled {
   justify-content: center;
 }
 
-.snapshot_table_row {
+.manager_table_row {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-.snapshot_table_row *:first-child {
+.manager_table_row *:first-child {
   flex: 1 1 80%;
 }
-.snapshot_table_row * + * {
+.manager_table_row * + * {
   flex: 1 0 50px;
   padding: 0em 1em;
 }
-.snapshot_manager_placeholder {
+.manager_placeholder {
   margin-top: 1em;
 }
