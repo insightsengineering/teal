@@ -137,6 +137,16 @@ TealAppDriver <- R6::R6Class( # nolint
       private$ns$module
     },
     #' @description
+    #' Get the active shiny name space bound with a custom `element` name.
+    #'
+    #' @param element `character(1)` custom element name.
+    #'
+    #' @return (`string`) The active shiny name space of the component bound with the input `element`.
+    active_module_element = function(element) {
+      checkmate::assert_string(element)
+      sprintf("#%s-%s", self$active_module_ns(), element)
+    },
+    #' @description
     #' Get the active shiny name space for interacting with the filter panel.
     #'
     #' @return (`string`) The active shiny name space of the component.

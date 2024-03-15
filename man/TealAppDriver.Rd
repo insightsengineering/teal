@@ -28,6 +28,7 @@ on a \code{teal} application for implementing \code{shinytest2} tests.
 \item \href{#method-TealAppDriver-navigate_teal_tab}{\code{TealAppDriver$navigate_teal_tab()}}
 \item \href{#method-TealAppDriver-active_ns}{\code{TealAppDriver$active_ns()}}
 \item \href{#method-TealAppDriver-active_module_ns}{\code{TealAppDriver$active_module_ns()}}
+\item \href{#method-TealAppDriver-active_module_element}{\code{TealAppDriver$active_module_element()}}
 \item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
 \item \href{#method-TealAppDriver-filter_manager_ns}{\code{TealAppDriver$filter_manager_ns()}}
 \item \href{#method-TealAppDriver-helper_NS}{\code{TealAppDriver$helper_NS()}}
@@ -218,6 +219,26 @@ Get the active shiny name space for interacting with the module content.
 
 \subsection{Returns}{
 (\code{string}) The active shiny name space of the component.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-active_module_element"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-active_module_element}{}}}
+\subsection{Method \code{active_module_element()}}{
+Get the active shiny name space bound with a custom \code{element} name.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_module_element(element)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element}}{\code{character(1)} custom element name.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{string}) The active shiny name space of the component bound with the input \code{element}.
 }
 }
 \if{html}{\out{<hr>}}
