@@ -18,10 +18,10 @@ testthat::test_that(
       module(
         label = module_label,
         ui = function(id) {
-          verbatim_popup_ui(id, button_label = "Open popup")
+          teal.widgets::verbatim_popup_ui(id, button_label = "Open popup")
         },
         server = function(id) {
-          verbatim_popup_srv(
+          teal.widgets::verbatim_popup_srv(
             id,
             verbatim_content = "if (TRUE) { print('Popups are the best') }",
             title = "My custom title",
@@ -48,12 +48,14 @@ testthat::test_that(
 
   # Click the button.
   app$click(selector = popup_button_element)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Verify the content of the popped modal is as expected.
   testthat::expect_equal(
     app$get_text(".modal-title"),
     modal_title
   )
+
   testthat::expect_equal(
     app$active_module_element("copy_button1") %>%
     app$get_text(),
@@ -107,6 +109,9 @@ testthat::test_that(
       )
     )
   )
+
+  app$wait_for_idle(timeout = default_idle_timeout)
+
   # Check if there are two buttons above the table.
   table_buttons_selector <- app$active_module_element("table-with-settings > div.table-settings-buttons")
   table_buttons <-
@@ -131,16 +136,24 @@ testthat::test_that(
   )
 
   # Click the first button.
+  app$click(selector = dwnl_button)
+  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Review the content of the toggle.
+  # TO BE ADDED.
 
   # Click the second button.
-
+  app$click(selector = app$active_module_element("expand"))
+  app$wait_for_idle(timeout = default_idle_timeout)
   # Review the modal content.
 
   # Close modal.
+  app$click(selector = "#shiny-modal-wrapper .modal-footer > button")
+  app$wait_for_idle(timeout = default_idle_timeout)
+  testthat::expect_null(app$get_html(app$active_module_element("table_out_modal")))
 
   # Review the table content.
+  # TO BE ADDED.
 
   app$stop()
 
