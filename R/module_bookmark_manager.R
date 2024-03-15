@@ -92,14 +92,8 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
   moduleServer(id, function(input, output, session) {
     logger::log_trace("bookmark_manager_srv initializing")
 
-    ns <- session$ns
+    # Set up bookmarking callbacks.
     app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
-
-    # Store input states.
-    bookmark_history <- reactiveVal({
-      list()
-    })
-
     # These exclusions are to ensure the right modals open in bookmarked app (first 2) and for extra security (3rd).
     setBookmarkExclude(c("bookmark_add", "bookmark_name", "bookmark_accept"))
     app_session$onBookmark(function(state) {
@@ -113,28 +107,6 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
       state$values$snapshot_history <- snapshot_history()   # isolate this?
       state$values$bookmark_history <- bookmark_history()   # isolate this?
     })
-    app_session$onRestored(function(state) {
-      # Restore filter state.
-      logger::log_trace("bookmark_manager_srv@onRestored: restoring filter state")
-      snapshot <- state$values$filter_state_on_bookmark
-      snapshot_state <- as.teal_slices(snapshot)
-      mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
-      mapply(
-        function(filtered_data, filter_ids) {
-          filtered_data$clear_filter_states(force = TRUE)
-          slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
-          filtered_data$set_filter_state(slices)
-        },
-        filtered_data = datasets,
-        filter_ids = mapping_unfolded
-      )
-      slices_global(snapshot_state)
-      # Restore snapshot history and bookmark history.
-      logger::log_trace("bookmark_manager_srv@onRestored: restoring snapshot and bookmark history")
-      snapshot_history(state$values$snapshot_history)
-      bookmark_history(state$values$bookmark_history)
-    })
-
     app_session$onBookmarked(function(url) {
       logger::log_trace("bookmark_manager_srv@onBookmarked: bookmark button clicked, registering bookmark")
       bookmark_name <- trimws(input$bookmark_name)
@@ -163,6 +135,34 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
 
         removeModal()
       }
+    })
+    app_session$onRestored(function(state) {
+      # Restore filter state.
+      logger::log_trace("bookmark_manager_srv@onRestored: restoring filter state")
+      snapshot <- state$values$filter_state_on_bookmark
+      snapshot_state <- as.teal_slices(snapshot)
+      mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
+      mapply(
+        function(filtered_data, filter_ids) {
+          filtered_data$clear_filter_states(force = TRUE)
+          slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
+          filtered_data$set_filter_state(slices)
+        },
+        filtered_data = datasets,
+        filter_ids = mapping_unfolded
+      )
+      slices_global(snapshot_state)
+      # Restore snapshot history and bookmark history.
+      logger::log_trace("bookmark_manager_srv@onRestored: restoring snapshot and bookmark history")
+      snapshot_history(state$values$snapshot_history)
+      bookmark_history(state$values$bookmark_history)
+    })
+
+    ns <- session$ns
+
+    # Store input states.
+    bookmark_history <- reactiveVal({
+      list()
     })
 
     # Bookmark current input state - name bookmark.
