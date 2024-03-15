@@ -108,6 +108,5 @@ wunder_bar_srv <- function(id, datasets, filter) {
       datasets = filter_manager_results$datasets_flat,
       snapshot_history = snapshot_history
     )
-
   })
 }

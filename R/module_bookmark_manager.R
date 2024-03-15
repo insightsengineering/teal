@@ -104,8 +104,8 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
       state$values$filter_state_on_bookmark <- snapshot
       # Add snapshot history and bookmark history to bookmark.
       logger::log_trace("bookmark_manager_srv@onBookmark: storing snapshot and bookmark history")
-      state$values$snapshot_history <- snapshot_history()   # isolate this?
-      state$values$bookmark_history <- bookmark_history()   # isolate this?
+      state$values$snapshot_history <- snapshot_history() # isolate this?
+      state$values$bookmark_history <- bookmark_history() # isolate this?
     })
     app_session$onBookmarked(function(url) {
       logger::log_trace("bookmark_manager_srv@onBookmarked: bookmark button clicked, registering bookmark")
