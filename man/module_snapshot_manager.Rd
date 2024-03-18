@@ -26,7 +26,7 @@ all columns are \code{logical} vectors.}
 \item{datasets}{non-nested (named \code{list}) of \code{FilteredData} objects.}
 }
 \value{
-\code{list} containing the snapshot histtory, where each element is an unlisted \code{teal_slices} object.
+\code{list} containing the snapshot history, where each element is an unlisted \code{teal_slices} object.
 }
 \description{
 Capture and restore snapshots of the global (app) filter state.

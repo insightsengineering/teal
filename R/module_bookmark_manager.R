@@ -47,7 +47,7 @@
 #' @section Note:
 #' All `teal` apps are inherently bookmarkable. Normal `shiny` apps require that `enableBookmarking` be set to "server",
 #' either by setting an argument in a `shinyApp` call or by calling a special function. In `teal` bookmarks are enabled
-#' by automatically setting an option when the apckage is loaded.
+#' by automatically setting an option when the package is loaded.
 #'
 #' @param id (`character(1)`) `shiny` module instance id.
 #' @inheritParams module_snapshot_manager

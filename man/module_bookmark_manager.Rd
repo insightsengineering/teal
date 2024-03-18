@@ -90,7 +90,7 @@ Finally, snapshot history and bookmark history are loaded from \code{values.rds}
 
 All \code{teal} apps are inherently bookmarkable. Normal \code{shiny} apps require that \code{enableBookmarking} be set to "server",
 either by setting an argument in a \code{shinyApp} call or by calling a special function. In \code{teal} bookmarks are enabled
-by automatically setting an option when the apckage is loaded.
+by automatically setting an option when the package is loaded.
 }
 
 \keyword{internal}

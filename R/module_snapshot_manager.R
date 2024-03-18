@@ -73,7 +73,7 @@
 #'                       all columns are `logical` vectors.
 #' @param datasets non-nested (named `list`) of `FilteredData` objects.
 #'
-#' @return `list` containing the snapshot histtory, where each element is an unlisted `teal_slices` object.
+#' @return `list` containing the snapshot history, where each element is an unlisted `teal_slices` object.
 #'
 #' @name module_snapshot_manager
 #' @aliases snapshot snapshot_manager snapshot_manager_module
