@@ -1,4 +1,4 @@
-# teal 0.15.2.9004
+# teal 0.15.2.9005
 
 ### New features
 * Introduced bookmarking feature. Click the bookmark icon in the top-right corner to access the bookmark manager.
