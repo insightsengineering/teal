@@ -40,7 +40,6 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
 \item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
-\item \href{#method-TealAppDriver-open_filter_manager}{\code{TealAppDriver$open_filter_manager()}}
 \item \href{#method-TealAppDriver-read_html}{\code{TealAppDriver$read_html()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
 }
@@ -482,18 +481,6 @@ Wrapper around \code{get_url()} method that opens the app in the browser.
 
 \subsection{Returns}{
 Nothing. Opens the underlying teal app in the browser.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-open_filter_manager"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-open_filter_manager}{}}}
-\subsection{Method \code{open_filter_manager()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$open_filter_manager()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-The \code{TealAppDriver} object invisibly.
 }
 }
 \if{html}{\out{<hr>}}
