@@ -248,28 +248,28 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @param dataset_name (character) The name of the dataset to get the filter values from.
     #' @param var_name (character) The name of the variable to get the filter values from.
-    #' @param type (character) The type of the filter to get the value from. Default is `categorical`.
     #'
     #' @return The value of the active filter selection.
-    get_active_filter_selection = function(dataset_name, var_name, type = c("categorical", "range")) {
+    get_active_filter_selection = function(dataset_name, var_name) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
-      type <- match.arg(type)
-
-      self$get_value(
-        input = sprintf(
-          "%s-active-%s-filter-%s_%s-inputs-%s",
-          self$active_filters_ns(),
-          dataset_name,
-          dataset_name,
-          var_name,
-          switch(type,
-            categorical = "selection",
-            range = "selection_manual",
-            stop("Not supported.")
-          )
-        )
+      input_id_prefix <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name
       )
+
+      # Find the type of filter (categorical or range)
+      supported_suffix <- c("selection", "selection_manual")
+      for (suffix in supported_suffix) {
+        if (!is.null(self$get_html(sprintf("#%s-%s", input_id_prefix, suffix)))) {
+          return(self$get_value(input = sprintf("%s-%s", input_id_prefix, suffix)))
+        }
+      }
+
+      NULL # If there are not any supported filters
     },
     #' @description
     #' Add a new variable from the dataset to be filtered.
@@ -337,18 +337,34 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param type (character) The type of the filter to get the value from. Default is `categorical`.
     #'
     #' @return The `TealAppDriver` object invisibly.
-    set_active_filter_selection = function(dataset_name, var_name, input, type = c("categorical", "range")) {
+    set_active_filter_selection = function(dataset_name, var_name, input) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
       checkmate::check_string(input)
-      type <- match.arg(type)
 
-      # Convert to `teal_slices` naming
-      slices_suffix <- switch(type,
-        categorical = "selection",
-        range = "selection_manual",
-        stop("Not supported.")
+      input_id_prefix <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name
       )
+
+      # Find the type of filter (based on filter panel)
+      supported_suffix <- c("selection", "selection_manual")
+      slices_suffix <- supported_suffix[
+        match(
+          TRUE,
+          vapply(
+            supported_suffix,
+            function(suffix) {
+              !is.null(self$get_html(sprintf("#%s-%s", input_id_prefix, suffix)))
+            },
+            logical(1)
+          )
+        )
+      ]
+
       # Generate correct namespace
       slices_input_id <- sprintf(
         "%s-active-%s-filter-%s_%s-inputs-%s",
@@ -371,7 +387,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
       } else if (identical(slices_suffix, "selection")) {
         self$set_input(slices_input_id, input)
+      } else {
+        stop("Filter selection set not supported for this slice.")
       }
+
       invisible(self)
     },
     #' @description
