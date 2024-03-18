@@ -101,7 +101,7 @@ wunder_bar_srv <- function(id, datasets, filter) {
       mapping_matrix = filter_manager_results$mapping_matrix,
       datasets = filter_manager_results$datasets_flat
     )
-    bookmark_manager_srv(
+    bookmark_history <- bookmark_manager_srv(
       id = "bookmark_manager",
       slices_global = filter_manager_results$slices_global,
       mapping_matrix = filter_manager_results$mapping_matrix,
