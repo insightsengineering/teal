@@ -395,7 +395,7 @@ is_arg_used <- function(modules, arg) {
 #' Nesting it increases overall depth by 1.
 #'
 #' @inheritParams init
-#' @param depth optional, integer determining current depth level
+#' @param depth optional integer determining current depth level
 #'
 #' @return Depth level for given module.
 #' @keywords internal
