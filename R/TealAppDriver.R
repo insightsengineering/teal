@@ -103,9 +103,11 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The `TealAppDriver` object invisibly.
     navigate_teal_tab = function(tabs) {
+      checkmate::check_character(tabs, min.len = 1)
       for (tab in tabs) {
+        root <- "root"
         self$set_input(
-          sprintf("teal-main_ui-%s-active_tab", private$modules$label),
+          sprintf("teal-main_ui-%s-active_tab", root),
           get_unique_labels(tab),
           wait_ = FALSE
         )
@@ -134,6 +136,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         private$set_active_ns()
       }
       private$ns$module
+    },
+    #' @description
+    #' Get the active shiny name space bound with a custom `element` name.
+    #'
+    #' @param element `character(1)` custom element name.
+    #'
+    #' @return (`string`) The active shiny name space of the component bound with the input `element`.
+    active_module_element = function(element) {
+      checkmate::assert_string(element)
+      sprintf("#%s-%s", self$active_module_ns(), element)
     },
     #' @description
     #' Get the active shiny name space for interacting with the filter panel.
@@ -172,6 +184,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The value of the shiny input.
     get_active_module_input = function(input_id) {
+      checkmate::check_string(input_id)
       self$get_value(input = sprintf("%s-%s", self$active_module_ns(), input_id))
     },
     #' @description
@@ -182,6 +195,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The value of the shiny output.
     get_active_module_output = function(output_id) {
+      checkmate::check_string(output_id)
       self$get_value(output = sprintf("%s-%s", self$active_module_ns(), output_id))
     },
     #' @description
@@ -193,6 +207,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The `TealAppDriver` object invisibly.
     set_module_input = function(input_id, value) {
+      checkmate::check_string(input_id)
+      checkmate::check_string(value)
       self$set_input(
         sprintf("%s-%s", self$active_module_ns(), input_id),
         value
@@ -235,6 +251,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param dataset_name (character) The name of the dataset to get the filter variables from.
     #' If `NULL`, the filter variables for all the datasets will be returned in a list.
     get_active_data_filters = function(dataset_name = NULL) {
+      checkmate::check_string(dataset_name, null.ok = TRUE)
       datasets <- self$get_active_filter_vars()
       checkmate::assert_subset(dataset_name, datasets)
       active_filters <- lapply(
@@ -265,6 +282,9 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The value of the active filter selection.
     get_active_filter_selection = function(dataset_name, var_name, is_numeric = FALSE) {
+      checkmate::check_string(dataset_name)
+      checkmate::check_string(var_name)
+      checkmate::check_flag(is_numeric)
       selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
       self$get_value(
         input = sprintf(
@@ -285,6 +305,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The `TealAppDriver` object invisibly.
     add_filter_var = function(dataset_name, var_name) {
+      checkmate::check_string(dataset_name)
+      checkmate::check_string(var_name)
       self$set_input(
         sprintf(
           "%s-add-%s-filter-var_to_add",
@@ -305,6 +327,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The `TealAppDriver` object invisibly.
     remove_filter_var = function(dataset_name = NULL, var_name = NULL) {
+      checkmate::check_string(dataset_name, null.ok = TRUE)
+      checkmate::check_string(var_name, null.ok = TRUE)
       if (is.null(dataset_name)) {
         remove_selector <- sprintf(
           "#%s-active-remove_all_filters",
@@ -340,6 +364,11 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The `TealAppDriver` object invisibly.
     set_active_filter_selection = function(dataset_name, var_name, input, is_numeric = FALSE) {
+      checkmate::check_string(dataset_name)
+      checkmate::check_string(var_name)
+      checkmate::check_string(input)
+      checkmate::check_flag(is_numeric)
+
       selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
       self$set_input(
         sprintf(
@@ -355,13 +384,11 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       invisible(self)
     },
     #' @description
-    #' Click on the filter manager show button.
+    #' Wrapper around `get_url()` method that opens the app in the browser.
     #'
-    #' @return The `TealAppDriver` object invisibly.
-    open_filter_manager = function() {
-      self$click(shiny::NS(self$filter_manager_ns(), "show"))
-      self$wait_for_idle(500)
-      invisible(self)
+    #' @return Nothing. Opens the underlying teal app in the browser.
+    open_url = function() {
+      browseURL(self$get_url())
     }
   ),
   # private members ----
@@ -372,8 +399,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     filter = teal_slices(),
     ns = list(
       module = character(0),
-      filter_panel = character(0),
-      filter_manager = character(0)
+      filter_panel = character(0)
     ),
     idle_timeout = 20000, # 20 seconds
     load_timeout = 100000, # 100 seconds
@@ -403,13 +429,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
       component <- "filter_panel"
       if (!is.null(self$get_html(sprintf("#teal-main_ui-%s", component)))) {
-        private$ns[[component]] <- sprintf("teal-main_ui-%s", component)
-      } else {
-        private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
-      }
-
-      component <- "filter_manager"
-      if (!is.null(self$get_html(sprintf("#teal-main_ui-%s-show", component)))) {
         private$ns[[component]] <- sprintf("teal-main_ui-%s", component)
       } else {
         private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
