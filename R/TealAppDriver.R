@@ -198,14 +198,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
-      displayed_datasets_index <- self$get_js(
-        sprintf(
-          "Array.from(
-              document.querySelectorAll(\"#%s-active-filter_active_vars_contents > span\")
-          ).map((el) => window.getComputedStyle(el).display != \"none\");",
-          self$active_filters_ns()
+      displayed_datasets_index <- unlist(
+        self$get_js(
+          sprintf(
+            "Array.from(
+                document.querySelectorAll(\"#%s-active-filter_active_vars_contents > span\")
+            ).map((el) => window.getComputedStyle(el).display != \"none\");",
+            self$active_filters_ns()
+          )
         )
-      ) |> unlist()
+      )
 
       available_datasets <- self$get_text(
         sprintf(
