@@ -158,25 +158,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       private$ns$filter_panel
     },
     #' @description
-    #' Get the active shiny name space for interacting with the filter panel.
-    #'
-    #' @return (`string`) The active shiny name space of the component.
-    filter_manager_ns = function() {
-      if (identical(private$ns$filter_manager, character(0))) {
-        private$set_active_ns()
-      }
-      private$ns$filter_manager
-    },
-    #' @description
-    #' Get the snapshot manager name space.
-    #'
-    #' @return (`string`) The active shiny name space of the snapshot manager
-    snapshot_manager_ns = function() {
-      sprintf(
-        "%s-%s-%s", self$filter_manager_ns(), "filter_manager", "snapshot_manager"
-      )
-    },
-    #' @description
     #' Get the input from the module in the `teal` app.
     #' This function will only access inputs from the name space of the current active teal module.
     #'
