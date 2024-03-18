@@ -360,8 +360,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return An XML document.
     get_html_rvest = function(selector) {
-      self$get_html(selector) %>%
-        rvest::read_html()
+      rvest::read_html(self$get_html(selector))
     },
     #' Wrapper around `get_url()` method that opens the app in the browser.
     #'
