@@ -6,10 +6,10 @@ testthat::test_that("e2e: Create empty snapshot", {
 
   app$open_filter_manager()
 
-  ns <- app$helper_NS(
-    app$filter_manager_ns(),
-    "filter_manager",
-    "snapshot_manager"
+  ns <- NS(
+    sprintf(
+      "%s-%s-%s", app$filter_manager_ns(), "filter_manager", "snapshot_manager"
+    )
   )
 
   app$click(ns("snapshot_add"))
@@ -37,10 +37,10 @@ testthat::test_that("e2e: Downloads empty snapshot", {
 
   app$open_filter_manager()
 
-  ns <- app$helper_NS(
-    app$filter_manager_ns(),
-    "filter_manager",
-    "snapshot_manager"
+  ns <- NS(
+    sprintf(
+      "%s-%s-%s", app$filter_manager_ns(), "filter_manager", "snapshot_manager"
+    )
   )
 
   app$click(ns("snapshot_add"))
@@ -75,10 +75,10 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
 
   app$open_filter_manager()
 
-  ns <- app$helper_NS(
-    app$filter_manager_ns(),
-    "filter_manager",
-    "snapshot_manager"
+  ns <- NS(
+    sprintf(
+      "%s-%s-%s", app$filter_manager_ns(), "filter_manager", "snapshot_manager"
+    )
   )
 
   app$click(ns("snapshot_add"))
@@ -135,10 +135,10 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
 
   app$open_filter_manager()
 
-  ns <- app$helper_NS(
-    app$filter_manager_ns(),
-    "filter_manager",
-    "snapshot_manager"
+  ns <- NS(
+    sprintf(
+      "%s-%s-%s", app$filter_manager_ns(), "filter_manager", "snapshot_manager"
+    )
   )
 
   app$click(ns("snapshot_load"))
@@ -172,10 +172,10 @@ testthat::test_that("e2e: Snapshot manager can reset the state", {
 
   app$open_filter_manager()
 
-  ns <- app$helper_NS(
-    app$filter_manager_ns(),
-    "filter_manager",
-    "snapshot_manager"
+  ns <- NS(
+    sprintf(
+      "%s-%s-%s", app$filter_manager_ns(), "filter_manager", "snapshot_manager"
+    )
   )
 
   app$click(ns("snapshot_reset"))

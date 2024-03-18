@@ -167,35 +167,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       private$ns$filter_manager
     },
     #' @description
-    #' Advance utility to help in creating namespace and CSS selectors for Shiny UI.
-    #' It is similar with [shiny::NS()] by returning a function that can be used
-    #' to create a namespace for the shiny UI.
-    #'
-    #' This namespace can be enriched with a prefix and suffix to create a CSS selector.
-    #'
-    #' @param namespace (`character(1)`) The base id to be used for the namespace.
-    #' @param ... (`character`) The additional ids to be appended to `namespace`.
-    #'
-    #' @return A function similar to [shiny::NS()] that is used to create a `character`
-    #' namespace for the shiny UI.
-    #'
-    helper_NS = function(namespace, ...) { # nolint: object_name.
-      dots <- rlang::list2(...)
-      checkmate::assert_list(dots, types = "character")
-      base_id <- namespace
-      if (length(dots) > 0) base_id <- paste(c(namespace, dots), collapse = shiny::ns.sep)
-
-      function(..., .css_prefix = "", .css_suffix = "") {
-        dots <- rlang::list2(...)
-        checkmate::assert_list(dots, types = "character")
-        base_string <- sprintf("%s%s%s", .css_prefix, base_id, .css_suffix)
-        if (length(dots) == 0) {
-          return(base_string)
-        }
-        (shiny::NS(base_string))(paste(dots, collapse = shiny::ns.sep))
-      }
-    },
-    #' @description
     #' Get the input from the module in the `teal` app.
     #' This function will only access inputs from the name space of the current active teal module.
     #'
@@ -397,10 +368,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The `TealAppDriver` object invisibly.
     open_filter_manager = function() {
-      active_ns <- self$filter_manager_ns()
-      ns <- self$helper_NS(active_ns)
-
-      self$click(ns("show"))
+      self$click(NS(self$filter_manager_ns(), "show"))
       self$wait_for_idle(500)
       invisible(self)
     },
