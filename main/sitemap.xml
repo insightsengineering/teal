@@ -82,6 +82,9 @@
     <loc>https://insightsengineering.github.io/teal/pull_request_template.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/TealAppDriver.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/TealReportCard.html</loc>
   </url>
   <url>
@@ -131,6 +134,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_rcode_libraries.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/get_unique_labels.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/include_css_files.html</loc>
