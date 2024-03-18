@@ -34,7 +34,6 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-set_module_input}{\code{TealAppDriver$set_module_input()}}
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
-\item \href{#method-TealAppDriver-get_active_filter_selection}{\code{TealAppDriver$get_active_filter_selection()}}
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
@@ -341,34 +340,6 @@ Get the active filter variables from a dataset in the \code{teal} app.
 If \code{NULL}, the filter variables for all the datasets will be returned in a list.}
 }
 \if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-get_active_filter_selection"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_filter_selection}{}}}
-\subsection{Method \code{get_active_filter_selection()}}{
-Get the active filter values from the active filter selection of dataset from the filter panel.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filter_selection(
-  dataset_name,
-  var_name,
-  is_numeric = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataset_name}}{(character) The name of the dataset to get the filter values from.}
-
-\item{\code{var_name}}{(character) The name of the variable to get the filter values from.}
-
-\item{\code{is_numeric}}{(logical) If the variable is numeric or not.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The value of the active filter selection.
 }
 }
 \if{html}{\out{<hr>}}
