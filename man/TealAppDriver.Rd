@@ -30,8 +30,6 @@ on a \code{teal} application for implementing \code{shinytest2} tests.
 \item \href{#method-TealAppDriver-active_module_ns}{\code{TealAppDriver$active_module_ns()}}
 \item \href{#method-TealAppDriver-active_module_element}{\code{TealAppDriver$active_module_element()}}
 \item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
-\item \href{#method-TealAppDriver-filter_manager_ns}{\code{TealAppDriver$filter_manager_ns()}}
-\item \href{#method-TealAppDriver-snapshot_manager_ns}{\code{TealAppDriver$snapshot_manager_ns()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
 \item \href{#method-TealAppDriver-set_module_input}{\code{TealAppDriver$set_module_input()}}
@@ -251,32 +249,6 @@ Get the active shiny name space for interacting with the filter panel.
 
 \subsection{Returns}{
 (\code{string}) The active shiny name space of the component.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-filter_manager_ns"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-filter_manager_ns}{}}}
-\subsection{Method \code{filter_manager_ns()}}{
-Get the active shiny name space for interacting with the filter panel.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$filter_manager_ns()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(\code{string}) The active shiny name space of the component.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-snapshot_manager_ns"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-snapshot_manager_ns}{}}}
-\subsection{Method \code{snapshot_manager_ns()}}{
-Get the snapshot manager name space.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$snapshot_manager_ns()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(\code{string}) The active shiny name space of the snapshot manager
 }
 }
 \if{html}{\out{<hr>}}
