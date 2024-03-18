@@ -32,7 +32,7 @@ testthat::test_that("snapshot manager holds initial state in history", {
       id = "test",
       slices_global = slices_global,
       mapping_matrix = mapping_matrix,
-      filtered_data_list = filtered_data_list
+      datasets = filtered_data_list
     ),
     expr = {
       testthat::expect_true("Initial application state" %in% names(snapshot_history()))
