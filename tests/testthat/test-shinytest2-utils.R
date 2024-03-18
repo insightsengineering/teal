@@ -1,0 +1,31 @@
+testthat::test_that("e2e: show/hide hamburger works as expected", {
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
+    modules = example_module()
+  )
+
+  get_class_attributes <- function(app, selector) {
+    element <- app$get_html(selector = selector) %>%
+      rvest::read_html() %>%
+      rvest::html_elements(selector)
+    list(
+      class = rvest::html_attr(element, "class"),
+      style = rvest::html_attr(element, "style")
+    )
+  }
+
+  primary_attrs <- get_class_attributes(app, ".teal_primary_col")
+  secondary_attrs <- get_class_attributes(app, ".teal_secondary_col")
+
+  testthat::expect_true(grepl("col-sm-9", primary_attrs$class))
+  testthat::expect_false(isTruthy(secondary_attrs$style))
+
+  app$click(selector = ".btn.action-button.filter_hamburger")
+  app$wait_for_idle(timeout = default_idle_timeout)
+  primary_attrs <- get_class_attributes(app, ".teal_primary_col")
+  secondary_attrs <- get_class_attributes(app, ".teal_secondary_col")
+
+  testthat::expect_true(grepl("col-sm-12", primary_attrs$class))
+  testthat::expect_true(grepl("display: none;", secondary_attrs$style))
+  app$stop()
+})
