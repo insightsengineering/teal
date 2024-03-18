@@ -29,7 +29,6 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-active_module_ns}{\code{TealAppDriver$active_module_ns()}}
 \item \href{#method-TealAppDriver-active_module_element}{\code{TealAppDriver$active_module_element()}}
 \item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
-\item \href{#method-TealAppDriver-helper_NS}{\code{TealAppDriver$helper_NS()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
 \item \href{#method-TealAppDriver-set_module_input}{\code{TealAppDriver$set_module_input()}}
@@ -249,33 +248,6 @@ Get the active shiny name space for interacting with the filter panel.
 
 \subsection{Returns}{
 (\code{string}) The active shiny name space of the component.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-helper_NS"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-helper_NS}{}}}
-\subsection{Method \code{helper_NS()}}{
-Advance utility to help in creating namespace and CSS selectors for Shiny UI.
-It is similar with \code{\link[shiny:NS]{shiny::NS()}} by returning a function that can be used
-to create a namespace for the shiny UI.
-
-This namespace can be enriched with a prefix and suffix to create a CSS selector.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$helper_NS(namespace, ...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{namespace}}{(\code{character(1)}) The base id to be used for the namespace.}
-
-\item{\code{...}}{(\code{character}) The additional ids to be appended to \code{namespace}.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A function similar to \code{\link[shiny:NS]{shiny::NS()}} that is used to create a \code{character}
-namespace for the shiny UI.
 }
 }
 \if{html}{\out{<hr>}}

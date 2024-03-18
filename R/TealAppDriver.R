@@ -7,7 +7,7 @@
 #'
 #' @keywords internal
 #'
-TealAppDriver <- R6::R6Class( # nolint
+TealAppDriver <- R6::R6Class( # nolint: object_name.
   "TealAppDriver",
   inherit = shinytest2::AppDriver,
   # public methods ----
@@ -155,35 +155,6 @@ TealAppDriver <- R6::R6Class( # nolint
         private$set_active_ns()
       }
       private$ns$filter_panel
-    },
-    #' @description
-    #' Advance utility to help in creating namespace and CSS selectors for Shiny UI.
-    #' It is similar with [shiny::NS()] by returning a function that can be used
-    #' to create a namespace for the shiny UI.
-    #'
-    #' This namespace can be enriched with a prefix and suffix to create a CSS selector.
-    #'
-    #' @param namespace (`character(1)`) The base id to be used for the namespace.
-    #' @param ... (`character`) The additional ids to be appended to `namespace`.
-    #'
-    #' @return A function similar to [shiny::NS()] that is used to create a `character`
-    #' namespace for the shiny UI.
-    #'
-    helper_NS = function(namespace, ...) { # nolint: object_name.
-      dots <- rlang::list2(...)
-      checkmate::assert_list(dots, types = "character")
-      base_id <- namespace
-      if (length(dots) > 0) base_id <- paste(c(namespace, dots), collapse = shiny::ns.sep)
-
-      function(..., .css_prefix = "", .css_suffix = "") {
-        dots <- rlang::list2(...)
-        checkmate::assert_list(dots, types = "character")
-        base_string <- sprintf("%s%s%s", .css_prefix, base_id, .css_suffix)
-        if (length(dots) == 0) {
-          return(base_string)
-        }
-        (shiny::NS(base_string))(paste(dots, collapse = shiny::ns.sep))
-      }
     },
     #' @description
     #' Get the input from the module in the `teal` app.
