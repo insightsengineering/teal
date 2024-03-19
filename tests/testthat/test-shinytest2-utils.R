@@ -5,8 +5,7 @@ testthat::test_that("e2e: show/hide hamburger works as expected", {
   )
 
   get_class_attributes <- function(app, selector) {
-    element <- app$get_html(selector = selector) %>%
-      rvest::read_html() %>%
+    element <- app$get_html_rvest(selector = selector) %>%
       rvest::html_elements(selector)
     list(
       class = rvest::html_attr(element, "class"),
