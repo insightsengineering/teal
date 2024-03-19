@@ -68,77 +68,78 @@ testthat::test_that(
     modal_content_message <- "A welcome message!"
     modal_content <- tags$b(modal_content_message, style = "color: red;")
 
-  modal_btns <- list(
-    list(text = "Proceed"),
-    list(text = "Read more", onclick = "window.open('http://google.com', '_blank')", id = "read"),
-    list(text = "Reject", onclick = "window.close()", id = "close")
-  )
-  modal_buttons <-
-    tagList(
-      shiny::modalButton(modal_btns[[1]]$text),
-      shiny::actionButton(
-        modal_btns[[2]]$id,
-        label = modal_btns[[2]]$text,
-        onclick = modal_btns[[2]]$onclick
-      ),
-      shiny::actionButton(
-        modal_btns[[3]]$id,
-        label = modal_btns[[3]]$text,
-        onclick = modal_btns[[3]]$onclick
+    modal_btns <- list(
+      list(text = "Proceed"),
+      list(text = "Read more", onclick = "window.open('http://google.com', '_blank')", id = "read"),
+      list(text = "Reject", onclick = "window.close()", id = "close")
+    )
+    modal_buttons <-
+      tagList(
+        shiny::modalButton(modal_btns[[1]]$text),
+        shiny::actionButton(
+          modal_btns[[2]]$id,
+          label = modal_btns[[2]]$text,
+          onclick = modal_btns[[2]]$onclick
+        ),
+        shiny::actionButton(
+          modal_btns[[3]]$id,
+          label = modal_btns[[3]]$text,
+          onclick = modal_btns[[3]]$onclick
+        )
+      )
+
+    app <- TealAppDriver$new(
+      data = simple_teal_data(),
+      modules = modules(
+        landing_popup_module(
+          title = modal_title,
+          content = modal_content,
+          buttons = modal_buttons
+        ),
+        example_module()
       )
     )
 
-  app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      landing_popup_module(
-        title = modal_title,
-        content = modal_content,
-        buttons = modal_buttons
-      ),
-      example_module()
+    app$wait_for_idle(timeout = default_idle_timeout)
+
+    testthat::expect_equal(
+      app$get_text(".modal-title"),
+      modal_title
     )
-  )
 
-  app$wait_for_idle(timeout = default_idle_timeout)
+    testthat::expect_equal(
+      trimws(app$get_text(".modal-body")),
+      modal_content_message
+    )
 
-  testthat::expect_equal(
-    app$get_text(".modal-title"),
-    modal_title
-  )
+    testthat::expect_equal(
+      app$get_text(".btn-default:nth-child(1)"),
+      modal_btns[[1]]$text
+    )
 
-  testthat::expect_equal(
-    trimws(app$get_text(".modal-body")),
-    modal_content_message
-  )
+    testthat::expect_equal(
+      app$get_text(phash(modal_btns[[2]]$id)),
+      modal_btns[[2]]$text
+    )
 
-  testthat::expect_equal(
-    app$get_text(".btn-default:nth-child(1)"),
-    modal_btns[[1]]$text
-  )
+    testthat::expect_equal(
+      extract_onclick(phash(modal_btns[[2]]$id)),
+      modal_btns[[2]]$onclick
+    )
 
-  testthat::expect_equal(
-    app$get_text(phash(modal_btns[[2]]$id)),
-    modal_btns[[2]]$text
-  )
+    testthat::expect_equal(
+      app$get_text(phash(modal_btns[[3]]$id)),
+      modal_btns[[3]]$text
+    )
 
-  testthat::expect_equal(
-    extract_onclick(phash(modal_btns[[2]]$id)),
-    modal_btns[[2]]$onclick
-  )
+    testthat::expect_equal(
+      extract_onclick(phash(modal_btns[[3]]$id)),
+      modal_btns[[3]]$onclick
+    )
 
-  testthat::expect_equal(
-    app$get_text(phash(modal_btns[[3]]$id)),
-    modal_btns[[3]]$text
-  )
-
-  testthat::expect_equal(
-    extract_onclick(phash(modal_btns[[3]]$id)),
-    modal_btns[[3]]$onclick
-  )
-
-  app$stop()
-})
+    app$stop()
+  }
+)
 
 testthat::test_that("e2e: when customized button in landing_popup_module is clicked, it redirects to a certain page", {
   onclick_text <- "window.open('http://google.com', '_blank')"
