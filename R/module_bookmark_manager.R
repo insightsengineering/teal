@@ -64,11 +64,11 @@
 #'
 bookmark_manager_ui <- function(id) {
   ns <- NS(id)
-  div(
+  tags$div(
     class = "manager_content",
-    div(
+    tags$div(
       class = "manager_table_row",
-      span(tags$b("Bookmark manager")),
+      tags$span(tags$b("Bookmark manager")),
       actionLink(ns("bookmark_add"), NULL, icon = suppressMessages(icon("solid fa-bookmark")), title = "add bookmark"),
       NULL
     ),
@@ -200,7 +200,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
             class = "manager_table_row",
             tags$span(
               class = "details",
-              a(h5(s), title = "go to bookmark", href = bookmark_history()[[s]], target = "blank"),
+              tags$a(tags$h5(s), title = "go to bookmark", href = bookmark_history()[[s]], target = "blank"),
               # Used only to copy to clipboard
               tags$pre(id = ns(id_rowme), style = "display: none;", bookmark_history()[[s]]),
             ),
@@ -220,7 +220,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
     output$bookmark_list <- renderUI({
       rows <- lapply(rev(reactiveValuesToList(divs)), function(d) d)
       if (length(rows) == 0L) {
-        div(
+        tags$div(
           class = "manager_placeholder",
           "Bookmarks will appear here."
         )
