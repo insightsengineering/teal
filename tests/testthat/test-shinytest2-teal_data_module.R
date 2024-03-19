@@ -35,7 +35,7 @@ testthat::test_that("e2e: teal_data_module will have a delayed load of datasets"
   app$stop()
 })
 
-testthat::test_that("e2e: teal_data_module fails to proceed without input", {
+testthat::test_that("e2e: teal_data_module shows validation errors", {
   tdm <- teal_data_module(
     ui = function(id) {
       ns <- shiny::NS(id)
