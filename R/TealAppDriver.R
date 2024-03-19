@@ -354,18 +354,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       invisible(self)
     },
     #' @description
-    #' Wrapper around `get_url()` method that opens the app in the browser.
-    #'
-    #' @return The `TealAppDriver` object invisibly.
-    open_filter_manager = function() {
-      active_ns <- self$filter_manager_ns()
-      ns <- self$helper_NS(active_ns)
-
-      self$click(ns("show"))
-      self$wait_for_idle(500)
-      invisible(self)
-    },
-    #' @description
     #' Extract `onlick` attribute from a `button` (found by `selector`).
     #'
     #' @param selector (`character(1)`) specifying the selector to be used to get the content of a `button`.
