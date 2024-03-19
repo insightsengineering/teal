@@ -31,8 +31,8 @@
 #'   The header of the app.
 #' @param footer (`shiny.tag` or `character(1)`)
 #'   The footer of the app.
-#' @param id (`character`)
-#'   Optional string specifying the `shiny` module id in cases it is used as a `shiny` module
+#' @param id (`character`) optional
+#'   string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
 #'
 #' @return Named list with server and UI functions.
