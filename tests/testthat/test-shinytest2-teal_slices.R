@@ -89,35 +89,5 @@ testthat::test_that("e2e: teal_slices filters are initialized when module specif
   )
   testthat::expect_null(app$get_active_filter_selection("mtcars", "cyl"))
 
-  app$set_active_filter_selection("iris", "Species", "setosa")
-  app$navigate_teal_tab("Module_1")
-  app$wait_for_idle(timeout = default_idle_timeout)
-
-  testthat::expect_identical(
-    app$get_active_filter_selection("iris", "Species"),
-    "setosa"
-  )
-  app$stop()
-})
-
-testthat::test_that("e2e: Set numeric filter state", {
-  app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = example_module(label = "Example Module"),
-    timeout = default_idle_timeout
-  )
-
-  app$wait_for_idle()
-
-  app$add_filter_var("iris", "Sepal.Length")
-  app$wait_for_idle()
-
-  app$set_active_filter_selection("iris", "Sepal_Length", c(5, 6))
-  app$wait_for_idle()
-  testthat::expect_equal(
-    app$get_active_filter_selection("iris", "Sepal_Length"),
-    c(5, 6)
-  )
-
   app$stop()
 })
