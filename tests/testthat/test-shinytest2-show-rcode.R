@@ -6,7 +6,7 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
   app$wait_for_idle(timeout = default_idle_timeout)
 
   # Check if button exists.
-  button_selector <- sprintf("#%s-rcode-button", app$active_module_ns())
+  button_selector <- app$active_module_element("rcode-button")
   testthat::expect_equal(
     app$get_text(button_selector),
     "Show R code"
@@ -31,16 +31,20 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
   )
   # Check for Copy buttons.
   testthat::expect_equal(
-    app$get_text(sprintf("#%s-rcode-copy_button1", app$active_module_ns())),
+    app$active_module_element("rcode-copy_button1") %>%
+    app$get_text(),
     "Copy to Clipboard"
   )
   testthat::expect_equal(
-    app$get_text(sprintf("#%s-rcode-copy_button2", app$active_module_ns())),
+    app$active_module_element("rcode-copy_button2") %>%
+    app$get_text(),
     "Copy to Clipboard"
   )
 
   # Check R code output.
-  r_code <- app$get_text(sprintf("#%s-rcode-verbatim_content", app$active_module_ns()))
+  r_code <- 
+    app$active_module_element("rcode-verbatim_content") %>% 
+    app$get_text()
 
   testthat::expect_match(r_code, "# Add any code to install/load your NEST environment here", fixed = TRUE)
   testthat::expect_match(r_code, "library(teal.code)", fixed = TRUE)
