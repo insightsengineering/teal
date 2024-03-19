@@ -207,7 +207,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
             tags$a(
               tags$i(
                 class = "fa-regular fa-copy",
-                title = sprintf("Copy '%s' bookmark to clipboard", s)
+                title = sprintf("Copy '%s' bookmark link to clipboard", s)
               ),
               onclick = sprintf("copyToClipboard('%s')", ns(id_rowme))
             )
