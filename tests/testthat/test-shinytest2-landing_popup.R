@@ -123,7 +123,7 @@ testthat::test_that(
     )
 
     testthat::expect_equal(
-      extract_onclick(phash(modal_btns$more$id)),
+      app$get_onclick(phash(modal_btns$more$id)),
       modal_btns$more$onclick
     )
 
@@ -133,7 +133,7 @@ testthat::test_that(
     )
 
     testthat::expect_equal(
-      extract_onclick(phash(modal_btns$reject$id)),
+      app$get_onclick(phash(modal_btns$reject$id)),
       modal_btns$reject$onclick
     )
 
