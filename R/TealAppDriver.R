@@ -360,8 +360,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The `character` vector.
     get_onclick = function(selector) {
-      self$get_html(selector) %>%
-        rvest::read_html() %>%
+      self$get_html_rvest(selector) %>%
         rvest::html_nodes("button") %>%
         rvest::html_attr("onclick")
     },
