@@ -38,8 +38,8 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
-\item \href{#method-TealAppDriver-open_filter_manager}{\code{TealAppDriver$open_filter_manager()}}
 \item \href{#method-TealAppDriver-get_onclick}{\code{TealAppDriver$get_onclick()}}
+\item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
 }
@@ -451,19 +451,6 @@ The \code{TealAppDriver} object invisibly.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-open_filter_manager"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-open_filter_manager}{}}}
-\subsection{Method \code{open_filter_manager()}}{
-Wrapper around \code{get_url()} method that opens the app in the browser.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$open_filter_manager()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-The \code{TealAppDriver} object invisibly.
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_onclick"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_onclick}{}}}
 \subsection{Method \code{get_onclick()}}{
@@ -484,10 +471,30 @@ The \code{character} vector.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-get_html_rvest"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-get_html_rvest}{}}}
+\subsection{Method \code{get_html_rvest()}}{
+Wrapper around \code{get_html} that passes the output directly to \code{rvest::read_html}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_html_rvest(selector)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{\code{(character(1))} passed to \code{get_html}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+An XML document.
+Wrapper around \code{get_url()} method that opens the app in the browser.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-open_url"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-open_url}{}}}
 \subsection{Method \code{open_url()}}{
-Wrapper around \code{get_url()} method that opens the app in the browser.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$open_url()}\if{html}{\out{</div>}}
 }
