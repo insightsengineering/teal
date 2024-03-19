@@ -198,7 +198,19 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
         if (!is.element(id_rowme, names(divs))) {
           divs[[id_rowme]] <- div(
             class = "manager_table_row",
-            a(h5(s), title = "go to bookmark", href = bookmark_history()[[s]], target = "blank")
+            tags$span(
+              class = "details",
+              a(h5(s), title = "go to bookmark", href = bookmark_history()[[s]], target = "blank"),
+              # Used only to copy to clipboard
+              tags$pre(id = ns(id_rowme), style = "display: none;", bookmark_history()[[s]]),
+            ),
+            tags$a(
+              tags$i(
+                class = "fa-regular fa-copy",
+                title = sprintf("Copy '%s' bookmark to clipboard", s)
+              ),
+              onclick = sprintf("copyToClipboard('%s')", ns(id_rowme))
+            )
           )
         }
       })
@@ -213,7 +225,10 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
           "Bookmarks will appear here."
         )
       } else {
-        rows
+        tagList(
+          tags$head(shiny::includeScript(system.file("js/verbatim_popup.js", package = "teal.widgets"))),
+          rows
+        )
       }
     })
 

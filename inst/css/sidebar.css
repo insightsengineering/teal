@@ -36,3 +36,6 @@ a.disabled {
 .manager_placeholder {
   margin-top: 1em;
 }
+.manager_table_row [onClick] {
+  cursor: pointer;
+}
