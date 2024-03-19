@@ -69,22 +69,22 @@ testthat::test_that(
     modal_content <- tags$b(modal_content_message, style = "color: red;")
 
     modal_btns <- list(
-      list(text = "Proceed"),
-      list(text = "Read more", onclick = "window.open('http://google.com', '_blank')", id = "read"),
-      list(text = "Reject", onclick = "window.close()", id = "close")
+      go = list(text = "Proceed"),
+      more = list(text = "Read more", onclick = "window.open('http://google.com', '_blank')", id = "read"),
+      reject = list(text = "Reject", onclick = "window.close()", id = "close")
     )
     modal_buttons <-
       tagList(
-        shiny::modalButton(modal_btns[[1]]$text),
+        shiny::modalButton(modal_btns$go$text),
         shiny::actionButton(
-          modal_btns[[2]]$id,
-          label = modal_btns[[2]]$text,
-          onclick = modal_btns[[2]]$onclick
+          modal_btns$more$id,
+          label = modal_btns$more$text,
+          onclick = modal_btns$more$onclick
         ),
         shiny::actionButton(
-          modal_btns[[3]]$id,
-          label = modal_btns[[3]]$text,
-          onclick = modal_btns[[3]]$onclick
+          modal_btns$reject$id,
+          label = modal_btns$reject$text,
+          onclick = modal_btns$reject$onclick
         )
       )
 
@@ -114,27 +114,27 @@ testthat::test_that(
 
     testthat::expect_equal(
       app$get_text(".btn-default:nth-child(1)"),
-      modal_btns[[1]]$text
+      modal_btns$go$text
     )
 
     testthat::expect_equal(
-      app$get_text(phash(modal_btns[[2]]$id)),
-      modal_btns[[2]]$text
+      app$get_text(phash(modal_btns$more$id)),
+      modal_btns$more$text
     )
 
     testthat::expect_equal(
-      extract_onclick(phash(modal_btns[[2]]$id)),
-      modal_btns[[2]]$onclick
+      extract_onclick(phash(modal_btns$more$id)),
+      modal_btns$more$onclick
     )
 
     testthat::expect_equal(
-      app$get_text(phash(modal_btns[[3]]$id)),
-      modal_btns[[3]]$text
+      app$get_text(phash(modal_btns$reject$id)),
+      modal_btns$reject$text
     )
 
     testthat::expect_equal(
-      extract_onclick(phash(modal_btns[[3]]$id)),
-      modal_btns[[3]]$onclick
+      extract_onclick(phash(modal_btns$reject$id)),
+      modal_btns$reject$onclick
     )
 
     app$stop()
