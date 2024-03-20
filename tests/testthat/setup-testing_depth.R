@@ -48,7 +48,7 @@ testing_depth <- function() {
 #' By default `depth` argument lower or equal to 3 will not be skipped because by default `TESTING_DEPTH`
 #' is equal to 3. To skip <= 3 depth tests then the environment variable has to be lower than 3 respectively.
 skip_if_too_deep <- function(depth) { # nolintr
-  stopifnot(length(depth) == 1 && is.numeric(depth) && depth >= 0 && depth <= 5)
+  checkmate::assert_numeric(depth, len = 1, lower = 0, upper = 5)
   test_to_depth <- testing_depth() # by default 3 if there are no env variable
   if (test_to_depth < depth) {
     testthat::skip(paste("testing depth", test_to_depth, "is below current testing specification", depth))
