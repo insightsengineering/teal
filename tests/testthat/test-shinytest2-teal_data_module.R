@@ -72,7 +72,7 @@ testthat::test_that("e2e: teal_data_module shows validation errors", {
   app$stop()
 })
 
-testthat::test_that("e2e: teal_data_module adds new column to datasets", {
+testthat::test_that("e2e: teal_data_module inputs change teal_data object that is passed to teal main UI", {
   tdm <- teal_data_module(
     ui = function(id) {
       ns <- shiny::NS(id)
