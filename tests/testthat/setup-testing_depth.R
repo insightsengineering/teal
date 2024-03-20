@@ -19,7 +19,6 @@ get_testing_depth <- function() {
   if (length(depth) != 1) {
     depth <- default_depth
   }
-
   depth
 }
 
