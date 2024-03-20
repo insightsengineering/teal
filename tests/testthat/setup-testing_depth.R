@@ -9,10 +9,8 @@
 #'
 get_testing_depth <- function() {
   default_depth <- 3
-  depth <- getOption("TESTING_DEPTH", default_depth)
-  if (is.null(depth)) {
-    depth <- Sys.getenv("TESTING_DEPTH", default_depth)
-  }
+  depth <- getOption("TESTING_DEPTH", Sys.getenv("TESTING_DEPTH", default_depth))
+
 
   depth <- tryCatch(
     as.numeric(depth),
