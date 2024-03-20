@@ -230,6 +230,10 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
       # When restoring bookmark, all modules must be initialized on app start.
       # Delayed module initiation (below) precludes restoring state b/c inputs do not exist when restoring occurs.
       call_module()
+    } else if (id == "report_previewer") {
+      # Report previewer must be initiated on app start for report cards to be included in bookmarks.
+      # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
+      call_module()
     } else {
       # When app starts normally, modules are initialized only when corresponding tabs are clicked.
       # Observing trigger_module() induces the module only when output$data_reactive is triggered (see above).
