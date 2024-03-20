@@ -372,11 +372,7 @@ If \code{NULL}, the filter variables for all the datasets will be returned in a 
 \subsection{Method \code{get_active_filter_selection()}}{
 Get the active filter values from the active filter selection of dataset from the filter panel.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filter_selection(
-  dataset_name,
-  var_name,
-  is_numeric = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filter_selection(dataset_name, var_name)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -385,8 +381,6 @@ Get the active filter values from the active filter selection of dataset from th
 \item{\code{dataset_name}}{(character) The name of the dataset to get the filter values from.}
 
 \item{\code{var_name}}{(character) The name of the variable to get the filter values from.}
-
-\item{\code{is_numeric}}{(logical) If the variable is numeric or not.}
 }
 \if{html}{\out{</div>}}
 }
@@ -446,12 +440,7 @@ The \code{TealAppDriver} object invisibly.
 \subsection{Method \code{set_active_filter_selection()}}{
 Set the active filter values for a variable of a dataset in the active filter variable panel.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_filter_selection(
-  dataset_name,
-  var_name,
-  input,
-  is_numeric = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_filter_selection(dataset_name, var_name, input)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -463,7 +452,7 @@ Set the active filter values for a variable of a dataset in the active filter va
 
 \item{\code{input}}{The value to set the filter to.}
 
-\item{\code{is_numeric}}{(logical) If the variable is numeric or not.}
+\item{\code{type}}{(character) The type of the filter to get the value from. Default is \code{categorical}.}
 }
 \if{html}{\out{</div>}}
 }
