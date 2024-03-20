@@ -147,6 +147,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       sprintf("#%s-%s", self$active_module_ns(), element)
     },
     #' @description
+    #' Get the text of the active shiny name space bound with a custom `element` name.
+    #'
+    #' @param element `character(1)` the text of the custom element name.
+    #'
+    #' @return (`string`) The text of the active shiny name space of the component bound with the input `element`.
+    active_module_element_text = function(element) {
+      checkmate::assert_string(element)
+      self$get_text(self$active_module_element(element))
+    },
+    #' @description
     #' Get the active shiny name space for interacting with the filter panel.
     #'
     #' @return (`string`) The active shiny name space of the component.
@@ -248,24 +258,28 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @param dataset_name (character) The name of the dataset to get the filter values from.
     #' @param var_name (character) The name of the variable to get the filter values from.
-    #' @param is_numeric (logical) If the variable is numeric or not.
     #'
     #' @return The value of the active filter selection.
-    get_active_filter_selection = function(dataset_name, var_name, is_numeric = FALSE) {
+    get_active_filter_selection = function(dataset_name, var_name) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
-      checkmate::check_flag(is_numeric)
-      selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-      self$get_value(
-        input = sprintf(
-          "%s-active-%s-filter-%s_%s-inputs-%s",
-          self$active_filters_ns(),
-          dataset_name,
-          dataset_name,
-          var_name,
-          selection_suffix
-        )
+      input_id_prefix <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name
       )
+
+      # Find the type of filter (categorical or range)
+      supported_suffix <- c("selection", "selection_manual")
+      for (suffix in supported_suffix) {
+        if (!is.null(self$get_html(sprintf("#%s-%s", input_id_prefix, suffix)))) {
+          return(self$get_value(input = sprintf("%s-%s", input_id_prefix, suffix)))
+        }
+      }
+
+      NULL # If there are not any supported filters
     },
     #' @description
     #' Add a new variable from the dataset to be filtered.
@@ -330,27 +344,63 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param dataset_name (character) The name of the dataset to set the filter value for.
     #' @param var_name (character) The name of the variable to set the filter value for.
     #' @param input The value to set the filter to.
-    #' @param is_numeric (logical) If the variable is numeric or not.
+    #' @param type (character) The type of the filter to get the value from. Default is `categorical`.
     #'
     #' @return The `TealAppDriver` object invisibly.
-    set_active_filter_selection = function(dataset_name, var_name, input, is_numeric = FALSE) {
+    set_active_filter_selection = function(dataset_name, var_name, input) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
       checkmate::check_string(input)
-      checkmate::check_flag(is_numeric)
 
-      selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-      self$set_input(
-        sprintf(
-          "%s-active-%s-filter-%s_%s-inputs-%s",
-          self$active_filters_ns(),
-          dataset_name,
-          dataset_name,
-          var_name,
-          selection_suffix
-        ),
-        input
+      input_id_prefix <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name
       )
+
+      # Find the type of filter (based on filter panel)
+      supported_suffix <- c("selection", "selection_manual")
+      slices_suffix <- supported_suffix[
+        match(
+          TRUE,
+          vapply(
+            supported_suffix,
+            function(suffix) {
+              !is.null(self$get_html(sprintf("#%s-%s", input_id_prefix, suffix)))
+            },
+            logical(1)
+          )
+        )
+      ]
+
+      # Generate correct namespace
+      slices_input_id <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs-%s",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name,
+        slices_suffix
+      )
+
+      if (identical(slices_suffix, "selection_manual")) {
+        checkmate::assert_numeric(input, len = 2)
+        self$run_js(
+          sprintf(
+            "Shiny.setInputValue('%s:sw.numericRange', [%f, %f], {priority: 'event'})",
+            slices_input_id,
+            input[[1]],
+            input[[2]]
+          )
+        )
+      } else if (identical(slices_suffix, "selection")) {
+        self$set_input(slices_input_id, input)
+      } else {
+        stop("Filter selection set not supported for this slice.")
+      }
+
       invisible(self)
     },
     #' @description

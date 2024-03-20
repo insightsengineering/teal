@@ -28,6 +28,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-active_ns}{\code{TealAppDriver$active_ns()}}
 \item \href{#method-TealAppDriver-active_module_ns}{\code{TealAppDriver$active_module_ns()}}
 \item \href{#method-TealAppDriver-active_module_element}{\code{TealAppDriver$active_module_element()}}
+\item \href{#method-TealAppDriver-active_module_element_text}{\code{TealAppDriver$active_module_element_text()}}
 \item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
@@ -239,6 +240,26 @@ Get the active shiny name space bound with a custom \code{element} name.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-active_module_element_text"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-active_module_element_text}{}}}
+\subsection{Method \code{active_module_element_text()}}{
+Get the text of the active shiny name space bound with a custom \code{element} name.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_module_element_text(element)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element}}{\code{character(1)} the text of the custom element name.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{string}) The text of the active shiny name space of the component bound with the input \code{element}.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-active_filters_ns"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-active_filters_ns}{}}}
 \subsection{Method \code{active_filters_ns()}}{
@@ -350,11 +371,7 @@ If \code{NULL}, the filter variables for all the datasets will be returned in a 
 \subsection{Method \code{get_active_filter_selection()}}{
 Get the active filter values from the active filter selection of dataset from the filter panel.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filter_selection(
-  dataset_name,
-  var_name,
-  is_numeric = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filter_selection(dataset_name, var_name)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -363,8 +380,6 @@ Get the active filter values from the active filter selection of dataset from th
 \item{\code{dataset_name}}{(character) The name of the dataset to get the filter values from.}
 
 \item{\code{var_name}}{(character) The name of the variable to get the filter values from.}
-
-\item{\code{is_numeric}}{(logical) If the variable is numeric or not.}
 }
 \if{html}{\out{</div>}}
 }
@@ -424,12 +439,7 @@ The \code{TealAppDriver} object invisibly.
 \subsection{Method \code{set_active_filter_selection()}}{
 Set the active filter values for a variable of a dataset in the active filter variable panel.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_filter_selection(
-  dataset_name,
-  var_name,
-  input,
-  is_numeric = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_filter_selection(dataset_name, var_name, input)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -441,7 +451,7 @@ Set the active filter values for a variable of a dataset in the active filter va
 
 \item{\code{input}}{The value to set the filter to.}
 
-\item{\code{is_numeric}}{(logical) If the variable is numeric or not.}
+\item{\code{type}}{(character) The type of the filter to get the value from. Default is \code{categorical}.}
 }
 \if{html}{\out{</div>}}
 }
