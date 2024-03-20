@@ -94,8 +94,14 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
 
     # Set up bookmarking callbacks.
     app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
-    # These exclusions are to ensure the right modals open in bookmarked app (first 2) and for extra security (3rd).
-    setBookmarkExclude(c("bookmark_add", "bookmark_name", "bookmark_accept"))
+    # Register bookmark exclusions: all buttons and the `textInput` for bookmark name.
+    # Run in observer so list is updated every time new input item is registered.
+    observe({
+      inputs <- reactiveValuesToList(app_session$input)
+      ids_buttons <- names(Filter(function(x) inherits(x, "shinyActionButtonValue"), inputs))
+      id_bookmark_name <- grep("bookmark_name", names(inputs), value = TRUE, fixed = TRUE)
+      setBookmarkExclude(union(ids_buttons, id_bookmark_name), session = app_session)
+    })
     app_session$onBookmark(function(state) {
       # Add current filter state to bookmark.
       logger::log_trace("bookmark_manager_srv@onBookmark: storing filter state")
