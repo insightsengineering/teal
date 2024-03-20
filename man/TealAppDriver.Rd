@@ -28,6 +28,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-active_ns}{\code{TealAppDriver$active_ns()}}
 \item \href{#method-TealAppDriver-active_module_ns}{\code{TealAppDriver$active_module_ns()}}
 \item \href{#method-TealAppDriver-active_module_element}{\code{TealAppDriver$active_module_element()}}
+\item \href{#method-TealAppDriver-active_module_element_text}{\code{TealAppDriver$active_module_element_text()}}
 \item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
@@ -237,6 +238,26 @@ Get the active shiny name space bound with a custom \code{element} name.
 }
 \subsection{Returns}{
 (\code{string}) The active shiny name space of the component bound with the input \code{element}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-active_module_element_text"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-active_module_element_text}{}}}
+\subsection{Method \code{active_module_element_text()}}{
+Get the text of the active shiny name space bound with a custom \code{element} name.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_module_element_text(element)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element}}{\code{character(1)} the text of the custom element name.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{string}) The text of the active shiny name space of the component bound with the input \code{element}.
 }
 }
 \if{html}{\out{<hr>}}
