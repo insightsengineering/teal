@@ -1,6 +1,6 @@
 #' Returns testing depth set by session option or by environmental variable.
 #'
-#' @details Looks for the option `TESTING_DEPTH` first, if not set,
+#' @details Looks for the session option `TESTING_DEPTH` first. If not set,
 #' takes the system environmental variable `TESTING_DEPTH`. If neither
 #' is set, then returns 3 by default. If the value of `TESTING_DEPTH`
 #' is not a numeric of length 1, then returns 3.
