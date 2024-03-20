@@ -15,10 +15,7 @@ get_testing_depth <- function() {
     error = function(error) default_depth,
     warning = function(warning) default_depth
   )
-
-  if (length(depth) != 1) {
-    depth <- default_depth
-  }
+  if (length(depth) != 1) depth <- default_depth
   depth
 }
 
