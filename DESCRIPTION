@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.15.2.9004
-Date: 2024-03-15
+Version: 0.15.2.9010
+Date: 2024-03-20
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -60,6 +60,8 @@ Suggests:
     MultiAssayExperiment,
     R6,
     rmarkdown (>= 2.19),
+    rvest,
+    shinytest2,
     shinyvalidate,
     testthat (>= 3.1.5),
     withr (>= 2.1.0),
@@ -84,6 +86,7 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Collate:
+    'TealAppDriver.R'
     'dummy_functions.R'
     'get_rcode_utils.R'
     'include_css_js.R'
