@@ -1,4 +1,5 @@
 testthat::test_that("e2e: reporter tab is created when a module has reporter", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = report_module(label = "Module with Reporter")
@@ -19,6 +20,7 @@ testthat::test_that("e2e: reporter tab is created when a module has reporter", {
 })
 
 testthat::test_that("e2e: reporter tab is not created when a module has no reporter", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
@@ -39,6 +41,7 @@ testthat::test_that("e2e: reporter tab is not created when a module has no repor
 })
 
 testthat::test_that("e2e: adding a report card in a module adds it in the report previewer tab", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = report_module(label = "Module with Reporter")

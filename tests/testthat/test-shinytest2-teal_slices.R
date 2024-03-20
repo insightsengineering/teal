@@ -1,4 +1,5 @@
 testthat::test_that("e2e: teal_slices filters are initialized when global filters are created", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
@@ -43,6 +44,7 @@ testthat::test_that("e2e: teal_slices filters are initialized when global filter
 })
 
 testthat::test_that("e2e: teal_slices filters are initialized when module specific filters are created", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
