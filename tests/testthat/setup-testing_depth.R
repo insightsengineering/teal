@@ -8,19 +8,20 @@
 #' @return `numeric(1)` the testing depth.
 #'
 get_testing_depth <- function() {
-  depth <- getOption("TESTING_DEPTH")
+  default_depth <- 3
+  depth <- getOption("TESTING_DEPTH", default_depth)
   if (is.null(depth)) {
-    depth <- Sys.getenv("TESTING_DEPTH")
+    depth <- Sys.getenv("TESTING_DEPTH", default_depth)
   }
 
   depth <- tryCatch(
     as.numeric(depth),
-    error = function(error) 3,
-    warning = function(warning) 3
+    error = function(error) default_depth,
+    warning = function(warning) default_depth
   )
 
   if (length(depth) != 1 || is.na(depth)) {
-    depth <- 3
+    depth <- default_depth
   }
 
   depth
