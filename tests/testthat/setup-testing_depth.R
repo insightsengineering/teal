@@ -1,4 +1,4 @@
-#' Returns testing depth set by an environmental variable.
+#' Returns testing depth set by session option or by environmental variable.
 #'
 #' @details Looks for the option `TESTING_DEPTH` first, if not set,
 #' takes the system environmental variable `TESTING_DEPTH`. If neither
