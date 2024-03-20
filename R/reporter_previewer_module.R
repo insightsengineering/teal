@@ -24,7 +24,7 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
   checkmate::assert_list(server_args, names = "named")
   checkmate::assert_true(all(names(server_args) %in% names(formals(teal.reporter::reporter_previewer_srv))))
 
-  logger::log_info("Initializing reporter_previewer_module")
+  message("Initializing reporter_previewer_module")
 
   srv <- function(id, reporter, ...) {
     teal.reporter::reporter_previewer_srv(id, reporter, ...)
