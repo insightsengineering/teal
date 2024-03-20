@@ -16,7 +16,7 @@ get_testing_depth <- function() {
     warning = function(warning) default_depth
   )
 
-  if (length(depth) != 1 || is.na(depth)) {
+  if (length(depth) != 1) {
     depth <- default_depth
   }
 
