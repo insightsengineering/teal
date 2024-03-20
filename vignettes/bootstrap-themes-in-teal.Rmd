@@ -44,7 +44,7 @@ Available Bootstrap versions could be checked with `bslib::versions()` and Boots
 ```
 # bslib::versions()
 # bslib::bootswatch_themes(version = "5")
-options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux")
+options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux"))
 # or
 options("teal.bs_theme" = bslib::bs_theme_update(bslib::bs_theme(version = "5"), bootswatch = "lux"))
 ```
