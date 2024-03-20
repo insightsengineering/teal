@@ -7,23 +7,23 @@
 #'
 #' @return `numeric(1)` the testing depth.
 #'
-testing_depth <- function() {
-  testing_depth <- getOption("TESTING_DEPTH")
-  if (is.null(testing_depth)) {
-    testing_depth <- Sys.getenv("TESTING_DEPTH")
+get_testing_depth <- function() {
+  depth <- getOption("TESTING_DEPTH")
+  if (is.null(depth)) {
+    depth <- Sys.getenv("TESTING_DEPTH")
   }
 
-  testing_depth <- tryCatch(
-    as.numeric(testing_depth),
+  depth <- tryCatch(
+    as.numeric(depth),
     error = function(error) 3,
     warning = function(warning) 3
   )
 
-  if (length(testing_depth) != 1 || is.na(testing_depth)) {
-    testing_depth <- 3
+  if (length(depth) != 1 || is.na(depth)) {
+    depth <- 3
   }
 
-  testing_depth
+  depth
 }
 
 #' Skipping tests in the testthat pipeline under specific scope
@@ -49,7 +49,7 @@ testing_depth <- function() {
 #' is equal to 3. To skip <= 3 depth tests then the environment variable has to be lower than 3 respectively.
 skip_if_too_deep <- function(depth) { # nolintr
   checkmate::assert_numeric(depth, len = 1, lower = 0, upper = 5)
-  test_to_depth <- testing_depth() # by default 3 if there are no env variable
+  test_to_depth <- get_testing_depth() # by default 3 if there are no env variable
   if (test_to_depth < depth) {
     testthat::skip(paste("testing depth", test_to_depth, "is below current testing specification", depth))
   }
