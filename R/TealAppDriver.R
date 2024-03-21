@@ -389,7 +389,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The `character` vector.
     get_attr = function(selector, attribute_name) {
-      rvest::read_html(self$get_html("html")) %>%
+      self$get_html_rvest("html") %>%
         rvest::html_nodes(selector) %>%
         rvest::html_attr(attribute_name)
     }
