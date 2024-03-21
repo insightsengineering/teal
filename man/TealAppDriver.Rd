@@ -38,7 +38,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
-\item \href{#method-TealAppDriver-get_onclick}{\code{TealAppDriver$get_onclick()}}
+\item \href{#method-TealAppDriver-get_attr}{\code{TealAppDriver$get_attr()}}
 \item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
@@ -438,18 +438,20 @@ The \code{TealAppDriver} object invisibly.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-get_onclick"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-get_onclick}{}}}
-\subsection{Method \code{get_onclick()}}{
-Extract \code{onlick} attribute from a \code{button} (found by \code{selector}).
+\if{html}{\out{<a id="method-TealAppDriver-get_attr"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-get_attr}{}}}
+\subsection{Method \code{get_attr()}}{
+Extract \code{html} attribute (found by a \code{selector}).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_onclick(selector)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_attr(selector, attribute)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selector}}{(\code{character(1)}) specifying the selector to be used to get the content of a \code{button}.}
+\item{\code{selector}}{(\code{character(1)}) specifying the selector to be used to get the content of a specific node.}
+
+\item{\code{attribute}}{(\code{character(1)}) name of an attribute to retrieve from a node specified by \code{selector}.}
 }
 \if{html}{\out{</div>}}
 }

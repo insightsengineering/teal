@@ -382,17 +382,17 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       invisible(self)
     },
     #' @description
-    #' @description
-    #' Extract `html` attribute from (found by a `selector`).
+    #' Extract `html` attribute (found by a `selector`).
     #'
-    #' @param selector (`character(1)`) specifying the selector to be used to get the content of a `button`.
+    #' @param selector (`character(1)`) specifying the selector to be used to get the content of a specific node.
+    #' @param attribute (`character(1)`) name of an attribute to retrieve from a node specified by `selector`.
     #'
     #' @return The `character` vector.
-    get_attr = function(selector, attribute_name) {
+    get_attr = function(selector, attribute) {
       self$get_html_rvest("html") %>%
         rvest::html_nodes(selector) %>%
-        rvest::html_attr(attribute_name)
-    }
+        rvest::html_attr(attribute)
+    },
     #' @description
     #' Wrapper around `get_html` that passes the output directly to `rvest::read_html`.
     #'
