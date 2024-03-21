@@ -1,6 +1,7 @@
 testthat::test_that(
-  "e2e: teal.widgets::verbatim_popup is initialized with a button that opens a modal with a verbatim text", {
-
+  "e2e: teal.widgets::verbatim_popup is initialized with a button that opens a modal with a verbatim text",
+  {
+  skip_if_too_deep(5)
   # App can not start if I put the content in variables.
   # verbatim_popup_ui(id, button_label = ui_popup_button_label)
   # verbatim_popup_srv(id, verbatim_content = verbatim_content_text, title = modal_title, style = TRUE)
@@ -57,8 +58,7 @@ testthat::test_that(
   )
 
   testthat::expect_equal(
-    app$active_module_element("copy_button1") %>%
-    app$get_text(),
+    app$active_module_element_text("copy_button1"),
     "Copy to Clipboard"
   )
   testthat::expect_equal(
@@ -66,15 +66,13 @@ testthat::test_that(
     "Dismiss"
   )
   testthat::expect_equal(
-    app$active_module_element("verbatim_content") %>%
-    app$get_text(),
+    app$active_module_element_text("verbatim_content"),
     verbatim_content_text
   )
 
   # Modal is closed, once the button is clicked.
   app$click(selector = "#shiny-modal-wrapper button[data-dismiss='modal']")
-  # So far there are two Dismiss buttons, but will open an issue to fix this.
-  # https://github.com/insightsengineering/teal.widgets/issues/233
+  # There are two Dismiss buttons.
   app$wait_for_idle(timeout = default_idle_timeout)
   testthat::expect_null(app$get_html("#shiny-modal-wrapper"))
 
@@ -82,8 +80,9 @@ testthat::test_that(
 })
 
 testthat::test_that(
-  "e2e: teal.widgets::table_with_settings is initialized with two buttons and a table", {
-
+  "e2e: teal.widgets::table_with_settings is initialized with two buttons and a table",
+  {
+  skip_if_too_deep(5)
   # This should probably be moved to teal.widgets directly.
   testthat::skip_if_not_installed(c("rtables", "formatters"))
 
@@ -115,8 +114,7 @@ testthat::test_that(
   # Check if there are two buttons above the table.
   table_buttons_selector <- app$active_module_element("table-with-settings > div.table-settings-buttons")
   table_buttons <-
-    app$get_html(table_buttons_selector) %>%
-    rvest::read_html() %>%
+    app$get_html_rvest(table_buttons_selector) %>%
     rvest::html_elements("button")
   testthat::expect_length(table_buttons, 2)
   # Check is the first one is a toggle button.
@@ -128,8 +126,7 @@ testthat::test_that(
   # First button has specific font-awesome icon.
   dwnl_button <- app$active_module_element("downbutton-dwnl")
   testhat::expect_equal(
-    app$get_html(dwnl_button) %>%
-      rvest::read_html() %>%
+    app$get_html_rvest(dwnl_button) %>%
       rvest::html_element("i") %>%
       rvest::html_attr("class"),
     "fas fa-download"
