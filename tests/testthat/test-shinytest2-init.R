@@ -4,7 +4,6 @@ testthat::test_that("e2e: teal app initializes with no errors", {
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
   app$expect_no_shiny_error()
   app$stop()
 })
@@ -15,7 +14,6 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Check if button exists.
   button_selector <- "#teal-sessionInfo-button"
@@ -82,7 +80,6 @@ testthat::test_that("e2e: init creates UI containing specified title, favicon, h
     header = app_header,
     footer = app_footer
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_equal(
     app$get_text("head > title")[1],

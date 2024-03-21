@@ -11,7 +11,6 @@ testthat::test_that("e2e: teal app with landing_popup_module initializes with no
     )
   )
 
-  app$wait_for_idle(timeout = default_idle_timeout)
   testthat::expect_equal(
     app$get_text("#landingpopup b"),
     "A welcome message!"
@@ -28,7 +27,6 @@ testthat::test_that("e2e: app with default landing_popup_module creates modal co
       example_module()
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_equal(
     app$get_text("#shiny-modal-wrapper button"),
@@ -47,7 +45,6 @@ testthat::test_that("e2e: when default landing_popup_module is closed, it shows 
       example_module()
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Button is clicked.
   app$click(selector = "#shiny-modal-wrapper button[data-dismiss='modal']")
@@ -104,8 +101,6 @@ testthat::test_that(
       )
     )
 
-    app$wait_for_idle(timeout = default_idle_timeout)
-
     testthat::expect_equal(
       app$get_text(".modal-title"),
       modal_title
@@ -157,7 +152,6 @@ testthat::test_that("e2e: when customized button in landing_popup_module is clic
       example_module()
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_equal(
     app$get_attr("#read", "onclick"),

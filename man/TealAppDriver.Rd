@@ -20,6 +20,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-TealAppDriver-new}{\code{TealAppDriver$new()}}
+\item \href{#method-TealAppDriver-wait_for_idle}{\code{TealAppDriver$wait_for_idle()}}
 \item \href{#method-TealAppDriver-expect_no_shiny_error}{\code{TealAppDriver$expect_no_shiny_error()}}
 \item \href{#method-TealAppDriver-expect_no_validation_error}{\code{TealAppDriver$expect_no_validation_error()}}
 \item \href{#method-TealAppDriver-expect_validation_error}{\code{TealAppDriver$expect_validation_error()}}
@@ -75,7 +76,6 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="stop"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-stop'><code>shinytest2::AppDriver$stop()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="upload_file"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-upload_file'><code>shinytest2::AppDriver$upload_file()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="view"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-view'><code>shinytest2::AppDriver$view()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="wait_for_idle"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-wait_for_idle'><code>shinytest2::AppDriver$wait_for_idle()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="wait_for_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-wait_for_js'><code>shinytest2::AppDriver$wait_for_js()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="wait_for_value"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-wait_for_value'><code>shinytest2::AppDriver$wait_for_value()</code></a></span></li>
 </ul>
@@ -109,6 +109,23 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 }
 \subsection{Returns}{
 Object of class \code{TealAppDriver}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-wait_for_idle"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-wait_for_idle}{}}}
+\subsection{Method \code{wait_for_idle()}}{
+Set custom values for \code{duration} and \code{timeout} in parent \code{\link{AppDriver}} \code{waif_for_idle()} method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$wait_for_idle(duration = 500, timeout = 20000)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{duration, timeout}}{(\code{numeric(1)}) passed to parent \code{\link{AppDriver}} \code{waif_for_idle()} method.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

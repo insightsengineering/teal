@@ -4,7 +4,6 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Check if button exists.
   button_selector <- app$active_module_element("rcode-button")

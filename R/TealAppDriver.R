@@ -47,6 +47,13 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       )
 
       private$set_active_ns()
+      self$wait_for_idle()
+    },
+    #' @description
+    #' Set custom values for `duration` and `timeout` in parent [`AppDriver`] `waif_for_idle()` method.
+    #' @param duration,timeout (`numeric(1)`) passed to parent [`AppDriver`] `waif_for_idle()` method.
+    wait_for_idle = function(duration = 500, timeout = 20000) {
+      super$wait_for_idle(duration = duration, timeout = timeout)
     },
     #' @description
     #' Check if the app has shiny errors. This checks for global shiny errors.
