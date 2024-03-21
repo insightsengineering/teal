@@ -155,7 +155,7 @@ testthat::test_that("e2e: when customized button in landing_popup_module is clic
   app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_equal(
-    app$get_onclick("#read"),
+    app$get_attr("#read", "onclick"),
     onclick_text
   )
 
