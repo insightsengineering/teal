@@ -125,32 +125,93 @@ testthat::test_that(
   )
   # First button has specific font-awesome icon.
   dwnl_button <- app$active_module_element("downbutton-dwnl")
-  testhat::expect_equal(
+  testthat::expect_equal(
     app$get_html_rvest(dwnl_button) %>%
       rvest::html_element("i") %>%
       rvest::html_attr("class"),
     "fas fa-download"
   )
 
-  # Click the first button.
+  # Click the first TABLE button.
   app$click(selector = dwnl_button)
   app$wait_for_idle(timeout = default_idle_timeout)
 
   # Review the content of the toggle.
-  # TO BE ADDED.
+  testthat::expect_equal(
+    app$active_module_element_text("downbutton-file_format-label"),
+    "File type"
+  )
 
-  # Click the second button.
+  file_format_text <- app$active_module_element_text("downbutton-file_format > div")
+  testthat::expect_match(file_format_text, "formatted txt\n", fixed = TRUE)
+  testthat::expect_match(file_format_text, "csv\n", fixed = TRUE)
+  testthat::expect_match(file_format_text, "pdf\n", fixed = TRUE)
+
+  testthat::expect_equal(
+    app$active_module_element_text("downbutton-file_name-label"),
+    "File name (without extension)"
+  )
+
+  # QUESTION - NEED HELP
+  # How to get
+  # value="table_20240321_142134"
+  # out of
+  # <input id="teal-main_ui-root-module_with_table_with_settings-module-downbutton-file_name" type="text" class="shiny-input-text form-control shinyjs-resettable shiny-bound-input" value="table_20240321_142134" data-shinyjs-resettable-id="teal-main_ui-root-module_with_table_with_settings-module-downbutton-file_name" data-shinyjs-resettable-type="Text" data-shinyjs-resettable-value="table_20240321_142134">
+  # for
+  # app$get_html_rvest(app$active_module_element("downbutton-file_name"))
+
+  # TODO - NEED HELP
+  # do not use div:nth-child(3)
+  pagination <- "downbutton-dwnl > li > div > div:nth-child(3) > div.paginate-ui  > div.form-group.shiny-input-container"
+  pagination_class <- gsub("#", "#dropdown-menu-", app$active_module_element(pagination))
+  pagination_text <- app$get_text(pagination_class)
+  testthat::expect_match(pagination_text, "Paginate table:\n", fixed = TRUE)
+  testthat::expect_match(pagination_text, "lines / page\n", fixed = TRUE)
+
+  download_button <- app$get_html_rvest(app$active_module_element("downbutton-data_download > i"))
+  testthat::expect_equal(
+    download_button %>%
+      html_node("i") %>%
+      html_attr("class"),
+    "fas fa-download"
+  )
+  testthat::expect_equal(
+    download_button %>%
+      html_node("i") %>%
+      html_attr("aria-label"),
+    "download icon"
+  )
+
+  # TODO - NEED HELP
+  # click second radio button
+  # app$click(selector = "input[value~=csv]")
+  # check that pagination is missing
+
+  # Click the second TABLE button.
   app$click(selector = app$active_module_element("expand"))
   app$wait_for_idle(timeout = default_idle_timeout)
-  # Review the modal content.
+  # Review the table modal content.
+
+  table_content <- app$active_module_element_text("table_out_modal")
+
+  check_table <- function(content) {
+    testthat::expect_match(content, "A: Drug X", fixed = TRUE)
+    testthat::expect_match(content, "C: Combination", fixed = TRUE)
+    testthat::expect_match(content, "UNDIFFERENTIATED", fixed = TRUE)
+    testthat::expect_match(content, "SEX", fixed = TRUE)
+    testthat::expect_match(content, "34.91", fixed = TRUE)
+    testthat::expect_match(content, "33.02", fixed = TRUE)
+  }
+  check_table(table_content)
 
   # Close modal.
   app$click(selector = "#shiny-modal-wrapper .modal-footer > button")
   app$wait_for_idle(timeout = default_idle_timeout)
   testthat::expect_null(app$get_html(app$active_module_element("table_out_modal")))
 
-  # Review the table content.
-  # TO BE ADDED.
+  # Review the main table content.
+  main_table_content <- app$active_module_element_text("table_out_main")
+  check_table(main_table_content)
 
   app$stop()
 
