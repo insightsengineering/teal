@@ -382,16 +382,17 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       invisible(self)
     },
     #' @description
-    #' Extract `onlick` attribute from a `button` (found by `selector`).
+    #' @description
+    #' Extract `html` attribute from (found by a `selector`).
     #'
     #' @param selector (`character(1)`) specifying the selector to be used to get the content of a `button`.
     #'
     #' @return The `character` vector.
-    get_onclick = function(selector) {
-      self$get_html_rvest(selector) %>%
-        rvest::html_nodes("button") %>%
-        rvest::html_attr("onclick")
-    },
+    get_attr = function(selector, attribute_name) {
+      rvest::read_html(self$get_html("html")) %>%
+        rvest::html_nodes(selector) %>%
+        rvest::html_attr(attribute_name)
+    }
     #' @description
     #' Wrapper around `get_html` that passes the output directly to `rvest::read_html`.
     #'
