@@ -212,7 +212,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
 
     # Create table to display list of bookmarks and their actions.
     output$bookmark_list <- renderUI({
-      rows <- lapply(rev(reactiveValuesToList(divs)), function(d) d)
+      rows <- rev(reactiveValuesToList(divs))
       if (length(rows) == 0L) {
         div(
           class = "manager_placeholder",

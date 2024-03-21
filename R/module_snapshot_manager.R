@@ -335,7 +335,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
 
     # Create table to display list of snapshots and their actions.
     output$snapshot_list <- renderUI({
-      rows <- lapply(rev(reactiveValuesToList(divs)), function(d) d)
+      rows <- rev(reactiveValuesToList(divs))
       if (length(rows) == 0L) {
         tags$div(
           class = "manager_placeholder",
