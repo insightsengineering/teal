@@ -123,7 +123,7 @@ testthat::test_that(
     )
 
     testthat::expect_equal(
-      app$get_onclick(phash(modal_btns$more$id)),
+      app$get_attr(phash(modal_btns$more$id), "onclick"),
       modal_btns$more$onclick
     )
 
