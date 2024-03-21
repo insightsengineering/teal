@@ -51,12 +51,10 @@ testthat::test_that("e2e: filtering a module-specific filter is refected in othe
   )
 
   app$navigate_teal_tab("Module_2")
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   app$set_active_filter_selection("iris", "Species", c("setosa"))
 
   app$navigate_teal_tab("Module_1")
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_equal(
     app$get_active_filter_selection("iris", "Species"),
@@ -92,12 +90,10 @@ testthat::test_that("e2e: filtering a module-specific filter is not refected in 
   )
 
   app$navigate_teal_tab("Module_2")
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   app$set_active_filter_selection("mtcars", "cyl", c("4"))
 
   app$navigate_teal_tab("Module_1")
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_equal(
     app$get_active_filter_selection("mtcars", "cyl"),
