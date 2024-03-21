@@ -208,14 +208,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
-      displayed_datasets_index <- self$get_js(
-        sprintf(
-          "Array.from(
-              document.querySelectorAll(\"#%s-active-filter_active_vars_contents > span\")
-          ).map((el) => window.getComputedStyle(el).display != \"none\");",
-          self$active_filters_ns()
+      displayed_datasets_index <- unlist(
+        self$get_js(
+          sprintf(
+            "Array.from(
+                document.querySelectorAll(\"#%s-active-filter_active_vars_contents > span\")
+            ).map((el) => window.getComputedStyle(el).display != \"none\");",
+            self$active_filters_ns()
+          )
         )
-      ) |> unlist()
+      )
 
       available_datasets <- self$get_text(
         sprintf(
@@ -237,49 +239,25 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       active_filters <- lapply(
         datasets,
         function(x) {
-          self$get_text(
+          var_names <- self$get_text(
             sprintf(
               "#%s-active-%s-filters .filter-card-varname",
               self$active_filters_ns(),
               x
             )
-          ) |>
+          ) %>%
             gsub(pattern = "\\s", replacement = "")
+          structure(
+            lapply(var_names, private$get_active_filter_selection, dataset_name = x),
+            names = var_names
+          )
         }
       )
       names(active_filters) <- datasets
-      if (!is.null(dataset_name)) {
-        active_filters <- active_filters[[dataset_name]]
+      if (is.null(dataset_name)) {
+        return(active_filters)
       }
-      active_filters
-    },
-    #' @description
-    #' Get the active filter values from the active filter selection of dataset from the filter panel.
-    #'
-    #' @param dataset_name (character) The name of the dataset to get the filter values from.
-    #' @param var_name (character) The name of the variable to get the filter values from.
-    #'
-    #' @return The value of the active filter selection.
-    get_active_filter_selection = function(dataset_name, var_name) {
-      checkmate::check_string(dataset_name)
-      checkmate::check_string(var_name)
-      input_id_prefix <- sprintf(
-        "%s-active-%s-filter-%s_%s-inputs",
-        self$active_filters_ns(),
-        dataset_name,
-        dataset_name,
-        var_name
-      )
-
-      # Find the type of filter (categorical or range)
-      supported_suffix <- c("selection", "selection_manual")
-      for (suffix in supported_suffix) {
-        if (!is.null(self$get_html(sprintf("#%s-%s", input_id_prefix, suffix)))) {
-          return(self$get_value(input = sprintf("%s-%s", input_id_prefix, suffix)))
-        }
-      }
-
-      NULL # If there are not any supported filters
+      active_filters[[dataset_name]]
     },
     #' @description
     #' Add a new variable from the dataset to be filtered.
@@ -404,6 +382,18 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       invisible(self)
     },
     #' @description
+    #' Extract `html` attribute (found by a `selector`).
+    #'
+    #' @param selector (`character(1)`) specifying the selector to be used to get the content of a specific node.
+    #' @param attribute (`character(1)`) name of an attribute to retrieve from a node specified by `selector`.
+    #'
+    #' @return The `character` vector.
+    get_attr = function(selector, attribute) {
+      self$get_html_rvest("html") %>%
+        rvest::html_nodes(selector) %>%
+        rvest::html_attr(attribute)
+    },
+    #' @description
     #' Wrapper around `get_html` that passes the output directly to `rvest::read_html`.
     #'
     #' @param selector `(character(1))` passed to `get_html`.
@@ -461,6 +451,34 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       } else {
         private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
       }
+    },
+    # @description
+    # Get the active filter values from the active filter selection of dataset from the filter panel.
+    #
+    # @param dataset_name (character) The name of the dataset to get the filter values from.
+    # @param var_name (character) The name of the variable to get the filter values from.
+    #
+    # @return The value of the active filter selection.
+    get_active_filter_selection = function(dataset_name, var_name) {
+      checkmate::check_string(dataset_name)
+      checkmate::check_string(var_name)
+      input_id_prefix <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name
+      )
+
+      # Find the type of filter (categorical or range)
+      supported_suffix <- c("selection", "selection_manual")
+      for (suffix in supported_suffix) {
+        if (!is.null(self$get_html(sprintf("#%s-%s", input_id_prefix, suffix)))) {
+          return(self$get_value(input = sprintf("%s-%s", input_id_prefix, suffix)))
+        }
+      }
+
+      NULL # If there are not any supported filters
     }
   )
 )

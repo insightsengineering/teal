@@ -35,10 +35,10 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-set_module_input}{\code{TealAppDriver$set_module_input()}}
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
-\item \href{#method-TealAppDriver-get_active_filter_selection}{\code{TealAppDriver$get_active_filter_selection()}}
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
+\item \href{#method-TealAppDriver-get_attr}{\code{TealAppDriver$get_attr()}}
 \item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
@@ -366,28 +366,6 @@ If \code{NULL}, the filter variables for all the datasets will be returned in a 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-get_active_filter_selection"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_filter_selection}{}}}
-\subsection{Method \code{get_active_filter_selection()}}{
-Get the active filter values from the active filter selection of dataset from the filter panel.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filter_selection(dataset_name, var_name)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataset_name}}{(character) The name of the dataset to get the filter values from.}
-
-\item{\code{var_name}}{(character) The name of the variable to get the filter values from.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The value of the active filter selection.
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-add_filter_var"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-add_filter_var}{}}}
 \subsection{Method \code{add_filter_var()}}{
@@ -457,6 +435,28 @@ Set the active filter values for a variable of a dataset in the active filter va
 }
 \subsection{Returns}{
 The \code{TealAppDriver} object invisibly.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-get_attr"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-get_attr}{}}}
+\subsection{Method \code{get_attr()}}{
+Extract \code{html} attribute (found by a \code{selector}).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_attr(selector, attribute)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{(\code{character(1)}) specifying the selector to be used to get the content of a specific node.}
+
+\item{\code{attribute}}{(\code{character(1)}) name of an attribute to retrieve from a node specified by \code{selector}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{character} vector.
 }
 }
 \if{html}{\out{<hr>}}
