@@ -367,6 +367,14 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return Nothing. Opens the underlying teal app in the browser.
     open_url = function() {
       browseURL(self$get_url())
+    },
+    #' @description
+    #' Wait unitl an output value is not one of `ignored` values `timeout` is reached.
+    #' This function will only access output value and its wrapper around `wait_for_value` method.
+    #' @param output_id (character) The shiny output id to get the value from.
+    wait_for_ouput_value = function(output_id, ...) {
+      checkmate::check_string(input_id)
+      self$wait_for_value(output = sprintf("%s-%s", self$active_module_ns(), output_id), ...)
     }
   ),
   # private members ----
