@@ -21,6 +21,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \itemize{
 \item \href{#method-TealAppDriver-new}{\code{TealAppDriver$new()}}
 \item \href{#method-TealAppDriver-wait_for_idle}{\code{TealAppDriver$wait_for_idle()}}
+\item \href{#method-TealAppDriver-click}{\code{TealAppDriver$click()}}
 \item \href{#method-TealAppDriver-expect_no_shiny_error}{\code{TealAppDriver$expect_no_shiny_error()}}
 \item \href{#method-TealAppDriver-expect_no_validation_error}{\code{TealAppDriver$expect_no_validation_error()}}
 \item \href{#method-TealAppDriver-expect_validation_error}{\code{TealAppDriver$expect_validation_error()}}
@@ -48,7 +49,6 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \if{html}{\out{
 <details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="click"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-click'><code>shinytest2::AppDriver$click()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_download"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_download'><code>shinytest2::AppDriver$expect_download()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_html"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_html'><code>shinytest2::AppDriver$expect_html()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_js'><code>shinytest2::AppDriver$expect_js()</code></a></span></li>
@@ -124,6 +124,23 @@ Set custom values for \code{duration} and \code{timeout} in parent \code{\link{A
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{duration, timeout}}{(\code{numeric(1)}) passed to parent \code{\link{AppDriver}} \code{waif_for_idle()} method.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-click"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-click}{}}}
+\subsection{Method \code{click()}}{
+Append parent \code{\link{AppDriver}} \code{click} method with a call to \code{waif_for_idle()} method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$click(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{arguments passed to parent \code{\link{AppDriver}} \code{click()} method.}
 }
 \if{html}{\out{</div>}}
 }

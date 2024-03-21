@@ -14,8 +14,6 @@ testthat::test_that("e2e: teal_slices filters are initialized when global filter
     )
   )
 
-  app$wait_for_idle(timeout = default_idle_timeout)
-
   testthat::expect_identical(
     names(app$get_active_data_filters("iris")),
     "Species"
@@ -63,7 +61,6 @@ testthat::test_that("e2e: teal_slices filters are initialized when module specif
       )
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_identical(
     names(app$get_active_data_filters("iris")),

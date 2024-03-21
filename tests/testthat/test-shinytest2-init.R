@@ -23,7 +23,6 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   )
 
   app$click(selector = button_selector)
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Check header and title content.
   testthat::expect_equal(

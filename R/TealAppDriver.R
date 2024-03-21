@@ -56,6 +56,13 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       super$wait_for_idle(duration = duration, timeout = timeout)
     },
     #' @description
+    #' Append parent [`AppDriver`] `click` method with a call to `waif_for_idle()` method.
+    #' @param ... arguments passed to parent [`AppDriver`] `click()` method.
+    click = function(...) {
+      super$click(...)
+      wait_for_idle()
+    },
+    #' @description
     #' Check if the app has shiny errors. This checks for global shiny errors.
     #' Note that any shiny errors dependent on shiny server render will only be captured after the teal module tab
     #' is visited because shiny will not trigger server computations when the tab is invisible.
