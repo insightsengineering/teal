@@ -1,11 +1,11 @@
 testthat::test_that("e2e: reporter tab is created when a module has reporter", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = report_module(label = "Module with Reporter")
   )
 
-  teal_tabs <- app$get_html(selector = "#teal-main_ui-root-active_tab") %>%
-    rvest::read_html() %>%
+  teal_tabs <- app$get_html_rvest(selector = "#teal-main_ui-root-active_tab") %>%
     rvest::html_elements("a")
   tab_names <- setNames(
     rvest::html_attr(teal_tabs, "data-value"),
@@ -20,12 +20,12 @@ testthat::test_that("e2e: reporter tab is created when a module has reporter", {
 })
 
 testthat::test_that("e2e: reporter tab is not created when a module has no reporter", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-  teal_tabs <- app$get_html(selector = "#teal-main_ui-root-active_tab") %>%
-    rvest::read_html() %>%
+  teal_tabs <- app$get_html_rvest(selector = "#teal-main_ui-root-active_tab") %>%
     rvest::html_elements("a")
   tab_names <- setNames(
     rvest::html_attr(teal_tabs, "data-value"),
@@ -41,6 +41,7 @@ testthat::test_that("e2e: reporter tab is not created when a module has no repor
 })
 
 testthat::test_that("e2e: adding a report card in a module adds it in the report previewer tab", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = report_module(label = "Module with Reporter")
