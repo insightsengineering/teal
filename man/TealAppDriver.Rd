@@ -497,7 +497,7 @@ Nothing. Opens the underlying teal app in the browser.
 \if{html}{\out{<a id="method-TealAppDriver-wait_for_ouput_value"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-wait_for_ouput_value}{}}}
 \subsection{Method \code{wait_for_ouput_value()}}{
-Wait unitl an output value is not one of \code{ignored} values \code{timeout} is reached.
+Wait until an output value is not one of \code{ignored} values \code{timeout} is reached.
 This function will only access output value and its wrapper around \code{wait_for_value} method.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$wait_for_ouput_value(output_id, ...)}\if{html}{\out{</div>}}
