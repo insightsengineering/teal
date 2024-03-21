@@ -133,7 +133,7 @@ testthat::test_that(
     )
 
     testthat::expect_equal(
-      app$get_onclick(phash(modal_btns$reject$id)),
+      app$get_attr(phash(modal_btns$reject$id), "onclick"),
       modal_btns$reject$onclick
     )
 
