@@ -147,6 +147,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       sprintf("#%s-%s", self$active_module_ns(), element)
     },
     #' @description
+    #' Get the text of the active shiny name space bound with a custom `element` name.
+    #'
+    #' @param element `character(1)` the text of the custom element name.
+    #'
+    #' @return (`string`) The text of the active shiny name space of the component bound with the input `element`.
+    active_module_element_text = function(element) {
+      checkmate::assert_string(element)
+      self$get_text(self$active_module_element(element))
+    },
+    #' @description
     #' Get the active shiny name space for interacting with the filter panel.
     #'
     #' @return (`string`) The active shiny name space of the component.
@@ -198,14 +208,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
-      displayed_datasets_index <- self$get_js(
-        sprintf(
-          "Array.from(
-              document.querySelectorAll(\"#%s-active-filter_active_vars_contents > span\")
-          ).map((el) => window.getComputedStyle(el).display != \"none\");",
-          self$active_filters_ns()
+      displayed_datasets_index <- unlist(
+        self$get_js(
+          sprintf(
+            "Array.from(
+                document.querySelectorAll(\"#%s-active-filter_active_vars_contents > span\")
+            ).map((el) => window.getComputedStyle(el).display != \"none\");",
+            self$active_filters_ns()
+          )
         )
-      ) |> unlist()
+      )
 
       available_datasets <- self$get_text(
         sprintf(
@@ -227,45 +239,25 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       active_filters <- lapply(
         datasets,
         function(x) {
-          self$get_text(
+          var_names <- self$get_text(
             sprintf(
               "#%s-active-%s-filters .filter-card-varname",
               self$active_filters_ns(),
               x
             )
-          ) |>
+          ) %>%
             gsub(pattern = "\\s", replacement = "")
+          structure(
+            lapply(var_names, private$get_active_filter_selection, dataset_name = x),
+            names = var_names
+          )
         }
       )
       names(active_filters) <- datasets
-      if (!is.null(dataset_name)) {
-        active_filters <- active_filters[[dataset_name]]
+      if (is.null(dataset_name)) {
+        return(active_filters)
       }
-      active_filters
-    },
-    #' @description
-    #' Get the active filter values from the active filter selection of dataset from the filter panel.
-    #'
-    #' @param dataset_name (character) The name of the dataset to get the filter values from.
-    #' @param var_name (character) The name of the variable to get the filter values from.
-    #' @param is_numeric (logical) If the variable is numeric or not.
-    #'
-    #' @return The value of the active filter selection.
-    get_active_filter_selection = function(dataset_name, var_name, is_numeric = FALSE) {
-      checkmate::check_string(dataset_name)
-      checkmate::check_string(var_name)
-      checkmate::check_flag(is_numeric)
-      selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-      self$get_value(
-        input = sprintf(
-          "%s-active-%s-filter-%s_%s-inputs-%s",
-          self$active_filters_ns(),
-          dataset_name,
-          dataset_name,
-          var_name,
-          selection_suffix
-        )
-      )
+      active_filters[[dataset_name]]
     },
     #' @description
     #' Add a new variable from the dataset to be filtered.
@@ -330,28 +322,76 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param dataset_name (character) The name of the dataset to set the filter value for.
     #' @param var_name (character) The name of the variable to set the filter value for.
     #' @param input The value to set the filter to.
-    #' @param is_numeric (logical) If the variable is numeric or not.
+    #' @param type (character) The type of the filter to get the value from. Default is `categorical`.
     #'
     #' @return The `TealAppDriver` object invisibly.
-    set_active_filter_selection = function(dataset_name, var_name, input, is_numeric = FALSE) {
+    set_active_filter_selection = function(dataset_name, var_name, input) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
       checkmate::check_string(input)
-      checkmate::check_flag(is_numeric)
 
-      selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-      self$set_input(
-        sprintf(
-          "%s-active-%s-filter-%s_%s-inputs-%s",
-          self$active_filters_ns(),
-          dataset_name,
-          dataset_name,
-          var_name,
-          selection_suffix
-        ),
-        input
+      input_id_prefix <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name
       )
+
+      # Find the type of filter (based on filter panel)
+      supported_suffix <- c("selection", "selection_manual")
+      slices_suffix <- supported_suffix[
+        match(
+          TRUE,
+          vapply(
+            supported_suffix,
+            function(suffix) {
+              !is.null(self$get_html(sprintf("#%s-%s", input_id_prefix, suffix)))
+            },
+            logical(1)
+          )
+        )
+      ]
+
+      # Generate correct namespace
+      slices_input_id <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs-%s",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name,
+        slices_suffix
+      )
+
+      if (identical(slices_suffix, "selection_manual")) {
+        checkmate::assert_numeric(input, len = 2)
+        self$run_js(
+          sprintf(
+            "Shiny.setInputValue('%s:sw.numericRange', [%f, %f], {priority: 'event'})",
+            slices_input_id,
+            input[[1]],
+            input[[2]]
+          )
+        )
+      } else if (identical(slices_suffix, "selection")) {
+        self$set_input(slices_input_id, input)
+      } else {
+        stop("Filter selection set not supported for this slice.")
+      }
+
       invisible(self)
+    },
+    #' @description
+    #' Extract `html` attribute (found by a `selector`).
+    #'
+    #' @param selector (`character(1)`) specifying the selector to be used to get the content of a specific node.
+    #' @param attribute (`character(1)`) name of an attribute to retrieve from a node specified by `selector`.
+    #'
+    #' @return The `character` vector.
+    get_attr = function(selector, attribute) {
+      self$get_html_rvest("html") %>%
+        rvest::html_nodes(selector) %>%
+        rvest::html_attr(attribute)
     },
     #' @description
     #' Wrapper around `get_html` that passes the output directly to `rvest::read_html`.
@@ -419,6 +459,34 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       } else {
         private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
       }
+    },
+    # @description
+    # Get the active filter values from the active filter selection of dataset from the filter panel.
+    #
+    # @param dataset_name (character) The name of the dataset to get the filter values from.
+    # @param var_name (character) The name of the variable to get the filter values from.
+    #
+    # @return The value of the active filter selection.
+    get_active_filter_selection = function(dataset_name, var_name) {
+      checkmate::check_string(dataset_name)
+      checkmate::check_string(var_name)
+      input_id_prefix <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name
+      )
+
+      # Find the type of filter (categorical or range)
+      supported_suffix <- c("selection", "selection_manual")
+      for (suffix in supported_suffix) {
+        if (!is.null(self$get_html(sprintf("#%s-%s", input_id_prefix, suffix)))) {
+          return(self$get_value(input = sprintf("%s-%s", input_id_prefix, suffix)))
+        }
+      }
+
+      NULL # If there are not any supported filters
     }
   )
 )
