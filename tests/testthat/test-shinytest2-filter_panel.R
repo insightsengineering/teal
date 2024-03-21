@@ -1,4 +1,5 @@
 testthat::test_that("e2e: module content is updated when a data is filtered in filter panel", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
@@ -27,6 +28,7 @@ testthat::test_that("e2e: module content is updated when a data is filtered in f
 })
 
 testthat::test_that("e2e: filtering a module-specific filter is refected in other shared module", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
@@ -69,6 +71,7 @@ testthat::test_that("e2e: filtering a module-specific filter is refected in othe
 })
 
 testthat::test_that("e2e: filtering a module-specific filter is not refected in other unshared modules", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
