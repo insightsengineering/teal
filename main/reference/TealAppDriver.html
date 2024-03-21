@@ -12,7 +12,7 @@ Drive a teal application"><!-- mathjax --><script src="https://cdnjs.cloudflare.
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9013</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9014</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,23 +66,6 @@ Drive a teal application"><!-- mathjax --><script src="https://cdnjs.cloudflare.
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2-rc1">v0.15.2-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2">v0.15.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1">v0.15.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -151,6 +134,7 @@ driving a teal application for performing interactions for <code>shinytest2</cod
 <li><p><a href="#method-TealAppDriver-add_filter_var"><code>TealAppDriver$add_filter_var()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-remove_filter_var"><code>TealAppDriver$remove_filter_var()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-set_active_filter_selection"><code>TealAppDriver$set_active_filter_selection()</code></a></p></li>
+<li><p><a href="#method-TealAppDriver-get_attr"><code>TealAppDriver$get_attr()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-get_html_rvest"><code>TealAppDriver$get_html_rvest()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-open_url"><code>TealAppDriver$open_url()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-clone"><code>TealAppDriver$clone()</code></a></p></li>
@@ -547,15 +531,39 @@ If <code>NULL</code>, all the filter variables of the dataset will be removed.</
 <p>The <code>TealAppDriver</code> object invisibly.</p>
 </div>
 
-</div><p></p><hr><a id="method-TealAppDriver-get_html_rvest"></a><div class="section">
-<h3 id="method-get-html-rvest-">Method <code>get_html_rvest()</code><a class="anchor" aria-label="anchor" href="#method-get-html-rvest-"></a></h3>
-<p>Wrapper around <code>get_html</code> that passes the output directly to <code><a href="http://xml2.r-lib.org/reference/read_xml.html" class="external-link">rvest::read_html</a></code>.</p><div class="section">
+</div><p></p><hr><a id="method-TealAppDriver-get_attr"></a><div class="section">
+<h3 id="method-get-attr-">Method <code>get_attr()</code><a class="anchor" aria-label="anchor" href="#method-get-attr-"></a></h3>
+<p>Extract <code>html</code> attribute (found by a <code>selector</code>).</p><div class="section">
 <h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_html_rvest</span><span class="op">(</span><span class="va">selector</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_attr</span><span class="op">(</span><span class="va">selector</span>, <span class="va">attribute</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-12">Arguments<a class="anchor" aria-label="anchor" href="#arguments-12"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>selector</code></dt>
+<dd><p>(<code>character(1)</code>) specifying the selector to be used to get the content of a specific node.</p></dd>
+
+
+<dt><code>attribute</code></dt>
+<dd><p>(<code>character(1)</code>) name of an attribute to retrieve from a node specified by <code>selector</code>.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+<div class="section">
+<h4 id="returns-14">Returns<a class="anchor" aria-label="anchor" href="#returns-14"></a></h4>
+<p>The <code>character</code> vector.</p>
+</div>
+
+</div><p></p><hr><a id="method-TealAppDriver-get_html_rvest"></a><div class="section">
+<h3 id="method-get-html-rvest-">Method <code>get_html_rvest()</code><a class="anchor" aria-label="anchor" href="#method-get-html-rvest-"></a></h3>
+<p>Wrapper around <code>get_html</code> that passes the output directly to <code><a href="http://xml2.r-lib.org/reference/read_xml.html" class="external-link">rvest::read_html</a></code>.</p><div class="section">
+<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_html_rvest</span><span class="op">(</span><span class="va">selector</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>selector</code></dt>
 <dd><p><code>(character(1))</code> passed to <code>get_html</code>.</p></dd>
 
@@ -563,7 +571,7 @@ If <code>NULL</code>, all the filter variables of the dataset will be removed.</
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-14">Returns<a class="anchor" aria-label="anchor" href="#returns-14"></a></h4>
+<h4 id="returns-15">Returns<a class="anchor" aria-label="anchor" href="#returns-15"></a></h4>
 <p>An XML document.
 Wrapper around <code>get_url()</code> method that opens the app in the browser.</p>
 </div>
@@ -572,24 +580,24 @@ Wrapper around <code>get_url()</code> method that opens the app in the browser.<
 <h3 id="method-open-url-">Method <code>open_url()</code><a class="anchor" aria-label="anchor" href="#method-open-url-"></a></h3>
 
 <div class="section">
-<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
+<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">open_url</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="returns-15">Returns<a class="anchor" aria-label="anchor" href="#returns-15"></a></h4>
+<h4 id="returns-16">Returns<a class="anchor" aria-label="anchor" href="#returns-16"></a></h4>
 <p>Nothing. Opens the underlying teal app in the browser.</p>
 </div>
 
 </div><p></p><hr><a id="method-TealAppDriver-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
+<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
+<h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
