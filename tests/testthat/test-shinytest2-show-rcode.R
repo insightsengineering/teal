@@ -1,4 +1,5 @@
 testthat::test_that("e2e: teal app initializes with Show R Code modal", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")

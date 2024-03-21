@@ -1,4 +1,5 @@
 testthat::test_that("e2e: teal_data_module will have a delayed load of datasets", {
+  skip_if_too_deep(5)
   tdm <- teal_data_module(
     ui = function(id) {
       ns <- shiny::NS(id)
@@ -36,6 +37,7 @@ testthat::test_that("e2e: teal_data_module will have a delayed load of datasets"
 })
 
 testthat::test_that("e2e: teal_data_module shows validation errors", {
+  skip_if_too_deep(5)
   tdm <- teal_data_module(
     ui = function(id) {
       ns <- shiny::NS(id)
@@ -73,6 +75,7 @@ testthat::test_that("e2e: teal_data_module shows validation errors", {
 })
 
 testthat::test_that("e2e: teal_data_module inputs change teal_data object that is passed to teal main UI", {
+  skip_if_too_deep(5)
   tdm <- teal_data_module(
     ui = function(id) {
       ns <- shiny::NS(id)
