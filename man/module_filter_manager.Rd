@@ -3,18 +3,20 @@
 \name{module_filter_manager}
 \alias{module_filter_manager}
 \alias{filter_manager_ui}
+\alias{filter_manager}
+\alias{filter_manager_module}
 \alias{filter_manager_srv}
 \title{Manage multiple \code{FilteredData} objects}
 \usage{
 filter_manager_ui(id)
 
-filter_manager_srv(id, filtered_data_list, filter)
+filter_manager_srv(id, datasets, filter)
 }
 \arguments{
 \item{id}{(\code{character(1)})
-\code{shiny} module id.}
+\code{shiny} module instance id.}
 
-\item{filtered_data_list}{(named \code{list})
+\item{datasets}{(named \code{list})
 A list, possibly nested, of \code{FilteredData} objects.
 Each \code{FilteredData} will be served to one module in the \code{teal} application.
 The structure of the list must reflect the nesting of modules in tabs
@@ -24,7 +26,19 @@ and the names of the list must match the labels of their respective modules.}
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
-A list of \code{reactive}s, each holding a \code{teal_slices}, as returned by \code{filter_manager_module_srv}.
+A \code{list} containing:
+
+objects used by other manager modules
+\itemize{
+\item \code{datasets_flat}: named list of \code{FilteredData} objects,
+\item \code{mapping_matrix}: \code{reactive} containing a \code{data.frame},
+\item \code{slices_global}: \code{reactiveVal} containing a \code{teal_slices} object,
+}
+
+objects used for testing
+\itemize{
+\item modules_out: \code{list} of \code{reactive}s, each holding a \code{teal_slices}, as returned by \code{filter_manager_module_srv}.
+}
 }
 \description{
 Oversee filter states across the entire application.
