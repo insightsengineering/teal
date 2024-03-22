@@ -143,6 +143,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
       }
     })
     app_session$onRestored(function(state) {
+      browser()
       # Restore filter state.
       logger::log_trace("bookmark_manager_srv@onRestored: restoring filter state")
       snapshot <- state$values$filter_state_on_bookmark
@@ -225,4 +226,18 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
 
     bookmark_history
   })
+}
+
+
+restoreValue <- function(object_name, default) {
+  session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
+  if (isTRUE(session$restoreContext$active)) {
+    if (exists(object_name, session$restoreContext$values, inherits = FALSE)) {
+      session$restoreContext$values[[object_name]]
+    } else {
+      default
+    }
+  } else {
+    default
+  }
 }

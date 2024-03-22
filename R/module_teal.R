@@ -163,7 +163,16 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       env$progress$set(0.25, message = "Setting data")
 
       # Create list of `FilteredData` objects that reflects structure of `modules`.
-      modules_datasets(teal_data_rv(), modules, filter, teal_data_to_filtered_data(teal_data_rv()))
+      restored_filter <- restoreValue("filter_state_on_bookmark", filter)
+      if (!is.teal_slices(restored_filter)) {
+        restored_filter <- as.teal_slices(restored_filter)
+      }
+      modules_datasets(
+        teal_data_rv(),
+        modules,
+        restored_filter,
+        teal_data_to_filtered_data(teal_data_rv())
+      )
     })
 
     # Replace splash / welcome screen once data is loaded ----
