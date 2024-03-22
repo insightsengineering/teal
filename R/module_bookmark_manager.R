@@ -262,3 +262,111 @@ restoreValue <- function(value, default) { # nolint: object_name.
     default
   }
 }
+
+#' Compare bookmarks.
+#'
+#' Test if two bookmarks store identical state.
+#'
+#' `input` environments are compared one variable at a time and if not identical,
+#' values in both bookmarks are reported. States of `datatable`s are stripped
+#' of the `time` element before comparing because the time stamp is always different.
+#' The contents themselves are not printed as they are large and the contents are not informative.
+#' Elements present in one bookmark and absent in the other are also reported.
+#' Differences are printed as messages.
+#'
+#' `values` environments are compared with `all.equal`.
+#'
+#' @section How to use:
+#' Open an application, change relevant inputs (typically, all of them), and create a bookmark.
+#' Then open that bookmark and immediately create a bookmark of that.
+#' If restoring bookmarks occurred properly, the two bookmarks should store the same state.
+#'
+#'
+#' @param book1,book2 bookmark directories stored in `shiny_bookmarks/`;
+#'                    default to the two most recently modified directories
+#'
+#' @return
+#' Invisible `NULL` if bookmarks are identical or if there are no bookmarks to test.
+#' `FALSE` if inconsistencies are detected.
+#'
+#' @keywords internal
+#'
+bookmarks_identical <- function(book1, book2) {
+  if (!dir.exists("shiny_bookmarks")) {
+    message("no bookmark directory")
+    return(invisible(NULL))
+  }
+
+  ans <- TRUE
+
+  if (missing(book1) && missing(book2)) {
+    dirs <- list.dirs("shiny_bookmarks", recursive = FALSE)
+    bookmarks_sorted <- basename(rev(dirs[order(file.mtime(dirs))]))
+    if (length(bookmarks_sorted) < 2L) {
+      message("no bookmarks to compare")
+      return(invisible(NULL))
+    }
+    book1 <- bookmarks_sorted[2L]
+    book2 <- bookmarks_sorted[1L]
+  } else {
+    if (!dir.exists(file.path("shiny_bookmarks", book1))) stop(book1, " not found")
+    if (!dir.exists(file.path("shiny_bookmarks", book2))) stop(book2, " not found")
+  }
+
+  book1_input <- readRDS(file.path("shiny_bookmarks", book1, "input.rds"))
+  book2_input <- readRDS(file.path("shiny_bookmarks", book2, "input.rds"))
+
+  elements_common <- intersect(names(book1_input), names(book2_input))
+  dt_states <- grepl("_state$", elements_common)
+  if (any(dt_states)) {
+    for (el in elements_common[dt_states]) {
+      book1_input[[el]][["time"]] <- NULL
+      book2_input[[el]][["time"]] <- NULL
+    }
+  }
+
+  identicals <- mapply(identical, book1_input[elements_common], book2_input[elements_common])
+  non_identicals <- names(identicals[!identicals])
+  compares <- sprintf("$ %s:\t%s --- %s", non_identicals, book1_input[non_identicals], book2_input[non_identicals])
+  if (length(compares) != 0L) {
+    message("common elements not identical: \n", paste(compares, collapse = "\n"))
+    ans <- FALSE
+  }
+
+  elements_boook1 <- setdiff(names(book1_input), names(book2_input))
+  if (length(elements_boook1) != 0L) {
+    dt_states <- grepl("_state$", elements_boook1)
+    if (any(dt_states)) {
+      for (el in elements_boook1[dt_states]) {
+        if (is.list(book1_input[[el]])) book1_input[[el]] <- "--- data table state ---"
+      }
+    }
+    excess1 <- sprintf("$ %s:\t%s", elements_boook1, book1_input[elements_boook1])
+    message("elements only in book1: \n", paste(excess1, collapse = "\n"))
+    ans <- FALSE
+  }
+
+  elements_boook2 <- setdiff(names(book2_input), names(book1_input))
+  if (length(elements_boook2) != 0L) {
+    dt_states <- grepl("_state$", elements_boook1)
+    if (any(dt_states)) {
+      for (el in elements_boook1[dt_states]) {
+        if (is.list(book2_input[[el]])) book2_input[[el]] <- "--- data table state ---"
+      }
+    }
+    excess2 <- sprintf("$ %s:\t%s", elements_boook2, book2_input[elements_boook2])
+    message("elements only in book2: \n", paste(excess2, collapse = "\n"))
+    ans <- FALSE
+  }
+
+  book1_values <- readRDS(file.path("shiny_bookmarks", book1, "values.rds"))
+  book2_values <- readRDS(file.path("shiny_bookmarks", book2, "values.rds"))
+
+  if (!isTRUE(all.equal(book1_values, book2_values))) {
+    message("different values detected")
+    ans <- FALSE
+  }
+
+  if (ans) message("perfect!")
+  invisible(NULL)
+}
