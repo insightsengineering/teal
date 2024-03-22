@@ -374,9 +374,9 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         checkmate::assert_numeric(input, len = 2)
         extra_formals <- formals(app$set_inputs)
 
-        checkmate::assert_choice(dots$priority_, formals(self$set_inputs))
-
         dots <- rlang::list2(...)
+        
+        checkmate::assert_choice(dots$priority_, formals(self$set_inputs))
         self$run_js(
           sprintf(
             "Shiny.setInputValue('%s:sw.numericRange', [%f, %f], {priority: '%s'})",
