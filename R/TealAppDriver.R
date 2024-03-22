@@ -395,7 +395,9 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       invisible(self)
     },
     #' @description
-    #' Click on the filter manager show button.
+    #' Open one of the managers.
+    #'
+    #' @param manager (character) The manager to open. Default is `snapshot`.
     #'
     #' @return The `TealAppDriver` object invisibly.
     open_manager_modal = function(manager = c("snapshot", "filter", "bookmark")) {

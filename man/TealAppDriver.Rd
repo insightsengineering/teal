@@ -30,6 +30,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-active_module_element}{\code{TealAppDriver$active_module_element()}}
 \item \href{#method-TealAppDriver-active_module_element_text}{\code{TealAppDriver$active_module_element_text()}}
 \item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
+\item \href{#method-TealAppDriver-wunder_bar_ns}{\code{TealAppDriver$wunder_bar_ns()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
 \item \href{#method-TealAppDriver-set_module_input}{\code{TealAppDriver$set_module_input()}}
@@ -38,6 +39,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
+\item \href{#method-TealAppDriver-open_manager_modal}{\code{TealAppDriver$open_manager_modal()}}
 \item \href{#method-TealAppDriver-get_attr}{\code{TealAppDriver$get_attr()}}
 \item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
@@ -273,6 +275,27 @@ Get the active shiny name space for interacting with the filter panel.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-wunder_bar_ns"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-wunder_bar_ns}{}}}
+\subsection{Method \code{wunder_bar_ns()}}{
+Get the active shiny name space for interacting with the wunder_bar elements.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$wunder_bar_ns(id = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{(character) The id of the wunder_bar element. Default is \code{NULL} and returns
+the namespace to wunder bar itself.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{string}) The active shiny name space of the component.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_module_input"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_module_input}{}}}
 \subsection{Method \code{get_active_module_input()}}{
@@ -430,6 +453,26 @@ Set the active filter values for a variable of a dataset in the active filter va
 \item{\code{input}}{The value to set the filter to.}
 
 \item{\code{type}}{(character) The type of the filter to get the value from. Default is \code{categorical}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-open_manager_modal"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-open_manager_modal}{}}}
+\subsection{Method \code{open_manager_modal()}}{
+Open one of the managers.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$open_manager_modal(manager = c("snapshot", "filter", "bookmark"))}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{manager}}{(character) The manager to open. Default is \code{snapshot}.}
 }
 \if{html}{\out{</div>}}
 }
