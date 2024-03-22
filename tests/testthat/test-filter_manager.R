@@ -41,11 +41,11 @@ testthat::test_that("filter_manager_srv initializes properly processes input arg
     app = filter_manager_srv,
     args = list(
       id = "test",
-      filtered_data_list = filtered_data_list,
+      datasets = filtered_data_list,
       filter = filter_global
     ),
     expr = {
-      testthat::expect_named(filtered_data_list, c("m1", "m2", "m3"))
+      testthat::expect_named(datasets_flat, c("m1", "m2", "m3"))
 
       testthat::expect_identical(slices_global(), filter)
     }
@@ -56,11 +56,11 @@ testthat::test_that("filter_manager_srv initializes properly processes input arg
     app = filter_manager_srv,
     args = list(
       id = "test",
-      filtered_data_list = filtered_data_list,
+      datasets = filtered_data_list,
       filter = filter_modular
     ),
     expr = {
-      testthat::expect_named(filtered_data_list, "global_filters")
+      testthat::expect_named(datasets_flat, "Global Filters")
 
       testthat::expect_identical(slices_global(), filter)
     }

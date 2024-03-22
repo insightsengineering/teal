@@ -22,7 +22,7 @@ stores \code{teal_slices} with all available filters; allows the following actio
 }}
 }
 \value{
-A \code{reactive} expression containing the slices active in this module.
+A \code{reactive} expression containing a \code{teal_slices} with the slices active in this module.
 }
 \description{
 Tracks filter states in a single module.

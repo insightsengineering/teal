@@ -35,7 +35,7 @@
 #'   string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
 #'
-#' @return Named list with server and UI functions.
+#' @return Named list containing server and UI functions.
 #'
 #' @export
 #'
@@ -221,8 +221,9 @@ init <- function(data,
   # Note regarding case `id = character(0)`:
   # rather than creating a submodule of this module, we directly modify
   # the UI and server with `id = character(0)` and calling the server function directly
+  # Note: UI must be a function to support bookmarking.
   res <- list(
-    ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
+    ui = function(request) ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
       if (!is.null(landing_module)) {
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
