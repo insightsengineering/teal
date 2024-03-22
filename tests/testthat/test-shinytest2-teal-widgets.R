@@ -153,7 +153,7 @@ testthat::test_that(
 
     testthat::expect_equal(
       app$active_module_element("downbutton-file_name", hash = FALSE) %>%
-      app$get_value(input = .),
+        app$get_value(input = .),
       "table_20240322_161122"
     )
 
