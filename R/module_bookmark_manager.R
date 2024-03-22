@@ -239,6 +239,10 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
 #' because the app becomes ready before modules execute and callbacks are registered.
 #' In those cases the stored values can still be recovered from the `session` object directly.
 #'
+#' @section Use in modules:
+#' Variable names in the `values` environment are prefixed with module name space names,
+#' therefore, when using this function in modules, `value` must be run through the name space function.
+#'
 #' @param value (`character(1)`) name of value to restore
 #' @param default fallback value
 #'
