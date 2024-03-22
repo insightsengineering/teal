@@ -206,7 +206,6 @@ module <- function(label = "module",
     datanames <- filters
     msg <-
       "The `filters` argument is deprecated and will be removed in the next release. Please use `datanames` instead."
-    logger::log_warn(msg)
     warning(msg)
   }
 

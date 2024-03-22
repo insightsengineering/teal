@@ -1,4 +1,5 @@
 testthat::test_that("e2e: teal app initializes with no errors", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
@@ -9,6 +10,7 @@ testthat::test_that("e2e: teal app initializes with no errors", {
 })
 
 testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
@@ -65,6 +67,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
 })
 
 testthat::test_that("e2e: init creates UI containing specified title, favicon, header and footer", {
+  skip_if_too_deep(5)
   app_title <- "Custom Teal App Title"
   app_favicon <- "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
   app_header <- "Custom Teal App Header"

@@ -1,4 +1,5 @@
 testthat::test_that("e2e: the module server logic is only triggered when the teal module becomes active", {
+  skip_if_too_deep(5)
   value_export_module <- function(label = "custom module") {
     module(
       label = label,
@@ -37,6 +38,7 @@ testthat::test_that("e2e: the module server logic is only triggered when the tea
 
 
 testthat::test_that("e2e: filter panel only shows the data supplied using datanames", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
@@ -53,6 +55,7 @@ testthat::test_that("e2e: filter panel only shows the data supplied using datana
 })
 
 testthat::test_that("e2e: filter panel shows all the datasets when datanames is all", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
@@ -69,6 +72,7 @@ testthat::test_that("e2e: filter panel shows all the datasets when datanames is 
 })
 
 testthat::test_that("e2e: filter panel is not displayed when datanames is NULL", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
@@ -88,6 +92,7 @@ testthat::test_that("e2e: filter panel is not displayed when datanames is NULL",
 })
 
 testthat::test_that("e2e: all the nested teal modules are initiated as expected", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
