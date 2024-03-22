@@ -219,9 +219,52 @@ testthat::test_that(
 
 
 testthat::test_that(
-  "e2e: teal.widgets::plot_with_settings is initialized",
+  "e2e: teal.widgets::plot_with_settings is initialized with proper plot and buttons",
   {
     skip_if_too_deep(5)
+    # This should probably be moved to teal.widgets directly.
+    testthat::skip_if_not_installed(c("ggplot2"))
+    app <- TealAppDriver$new(
+      data = simple_teal_data(),
+      modules = modules(
+        module(
+          label = "Module with plot_with_settings",
+          ui = function(id) {
+            teal.widgets::plot_with_settings_ui(id = id)
+          },
+          server <- function(id, input, output, session) {
+            plot_r <- reactive({
+                ggplot2::qplot(x = faithful$waiting, y = faithful$eruptions)
+            })
 
+            teal.widgets::plot_with_settings_srv(id = id, plot_r = plot_r)
+          }
+        )
+      )
+    )
+
+    app$wait_for_idle(timeout = default_idle_timeout)
+
+    # Check there is an image.
+
+    # Check there are 3 buttons.
+
+    # Check content of the first button.
+
+    # Check content of the second button.
+
+    # Check content of the third button.
+
+
+    # RUN MORE TESTS FOR OTHER PARAMETERS of plot_with_settings_srv
+    # height = c(600, 200, 2000),
+    # width = NULL,
+    # show_hide_signal = reactive(TRUE),
+    # brushing = FALSE,
+    # clicking = FALSE,
+    # dblclicking = FALSE,
+    # hovering = FALSE,
+    # graph_align = "left"
+    app$stop()
   }
 )
