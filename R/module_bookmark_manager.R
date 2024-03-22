@@ -143,7 +143,6 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
       }
     })
     app_session$onRestored(function(state) {
-      browser()
       # Restore filter state.
       logger::log_trace("bookmark_manager_srv@onRestored: restoring filter state")
       snapshot <- state$values$filter_state_on_bookmark
