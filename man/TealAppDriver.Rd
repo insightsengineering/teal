@@ -225,13 +225,15 @@ Get the active shiny name space for interacting with the module content.
 \subsection{Method \code{active_module_element()}}{
 Get the active shiny name space bound with a custom \code{element} name.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_module_element(element)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_module_element(element, hash = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{element}}{\code{character(1)} custom element name.}
+\item{\code{element}}{(\code{character(1)}) custom element name.}
+
+\item{\code{hash}}{(\code{logical(1)}) whether to prepend the name with \verb{#} sign.}
 }
 \if{html}{\out{</div>}}
 }

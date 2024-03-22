@@ -139,12 +139,15 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Get the active shiny name space bound with a custom `element` name.
     #'
-    #' @param element `character(1)` custom element name.
+    #' @param element (`character(1)`) custom element name.
+    #' @param hash (`logical(1)`) whether to prepend the name with `#` sign.
     #'
     #' @return (`string`) The active shiny name space of the component bound with the input `element`.
-    active_module_element = function(element) {
+    active_module_element = function(element, hash = TRUE) {
       checkmate::assert_string(element)
-      sprintf("#%s-%s", self$active_module_ns(), element)
+      checkmate::assert_flag(hash)
+      fmt <- if (hash) "#%s-%s" else "%s-%s"
+      sprintf(fmt, self$active_module_ns(), element)
     },
     #' @description
     #' Get the text of the active shiny name space bound with a custom `element` name.

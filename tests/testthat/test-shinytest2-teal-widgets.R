@@ -151,13 +151,11 @@ testthat::test_that(
       "File name (without extension)"
     )
 
-    # QUESTION - NEED HELP
-    # How to get
-    # value="table_20240321_142134"
-    # out of
-    # <input id="teal-main_ui-root-module_with_table_with_settings-module-downbutton-file_name" type="text" class="shiny-input-text form-control shinyjs-resettable shiny-bound-input" value="table_20240321_142134" data-shinyjs-resettable-id="teal-main_ui-root-module_with_table_with_settings-module-downbutton-file_name" data-shinyjs-resettable-type="Text" data-shinyjs-resettable-value="table_20240321_142134">
-    # for
-    # app$get_html_rvest(app$active_module_element("downbutton-file_name"))
+    testthat::expect_equal(
+      app$active_module_element("downbutton-file_name", hash = FALSE) %>%
+      app$get_value(input = .),
+      "table_20240322_161122"
+    )
 
     pagination <- "downbutton-dwnl .paginate-ui .form-group.shiny-input-container"
     pagination_class <- gsub("#", "#dropdown-menu-", app$active_module_element(pagination))
