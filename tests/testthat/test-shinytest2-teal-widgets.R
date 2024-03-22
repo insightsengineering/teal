@@ -2,12 +2,6 @@ testthat::test_that(
   "e2e: teal.widgets::verbatim_popup is initialized with a button that opens a modal with a verbatim text",
   {
     skip_if_too_deep(5)
-    # App can not start if I put the content in variables.
-    # verbatim_popup_ui(id, button_label = ui_popup_button_label)
-    # verbatim_popup_srv(id, verbatim_content = verbatim_content_text, title = modal_title, style = TRUE)
-
-    # {shiny}      R  stderr ----------- Warning: Error in <Anonymous>: object 'ui_popup_button_label' not found
-    # {shiny}      R  stderr ----------- Warning: Error in <Anonymous>: object 'modal_title' not found
     module_label <- "Module with verbatim popup"
     ui_popup_button_label <- "Open popup"
     modal_title <- "My custom title"
