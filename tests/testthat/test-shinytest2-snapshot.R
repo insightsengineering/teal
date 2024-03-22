@@ -1,4 +1,6 @@
 testthat::test_that("e2e: Create empty snapshot", {
+  skip_if_too_deep(5)
+
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module"),
@@ -26,6 +28,7 @@ testthat::test_that("e2e: Create empty snapshot", {
 
 testthat::test_that("e2e: Downloads empty snapshot", {
   skip_if_not_installed("withr")
+  skip_if_too_deep(5)
 
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -59,6 +62,8 @@ testthat::test_that("e2e: Downloads empty snapshot", {
 })
 
 testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
+  skip_if_too_deep(5)
+
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module"),
@@ -92,6 +97,7 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
 
 testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
   skip_if_not_installed("withr")
+  skip_if_too_deep(5)
 
   data <- simple_teal_data()
   mods <- example_module(label = "module1")
@@ -141,6 +147,7 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
 
 testthat::test_that("e2e: Snapshot manager can reset the state", {
   skip_if_not_installed("withr")
+  skip_if_too_deep(5)
 
   app <- TealAppDriver$new(
     data = simple_teal_data(),
