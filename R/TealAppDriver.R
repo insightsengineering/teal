@@ -375,7 +375,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         extra_formals <- formals(app$set_inputs)
 
         dots <- rlang::list2(...)
-        
+
         checkmate::assert_choice(dots$priority_, formals(self$set_inputs))
         self$run_js(
           sprintf(
