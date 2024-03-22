@@ -159,9 +159,7 @@ testthat::test_that(
     # for
     # app$get_html_rvest(app$active_module_element("downbutton-file_name"))
 
-    # TODO - NEED HELP
-    # do not use div:nth-child(3)
-    pagination <- "downbutton-dwnl > li > div > div:nth-child(3) > div.paginate-ui  > div.form-group.shiny-input-container"
+    pagination <- "downbutton-dwnl .paginate-ui .form-group.shiny-input-container"
     pagination_class <- gsub("#", "#dropdown-menu-", app$active_module_element(pagination))
     pagination_text <- app$get_text(pagination_class)
     testthat::expect_match(pagination_text, "Paginate table:\n", fixed = TRUE)
