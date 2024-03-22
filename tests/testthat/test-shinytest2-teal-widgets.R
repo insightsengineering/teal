@@ -216,3 +216,12 @@ testthat::test_that(
     app$stop()
   }
 )
+
+
+testthat::test_that(
+  "e2e: teal.widgets::plot_with_settings is initialized",
+  {
+    skip_if_too_deep(5)
+
+  }
+)
