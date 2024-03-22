@@ -216,19 +216,34 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
       args <- c(args, filter_panel_api = filter_panel_api)
     }
 
-    # observe the trigger_module above to induce the module once the renderUI is triggered
-    observeEvent(
-      ignoreNULL = TRUE,
-      once = TRUE,
-      eventExpr = trigger_module(),
-      handlerExpr = {
-        module_output <- if (is_arg_used(modules$server, "id")) {
-          do.call(modules$server, args)
-        } else {
-          do.call(callModule, c(args, list(module = modules$server)))
-        }
+    # This function calls a module server function.
+    call_module <- function() {
+      if (is_arg_used(modules$server, "id")) {
+        do.call(modules$server, args)
+      } else {
+        do.call(callModule, c(args, list(module = modules$server)))
       }
-    )
+    }
+
+    # Call modules.
+    if (isTRUE(session$restoreContext$active)) {
+      # When restoring bookmark, all modules must be initialized on app start.
+      # Delayed module initiation (below) precludes restoring state b/c inputs do not exist when restoring occurs.
+      call_module()
+    } else if (id == "report_previewer") {
+      # Report previewer must be initiated on app start for report cards to be included in bookmarks.
+      # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
+      call_module()
+    } else {
+      # When app starts normally, modules are initialized only when corresponding tabs are clicked.
+      # Observing trigger_module() induces the module only when output$data_reactive is triggered (see above).
+      observeEvent(
+        ignoreNULL = TRUE,
+        once = TRUE,
+        eventExpr = trigger_module(),
+        handlerExpr = call_module()
+      )
+    }
 
     reactive(modules)
   })
