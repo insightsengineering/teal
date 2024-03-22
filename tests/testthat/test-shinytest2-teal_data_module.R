@@ -120,7 +120,7 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
 
   app$wait_for_idle()
   testthat::expect_setequal(
-    app$get_active_filter_selection("dataset1", "A_New_Column"),
+    app$get_active_data_filters("dataset1")$A_New_Column,
     unique(sprintf("%s new", iris$Species))
   )
 

@@ -50,7 +50,7 @@ testthat::test_that("e2e: filtering a module-specific filter is refected in othe
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_equal(
-    app$get_active_filter_selection("iris", "Species"),
+    app$get_active_data_filters("iris")$Species,
     c("setosa", "versicolor", "virginica")
   )
 
@@ -63,7 +63,7 @@ testthat::test_that("e2e: filtering a module-specific filter is refected in othe
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_equal(
-    app$get_active_filter_selection("iris", "Species"),
+    app$get_active_data_filters("iris")$Species,
     c("setosa")
   )
 
@@ -93,7 +93,7 @@ testthat::test_that("e2e: filtering a module-specific filter is not refected in 
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_equal(
-    app$get_active_filter_selection("mtcars", "cyl"),
+    app$get_active_data_filters("mtcars")$cyl,
     c("4", "6")
   )
 
@@ -106,7 +106,7 @@ testthat::test_that("e2e: filtering a module-specific filter is not refected in 
   app$wait_for_idle(timeout = default_idle_timeout)
 
   expect_equal(
-    app$get_active_filter_selection("mtcars", "cyl"),
+    app$get_active_data_filters("mtcars")$cyl,
     c("4", "6")
   )
 
