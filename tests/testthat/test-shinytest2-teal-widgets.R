@@ -177,10 +177,21 @@ testthat::test_that(
       "download icon"
     )
 
-    # TODO - NEED HELP
-    # click second radio button
-    # app$click(selector = "input[value~=csv]")
+    app$click(selector = "input[value='.csv']")
     # check that pagination is missing
+    # app$get_text(pagination_class) # this returns values even though pagination is missing from the view
+    testthat::expect_false(
+      any(
+        unlist(
+          app$get_js(
+            sprintf(
+              "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility())",
+              pagination_class
+            )
+          )
+        )
+      )
+    )
 
     # Click the second TABLE button.
     app$click(selector = app$active_module_element("expand"))
