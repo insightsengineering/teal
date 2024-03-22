@@ -5,7 +5,7 @@ testthat::test_that("e2e: Create empty snapshot", {
     timeout = 20 * 1000
   )
 
-  app$open_snapshot_manager()
+  app$open_manager_modal("snapshot")
 
   ns <- shiny::NS(app$wunder_bar_ns("snapshot_manager"))
 
@@ -33,7 +33,7 @@ testthat::test_that("e2e: Downloads empty snapshot", {
     timeout = 20 * 1000
   )
 
-  app$open_snapshot_manager()
+  app$open_manager_modal("snapshot")
 
   ns <- shiny::NS(app$wunder_bar_ns("snapshot_manager"))
 
@@ -68,7 +68,7 @@ testthat::test_that("e2e: Download filter snapshot with non-empty filters", {
   app$add_filter_var("iris", "Species")
   app$set_active_filter_selection("iris", "Species", c("setosa", "virginica"))
 
-  app$open_snapshot_manager()
+  app$open_manager_modal("snapshot")
 
   ns <- shiny::NS(app$wunder_bar_ns("snapshot_manager"))
 
@@ -119,7 +119,7 @@ testthat::test_that("e2e: Upload filter snapshot with non-empty filters", {
   local_snapshot <- withr::local_file("temp_slices.json")
   slices_store(tss, local_snapshot)
 
-  app$open_snapshot_manager()
+  app$open_manager_modal("snapshot")
 
   ns <- shiny::NS(app$wunder_bar_ns("snapshot_manager"))
 
@@ -151,12 +151,12 @@ testthat::test_that("e2e: Snapshot manager can reset the state", {
   app$add_filter_var("iris", "Species")
   app$set_active_filter_selection("iris", "Species", c("setosa", "virginica"))
 
-  app$open_snapshot_manager()
+  app$open_manager_modal("snapshot")
 
   ns <- shiny::NS(app$wunder_bar_ns("snapshot_manager"))
 
   app$click(ns("snapshot_reset"))
-  app$wait_for_idle(500)
+  app$wait_for_idle()
 
   testthat::expect_length(app$get_active_data_filters("iris"), 0)
   testthat::expect_length(app$get_active_data_filters("mtcars"), 0)

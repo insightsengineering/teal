@@ -398,8 +398,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Click on the filter manager show button.
     #'
     #' @return The `TealAppDriver` object invisibly.
-    open_snapshot_manager = function() {
-      self$click(self$wunder_bar_ns("show_snapshot_manager"))
+    open_manager_modal = function(manager = c("snapshot", "filter", "bookmark")) {
+      manager <- match.arg(manager)
+
+      self$click(self$wunder_bar_ns(sprintf("show_%s_manager", manager)))
       self$wait_for_idle()
       invisible(self)
     },
