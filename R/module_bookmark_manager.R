@@ -227,12 +227,34 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
   })
 }
 
+# utilities ----
 
-restoreValue <- function(object_name, default) {
+#' Restore value from bookmark.
+#'
+#' Get value from bookmark or return default.
+#'
+#' Server-side bookmarks can store not only inputs but also arbitrary values.
+#' These values are stored by `onBookmark` callbacks and restored by `onBookmarked` callbacks.
+#' Using `teal_data_module` makes it impossible to run the callbacks
+#' because the app becomes ready before modules execute and callbacks are registered.
+#' In those cases the stored values can still be recovered from the `session` object directly.
+#'
+#' @param value (`character(1)`) name of value to restore
+#' @param default fallback value
+#'
+#' @return
+#' In an application restored from a server-side bookmark,
+#' the variable specified by `value` from the `values` environment.
+#' Otherwise `default`.
+#'
+#' @keywords internal
+#'
+restoreValue <- function(value, default) { # nolint: object_name.
+  checkmate::assert_character("value")
   session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
   if (isTRUE(session$restoreContext$active)) {
-    if (exists(object_name, session$restoreContext$values, inherits = FALSE)) {
-      session$restoreContext$values[[object_name]]
+    if (exists(value, session$restoreContext$values, inherits = FALSE)) {
+      session$restoreContext$values[[value]]
     } else {
       default
     }
