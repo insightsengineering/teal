@@ -106,7 +106,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       for (tab in tabs) {
         root <- "root"
         self$set_input(
-          sprintf("teal-main_ui-%s-active_tab", root),
+          sprintf("%s-%s-active_tab", private$base_ns, root),
           get_unique_labels(tab),
           wait_ = FALSE
         )
@@ -165,6 +165,19 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         private$set_active_ns()
       }
       private$ns$filter_panel
+    },
+    #' @description
+    #' Get the active shiny name space for interacting with the wunder_bar elements.
+    #'
+    #' @param id (character) The id of the wunder_bar element. Default is `NULL` and returns
+    #' the namespace to wunder bar itself.
+    #'
+    #' @return (`string`) The active shiny name space of the component.
+    wunder_bar_ns = function(id = NULL) {
+      checkmate::assert_string(id, null.ok = TRUE)
+      full_id <- "wunder_bar"
+      if (!is.null(id)) full_id <- shiny::NS(full_id, id = id)
+      shiny::NS(private$base_ns, id = full_id)
     },
     #' @description
     #' Get the input from the module in the `teal` app.
@@ -382,6 +395,15 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       invisible(self)
     },
     #' @description
+    #' Click on the filter manager show button.
+    #'
+    #' @return The `TealAppDriver` object invisibly.
+    open_snapshot_manager = function() {
+      self$click(self$wunder_bar_ns("show_snapshot_manager"))
+      self$wait_for_idle()
+      invisible(self)
+    },
+    #' @description
     #' Extract `html` attribute (found by a `selector`).
     #'
     #' @param selector (`character(1)`) specifying the selector to be used to get the content of a specific node.
@@ -412,6 +434,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
   # private members ----
   private = list(
     # private attributes ----
+    base_ns = "teal-main_ui",
     data = NULL,
     modules = NULL,
     filter = teal_slices(),
@@ -419,8 +442,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       module = character(0),
       filter_panel = character(0)
     ),
-    idle_timeout = 20000, # 20 seconds
-    load_timeout = 100000, # 100 seconds
+    idle_timeout = 20 * 1000, # 20 seconds
+    load_timeout = 100 * 1000, # 100 seconds
     # private methods ----
     set_active_ns = function() {
       all_inputs <- self$get_values()$input
@@ -446,8 +469,9 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       private$ns$module <- sprintf("%s-%s", active_ns, "module")
 
       component <- "filter_panel"
-      if (!is.null(self$get_html(sprintf("#teal-main_ui-%s", component)))) {
-        private$ns[[component]] <- sprintf("teal-main_ui-%s", component)
+      component_id <- sprintf("%s-%s", private$base_ns, component)
+      if (!is.null(self$get_html(sprintf("#%s", component_id)))) {
+        private$ns[[component]] <- component_id
       } else {
         private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
       }
