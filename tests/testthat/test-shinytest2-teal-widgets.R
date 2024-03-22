@@ -21,14 +21,19 @@ testthat::test_that(
           ui = function(id) {
             teal.widgets::verbatim_popup_ui(id, button_label = "Open popup")
           },
-          server = function(id) {
-            teal.widgets::verbatim_popup_srv(
-              id,
-              verbatim_content = "if (TRUE) { print('Popups are the best') }",
-              title = "My custom title",
-              style = FALSE
+          server = eval(
+            substitute(
+              function(id) {
+                teal.widgets::verbatim_popup_srv(
+                  id,
+                  verbatim_content = verbatim_content_text,
+                  title = "modal_title",
+                  style = FALSE
+                )
+              },
+              env = list(verbatim_content_text = verbatim_content_text)
             )
-          }
+          )
         )
       )
     )
