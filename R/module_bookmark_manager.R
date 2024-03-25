@@ -230,13 +230,12 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
 #'
 restoreValue <- function(value, default) { # nolint: object_name.
   checkmate::assert_character("value")
-  session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
-  if (isTRUE(session$restoreContext$active)) {
-    if (exists(value, session$restoreContext$values, inherits = FALSE)) {
-      session$restoreContext$values[[value]]
-    } else {
-      default
-    }
+  session_default <- shiny::getDefaultReactiveDomain()
+  session_parent <- .subset2(session_default, "parent")
+  session <- if (is.null(session_parent)) session_default else session_parent
+
+  if (isTRUE(session$restoreContext$active) && exists(value, session$restoreContext$values, inherits = FALSE)) {
+    session$restoreContext$values[[value]]
   } else {
     default
   }
