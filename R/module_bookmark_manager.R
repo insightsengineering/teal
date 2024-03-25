@@ -339,6 +339,7 @@ bookmarks_identical <- function(book1, book2) {
 
   if (!isTRUE(all.equal(book1_values, book2_values))) {
     message("different values detected")
+    message("choices for numeric filters MAY be different, see RangeFilterState$set_choices")
     ans <- FALSE
   }
 
