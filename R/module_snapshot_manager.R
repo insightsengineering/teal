@@ -115,14 +115,24 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("snapshot_manager_srv initializing")
 
+    session$onBookmark(function(state) {
+      # Add current filter state to bookmark.
+      logger::log_trace("snapshot_manager_srv@onBookmark: storing filter state")
+      snapshot <- as.list(slices_global(), recursive = TRUE)
+      attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
+      state$values$filter_state_on_bookmark <- snapshot
+      # Add snapshot history and bookmark history to bookmark.
+      logger::log_trace("snapshot_manager_srv@onBookmark: storing snapshot and bookmark history")
+      state$values$snapshot_history <- snapshot_history() # isolate this?
+    })
+
     ns <- session$ns
 
     # Store global filter states ----
     filter <- isolate(slices_global())
     snapshot_history <- reactiveVal({
-      list(
-        "Initial application state" = as.list(filter, recursive = TRUE)
-      )
+      # Restore directly from bookmarked state, if applicable.
+      restoreValue(ns("snapshot_history"), list("Initial application state" = as.list(filter, recursive = TRUE)))
     })
 
     # Snapshot current application state ----
