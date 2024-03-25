@@ -115,6 +115,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("snapshot_manager_srv initializing")
 
+    # Set up bookmarking callbacks ----
     # Add current filter state to bookmark.
     # This is done on the app session because the value is restored in `module_teal`
     # and we don't want to have to use this module's name space there.

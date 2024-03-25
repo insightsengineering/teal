@@ -92,7 +92,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
   moduleServer(id, function(input, output, session) {
     logger::log_trace("bookmark_manager_srv initializing")
 
-    # Set up bookmarking callbacks.
+    # Set up bookmarking callbacks ----
     # Register bookmark exclusions: all buttons and the `textInput` for bookmark name.
     setBookmarkExclude(c("bookmark_add", "bookmark_accept", "bookmark_name"))
     # Add bookmark history to bookmark.
@@ -134,13 +134,13 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
 
     ns <- session$ns
 
-    # Store input states.
+    # Track input states ----
     bookmark_history <- reactiveVal({
       # Restore directly from bookmarked state, if applicable.
       restoreValue(ns("bookmark_history"), list())
     })
 
-    # Bookmark current input state - name bookmark.
+    # Bookmark current input state - name bookmark. ----
     observeEvent(input$bookmark_add, {
       logger::log_trace("bookmark_manager_srv: bookmark_add button clicked")
       showModal(
@@ -160,7 +160,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
       app_session$doBookmark()
     })
 
-    # Create UI elements and server logic for the bookmark table.
+    # Create UI elements and server logic for the bookmark table ----
     # Divs are tracked for a slight speed margin.
     divs <- reactiveValues()
 
@@ -179,7 +179,7 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
       })
     })
 
-    # Create table to display list of bookmarks and their actions.
+    # Create table to display list of bookmarks and their actions ----
     output$bookmark_list <- renderUI({
       rows <- rev(reactiveValuesToList(divs))
       if (length(rows) == 0L) {
