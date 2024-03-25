@@ -92,6 +92,21 @@ bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, sn
   moduleServer(id, function(input, output, session) {
     logger::log_trace("bookmark_manager_srv initializing")
 
+    # Enforce server-side bookmarking ----
+    bookmark_option <- getShinyOption("bookmarkStore", "disabled")
+    if (bookmark_option != "server") {
+      shinyjs::disable("bookmark_add")
+      output$bookmark_list <- renderUI({
+        div(
+          class = "manager_placeholder",
+          sprintf("Bookmarking has been set to \"%s\".", bookmark_option), tags$br(),
+          "Only server-side bookmarking is supported.", tags$br(),
+          "Please contact your app developer."
+        )
+      })
+      return(list())
+    }
+
     # Set up bookmarking callbacks ----
     # Register bookmark exclusions: all buttons and the `textInput` for bookmark name.
     setBookmarkExclude(c("bookmark_add", "bookmark_accept", "bookmark_name"))
