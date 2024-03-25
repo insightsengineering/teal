@@ -163,7 +163,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       env$progress$set(0.25, message = "Setting data")
 
       # Restore filter from bookmarked state, if applicable.
-      filter_restored <- restoreValue("filter_state_on_bookmark", filter)
+      filter_restored <- restoreValue("teal-main_ui-wunder_bar-snapshot_manager-filter_state_on_bookmark", filter)
       if (!is.teal_slices(filter_restored)) {
         filter_restored <- as.teal_slices(filter_restored)
       }
