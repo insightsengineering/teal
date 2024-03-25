@@ -20,16 +20,14 @@ Otherwise \code{default}.
 Get value from bookmark or return default.
 }
 \details{
-Server-side bookmarks can store not only inputs but also arbitrary values.
-These values are stored by \code{onBookmark} callbacks and restored by \code{onBookmarked} callbacks.
+Bookmarks can store not only inputs but also arbitrary values.
+These values are stored by \code{onBookmark} callbacks and restored by \code{onBookmarked} callbacks,
+and they are placed in the \code{values} environment in the \code{session$restoreContext} field.
 Using \code{teal_data_module} makes it impossible to run the callbacks
 because the app becomes ready before modules execute and callbacks are registered.
 In those cases the stored values can still be recovered from the \code{session} object directly.
-}
-\section{Use in modules}{
 
-Variable names in the \code{values} environment are prefixed with module name space names,
+Note that variable names in the \code{values} environment are prefixed with module name space names,
 therefore, when using this function in modules, \code{value} must be run through the name space function.
 }
-
 \keyword{internal}
