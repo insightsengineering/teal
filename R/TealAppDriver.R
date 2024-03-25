@@ -60,7 +60,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param ... arguments passed to parent [`AppDriver`] `click()` method.
     click = function(...) {
       super$click(...)
-      wait_for_idle()
+      self$wait_for_idle()
     },
     #' @description
     #' Check if the app has shiny errors. This checks for global shiny errors.
