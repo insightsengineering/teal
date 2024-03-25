@@ -97,7 +97,7 @@ bookmark_manager_srv <- function(id) {
           "Please contact your app developer."
         )
       })
-      return(list())
+      return(reactiveVal(list()))
     }
 
     # Set up bookmarking callbacks ----
