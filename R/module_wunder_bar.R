@@ -52,6 +52,8 @@ wunder_bar_srv <- function(id, datasets, filter) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("wunder_bar_srv initializing")
 
+    setBookmarkExclude(c("show_filter_manager", "show_bookmark_manager", "show_bookmark_manager"))
+
     ns <- session$ns
 
     observeEvent(input$show_filter_manager, {
