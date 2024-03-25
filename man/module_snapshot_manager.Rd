@@ -101,6 +101,14 @@ a \code{teal_slices} object. When a snapshot is restored from file, its \code{ap
 of the current app state and only if the match is the snapshot admitted to the session.
 }
 
+\section{Bookmarks}{
+
+An \code{onBookmark} callback creates a snapshot of the current filter state.
+This is done on the app session, not the module session.
+(The snapshot will be retrieved by \code{module_teal} in order to set initial app state in a restored app.)
+Then that snapshot, and the previous snapshot history are dumped into the \code{values.rds} file in \verb{<bookmark_dir>}.
+}
+
 \author{
 Aleksander Chlebowski
 }

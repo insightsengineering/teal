@@ -11,27 +11,10 @@
 \usage{
 bookmark_manager_ui(id)
 
-bookmark_manager_srv(
-  id,
-  slices_global,
-  mapping_matrix,
-  datasets,
-  snapshot_history
-)
+bookmark_manager_srv(id)
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
-
-\item{slices_global}{(\code{reactiveVal}) that contains a \code{teal_slices} object
-containing all \code{teal_slice}s existing in the app, both active and inactive.}
-
-\item{mapping_matrix}{(\code{reactive}) that contains a \code{data.frame} representation
-of the mapping of filter state ids (rows) to modules labels (columns);
-all columns are \code{logical} vectors.}
-
-\item{datasets}{non-nested (named \code{list}) of \code{FilteredData} objects.}
-
-\item{snapshot_history}{(named \code{list}) of unlisted \code{teal_slices} objects, as returned by the \code{snapshot_manager}.}
 }
 \value{
 \code{reactiveVal} containing a named list of bookmark URLs.
@@ -68,10 +51,7 @@ Once a bookmark name has been accepted, the app state is saved: values of all in
 which are kept in the \code{input} slot of the \code{session} object, are dumped into the \code{input.rds} file
 in the \verb{<bookmark_dir>} directory on the server.
 This is out of the box behavior that permeates the entire app, no adjustments to modules are necessary.
-An additional \code{onBookmark} callback creates a snapshot of the current filter state
-(the module has access to the filter state of the application through \code{slices_global} and \code{mapping_matrix}).
-Then that snapshot, the previous snapshot history (which is passed to this module as argument),
-and the previous bookmark history are dumped into the \code{values.rds} file in \verb{<bookmark_dir>}.
+An additional \code{onBookmark} callback dumps the previous bookmark history to the \code{values.rds} file in \verb{<bookmark_dir>}.
 
 Finally, an \code{onBookmarked} callback adds the newly created bookmark to the bookmark history.
 Notably, this occurs \emph{after} creating the bookmark is concluded so the bookmark history that was stored
@@ -80,10 +60,8 @@ does not include the newly added bookmark.
 When starting the app from a bookmark, \code{shiny} recognizes that the app is being restored,
 locates the bookmark directory and loads both \code{.rds} file.
 Values stored in \code{input.rds} are automatically set to their corresponding inputs.
-The filter state that the app had upon bookmarking, which was saved as a separate snapshot, is restored.
-This is done in the same manner as in the \code{snapshot_manager} module and thus requires access to \code{datasets_flat},
-which is passed to this module as argument.
-Finally, snapshot history and bookmark history are loaded from \code{values.rds} and set to appropriate \code{reactiveVal}s.
+
+Finally, bookmark history is loaded from \code{values.rds} and set to the module's \code{reactiveVal}.
 }
 
 \section{Note}{
@@ -91,6 +69,8 @@ Finally, snapshot history and bookmark history are loaded from \code{values.rds}
 All \code{teal} apps are inherently bookmarkable. Normal \code{shiny} apps require that \code{enableBookmarking} be set to "server",
 either by setting an argument in a \code{shinyApp} call or by calling a special function. In \code{teal} bookmarks are enabled
 by automatically setting an option when the package is loaded.
+
+If the option is set to a different value by the app developer, the bookmark manager will forbid creating bookmarks.
 }
 
 \keyword{internal}

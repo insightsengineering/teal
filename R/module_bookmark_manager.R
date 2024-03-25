@@ -27,10 +27,7 @@
 #' which are kept in the `input` slot of the `session` object, are dumped into the `input.rds` file
 #' in the `<bookmark_dir>` directory on the server.
 #' This is out of the box behavior that permeates the entire app, no adjustments to modules are necessary.
-#' An additional `onBookmark` callback creates a snapshot of the current filter state
-#' (the module has access to the filter state of the application through `slices_global` and `mapping_matrix`).
-#' Then that snapshot, the previous snapshot history (which is passed to this module as argument),
-#' and the previous bookmark history are dumped into the `values.rds` file in `<bookmark_dir>`.
+#' An additional `onBookmark` callback dumps the previous bookmark history to the `values.rds` file in `<bookmark_dir>`.
 #'
 #' Finally, an `onBookmarked` callback adds the newly created bookmark to the bookmark history.
 #' Notably, this occurs _after_ creating the bookmark is concluded so the bookmark history that was stored
@@ -39,19 +36,17 @@
 #' When starting the app from a bookmark, `shiny` recognizes that the app is being restored,
 #' locates the bookmark directory and loads both `.rds` file.
 #' Values stored in `input.rds` are automatically set to their corresponding inputs.
-#' The filter state that the app had upon bookmarking, which was saved as a separate snapshot, is restored.
-#' This is done in the same manner as in the `snapshot_manager` module and thus requires access to `datasets_flat`,
-#' which is passed to this module as argument.
-#' Finally, snapshot history and bookmark history are loaded from `values.rds` and set to appropriate `reactiveVal`s.
+#'
+#' Finally, bookmark history is loaded from `values.rds` and set to the module's `reactiveVal`.
 #'
 #' @section Note:
 #' All `teal` apps are inherently bookmarkable. Normal `shiny` apps require that `enableBookmarking` be set to "server",
 #' either by setting an argument in a `shinyApp` call or by calling a special function. In `teal` bookmarks are enabled
 #' by automatically setting an option when the package is loaded.
 #'
+#' If the option is set to a different value by the app developer, the bookmark manager will forbid creating bookmarks.
+#'
 #' @param id (`character(1)`) `shiny` module instance id.
-#' @inheritParams module_snapshot_manager
-#' @param snapshot_history (named `list`) of unlisted `teal_slices` objects, as returned by the `snapshot_manager`.
 #'
 #' @return `reactiveVal` containing a named list of bookmark URLs.
 #'

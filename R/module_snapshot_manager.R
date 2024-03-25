@@ -65,6 +65,12 @@
 #' a `teal_slices` object. When a snapshot is restored from file, its `app_id` is compared to that
 #' of the current app state and only if the match is the snapshot admitted to the session.
 #'
+#' @section Bookmarks:
+#' An `onBookmark` callback creates a snapshot of the current filter state.
+#' This is done on the app session, not the module session.
+#' (The snapshot will be retrieved by `module_teal` in order to set initial app state in a restored app.)
+#' Then that snapshot, and the previous snapshot history are dumped into the `values.rds` file in `<bookmark_dir>`.
+#'
 #' @param id (`character(1)`) `shiny` module instance id.
 #' @param slices_global (`reactiveVal`) that contains a `teal_slices` object
 #'                      containing all `teal_slice`s existing in the app, both active and inactive.
