@@ -53,149 +53,88 @@
 #' @name module_bookmark_manager
 #' @aliases bookmark bookmark_manager bookmark_manager_module
 #'
-
 #' @rdname module_bookmark_manager
 #' @keywords internal
 #'
-bookmark_manager_ui <- function(id) {
+bookmark_module_ui <- function(id, modules) {
   ns <- NS(id)
-  div(
-    class = "manager_content",
-    div(
-      class = "manager_table_row",
-      span(tags$b("Bookmark manager")),
-      actionLink(ns("bookmark_add"), NULL, icon = suppressMessages(icon("solid fa-bookmark")), title = "add bookmark"),
-      NULL
-    ),
-    uiOutput(ns("bookmark_list"))
+
+  is_unbookmarkable <- rapply(
+    get_teal_bookmarkable_summary(modules),
+    Negate(isTRUE),
+    how = "unlist"
+  )
+  tags$button(
+    id = ns("do_bookmark"),
+    class = "btn action-button wunder_bar_button",
+    title = "Add bookmark",
+    tags$span(
+      suppressMessages(icon("solid fa-bookmark")),
+      if (any(is_unbookmarkable)) {
+        tags$span(
+          sum(is_unbookmarkable),
+          class = "badge badge-warning badge-count"
+        )
+      }
+    )
   )
 }
 
 #' @rdname module_bookmark_manager
 #' @keywords internal
 #'
-bookmark_manager_srv <- function(id) {
+bookmark_manager_srv <- function(id, modules) {
   checkmate::assert_character(id)
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("bookmark_manager_srv initializing")
-
-    # Enforce server-side bookmarking ----
-    bookmark_option <- getShinyOption("bookmarkStore", "disabled")
-    if (bookmark_option != "server") {
-      shinyjs::disable("bookmark_add")
-      output$bookmark_list <- renderUI({
-        div(
-          class = "manager_placeholder",
-          sprintf("Bookmarking has been set to \"%s\".", bookmark_option), tags$br(),
-          "Only server-side bookmarking is supported.", tags$br(),
-          "Please contact your app developer."
-        )
-      })
-      return(reactiveVal(list()))
-    }
+    ns <- session$ns
+    is_unbookmarkable <- rapply(
+      get_teal_bookmarkable_summary(modules),
+      Negate(isTRUE),
+      how = "unlist"
+    )
 
     # Set up bookmarking callbacks ----
     # Register bookmark exclusions: all buttons and the `textInput` for bookmark name.
-    setBookmarkExclude(c("bookmark_add", "bookmark_accept", "bookmark_name"))
-    # Add bookmark history to bookmark.
-    session$onBookmark(function(state) {
-      logger::log_trace("bookmark_manager_srv@onBookmark: storing bookmark history")
-      state$values$bookmark_history <- bookmark_history() # isolate this?
-    })
+    setBookmarkExclude(c("do_bookmark"))
     # This bookmark can only be used on the app session.
     app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
     app_session$onBookmarked(function(url) {
       logger::log_trace("bookmark_manager_srv@onBookmarked: bookmark button clicked, registering bookmark")
-      bookmark_name <- trimws(input$bookmark_name)
-      if (identical(bookmark_name, "")) {
-        logger::log_trace("bookmark_manager_srv@onBookmarked: bookmark name rejected")
-        showNotification(
-          "Please name the bookmark.",
-          type = "message"
-        )
-        updateTextInput(inputId = "bookmark_name", value = "", placeholder = "Meaningful, unique name")
-        unlink(strsplit(url, "_state_id_=")[[1L]][[2L]], recursive = TRUE, force = TRUE, expand = FALSE)
-      } else if (is.element(make.names(bookmark_name), make.names(names(bookmark_history())))) {
-        logger::log_trace("bookmark_manager_srv@onBookmarked: bookmark name rejected")
-        showNotification(
-          "This name is in conflict with other bookmark names. Please choose a different one.",
-          type = "message"
-        )
-        updateTextInput(inputId = "bookmark_name", value = "", placeholder = "Meaningful, unique name")
-        unlink(strsplit(url, "_state_id_=")[[1L]][[2L]], recursive = TRUE, force = TRUE, expand = FALSE)
-      } else {
-        # Add bookmark URL to bookmark history (with name).
-        logger::log_trace("bookmark_manager_srv@onBookmarked: bookmark name accepted, adding to history")
-        bookmark_update <- c(bookmark_history(), list(url))
-        names(bookmark_update)[length(bookmark_update)] <- bookmark_name
-        bookmark_history(bookmark_update)
+      bkmb_summary <- get_teal_bookmarkable_summary(modules)
 
-        removeModal()
-      }
-    })
-
-    ns <- session$ns
-
-    # Track input states ----
-    bookmark_history <- reactiveVal({
-      # Restore directly from bookmarked state, if applicable.
-      restoreValue(ns("bookmark_history"), list())
-    })
-
-    # Bookmark current input state - name bookmark. ----
-    observeEvent(input$bookmark_add, {
-      logger::log_trace("bookmark_manager_srv: bookmark_add button clicked")
       showModal(
         modalDialog(
-          textInput(ns("bookmark_name"), "Name the bookmark", width = "100%", placeholder = "Meaningful, unique name"),
-          footer = tagList(
-            actionButton(ns("bookmark_accept"), label = "Accept", icon = icon("thumbs-up")),
-            modalButton(label = "Cancel", icon = icon("thumbs-down"))
-          ),
-          size = "s"
+          title = "Bookmarked teal app url",
+          tags$div(
+            tags$span(tags$pre(url)),
+            tags$button(
+              id = ns("copy_to_clipboard"),
+              class = "btn action-button",
+              title = "Copy to clipboard",
+              tags$span(suppressMessages(icon("solid fa-copy")))
+            ),
+            if (any(is_unbookmarkable)) {
+              tags$div(
+                tags$p(
+                  icon("fas fa-exclamation-triangle"),
+                  "Some modules are not bookmarkable. Their state will not be restored when using this bookmark.",
+                  class = "text-warning"
+                ),
+                tags$pre(yaml::as.yaml(bkmb_summary))
+              )
+            }
+          )
         )
       )
     })
 
-    # Initiate bookmarking with normal action button b/c `bookmarkButton` may not work on Windows.
-    observeEvent(input$bookmark_accept, {
-      app_session$doBookmark()
+
+    observeEvent(input$do_bookmark, {
+      logger::log_trace("bookmark_manager_srv@1 do_bookmark module clicked.")
+      session$doBookmark()
     })
-
-    # Create UI elements and server logic for the bookmark table ----
-    # Divs are tracked for a slight speed margin.
-    divs <- reactiveValues()
-
-    observeEvent(bookmark_history(), {
-      logger::log_trace("bookmark_manager_srv: bookmark history changed, updating bookmark list")
-      lapply(names(bookmark_history()), function(s) {
-        id_rowme <- sprintf("rowme_%s", make.names(s))
-
-        # Create a row for the bookmark table.
-        if (!is.element(id_rowme, names(divs))) {
-          divs[[id_rowme]] <- div(
-            class = "manager_table_row",
-            a(h5(s), title = "go to bookmark", href = bookmark_history()[[s]], target = "blank")
-          )
-        }
-      })
-    })
-
-    # Create table to display list of bookmarks and their actions ----
-    output$bookmark_list <- renderUI({
-      rows <- rev(reactiveValuesToList(divs))
-      if (length(rows) == 0L) {
-        div(
-          class = "manager_placeholder",
-          "Bookmarks will appear here."
-        )
-      } else {
-        rows
-      }
-    })
-
-    bookmark_history
   })
 }
 
@@ -345,4 +284,14 @@ bookmarks_identical <- function(book1, book2) {
 
   if (ans) message("perfect!")
   invisible(NULL)
+}
+
+
+get_teal_bookmarkable_summary <- function(modules, indent = 0L) {
+  if (inherits(modules, "teal_modules")) {
+    lapply(modules$children, get_teal_bookmarkable_summary, indent = indent + 2L)
+  } else {
+    val <- isTRUE(attr(modules, "teal_bookmarkable"))
+    setNames(val, modules$label)
+  }
 }

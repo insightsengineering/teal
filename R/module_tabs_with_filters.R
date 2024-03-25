@@ -47,7 +47,7 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices()) 
       title = "Toggle filter panel",
       icon("fas fa-bars")
     ),
-    wunder_bar_ui(ns("wunder_bar"))
+    wunder_bar_ui(ns("wunder_bar"), modules)
   )
   teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btns)
 
@@ -84,7 +84,7 @@ srv_tabs_with_filters <- function(id,
     logger::log_trace("srv_tabs_with_filters initializing the module.")
 
     is_module_specific <- isTRUE(attr(filter, "module_specific"))
-    wunder_bar_out <- wunder_bar_srv("wunder_bar", datasets, filter)
+    wunder_bar_out <- wunder_bar_srv("wunder_bar", datasets, filter, modules)
 
     active_module <- srv_nested_tabs(
       id = "root",
