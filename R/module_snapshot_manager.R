@@ -115,20 +115,25 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("snapshot_manager_srv initializing")
 
-    session$onBookmark(function(state) {
-      # Add current filter state to bookmark.
+    # Add current filter state to bookmark.
+    # This is done on the app session because the value is restored in `module_teal`
+    # and we don't want to have to use this module's name space there.
+    app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
+    app_session$onBookmark(function(state) {
       logger::log_trace("snapshot_manager_srv@onBookmark: storing filter state")
       snapshot <- as.list(slices_global(), recursive = TRUE)
       attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
       state$values$filter_state_on_bookmark <- snapshot
-      # Add snapshot history and bookmark history to bookmark.
+    })
+    # Add snapshot history to bookmark.
+    session$onBookmark(function(state) {
       logger::log_trace("snapshot_manager_srv@onBookmark: storing snapshot and bookmark history")
       state$values$snapshot_history <- snapshot_history() # isolate this?
     })
 
     ns <- session$ns
 
-    # Store global filter states ----
+    # Track global filter states ----
     filter <- isolate(slices_global())
     snapshot_history <- reactiveVal({
       # Restore directly from bookmarked state, if applicable.
