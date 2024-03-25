@@ -46,7 +46,7 @@ testthat::test_that("e2e: filtering a module-specific filter is refected in othe
   )
 
   expect_equal(
-    app$get_active_filter_selection("iris", "Species"),
+    app$get_active_data_filters("iris")$Species,
     c("setosa", "versicolor", "virginica")
   )
 
@@ -57,7 +57,7 @@ testthat::test_that("e2e: filtering a module-specific filter is refected in othe
   app$navigate_teal_tab("Module_1")
 
   expect_equal(
-    app$get_active_filter_selection("iris", "Species"),
+    app$get_active_data_filters("iris")$Species,
     c("setosa")
   )
 
@@ -85,7 +85,7 @@ testthat::test_that("e2e: filtering a module-specific filter is not refected in 
   )
 
   expect_equal(
-    app$get_active_filter_selection("mtcars", "cyl"),
+    app$get_active_data_filters("mtcars")$cyl,
     c("4", "6")
   )
 
@@ -96,7 +96,7 @@ testthat::test_that("e2e: filtering a module-specific filter is not refected in 
   app$navigate_teal_tab("Module_1")
 
   expect_equal(
-    app$get_active_filter_selection("mtcars", "cyl"),
+    app$get_active_data_filters("mtcars")$cyl,
     c("4", "6")
   )
 
