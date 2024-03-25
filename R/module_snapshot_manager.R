@@ -117,9 +117,11 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
 
     # Set up bookmarking callbacks ----
     # Register bookmark exclusions (all buttons and text fields).
-    setBookmarkExclude(c("snapshot_add", "snapshot_load", "snapshot_reset",
-                         "snapshot_name_accept", "snaphot_file_accept",
-                         "snapshot_name", "snapshot_file"))
+    setBookmarkExclude(c(
+      "snapshot_add", "snapshot_load", "snapshot_reset",
+      "snapshot_name_accept", "snaphot_file_accept",
+      "snapshot_name", "snapshot_file"
+    ))
     # Add current filter state to bookmark.
     # This is done on the app session because the value is restored in `module_teal`
     # and we don't want to have to use this module's name space there.
