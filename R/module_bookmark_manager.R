@@ -79,15 +79,8 @@ bookmark_manager_ui <- function(id) {
 #' @rdname module_bookmark_manager
 #' @keywords internal
 #'
-bookmark_manager_srv <- function(id, slices_global, mapping_matrix, datasets, snapshot_history) {
+bookmark_manager_srv <- function(id) {
   checkmate::assert_character(id)
-  checkmate::assert_true(is.reactive(slices_global))
-  checkmate::assert_class(isolate(slices_global()), "teal_slices")
-  checkmate::assert_true(is.reactive(mapping_matrix))
-  checkmate::assert_data_frame(isolate(mapping_matrix()), null.ok = TRUE)
-  checkmate::assert_list(datasets, types = "FilteredData", any.missing = FALSE, names = "named")
-  checkmate::assert_true(is.reactive(snapshot_history))
-  checkmate::assert_list(isolate(snapshot_history()), names = "unique")
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("bookmark_manager_srv initializing")
