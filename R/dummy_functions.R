@@ -15,7 +15,7 @@
 #' @export
 example_module <- function(label = "example teal module", datanames = "all") {
   checkmate::assert_string(label)
-  mod <- module(
+  ans <- module(
     label,
     server = function(id, data) {
       checkmate::assert_class(data(), "teal_data")
@@ -48,6 +48,6 @@ example_module <- function(label = "example teal module", datanames = "all") {
     },
     datanames = datanames
   )
-  attr(mod, "teal_bookmarkable") <- TRUE
-  mod
+  attr(ans, "teal_bookmarkable") <- TRUE
+  ans
 }
