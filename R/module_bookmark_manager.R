@@ -59,11 +59,11 @@
 #'
 bookmark_manager_ui <- function(id) {
   ns <- NS(id)
-  div(
+  tags$div(
     class = "manager_content",
-    div(
+    tags$div(
       class = "manager_table_row",
-      span(tags$b("Bookmark manager")),
+      tags$span(tags$b("Bookmark manager")),
       actionLink(ns("bookmark_add"), NULL, icon = suppressMessages(icon("solid fa-bookmark")), title = "add bookmark"),
       NULL
     ),
@@ -176,7 +176,19 @@ bookmark_manager_srv <- function(id) {
         if (!is.element(id_rowme, names(divs))) {
           divs[[id_rowme]] <- div(
             class = "manager_table_row",
-            a(h5(s), title = "go to bookmark", href = bookmark_history()[[s]], target = "blank")
+            tags$span(
+              class = "details",
+              tags$a(tags$h5(s), title = "go to bookmark", href = bookmark_history()[[s]], target = "blank"),
+              # Used only to copy to clipboard
+              tags$pre(id = ns(id_rowme), style = "display: none;", bookmark_history()[[s]]),
+            ),
+            tags$a(
+              tags$i(
+                class = "fa-regular fa-copy",
+                title = sprintf("Copy '%s' bookmark link to clipboard", s)
+              ),
+              onclick = sprintf("copyToClipboard('%s')", ns(id_rowme))
+            )
           )
         }
       })
@@ -186,12 +198,15 @@ bookmark_manager_srv <- function(id) {
     output$bookmark_list <- renderUI({
       rows <- rev(reactiveValuesToList(divs))
       if (length(rows) == 0L) {
-        div(
+        tags$div(
           class = "manager_placeholder",
           "Bookmarks will appear here."
         )
       } else {
-        rows
+        tagList(
+          tags$head(shiny::includeScript(system.file("js/verbatim_popup.js", package = "teal.widgets"))),
+          rows
+        )
       }
     })
 
