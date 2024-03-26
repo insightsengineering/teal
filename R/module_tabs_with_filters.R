@@ -47,7 +47,7 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices()) 
       title = "Toggle filter panel",
       icon("fas fa-bars")
     ),
-    wunder_bar_ui(ns("wunder_bar"), modules)
+    wunder_bar_ui(ns("wunder_bar"))
   )
   teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btns)
 

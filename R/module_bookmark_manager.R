@@ -26,32 +26,20 @@
 #'
 #' @return `reactiveVal` containing a named list of bookmark URLs.
 #'
-#' @name module_bookmark_manager
 #' @aliases bookmark bookmark_manager bookmark_manager_module
 #'
 #' @rdname module_bookmark_manager
 #' @keywords internal
 #'
-bookmark_module_ui <- function(id, modules) {
+bookmark_module_ui <- function(id) {
   ns <- NS(id)
-
-  is_unbookmarkable <- rapply(
-    get_teal_bookmarkable_summary(modules),
-    Negate(isTRUE),
-    how = "unlist"
-  )
   tags$button(
     id = ns("do_bookmark"),
     class = "btn action-button wunder_bar_button",
     title = "Add bookmark",
     tags$span(
       suppressMessages(icon("solid fa-bookmark")),
-      if (any(is_unbookmarkable)) {
-        tags$span(
-          sum(is_unbookmarkable),
-          class = "badge badge-warning badge-count"
-        )
-      }
+      uiOutput(ns("bookmark_warning"), inline = TRUE)
     )
   )
 }
@@ -65,11 +53,26 @@ bookmark_manager_srv <- function(id, modules) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("bookmark_manager_srv initializing")
     ns <- session$ns
+    bookmark_option <- getShinyOption("bookmarkStore", "disabled")
     is_unbookmarkable <- rapply(
       get_teal_bookmarkable_summary(modules),
       Negate(isTRUE),
       how = "unlist"
     )
+
+    output$bookmark_warning <- renderUI({
+      if (bookmark_option != "server") {
+        tags$span(
+          "!",
+          class = "badge-count"
+        )
+      } else if (any(is_unbookmarkable)) {
+        tags$span(
+          sum(is_unbookmarkable),
+          class = "badge badge-warning badge-count"
+        )
+      }
+    })
 
     # Set up bookmarking callbacks ----
     # Register bookmark exclusions: all buttons and the `textInput` for bookmark name.
@@ -78,42 +81,47 @@ bookmark_manager_srv <- function(id, modules) {
     app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
     app_session$onBookmarked(function(url) {
       logger::log_trace("bookmark_manager_srv@onBookmarked: bookmark button clicked, registering bookmark")
-
-      bookmark_option <- getShinyOption("bookmarkStore", "disabled")
-      if (bookmark_option != "server") {
+      modal_content <- if (bookmark_option != "server") {
         msg <- sprintf(
           "Bookmarking has been set to \"%s\".\n%s\n%s",
           bookmark_option,
           "Only server-side bookmarking is supported.",
           "Please contact your app developer."
         )
-        shiny::showNotification(msg, duration = 10, type = "warning")
-        return(NULL)
+        tags$div(
+          tags$p(msg, class = "text-warning")
+        )
+      } else {
+        tags$div(
+          tags$span(tags$pre(url)),
+          tags$button(
+            id = ns("copy_to_clipboard"),
+            class = "btn action-button",
+            title = "Copy to clipboard",
+            tags$span(suppressMessages(icon("solid fa-copy")))
+          ),
+          if (any(is_unbookmarkable)) {
+            bkmb_summary <- get_teal_bookmarkable_summary(modules)
+            tags$div(
+              tags$p(
+                icon("fas fa-exclamation-triangle"),
+                "Some modules are not bookmarkable. Their state will not be restored when using this bookmark.",
+                class = "text-warning"
+              ),
+              tags$pre(yaml::as.yaml(bkmb_summary))
+            )
+          }
+        )
       }
 
-      bkmb_summary <- get_teal_bookmarkable_summary(modules)
       showModal(
         modalDialog(
           title = "Bookmarked teal app url",
-          tags$div(
-            tags$span(tags$pre(url)),
-            tags$button(
-              id = ns("copy_to_clipboard"),
-              class = "btn action-button",
-              title = "Copy to clipboard",
-              tags$span(suppressMessages(icon("solid fa-copy")))
-            ),
-            if (any(is_unbookmarkable)) {
-              tags$div(
-                tags$p(
-                  icon("fas fa-exclamation-triangle"),
-                  "Some modules are not bookmarkable. Their state will not be restored when using this bookmark.",
-                  class = "text-warning"
-                ),
-                tags$pre(yaml::as.yaml(bkmb_summary))
-              )
-            }
-          )
+          modal_content,
+          footer = tagList(
+            actionButton(ns("close_modal"), "Close")
+          ),
+          easyClose = TRUE
         )
       )
     })

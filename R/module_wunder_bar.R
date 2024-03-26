@@ -20,23 +20,25 @@
 
 #' @rdname module_wunder_bar
 #' @keywords internal
-wunder_bar_ui <- function(id, modules) {
+wunder_bar_ui <- function(id) {
   ns <- NS(id)
-  tagList(
-    title = "",
-    tags$button(
-      id = ns("show_filter_manager"),
-      class = "btn action-button wunder_bar_button",
-      title = "View filter mapping",
-      suppressMessages(icon("solid fa-grip"))
-    ),
-    tags$button(
-      id = ns("show_snapshot_manager"),
-      class = "btn action-button wunder_bar_button",
-      title = "Manage filter state snapshots",
-      icon("camera")
-    ),
-    bookmark_module_ui(ns("bookmark_manager"), modules)
+  rev(
+    tagList(
+      title = "",
+      tags$button(
+        id = ns("show_filter_manager"),
+        class = "btn action-button wunder_bar_button",
+        title = "View filter mapping",
+        suppressMessages(icon("solid fa-grip"))
+      ),
+      tags$button(
+        id = ns("show_snapshot_manager"),
+        class = "btn action-button wunder_bar_button",
+        title = "Manage filter state snapshots",
+        icon("camera")
+      ),
+      bookmark_module_ui(ns("bookmark_manager"))
+    )
   )
 }
 
