@@ -289,9 +289,11 @@ bookmarks_identical <- function(book1, book2) {
 get_teal_bookmarkable_summary <- function(modules) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, get_teal_bookmarkable_summary)
+    setNames(
+      lapply(modules$children, get_teal_bookmarkable_summary),
+      vapply(modules$children, `[[`, "label", FUN.VALUE = character(1))
+    )
   } else {
-    val <- isTRUE(attr(modules, "teal_bookmarkable"))
-    setNames(val, modules$label)
+    isTRUE(attr(modules, "teal_bookmarkable"))
   }
 }
