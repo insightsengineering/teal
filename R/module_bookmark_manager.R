@@ -49,7 +49,7 @@ bookmark_module_ui <- function(id) {
 #'
 bookmark_manager_srv <- function(id, modules) {
   checkmate::assert_character(id)
-
+  checkmate::assert_multi_class(modules, "teal_modules")
   moduleServer(id, function(input, output, session) {
     logger::log_trace("bookmark_manager_srv initializing")
     ns <- session$ns
@@ -59,7 +59,7 @@ bookmark_manager_srv <- function(id, modules) {
       Negate(isTRUE),
       how = "unlist"
     )
-
+    # Render bookmark warnings count
     output$bookmark_warning <- renderUI({
       if (bookmark_option != "server") {
         tags$span(
@@ -75,7 +75,7 @@ bookmark_manager_srv <- function(id, modules) {
     })
 
     # Set up bookmarking callbacks ----
-    # Register bookmark exclusions: all buttons and the `textInput` for bookmark name.
+    # Register bookmark exclusions: do_bookmark button to avoid re-bookmarking
     setBookmarkExclude(c("do_bookmark"))
     # This bookmark can only be used on the app session.
     app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
@@ -93,19 +93,20 @@ bookmark_manager_srv <- function(id, modules) {
         )
       } else {
         tags$div(
-          tags$span(tags$pre(url)),
-          tags$button(
-            id = ns("copy_to_clipboard"),
-            class = "btn action-button",
-            title = "Copy to clipboard",
-            tags$span(suppressMessages(icon("solid fa-copy")))
+          tags$span(
+            tags$pre(url)
           ),
           if (any(is_unbookmarkable)) {
-            bkmb_summary <- get_teal_bookmarkable_summary(modules)
+            bkmb_summary <- rapply(
+              get_teal_bookmarkable_summary(modules),
+              function(x) if (isTRUE(x)) "✓" else "✗",
+              how = "replace"
+            )
             tags$div(
               tags$p(
                 icon("fas fa-exclamation-triangle"),
-                "Some modules are not bookmarkable. Their state will not be restored when using this bookmark.",
+                "Some modules will not be restored when using this bookmark.",
+                "Check the list below to see which modules are not bookmarkable.",
                 class = "text-warning"
               ),
               tags$pre(yaml::as.yaml(bkmb_summary))
@@ -118,14 +119,12 @@ bookmark_manager_srv <- function(id, modules) {
         modalDialog(
           title = "Bookmarked teal app url",
           modal_content,
-          footer = tagList(
-            actionButton(ns("close_modal"), "Close")
-          ),
           easyClose = TRUE
         )
       )
     })
 
+    # manually trigger bookmarking because of the problems reported with bookmarkButton in teal
     observeEvent(input$do_bookmark, {
       logger::log_trace("bookmark_manager_srv@1 do_bookmark module clicked.")
       session$doBookmark()
@@ -288,6 +287,7 @@ bookmarks_identical <- function(book1, book2) {
 #' whether the module is bookmarkable.
 #' @keywords internal
 get_teal_bookmarkable_summary <- function(modules) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   if (inherits(modules, "teal_modules")) {
     lapply(modules$children, get_teal_bookmarkable_summary)
   } else {
