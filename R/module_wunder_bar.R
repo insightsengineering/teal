@@ -13,8 +13,7 @@
 #' @name module_wunder_bar
 #' @aliases wunder_bar wunder_bar_module
 #'
-#' @param id (`character(1)`) `shiny` module instance id.
-#' @inheritParams module_filter_manager
+#' @inheritParams module_tabs_with_filters
 #'
 #' @return Nothing is returned.
 
@@ -37,7 +36,7 @@ wunder_bar_ui <- function(id) {
         title = "Manage filter state snapshots",
         icon("camera")
       ),
-      bookmark_module_ui(ns("bookmark_manager"))
+      bookmark_manager_ui(ns("bookmark_manager"))
     )
   )
 }

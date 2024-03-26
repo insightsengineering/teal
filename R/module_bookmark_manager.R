@@ -22,7 +22,7 @@
 #' modules are not bookmarkable. In order to set external `teal_module` elements as bookmarkable, the
 #' `teal_bookmarkable` attribute must be set to `TRUE` by the module developer.
 #'
-#' @param id (`character(1)`) `shiny` module instance id.
+#' @inheritParams module_wunder_bar
 #'
 #' @return `reactiveVal` containing a named list of bookmark URLs.
 #'
@@ -31,7 +31,7 @@
 #' @rdname module_bookmark_manager
 #' @keywords internal
 #'
-bookmark_module_ui <- function(id) {
+bookmark_manager_ui <- function(id) {
   ns <- NS(id)
   tags$button(
     id = ns("do_bookmark"),
@@ -99,7 +99,7 @@ bookmark_manager_srv <- function(id, modules) {
           if (any(is_unbookmarkable)) {
             bkmb_summary <- rapply(
               get_teal_bookmarkable_summary(modules),
-              function(x) if (isTRUE(x)) "✓" else "✗",
+              function(x) if (isTRUE(x)) "\u2705" else "\u274C",
               how = "replace"
             )
             tags$div(
