@@ -164,8 +164,8 @@ init <- function(data,
     stop("Only one `landing_popup_module` can be used.")
   }
 
-  ## `filter` - app_id attribute
-  attr(filter, "app_id") <- create_app_id(data, modules)
+  ## `filter` - set app_id attribute unless present (when restoring bookmark)
+  if (is.null(attr(filter, "app_id", exact = TRUE))) attr(filter, "app_id") <- create_app_id(data, modules)
 
   ## `filter` - convert teal.slice::teal_slices to teal::teal_slices
   filter <- as.teal_slices(as.list(filter))
