@@ -6,45 +6,21 @@
 #' and server-side bookmarks can be created.
 #'
 #' The bookmark manager is accessed with the bookmark icon in the [`wunder_bar`].
-#' The manager's header contains a title and a bookmark icon. Clicking the icon creates a bookmark.
-#' As bookmarks are added, they will show up as rows in a table, each being a link that, when clicked,
-#' will open the bookmarked application in a new window.
+#' The manager's modal displays the bookmark URL, which can be copied to the clipboard.
 #'
 #' @section Server logic:
 #' A bookmark is a URL that contains the app address with a `/?_state_id_=<bookmark_dir>` suffix.
 #' `<bookmark_dir>` is a directory created on the server, where the state of the application is saved.
 #' Accessing the bookmark URL opens a new session of the app that starts in the previously saved state.
 #'
-#' Bookmarks are stored in a `reactiveVal` as a named list.
-#' For every bookmark created a piece of HTML is created that contains a link,
-#' whose text is the name of the bookmark and whose href is the bookmark URL.
-#'
-#' @section Bookmark mechanics:
-#' When a bookmark is added, the user is prompted to name it.
-#' New bookmark names are validated so that thy are unique. Leading and trailing white space is trimmed.
-#'
-#' Once a bookmark name has been accepted, the app state is saved: values of all inputs,
-#' which are kept in the `input` slot of the `session` object, are dumped into the `input.rds` file
-#' in the `<bookmark_dir>` directory on the server.
-#' This is out of the box behavior that permeates the entire app, no adjustments to modules are necessary.
-#' An additional `onBookmark` callback dumps the previous bookmark history to the `values.rds` file in `<bookmark_dir>`.
-#'
-#' Finally, an `onBookmarked` callback adds the newly created bookmark to the bookmark history.
-#' Notably, this occurs _after_ creating the bookmark is concluded so the bookmark history that was stored
-#' does not include the newly added bookmark.
-#'
-#' When starting the app from a bookmark, `shiny` recognizes that the app is being restored,
-#' locates the bookmark directory and loads both `.rds` file.
-#' Values stored in `input.rds` are automatically set to their corresponding inputs.
-#'
-#' Finally, bookmark history is loaded from `values.rds` and set to the module's `reactiveVal`.
-#'
 #' @section Note:
-#' All `teal` apps are inherently bookmarkable. Normal `shiny` apps require that `enableBookmarking` be set to "server",
-#' either by setting an argument in a `shinyApp` call or by calling a special function. In `teal` bookmarks are enabled
-#' by automatically setting an option when the package is loaded.
+#' `shinyOptions("bookmarkStore" = "server")` is set in `teal` by default on package load. Using the
+#' `url` option is not supported.
 #'
-#' If the option is set to a different value by the app developer, the bookmark manager will forbid creating bookmarks.
+#' `teal` does not guarantee that all `teal_module` elements are bookmarkable. Those that are, have the
+#' `teal_bookmarkable` attribute set to `TRUE`. The bookmark manager modal displays a warning if any
+#' modules are not bookmarkable. In order to set external `teal_module` elements as bookmarkable, the
+#' `teal_bookmarkable` attribute must be set to `TRUE` by the module developer.
 #'
 #' @param id (`character(1)`) `shiny` module instance id.
 #'
@@ -102,8 +78,20 @@ bookmark_manager_srv <- function(id, modules) {
     app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
     app_session$onBookmarked(function(url) {
       logger::log_trace("bookmark_manager_srv@onBookmarked: bookmark button clicked, registering bookmark")
-      bkmb_summary <- get_teal_bookmarkable_summary(modules)
 
+      bookmark_option <- getShinyOption("bookmarkStore", "disabled")
+      if (bookmark_option != "server") {
+        msg <- sprintf(
+          "Bookmarking has been set to \"%s\".\n%s\n%s",
+          bookmark_option,
+          "Only server-side bookmarking is supported.",
+          "Please contact your app developer."
+        )
+        shiny::showNotification(msg, duration = 10, type = "warning")
+        return(NULL)
+      }
+
+      bkmb_summary <- get_teal_bookmarkable_summary(modules)
       showModal(
         modalDialog(
           title = "Bookmarked teal app url",
@@ -129,7 +117,6 @@ bookmark_manager_srv <- function(id, modules) {
         )
       )
     })
-
 
     observeEvent(input$do_bookmark, {
       logger::log_trace("bookmark_manager_srv@1 do_bookmark module clicked.")
@@ -286,10 +273,15 @@ bookmarks_identical <- function(book1, book2) {
   invisible(NULL)
 }
 
-
-get_teal_bookmarkable_summary <- function(modules, indent = 0L) {
+#' Get bookmarkable summary list
+#'
+#' @param modules `teal_modules` object
+#' @return named list of the same structure as `modules` with `TRUE` or `FALSE` values indicating
+#' whether the module is bookmarkable.
+#' @keywords internal
+get_teal_bookmarkable_summary <- function(modules) {
   if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, get_teal_bookmarkable_summary, indent = indent + 2L)
+    lapply(modules$children, get_teal_bookmarkable_summary)
   } else {
     val <- isTRUE(attr(modules, "teal_bookmarkable"))
     setNames(val, modules$label)

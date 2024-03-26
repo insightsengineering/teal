@@ -8,9 +8,9 @@
 \alias{wunder_bar_srv}
 \title{Manager bar module}
 \usage{
-wunder_bar_ui(id)
+wunder_bar_ui(id, modules)
 
-wunder_bar_srv(id, datasets, filter)
+wunder_bar_srv(id, datasets, filter, modules)
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}

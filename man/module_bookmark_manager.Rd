@@ -2,16 +2,16 @@
 % Please edit documentation in R/module_bookmark_manager.R
 \name{module_bookmark_manager}
 \alias{module_bookmark_manager}
-\alias{bookmark_manager_ui}
+\alias{bookmark_module_ui}
 \alias{bookmark}
 \alias{bookmark_manager}
 \alias{bookmark_manager_module}
 \alias{bookmark_manager_srv}
 \title{App state management.}
 \usage{
-bookmark_manager_ui(id)
+bookmark_module_ui(id, modules)
 
-bookmark_manager_srv(id)
+bookmark_manager_srv(id, modules)
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
@@ -27,50 +27,24 @@ This module introduces bookmarks into \code{teal} apps: the \code{shiny} bookmar
 and server-side bookmarks can be created.
 
 The bookmark manager is accessed with the bookmark icon in the \code{\link{wunder_bar}}.
-The manager's header contains a title and a bookmark icon. Clicking the icon creates a bookmark.
-As bookmarks are added, they will show up as rows in a table, each being a link that, when clicked,
-will open the bookmarked application in a new window.
+The manager's modal displays the bookmark URL, which can be copied to the clipboard.
 }
 \section{Server logic}{
 
 A bookmark is a URL that contains the app address with a \verb{/?_state_id_=<bookmark_dir>} suffix.
 \verb{<bookmark_dir>} is a directory created on the server, where the state of the application is saved.
 Accessing the bookmark URL opens a new session of the app that starts in the previously saved state.
-
-Bookmarks are stored in a \code{reactiveVal} as a named list.
-For every bookmark created a piece of HTML is created that contains a link,
-whose text is the name of the bookmark and whose href is the bookmark URL.
-}
-
-\section{Bookmark mechanics}{
-
-When a bookmark is added, the user is prompted to name it.
-New bookmark names are validated so that thy are unique. Leading and trailing white space is trimmed.
-
-Once a bookmark name has been accepted, the app state is saved: values of all inputs,
-which are kept in the \code{input} slot of the \code{session} object, are dumped into the \code{input.rds} file
-in the \verb{<bookmark_dir>} directory on the server.
-This is out of the box behavior that permeates the entire app, no adjustments to modules are necessary.
-An additional \code{onBookmark} callback dumps the previous bookmark history to the \code{values.rds} file in \verb{<bookmark_dir>}.
-
-Finally, an \code{onBookmarked} callback adds the newly created bookmark to the bookmark history.
-Notably, this occurs \emph{after} creating the bookmark is concluded so the bookmark history that was stored
-does not include the newly added bookmark.
-
-When starting the app from a bookmark, \code{shiny} recognizes that the app is being restored,
-locates the bookmark directory and loads both \code{.rds} file.
-Values stored in \code{input.rds} are automatically set to their corresponding inputs.
-
-Finally, bookmark history is loaded from \code{values.rds} and set to the module's \code{reactiveVal}.
 }
 
 \section{Note}{
 
-All \code{teal} apps are inherently bookmarkable. Normal \code{shiny} apps require that \code{enableBookmarking} be set to "server",
-either by setting an argument in a \code{shinyApp} call or by calling a special function. In \code{teal} bookmarks are enabled
-by automatically setting an option when the package is loaded.
+\code{shinyOptions("bookmarkStore" = "server")} is set in \code{teal} by default on package load. Using the
+\code{url} option is not supported.
 
-If the option is set to a different value by the app developer, the bookmark manager will forbid creating bookmarks.
+\code{teal} does not guarantee that all \code{teal_module} elements are bookmarkable. Those that are, have the
+\code{teal_bookmarkable} attribute set to \code{TRUE}. The bookmark manager modal displays a warning if any
+modules are not bookmarkable. In order to set external \code{teal_module} elements as bookmarkable, the
+\code{teal_bookmarkable} attribute must be set to \code{TRUE} by the module developer.
 }
 
 \keyword{internal}
