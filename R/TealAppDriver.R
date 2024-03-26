@@ -409,12 +409,25 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       browseURL(self$get_url())
     },
     #' @description
-    #' Wait until an output value is not one of `ignored` values `timeout` is reached.
-    #' This function will only access output value and its wrapper around `wait_for_value` method.
-    #' @param output_id (character) The shiny output id to get the value from.
-    wait_for_ouput_value = function(output_id, ...) {
-      checkmate::check_string(input_id)
-      self$wait_for_value(output = sprintf("%s-%s", self$active_module_ns(), output_id), ...)
+    #' Waits until a specified input, output, or export value.
+    #' This function serves as a wrapper around the `wait_for_value` method,
+    #' providing a more flexible interface for waiting on different types of values within the active module namespace.
+    #' @param ... Dynamic parameters allowing the specification of either an `input`, `output`, or `export` parameter with,
+    #' additional value to passed in `wait_for_value`
+    wait_for_active_module_value = function(...) {
+      dots <- list(...)
+      param_types <- intersect(names(dots), c("input", "output", "export"))
+      checkmate::assert(
+        checkmate::assert_choice(parm_type, c("input", "output", "export")),
+        checkmate::assert_character(dots[[param_type]], len = 1, min.chars = 1),
+        combine = "and"
+      )
+
+
+      modified_id <- sprintf("%s-%s", self$active_module_ns(), dots[[param_type]])
+      dots <- dots[!names(dots) %in% param_type]
+
+      do.call(what = self$wait_for_value, args = c(list(param_type = modified_id, timeout = private$load_timeout), dots))
     }
   ),
   # private members ----
