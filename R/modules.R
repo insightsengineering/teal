@@ -436,6 +436,6 @@ modules_bookmarkable <- function(modules) {
       vapply(modules$children, `[[`, "label", FUN.VALUE = character(1))
     )
   } else {
-    isTRUE(attr(modules, "teal_bookmarkable"))
+    isTRUE(attr(modules, "teal_bookmarkable", exact = TRUE))
   }
 }
