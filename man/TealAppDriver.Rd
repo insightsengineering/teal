@@ -109,12 +109,14 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 timeout_ parameter in the \code{TealAppDriver} class.
 Defaults to 20s.
 
-See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details.}
+See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details on how to change it
+via options or environment variables.}
 
 \item{\code{load_timeout}}{(\code{numeric}) How long to wait for the app to load, in ms.
 This includes the time to start R. Defaults to 100s.
 
-See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details.}
+See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details on how to change it
+via options or environment variables}
 
 \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$new}}
 }

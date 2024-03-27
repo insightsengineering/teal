@@ -20,11 +20,13 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' timeout_ parameter in the `TealAppDriver` class.
     #' Defaults to 20s.
     #'
-    #' See [`shinytest2::AppDriver`] `new` method for more details.
+    #' See [`shinytest2::AppDriver`] `new` method for more details on how to change it
+    #' via options or environment variables.
     #' @param load_timeout (`numeric`) How long to wait for the app to load, in ms.
     #' This includes the time to start R. Defaults to 100s.
     #'
-    #' See [`shinytest2::AppDriver`] `new` method for more details.
+    #' See [`shinytest2::AppDriver`] `new` method for more details on how to change it
+    #' via options or environment variables
     #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$new`
     #'
     #'
