@@ -412,8 +412,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Waits until a specified input, output, or export value.
     #' This function serves as a wrapper around the `wait_for_value` method,
     #' providing a more flexible interface for waiting on different types of values within the active module namespace.
-    #' @param ... Dynamic parameters allowing the specification of either an `input`, `output`, or `export` parameter with,
-    #' additional value to passed in `wait_for_value`
+    #' @param ... Dynamic parameters allowing the specification of either an `input`, `output`, or `export`
+    #' parameter with additional value to passed in `wait_for_value`.
     wait_for_active_module_value = function(...) {
       dots <- list(...)
       param_types <- intersect(names(dots), c("input", "output", "export"))
@@ -427,7 +427,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       modified_id <- sprintf("%s-%s", self$active_module_ns(), dots[[param_type]])
       dots <- dots[!names(dots) %in% param_type]
 
-      do.call(what = self$wait_for_value, args = c(list(param_type = modified_id, timeout = private$load_timeout), dots))
+      do.call(what = self$wait_for_value,
+              args = c(list(param_type = modified_id, timeout = private$load_timeout), dots))
     }
   ),
   # private members ----

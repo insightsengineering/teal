@@ -507,8 +507,8 @@ providing a more flexible interface for waiting on different types of values wit
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{Dynamic parameters allowing the specification of either an \code{input}, \code{output}, or \code{export} parameter with,
-additional value to passed in \code{wait_for_value}}
+\item{\code{...}}{Dynamic parameters allowing the specification of either an \code{input}, \code{output}, or \code{export}
+parameter with additional value to passed in \code{wait_for_value}.}
 }
 \if{html}{\out{</div>}}
 }
