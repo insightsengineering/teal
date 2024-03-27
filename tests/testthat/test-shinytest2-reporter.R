@@ -46,10 +46,8 @@ testthat::test_that("e2e: adding a report card in a module adds it in the report
     data = simple_teal_data(),
     modules = report_module(label = "Module with Reporter")
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   app$click(NS(app$active_module_ns(), "reporter-add_report_card_simple-add_report_card_button"))
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   app$set_input(
     NS(app$active_module_ns(), "reporter-add_report_card_simple-label"),
