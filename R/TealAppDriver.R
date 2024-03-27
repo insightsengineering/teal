@@ -376,20 +376,22 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
         dots <- rlang::list2(...)
 
-        checkmate::assert_choice(dots$priority_, formals(self$set_inputs))
+        checkmate::assert_choice(dots$priority_, formals(self$set_inputs)[["priority_"]])
         self$run_js(
           sprintf(
             "Shiny.setInputValue('%s:sw.numericRange', [%f, %f], {priority: '%s'})",
             slices_input_id,
             input[[1]],
             input[[2]],
-            priority_ = dplyr::coalesce(dots$priority_, "input", .size = 1)
+            priority_ = ifelse(is.null(dots$priority_), "input", dots$priority_)
           )
         )
-        self$wait_for_idle(
-          wait = dplyr::coalesce(dots$wait_, TRUE, .size = 1),
-          timeout = dplyr::coalesce(dots$timeout_, private$timeout, .size = 1)
-        )
+        # Default `wait_` (NULL) value is TRUE.
+        if (isTRUE(dots$wait_) || is.null(dots$wait_)) {
+          self$wait_for_idle(
+            timeout = if (is.null(dots$timeout_)) rlang::missing_arg() else dots$timeout_
+          )
+        }
       } else if (identical(slices_suffix, "selection")) {
         self$set_input(
           slices_input_id,
