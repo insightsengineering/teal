@@ -5,10 +5,6 @@
 #' Extension of the `shinytest2::AppDriver` class with methods for
 #' driving a teal application for performing interactions for `shinytest2` tests.
 #'
-#' Default timeout values are overridden to 20s and 100s for `timeout` and
-#' `load_timeout` respectively. These can be further overridden by passing them as
-#' arguments when initializing `TealAppDriver`.
-#'
 #' @keywords internal
 #'
 TealAppDriver <- R6::R6Class( # nolint: object_name.
@@ -20,7 +16,17 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
     #' @param data,modules,filter,title,header,footer arguments passed to `init`
+    #' @param timeout (`numeric`) Default number of milliseconds for any timeout or
+    #' timeout_ parameter in the `TealAppDriver` class.
+    #' Defaults to 20s.
+    #'
+    #' See [`shinytest2::AppDriver`] `new` method for more details.
+    #' @param load_timeout (`numeric`) How long to wait for the app to load, in ms.
+    #' This includes the time to start R. Defaults to 100s.
+    #'
+    #' See [`shinytest2::AppDriver`] `new` method for more details.
     #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$new`
+    #'
     #'
     #' @return  Object of class `TealAppDriver`
     initialize = function(data,
@@ -29,6 +35,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
                           title = build_app_title(),
                           header = tags$p(),
                           footer = tags$p(),
+                          timeout = rlang::missing_arg(),
+                          load_timeout = rlant::missing_arg(),
                           ...) {
       private$data <- data
       private$modules <- modules
@@ -42,23 +50,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         footer = footer
       )
 
-      dots <- rlang::list2(...)
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
       # It must be set as parameter to the AppDriver
-      if (is.null(dots$timeout)) dots$timeout <- 20 * 1000
-      if (is.null(dots$load_timeout)) dots$load_timeout <- 100 * 1000
-
       suppressWarnings(
-        do.call(
-          super$initialize,
-          modifyList(
-            dots,
-            list(
-              app_dir = shinyApp(app$ui, app$server),
-              name = "teal",
-              variant = platform_variant()
-            )
-          )
+        super$initialize(
+          app_dir = shinyApp(app$ui, app$server),
+          name = "teal",
+          variant = platform_variant(),
+          timeout = rlang::maybe_missing(timeout, 20 * 1000),
+          load_timeout = rlang::maybe_missing(load_timeout, 100 * 1000),
+          ...
         )
       )
 

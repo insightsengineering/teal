@@ -11,10 +11,6 @@ Drive a \code{teal} application
 \details{
 Extension of the \code{shinytest2::AppDriver} class with methods for
 driving a teal application for performing interactions for \code{shinytest2} tests.
-
-Default timeout values are overridden to 20s and 100s for \code{timeout} and
-\code{load_timeout} respectively. These can be further overridden by passing them as
-arguments when initializing \code{TealAppDriver}.
 }
 \keyword{internal}
 \section{Super class}{
@@ -98,6 +94,8 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
   title = build_app_title(),
   header = tags$p(),
   footer = tags$p(),
+  timeout = rlang::missing_arg(),
+  load_timeout = rlant::missing_arg(),
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -106,6 +104,17 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{data, modules, filter, title, header, footer}}{arguments passed to \code{init}}
+
+\item{\code{timeout}}{(\code{numeric}) Default number of milliseconds for any timeout or
+timeout_ parameter in the \code{TealAppDriver} class.
+Defaults to 20s.
+
+See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details.}
+
+\item{\code{load_timeout}}{(\code{numeric}) How long to wait for the app to load, in ms.
+This includes the time to start R. Defaults to 100s.
+
+See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details.}
 
 \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$new}}
 }
