@@ -39,7 +39,7 @@ bookmark_manager_ui <- function(id) {
     title = "Add bookmark",
     tags$span(
       suppressMessages(icon("solid fa-bookmark")),
-      uiOutput(ns("bookmark_warning"), inline = TRUE)
+      uiOutput(ns("warning_badge"), inline = TRUE)
     )
   )
 }
@@ -60,7 +60,7 @@ bookmark_manager_srv <- function(id, modules) {
       how = "unlist"
     )
     # Render bookmark warnings count
-    output$bookmark_warning <- renderUI({
+    output$warning_badge <- renderUI({
       if (!identical(bookmark_option, "server")) {
         shinyjs::hide("do_bookmark")
         NULL
