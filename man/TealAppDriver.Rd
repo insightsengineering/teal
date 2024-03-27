@@ -41,6 +41,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-get_attr}{\code{TealAppDriver$get_attr()}}
 \item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
+\item \href{#method-TealAppDriver-wait_for_active_module_value}{\code{TealAppDriver$wait_for_active_module_value()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
 }
 }
@@ -490,6 +491,34 @@ Wrapper around \code{get_url()} method that opens the app in the browser.
 
 \subsection{Returns}{
 Nothing. Opens the underlying teal app in the browser.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-wait_for_active_module_value"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-wait_for_active_module_value}{}}}
+\subsection{Method \code{wait_for_active_module_value()}}{
+Waits until a specified input, output, or export value.
+This function serves as a wrapper around the \code{wait_for_value} method,
+providing a more flexible interface for waiting on different types of values within the active module namespace.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$wait_for_active_module_value(
+  input = rlang::missing_arg(),
+  output = rlang::missing_arg(),
+  export = rlang::missing_arg(),
+  ...
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input, output, export}}{A name of an input, output, or export value.
+Only one of these parameters may be used.}
+
+\item{\code{...}}{Must be empty. Allows for parameter expansion.
+Parameter with additional value to passed in \code{wait_for_value}.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

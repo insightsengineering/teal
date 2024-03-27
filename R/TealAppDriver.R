@@ -407,6 +407,31 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return Nothing. Opens the underlying teal app in the browser.
     open_url = function() {
       browseURL(self$get_url())
+    },
+    #' @description
+    #' Waits until a specified input, output, or export value.
+    #' This function serves as a wrapper around the `wait_for_value` method,
+    #' providing a more flexible interface for waiting on different types of values within the active module namespace.
+    #' @param input,output,export A name of an input, output, or export value.
+    #' Only one of these parameters may be used.
+    #' @param ... Must be empty. Allows for parameter expansion.
+    #' Parameter with additional value to passed in `wait_for_value`.
+    wait_for_active_module_value = function(input = rlang::missing_arg(),
+                                            output = rlang::missing_arg(),
+                                            export = rlang::missing_arg(),
+                                            ...) {
+      ns <- shiny::NS(self$active_module_ns())
+
+      if (!rlang::is_missing(input) && checkmate::test_string(input, min.chars = 1)) input <- ns(input)
+      if (!rlang::is_missing(output) && checkmate::test_string(output, min.chars = 1)) output <- ns(output)
+      if (!rlang::is_missing(export) && checkmate::test_string(export, min.chars = 1)) export <- ns(export)
+
+      self$wait_for_value(
+        input = input,
+        output = output,
+        export = export,
+        ...
+      )
     }
   ),
   # private members ----
