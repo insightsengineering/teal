@@ -501,14 +501,22 @@ Waits until a specified input, output, or export value.
 This function serves as a wrapper around the \code{wait_for_value} method,
 providing a more flexible interface for waiting on different types of values within the active module namespace.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$wait_for_active_module_value(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$wait_for_active_module_value(
+  input = rlang::missing_arg(),
+  output = rlang::missing_arg(),
+  export = rlang::missing_arg(),
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{Dynamic parameters allowing the specification of either an \code{input}, \code{output}, or \code{export}
-parameter with additional value to passed in \code{wait_for_value}.}
+\item{\code{input, output, export}}{A name of an input, output, or export value.
+Only one of these parameters may be used.}
+
+\item{\code{...}}{Must be empty. Allows for parameter expansion.
+Parameter with additional value to passed in \code{wait_for_value}.}
 }
 \if{html}{\out{</div>}}
 }
