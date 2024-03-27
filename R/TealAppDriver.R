@@ -37,12 +37,24 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         header = header,
         footer = footer
       )
+
+      dots <- rlang::list2(...)
+      # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
+      # It must be set as parameter to the driver if no
+      if (is.null(dots$timeout)) dots$timeout <- 20 * 1000
+      if (is.null(dots$load_timeout)) dots$load_timeout <- 100 * 1000
+
       suppressWarnings(
-        super$initialize(
-          shinyApp(app$ui, app$server),
-          name = "teal",
-          variant = platform_variant(),
-          ...
+        do.call(
+          super$initialize,
+          modifyList(
+            dots,
+            list(
+              app_dir = shinyApp(app$ui, app$server),
+              name = "teal",
+              variant = platform_variant()
+            )
+          )
         )
       )
 
@@ -50,14 +62,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       self$wait_for_idle()
     },
     #' @description
-    #' Set custom values for `duration` and `timeout` in parent [`AppDriver`] `waif_for_idle()` method.
-    #' @param duration,timeout (`numeric(1)`) passed to parent [`AppDriver`] `waif_for_idle()` method.
-    wait_for_idle = function(duration = 500, timeout = 20000) {
-      super$wait_for_idle(duration = duration, timeout = timeout)
-    },
-    #' @description
-    #' Append parent [`AppDriver`] `click` method with a call to `waif_for_idle()` method.
-    #' @param ... arguments passed to parent [`AppDriver`] `click()` method.
+    #' Append parent [`shinytest2::AppDriver`] `click` method with a call to `waif_for_idle()` method.
+    #' @param ... arguments passed to parent [`shinytest2::AppDriver`] `click()` method.
     click = function(...) {
       super$click(...)
       self$wait_for_idle()
@@ -126,7 +132,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
         root <- sprintf("%s-%s", private$modules$label, get_unique_labels(tab))
       }
-      self$wait_for_idle(timeout = private$idle_timeout)
+      self$wait_for_idle()
       private$set_active_ns()
       invisible(self)
     },
@@ -433,8 +439,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       module = character(0),
       filter_panel = character(0)
     ),
-    idle_timeout = 20000, # 20 seconds
-    load_timeout = 100000, # 100 seconds
+    load_timeout = NULL,
     # private methods ----
     set_active_ns = function() {
       all_inputs <- self$get_values()$input

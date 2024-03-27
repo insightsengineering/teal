@@ -25,8 +25,7 @@ testthat::test_that("e2e: teal_data_module will have a delayed load of datasets"
 
   app <- TealAppDriver$new(
     data = tdm,
-    modules = example_module(label = "Example Module"),
-    timeout = default_idle_timeout
+    modules = example_module(label = "Example Module")
   )
 
   app$click("teal_data_module-submit")
@@ -61,8 +60,7 @@ testthat::test_that("e2e: teal_data_module shows validation errors", {
 
   app <- TealAppDriver$new(
     data = tdm,
-    modules = example_module(label = "Example Module"),
-    timeout = default_idle_timeout
+    modules = example_module(label = "Example Module")
   )
 
   app$click("teal_data_module-submit")
@@ -106,8 +104,7 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
 
   app <- TealAppDriver$new(
     data = tdm,
-    modules = example_module(label = "Example Module"),
-    timeout = default_idle_timeout
+    modules = example_module(label = "Example Module")
   )
 
   app$set_input("teal_data_module-new_column", "A_New_Column")

@@ -1,8 +1,6 @@
 library(shinytest2)
 library(rvest)
 
-default_idle_timeout <- 2000
-
 simple_teal_data <- function() {
   data <- within(teal_data(), {
     iris <- iris
