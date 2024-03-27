@@ -412,23 +412,27 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Waits until a specified input, output, or export value.
     #' This function serves as a wrapper around the `wait_for_value` method,
     #' providing a more flexible interface for waiting on different types of values within the active module namespace.
-    #' @param ... Dynamic parameters allowing the specification of either an `input`, `output`, or `export`
-    #' parameter with additional value to passed in `wait_for_value`.
-    wait_for_active_module_value = function(...) {
-      dots <- list(...)
-      param_types <- intersect(names(dots), c("input", "output", "export"))
-      checkmate::assert(
-        checkmate::assert_choice(parm_type, c("input", "output", "export")),
-        checkmate::assert_character(dots[[param_type]], len = 1, min.chars = 1),
-        combine = "and"
+    #' @param input,output,export A name of an input, output, or export value.
+    #' Only one of these parameters may be used.
+    #' @param ... Must be empty. Allows for parameter expansion.
+    #' Parameter with additional value to passed in `wait_for_value`.
+    wait_for_active_module_value = function(input = rlang::missing_arg(),
+                                            output = rlang::missing_arg(),
+                                            export = rlang::missing_arg(),
+                                            ...) {
+      ns <- shiny::NS(self$active_module_ns())
+
+      if (!rlang::is_missing(input) && checkmate::test_string(input, min.chars = 1)) input <- ns(input)
+      if (!rlang::is_missing(output) && checkmate::test_string(output, min.chars = 1)) output <- ns(output)
+      if (!rlang::is_missing(export) && checkmate::test_string(export, min.chars = 1)) export <- ns(export)
+
+      self$wait_for_value(
+        input = input,
+        output = output,
+        export = export,
+        timeout = private$idle_timeout,
+        ...
       )
-
-
-      modified_id <- sprintf("%s-%s", self$active_module_ns(), dots[[param_type]])
-      dots <- dots[!names(dots) %in% param_type]
-
-      do.call(what = self$wait_for_value,
-              args = c(list(param_type = modified_id, timeout = private$load_timeout), dots))
     }
   ),
   # private members ----
