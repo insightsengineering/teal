@@ -421,3 +421,21 @@ module_labels <- function(modules) {
     modules$label
   }
 }
+
+#' Retrieve `teal_bookmarkable` attribute from `teal_modules`
+#'
+#' @param modules (`teal_modules` or `teal_module`) object
+#' @return named list of the same structure as `modules` with `TRUE` or `FALSE` values indicating
+#' whether the module is bookmarkable.
+#' @keywords internal
+modules_bookmarkable <- function(modules) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+  if (inherits(modules, "teal_modules")) {
+    setNames(
+      lapply(modules$children, modules_bookmarkable),
+      vapply(modules$children, `[[`, "label", FUN.VALUE = character(1))
+    )
+  } else {
+    isTRUE(attr(modules, "teal_bookmarkable"))
+  }
+}
