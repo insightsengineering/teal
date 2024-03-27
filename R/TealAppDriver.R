@@ -372,11 +372,11 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
       if (identical(slices_suffix, "selection_manual")) {
         checkmate::assert_numeric(input, len = 2)
-        extra_formals <- formals(app$set_inputs)
 
         dots <- rlang::list2(...)
+        checkmate::assert_choice(dots$priority_, formals(self$set_inputs)[["priority_"]], null.ok = TRUE)
+        checkmate::assert_flag(dots$wait_, null.ok = TRUE)
 
-        checkmate::assert_choice(dots$priority_, formals(self$set_inputs)[["priority_"]])
         self$run_js(
           sprintf(
             "Shiny.setInputValue('%s:sw.numericRange', [%f, %f], {priority: '%s'})",
@@ -386,7 +386,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
             priority_ = ifelse(is.null(dots$priority_), "input", dots$priority_)
           )
         )
-        # Default `wait_` (NULL) value is TRUE.
+
         if (isTRUE(dots$wait_) || is.null(dots$wait_)) {
           self$wait_for_idle(
             timeout = if (is.null(dots$timeout_)) rlang::missing_arg() else dots$timeout_
