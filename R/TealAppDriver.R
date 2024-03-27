@@ -430,7 +430,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         input = input,
         output = output,
         export = export,
-        timeout = private$idle_timeout,
         ...
       )
     }
