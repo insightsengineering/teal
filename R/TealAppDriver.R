@@ -427,8 +427,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       modified_id <- sprintf("%s-%s", self$active_module_ns(), dots[[param_type]])
       dots <- dots[!names(dots) %in% param_type]
 
-      do.call(what = self$wait_for_value,
-              args = c(list(param_type = modified_id, timeout = private$load_timeout), dots))
+      do.call(
+        what = self$wait_for_value,
+        args = c(list(param_type = modified_id, timeout = private$load_timeout), dots)
+      )
     }
   ),
   # private members ----
