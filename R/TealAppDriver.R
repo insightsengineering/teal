@@ -5,6 +5,10 @@
 #' Extension of the `shinytest2::AppDriver` class with methods for
 #' driving a teal application for performing interactions for `shinytest2` tests.
 #'
+#' Default timeout values are overridden to 20s and 100s for `timeout` and
+#' `load_timeout` respectively. These can be further overridden by passing them as
+#' arguments when initializing `TealAppDriver`.
+#'
 #' @keywords internal
 #'
 TealAppDriver <- R6::R6Class( # nolint: object_name.

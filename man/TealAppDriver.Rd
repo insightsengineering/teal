@@ -11,6 +11,10 @@ Drive a \code{teal} application
 \details{
 Extension of the \code{shinytest2::AppDriver} class with methods for
 driving a teal application for performing interactions for \code{shinytest2} tests.
+
+Default timeout values are overridden to 20s and 100s for \code{timeout} and
+\code{load_timeout} respectively. These can be further overridden by passing them as
+arguments when initializing \code{TealAppDriver}.
 }
 \keyword{internal}
 \section{Super class}{
