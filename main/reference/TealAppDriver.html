@@ -12,7 +12,7 @@ Drive a teal application"><!-- mathjax --><script src="https://cdnjs.cloudflare.
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9016</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9017</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,23 +66,6 @@ Drive a teal application"><!-- mathjax --><script src="https://cdnjs.cloudflare.
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2-rc1">v0.15.2-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2">v0.15.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1">v0.15.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -133,6 +116,7 @@ driving a teal application for performing interactions for <code>shinytest2</cod
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
 <ul><li><p><a href="#method-TealAppDriver-new"><code>TealAppDriver$new()</code></a></p></li>
+<li><p><a href="#method-TealAppDriver-click"><code>TealAppDriver$click()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-expect_no_shiny_error"><code>TealAppDriver$expect_no_shiny_error()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-expect_no_validation_error"><code>TealAppDriver$expect_no_validation_error()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-expect_validation_error"><code>TealAppDriver$expect_validation_error()</code></a></p></li>
@@ -156,8 +140,7 @@ driving a teal application for performing interactions for <code>shinytest2</cod
 <li><p><a href="#method-TealAppDriver-open_url"><code>TealAppDriver$open_url()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-wait_for_active_module_value"><code>TealAppDriver$wait_for_active_module_value()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-clone"><code>TealAppDriver$clone()</code></a></p></li>
-</ul></div><p><details><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="click"><a href="https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-click"><code>shinytest2::AppDriver$click()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_download"><a href="https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-expect_download"><code>shinytest2::AppDriver$expect_download()</code></a></span></li>
+</ul></div><p><details><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_download"><a href="https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-expect_download"><code>shinytest2::AppDriver$expect_download()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_html"><a href="https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-expect_html"><code>shinytest2::AppDriver$expect_html()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_js"><a href="https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-expect_js"><code>shinytest2::AppDriver$expect_js()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_screenshot"><a href="https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-expect_screenshot"><code>shinytest2::AppDriver$expect_screenshot()</code></a></span></li>
@@ -198,6 +181,8 @@ driving a teal application for performing interactions for <code>shinytest2</cod
 <span>  title <span class="op">=</span> <span class="fu"><a href="../reference/build_app_title.html">build_app_title</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  header <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  timeout <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/missing_arg.html" class="external-link">missing_arg</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  load_timeout <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/missing_arg.html" class="external-link">missing_arg</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -206,6 +191,21 @@ driving a teal application for performing interactions for <code>shinytest2</cod
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>data, modules, filter, title, header, footer</code></dt>
 <dd><p>arguments passed to <code>init</code></p></dd>
+
+
+<dt><code>timeout</code></dt>
+<dd><p>(<code>numeric</code>) Default number of milliseconds for any timeout or
+timeout_ parameter in the <code>TealAppDriver</code> class.
+Defaults to 20s.</p>
+<p>See <code><a href="https://rstudio.github.io/shinytest2/reference/AppDriver.html" class="external-link">shinytest2::AppDriver</a></code> <code>new</code> method for more details on how to change it
+via options or environment variables.</p></dd>
+
+
+<dt><code>load_timeout</code></dt>
+<dd><p>(<code>numeric</code>) How long to wait for the app to load, in ms.
+This includes the time to start R. Defaults to 100s.</p>
+<p>See <code><a href="https://rstudio.github.io/shinytest2/reference/AppDriver.html" class="external-link">shinytest2::AppDriver</a></code> <code>new</code> method for more details on how to change it
+via options or environment variables</p></dd>
 
 
 <dt><code>...</code></dt>
@@ -219,6 +219,22 @@ driving a teal application for performing interactions for <code>shinytest2</cod
 <p>Object of class <code>TealAppDriver</code></p>
 </div>
 
+</div><p></p><hr><a id="method-TealAppDriver-click"></a><div class="section">
+<h3 id="method-click-">Method <code>click()</code><a class="anchor" aria-label="anchor" href="#method-click-"></a></h3>
+<p>Append parent <code><a href="https://rstudio.github.io/shinytest2/reference/AppDriver.html" class="external-link">shinytest2::AppDriver</a></code> <code>click</code> method with a call to <code>waif_for_idle()</code> method.</p><div class="section">
+<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">click</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>...</code></dt>
+<dd><p>arguments passed to parent <code><a href="https://rstudio.github.io/shinytest2/reference/AppDriver.html" class="external-link">shinytest2::AppDriver</a></code> <code>click()</code> method.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
 </div><p></p><hr><a id="method-TealAppDriver-expect_no_shiny_error"></a><div class="section">
 <h3 id="method-expect-no-shiny-error-">Method <code>expect_no_shiny_error()</code><a class="anchor" aria-label="anchor" href="#method-expect-no-shiny-error-"></a></h3>
 <p>Check if the app has shiny errors. This checks for global shiny errors.
@@ -226,7 +242,7 @@ Note that any shiny errors dependent on shiny server render will only be capture
 is visited because shiny will not trigger server computations when the tab is invisible.
 So, navigate to the module tab you want to test before calling this function.
 Although, this catches errors hidden in the other module tabs if they are already rendered.</p><div class="section">
-<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
+<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">expect_no_shiny_error</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -234,7 +250,7 @@ Although, this catches errors hidden in the other module tabs if they are alread
 </div><p></p><hr><a id="method-TealAppDriver-expect_no_validation_error"></a><div class="section">
 <h3 id="method-expect-no-validation-error-">Method <code>expect_no_validation_error()</code><a class="anchor" aria-label="anchor" href="#method-expect-no-validation-error-"></a></h3>
 <p>Check if the app has no validation errors. This checks for global shiny validation errors.</p><div class="section">
-<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">expect_no_validation_error</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -242,7 +258,7 @@ Although, this catches errors hidden in the other module tabs if they are alread
 </div><p></p><hr><a id="method-TealAppDriver-expect_validation_error"></a><div class="section">
 <h3 id="method-expect-validation-error-">Method <code>expect_validation_error()</code><a class="anchor" aria-label="anchor" href="#method-expect-validation-error-"></a></h3>
 <p>Check if the app has validation errors. This checks for global shiny validation errors.</p><div class="section">
-<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">expect_validation_error</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -250,12 +266,12 @@ Although, this catches errors hidden in the other module tabs if they are alread
 </div><p></p><hr><a id="method-TealAppDriver-set_input"></a><div class="section">
 <h3 id="method-set-input-">Method <code>set_input()</code><a class="anchor" aria-label="anchor" href="#method-set-input-"></a></h3>
 <p>Set the input in the <code>teal</code> app.</p><div class="section">
-<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">set_input</span><span class="op">(</span><span class="va">input_id</span>, <span class="va">value</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
+<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>input_id</code></dt>
 <dd><p>(character) The shiny input id with it's complete name space.</p></dd>
 
@@ -278,12 +294,12 @@ Although, this catches errors hidden in the other module tabs if they are alread
 </div><p></p><hr><a id="method-TealAppDriver-navigate_teal_tab"></a><div class="section">
 <h3 id="method-navigate-teal-tab-">Method <code>navigate_teal_tab()</code><a class="anchor" aria-label="anchor" href="#method-navigate-teal-tab-"></a></h3>
 <p>Navigate the teal tabs in the <code>teal</code> app.</p><div class="section">
-<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">navigate_teal_tab</span><span class="op">(</span><span class="va">tabs</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
+<h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>tabs</code></dt>
 <dd><p>(character) Labels of tabs to navigate to. The order of the tabs is important,
 and it should start with the most parent level tab.
@@ -302,7 +318,7 @@ If you wish to select the third tab with the same name, use the suffix "_2" and 
 </div><p></p><hr><a id="method-TealAppDriver-active_ns"></a><div class="section">
 <h3 id="method-active-ns-">Method <code>active_ns()</code><a class="anchor" aria-label="anchor" href="#method-active-ns-"></a></h3>
 <p>Get the active shiny name space for different components of the teal app.</p><div class="section">
-<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">active_ns</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -314,7 +330,7 @@ If you wish to select the third tab with the same name, use the suffix "_2" and 
 </div><p></p><hr><a id="method-TealAppDriver-active_module_ns"></a><div class="section">
 <h3 id="method-active-module-ns-">Method <code>active_module_ns()</code><a class="anchor" aria-label="anchor" href="#method-active-module-ns-"></a></h3>
 <p>Get the active shiny name space for interacting with the module content.</p><div class="section">
-<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">active_module_ns</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -326,12 +342,12 @@ If you wish to select the third tab with the same name, use the suffix "_2" and 
 </div><p></p><hr><a id="method-TealAppDriver-active_module_element"></a><div class="section">
 <h3 id="method-active-module-element-">Method <code>active_module_element()</code><a class="anchor" aria-label="anchor" href="#method-active-module-element-"></a></h3>
 <p>Get the active shiny name space bound with a custom <code>element</code> name.</p><div class="section">
-<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
+<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">active_module_element</span><span class="op">(</span><span class="va">element</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
+<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>element</code></dt>
 <dd><p><code>character(1)</code> custom element name.</p></dd>
 
@@ -346,12 +362,12 @@ If you wish to select the third tab with the same name, use the suffix "_2" and 
 </div><p></p><hr><a id="method-TealAppDriver-active_module_element_text"></a><div class="section">
 <h3 id="method-active-module-element-text-">Method <code>active_module_element_text()</code><a class="anchor" aria-label="anchor" href="#method-active-module-element-text-"></a></h3>
 <p>Get the text of the active shiny name space bound with a custom <code>element</code> name.</p><div class="section">
-<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">active_module_element_text</span><span class="op">(</span><span class="va">element</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
+<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>element</code></dt>
 <dd><p><code>character(1)</code> the text of the custom element name.</p></dd>
 
@@ -366,7 +382,7 @@ If you wish to select the third tab with the same name, use the suffix "_2" and 
 </div><p></p><hr><a id="method-TealAppDriver-active_filters_ns"></a><div class="section">
 <h3 id="method-active-filters-ns-">Method <code>active_filters_ns()</code><a class="anchor" aria-label="anchor" href="#method-active-filters-ns-"></a></h3>
 <p>Get the active shiny name space for interacting with the filter panel.</p><div class="section">
-<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">active_filters_ns</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -379,12 +395,12 @@ If you wish to select the third tab with the same name, use the suffix "_2" and 
 <h3 id="method-get-active-module-input-">Method <code>get_active_module_input()</code><a class="anchor" aria-label="anchor" href="#method-get-active-module-input-"></a></h3>
 <p>Get the input from the module in the <code>teal</code> app.
 This function will only access inputs from the name space of the current active teal module.</p><div class="section">
-<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
+<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_active_module_input</span><span class="op">(</span><span class="va">input_id</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
+<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>input_id</code></dt>
 <dd><p>(character) The shiny input id to get the value from.</p></dd>
 
@@ -400,12 +416,12 @@ This function will only access inputs from the name space of the current active 
 <h3 id="method-get-active-module-output-">Method <code>get_active_module_output()</code><a class="anchor" aria-label="anchor" href="#method-get-active-module-output-"></a></h3>
 <p>Get the output from the module in the <code>teal</code> app.
 This function will only access outputs from the name space of the current active teal module.</p><div class="section">
-<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
+<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_active_module_output</span><span class="op">(</span><span class="va">output_id</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
+<h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>output_id</code></dt>
 <dd><p>(character) The shiny output id to get the value from.</p></dd>
 
@@ -421,12 +437,12 @@ This function will only access outputs from the name space of the current active
 <h3 id="method-set-module-input-">Method <code>set_module_input()</code><a class="anchor" aria-label="anchor" href="#method-set-module-input-"></a></h3>
 <p>Set the input in the module in the <code>teal</code> app.
 This function will only set inputs in the name space of the current active teal module.</p><div class="section">
-<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
+<h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">set_module_input</span><span class="op">(</span><span class="va">input_id</span>, <span class="va">value</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
+<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>input_id</code></dt>
 <dd><p>(character) The shiny input id to get the value from.</p></dd>
 
@@ -445,7 +461,7 @@ This function will only set inputs in the name space of the current active teal 
 </div><p></p><hr><a id="method-TealAppDriver-get_active_filter_vars"></a><div class="section">
 <h3 id="method-get-active-filter-vars-">Method <code>get_active_filter_vars()</code><a class="anchor" aria-label="anchor" href="#method-get-active-filter-vars-"></a></h3>
 <p>Get the active datasets that can be accessed via the filter panel of the current active teal module.</p><div class="section">
-<h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
+<h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_active_filter_vars</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -453,12 +469,12 @@ This function will only set inputs in the name space of the current active teal 
 </div><p></p><hr><a id="method-TealAppDriver-get_active_data_filters"></a><div class="section">
 <h3 id="method-get-active-data-filters-">Method <code>get_active_data_filters()</code><a class="anchor" aria-label="anchor" href="#method-get-active-data-filters-"></a></h3>
 <p>Get the active filter variables from a dataset in the <code>teal</code> app.</p><div class="section">
-<h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
+<h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_active_data_filters</span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
+<h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>dataset_name</code></dt>
 <dd><p>(character) The name of the dataset to get the filter variables from.
 If <code>NULL</code>, the filter variables for all the datasets will be returned in a list.</p></dd>
@@ -470,12 +486,12 @@ If <code>NULL</code>, the filter variables for all the datasets will be returned
 </div><p></p><hr><a id="method-TealAppDriver-add_filter_var"></a><div class="section">
 <h3 id="method-add-filter-var-">Method <code>add_filter_var()</code><a class="anchor" aria-label="anchor" href="#method-add-filter-var-"></a></h3>
 <p>Add a new variable from the dataset to be filtered.</p><div class="section">
-<h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
+<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">add_filter_var</span><span class="op">(</span><span class="va">dataset_name</span>, <span class="va">var_name</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
+<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>dataset_name</code></dt>
 <dd><p>(character) The name of the dataset to add the filter variable to.</p></dd>
 
@@ -494,12 +510,12 @@ If <code>NULL</code>, the filter variables for all the datasets will be returned
 </div><p></p><hr><a id="method-TealAppDriver-remove_filter_var"></a><div class="section">
 <h3 id="method-remove-filter-var-">Method <code>remove_filter_var()</code><a class="anchor" aria-label="anchor" href="#method-remove-filter-var-"></a></h3>
 <p>Remove an active filter variable of a dataset from the active filter variables panel.</p><div class="section">
-<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
+<h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">remove_filter_var</span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="cn">NULL</span>, var_name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
+<h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>dataset_name</code></dt>
 <dd><p>(character) The name of the dataset to remove the filter variable from.
 If <code>NULL</code>, all the filter variables will be removed.</p></dd>
@@ -520,12 +536,12 @@ If <code>NULL</code>, all the filter variables of the dataset will be removed.</
 </div><p></p><hr><a id="method-TealAppDriver-set_active_filter_selection"></a><div class="section">
 <h3 id="method-set-active-filter-selection-">Method <code>set_active_filter_selection()</code><a class="anchor" aria-label="anchor" href="#method-set-active-filter-selection-"></a></h3>
 <p>Set the active filter values for a variable of a dataset in the active filter variable panel.</p><div class="section">
-<h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
+<h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">set_active_filter_selection</span><span class="op">(</span><span class="va">dataset_name</span>, <span class="va">var_name</span>, <span class="va">input</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
+<h4 id="arguments-12">Arguments<a class="anchor" aria-label="anchor" href="#arguments-12"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>dataset_name</code></dt>
 <dd><p>(character) The name of the dataset to set the filter value for.</p></dd>
 
@@ -552,12 +568,12 @@ If <code>NULL</code>, all the filter variables of the dataset will be removed.</
 </div><p></p><hr><a id="method-TealAppDriver-get_attr"></a><div class="section">
 <h3 id="method-get-attr-">Method <code>get_attr()</code><a class="anchor" aria-label="anchor" href="#method-get-attr-"></a></h3>
 <p>Extract <code>html</code> attribute (found by a <code>selector</code>).</p><div class="section">
-<h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
+<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_attr</span><span class="op">(</span><span class="va">selector</span>, <span class="va">attribute</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-12">Arguments<a class="anchor" aria-label="anchor" href="#arguments-12"></a></h4>
+<h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>selector</code></dt>
 <dd><p>(<code>character(1)</code>) specifying the selector to be used to get the content of a specific node.</p></dd>
 
@@ -576,12 +592,12 @@ If <code>NULL</code>, all the filter variables of the dataset will be removed.</
 </div><p></p><hr><a id="method-TealAppDriver-get_html_rvest"></a><div class="section">
 <h3 id="method-get-html-rvest-">Method <code>get_html_rvest()</code><a class="anchor" aria-label="anchor" href="#method-get-html-rvest-"></a></h3>
 <p>Wrapper around <code>get_html</code> that passes the output directly to <code><a href="http://xml2.r-lib.org/reference/read_xml.html" class="external-link">rvest::read_html</a></code>.</p><div class="section">
-<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
+<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_html_rvest</span><span class="op">(</span><span class="va">selector</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
+<h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>selector</code></dt>
 <dd><p><code>(character(1))</code> passed to <code>get_html</code>.</p></dd>
 
@@ -598,7 +614,7 @@ Wrapper around <code>get_url()</code> method that opens the app in the browser.<
 <h3 id="method-open-url-">Method <code>open_url()</code><a class="anchor" aria-label="anchor" href="#method-open-url-"></a></h3>
 
 <div class="section">
-<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
+<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">open_url</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -612,7 +628,7 @@ Wrapper around <code>get_url()</code> method that opens the app in the browser.<
 <p>Waits until a specified input, output, or export value.
 This function serves as a wrapper around the <code>wait_for_value</code> method,
 providing a more flexible interface for waiting on different types of values within the active module namespace.</p><div class="section">
-<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
+<h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">wait_for_active_module_value</span><span class="op">(</span></span>
 <span>  input <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/missing_arg.html" class="external-link">missing_arg</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  output <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/missing_arg.html" class="external-link">missing_arg</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -622,7 +638,7 @@ providing a more flexible interface for waiting on different types of values wit
 </div>
 
 <div class="section">
-<h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
+<h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>input, output, export</code></dt>
 <dd><p>A name of an input, output, or export value.
 Only one of these parameters may be used.</p></dd>
@@ -639,12 +655,12 @@ Parameter with additional value to passed in <code>wait_for_value</code>.</p></d
 </div><p></p><hr><a id="method-TealAppDriver-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
+<h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
+<h4 id="arguments-16">Arguments<a class="anchor" aria-label="anchor" href="#arguments-16"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
