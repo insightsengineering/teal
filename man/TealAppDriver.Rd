@@ -95,7 +95,7 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
   header = tags$p(),
   footer = tags$p(),
   timeout = rlang::missing_arg(),
-  load_timeout = rlant::missing_arg(),
+  load_timeout = rlang::missing_arg(),
   ...
 )}\if{html}{\out{</div>}}
 }

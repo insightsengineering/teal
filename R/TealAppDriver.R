@@ -38,7 +38,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
                           header = tags$p(),
                           footer = tags$p(),
                           timeout = rlang::missing_arg(),
-                          load_timeout = rlant::missing_arg(),
+                          load_timeout = rlang::missing_arg(),
                           ...) {
       private$data <- data
       private$modules <- modules
