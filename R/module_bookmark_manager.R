@@ -63,6 +63,7 @@ bookmark_manager_srv <- function(id, modules) {
     output$bookmark_warning <- renderUI({
       if (!identical(bookmark_option, "server")) {
         shinyjs::hide("do_bookmark")
+        NULL
       } else if (any(is_unbookmarkable)) {
         tags$span(
           sum(is_unbookmarkable),
