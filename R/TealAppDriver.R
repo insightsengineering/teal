@@ -439,7 +439,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       module = character(0),
       filter_panel = character(0)
     ),
-    load_timeout = NULL,
     # private methods ----
     set_active_ns = function() {
       all_inputs <- self$get_values()$input
