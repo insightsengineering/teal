@@ -16,7 +16,19 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
     #' @param data,modules,filter,title,header,footer arguments passed to `init`
+    #' @param timeout (`numeric`) Default number of milliseconds for any timeout or
+    #' timeout_ parameter in the `TealAppDriver` class.
+    #' Defaults to 20s.
+    #'
+    #' See [`shinytest2::AppDriver`] `new` method for more details on how to change it
+    #' via options or environment variables.
+    #' @param load_timeout (`numeric`) How long to wait for the app to load, in ms.
+    #' This includes the time to start R. Defaults to 100s.
+    #'
+    #' See [`shinytest2::AppDriver`] `new` method for more details on how to change it
+    #' via options or environment variables
     #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$new`
+    #'
     #'
     #' @return  Object of class `TealAppDriver`
     initialize = function(data,
@@ -25,6 +37,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
                           title = build_app_title(),
                           header = tags$p(),
                           footer = tags$p(),
+                          timeout = rlang::missing_arg(),
+                          load_timeout = rlang::missing_arg(),
                           ...) {
       private$data <- data
       private$modules <- modules
@@ -37,16 +51,29 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         header = header,
         footer = footer
       )
+
+      # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
+      # It must be set as parameter to the AppDriver
       suppressWarnings(
         super$initialize(
-          shinyApp(app$ui, app$server),
+          app_dir = shinyApp(app$ui, app$server),
           name = "teal",
           variant = platform_variant(),
+          timeout = rlang::maybe_missing(timeout, 20 * 1000),
+          load_timeout = rlang::maybe_missing(load_timeout, 100 * 1000),
           ...
         )
       )
 
       private$set_active_ns()
+      self$wait_for_idle()
+    },
+    #' @description
+    #' Append parent [`shinytest2::AppDriver`] `click` method with a call to `waif_for_idle()` method.
+    #' @param ... arguments passed to parent [`shinytest2::AppDriver`] `click()` method.
+    click = function(...) {
+      super$click(...)
+      self$wait_for_idle()
     },
     #' @description
     #' Check if the app has shiny errors. This checks for global shiny errors.
@@ -112,7 +139,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
         root <- sprintf("%s-%s", private$modules$label, get_unique_labels(tab))
       }
-      self$wait_for_idle(timeout = private$idle_timeout)
+      self$wait_for_idle()
       private$set_active_ns()
       invisible(self)
     },
@@ -430,6 +457,31 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return Nothing. Opens the underlying teal app in the browser.
     open_url = function() {
       browseURL(self$get_url())
+    },
+    #' @description
+    #' Waits until a specified input, output, or export value.
+    #' This function serves as a wrapper around the `wait_for_value` method,
+    #' providing a more flexible interface for waiting on different types of values within the active module namespace.
+    #' @param input,output,export A name of an input, output, or export value.
+    #' Only one of these parameters may be used.
+    #' @param ... Must be empty. Allows for parameter expansion.
+    #' Parameter with additional value to passed in `wait_for_value`.
+    wait_for_active_module_value = function(input = rlang::missing_arg(),
+                                            output = rlang::missing_arg(),
+                                            export = rlang::missing_arg(),
+                                            ...) {
+      ns <- shiny::NS(self$active_module_ns())
+
+      if (!rlang::is_missing(input) && checkmate::test_string(input, min.chars = 1)) input <- ns(input)
+      if (!rlang::is_missing(output) && checkmate::test_string(output, min.chars = 1)) output <- ns(output)
+      if (!rlang::is_missing(export) && checkmate::test_string(export, min.chars = 1)) export <- ns(export)
+
+      self$wait_for_value(
+        input = input,
+        output = output,
+        export = export,
+        ...
+      )
     }
   ),
   # private members ----
@@ -442,8 +494,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       module = character(0),
       filter_panel = character(0)
     ),
-    idle_timeout = 20000, # 20 seconds
-    load_timeout = 100000, # 100 seconds
     # private methods ----
     set_active_ns = function() {
       all_inputs <- self$get_values()$input

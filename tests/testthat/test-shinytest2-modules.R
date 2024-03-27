@@ -24,7 +24,7 @@ testthat::test_that("e2e: the module server logic is only triggered when the tea
       value_export_module(label = "Module 2")
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
+
   test_exports <- app$get_values()$export
 
   expect_equal(length(test_exports), 1)
@@ -45,7 +45,6 @@ testthat::test_that("e2e: filter panel only shows the data supplied using datana
       example_module(label = "mtcars", datanames = "mtcars")
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_identical(
     app$get_active_filter_vars(),
@@ -62,7 +61,6 @@ testthat::test_that("e2e: filter panel shows all the datasets when datanames is 
       example_module(label = "all", datanames = "all")
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_identical(
     app$get_active_filter_vars(),
@@ -79,7 +77,6 @@ testthat::test_that("e2e: filter panel is not displayed when datanames is NULL",
       example_module(label = "NULL", datanames = NULL)
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_identical(
     app$get_html_rvest(".teal_secondary_col") %>%

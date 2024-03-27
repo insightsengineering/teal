@@ -20,6 +20,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-TealAppDriver-new}{\code{TealAppDriver$new()}}
+\item \href{#method-TealAppDriver-click}{\code{TealAppDriver$click()}}
 \item \href{#method-TealAppDriver-expect_no_shiny_error}{\code{TealAppDriver$expect_no_shiny_error()}}
 \item \href{#method-TealAppDriver-expect_no_validation_error}{\code{TealAppDriver$expect_no_validation_error()}}
 \item \href{#method-TealAppDriver-expect_validation_error}{\code{TealAppDriver$expect_validation_error()}}
@@ -41,13 +42,13 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-get_attr}{\code{TealAppDriver$get_attr()}}
 \item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
+\item \href{#method-TealAppDriver-wait_for_active_module_value}{\code{TealAppDriver$wait_for_active_module_value()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
 }
 }
 \if{html}{\out{
 <details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="click"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-click'><code>shinytest2::AppDriver$click()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_download"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_download'><code>shinytest2::AppDriver$expect_download()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_html"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_html'><code>shinytest2::AppDriver$expect_html()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_js'><code>shinytest2::AppDriver$expect_js()</code></a></span></li>
@@ -94,6 +95,8 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
   title = build_app_title(),
   header = tags$p(),
   footer = tags$p(),
+  timeout = rlang::missing_arg(),
+  load_timeout = rlang::missing_arg(),
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -103,12 +106,42 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \describe{
 \item{\code{data, modules, filter, title, header, footer}}{arguments passed to \code{init}}
 
+\item{\code{timeout}}{(\code{numeric}) Default number of milliseconds for any timeout or
+timeout_ parameter in the \code{TealAppDriver} class.
+Defaults to 20s.
+
+See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details on how to change it
+via options or environment variables.}
+
+\item{\code{load_timeout}}{(\code{numeric}) How long to wait for the app to load, in ms.
+This includes the time to start R. Defaults to 100s.
+
+See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details on how to change it
+via options or environment variables}
+
 \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$new}}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 Object of class \code{TealAppDriver}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-click"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-click}{}}}
+\subsection{Method \code{click()}}{
+Append parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click} method with a call to \code{waif_for_idle()} method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$click(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{arguments passed to parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click()} method.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -494,6 +527,34 @@ Wrapper around \code{get_url()} method that opens the app in the browser.
 
 \subsection{Returns}{
 Nothing. Opens the underlying teal app in the browser.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-wait_for_active_module_value"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-wait_for_active_module_value}{}}}
+\subsection{Method \code{wait_for_active_module_value()}}{
+Waits until a specified input, output, or export value.
+This function serves as a wrapper around the \code{wait_for_value} method,
+providing a more flexible interface for waiting on different types of values within the active module namespace.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$wait_for_active_module_value(
+  input = rlang::missing_arg(),
+  output = rlang::missing_arg(),
+  export = rlang::missing_arg(),
+  ...
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input, output, export}}{A name of an input, output, or export value.
+Only one of these parameters may be used.}
+
+\item{\code{...}}{Must be empty. Allows for parameter expansion.
+Parameter with additional value to passed in \code{wait_for_value}.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
