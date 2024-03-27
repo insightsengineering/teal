@@ -40,7 +40,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
       dots <- rlang::list2(...)
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
-      # It must be set as parameter to the driver if no
+      # It must be set as parameter to the AppDriver
       if (is.null(dots$timeout)) dots$timeout <- 20 * 1000
       if (is.null(dots$load_timeout)) dots$load_timeout <- 100 * 1000
 
