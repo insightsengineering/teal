@@ -12,9 +12,6 @@
   teal.logger::register_logger("teal")
   teal.logger::register_handlers("teal")
 
-  # Turn on server-side bookmarking in shiny.
-  shiny::shinyOptions("bookmarkStore" = "server")
-
   invisible()
 }
 

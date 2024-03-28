@@ -56,6 +56,7 @@ wunder_bar_srv <- function(id, datasets, filter, modules) {
       showModal(
         modalDialog(
           filter_manager_ui(ns("filter_manager")),
+          class = "filter_manager_modal",
           size = "l",
           footer = NULL,
           easyClose = TRUE
@@ -68,13 +69,13 @@ wunder_bar_srv <- function(id, datasets, filter, modules) {
       showModal(
         modalDialog(
           snapshot_manager_ui(ns("snapshot_manager")),
+          class = "snapshot_manager_modal",
           size = "m",
           footer = NULL,
           easyClose = TRUE
         )
       )
     })
-
 
     filter_manager_results <- filter_manager_srv(
       id = "filter_manager",
@@ -87,9 +88,6 @@ wunder_bar_srv <- function(id, datasets, filter, modules) {
       mapping_matrix = filter_manager_results$mapping_matrix,
       datasets = filter_manager_results$datasets_flat
     )
-    bookmark_history <- bookmark_manager_srv(
-      id = "bookmark_manager",
-      modules = modules
-    )
+    bookmark_manager_srv(id = "bookmark_manager", modules = modules)
   })
 }

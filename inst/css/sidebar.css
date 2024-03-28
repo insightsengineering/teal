@@ -10,17 +10,15 @@
 }
 
 .badge-count {
-  padding-left: 9px;
-  padding-right: 9px;
-  -webkit-border-radius: 9px;
-  -moz-border-radius: 9px;
-  border-radius: 9px;
-  font-size: 12px;
-  background: #ff0000;
-  color: #fff;
-  padding: 0 5px;
+  padding-left: 1em;
+  padding-right: 1em;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
+  border-radius: 1em;
+  font-size: 0.7em;
+  padding: 0 .5em;
   vertical-align: top;
-  margin-left: -10px;
+  margin-left: -1em;
 }
 
 /* disable any anchor with the disabled class */

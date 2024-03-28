@@ -39,7 +39,7 @@ bookmark_manager_ui <- function(id) {
     title = "Add bookmark",
     tags$span(
       suppressMessages(icon("solid fa-bookmark")),
-      uiOutput(ns("bookmark_warning"), inline = TRUE)
+      uiOutput(ns("warning_badge"), inline = TRUE)
     )
   )
 }
@@ -49,27 +49,25 @@ bookmark_manager_ui <- function(id) {
 #'
 bookmark_manager_srv <- function(id, modules) {
   checkmate::assert_character(id)
-  checkmate::assert_multi_class(modules, "teal_modules")
+  checkmate::assert_class(modules, "teal_modules")
   moduleServer(id, function(input, output, session) {
     logger::log_trace("bookmark_manager_srv initializing")
     ns <- session$ns
     bookmark_option <- getShinyOption("bookmarkStore", "disabled")
     is_unbookmarkable <- rapply(
-      get_teal_bookmarkable_summary(modules),
+      modules_bookmarkable(modules),
       Negate(isTRUE),
       how = "unlist"
     )
     # Render bookmark warnings count
-    output$bookmark_warning <- renderUI({
-      if (bookmark_option != "server") {
-        tags$span(
-          "!",
-          class = "badge-count"
-        )
+    output$warning_badge <- renderUI({
+      if (!identical(bookmark_option, "server")) {
+        shinyjs::hide("do_bookmark")
+        NULL
       } else if (any(is_unbookmarkable)) {
         tags$span(
           sum(is_unbookmarkable),
-          class = "badge badge-warning badge-count"
+          class = "badge-warning badge-count text-white bg-danger"
         )
       }
     })
@@ -98,14 +96,23 @@ bookmark_manager_srv <- function(id, modules) {
           ),
           if (any(is_unbookmarkable)) {
             bkmb_summary <- rapply(
-              get_teal_bookmarkable_summary(modules),
-              function(x) if (isTRUE(x)) "\u2705" else "\u274C",
+              modules_bookmarkable(modules),
+              function(x) {
+                if (isTRUE(x)) {
+                  "\u2705" # check mark
+                } else if (isFALSE(x)) {
+                  "\u274C" # cross mark
+                } else {
+                  "\u2753" # question mark
+                }
+              },
               how = "replace"
             )
             tags$div(
               tags$p(
                 icon("fas fa-exclamation-triangle"),
                 "Some modules will not be restored when using this bookmark.",
+                tags$br(),
                 "Check the list below to see which modules are not bookmarkable.",
                 class = "text-warning"
               ),
@@ -124,11 +131,13 @@ bookmark_manager_srv <- function(id, modules) {
       )
     })
 
-    # manually trigger bookmarking because of the problems reported with bookmarkButton in teal
+    # manually trigger bookmarking because of the problems reported on windows with bookmarkButton in teal
     observeEvent(input$do_bookmark, {
       logger::log_trace("bookmark_manager_srv@1 do_bookmark module clicked.")
       session$doBookmark()
     })
+
+    invisible(NULL)
   })
 }
 
@@ -278,22 +287,4 @@ bookmarks_identical <- function(book1, book2) {
 
   if (ans) message("perfect!")
   invisible(NULL)
-}
-
-#' Get bookmarkable summary list
-#'
-#' @param modules `teal_modules` object
-#' @return named list of the same structure as `modules` with `TRUE` or `FALSE` values indicating
-#' whether the module is bookmarkable.
-#' @keywords internal
-get_teal_bookmarkable_summary <- function(modules) {
-  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
-  if (inherits(modules, "teal_modules")) {
-    setNames(
-      lapply(modules$children, get_teal_bookmarkable_summary),
-      vapply(modules$children, `[[`, "label", FUN.VALUE = character(1))
-    )
-  } else {
-    isTRUE(attr(modules, "teal_bookmarkable"))
-  }
 }
