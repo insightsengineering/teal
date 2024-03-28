@@ -35,7 +35,7 @@ bookmark_manager_ui <- function(id) {
   ns <- NS(id)
   tags$button(
     id = ns("do_bookmark"),
-    class = "btn action-button wunder_bar_button",
+    class = "btn action-button wunder_bar_button bookmark_manager_button",
     title = "Add bookmark",
     tags$span(
       suppressMessages(icon("solid fa-bookmark")),
