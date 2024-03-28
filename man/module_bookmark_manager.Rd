@@ -21,17 +21,25 @@ will be displayed in the \code{teal} application. See \code{\link[=modules]{modu
 more details.}
 }
 \value{
-\code{reactiveVal} containing a named list of bookmark URLs.
+Invisible \code{NULL}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Capture and restore the global (app) input state.
 }
 \details{
 This module introduces bookmarks into \code{teal} apps: the \code{shiny} bookmarking mechanism becomes enabled
 and server-side bookmarks can be created.
 
-The bookmark manager is accessed with the bookmark icon in the \code{\link{wunder_bar}}.
-The manager's modal displays the bookmark URL, which can be copied to the clipboard.
+The bookmark manager presents a button with the bookmark icon and is placed in the \code{\link{wunder_bar}}.
+When clicked, the button creates a bookmark and opens a modal which displays the bookmark URL.
+
+\code{teal} does not guarantee that all modules (\code{teal_module} objects) are bookmarkable.
+Those that are, have a \code{teal_bookmarkable} attribute set to \code{TRUE}. If any modules are not bookmarkable,
+the bookmark manager modal displays a warning and the bookmark button displays a flag.
+In order to communicate that a external module is bookmarkable, the module developer
+should set the \code{teal_bookmarkable} attribute to \code{TRUE}.
 }
 \section{Server logic}{
 
@@ -42,13 +50,8 @@ Accessing the bookmark URL opens a new session of the app that starts in the pre
 
 \section{Note}{
 
-\code{shinyOptions("bookmarkStore" = "server")} is set in \code{teal} by default on package load. Using the
-\code{url} option is not supported.
-
-\code{teal} does not guarantee that all \code{teal_module} elements are bookmarkable. Those that are, have the
-\code{teal_bookmarkable} attribute set to \code{TRUE}. The bookmark manager modal displays a warning if any
-modules are not bookmarkable. In order to set external \code{teal_module} elements as bookmarkable, the
-\code{teal_bookmarkable} attribute must be set to \code{TRUE} by the module developer.
+\code{shinyOptions("bookmarkStore" = "server")} is set in \code{teal} by default on package load.
+Using the \code{url} option is not supported.
 }
 
 \keyword{internal}

@@ -1,12 +1,22 @@
 #' App state management.
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' Capture and restore the global (app) input state.
 #'
+#' @details
 #' This module introduces bookmarks into `teal` apps: the `shiny` bookmarking mechanism becomes enabled
 #' and server-side bookmarks can be created.
 #'
-#' The bookmark manager is accessed with the bookmark icon in the [`wunder_bar`].
-#' The manager's modal displays the bookmark URL, which can be copied to the clipboard.
+#' The bookmark manager presents a button with the bookmark icon and is placed in the [`wunder_bar`].
+#' When clicked, the button creates a bookmark and opens a modal which displays the bookmark URL.
+#'
+#' `teal` does not guarantee that all modules (`teal_module` objects) are bookmarkable.
+#' Those that are, have a `teal_bookmarkable` attribute set to `TRUE`. If any modules are not bookmarkable,
+#' the bookmark manager modal displays a warning and the bookmark button displays a flag.
+#' In order to communicate that a external module is bookmarkable, the module developer
+#' should set the `teal_bookmarkable` attribute to `TRUE`.
 #'
 #' @section Server logic:
 #' A bookmark is a URL that contains the app address with a `/?_state_id_=<bookmark_dir>` suffix.
@@ -14,17 +24,12 @@
 #' Accessing the bookmark URL opens a new session of the app that starts in the previously saved state.
 #'
 #' @section Note:
-#' `shinyOptions("bookmarkStore" = "server")` is set in `teal` by default on package load. Using the
-#' `url` option is not supported.
-#'
-#' `teal` does not guarantee that all `teal_module` elements are bookmarkable. Those that are, have the
-#' `teal_bookmarkable` attribute set to `TRUE`. The bookmark manager modal displays a warning if any
-#' modules are not bookmarkable. In order to set external `teal_module` elements as bookmarkable, the
-#' `teal_bookmarkable` attribute must be set to `TRUE` by the module developer.
+#' `shinyOptions("bookmarkStore" = "server")` is set in `teal` by default on package load.
+#' Using the `url` option is not supported.
 #'
 #' @inheritParams module_wunder_bar
 #'
-#' @return `reactiveVal` containing a named list of bookmark URLs.
+#' @return Invisible `NULL`.
 #'
 #' @aliases bookmark bookmark_manager bookmark_manager_module
 #'
