@@ -51,8 +51,11 @@ Accessing the bookmark URL opens a new session of the app that starts in the pre
 
 \section{Note}{
 
-\code{shinyOptions("bookmarkStore" = "server")} is set in \code{teal} by default on package load.
-Using the \code{url} option is not supported.
+To enable bookmarking use either:
+\itemize{
+\item \code{shiny} app by using \code{shinyApp(..., enableBookmarking = "server")} (not supported in \code{shinytest2})
+\item set \code{options(shiny.bookmarkStore = "server")} before running the app
+}
 }
 
 \keyword{internal}

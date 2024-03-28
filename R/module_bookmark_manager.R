@@ -24,8 +24,10 @@
 #' Accessing the bookmark URL opens a new session of the app that starts in the previously saved state.
 #'
 #' @section Note:
-#' `shinyOptions("bookmarkStore" = "server")` is set in `teal` by default on package load.
-#' Using the `url` option is not supported.
+#' To enable bookmarking use either:
+#' - `shiny` app by using `shinyApp(..., enableBookmarking = "server")` (not supported in `shinytest2`)
+#' - set `options(shiny.bookmarkStore = "server")` before running the app
+#'
 #'
 #' @inheritParams module_wunder_bar
 #'
@@ -38,15 +40,7 @@
 #'
 bookmark_manager_ui <- function(id) {
   ns <- NS(id)
-  tags$button(
-    id = ns("do_bookmark"),
-    class = "btn action-button wunder_bar_button bookmark_manager_button",
-    title = "Add bookmark",
-    tags$span(
-      suppressMessages(icon("solid fa-bookmark")),
-      uiOutput(ns("warning_badge"), inline = TRUE)
-    )
-  )
+  uiOutput(ns("bookmark_button"), inline = TRUE)
 }
 
 #' @rdname module_bookmark_manager
@@ -58,21 +52,34 @@ bookmark_manager_srv <- function(id, modules) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("bookmark_manager_srv initializing")
     ns <- session$ns
-    bookmark_option <- getShinyOption("bookmarkStore", "disabled")
-    is_unbookmarkable <- rapply(
+    bookmark_option <- getShinyOption("bookmarkStore")
+    if (is.null(bookmark_option) && identical(getOption("shiny.bookmarkStore"), "server")) {
+      bookmark_option <- getOption("shiny.bookmarkStore")
+      # option alone doesn't activate bookmarking - we need to set shinyOptions
+      shinyOptions(bookmarkStore = bookmark_option)
+    }
+
+    is_unbookmarkable <- unlist(rapply2(
       modules_bookmarkable(modules),
-      Negate(isTRUE),
-      how = "unlist"
-    )
+      Negate(isTRUE)
+    ))
+
     # Render bookmark warnings count
-    output$warning_badge <- renderUI({
-      if (!identical(bookmark_option, "server")) {
-        shinyjs::hide("do_bookmark")
-        NULL
-      } else if (any(is_unbookmarkable)) {
-        tags$span(
-          sum(is_unbookmarkable),
-          class = "badge-warning badge-count text-white bg-danger"
+    output$bookmark_button <- renderUI({
+      if (!all(is_unbookmarkable) && identical(bookmark_option, "server")) {
+        tags$button(
+          id = ns("do_bookmark"),
+          class = "btn action-button wunder_bar_button bookmark_manager_button",
+          title = "Add bookmark",
+          tags$span(
+            suppressMessages(icon("solid fa-bookmark")),
+            if (any(is_unbookmarkable)) {
+              tags$span(
+                sum(is_unbookmarkable),
+                class = "badge-warning badge-count text-white bg-danger"
+              )
+            }
+          )
         )
       }
     })
@@ -100,7 +107,7 @@ bookmark_manager_srv <- function(id, modules) {
             tags$pre(url)
           ),
           if (any(is_unbookmarkable)) {
-            bkmb_summary <- rapply(
+            bkmb_summary <- rapply2(
               modules_bookmarkable(modules),
               function(x) {
                 if (isTRUE(x)) {
@@ -110,8 +117,7 @@ bookmark_manager_srv <- function(id, modules) {
                 } else {
                   "\u2753" # question mark
                 }
-              },
-              how = "replace"
+              }
             )
             tags$div(
               tags$p(
@@ -129,6 +135,7 @@ bookmark_manager_srv <- function(id, modules) {
 
       showModal(
         modalDialog(
+          id = ns("bookmark_modal"),
           title = "Bookmarked teal app url",
           modal_content,
           easyClose = TRUE
@@ -292,4 +299,15 @@ bookmarks_identical <- function(book1, book2) {
 
   if (ans) message("perfect!")
   invisible(NULL)
+}
+
+
+# Replacement for [base::rapply] which doesn't handle NULL values - skips the evaluation
+# of the function and returns NULL for given element.
+rapply2 <- function(x, f) {
+  if (inherits(x, "list")) {
+    lapply(x, rapply2, f = f)
+  } else {
+    f(x)
+  }
 }

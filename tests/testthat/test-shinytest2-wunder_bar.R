@@ -4,7 +4,6 @@ testthat::test_that("wunder_bar_srv clicking filter icon opens filter-manager mo
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   filter_manager_btn_id <- grep(
     "filter_manager",
@@ -24,7 +23,6 @@ testthat::test_that("wunder_bar_srv clicking snapshot icon opens snapshot-manage
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   snapshot_manager_btn_id <- grep(
     "snapshot_manager",
