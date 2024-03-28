@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9017</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9018</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,23 +64,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2-rc1">v0.15.2-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2">v0.15.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1">v0.15.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -109,7 +92,11 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.15.2.9017" id="teal-01529017">teal 0.15.2.9017<a class="anchor" aria-label="anchor" href="#teal-01529017"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.15.2.9018" id="teal-01529018">teal 0.15.2.9018<a class="anchor" aria-label="anchor" href="#teal-01529018"></a></h2>
+<div class="section level4">
+<h4 id="miscellaneous-0-15-2-9018">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-15-2-9018"></a></h4>
+<ul><li>Filter mapping display is no longer coupled to the snapshot manager.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.15.2" id="teal-0152">teal 0.15.2<a class="anchor" aria-label="anchor" href="#teal-0152"></a></h2><p class="text-muted">CRAN release: 2024-03-07</p>
@@ -134,7 +121,7 @@
 <div class="section level4">
 <h4 id="new-features-0-15-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-15-0"></a></h4>
 <ul><li>Added <code>landing_popup_module</code> function which creates a module that will display a popup when the app starts. The popup will block access to the app until it is dismissed.</li>
-<li>Filter state snapshots can now be uploaded from file. See <code><a href="../reference/snapshot_manager_module.html">?snapshot</a></code>.</li>
+<li>Filter state snapshots can now be uploaded from file. See <code><a href="../reference/module_snapshot_manager.html">?snapshot</a></code>.</li>
 <li>Added <code>as_tdata</code> function to facilitate migration of modules to the new <code>teal_data</code> class.</li>
 <li>Added <code>build_app_title</code> function to facilitate adding favicons to app title.</li>
 </ul></div>
@@ -168,7 +155,7 @@
 <div class="section level4">
 <h4 id="new-features-0-14-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-14-0"></a></h4>
 <ul><li>Enabled module specific filter panel. See <code>module_specific</code> in <code><a href="../reference/teal_slices.html">teal::teal_slices</a></code> documentation.</li>
-<li>Enabled capturing and resetting application filter state with snapshots. See <code><a href="../reference/snapshot_manager_module.html">?snapshot</a></code>.</li>
+<li>Enabled capturing and resetting application filter state with snapshots. See <code><a href="../reference/module_snapshot_manager.html">?snapshot</a></code>.</li>
 <li>Enabled <code>reporter_previewer_module</code> to customize default values through <code>srv_args</code>.</li>
 <li>Enabled passing own <code>reporter_previewer_module</code> in a list of modules to override default one.</li>
 </ul></div>

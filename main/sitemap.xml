@@ -94,6 +94,9 @@
     <loc>https://insightsengineering.github.io/teal/reference/append_module.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/bookmarks_identical.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/build_app_title.html</loc>
   </url>
   <url>
@@ -166,10 +169,10 @@
     <loc>https://insightsengineering.github.io/teal/reference/matrix_to_mapping.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_filter_manager.html</loc>
+    <loc>https://insightsengineering.github.io/teal/reference/module_bookmark_manager.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_filter_manager_modal.html</loc>
+    <loc>https://insightsengineering.github.io/teal/reference/module_filter_manager.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/module_labels.html</loc>
@@ -181,6 +184,9 @@
     <loc>https://insightsengineering.github.io/teal/reference/module_nested_tabs.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/module_snapshot_manager.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/module_tabs_with_filters.html</loc>
   </url>
   <url>
@@ -188,6 +194,12 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/module_teal_with_splash.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/module_wunder_bar.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/modules_bookmarkable.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/modules_datasets.html</loc>
@@ -205,6 +217,9 @@
     <loc>https://insightsengineering.github.io/teal/reference/reporter_previewer_module.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/restoreValue.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/run_js_files.html</loc>
   </url>
   <url>
@@ -212,9 +227,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/slices_store.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/snapshot_manager_module.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/tdata.html</loc>
