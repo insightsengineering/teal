@@ -13,8 +13,7 @@
 #' @name module_wunder_bar
 #' @aliases wunder_bar wunder_bar_module
 #'
-#' @param id (`character(1)`) `shiny` module instance id.
-#' @inheritParams module_filter_manager
+#' @inheritParams module_tabs_with_filters
 #'
 #' @return Nothing is returned.
 
@@ -22,8 +21,9 @@
 #' @keywords internal
 wunder_bar_ui <- function(id) {
   ns <- NS(id)
-  rev( # Reversing order because buttons show up in UI from right to left.
+  rev(
     tagList(
+      title = "",
       tags$button(
         id = ns("show_filter_manager"),
         class = "btn action-button wunder_bar_button",
@@ -36,19 +36,14 @@ wunder_bar_ui <- function(id) {
         title = "Manage filter state snapshots",
         icon("camera")
       ),
-      tags$button(
-        id = ns("show_bookmark_manager"),
-        class = "btn action-button wunder_bar_button",
-        title = "Manage bookmarks",
-        suppressMessages(icon("solid fa-bookmark"))
-      )
+      bookmark_manager_ui(ns("bookmark_manager"))
     )
   )
 }
 
 #' @rdname module_wunder_bar
 #' @keywords internal
-wunder_bar_srv <- function(id, datasets, filter) {
+wunder_bar_srv <- function(id, datasets, filter, modules) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("wunder_bar_srv initializing")
 
@@ -61,6 +56,7 @@ wunder_bar_srv <- function(id, datasets, filter) {
       showModal(
         modalDialog(
           filter_manager_ui(ns("filter_manager")),
+          class = "filter_manager_modal",
           size = "l",
           footer = NULL,
           easyClose = TRUE
@@ -73,18 +69,7 @@ wunder_bar_srv <- function(id, datasets, filter) {
       showModal(
         modalDialog(
           snapshot_manager_ui(ns("snapshot_manager")),
-          size = "m",
-          footer = NULL,
-          easyClose = TRUE
-        )
-      )
-    })
-
-    observeEvent(input$show_bookmark_manager, {
-      logger::log_trace("wunder_bar_srv@1 show_bookmark_manager button has been clicked.")
-      showModal(
-        modalDialog(
-          bookmark_manager_ui(ns("bookmark_manager")),
+          class = "snapshot_manager_modal",
           size = "m",
           footer = NULL,
           easyClose = TRUE
@@ -103,6 +88,6 @@ wunder_bar_srv <- function(id, datasets, filter) {
       mapping_matrix = filter_manager_results$mapping_matrix,
       datasets = filter_manager_results$datasets_flat
     )
-    bookmark_history <- bookmark_manager_srv(id = "bookmark_manager")
+    bookmark_manager_srv(id = "bookmark_manager", modules = modules)
   })
 }

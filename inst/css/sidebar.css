@@ -1,11 +1,24 @@
 /* teal sidebar css */
 
 
-.filter_hamburger, .wunder_bar_button {
+.filter_hamburger,
+.wunder_bar_button {
   font-size: 16px;
   padding: 8px !important;
   float: right !important;
   background-color: transparent !important;
+}
+
+.badge-count {
+  padding-left: 1em;
+  padding-right: 1em;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
+  border-radius: 1em;
+  font-size: 0.7em;
+  padding: 0 .5em;
+  vertical-align: top;
+  margin-left: -1em;
 }
 
 /* disable any anchor with the disabled class */
@@ -26,13 +39,16 @@ a.disabled {
   flex-direction: row;
   align-items: center;
 }
+
 .manager_table_row *:first-child {
   flex: 1 1 80%;
 }
-.manager_table_row * + * {
+
+.manager_table_row *+* {
   flex: 0 0 0px;
   padding: 0em 1.5em;
 }
+
 .manager_placeholder {
   margin-top: 1em;
 }
