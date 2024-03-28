@@ -12,6 +12,7 @@
 #'
 #' @name module_wunder_bar
 #' @aliases wunder_bar wunder_bar_module
+#' @include module_bookmark_manager.R
 #'
 #' @inheritParams module_tabs_with_filters
 #'
