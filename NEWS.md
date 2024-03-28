@@ -1,8 +1,5 @@
 # teal 0.15.2.9018
 
-### New features
-* Introduced bookmarking feature. Click the bookmark icon in the top-right corner to access the bookmark manager.
-
 ### Miscellaneous
 * Filter mapping display is no longer coupled to the snapshot manager.
 
