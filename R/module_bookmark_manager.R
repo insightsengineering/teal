@@ -33,7 +33,7 @@
 #'
 #' @aliases bookmark bookmark_manager bookmark_manager_module
 #'
-#' @rdname module_bookmark_manager
+#' @name module_bookmark_manager
 #' @keywords internal
 #'
 bookmark_manager_ui <- function(id) {
