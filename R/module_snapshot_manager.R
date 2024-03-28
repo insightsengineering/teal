@@ -7,7 +7,7 @@
 #' as well as to save it to file in order to share it with an app developer or other users,
 #' who in turn can upload it to their own session.
 #'
-#' The snapshot manager is accessed through the filter manager, with the cog icon in the top right corner.
+#' The snapshot manager is accessed with the camera icon in the [`wunder_bar`].
 #' At the beginning of a session it presents three icons: a camera, an upload, and an circular arrow.
 #' Clicking the camera captures a snapshot, clicking the upload adds a snapshot from a file
 #' and applies the filter states therein, and clicking the arrow resets initial application state.
@@ -44,7 +44,7 @@
 #' This is substituted as the snapshot's `mapping` attribute and the snapshot is added to the snapshot list.
 #'
 #' To restore app state, a snapshot is retrieved from storage and rebuilt into a `teal_slices` object.
-#' Then state of all `FilteredData` objects (provided in `filtered_data_list`) is cleared
+#' Then state of all `FilteredData` objects (provided in `datasets`) is cleared
 #' and set anew according to the `mapping` attribute of the snapshot.
 #' The snapshot is then set as the current content of `slices_global`.
 #'
@@ -65,30 +65,38 @@
 #' a `teal_slices` object. When a snapshot is restored from file, its `app_id` is compared to that
 #' of the current app state and only if the match is the snapshot admitted to the session.
 #'
-#' @param id (`character(1)`) `shiny` module id
+#' @section Bookmarks:
+#' An `onBookmark` callback creates a snapshot of the current filter state.
+#' This is done on the app session, not the module session.
+#' (The snapshot will be retrieved by `module_teal` in order to set initial app state in a restored app.)
+#' Then that snapshot, and the previous snapshot history are dumped into the `values.rds` file in `<bookmark_dir>`.
+#'
+#' @param id (`character(1)`) `shiny` module instance id.
 #' @param slices_global (`reactiveVal`) that contains a `teal_slices` object
-#'                      containing all `teal_slice`s existing in the app, both active and inactive
+#'                      containing all `teal_slice`s existing in the app, both active and inactive.
 #' @param mapping_matrix (`reactive`) that contains a `data.frame` representation
 #'                       of the mapping of filter state ids (rows) to modules labels (columns);
-#'                       all columns are `logical` vectors
-#' @param filtered_data_list non-nested (named `list`) that contains `FilteredData` objects
+#'                       all columns are `logical` vectors.
+#' @param datasets non-nested (named `list`) of `FilteredData` objects.
 #'
-#' @return Nothing is returned.
+#' @return `list` containing the snapshot history, where each element is an unlisted `teal_slices` object.
 #'
-#' @name snapshot_manager_module
-#' @aliases snapshot snapshot_manager
+#' @name module_snapshot_manager
+#' @aliases snapshot snapshot_manager snapshot_manager_module
 #'
 #' @author Aleksander Chlebowski
 #'
-#' @rdname snapshot_manager_module
+
+
+#' @rdname module_snapshot_manager
 #' @keywords internal
 #'
 snapshot_manager_ui <- function(id) {
   ns <- NS(id)
   tags$div(
-    class = "snapshot_manager_content",
+    class = "manager_content",
     tags$div(
-      class = "snapshot_table_row",
+      class = "manager_table_row",
       tags$span(tags$b("Snapshot manager")),
       actionLink(ns("snapshot_add"), label = NULL, icon = icon("camera"), title = "add snapshot"),
       actionLink(ns("snapshot_load"), label = NULL, icon = icon("upload"), title = "upload snapshot"),
@@ -99,31 +107,56 @@ snapshot_manager_ui <- function(id) {
   )
 }
 
-#' @rdname snapshot_manager_module
+#' @rdname module_snapshot_manager
 #' @keywords internal
 #'
-snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_data_list) {
+snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
   checkmate::assert_character(id)
   checkmate::assert_true(is.reactive(slices_global))
   checkmate::assert_class(isolate(slices_global()), "teal_slices")
   checkmate::assert_true(is.reactive(mapping_matrix))
   checkmate::assert_data_frame(isolate(mapping_matrix()), null.ok = TRUE)
-  checkmate::assert_list(filtered_data_list, types = "FilteredData", any.missing = FALSE, names = "named")
+  checkmate::assert_list(datasets, types = "FilteredData", any.missing = FALSE, names = "named")
 
   moduleServer(id, function(input, output, session) {
+    logger::log_trace("snapshot_manager_srv initializing")
+
+    # Set up bookmarking callbacks ----
+    # Register bookmark exclusions (all buttons and text fields).
+    setBookmarkExclude(c(
+      "snapshot_add", "snapshot_load", "snapshot_reset",
+      "snapshot_name_accept", "snaphot_file_accept",
+      "snapshot_name", "snapshot_file"
+    ))
+    # Add current filter state to bookmark.
+    # This is done on the app session because the value is restored in `module_teal`
+    # and we don't want to have to use this module's name space there.
+    app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
+    app_session$onBookmark(function(state) {
+      logger::log_trace("snapshot_manager_srv@onBookmark: storing filter state")
+      snapshot <- as.list(slices_global(), recursive = TRUE)
+      attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
+      state$values$filter_state_on_bookmark <- snapshot
+    })
+    # Add snapshot history to bookmark.
+    session$onBookmark(function(state) {
+      logger::log_trace("snapshot_manager_srv@onBookmark: storing snapshot and bookmark history")
+      state$values$snapshot_history <- snapshot_history() # isolate this?
+    })
+
     ns <- session$ns
 
-    # Store global filter states ----
+    # Track global filter states ----
     filter <- isolate(slices_global())
     snapshot_history <- reactiveVal({
-      list(
-        "Initial application state" = as.list(filter, recursive = TRUE)
-      )
+      # Restore directly from bookmarked state, if applicable.
+      restoreValue(ns("snapshot_history"), list("Initial application state" = as.list(filter, recursive = TRUE)))
     })
 
     # Snapshot current application state ----
     # Name snaphsot.
     observeEvent(input$snapshot_add, {
+      logger::log_trace("snapshot_manager_srv: snapshot_add button clicked")
       showModal(
         modalDialog(
           textInput(ns("snapshot_name"), "Name the snapshot", width = "100%", placeholder = "Meaningful, unique name"),
@@ -137,20 +170,24 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
     })
     # Store snaphsot.
     observeEvent(input$snapshot_name_accept, {
+      logger::log_trace("snapshot_manager_srv: snapshot_name_accept button clicked")
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
+        logger::log_trace("snapshot_manager_srv: snapshot name rejected")
         showNotification(
           "Please name the snapshot.",
           type = "message"
         )
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else if (is.element(make.names(snapshot_name), make.names(names(snapshot_history())))) {
+        logger::log_trace("snapshot_manager_srv: snapshot name rejected")
         showNotification(
           "This name is in conflict with other snapshot names. Please choose a different one.",
           type = "message"
         )
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
+        logger::log_trace("snapshot_manager_srv: snapshot name accepted, adding snapshot")
         snapshot <- as.list(slices_global(), recursive = TRUE)
         attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
         snapshot_update <- c(snapshot_history(), list(snapshot))
@@ -158,13 +195,14 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         snapshot_history(snapshot_update)
         removeModal()
         # Reopen filter manager modal by clicking button in the main application.
-        shinyjs::click(id = "teal-main_ui-filter_manager-show", asis = TRUE)
+        shinyjs::click(id = "teal-main_ui-wunder_bar-show_snapshot_manager", asis = TRUE)
       }
     })
 
     # Upload a snapshot file ----
     # Select file.
     observeEvent(input$snapshot_load, {
+      logger::log_trace("snapshot_manager_srv: snapshot_load button clicked")
       showModal(
         modalDialog(
           fileInput(ns("snapshot_file"), "Choose snapshot file", accept = ".json", width = "100%"),
@@ -183,11 +221,14 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
     })
     # Store new snapshot to list and restore filter states.
     observeEvent(input$snaphot_file_accept, {
+      logger::log_trace("snapshot_manager_srv: snapshot_file_accept button clicked")
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
+        logger::log_trace("snapshot_manager_srv: no snapshot name provided, naming after file")
         snapshot_name <- tools::file_path_sans_ext(input$snapshot_file$name)
       }
       if (is.element(make.names(snapshot_name), make.names(names(snapshot_history())))) {
+        logger::log_trace("snapshot_manager_srv: snapshot name rejected")
         showNotification(
           "This name is in conflict with other snapshot names. Please choose a different one.",
           type = "message"
@@ -195,32 +236,37 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         # Restore snapshot and verify app compatibility.
+        logger::log_trace("snapshot_manager_srv: snapshot name accepted, loading snapshot")
         snapshot_state <- try(slices_restore(input$snapshot_file$datapath))
         if (!inherits(snapshot_state, "modules_teal_slices")) {
+          logger::log_trace("snapshot_manager_srv: snapshot file corrupt")
           showNotification(
             "File appears to be corrupt.",
             type = "error"
           )
         } else if (!identical(attr(snapshot_state, "app_id"), attr(slices_global(), "app_id"))) {
+          logger::log_trace("snapshot_manager_srv: snapshot not compatible with app")
           showNotification(
             "This snapshot file is not compatible with the app and cannot be loaded.",
             type = "warning"
           )
         } else {
           # Add to snapshot history.
+          logger::log_trace("snapshot_manager_srv: snapshot loaded, adding to history")
           snapshot <- as.list(snapshot_state, recursive = TRUE)
           snapshot_update <- c(snapshot_history(), list(snapshot))
           names(snapshot_update)[length(snapshot_update)] <- snapshot_name
           snapshot_history(snapshot_update)
           ### Begin simplified restore procedure. ###
-          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+          logger::log_trace("snapshot_manager_srv: restoring snapshot")
+          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
           mapply(
             function(filtered_data, filter_ids) {
               filtered_data$clear_filter_states(force = TRUE)
               slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
               filtered_data$set_filter_state(slices)
             },
-            filtered_data = filtered_data_list,
+            filtered_data = datasets,
             filter_ids = mapping_unfolded
           )
           slices_global(snapshot_state)
@@ -233,18 +279,19 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
 
     # Restore initial state ----
     observeEvent(input$snapshot_reset, {
+      logger::log_trace("snapshot_manager_srv: snapshot_reset button clicked, restoring snapshot")
       s <- "Initial application state"
       ### Begin restore procedure. ###
       snapshot <- snapshot_history()[[s]]
       snapshot_state <- as.teal_slices(snapshot)
-      mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+      mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
       mapply(
         function(filtered_data, filter_ids) {
           filtered_data$clear_filter_states(force = TRUE)
           slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
           filtered_data$set_filter_state(slices)
         },
-        filtered_data = filtered_data_list,
+        filtered_data = datasets,
         filter_ids = mapping_unfolded
       )
       slices_global(snapshot_state)
@@ -261,6 +308,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
     divs <- reactiveValues()
 
     observeEvent(snapshot_history(), {
+      logger::log_trace("snapshot_manager_srv: snapshot history modified, updating snapshot list")
       lapply(names(snapshot_history())[-1L], function(s) {
         id_pickme <- sprintf("pickme_%s", make.names(s))
         id_saveme <- sprintf("saveme_%s", make.names(s))
@@ -272,14 +320,14 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
             ### Begin restore procedure. ###
             snapshot <- snapshot_history()[[s]]
             snapshot_state <- as.teal_slices(snapshot)
-            mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(filtered_data_list))
+            mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
             mapply(
               function(filtered_data, filter_ids) {
                 filtered_data$clear_filter_states(force = TRUE)
                 slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
                 filtered_data$set_filter_state(slices)
               },
-              filtered_data = filtered_data_list,
+              filtered_data = datasets,
               filter_ids = mapping_unfolded
             )
             slices_global(snapshot_state)
@@ -304,7 +352,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
         # Create a row for the snapshot table.
         if (!is.element(id_rowme, names(divs))) {
           divs[[id_rowme]] <- tags$div(
-            class = "snapshot_table_row",
+            class = "manager_table_row",
             tags$span(tags$h5(s)),
             actionLink(inputId = ns(id_pickme), label = icon("circle-check"), title = "select"),
             downloadLink(outputId = ns(id_saveme), label = icon("save"), title = "save to file")
@@ -315,16 +363,18 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
 
     # Create table to display list of snapshots and their actions.
     output$snapshot_list <- renderUI({
-      rows <- lapply(rev(reactiveValuesToList(divs)), function(d) d)
+      rows <- rev(reactiveValuesToList(divs))
       if (length(rows) == 0L) {
         tags$div(
-          class = "snapshot_manager_placeholder",
+          class = "manager_placeholder",
           "Snapshots will appear here."
         )
       } else {
         rows
       }
     })
+
+    snapshot_history
   })
 }
 
@@ -337,6 +387,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, filtered_dat
 #' @param mapping (named `list`) as stored in mapping parameter of `teal_slices`
 #' @param module_names (`character`) vector containing names of all modules in the app
 #' @return A `named_list` with one element per module, each element containing all filters applied to that module.
+#'
 #' @keywords internal
 #'
 unfold_mapping <- function(mapping, module_names) {
@@ -354,6 +405,7 @@ unfold_mapping <- function(mapping, module_names) {
 #' @param mapping_matrix (`data.frame`) of logical vectors where
 #'                       columns represent modules and row represent `teal_slice`s
 #' @return Named `list` like that in the `mapping` attribute of a `teal_slices` object.
+#'
 #' @keywords internal
 #'
 matrix_to_mapping <- function(mapping_matrix) {
