@@ -311,17 +311,76 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       invisible(self)
     },
     #' @description
+    # Add a new subject filter variable for MAE datasets.
+    #'
+    #' @param dataset_name (character) The name of the dataset to add the filter variable to.
+    #' @param var_name (character) The name of the variable to add to the filter panel.
+    #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
+    #'
+    #' @return The `TealAppDriver` object invisibly.
+    add_mae_subjects_filter_var = function(dataset_name, var_name, ...) {
+      checkmate::check_string(dataset_name)
+      checkmate::check_string(var_name)
+      self$set_input(
+        sprintf(
+          "%s-add-%s-subjects-var_to_add",
+          self$active_filters_ns(),
+          dataset_name
+        ),
+        var_name,
+        ...
+      )
+      invisible(self)
+    },
+    #' @description
+    #' Add a new sample filter variable for MAE datasets, specifying whether it's for genes or samples.
+    #'
+    #' @param dataset_name (character) The name of the dataset to add the filter variable to.
+    #' @param sample_name (character) The name of the sample/experiment.
+    #' @param var_name (character) The name of the variable to add to the filter panel.
+    #' @param filter_type (character) Specifies the type of filter: "gene" for gene variables, "sample" for sample variables.
+    #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
+    #'
+    #' @return The `TealAppDriver` object invisibly.
+    add_mae_sample_filter_var = function(dataset_name, sample_name, var_name, filter_type = c("gene", "sample"), ...) {
+      filter_type <- match.arg(filter_type)
+      checkmate::check_string(dataset_name)
+      checkmate::check_string(sample_name)
+      checkmate::check_string(var_name)
+      checkmate::assert_choice(filter_type, c("gene", "sample"))
+
+      type_suffix <- ifelse(filter_type == "gene", "row", "col")
+
+      self$set_input(
+        sprintf(
+          "%s-add-%s-%s-%s_to_add",
+          self$active_filters_ns(),
+          dataset_name,
+          sample_name,
+          type_suffix
+        ),
+        var_name,
+        ...
+      )
+      invisible(self)
+    },
+    #' @description
     #' Remove an active filter variable of a dataset from the active filter variables panel.
     #'
     #' @param dataset_name (character) The name of the dataset to remove the filter variable from.
     #' If `NULL`, all the filter variables will be removed.
     #' @param var_name (character) The name of the variable to remove from the filter panel.
     #' If `NULL`, all the filter variables of the dataset will be removed.
+    #' @param filter_type (character) Specifies the type of filter: "data.frame", "subject", "gene", or "sample".
+    #' @param sample_name (character) The name of the sample, required for "gene" and "sample" filter types.
     #'
     #' @return The `TealAppDriver` object invisibly.
     remove_filter_var = function(dataset_name = NULL, var_name = NULL) {
       checkmate::check_string(dataset_name, null.ok = TRUE)
       checkmate::check_string(var_name, null.ok = TRUE)
+      checkmate::assert_choice(filter_type, c("dataframe", "subject", "gene", "sample"))
+      checkmate::check_string(sample_name, na.ok = TRUE)
+
       if (is.null(dataset_name)) {
         remove_selector <- sprintf(
           "#%s-active-remove_all_filters",
@@ -333,13 +392,50 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           self$active_filters_ns(),
           dataset_name
         )
-      } else {
-        remove_selector <- sprintf(
-          "#%s-active-%s-filter-%s_%s-remove",
-          self$active_filters_ns(),
-          dataset_name,
-          dataset_name,
-          var_name
+      } else{
+        remove_selector <- switch(filter_type,
+                                  `data.frame` = {
+                                    sprintf(
+                                      "#%s-active-%s-filter-%s_%s-remove",
+                                      self$active_filters_ns(),
+                                      dataset_name,
+                                      dataset_name,
+                                      var_name
+                                    )
+                                  },
+                                  subject = {
+                                    sprintf(
+                                      "#%s-active-%s-subjects-%s_%s-remove",
+                                      self$active_filters_ns(),
+                                      dataset_name,
+                                      dataset_name,
+                                      var_name
+                                    )
+                                  },
+                                  gene = {
+                                    checkmate::check_string(sample_name)
+                                    sprintf(
+                                      "#%s-active-%s-%s-%s_%s_%s_subset-remove",
+                                      self$active_filters_ns(),
+                                      dataset_name,
+                                      sample_name,
+                                      dataset_name,
+                                      var_name,
+                                      sample_name
+                                    )
+                                  },
+                                  sample = {
+                                    checkmate::check_string(sample_name)
+                                    sprintf(
+                                      "#%s-active-%s-%s-%s_%s_%s_select-remove",
+                                      self$active_filters_ns(),
+                                      dataset_name,
+                                      sample_name,
+                                      dataset_name,
+                                      var_name,
+                                      sample_name
+                                    )
+                                  }
         )
       }
       self$click(
