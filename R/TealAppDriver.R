@@ -392,50 +392,50 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           self$active_filters_ns(),
           dataset_name
         )
-      } else{
+      } else {
         remove_selector <- switch(filter_type,
-                                  `data.frame` = {
-                                    sprintf(
-                                      "#%s-active-%s-filter-%s_%s-remove",
-                                      self$active_filters_ns(),
-                                      dataset_name,
-                                      dataset_name,
-                                      var_name
-                                    )
-                                  },
-                                  subject = {
-                                    sprintf(
-                                      "#%s-active-%s-subjects-%s_%s-remove",
-                                      self$active_filters_ns(),
-                                      dataset_name,
-                                      dataset_name,
-                                      var_name
-                                    )
-                                  },
-                                  gene = {
-                                    checkmate::check_string(sample_name)
-                                    sprintf(
-                                      "#%s-active-%s-%s-%s_%s_%s_subset-remove",
-                                      self$active_filters_ns(),
-                                      dataset_name,
-                                      sample_name,
-                                      dataset_name,
-                                      var_name,
-                                      sample_name
-                                    )
-                                  },
-                                  sample = {
-                                    checkmate::check_string(sample_name)
-                                    sprintf(
-                                      "#%s-active-%s-%s-%s_%s_%s_select-remove",
-                                      self$active_filters_ns(),
-                                      dataset_name,
-                                      sample_name,
-                                      dataset_name,
-                                      var_name,
-                                      sample_name
-                                    )
-                                  }
+          `data.frame` = {
+            sprintf(
+              "#%s-active-%s-filter-%s_%s-remove",
+              self$active_filters_ns(),
+              dataset_name,
+              dataset_name,
+              var_name
+            )
+          },
+          subject = {
+            sprintf(
+              "#%s-active-%s-subjects-%s_%s-remove",
+              self$active_filters_ns(),
+              dataset_name,
+              dataset_name,
+              var_name
+            )
+          },
+          gene = {
+            checkmate::check_string(sample_name)
+            sprintf(
+              "#%s-active-%s-%s-%s_%s_%s_subset-remove",
+              self$active_filters_ns(),
+              dataset_name,
+              sample_name,
+              dataset_name,
+              var_name,
+              sample_name
+            )
+          },
+          sample = {
+            checkmate::check_string(sample_name)
+            sprintf(
+              "#%s-active-%s-%s-%s_%s_%s_select-remove",
+              self$active_filters_ns(),
+              dataset_name,
+              sample_name,
+              dataset_name,
+              var_name,
+              sample_name
+            )
+          }
         )
       }
       self$click(
