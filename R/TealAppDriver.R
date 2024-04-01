@@ -221,14 +221,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @param input_id (character) The shiny input id to get the value from.
     #' @param value The value to set the input to.
+    #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
     #'
     #' @return The `TealAppDriver` object invisibly.
-    set_module_input = function(input_id, value) {
+    set_module_input = function(input_id, value, ...) {
       checkmate::check_string(input_id)
       checkmate::check_string(value)
       self$set_input(
         sprintf("%s-%s", self$active_module_ns(), input_id),
-        value
+        value,
+        ...
       )
       invisible(self)
     },
@@ -291,9 +293,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @param dataset_name (character) The name of the dataset to add the filter variable to.
     #' @param var_name (character) The name of the variable to add to the filter panel.
+    #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
     #'
     #' @return The `TealAppDriver` object invisibly.
-    add_filter_var = function(dataset_name, var_name) {
+    add_filter_var = function(dataset_name, var_name, ...) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
       self$set_input(
@@ -302,7 +305,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           self$active_filters_ns(),
           dataset_name
         ),
-        var_name
+        var_name,
+        ...
       )
       invisible(self)
     },
@@ -349,10 +353,13 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param dataset_name (character) The name of the dataset to set the filter value for.
     #' @param var_name (character) The name of the variable to set the filter value for.
     #' @param input The value to set the filter to.
-    #' @param type (character) The type of the filter to get the value from. Default is `categorical`.
+    #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
     #'
     #' @return The `TealAppDriver` object invisibly.
-    set_active_filter_selection = function(dataset_name, var_name, input) {
+    set_active_filter_selection = function(dataset_name,
+                                           var_name,
+                                           input,
+                                           ...) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
       checkmate::check_string(input)
@@ -392,16 +399,32 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
       if (identical(slices_suffix, "selection_manual")) {
         checkmate::assert_numeric(input, len = 2)
+
+        dots <- rlang::list2(...)
+        checkmate::assert_choice(dots$priority_, formals(self$set_inputs)[["priority_"]], null.ok = TRUE)
+        checkmate::assert_flag(dots$wait_, null.ok = TRUE)
+
         self$run_js(
           sprintf(
-            "Shiny.setInputValue('%s:sw.numericRange', [%f, %f], {priority: 'event'})",
+            "Shiny.setInputValue('%s:sw.numericRange', [%f, %f], {priority: '%s'})",
             slices_input_id,
             input[[1]],
-            input[[2]]
+            input[[2]],
+            priority_ = ifelse(is.null(dots$priority_), "input", dots$priority_)
           )
         )
+
+        if (isTRUE(dots$wait_) || is.null(dots$wait_)) {
+          self$wait_for_idle(
+            timeout = if (is.null(dots$timeout_)) rlang::missing_arg() else dots$timeout_
+          )
+        }
       } else if (identical(slices_suffix, "selection")) {
-        self$set_input(slices_input_id, input)
+        self$set_input(
+          slices_input_id,
+          input,
+          ...
+        )
       } else {
         stop("Filter selection set not supported for this slice.")
       }
