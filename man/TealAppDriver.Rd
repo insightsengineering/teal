@@ -37,6 +37,8 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
+\item \href{#method-TealAppDriver-add_mae_subjects_filter_var}{\code{TealAppDriver$add_mae_subjects_filter_var()}}
+\item \href{#method-TealAppDriver-add_mae_sample_filter_var}{\code{TealAppDriver$add_mae_sample_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
 \item \href{#method-TealAppDriver-get_attr}{\code{TealAppDriver$get_attr()}}
@@ -425,6 +427,63 @@ The \code{TealAppDriver} object invisibly.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-add_mae_subjects_filter_var"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-add_mae_subjects_filter_var}{}}}
+\subsection{Method \code{add_mae_subjects_filter_var()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_mae_subjects_filter_var(dataset_name, var_name, ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset_name}}{(character) The name of the dataset to add the filter variable to.}
+
+\item{\code{var_name}}{(character) The name of the variable to add to the filter panel.}
+
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-add_mae_sample_filter_var"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-add_mae_sample_filter_var}{}}}
+\subsection{Method \code{add_mae_sample_filter_var()}}{
+Add a new sample filter variable for MAE datasets, specifying whether it's for genes or samples.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_mae_sample_filter_var(
+  dataset_name,
+  sample_name,
+  var_name,
+  filter_type = c("gene", "sample"),
+  ...
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset_name}}{(character) The name of the dataset to add the filter variable to.}
+
+\item{\code{sample_name}}{(character) The name of the sample/experiment.}
+
+\item{\code{var_name}}{(character) The name of the variable to add to the filter panel.}
+
+\item{\code{filter_type}}{(character) Specifies the type of filter: "gene" for gene variables, "sample" for sample variables.}
+
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-remove_filter_var"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-remove_filter_var}{}}}
 \subsection{Method \code{remove_filter_var()}}{
@@ -441,6 +500,10 @@ If \code{NULL}, all the filter variables will be removed.}
 
 \item{\code{var_name}}{(character) The name of the variable to remove from the filter panel.
 If \code{NULL}, all the filter variables of the dataset will be removed.}
+
+\item{\code{filter_type}}{(character) Specifies the type of filter: "data.frame", "subject", "gene", or "sample".}
+
+\item{\code{sample_name}}{(character) The name of the sample, required for "gene" and "sample" filter types.}
 }
 \if{html}{\out{</div>}}
 }
