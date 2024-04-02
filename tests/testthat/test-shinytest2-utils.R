@@ -21,7 +21,6 @@ testthat::test_that("e2e: show/hide hamburger works as expected", {
   testthat::expect_false(isTruthy(secondary_attrs$style))
 
   app$click(selector = ".btn.action-button.filter_hamburger")
-  app$wait_for_idle(timeout = default_idle_timeout)
   primary_attrs <- get_class_attributes(app, ".teal_primary_col")
   secondary_attrs <- get_class_attributes(app, ".teal_secondary_col")
 
