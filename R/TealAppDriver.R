@@ -289,79 +289,53 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       active_filters[[dataset_name]]
     },
     #' @description
-    #' Add a new variable from the dataset to be filtered.
-    #'
-    #' @param dataset_name (character) The name of the dataset to add the filter variable to.
-    #' @param var_name (character) The name of the variable to add to the filter panel.
-    #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
-    #'
-    #' @return The `TealAppDriver` object invisibly.
-    add_filter_var = function(dataset_name, var_name, ...) {
-      checkmate::check_string(dataset_name)
-      checkmate::check_string(var_name)
-      self$set_input(
-        sprintf(
-          "%s-add-%s-filter-var_to_add",
-          self$active_filters_ns(),
-          dataset_name
-        ),
-        var_name,
-        ...
-      )
-      invisible(self)
-    },
-    #' @description
-    # Add a new subject filter variable for MAE datasets.
-    #'
-    #' @param dataset_name (character) The name of the dataset to add the filter variable to.
-    #' @param var_name (character) The name of the variable to add to the filter panel.
-    #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
-    #'
-    #' @return The `TealAppDriver` object invisibly.
-    add_mae_subjects_filter_var = function(dataset_name, var_name, ...) {
-      checkmate::check_string(dataset_name)
-      checkmate::check_string(var_name)
-      self$set_input(
-        sprintf(
-          "%s-add-%s-subjects-var_to_add",
-          self$active_filters_ns(),
-          dataset_name
-        ),
-        var_name,
-        ...
-      )
-      invisible(self)
-    },
-    #' @description
-    #' Add a new sample filter variable for MAE datasets, specifying whether it's for genes or samples.
+    #' Adds a new filter variable to the dataset. Supports both standard datasets and MAE datasets.
     #'
     #' @param dataset_name (character) The name of the dataset to add the filter variable to.
     #' @param sample_name (character) The name of the sample/experiment.
     #' @param var_name (character) The name of the variable to add to the filter panel.
-    #' @param filter_type (character) Specifies the type of filter: "gene" for gene variables, "sample" for sample variables.
+    #' @param filter_type (character) Specifies the type of filter. Default is "data.frame".
     #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
     #'
     #' @return The `TealAppDriver` object invisibly.
-    add_mae_sample_filter_var = function(dataset_name, sample_name, var_name, filter_type = c("gene", "sample"), ...) {
-      filter_type <- match.arg(filter_type)
+    add_filter_var = function(dataset_name, sample_name, var_name, filter_type = "data.frame", ...) {
       checkmate::check_string(dataset_name)
-      checkmate::check_string(sample_name)
       checkmate::check_string(var_name)
-      checkmate::assert_choice(filter_type, c("gene", "sample"))
+      checkmate::assert_choice(filter_type, c("data.frame", "subject", "gene", "sample"))
 
-      type_suffix <- ifelse(filter_type == "gene", "row", "col")
-
-      self$set_input(
-        sprintf(
-          "%s-add-%s-%s-%s_to_add",
+      input_id <- switch(filter_type,
+        `data.frame` = sprintf(
+          "%s-add-%s-filter-var_to_add",
+          self$active_filters_ns(),
+          dataset_name
+        ),
+        subject = sprintf(
+          "%s-add-%s-subjects-%s_to_add",
           self$active_filters_ns(),
           dataset_name,
-          sample_name,
-          type_suffix
+          dataset_name
         ),
-        var_name,
-        ...
+        gene = {
+          checkmate::check_string(sample_name)
+          sprintf(
+            "%s-add-%s-%s-row_to_add",
+            self$active_filters_ns(),
+            dataset_name,
+            sample_name
+          )
+        },
+        sample = {
+          checkmate::check_string(sample_name)
+          sprintf(
+            "%s-add-%s-%s-col_to_add",
+            self$active_filters_ns(),
+            dataset_name,
+            sample_name
+          )
+        }
       )
+
+      self$set_input(input_id, var_name, ...)
       invisible(self)
     },
     #' @description
@@ -369,17 +343,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @param dataset_name (character) The name of the dataset to remove the filter variable from.
     #' If `NULL`, all the filter variables will be removed.
+    #' @param sample_name (character) The name of the sample, required for "gene" and "sample" filter types.
     #' @param var_name (character) The name of the variable to remove from the filter panel.
     #' If `NULL`, all the filter variables of the dataset will be removed.
     #' @param filter_type (character) Specifies the type of filter: "data.frame", "subject", "gene", or "sample".
-    #' @param sample_name (character) The name of the sample, required for "gene" and "sample" filter types.
     #'
     #' @return The `TealAppDriver` object invisibly.
-    remove_filter_var = function(dataset_name = NULL, var_name = NULL) {
+    remove_filter_var = function(dataset_name = NULL, sample_name = NULL, var_name = NULL, filter_type = "data.frame") {
       checkmate::check_string(dataset_name, null.ok = TRUE)
       checkmate::check_string(var_name, null.ok = TRUE)
-      checkmate::assert_choice(filter_type, c("dataframe", "subject", "gene", "sample"))
-      checkmate::check_string(sample_name, na.ok = TRUE)
+      checkmate::assert_choice(filter_type, c("data.frame", "subject", "gene", "sample"))
 
       if (is.null(dataset_name)) {
         remove_selector <- sprintf(
@@ -447,25 +420,63 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Set the active filter values for a variable of a dataset in the active filter variable panel.
     #'
     #' @param dataset_name (character) The name of the dataset to set the filter value for.
+    #' @param sample_name (character) The name of the sample, required for "gene" and "sample" filter types.
     #' @param var_name (character) The name of the variable to set the filter value for.
     #' @param input The value to set the filter to.
+    #' @param filter_type (character) Specifies the type of filter: "data.frame", "subject", "gene", or "sample".
     #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
     #'
     #' @return The `TealAppDriver` object invisibly.
     set_active_filter_selection = function(dataset_name,
+                                           sample_name = NULL,
                                            var_name,
                                            input,
+                                           filter_type = "data.frame",
                                            ...) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
       checkmate::check_string(input)
+      checkmate::assert_choice(filter_type, c("data.frame", "subject", "gene", "sample"))
 
-      input_id_prefix <- sprintf(
-        "%s-active-%s-filter-%s_%s-inputs",
-        self$active_filters_ns(),
-        dataset_name,
-        dataset_name,
-        var_name
+      input_id_prefix <- switch(filter_type,
+        `data.frame` = sprintf(
+          "%s-active-%s-filter-%s_%s-inputs",
+          self$active_filters_ns(),
+          dataset_name,
+          dataset_name,
+          var_name
+        ),
+        subject = sprintf(
+          "#%s-active-%s-subjects-%s_%s-inputs",
+          self$active_filters_ns(),
+          dataset_name,
+          dataset_name,
+          var_name
+        ),
+        gene = {
+          checkmate::check_string(sample_name)
+          sprintf(
+            "#%s-active-%s-%s-%s_%s_%s_subset-inputs",
+            self$active_filters_ns(),
+            dataset_name,
+            sample_name,
+            dataset_name,
+            var_name,
+            sample_name
+          )
+        },
+        sample = {
+          checkmate::check_string(sample_name)
+          sprintf(
+            "#%s-active-%s-%s-%s_%s_%s_select-inputs",
+            self$active_filters_ns(),
+            dataset_name,
+            sample_name,
+            dataset_name,
+            var_name,
+            sample_name
+          )
+        }
       )
 
       # Find the type of filter (based on filter panel)
@@ -485,11 +496,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
       # Generate correct namespace
       slices_input_id <- sprintf(
-        "%s-active-%s-filter-%s_%s-inputs-%s",
-        self$active_filters_ns(),
-        dataset_name,
-        dataset_name,
-        var_name,
+        "%s-%s",
+        input_id_prefix,
         slices_suffix
       )
 

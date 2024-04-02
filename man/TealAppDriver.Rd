@@ -37,8 +37,6 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
-\item \href{#method-TealAppDriver-add_mae_subjects_filter_var}{\code{TealAppDriver$add_mae_subjects_filter_var()}}
-\item \href{#method-TealAppDriver-add_mae_sample_filter_var}{\code{TealAppDriver$add_mae_sample_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
 \item \href{#method-TealAppDriver-get_attr}{\code{TealAppDriver$get_attr()}}
@@ -406,60 +404,13 @@ If \code{NULL}, the filter variables for all the datasets will be returned in a 
 \if{html}{\out{<a id="method-TealAppDriver-add_filter_var"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-add_filter_var}{}}}
 \subsection{Method \code{add_filter_var()}}{
-Add a new variable from the dataset to be filtered.
+Adds a new filter variable to the dataset. Supports both standard datasets and MAE datasets.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_filter_var(dataset_name, var_name, ...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataset_name}}{(character) The name of the dataset to add the filter variable to.}
-
-\item{\code{var_name}}{(character) The name of the variable to add to the filter panel.}
-
-\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The \code{TealAppDriver} object invisibly.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-add_mae_subjects_filter_var"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-add_mae_subjects_filter_var}{}}}
-\subsection{Method \code{add_mae_subjects_filter_var()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_mae_subjects_filter_var(dataset_name, var_name, ...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataset_name}}{(character) The name of the dataset to add the filter variable to.}
-
-\item{\code{var_name}}{(character) The name of the variable to add to the filter panel.}
-
-\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The \code{TealAppDriver} object invisibly.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-add_mae_sample_filter_var"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-add_mae_sample_filter_var}{}}}
-\subsection{Method \code{add_mae_sample_filter_var()}}{
-Add a new sample filter variable for MAE datasets, specifying whether it's for genes or samples.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_mae_sample_filter_var(
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_filter_var(
   dataset_name,
   sample_name,
   var_name,
-  filter_type = c("gene", "sample"),
+  filter_type = "data.frame",
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -473,7 +424,7 @@ Add a new sample filter variable for MAE datasets, specifying whether it's for g
 
 \item{\code{var_name}}{(character) The name of the variable to add to the filter panel.}
 
-\item{\code{filter_type}}{(character) Specifies the type of filter: "gene" for gene variables, "sample" for sample variables.}
+\item{\code{filter_type}}{(character) Specifies the type of filter. Default is "data.frame".}
 
 \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
 }
@@ -489,7 +440,12 @@ The \code{TealAppDriver} object invisibly.
 \subsection{Method \code{remove_filter_var()}}{
 Remove an active filter variable of a dataset from the active filter variables panel.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$remove_filter_var(dataset_name = NULL, var_name = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$remove_filter_var(
+  dataset_name = NULL,
+  sample_name = NULL,
+  var_name = NULL,
+  filter_type = "data.frame"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -498,12 +454,12 @@ Remove an active filter variable of a dataset from the active filter variables p
 \item{\code{dataset_name}}{(character) The name of the dataset to remove the filter variable from.
 If \code{NULL}, all the filter variables will be removed.}
 
+\item{\code{sample_name}}{(character) The name of the sample, required for "gene" and "sample" filter types.}
+
 \item{\code{var_name}}{(character) The name of the variable to remove from the filter panel.
 If \code{NULL}, all the filter variables of the dataset will be removed.}
 
 \item{\code{filter_type}}{(character) Specifies the type of filter: "data.frame", "subject", "gene", or "sample".}
-
-\item{\code{sample_name}}{(character) The name of the sample, required for "gene" and "sample" filter types.}
 }
 \if{html}{\out{</div>}}
 }
@@ -517,7 +473,14 @@ The \code{TealAppDriver} object invisibly.
 \subsection{Method \code{set_active_filter_selection()}}{
 Set the active filter values for a variable of a dataset in the active filter variable panel.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_filter_selection(dataset_name, var_name, input, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_filter_selection(
+  dataset_name,
+  sample_name = NULL,
+  var_name,
+  input,
+  filter_type = "data.frame",
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -525,9 +488,13 @@ Set the active filter values for a variable of a dataset in the active filter va
 \describe{
 \item{\code{dataset_name}}{(character) The name of the dataset to set the filter value for.}
 
+\item{\code{sample_name}}{(character) The name of the sample, required for "gene" and "sample" filter types.}
+
 \item{\code{var_name}}{(character) The name of the variable to set the filter value for.}
 
 \item{\code{input}}{The value to set the filter to.}
+
+\item{\code{filter_type}}{(character) Specifies the type of filter: "data.frame", "subject", "gene", or "sample".}
 
 \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
 }

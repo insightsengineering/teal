@@ -111,7 +111,7 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
   app$click("teal_data_module-submit")
 
   # This may fail if teal_data_module does not perform the transformation
-  testthat::expect_no_error(app$add_filter_var("dataset1", "A_New_Column"))
+  testthat::expect_no_error(app$add_filter_var(dataset_name = "dataset1", vvar_name = "A_New_Column"))
 
   testthat::expect_setequal(
     app$get_active_data_filters("dataset1")$A_New_Column,
