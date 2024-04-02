@@ -16,7 +16,11 @@ testthat::test_that("e2e: module content is updated when a data is filtered in f
 
   old_output <- app$get_active_module_output("text")
 
-  app$set_active_filter_selection("iris", "Species", c("setosa", "versicolor"))
+  app$set_active_filter_selection(
+    dataset_name = "iris",
+    var_name = "Species",
+    input = c("setosa", "versicolor")
+  )
 
   testthat::expect_false(
     identical(old_output, app$get_active_module_output("text"))
@@ -52,7 +56,11 @@ testthat::test_that("e2e: filtering a module-specific filter is refected in othe
 
   app$navigate_teal_tab("Module_2")
 
-  app$set_active_filter_selection("iris", "Species", c("setosa"))
+  app$set_active_filter_selection(
+    dataset_name = "iris",
+    var_name = "Species",
+    input = c("setosa")
+  )
 
   app$navigate_teal_tab("Module_1")
 
@@ -91,7 +99,11 @@ testthat::test_that("e2e: filtering a module-specific filter is not refected in 
 
   app$navigate_teal_tab("Module_2")
 
-  app$set_active_filter_selection("mtcars", "cyl", c("4"))
+  app$set_active_filter_selection(
+    dataset_name = "mtcars",
+    var_name = "cyl",
+    input = c("4")
+  )
 
   app$navigate_teal_tab("Module_1")
 
