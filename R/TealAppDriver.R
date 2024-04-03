@@ -310,9 +310,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           dataset_name
         ),
         subject = sprintf(
-          "%s-add-%s-subjects-%s_to_add",
+          "%s-add-%s-subjects-var_to_add",
           self$active_filters_ns(),
-          dataset_name,
           dataset_name
         ),
         gene = {
@@ -447,7 +446,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           var_name
         ),
         subject = sprintf(
-          "#%s-active-%s-subjects-%s_%s-inputs",
+          "%s-active-%s-subjects-%s_%s-inputs",
           self$active_filters_ns(),
           dataset_name,
           dataset_name,
@@ -456,7 +455,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         gene = {
           checkmate::check_string(sample_name)
           sprintf(
-            "#%s-active-%s-%s-%s_%s_%s_subset-inputs",
+            "%s-active-%s-%s-%s_%s_%s_subset-inputs",
             self$active_filters_ns(),
             dataset_name,
             sample_name,
@@ -468,7 +467,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         sample = {
           checkmate::check_string(sample_name)
           sprintf(
-            "#%s-active-%s-%s-%s_%s_%s_select-inputs",
+            "%s-active-%s-%s-%s_%s_%s_select-inputs",
             self$active_filters_ns(),
             dataset_name,
             sample_name,
