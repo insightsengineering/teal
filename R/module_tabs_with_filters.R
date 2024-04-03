@@ -44,10 +44,10 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices()) 
       class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
       href = "javascript:void(0)",
       onclick = "toggleFilterPanel();", # see sidebar.js
-      title = "Toggle filter panels",
+      title = "Toggle filter panel",
       icon("fas fa-bars")
     ),
-    filter_manager_modal_ui(ns("filter_manager"))
+    wunder_bar_ui(ns("wunder_bar"))
   )
   teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btns)
 
@@ -84,7 +84,7 @@ srv_tabs_with_filters <- function(id,
     logger::log_trace("srv_tabs_with_filters initializing the module.")
 
     is_module_specific <- isTRUE(attr(filter, "module_specific"))
-    manager_out <- filter_manager_modal_srv("filter_manager", filtered_data_list = datasets, filter = filter)
+    wunder_bar_out <- wunder_bar_srv("wunder_bar", datasets, filter, modules)
 
     active_module <- srv_nested_tabs(
       id = "root",

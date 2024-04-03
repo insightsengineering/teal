@@ -206,7 +206,6 @@ module <- function(label = "module",
     datanames <- filters
     msg <-
       "The `filters` argument is deprecated and will be removed in the next release. Please use `datanames` instead."
-    logger::log_warn(msg)
     warning(msg)
   }
 
@@ -267,7 +266,7 @@ modules <- function(..., label = "root") {
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
   labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  names(submodules) <- make.unique(gsub("[^[:alnum:]]+", "_", labels), sep = "_")
+  names(submodules) <- get_unique_labels(labels)
   structure(
     list(
       label = label,
@@ -325,7 +324,7 @@ append_module <- function(modules, module) {
   checkmate::assert_class(module, "teal_module")
   modules$children <- c(modules$children, list(module))
   labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
-  names(modules$children) <- make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
+  names(modules$children) <- get_unique_labels(labels)
   modules
 }
 
@@ -395,7 +394,7 @@ is_arg_used <- function(modules, arg) {
 #' Nesting it increases overall depth by 1.
 #'
 #' @inheritParams init
-#' @param depth optional, integer determining current depth level
+#' @param depth optional integer determining current depth level
 #'
 #' @return Depth level for given module.
 #' @keywords internal
@@ -420,5 +419,23 @@ module_labels <- function(modules) {
     lapply(modules$children, module_labels)
   } else {
     modules$label
+  }
+}
+
+#' Retrieve `teal_bookmarkable` attribute from `teal_modules`
+#'
+#' @param modules (`teal_modules` or `teal_module`) object
+#' @return named list of the same structure as `modules` with `TRUE` or `FALSE` values indicating
+#' whether the module is bookmarkable.
+#' @keywords internal
+modules_bookmarkable <- function(modules) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+  if (inherits(modules, "teal_modules")) {
+    setNames(
+      lapply(modules$children, modules_bookmarkable),
+      vapply(modules$children, `[[`, "label", FUN.VALUE = character(1))
+    )
+  } else {
+    attr(modules, "teal_bookmarkable", exact = TRUE)
   }
 }

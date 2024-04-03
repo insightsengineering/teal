@@ -13,7 +13,7 @@ nested list of \code{teal_modules} or \code{teal_module} objects or a single
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{depth}{optional, integer determining current depth level}
+\item{depth}{optional integer determining current depth level}
 }
 \value{
 Depth level for given module.

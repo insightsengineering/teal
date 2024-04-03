@@ -38,12 +38,12 @@ The header of the app.}
 \item{footer}{(\code{shiny.tag} or \code{character(1)})
 The footer of the app.}
 
-\item{id}{(\code{character})
-Optional string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
+\item{id}{(\code{character}) optional
+string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 }
 \value{
-Named list with server and UI functions.
+Named list containing server and UI functions.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
