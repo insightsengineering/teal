@@ -355,7 +355,7 @@ The value of the shiny output.
 Set the input in the module in the \code{teal} app.
 This function will only set inputs in the name space of the current active teal module.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_module_input(input_id, value)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_module_input(input_id, value, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -364,6 +364,8 @@ This function will only set inputs in the name space of the current active teal 
 \item{\code{input_id}}{(character) The shiny input id to get the value from.}
 
 \item{\code{value}}{The value to set the input to.}
+
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
 }
 \if{html}{\out{</div>}}
 }
@@ -434,7 +436,7 @@ If \code{NULL}, the filter variables for all the datasets will be returned in a 
 \subsection{Method \code{add_filter_var()}}{
 Add a new variable from the dataset to be filtered.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_filter_var(dataset_name, var_name)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_filter_var(dataset_name, var_name, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -443,6 +445,8 @@ Add a new variable from the dataset to be filtered.
 \item{\code{dataset_name}}{(character) The name of the dataset to add the filter variable to.}
 
 \item{\code{var_name}}{(character) The name of the variable to add to the filter panel.}
+
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
 }
 \if{html}{\out{</div>}}
 }
@@ -480,7 +484,7 @@ The \code{TealAppDriver} object invisibly.
 \subsection{Method \code{set_active_filter_selection()}}{
 Set the active filter values for a variable of a dataset in the active filter variable panel.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_filter_selection(dataset_name, var_name, input)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_filter_selection(dataset_name, var_name, input, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -492,7 +496,7 @@ Set the active filter values for a variable of a dataset in the active filter va
 
 \item{\code{input}}{The value to set the filter to.}
 
-\item{\code{type}}{(character) The type of the filter to get the value from. Default is \code{categorical}.}
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
 }
 \if{html}{\out{</div>}}
 }
