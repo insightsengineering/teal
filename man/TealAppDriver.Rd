@@ -35,7 +35,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
 \item \href{#method-TealAppDriver-set_module_input}{\code{TealAppDriver$set_module_input()}}
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
-\item \href{#method-TealAppDriver-test_visibility}{\code{TealAppDriver$test_visibility()}}
+\item \href{#method-TealAppDriver-is_visible}{\code{TealAppDriver$is_visible()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
@@ -382,12 +382,12 @@ Get the active datasets that can be accessed via the filter panel of the current
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-test_visibility"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-test_visibility}{}}}
-\subsection{Method \code{test_visibility()}}{
+\if{html}{\out{<a id="method-TealAppDriver-is_visible"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-is_visible}{}}}
+\subsection{Method \code{is_visible()}}{
 Test if CSS elements are visible on the page via Javascript call.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$test_visibility(
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$is_visible(
   selector,
   content_visibility_auto = FALSE,
   opacity_property = FALSE,

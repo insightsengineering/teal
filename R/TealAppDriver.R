@@ -235,7 +235,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
-      displayed_datasets_index <- self$test_visibility(
+      displayed_datasets_index <- self$is_visible(
         sprintf("#%s-active-filter_active_vars_contents > span", self$active_filters_ns())
       )
 
@@ -255,10 +255,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' on <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
     #'
     #' @return Logical vector with all occurrences of the selector.
-    test_visibility = function(selector,
-                               content_visibility_auto = FALSE,
-                               opacity_property = FALSE,
-                               visibility_property = FALSE) {
+    is_visible = function(selector,
+                          content_visibility_auto = FALSE,
+                          opacity_property = FALSE,
+                          visibility_property = FALSE) {
       checkmate::assert_string(selector)
       checkmate::assert_flag(content_visibility_auto)
       checkmate::assert_flag(opacity_property)
