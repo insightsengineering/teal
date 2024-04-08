@@ -387,7 +387,7 @@ Get the active datasets that can be accessed via the filter panel of the current
 \if{html}{\out{<a id="method-TealAppDriver-is_visible"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-is_visible}{}}}
 \subsection{Method \code{is_visible()}}{
-Test if CSS elements are visible on the page via JavaScript call.
+Test if \code{DOM} elements are visible on the page with a JavaScript call.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$is_visible(
   selector,
@@ -400,7 +400,7 @@ Test if CSS elements are visible on the page via JavaScript call.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selector}}{(\code{character(1)}) CSS selector to check visibility.
+\item{\code{selector}}{(\code{character(1)}) \code{CSS} selector to check visibility.
 A \code{CSS} id will return only one element if the UI is well formed.}
 
 \item{\code{content_visibility_auto, opacity_property, visibility_property}}{(\code{logical(1)}) See more information
