@@ -250,10 +250,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       available_datasets[displayed_datasets_index]
     },
     #' @description
-    #' Test if CSS elements are visible on the page via Javascript call.
-    #' @param selector (`character`) CSS selector to test visibility.
+    #' Test if CSS elements are visible on the page via JavaScript call.
+    #' @param selector (`character(1)`) CSS selector to check visibility.
     #' A `CSS` id will return only one element if the UI is well formed.
-    #' @param content_visibility_auto,opacity_property,visibility_property (`logical`) See more information
+    #' @param content_visibility_auto,opacity_property,visibility_property (`logical(1)`) See more information
     #' on <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
     #'
     #' @return Logical vector with all occurrences of the selector.
