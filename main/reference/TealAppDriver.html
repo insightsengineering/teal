@@ -12,7 +12,7 @@ Drive a teal application"><!-- mathjax --><script src="https://cdnjs.cloudflare.
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9020</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,23 +66,6 @@ Drive a teal application"><!-- mathjax --><script src="https://cdnjs.cloudflare.
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2-rc1">v0.15.2-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2">v0.15.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1">v0.15.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -148,6 +131,7 @@ driving a teal application for performing interactions for <code>shinytest2</cod
 <li><p><a href="#method-TealAppDriver-get_active_module_output"><code>TealAppDriver$get_active_module_output()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-set_module_input"><code>TealAppDriver$set_module_input()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-get_active_filter_vars"><code>TealAppDriver$get_active_filter_vars()</code></a></p></li>
+<li><p><a href="#method-TealAppDriver-is_visible"><code>TealAppDriver$is_visible()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-get_active_data_filters"><code>TealAppDriver$get_active_data_filters()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-add_filter_var"><code>TealAppDriver$add_filter_var()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-remove_filter_var"><code>TealAppDriver$remove_filter_var()</code></a></p></li>
@@ -487,15 +471,46 @@ This function will only set inputs in the name space of the current active teal 
 </div>
 
 
-</div><p></p><hr><a id="method-TealAppDriver-get_active_data_filters"></a><div class="section">
-<h3 id="method-get-active-data-filters-">Method <code>get_active_data_filters()</code><a class="anchor" aria-label="anchor" href="#method-get-active-data-filters-"></a></h3>
-<p>Get the active filter variables from a dataset in the <code>teal</code> app.</p><div class="section">
+</div><p></p><hr><a id="method-TealAppDriver-is_visible"></a><div class="section">
+<h3 id="method-is-visible-">Method <code>is_visible()</code><a class="anchor" aria-label="anchor" href="#method-is-visible-"></a></h3>
+<p>Test if <code>DOM</code> elements are visible on the page with a JavaScript call.</p><div class="section">
 <h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_active_data_filters</span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">is_visible</span><span class="op">(</span></span>
+<span>  <span class="va">selector</span>,</span>
+<span>  content_visibility_auto <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  opacity_property <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  visibility_property <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>selector</code></dt>
+<dd><p>(<code>character(1)</code>) <code>CSS</code> selector to check visibility.
+A <code>CSS</code> id will return only one element if the UI is well formed.</p></dd>
+
+
+<dt><code>content_visibility_auto, opacity_property, visibility_property</code></dt>
+<dd><p>(<code>logical(1)</code>) See more information
+on <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility" class="external-link">https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility</a>.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+<div class="section">
+<h4 id="returns-11">Returns<a class="anchor" aria-label="anchor" href="#returns-11"></a></h4>
+<p>Logical vector with all occurrences of the selector.</p>
+</div>
+
+</div><p></p><hr><a id="method-TealAppDriver-get_active_data_filters"></a><div class="section">
+<h3 id="method-get-active-data-filters-">Method <code>get_active_data_filters()</code><a class="anchor" aria-label="anchor" href="#method-get-active-data-filters-"></a></h3>
+<p>Get the active filter variables from a dataset in the <code>teal</code> app.</p><div class="section">
+<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_active_data_filters</span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>dataset_name</code></dt>
 <dd><p>(character) The name of the dataset to get the filter variables from.
 If <code>NULL</code>, the filter variables for all the datasets will be returned in a list.</p></dd>
@@ -507,12 +522,12 @@ If <code>NULL</code>, the filter variables for all the datasets will be returned
 </div><p></p><hr><a id="method-TealAppDriver-add_filter_var"></a><div class="section">
 <h3 id="method-add-filter-var-">Method <code>add_filter_var()</code><a class="anchor" aria-label="anchor" href="#method-add-filter-var-"></a></h3>
 <p>Add a new variable from the dataset to be filtered.</p><div class="section">
-<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
+<h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">add_filter_var</span><span class="op">(</span><span class="va">dataset_name</span>, <span class="va">var_name</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
+<h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>dataset_name</code></dt>
 <dd><p>(character) The name of the dataset to add the filter variable to.</p></dd>
 
@@ -528,19 +543,19 @@ If <code>NULL</code>, the filter variables for all the datasets will be returned
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-11">Returns<a class="anchor" aria-label="anchor" href="#returns-11"></a></h4>
+<h4 id="returns-12">Returns<a class="anchor" aria-label="anchor" href="#returns-12"></a></h4>
 <p>The <code>TealAppDriver</code> object invisibly.</p>
 </div>
 
 </div><p></p><hr><a id="method-TealAppDriver-remove_filter_var"></a><div class="section">
 <h3 id="method-remove-filter-var-">Method <code>remove_filter_var()</code><a class="anchor" aria-label="anchor" href="#method-remove-filter-var-"></a></h3>
 <p>Remove an active filter variable of a dataset from the active filter variables panel.</p><div class="section">
-<h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
+<h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">remove_filter_var</span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="cn">NULL</span>, var_name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
+<h4 id="arguments-12">Arguments<a class="anchor" aria-label="anchor" href="#arguments-12"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>dataset_name</code></dt>
 <dd><p>(character) The name of the dataset to remove the filter variable from.
 If <code>NULL</code>, all the filter variables will be removed.</p></dd>
@@ -554,19 +569,19 @@ If <code>NULL</code>, all the filter variables of the dataset will be removed.</
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-12">Returns<a class="anchor" aria-label="anchor" href="#returns-12"></a></h4>
+<h4 id="returns-13">Returns<a class="anchor" aria-label="anchor" href="#returns-13"></a></h4>
 <p>The <code>TealAppDriver</code> object invisibly.</p>
 </div>
 
 </div><p></p><hr><a id="method-TealAppDriver-set_active_filter_selection"></a><div class="section">
 <h3 id="method-set-active-filter-selection-">Method <code>set_active_filter_selection()</code><a class="anchor" aria-label="anchor" href="#method-set-active-filter-selection-"></a></h3>
 <p>Set the active filter values for a variable of a dataset in the active filter variable panel.</p><div class="section">
-<h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
+<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">set_active_filter_selection</span><span class="op">(</span><span class="va">dataset_name</span>, <span class="va">var_name</span>, <span class="va">input</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-12">Arguments<a class="anchor" aria-label="anchor" href="#arguments-12"></a></h4>
+<h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>dataset_name</code></dt>
 <dd><p>(character) The name of the dataset to set the filter value for.</p></dd>
 
@@ -586,19 +601,19 @@ If <code>NULL</code>, all the filter variables of the dataset will be removed.</
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-13">Returns<a class="anchor" aria-label="anchor" href="#returns-13"></a></h4>
+<h4 id="returns-14">Returns<a class="anchor" aria-label="anchor" href="#returns-14"></a></h4>
 <p>The <code>TealAppDriver</code> object invisibly.</p>
 </div>
 
 </div><p></p><hr><a id="method-TealAppDriver-get_attr"></a><div class="section">
 <h3 id="method-get-attr-">Method <code>get_attr()</code><a class="anchor" aria-label="anchor" href="#method-get-attr-"></a></h3>
 <p>Extract <code>html</code> attribute (found by a <code>selector</code>).</p><div class="section">
-<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
+<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_attr</span><span class="op">(</span><span class="va">selector</span>, <span class="va">attribute</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
+<h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>selector</code></dt>
 <dd><p>(<code>character(1)</code>) specifying the selector to be used to get the content of a specific node.</p></dd>
 
@@ -610,19 +625,19 @@ If <code>NULL</code>, all the filter variables of the dataset will be removed.</
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-14">Returns<a class="anchor" aria-label="anchor" href="#returns-14"></a></h4>
+<h4 id="returns-15">Returns<a class="anchor" aria-label="anchor" href="#returns-15"></a></h4>
 <p>The <code>character</code> vector.</p>
 </div>
 
 </div><p></p><hr><a id="method-TealAppDriver-get_html_rvest"></a><div class="section">
 <h3 id="method-get-html-rvest-">Method <code>get_html_rvest()</code><a class="anchor" aria-label="anchor" href="#method-get-html-rvest-"></a></h3>
 <p>Wrapper around <code>get_html</code> that passes the output directly to <code><a href="http://xml2.r-lib.org/reference/read_xml.html" class="external-link">rvest::read_html</a></code>.</p><div class="section">
-<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
+<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_html_rvest</span><span class="op">(</span><span class="va">selector</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
+<h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>selector</code></dt>
 <dd><p><code>(character(1))</code> passed to <code>get_html</code>.</p></dd>
 
@@ -630,7 +645,7 @@ If <code>NULL</code>, all the filter variables of the dataset will be removed.</
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="returns-15">Returns<a class="anchor" aria-label="anchor" href="#returns-15"></a></h4>
+<h4 id="returns-16">Returns<a class="anchor" aria-label="anchor" href="#returns-16"></a></h4>
 <p>An XML document.
 Wrapper around <code>get_url()</code> method that opens the app in the browser.</p>
 </div>
@@ -639,12 +654,12 @@ Wrapper around <code>get_url()</code> method that opens the app in the browser.<
 <h3 id="method-open-url-">Method <code>open_url()</code><a class="anchor" aria-label="anchor" href="#method-open-url-"></a></h3>
 
 <div class="section">
-<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
+<h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">open_url</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="returns-16">Returns<a class="anchor" aria-label="anchor" href="#returns-16"></a></h4>
+<h4 id="returns-17">Returns<a class="anchor" aria-label="anchor" href="#returns-17"></a></h4>
 <p>Nothing. Opens the underlying teal app in the browser.</p>
 </div>
 
@@ -653,7 +668,7 @@ Wrapper around <code>get_url()</code> method that opens the app in the browser.<
 <p>Waits until a specified input, output, or export value.
 This function serves as a wrapper around the <code>wait_for_value</code> method,
 providing a more flexible interface for waiting on different types of values within the active module namespace.</p><div class="section">
-<h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
+<h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">wait_for_active_module_value</span><span class="op">(</span></span>
 <span>  input <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/missing_arg.html" class="external-link">missing_arg</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  output <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/missing_arg.html" class="external-link">missing_arg</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -663,7 +678,7 @@ providing a more flexible interface for waiting on different types of values wit
 </div>
 
 <div class="section">
-<h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
+<h4 id="arguments-16">Arguments<a class="anchor" aria-label="anchor" href="#arguments-16"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>input, output, export</code></dt>
 <dd><p>A name of an input, output, or export value.
 Only one of these parameters may be used.</p></dd>
@@ -680,12 +695,12 @@ Parameter with additional value to passed in <code>wait_for_value</code>.</p></d
 </div><p></p><hr><a id="method-TealAppDriver-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
+<h4 id="usage-25">Usage<a class="anchor" aria-label="anchor" href="#usage-25"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-16">Arguments<a class="anchor" aria-label="anchor" href="#arguments-16"></a></h4>
+<h4 id="arguments-17">Arguments<a class="anchor" aria-label="anchor" href="#arguments-17"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
