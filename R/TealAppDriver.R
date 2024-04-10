@@ -311,7 +311,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       active_filters[[dataset_name]]
     },
     #' @description
-    #' Adds a new filter variable to the dataset. Supports both standard datasets and MAE datasets.
+    #' Adds a new filter variable to the dataset. Supports both `data.frame` and `MAE` datasets.
     #'
     #' @param dataset_name (character) The name of the dataset to add the filter variable to.
     #' @param sample_name (character) The name of the sample/experiment.
