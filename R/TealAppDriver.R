@@ -314,7 +314,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Adds a new filter variable to the dataset. Supports both `data.frame` and `MAE` datasets.
     #'
     #' @param dataset_name (character) The name of the dataset to add the filter variable to.
-    #' @param sample_name (character) The name of the sample/experiment.
+    #' @param sample_name (character) The name of the sample/experiment. Applicable only if the dataset is a `MultiAssayExperiment` object.
     #' @param var_name (character) The name of the variable to add to the filter panel.
     #' @param filter_type (character) Specifies the type of filter. Default is "data.frame".
     #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
