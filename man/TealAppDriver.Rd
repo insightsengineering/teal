@@ -434,7 +434,7 @@ If \code{NULL}, the filter variables for all the datasets will be returned in a 
 \if{html}{\out{<a id="method-TealAppDriver-add_filter_var"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-add_filter_var}{}}}
 \subsection{Method \code{add_filter_var()}}{
-Adds a new filter variable to the dataset. Supports both standard datasets and MAE datasets.
+Adds a new filter variable to the dataset. Supports both \code{data.frame} and \code{MAE} datasets.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_filter_var(
   dataset_name,
@@ -450,7 +450,7 @@ Adds a new filter variable to the dataset. Supports both standard datasets and M
 \describe{
 \item{\code{dataset_name}}{(character) The name of the dataset to add the filter variable to.}
 
-\item{\code{sample_name}}{(character) The name of the sample/experiment.}
+\item{\code{sample_name}}{(character) The name of the sample/experiment. Applicable only if the dataset is a \code{MultiAssayExperiment} object.}
 
 \item{\code{var_name}}{(character) The name of the variable to add to the filter panel.}
 
