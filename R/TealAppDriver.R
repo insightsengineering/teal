@@ -58,7 +58,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         super$initialize(
           app_dir = shinyApp(app$ui, app$server),
           name = "teal",
-          variant = platform_variant(),
+          variant = shinytest2::platform_variant(),
           timeout = rlang::maybe_missing(timeout, 20 * 1000),
           load_timeout = rlang::maybe_missing(load_timeout, 100 * 1000),
           ...
