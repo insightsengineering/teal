@@ -1,4 +1,5 @@
 testthat::test_that("e2e: the module server logic is only triggered when the teal module becomes active", {
+  skip_if_too_deep(5)
   value_export_module <- function(label = "custom module") {
     module(
       label = label,
@@ -23,7 +24,7 @@ testthat::test_that("e2e: the module server logic is only triggered when the tea
       value_export_module(label = "Module 2")
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
+
   test_exports <- app$get_values()$export
 
   expect_equal(length(test_exports), 1)
@@ -37,13 +38,13 @@ testthat::test_that("e2e: the module server logic is only triggered when the tea
 
 
 testthat::test_that("e2e: filter panel only shows the data supplied using datanames", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
       example_module(label = "mtcars", datanames = "mtcars")
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_identical(
     app$get_active_filter_vars(),
@@ -53,13 +54,13 @@ testthat::test_that("e2e: filter panel only shows the data supplied using datana
 })
 
 testthat::test_that("e2e: filter panel shows all the datasets when datanames is all", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
       example_module(label = "all", datanames = "all")
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_identical(
     app$get_active_filter_vars(),
@@ -69,13 +70,13 @@ testthat::test_that("e2e: filter panel shows all the datasets when datanames is 
 })
 
 testthat::test_that("e2e: filter panel is not displayed when datanames is NULL", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
       example_module(label = "NULL", datanames = NULL)
     )
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_identical(
     app$get_html_rvest(".teal_secondary_col") %>%
@@ -88,6 +89,7 @@ testthat::test_that("e2e: filter panel is not displayed when datanames is NULL",
 })
 
 testthat::test_that("e2e: all the nested teal modules are initiated as expected", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(

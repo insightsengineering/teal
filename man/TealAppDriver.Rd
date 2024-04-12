@@ -20,6 +20,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-TealAppDriver-new}{\code{TealAppDriver$new()}}
+\item \href{#method-TealAppDriver-click}{\code{TealAppDriver$click()}}
 \item \href{#method-TealAppDriver-expect_no_shiny_error}{\code{TealAppDriver$expect_no_shiny_error()}}
 \item \href{#method-TealAppDriver-expect_no_validation_error}{\code{TealAppDriver$expect_no_validation_error()}}
 \item \href{#method-TealAppDriver-expect_validation_error}{\code{TealAppDriver$expect_validation_error()}}
@@ -28,25 +29,27 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-active_ns}{\code{TealAppDriver$active_ns()}}
 \item \href{#method-TealAppDriver-active_module_ns}{\code{TealAppDriver$active_module_ns()}}
 \item \href{#method-TealAppDriver-active_module_element}{\code{TealAppDriver$active_module_element()}}
+\item \href{#method-TealAppDriver-active_module_element_text}{\code{TealAppDriver$active_module_element_text()}}
 \item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
 \item \href{#method-TealAppDriver-set_module_input}{\code{TealAppDriver$set_module_input()}}
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
+\item \href{#method-TealAppDriver-is_visible}{\code{TealAppDriver$is_visible()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
-\item \href{#method-TealAppDriver-get_active_filter_selection}{\code{TealAppDriver$get_active_filter_selection()}}
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
 \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
+\item \href{#method-TealAppDriver-get_attr}{\code{TealAppDriver$get_attr()}}
 \item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
+\item \href{#method-TealAppDriver-wait_for_active_module_value}{\code{TealAppDriver$wait_for_active_module_value()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
 }
 }
 \if{html}{\out{
 <details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="click"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-click'><code>shinytest2::AppDriver$click()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_download"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_download'><code>shinytest2::AppDriver$expect_download()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_html"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_html'><code>shinytest2::AppDriver$expect_html()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_js'><code>shinytest2::AppDriver$expect_js()</code></a></span></li>
@@ -93,6 +96,8 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
   title = build_app_title(),
   header = tags$p(),
   footer = tags$p(),
+  timeout = rlang::missing_arg(),
+  load_timeout = rlang::missing_arg(),
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -102,12 +107,42 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \describe{
 \item{\code{data, modules, filter, title, header, footer}}{arguments passed to \code{init}}
 
+\item{\code{timeout}}{(\code{numeric}) Default number of milliseconds for any timeout or
+timeout_ parameter in the \code{TealAppDriver} class.
+Defaults to 20s.
+
+See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details on how to change it
+via options or environment variables.}
+
+\item{\code{load_timeout}}{(\code{numeric}) How long to wait for the app to load, in ms.
+This includes the time to start R. Defaults to 100s.
+
+See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details on how to change it
+via options or environment variables}
+
 \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$new}}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 Object of class \code{TealAppDriver}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-click"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-click}{}}}
+\subsection{Method \code{click()}}{
+Append parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click} method with a call to \code{waif_for_idle()} method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$click(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{arguments passed to parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click()} method.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -239,6 +274,26 @@ Get the active shiny name space bound with a custom \code{element} name.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-active_module_element_text"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-active_module_element_text}{}}}
+\subsection{Method \code{active_module_element_text()}}{
+Get the text of the active shiny name space bound with a custom \code{element} name.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_module_element_text(element)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element}}{\code{character(1)} the text of the custom element name.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{string}) The text of the active shiny name space of the component bound with the input \code{element}.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-active_filters_ns"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-active_filters_ns}{}}}
 \subsection{Method \code{active_filters_ns()}}{
@@ -300,7 +355,7 @@ The value of the shiny output.
 Set the input in the module in the \code{teal} app.
 This function will only set inputs in the name space of the current active teal module.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_module_input(input_id, value)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_module_input(input_id, value, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -309,6 +364,8 @@ This function will only set inputs in the name space of the current active teal 
 \item{\code{input_id}}{(character) The shiny input id to get the value from.}
 
 \item{\code{value}}{The value to set the input to.}
+
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
 }
 \if{html}{\out{</div>}}
 }
@@ -325,6 +382,35 @@ Get the active datasets that can be accessed via the filter panel of the current
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filter_vars()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-is_visible"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-is_visible}{}}}
+\subsection{Method \code{is_visible()}}{
+Test if \code{DOM} elements are visible on the page with a JavaScript call.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$is_visible(
+  selector,
+  content_visibility_auto = FALSE,
+  opacity_property = FALSE,
+  visibility_property = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{(\code{character(1)}) \code{CSS} selector to check visibility.
+A \code{CSS} id will return only one element if the UI is well formed.}
+
+\item{\code{content_visibility_auto, opacity_property, visibility_property}}{(\code{logical(1)}) See more information
+on \url{https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Logical vector with all occurrences of the selector.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_data_filters"></a>}}
@@ -345,40 +431,12 @@ If \code{NULL}, the filter variables for all the datasets will be returned in a 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-get_active_filter_selection"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_filter_selection}{}}}
-\subsection{Method \code{get_active_filter_selection()}}{
-Get the active filter values from the active filter selection of dataset from the filter panel.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filter_selection(
-  dataset_name,
-  var_name,
-  is_numeric = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataset_name}}{(character) The name of the dataset to get the filter values from.}
-
-\item{\code{var_name}}{(character) The name of the variable to get the filter values from.}
-
-\item{\code{is_numeric}}{(logical) If the variable is numeric or not.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The value of the active filter selection.
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-add_filter_var"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-add_filter_var}{}}}
 \subsection{Method \code{add_filter_var()}}{
 Add a new variable from the dataset to be filtered.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_filter_var(dataset_name, var_name)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_filter_var(dataset_name, var_name, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -387,6 +445,8 @@ Add a new variable from the dataset to be filtered.
 \item{\code{dataset_name}}{(character) The name of the dataset to add the filter variable to.}
 
 \item{\code{var_name}}{(character) The name of the variable to add to the filter panel.}
+
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
 }
 \if{html}{\out{</div>}}
 }
@@ -424,12 +484,7 @@ The \code{TealAppDriver} object invisibly.
 \subsection{Method \code{set_active_filter_selection()}}{
 Set the active filter values for a variable of a dataset in the active filter variable panel.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_filter_selection(
-  dataset_name,
-  var_name,
-  input,
-  is_numeric = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_filter_selection(dataset_name, var_name, input, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -441,12 +496,34 @@ Set the active filter values for a variable of a dataset in the active filter va
 
 \item{\code{input}}{The value to set the filter to.}
 
-\item{\code{is_numeric}}{(logical) If the variable is numeric or not.}
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 The \code{TealAppDriver} object invisibly.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-get_attr"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-get_attr}{}}}
+\subsection{Method \code{get_attr()}}{
+Extract \code{html} attribute (found by a \code{selector}).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_attr(selector, attribute)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{(\code{character(1)}) specifying the selector to be used to get the content of a specific node.}
+
+\item{\code{attribute}}{(\code{character(1)}) name of an attribute to retrieve from a node specified by \code{selector}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{character} vector.
 }
 }
 \if{html}{\out{<hr>}}
@@ -480,6 +557,34 @@ Wrapper around \code{get_url()} method that opens the app in the browser.
 
 \subsection{Returns}{
 Nothing. Opens the underlying teal app in the browser.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-wait_for_active_module_value"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-wait_for_active_module_value}{}}}
+\subsection{Method \code{wait_for_active_module_value()}}{
+Waits until a specified input, output, or export value.
+This function serves as a wrapper around the \code{wait_for_value} method,
+providing a more flexible interface for waiting on different types of values within the active module namespace.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$wait_for_active_module_value(
+  input = rlang::missing_arg(),
+  output = rlang::missing_arg(),
+  export = rlang::missing_arg(),
+  ...
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input, output, export}}{A name of an input, output, or export value.
+Only one of these parameters may be used.}
+
+\item{\code{...}}{Must be empty. Allows for parameter expansion.
+Parameter with additional value to passed in \code{wait_for_value}.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

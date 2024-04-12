@@ -16,7 +16,19 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
     #' @param data,modules,filter,title,header,footer arguments passed to `init`
+    #' @param timeout (`numeric`) Default number of milliseconds for any timeout or
+    #' timeout_ parameter in the `TealAppDriver` class.
+    #' Defaults to 20s.
+    #'
+    #' See [`shinytest2::AppDriver`] `new` method for more details on how to change it
+    #' via options or environment variables.
+    #' @param load_timeout (`numeric`) How long to wait for the app to load, in ms.
+    #' This includes the time to start R. Defaults to 100s.
+    #'
+    #' See [`shinytest2::AppDriver`] `new` method for more details on how to change it
+    #' via options or environment variables
     #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$new`
+    #'
     #'
     #' @return  Object of class `TealAppDriver`
     initialize = function(data,
@@ -25,6 +37,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
                           title = build_app_title(),
                           header = tags$p(),
                           footer = tags$p(),
+                          timeout = rlang::missing_arg(),
+                          load_timeout = rlang::missing_arg(),
                           ...) {
       private$data <- data
       private$modules <- modules
@@ -37,16 +51,29 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         header = header,
         footer = footer
       )
+
+      # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
+      # It must be set as parameter to the AppDriver
       suppressWarnings(
         super$initialize(
-          shinyApp(app$ui, app$server),
+          app_dir = shinyApp(app$ui, app$server),
           name = "teal",
-          variant = platform_variant(),
+          variant = shinytest2::platform_variant(),
+          timeout = rlang::maybe_missing(timeout, 20 * 1000),
+          load_timeout = rlang::maybe_missing(load_timeout, 100 * 1000),
           ...
         )
       )
 
       private$set_active_ns()
+      self$wait_for_idle()
+    },
+    #' @description
+    #' Append parent [`shinytest2::AppDriver`] `click` method with a call to `waif_for_idle()` method.
+    #' @param ... arguments passed to parent [`shinytest2::AppDriver`] `click()` method.
+    click = function(...) {
+      super$click(...)
+      self$wait_for_idle()
     },
     #' @description
     #' Check if the app has shiny errors. This checks for global shiny errors.
@@ -112,7 +139,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
         root <- sprintf("%s-%s", private$modules$label, get_unique_labels(tab))
       }
-      self$wait_for_idle(timeout = private$idle_timeout)
+      self$wait_for_idle()
       private$set_active_ns()
       invisible(self)
     },
@@ -145,6 +172,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     active_module_element = function(element) {
       checkmate::assert_string(element)
       sprintf("#%s-%s", self$active_module_ns(), element)
+    },
+    #' @description
+    #' Get the text of the active shiny name space bound with a custom `element` name.
+    #'
+    #' @param element `character(1)` the text of the custom element name.
+    #'
+    #' @return (`string`) The text of the active shiny name space of the component bound with the input `element`.
+    active_module_element_text = function(element) {
+      checkmate::assert_string(element)
+      self$get_text(self$active_module_element(element))
     },
     #' @description
     #' Get the active shiny name space for interacting with the filter panel.
@@ -184,28 +221,27 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @param input_id (character) The shiny input id to get the value from.
     #' @param value The value to set the input to.
+    #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
     #'
     #' @return The `TealAppDriver` object invisibly.
-    set_module_input = function(input_id, value) {
+    set_module_input = function(input_id, value, ...) {
       checkmate::check_string(input_id)
       checkmate::check_string(value)
       self$set_input(
         sprintf("%s-%s", self$active_module_ns(), input_id),
-        value
+        value,
+        ...
       )
+      dots <- rlang::list2(...)
+      if (!isFALSE(dots[["wait"]])) self$wait_for_idle() # Default behavior is to wait
       invisible(self)
     },
     #' @description
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
-      displayed_datasets_index <- self$get_js(
-        sprintf(
-          "Array.from(
-              document.querySelectorAll(\"#%s-active-filter_active_vars_contents > span\")
-          ).map((el) => window.getComputedStyle(el).display != \"none\");",
-          self$active_filters_ns()
-        )
-      ) |> unlist()
+      displayed_datasets_index <- self$is_visible(
+        sprintf("#%s-active-filter_active_vars_contents > span", self$active_filters_ns())
+      )
 
       available_datasets <- self$get_text(
         sprintf(
@@ -214,6 +250,35 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
       )
       available_datasets[displayed_datasets_index]
+    },
+    #' @description
+    #' Test if `DOM` elements are visible on the page with a JavaScript call.
+    #' @param selector (`character(1)`) `CSS` selector to check visibility.
+    #' A `CSS` id will return only one element if the UI is well formed.
+    #' @param content_visibility_auto,opacity_property,visibility_property (`logical(1)`) See more information
+    #' on <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
+    #'
+    #' @return Logical vector with all occurrences of the selector.
+    is_visible = function(selector,
+                          content_visibility_auto = FALSE,
+                          opacity_property = FALSE,
+                          visibility_property = FALSE) {
+      checkmate::assert_string(selector)
+      checkmate::assert_flag(content_visibility_auto)
+      checkmate::assert_flag(opacity_property)
+      checkmate::assert_flag(visibility_property)
+      unlist(
+        self$get_js(
+          sprintf(
+            "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({%s, %s, %s}))",
+            selector,
+            # Extra parameters
+            sprintf("contentVisibilityAuto: %s", tolower(content_visibility_auto)),
+            sprintf("opacityProperty: %s", tolower(opacity_property)),
+            sprintf("visibilityProperty: %s", tolower(visibility_property))
+          )
+        )
+      )
     },
     #' @description
     #' Get the active filter variables from a dataset in the `teal` app.
@@ -227,54 +292,35 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       active_filters <- lapply(
         datasets,
         function(x) {
-          self$get_text(
+          var_names <- self$get_text(
             sprintf(
               "#%s-active-%s-filters .filter-card-varname",
               self$active_filters_ns(),
               x
             )
-          ) |>
+          ) %>%
             gsub(pattern = "\\s", replacement = "")
+          structure(
+            lapply(var_names, private$get_active_filter_selection, dataset_name = x),
+            names = var_names
+          )
         }
       )
       names(active_filters) <- datasets
-      if (!is.null(dataset_name)) {
-        active_filters <- active_filters[[dataset_name]]
+      if (is.null(dataset_name)) {
+        return(active_filters)
       }
-      active_filters
-    },
-    #' @description
-    #' Get the active filter values from the active filter selection of dataset from the filter panel.
-    #'
-    #' @param dataset_name (character) The name of the dataset to get the filter values from.
-    #' @param var_name (character) The name of the variable to get the filter values from.
-    #' @param is_numeric (logical) If the variable is numeric or not.
-    #'
-    #' @return The value of the active filter selection.
-    get_active_filter_selection = function(dataset_name, var_name, is_numeric = FALSE) {
-      checkmate::check_string(dataset_name)
-      checkmate::check_string(var_name)
-      checkmate::check_flag(is_numeric)
-      selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-      self$get_value(
-        input = sprintf(
-          "%s-active-%s-filter-%s_%s-inputs-%s",
-          self$active_filters_ns(),
-          dataset_name,
-          dataset_name,
-          var_name,
-          selection_suffix
-        )
-      )
+      active_filters[[dataset_name]]
     },
     #' @description
     #' Add a new variable from the dataset to be filtered.
     #'
     #' @param dataset_name (character) The name of the dataset to add the filter variable to.
     #' @param var_name (character) The name of the variable to add to the filter panel.
+    #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
     #'
     #' @return The `TealAppDriver` object invisibly.
-    add_filter_var = function(dataset_name, var_name) {
+    add_filter_var = function(dataset_name, var_name, ...) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
       self$set_input(
@@ -283,7 +329,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           self$active_filters_ns(),
           dataset_name
         ),
-        var_name
+        var_name,
+        ...
       )
       invisible(self)
     },
@@ -330,28 +377,95 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param dataset_name (character) The name of the dataset to set the filter value for.
     #' @param var_name (character) The name of the variable to set the filter value for.
     #' @param input The value to set the filter to.
-    #' @param is_numeric (logical) If the variable is numeric or not.
+    #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
     #'
     #' @return The `TealAppDriver` object invisibly.
-    set_active_filter_selection = function(dataset_name, var_name, input, is_numeric = FALSE) {
+    set_active_filter_selection = function(dataset_name,
+                                           var_name,
+                                           input,
+                                           ...) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
       checkmate::check_string(input)
-      checkmate::check_flag(is_numeric)
 
-      selection_suffix <- ifelse(is_numeric, "selection_manual", "selection")
-      self$set_input(
-        sprintf(
-          "%s-active-%s-filter-%s_%s-inputs-%s",
-          self$active_filters_ns(),
-          dataset_name,
-          dataset_name,
-          var_name,
-          selection_suffix
-        ),
-        input
+      input_id_prefix <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name
       )
+
+      # Find the type of filter (based on filter panel)
+      supported_suffix <- c("selection", "selection_manual")
+      slices_suffix <- supported_suffix[
+        match(
+          TRUE,
+          vapply(
+            supported_suffix,
+            function(suffix) {
+              !is.null(self$get_html(sprintf("#%s-%s", input_id_prefix, suffix)))
+            },
+            logical(1)
+          )
+        )
+      ]
+
+      # Generate correct namespace
+      slices_input_id <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs-%s",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name,
+        slices_suffix
+      )
+
+      if (identical(slices_suffix, "selection_manual")) {
+        checkmate::assert_numeric(input, len = 2)
+
+        dots <- rlang::list2(...)
+        checkmate::assert_choice(dots$priority_, formals(self$set_inputs)[["priority_"]], null.ok = TRUE)
+        checkmate::assert_flag(dots$wait_, null.ok = TRUE)
+
+        self$run_js(
+          sprintf(
+            "Shiny.setInputValue('%s:sw.numericRange', [%f, %f], {priority: '%s'})",
+            slices_input_id,
+            input[[1]],
+            input[[2]],
+            priority_ = ifelse(is.null(dots$priority_), "input", dots$priority_)
+          )
+        )
+
+        if (isTRUE(dots$wait_) || is.null(dots$wait_)) {
+          self$wait_for_idle(
+            timeout = if (is.null(dots$timeout_)) rlang::missing_arg() else dots$timeout_
+          )
+        }
+      } else if (identical(slices_suffix, "selection")) {
+        self$set_input(
+          slices_input_id,
+          input,
+          ...
+        )
+      } else {
+        stop("Filter selection set not supported for this slice.")
+      }
+
       invisible(self)
+    },
+    #' @description
+    #' Extract `html` attribute (found by a `selector`).
+    #'
+    #' @param selector (`character(1)`) specifying the selector to be used to get the content of a specific node.
+    #' @param attribute (`character(1)`) name of an attribute to retrieve from a node specified by `selector`.
+    #'
+    #' @return The `character` vector.
+    get_attr = function(selector, attribute) {
+      self$get_html_rvest("html") %>%
+        rvest::html_nodes(selector) %>%
+        rvest::html_attr(attribute)
     },
     #' @description
     #' Wrapper around `get_html` that passes the output directly to `rvest::read_html`.
@@ -367,6 +481,31 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return Nothing. Opens the underlying teal app in the browser.
     open_url = function() {
       browseURL(self$get_url())
+    },
+    #' @description
+    #' Waits until a specified input, output, or export value.
+    #' This function serves as a wrapper around the `wait_for_value` method,
+    #' providing a more flexible interface for waiting on different types of values within the active module namespace.
+    #' @param input,output,export A name of an input, output, or export value.
+    #' Only one of these parameters may be used.
+    #' @param ... Must be empty. Allows for parameter expansion.
+    #' Parameter with additional value to passed in `wait_for_value`.
+    wait_for_active_module_value = function(input = rlang::missing_arg(),
+                                            output = rlang::missing_arg(),
+                                            export = rlang::missing_arg(),
+                                            ...) {
+      ns <- shiny::NS(self$active_module_ns())
+
+      if (!rlang::is_missing(input) && checkmate::test_string(input, min.chars = 1)) input <- ns(input)
+      if (!rlang::is_missing(output) && checkmate::test_string(output, min.chars = 1)) output <- ns(output)
+      if (!rlang::is_missing(export) && checkmate::test_string(export, min.chars = 1)) export <- ns(export)
+
+      self$wait_for_value(
+        input = input,
+        output = output,
+        export = export,
+        ...
+      )
     }
   ),
   # private members ----
@@ -379,8 +518,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       module = character(0),
       filter_panel = character(0)
     ),
-    idle_timeout = 20000, # 20 seconds
-    load_timeout = 100000, # 100 seconds
     # private methods ----
     set_active_ns = function() {
       all_inputs <- self$get_values()$input
@@ -411,6 +548,34 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       } else {
         private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
       }
+    },
+    # @description
+    # Get the active filter values from the active filter selection of dataset from the filter panel.
+    #
+    # @param dataset_name (character) The name of the dataset to get the filter values from.
+    # @param var_name (character) The name of the variable to get the filter values from.
+    #
+    # @return The value of the active filter selection.
+    get_active_filter_selection = function(dataset_name, var_name) {
+      checkmate::check_string(dataset_name)
+      checkmate::check_string(var_name)
+      input_id_prefix <- sprintf(
+        "%s-active-%s-filter-%s_%s-inputs",
+        self$active_filters_ns(),
+        dataset_name,
+        dataset_name,
+        var_name
+      )
+
+      # Find the type of filter (categorical or range)
+      supported_suffix <- c("selection", "selection_manual")
+      for (suffix in supported_suffix) {
+        if (!is.null(self$get_html(sprintf("#%s-%s", input_id_prefix, suffix)))) {
+          return(self$get_value(input = sprintf("%s-%s", input_id_prefix, suffix)))
+        }
+      }
+
+      NULL # If there are not any supported filters
     }
   )
 )

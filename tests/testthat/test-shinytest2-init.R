@@ -1,19 +1,19 @@
 testthat::test_that("e2e: teal app initializes with no errors", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
   app$expect_no_shiny_error()
   app$stop()
 })
 
 testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
+  skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Check if button exists.
   button_selector <- "#teal-sessionInfo-button"
@@ -23,7 +23,6 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   )
 
   app$click(selector = button_selector)
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   # Check header and title content.
   testthat::expect_equal(
@@ -65,6 +64,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
 })
 
 testthat::test_that("e2e: init creates UI containing specified title, favicon, header and footer", {
+  skip_if_too_deep(5)
   app_title <- "Custom Teal App Title"
   app_favicon <- "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
   app_header <- "Custom Teal App Header"
@@ -79,7 +79,6 @@ testthat::test_that("e2e: init creates UI containing specified title, favicon, h
     header = app_header,
     footer = app_footer
   )
-  app$wait_for_idle(timeout = default_idle_timeout)
 
   testthat::expect_equal(
     app$get_text("head > title")[1],

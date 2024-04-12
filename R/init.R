@@ -35,7 +35,7 @@
 #'   string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
 #'
-#' @return Named list with server and UI functions.
+#' @return Named list containing server and UI functions.
 #'
 #' @export
 #'
@@ -164,8 +164,8 @@ init <- function(data,
     stop("Only one `landing_popup_module` can be used.")
   }
 
-  ## `filter` - app_id attribute
-  attr(filter, "app_id") <- create_app_id(data, modules)
+  ## `filter` - set app_id attribute unless present (when restoring bookmark)
+  if (is.null(attr(filter, "app_id", exact = TRUE))) attr(filter, "app_id") <- create_app_id(data, modules)
 
   ## `filter` - convert teal.slice::teal_slices to teal::teal_slices
   filter <- as.teal_slices(as.list(filter))
@@ -221,8 +221,9 @@ init <- function(data,
   # Note regarding case `id = character(0)`:
   # rather than creating a submodule of this module, we directly modify
   # the UI and server with `id = character(0)` and calling the server function directly
+  # Note: UI must be a function to support bookmarking.
   res <- list(
-    ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
+    ui = function(request) ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
       if (!is.null(landing_module)) {
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))

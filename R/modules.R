@@ -206,7 +206,6 @@ module <- function(label = "module",
     datanames <- filters
     msg <-
       "The `filters` argument is deprecated and will be removed in the next release. Please use `datanames` instead."
-    logger::log_warn(msg)
     warning(msg)
   }
 
@@ -420,5 +419,23 @@ module_labels <- function(modules) {
     lapply(modules$children, module_labels)
   } else {
     modules$label
+  }
+}
+
+#' Retrieve `teal_bookmarkable` attribute from `teal_modules`
+#'
+#' @param modules (`teal_modules` or `teal_module`) object
+#' @return named list of the same structure as `modules` with `TRUE` or `FALSE` values indicating
+#' whether the module is bookmarkable.
+#' @keywords internal
+modules_bookmarkable <- function(modules) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+  if (inherits(modules, "teal_modules")) {
+    setNames(
+      lapply(modules$children, modules_bookmarkable),
+      vapply(modules$children, `[[`, "label", FUN.VALUE = character(1))
+    )
+  } else {
+    attr(modules, "teal_bookmarkable", exact = TRUE)
   }
 }
