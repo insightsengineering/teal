@@ -249,6 +249,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           self$active_filters_ns()
         )
       )
+
+      self$log_message(sprintf("Value for displayed_datasets_index: %s", toString(available_datasets)))
+      self$log_message(sprintf("Value for available_datasets: %s", toString(displayed_datasets_index)))
+
       available_datasets[displayed_datasets_index]
     },
     #' @description
