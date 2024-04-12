@@ -233,7 +233,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         ...
       )
       dots <- rlang::list2(...)
-      if (!isFALSE(dots[[wait]])) self$wait_for_idle() # Default behavior is to wait
+      if (!isFALSE(dots[["wait"]])) self$wait_for_idle() # Default behavior is to wait
       invisible(self)
     },
     #' @description
