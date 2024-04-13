@@ -45,11 +45,11 @@ testthat::test_that("e2e: filtering a module-specific filter is refected in othe
     )
   )
 
-  get_species_filter_values <- app$get_active_data_filters("iris")$Species
+  get_active_filter_vars <- app$get_active_filter_vars()
   print(app$get_logs())
 
   expect_equal(
-    get_species_filter_values,
+    app$get_active_data_filters("iris")$Species,
     c("setosa", "versicolor", "virginica")
   )
 
