@@ -47,6 +47,7 @@ testthat::test_that("e2e: filtering a module-specific filter is refected in othe
 
   get_active_filter_vars <- app$get_active_filter_vars()
   print(app$get_logs())
+  print(app$get_html("#teal-main_ui_container"))
 
   expect_equal(
     app$get_active_data_filters("iris")$Species,
