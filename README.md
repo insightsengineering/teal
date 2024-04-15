@@ -50,6 +50,12 @@ A lot of the functionality of the `teal` framework derives from the following pa
 -   [`teal.logger`](https://insightsengineering.github.io/teal.logger/latest-tag/): standardizes logging within `teal` framework.
 -   [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/latest-tag/): allows `teal` applications to generate reports.
 
+Additionally, a video has been prepared to enhance your teal learning experience.  
+Please click on the image below to watch it.
+
+[![A Complete Guide to Getting Started with teal](https://img.youtube.com/vi/N8ZamECICSI/0.jpg)](https://www.youtube.com/watch?v=N8ZamECICSI)
+
+
 <!-- markdownlint-enable MD007 MD030 -->
 
 ## Installation
