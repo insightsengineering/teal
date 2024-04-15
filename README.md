@@ -55,7 +55,6 @@ Please click on the image below to watch it.
 
 [![A Complete Guide to Getting Started with teal](https://img.youtube.com/vi/N8ZamECICSI/0.jpg)](https://www.youtube.com/watch?v=N8ZamECICSI)
 
-
 <!-- markdownlint-enable MD007 MD030 -->
 
 ## Installation
