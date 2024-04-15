@@ -11,7 +11,7 @@ reporter_previewer_module(label = "Report previewer", server_args = list())
 For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 
 \item{server_args}{(named \code{list})
-Arguments passed to \code{\link[teal.reporter:reporter_previewer_srv]{teal.reporter::reporter_previewer_srv()}}.}
+Arguments passed to \code{\link[teal.reporter:reporter_previewer]{teal.reporter::reporter_previewer_srv()}}.}
 }
 \value{
 \code{teal_module} (extended with \code{teal_module_previewer} class) containing the \code{teal.reporter} previewer functionality.
@@ -19,8 +19,8 @@ Arguments passed to \code{\link[teal.reporter:reporter_previewer_srv]{teal.repor
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-This function wraps \code{\link[teal.reporter:reporter_previewer_ui]{teal.reporter::reporter_previewer_ui()}} and
-\code{\link[teal.reporter:reporter_previewer_srv]{teal.reporter::reporter_previewer_srv()}} into a \code{teal_module} to be
+This function wraps \code{\link[teal.reporter:reporter_previewer]{teal.reporter::reporter_previewer_ui()}} and
+\code{\link[teal.reporter:reporter_previewer]{teal.reporter::reporter_previewer_srv()}} into a \code{teal_module} to be
 used in \code{teal} applications.
 
 If you are creating a \code{teal} application using \code{\link[=init]{init()}} then this
