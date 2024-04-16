@@ -33,7 +33,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
-\item \href{#method-TealAppDriver-set_module_input}{\code{TealAppDriver$set_module_input()}}
+\item \href{#method-TealAppDriver-set_active_module_input}{\code{TealAppDriver$set_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
 \item \href{#method-TealAppDriver-is_visible}{\code{TealAppDriver$is_visible()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
@@ -349,13 +349,13 @@ The value of the shiny output.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-set_module_input"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-set_module_input}{}}}
-\subsection{Method \code{set_module_input()}}{
+\if{html}{\out{<a id="method-TealAppDriver-set_active_module_input"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-set_active_module_input}{}}}
+\subsection{Method \code{set_active_module_input()}}{
 Set the input in the module in the \code{teal} app.
 This function will only set inputs in the name space of the current active teal module.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_module_input(input_id, value, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_module_input(input_id, value, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
