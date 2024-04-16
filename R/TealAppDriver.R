@@ -224,7 +224,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
     #'
     #' @return The `TealAppDriver` object invisibly.
-    set_module_input = function(input_id, value, ...) {
+    set_active_module_input = function(input_id, value, ...) {
       checkmate::check_string(input_id)
       checkmate::check_string(value)
       self$set_input(
