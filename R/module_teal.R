@@ -154,7 +154,10 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
 
     reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
     if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
-      modules <- append_module(modules, reporter_previewer_module())
+      modules <- append_module(
+        modules, 
+        reporter_previewer_module(server_args = list(previewer_buttons = c("download", "reset")))
+      )
     }
 
     env <- environment()
