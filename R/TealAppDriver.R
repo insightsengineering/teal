@@ -58,7 +58,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         super$initialize(
           app_dir = shinyApp(app$ui, app$server),
           name = "teal",
-          variant = platform_variant(),
+          variant = shinytest2::platform_variant(),
           timeout = rlang::maybe_missing(timeout, 20 * 1000),
           load_timeout = rlang::maybe_missing(load_timeout, 100 * 1000),
           ...
@@ -224,7 +224,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$set_inputs`
     #'
     #' @return The `TealAppDriver` object invisibly.
-    set_module_input = function(input_id, value, ...) {
+    set_active_module_input = function(input_id, value, ...) {
       checkmate::check_string(input_id)
       checkmate::check_string(value)
       self$set_input(
@@ -232,20 +232,15 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         value,
         ...
       )
+      dots <- rlang::list2(...)
+      if (!isFALSE(dots[["wait"]])) self$wait_for_idle() # Default behavior is to wait
       invisible(self)
     },
     #' @description
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
-      displayed_datasets_index <- unlist(
-        self$get_js(
-          sprintf(
-            "Array.from(
-                document.querySelectorAll(\"#%s-active-filter_active_vars_contents > span\")
-            ).map((el) => window.getComputedStyle(el).display != \"none\");",
-            self$active_filters_ns()
-          )
-        )
+      displayed_datasets_index <- self$is_visible(
+        sprintf("#%s-active-filter_active_vars_contents > span", self$active_filters_ns())
       )
 
       available_datasets <- self$get_text(
@@ -255,6 +250,35 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
       )
       available_datasets[displayed_datasets_index]
+    },
+    #' @description
+    #' Test if `DOM` elements are visible on the page with a JavaScript call.
+    #' @param selector (`character(1)`) `CSS` selector to check visibility.
+    #' A `CSS` id will return only one element if the UI is well formed.
+    #' @param content_visibility_auto,opacity_property,visibility_property (`logical(1)`) See more information
+    #' on <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
+    #'
+    #' @return Logical vector with all occurrences of the selector.
+    is_visible = function(selector,
+                          content_visibility_auto = FALSE,
+                          opacity_property = FALSE,
+                          visibility_property = FALSE) {
+      checkmate::assert_string(selector)
+      checkmate::assert_flag(content_visibility_auto)
+      checkmate::assert_flag(opacity_property)
+      checkmate::assert_flag(visibility_property)
+      unlist(
+        self$get_js(
+          sprintf(
+            "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({%s, %s, %s}))",
+            selector,
+            # Extra parameters
+            sprintf("contentVisibilityAuto: %s", tolower(content_visibility_auto)),
+            sprintf("opacityProperty: %s", tolower(opacity_property)),
+            sprintf("visibilityProperty: %s", tolower(visibility_property))
+          )
+        )
+      )
     },
     #' @description
     #' Get the active filter variables from a dataset in the `teal` app.
