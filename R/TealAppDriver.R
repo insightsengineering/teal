@@ -271,7 +271,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::assert_flag(content_visibility_auto)
       checkmate::assert_flag(opacity_property)
       checkmate::assert_flag(visibility_property)
-      unlist(
+      result <- unlist(
         self$get_js(
           sprintf(
             "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({%s, %s, %s}))",
@@ -283,6 +283,22 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           )
         )
       )
+
+      # Fallback if chrome/chromium doesn't support el.checkVisibility (< 105)
+      if (all(vapply(result, is.null, logical(1)))) {
+        fun_body <- "elem => !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length)"
+        unlist(
+          self$get_js(
+            sprintf(
+              "Array.from(document.querySelectorAll('%s')).map(%s)",
+              selector,
+              fun_body
+            )
+          )
+        )
+      } else {
+        result
+      }
     },
     #' @description
     #' Get the active filter variables from a dataset in the `teal` app.
