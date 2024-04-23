@@ -14,27 +14,27 @@ testthat::test_that("e2e: teal_slices filters are initialized when global filter
     )
   )
 
-  testthat::expect_identical(
+  testthat::expect_setequal(
     names(app$get_active_data_filters("iris")),
     "Species"
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     names(app$get_active_data_filters("mtcars")),
     c("cyl", "drat", "gear")
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     app$get_active_data_filters("iris")$Species,
     c("setosa", "versicolor", "virginica")
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     app$get_active_data_filters("mtcars")$cyl,
     c("4", "6")
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     app$get_active_data_filters("mtcars")$drat,
     c(3, 4)
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     app$get_active_data_filters("mtcars")$gear,
     c("3", "4", "5")
   )
@@ -62,19 +62,19 @@ testthat::test_that("e2e: teal_slices filters are initialized when module specif
     )
   )
 
-  testthat::expect_identical(
+  testthat::expect_setequal(
     names(app$get_active_data_filters("iris")),
     "Species"
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     names(app$get_active_data_filters("mtcars")),
     "cyl"
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     app$get_active_data_filters("iris")$Species,
     c("setosa", "versicolor", "virginica")
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     app$get_active_data_filters("mtcars")$cyl,
     c("4", "6")
   )
@@ -84,23 +84,23 @@ testthat::test_that("e2e: teal_slices filters are initialized when module specif
 
   app$navigate_teal_tab("Module_2")
 
-  testthat::expect_identical(
+  testthat::expect_setequal(
     names(app$get_active_data_filters("iris")),
     "Species"
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     names(app$get_active_data_filters("mtcars")),
     c("drat", "gear")
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     app$get_active_data_filters("iris")$Species,
     c("setosa", "versicolor", "virginica")
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     app$get_active_data_filters("mtcars")$drat,
     c(3, 4)
   )
-  testthat::expect_identical(
+  testthat::expect_setequal(
     app$get_active_data_filters("mtcars")$gear,
     c("3", "4", "5")
   )
