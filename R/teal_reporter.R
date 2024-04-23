@@ -72,7 +72,15 @@ TealReportCard <- R6::R6Class( # nolint: object_name.
       invisible(self)
     }
   ),
-  private = list()
+  private = list(
+    dispatch_block = function(block_class) {
+      if (block_class %in% c("TealSlicesBlock")) {
+        instance <- eval(str2lang(block_class))
+      } else {
+        super$dispatch_block(block_class)
+      }
+    }
+  )
 )
 
 #' @title `TealSlicesBlock`
@@ -80,7 +88,6 @@ TealReportCard <- R6::R6Class( # nolint: object_name.
 #' @description
 #' Specialized `TealSlicesBlock` block for managing filter panel content in reports.
 #'
-#' @export
 TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
   classname = "TealSlicesBlock",
   inherit = teal.reporter:::TextBlock,
