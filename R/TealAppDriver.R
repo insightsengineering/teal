@@ -76,8 +76,20 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         strict = FALSE
       )
 
-      testthat::skip_if(is.na(chrome_version), "Problem getting Chrome version.")
-      testthat::skip_if(chrome_version < 105, "Chrome version is not supported, please upgrade.")
+      required_version <- 105
+
+      testthat::skip_if(
+        is.na(chrome_version),
+        "Problem getting Chrome version, please contact the developers."
+      )
+      testthat::skip_if(
+        chrome_version < required_version,
+        sprintf(
+          "Chrome version '%s' is not supported, please upgrade to %d or above.",
+          chrome_version,
+          required_version
+        )
+      )
       # end od check
 
       private$set_active_ns()
