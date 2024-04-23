@@ -65,6 +65,20 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
       )
 
+      # Check for minimum version of Chrome that supports the tests
+      #  - Element.checkVisibility was added on 105
+      chrome_version <- numeric_version(
+        gsub(
+          "[[:alnum:]_]+/", # Prefix that ends with forward slash
+          "",
+          self$get_chromote_session()$Browser$getVersion()$product
+        ),
+        strict = FALSE
+      )
+
+      testthat::skip_if_not(!is.na(chrome_version) && chrome_version >= 105)
+      # end od check
+
       private$set_active_ns()
       self$wait_for_idle()
     },
