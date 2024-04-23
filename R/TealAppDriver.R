@@ -297,7 +297,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::assert_flag(visibility_property)
 
       testthat::skip_if_not(
-        app$get_js("typeof Element.prototype.checkVisibility === 'function'"),
+        self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
         "Element.prototype.checkVisibility is not supported in the current browser."
       )
 
