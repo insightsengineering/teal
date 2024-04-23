@@ -110,4 +110,3 @@ testthat::test_that("TealSlicesBlock$from_list retains states from a list", {
   block2$from_list(block1$to_list())
   testthat::expect_identical(block1$get_content(), block2$get_content())
 })
-
