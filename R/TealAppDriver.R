@@ -216,6 +216,39 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       self$get_value(output = sprintf("%s-%s", self$active_module_ns(), output_id))
     },
     #' @description
+    #' Get the output from the module's `teal.widgets::table_with_settings` in the `teal` app.
+    #' This function will only access outputs from the name space of the current active teal module.
+    #'
+    #' @param which (integer) If there is more than one table, which should be extracted.
+    #'
+    #' @return The data.frame with table contents.
+    get_active_module_tws_output = function(which = 1) {
+      checkmate::check_number(which, lower = 1)
+      table <-
+        rvest::html_table(
+          self$get_html_rvest(
+            self$active_module_element("table-table-with-settings")
+          ),
+          fill = TRUE
+        )
+      if (identical(table, list())) {
+        table
+      } else {
+        table[[which]]
+      }
+    },
+    #' @description
+    #' Get the output from the module's `teal.widgets::plot_with_settings` in the `teal` app.
+    #' This function will only access plots from the name space of the current active teal module.
+    #'
+    #' @return The `src` attribute as `character(1)` vector.
+    get_active_module_pws_output = function() {
+      self$get_attr(
+        self$active_module_element("myplot-plot_main > img"),
+        "src"
+      )
+    },
+    #' @description
     #' Set the input in the module in the `teal` app.
     #' This function will only set inputs in the name space of the current active teal module.
     #'
