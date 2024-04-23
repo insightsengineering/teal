@@ -85,7 +85,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       testthat::skip_if(
         chrome_version < required_version,
         sprintf(
-          "Chrome version '%s' is not supported, please upgrade to %d or above.",
+          "Chrome version '%s' is not supported, please upgrade to '%d' or higher",
           chrome_version,
           required_version
         )
