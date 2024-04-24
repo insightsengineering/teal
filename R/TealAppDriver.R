@@ -261,7 +261,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           fill = TRUE
         )
       if (length(table) == 0) {
-        table
+        data.frame()
       } else {
         table[[which]]
       }
