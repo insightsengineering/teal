@@ -83,7 +83,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name.
 #' @docType class
 #' @description
 #' Specialized `TealSlicesBlock` block for managing filter panel content in reports.
-#'
+#' @keywords internal
 TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
   classname = "TealSlicesBlock",
   inherit = teal.reporter:::TextBlock,
