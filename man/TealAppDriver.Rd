@@ -33,6 +33,8 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
+\item \href{#method-TealAppDriver-get_active_module_tws_output}{\code{TealAppDriver$get_active_module_tws_output()}}
+\item \href{#method-TealAppDriver-get_active_module_pws_output}{\code{TealAppDriver$get_active_module_pws_output()}}
 \item \href{#method-TealAppDriver-set_active_module_input}{\code{TealAppDriver$set_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
 \item \href{#method-TealAppDriver-is_visible}{\code{TealAppDriver$is_visible()}}
@@ -346,6 +348,50 @@ This function will only access outputs from the name space of the current active
 }
 \subsection{Returns}{
 The value of the shiny output.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-get_active_module_tws_output"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_module_tws_output}{}}}
+\subsection{Method \code{get_active_module_tws_output()}}{
+Get the output from the module's \code{teal.widgets::table_with_settings} in the \code{teal} app.
+This function will only access outputs from the name space of the current active teal module.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_tws_output(tws, which = 1)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tws}}{(\code{character(1)}) \code{table_with_settings} namespace name.}
+
+\item{\code{which}}{(integer) If there is more than one table, which should be extracted.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The data.frame with table contents.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-get_active_module_pws_output"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_module_pws_output}{}}}
+\subsection{Method \code{get_active_module_pws_output()}}{
+Get the output from the module's \code{teal.widgets::plot_with_settings} in the \code{teal} app.
+This function will only access plots from the name space of the current active teal module.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_pws_output(pws)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{pws}}{(\code{character(1)}) \code{plot_with_settings} namespace name.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{src} attribute as \code{character(1)} vector.
 }
 }
 \if{html}{\out{<hr>}}
