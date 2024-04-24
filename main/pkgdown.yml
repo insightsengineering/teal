@@ -1,25 +1,25 @@
 pandoc: 3.1.1
-pkgdown: 2.0.7
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  adding-support-for-reporting: adding-support-for-reporting.html
   actors: blueprint/actors.html
+  adding-support-for-reporting: adding-support-for-reporting.html
+  bootstrap-themes-in-teal: bootstrap-themes-in-teal.html
+  creating-custom-modules: creating-custom-modules.html
+  data-as-shiny-module: data-as-shiny-module.html
   dataflow: blueprint/dataflow.html
   filter_panel: blueprint/filter_panel.html
+  filter-panel: filter-panel.html
+  getting-started-with-teal: getting-started-with-teal.html
   in_app_data: blueprint/in_app_data.html
+  including-data-in-teal-applications: including-data-in-teal-applications.html
   index: blueprint/index.html
   input_data: blueprint/input_data.html
   intro: blueprint/intro.html
   module_encapsulation: blueprint/module_encapsulation.html
   product_map: blueprint/product_map.html
-  bootstrap-themes-in-teal: bootstrap-themes-in-teal.html
-  creating-custom-modules: creating-custom-modules.html
-  data-as-shiny-module: data-as-shiny-module.html
-  filter-panel: filter-panel.html
-  getting-started-with-teal: getting-started-with-teal.html
-  including-data-in-teal-applications: including-data-in-teal-applications.html
   teal-options: teal-options.html
-last_built: 2024-04-16T18:31Z
+last_built: 2024-04-24T09:28Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles
