@@ -27,6 +27,7 @@ block <- TealSlicesBlock$new()
 block$to_list()
 
 }
+\keyword{internal}
 \section{Super classes}{
 \code{\link[teal.reporter:ContentBlock]{teal.reporter::ContentBlock}} -> \code{\link[teal.reporter:TextBlock]{teal.reporter::TextBlock}} -> \code{TealSlicesBlock}
 }
