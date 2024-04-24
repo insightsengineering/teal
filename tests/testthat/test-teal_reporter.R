@@ -99,7 +99,7 @@ testthat::test_that("TealSlicesBlock$to_list returns list containing teal_slices
   block <- TealSlicesBlock$new(tss)
   testthat::expect_identical(
     block$to_list(),
-    list(teal_slices = tss)
+    list(text = "- Dataset name: a\n  Variable name: b\n", style = "verbatim")
   )
 })
 
