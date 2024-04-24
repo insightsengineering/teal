@@ -357,12 +357,14 @@ The value of the shiny output.
 Get the output from the module's \code{teal.widgets::table_with_settings} in the \code{teal} app.
 This function will only access outputs from the name space of the current active teal module.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_tws_output(which = 1)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_tws_output(tws, which = 1)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{tws}}{(\code{character(1)}) \code{table_with_settings} namespace name.}
+
 \item{\code{which}}{(integer) If there is more than one table, which should be extracted.}
 }
 \if{html}{\out{</div>}}
@@ -378,9 +380,16 @@ The data.frame with table contents.
 Get the output from the module's \code{teal.widgets::plot_with_settings} in the \code{teal} app.
 This function will only access plots from the name space of the current active teal module.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_pws_output()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_pws_output(pws)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{pws}}{(\code{character(1)}) \code{plot_with_settings} namespace name.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 The \code{src} attribute as \code{character(1)} vector.
 }
