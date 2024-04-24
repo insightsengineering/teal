@@ -260,7 +260,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           ),
           fill = TRUE
         )
-      if (identical(table, list())) {
+      if (length(table) == 0) {
         table
       } else {
         table[[which]]
