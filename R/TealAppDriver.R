@@ -65,6 +65,33 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
       )
 
+      # Check for minimum version of Chrome that supports the tests
+      #  - Element.checkVisibility was added on 105
+      chrome_version <- numeric_version(
+        gsub(
+          "[[:alnum:]_]+/", # Prefix that ends with forward slash
+          "",
+          self$get_chromote_session()$Browser$getVersion()$product
+        ),
+        strict = FALSE
+      )
+
+      required_version <- 105
+
+      testthat::skip_if(
+        is.na(chrome_version),
+        "Problem getting Chrome version, please contact the developers."
+      )
+      testthat::skip_if(
+        chrome_version < required_version,
+        sprintf(
+          "Chrome version '%s' is not supported, please upgrade to '%d' or higher",
+          chrome_version,
+          required_version
+        )
+      )
+      # end od check
+
       private$set_active_ns()
       self$wait_for_idle()
     },
@@ -287,6 +314,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           self$active_filters_ns()
         )
       )
+
       available_datasets[displayed_datasets_index]
     },
     #' @description
@@ -305,6 +333,12 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::assert_flag(content_visibility_auto)
       checkmate::assert_flag(opacity_property)
       checkmate::assert_flag(visibility_property)
+
+      testthat::skip_if_not(
+        self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
+        "Element.prototype.checkVisibility is not supported in the current browser."
+      )
+
       unlist(
         self$get_js(
           sprintf(
