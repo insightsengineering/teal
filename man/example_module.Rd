@@ -4,7 +4,7 @@
 \alias{example_module}
 \title{An example \code{teal} module}
 \usage{
-example_module(label = "example teal module", datanames = "all")
+example_module(label = "example teal module", datanames = "all", ...)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
@@ -15,6 +15,11 @@ filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
 and the keyword \code{"all"} will show filters of all datasets. \code{datanames} also determines
 a subset of datasets which are appended to the \code{data} argument in server function.}
+
+\item{...}{\itemize{
+\item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) Objects to wrap into a tab.
+\item For \code{format()} and \code{print()}: Arguments passed to other methods.
+}}
 }
 \value{
 A \code{teal} module which can be included in the \code{modules} argument to \code{\link[=init]{init()}}.

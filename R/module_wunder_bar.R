@@ -21,21 +21,22 @@
 #' @keywords internal
 wunder_bar_ui <- function(id) {
   ns <- NS(id)
-  rev(
-    tagList(
-      title = "",
-      tags$button(
+  shiny::tagList(
+    bslib::nav_item(
+      tags$a(
         id = ns("show_filter_manager"),
-        class = "btn action-button wunder_bar_button",
-        title = "View filter mapping",
-        suppressMessages(icon("solid fa-grip"))
-      ),
-      tags$button(
+        bsicons::bs_icon("grip-vertical"),
+        "Filter mapping"
+      )
+    ),
+    bslib::nav_item(
+      tags$a(
         id = ns("show_snapshot_manager"),
-        class = "btn action-button wunder_bar_button",
-        title = "Manage filter state snapshots",
-        icon("camera")
-      ),
+        bsicons::bs_icon("camera"),
+        "Snapshot manager"
+      )
+    ),
+    bslib::nav_item(
       bookmark_manager_ui(ns("bookmark_manager"))
     )
   )
@@ -77,17 +78,17 @@ wunder_bar_srv <- function(id, datasets, filter, modules) {
       )
     })
 
-    filter_manager_results <- filter_manager_srv(
-      id = "filter_manager",
-      datasets = datasets,
-      filter = filter
-    )
-    snapshot_history <- snapshot_manager_srv(
-      id = "snapshot_manager",
-      slices_global = filter_manager_results$slices_global,
-      mapping_matrix = filter_manager_results$mapping_matrix,
-      datasets = filter_manager_results$datasets_flat
-    )
+    # filter_manager_results <- filter_manager_srv(
+    #   id = "filter_manager",
+    #   datasets = datasets,
+    #   filter = filter
+    # )
+    # snapshot_history <- snapshot_manager_srv(
+    #   id = "snapshot_manager",
+    #   slices_global = filter_manager_results$slices_global,
+    #   mapping_matrix = filter_manager_results$mapping_matrix,
+    #   datasets = filter_manager_results$datasets_flat
+    # )
     bookmark_manager_srv(id = "bookmark_manager", modules = modules)
   })
 }

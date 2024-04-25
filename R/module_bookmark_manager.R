@@ -67,19 +67,19 @@ bookmark_manager_srv <- function(id, modules) {
     # Render bookmark warnings count
     output$bookmark_button <- renderUI({
       if (!all(is_unbookmarkable) && identical(bookmark_option, "server")) {
-        tags$button(
+        tags$a(
           id = ns("do_bookmark"),
           class = "btn action-button wunder_bar_button bookmark_manager_button",
-          title = "Add bookmark",
           tags$span(
-            suppressMessages(icon("solid fa-bookmark")),
+            bsicons::bs_icon("bookmark"),
             if (any(is_unbookmarkable)) {
               tags$span(
                 sum(is_unbookmarkable),
                 class = "badge-warning badge-count text-white bg-danger"
               )
             }
-          )
+          ),
+          "Add bookmark"
         )
       }
     })

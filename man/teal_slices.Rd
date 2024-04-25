@@ -22,28 +22,6 @@ as.teal_slices(x)
 \method{c}{teal_slices}(...)
 }
 \arguments{
-\item{...}{any number of \code{teal_slice} objects. For \code{print} and \code{format},
-additional arguments passed to other functions.}
-
-\item{include_varnames, exclude_varnames}{(\verb{named list}s of \code{character}) where list names
-match names of data sets and vector elements match variable names in respective data sets;
-specify which variables are allowed to be filtered; see \code{Details}.}
-
-\item{count_type}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-\emph{This is a new feature. Do kindly share your opinions on
-\href{https://github.com/insightsengineering/teal.slice/}{\code{teal.slice}'s GitHub repository}.}
-
-(\code{character(1)}) string specifying how observations are tallied by these filter states.
-Possible options:
-\itemize{
-\item \code{"none"} (default) to have counts of single \code{FilterState} to show unfiltered number only.
-\item \code{"all"} to have counts of single \code{FilterState} to show number of observation in filtered
-and unfiltered dataset. Note, that issues were reported when using this option with \code{MultiAssayExperiment}.
-Please make sure that adding new filters doesn't fail on target platform before deploying for production.
-}}
-
-\item{allow_add}{(\code{logical(1)}) logical flag specifying whether the user will be able to add new filters}
-
 \item{module_specific}{(\code{logical(1)}) optional,
 \itemize{
 \item \code{FALSE} (default) when one filter panel applied to all modules.
