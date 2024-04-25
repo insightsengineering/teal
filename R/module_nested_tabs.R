@@ -1,7 +1,7 @@
 #' Create a UI of nested tabs of `teal_modules`
 #'
 #' @section `ui_nested_tabs`:
-#' Each `teal_modules` is translated to a `bslib::navset_tab` and each
+#' Each `teal_modules` is translated to a `tabsetPanel` and each
 #' of its children is another tab-module called recursively. The UI of a
 #' `teal_module` is obtained by calling its UI function.
 #'
@@ -26,7 +26,7 @@
 #' @return
 #' Depending on the class of `modules`, `ui_nested_tabs` returns:
 #'   - `teal_module`: instantiated UI of the module.
-#'   - `teal_modules`: `bslib::navset_tab` with each tab corresponding to recursively
+#'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
 #'     calling this function on it.
 #'
 #' `srv_nested_tabs` returns a reactive which returns the active module that corresponds to the selected tab.
@@ -48,40 +48,37 @@ ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_module_
 }
 
 #' @rdname module_nested_tabs
-#' @export3
+#' @export
 ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   ns <- NS(id)
-  tabs <- lapply(
-    names(modules$children),
-    function(module_id) {
-      module_label <- modules$children[[module_id]]$label
-      bslib::nav_panel(
-        title = module_label,
-        value = module_id, # when clicked this tab value changes input$<tabset panel id>
-        ui_nested_tabs(
-          id = ns(module_id),
-          modules = modules$children[[module_id]],
-          datasets = datasets[[module_label]],
-          depth = depth + 1L,
-          is_module_specific = is_module_specific
-        )
-      )
-    }
-  )
-
-  if (depth > 0) {
-    do.call(
-      bslib::navset_tab,
-      c(
-        # by giving an id, we can reactively respond to tab changes
-        list(id = ns("active_tab")),
-        tabs
+  do.call(
+    tabsetPanel,
+    c(
+      # by giving an id, we can reactively respond to tab changes
+      list(
+        id = ns("active_tab"),
+        type = if (modules$label == "root") "pills" else "tabs"
+      ),
+      lapply(
+        names(modules$children),
+        function(module_id) {
+          module_label <- modules$children[[module_id]]$label
+          tabPanel(
+            title = module_label,
+            value = module_id, # when clicked this tab value changes input$<tabset panel id>
+            ui_nested_tabs(
+              id = ns(module_id),
+              modules = modules$children[[module_id]],
+              datasets = datasets[[module_label]],
+              depth = depth + 1L,
+              is_module_specific = is_module_specific
+            )
+          )
+        }
       )
     )
-  } else {
-    tabs
-  }
+  )
 }
 
 #' @rdname module_nested_tabs
@@ -89,8 +86,10 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
 ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
   checkmate::assert_class(datasets, classes = "FilteredData")
   ns <- NS(id)
+
   args <- c(list(id = ns("module")), modules$ui_args)
-  module_ui <- tags$div(
+
+  teal_ui <- tags$div(
     id = id,
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
@@ -99,17 +98,19 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
       do.call(modules$ui, args)
     )
   )
-  bslib::layout_sidebar(
-    bslib::card(bslib::card_body(module_ui)),
-    width = "33%",
-    sidebar = bslib::accordion(
-      bslib::accordion_panel(
-        title = "Global filters",
-        icon = shiny::icon("filter"),
-        datasets$ui_filter_panel(ns("module_filter_panel"))
+
+  if (!is.null(modules$datanames) && is_module_specific) {
+    fluidRow(
+      column(width = 9, teal_ui, class = "teal_primary_col"),
+      column(
+        width = 3,
+        datasets$ui_filter_panel(ns("module_filter_panel")),
+        class = "teal_secondary_col"
       )
     )
-  )
+  } else {
+    teal_ui
+  }
 }
 
 #' @rdname module_nested_tabs
@@ -175,7 +176,9 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
 
   moduleServer(id = id, module = function(input, output, session) {
-    datasets$srv_filter_panel("module_filter_panel")
+    if (!is.null(modules$datanames) && is_module_specific) {
+      datasets$srv_filter_panel("module_filter_panel")
+    }
 
     # Create two triggers to limit reactivity between filter-panel and modules.
     # We want to recalculate only visible modules
@@ -189,6 +192,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
       })
       isolate(trigger_data(trigger_data() + 1))
       isolate(trigger_module(TRUE))
+
       NULL
     })
 

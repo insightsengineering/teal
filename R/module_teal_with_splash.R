@@ -84,11 +84,11 @@ ui_teal_with_splash <- function(id,
   splash_ui <- if (inherits(data, "teal_data_module")) {
     data$ui(ns("teal_data_module"))
   } else if (inherits(data, "teal_data")) {
-    bslib::card()
+    tags$div()
   }
   ui_teal(
     id = ns("teal"),
-    splash_ui = bslib::card(splash_ui, uiOutput(ns("error"))),
+    splash_ui = tags$div(splash_ui, uiOutput(ns("error"))),
     title = title,
     header = header,
     footer = footer
