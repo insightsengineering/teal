@@ -2,6 +2,7 @@
 # x add teal_data_module somewhere
 # x make sure global reactive-filters are executed once (log: filtering data dataname: TITANIC)
 # x add transform module
+# - investigate duplicated logs (retriggered reactives)
 # - fix nested tabs
 # - make reactive assertions on teal_data (on a transform module output)
 # - disable modules when no data is loaded
