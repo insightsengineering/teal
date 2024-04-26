@@ -101,6 +101,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       sidebar = bslib::sidebar(
         width = "30%",
         bslib::accordion(
+          open = FALSE,
           bslib::accordion_panel(
             title = "Filters",
             icon = bsicons::bs_icon("filter"),
@@ -264,6 +265,6 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
       datasets
     )
   )
-  tdata@verified <- TRUE
+  tdata@verified <- TRUE # todo: change to original value from from data
   tdata
 }

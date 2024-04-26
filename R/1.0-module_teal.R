@@ -8,6 +8,7 @@
 # - disable modules when no data is loaded
 # - add module-specific-filter-panel
 # - add wunderbar buttons
+# - propose a way to make a simple filters for a module (including combined filters e.g. PARAMCD+AVISIT)
 # - connect filter manager with reactive filter panel!
 # - add reporter previewer
 # - what if data is reloaded? What happens with filter-panel? Is bookmarking working after resubmitting data?

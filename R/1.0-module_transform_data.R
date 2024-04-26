@@ -8,8 +8,8 @@
 #' @seealso [teal_transform_module()]
 #' @return `teal_module` with added transformation module
 #' @export
-transform_teal_data <- function(module, ui, server) {
-  transformation_module <- teal_transform_module(ui, server)
+transform_teal_data <- function(module, ui, server, label = "Transform data") {
+  transformation_module <- teal_transform_module(ui, server, label = label)
   attr(module, "transform_modules") <- c(
     attr(module, "transform_modules"),
     list(transformation_module)
@@ -26,11 +26,12 @@ transform_teal_data <- function(module, ui, server) {
 #'
 #' @return `teal_data_module`
 #' @export
-teal_transform_module <- function(ui, server) {
+teal_transform_module <- function(ui, server, label = "Transform data") {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert_function(server, args = c("id", "data"), nargs = 2)
   structure(
     list(ui = ui, server = server),
+    label = label,
     class = "teal_data_module"
   )
 }
@@ -53,15 +54,15 @@ ui_teal_transform_data <- function(id, modules) {
   checkmate::assert_string(id)
   checkmate::assert_class(modules, "teal_module")
   ns <- NS(id)
+  transform_mods <- attr(modules, "transform_modules")
   lapply(
-    seq_along(attr(modules, "transform_modules")),
+    seq_along(transform_mods),
     function(i) {
+      transform_mod <- transform_mods[[i]]
       bslib::accordion_panel(
-        title = "Transformation",
+        title = attr(transform_mod, "label"),
         icon = bsicons::bs_icon("pencil-square"),
-        attr(modules, "transform_modules")[[i]]$ui(
-          id = ns(paste0("transform_", i))
-        )
+        transform_mod$ui(id = ns(paste0("transform_", i)))
       )
     }
   )
@@ -76,16 +77,16 @@ srv_teal_transform_data <- function(id, data, modules) {
   moduleServer(id, function(input, output, session) {
     data_out <- list(data)
     transform_mods <- attr(modules, "transform_modules")
-    for (i in seq_along(transform_mods)) {
-      module_id <- paste0("transform_", i)
-      data_out <- c(
-        data_out,
-        transform_mods[[i]]$server(
-          id = module_id,
-          data = data_out[[i]]
+    lapply(
+      seq_along(transform_mods),
+      function(i) {
+        module_id <- paste0("transform_", i)
+        data_out <<- c(
+          data_out,
+          transform_mods[[i]]$server(id = module_id, data = data_out[[i]])
         )
-      )
-    }
+      }
+    )
     data_out[[length(data_out)]]
   })
 }
