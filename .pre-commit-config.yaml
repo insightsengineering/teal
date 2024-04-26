@@ -52,6 +52,7 @@ repos:
           .*\.svg|
           .*\.xml|
           (.*/|)\_pkgdown.y[a]?ml|
+          (.*/|)\.covrignore|
           (.*/|)\.gitignore|
           (.*/|)\.gitlab-ci\.y[a]?ml|
           (.*/|)\.lintr|
