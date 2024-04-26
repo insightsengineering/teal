@@ -72,10 +72,17 @@ TealReportCard <- R6::R6Class( # nolint: object_name.
       invisible(self)
     }
   ),
-  private = list()
+  private = list(
+    dispatch_block = function(block_class) {
+      eval(str2lang(block_class))
+    }
+  )
 )
 
-#' @title `RcodeBlock`
+#' @title `TealSlicesBlock`
+#' @docType class
+#' @description
+#' Specialized `TealSlicesBlock` block for managing filter panel content in reports.
 #' @keywords internal
 TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
   classname = "TealSlicesBlock",
@@ -142,21 +149,38 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
       private$teal_slices <- content
       invisible(self)
     },
-    #' @description Create the `RcodeBlock` from a list.
-    #' @param x (named `list`) with two fields `c("text", "params")`.
-    #' Use the `get_available_params` method to get all possible parameters.
+    #' @description Create the `TealSlicesBlock` from a list.
+    #'
+    #' @param x (`named list`) with two fields `text` and `style`.
+    #' Use the `get_available_styles` method to get all possible styles.
+    #'
     #' @return `self`, invisibly.
+    #' @examples
+    #' TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal")
+    #' block <- TealSlicesBlock$new()
+    #' block$from_list(list(text = "sth", style = "default"))
+    #'
     from_list = function(x) {
       checkmate::assert_list(x)
-      checkmate::assert_names(names(x), must.include = c("teal_slices"))
-      self$set_content(x$teal_slices)
+      checkmate::assert_names(names(x), must.include = c("text", "style"))
+      super$set_content(x$text)
+      super$set_style(x$style)
       invisible(self)
     },
-    #' @description Convert the `RcodeBlock` to a list.
-    #' @return named `list` with a text and `params`.
-
+    #' @description Convert the `TealSlicesBlock` to a list.
+    #'
+    #' @return `named list` with a text and style.
+    #' @examples
+    #' TealSlicesBlock <- getFromNamespace("TealSlicesBlock", "teal")
+    #' block <- TealSlicesBlock$new()
+    #' block$to_list()
+    #'
     to_list = function() {
-      list(teal_slices = private$teal_slices)
+      content <- self$get_content()
+      list(
+        text = if (length(content)) content else "",
+        style = self$get_style()
+      )
     }
   ),
   private = list(

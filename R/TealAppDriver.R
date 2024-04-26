@@ -65,6 +65,33 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
       )
 
+      # Check for minimum version of Chrome that supports the tests
+      #  - Element.checkVisibility was added on 105
+      chrome_version <- numeric_version(
+        gsub(
+          "[[:alnum:]_]+/", # Prefix that ends with forward slash
+          "",
+          self$get_chromote_session()$Browser$getVersion()$product
+        ),
+        strict = FALSE
+      )
+
+      required_version <- 105
+
+      testthat::skip_if(
+        is.na(chrome_version),
+        "Problem getting Chrome version, please contact the developers."
+      )
+      testthat::skip_if(
+        chrome_version < required_version,
+        sprintf(
+          "Chrome version '%s' is not supported, please upgrade to '%d' or higher",
+          chrome_version,
+          required_version
+        )
+      )
+      # end od check
+
       private$set_active_ns()
       self$wait_for_idle()
     },
@@ -216,6 +243,44 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       self$get_value(output = sprintf("%s-%s", self$active_module_ns(), output_id))
     },
     #' @description
+    #' Get the output from the module's `teal.widgets::table_with_settings` in the `teal` app.
+    #' This function will only access outputs from the name space of the current active teal module.
+    #'
+    #' @param tws (`character(1)`) `table_with_settings` namespace name.
+    #' @param which (integer) If there is more than one table, which should be extracted.
+    #'
+    #' @return The data.frame with table contents.
+    get_active_module_tws_output = function(tws, which = 1) {
+      checkmate::check_number(which, lower = 1)
+      checkmate::check_string(tws)
+      table <-
+        rvest::html_table(
+          self$get_html_rvest(
+            self$active_module_element(sprintf("%s-table-with-settings", tws))
+          ),
+          fill = TRUE
+        )
+      if (length(table) == 0) {
+        data.frame()
+      } else {
+        table[[which]]
+      }
+    },
+    #' @description
+    #' Get the output from the module's `teal.widgets::plot_with_settings` in the `teal` app.
+    #' This function will only access plots from the name space of the current active teal module.
+    #'
+    #' @param pws (`character(1)`) `plot_with_settings` namespace name.
+    #'
+    #' @return The `src` attribute as `character(1)` vector.
+    get_active_module_pws_output = function(pws) {
+      checkmate::check_string(pws)
+      self$get_attr(
+        self$active_module_element(sprintf("%s-plot_main > img", pws)),
+        "src"
+      )
+    },
+    #' @description
     #' Set the input in the module in the `teal` app.
     #' This function will only set inputs in the name space of the current active teal module.
     #'
@@ -249,6 +314,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           self$active_filters_ns()
         )
       )
+
       available_datasets[displayed_datasets_index]
     },
     #' @description
@@ -267,6 +333,12 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::assert_flag(content_visibility_auto)
       checkmate::assert_flag(opacity_property)
       checkmate::assert_flag(visibility_property)
+
+      testthat::skip_if_not(
+        self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
+        "Element.prototype.checkVisibility is not supported in the current browser."
+      )
+
       unlist(
         self$get_js(
           sprintf(
