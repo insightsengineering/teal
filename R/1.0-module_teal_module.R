@@ -110,8 +110,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
           !!!transform_modules
         )
       )
-    ),
-    icon = uiOutput(ns("icon"))
+    )
   )
 }
 
@@ -179,18 +178,6 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
       isolate(trigger_data(trigger_data() + 1))
       isolate(trigger_module(TRUE))
       NULL
-    })
-
-    output$icon <- renderUI({
-      if (trigger_data() > 1) {
-        NULL
-      } else {
-        bslib::tooltip(
-          bsicons::bs_icon("info-circle"),
-          "Load data to activate the module.",
-          placement = "bottom"
-        )
-      }
     })
 
     # collect arguments to run teal_module
