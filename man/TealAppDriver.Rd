@@ -357,11 +357,7 @@ The value of the shiny output.
 Get the output from the module's \code{teal.widgets::table_with_settings} or \code{DT::DTOutput} in the \code{teal} app.
 This function will only access outputs from the name space of the current active teal module.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_table_output(
-  table_id,
-  which = 1,
-  is_dt_table = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_table_output(table_id, which = 1)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -369,9 +365,7 @@ This function will only access outputs from the name space of the current active
 \describe{
 \item{\code{table_id}}{(\code{character(1)}) The id of the table in the active teal module's name space.}
 
-\item{\code{which}}{(integer) If there is more than one table, which should be extracted.}
-
-\item{\code{is_dt_table}}{(logical) If the table is a \code{DT::DTOutput}.
+\item{\code{which}}{(integer) If there is more than one table, which should be extracted.
 By default it will look for  a table that is built using \code{teal.widgets::table_with_settings}.}
 }
 \if{html}{\out{</div>}}

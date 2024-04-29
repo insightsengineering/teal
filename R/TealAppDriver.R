@@ -248,19 +248,13 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @param table_id (`character(1)`) The id of the table in the active teal module's name space.
     #' @param which (integer) If there is more than one table, which should be extracted.
-    #' @param is_dt_table (logical) If the table is a `DT::DTOutput`.
     #' By default it will look for  a table that is built using `teal.widgets::table_with_settings`.
     #'
     #' @return The data.frame with table contents.
-    get_active_module_table_output = function(table_id, which = 1, is_dt_table = FALSE) {
+    get_active_module_table_output = function(table_id, which = 1) {
       checkmate::check_number(which, lower = 1)
       checkmate::check_string(table_id)
-      table_selector <- ifelse(
-        is_dt_table,
-        self$active_module_element(table_id),
-        self$active_module_element(sprintf("%s-table-with-settings", table_id))
-      )
-      table <- table_selector %>%
+      table <- self$active_module_element(table_id) %>%
         self$get_html_rvest() %>%
         rvest::html_table(fill = TRUE)
       if (length(table) == 0) {
