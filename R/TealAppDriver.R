@@ -243,7 +243,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       self$get_value(output = sprintf("%s-%s", self$active_module_ns(), output_id))
     },
     #' @description
-    #' Get the output from the module's `teal.widgets::table_with_settings` in the `teal` app.
+    #' Get the output from the module's `teal.widgets::table_with_settings` or `DT::DTOutput` in the `teal` app.
     #' This function will only access outputs from the name space of the current active teal module.
     #'
     #' @param tws (`character(1)`) `table_with_settings` namespace name.
@@ -253,13 +253,14 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     get_active_module_tws_output = function(tws, which = 1) {
       checkmate::check_number(which, lower = 1)
       checkmate::check_string(tws)
-      table <-
-        rvest::html_table(
-          self$get_html_rvest(
-            self$active_module_element(sprintf("%s-table-with-settings", tws))
-          ),
-          fill = TRUE
-        )
+      table_selector <- ifelse(
+        is.null(self$is_visible(sprintf("%s table", self$active_module_element(tws)))),
+        self$active_module_element(sprintf("%s-table-with-settings", tws)),
+        sprintf("%s table", self$active_module_element(tws))
+      )
+      table <- table_selector %>%
+        self$get_html_rvest() %>%
+        rvest::html_table(fill = TRUE)
       if (length(table) == 0) {
         data.frame()
       } else {
