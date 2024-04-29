@@ -354,7 +354,7 @@ The value of the shiny output.
 \if{html}{\out{<a id="method-TealAppDriver-get_active_module_tws_output"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_module_tws_output}{}}}
 \subsection{Method \code{get_active_module_tws_output()}}{
-Get the output from the module's \code{teal.widgets::table_with_settings} in the \code{teal} app.
+Get the output from the module's \code{teal.widgets::table_with_settings} or \code{DT::DTOutput} in the \code{teal} app.
 This function will only access outputs from the name space of the current active teal module.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_tws_output(tws, which = 1)}\if{html}{\out{</div>}}
