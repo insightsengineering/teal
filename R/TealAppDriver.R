@@ -248,13 +248,15 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @param tws (`character(1)`) `table_with_settings` namespace name.
     #' @param which (integer) If there is more than one table, which should be extracted.
+    #' @param is_dt_table (logical) If the table is a `DT::DTOutput`.
+    #' By default it will look for  a table that is built using `teal.widgets::table_with_settings`.
     #'
     #' @return The data.frame with table contents.
-    get_active_module_tws_output = function(tws, which = 1) {
+    get_active_module_table_output = function(tws, which = 1, is_dt_table = FALSE) {
       checkmate::check_number(which, lower = 1)
       checkmate::check_string(tws)
       table_selector <- ifelse(
-        is.null(self$is_visible(self$active_module_element(sprintf("%s-table-with-settings", tws)))),
+        is_dt_table,
         self$active_module_element(tws),
         self$active_module_element(sprintf("%s-table-with-settings", tws))
       )
@@ -274,7 +276,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param pws (`character(1)`) `plot_with_settings` namespace name.
     #'
     #' @return The `src` attribute as `character(1)` vector.
-    get_active_module_pws_output = function(pws) {
+    get_active_module_plot_output = function(pws) {
       checkmate::check_string(pws)
       self$get_attr(
         self$active_module_element(sprintf("%s-plot_main > img", pws)),
