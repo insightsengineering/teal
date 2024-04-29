@@ -43,3 +43,6 @@ SECURITY.md
 ^test_full_example$
 coverage.*
 ^pkgdown$
+^.revdeprefs\.yaml$
+^revdep$
+^\.covrignore$
