@@ -41,6 +41,27 @@ jobs:
         checking top-level files .* NOTE
       unit-test-report-brand: >-
         https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/thumbs/teal.png
+  r-cmd-non-cran:
+    name: R CMD Check (non-CRAN) 🧬
+    uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+    with:
+      enforce-note-blocklist: true
+      publish-unit-test-report-gh-pages: false
+      junit-xml-comparison: false
+      concurrency-group: non-cran
+      disable-unit-test-reports: true
+      skip-r-cmd-install: true
+      note-blocklist: |
+        checking dependencies in R code .* NOTE
+        checking R code for possible problems .* NOTE
+        checking examples .* NOTE
+        checking Rd line widths .* NOTE
+        checking S3 generic/method consistency .* NOTE
+        checking Rd .usage sections .* NOTE
+        checking for unstated dependencies in vignettes .* NOTE
+        checking top-level files .* NOTE
   coverage:
     name: Coverage 📔
     uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
