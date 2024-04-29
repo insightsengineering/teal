@@ -246,19 +246,19 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Get the output from the module's `teal.widgets::table_with_settings` or `DT::DTOutput` in the `teal` app.
     #' This function will only access outputs from the name space of the current active teal module.
     #'
-    #' @param tws (`character(1)`) `table_with_settings` namespace name.
+    #' @param table_id (`character(1)`) The id of the table in the active teal module's name space.
     #' @param which (integer) If there is more than one table, which should be extracted.
     #' @param is_dt_table (logical) If the table is a `DT::DTOutput`.
     #' By default it will look for  a table that is built using `teal.widgets::table_with_settings`.
     #'
     #' @return The data.frame with table contents.
-    get_active_module_table_output = function(tws, which = 1, is_dt_table = FALSE) {
+    get_active_module_table_output = function(table_id, which = 1, is_dt_table = FALSE) {
       checkmate::check_number(which, lower = 1)
-      checkmate::check_string(tws)
+      checkmate::check_string(table_id)
       table_selector <- ifelse(
         is_dt_table,
-        self$active_module_element(tws),
-        self$active_module_element(sprintf("%s-table-with-settings", tws))
+        self$active_module_element(table_id),
+        self$active_module_element(sprintf("%s-table-with-settings", table_id))
       )
       table <- table_selector %>%
         self$get_html_rvest() %>%
@@ -273,13 +273,13 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Get the output from the module's `teal.widgets::plot_with_settings` in the `teal` app.
     #' This function will only access plots from the name space of the current active teal module.
     #'
-    #' @param pws (`character(1)`) `plot_with_settings` namespace name.
+    #' @param plot_id (`character(1)`) The id of the plot in the active teal module's name space.
     #'
     #' @return The `src` attribute as `character(1)` vector.
-    get_active_module_plot_output = function(pws) {
-      checkmate::check_string(pws)
+    get_active_module_plot_output = function(plot_id) {
+      checkmate::check_string(plot_id)
       self$get_attr(
-        self$active_module_element(sprintf("%s-plot_main > img", pws)),
+        self$active_module_element(sprintf("%s-plot_main > img", plot_id)),
         "src"
       )
     },

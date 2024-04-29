@@ -358,7 +358,7 @@ Get the output from the module's \code{teal.widgets::table_with_settings} or \co
 This function will only access outputs from the name space of the current active teal module.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_table_output(
-  tws,
+  table_id,
   which = 1,
   is_dt_table = FALSE
 )}\if{html}{\out{</div>}}
@@ -367,7 +367,7 @@ This function will only access outputs from the name space of the current active
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tws}}{(\code{character(1)}) \code{table_with_settings} namespace name.}
+\item{\code{table_id}}{(\code{character(1)}) The id of the table in the active teal module's name space.}
 
 \item{\code{which}}{(integer) If there is more than one table, which should be extracted.}
 
@@ -387,13 +387,13 @@ The data.frame with table contents.
 Get the output from the module's \code{teal.widgets::plot_with_settings} in the \code{teal} app.
 This function will only access plots from the name space of the current active teal module.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_plot_output(pws)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_plot_output(plot_id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{pws}}{(\code{character(1)}) \code{plot_with_settings} namespace name.}
+\item{\code{plot_id}}{(\code{character(1)}) The id of the plot in the active teal module's name space.}
 }
 \if{html}{\out{</div>}}
 }
