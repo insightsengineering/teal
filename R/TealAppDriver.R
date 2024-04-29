@@ -254,9 +254,9 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::check_number(which, lower = 1)
       checkmate::check_string(tws)
       table_selector <- ifelse(
-        is.null(self$is_visible(sprintf("%s table", self$active_module_element(tws)))),
-        self$active_module_element(sprintf("%s-table-with-settings", tws)),
-        sprintf("%s table", self$active_module_element(tws))
+        is.null(self$is_visible(self$active_module_element(sprintf("%s-table-with-settings", tws)))),
+        self$active_module_element(tws),
+        self$active_module_element(sprintf("%s-table-with-settings", tws))
       )
       table <- table_selector %>%
         self$get_html_rvest() %>%
