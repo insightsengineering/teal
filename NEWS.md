@@ -1,4 +1,4 @@
-# teal 0.15.2.9031
+# teal 0.15.2.9032
 
 ### Miscellaneous
 * Filter mapping display is no longer coupled to the snapshot manager.
