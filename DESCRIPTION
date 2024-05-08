@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.15.2.9033
-Date: 2024-05-06
+Version: 0.15.2.9034
+Date: 2024-05-08
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -55,10 +55,10 @@ Imports:
     teal.widgets (>= 0.4.0),
     utils
 Suggests:
-    MultiAssayExperiment,
-    R6,
     bslib,
     knitr (>= 1.42),
+    MultiAssayExperiment,
+    R6,
     rmarkdown (>= 2.19),
     rvest,
     shinytest2,
