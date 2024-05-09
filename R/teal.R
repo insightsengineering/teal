@@ -9,15 +9,8 @@
 #' @keywords internal
 "_PACKAGE"
 
-#' @importFrom magrittr %>%
-#' @export
-magrittr::`%>%`
-
-# Fix R CMD check notes
 #' @import shiny teal.data teal.slice
 #' @importFrom stats setNames
+#' @importFrom magrittr %>%
+#' @export %>%
 NULL
-
-# Fix R CMD check notes
-#' @importFrom lifecycle badge
-lifecycle::badge
