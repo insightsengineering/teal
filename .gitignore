@@ -28,3 +28,5 @@ vignettes/*.R
 vignettes/*.html
 vignettes/*.md
 inst/doc
+tests/testthat/_snaps/**/*.new.md
+tests/testthat/_snaps/**/*.new.svg
