@@ -12,7 +12,7 @@ Drive a teal application"><!-- mathjax --><script src="https://cdnjs.cloudflare.
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9033</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9034</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,23 +66,6 @@ Drive a teal application"><!-- mathjax --><script src="https://cdnjs.cloudflare.
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2-rc1">v0.15.2-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2">v0.15.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1">v0.15.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -146,8 +129,8 @@ driving a teal application for performing interactions for <code>shinytest2</cod
 <li><p><a href="#method-TealAppDriver-active_filters_ns"><code>TealAppDriver$active_filters_ns()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-get_active_module_input"><code>TealAppDriver$get_active_module_input()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-get_active_module_output"><code>TealAppDriver$get_active_module_output()</code></a></p></li>
-<li><p><a href="#method-TealAppDriver-get_active_module_tws_output"><code>TealAppDriver$get_active_module_tws_output()</code></a></p></li>
-<li><p><a href="#method-TealAppDriver-get_active_module_pws_output"><code>TealAppDriver$get_active_module_pws_output()</code></a></p></li>
+<li><p><a href="#method-TealAppDriver-get_active_module_table_output"><code>TealAppDriver$get_active_module_table_output()</code></a></p></li>
+<li><p><a href="#method-TealAppDriver-get_active_module_plot_output"><code>TealAppDriver$get_active_module_plot_output()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-set_active_module_input"><code>TealAppDriver$set_active_module_input()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-get_active_filter_vars"><code>TealAppDriver$get_active_filter_vars()</code></a></p></li>
 <li><p><a href="#method-TealAppDriver-is_visible"><code>TealAppDriver$is_visible()</code></a></p></li>
@@ -453,22 +436,23 @@ This function will only access outputs from the name space of the current active
 <p>The value of the shiny output.</p>
 </div>
 
-</div><p></p><hr><a id="method-TealAppDriver-get_active_module_tws_output"></a><div class="section">
-<h3 id="method-get-active-module-tws-output-">Method <code>get_active_module_tws_output()</code><a class="anchor" aria-label="anchor" href="#method-get-active-module-tws-output-"></a></h3>
-<p>Get the output from the module's <code><a href="https://insightsengineering.github.io/teal.widgets/latest-tag/reference/table_with_settings.html">teal.widgets::table_with_settings</a></code> in the <code>teal</code> app.
+</div><p></p><hr><a id="method-TealAppDriver-get_active_module_table_output"></a><div class="section">
+<h3 id="method-get-active-module-table-output-">Method <code>get_active_module_table_output()</code><a class="anchor" aria-label="anchor" href="#method-get-active-module-table-output-"></a></h3>
+<p>Get the output from the module's <code><a href="https://insightsengineering.github.io/teal.widgets/latest-tag/reference/table_with_settings.html">teal.widgets::table_with_settings</a></code> or <code><a href="https://rdrr.io/pkg/DT/man/dataTableOutput.html" class="external-link">DT::DTOutput</a></code> in the <code>teal</code> app.
 This function will only access outputs from the name space of the current active teal module.</p><div class="section">
 <h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_active_module_tws_output</span><span class="op">(</span><span class="va">tws</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_active_module_table_output</span><span class="op">(</span><span class="va">table_id</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>tws</code></dt>
-<dd><p>(<code>character(1)</code>) <code>table_with_settings</code> namespace name.</p></dd>
+<p></p><div class="arguments"><dl><dt><code>table_id</code></dt>
+<dd><p>(<code>character(1)</code>) The id of the table in the active teal module's name space.</p></dd>
 
 
 <dt><code>which</code></dt>
-<dd><p>(integer) If there is more than one table, which should be extracted.</p></dd>
+<dd><p>(integer) If there is more than one table, which should be extracted.
+By default it will look for  a table that is built using <code><a href="https://insightsengineering.github.io/teal.widgets/latest-tag/reference/table_with_settings.html">teal.widgets::table_with_settings</a></code>.</p></dd>
 
 
 </dl><p></p></div>
@@ -478,18 +462,18 @@ This function will only access outputs from the name space of the current active
 <p>The data.frame with table contents.</p>
 </div>
 
-</div><p></p><hr><a id="method-TealAppDriver-get_active_module_pws_output"></a><div class="section">
-<h3 id="method-get-active-module-pws-output-">Method <code>get_active_module_pws_output()</code><a class="anchor" aria-label="anchor" href="#method-get-active-module-pws-output-"></a></h3>
+</div><p></p><hr><a id="method-TealAppDriver-get_active_module_plot_output"></a><div class="section">
+<h3 id="method-get-active-module-plot-output-">Method <code>get_active_module_plot_output()</code><a class="anchor" aria-label="anchor" href="#method-get-active-module-plot-output-"></a></h3>
 <p>Get the output from the module's <code><a href="https://insightsengineering.github.io/teal.widgets/latest-tag/reference/plot_with_settings.html">teal.widgets::plot_with_settings</a></code> in the <code>teal</code> app.
 This function will only access plots from the name space of the current active teal module.</p><div class="section">
 <h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_active_module_pws_output</span><span class="op">(</span><span class="va">pws</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TealAppDriver</span><span class="op">$</span><span class="fu">get_active_module_plot_output</span><span class="op">(</span><span class="va">plot_id</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>pws</code></dt>
-<dd><p>(<code>character(1)</code>) <code>plot_with_settings</code> namespace name.</p></dd>
+<p></p><div class="arguments"><dl><dt><code>plot_id</code></dt>
+<dd><p>(<code>character(1)</code>) The id of the plot in the active teal module's name space.</p></dd>
 
 
 </dl><p></p></div>
