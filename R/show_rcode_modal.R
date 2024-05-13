@@ -14,7 +14,6 @@
 #' @references [shiny::showModal()]
 #' @export
 show_rcode_modal <- function(title = NULL, rcode, session = getDefaultReactiveDomain()) {
-
   lifecycle::deprecate_soft(
     when = "0.15.3",
     what = "show_rcode_modal()",
