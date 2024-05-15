@@ -59,7 +59,7 @@ Suggests:
     knitr (>= 1.42),
     MultiAssayExperiment,
     R6,
-    rmarkdown (>= 2.19),
+    rmarkdown (>= 2.23),
     rvest,
     shinytest2,
     shinyvalidate,
