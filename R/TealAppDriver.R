@@ -336,6 +336,9 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         "Element.prototype.checkVisibility is not supported in the current browser."
       )
 
+      # Check if no UI updates are made in the page for 0.5 seconds.
+      self$wait_for_element_stability(element_selector = "body", stability_period = 500, check_interval = 50)
+
       unlist(
         self$get_js(
           sprintf(
@@ -576,11 +579,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         ...
       )
     },
-    wait_for_element_stability = function(element_selector = "body", stability_period = 1000, check_interval = 100) {
+    #' @description
+    #' Check if the page is stable without any DOM updates for the specified stability period.
+    #' @param element_selector (`character(1)`) `CSS` selector to check the stability of the page.
+    #' @param stability_period (`numeric(1)`) The time in milliseconds to wait for the page to be stable.
+    #' @param check_interval (`numeric(1)`) The time in milliseconds to check for changes in the page.
+    #' The stability check is reset when a change is detected in the page after sleeping for check_interval.
+    #' Parameter with additional value to passed in `wait_for_value`.
+    wait_for_element_stability = function(element_selector = "body", stability_period = 500, check_interval = 50) {
       element_content <- self$get_html(element_selector)
       times_run <- 0
-      check_interval <- 100
-      stability_period <- 1000
       max_times_run <- stability_period / check_interval
 
       while (TRUE) {
@@ -591,7 +599,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         } else if (times_run < max_times_run) {
           times_run <- times_run + 1
         } else {
-          print("Page is stable now!")
           break
         }
         Sys.sleep(check_interval / 1000)
