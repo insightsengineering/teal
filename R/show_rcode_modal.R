@@ -1,6 +1,6 @@
 #' Show `R` code modal
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description `r lifecycle::badge("deprecated")`
 #'
 #' Use the [shiny::showModal()] function to show the `R` code inside.
 #'
@@ -14,6 +14,12 @@
 #' @references [shiny::showModal()]
 #' @export
 show_rcode_modal <- function(title = NULL, rcode, session = getDefaultReactiveDomain()) {
+  lifecycle::deprecate_soft(
+    when = "0.15.3",
+    what = "show_rcode_modal()",
+    details = "This function will be removed in the next release."
+  )
+
   rcode <- paste(rcode, collapse = "\n")
 
   ns <- session$ns
