@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.513622152746762" branch-rate="0" lines-covered="1150" lines-valid="2239" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-05-09 13:14:18.404572">
+<coverage line-rate="0.512477718360071" branch-rate="0" lines-covered="1150" lines-valid="2244" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-05-16 10:53:20.347697">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
   <packages>
-    <package name="teal" line-rate="0.513622152746762" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.512477718360071" branch-rate="0" complexity="0">
       <classes>
         <class name="TealAppDriver.R" filename="R/TealAppDriver.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
@@ -3835,12 +3835,11 @@
             <method name="show_rcode_modal" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="17" hits="0" branch="false"/>
+                <line number="18" hits="0" branch="false"/>
                 <line number="19" hits="0" branch="false"/>
                 <line number="20" hits="0" branch="false"/>
                 <line number="21" hits="0" branch="false"/>
-                <line number="22" hits="0" branch="false"/>
                 <line number="23" hits="0" branch="false"/>
-                <line number="24" hits="0" branch="false"/>
                 <line number="25" hits="0" branch="false"/>
                 <line number="26" hits="0" branch="false"/>
                 <line number="27" hits="0" branch="false"/>
@@ -3853,17 +3852,22 @@
                 <line number="34" hits="0" branch="false"/>
                 <line number="35" hits="0" branch="false"/>
                 <line number="36" hits="0" branch="false"/>
+                <line number="37" hits="0" branch="false"/>
+                <line number="38" hits="0" branch="false"/>
+                <line number="39" hits="0" branch="false"/>
+                <line number="40" hits="0" branch="false"/>
+                <line number="41" hits="0" branch="false"/>
+                <line number="42" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
           <lines>
             <line number="17" hits="0" branch="false"/>
+            <line number="18" hits="0" branch="false"/>
             <line number="19" hits="0" branch="false"/>
             <line number="20" hits="0" branch="false"/>
             <line number="21" hits="0" branch="false"/>
-            <line number="22" hits="0" branch="false"/>
             <line number="23" hits="0" branch="false"/>
-            <line number="24" hits="0" branch="false"/>
             <line number="25" hits="0" branch="false"/>
             <line number="26" hits="0" branch="false"/>
             <line number="27" hits="0" branch="false"/>
@@ -3876,6 +3880,12 @@
             <line number="34" hits="0" branch="false"/>
             <line number="35" hits="0" branch="false"/>
             <line number="36" hits="0" branch="false"/>
+            <line number="37" hits="0" branch="false"/>
+            <line number="38" hits="0" branch="false"/>
+            <line number="39" hits="0" branch="false"/>
+            <line number="40" hits="0" branch="false"/>
+            <line number="41" hits="0" branch="false"/>
+            <line number="42" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="tdata.R" filename="R/tdata.R" line-rate="0.981132075471698" branch-rate="0" complexity="0">
