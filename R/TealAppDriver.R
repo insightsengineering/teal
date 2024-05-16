@@ -575,6 +575,27 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         export = export,
         ...
       )
+    },
+    wait_for_element_stability = function(element_selector = "body", stability_period = 1000, check_interval = 100) {
+      element_content <- self$get_html(element_selector)
+      times_run <- 0
+      check_interval <- 100
+      stability_period <- 1000
+      max_times_run <- stability_period / check_interval
+
+      while (TRUE) {
+        current_element <- self$get_html(element_selector)
+        if (!identical(current_element, element_content)) {
+          element_content <- current_inner_html
+          times_run <- 0
+        } else if (times_run < max_times_run) {
+          times_run <- times_run + 1
+        } else {
+          print("Page is stable now!")
+          break
+        }
+        Sys.sleep(check_interval / 1000)
+      }
     }
   ),
   # private members ----
