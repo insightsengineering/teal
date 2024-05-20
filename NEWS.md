@@ -1,5 +1,10 @@
 # teal 0.15.2.9037
 
+### New features
+
+* Footer of `teal` apps is enriched with a modal that shows `.lock` file created with `pak` package. 
+This will boost the reproducibility of the app.
+
 ### Miscellaneous
 * Filter mapping display is no longer coupled to the snapshot manager.
 

@@ -23,6 +23,7 @@ repos:
           - logger
           - magrittr
           - methods
+          - pak
           - rlang
           - shiny
           - shinyjs

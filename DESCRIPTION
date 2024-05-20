@@ -46,6 +46,7 @@ Imports:
     logger (>= 0.2.0),
     magrittr (>= 1.5),
     methods,
+    pak,
     rlang (>= 1.0.0),
     shinyjs,
     stats,
@@ -72,7 +73,7 @@ RdMacros:
     lifecycle
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
-    r-lib/lifecycle, daroczig/logger, tidyverse/magrittr, r-lib/rlang,
+    r-lib/lifecycle, daroczig/logger, tidyverse/magrittr, r-lib/pak, r-lib/rlang,
     daattali/shinyjs, insightsengineering/teal.logger,
     insightsengineering/teal.reporter, insightsengineering/teal.widgets,
     rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
