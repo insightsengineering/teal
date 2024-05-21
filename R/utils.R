@@ -392,23 +392,24 @@ get_unique_labels <- function(labels) {
 #' @return (`character(n)`) content of `lockfile`.
 #'
 #' @keywords internal
-create_lockfile <- function(lockfile = 'pkg.lock') {
+create_lockfile <- function(lockfile = "pkg.lock") {
   # TODO: find a replacement for devtools
   package_source <- devtools::session_info()$packages$source
 
   # Check if any package require any custom repository.
-  #custom_repos <- unique(grep('CRAN|Github|Bioconductor|local', package_source, invert = TRUE, value = TRUE))
-  custom_repos <- unique(grep('http', package_source, value = TRUE))
+  # custom_repos <- unique(grep('CRAN|Github|Bioconductor|local', package_source, invert = TRUE, value = TRUE))
+  custom_repos <- unique(grep("http", package_source, value = TRUE))
 
   if (length(custom_repos) > 0) {
     # remove R version
     custom_repos <- gsub("\\s.*", "", custom_repos)
     # extend options(repos) with a custom repository for pak::lockfile_create
-    old_repos <- options('repos');on.exit(options(repos = old_repos$repos))
+    old_repos <- options("repos")
+    on.exit(options(repos = old_repos$repos))
     options(
       repos = c(
-        options('repos')$repos,
-        custom_repos[!(custom_repos %in% options('repos')$repos)]
+        options("repos")$repos,
+        custom_repos[!(custom_repos %in% options("repos")$repos)]
       )
     )
   }
