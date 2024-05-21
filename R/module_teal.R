@@ -113,7 +113,8 @@ ui_teal <- function(id,
       tags$div(
         footer,
         teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
-        teal.widgets::verbatim_popup_ui(ns("lockFile"), ".lock file", type = "link"),
+        br(),
+        teal.widgets::verbatim_popup_ui(ns("lockFile"), "Compute .lock file", type = "link"),
         textOutput(ns("identifier"))
       )
     )
@@ -139,7 +140,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
 
     teal.widgets::verbatim_popup_srv(
       "lockFile",
-      verbatim_content = utils::capture.output(pak::lockfile_create()),
+      verbatim_content = create_lockfile(),
       title = ".lock file"
     )
 
