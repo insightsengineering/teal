@@ -46,7 +46,6 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
 \item \href{#method-TealAppDriver-wait_for_active_module_value}{\code{TealAppDriver$wait_for_active_module_value()}}
-\item \href{#method-TealAppDriver-wait_for_element_stability}{\code{TealAppDriver$wait_for_element_stability()}}
 \item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
 }
 }
@@ -630,33 +629,6 @@ providing a more flexible interface for waiting on different types of values wit
 Only one of these parameters may be used.}
 
 \item{\code{...}}{Must be empty. Allows for parameter expansion.
-Parameter with additional value to passed in \code{wait_for_value}.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-wait_for_element_stability"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-wait_for_element_stability}{}}}
-\subsection{Method \code{wait_for_element_stability()}}{
-Check if the page is stable without any DOM updates for the specified stability period.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$wait_for_element_stability(
-  element_selector = "body",
-  stability_period = 500,
-  check_interval = 50
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{element_selector}}{(\code{character(1)}) \code{CSS} selector to check the stability of the page.}
-
-\item{\code{stability_period}}{(\code{numeric(1)}) The time in milliseconds to wait for the page to be stable.}
-
-\item{\code{check_interval}}{(\code{numeric(1)}) The time in milliseconds to check for changes in the page.
-The stability check is reset when a change is detected in the page after sleeping for check_interval.
 Parameter with additional value to passed in \code{wait_for_value}.}
 }
 \if{html}{\out{</div>}}

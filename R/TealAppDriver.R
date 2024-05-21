@@ -652,26 +652,24 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       NULL # If there are not any supported filters
     },
     #' @description
-    #' Check if the page is stable without any `DOM` updates for the specified stability period.
+    #' Check if the page is stable without any `DOM` updates in the body of the app.
     #' @param stability_period (`numeric(1)`) The time in milliseconds to wait till the page to be stable.
     #' @param check_interval (`numeric(1)`) The time in milliseconds to check for changes in the page.
     #' The stability check is reset when a change is detected in the page after sleeping for check_interval.
     wait_for_page_stability = function(stability_period = 500, check_interval = 50) {
-      element_content <- self$get_html("body")
-      times_run <- 0
-      max_times_run <- stability_period / check_interval
+      previous_content <- self$get_html("body")
+      end_time <- Sys.time() + (stability_period / 1000)
 
-      while (TRUE) {
-        current_element <- self$get_html("body")
-        if (!identical(current_element, element_content)) {
-          element_content <- current_element
-          times_run <- 0
-        } else if (times_run < max_times_run) {
-          times_run <- times_run + 1
-        } else {
+      repeat {
+        Sys.sleep(check_interval / 1000)
+        current_content <- self$get_html("body")
+
+        if (!identical(previous_content, current_content)) {
+          previous_content <- current_content
+          end_time <- Sys.time() + (stability_period / 1000)
+        } else if (Sys.time() >= end_time) {
           break
         }
-        Sys.sleep(check_interval / 1000)
       }
     }
   )
