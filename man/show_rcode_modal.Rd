@@ -17,7 +17,7 @@ vector with \code{R} code to show inside the modal.}
 \code{shiny} session object, defaults to \code{\link[shiny:domains]{shiny::getDefaultReactiveDomain()}}.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 Use the \code{\link[shiny:showModal]{shiny::showModal()}} function to show the \code{R} code inside.
 }
