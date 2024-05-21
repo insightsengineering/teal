@@ -100,7 +100,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param ... arguments passed to parent [`shinytest2::AppDriver`] `click()` method.
     click = function(...) {
       super$click(...)
-      self$wait_for_idle()
+      private$wait_for_page_stability()
     },
     #' @description
     #' Check if the app has shiny errors. This checks for global shiny errors.
@@ -330,6 +330,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::assert_flag(content_visibility_auto)
       checkmate::assert_flag(opacity_property)
       checkmate::assert_flag(visibility_property)
+
+      private$wait_for_page_stability()
 
       testthat::skip_if_not(
         self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
@@ -578,31 +580,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         export = export,
         ...
       )
-    },
-    #' @description
-    #' Check if the page is stable without any `DOM` updates for the specified stability period.
-    #' @param element_selector (`character(1)`) `CSS` selector to check the stability of the page.
-    #' @param stability_period (`numeric(1)`) The time in milliseconds to wait for the page to be stable.
-    #' @param check_interval (`numeric(1)`) The time in milliseconds to check for changes in the page.
-    #' The stability check is reset when a change is detected in the page after sleeping for check_interval.
-    #' Parameter with additional value to passed in `wait_for_value`.
-    wait_for_element_stability = function(element_selector = "body", stability_period = 500, check_interval = 50) {
-      element_content <- self$get_html(element_selector)
-      times_run <- 0
-      max_times_run <- stability_period / check_interval
-
-      while (TRUE) {
-        current_element <- self$get_html(element_selector)
-        if (!identical(current_element, element_content)) {
-          element_content <- current_element
-          times_run <- 0
-        } else if (times_run < max_times_run) {
-          times_run <- times_run + 1
-        } else {
-          break
-        }
-        Sys.sleep(check_interval / 1000)
-      }
     }
   ),
   # private members ----
@@ -673,6 +650,29 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       }
 
       NULL # If there are not any supported filters
+    },
+    #' @description
+    #' Check if the page is stable without any `DOM` updates for the specified stability period.
+    #' @param stability_period (`numeric(1)`) The time in milliseconds to wait till the page to be stable.
+    #' @param check_interval (`numeric(1)`) The time in milliseconds to check for changes in the page.
+    #' The stability check is reset when a change is detected in the page after sleeping for check_interval.
+    wait_for_page_stability = function(stability_period = 500, check_interval = 50) {
+      element_content <- self$get_html("body")
+      times_run <- 0
+      max_times_run <- stability_period / check_interval
+
+      while (TRUE) {
+        current_element <- self$get_html("body")
+        if (!identical(current_element, element_content)) {
+          element_content <- current_element
+          times_run <- 0
+        } else if (times_run < max_times_run) {
+          times_run <- times_run + 1
+        } else {
+          break
+        }
+        Sys.sleep(check_interval / 1000)
+      }
     }
   )
 )
