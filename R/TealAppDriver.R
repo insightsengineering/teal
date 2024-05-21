@@ -580,7 +580,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       )
     },
     #' @description
-    #' Check if the page is stable without any DOM updates for the specified stability period.
+    #' Check if the page is stable without any `DOM` updates for the specified stability period.
     #' @param element_selector (`character(1)`) `CSS` selector to check the stability of the page.
     #' @param stability_period (`numeric(1)`) The time in milliseconds to wait for the page to be stable.
     #' @param check_interval (`numeric(1)`) The time in milliseconds to check for changes in the page.
@@ -594,7 +594,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       while (TRUE) {
         current_element <- self$get_html(element_selector)
         if (!identical(current_element, element_content)) {
-          element_content <- current_inner_html
+          element_content <- current_element
           times_run <- 0
         } else if (times_run < max_times_run) {
           times_run <- times_run + 1
