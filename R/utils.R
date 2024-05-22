@@ -395,6 +395,7 @@ get_unique_labels <- function(labels) {
 create_lockfile_future <- function(lockfile = 'session.lock'){
   future::future({
     packages <- sessioninfo::session_info()$packages
+    # return(capture.output(print(packages))) # FOR TESTING
 
     # Check ?pkgdepends::pkg_refs()
     # to see why we need to append custom syntax in package names,
@@ -427,23 +428,29 @@ create_lockfile_future <- function(lockfile = 'session.lock'){
       )
     })
 
-    custom <- packages[grepl('http', packages$source), ]
-    custom$source <- gsub("\\s.*", "", custom$source) # remove R version
-    if (nrow(custom) > 0) {
+    # Custom installed packages are needed for the case where a basic teal app is started,
+    # and there are no teal.reporter calls, so no teal.reporter is not loaded.
+    # But teal.reporter is needed for local teal installations, and it needs to be checked
+    # if this was installed from a custom repository.
+    custom_installed <- sessioninfo::session_info('installed')$packages
+    custom_installed <- custom_installed[grepl('http', custom_installed$source), ]
+    custom_installed$source <- gsub("\\s.*", "", custom_installed$source) # remove R version
+    if (nrow(custom_installed) > 0) {
 
-      # If this is uncommented then the funcionality breaks,
-      # like if the on.exit() happens before pack::lockfile_create.
-      # old_repos <- options("repos")
-      # on.exit(options(repos = old_repos$repos))
+      old_repos <- options("repos")
+      on.exit(options(repos = old_repos$repos))
 
       # Extend options(repos) with a custom repository for pak::lockfile_create
       options(
         repos = unique(c(
           options("repos")$repos,
-          custom$source
+          custom_installed$source
         ))
       )
     }
+
+    custom <- packages[grepl('http', packages$source), ]
+    custom$source <- gsub("\\s.*", "", custom$source) # remove R version
     custom <- apply(custom, MARGIN = 1, function(row){
       sprintf('%s=url::%s/src/contrib/%s_%s.tar.gz',
               row[1], # pacakge
