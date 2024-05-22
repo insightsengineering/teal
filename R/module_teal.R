@@ -114,7 +114,11 @@ ui_teal <- function(id,
         footer,
         teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
         br(),
-        teal.widgets::verbatim_popup_ui(ns("lockFile"), "Compute .lock file", type = "link"),
+        if (!inherits(session, "MockShinySession")) {
+          teal.widgets::verbatim_popup_ui(ns("lockFile"), "Compute .lock file", type = "link")
+        } else {
+          NULL
+        },
         textOutput(ns("identifier"))
       )
     )
@@ -138,16 +142,18 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile
       title = "SessionInfo"
     )
 
-    teal.widgets::verbatim_popup_srv(
-      "lockFile",
-      verbatim_content = {
-        while (lockfile_task$status() == "running") {
-          Sys.sleep(0.25)
-        }
-        lockfile_task$result()
-      },
-      title = ".lock file"
-    )
+    if (!inherits(session, "MockShinySession")) {
+      teal.widgets::verbatim_popup_srv(
+        "lockFile",
+        verbatim_content = {
+          while (lockfile_task$status() == "running") {
+            Sys.sleep(0.25)
+          }
+          lockfile_task$result()
+        },
+        title = ".lock file"
+      )
+    }
 
     # `JavaScript` code
     run_js_files(files = "init.js")

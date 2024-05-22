@@ -153,11 +153,15 @@ init <- function(data,
   # log
   teal.logger::log_system_info()
 
-  future::plan(future::multisession, workers = 2)
-  logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
-  lockfile_task <- ExtendedTask$new(create_lockfile_future)
-  lockfile_task$invoke()
-  logger::log_trace("pak::lockfile_create() has been started in a parallel process through shiny::ExtendedTask$new().")
+  if (!identical(Sys.getenv("TESTTHAT"), "true")) {
+    future::plan(future::multisession, workers = 2)
+    logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
+    lockfile_task <- ExtendedTask$new(create_lockfile_future)
+    lockfile_task$invoke()
+    logger::log_trace("pak::lockfile_create() has been started in a parallel process through shiny::ExtendedTask$new().")
+  } else {
+    lockfile_task <- NULL
+  }
 
   # argument transformations
   ## `modules` - landing module
