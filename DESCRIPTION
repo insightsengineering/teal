@@ -40,8 +40,8 @@ Depends:
     teal.data (>= 0.5.0),
     teal.slice (>= 0.5.0)
 Imports:
-    callr,
     checkmate (>= 2.1.0),
+    future,
     jsonlite,
     lifecycle (>= 0.2.0),
     logger (>= 0.2.0),
@@ -73,7 +73,7 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
-    insightsengineering/teal.slice, r-lib/callr, mllg/checkmate, jeroen/jsonlite,
+    insightsengineering/teal.slice, mllg/checkmate, HenrikBengtsson/future, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, tidyverse/magrittr, r-lib/pak, r-lib/rlang,
     daattali/shinyjs, insightsengineering/teal.logger,
     insightsengineering/teal.reporter, insightsengineering/teal.widgets,

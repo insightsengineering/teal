@@ -97,7 +97,7 @@ ui_teal_with_splash <- function(id,
 
 #' @export
 #' @rdname module_teal_with_splash
-srv_teal_with_splash <- function(id, data, modules, filter = teal_slices(), callr_lockfile) {
+srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_class(modules, "teal_modules")
@@ -105,6 +105,10 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices(), call
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_with_splash initializing module with data.")
+
+    lockfile_task <- ExtendedTask$new(create_lockfile)
+    lockfile_task$invoke()
+    logger::log_trace("pak::lockfile_create() has been started in a parallel process through shiny::ExtendedTask$new().")
 
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
@@ -199,7 +203,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices(), call
     })
 
 
-    res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter, callr_lockfile = callr_lockfile)
+    res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter, lockfile_task = lockfile_task)
     logger::log_trace("srv_teal_with_splash initialized module with data.")
 
     res
