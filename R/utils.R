@@ -392,60 +392,75 @@ get_unique_labels <- function(labels) {
 #' @return (`character(n)`) content of `lockfile`.
 #'
 #' @keywords internal
-create_lockfile <- function(lockfile = 'session.lock') {
-  # TODO: find a replacement for devtools
-  packages <- devtools::session_info()$packages
-
-  # Check ?pkgdepends::pkg_refs()
-  # to see why we need to append custom syntax in package names,
-  # if they do not come from CRAN-like repository.
-
-  cran_like <- packages$package[grepl('CRAN|Bioconductor', packages$source)]
-
-  local <- packages[grepl('local', packages$source), ]
-  local <- apply(local, MARGIN = 1, function(row){
-    sprintf('%s=local::%s',
-            row[1], # pacakge,
-            row[5] # loadedpath
-    )
-  })
-
-  github <- packages[grepl('Github', packages$source), ]
-  gitlab <- packages[grepl('Gitlab', packages$source), ]
-  github$source <- gsub("\\)$", "", gsub("Github (", "", grep('Github', github$source, value = TRUE), fixed = TRUE))
-  gitlab$source <- gsub("\\)$", "", gsub("Gitlab (", "", grep('Gitlab', gitlab$source, value = TRUE), fixed = TRUE))
-  github <- apply(github, MARGIN = 1, function(row){
-    sprintf('%s=%s',
-      row[1], # pacakge,
-      row[9] # source
-    )
-  })
-  gitlab <- apply(gitlab, MARGIN = 1, function(row){
-    sprintf('%s=%s',
-      row[1], # pacakge,
-      row[9] # source
-    )
-  })
-
-  custom <- packages[grepl('http', packages$source), ]
-  custom$source <- gsub("\\s.*", "", custom$source) # remove R version
-  custom <- apply(custom, MARGIN = 1, function(row){
-    sprintf('%s=url::%s/src/contrib/%s_%s.tar.gz',
-      row[1], # pacakge
-      row[9], # source
-      row[1], # pacakge
-      row[3] #loadedVersion
-    )
-  })
-
-  packages <- c(cran_like, local, github, gitlab, custom)
-
-  pak::lockfile_create(packages, lockfile = lockfile)
-  readLines(lockfile)
-}
-
 create_lockfile_future <- function(lockfile = 'session.lock'){
   future::future({
-    create_lockfile(lockfile)
-  })
+    # TODO: find a replacement for devtools
+    browser()
+    packages <- devtools::session_info()$packages
+
+    # Check ?pkgdepends::pkg_refs()
+    # to see why we need to append custom syntax in package names,
+    # if they do not come from CRAN-like repository.
+
+    cran_like <- packages$package[grepl('CRAN|Bioconductor', packages$source)]
+
+    local <- packages[grepl('local', packages$source), ]
+    local <- apply(local, MARGIN = 1, function(row){
+      sprintf('%s=local::%s',
+              row[1], # pacakge,
+              row[5] # loadedpath
+      )
+    })
+
+    github <- packages[grepl('Github', packages$source), ]
+    gitlab <- packages[grepl('Gitlab', packages$source), ]
+    github$source <- gsub("\\)$", "", gsub("Github (", "", grep('Github', github$source, value = TRUE), fixed = TRUE))
+    gitlab$source <- gsub("\\)$", "", gsub("Gitlab (", "", grep('Gitlab', gitlab$source, value = TRUE), fixed = TRUE))
+    github <- apply(github, MARGIN = 1, function(row){
+      sprintf('%s=%s',
+              row[1], # pacakge,
+              row[9] # source
+      )
+    })
+    gitlab <- apply(gitlab, MARGIN = 1, function(row){
+      sprintf('%s=%s',
+              row[1], # pacakge,
+              row[9] # source
+      )
+    })
+
+    custom <- packages[grepl('http', packages$source), ]
+    custom$source <- gsub("\\s.*", "", custom$source) # remove R version
+    if (nrow(custom) > 0) {
+
+      # If this is uncommented then the funcionality breaks,
+      # like if the on.exit() happens before pack::lockfile_create.
+      # old_repos <- options("repos")
+      # on.exit(options(repos = old_repos$repos))
+
+      # Extend options(repos) with a custom repository for pak::lockfile_create
+      options(
+        repos = unique(c(
+          options("repos")$repos,
+          custom$source
+        ))
+      )
+    }
+    custom <- apply(custom, MARGIN = 1, function(row){
+      sprintf('%s=url::%s/src/contrib/%s_%s.tar.gz',
+              row[1], # pacakge
+              row[9], # source
+              row[1], # pacakge
+              row[3] #loadedVersion
+      )
+    })
+
+    # The order does not matter.
+    packages <- c(custom, github, gitlab, cran_like, local)
+
+    pak::lockfile_create(packages, lockfile = lockfile)
+    readLines(lockfile)
+  },
+  seed = NULL
+  )
 }
