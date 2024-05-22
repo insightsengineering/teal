@@ -444,7 +444,7 @@ create_lockfile <- function(lockfile = 'session.lock') {
   readLines(lockfile)
 }
 
-create_lockfile_futures <- function(lockfile = 'session.lock'){
+create_lockfile_future <- function(lockfile = 'session.lock'){
   future::future({
     create_lockfile(lockfile)
   })
