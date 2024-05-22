@@ -97,7 +97,7 @@ ui_teal_with_splash <- function(id,
 
 #' @export
 #' @rdname module_teal_with_splash
-srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
+srv_teal_with_splash <- function(id, data, modules, filter = teal_slices(), callr_lockfile) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_class(modules, "teal_modules")
@@ -199,7 +199,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     })
 
 
-    res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter)
+    res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter, callr_lockfile = callr_lockfile)
     logger::log_trace("srv_teal_with_splash initialized module with data.")
 
     res

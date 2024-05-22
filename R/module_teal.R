@@ -123,7 +123,7 @@ ui_teal <- function(id,
 
 
 #' @rdname module_teal
-srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
+srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), callr_lockfile = callr_lockfile) {
   stopifnot(is.reactive(teal_data_rv))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal initializing the module.")
@@ -140,7 +140,12 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
 
     teal.widgets::verbatim_popup_srv(
       "lockFile",
-      verbatim_content = create_lockfile(),
+      verbatim_content = if (callr_lockfile$is_alive()) {
+        callr_lockfile$wait()
+        callr_lockfile$get_result()
+      } else {
+        callr_lockfile$get_result()
+      },
       title = ".lock file"
     )
 

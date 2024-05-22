@@ -153,6 +153,9 @@ init <- function(data,
   # log
   teal.logger::log_system_info()
 
+  logger::log_trace("pak::lockfile_create() has been started in a parallel process through callr::r_bg().")
+  callr_lockfile <- callr::r_bg(create_lockfile)
+
   # argument transformations
   ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
@@ -228,7 +231,7 @@ init <- function(data,
       if (!is.null(landing_module)) {
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
-      srv_teal_with_splash(id = id, data = data, modules = modules, filter = deep_copy_filter(filter))
+      srv_teal_with_splash(id = id, data = data, modules = modules, filter = deep_copy_filter(filter), callr_lockfile = callr_lockfile)
     }
   )
 
