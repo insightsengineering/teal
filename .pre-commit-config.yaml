@@ -26,6 +26,7 @@ repos:
           - methods
           - pak
           - rlang
+          - sessioninfo
           - shiny
           - shinyjs
           - stats

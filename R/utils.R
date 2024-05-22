@@ -394,9 +394,7 @@ get_unique_labels <- function(labels) {
 #' @keywords internal
 create_lockfile_future <- function(lockfile = 'session.lock'){
   future::future({
-    # TODO: find a replacement for devtools
-    browser()
-    packages <- devtools::session_info()$packages
+    packages <- sessioninfo::session_info()$packages
 
     # Check ?pkgdepends::pkg_refs()
     # to see why we need to append custom syntax in package names,
