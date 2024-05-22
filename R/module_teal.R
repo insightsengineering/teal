@@ -123,7 +123,7 @@ ui_teal <- function(id,
 
 
 #' @rdname module_teal
-srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile_task = lockfile_task) {
+srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
   stopifnot(is.reactive(teal_data_rv))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal initializing the module.")
@@ -140,12 +140,13 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile
 
     teal.widgets::verbatim_popup_srv(
       "lockFile",
-      verbatim_content = if (lockfile_task$status() == 'running') {
+      verbatim_content = {
+        lockfile_task <- ExtendedTask$new(create_lockfile_future)
+        lockfile_task$invoke()
+        logger::log_trace("pak::lockfile_create() has been started in a parallel process through shiny::ExtendedTask$new().")
         while (lockfile_task$status() == 'running') {
           Sys.sleep(0.25)
         }
-        lockfile_task$result()
-      } else {
         lockfile_task$result()
       },
       title = ".lock file"

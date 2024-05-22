@@ -106,10 +106,6 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_with_splash initializing module with data.")
 
-    lockfile_task <- ExtendedTask$new(create_lockfile_future)
-    lockfile_task$invoke()
-    logger::log_trace("pak::lockfile_create() has been started in a parallel process through shiny::ExtendedTask$new().")
-
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
     }
@@ -203,7 +199,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     })
 
 
-    res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter, lockfile_task = lockfile_task)
+    res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter)
     logger::log_trace("srv_teal_with_splash initialized module with data.")
 
     res
