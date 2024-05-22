@@ -100,7 +100,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @param ... arguments passed to parent [`shinytest2::AppDriver`] `click()` method.
     click = function(...) {
       super$click(...)
-      self$wait_for_idle()
+      private$wait_for_page_stability()
     },
     #' @description
     #' Check if the app has shiny errors. This checks for global shiny errors.
@@ -330,6 +330,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::assert_flag(content_visibility_auto)
       checkmate::assert_flag(opacity_property)
       checkmate::assert_flag(visibility_property)
+
+      private$wait_for_page_stability()
 
       testthat::skip_if_not(
         self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
@@ -645,6 +647,28 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       }
 
       NULL # If there are not any supported filters
+    },
+    # @description
+    # Check if the page is stable without any `DOM` updates in the body of the app.
+    # This is achieved by blocing the R process by sleeping until the page is unchanged till the `stability_period`.
+    # @param stability_period (`numeric(1)`) The time in milliseconds to wait till the page to be stable.
+    # @param check_interval (`numeric(1)`) The time in milliseconds to check for changes in the page.
+    # The stability check is reset when a change is detected in the page after sleeping for check_interval.
+    wait_for_page_stability = function(stability_period = 500, check_interval = 50) {
+      previous_content <- self$get_html("body")
+      end_time <- Sys.time() + (stability_period / 1000)
+
+      repeat {
+        Sys.sleep(check_interval / 1000)
+        current_content <- self$get_html("body")
+
+        if (!identical(previous_content, current_content)) {
+          previous_content <- current_content
+          end_time <- Sys.time() + (stability_period / 1000)
+        } else if (Sys.time() >= end_time) {
+          break
+        }
+      }
     }
   )
 )
