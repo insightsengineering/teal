@@ -445,7 +445,7 @@ create_lockfile <- function(lockfile = 'session.lock') {
 }
 
 create_lockfile_futures <- function(lockfile = 'session.lock'){
-  future_promise({
-    futures::create_lockfile(lockfile)
+  future::future({
+    create_lockfile(lockfile)
   })
 }
