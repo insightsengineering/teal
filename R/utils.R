@@ -396,9 +396,9 @@ create_lockfile_future <- function(lockfile = "session.lock") {
   future::future(
     {
       packages <- sessioninfo::session_info()$packages
-      # return(capture.output(print(packages))) # FOR TESTING
+      # # FOR TESTING return(capture.output(print(packages))) # FOR TESTING
 
-      # Check ?pkgdepends::pkg_refs()
+      # # Check '?pkgdepends::pkg_refs()'
       # to see why we need to append custom syntax in package names,
       # if they do not come from CRAN-like repository.
 
