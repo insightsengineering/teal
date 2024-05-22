@@ -14,7 +14,13 @@ ui_teal(
   footer = tags$p()
 )
 
-srv_teal(id, modules, teal_data_rv, filter = teal_slices())
+srv_teal(
+  id,
+  modules,
+  teal_data_rv,
+  filter = teal_slices(),
+  lockfile_task = lockfile_task
+)
 }
 \arguments{
 \item{id}{(\code{character(1)})
