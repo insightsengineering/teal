@@ -153,16 +153,6 @@ init <- function(data,
   # log
   teal.logger::log_system_info()
 
-  if (!identical(Sys.getenv("TESTTHAT"), "true")) {
-    future::plan(future::multisession, workers = 2)
-    logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
-    lockfile_task <- ExtendedTask$new(create_lockfile_future)
-    lockfile_task$invoke()
-    logger::log_trace("pak::lockfile_create() has been started in a parallel process through shiny::ExtendedTask$new().")
-  } else {
-    lockfile_task <- NULL
-  }
-
   # argument transformations
   ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
@@ -238,9 +228,7 @@ init <- function(data,
       if (!is.null(landing_module)) {
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
-      srv_teal_with_splash(
-        id = id, data = data, modules = modules, filter = deep_copy_filter(filter), lockfile_task = lockfile_task
-      )
+      srv_teal_with_splash(id = id, data = data, modules = modules, filter = deep_copy_filter(filter))
     }
   )
 

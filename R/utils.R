@@ -473,3 +473,19 @@ create_lockfile_future <- function(lockfile = "session.lock") {
     seed = NULL
   )
 }
+
+create_renv_lockfile_future <- function() {
+  future::future({
+    temp_dir <- tempdir()
+    lockfile_path <- file.path(temp_dir, "session.lock")
+
+    renv::snapshot(
+      lockfile = lockfile_path,
+      prompt = FALSE,
+      force = TRUE,
+      type = getOption("teal.renv.type", "implicit")
+    )
+
+    lockfile_path
+  })
+}

@@ -114,11 +114,7 @@ ui_teal <- function(id,
         footer,
         teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
         br(),
-        if (!inherits(session, "MockShinySession")) {
-          teal.widgets::verbatim_popup_ui(ns("lockFile"), "Compute .lock file", type = "link")
-        } else {
-          NULL
-        },
+        downloadLink(ns("lockFile"), "Download .lock file"),
         textOutput(ns("identifier"))
       )
     )
@@ -127,7 +123,7 @@ ui_teal <- function(id,
 
 
 #' @rdname module_teal
-srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile_task = lockfile_task) {
+srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
   stopifnot(is.reactive(teal_data_rv))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal initializing the module.")
@@ -143,16 +139,37 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile
     )
 
     if (!inherits(session, "MockShinySession")) {
-      teal.widgets::verbatim_popup_srv(
-        "lockFile",
-        verbatim_content = {
+
+      future::plan(future::multisession, workers = 2)
+      logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
+      lockfile_task <- ExtendedTask$new(create_renv_lockfile_future)
+      lockfile_task$invoke()
+      logger::log_trace("lockfile creation invoked.")
+
+      output$lockFile <- downloadHandler(
+        filename = function() {
+          'session.lock'
+        },
+        content = function(file) {
           while (lockfile_task$status() == "running") {
             Sys.sleep(0.25)
           }
-          lockfile_task$result()
+          file.copy(lockfile_task$result(), file)
+          file
         },
-        title = ".lock file"
+        contentType = "application/json"
       )
+
+      # teal.widgets::verbatim_popup_srv(
+      #   "lockFile",
+      #   verbatim_content = {
+      #     while (lockfile_task$status() == "running") {
+      #       Sys.sleep(0.25)
+      #     }
+      #     lockfile_task$result()
+      #   },
+      #   title = ".lock file"
+      # )
     }
 
     # `JavaScript` code
