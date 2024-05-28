@@ -25,6 +25,11 @@
 #'
 #' It is written as a `shiny` module so it can be added into other apps as well.
 #'
+#' @section Reproducibility:
+#' Reproducibility is supported by multiple features. `teal` includes a `utils::sessioInfo()` output to allow to compare
+#' packages used in the session. It also allows to create `renv` `.lockfile` to support project setup reproducibility.
+#' For more information about `.lockfile` creation visit [`create_renv_lockfile()`].
+#'
 #' @name module_teal
 #'
 #' @inheritParams module_teal_with_splash
