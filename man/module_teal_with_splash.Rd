@@ -14,13 +14,7 @@ ui_teal_with_splash(
   footer = tags$p()
 )
 
-srv_teal_with_splash(
-  id,
-  data,
-  modules,
-  filter = teal_slices(),
-  lockfile_task = lockfile_task
-)
+srv_teal_with_splash(id, data, modules, filter = teal_slices())
 }
 \arguments{
 \item{id}{(\code{character(1)})
