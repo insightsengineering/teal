@@ -144,7 +144,6 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
     )
 
     if (!inherits(session, "MockShinySession")) {
-
       user_lockfile <- getOption("teal.renv.lockfile", "")
       if (!file.exists(user_lockfile)) {
         # If user has setup the file, there is no need to compute a new one.
@@ -157,7 +156,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
 
       output$lockFile <- downloadHandler(
         filename = function() {
-          'project.lock'
+          "project.lock"
         },
         content = function(file) {
           if (!file.exists(user_lockfile)) {
