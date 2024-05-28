@@ -143,7 +143,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       title = "SessionInfo"
     )
 
-    if (!inherits(session, "MockShinySession")) {
+    if (!(inherits(session, "MockShinySession") || identical(Sys.getenv("TESTTHAT"), "true"))) {
 
       user_lockfile <- getOption("teal.renv.lockfile", "")
       if (!file.exists(user_lockfile)) {
