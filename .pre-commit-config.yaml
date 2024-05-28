@@ -24,9 +24,8 @@ repos:
           - logger
           - magrittr
           - methods
-          - pak
+          - renv
           - rlang
-          - sessioninfo
           - shiny
           - shinyjs
           - stats
