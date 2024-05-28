@@ -11,7 +11,7 @@
 #' This is necessary because the filter panel and modules depend on the data to initialize.
 #'
 #' `teal_with_splash` follows the `shiny` module convention.
-#' [`init()`] is a wrapper around this that assumes that `teal` it is
+#' [`init()`] is a wrapper around this that assumes that `teal` is
 #' the top-level module and cannot be embedded.
 #'
 #' Note: It is no longer recommended to embed `teal` in `shiny` apps as a module.

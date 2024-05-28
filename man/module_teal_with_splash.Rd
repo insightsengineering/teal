@@ -54,7 +54,7 @@ This module pauses app initialization pending delayed data loading.
 This is necessary because the filter panel and modules depend on the data to initialize.
 
 \code{teal_with_splash} follows the \code{shiny} module convention.
-\code{\link[=init]{init()}} is a wrapper around this that assumes that \code{teal} it is
+\code{\link[=init]{init()}} is a wrapper around this that assumes that \code{teal} is
 the top-level module and cannot be embedded.
 
 Note: It is no longer recommended to embed \code{teal} in \code{shiny} apps as a module.
