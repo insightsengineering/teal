@@ -139,7 +139,6 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
     )
 
     if (!inherits(session, "MockShinySession")) {
-
       future::plan(future::multisession, workers = 2)
       logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
       lockfile_task <- ExtendedTask$new(create_renv_lockfile_future)
@@ -148,7 +147,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
 
       output$lockFile <- downloadHandler(
         filename = function() {
-          'session.lock'
+          "session.lock"
         },
         content = function(file) {
           while (lockfile_task$status() == "running") {
