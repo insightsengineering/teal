@@ -687,7 +687,7 @@ filter <- teal_slices(
   )
 )
 
-app <- init(data, modules, filter)
-# app <- init(data, modules)
+# app <- init(data, modules, filter)
+app <- init(data, modules)
 
 runApp(app)

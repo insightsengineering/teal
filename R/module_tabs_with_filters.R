@@ -53,6 +53,8 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices(), 
   )
   teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btns)
 
+  progress$set(message = "Preparing main UI", detail = "")
+
   if (!is_module_specific) {
     # need to rearrange html so that filter panel is within tabset
     tabset_bar <- teal_ui$children[[1]]
