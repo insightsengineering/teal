@@ -151,7 +151,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
         logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
         lockfile_task <- ExtendedTask$new(create_renv_lockfile)
         lockfile_task$invoke()
-        logger::log_trace("lockfile creation invoked.")
+        logger::log_info("lockfile creation invoked.")
       }
 
       output$lockFile <- downloadHandler(

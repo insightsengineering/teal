@@ -407,12 +407,19 @@ create_renv_lockfile <- function() {
     temp_dir <- tempdir()
     lockfile_path <- file.path(temp_dir, "project.lock")
 
-    renv::snapshot(
-      lockfile = lockfile_path,
-      prompt = FALSE,
-      force = TRUE,
-      type = getOption("teal.renv.type", "implicit")
+    renv_status <- capture.output(
+      renv::snapshot(
+        lockfile = lockfile_path,
+        prompt = FALSE,
+        force = TRUE,
+        type = getOption("teal.renv.type", "implicit")
+      )
     )
+    if (any(grepl('Lockfile written', renv_status))) {
+      logger::log_info("lockfile created successfully.", namespace = "teal")
+    } else {
+      logger::log_info("lockfile created with issues.", namespace = "teal")
+    }
 
     lockfile_path
   })
