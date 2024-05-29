@@ -338,18 +338,36 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         "Element.prototype.checkVisibility is not supported in the current browser."
       )
 
-      unlist(
-        self$get_js(
-          sprintf(
-            "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({%s, %s, %s}))",
-            selector,
-            # Extra parameters
-            sprintf("contentVisibilityAuto: %s", tolower(content_visibility_auto)),
-            sprintf("opacityProperty: %s", tolower(opacity_property)),
-            sprintf("visibilityProperty: %s", tolower(visibility_property))
+      if (visibility_property) {
+        visibility <- unlist(
+          self$get_js(
+            sprintf(
+              "var selector = '%s';
+              var elements = document.querySelectorAll(selector);
+              var visibilityList = [];
+              elements.forEach(function(element) {
+                var computedStyles = window.getComputedStyle(element);
+                visibilityList.push(computedStyles.visibility !== 'hidden');
+              });
+              visibilityList;",
+              selector
+            )
           )
         )
-      )
+      } else {
+        visibility <- unlist(
+          self$get_js(
+            sprintf(
+              "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({%s, %s}))",
+              selector,
+              # Extra parameters
+              sprintf("contentVisibilityAuto: %s", tolower(content_visibility_auto)),
+              sprintf("opacityProperty: %s", tolower(opacity_property))
+            )
+          )
+        )
+      }
+      visibility
     },
     #' @description
     #' Get the active filter variables from a dataset in the `teal` app.
