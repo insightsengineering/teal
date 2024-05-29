@@ -128,7 +128,7 @@ ui_teal <- function(id,
 
 
 #' @rdname module_teal
-srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
+srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile_task) {
   stopifnot(is.reactive(teal_data_rv))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal initializing the module.")
@@ -143,22 +143,13 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       title = "SessionInfo"
     )
 
-    if (!(inherits(session, "MockShinySession") || identical(Sys.getenv("TESTTHAT"), "true"))) {
-      user_lockfile <- getOption("teal.renv.lockfile", "")
-      if (!file.exists(user_lockfile)) {
-        # If user has setup the file, there is no need to compute a new one.
-        future::plan(future::multisession, workers = 2)
-        logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
-        lockfile_task <- ExtendedTask$new(create_renv_lockfile)
-        lockfile_task$invoke()
-        logger::log_info("lockfile creation invoked.")
-      }
-
+    if (!is_mocked(session) && !is.null(lockfile_task)) {
       output$lockFile <- downloadHandler(
         filename = function() {
           "project.lock"
         },
         content = function(file) {
+          user_lockfile <- getOption("teal.renv.lockfile", "")
           if (!file.exists(user_lockfile)) {
             while (lockfile_task$status() == "running") {
               Sys.sleep(0.25)

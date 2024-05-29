@@ -153,6 +153,19 @@ init <- function(data,
   # log
   teal.logger::log_system_info()
 
+  # invoke lockfile creation
+  user_lockfile <- getOption("teal.renv.lockfile", "")
+  if (!file.exists(user_lockfile)) {
+    # If user has setup the file, there is no need to compute a new one.
+    future::plan(future::multisession, workers = 2)
+    logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
+    lockfile_task <- ExtendedTask$new(create_renv_lockfile)
+    lockfile_task$invoke()
+    logger::log_info("lockfile creation invoked.")
+  } else {
+    lockfile_task <- NULL
+  }
+
   # argument transformations
   ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
@@ -228,7 +241,9 @@ init <- function(data,
       if (!is.null(landing_module)) {
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
-      srv_teal_with_splash(id = id, data = data, modules = modules, filter = deep_copy_filter(filter))
+      srv_teal_with_splash(id = id,
+        data = data, modules = modules, filter = deep_copy_filter(filter), lockfile_task = lockfile_task
+      )
     }
   )
 

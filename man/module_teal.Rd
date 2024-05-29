@@ -14,7 +14,7 @@ ui_teal(
   footer = tags$p()
 )
 
-srv_teal(id, modules, teal_data_rv, filter = teal_slices())
+srv_teal(id, modules, teal_data_rv, filter = teal_slices(), lockfile_task)
 }
 \arguments{
 \item{id}{(\code{character(1)})
@@ -44,6 +44,8 @@ returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
 
 \item{filter}{(\code{teal_slices})
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
+
+\item{lockfile_task}{\code{\link[future:future]{future::future}} promise invoked with \code{\link{create_renv_lockfile}}}
 }
 \value{
 Returns a \code{reactive} expression which returns the currently active module.
