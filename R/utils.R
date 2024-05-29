@@ -425,10 +425,3 @@ create_renv_lockfile <- function() {
   })
 }
 
-
-#' Check is shiny session is run through testServer or different mocked up solutions.
-#' @keywords internal
-#' @noRd
-is_mocked <- function(session) {
-  inherits(session, "MockShinySession") || identical(Sys.getenv("TESTTHAT"), "true")
-}

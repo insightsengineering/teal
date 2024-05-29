@@ -143,7 +143,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile
       title = "SessionInfo"
     )
 
-    if (!is_mocked(session) && !is.null(lockfile_task)) {
+    if (!(inherits(session, "MockShinySession") || identical(Sys.getenv("TESTTHAT"), "true"))) {
       output$lockFile <- downloadHandler(
         filename = function() {
           "project.lock"

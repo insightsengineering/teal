@@ -155,7 +155,7 @@ init <- function(data,
 
   # invoke lockfile creation
   user_lockfile <- getOption("teal.renv.lockfile", "")
-  if (!file.exists(user_lockfile)) {
+  if (!file.exists(user_lockfile) && !identical(Sys.getenv("TESTTHAT"), "true")) {
     # If user has setup the file, there is no need to compute a new one.
     future::plan(future::multisession, workers = 2)
     logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
