@@ -424,4 +424,3 @@ create_renv_lockfile <- function() {
     lockfile_path
   })
 }
-
