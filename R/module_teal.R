@@ -183,9 +183,12 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
 
     observeEvent(datasets_reactive(), once = TRUE, {
       logger::log_trace("srv_teal@5 setting main ui after data was pulled")
-      on.exit(env$progress$close())
-      env$progress$set(0.5, message = "Setting up main UI")
       datasets <- datasets_reactive()
+      progress_m <- Progress$new(
+        max = length(unlist(module_labels(modules)))
+      )
+      progress_m$set(message = "Preparing modules")
+      on.exit(progress_m$close())
 
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
       removeUI(sprintf("#%s > div:nth-child(1)", session$ns("main_ui_container")))
@@ -198,7 +201,8 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
           session$ns("main_ui"),
           modules = modules,
           datasets = datasets,
-          filter = filter
+          filter = filter,
+          progress = progress_m
         )),
         # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
         # have any effect as they are ignored when not present
