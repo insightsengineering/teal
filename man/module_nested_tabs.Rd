@@ -12,13 +12,41 @@
 \alias{srv_nested_tabs.teal_module}
 \title{Create a UI of nested tabs of \code{teal_modules}}
 \usage{
-ui_nested_tabs(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
+ui_nested_tabs(
+  id,
+  modules,
+  datasets,
+  depth = 0L,
+  is_module_specific = FALSE,
+  progress = progress
+)
 
-\method{ui_nested_tabs}{default}(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
+\method{ui_nested_tabs}{default}(
+  id,
+  modules,
+  datasets,
+  depth = 0L,
+  is_module_specific = FALSE,
+  progress = progress
+)
 
-\method{ui_nested_tabs}{teal_modules}(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
+\method{ui_nested_tabs}{teal_modules}(
+  id,
+  modules,
+  datasets,
+  depth = 0L,
+  is_module_specific = FALSE,
+  progress = progress
+)
 
-\method{ui_nested_tabs}{teal_module}(id, modules, datasets, depth = 0L, is_module_specific = FALSE)
+\method{ui_nested_tabs}{teal_module}(
+  id,
+  modules,
+  datasets,
+  depth = 0L,
+  is_module_specific = FALSE,
+  progress = progress
+)
 
 srv_nested_tabs(
   id,
@@ -72,6 +100,8 @@ number which helps to determine depth of the modules nesting.}
 \item{is_module_specific}{(\code{logical(1)})
 flag determining if the filter panel is global or module-specific.
 When set to \code{TRUE}, a filter panel is called inside of each module tab.}
+
+\item{progress}{(\code{Progress}) object from \code{shiny}}
 
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
 }
