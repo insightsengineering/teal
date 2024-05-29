@@ -39,7 +39,7 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices(), 
   ns <- NS(id)
   is_module_specific <- isTRUE(attr(filter, "module_specific"))
 
-  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets, is_module_specific = is_module_specific, progress = progress)
+  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets, is_module_specific = is_module_specific, progress = progress) # nolint: line_length.
   filter_panel_btns <- tags$li(
     class = "flex-grow",
     tags$button(

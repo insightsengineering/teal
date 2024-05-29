@@ -193,7 +193,11 @@ check_filter_datanames <- function(filters, datanames) {
 #' @return Returns list of same shape as `modules`, containing `FilteredData` at every leaf.
 #' If module specific, each leaf contains different instance, otherwise every leaf contains `filtered_data_singleton`.
 #' @keywords internal
-modules_datasets <- function(data, modules, filters, filtered_data_singleton = teal_data_to_filtered_data(data), progress) {
+modules_datasets <- function(data,
+                             modules,
+                             filters,
+                             filtered_data_singleton = teal_data_to_filtered_data(data),
+                             progress) {
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(filters, "modules_teal_slices")
