@@ -415,7 +415,7 @@ create_renv_lockfile <- function() {
         type = getOption("teal.renv.type", "implicit")
       )
     )
-    if (any(grepl('Lockfile written', renv_status))) {
+    if (any(grepl("Lockfile written", renv_status))) {
       logger::log_info("lockfile created successfully.", namespace = "teal")
     } else {
       logger::log_info("lockfile created with issues.", namespace = "teal")
