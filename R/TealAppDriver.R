@@ -76,7 +76,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         strict = FALSE
       )
 
-      required_version <- "105"
+      required_version <- "121"
 
       testthat::skip_if(
         is.na(chrome_version),
