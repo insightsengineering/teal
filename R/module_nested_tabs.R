@@ -36,7 +36,7 @@
 NULL
 
 #' @rdname module_nested_tabs
-ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = progress) {
+ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_count(depth)
   checkmate::assert_r6(progress, "Progress")
@@ -45,13 +45,13 @@ ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific
 
 #' @rdname module_nested_tabs
 #' @export
-ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = progress) {
+ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname module_nested_tabs
 #' @export
-ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = progress) { # nolint: line_length.
+ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress) {
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   ns <- NS(id)
   do.call(
@@ -86,7 +86,7 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
 
 #' @rdname module_nested_tabs
 #' @export
-ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = progress) { # nolint: line_length.
+ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress) {
   checkmate::assert_class(datasets, classes = "FilteredData")
   ns <- NS(id)
 

@@ -30,7 +30,7 @@
 NULL
 
 #' @rdname module_tabs_with_filters
-ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices(), progress = progress) {
+ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices(), progress) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   checkmate::assert_class(filter, "teal_slices")
