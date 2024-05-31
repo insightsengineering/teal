@@ -76,7 +76,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         strict = FALSE
       )
 
-      required_version <- "105"
+      required_version <- "121"
 
       testthat::skip_if(
         is.na(chrome_version),
@@ -654,7 +654,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     # @param stability_period (`numeric(1)`) The time in milliseconds to wait till the page to be stable.
     # @param check_interval (`numeric(1)`) The time in milliseconds to check for changes in the page.
     # The stability check is reset when a change is detected in the page after sleeping for check_interval.
-    wait_for_page_stability = function(stability_period = 500, check_interval = 50) {
+    wait_for_page_stability = function(stability_period = 2000, check_interval = 200) {
       previous_content <- self$get_html("body")
       end_time <- Sys.time() + (stability_period / 1000)
 
