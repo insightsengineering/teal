@@ -162,6 +162,7 @@ init <- function(data,
     lockfile_task <- ExtendedTask$new(create_renv_lockfile)
     lockfile_task$invoke()
     logger::log_info("lockfile creation invoked.")
+    onStop(function() future::plan(future::sequential))
   } else {
     lockfile_task <- NULL
   }
