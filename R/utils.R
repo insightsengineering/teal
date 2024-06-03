@@ -405,7 +405,7 @@ get_unique_labels <- function(labels) {
 create_renv_lockfile <- function() {
   future::future({
     temp_dir <- tempdir()
-    lockfile_path <- file.path(temp_dir, "project.lock")
+    lockfile_path <- file.path(temp_dir, "renv.lock")
 
     renv_status <- capture.output(
       renv::snapshot(
