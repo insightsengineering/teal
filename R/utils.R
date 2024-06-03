@@ -419,10 +419,9 @@ get_unique_labels <- function(labels) {
 #' @keywords internal
 create_renv_lockfile <- function(old_plan) {
   promise <- promises::future_promise({
-
     renv_status <- utils::capture.output(
       renv::snapshot(
-        lockfile = 'teal_renv_lock.lock', # if a file is created in tempdir() it gets deleted on 'then(onFulfilled' part
+        lockfile = "teal_renv_lock.lock", # if a file is created in tempdir() it gets deleted on 'then(onFulfilled' part
         prompt = FALSE,
         force = TRUE
         # type = is taken from renv::settings$snapshot.type()
@@ -436,6 +435,8 @@ create_renv_lockfile <- function(old_plan) {
 
     lockfile_path
   })
-  promise |> promises::then(onFulfilled = function(){future::plan(old_plan)})
+  promise |> promises::then(onFulfilled = function() {
+    future::plan(old_plan)
+  })
   promise
 }
