@@ -163,7 +163,7 @@ init <- function(data,
     lockfile_task$invoke()
     logger::log_info("lockfile creation invoked.")
 
-    shiny::onStop(function()future::plan(old_plan))
+    shiny::onStop(function() future::plan(old_plan))
   } else {
     lockfile_task <- NULL
   }
