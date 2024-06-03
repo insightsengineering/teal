@@ -404,21 +404,23 @@ get_unique_labels <- function(labels) {
 #' `renv::settings$snapshot.type("custom")` and set `renv.snapshot.filter` option.
 #'
 #' @note
-#' This function computes the `.lockfile` as a `future::future` promise, while
-#' running the evaluation of the process on a separate worker. `future::plan()` and `shiny::ExtendedTask()` are used to
-#' setup parallel asynchronous computations.
+#' This function computes the `.lockfile` as a `promises::future_promise` promise, while
+#' running the evaluation of the process on a separate worker. If `future::plan()` was set to something different than
+#' `future::sequential`, it reuses the parallel backed. If not, it sets `future::multisession` as a parallel plan with
+#' 2 workers. Then, `shiny::ExtendedTask()` is used to run asynchronous computations. If `teal` app started with
+#' `future::sequential` plan, is it set back once the task is finished.
 #'
 #' @section `.lockfile` usage:
 #' Once you have a `.lockfile` file, you can restore R project with `ren::init();renv::restore()`.
 #'
-#' @param old_plan An old `future::plan` to restore after computations are finished.
+#' @param close Whether to set `future::plan` to `future::sequential` when finishing the task.
 #'
 #' @seealso [renv::snapshot()], [renv::restore()], [renv::init()].
 #'
 #' @return (`character(1)`) the path to the `lockfile` created in a `tempdir()`.
 #'
 #' @keywords internal
-create_renv_lockfile <- function(old_plan) {
+create_renv_lockfile <- function(close) {
   promise <- promises::future_promise({
     # Below is not a file in tempdir() directory.
     # If a file is created in tempdir() it gets deleted on 'then(onFulfilled' part.
@@ -440,8 +442,10 @@ create_renv_lockfile <- function(old_plan) {
 
     lockfile_path
   })
-  promise |> promises::then(onFulfilled = function() {
-    future::plan(old_plan)
-  })
+  if (close) {
+    promise |> promises::then(onFulfilled = function() {
+      future::plan(future::sequential)
+    })
+  }
   promise
 }

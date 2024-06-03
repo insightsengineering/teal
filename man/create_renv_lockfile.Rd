@@ -4,10 +4,10 @@
 \alias{create_renv_lockfile}
 \title{Create \code{renv} \code{.lock} file}
 \usage{
-create_renv_lockfile(old_plan)
+create_renv_lockfile(close)
 }
 \arguments{
-\item{old_plan}{An old \code{future::plan} to restore after computations are finished.}
+\item{close}{Whether to set \code{future::plan} to \code{future::sequential} when finishing the task.}
 }
 \value{
 (\code{character(1)}) the path to the \code{lockfile} created in a \code{tempdir()}.
@@ -33,9 +33,11 @@ to see what \code{DESCRIPTION} fields are included in the \code{.lockfile}.
 }
 }
 \note{
-This function computes the \code{.lockfile} as a \code{future::future} promise, while
-running the evaluation of the process on a separate worker. \code{future::plan()} and \code{shiny::ExtendedTask()} are used to
-setup parallel asynchronous computations.
+This function computes the \code{.lockfile} as a \code{promises::future_promise} promise, while
+running the evaluation of the process on a separate worker. If \code{future::plan()} was set to something different than
+\code{future::sequential}, it reuses the parallel backed. If not, it sets \code{future::multisession} as a parallel plan with
+2 workers. Then, \code{shiny::ExtendedTask()} is used to run asynchronous computations. If \code{teal} app started with
+\code{future::sequential} plan, is it set back once the task is finished.
 }
 \section{\code{.lockfile} usage}{
 

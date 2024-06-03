@@ -154,13 +154,18 @@ init <- function(data,
   teal.logger::log_system_info()
 
   # invoke lockfile creation
+  # If user has setup the file, there is no need to compute a new one.
   user_lockfile <- getOption("teal.renv.lockfile", "")
   if (!(file.exists(user_lockfile) || identical(Sys.getenv("TESTTHAT"), "true"))) {
-    # If user has setup the file, there is no need to compute a new one.
+
     old_plan <- future::plan()
-    future::plan(future::multisession, workers = 2)
+    # If there is already a parallel backend, reuse it.
+    if (inherits(old_plan, "sequential")) {
+      future::plan(future::multisession, workers = 2)
+    }
+
     lockfile_task <- ExtendedTask$new(create_renv_lockfile)
-    lockfile_task$invoke(old_plan)
+    lockfile_task$invoke(inherits(old_plan, "sequential"))
     logger::log_info("lockfile creation invoked.")
   } else {
     lockfile_task <- NULL
