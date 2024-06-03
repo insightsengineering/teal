@@ -440,6 +440,8 @@ create_renv_lockfile <- function(old_plan) {
 
     lockfile_path
   })
-  promise |> promises::then(onFulfilled = function(){future::plan(old_plan)})
+  promise |> promises::then(onFulfilled = function() {
+    future::plan(old_plan)
+  })
   promise
 }
