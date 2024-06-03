@@ -395,9 +395,10 @@ get_unique_labels <- function(labels) {
 #' - **Working directory `.lockfile`**: If `options("teal.renv.lockfile")` is empty, by default `teal` will
 #' create an `implicit` type of the `.lockfile`, that uses `renv::dependencies()` to detect all R packages in the
 #' current project working directory.
-#' - **`DESCRIPTION` based `.lockfile`**: You can always include a `DESCRIPTION` file in your working directory and enable
-#' `.lockfile` creation based on this file. To do this, run `renv::settings$snapshot.type("explicit")`. Naming of `type`
-#' is the same as in `renv::snapshot()`. For the `"explicit"` type refer to `renv::settings$package.dependency.fields()`
+#' - **`DESCRIPTION` based `.lockfile`**: You can always include a `DESCRIPTION` file in your working directory and
+#' enable `.lockfile` creation based on this file. To do this, run `renv::settings$snapshot.type("explicit")`.
+#' Naming of `type` is the same as in `renv::snapshot()`. For the `"explicit"` type refer to
+#' `renv::settings$package.dependency.fields()`
 #' to see what `DESCRIPTION` fields are included in the `.lockfile`.
 #' - **Custom files based `.lockfile`**: If you want to specify custom files as a base for the `.lockfile`, then run
 #' `renv::settings$snapshot.type("custom")` and set `renv.snapshot.filter` option.
@@ -417,13 +418,11 @@ get_unique_labels <- function(labels) {
 #'
 #' @keywords internal
 create_renv_lockfile <- function() {
-  future::future({
-    temp_dir <- tempdir()
-    lockfile_path <- file.path(temp_dir, "renv.lock")
+  promise <- promises::future_promise({
 
     renv_status <- utils::capture.output(
       renv::snapshot(
-        lockfile = lockfile_path,
+        lockfile = 'teal_renv_lock.lock', # if a file is created in tempdir() it gets deleted on 'then(onFulfilled' part
         prompt = FALSE,
         force = TRUE
         # type = is taken from renv::settings$snapshot.type()
@@ -437,6 +436,8 @@ create_renv_lockfile <- function() {
 
     lockfile_path
   })
+  promise |> promises::then(onFulfilled = function(){future::plan(future::sequential)})
+  promise
 }
 
 create_lockfile <- function() {
