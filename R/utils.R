@@ -395,7 +395,7 @@ get_unique_labels <- function(labels) {
 #' - **Working directory `.lockfile`**: If `options("teal.renv.lockfile")` is empty, by default `teal` will
 #' create an `implicit` type of the `.lockfile`, that uses `renv::dependencies()` to detect all R packages in the
 #' current project working directory.
-#' - **`DESCRIPTION` based lockfile**: You can always include a `DESCRIPTION` file in your working directory and enable
+#' - **`DESCRIPTION` based `.lockfile`**: You can always include a `DESCRIPTION` file in your working directory and enable
 #' `.lockfile` creation based on this file. To do this, run `renv::settings$snapshot.type("explicit")`. Naming of `type`
 #' is the same as in `renv::snapshot()`. For the `"explicit"` type refer to `renv::settings$package.dependency.fields()`
 #' to see what `DESCRIPTION` fields are included in the `.lockfile`.

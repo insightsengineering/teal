@@ -20,7 +20,7 @@ The \code{.lockfile} creation is based on \code{\link[renv:snapshot]{renv::snaps
 \item \strong{Working directory \code{.lockfile}}: If \code{options("teal.renv.lockfile")} is empty, by default \code{teal} will
 create an \code{implicit} type of the \code{.lockfile}, that uses \code{renv::dependencies()} to detect all R packages in the
 current project working directory.
-\item \strong{\code{DESCRIPTION} based lockfile}: You can always include a \code{DESCRIPTION} file in your working directory and enable
+\item \strong{\code{DESCRIPTION} based \code{.lockfile}}: You can always include a \code{DESCRIPTION} file in your working directory and enable
 \code{.lockfile} creation based on this file. To do this, run \code{renv::settings$snapshot.type("explicit")}. Naming of \code{type}
 is the same as in \code{renv::snapshot()}. For the \code{"explicit"} type refer to \code{renv::settings$package.dependency.fields()}
 to see what \code{DESCRIPTION} fields are included in the \code{.lockfile}.
