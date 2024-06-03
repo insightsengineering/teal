@@ -441,5 +441,5 @@ create_renv_lockfile <- function() {
 
 create_lockfile <- function() {
   user_lockfile <- getOption("teal.renv.lockfile", "")
-  !(file.exists(user_lockfile) && identical(Sys.getenv("TESTTHAT"), "true"))
+  !(file.exists(user_lockfile) || identical(Sys.getenv("TESTTHAT"), "true"))
 }
