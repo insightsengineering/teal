@@ -239,7 +239,7 @@ init <- function(data,
   res <- list(
     ui = function(request) ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-      if (create_lockfile){
+      if (create_lockfile) {
         shiny::onStop(function() future::plan(future::sequential))
       }
       if (!is.null(landing_module)) {
