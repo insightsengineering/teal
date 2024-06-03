@@ -24,6 +24,7 @@ repos:
           - logger
           - magrittr
           - methods
+          - promises
           - renv
           - rlang
           - shiny
