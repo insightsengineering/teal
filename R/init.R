@@ -156,11 +156,14 @@ init <- function(data,
   # invoke lockfile creation
   if (create_lockfile()) {
     # If user has setup the file, there is no need to compute a new one.
-    tplan <- future::plan(future::multisession, workers = 2)
+    old_plan <- future::plan()
+    future::plan(future::multisession, workers = 2)
     logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
     lockfile_task <- ExtendedTask$new(create_renv_lockfile)
     lockfile_task$invoke()
     logger::log_info("lockfile creation invoked.")
+
+    shiny::onStop(function()future::plan(old_plan))
   } else {
     lockfile_task <- NULL
   }
