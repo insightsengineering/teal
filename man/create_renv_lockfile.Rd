@@ -4,7 +4,10 @@
 \alias{create_renv_lockfile}
 \title{Create \code{renv} \code{.lock} file}
 \usage{
-create_renv_lockfile()
+create_renv_lockfile(old_plan)
+}
+\arguments{
+\item{old_plan}{An old \code{future::plan} to restore after computations are finished.}
 }
 \value{
 (\code{character(1)}) the path to the \code{lockfile} created in a \code{tempdir()}.

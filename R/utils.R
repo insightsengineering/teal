@@ -411,6 +411,7 @@ get_unique_labels <- function(labels) {
 #' @section `.lockfile` usage:
 #' Once you have a `.lockfile` file, you can restore R project with `ren::init();renv::restore()`.
 #'
+#' @param old_plan An old `future::plan` to restore after computations are finished.
 #'
 #' @seealso [renv::snapshot()], [renv::restore()], [renv::init()].
 #'
@@ -419,10 +420,13 @@ get_unique_labels <- function(labels) {
 #' @keywords internal
 create_renv_lockfile <- function(old_plan) {
   promise <- promises::future_promise({
+    # Below is not a file in tempdir() directory.
+    # If a file is created in tempdir() it gets deleted on 'then(onFulfilled' part.
+    lockfile_path <- 'teal_renv_lock.lock'
 
     renv_status <- utils::capture.output(
       renv::snapshot(
-        lockfile = 'teal_renv_lock.lock', # if a file is created in tempdir() it gets deleted on 'then(onFulfilled' part
+        lockfile = lockfile_path,
         prompt = FALSE,
         force = TRUE
         # type = is taken from renv::settings$snapshot.type()
