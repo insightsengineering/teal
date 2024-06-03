@@ -387,17 +387,31 @@ get_unique_labels <- function(labels) {
 #' Function allows to create `renv::snapshot()` during the `teal` initialization.
 #'
 #' @details
-#' User is able to provide his/her own predefined `.lockfile` by setting the path to the `.lockfile` through
-#' `options("teal.renv.lockfile")`. Then this function is not used. If this option is empty, by default `teal` will
-#' create an `implicit` type of the `.lockfile`, that uses `renv::dependencies()` to detect all R packages in current
-#' project working directory. You can always include a `DESCRIPTION` file in your working directory and enable
-#' `.lockfile` creation based on this file. To do this, set `options(teal.renv.type = "explicit")`.
-#' Naming of `type` is the same as in `renv::snapshot()`.
+#'
+#' The `.lockfile` creation is based on [renv::snapshot()]. It allows multiple ways of `.lockfile` creation.
+#'
+#' - **Pre-computed `.lockfile`**: User is able to provide his own pre-computed `.lockfile` by setting the path to the
+#' `.lockfile` through `options("teal.renv.lockfile")`. Then this function is not used.
+#' - **Working directory `.lockfile`**: If `options("teal.renv.lockfile")` is empty, by default `teal` will
+#' create an `implicit` type of the `.lockfile`, that uses `renv::dependencies()` to detect all R packages in the
+#' current project working directory.
+#' - **`DESCRIPTION` based lockfile**: You can always include a `DESCRIPTION` file in your working directory and enable
+#' `.lockfile` creation based on this file. To do this, run `renv::settings$snapshot.type("explicit")`. Naming of `type`
+#' is the same as in `renv::snapshot()`. For the `"explicit"` type refer to `renv::settings$package.dependency.fields()`
+#' to see what `DESCRIPTION` fields are included in the `.lockfile`.
+#' - **Custom files based `.lockfile`**: If you want to specify custom files as a base for the `.lockfile`, then run
+#' `renv::settings$snapshot.type("custom")` and set `renv.snapshot.filter` option.
 #'
 #' @note
 #' This function computes the `.lockfile` as a `future::future` promise, while
 #' running the evaluation of the process on a separate worker. `future::plan()` and `shiny::ExtendedTask()` are used to
 #' setup parallel asynchronous computations.
+#'
+#' @section `.lockfile` usage:
+#' Once you have a `.lockfile` file, you can restore R project with `ren::init();renv::restore()`.
+#'
+#'
+#' @seealso [renv::snapshot()], [renv::restore()], [renv::init()].
 #'
 #' @return (`character(1)`) the path to the `lockfile` created in a `tempdir()`.
 #'
@@ -411,8 +425,8 @@ create_renv_lockfile <- function() {
       renv::snapshot(
         lockfile = lockfile_path,
         prompt = FALSE,
-        force = TRUE,
-        type = getOption("teal.renv.type", "implicit")
+        force = TRUE
+        # type = is taken from renv::settings$snapshot.type()
       )
     )
     if (any(grepl("Lockfile written", renv_status))) {

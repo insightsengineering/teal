@@ -13,16 +13,32 @@ create_renv_lockfile()
 Function allows to create \code{renv::snapshot()} during the \code{teal} initialization.
 }
 \details{
-User is able to provide his/her own predefined \code{.lockfile} by setting the path to the \code{.lockfile} through
-\code{options("teal.renv.lockfile")}. Then this function is not used. If this option is empty, by default \code{teal} will
-create an \code{implicit} type of the \code{.lockfile}, that uses \code{renv::dependencies()} to detect all R packages in current
-project working directory. You can always include a \code{DESCRIPTION} file in your working directory and enable
-\code{.lockfile} creation based on this file. To do this, set \code{options(teal.renv.type = "explicit")}.
-Naming of \code{type} is the same as in \code{renv::snapshot()}.
+The \code{.lockfile} creation is based on \code{\link[renv:snapshot]{renv::snapshot()}}. It allows multiple ways of \code{.lockfile} creation.
+\itemize{
+\item \strong{Pre-computed \code{.lockfile}}: User is able to provide his own pre-computed \code{.lockfile} by setting the path to the
+\code{.lockfile} through \code{options("teal.renv.lockfile")}. Then this function is not used.
+\item \strong{Working directory \code{.lockfile}}: If \code{options("teal.renv.lockfile")} is empty, by default \code{teal} will
+create an \code{implicit} type of the \code{.lockfile}, that uses \code{renv::dependencies()} to detect all R packages in the
+current project working directory.
+\item \strong{\code{DESCRIPTION} based lockfile}: You can always include a \code{DESCRIPTION} file in your working directory and enable
+\code{.lockfile} creation based on this file. To do this, run \code{renv::settings$snapshot.type("explicit")}. Naming of \code{type}
+is the same as in \code{renv::snapshot()}. For the \code{"explicit"} type refer to \code{renv::settings$package.dependency.fields()}
+to see what \code{DESCRIPTION} fields are included in the \code{.lockfile}.
+\item \strong{Custom files based \code{.lockfile}}: If you want to specify custom files as a base for the \code{.lockfile}, then run
+\code{renv::settings$snapshot.type("custom")} and set \code{renv.snapshot.filter} option.
+}
 }
 \note{
 This function computes the \code{.lockfile} as a \code{future::future} promise, while
 running the evaluation of the process on a separate worker. \code{future::plan()} and \code{shiny::ExtendedTask()} are used to
 setup parallel asynchronous computations.
+}
+\section{\code{.lockfile} usage}{
+
+Once you have a \code{.lockfile} file, you can restore R project with \verb{ren::init();renv::restore()}.
+}
+
+\seealso{
+\code{\link[renv:snapshot]{renv::snapshot()}}, \code{\link[renv:restore]{renv::restore()}}, \code{\link[renv:init]{renv::init()}}.
 }
 \keyword{internal}
