@@ -36,7 +36,7 @@ URL: https://insightsengineering.github.io/teal/,
 BugReports: https://github.com/insightsengineering/teal/issues
 Depends:
     R (>= 4.0),
-    shiny (>= 1.7.0),
+    shiny (>= 1.8.1),
     teal.data (>= 0.5.0),
     teal.slice (>= 0.5.0)
 Imports:
