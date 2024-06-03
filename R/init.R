@@ -154,7 +154,8 @@ init <- function(data,
   teal.logger::log_system_info()
 
   # invoke lockfile creation
-  if (create_lockfile()) {
+  user_lockfile <- getOption("teal.renv.lockfile", "")
+  if (!(file.exists(user_lockfile) || identical(Sys.getenv("TESTTHAT"), "true"))) {
     # If user has setup the file, there is no need to compute a new one.
     old_plan <- future::plan()
     future::plan(future::multisession, workers = 2)
