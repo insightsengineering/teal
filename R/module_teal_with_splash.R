@@ -111,7 +111,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices(), lock
       shinyjs::showLog()
     }
 
-    if (create_lockfile()){
+    if (create_lockfile()) {
       shiny::onStop(function() {
         while (lockfile_task$status() == "running") {
           Sys.sleep(0.25)
