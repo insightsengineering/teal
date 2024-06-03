@@ -209,6 +209,8 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
         immediate = TRUE
       )
 
+      progress_m$set(message = "Finalizing")
+
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)
       srv_tabs_with_filters(
