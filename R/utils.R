@@ -421,7 +421,7 @@ create_renv_lockfile <- function() {
     temp_dir <- tempdir()
     lockfile_path <- file.path(temp_dir, "renv.lock")
 
-    renv_status <- capture.output(
+    renv_status <- utils::capture.output(
       renv::snapshot(
         lockfile = lockfile_path,
         prompt = FALSE,
