@@ -159,7 +159,6 @@ init <- function(data,
     # If user has setup the file, there is no need to compute a new one.
     old_plan <- future::plan()
     future::plan(future::multisession, workers = 2)
-    logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
     lockfile_task <- ExtendedTask$new(create_renv_lockfile)
     lockfile_task$invoke(old_plan)
     logger::log_info("lockfile creation invoked.")
