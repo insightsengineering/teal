@@ -422,7 +422,7 @@ create_renv_lockfile <- function(old_plan) {
   promise <- promises::future_promise({
     # Below is not a file in tempdir() directory.
     # If a file is created in tempdir() it gets deleted on 'then(onFulfilled' part.
-    lockfile_path <- 'teal_renv_lock.lock'
+    lockfile_path <- "teal_renv_lock.lock"
 
     renv_status <- utils::capture.output(
       renv::snapshot(
