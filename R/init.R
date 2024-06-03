@@ -160,10 +160,8 @@ init <- function(data,
     future::plan(future::multisession, workers = 2)
     logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
     lockfile_task <- ExtendedTask$new(create_renv_lockfile)
-    lockfile_task$invoke()
+    lockfile_task$invoke(old_plan)
     logger::log_info("lockfile creation invoked.")
-
-    shiny::onStop(function() future::plan(old_plan))
   } else {
     lockfile_task <- NULL
   }

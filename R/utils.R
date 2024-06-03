@@ -417,7 +417,7 @@ get_unique_labels <- function(labels) {
 #' @return (`character(1)`) the path to the `lockfile` created in a `tempdir()`.
 #'
 #' @keywords internal
-create_renv_lockfile <- function() {
+create_renv_lockfile <- function(old_plan) {
   promise <- promises::future_promise({
 
     renv_status <- utils::capture.output(
@@ -436,7 +436,7 @@ create_renv_lockfile <- function() {
 
     lockfile_path
   })
-  promise |> promises::then(onFulfilled = function(){future::plan(future::sequential)})
+  promise |> promises::then(onFulfilled = function(){future::plan(old_plan)})
   promise
 }
 
