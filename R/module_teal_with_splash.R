@@ -111,6 +111,15 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices(), lock
       shinyjs::showLog()
     }
 
+    if (create_lockfile()){
+      shiny::onStop(function() {
+        while (lockfile_task$status() == "running") {
+          Sys.sleep(0.25)
+        }
+        future::plan(future::sequential)
+      })
+    }
+
     # teal_data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
     teal_data_rv <- if (inherits(data, "teal_data_module")) {

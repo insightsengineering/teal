@@ -154,9 +154,7 @@ init <- function(data,
   teal.logger::log_system_info()
 
   # invoke lockfile creation
-  user_lockfile <- getOption("teal.renv.lockfile", "")
-  create_lockfile <- !(file.exists(user_lockfile) && identical(Sys.getenv("TESTTHAT"), "true"))
-  if (create_lockfile) {
+  if (create_lockfile()) {
     # If user has setup the file, there is no need to compute a new one.
     tplan <- future::plan(future::multisession, workers = 2)
     logger::log_trace("future::plan() set: using future::multisession and 2 workers.")
@@ -239,14 +237,6 @@ init <- function(data,
   res <- list(
     ui = function(request) ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
-      if (create_lockfile){
-        shiny::onStop(function() {
-          while (lockfile_task$status() == "running") {
-            Sys.sleep(0.25)
-          }
-          future::plan(future::sequential)
-        })
-      }
       if (!is.null(landing_module)) {
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
