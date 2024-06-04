@@ -143,7 +143,8 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile
       title = "SessionInfo"
     )
 
-    if (!(inherits(session, "MockShinySession") || identical(Sys.getenv("TESTTHAT"), "true"))) {
+    if (!(is_mocked(session) || is_in_test())) {
+      shiny::onStop(function() file.remove('teal_renv_lock.lock'))
       output$lockFile <- downloadHandler(
         filename = function() {
           "renv.lock"

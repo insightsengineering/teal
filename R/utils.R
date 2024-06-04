@@ -449,3 +449,15 @@ create_renv_lockfile <- function(close) {
   }
   promise
 }
+
+is_r_cmd_check <- function() {
+  ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_", "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
+}
+
+is_in_test <- function() {
+  identical(Sys.getenv("TESTTHAT"), "true")
+}
+
+is_mocked <- function(session) {
+  inherits(session, "MockShinySession")
+}

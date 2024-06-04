@@ -156,7 +156,7 @@ init <- function(data,
   # invoke lockfile creation
   # If user has setup the file, there is no need to compute a new one.
   user_lockfile <- getOption("teal.renv.lockfile", "")
-  if (!(file.exists(user_lockfile) || identical(Sys.getenv("TESTTHAT"), "true"))) {
+  if (!(file.exists(user_lockfile) || is_in_test() || is_r_cmd_check() )) {
     old_plan <- future::plan()
     # If there is already a parallel backend, reuse it.
     if (inherits(old_plan, "sequential")) {
