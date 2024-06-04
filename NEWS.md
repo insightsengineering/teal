@@ -2,7 +2,7 @@
 
 ### New features
 
-* Footer of `teal` apps is enriched with a modal that shows `.lock` file created with `pak` package. 
+* Footer of `teal` apps is enriched with a button that allows to download the `.lock` file created with `renv` package. 
 This will boost the reproducibility of the app.
 
 ### Miscellaneous
