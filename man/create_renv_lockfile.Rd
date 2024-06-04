@@ -19,8 +19,8 @@ Function allows to create \code{renv::snapshot()} during the \code{teal} initial
 The \code{.lockfile} creation is based on \code{\link[renv:snapshot]{renv::snapshot()}}. It allows multiple ways of \code{.lockfile} creation.
 \itemize{
 \item \strong{Pre-computed \code{.lockfile}}: User is able to provide his own pre-computed \code{.lockfile} by setting the path to the
-\code{.lockfile} through \code{options("teal.renv.lockfile")}. Then this function is not used.
-\item \strong{Working directory \code{.lockfile}}: If \code{options("teal.renv.lockfile")} is empty, by default \code{teal} will
+\code{.lockfile} through \code{options(teal.renv.lockfile = "")}. Then this function is not used.
+\item \strong{Working directory \code{.lockfile}}: If \code{options(teal.renv.lockfile)} is empty, by default \code{teal} will
 create an \code{implicit} type of the \code{.lockfile}, that uses \code{renv::dependencies()} to detect all R packages in the
 current project working directory.
 \item \strong{\code{DESCRIPTION} based \code{.lockfile}}: You can always include a \code{DESCRIPTION} file in your working directory and

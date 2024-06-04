@@ -391,8 +391,8 @@ get_unique_labels <- function(labels) {
 #' The `.lockfile` creation is based on [renv::snapshot()]. It allows multiple ways of `.lockfile` creation.
 #'
 #' - **Pre-computed `.lockfile`**: User is able to provide his own pre-computed `.lockfile` by setting the path to the
-#' `.lockfile` through `options("teal.renv.lockfile")`. Then this function is not used.
-#' - **Working directory `.lockfile`**: If `options("teal.renv.lockfile")` is empty, by default `teal` will
+#' `.lockfile` through `options(teal.renv.lockfile = "")`. Then this function is not used.
+#' - **Working directory `.lockfile`**: If `options(teal.renv.lockfile)` is empty, by default `teal` will
 #' create an `implicit` type of the `.lockfile`, that uses `renv::dependencies()` to detect all R packages in the
 #' current project working directory.
 #' - **`DESCRIPTION` based `.lockfile`**: You can always include a `DESCRIPTION` file in your working directory and
