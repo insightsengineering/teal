@@ -6,13 +6,7 @@
 \alias{srv_tabs_with_filters}
 \title{Add right filter panel into each of the top-level \code{teal_modules} UIs}
 \usage{
-ui_tabs_with_filters(
-  id,
-  modules,
-  datasets,
-  filter = teal_slices(),
-  progress = progress
-)
+ui_tabs_with_filters(id, modules, datasets, filter = teal_slices(), progress)
 
 srv_tabs_with_filters(
   id,
