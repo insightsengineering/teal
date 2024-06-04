@@ -28,6 +28,7 @@ jobs:
       additional-env-vars: |
         _R_CHECK_CRAN_INCOMING_REMOTE_=false
         TESTING_DEPTH=5
+        _R_CHECK_EXAMPLE_TIMING_THRESHOLD_=6
       additional-r-cmd-check-params: --as-cran
       enforce-note-blocklist: true
       note-blocklist: |
@@ -47,6 +48,8 @@ jobs:
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
+      additional-env-vars: |
+        _R_CHECK_EXAMPLE_TIMING_THRESHOLD_=6
       enforce-note-blocklist: true
       publish-unit-test-report-gh-pages: false
       junit-xml-comparison: false
