@@ -165,7 +165,7 @@ init <- function(data,
 
     lockfile_task <- ExtendedTask$new(create_renv_lockfile)
     lockfile_task$invoke(inherits(old_plan, "sequential"))
-    logger::log_info("lockfile creation invoked.")
+    logger::log_trace("lockfile creation invoked.")
   } else {
     lockfile_task <- NULL
   }
