@@ -27,9 +27,6 @@ app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = example_module()
 )
-\dontshow{
-Sys.sleep(5) # we need shiny::ExtendedTask inside init to finish and close extra connection
-}
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
