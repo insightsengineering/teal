@@ -47,8 +47,6 @@ jobs:
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
-      additional-env-vars: |
-        _R_CHECK_CONNECTIONS_LEFT_OPEN_=false
       enforce-note-blocklist: true
       publish-unit-test-report-gh-pages: false
       junit-xml-comparison: false
