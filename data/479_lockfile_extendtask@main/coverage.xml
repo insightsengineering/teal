@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.5002156101768" branch-rate="0" lines-covered="1160" lines-valid="2319" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-06-04 14:04:24.403759">
+<coverage line-rate="0.5002156101768" branch-rate="0" lines-covered="1160" lines-valid="2319" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-06-05 07:38:55.231468">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -4923,42 +4923,42 @@
             </method>
             <method name="create_renv_lockfile" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
+                <line number="421" hits="0" branch="false"/>
                 <line number="424" hits="0" branch="false"/>
+                <line number="426" hits="0" branch="false"/>
                 <line number="427" hits="0" branch="false"/>
+                <line number="428" hits="0" branch="false"/>
                 <line number="429" hits="0" branch="false"/>
                 <line number="430" hits="0" branch="false"/>
-                <line number="431" hits="0" branch="false"/>
                 <line number="432" hits="0" branch="false"/>
                 <line number="433" hits="0" branch="false"/>
+                <line number="434" hits="0" branch="false"/>
                 <line number="435" hits="0" branch="false"/>
                 <line number="436" hits="0" branch="false"/>
                 <line number="437" hits="0" branch="false"/>
                 <line number="438" hits="0" branch="false"/>
-                <line number="439" hits="0" branch="false"/>
                 <line number="440" hits="0" branch="false"/>
                 <line number="441" hits="0" branch="false"/>
+                <line number="442" hits="0" branch="false"/>
                 <line number="443" hits="0" branch="false"/>
                 <line number="444" hits="0" branch="false"/>
                 <line number="445" hits="0" branch="false"/>
-                <line number="446" hits="0" branch="false"/>
                 <line number="447" hits="0" branch="false"/>
-                <line number="448" hits="0" branch="false"/>
-                <line number="450" hits="0" branch="false"/>
               </lines>
             </method>
             <method name="is_r_cmd_check" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="454" hits="0" branch="false"/>
+                <line number="451" hits="0" branch="false"/>
               </lines>
             </method>
             <method name="is_in_test" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="458" hits="27" branch="false"/>
+                <line number="455" hits="27" branch="false"/>
               </lines>
             </method>
             <method name="is_mocked" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="462" hits="18" branch="false"/>
+                <line number="459" hits="18" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -5136,30 +5136,30 @@
             <line number="365" hits="44" branch="false"/>
             <line number="367" hits="102" branch="false"/>
             <line number="381" hits="99" branch="false"/>
+            <line number="421" hits="0" branch="false"/>
             <line number="424" hits="0" branch="false"/>
+            <line number="426" hits="0" branch="false"/>
             <line number="427" hits="0" branch="false"/>
+            <line number="428" hits="0" branch="false"/>
             <line number="429" hits="0" branch="false"/>
             <line number="430" hits="0" branch="false"/>
-            <line number="431" hits="0" branch="false"/>
             <line number="432" hits="0" branch="false"/>
             <line number="433" hits="0" branch="false"/>
+            <line number="434" hits="0" branch="false"/>
             <line number="435" hits="0" branch="false"/>
             <line number="436" hits="0" branch="false"/>
             <line number="437" hits="0" branch="false"/>
             <line number="438" hits="0" branch="false"/>
-            <line number="439" hits="0" branch="false"/>
             <line number="440" hits="0" branch="false"/>
             <line number="441" hits="0" branch="false"/>
+            <line number="442" hits="0" branch="false"/>
             <line number="443" hits="0" branch="false"/>
             <line number="444" hits="0" branch="false"/>
             <line number="445" hits="0" branch="false"/>
-            <line number="446" hits="0" branch="false"/>
             <line number="447" hits="0" branch="false"/>
-            <line number="448" hits="0" branch="false"/>
-            <line number="450" hits="0" branch="false"/>
-            <line number="454" hits="0" branch="false"/>
-            <line number="458" hits="27" branch="false"/>
-            <line number="462" hits="18" branch="false"/>
+            <line number="451" hits="0" branch="false"/>
+            <line number="455" hits="27" branch="false"/>
+            <line number="459" hits="18" branch="false"/>
           </lines>
         </class>
         <class name="validate_inputs.R" filename="R/validate_inputs.R" line-rate="1" branch-rate="0" complexity="0">
