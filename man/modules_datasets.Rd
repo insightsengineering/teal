@@ -21,7 +21,7 @@ modules_datasets(
 
 \item{filtered_data_singleton}{A result of \code{teal_data_to_filtered_data} applied to \code{data}.}
 
-\item{progress}{(\code{Progress}) object, optional; will be filled}
+\item{progress}{(\code{Progress}) object from \code{shiny}; will be filled}
 }
 \value{
 Returns list of same shape as \code{modules}, containing \code{FilteredData} at every leaf.
