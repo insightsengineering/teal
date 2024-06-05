@@ -92,7 +92,7 @@ ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_mod
 
   progress$inc(
     amount = 1,
-    detail = sprintf("%.0f%%", progress$getValue() / progress$getMax() * 100)
+    detail = sprintf("%s%%", round(progress$getValue() / progress$getMax(), 2L) * 100)
   )
 
   args <- c(list(id = ns("module")), modules$ui_args)

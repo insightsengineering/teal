@@ -207,7 +207,7 @@ modules_datasets <- function(data,
   if (!isTRUE(attr(filters, "module_specific"))) {
     progress$inc(
       amount = progress$getMax(),
-      detail = sprintf("%.0f%%", progress$getMax() / progress$getMax() * 100)
+      detail = "100%"
     )
 
     # subset global filters
@@ -222,7 +222,7 @@ modules_datasets <- function(data,
   if (inherits(modules, "teal_module")) {
     progress$inc(
       amount = 1,
-      detail = sprintf("%.0f%%", progress$getValue() / progress$getMax() * 100)
+      detail = sprintf("%s%%", round(progress$getValue() / progress$getMax(), 2L) * 100)
     )
 
     # 1. get datanames
