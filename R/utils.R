@@ -189,7 +189,8 @@ check_filter_datanames <- function(filters, datanames) {
 #' @param modules (`teal_modules`) object
 #' @param filters (`teal_slices`) object
 #' @param filtered_data_singleton A result of `teal_data_to_filtered_data` applied to `data`.
-#' @param progress (`Progress`) object from `shiny`; will be filled
+#' @param progress (`Progress`) object from `shiny`, optional.
+#'  The progress bar will be filled during the (possibly recursive) call.
 #' @return Returns list of same shape as `modules`, containing `FilteredData` at every leaf.
 #' If module specific, each leaf contains different instance, otherwise every leaf contains `filtered_data_singleton`.
 #' @keywords internal
@@ -202,13 +203,17 @@ modules_datasets <- function(data,
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(filters, "modules_teal_slices")
   checkmate::assert_r6(filtered_data_singleton, "FilteredData")
-  checkmate::assert_r6(progress, "Progress")
+  if (!missing(progress)) {
+    checkmate::assert_r6(progress, "Progress")
+  }
 
   if (!isTRUE(attr(filters, "module_specific"))) {
-    progress$inc(
-      amount = progress$getMax(),
-      detail = "100%"
-    )
+    if (!missing(progress)) {
+      progress$inc(
+        amount = progress$getMax(),
+        detail = "100%"
+      )
+    }
 
     # subset global filters
     slices <- shiny::isolate({
@@ -220,10 +225,12 @@ modules_datasets <- function(data,
   }
 
   if (inherits(modules, "teal_module")) {
-    progress$inc(
-      amount = 1,
-      detail = sprintf("%s%%", round(progress$getValue() / progress$getMax(), 2L) * 100)
-    )
+    if (!missing(progress)) {
+      progress$inc(
+        amount = 1,
+        detail = sprintf("%s%%", round(progress$getValue() / progress$getMax(), 2L) * 100)
+      )
+    }
 
     # 1. get datanames
     datanames <-
