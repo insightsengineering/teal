@@ -383,10 +383,7 @@ get_unique_labels <- function(labels) {
 
 #' Create `renv` `.lock` file
 #'
-#' @description
 #' Function allows to create `renv::snapshot()` during the `teal` initialization.
-#'
-#' @details
 #'
 #' The `.lockfile` creation is based on [renv::snapshot()]. It allows multiple ways of `.lockfile` creation.
 #'
