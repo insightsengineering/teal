@@ -163,7 +163,6 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
     progress <- Progress$new(
       max = length(unlist(module_labels(modules)))
     )
-    progress$set(message = "Preparing data filtering", detail = "0%")
 
     datasets_reactive <- eventReactive(teal_data_rv(), {
       # Restore filter from bookmarked state, if applicable.
@@ -172,6 +171,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
         filter_restored <- as.teal_slices(filter_restored)
       }
       # Create list of `FilteredData` objects that reflects structure of `modules`.
+      progress$set(message = "Preparing data filtering", detail = "0%")
       modules_datasets(teal_data_rv(), modules, filter_restored, teal_data_to_filtered_data(teal_data_rv()), progress)
     })
 
