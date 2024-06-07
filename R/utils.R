@@ -440,7 +440,7 @@ create_renv_lockfile <- function(close) {
     lockfile_path
   })
   if (close) {
-    promise |> promises::then(onFulfilled = function() {
+    promises::then(promise, onFulfilled = function() {
       future::plan(future::sequential)
     })
   }
