@@ -1,4 +1,4 @@
-pandoc: 3.1.13
+pandoc: '3.2'
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
@@ -8,8 +8,8 @@ articles:
   creating-custom-modules: creating-custom-modules.html
   data-as-shiny-module: data-as-shiny-module.html
   dataflow: blueprint/dataflow.html
-  filter-panel: filter-panel.html
   filter_panel: blueprint/filter_panel.html
+  filter-panel: filter-panel.html
   getting-started-with-teal: getting-started-with-teal.html
   in_app_data: blueprint/in_app_data.html
   including-data-in-teal-applications: including-data-in-teal-applications.html
@@ -19,7 +19,7 @@ articles:
   module_encapsulation: blueprint/module_encapsulation.html
   product_map: blueprint/product_map.html
   teal-options: teal-options.html
-last_built: 2024-05-16T10:52Z
+last_built: 2024-06-07T12:43Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles
