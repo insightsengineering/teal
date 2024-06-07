@@ -162,18 +162,18 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
 
 
     datasets_reactive <- eventReactive(teal_data_rv(), {
-      progress_d <- Progress$new(
+      progress_data <- Progress$new(
         max = length(unlist(module_labels(modules)))
       )
-      on.exit(progress_d$close())
-      progress_d$set(message = "Preparing data filtering", detail = "0%")
+      on.exit(progress_data$close())
+      progress_data$set(message = "Preparing data filtering", detail = "0%")
       # Restore filter from bookmarked state, if applicable.
       filter_restored <- restoreValue("filter_state_on_bookmark", filter)
       if (!is.teal_slices(filter_restored)) {
         filter_restored <- as.teal_slices(filter_restored)
       }
       # Create list of `FilteredData` objects that reflects structure of `modules`.
-      modules_datasets(teal_data_rv(), modules, filter_restored, teal_data_to_filtered_data(teal_data_rv()), progress_d)
+      modules_datasets(teal_data_rv(), modules, filter_restored, teal_data_to_filtered_data(teal_data_rv()), progress_data) # nolint: line_length.
     })
 
 
@@ -187,11 +187,11 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       logger::log_trace("srv_teal@5 setting main ui after data was pulled")
       datasets <- datasets_reactive()
 
-      progress_m <- Progress$new(
+      progress_modules <- Progress$new(
         max = length(unlist(module_labels(modules)))
       )
-      on.exit(progress_m$close())
-      progress_m$set(value = 0, message = "Preparing modules", detail = "0%")
+      on.exit(progress_modules$close())
+      progress_modules$set(value = 0, message = "Preparing modules", detail = "0%")
 
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
       removeUI(sprintf("#%s > div:nth-child(1)", session$ns("main_ui_container")))
@@ -205,14 +205,14 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
           modules = modules,
           datasets = datasets,
           filter = filter,
-          progress = progress_m
+          progress = progress_modules
         )),
         # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
         # have any effect as they are ignored when not present
         immediate = TRUE
       )
 
-      progress_m$set(message = "Finalizing")
+      progress_modules$set(message = "Finalizing")
 
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)
