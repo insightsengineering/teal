@@ -155,7 +155,6 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile
             while (lockfile_task$status() == "running") {
               Sys.sleep(0.25)
             }
-            # lockfile_task creates 'teal_renv_lock.lock'
             file.copy(lockfile_task$result(), file)
             file
           } else {
