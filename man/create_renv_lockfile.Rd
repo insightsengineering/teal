@@ -7,7 +7,7 @@
 create_renv_lockfile(close)
 }
 \arguments{
-\item{close}{Whether to set \code{future::plan} to \code{future::sequential} when finishing the task.}
+\item{close}{(\code{logical(1)}) Flag that indicates whether to set \code{future::plan} to \code{future::sequential} when finishing the task.}
 }
 \value{
 (\code{character(1)}) the path to the \code{lockfile} created in a \code{tempdir()}.
