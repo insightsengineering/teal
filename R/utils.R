@@ -423,6 +423,7 @@ create_renv_lockfile <- function(close) {
     # Below is not a file in tempdir() directory.
     # If a file is created in tempdir() it gets deleted on 'then(onFulfilled' part.
     lockfile_path <- "teal_renv_lock.lock"
+    shiny::onStop(function() file.remove(lockfile_path))
 
     renv_status <- utils::capture.output(
       renv::snapshot(
