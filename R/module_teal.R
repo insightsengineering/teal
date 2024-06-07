@@ -160,19 +160,20 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       )
     }
 
-    progress <- Progress$new(
-      max = length(unlist(module_labels(modules)))
-    )
 
     datasets_reactive <- eventReactive(teal_data_rv(), {
+      progress_d <- Progress$new(
+        max = length(unlist(module_labels(modules)))
+      )
+      on.exit(progress_d$close())
+      progress_d$set(message = "Preparing data filtering", detail = "0%")
       # Restore filter from bookmarked state, if applicable.
       filter_restored <- restoreValue("filter_state_on_bookmark", filter)
       if (!is.teal_slices(filter_restored)) {
         filter_restored <- as.teal_slices(filter_restored)
       }
       # Create list of `FilteredData` objects that reflects structure of `modules`.
-      progress$set(message = "Preparing data filtering", detail = "0%")
-      modules_datasets(teal_data_rv(), modules, filter_restored, teal_data_to_filtered_data(teal_data_rv()), progress)
+      modules_datasets(teal_data_rv(), modules, filter_restored, teal_data_to_filtered_data(teal_data_rv()), progress_d)
     })
 
 
@@ -186,7 +187,11 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       logger::log_trace("srv_teal@5 setting main ui after data was pulled")
       datasets <- datasets_reactive()
 
-      progress$set(value = 0, message = "Preparing modules", detail = "0%")
+      progress_m <- Progress$new(
+        max = length(unlist(module_labels(modules)))
+      )
+      on.exit(progress_m$close())
+      progress_m$set(value = 0, message = "Preparing modules", detail = "0%")
 
       # main_ui_container contains splash screen first and we remove it and replace it by the real UI
       removeUI(sprintf("#%s > div:nth-child(1)", session$ns("main_ui_container")))
@@ -200,28 +205,24 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
           modules = modules,
           datasets = datasets,
           filter = filter,
-          progress = progress
+          progress = progress_m
         )),
         # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
         # have any effect as they are ignored when not present
         immediate = TRUE
       )
 
-
-      progress$set(message = "Finalizing")
+      progress_m$set(message = "Finalizing")
 
       # must make sure that this is only executed once as modules assume their observers are only
       # registered once (calling server functions twice would trigger observers twice each time)
-      ans <- srv_tabs_with_filters(
+      srv_tabs_with_filters(
         id = "main_ui",
         datasets = datasets,
         modules = modules,
         reporter = reporter,
         filter = filter
       )
-
-      progress$close()
-      ans
     })
   })
 }
