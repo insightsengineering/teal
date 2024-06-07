@@ -62,6 +62,13 @@ the top-level module and cannot be embedded.
 Note: It is no longer recommended to embed \code{teal} in \code{shiny} apps as a module.
 but rather use \code{init} to create a standalone application.
 }
+\section{Reproducibility}{
+
+Reproducibility is supported by multiple features. \code{teal} includes a \code{utils::sessioInfo()} output to allow to compare
+packages used in the session. It also allows to create \code{renv} \code{.lockfile} to support project setup reproducibility.
+For more information about \code{.lockfile} creation visit \code{\link[=create_renv_lockfile]{create_renv_lockfile()}}.
+}
+
 \examples{
 teal_modules <- modules(example_module())
 # Shiny app with modular integration of teal

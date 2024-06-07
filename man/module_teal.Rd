@@ -75,11 +75,4 @@ of the tab.
 
 It is written as a \code{shiny} module so it can be added into other apps as well.
 }
-\section{Reproducibility}{
-
-Reproducibility is supported by multiple features. \code{teal} includes a \code{utils::sessioInfo()} output to allow to compare
-packages used in the session. It also allows to create \code{renv} \code{.lockfile} to support project setup reproducibility.
-For more information about \code{.lockfile} creation visit \code{\link[=create_renv_lockfile]{create_renv_lockfile()}}.
-}
-
 \keyword{internal}
