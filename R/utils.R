@@ -418,6 +418,7 @@ get_unique_labels <- function(labels) {
 #'
 #' @keywords internal
 create_renv_lockfile <- function(close) {
+  checkmate::assert_flag(close)
   promise <- promises::future_promise({
     # Below is not a file in tempdir() directory.
     # If a file is created in tempdir() it gets deleted on 'then(onFulfilled' part.
