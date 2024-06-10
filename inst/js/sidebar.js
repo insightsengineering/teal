@@ -1,12 +1,18 @@
 // used to collapse and expand the filter panel in teal apps
+/*
+resize is placed at end of functions
+b/c in embedded apps it will throw errors that cause the function to exit early
+*/
 var filter_open = true;
 const hideSidebar = () => {
-  $(".teal_secondary_col").fadeOut(1);
-  $(".teal_primary_col").attr("class", "teal_primary_col col-sm-12").resize();
+  $(".teal_secondary_col").css("display", "none");
+  $(".teal_primary_col").attr("class", "teal_primary_col col-sm-12");
+  $(".teal_primary_col").resize();
 };
 const showSidebar = () => {
-  $(".teal_primary_col").attr("class", "teal_primary_col col-sm-9").resize();
-  $(".teal_secondary_col").delay(600).fadeIn(50);
+  $(".teal_primary_col").attr("class", "teal_primary_col col-sm-9");
+  $(".teal_secondary_col").css("display", "block");
+  $(".teal_primary_col").resize();
 };
 const toggleFilterPanel = () => {
   if (filter_open && !$(".teal_secondary_col").is(':visible')) {
