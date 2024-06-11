@@ -3,9 +3,6 @@
 ### Enhancement
 * Provided progress bar for modules loading and data filtering during teal app startup.
 
-### Enhancement
-* Provided progress bar for modules loading and data filtering during teal app startup.
-
 ### Miscellaneous
 * Filter mapping display is no longer coupled to the snapshot manager.
 
