@@ -5,8 +5,7 @@
 
 ### New features
 
-* Footer of `teal` apps is enriched with a button that allows to download the `.lock` file created with `renv` package. 
-This will boost the reproducibility of the app.
+* Possibility to download `.lock` file to restore app session for reproducibility.
 
 ### Miscellaneous
 * Filter mapping display is no longer coupled to the snapshot manager.
