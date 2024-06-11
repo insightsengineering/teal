@@ -447,7 +447,7 @@ create_renv_lockfile <- function(close) {
   promise <- promises::future_promise({
     # Below is not a file in tempdir() directory.
     # If a file is created in tempdir() it gets deleted on 'then(onFulfilled' part.
-    lockfile_path <- "teal_renv_lock.lock"
+    lockfile_path <- "teal_app.lock"
     shiny::onStop(function() file.remove(lockfile_path))
 
     renv_status <- utils::capture.output(
