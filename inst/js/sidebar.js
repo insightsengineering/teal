@@ -11,7 +11,11 @@ const hideSidebar = () => {
 };
 const showSidebar = () => {
   $(".teal_primary_col").attr("class", "teal_primary_col col-sm-9");
-  $(".teal_secondary_col").css("display", "block");
+  setTimeout(
+    () => {
+      $(".teal_secondary_col").css("display", "block");
+    },
+    600)
   $(".teal_primary_col").resize();
 };
 const toggleFilterPanel = () => {
