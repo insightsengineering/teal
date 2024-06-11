@@ -15,7 +15,7 @@ const showSidebar = () => {
     () => {
       $(".teal_secondary_col").css("display", "block");
     },
-    600)
+    600);
   $(".teal_primary_col").resize();
 };
 const toggleFilterPanel = () => {
