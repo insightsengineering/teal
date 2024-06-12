@@ -51,7 +51,7 @@ ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_module_
 
 #' @rdname module_nested_tabs
 #' @export
-ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) {
+ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) { # nolint: line_length.
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   ns <- NS(id)
   do.call(
