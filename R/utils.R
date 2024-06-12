@@ -435,7 +435,7 @@ get_unique_labels <- function(labels) {
 #'
 #' @param close (`logical(1)`) Flag that indicates whether to set `future::plan` to `future::sequential` when finishing the task.
 #'
-#' @seealso [renv::snapshot()], [renv::restore()], [renv::init()].
+#' @seealso [renv::snapshot()], [renv::restore()].
 #'
 #' @return (`character(1)`) the path to the `lockfile` created in a `tempdir()`.
 #'
