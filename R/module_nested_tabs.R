@@ -36,22 +36,22 @@
 NULL
 
 #' @rdname module_nested_tabs
-ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress) {
+ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_count(depth)
-  checkmate::assert_r6(progress, "Progress")
+  checkmate::assert_r6(progress, "Progress", null.ok = TRUE)
   UseMethod("ui_nested_tabs", modules)
 }
 
 #' @rdname module_nested_tabs
 #' @export
-ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress) {
+ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname module_nested_tabs
 #' @export
-ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress) {
+ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) { # nolint: line_length.
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   ns <- NS(id)
   do.call(
@@ -86,14 +86,16 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
 
 #' @rdname module_nested_tabs
 #' @export
-ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress) {
+ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) {
   checkmate::assert_class(datasets, classes = "FilteredData")
   ns <- NS(id)
 
-  progress$inc(
-    amount = 1,
-    detail = sprintf("%s%%", round(progress$getValue() / progress$getMax(), 2L) * 100)
-  )
+  if (!is.null(progress)) {
+    progress$inc(
+      amount = 1,
+      detail = sprintf("%s%%", round(progress$getValue() / progress$getMax(), 2L) * 100)
+    )
+  }
 
   args <- c(list(id = ns("module")), modules$ui_args)
 

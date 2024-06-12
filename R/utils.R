@@ -198,17 +198,15 @@ modules_datasets <- function(data,
                              modules,
                              filters,
                              filtered_data_singleton = teal_data_to_filtered_data(data),
-                             progress) {
+                             progress = NULL) {
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(filters, "modules_teal_slices")
   checkmate::assert_r6(filtered_data_singleton, "FilteredData")
-  if (!missing(progress)) {
-    checkmate::assert_r6(progress, "Progress")
-  }
+  checkmate::assert_r6(progress, "Progress", null.ok = TRUE)
 
   if (!isTRUE(attr(filters, "module_specific"))) {
-    if (!missing(progress)) {
+    if (!is.null(progress)) {
       progress$inc(
         amount = progress$getMax(),
         detail = "100%"
@@ -225,7 +223,7 @@ modules_datasets <- function(data,
   }
 
   if (inherits(modules, "teal_module")) {
-    if (!missing(progress)) {
+    if (!is.null(progress)) {
       progress$inc(
         amount = 1,
         detail = sprintf("%s%%", round(progress$getValue() / progress$getMax(), 2L) * 100)

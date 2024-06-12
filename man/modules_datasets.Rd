@@ -9,7 +9,7 @@ modules_datasets(
   modules,
   filters,
   filtered_data_singleton = teal_data_to_filtered_data(data),
-  progress
+  progress = NULL
 )
 }
 \arguments{

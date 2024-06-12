@@ -30,11 +30,11 @@
 NULL
 
 #' @rdname module_tabs_with_filters
-ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices(), progress) {
+ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices(), progress = NULL) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   checkmate::assert_class(filter, "teal_slices")
-  checkmate::assert_r6(progress, "Progress")
+  checkmate::assert_r6(progress, "Progress", null.ok = TRUE)
 
   ns <- NS(id)
   is_module_specific <- isTRUE(attr(filter, "module_specific"))
@@ -53,7 +53,9 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices(), 
   )
   teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btns)
 
-  progress$set(message = "Preparing main UI", detail = "")
+  if (!is.null(progress)) {
+    progress$set(message = "Preparing main UI", detail = "")
+  }
 
   if (!is_module_specific) {
     # need to rearrange html so that filter panel is within tabset

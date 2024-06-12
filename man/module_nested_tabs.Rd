@@ -18,7 +18,7 @@ ui_nested_tabs(
   datasets,
   depth = 0L,
   is_module_specific = FALSE,
-  progress
+  progress = NULL
 )
 
 \method{ui_nested_tabs}{default}(
@@ -27,7 +27,7 @@ ui_nested_tabs(
   datasets,
   depth = 0L,
   is_module_specific = FALSE,
-  progress
+  progress = NULL
 )
 
 \method{ui_nested_tabs}{teal_modules}(
@@ -36,7 +36,7 @@ ui_nested_tabs(
   datasets,
   depth = 0L,
   is_module_specific = FALSE,
-  progress
+  progress = NULL
 )
 
 \method{ui_nested_tabs}{teal_module}(
@@ -45,7 +45,7 @@ ui_nested_tabs(
   datasets,
   depth = 0L,
   is_module_specific = FALSE,
-  progress
+  progress = NULL
 )
 
 srv_nested_tabs(
