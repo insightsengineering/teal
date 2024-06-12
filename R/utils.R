@@ -479,7 +479,3 @@ is_r_cmd_check <- function() {
 is_in_test <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }
-
-is_mocked <- function(session) {
-  inherits(session, "MockShinySession")
-}

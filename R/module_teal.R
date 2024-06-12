@@ -138,26 +138,24 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile
       title = "SessionInfo"
     )
 
-    if (!(is_mocked(session) || is_in_test())) {
-      output$lockFile <- downloadHandler(
-        filename = function() {
-          "renv.lock"
-        },
-        content = function(file) {
-          user_lockfile <- getOption("teal.renv.lockfile", "")
-          if (!file.exists(user_lockfile)) {
-            while (lockfile_task$status() == "running") {
-              Sys.sleep(0.25)
-            }
-            file.copy(lockfile_task$result(), file)
-            file
-          } else {
-            user_lockfile
+    output$lockFile <- downloadHandler(
+      filename = function() {
+        "renv.lock"
+      },
+      content = function(file) {
+        user_lockfile <- getOption("teal.renv.lockfile", "")
+        if (!file.exists(user_lockfile)) {
+          while (lockfile_task$status() == "running") {
+            Sys.sleep(0.25)
           }
-        },
-        contentType = "application/json"
-      )
-    }
+          file.copy(lockfile_task$result(), file)
+          file
+        } else {
+          user_lockfile
+        }
+      },
+      contentType = "application/json"
+    )
 
     # `JavaScript` code
     run_js_files(files = "init.js")
