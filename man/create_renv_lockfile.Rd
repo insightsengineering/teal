@@ -45,6 +45,6 @@ Once you have a \code{.lockfile} file, you can restore R project with \verb{ren:
 }
 
 \seealso{
-\code{\link[renv:snapshot]{renv::snapshot()}}, \code{\link[renv:restore]{renv::restore()}}, \code{\link[renv:init]{renv::init()}}.
+\code{\link[renv:snapshot]{renv::snapshot()}}, \code{\link[renv:restore]{renv::restore()}}.
 }
 \keyword{internal}
