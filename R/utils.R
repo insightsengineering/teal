@@ -448,7 +448,7 @@ create_renv_lockfile <- function(close) {
     lockfile_path <- "teal_app.lock"
     shiny::onStop(function() file.remove(lockfile_path))
 
-    renv_status <- utils::capture.output(
+    renv_logs <- utils::capture.output(
       renv::snapshot(
         lockfile = lockfile_path,
         prompt = FALSE,
@@ -456,7 +456,7 @@ create_renv_lockfile <- function(close) {
         # type = is taken from renv::settings$snapshot.type()
       )
     )
-    if (any(grepl("Lockfile written", renv_status))) {
+    if (any(grepl("Lockfile written", renv_logs))) {
       logger::log_trace("lockfile created successfully.", namespace = "teal")
     } else {
       logger::log_trace("lockfile created with issues.", namespace = "teal")
