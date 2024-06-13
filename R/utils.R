@@ -433,7 +433,8 @@ get_unique_labels <- function(labels) {
 #' @section `.lockfile` usage:
 #' Once you have a `.lockfile` file, you can restore R project with `ren::init();renv::restore()`.
 #'
-#' @param close (`logical(1)`) Flag that indicates whether to set `future::plan` to `future::sequential` when finishing the task.
+#' @param close (`logical(1)`) Flag that indicates whether to set `future::plan` to `future::sequential`
+#' when finishing the task.
 #'
 #' @seealso [renv::snapshot()], [renv::restore()].
 #'
