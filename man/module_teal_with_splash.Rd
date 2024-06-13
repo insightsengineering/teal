@@ -14,7 +14,7 @@ ui_teal_with_splash(
   footer = tags$p()
 )
 
-srv_teal_with_splash(id, data, modules, filter = teal_slices(), lockfile_task)
+srv_teal_with_splash(id, data, modules, filter = teal_slices())
 }
 \arguments{
 \item{id}{(\code{character(1)})
@@ -40,8 +40,6 @@ more details.}
 
 \item{filter}{(\code{teal_slices})
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
-
-\item{lockfile_task}{\code{\link[future:future]{future::future}} promise invoked with \code{\link{create_renv_lockfile}}}
 }
 \value{
 Returns a \code{reactive} expression containing a \code{teal_data} object when data is loaded or \code{NULL} when it is not.

@@ -7,6 +7,7 @@
   if (any(toset)) options(teal_default_options[toset])
 
   options("shiny.sanitize.errors" = FALSE)
+  options("teal.internal.renv.lockfile" = "teal_app.lock")
 
   # Set up the teal logger instance
   teal.logger::register_logger("teal")

@@ -123,7 +123,7 @@ ui_teal <- function(id,
 
 
 #' @rdname module_teal
-srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile_task) {
+srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
   stopifnot(is.reactive(teal_data_rv))
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal initializing the module.")
@@ -145,10 +145,11 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices(), lockfile
       content = function(file) {
         user_lockfile <- getOption("teal.renv.lockfile", "")
         if (!file.exists(user_lockfile)) {
-          while (lockfile_task$status() == "running") {
+          teal_lockfile <- getOption("teal.internal.renv.lockfile")
+          while (!file.exists(teal_lockfile)) {
             Sys.sleep(0.25)
           }
-          file.copy(lockfile_task$result(), file)
+          file.copy(teal_lockfile, file)
           file
         } else {
           user_lockfile

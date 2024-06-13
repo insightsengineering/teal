@@ -21,7 +21,6 @@
 #'
 #' @param id (`character(1)`)
 #'   module id
-#' @param lockfile_task [`future::future`] promise invoked with [`create_renv_lockfile`]
 #' @inheritParams init
 #' @param modules (`teal_modules`) object containing the output modules which
 #'   will be displayed in the `teal` application. See [modules()] and [module()] for
@@ -104,7 +103,7 @@ ui_teal_with_splash <- function(id,
 
 #' @export
 #' @rdname module_teal_with_splash
-srv_teal_with_splash <- function(id, data, modules, filter = teal_slices(), lockfile_task) {
+srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_class(modules, "teal_modules")
@@ -205,11 +204,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices(), lock
       NULL
     })
 
-
-    res <- srv_teal(
-      id = "teal",
-      modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter, lockfile_task = lockfile_task
-    )
+    res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter)
     logger::log_trace("srv_teal_with_splash initialized module with data.")
 
     res
