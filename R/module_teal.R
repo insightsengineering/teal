@@ -147,6 +147,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
         if (!file.exists(user_lockfile)) {
           teal_lockfile <- getOption("teal.internal.renv.lockfile")
           while (!file.exists(teal_lockfile)) {
+            logger::log_trace("lockfile not created yet, retrying...")
             Sys.sleep(0.25)
           }
           file.copy(teal_lockfile, file)
