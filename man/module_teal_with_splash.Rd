@@ -64,7 +64,7 @@ but rather use \code{init} to create a standalone application.
 
 Reproducibility is supported by multiple features. \code{teal} includes a \code{utils::sessioInfo()} output to allow to compare
 packages used in the session. It also allows to create \code{renv} \code{.lockfile} to support project setup reproducibility.
-For more information about \code{.lockfile} creation visit \code{\link[=create_renv_lockfile]{create_renv_lockfile()}}.
+For more information about \code{.lockfile} creation visit \code{\link[=teal_lockfile]{teal_lockfile()}}.
 }
 
 \examples{

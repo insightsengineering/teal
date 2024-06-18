@@ -257,7 +257,7 @@ testthat::test_that("create_renv_lockfile creates a lock file during the executi
   old_plan <- future::plan(future::sequential)
   withr::defer(future::plan(old_plan))
 
-  renv_file_name <- "teal_app.lock"
+  renv_file_name <- getOption("teal.internal.renv.lockfile")
   withr::defer(file.remove(renv_file_name))
   promise <- create_renv_lockfile(TRUE)
 

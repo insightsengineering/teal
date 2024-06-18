@@ -30,7 +30,7 @@
 #' @section Reproducibility:
 #' Reproducibility is supported by multiple features. `teal` includes a `utils::sessioInfo()` output to allow to compare
 #' packages used in the session. It also allows to create `renv` `.lockfile` to support project setup reproducibility.
-#' For more information about `.lockfile` creation visit [`create_renv_lockfile()`].
+#' For more information about `.lockfile` creation visit [`teal_lockfile()`].
 #'
 #' @return
 #' Returns a `reactive` expression containing a `teal_data` object when data is loaded or `NULL` when it is not.
