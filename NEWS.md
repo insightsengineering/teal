@@ -1,4 +1,4 @@
-# teal 0.15.2.9040
+# teal 0.15.2.9041
 
 ### Enhancement
 * Provided progress bar for modules loading and data filtering during teal app startup.
