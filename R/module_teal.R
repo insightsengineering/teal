@@ -138,29 +138,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       title = "SessionInfo"
     )
 
-    output$lockFile <- downloadHandler(
-      filename = function() {
-        "renv.lock"
-      },
-      content = function(file) {
-        user_lockfile <- getOption("teal.renv.lockfile", "")
-        # If someone provided user_lockfile that does not exist, it is handled by teal_lockfile().
-        if (!file.exists(user_lockfile)) {
-          teal_lockfile <- getOption("teal.internal.renv.lockfile")
-          iter <- 1
-          while (!file.exists(teal_lockfile) && iter <= 100) {
-            logger::log_trace("lockfile not created yet, retrying...")
-            Sys.sleep(0.25)
-            iter <- iter + 1 # max wait time is 25 seconds
-          }
-          file.copy(teal_lockfile, file)
-          file
-        } else {
-          user_lockfile
-        }
-      },
-      contentType = "application/json"
-    )
+    output$lockFile <- teal_lockfile_download()
 
     # `JavaScript` code
     run_js_files(files = "init.js")

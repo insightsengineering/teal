@@ -84,6 +84,32 @@ create_renv_lockfile <- function(close) {
   promise
 }
 
+teal_lockfile_download <- function(){
+  downloadHandler(
+    filename = function() {
+      "renv.lock"
+    },
+    content = function(file) {
+      user_lockfile <- getOption("teal.renv.lockfile", "")
+      # If someone provided user_lockfile that does not exist, it is handled by teal_lockfile().
+      if (!file.exists(user_lockfile)) {
+        teal_lockfile <- getOption("teal.internal.renv.lockfile")
+        iter <- 1
+        while (!file.exists(teal_lockfile) && iter <= 100) {
+          logger::log_trace("lockfile not created yet, retrying...")
+          Sys.sleep(0.25)
+          iter <- iter + 1 # max wait time is 25 seconds
+        }
+        file.copy(teal_lockfile, file)
+        file
+      } else {
+        user_lockfile
+      }
+    },
+    contentType = "application/json"
+  )
+}
+
 is_r_cmd_check <- function() {
   ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_", "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
 }
