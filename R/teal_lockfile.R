@@ -29,7 +29,7 @@
 #'
 #' @seealso [renv::snapshot()], [renv::restore()].
 #'
-#' @return Nothing. This is executed for its side effect that creates `.lock` file which is then used in the application.
+#' @return Nothing. This is executed for its side effect that creates lockfile which is then used in the application.
 #'
 #' @keywords internal
 teal_lockfile <- function() {

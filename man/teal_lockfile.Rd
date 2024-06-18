@@ -7,8 +7,7 @@
 teal_lockfile()
 }
 \value{
-Nothing is returned. The side effect of this function is the creation of
-\code{getOption("teal.internal.renv.lockfile")} file, which will be shared through the \code{teal} app.
+Nothing. This is executed for its side effect that creates lockfile which is then used in the application.
 }
 \description{
 This function is used during \code{teal::init} and creates \code{renv} compatible lockfile to used inside the application.
