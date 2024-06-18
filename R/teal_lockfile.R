@@ -66,9 +66,9 @@ create_renv_lockfile <- function(close) {
       )
     )
     if (any(grepl("Lockfile written", renv_logs))) {
-      logger::log_trace("lockfile created successfully.", namespace = "teal")
+      logger::log_trace("lockfile created successfully.")
     } else {
-      logger::log_trace("lockfile created with issues.", namespace = "teal")
+      logger::log_trace("lockfile created with issues.")
     }
 
     lockfile_path
