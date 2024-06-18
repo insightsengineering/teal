@@ -61,6 +61,7 @@ teal_lockfile <- function() {
 
 create_renv_lockfile <- function(close, lockfile_path) {
   checkmate::assert_flag(close)
+  checkmate::assert_string(lockfile_path)
   promise <- promises::future_promise({
     # Below we can not use a file created in tempdir() directory.
     # If a file is created in tempdir(), it gets deleted on 'then(onFulfilled' part.
