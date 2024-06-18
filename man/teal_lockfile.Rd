@@ -10,13 +10,18 @@ teal_lockfile()
 Nothing. This is executed for its side effect that creates lockfile which is then used in \code{teal} application.
 }
 \description{
-This function is used during \code{teal::init} and creates \code{renv} compatible lockfile to used inside the application.
+This function is used during \link{init} and creates \code{renv} compatible lockfile to used inside the application.
 }
 \details{
 The process uses \code{\link[renv:snapshot]{renv::snapshot()}}, which allows multiple ways of lockfile creation.
 \itemize{
+\item User specified:
+\itemize{
 \item \strong{Pre-computed lockfile}: User is able to provide his own pre-computed lockfile by setting the path to the
 lockfile through \code{options(teal.renv.lockfile = "")}. Then this function is not used.
+}
+\item Automatically computed:
+\itemize{
 \item \strong{Working directory lockfile}: If \code{options(teal.renv.lockfile)} is empty, by default \code{teal} will
 create an \code{implicit} type of the lockfile, that uses \code{renv::dependencies()} to detect all R packages in the
 current project working directory.
@@ -27,6 +32,7 @@ Naming of \code{type} is the same as in \code{renv::snapshot()}. For the \code{"
 to see what \code{DESCRIPTION} fields are included in the lockfile.
 \item \strong{Custom files based lockfile}: If you want to specify custom files as a base for the lockfile, then run
 \code{renv::settings$snapshot.type("custom")} and set \code{renv.snapshot.filter} option.
+}
 }
 }
 \note{

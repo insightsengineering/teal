@@ -1,21 +1,23 @@
 #' Create lockfile for application reproducibility
 #'
-#' This function is used during `teal::init` and creates `renv` compatible lockfile to used inside the application.
+#' This function is used during [teal::init] and creates `renv` compatible lockfile to used inside the application.
 #'
 #' The process uses [renv::snapshot()], which allows multiple ways of lockfile creation.
 #'
-#' - **Pre-computed lockfile**: User is able to provide his own pre-computed lockfile by setting the path to the
-#' lockfile through `options(teal.renv.lockfile = "")`. Then this function is not used.
-#' - **Working directory lockfile**: If `options(teal.renv.lockfile)` is empty, by default `teal` will
-#' create an `implicit` type of the lockfile, that uses `renv::dependencies()` to detect all R packages in the
-#' current project working directory.
-#' - **`DESCRIPTION` based lockfile**: You can always include a `DESCRIPTION` file in your working directory and
-#' enable lockfile creation based on this file. To do this, run `renv::settings$snapshot.type("explicit")`.
-#' Naming of `type` is the same as in `renv::snapshot()`. For the `"explicit"` type refer to
-#' `renv::settings$package.dependency.fields()`
-#' to see what `DESCRIPTION` fields are included in the lockfile.
-#' - **Custom files based lockfile**: If you want to specify custom files as a base for the lockfile, then run
-#' `renv::settings$snapshot.type("custom")` and set `renv.snapshot.filter` option.
+#' - User specified:
+#'     - **Pre-computed lockfile**: User is able to provide his own pre-computed lockfile by setting the path to the
+#'     lockfile through `options(teal.renv.lockfile = "")`. Then this function is not used.
+#' - Automatically computed:
+#'     - **Working directory lockfile**: If `options(teal.renv.lockfile)` is empty, by default `teal` will
+#'     create an `implicit` type of the lockfile, that uses `renv::dependencies()` to detect all R packages in the
+#'     current project working directory.
+#'     - **`DESCRIPTION` based lockfile**: You can always include a `DESCRIPTION` file in your working directory and
+#'     enable lockfile creation based on this file. To do this, run `renv::settings$snapshot.type("explicit")`.
+#'     Naming of `type` is the same as in `renv::snapshot()`. For the `"explicit"` type refer to
+#'     `renv::settings$package.dependency.fields()`
+#'     to see what `DESCRIPTION` fields are included in the lockfile.
+#'     - **Custom files based lockfile**: If you want to specify custom files as a base for the lockfile, then run
+#'     `renv::settings$snapshot.type("custom")` and set `renv.snapshot.filter` option.
 #'
 #' @note
 #' This function computes the lockfile as a `promises::future_promise` promise, while
