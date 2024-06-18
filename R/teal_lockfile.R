@@ -6,7 +6,7 @@
 #'
 #' - User-specified:
 #'     - **Pre-computed lockfile**: Users can provide their own pre-computed lockfile by specifying the path via
-#'     `options(teal.renv.lockfile = "")`. In this case, this function is bypassed.
+#'     `teal.renv.lockfile` option. Automatic lockfile computation is skipped in such case.
 #' - Automatically computed:
 #'     - **Working directory lockfile**: If `options("teal.renv.lockfile")` is empty, `teal` will, by default, create an
 #'      `implicit` type lockfile that uses `renv::dependencies()` to detect all R packages in the current project's
