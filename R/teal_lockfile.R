@@ -36,6 +36,10 @@
 teal_lockfile <- function() {
   # If user has setup the file, there is no need to compute a new one.
   user_lockfile <- getOption("teal.renv.lockfile", "")
+  if (!identical(user_lockfile, "") && !file.exists(user_lockfile)) {
+    stop("lockfile provided through options('teal.renv.lockfile') does not exist.")
+  }
+
   if (!(file.exists(user_lockfile) || is_in_test() || is_r_cmd_check())) {
     old_plan <- future::plan()
     # If there is already a parallel backend, reuse it.

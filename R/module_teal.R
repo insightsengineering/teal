@@ -144,6 +144,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       },
       content = function(file) {
         user_lockfile <- getOption("teal.renv.lockfile", "")
+        # If someone provided user_lockfile that does not exist, it is handled by teal_lockfile().
         if (!file.exists(user_lockfile)) {
           teal_lockfile <- getOption("teal.internal.renv.lockfile")
           iter <- 1
