@@ -2,49 +2,48 @@
 % Please edit documentation in R/teal_lockfile.R
 \name{teal_lockfile}
 \alias{teal_lockfile}
-\title{Create lockfile for application reproducibility}
+\title{Generate lockfile for application reproducibility}
 \usage{
 teal_lockfile()
 }
 \value{
-Nothing. This is executed for its side effect that creates lockfile which is then used in \code{teal} application.
+Nothing. This function is executed for its side effect of creating a lockfile used in the \code{teal} application.
 }
 \description{
-This function is used during \link{init} and creates \code{renv} compatible lockfile to used inside the application.
+This function is invoked during \link{init} to create \code{renv}-compatible lockfile for use within the application.
 }
 \details{
-The process uses \code{\link[renv:snapshot]{renv::snapshot()}}, which allows multiple ways of lockfile creation.
+The function leverages \code{\link[renv:snapshot]{renv::snapshot()}}, which offers multiple methods for lockfile creation.
 \itemize{
-\item User specified:
+\item User-specified:
 \itemize{
-\item \strong{Pre-computed lockfile}: User is able to provide his own pre-computed lockfile by setting the path to the
-lockfile through \code{options(teal.renv.lockfile = "")}. Then this function is not used.
+\item \strong{Pre-computed lockfile}: Users can provide their own pre-computed lockfile by specifying the path via
+\code{options(teal.renv.lockfile = "")}. In this case, this function is bypassed.
 }
 \item Automatically computed:
 \itemize{
-\item \strong{Working directory lockfile}: If \code{options(teal.renv.lockfile)} is empty, by default \code{teal} will
-create an \code{implicit} type of the lockfile, that uses \code{renv::dependencies()} to detect all R packages in the
-current project working directory.
-\item \strong{\code{DESCRIPTION} based lockfile}: You can always include a \code{DESCRIPTION} file in your working directory and
-enable lockfile creation based on this file. To do this, run \code{renv::settings$snapshot.type("explicit")}.
-Naming of \code{type} is the same as in \code{renv::snapshot()}. For the \code{"explicit"} type refer to
-\code{renv::settings$package.dependency.fields()}
-to see what \code{DESCRIPTION} fields are included in the lockfile.
-\item \strong{Custom files based lockfile}: If you want to specify custom files as a base for the lockfile, then run
-\code{renv::settings$snapshot.type("custom")} and set \code{renv.snapshot.filter} option.
+\item \strong{Working directory lockfile}: If \code{options("teal.renv.lockfile")} is empty, \code{teal} will, by default, create an
+\code{implicit} type lockfile that uses \code{renv::dependencies()} to detect all R packages in the current project's
+working directory.
+\item \strong{\code{DESCRIPTION}-based lockfile}: To generate a lockfile based on a \code{DESCRIPTION} file in your working
+directory, set \code{renv::settings$snapshot.type("explicit")}. The naming convention for \code{type} follows
+\code{renv::snapshot()}. For the \code{"explicit"} type, refer to \code{renv::settings$package.dependency.fields()} for the
+\code{DESCRIPTION} fields included in the lockfile.
+\item \strong{Custom files-based lockfile}: To specify custom files as the basis for the lockfile, set
+\code{renv::settings$snapshot.type("custom")} and configure the \code{renv.snapshot.filter} option.
 }
 }
 }
 \note{
-This function computes the lockfile as a \code{promises::future_promise} promise, while
-running the evaluation of the process on a separate worker. If \code{future::plan()} was set to something different than
-\code{future::sequential}, it reuses the parallel backed. If not, it sets \code{future::multisession} as a parallel plan with
-2 workers. Then, \code{shiny::ExtendedTask()} is used to run asynchronous computations. If the \code{teal} app started with
-\code{future::sequential} plan, is it set back once the task is finished.
+This function computes the lockfile as a \code{promises::future_promise} promise, executing the process on a separate
+worker. If \code{future::plan()} is set to something other than \code{future::sequential}, it reuses the existing parallel
+backend. Otherwise, it sets \code{future::multisession} as the parallel plan with two workers. The \code{shiny::ExtendedTask()}
+is then used to run asynchronous computations. If the \code{teal} app started with the \code{future::sequential} plan, it is
+reset once the task is completed.
 }
 \section{lockfile usage}{
 
-Once you have the lockfile, you can restore the application environment with \code{renv::restore()}.
+After creating the lockfile, you can restore the application environment using \code{renv::restore()}.
 }
 
 \seealso{

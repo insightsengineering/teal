@@ -1,37 +1,36 @@
-#' Create lockfile for application reproducibility
+#' Generate lockfile for application reproducibility
 #'
-#' This function is used during [teal::init] and creates `renv` compatible lockfile to used inside the application.
+#' This function is invoked during [teal::init] to create `renv`-compatible lockfile for use within the application.
 #'
-#' The process uses [renv::snapshot()], which allows multiple ways of lockfile creation.
+#' The function leverages [renv::snapshot()], which offers multiple methods for lockfile creation.
 #'
-#' - User specified:
-#'     - **Pre-computed lockfile**: User is able to provide his own pre-computed lockfile by setting the path to the
-#'     lockfile through `options(teal.renv.lockfile = "")`. Then this function is not used.
+#' - User-specified:
+#'     - **Pre-computed lockfile**: Users can provide their own pre-computed lockfile by specifying the path via
+#'     `options(teal.renv.lockfile = "")`. In this case, this function is bypassed.
 #' - Automatically computed:
-#'     - **Working directory lockfile**: If `options(teal.renv.lockfile)` is empty, by default `teal` will
-#'     create an `implicit` type of the lockfile, that uses `renv::dependencies()` to detect all R packages in the
-#'     current project working directory.
-#'     - **`DESCRIPTION` based lockfile**: You can always include a `DESCRIPTION` file in your working directory and
-#'     enable lockfile creation based on this file. To do this, run `renv::settings$snapshot.type("explicit")`.
-#'     Naming of `type` is the same as in `renv::snapshot()`. For the `"explicit"` type refer to
-#'     `renv::settings$package.dependency.fields()`
-#'     to see what `DESCRIPTION` fields are included in the lockfile.
-#'     - **Custom files based lockfile**: If you want to specify custom files as a base for the lockfile, then run
-#'     `renv::settings$snapshot.type("custom")` and set `renv.snapshot.filter` option.
+#'     - **Working directory lockfile**: If `options("teal.renv.lockfile")` is empty, `teal` will, by default, create an
+#'      `implicit` type lockfile that uses `renv::dependencies()` to detect all R packages in the current project's
+#'      working directory.
+#'     - **`DESCRIPTION`-based lockfile**: To generate a lockfile based on a `DESCRIPTION` file in your working
+#'     directory, set `renv::settings$snapshot.type("explicit")`. The naming convention for `type` follows
+#'     `renv::snapshot()`. For the `"explicit"` type, refer to `renv::settings$package.dependency.fields()` for the
+#'     `DESCRIPTION` fields included in the lockfile.
+#'     - **Custom files-based lockfile**: To specify custom files as the basis for the lockfile, set
+#'     `renv::settings$snapshot.type("custom")` and configure the `renv.snapshot.filter` option.
 #'
 #' @note
-#' This function computes the lockfile as a `promises::future_promise` promise, while
-#' running the evaluation of the process on a separate worker. If `future::plan()` was set to something different than
-#' `future::sequential`, it reuses the parallel backed. If not, it sets `future::multisession` as a parallel plan with
-#' 2 workers. Then, `shiny::ExtendedTask()` is used to run asynchronous computations. If the `teal` app started with
-#' `future::sequential` plan, is it set back once the task is finished.
+#' This function computes the lockfile as a `promises::future_promise` promise, executing the process on a separate
+#' worker. If `future::plan()` is set to something other than `future::sequential`, it reuses the existing parallel
+#' backend. Otherwise, it sets `future::multisession` as the parallel plan with two workers. The `shiny::ExtendedTask()`
+#' is then used to run asynchronous computations. If the `teal` app started with the `future::sequential` plan, it is
+#' reset once the task is completed.
 #'
 #' @section lockfile usage:
-#' Once you have the lockfile, you can restore the application environment with `renv::restore()`.
+#' After creating the lockfile, you can restore the application environment using `renv::restore()`.
 #'
 #' @seealso [renv::snapshot()], [renv::restore()].
 #'
-#' @return Nothing. This is executed for its side effect that creates lockfile which is then used in `teal` application.
+#' @return Nothing. This function is executed for its side effect of creating a lockfile used in the `teal` application.
 #'
 #' @keywords internal
 teal_lockfile <- function() {
