@@ -5,7 +5,7 @@
 
 ### New features
 
-* Possibility to download `.lock` file to restore app session for reproducibility.
+* Possibility to download lockfile to restore app session for reproducibility.
 
 ### Miscellaneous
 * Filter mapping display is no longer coupled to the snapshot manager.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/teal_lockfile.R
 \name{teal_lockfile}
 \alias{teal_lockfile}
-\title{Create application \code{.lockfile}}
+\title{Create lockfile for application reproducibility}
 \usage{
 teal_lockfile()
 }
@@ -11,35 +11,35 @@ Nothing is returned. The side effect of this function is the creation of
 \code{getOption("teal.internal.renv.lockfile")} file, which will be shared through the \code{teal} app.
 }
 \description{
-This function is used during \code{teal::init} and enables to create \code{renv} \code{.lockfile} to be shared in the \code{teal} app.
+This function is used during \code{teal::init} and creates \code{renv} compatible lockfile to used inside the application.
 }
 \details{
-The process uses \code{\link[renv:snapshot]{renv::snapshot()}}, which allows multiple ways of \code{.lockfile} creation.
+The process uses \code{\link[renv:snapshot]{renv::snapshot()}}, which allows multiple ways of lockfile creation.
 \itemize{
-\item \strong{Pre-computed \code{.lockfile}}: User is able to provide his own pre-computed \code{.lockfile} by setting the path to the
-\code{.lockfile} through \code{options(teal.renv.lockfile = "")}. Then this function is not used.
-\item \strong{Working directory \code{.lockfile}}: If \code{options(teal.renv.lockfile)} is empty, by default \code{teal} will
-create an \code{implicit} type of the \code{.lockfile}, that uses \code{renv::dependencies()} to detect all R packages in the
+\item \strong{Pre-computed lockfile}: User is able to provide his own pre-computed lockfile by setting the path to the
+lockfile through \code{options(teal.renv.lockfile = "")}. Then this function is not used.
+\item \strong{Working directory lockfile}: If \code{options(teal.renv.lockfile)} is empty, by default \code{teal} will
+create an \code{implicit} type of the lockfile, that uses \code{renv::dependencies()} to detect all R packages in the
 current project working directory.
-\item \strong{\code{DESCRIPTION} based \code{.lockfile}}: You can always include a \code{DESCRIPTION} file in your working directory and
-enable \code{.lockfile} creation based on this file. To do this, run \code{renv::settings$snapshot.type("explicit")}.
+\item \strong{\code{DESCRIPTION} based lockfile}: You can always include a \code{DESCRIPTION} file in your working directory and
+enable lockfile creation based on this file. To do this, run \code{renv::settings$snapshot.type("explicit")}.
 Naming of \code{type} is the same as in \code{renv::snapshot()}. For the \code{"explicit"} type refer to
 \code{renv::settings$package.dependency.fields()}
-to see what \code{DESCRIPTION} fields are included in the \code{.lockfile}.
-\item \strong{Custom files based \code{.lockfile}}: If you want to specify custom files as a base for the \code{.lockfile}, then run
+to see what \code{DESCRIPTION} fields are included in the lockfile.
+\item \strong{Custom files based lockfile}: If you want to specify custom files as a base for the lockfile, then run
 \code{renv::settings$snapshot.type("custom")} and set \code{renv.snapshot.filter} option.
 }
 }
 \note{
-This function computes the \code{.lockfile} as a \code{promises::future_promise} promise, while
+This function computes the lockfile as a \code{promises::future_promise} promise, while
 running the evaluation of the process on a separate worker. If \code{future::plan()} was set to something different than
 \code{future::sequential}, it reuses the parallel backed. If not, it sets \code{future::multisession} as a parallel plan with
 2 workers. Then, \code{shiny::ExtendedTask()} is used to run asynchronous computations. If the \code{teal} app started with
 \code{future::sequential} plan, is it set back once the task is finished.
 }
-\section{\code{.lockfile} usage}{
+\section{lockfile usage}{
 
-Once you have a \code{.lockfile} file, you can restore R project with \verb{ren::init();renv::restore()}.
+Once you have the lockfile, you can restore the application environment with \code{renv::restore()}.
 }
 
 \seealso{

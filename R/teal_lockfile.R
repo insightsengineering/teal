@@ -1,31 +1,31 @@
-#' Create application `.lockfile`
+#' Create lockfile for application reproducibility
 #'
-#' This function is used during `teal::init` and creates `renv` compatible `.lock` file to used inside the application.
+#' This function is used during `teal::init` and creates `renv` compatible lockfile to used inside the application.
 #'
-#' The process uses [renv::snapshot()], which allows multiple ways of `.lockfile` creation.
+#' The process uses [renv::snapshot()], which allows multiple ways of lockfile creation.
 #'
-#' - **Pre-computed `.lockfile`**: User is able to provide his own pre-computed `.lockfile` by setting the path to the
-#' `.lockfile` through `options(teal.renv.lockfile = "")`. Then this function is not used.
-#' - **Working directory `.lockfile`**: If `options(teal.renv.lockfile)` is empty, by default `teal` will
-#' create an `implicit` type of the `.lockfile`, that uses `renv::dependencies()` to detect all R packages in the
+#' - **Pre-computed lockfile**: User is able to provide his own pre-computed lockfile by setting the path to the
+#' lockfile through `options(teal.renv.lockfile = "")`. Then this function is not used.
+#' - **Working directory lockfile**: If `options(teal.renv.lockfile)` is empty, by default `teal` will
+#' create an `implicit` type of the lockfile, that uses `renv::dependencies()` to detect all R packages in the
 #' current project working directory.
-#' - **`DESCRIPTION` based `.lockfile`**: You can always include a `DESCRIPTION` file in your working directory and
-#' enable `.lockfile` creation based on this file. To do this, run `renv::settings$snapshot.type("explicit")`.
+#' - **`DESCRIPTION` based lockfile**: You can always include a `DESCRIPTION` file in your working directory and
+#' enable lockfile creation based on this file. To do this, run `renv::settings$snapshot.type("explicit")`.
 #' Naming of `type` is the same as in `renv::snapshot()`. For the `"explicit"` type refer to
 #' `renv::settings$package.dependency.fields()`
-#' to see what `DESCRIPTION` fields are included in the `.lockfile`.
-#' - **Custom files based `.lockfile`**: If you want to specify custom files as a base for the `.lockfile`, then run
+#' to see what `DESCRIPTION` fields are included in the lockfile.
+#' - **Custom files based lockfile**: If you want to specify custom files as a base for the lockfile, then run
 #' `renv::settings$snapshot.type("custom")` and set `renv.snapshot.filter` option.
 #'
 #' @note
-#' This function computes the `.lockfile` as a `promises::future_promise` promise, while
+#' This function computes the lockfile as a `promises::future_promise` promise, while
 #' running the evaluation of the process on a separate worker. If `future::plan()` was set to something different than
 #' `future::sequential`, it reuses the parallel backed. If not, it sets `future::multisession` as a parallel plan with
 #' 2 workers. Then, `shiny::ExtendedTask()` is used to run asynchronous computations. If the `teal` app started with
 #' `future::sequential` plan, is it set back once the task is finished.
 #'
-#' @section `.lock` file usage:
-#' Once you have the `.lock` file, you can restore the application environment with `renv::restore()`.
+#' @section lockfile usage:
+#' Once you have the lockfile, you can restore the application environment with `renv::restore()`.
 #'
 #' @seealso [renv::snapshot()], [renv::restore()].
 #'
