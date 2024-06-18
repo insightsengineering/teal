@@ -406,7 +406,8 @@ get_unique_labels <- function(labels) {
 
 #' Create `renv` `.lock` file
 #'
-#' Function allows to create `renv::snapshot()` during the `teal` initialization.
+#' This function is not meant for a single usage. Check `Details` section to understand how you can steer the
+#' `.lockfile` creation process. This function is used to create `renv::snapshot()` during the `teal` initialization.
 #'
 #' The `.lockfile` creation is based on [renv::snapshot()]. It allows multiple ways of `.lockfile` creation.
 #'
@@ -438,7 +439,7 @@ get_unique_labels <- function(labels) {
 #'
 #' @seealso [renv::snapshot()], [renv::restore()].
 #'
-#' @return (`character(1)`) the path to the `lockfile` created in a `tempdir()`.
+#' @return (`promises::future_promise`) containing a promise to evaluate `renv::snapshot()`.
 #'
 #' @keywords internal
 create_renv_lockfile <- function(close) {

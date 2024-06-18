@@ -11,10 +11,11 @@ create_renv_lockfile(close)
 when finishing the task.}
 }
 \value{
-(\code{character(1)}) the path to the \code{lockfile} created in a \code{tempdir()}.
+(\code{promises::future_promise}) containing a promise to evaluate \code{renv::snapshot()}.
 }
 \description{
-Function allows to create \code{renv::snapshot()} during the \code{teal} initialization.
+This function is not meant for a single usage. Check \code{Details} section to understand how you can steer the
+\code{.lockfile} creation process. This function is used to create \code{renv::snapshot()} during the \code{teal} initialization.
 }
 \details{
 The \code{.lockfile} creation is based on \code{\link[renv:snapshot]{renv::snapshot()}}. It allows multiple ways of \code{.lockfile} creation.
