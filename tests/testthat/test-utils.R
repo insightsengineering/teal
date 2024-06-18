@@ -259,7 +259,7 @@ testthat::test_that("create_renv_lockfile creates a lock file during the executi
 
   renv_file_name <- "teal_app.lock"
   withr::defer(file.remove(renv_file_name))
-  promise <- create_renv_lockfile(TRUE)
+  promise <- create_renv_lockfile(TRUE, renv_file_name)
 
   testthat::expect_true(file.exists(renv_file_name))
 })
