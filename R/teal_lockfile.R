@@ -35,11 +35,16 @@
 teal_lockfile <- function() {
   # If user has setup the file, there is no need to compute a new one.
   user_lockfile <- getOption("teal.renv.lockfile", "")
-  if (!identical(user_lockfile, "") && !file.exists(user_lockfile)) {
-    stop("lockfile provided through options('teal.renv.lockfile') does not exist.")
+  if (!identical(user_lockfile, "")) {
+    if (file.exists(user_lockfile)) {
+      file.copy(user_lockfile, "teal_app.lock")
+      return(invisible(NULL))
+    } else {
+      stop("lockfile provided through options('teal.renv.lockfile') does not exist.")
+    }
   }
 
-  if (!(file.exists(user_lockfile) || is_in_test() || is_r_cmd_check())) {
+  if (!(is_in_test() || is_r_cmd_check())) {
     old_plan <- future::plan()
     # If there is already a parallel backend, reuse it.
     if (inherits(old_plan, "sequential")) {
@@ -55,8 +60,8 @@ teal_lockfile <- function() {
 create_renv_lockfile <- function(close) {
   checkmate::assert_flag(close)
   promise <- promises::future_promise({
-    # Below is not a file in tempdir() directory.
-    # If a file is created in tempdir() it gets deleted on 'then(onFulfilled' part.
+    # Below we can not use a file created in tempdir() directory.
+    # If a file is created in tempdir(), it gets deleted on 'then(onFulfilled' part.
     lockfile_path <- "teal_app.lock"
     shiny::onStop(function() file.remove(lockfile_path))
 
@@ -90,21 +95,15 @@ teal_lockfile_downloadhandler <- function() {
       "renv.lock"
     },
     content = function(file) {
-      user_lockfile <- getOption("teal.renv.lockfile", "")
-      # If someone provided user_lockfile that does not exist, it is handled by teal_lockfile().
-      if (!file.exists(user_lockfile)) {
-        teal_lockfile <- "teal_app.lock"
-        iter <- 1
-        while (!file.exists(teal_lockfile) && iter <= 100) {
-          logger::log_trace("lockfile not created yet, retrying...")
-          Sys.sleep(0.25)
-          iter <- iter + 1 # max wait time is 25 seconds
-        }
-        file.copy(teal_lockfile, file)
-        file
-      } else {
-        user_lockfile
+      teal_lockfile <- "teal_app.lock"
+      iter <- 1
+      while (!file.exists(teal_lockfile) && iter <= 100) {
+        logger::log_trace("lockfile not created yet, retrying...")
+        Sys.sleep(0.25)
+        iter <- iter + 1 # max wait time is 25 seconds
       }
+      file.copy(teal_lockfile, file)
+      file
     },
     contentType = "application/json"
   )
