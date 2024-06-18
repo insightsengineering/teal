@@ -1,6 +1,6 @@
 #' Create application `.lockfile`
 #'
-#' This function is used during `teal::init` and enables to create `renv` `.lockfile` to be shared in the `teal` app.
+#' This function is used during `teal::init` and creates `renv` compatible `.lock` file to used inside the application.
 #'
 #' The process uses [renv::snapshot()], which allows multiple ways of `.lockfile` creation.
 #'
