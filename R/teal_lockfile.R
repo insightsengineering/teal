@@ -24,8 +24,8 @@
 #' 2 workers. Then, `shiny::ExtendedTask()` is used to run asynchronous computations. If the `teal` app started with
 #' `future::sequential` plan, is it set back once the task is finished.
 #'
-#' @section `.lockfile` usage:
-#' Once you have a `.lockfile` file, you can restore R project with `ren::init();renv::restore()`.
+#' @section `.lock` file usage:
+#' Once you have the `.lock` file, you can restore the application environment with `renv::restore()`.
 #'
 #' @seealso [renv::snapshot()], [renv::restore()].
 #'
