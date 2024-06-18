@@ -7,7 +7,7 @@
 teal_lockfile()
 }
 \value{
-Nothing. This is executed for its side effect that creates lockfile which is then used in the application.
+Nothing. This is executed for its side effect that creates lockfile which is then used in \code{teal} application.
 }
 \description{
 This function is used during \code{teal::init} and creates \code{renv} compatible lockfile to used inside the application.

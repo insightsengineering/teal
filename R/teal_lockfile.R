@@ -29,7 +29,7 @@
 #'
 #' @seealso [renv::snapshot()], [renv::restore()].
 #'
-#' @return Nothing. This is executed for its side effect that creates lockfile which is then used in the application.
+#' @return Nothing. This is executed for its side effect that creates lockfile which is then used in `teal` application.
 #'
 #' @keywords internal
 teal_lockfile <- function() {
@@ -57,7 +57,7 @@ create_renv_lockfile <- function(close) {
   promise <- promises::future_promise({
     # Below is not a file in tempdir() directory.
     # If a file is created in tempdir() it gets deleted on 'then(onFulfilled' part.
-    lockfile_path <- getOption("teal.internal.renv.lockfile")
+    lockfile_path <- "teal_app.lock"
     shiny::onStop(function() file.remove(lockfile_path))
 
     renv_logs <- utils::capture.output(
@@ -93,7 +93,7 @@ teal_lockfile_downloadhandler <- function(){
       user_lockfile <- getOption("teal.renv.lockfile", "")
       # If someone provided user_lockfile that does not exist, it is handled by teal_lockfile().
       if (!file.exists(user_lockfile)) {
-        teal_lockfile <- getOption("teal.internal.renv.lockfile")
+        teal_lockfile <- "teal_app.lock"
         iter <- 1
         while (!file.exists(teal_lockfile) && iter <= 100) {
           logger::log_trace("lockfile not created yet, retrying...")
