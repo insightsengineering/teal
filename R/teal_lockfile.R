@@ -34,11 +34,12 @@
 #'
 #' @keywords internal
 teal_lockfile <- function() {
+  lockfile_path <- "teal_app.lock"
   # If user has setup the file, there is no need to compute a new one.
   user_lockfile <- getOption("teal.renv.lockfile", "")
   if (!identical(user_lockfile, "")) {
     if (file.exists(user_lockfile)) {
-      file.copy(user_lockfile, "teal_app.lock")
+      file.copy(user_lockfile, lockfile_path)
       return(invisible(NULL))
     } else {
       stop("lockfile provided through options('teal.renv.lockfile') does not exist.")
@@ -53,17 +54,16 @@ teal_lockfile <- function() {
     }
 
     lockfile_task <- ExtendedTask$new(create_renv_lockfile)
-    lockfile_task$invoke(inherits(old_plan, "sequential"))
+    lockfile_task$invoke(inherits(old_plan, "sequential"), lockfile_path)
     logger::log_trace("lockfile creation invoked.")
   }
 }
 
-create_renv_lockfile <- function(close) {
+create_renv_lockfile <- function(close, lockfile_path) {
   checkmate::assert_flag(close)
   promise <- promises::future_promise({
     # Below we can not use a file created in tempdir() directory.
     # If a file is created in tempdir(), it gets deleted on 'then(onFulfilled' part.
-    lockfile_path <- "teal_app.lock"
     shiny::onStop(function() file.remove(lockfile_path))
 
     renv_logs <- utils::capture.output(
