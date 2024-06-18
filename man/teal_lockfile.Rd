@@ -2,7 +2,7 @@
 % Please edit documentation in R/teal_lockfile.R
 \name{teal_lockfile}
 \alias{teal_lockfile}
-\title{Create \code{renv} \code{.lockfile}}
+\title{Create application \code{.lockfile}}
 \usage{
 teal_lockfile()
 }

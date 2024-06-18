@@ -1,4 +1,4 @@
-#' Create `renv` `.lockfile`
+#' Create application `.lockfile`
 #'
 #' This function is used during `teal::init` and enables to create `renv` `.lockfile` to be shared in the `teal` app.
 #'
