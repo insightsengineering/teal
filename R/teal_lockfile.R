@@ -84,7 +84,7 @@ create_renv_lockfile <- function(close) {
   promise
 }
 
-teal_lockfile_downloadhandler <- function(){
+teal_lockfile_downloadhandler <- function() {
   downloadHandler(
     filename = function() {
       "renv.lock"
