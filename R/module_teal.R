@@ -138,7 +138,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       title = "SessionInfo"
     )
 
-    output$lockFile <- teal_lockfile_download()
+    output$lockFile <- teal_lockfile_downloadhandler()
 
     # `JavaScript` code
     run_js_files(files = "init.js")
