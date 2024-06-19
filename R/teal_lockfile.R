@@ -18,13 +18,6 @@
 #'     - **Custom files-based lockfile**: To specify custom files as the basis for the lockfile, set
 #'     `renv::settings$snapshot.type("custom")` and configure the `renv.snapshot.filter` option.
 #'
-#' @note
-#' This function computes the lockfile as a `promises::future_promise` promise, executing the process on a separate
-#' worker. If `future::plan()` is set to something other than `future::sequential`, it reuses the existing parallel
-#' backend. Otherwise, it sets `future::multisession` as the parallel plan with two workers. The `shiny::ExtendedTask()`
-#' is then used to run asynchronous computations. If the `teal` app started with the `future::sequential` plan, it is
-#' reset once the task is completed.
-#'
 #' @section lockfile usage:
 #' After creating the lockfile, you can restore the application environment using `renv::restore()`.
 #'
@@ -48,13 +41,13 @@ teal_lockfile <- function() {
 
   if (!(is_in_test() || is_r_cmd_check())) {
     old_plan <- future::plan()
-    # If there is already a parallel backend, reuse it.
+    # If there is already a parallel (non-sequential) backend, reuse it.
     if (inherits(old_plan, "sequential")) {
       future::plan(future::multisession, workers = 2)
     }
 
     lockfile_task <- ExtendedTask$new(create_renv_lockfile)
-    lockfile_task$invoke(inherits(old_plan, "sequential"), lockfile_path)
+    lockfile_task$invoke(close = inherits(old_plan, "sequential"), lockfile_path)
     logger::log_trace("lockfile creation invoked.")
   }
 }
@@ -84,6 +77,7 @@ create_renv_lockfile <- function(close = FALSE, lockfile_path = NULL) {
     lockfile_path
   })
   if (close) {
+    # If the initial backend was only sequential, bring it back.
     promises::then(promise, onFulfilled = function() {
       future::plan(future::sequential)
     })

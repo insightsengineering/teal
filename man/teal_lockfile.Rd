@@ -34,13 +34,6 @@ directory, set \code{renv::settings$snapshot.type("explicit")}. The naming conve
 }
 }
 }
-\note{
-This function computes the lockfile as a \code{promises::future_promise} promise, executing the process on a separate
-worker. If \code{future::plan()} is set to something other than \code{future::sequential}, it reuses the existing parallel
-backend. Otherwise, it sets \code{future::multisession} as the parallel plan with two workers. The \code{shiny::ExtendedTask()}
-is then used to run asynchronous computations. If the \code{teal} app started with the \code{future::sequential} plan, it is
-reset once the task is completed.
-}
 \section{lockfile usage}{
 
 After creating the lockfile, you can restore the application environment using \code{renv::restore()}.
