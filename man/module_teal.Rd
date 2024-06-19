@@ -70,7 +70,5 @@ main \code{teal} UI that depends on the data.
 The currently active tab is tracked and the right filter panel
 updates the displayed datasets to filter for according to the active \code{datanames}
 of the tab.
-
-It is written as a \code{shiny} module so it can be added into other apps as well.
 }
 \keyword{internal}

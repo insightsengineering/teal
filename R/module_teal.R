@@ -23,8 +23,6 @@
 #' updates the displayed datasets to filter for according to the active `datanames`
 #' of the tab.
 #'
-#' It is written as a `shiny` module so it can be added into other apps as well.
-#'
 #' @name module_teal
 #'
 #' @inheritParams module_teal_with_splash
