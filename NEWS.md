@@ -1,4 +1,7 @@
-# teal 0.15.2.9037
+# teal 0.15.2.9042
+
+### Enhancement
+* Provided progress bar for modules loading and data filtering during teal app startup.
 
 ### Miscellaneous
 * Filter mapping display is no longer coupled to the snapshot manager.

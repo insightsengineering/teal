@@ -189,25 +189,47 @@ check_filter_datanames <- function(filters, datanames) {
 #' @param modules (`teal_modules`) object
 #' @param filters (`teal_slices`) object
 #' @param filtered_data_singleton A result of `teal_data_to_filtered_data` applied to `data`.
+#' @param progress (`Progress`) object from `shiny`, optional.
+#'  The progress bar will be filled during the (possibly recursive) call.
 #' @return Returns list of same shape as `modules`, containing `FilteredData` at every leaf.
 #' If module specific, each leaf contains different instance, otherwise every leaf contains `filtered_data_singleton`.
 #' @keywords internal
-modules_datasets <- function(data, modules, filters, filtered_data_singleton = teal_data_to_filtered_data(data)) {
+modules_datasets <- function(data,
+                             modules,
+                             filters,
+                             filtered_data_singleton = teal_data_to_filtered_data(data),
+                             progress = NULL) {
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(filters, "modules_teal_slices")
   checkmate::assert_r6(filtered_data_singleton, "FilteredData")
+  checkmate::assert_r6(progress, "Progress", null.ok = TRUE)
 
   if (!isTRUE(attr(filters, "module_specific"))) {
+    if (!is.null(progress)) {
+      progress$inc(
+        amount = progress$getMax(),
+        detail = "100%"
+      )
+    }
+
     # subset global filters
     slices <- shiny::isolate({
       Filter(function(x) x$id %in% attr(filters, "mapping")$global_filters, filters)
     })
     filtered_data_singleton$set_filter_state(slices)
+
     return(modules_structure(modules, filtered_data_singleton))
   }
 
   if (inherits(modules, "teal_module")) {
+    if (!is.null(progress)) {
+      progress$inc(
+        amount = 1,
+        detail = sprintf("%s%%", round(progress$getValue() / progress$getMax(), 2L) * 100)
+      )
+    }
+
     # 1. get datanames
     datanames <-
       if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
@@ -245,7 +267,8 @@ modules_datasets <- function(data, modules, filters, filtered_data_singleton = t
       modules_datasets,
       data = data,
       filters = filters,
-      filtered_data_singleton = filtered_data_singleton
+      filtered_data_singleton = filtered_data_singleton,
+      progress = progress
     )
     names(ans) <- vapply(modules$children, `[[`, character(1), "label")
 

@@ -20,6 +20,7 @@
 #'   of the `modules` argument and list names must correspond to the labels in `modules`.
 #'   When filter is not module-specific then list contains the same object in all elements.
 #' @param reporter (`Reporter`) object from `teal.reporter`
+#' @param progress (`Progress`) object from `shiny`
 #'
 #' @return
 #' A `shiny.tag.list` containing the main menu, placeholders for filters and placeholders for the `teal` modules.
@@ -29,15 +30,16 @@
 NULL
 
 #' @rdname module_tabs_with_filters
-ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices()) {
+ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices(), progress = NULL) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   checkmate::assert_class(filter, "teal_slices")
+  checkmate::assert_r6(progress, "Progress", null.ok = TRUE)
 
   ns <- NS(id)
   is_module_specific <- isTRUE(attr(filter, "module_specific"))
 
-  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets, is_module_specific = is_module_specific)
+  teal_ui <- ui_nested_tabs(ns("root"), modules = modules, datasets, is_module_specific = is_module_specific, progress = progress) # nolint: line_length.
   filter_panel_btns <- tags$li(
     class = "flex-grow",
     tags$button(
@@ -50,6 +52,10 @@ ui_tabs_with_filters <- function(id, modules, datasets, filter = teal_slices()) 
     wunder_bar_ui(ns("wunder_bar"))
   )
   teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btns)
+
+  if (!is.null(progress)) {
+    progress$set(message = "Preparing main UI", detail = "")
+  }
 
   if (!is_module_specific) {
     # need to rearrange html so that filter panel is within tabset

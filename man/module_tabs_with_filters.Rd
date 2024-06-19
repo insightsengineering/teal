@@ -6,7 +6,13 @@
 \alias{srv_tabs_with_filters}
 \title{Add right filter panel into each of the top-level \code{teal_modules} UIs}
 \usage{
-ui_tabs_with_filters(id, modules, datasets, filter = teal_slices())
+ui_tabs_with_filters(
+  id,
+  modules,
+  datasets,
+  filter = teal_slices(),
+  progress = NULL
+)
 
 srv_tabs_with_filters(
   id,
@@ -32,6 +38,8 @@ When filter is not module-specific then list contains the same object in all ele
 
 \item{filter}{(\code{teal_slices})
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
+
+\item{progress}{(\code{Progress}) object from \code{shiny}}
 
 \item{reporter}{(\code{Reporter}) object from \code{teal.reporter}}
 }

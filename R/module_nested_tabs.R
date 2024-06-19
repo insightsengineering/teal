@@ -22,6 +22,7 @@
 #' @param is_module_specific (`logical(1)`)
 #'  flag determining if the filter panel is global or module-specific.
 #'  When set to `TRUE`, a filter panel is called inside of each module tab.
+#' @param progress (`Progress`) object from `shiny`
 #'
 #' @return
 #' Depending on the class of `modules`, `ui_nested_tabs` returns:
@@ -35,21 +36,22 @@
 NULL
 
 #' @rdname module_nested_tabs
-ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
+ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_count(depth)
+  checkmate::assert_r6(progress, "Progress", null.ok = TRUE)
   UseMethod("ui_nested_tabs", modules)
 }
 
 #' @rdname module_nested_tabs
 #' @export
-ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
+ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname module_nested_tabs
 #' @export
-ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
+ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) { # nolint: line_length.
   checkmate::assert_list(datasets, types = c("list", "FilteredData"))
   ns <- NS(id)
   do.call(
@@ -72,7 +74,8 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
               modules = modules$children[[module_id]],
               datasets = datasets[[module_label]],
               depth = depth + 1L,
-              is_module_specific = is_module_specific
+              is_module_specific = is_module_specific,
+              progress = progress
             )
           )
         }
@@ -83,9 +86,16 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
 
 #' @rdname module_nested_tabs
 #' @export
-ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE) {
+ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) {
   checkmate::assert_class(datasets, classes = "FilteredData")
   ns <- NS(id)
+
+  if (!is.null(progress)) {
+    progress$inc(
+      amount = 1,
+      detail = sprintf("%s%%", round(progress$getValue() / progress$getMax(), 2L) * 100)
+    )
+  }
 
   args <- c(list(id = ns("module")), modules$ui_args)
 

@@ -8,7 +8,8 @@ modules_datasets(
   data,
   modules,
   filters,
-  filtered_data_singleton = teal_data_to_filtered_data(data)
+  filtered_data_singleton = teal_data_to_filtered_data(data),
+  progress = NULL
 )
 }
 \arguments{
@@ -19,6 +20,9 @@ modules_datasets(
 \item{filters}{(\code{teal_slices}) object}
 
 \item{filtered_data_singleton}{A result of \code{teal_data_to_filtered_data} applied to \code{data}.}
+
+\item{progress}{(\code{Progress}) object from \code{shiny}, optional.
+The progress bar will be filled during the (possibly recursive) call.}
 }
 \value{
 Returns list of same shape as \code{modules}, containing \code{FilteredData} at every leaf.
