@@ -18,11 +18,14 @@ repos:
           - davidgohel/flextable # Error: package 'flextable' is not available
           - davidgohel/gdtools # for flextable
           - checkmate
+          - future
           - jsonlite
           - lifecycle
           - logger
           - magrittr
           - methods
+          - promises
+          - renv
           - rlang
           - shiny
           - shinyjs

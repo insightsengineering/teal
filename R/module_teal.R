@@ -111,6 +111,8 @@ ui_teal <- function(id,
       tags$div(
         footer,
         teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
+        br(),
+        downloadLink(ns("lockFile"), "Download .lock file"),
         textOutput(ns("identifier"))
       )
     )
@@ -133,6 +135,8 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       verbatim_content = utils::capture.output(utils::sessionInfo()),
       title = "SessionInfo"
     )
+
+    output$lockFile <- teal_lockfile_downloadhandler()
 
     # `JavaScript` code
     run_js_files(files = "init.js")

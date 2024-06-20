@@ -84,6 +84,10 @@ This indicates whether to print the `JavaScript` console logs to the `R` console
 
 Default: `FALSE`.
 
+### `teal.renv.lockfile` (`character`)
+
+The path to the pre-computed `renv` lockfile that will be shared through teal app. To read more about lockfile usage creation check `?teal::teal_lockfile`.
+
 
 # Deprecated options
 

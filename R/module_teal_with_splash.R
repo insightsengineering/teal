@@ -11,7 +11,7 @@
 #' This is necessary because the filter panel and modules depend on the data to initialize.
 #'
 #' `teal_with_splash` follows the `shiny` module convention.
-#' [`init()`] is a wrapper around this that assumes that `teal` it is
+#' [`init()`] is a wrapper around this that assumes that `teal` is
 #' the top-level module and cannot be embedded.
 #'
 #' Note: It is no longer recommended to embed `teal` in `shiny` apps as a module.
@@ -26,6 +26,12 @@
 #'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
 #' @inheritParams shiny::moduleServer
+#'
+#' @section Reproducibility:
+#' Reproducibility is supported by multiple features. `teal` includes a `utils::sessioInfo()` output to allow to compare
+#' packages used in the session. It also allows to create `renv` lockfile to support project setup reproducibility.
+#' For more information about lockfile creation visit [`teal_lockfile()`].
+#'
 #' @return
 #' Returns a `reactive` expression containing a `teal_data` object when data is loaded or `NULL` when it is not.
 #' @name module_teal_with_splash
@@ -197,7 +203,6 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       teal_data_rv_validate()
       NULL
     })
-
 
     res <- srv_teal(id = "teal", modules = modules, teal_data_rv = teal_data_rv_validate, filter = filter)
     logger::log_trace("srv_teal_with_splash initialized module with data.")

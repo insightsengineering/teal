@@ -54,12 +54,19 @@ This module pauses app initialization pending delayed data loading.
 This is necessary because the filter panel and modules depend on the data to initialize.
 
 \code{teal_with_splash} follows the \code{shiny} module convention.
-\code{\link[=init]{init()}} is a wrapper around this that assumes that \code{teal} it is
+\code{\link[=init]{init()}} is a wrapper around this that assumes that \code{teal} is
 the top-level module and cannot be embedded.
 
 Note: It is no longer recommended to embed \code{teal} in \code{shiny} apps as a module.
 but rather use \code{init} to create a standalone application.
 }
+\section{Reproducibility}{
+
+Reproducibility is supported by multiple features. \code{teal} includes a \code{utils::sessioInfo()} output to allow to compare
+packages used in the session. It also allows to create \code{renv} lockfile to support project setup reproducibility.
+For more information about lockfile creation visit \code{\link[=teal_lockfile]{teal_lockfile()}}.
+}
+
 \examples{
 teal_modules <- modules(example_module())
 # Shiny app with modular integration of teal
