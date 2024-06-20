@@ -4,6 +4,7 @@ Forkers
 Hoffmann
 MAEs
 ORCID
+Pre
 Reproducibility
 TLG
 UI
@@ -16,6 +17,7 @@ dialogs
 favicon
 favicons
 funder
+lockfile
 omics
 pre
 programmatically
@@ -26,4 +28,3 @@ tabsetted
 themer
 theming
 uncheck
-lockfile
