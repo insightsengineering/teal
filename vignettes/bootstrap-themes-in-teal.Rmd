@@ -82,13 +82,7 @@ Other `bslib::bs_add_*` family functions could be used to specify low-level Boot
 
 ### Bootstrap NULL vs Bootstrap 3
 
-It is important to note that the statements `options("teal.bs_theme" = NULL)` and `options("teal.bs_theme" = bslib::bs_theme(version = "3")` are not equivalent as the `bslib` approximation of the default `shiny` theme for Bootstrap version 3 can introduce some discrepancies. One important difference is that when using `bslib::bs_theme(version = "3", bootswatch = "THEME NAME")` one can apply the custom Bootstrap theme. Another one is that the usage of `bslib::bs_theme(version = "3")` requires the installation of the latest `shinyWidgets` package from the main branch, see below.
-
-```
-# Downloading the newest shinyWidgets
-# needed only when bslib::bs_theme(version = "3", ...) is used
-remotes::install_github("https://github.com/dreamRs/shinyWidgets@main")
-```
+It is important to note that the statements `options("teal.bs_theme" = NULL)` and `options("teal.bs_theme" = bslib::bs_theme(version = "3")` are not equivalent as the `bslib` approximation of the default `shiny` theme for Bootstrap version 3 can introduce some discrepancies. One important difference is that when using `bslib::bs_theme(version = "3", bootswatch = "THEME NAME")` one can apply the custom Bootstrap theme. Another one is that the usage of `bslib::bs_theme(version = "3")` requires the installation of the `shinyWidgets` package of minimum version 0.7.4.
 
 ### Regular `shiny::fluidPage`
 
