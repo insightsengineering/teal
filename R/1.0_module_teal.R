@@ -94,6 +94,7 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       }
 
       eventReactive(data_rv(), {
+        logger::log_trace("srv_teal_module@1 initializing FilteredData")
         # Otherwise, FilteredData will be created in the modules' scope later
         progress_data <- Progress$new(
           max = length(unlist(module_labels(modules)))

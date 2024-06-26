@@ -158,6 +158,7 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
   moduleServer(id = id, module = function(input, output, session) {
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
+        logger::log_trace("srv_teal_module@1 initializing module-specific FilteredData")
         # Otherwise, FilteredData will be created in the modules' scope later
         progress_data <- Progress$new(
           max = length(unlist(module_labels(modules)))
@@ -172,13 +173,14 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
     srv_filter_panel("module_filter_panel", teal_slices(), datasets)
 
     # Create two triggers to limit reactivity between filter-panel and modules.
-    # We want to recalculate only visible modules
+    # We want to recalculate only visible modules (renderUI triggers only when visible, when tab is displayed)
     # - trigger the data when the tab is selected
     # - trigger module to be called when the tab is selected for the first time
     trigger_data <- reactiveVal(1L)
     trigger_module <- reactiveVal(NULL)
     output$data_reactive <- renderUI({
-      req(data_rv())
+      req(datasets())
+      get_filter_expr(datasets())
       isolate(trigger_data(trigger_data() + 1))
       isolate(trigger_module(TRUE))
       NULL
@@ -200,13 +202,10 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
     }
 
     if (is_arg_used(modules$server, "data")) {
-      filtered_teal_data <- eventReactive(
-        trigger_data(),
-        {
-          # todo: datasets() doesn't trigger teal_module. When filter applied active module data doesn't change
-          .make_teal_data(modules, data = data_rv(), datasets = datasets())
-        }
-      )
+      filtered_teal_data <- eventReactive(trigger_data(), {
+        # todo: datasets() doesn't trigger teal_module. When filter applied active module data doesn't change
+        .make_teal_data(modules, data = data_rv(), datasets = datasets())
+      })
       args <- c(args, data = list(filtered_teal_data))
     }
 
@@ -226,7 +225,7 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
     }
 
     # Call modules.
-    if (isTRUE(session$restoreContext$active)) {
+    module_out <- if (isTRUE(session$restoreContext$active)) {
       # When restoring bookmark, all modules must be initialized on app start.
       # Delayed module initiation (below) precludes restoring state b/c inputs do not exist when restoring occurs.
       call_module()
@@ -243,6 +242,11 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
         eventExpr = trigger_module(),
         handlerExpr = call_module()
       )
+    }
+
+    # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
+    if ("report" %in% names(module_out)) {
+      # (reactively) add card to the reporter
     }
 
     reactive(modules)
