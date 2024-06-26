@@ -49,7 +49,7 @@ ui_teal_1.0 <- function(id,
       class = "shinybusymessage"
     )
   )
-
+  # todo: add reporter previewer to the list of the module
   data_elem <- ui_data(ns("data"), data = data, title = title, header = header, footer = footer)
   tabs_elem <- ui_teal_module(id = ns("root_module"), modules = modules)
 
@@ -84,7 +84,36 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_with_splash initializing module with data.")
 
+    output$identifier <- renderText(
+      paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
+    )
+
+    teal.widgets::verbatim_popup_srv(
+      "sessionInfo",
+      verbatim_content = utils::capture.output(utils::sessionInfo()),
+      title = "SessionInfo"
+    )
+
+    output$lockFile <- teal_lockfile_downloadhandler()
+
+    # `JavaScript` code
+    run_js_files(files = "init.js")
+
+    # set timezone in shiny app
+    # timezone is set in the early beginning so it will be available also
+    # for `DDL` and all shiny modules
+    get_client_timezone(session$ns)
+    observeEvent(
+      eventExpr = input$timezone,
+      once = TRUE,
+      handlerExpr = {
+        session$userData$timezone <- input$timezone
+        logger::log_trace("srv_teal@1 Timezone set to client's timezone: { input$timezone }.")
+      }
+    )
+
     data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
+
     # Restore filter from bookmarked state, if applicable.
     filter_restored <- restoreValue("filter_state_on_bookmark", filter)
     if (!is.teal_slices(filter_restored)) {
@@ -101,6 +130,7 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
         on.exit(progress_data$close())
         progress_data$set(message = "Preparing data filtering", detail = "0%")
         filtered_data <- teal_data_to_filtered_data(data_rv())
+        # todo: We need a bookmark feature back to test filter_restored
         # todo: (question) what filters should be restored after refreshing of the data:
         #    1. filters that were set by the app developer
         #    2. filters that were set by the user (preferable by @gogonzo)
