@@ -83,17 +83,22 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
 ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
-  module_ui <- div(
+  div(
     id = id,
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
       if (depth >= 2L) tags$div(style = "mt-6"),
-      do.call(modules$ui, args)
+      fluidRow(
+        column(width = 9, do.call(modules$ui, args), class = "teal_primary_col"),
+        column(
+          width = 3,
+          ui_filter_panel(ns("module_filter_panel")),
+          class = "teal_secondary_col"
+        )
+      )
     )
   )
-
-  module_ui
 }
 
 #' @rdname module_teal_module
@@ -151,12 +156,25 @@ srv_teal_module.teal_modules <- function(id, data_rv, datasets, modules, reporte
 srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter = teal.reporter::Reporter$new()) {
   logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
-    srv_global_filter_panel("filter_panel", teal_slices(), datasets)
+    if (is.null(datasets)) {
+      datasets <- eventReactive(data_rv(), {
+        # Otherwise, FilteredData will be created in the modules' scope later
+        progress_data <- Progress$new(
+          max = length(unlist(module_labels(modules)))
+        )
+        on.exit(progress_data$close())
+        progress_data$set(message = "Preparing data filtering", detail = "0%")
+        filtered_data <- teal_data_to_filtered_data(data_rv())
+        filtered_data$set_filter_state(filter_restored)
+        filtered_data
+      })
+    }
+    srv_filter_panel("module_filter_panel", teal_slices(), datasets)
 
     trigger_data <- reactiveVal(1L)
     trigger_module <- reactiveVal(NULL)
     output$data_reactive <- renderUI({
-      lapply(data_rv(), function(x) x())
+      req(data_rv())
       isolate(trigger_data(trigger_data() + 1))
       isolate(trigger_module(TRUE))
       NULL
@@ -169,18 +187,18 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
     }
 
     if (is_arg_used(modules$server, "datasets")) {
-      args <- c(args, datasets = datasets)
+      args <- c(args, datasets = isolate(datasets()))
+      warning("datasets argument is not reactive and therefore it won't be updated when data is refreshed.")
     }
 
     if (is_arg_used(modules$server, "data")) {
       filtered_teal_data <- eventReactive(
         trigger_data(),
         {
-          .make_teal_data(modules, data_rv())
+          .make_teal_data(modules, data = data_rv(), datasets = datasets())
         }
       )
-      data <- srv_teal_transform_data("transformers", filtered_teal_data, modules)
-      args <- c(args, data = list(data))
+      args <- c(args, data = list(filtered_teal_data))
     }
 
     # if (is_arg_used(modules$server, "filter_panel_api")) {
@@ -221,17 +239,18 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
   })
 }
 
-.make_teal_data <- function(modules, data) {
-  datasets <- isolate(lapply(data, function(x) x()))
-  filter_code <- isolate(lapply(datasets, function(x) attr(x, "filter_code")))
-  data_code <- attr(data, "code")
+.make_teal_data <- function(modules, data, datasets) {
+  datanames <- teal.data::datanames(data)
+  filtered_datasets <- sapply(datanames, datasets$get_data, filtered = TRUE, USE.NAMES = TRUE)
+  filter_code <- get_filter_expr(datasets)
+  data_code <- teal.data::get_code(data)
   all_code <- paste(unlist(c(data_code, filter_code)), collapse = "\n")
   tdata <- do.call(
     teal.data::teal_data,
     c(
       list(code = all_code),
-      list(join_keys = attr(data, "join_keys")),
-      datasets
+      list(join_keys = teal.data::join_keys(data)),
+      filtered_datasets
     )
   )
   tdata@verified <- TRUE # todo: change to original value from from data

@@ -83,14 +83,34 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_with_splash initializing module with data.")
-    data_reactive <- srv_data("data", data = data, modules = modules, filter = filter)
 
-    observe({
-      logger::log_trace("data changed")
-      print(data_reactive())
-    })
+    data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
+
+    datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
+      # Restore filter from bookmarked state, if applicable.
+      filter_restored <- restoreValue("filter_state_on_bookmark", filter)
+      if (!is.teal_slices(filter_restored)) {
+        filter_restored <- as.teal_slices(filter_restored)
+      }
+
+      eventReactive(data_rv(), {
+        # Otherwise, FilteredData will be created in the modules' scope later
+        progress_data <- Progress$new(
+          max = length(unlist(module_labels(modules)))
+        )
+        on.exit(progress_data$close())
+        progress_data$set(message = "Preparing data filtering", detail = "0%")
+        filtered_data <- teal_data_to_filtered_data(data_rv())
+        filtered_data$set_filter_state(filter_restored)
+        filtered_data
+      })
+    }
+
+    modules_out <- srv_teal_module(
+      id = "root_module",
+      data_rv = data_rv,
+      datasets = datasets_rv,
+      modules = modules,
+    )
   })
 }
-
-# srv_teal_with_splash -> srv_teal -> srv_tabs_with_filters -> srv_nested_tabs
-# srv_teal
