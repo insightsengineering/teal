@@ -85,14 +85,13 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
     logger::log_trace("srv_teal_with_splash initializing module with data.")
 
     data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
+    # Restore filter from bookmarked state, if applicable.
+    filter_restored <- restoreValue("filter_state_on_bookmark", filter)
+    if (!is.teal_slices(filter_restored)) {
+      filter_restored <- as.teal_slices(filter_restored)
+    }
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
-      # Restore filter from bookmarked state, if applicable.
-      filter_restored <- restoreValue("filter_state_on_bookmark", filter)
-      if (!is.teal_slices(filter_restored)) {
-        filter_restored <- as.teal_slices(filter_restored)
-      }
-
       eventReactive(data_rv(), {
         logger::log_trace("srv_teal_module@1 initializing FilteredData")
         # Otherwise, FilteredData will be created in the modules' scope later
@@ -115,6 +114,7 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       data_rv = data_rv,
       datasets = datasets_rv,
       modules = modules,
+      filter = filter_restored
     )
   })
 }

@@ -102,7 +102,12 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
 }
 
 #' @rdname module_teal_module
-srv_teal_module <- function(id, data_rv, datasets, modules, reporter = teal.reporter::Reporter$new()) {
+srv_teal_module <- function(id,
+                            data_rv,
+                            datasets,
+                            modules,
+                            filter = teal_slices(),
+                            reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(reporter, "Reporter")
   UseMethod("srv_teal_module", modules)
@@ -110,13 +115,23 @@ srv_teal_module <- function(id, data_rv, datasets, modules, reporter = teal.repo
 
 #' @rdname module_teal_module
 #' @export
-srv_teal_module.default <- function(id, data_rv, datasets, modules, reporter = teal.reporter::Reporter$new()) {
+srv_teal_module.default <- function(id,
+                                    data_rv,
+                                    datasets,
+                                    modules,
+                                    filter = teal_slices(),
+                                    reporter = teal.reporter::Reporter$new()) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname module_teal_module
 #' @export
-srv_teal_module.teal_modules <- function(id, data_rv, datasets, modules, reporter = teal.reporter::Reporter$new()) {
+srv_teal_module.teal_modules <- function(id,
+                                         data_rv,
+                                         datasets,
+                                         modules,
+                                         filter = teal_slices(),
+                                         reporter = teal.reporter::Reporter$new()) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_trace("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
@@ -129,6 +144,7 @@ srv_teal_module.teal_modules <- function(id, data_rv, datasets, modules, reporte
           data_rv = data_rv,
           datasets = datasets,
           modules = modules$children[[module_id]],
+          filter = filter,
           reporter = reporter
         )
       },
@@ -153,7 +169,12 @@ srv_teal_module.teal_modules <- function(id, data_rv, datasets, modules, reporte
 
 #' @rdname module_teal_module
 #' @export
-srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter = teal.reporter::Reporter$new()) {
+srv_teal_module.teal_module <- function(id,
+                                        data_rv,
+                                        datasets,
+                                        modules,
+                                        filter = teal_slices(),
+                                        reporter = teal.reporter::Reporter$new()) {
   logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     if (is.null(datasets)) {
@@ -166,7 +187,7 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
         on.exit(progress_data$close())
         progress_data$set(message = "Preparing data filtering", detail = "0%")
         filtered_data <- teal_data_to_filtered_data(data_rv())
-        filtered_data$set_filter_state(filter_restored)
+        filtered_data$set_filter_state(filter)
         filtered_data
       })
     }
