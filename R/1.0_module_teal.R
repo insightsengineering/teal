@@ -21,6 +21,21 @@ ui_teal_1.0 <- function(id,
     checkmate::check_string(footer),
     checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
   )
+
+  if (is.character(title)) {
+    title <- build_app_title(title)
+  } else {
+    validate_app_title_tag(title)
+  }
+
+  if (checkmate::test_string(header)) {
+    header <- tags$p(header)
+  }
+
+  if (checkmate::test_string(footer)) {
+    footer <- tags$p(footer)
+  }
+
   ns <- NS(id)
 
   # show busy icon when `shiny` session is busy computing stuff
