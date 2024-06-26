@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9044</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9045</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,23 +82,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2-rc1">v0.15.2-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2">v0.15.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1">v0.15.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -255,11 +238,7 @@ some discrepancies. One important difference is that when using
 <code>bslib::bs_theme(version = "3", bootswatch = "THEME NAME")</code>
 one can apply the custom Bootstrap theme. Another one is that the usage
 of <code>bslib::bs_theme(version = "3")</code> requires the installation
-of the latest <code>shinyWidgets</code> package from the main branch,
-see below.</p>
-<pre><code><span><span class="co"># Downloading the newest shinyWidgets</span></span>
-<span><span class="co"># needed only when bslib::bs_theme(version = "3", ...) is used</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"https://github.com/dreamRs/shinyWidgets@main"</span><span class="op">)</span></span></code></pre>
+of the <code>shinyWidgets</code> package of minimum version 0.7.4.</p>
 </div>
 <div class="section level3">
 <h3 id="regular-shinyfluidpage">Regular <code>shiny::fluidPage</code><a class="anchor" aria-label="anchor" href="#regular-shinyfluidpage"></a>
@@ -282,7 +261,7 @@ below. For this example we assume that we want to use Bootstrap 5. To
 start, we launch the app with
 <code>bslib::run_with_themer(app$ui, app$server)</code> instead of
 <code><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shiny::shinyApp</a></code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"5"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://insightsengineering.github.io/teal/">teal</a></span><span class="op">)</span></span>
@@ -309,7 +288,7 @@ select the Minty theme in the “Overall theme” drop-down.</p>
 <p><code>bslib</code> has updated our <code>CSS</code> styles to use our
 new theme, including the <code>customizer</code> theme. Additionally, if
 we look at our <code>R</code> console, we will see</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">####  Update your bs_theme() R code with:  #####</span></span>
 <span><span class="fu">bs_theme_update</span><span class="op">(</span><span class="va">theme</span>, bootswatch <span class="op">=</span> <span class="st">"minty"</span><span class="op">)</span></span></code></pre></div>
 <p>This is a helpful guide that provides code to update our theme. For
@@ -347,7 +326,7 @@ like before but this time we will expand on our
 <code><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bslib::bs_theme</a></code> call to include our changes. Luckily, the
 arguments that were printed to the <code>R</code> console when running
 our app in the themer can be plugged right in.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
 <span>  <span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span></span>
 <span>    version <span class="op">=</span> <span class="st">"5"</span>,</span>
