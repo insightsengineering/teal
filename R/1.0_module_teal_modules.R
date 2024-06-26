@@ -224,7 +224,6 @@ srv_teal_module.teal_module <- function(id,
 
     if (is_arg_used(modules$server, "data")) {
       filtered_teal_data <- eventReactive(trigger_data(), {
-        # todo: datasets() doesn't trigger teal_module. When filter applied active module data doesn't change
         .make_teal_data(modules, data = data_rv(), datasets = datasets())
       })
       args <- c(args, data = list(filtered_teal_data))

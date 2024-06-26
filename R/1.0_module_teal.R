@@ -49,7 +49,7 @@ ui_teal_1.0 <- function(id,
       class = "shinybusymessage"
     )
   )
-  # todo: add reporter previewer to the list of the module
+  # todo: add reporter previewer to the list of the modules
   data_elem <- ui_data(ns("data"), data = data, title = title, header = header, footer = footer)
   tabs_elem <- ui_teal_module(id = ns("root_module"), modules = modules)
 
