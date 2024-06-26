@@ -22,6 +22,8 @@ srv_filter_panel <- function(id, filter, datasets) {
   moduleServer(id, function(input, output, session) {
     output$panel <- renderUI({
       req(datasets())
+      # render will be triggered only when FilteredData object changes (not when filters change)
+      # technically it means that teal_data_module needs to be refreshed
       logger::log_trace("srv_filter_panel rendering filter panel.")
       datasets()$srv_filter_panel("filters")
       datasets()$ui_filter_panel(session$ns("filters"))

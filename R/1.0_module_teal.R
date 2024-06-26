@@ -101,6 +101,9 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
         on.exit(progress_data$close())
         progress_data$set(message = "Preparing data filtering", detail = "0%")
         filtered_data <- teal_data_to_filtered_data(data_rv())
+        # todo: (question) what filters should be restored after refreshing of the data:
+        #    1. filters that were set by the app developer
+        #    2. filters that were set by the user (preferable by @gogonzo)
         filtered_data$set_filter_state(filter_restored)
         filtered_data
       })

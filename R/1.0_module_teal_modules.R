@@ -171,6 +171,10 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
     }
     srv_filter_panel("module_filter_panel", teal_slices(), datasets)
 
+    # Create two triggers to limit reactivity between filter-panel and modules.
+    # We want to recalculate only visible modules
+    # - trigger the data when the tab is selected
+    # - trigger module to be called when the tab is selected for the first time
     trigger_data <- reactiveVal(1L)
     trigger_module <- reactiveVal(NULL)
     output$data_reactive <- renderUI({
@@ -187,6 +191,10 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
     }
 
     if (is_arg_used(modules$server, "datasets")) {
+      # todo: this will be a bug. Because FilteredData is now reactive and module receives
+      #       a static FilteredData it means that change of a reactive FilteredData will not be
+      #       reflected in the module. This is a bug and is not possible to fix without deep
+      #       change of the FilteredData. Same applies to FilterPanelAPI.
       args <- c(args, datasets = isolate(datasets()))
       warning("datasets argument is not reactive and therefore it won't be updated when data is refreshed.")
     }
@@ -195,16 +203,18 @@ srv_teal_module.teal_module <- function(id, data_rv, datasets, modules, reporter
       filtered_teal_data <- eventReactive(
         trigger_data(),
         {
+          # todo: datasets() doesn't trigger teal_module. When filter applied active module data doesn't change
           .make_teal_data(modules, data = data_rv(), datasets = datasets())
         }
       )
       args <- c(args, data = list(filtered_teal_data))
     }
 
-    # if (is_arg_used(modules$server, "filter_panel_api")) {
-    #   filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets)
-    #   args <- c(args, filter_panel_api = filter_panel_api)
-    # }
+
+    if (is_arg_used(modules$server, "filter_panel_api")) {
+      filter_panel_api <- teal.slice::FilterPanelAPI$new(isolate(datasets()))
+      args <- c(args, filter_panel_api = filter_panel_api)
+    }
 
     # This function calls a module server function.
     call_module <- function() {
