@@ -83,7 +83,7 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
 ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
-  module_ui <- bslib::card(
+  module_ui <- div(
     id = id,
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
