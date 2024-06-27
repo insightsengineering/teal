@@ -65,7 +65,6 @@ srv_data <- function(id, data, modules, filter) {
     })
 
     if (inherits(data, "teal_data_module")) {
-      print("Yes, clicking the modal")
       shinyjs::disable(selector = "#root_module-active_tab.nav-tabs a")
       shinyjs::click(id = "open_teal_data_module")
     }
