@@ -134,6 +134,8 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
     data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
 
     # Restore filter from bookmarked state, if applicable.
+    # todo: bookmark store/restore of teal_slices should be implemented here
+    #       Move it from snapshot_manager_srv to here or to filter_manager
     filter_restored <- restoreValue("filter_state_on_bookmark", filter)
     if (!is.teal_slices(filter_restored)) {
       filter_restored <- as.teal_slices(filter_restored)
@@ -165,6 +167,7 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
     )
     # todo: use modules_out to active_datanames() see 104. I see potential circular reactive dependency
 
+    # todo: make a module containing for this observer and for an icon on the UI side?
     observeEvent(input$filter_manager, {
       showModal(
         modalDialog(
@@ -176,10 +179,12 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
     })
     filter_manager_srv("filter_manager", is_module_specific = isTRUE(attr(filter, "module_specific")))
 
-
+    # todo: connect snapshot manager with slices_global
     observeEvent(input$snapshot_manager, {
       print("snapshot_manager clicked!")
     })
+
+    # todo: bring back bookmark manager
     observeEvent(input$bookmark_manager, {
       print("bookmark_manager clicked!")
     })
