@@ -221,6 +221,14 @@ init <- function(data,
     }
   }
 
+  reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
+  if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
+    modules <- append_module(
+      modules,
+      reporter_previewer_module(server_args = list(previewer_buttons = c("download", "reset")))
+    )
+  }
+
   # Note regarding case `id = character(0)`:
   # rather than creating a submodule of this module, we directly modify
   # the UI and server with `id = character(0)` and calling the server function directly
