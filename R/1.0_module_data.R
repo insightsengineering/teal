@@ -45,13 +45,21 @@ srv_data <- function(id, data, modules, filter) {
     })
 
     observeEvent(input$open_teal_data_module, {
+      if (input$open_teal_data_module > 1) {
+        footer <- modalButton("Dismiss")
+        easy_close <- TRUE
+      } else {
+        footer <- NULL
+        easy_close <- FALSE
+      }
       showModal(
         modalDialog(
           tags$div(
             data$ui(session$ns("teal_data_module")),
             uiOutput(session$ns("response"))
           ),
-          footer = NULL
+          footer = footer,
+          easyClose = easy_close
         )
       )
     })
