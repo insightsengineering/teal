@@ -188,7 +188,7 @@ srv_teal_module.teal_module <- function(id,
         on.exit(progress_data$close())
         progress_data$set(message = "Preparing data filtering", detail = "0%")
         filtered_data <- teal_data_to_filtered_data(data_rv())
-        filtered_data$set_filter_state(filter)
+        # filtered_data$set_filter_state(filter)
         filtered_data
       })
     }
@@ -198,7 +198,7 @@ srv_teal_module.teal_module <- function(id,
     #   filter_manager_module_srv needs to be called before filter_panel_srv
     #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
     #   and if it is not set, then it won't be available in the srv_filter_panel
-    filter_manager_module_srv(modules$label, datasets)
+    filter_manager_module_srv(modules$label, module_fd = datasets)
     srv_filter_panel("module_filter_panel", teal_slices(), datasets)
 
     # Create two triggers to limit reactivity between filter-panel and modules.
@@ -228,6 +228,8 @@ srv_teal_module.teal_module <- function(id,
       #       change of the FilteredData. Same applies to FilterPanelAPI.
       # todo: (breaking change) datasets won't work with DDL at all. `isolate()` returns immediately
       #       even if data is not available - this means that isolate(datasets()) will return NULL or error
+      # solution: move args addition to the call_module function below so the arguments will be gathered when module
+      #           is ready to be called.
       args <- c(args, datasets = isolate(datasets()))
       warning("datasets argument is not reactive and therefore it won't be updated when data is refreshed.")
     }

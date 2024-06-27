@@ -138,6 +138,9 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
     if (!is.teal_slices(filter_restored)) {
       filter_restored <- as.teal_slices(filter_restored)
     }
+    # singleton storing all filters from all modules
+    session$userData$slices_global <- reactiveVal(filter_restored)
+    session$userData$slices_mapping <- list()
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
@@ -149,20 +152,9 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
         on.exit(progress_data$close())
         progress_data$set(message = "Preparing data filtering", detail = "0%")
         filtered_data <- teal_data_to_filtered_data(data_rv())
-        # todo: filters should be Filter by mapping - ideally in some global place
-        #       to handle bookmarking and data-reload.
-        # todo: We need a bookmark feature back to test filter_restored
-        # todo: (question) what filters should be restored after refreshing of the data:
-        #    1. filters that were set by the app developer
-        #    2. filters that were set by the user (preferable by @gogonzo)
-        filtered_data$set_filter_state(filter_restored)
         filtered_data
       })
     }
-
-    # singleton storing all filters from all modules
-    session$userData$slices_global <- reactiveVal(filter_restored)
-    session$userData$slices_mapping <- list()
 
     modules_out <- srv_teal_module(
       id = "root_module",

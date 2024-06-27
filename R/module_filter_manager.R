@@ -95,17 +95,29 @@ filter_manager_srv <- function(id, is_module_specific) {
 #' @return A `reactive` expression containing a `teal_slices` with the slices active in this module.
 #' @keywords internal
 #'
-filter_manager_module_srv <- function(id, module_fd) {
-  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
+filter_manager_module_srv <- function(module_label, module_fd) {
+  checkmate::assert_character(module_label, max.len = 1, any.missing = FALSE)
   checkmate::assert_class(module_fd, "reactive")
 
-  moduleServer(id, function(input, output, session) {
+  moduleServer(module_label, function(input, output, session) {
     # Track filter global and local states.
     slices_global <- session$userData$slices_global
     slices_module <- reactive(req(module_fd())$get_filter_state())
 
     # Set (reactively) available filters for the module.
     observeEvent(module_fd(), {
+      # setting filter states from slices_global:
+      # 1. when data initializes it takes initial slices set in module_teal
+      # 2. when data reinitializes it takes slices from the last state
+      slices <- Filter(
+        function(slice) {
+          # todo: add global_filters if mapping isn't provided (global filter)
+          isolate(slice$id) %in% unlist(attr(slices_global(), "mapping")[c(module_label, "global_filters")])
+        },
+        slices_global()
+      )
+      module_fd()$set_filter_state(slices)
+
       # FilteredData$set_available_teal_slices discards irrelevant filters
       # it means we don't need to subset slices_global() from filters refering to irrelevant datasets
       module_fd()$set_available_teal_slices(reactive(slices_global()))
@@ -118,7 +130,7 @@ filter_manager_module_srv <- function(id, module_fd) {
       global_ids <- vapply(slices_global(), `[[`, character(1L), "id")
       new_slices <- setdiff_teal_slices(slices_module(), slices_global())
       if (length(new_slices)) {
-        logger::log_trace("filter_manager_srv@2 added filter in module: { id }.")
+        logger::log_trace("filter_manager_srv@2 added filter in module: { module_label }.")
         # In case the new state has the same id as an existing state, add a suffix to it
         lapply(
           new_slices,
@@ -128,6 +140,8 @@ filter_manager_module_srv <- function(id, module_fd) {
             }
           }
         )
+        # todo: when new filter is added in one module in module-specific app it is also
+        #       added to other modules. It should be added only to the module where it was added.
         new_slices_global <- c(slices_global(), new_slices)
         slices_global(new_slices_global)
 
@@ -136,10 +150,10 @@ filter_manager_module_srv <- function(id, module_fd) {
       }
 
       # Set ids of the filters in the mapping matrix for the module
-      logger::log_trace("filter_manager_srv@2 updating filter mapping for module: { id }.")
+      logger::log_trace("filter_manager_srv@2 updating filter mapping for module: { module_label }.")
       module_ids <- vapply(slices_module(), `[[`, character(1L), "id")
       mapping_matrix <- attr(slices_global(), "mapping")
-      mapping_matrix[[id]] <- module_ids
+      mapping_matrix[[module_label]] <- module_ids
       new_slices_with_mapping <- slices_global()
       attr(new_slices_with_mapping, "mapping") <- mapping_matrix
       slices_global(new_slices_with_mapping)
@@ -150,7 +164,7 @@ filter_manager_module_srv <- function(id, module_fd) {
       # - NA if filter is not available for the module
       ids_allowed <- vapply(module_fd()$get_available_teal_slices()(), `[[`, character(1L), "id")
       ids_active <- global_ids %in% module_ids
-      session$userData$slices_mapping[[id]] <- setNames(
+      session$userData$slices_mapping[[module_label]] <- setNames(
         ifelse(global_ids %in% ids_allowed, ids_active, NA),
         global_ids
       )
