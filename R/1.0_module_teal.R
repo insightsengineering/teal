@@ -67,7 +67,14 @@ ui_teal_1.0 <- function(id,
       data_elem,
       actionButton(ns("filter_manager"), NULL, icon = icon("filter")),
       actionButton(ns("snapshot_manager"), NULL, icon = icon("floppy-disk")),
-      actionButton(ns("bookmark_manager"), NULL, icon = icon("bookmark"))
+      actionButton(ns("bookmark_manager"), NULL, icon = icon("bookmark")),
+      tags$button(
+        class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
+        href = "javascript:void(0)",
+        onclick = "toggleFilterPanel();", # see sidebar.js
+        title = "Toggle filter panel",
+        icon("fas fa-bars")
+      )
     ),
     tags$script(HTML("
       $(document).ready(function() {
