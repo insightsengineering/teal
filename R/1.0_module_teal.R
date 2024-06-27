@@ -60,8 +60,20 @@ ui_teal_1.0 <- function(id,
     tags$header(header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
-    data_elem,
     tabs_elem,
+    tags$div(
+      id = "teal-util-icons",
+      style = "margin-left: auto;",
+      data_elem,
+      actionButton(ns("filter_manager"), NULL, icon = icon("filter")),
+      actionButton(ns("snapshot_manager"), NULL, icon = icon("floppy-disk")),
+      actionButton(ns("bookmark_manager"), NULL, icon = icon("bookmark"))
+    ),
+    tags$script(HTML("
+      $(document).ready(function() {
+        $('#teal-util-icons').appendTo('#root_module-active_tab');
+      });
+    ")),
     tags$hr(),
     tags$footer(
       tags$div(
@@ -146,5 +158,15 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       modules = modules,
       filter = filter_restored
     )
+
+    observeEvent(input$filter_manager, {
+      print("filter_manager clicked!")
+    })
+    observeEvent(input$snapshot_manager, {
+      print("snapshot_manager clicked!")
+    })
+    observeEvent(input$bookmark_manager, {
+      print("bookmark_manager clicked!")
+    })
   })
 }
