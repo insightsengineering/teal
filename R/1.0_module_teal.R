@@ -149,6 +149,8 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
         on.exit(progress_data$close())
         progress_data$set(message = "Preparing data filtering", detail = "0%")
         filtered_data <- teal_data_to_filtered_data(data_rv())
+        # todo: filters should be Filter by mapping - ideally in some global place
+        #       to handle bookmarking and data-reload.
         # todo: We need a bookmark feature back to test filter_restored
         # todo: (question) what filters should be restored after refreshing of the data:
         #    1. filters that were set by the app developer
@@ -160,7 +162,7 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
 
     # singleton storing all filters from all modules
     session$userData$slices_global <- reactiveVal(filter_restored)
-    session$userData$mapping_matrix <- reactiveVal(attr(filter_restored, "mapping_matrix"))
+    session$userData$slices_mapping <- list()
 
     modules_out <- srv_teal_module(
       id = "root_module",
@@ -172,8 +174,17 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
     # todo: use modules_out to active_datanames() see 104. I see potential circular reactive dependency
 
     observeEvent(input$filter_manager, {
-      print("filter_manager clicked!")
+      showModal(
+        modalDialog(
+          tags$div(
+            filter_manager_ui(session$ns("filter_manager"))
+          )
+        )
+      )
     })
+    filter_manager_srv("filter_manager", is_module_specific = isTRUE(attr(filter, "module_specific")))
+
+
     observeEvent(input$snapshot_manager, {
       print("snapshot_manager clicked!")
     })

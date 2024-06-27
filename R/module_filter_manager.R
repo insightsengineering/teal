@@ -45,43 +45,16 @@ filter_manager_ui <- function(id) {
 #' @rdname module_filter_manager
 #' @keywords internal
 #'
-filter_manager_srv <- function(id, datasets, filter) {
+filter_manager_srv <- function(id, is_module_specific) {
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("filter_manager_srv initializing for: { paste(names(datasets), collapse = ', ')}.")
-
-    is_module_specific <- isTRUE(attr(filter, "module_specific"))
-
-    # Create a global list of slices.
-    # Contains all available teal_slice objects available to all modules.
-    # Passed whole to instances of FilteredData used for individual modules.
-    # Down there a subset that pertains to the data sets used in that module is applied and displayed.
-    slices_global <- reactiveVal(filter)
-
-    datasets_flat <-
-      if (!is_module_specific) {
-        flatten_datasets(unlist(datasets)[[1]])
-      } else {
-        flatten_datasets(datasets)
-      }
-
-    # Create mapping of filters to modules in matrix form (presented as data.frame).
-    # Modules get NAs for filters that cannot be set for them.
-    mapping_matrix <- reactive({
-      state_ids_global <- vapply(slices_global(), `[[`, character(1L), "id")
-      mapping_smooth <- lapply(datasets_flat, function(x) {
-        state_ids_local <- vapply(x$get_filter_state(), `[[`, character(1L), "id")
-        state_ids_allowed <- vapply(x$get_available_teal_slices()(), `[[`, character(1L), "id")
-        states_active <- state_ids_global %in% state_ids_local
-        ifelse(state_ids_global %in% state_ids_allowed, states_active, NA)
-      })
-
-      as.data.frame(mapping_smooth, row.names = state_ids_global, check.names = FALSE)
-    })
+    logger::log_trace("filter_manager_srv initializing.")
 
     output$slices_table <- renderTable(
       expr = {
+        mapping_list <- session$userData$slices_mapping
         # Display logical values as UTF characters.
-        mm <- mapping_matrix()
+        global_ids <- vapply(session$userData$slices_global(), `[[`, character(1L), "id")
+        mm <- as.data.frame(do.call(cbind, mapping_list))
         mm[] <- lapply(mm, ifelse, yes = intToUtf8(9989), no = intToUtf8(10060))
         mm[] <- lapply(mm, function(x) ifelse(is.na(x), intToUtf8(128306), x))
 
@@ -94,24 +67,8 @@ filter_manager_srv <- function(id, datasets, filter) {
         # Report Previewer will not be displayed.
         mm[names(mm) != "Report previewer"]
       },
-      align = paste(c("l", rep("c", sum(names(datasets_flat) != "Report previewer"))), collapse = ""),
+      # align = paste(c("l", rep("c", sum(names(datasets_flat) != "Report previewer"))), collapse = ""),
       rownames = TRUE
-    )
-
-    # Create list of module calls.
-    modules_out <- lapply(names(datasets_flat), function(module_name) {
-      filter_manager_module_srv(
-        id = module_name,
-        module_fd = datasets_flat[[module_name]],
-        slices_global = slices_global
-      )
-    })
-
-    list(
-      slices_global = slices_global,
-      mapping_matrix = mapping_matrix,
-      datasets_flat = datasets_flat,
-      modules_out = modules_out # returned for testing purpose
     )
   })
 }
@@ -127,7 +84,7 @@ filter_manager_srv <- function(id, datasets, filter) {
 #' by setting `private$available_teal_slices` in each `FilteredData`.
 #'
 #' @param id (`character(1)`)
-#'  `shiny` module id.
+#'  `shiny` module id. Should be a `label` of a `teal_module`.
 #' @param module_fd (`FilteredData`)
 #'   Object containing the data to be filtered in a single `teal` module.
 #' @param slices_global (`reactiveVal`)
@@ -143,28 +100,26 @@ filter_manager_module_srv <- function(id, module_fd) {
   checkmate::assert_class(module_fd, "reactive")
 
   moduleServer(id, function(input, output, session) {
+    # Track filter global and local states.
     slices_global <- session$userData$slices_global
+    slices_module <- reactive(req(module_fd())$get_filter_state())
 
-    # Only operate on slices that refer to data sets present in this module.
+    # Set (reactively) available filters for the module.
     observeEvent(module_fd(), {
       # FilteredData$set_available_teal_slices discards irrelevant filters
       # it means we don't need to subset slices_global() from filters refering to irrelevant datasets
       module_fd()$set_available_teal_slices(reactive(slices_global()))
     })
 
-    # Track filter state of this module.
-    slices_module <- reactive(req(module_fd())$get_filter_state())
-
-    # Add new filters to global state.
-    # todo: check if ignoreInit doesn't ignore initial filters. Initial filters should be set
-    observeEvent(slices_module(), ignoreInit = TRUE, ignoreNULL = TRUE, {
+    # Update global state and mapping matrix.
+    observeEvent(slices_module(), {
       # if is needed as c.teal_slices recreates an object.
       # It means `c(slices)` is not identical to `slices`
+      global_ids <- vapply(slices_global(), `[[`, character(1L), "id")
       new_slices <- setdiff_teal_slices(slices_module(), slices_global())
       if (length(new_slices)) {
         logger::log_trace("filter_manager_srv@2 added filter in module: { id }.")
         # In case the new state has the same id as an existing state, add a suffix to it
-        global_ids <- vapply(slices_global(), `[[`, character(1L), "id")
         lapply(
           new_slices,
           function(slice) {
@@ -173,9 +128,34 @@ filter_manager_module_srv <- function(id, module_fd) {
             }
           }
         )
-        slices_global(c(slices_global(), new_slices))
+        new_slices_global <- c(slices_global(), new_slices)
+        slices_global(new_slices_global)
+
+        # because new filters has been added
+        global_ids <- vapply(slices_global(), `[[`, character(1L), "id")
       }
+
+      # Set ids of the filters in the mapping matrix for the module
+      logger::log_trace("filter_manager_srv@2 updating filter mapping for module: { id }.")
+      module_ids <- vapply(slices_module(), `[[`, character(1L), "id")
+      mapping_matrix <- attr(slices_global(), "mapping")
+      mapping_matrix[[id]] <- module_ids
+      new_slices_with_mapping <- slices_global()
+      attr(new_slices_with_mapping, "mapping") <- mapping_matrix
+      slices_global(new_slices_with_mapping)
+
+      # Special version of mapping:
+      # - TRUE if filter is active in the module
+      # - FALSE if filter is inactive but available for the module
+      # - NA if filter is not available for the module
+      ids_allowed <- vapply(module_fd()$get_available_teal_slices()(), `[[`, character(1L), "id")
+      ids_active <- global_ids %in% module_ids
+      session$userData$slices_mapping[[id]] <- setNames(
+        ifelse(global_ids %in% ids_allowed, ids_active, NA),
+        global_ids
+      )
     })
+
     slices_module # returned for testing purpose
   })
 }
