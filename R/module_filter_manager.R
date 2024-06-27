@@ -150,9 +150,6 @@ filter_manager_module_srv <- function(id, module_fd) {
       # FilteredData$set_available_teal_slices discards irrelevant filters
       # it means we don't need to subset slices_global() from filters refering to irrelevant datasets
       module_fd()$set_available_teal_slices(reactive(slices_global()))
-      # todo: available filters are not set properly for the first module.
-      #       Looks like set_available_teal_slices is executed before module_fd() is validated.
-      #
     })
 
     # Track filter state of this module.
