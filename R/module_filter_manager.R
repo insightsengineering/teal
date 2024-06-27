@@ -162,10 +162,17 @@ filter_manager_module_srv <- function(id, module_fd) {
       # It means `c(slices)` is not identical to `slices`
       new_slices <- setdiff_teal_slices(slices_module(), slices_global())
       if (length(new_slices)) {
-        logger::log_trace("filter_manager_module_srv@1 adding new slices to slices_global.")
-        # todo: check id of "new_slices" and change if any are duplicated
-        #       extra note - slices_global can already contain filter which is based on the same column
-        #       and by default id is `$dataname $column_name`, so it can be duplicated.
+        logger::log_trace("filter_manager_srv@2 added filter in module: { id }.")
+        # In case the new state has the same id as an existing state, add a suffix to it
+        global_ids <- vapply(slices_global(), `[[`, character(1L), "id")
+        lapply(
+          new_slices,
+          function(slice) {
+            if (slice$id %in% global_ids) {
+              slice$id <- utils::tail(make.unique(c(global_ids, slice$id), sep = "_"), 1)
+            }
+          }
+        )
         slices_global(c(slices_global(), new_slices))
       }
     })
