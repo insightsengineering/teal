@@ -158,7 +158,7 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       })
     }
 
-    modules_out <- srv_teal_module(
+    active_module <- srv_teal_module(
       id = "root_module",
       data_rv = data_rv,
       datasets = datasets_rv,

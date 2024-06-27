@@ -293,6 +293,7 @@ srv_teal_module.teal_module <- function(id,
   filtered_datasets <- sapply(datanames, datasets$get_data, filtered = TRUE, USE.NAMES = TRUE)
   filter_code <- get_filter_expr(datasets)
   data_code <- teal.data::get_code(data)
+  # todo: add hashes (see .datasets_to_data)
   all_code <- paste(unlist(c(data_code, filter_code)), collapse = "\n")
   tdata <- do.call(
     teal.data::teal_data,
