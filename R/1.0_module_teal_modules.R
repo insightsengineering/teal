@@ -178,6 +178,7 @@ srv_teal_module.teal_module <- function(id,
   logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     if (is.null(datasets)) {
+      # todo: create datasets object using modules$datanames (need to resolve datanames = "all" also)
       datasets <- eventReactive(data_rv(), {
         logger::log_trace("srv_teal_module@1 initializing module-specific FilteredData")
         # Otherwise, FilteredData will be created in the modules' scope later
