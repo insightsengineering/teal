@@ -192,7 +192,11 @@ srv_teal_module.teal_module <- function(id,
         filtered_data
       })
     }
+
     srv_filter_panel("module_filter_panel", teal_slices(), datasets)
+
+    # manage module filters on the module level
+    filter_manager_module_srv(modules$label, datasets)
 
     # Create two triggers to limit reactivity between filter-panel and modules.
     # We want to recalculate only visible modules (renderUI triggers only when visible, when tab is displayed)
@@ -219,6 +223,8 @@ srv_teal_module.teal_module <- function(id,
       #       a static FilteredData it means that change of a reactive FilteredData will not be
       #       reflected in the module. This is a bug and is not possible to fix without deep
       #       change of the FilteredData. Same applies to FilterPanelAPI.
+      # todo: (breaking change) datasets won't work with DDL at all. `isolate()` returns immediately
+      #       even if data is not available - this means that isolate(datasets()) will return NULL or error
       args <- c(args, datasets = isolate(datasets()))
       warning("datasets argument is not reactive and therefore it won't be updated when data is refreshed.")
     }

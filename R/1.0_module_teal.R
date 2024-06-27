@@ -158,6 +158,10 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       })
     }
 
+    # singleton storing all filters from all modules
+    session$userData$slices_global <- reactiveVal(filter_restored)
+    session$userData$mapping_matrix <- reactiveVal(attr(filter_restored, "mapping_matrix"))
+
     modules_out <- srv_teal_module(
       id = "root_module",
       data_rv = data_rv,

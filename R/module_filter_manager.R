@@ -138,43 +138,40 @@ filter_manager_srv <- function(id, datasets, filter) {
 #' @return A `reactive` expression containing a `teal_slices` with the slices active in this module.
 #' @keywords internal
 #'
-filter_manager_module_srv <- function(id, module_fd, slices_global) {
+filter_manager_module_srv <- function(id, module_fd) {
+  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
+  checkmate::assert_class(module_fd, "reactive")
+
   moduleServer(id, function(input, output, session) {
+    slices_global <- session$userData$slices_global
+
     # Only operate on slices that refer to data sets present in this module.
-    module_fd$set_available_teal_slices(reactive(slices_global()))
+    observeEvent(module_fd(), {
+      # FilteredData$set_available_teal_slices discards irrelevant filters
+      # it means we don't need to subset slices_global() from filters refering to irrelevant datasets
+      module_fd()$set_available_teal_slices(reactive(slices_global()))
+      # todo: available filters are not set properly for the first module.
+      #       Looks like set_available_teal_slices is executed before module_fd() is validated.
+      #
+    })
 
     # Track filter state of this module.
-    slices_module <- reactive(module_fd$get_filter_state())
+    slices_module <- reactive(req(module_fd())$get_filter_state())
 
-    # Reactive values for comparing states.
-    previous_slices <- reactiveVal(isolate(slices_module()))
-    slices_added <- reactiveVal(NULL)
-
-    # Observe changes in module filter state and trigger appropriate actions.
-    observeEvent(slices_module(), ignoreNULL = FALSE, {
-      logger::log_trace("filter_manager_srv@1 detecting states deltas in module: { id }.")
-      added <- setdiff_teal_slices(slices_module(), slices_global())
-      if (length(added)) slices_added(added)
-      previous_slices(slices_module())
+    # Add new filters to global state.
+    # todo: check if ignoreInit doesn't ignore initial filters. Initial filters should be set
+    observeEvent(slices_module(), ignoreInit = TRUE, ignoreNULL = TRUE, {
+      # if is needed as c.teal_slices recreates an object.
+      # It means `c(slices)` is not identical to `slices`
+      new_slices <- setdiff_teal_slices(slices_module(), slices_global())
+      if (length(new_slices)) {
+        logger::log_trace("filter_manager_module_srv@1 adding new slices to slices_global.")
+        # todo: check id of "new_slices" and change if any are duplicated
+        #       extra note - slices_global can already contain filter which is based on the same column
+        #       and by default id is `$dataname $column_name`, so it can be duplicated.
+        slices_global(c(slices_global(), new_slices))
+      }
     })
-
-    observeEvent(slices_added(), ignoreNULL = TRUE, {
-      logger::log_trace("filter_manager_srv@2 added filter in module: { id }.")
-      # In case the new state has the same id as an existing state, add a suffix to it.
-      global_ids <- vapply(slices_global(), `[[`, character(1L), "id")
-      lapply(
-        slices_added(),
-        function(slice) {
-          if (slice$id %in% global_ids) {
-            slice$id <- utils::tail(make.unique(c(global_ids, slice$id), sep = "_"), 1)
-          }
-        }
-      )
-      slices_global_new <- c(slices_global(), slices_added())
-      slices_global(slices_global_new)
-      slices_added(NULL)
-    })
-
     slices_module # returned for testing purpose
   })
 }
