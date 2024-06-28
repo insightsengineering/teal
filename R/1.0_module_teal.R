@@ -131,7 +131,12 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       }
     )
 
-    data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
+    data_rv <- reactiveVal(NULL)
+    injected_data <- srv_data("data", data = data, modules = modules, filter = filter)
+    observeEvent(injected_data(), {
+      data_rv(injected_data())
+    })
+
 
     # Restore filter from bookmarked state, if applicable.
     filter_restored <- restoreValue("filter_state_on_bookmark", filter)
