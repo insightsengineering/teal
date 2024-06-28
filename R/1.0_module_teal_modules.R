@@ -306,10 +306,11 @@ srv_teal_module.teal_module <- function(id,
 
 .make_teal_data <- function(modules, data, datasets, datanames) {
   filtered_datasets <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
-  filter_code <- get_filter_expr(datasets)
-  data_code <- teal.data::get_code(data)
-  # todo: add hashes (see .datasets_to_data)
-  all_code <- paste(unlist(c(data_code, filter_code)), collapse = "\n")
+  filter_code <- get_filter_expr(datasets, datanames = datanames)
+  data_code <- teal.data::get_code(data, datanames = datanames)
+  hashes_code <- .get_hashes_code(datasets, datanames)
+
+  all_code <- paste(unlist(c(data_code, "", hashes_code, "", filter_code)), collapse = "\n")
   tdata <- do.call(
     teal.data::teal_data,
     c(
@@ -321,4 +322,29 @@ srv_teal_module.teal_module <- function(id,
   tdata@verified <- TRUE # todo: change to original value from from data
   teal.data::datanames(tdata) <- datanames
   tdata
+}
+
+#' Get code that tests the integrity of the reproducible data
+#'
+#' @param datasets (`FilteredData`) object holding the data
+#' @param datanames (`character`) names of datasets
+#'
+#' @return A character vector with the code lines.
+#' @keywords internal
+#'
+.get_hashes_code <- function(datasets, datanames) {
+  vapply(
+    datanames,
+    function(dataname, datasets) {
+      hash <- rlang::hash(datasets$get_data(dataname, filtered = FALSE))
+      sprintf(
+        "stopifnot(%s == %s)",
+        deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+        deparse1(hash)
+      )
+    },
+    character(1L),
+    datasets = datasets,
+    USE.NAMES = FALSE
+  )
 }
