@@ -1,0 +1,22 @@
+---
+    name: R-hub
+
+    on:
+      push:
+        branches:
+          - main
+          - pawelru_test_1
+      workflow_dispatch:
+
+    jobs:
+      rhub:
+        name: R-hub
+        uses: insightsengineering/r.pkg.template/.github/workflows/rhub.yaml@test-rhub-workflows
+        with:
+          lookup-refs: |
+            insightsengineering/teal.code
+            insightsengineering/teal.data
+            insightsengineering/teal.logger
+            insightsengineering/teal.slice
+            insightsengineering/teal.reporter
+            insightsengineering/teal.widgets
