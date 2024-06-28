@@ -165,7 +165,8 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       modules = modules,
       filter = filter_restored
     )
-    # todo: use modules_out to active_datanames() see 104. I see potential circular reactive dependency
+    # todo: use active_module to active_datanames() see module_tabs_with_filters.R#104.
+    # I see potential circular reactive dependency
 
     # todo: make a module containing for this observer and for an icon on the UI side?
     observeEvent(input$filter_manager, {

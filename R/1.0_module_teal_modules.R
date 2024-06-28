@@ -177,17 +177,29 @@ srv_teal_module.teal_module <- function(id,
                                         reporter = teal.reporter::Reporter$new()) {
   logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
+    active_datanames <- reactive({
+      req(data_rv())
+      if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
+        teal_data_datanames(data_rv())
+      } else {
+        include_parent_datanames(
+          modules$datanames,
+          teal.data::join_keys(data_rv())
+        )
+      }
+    })
     if (is.null(datasets)) {
       # todo: create datasets object using modules$datanames (need to resolve datanames = "all" also)
       datasets <- eventReactive(data_rv(), {
         logger::log_trace("srv_teal_module@1 initializing module-specific FilteredData")
+
         # Otherwise, FilteredData will be created in the modules' scope later
         progress_data <- Progress$new(
           max = length(unlist(module_labels(modules)))
         )
         on.exit(progress_data$close())
         progress_data$set(message = "Preparing data filtering", detail = "0%")
-        filtered_data <- teal_data_to_filtered_data(data_rv())
+        filtered_data <- teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
         # filtered_data$set_filter_state(filter)
         filtered_data
       })
@@ -199,7 +211,12 @@ srv_teal_module.teal_module <- function(id,
     #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
     #   and if it is not set, then it won't be available in the srv_filter_panel
     filter_manager_module_srv(modules$label, module_fd = datasets)
-    srv_filter_panel("module_filter_panel", teal_slices(), datasets)
+    srv_filter_panel(
+      "module_filter_panel",
+      filter = teal_slices(),
+      datasets = datasets,
+      active_datanames = active_datanames
+    )
 
     # Create two triggers to limit reactivity between filter-panel and modules.
     # We want to recalculate only visible modules (renderUI triggers only when visible, when tab is displayed)
@@ -236,7 +253,7 @@ srv_teal_module.teal_module <- function(id,
 
     if (is_arg_used(modules$server, "data")) {
       filtered_teal_data <- eventReactive(trigger_data(), {
-        .make_teal_data(modules, data = data_rv(), datasets = datasets())
+        .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
       })
       args <- c(args, data = list(filtered_teal_data))
     }
@@ -288,15 +305,7 @@ srv_teal_module.teal_module <- function(id,
   })
 }
 
-.make_teal_data <- function(modules, data, datasets) {
-  datanames <- if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-    datasets$datanames()
-  } else {
-    include_parent_datanames(
-      modules$datanames,
-      datasets$get_join_keys()
-    )
-  }
+.make_teal_data <- function(modules, data, datasets, datanames) {
   filtered_datasets <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
 
   filter_code <- get_filter_expr(datasets)

@@ -16,17 +16,21 @@ ui_filter_panel <- function(id) {
 }
 
 #' @rdname module_teal
-srv_filter_panel <- function(id, filter, datasets) {
+srv_filter_panel <- function(id, filter, datasets, active_datanames) {
   checkmate::assert_class(filter, "teal_slices")
   checkmate::assert_class(datasets, "reactive")
   moduleServer(id, function(input, output, session) {
     output$panel <- renderUI({
       req(datasets())
-      # render will be triggered only when FilteredData object changes (not when filters change)
-      # technically it means that teal_data_module needs to be refreshed
-      logger::log_trace("srv_filter_panel rendering filter panel.")
-      datasets()$srv_filter_panel("filters")
-      datasets()$ui_filter_panel(session$ns("filters"))
+      isolate({
+        # render will be triggered only when FilteredData object changes (not when filters change)
+        # technically it means that teal_data_module needs to be refreshed
+        logger::log_trace("srv_filter_panel rendering filter panel.")
+
+        filtered_data <- datasets()
+        filtered_data$srv_filter_panel("filters", active_datanames = active_datanames)
+        filtered_data$ui_filter_panel(session$ns("filters"))
+      })
     })
   })
 }
