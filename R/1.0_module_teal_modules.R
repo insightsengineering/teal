@@ -189,7 +189,6 @@ srv_teal_module.teal_module <- function(id,
       }
     })
     if (is.null(datasets)) {
-      # todo: create datasets object using modules$datanames (need to resolve datanames = "all" also)
       datasets <- eventReactive(data_rv(), {
         logger::log_trace("srv_teal_module@1 initializing module-specific FilteredData")
 
@@ -232,40 +231,35 @@ srv_teal_module.teal_module <- function(id,
       NULL
     })
 
-    # collect arguments to run teal_module
-    args <- c(list(id = "module"), modules$server_args)
-    if (is_arg_used(modules$server, "reporter")) {
-      args <- c(args, list(reporter = reporter))
-    }
-
-    if (is_arg_used(modules$server, "datasets")) {
-      # todo: this will be a bug. Because FilteredData is now reactive and module receives
-      #       a static FilteredData it means that change of a reactive FilteredData will not be
-      #       reflected in the module. This is a bug and is not possible to fix without deep
-      #       change of the FilteredData. Same applies to FilterPanelAPI.
-      # todo: (breaking change) datasets won't work with DDL at all. `isolate()` returns immediately
-      #       even if data is not available - this means that isolate(datasets()) will return NULL or error
-      # solution: move args addition to the call_module function below so the arguments will be gathered when module
-      #           is ready to be called.
-      args <- c(args, datasets = isolate(datasets()))
-      warning("datasets argument is not reactive and therefore it won't be updated when data is refreshed.")
-    }
-
-    if (is_arg_used(modules$server, "data")) {
-      filtered_teal_data <- eventReactive(trigger_data(), {
-        .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
-      })
-      args <- c(args, data = list(filtered_teal_data))
-    }
-
-
-    if (is_arg_used(modules$server, "filter_panel_api")) {
-      filter_panel_api <- teal.slice::FilterPanelAPI$new(isolate(datasets()))
-      args <- c(args, filter_panel_api = filter_panel_api)
-    }
-
     # This function calls a module server function.
     call_module <- function() {
+      # collect arguments to run teal_module
+      args <- c(list(id = "module"), modules$server_args)
+      if (is_arg_used(modules$server, "reporter")) {
+        args <- c(args, list(reporter = reporter))
+      }
+
+      if (is_arg_used(modules$server, "datasets")) {
+        # todo: this is a potential bug in case when app is restored from bookmark. When `restoreContext$active`
+        #       (see further below) then module is called outside of the reactive context and datasets() could not
+        #       be resolved yet. This bug is considered rare, when teal_module uses `dataset` argument and then data is #       `ddl`
+        args <- c(args, datasets = datasets())
+        warning("datasets argument is not reactive and therefore it won't be updated when data is refreshed.")
+      }
+
+      if (is_arg_used(modules$server, "data")) {
+        filtered_teal_data <- eventReactive(trigger_data(), {
+          .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
+        })
+        args <- c(args, data = list(filtered_teal_data))
+      }
+
+
+      if (is_arg_used(modules$server, "filter_panel_api")) {
+        filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets())
+        args <- c(args, filter_panel_api = filter_panel_api)
+      }
+
       if (is_arg_used(modules$server, "id")) {
         do.call(modules$server, args)
       } else {
@@ -275,6 +269,9 @@ srv_teal_module.teal_module <- function(id,
 
     # Call modules.
     module_out <- if (isTRUE(session$restoreContext$active)) {
+      # todo: call_module() contains reactive elements datasets(), data_rv(), active_datanames().
+      #       this means it can't be just called as is. It needs to be put in a reactive context, which is a problem
+      #       for a comment below. This is a bug and needs to be fixed.
       # When restoring bookmark, all modules must be initialized on app start.
       # Delayed module initiation (below) precludes restoring state b/c inputs do not exist when restoring occurs.
       call_module()
@@ -287,6 +284,8 @@ srv_teal_module.teal_module <- function(id,
       # Observing trigger_module() induces the module only when output$data_reactive is triggered (see above).
       observeEvent(
         ignoreNULL = TRUE,
+        # todo: (question) what would happen if module will be called multiple times (when data is refreshed)
+        #       What are potential issues?
         once = TRUE,
         eventExpr = trigger_module(),
         handlerExpr = call_module()
@@ -307,7 +306,6 @@ srv_teal_module.teal_module <- function(id,
 
 .make_teal_data <- function(modules, data, datasets, datanames) {
   filtered_datasets <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
-
   filter_code <- get_filter_expr(datasets)
   data_code <- teal.data::get_code(data)
   # todo: add hashes (see .datasets_to_data)

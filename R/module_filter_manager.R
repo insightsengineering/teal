@@ -100,12 +100,14 @@ filter_manager_module_srv <- function(module_label, module_fd) {
   checkmate::assert_class(module_fd, "reactive")
 
   moduleServer(module_label, function(input, output, session) {
+    logger::log_trace("filter_manager_srv initializing for module: { module_label }.")
     # Track filter global and local states.
     slices_global <- session$userData$slices_global
     slices_module <- reactive(req(module_fd())$get_filter_state())
 
     # Set (reactively) available filters for the module.
     observeEvent(module_fd(), {
+      logger::log_trace("filter_manager_srv@1 setting initial slices to FilteredData for module: { module_label }.")
       # setting filter states from slices_global:
       # 1. when data initializes it takes initial slices set in module_teal
       # 2. when data reinitializes it takes slices from the last state
@@ -116,6 +118,7 @@ filter_manager_module_srv <- function(module_label, module_fd) {
         },
         slices_global()
       )
+
       module_fd()$set_filter_state(slices)
 
       # FilteredData$set_available_teal_slices discards irrelevant filters
