@@ -101,7 +101,7 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(filter, "teal_slices")
 
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_teal_with_splash initializing module with data.")
+    logger::log_trace("srv_teal initializing.")
 
     output$identifier <- renderText(
       paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
@@ -134,16 +134,37 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
     data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
 
     # Restore filter from bookmarked state, if applicable.
-    # todo: bookmark store/restore of teal_slices should be implemented here
-    #       Move it from snapshot_manager_srv to here or to filter_manager
     filter_restored <- restoreValue("filter_state_on_bookmark", filter)
     if (!is.teal_slices(filter_restored)) {
       filter_restored <- as.teal_slices(filter_restored)
     }
-    # singleton storing all filters from all modules
-    session$userData$slices_global <- reactiveVal(filter_restored)
-    session$userData$slices_mapping <- list()
 
+    # Resolve mapping list to keep it constistent for filter manager.
+    # - when !module_specific then all filters are global
+    # - global_filters ids needs to be repeated in mapping for each module
+    if (!isTRUE(attr(filter_restored, "module_specific"))) {
+      attr(filter_restored, "mapping") <- list(
+        global_filters = isolate(sapply(filter_restored, `[[`, "id"))
+      )
+    }
+    module_labs <- module_labels(modules)
+    new_mapping <- sapply(
+      unlist(module_labs, use.names = FALSE),
+      simplify = FALSE,
+      function(module_lab) {
+        unlist(attr(filter_restored, "mapping")[c(module_lab, "global_filters")], use.names = FALSE)
+      }
+    )
+    attr(filter_restored, "mapping") <- new_mapping
+
+    # singleton controlled by filter-manager
+    session$userData$slices_global <- structure(
+      reactiveVal(filter_restored),
+      slices_mapping = list()
+    )
+
+    # todo: bookmark store/restore of teal_slices should be implemented here
+    #       Move it from snapshot_manager_srv to here or to filter_manager
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
         logger::log_trace("srv_teal_module@1 initializing FilteredData")

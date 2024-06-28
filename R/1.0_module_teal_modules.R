@@ -240,9 +240,6 @@ srv_teal_module.teal_module <- function(id,
       }
 
       if (is_arg_used(modules$server, "datasets")) {
-        # todo: this is a potential bug in case when app is restored from bookmark. When `restoreContext$active`
-        #       (see further below) then module is called outside of the reactive context and datasets() could not
-        #       be resolved yet. This bug is considered rare, when teal_module uses `dataset` argument and then data is #       `ddl`
         args <- c(args, datasets = datasets())
         warning("datasets argument is not reactive and therefore it won't be updated when data is refreshed.")
       }

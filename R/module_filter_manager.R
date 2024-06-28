@@ -51,7 +51,8 @@ filter_manager_srv <- function(id, is_module_specific) {
 
     output$slices_table <- renderTable(
       expr = {
-        mapping_list <- session$userData$slices_mapping
+        logger::log_trace("filter_manager_srv@1 rendering slices_table.")
+        mapping_list <- attr(session$userData$slices_global, "slices_mapping")
         # Display logical values as UTF characters.
         global_ids <- vapply(session$userData$slices_global(), `[[`, character(1L), "id")
         mm <- as.data.frame(do.call(cbind, mapping_list))
@@ -108,22 +109,22 @@ filter_manager_module_srv <- function(module_label, module_fd) {
     # Set (reactively) available filters for the module.
     observeEvent(module_fd(), {
       logger::log_trace("filter_manager_srv@1 setting initial slices to FilteredData for module: { module_label }.")
-      # setting filter states from slices_global:
-      # 1. when data initializes it takes initial slices set in module_teal
-      # 2. when data reinitializes it takes slices from the last state
+      # Filters relevant for the module in module-specific app.
       slices <- Filter(
         function(slice) {
-          # todo: add global_filters if mapping isn't provided (global filter)
-          isolate(slice$id) %in% unlist(attr(slices_global(), "mapping")[c(module_label, "global_filters")])
+          isolate(slice$id) %in% unlist(attr(slices_global(), "mapping")[module_label])
         },
         slices_global()
       )
 
+      # Setting filter states from slices_global:
+      # 1. when app initializes slices_global set to initial filters (specified by app developer)
+      # 2. when data reinitializes slices_global reflects latest filter states
       module_fd()$set_filter_state(slices)
 
       # FilteredData$set_available_teal_slices discards irrelevant filters
       # it means we don't need to subset slices_global() from filters refering to irrelevant datasets
-      module_fd()$set_available_teal_slices(reactive(slices_global()))
+      module_fd()$set_available_teal_slices(slices_global)
     })
 
     # Update global state and mapping matrix.
@@ -143,8 +144,6 @@ filter_manager_module_srv <- function(module_label, module_fd) {
             }
           }
         )
-        # todo: when new filter is added in one module in module-specific app it is also
-        #       added to other modules. It should be added only to the module where it was added.
         new_slices_global <- c(slices_global(), new_slices)
         slices_global(new_slices_global)
 
@@ -167,7 +166,7 @@ filter_manager_module_srv <- function(module_label, module_fd) {
       # - NA if filter is not available for the module
       ids_allowed <- vapply(module_fd()$get_available_teal_slices()(), `[[`, character(1L), "id")
       ids_active <- global_ids %in% module_ids
-      session$userData$slices_mapping[[module_label]] <- setNames(
+      attr(session$userData$slices_global, "slices_mapping")[[module_label]] <- setNames(
         ifelse(global_ids %in% ids_allowed, ids_active, NA),
         global_ids
       )
@@ -175,26 +174,4 @@ filter_manager_module_srv <- function(module_label, module_fd) {
 
     slices_module # returned for testing purpose
   })
-}
-
-
-
-# utilities ----
-
-#' Flatten potentially nested list of FilteredData objects while maintaining useful names.
-#' Simply using `unlist` would result in concatenated names.
-#' A single `FilteredData` will result in a list named "Global Filters"
-#' because that name used in the mapping matrix display.
-#' @param x `FilteredData` or a `list` thereof
-#' @param name (`character(1)`) string used to name `x` in the resulting list
-#' @return Unnested named list of `FilteredData` objects.
-#' @keywords internal
-#' @noRd
-#'
-flatten_datasets <- function(x, name = "Global Filters") {
-  if (inherits(x, "FilteredData")) {
-    setNames(list(x), name)
-  } else {
-    unlist(lapply(names(x), function(name) flatten_datasets(x[[name]], name)))
-  }
 }
