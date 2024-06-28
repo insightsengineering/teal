@@ -289,8 +289,16 @@ srv_teal_module.teal_module <- function(id,
 }
 
 .make_teal_data <- function(modules, data, datasets) {
-  datanames <- teal.data::datanames(data)
-  filtered_datasets <- sapply(datanames, datasets$get_data, filtered = TRUE, USE.NAMES = TRUE)
+  datanames <- if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
+    datasets$datanames()
+  } else {
+    include_parent_datanames(
+      modules$datanames,
+      datasets$get_join_keys()
+    )
+  }
+  filtered_datasets <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
+
   filter_code <- get_filter_expr(datasets)
   data_code <- teal.data::get_code(data)
   # todo: add hashes (see .datasets_to_data)
@@ -304,5 +312,6 @@ srv_teal_module.teal_module <- function(id,
     )
   )
   tdata@verified <- TRUE # todo: change to original value from from data
+  teal.data::datanames(tdata) <- datanames
   tdata
 }
