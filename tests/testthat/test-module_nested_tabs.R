@@ -353,33 +353,6 @@ testthat::test_that("srv_nested_tabs.teal_module passes filter_panel_api to the 
   )
 })
 
-testthat::test_that(".datasets_to_data returns data that doesn't contain raw datanames", {
-  datasets <- get_example_filtered_data()
-  module <- test_module_wdata(datanames = c("d1", "d2"))
-  data <- shiny::isolate(.datasets_to_data(module, datasets))
-
-  testthat::expect_setequal(datanames(data), c("d1", "d2"))
-  testthat::expect_setequal(
-    ls(teal.code::get_env(data)),
-    c("d1", "d2", sprintf("%s_raw", c("d1", "d2")))
-  )
-})
-
-testthat::test_that(".datasets_to_data returns data which is unfiltered", {
-  datasets <- get_example_filtered_data()
-  datasets$set_filter_state(
-    teal.slice::teal_slices(
-      teal.slice::teal_slice(dataname = "d1", varname = "val", selected = c(1, 2))
-    )
-  )
-  module <- test_module_wdata(datanames = c("d1", "d2"))
-  data <- shiny::isolate(.datasets_to_data(module, datasets))
-
-  d1_raw <- data[["d1_raw"]]
-  testthat::expect_equal(d1_raw, data.frame(id = 1:5, pk = c(2, 3, 2, 1, 4), val = 1:5))
-  d2_raw <- data[["d2_raw"]]
-  testthat::expect_equal(d2_raw, data.frame(id = 1:5, value = 1:5))
-})
 
 testthat::test_that(".datasets_to_data returns data which is filtered", {
   datasets <- get_example_filtered_data()
@@ -430,9 +403,6 @@ testthat::test_that(".datasets_to_data returns teal_data object", {
         "",
         "stopifnot(rlang::hash(d1) == \"f6f90d2c133ca4abdeb2f7a7d85b731e\")",
         "stopifnot(rlang::hash(d2) == \"6e30be195b7d914a1311672c3ebf4e4f\")",
-        "",
-        "d1_raw <- d1",
-        "d2_raw <- d2",
         "",
         "d2 <- dplyr::inner_join(x = d2, y = d1[, c(\"pk\"), drop = FALSE], by = c(id = \"pk\"))",
         ""
