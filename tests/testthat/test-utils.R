@@ -254,7 +254,6 @@ testthat::test_that("defunction recursively goes down a list", {
 })
 
 testthat::test_that("create_renv_lockfile creates a lock file during the execution", {
-
   renv_file_name <- "teal_app.lock"
   withr::defer(file.remove(renv_file_name))
   teal:::create_renv_lockfile(renv_file_name)
