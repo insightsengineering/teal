@@ -47,13 +47,11 @@ teal_lockfile <- function() {
 create_renv_lockfile <- function(lockfile_path = NULL) {
   checkmate::assert_string(lockfile_path, na.ok = TRUE)
 
-  utils::capture.output(
-    renv::snapshot(
-      lockfile = lockfile_path,
-      prompt = FALSE,
-      force = TRUE
-      # type = is taken from renv::settings$snapshot.type()
-    )
+  renv::snapshot(
+    lockfile = lockfile_path,
+    prompt = FALSE,
+    force = TRUE
+    # type = is taken from renv::settings$snapshot.type()
   )
   lockfile_path
 }
