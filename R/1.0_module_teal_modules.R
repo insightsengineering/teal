@@ -308,13 +308,13 @@ srv_teal_module.teal_module <- function(id,
     # Raw (unfiltered data)
     stats::setNames(
       lapply(datanames, function(x) datasets$get_data(x, filtered = FALSE)),
-      .get_raw_dataname(datanames)
+      sprintf("%s_raw", datanames)
     )
   )
 
   data_code <- teal.data::get_code(data, datanames = datanames)
   hashes_code <- .get_hashes_code(datasets, datanames)
-  raw_data_code <- .get_raw_code(datanames)
+  raw_data_code <- sprintf("%1$s_raw <- %1$s", datanames)
   filter_code <- get_filter_expr(datasets, datanames = datanames)
 
   all_code <- paste(unlist(c(data_code, "", hashes_code, raw_data_code, "", filter_code)), collapse = "\n")
@@ -355,16 +355,4 @@ srv_teal_module.teal_module <- function(id,
     datasets = datasets,
     USE.NAMES = FALSE
   )
-}
-
-#' Get code that creates a backup of the original (unfiltered) data
-#' @noRd
-.get_raw_code <- function(datanames) {
-  paste(.get_raw_dataname(datanames), "<-", datanames, collapse = "\n")
-}
-
-#' Standard function that gnerates the name of the raw dataset
-#' @noRd
-.get_raw_dataname <- function(datanames) {
-  sprintf("%s_raw", datanames)
 }
