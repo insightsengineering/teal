@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.512037833190026" branch-rate="0" lines-covered="1191" lines-valid="2326" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-07-01 13:24:37.839499">
+<coverage line-rate="0.511617900172117" branch-rate="0" lines-covered="1189" lines-valid="2324" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-07-01 14:25:44.984474">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
   <packages>
-    <package name="teal" line-rate="0.512037833190026" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.511617900172117" branch-rate="0" complexity="0">
       <classes>
         <class name="dummy_functions.R" filename="R/dummy_functions.R" line-rate="0.305555555555556" branch-rate="0" complexity="0">
           <methods>
@@ -3445,7 +3445,7 @@
             <line number="62" hits="34" branch="false"/>
           </lines>
         </class>
-        <class name="teal_lockfile.R" filename="R/teal_lockfile.R" line-rate="0.611111111111111" branch-rate="0" complexity="0">
+        <class name="teal_lockfile.R" filename="R/teal_lockfile.R" line-rate="0.588235294117647" branch-rate="0" complexity="0">
           <methods>
             <method name="teal_lockfile" signature="" line-rate="0.6" branch-rate="0" complexity="0">
               <lines>
@@ -3468,19 +3468,19 @@
                 <line number="51" hits="1" branch="false"/>
                 <line number="52" hits="1" branch="false"/>
                 <line number="53" hits="1" branch="false"/>
-                <line number="54" hits="1" branch="false"/>
+                <line number="55" hits="1" branch="false"/>
                 <line number="56" hits="1" branch="false"/>
-                <line number="57" hits="1" branch="false"/>
-                <line number="58" hits="1" branch="false"/>
               </lines>
             </method>
             <method name="teal_lockfile_downloadhandler" signature="" line-rate="0.411764705882353" branch-rate="0" complexity="0">
               <lines>
-                <line number="62" hits="18" branch="false"/>
+                <line number="60" hits="18" branch="false"/>
+                <line number="61" hits="18" branch="false"/>
+                <line number="62" hits="0" branch="false"/>
                 <line number="63" hits="18" branch="false"/>
-                <line number="64" hits="0" branch="false"/>
-                <line number="65" hits="18" branch="false"/>
-                <line number="66" hits="18" branch="false"/>
+                <line number="64" hits="18" branch="false"/>
+                <line number="65" hits="0" branch="false"/>
+                <line number="66" hits="0" branch="false"/>
                 <line number="67" hits="0" branch="false"/>
                 <line number="68" hits="0" branch="false"/>
                 <line number="69" hits="0" branch="false"/>
@@ -3488,11 +3488,9 @@
                 <line number="71" hits="0" branch="false"/>
                 <line number="72" hits="0" branch="false"/>
                 <line number="73" hits="0" branch="false"/>
-                <line number="74" hits="0" branch="false"/>
-                <line number="75" hits="0" branch="false"/>
+                <line number="74" hits="18" branch="false"/>
+                <line number="75" hits="18" branch="false"/>
                 <line number="76" hits="18" branch="false"/>
-                <line number="77" hits="18" branch="false"/>
-                <line number="78" hits="18" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -3512,15 +3510,15 @@
             <line number="51" hits="1" branch="false"/>
             <line number="52" hits="1" branch="false"/>
             <line number="53" hits="1" branch="false"/>
-            <line number="54" hits="1" branch="false"/>
+            <line number="55" hits="1" branch="false"/>
             <line number="56" hits="1" branch="false"/>
-            <line number="57" hits="1" branch="false"/>
-            <line number="58" hits="1" branch="false"/>
-            <line number="62" hits="18" branch="false"/>
+            <line number="60" hits="18" branch="false"/>
+            <line number="61" hits="18" branch="false"/>
+            <line number="62" hits="0" branch="false"/>
             <line number="63" hits="18" branch="false"/>
-            <line number="64" hits="0" branch="false"/>
-            <line number="65" hits="18" branch="false"/>
-            <line number="66" hits="18" branch="false"/>
+            <line number="64" hits="18" branch="false"/>
+            <line number="65" hits="0" branch="false"/>
+            <line number="66" hits="0" branch="false"/>
             <line number="67" hits="0" branch="false"/>
             <line number="68" hits="0" branch="false"/>
             <line number="69" hits="0" branch="false"/>
@@ -3528,11 +3526,9 @@
             <line number="71" hits="0" branch="false"/>
             <line number="72" hits="0" branch="false"/>
             <line number="73" hits="0" branch="false"/>
-            <line number="74" hits="0" branch="false"/>
-            <line number="75" hits="0" branch="false"/>
+            <line number="74" hits="18" branch="false"/>
+            <line number="75" hits="18" branch="false"/>
             <line number="76" hits="18" branch="false"/>
-            <line number="77" hits="18" branch="false"/>
-            <line number="78" hits="18" branch="false"/>
           </lines>
         </class>
         <class name="teal_reporter.R" filename="R/teal_reporter.R" line-rate="0.911764705882353" branch-rate="0" complexity="0">
