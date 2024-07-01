@@ -321,7 +321,7 @@ srv_teal_module.teal_module <- function(id,
   tdata <- do.call(
     teal.data::teal_data,
     c(
-      list(code = trimws(all_code, which = "right")), # remove trailling whitespace
+      list(code = trimws(all_code, which = "right")),
       list(join_keys = teal.data::join_keys(data)),
       new_datasets
     )
