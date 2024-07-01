@@ -39,52 +39,23 @@ teal_lockfile <- function() {
     }
   }
 
-  if (!(is_in_test() || is_r_cmd_check())) {
-    # old_plan <- future::plan()
-    # # If there is already a parallel (non-sequential) backend, reuse it.
-    # if (inherits(old_plan, "sequential")) {
-    #   future::plan(future::multisession, workers = 2)
-    # }
-    #
-    # lockfile_task <- ExtendedTask$new(create_renv_lockfile)
-    # lockfile_task$invoke(close = inherits(old_plan, "sequential"), lockfile_path)
-    callr::r_bg(create_renv_lockfile, args = list(lockfile_path = lockfile_path))
-    logger::log_trace("lockfile creation invoked.")
-  }
+  shiny::onStop(function() file.remove(lockfile_path))
+  callr::r_bg(create_renv_lockfile, args = list(lockfile_path = lockfile_path))
+  logger::log_trace("lockfile creation started.")
 }
 
-create_renv_lockfile <- function(#close = FALSE,
-                                 lockfile_path = NULL) {
-  #checkmate::assert_flag(close)
+create_renv_lockfile <- function(lockfile_path = NULL) {
   checkmate::assert_string(lockfile_path, na.ok = TRUE)
-  #promise <- promises::future_promise({
-    # Below we can not use a file created in tempdir() directory.
-    # If a file is created in tempdir(), it gets deleted on 'then(onFulfilled' part.
-    shiny::onStop(function() file.remove(lockfile_path))
 
-    renv_logs <- utils::capture.output(
-      renv::snapshot(
-        lockfile = lockfile_path,
-        prompt = FALSE,
-        force = TRUE
-        # type = is taken from renv::settings$snapshot.type()
-      )
+  renv_logs <- utils::capture.output(
+    renv::snapshot(
+      lockfile = lockfile_path,
+      prompt = FALSE,
+      force = TRUE
+      # type = is taken from renv::settings$snapshot.type()
     )
-    if (any(grepl("Lockfile written", renv_logs))) {
-      logger::log_trace("lockfile created successfully.")
-    } else {
-      logger::log_trace("lockfile created with issues.")
-    }
-
-    lockfile_path
-  #})
-  # if (close) {
-  #   # If the initial backend was only sequential, bring it back.
-  #   promises::then(promise, onFulfilled = function() {
-  #     future::plan(future::sequential)
-  #   })
-  # }
-  # promise
+  )
+  lockfile_path
 }
 
 teal_lockfile_downloadhandler <- function() {
@@ -105,12 +76,4 @@ teal_lockfile_downloadhandler <- function() {
     },
     contentType = "application/json"
   )
-}
-
-is_r_cmd_check <- function() {
-  ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_", "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
-}
-
-is_in_test <- function() {
-  identical(Sys.getenv("TESTTHAT"), "true")
 }
