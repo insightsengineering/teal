@@ -365,9 +365,5 @@ srv_teal_module.teal_module <- function(id,
 #'
 #' @keywords internal
 .get_raw_code <- function(datanames) {
-  str_raw_code <- paste(
-    paste(sprintf("%s_raw", datanames), "<-", datanames),
-    collapse = "\n",
-    sep = " "
-  )
+  paste(sprintf("%s_raw", datanames), "<-", datanames, collapse = "\n")
 }

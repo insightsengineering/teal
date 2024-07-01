@@ -81,8 +81,7 @@ srv_nested_tabs(
 )
 }
 \arguments{
-\item{id}{(\code{character(1)})
-module id}
+\item{id}{(\code{character(1)}) module id}
 
 \item{modules}{(\code{teal_modules}) object containing the output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
