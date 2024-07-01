@@ -90,11 +90,6 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Collate:
-    '1.0_filter_panel.R'
-    '1.0_module_data.R'
-    '1.0_module_teal.R'
-    '1.0_module_teal_modules.R'
-    '1.0_validate_reactive_teal_data.R'
     'TealAppDriver.R'
     'dummy_functions.R'
     'get_rcode_utils.R'

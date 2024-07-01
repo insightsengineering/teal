@@ -4,14 +4,14 @@
 \alias{filter_manager_module_srv}
 \title{Module specific filter manager}
 \usage{
-filter_manager_module_srv(module_label, module_fd)
+filter_manager_module_srv(id, module_fd, slices_global)
 }
 \arguments{
+\item{id}{(\code{character(1)})
+\code{shiny} module id.}
+
 \item{module_fd}{(\code{FilteredData})
 Object containing the data to be filtered in a single \code{teal} module.}
-
-\item{id}{(\code{character(1)})
-\code{shiny} module id. Should be a \code{label} of a \code{teal_module}.}
 
 \item{slices_global}{(\code{reactiveVal})
 stores \code{teal_slices} with all available filters; allows the following actions:

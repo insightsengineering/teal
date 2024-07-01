@@ -23,7 +23,8 @@ srv_tabs_with_filters(
 )
 }
 \arguments{
-\item{id}{(\code{character(1)}) module id}
+\item{id}{(\code{character(1)})
+module id}
 
 \item{modules}{(\code{teal_modules}) object containing the output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
@@ -35,7 +36,8 @@ details see \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}. Str
 of the \code{modules} argument and list names must correspond to the labels in \code{modules}.
 When filter is not module-specific then list contains the same object in all elements.}
 
-\item{filter}{(\code{teal_slices}) filter object}
+\item{filter}{(\code{teal_slices})
+Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 
 \item{progress}{(\code{Progress}) object from \code{shiny}}
 
