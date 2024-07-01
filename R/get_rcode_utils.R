@@ -62,13 +62,19 @@ get_datasets_code <- function(datanames, datasets, hashes) {
   }, character(1))
   str_hash <- paste(str_hash, collapse = "\n")
 
+  # raw code
+  str_raw_code <- paste(
+    paste(sprintf("%s_raw", datanames), "<-", datanames),
+    collapse = "\n"
+  )
+
   # filter expressions
   str_filter <- teal.slice::get_filter_expr(datasets, datanames)
   if (str_filter == "") {
-    str_filter <- character(0)
+    str_filter <- character(0L)
   }
 
   # concatenate all code
-  str_code <- paste(c(str_prepro, str_hash, str_filter), collapse = "\n\n")
+  str_code <- paste(c(str_prepro, str_hash, str_raw_code, str_filter), collapse = "\n\n")
   sprintf("%s\n", str_code)
 }

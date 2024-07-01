@@ -6,6 +6,7 @@
 ### New features
 
 * Possibility to download lockfile to restore app session for reproducibility.
+* Teal modules have access to unfiltered datasets.
 
 ### Miscellaneous
 * Filter mapping display is no longer coupled to the snapshot manager.
