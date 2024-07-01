@@ -312,10 +312,10 @@ srv_teal_module.teal_module <- function(id,
     )
   )
 
-  filter_code <- get_filter_expr(datasets, datanames = datanames)
   data_code <- teal.data::get_code(data, datanames = datanames)
   hashes_code <- .get_hashes_code(datasets, datanames)
   raw_data_code <- .get_raw_code(datanames)
+  filter_code <- get_filter_expr(datasets, datanames = datanames)
 
   all_code <- paste(unlist(c(data_code, "", hashes_code, raw_data_code, "", filter_code)), collapse = "\n")
   tdata <- do.call(
