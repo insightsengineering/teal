@@ -306,7 +306,7 @@ srv_teal_module.teal_module <- function(id,
     # Filtered data
     sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE),
     # Raw (unfiltered data)
-    rlang::set_names(
+    stats::setNames(
       lapply(datanames, function(x) datasets$get_data(x, filtered = FALSE)),
       .get_raw_dataname(datanames)
     )
