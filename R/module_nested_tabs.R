@@ -285,15 +285,7 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
   }
 
   # list of reactive filtered data
-  data <- c(
-    # Filtered data
-    sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE),
-    # Raw (unfiltered data)
-    setNames(
-      lapply(datanames, function(x) datasets$get_data(x, filtered = FALSE)),
-      sprintf("%s_raw", datanames)
-    )
-  )
+  data <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
 
   hashes <- calculate_hashes(datanames, datasets)
 
@@ -303,13 +295,12 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     get_datasets_code(datanames, datasets, hashes)
   )
 
+
   data <- do.call(
     teal.data::teal_data,
     args = c(data, code = list(code), join_keys = list(datasets$get_join_keys()[datanames]))
   )
 
-  # unfiltered datasets (_raw) are available, but not set as datanames
-  datanames(data) <- datanames
   data@verified <- attr(datasets, "verification_status")
   data
 }
