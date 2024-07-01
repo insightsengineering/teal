@@ -291,7 +291,7 @@ bookmarks_identical <- function(book1, book2) {
   book1_values <- readRDS(file.path("shiny_bookmarks", book1, "values.rds"))
   book2_values <- readRDS(file.path("shiny_bookmarks", book2, "values.rds"))
 
-  if (!isTRUE(all.equal(book1_values, book2_values))) {
+  if (isFALSE(all.equal(book1_values, book2_values))) {
     message("different values detected")
     message("choices for numeric filters MAY be different, see RangeFilterState$set_choices")
     ans <- FALSE
