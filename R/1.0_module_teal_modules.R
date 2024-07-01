@@ -302,20 +302,31 @@ srv_teal_module.teal_module <- function(id,
 }
 
 .make_teal_data <- function(modules, data, datasets, datanames) {
-  filtered_datasets <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
+  new_datasets <- c(
+    # Filtered data
+    sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE),
+    # Raw (unfiltered data)
+    setNames(
+      lapply(datanames, function(x) datasets$get_data(x, filtered = FALSE)),
+      sprintf("%s_raw", datanames)
+    )
+  )
+
   filter_code <- get_filter_expr(datasets, datanames = datanames)
   data_code <- teal.data::get_code(data, datanames = datanames)
   hashes_code <- .get_hashes_code(datasets, datanames)
+  raw_data_code <- .get_raw_code(datanames)
 
-  all_code <- paste(unlist(c(data_code, "", hashes_code, "", filter_code)), collapse = "\n")
+  all_code <- paste(unlist(c(data_code, "", hashes_code, raw_data_code, "", filter_code)), collapse = "\n")
   tdata <- do.call(
     teal.data::teal_data,
     c(
       list(code = all_code),
       list(join_keys = teal.data::join_keys(data)),
-      filtered_datasets
+      new_datasets
     )
   )
+
   tdata@verified <- TRUE # todo: change to original value from from data
   teal.data::datanames(tdata) <- datanames
   tdata
@@ -343,5 +354,20 @@ srv_teal_module.teal_module <- function(id,
     character(1L),
     datasets = datasets,
     USE.NAMES = FALSE
+  )
+}
+
+#' Get code that creates a backup of the original (unfiltered) data
+#'
+#' @param datanames (`character`) names of datasets
+#' @return A character vector with code lines that copy existing `<datanames>` to
+#' `<datanames>_raw`.
+#'
+#' @keywords internal
+.get_raw_code <- function(datanames) {
+  str_raw_code <- paste(
+    paste(sprintf("%s_raw", datanames), "<-", datanames),
+    collapse = "\n",
+    sep = " "
   )
 }
