@@ -205,7 +205,7 @@ modules_datasets <- function(data,
   checkmate::assert_r6(filtered_data_singleton, "FilteredData")
   checkmate::assert_r6(progress, "Progress", null.ok = TRUE)
 
-  if (isFALSE(attr(filters, "module_specific"))) {
+  if (!isTRUE(attr(filters, "module_specific"))) {
     if (!is.null(progress)) {
       progress$inc(
         amount = progress$getMax(),

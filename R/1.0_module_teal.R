@@ -143,7 +143,7 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
     # Resolve mapping list to keep it constistent for filter manager.
     # - when !module_specific then all filters are global
     # - global_filters ids needs to be repeated in mapping for each module
-    if (isFALSE(attr(filter_restored, "module_specific"))) {
+    if (!isTRUE(attr(filter_restored, "module_specific"))) {
       attr(filter_restored, "mapping") <- list(
         global_filters = isolate(sapply(filter_restored, `[[`, "id"))
       )
@@ -166,7 +166,7 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
 
     # todo: bookmark store/restore of teal_slices should be implemented here
     #       Move it from snapshot_manager_srv to here or to filter_manager
-    datasets_rv <- if (isFALSE(attr(filter, "module_specific"))) {
+    datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
         logger::log_trace("srv_teal_module@1 initializing FilteredData")
         # Otherwise, FilteredData will be created in the modules' scope later

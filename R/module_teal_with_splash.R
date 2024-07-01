@@ -182,12 +182,12 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
       }
 
       is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
-      if (isFALSE(is_modules_ok)) {
+      if (!isTRUE(is_modules_ok)) {
         validate(need(isTRUE(is_modules_ok), sprintf("%s. Contact app developer.", is_modules_ok)))
       }
 
       is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
-      if (isFALSE(is_filter_ok)) {
+      if (!isTRUE(is_filter_ok)) {
         showNotification(
           "Some filters were not applied because of incompatibility with data. Contact app developer.",
           type = "warning",
