@@ -254,12 +254,10 @@ testthat::test_that("defunction recursively goes down a list", {
 })
 
 testthat::test_that("create_renv_lockfile creates a lock file during the execution", {
-  old_plan <- future::plan(future::sequential)
-  withr::defer(future::plan(old_plan))
 
   renv_file_name <- "teal_app.lock"
   withr::defer(file.remove(renv_file_name))
-  promise <- create_renv_lockfile(TRUE, renv_file_name)
+  teal:::create_renv_lockfile(renv_file_name)
 
   testthat::expect_true(file.exists(renv_file_name))
 })
