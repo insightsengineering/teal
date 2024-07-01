@@ -359,7 +359,10 @@ testthat::test_that(".datasets_to_data returns data that doesn't contain raw dat
   data <- shiny::isolate(.datasets_to_data(module, datasets))
 
   testthat::expect_setequal(datanames(data), c("d1", "d2"))
-  testthat::expect_setequal(ls(data@env), c("d1", "d2", sprintf("%s_raw", c("d1", "d2"))))
+  testthat::expect_setequal(
+    ls(teal.code::get_env(data)),
+    c("d1", "d2", sprintf("%s_raw", c("d1", "d2")))
+  )
 })
 
 testthat::test_that(".datasets_to_data returns data which is unfiltered", {
