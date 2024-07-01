@@ -308,7 +308,7 @@ srv_teal_module.teal_module <- function(id,
     # Raw (unfiltered data)
     rlang::set_names(
       lapply(datanames, function(x) datasets$get_data(x, filtered = FALSE)),
-      sprintf("%s_raw", datanames)
+      .get_raw_dataname(datanames)
     )
   )
 
@@ -358,12 +358,13 @@ srv_teal_module.teal_module <- function(id,
 }
 
 #' Get code that creates a backup of the original (unfiltered) data
-#'
-#' @param datanames (`character`) names of datasets
-#' @return A character vector with code lines that copy existing `<datanames>` to
-#' `<datanames>_raw`.
-#'
-#' @keywords internal
+#' @noRd
 .get_raw_code <- function(datanames) {
-  paste(sprintf("%s_raw", datanames), "<-", datanames, collapse = "\n")
+  paste(.get_raw_dataname(datanames), "<-", datanames, collapse = "\n")
+}
+
+#' Standard function that gnerates the name of the raw dataset
+#' @noRd
+.get_raw_dataname <- function(datanames) {
+  sprintf("%s_raw", datanames)
 }
