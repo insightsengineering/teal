@@ -29,7 +29,8 @@ srv_filter_panel <- function(id, filter, datasets, active_datanames) {
 
         filtered_data <- datasets()
         filtered_data$srv_filter_panel("filters", active_datanames = active_datanames)
-        filtered_data$ui_filter_panel(session$ns("filters"))
+        # todo: make sure to bump the `teal.slice` version. Please use the branch `669_insertUI@main` in `teal.slice`.
+        filtered_data$ui_filter_panel(session$ns("filters"), active_datanames = active_datanames())
       })
     })
   })
