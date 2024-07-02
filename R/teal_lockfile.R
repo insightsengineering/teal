@@ -67,7 +67,7 @@ teal_lockfile <- function() {
   logger::log_trace("lockfile creation started.")
 }
 
-create_renv_lockfile <- function(lockfile_path = NULL, opts) {
+create_renv_lockfile <- function(lockfile_path = NULL, opts = NULL) {
   checkmate::assert_string(lockfile_path, na.ok = TRUE)
   checkmate::assert_list(opts)
 
