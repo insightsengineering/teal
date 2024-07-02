@@ -5,22 +5,12 @@ b/c in embedded apps it will throw errors that cause the function to exit early
 */
 var filter_open = true;
 const hideSidebar = () => {
-  $(".teal_secondary_col").css("display", "none");
-  $(".teal_primary_col")
-    .removeClass("col-sm-9")
-    .addClass("col-sm-12");
-  $(".teal_primary_col").trigger("resize");
+  $(".teal_secondary_col").fadeOut(1);
+  $(".teal_primary_col").removeClass("col-sm-9").addClass("col-sm-12");
 };
 const showSidebar = () => {
-  $(".teal_primary_col")
-    .removeClass("col-sm-12")
-    .addClass("col-sm-9");
-  setTimeout(
-    () => {
-      $(".teal_secondary_col").css("display", "block");
-    },
-    600);
-  $(".teal_primary_col").trigger("resize");
+  $(".teal_primary_col").removeClass("col-sm-12").addClass("col-sm-9");
+  $(".teal_secondary_col").delay(600).fadeIn(50);
 };
 const toggleFilterPanel = () => {
   if (filter_open && !$(".teal_secondary_col").is(':visible')) {
