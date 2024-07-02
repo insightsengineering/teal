@@ -43,8 +43,8 @@ teal_lockfile <- function() {
 
   # Both capture.output are not needed if stdout = "|"
   callr_output <-
-  capture.output( # Needed to suppress: 'Opening fd 1' message
-    capture.output( # Needed to suppress: 'PROCESS 'Rterm', running, pid' output
+  utils::capture.output( # Needed to suppress: 'Opening fd 1' message
+    utils::capture.output( # Needed to suppress: 'PROCESS 'Rterm', running, pid' output
       callr::r_bg(
         func = create_renv_lockfile,
         args = list(
