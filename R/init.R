@@ -221,17 +221,27 @@ init <- function(data,
     }
   }
 
+  reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
+  if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
+    modules <- append_module(
+      modules,
+      reporter_previewer_module(server_args = list(previewer_buttons = c("download", "reset")))
+    )
+  }
+
   # Note regarding case `id = character(0)`:
   # rather than creating a submodule of this module, we directly modify
   # the UI and server with `id = character(0)` and calling the server function directly
   # Note: UI must be a function to support bookmarking.
   res <- list(
-    ui = function(request) ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
+    ui = function(request) {
+      ui_teal_1.0(id = id, data = data, modules = modules, title = title, header = header, footer = footer)
+    },
     server = function(input, output, session) {
       if (!is.null(landing_module)) {
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
-      srv_teal_with_splash(id = id, data = data, modules = modules, filter = deep_copy_filter(filter))
+      srv_teal_1.0(id = id, data = data, modules = modules, filter = deep_copy_filter(filter))
     }
   )
 
