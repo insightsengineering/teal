@@ -58,11 +58,11 @@ teal_lockfile <- function() {
         package = "renv"
         # default env = NULL # means that callr process will use environmental variables
         #     from the main session (parent process)
+        ),
+        type = "message"
       ),
-      type = "message"
-    ),
-    type = "output"
-  )
+      type = "output"
+    )
 
   logger::log_trace("lockfile creation started.")
 }
