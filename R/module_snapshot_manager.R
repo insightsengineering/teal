@@ -247,17 +247,6 @@ snapshot_manager_srv <- function(id) {
           snapshot_history(snapshot_update)
           ### Begin simplified restore procedure. ###
           logger::log_trace("snapshot_manager_srv: restoring snapshot")
-          print("elo2")
-          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
-          mapply(
-            function(filtered_data, filter_ids) {
-              filtered_data$clear_filter_states(force = TRUE)
-              slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
-              filtered_data$set_filter_state(slices)
-            },
-            filtered_data = datasets,
-            filter_ids = mapping_unfolded
-          )
           slices_global(snapshot_state)
           removeModal()
           ### End  simplified restore procedure. ###
@@ -344,21 +333,4 @@ snapshot_manager_srv <- function(id) {
 
     snapshot_history
   })
-}
-
-### utility functions ----
-
-#' Explicitly enumerate global filters.
-#'
-#' Transform module mapping such that global filters are explicitly specified for every module.
-#'
-#' @param mapping (named `list`) as stored in mapping parameter of `teal_slices`
-#' @param module_names (`character`) vector containing names of all modules in the app
-#' @return A `named_list` with one element per module, each element containing all filters applied to that module.
-#'
-#' @keywords internal
-#'
-unfold_mapping <- function(mapping, module_names) {
-  module_names <- structure(module_names, names = module_names)
-  lapply(module_names, function(x) c(mapping[[x]], mapping[["global_filters"]]))
 }
