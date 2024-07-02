@@ -68,6 +68,7 @@ ui_teal_1.0 <- function(id,
       actionButton(ns("filter_manager"), NULL, icon = icon("filter")),
       actionButton(ns("snapshot_manager"), NULL, icon = icon("floppy-disk")),
       actionButton(ns("bookmark_manager"), NULL, icon = icon("bookmark")),
+      ui_bookmark_panel(ns("bookmark_manager"), modules),
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
         href = "javascript:void(0)",
@@ -203,14 +204,11 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
     })
     filter_manager_srv("filter_manager", is_module_specific = isTRUE(attr(filter, "module_specific")))
 
+    srv_bookmark_panel("bookmark_manager", modules)
+
     # todo: connect snapshot manager with slices_global
     observeEvent(input$snapshot_manager, {
       print("snapshot_manager clicked!")
-    })
-
-    # todo: bring back bookmark manager
-    observeEvent(input$bookmark_manager, {
-      print("bookmark_manager clicked!")
     })
   })
 }

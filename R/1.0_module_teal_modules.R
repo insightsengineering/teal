@@ -240,20 +240,20 @@ srv_teal_module.teal_module <- function(id,
       }
 
       if (is_arg_used(modules$server, "datasets")) {
-        args <- c(args, datasets = datasets())
+        args <- c(args, datasets = isolate(datasets()))
         warning("datasets argument is not reactive and therefore it won't be updated when data is refreshed.")
       }
 
       if (is_arg_used(modules$server, "data")) {
         filtered_teal_data <- eventReactive(trigger_data(), {
-          .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
+          .make_teal_data(modules, data = data_rv(), datasets = isolate(datasets()), datanames = active_datanames())
         })
         args <- c(args, data = list(filtered_teal_data))
       }
 
 
       if (is_arg_used(modules$server, "filter_panel_api")) {
-        filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets())
+        filter_panel_api <- teal.slice::FilterPanelAPI$new(isolate(datasets()))
         args <- c(args, filter_panel_api = filter_panel_api)
       }
 

@@ -74,7 +74,7 @@ srv_data <- function(id, data, modules, filter) {
       shinyjs::click(id = "open_teal_data_module")
     }
 
-    data_rv <- reactiveVal(NULL)
+    data_rv <- reactiveVal(teal_data(iris = iris))
     observeEvent(teal_data_rv_validate(), {
       data_rv(teal_data_rv_validate())
     })
