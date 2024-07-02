@@ -1,8 +1,4 @@
 // used to collapse and expand the filter panel in teal apps
-/*
-resize is placed at end of functions
-b/c in embedded apps it will throw errors that cause the function to exit early
-*/
 var filter_open = true;
 const hideSidebar = () => {
   $(".teal_secondary_col").fadeOut(1);
