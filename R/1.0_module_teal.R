@@ -132,11 +132,8 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       }
     )
 
-    # todo: when data popup is on, hide the background to not show the app.
-    #       but don't hide/show as ui needs to be initialized.
     # todo: introduce option `run_once` to not show data icon when app is loaded (in case when data don't change).
     data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
-
 
     # Restore filter from bookmarked state, if applicable.
     filter_restored <- restoreValue("filter_state_on_bookmark", filter)

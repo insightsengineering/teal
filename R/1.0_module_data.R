@@ -59,6 +59,7 @@ srv_data <- function(id, data, modules, filter) {
       }
       showModal(
         modalDialog(
+          class = ifelse(easy_close, "blur_background", "hide_background"),
           tags$div(
             data$ui(session$ns("teal_data_module")),
             uiOutput(session$ns("response"))
