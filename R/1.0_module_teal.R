@@ -134,8 +134,6 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
     # todo: introduce option `run_once` to not show data icon when app is loaded (in case when data don't change).
     data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
 
-    # todo: bookmark store/restore of teal_slices should be implemented here
-    #       Move it from snapshot_manager_srv to here or to filter_manager
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
         logger::log_trace("srv_teal_module@1 initializing FilteredData")
@@ -166,7 +164,6 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       module_labels = unlist(module_labels(modules), use.names = FALSE)
     )
 
-    # todo: connect snapshot manager with slices_global
     observeEvent(input$snapshot_manager, {
       showModal(
         modalDialog(
