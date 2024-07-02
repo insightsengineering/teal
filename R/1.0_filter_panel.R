@@ -16,8 +16,7 @@ ui_filter_panel <- function(id) {
 }
 
 #' @rdname module_teal
-srv_filter_panel <- function(id, filter, datasets, active_datanames) {
-  checkmate::assert_class(filter, "teal_slices")
+srv_filter_panel <- function(id, datasets, active_datanames) {
   checkmate::assert_class(datasets, "reactive")
   moduleServer(id, function(input, output, session) {
     output$panel <- renderUI({
