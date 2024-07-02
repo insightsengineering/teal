@@ -40,11 +40,9 @@
 #'
 ui_bookmark_panel <- function(id, modules) {
   ns <- NS(id)
-  is_unbookmarkable <- unlist(rapply2(
-    modules_bookmarkable(modules),
-    Negate(isTRUE)
-  ))
-  bookmark_option <- getShinyOption("bookmarkStore")
+
+  bookmark_option <- get_bookmarking_option()
+  is_unbookmarkable <- need_bookmarking(modules)
 
   # Render bookmark warnings count
   if (!all(is_unbookmarkable) && identical(bookmark_option, "server")) {
@@ -74,17 +72,8 @@ srv_bookmark_panel <- function(id, modules) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("bookmark_manager_srv initializing")
     ns <- session$ns
-    bookmark_option <- getShinyOption("bookmarkStore")
-    if (is.null(bookmark_option) && identical(getOption("shiny.bookmarkStore"), "server")) {
-      bookmark_option <- getOption("shiny.bookmarkStore")
-      # option alone doesn't activate bookmarking - we need to set shinyOptions
-      shinyOptions(bookmarkStore = bookmark_option)
-    }
-
-    is_unbookmarkable <- unlist(rapply2(
-      modules_bookmarkable(modules),
-      Negate(isTRUE)
-    ))
+    bookmark_option <- get_bookmarking_option()
+    is_unbookmarkable <- need_bookmarking(modules)
 
     # Set up bookmarking callbacks ----
     # Register bookmark exclusions: do_bookmark button to avoid re-bookmarking
@@ -153,4 +142,26 @@ srv_bookmark_panel <- function(id, modules) {
 
     invisible(NULL)
   })
+}
+
+
+#' @rdname module_bookmark_manager
+#' @keywords internal
+get_bookmarking_option <- function() {
+  bookmark_option <- getShinyOption("bookmarkStore")
+  if (is.null(bookmark_option) && identical(getOption("shiny.bookmarkStore"), "server")) {
+    bookmark_option <- getOption("shiny.bookmarkStore")
+    # option alone doesn't activate bookmarking - we need to set shinyOptions
+    shinyOptions(bookmarkStore = bookmark_option)
+  }
+  bookmark_option
+}
+
+#' @rdname module_bookmark_manager
+#' @keywords internal
+need_bookmarking <- function(modules) {
+  unlist(rapply2(
+    modules_bookmarkable(modules),
+    Negate(isTRUE)
+  ))
 }
