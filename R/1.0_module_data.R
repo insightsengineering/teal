@@ -31,6 +31,11 @@ srv_data <- function(id, data, modules, filter) {
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     }
+    # todo: teal as a module (requested by: @chlebowa, @kpagacz)
+    # if we want to support teal as a module we need a following (we need to open srv_teal for data being a reactive)
+    # } else if (inherits(data, c("reactive", "reactiveVal"))) {
+    #  data
+    # }
 
     teal_data_rv_validate <- validate_reactive_teal_data(teal_data_rv)
 
