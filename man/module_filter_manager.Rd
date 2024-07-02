@@ -10,7 +10,7 @@
 \usage{
 filter_manager_ui(id)
 
-filter_manager_srv(id, datasets, filter)
+filter_manager_srv(id, is_module_specific)
 }
 \arguments{
 \item{id}{(\code{character(1)})
@@ -21,9 +21,6 @@ A list, possibly nested, of \code{FilteredData} objects.
 Each \code{FilteredData} will be served to one module in the \code{teal} application.
 The structure of the list must reflect the nesting of modules in tabs
 and the names of the list must match the labels of their respective modules.}
-
-\item{filter}{(\code{teal_slices})
-Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 A \code{list} containing:
