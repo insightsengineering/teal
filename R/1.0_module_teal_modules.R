@@ -327,7 +327,7 @@ srv_teal_module.teal_module <- function(id,
     )
   )
 
-  tdata@verified <- TRUE # todo: change to original value from from data
+  tdata@verified <- data@verified
   teal.data::datanames(tdata) <- datanames
   tdata
 }
