@@ -41,16 +41,16 @@ teal_lockfile <- function() {
 
   shiny::onStop(function() file.remove(lockfile_path))
   callr::r_bg(
-    func = create_renv_lockfile, 
+    func = create_renv_lockfile,
     args = list(
-      lockfile_path = lockfile_path, 
+      lockfile_path = lockfile_path,
       opts = options()
-    ), 
+    ),
     # renv setup is orchestrated by its special S3 objects: renv::settings, renv::config and renv::paths
     #     `package` parameter include `renv` namespace inside the environment of `func = create_renv_lockfile` function
-    package = "renv" 
+    package = "renv"
     # default env = NULL # means that callr process will use environmental variables from the main session (parent process)
-  )  
+  )
   logger::log_trace("lockfile creation started.")
 }
 
