@@ -302,20 +302,31 @@ srv_teal_module.teal_module <- function(id,
 }
 
 .make_teal_data <- function(modules, data, datasets, datanames) {
-  filtered_datasets <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
-  filter_code <- get_filter_expr(datasets, datanames = datanames)
+  new_datasets <- c(
+    # Filtered data
+    sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE),
+    # Raw (unfiltered data)
+    stats::setNames(
+      lapply(datanames, function(x) datasets$get_data(x, filtered = FALSE)),
+      sprintf("%s_raw", datanames)
+    )
+  )
+
   data_code <- teal.data::get_code(data, datanames = datanames)
   hashes_code <- .get_hashes_code(datasets, datanames)
+  raw_data_code <- sprintf("%1$s_raw <- %1$s", datanames)
+  filter_code <- get_filter_expr(datasets, datanames = datanames)
 
-  all_code <- paste(unlist(c(data_code, "", hashes_code, "", filter_code)), collapse = "\n")
+  all_code <- paste(unlist(c(data_code, "", hashes_code, raw_data_code, "", filter_code)), collapse = "\n")
   tdata <- do.call(
     teal.data::teal_data,
     c(
-      list(code = all_code),
+      list(code = trimws(all_code, which = "right")),
       list(join_keys = teal.data::join_keys(data)),
-      filtered_datasets
+      new_datasets
     )
   )
+
   tdata@verified <- data@verified
   teal.data::datanames(tdata) <- datanames
   tdata
