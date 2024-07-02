@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.510501500214316" branch-rate="0" lines-covered="1191" lines-valid="2333" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-07-02 11:20:50.981605">
+<coverage line-rate="0.511300639658849" branch-rate="0" lines-covered="1199" lines-valid="2345" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-07-02 12:30:51.518837">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
   <packages>
-    <package name="teal" line-rate="0.510501500214316" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.511300639658849" branch-rate="0" complexity="0">
       <classes>
         <class name="dummy_functions.R" filename="R/dummy_functions.R" line-rate="0.305555555555556" branch-rate="0" complexity="0">
           <methods>
@@ -3445,9 +3445,9 @@
             <line number="62" hits="34" branch="false"/>
           </lines>
         </class>
-        <class name="teal_lockfile.R" filename="R/teal_lockfile.R" line-rate="0.511627906976744" branch-rate="0" complexity="0">
+        <class name="teal_lockfile.R" filename="R/teal_lockfile.R" line-rate="0.545454545454545" branch-rate="0" complexity="0">
           <methods>
-            <method name="teal_lockfile" signature="" line-rate="0.764705882352941" branch-rate="0" complexity="0">
+            <method name="teal_lockfile" signature="" line-rate="0.84" branch-rate="0" complexity="0">
               <lines>
                 <line number="30" hits="9" branch="false"/>
                 <line number="32" hits="9" branch="false"/>
@@ -3457,49 +3457,61 @@
                 <line number="36" hits="0" branch="false"/>
                 <line number="38" hits="0" branch="false"/>
                 <line number="42" hits="9" branch="false"/>
-                <line number="43" hits="9" branch="false"/>
-                <line number="44" hits="9" branch="false"/>
                 <line number="45" hits="9" branch="false"/>
                 <line number="46" hits="9" branch="false"/>
                 <line number="47" hits="9" branch="false"/>
                 <line number="48" hits="9" branch="false"/>
+                <line number="49" hits="9" branch="false"/>
+                <line number="50" hits="9" branch="false"/>
                 <line number="51" hits="9" branch="false"/>
+                <line number="52" hits="9" branch="false"/>
                 <line number="53" hits="9" branch="false"/>
-                <line number="54" hits="9" branch="false"/>
+                <line number="55" hits="9" branch="false"/>
+                <line number="58" hits="9" branch="false"/>
+                <line number="61" hits="9" branch="false"/>
+                <line number="62" hits="9" branch="false"/>
+                <line number="63" hits="9" branch="false"/>
+                <line number="64" hits="9" branch="false"/>
+                <line number="65" hits="9" branch="false"/>
+                <line number="67" hits="9" branch="false"/>
               </lines>
             </method>
-            <method name="create_renv_lockfile" signature="" line-rate="0.222222222222222" branch-rate="0" complexity="0">
+            <method name="create_renv_lockfile" signature="" line-rate="0.153846153846154" branch-rate="0" complexity="0">
               <lines>
-                <line number="58" hits="1" branch="false"/>
-                <line number="59" hits="1" branch="false"/>
-                <line number="61" hits="0" branch="false"/>
-                <line number="63" hits="0" branch="false"/>
-                <line number="64" hits="0" branch="false"/>
-                <line number="65" hits="0" branch="false"/>
-                <line number="66" hits="0" branch="false"/>
-                <line number="68" hits="0" branch="false"/>
-                <line number="69" hits="0" branch="false"/>
+                <line number="71" hits="1" branch="false"/>
+                <line number="72" hits="1" branch="false"/>
+                <line number="74" hits="0" branch="false"/>
+                <line number="76" hits="0" branch="false"/>
+                <line number="77" hits="0" branch="false"/>
+                <line number="78" hits="0" branch="false"/>
+                <line number="79" hits="0" branch="false"/>
+                <line number="80" hits="0" branch="false"/>
+                <line number="82" hits="0" branch="false"/>
+                <line number="83" hits="0" branch="false"/>
+                <line number="85" hits="0" branch="false"/>
+                <line number="86" hits="0" branch="false"/>
+                <line number="88" hits="0" branch="false"/>
               </lines>
             </method>
             <method name="teal_lockfile_downloadhandler" signature="" line-rate="0.411764705882353" branch-rate="0" complexity="0">
               <lines>
-                <line number="73" hits="18" branch="false"/>
-                <line number="74" hits="18" branch="false"/>
-                <line number="75" hits="0" branch="false"/>
-                <line number="76" hits="18" branch="false"/>
-                <line number="77" hits="18" branch="false"/>
-                <line number="78" hits="0" branch="false"/>
-                <line number="79" hits="0" branch="false"/>
-                <line number="80" hits="0" branch="false"/>
-                <line number="81" hits="0" branch="false"/>
-                <line number="82" hits="0" branch="false"/>
-                <line number="83" hits="0" branch="false"/>
-                <line number="84" hits="0" branch="false"/>
-                <line number="85" hits="0" branch="false"/>
-                <line number="86" hits="0" branch="false"/>
-                <line number="87" hits="18" branch="false"/>
-                <line number="88" hits="18" branch="false"/>
-                <line number="89" hits="18" branch="false"/>
+                <line number="93" hits="18" branch="false"/>
+                <line number="94" hits="18" branch="false"/>
+                <line number="95" hits="0" branch="false"/>
+                <line number="96" hits="18" branch="false"/>
+                <line number="97" hits="18" branch="false"/>
+                <line number="98" hits="0" branch="false"/>
+                <line number="99" hits="0" branch="false"/>
+                <line number="100" hits="0" branch="false"/>
+                <line number="101" hits="0" branch="false"/>
+                <line number="102" hits="0" branch="false"/>
+                <line number="103" hits="0" branch="false"/>
+                <line number="104" hits="0" branch="false"/>
+                <line number="105" hits="0" branch="false"/>
+                <line number="106" hits="0" branch="false"/>
+                <line number="107" hits="18" branch="false"/>
+                <line number="108" hits="18" branch="false"/>
+                <line number="109" hits="18" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -3512,41 +3524,53 @@
             <line number="36" hits="0" branch="false"/>
             <line number="38" hits="0" branch="false"/>
             <line number="42" hits="9" branch="false"/>
-            <line number="43" hits="9" branch="false"/>
-            <line number="44" hits="9" branch="false"/>
             <line number="45" hits="9" branch="false"/>
             <line number="46" hits="9" branch="false"/>
             <line number="47" hits="9" branch="false"/>
             <line number="48" hits="9" branch="false"/>
+            <line number="49" hits="9" branch="false"/>
+            <line number="50" hits="9" branch="false"/>
             <line number="51" hits="9" branch="false"/>
+            <line number="52" hits="9" branch="false"/>
             <line number="53" hits="9" branch="false"/>
-            <line number="54" hits="9" branch="false"/>
-            <line number="58" hits="1" branch="false"/>
-            <line number="59" hits="1" branch="false"/>
-            <line number="61" hits="0" branch="false"/>
-            <line number="63" hits="0" branch="false"/>
-            <line number="64" hits="0" branch="false"/>
-            <line number="65" hits="0" branch="false"/>
-            <line number="66" hits="0" branch="false"/>
-            <line number="68" hits="0" branch="false"/>
-            <line number="69" hits="0" branch="false"/>
-            <line number="73" hits="18" branch="false"/>
-            <line number="74" hits="18" branch="false"/>
-            <line number="75" hits="0" branch="false"/>
-            <line number="76" hits="18" branch="false"/>
-            <line number="77" hits="18" branch="false"/>
+            <line number="55" hits="9" branch="false"/>
+            <line number="58" hits="9" branch="false"/>
+            <line number="61" hits="9" branch="false"/>
+            <line number="62" hits="9" branch="false"/>
+            <line number="63" hits="9" branch="false"/>
+            <line number="64" hits="9" branch="false"/>
+            <line number="65" hits="9" branch="false"/>
+            <line number="67" hits="9" branch="false"/>
+            <line number="71" hits="1" branch="false"/>
+            <line number="72" hits="1" branch="false"/>
+            <line number="74" hits="0" branch="false"/>
+            <line number="76" hits="0" branch="false"/>
+            <line number="77" hits="0" branch="false"/>
             <line number="78" hits="0" branch="false"/>
             <line number="79" hits="0" branch="false"/>
             <line number="80" hits="0" branch="false"/>
-            <line number="81" hits="0" branch="false"/>
             <line number="82" hits="0" branch="false"/>
             <line number="83" hits="0" branch="false"/>
-            <line number="84" hits="0" branch="false"/>
             <line number="85" hits="0" branch="false"/>
             <line number="86" hits="0" branch="false"/>
-            <line number="87" hits="18" branch="false"/>
-            <line number="88" hits="18" branch="false"/>
-            <line number="89" hits="18" branch="false"/>
+            <line number="88" hits="0" branch="false"/>
+            <line number="93" hits="18" branch="false"/>
+            <line number="94" hits="18" branch="false"/>
+            <line number="95" hits="0" branch="false"/>
+            <line number="96" hits="18" branch="false"/>
+            <line number="97" hits="18" branch="false"/>
+            <line number="98" hits="0" branch="false"/>
+            <line number="99" hits="0" branch="false"/>
+            <line number="100" hits="0" branch="false"/>
+            <line number="101" hits="0" branch="false"/>
+            <line number="102" hits="0" branch="false"/>
+            <line number="103" hits="0" branch="false"/>
+            <line number="104" hits="0" branch="false"/>
+            <line number="105" hits="0" branch="false"/>
+            <line number="106" hits="0" branch="false"/>
+            <line number="107" hits="18" branch="false"/>
+            <line number="108" hits="18" branch="false"/>
+            <line number="109" hits="18" branch="false"/>
           </lines>
         </class>
         <class name="teal_reporter.R" filename="R/teal_reporter.R" line-rate="0.911764705882353" branch-rate="0" complexity="0">
