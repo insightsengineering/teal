@@ -40,7 +40,7 @@ teal_lockfile <- function() {
   }
 
   shiny::onStop(function() file.remove(lockfile_path))
-  callr::r_bg(create_renv_lockfile, args = list(lockfile_path = lockfile_path, opts = options()), package = 'renv')
+  callr::r_bg(create_renv_lockfile, args = list(lockfile_path = lockfile_path, opts = options()), package = "renv")
   logger::log_trace("lockfile creation started.")
 }
 
