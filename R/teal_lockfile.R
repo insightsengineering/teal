@@ -39,50 +39,54 @@ teal_lockfile <- function() {
     }
   }
 
-  if (!(is_in_test() || is_r_cmd_check())) {
-    old_plan <- future::plan()
-    # If there is already a parallel (non-sequential) backend, reuse it.
-    if (inherits(old_plan, "sequential")) {
-      future::plan(future::multisession, workers = 2)
-    }
+  shiny::onStop(function() file.remove(lockfile_path))
 
-    lockfile_task <- ExtendedTask$new(create_renv_lockfile)
-    lockfile_task$invoke(close = inherits(old_plan, "sequential"), lockfile_path)
-    logger::log_trace("lockfile creation invoked.")
-  }
+  # Both capture.output are not needed if stdout = "|"
+  callr_output <-
+    utils::capture.output( # Needed to suppress: 'Opening fd 1' message
+      utils::capture.output( # Needed to suppress: 'PROCESS 'Rterm', running, pid' output
+        callr::r_bg(
+          func = create_renv_lockfile,
+          args = list(
+            lockfile_path = lockfile_path,
+            opts = options()
+          ),
+          # print results to the console
+          stdout = "",
+          # renv setup is orchestrated by its special S3 objects: renv::settings, renv::config and renv::paths
+          #     `package` parameter include `renv` namespace inside the environment of `func = create_renv_lockfile` fun
+          package = "renv"
+          # default env = NULL # means that callr process will use environmental variables
+          #     from the main session (parent process)
+        ),
+        type = "message"
+      ),
+      type = "output"
+    )
+
+  logger::log_trace("lockfile creation started.")
 }
 
-create_renv_lockfile <- function(close = FALSE, lockfile_path = NULL) {
-  checkmate::assert_flag(close)
+create_renv_lockfile <- function(lockfile_path = NULL, opts = NULL) {
   checkmate::assert_string(lockfile_path, na.ok = TRUE)
-  promise <- promises::future_promise({
-    # Below we can not use a file created in tempdir() directory.
-    # If a file is created in tempdir(), it gets deleted on 'then(onFulfilled' part.
-    shiny::onStop(function() file.remove(lockfile_path))
+  checkmate::assert_list(opts)
 
-    renv_logs <- utils::capture.output(
-      renv::snapshot(
-        lockfile = lockfile_path,
-        prompt = FALSE,
-        force = TRUE
-        # type = is taken from renv::settings$snapshot.type()
-      )
+  options(opts)
+
+  renv_logs <- utils::capture.output(
+    renv::snapshot(
+      lockfile = lockfile_path,
+      prompt = FALSE,
+      force = TRUE
+      # type = is taken from renv::settings$snapshot.type()
     )
-    if (any(grepl("Lockfile written", renv_logs))) {
-      logger::log_trace("lockfile created successfully.")
-    } else {
-      logger::log_trace("lockfile created with issues.")
-    }
-
-    lockfile_path
-  })
-  if (close) {
-    # If the initial backend was only sequential, bring it back.
-    promises::then(promise, onFulfilled = function() {
-      future::plan(future::sequential)
-    })
+  )
+  # print() is required for callr::r_bg to track console output
+  if (any(grepl("Lockfile written", renv_logs))) {
+    print("lockfile created successfully.")
+  } else {
+    print("lockfile created with issues.")
   }
-  promise
 }
 
 teal_lockfile_downloadhandler <- function() {
@@ -103,12 +107,4 @@ teal_lockfile_downloadhandler <- function() {
     },
     contentType = "application/json"
   )
-}
-
-is_r_cmd_check <- function() {
-  ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_", "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
-}
-
-is_in_test <- function() {
-  identical(Sys.getenv("TESTTHAT"), "true")
 }
