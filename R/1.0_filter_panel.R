@@ -12,7 +12,7 @@ NULL
 #' @rdname module_teal
 ui_filter_panel <- function(id) {
   ns <- shiny::NS(id)
-  uiOutput(ns("data_summary"))
+  ui_data_summary(ns("data_summary"))
   uiOutput(ns("panel"))
 }
 

@@ -35,14 +35,10 @@ ui_data_summary = function(id) {
 #'
 #' @param id (`character(1)`)
 #'   `shiny` module instance id.
-#' @param data (`reactive`) `teal_data`
-#' @param datanames (`character`) names of datasets
+#' @param active_datanames (`character`) names of datasets
 #' @inheritParams module_tabs_with_filters
 #' @return `NULL`.
-srv_data_summary = function(id, data, datasets, datanames) {
-  checkmate::assert_class(data, "reactive")
-  checkmate::assert_class(data(), "teal_data")
-  #TODO: why do I need data() in here at all?
+srv_data_summary = function(id, datasets, active_datanames) {
 
   moduleServer(
     id = id,
@@ -57,11 +53,11 @@ srv_data_summary = function(id, data, datasets, datanames) {
 
       output$table <- renderUI({
         logger::log_trace("srv_data_summary updating counts")
-        if (length(datanames) == 0) {
+        if (length(active_datanames) == 0) {
           return(NULL)
         }
 
-        datasets_df <- get_filter_overview(datanames = datanames, datasets = datasets)
+        datasets_df <- get_filter_overview(datanames = active_datanames, datasets = datasets)
 
         attr(datasets_df$dataname, "label") <- "Data Name"
 
