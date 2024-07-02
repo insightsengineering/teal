@@ -66,14 +66,14 @@ This option controls the dots per inch of the graphs rendered and downloaded whe
 Default: 72
 
 ### `teal.log_layout` (`character`)
-This defines the layout of a log message used in a `teal` application. `teal` uses this layout to format the emitted log messages. Read the documentation of `teal.logger::register_logger` for more information. This must be set before loading any `teal` package(s).
+This defines the layout of a log message used in a `teal` application. `teal` uses this layout to format the emitted log messages. Read the documentation of `teal.logger::register_logger` for more information. This must be set before loading any `teal` package(s). In case the option is set after attaching the packages, please re-attach the packages again to use it correctly.
 
 Default: `"[{level}] {format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} token:[{token}] {ans} {msg}"`.
 
 Note that this layout is formatted by the `glue` package.
 
 ### `teal.log_level` (`character`)
-This is the logging level threshold used in a `teal` application. A `teal` application will not emit logs below this level. See the documentation of `logger::TRACE` for all possible values of logging threshold and more information on what it does. This must be set before loading any `teal` package(s).
+This is the logging level threshold used in a `teal` application. A `teal` application will not emit logs below this level. See the documentation of `logger::TRACE` for all possible values of logging threshold and more information on what it does. This must be set before loading any `teal` package(s). In case the option is set after attaching the packages, please re-attach the packages again to use it correctly.
 
 Default: `"INFO"`.
 
