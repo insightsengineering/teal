@@ -271,7 +271,12 @@ srv_teal_module.teal_module <- function(id,
       #       for a comment below. This is a bug and needs to be fixed.
       # When restoring bookmark, all modules must be initialized on app start.
       # Delayed module initiation (below) precludes restoring state b/c inputs do not exist when restoring occurs.
-      call_module()
+      observeEvent(
+        ignoreNULL = TRUE,
+        once = TRUE,
+        eventExpr = trigger_module(),
+        handlerExpr = call_module()
+      )
     } else if (inherits(modules, "teal_module_previewer")) {
       # Report previewer must be initiated on app start for report cards to be included in bookmarks.
       # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
