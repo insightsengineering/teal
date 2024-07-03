@@ -1,11 +1,11 @@
 ui_teal_1.0 <- function(id,
-                        data,
                         modules,
+                        data = NULL,
                         title = build_app_title(),
                         header = tags$p(),
                         footer = tags$p()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_multi_class(data, "teal_data_module", null.ok = TRUE)
   checkmate::assert(
     .var.name = "title",
     checkmate::check_string(title),
@@ -97,7 +97,7 @@ ui_teal_1.0 <- function(id,
 
 srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
