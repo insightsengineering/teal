@@ -77,3 +77,20 @@ testthat::test_that("init throws when dataname in filter incompatible w/ datanam
     "Filter 'iris Species' refers to dataname not available in 'data'"
   )
 })
+
+testthat::test_that("init creates a lockfile during the execution", {
+  renv_file_name <- "teal_app.lock"
+  withr::defer(file.remove(renv_file_name))
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = example_module(label = "example teal module")
+  )
+
+  iter <- 1
+  while (!file.exists(renv_file_name) && iter <= 100) {
+    Sys.sleep(0.25)
+    iter <- iter + 1 # max wait time is 25 seconds
+  }
+
+  testthat::expect_true(file.exists(renv_file_name))
+})
