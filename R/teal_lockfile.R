@@ -41,28 +41,24 @@ teal_lockfile <- function() {
 
   shiny::onStop(function() file.remove(lockfile_path))
 
-  # Both capture.output are not needed if stdout = "|"
-  callr_output <-
-    utils::capture.output( # Needed to suppress: 'Opening fd 1' message
-      utils::capture.output( # Needed to suppress: 'PROCESS 'Rterm', running, pid' output
-        callr::r_bg(
-          func = create_renv_lockfile,
-          args = list(
-            lockfile_path = lockfile_path,
-            opts = options()
-          ),
-          # print results to the console
-          stdout = "",
-          # renv setup is orchestrated by its special S3 objects: renv::settings, renv::config and renv::paths
-          #     `package` parameter include `renv` namespace inside the environment of `func = create_renv_lockfile` fun
-          package = "renv"
-          # default env = NULL # means that callr process will use environmental variables
-          #     from the main session (parent process)
-        ),
-        type = "message"
+  # capture.output is not needed if stdout = "|"
+  utils::capture.output( # Needed to suppress: 'Opening fd 1' message
+    callr::r_bg(
+      func = create_renv_lockfile,
+      args = list(
+        lockfile_path = lockfile_path,
+        opts = options()
       ),
-      type = "output"
-    )
+      # print results to the console
+      stdout = "",
+      # renv setup is orchestrated by its special S3 objects: renv::settings, renv::config and renv::paths
+      #     `package` parameter include `renv` namespace inside the environment of `func = create_renv_lockfile` fun
+      package = "renv"
+      # default env = NULL # means that callr process will use environmental variables
+      #     from the main session (parent process)
+    ),
+    type = "message"
+  )
 
   logger::log_trace("lockfile creation started.")
 }
