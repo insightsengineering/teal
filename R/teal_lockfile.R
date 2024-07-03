@@ -41,10 +41,10 @@ teal_lockfile <- function() {
 
   shiny::onStop(function() file.remove(lockfile_path))
 
-  # capture.output is not needed if stdout = "|"
-  utils::capture.output( # Needed to suppress: 'Opening fd 1' message
+  # # capture.output is not needed if stdout = "|"
+  # utils::capture.output( # Needed to suppress: 'Opening fd 1' message
     callr::r_bg(
-      func = create_renv_lockfile,
+      func = create_renv_lockfile_2,
       args = list(
         lockfile_path = lockfile_path,
         opts = options()
@@ -55,12 +55,16 @@ teal_lockfile <- function() {
       #     `package` parameter include `renv` namespace inside the environment of `func = create_renv_lockfile`
       package = "renv",
       # callr process will use environmental variables from the main session (parent process)
-      env = NULL
-    ),
-    type = "message"
-  )
+      env = Sys.getenv()
+    )#,
+  #   type = "message"
+  # )
 
   logger::log_trace("lockfile creation started.")
+}
+
+create_renv_lockfile_2 <- function(lockfile_path = NULL, opts = NULL) {
+  lapply(1:15, function(x) {print(x); Sys.sleep(1)})
 }
 
 create_renv_lockfile <- function(lockfile_path = NULL, opts = NULL) {
