@@ -48,10 +48,6 @@ srv_data <- function(id, data, modules, filter) {
 
     setBookmarkExclude("open_teal_data_module")
 
-    # Excluding the ids using full namespace and global shiny app session.
-    app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
-    setBookmarkExclude(extract_ids(data$ui(session$ns("teal_data_module"))), session = app_session)
-
     observeEvent(input$open_teal_data_module, {
       if (input$open_teal_data_module > 1) {
         footer <- modalButton("Dismiss")
@@ -81,6 +77,21 @@ srv_data <- function(id, data, modules, filter) {
     data_rv <- reactiveVal(NULL)
     observeEvent(teal_data_rv_validate(), {
       data_rv(teal_data_rv_validate())
+    })
+
+    observeEvent(teal_data_rv_validate(), once = TRUE, {
+      # Excluding the ids from teal_data_module using full namespace and global shiny app session.
+      app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
+      setBookmarkExclude(
+        session$ns(
+          grep(
+            pattern = "teal_data_module-",
+            x = names(reactiveValuesToList(input)),
+            value = TRUE
+          )
+        ),
+        session = app_session
+      )
     })
 
     data_rv
