@@ -2,10 +2,8 @@
 #'
 #' Oversee filter states across the entire application.
 #'
-#' This module observes changes in the filters of each `FilteredData` object
-#' and keeps track of all filters used. A mapping of filters to modules
-#' is kept in the `mapping_matrix` object (which is actually a `data.frame`)
-#' that tracks which filters (rows) are active in which modules (columns).
+#' This module observes changes in the filters in `session$userData$slices_global`
+#' and displays them in a table utilising information from `mapping`.
 #'
 #' @param id (`character(1)`)
 #'  `shiny` module instance id.
@@ -16,24 +14,54 @@
 #' @inheritParams init
 #'
 #' @return
-#' A `list` containing:
-#'
-#' objects used by other manager modules
+#' Module returns `NULL` but it registers singletons in `session$userData`:
 #' - `slices_global`: `reactiveVal` containing a `teal_slices` object,
 #' - `module_slices_api`: list of `function`(s) linking `FilteredData$get_available_teal_slices` of each module.
-#'
-#' objects used for testing
-#' - modules_out: `list` of `reactive`s, each holding a `teal_slices`, as returned by `filter_manager_module_srv`.
 #'
 #' @name module_filter_manager
 #' @aliases filter_manager filter_manager_module
 #'
+NULL
 
 #' @rdname module_filter_manager
 #' @keywords internal
-#'
-filter_manager_ui <- function(id) {
+ui_filter_manager_panel <- function(id) {
   ns <- NS(id)
+  tags$button(
+    id = ns("show_filter_manager"),
+    class = "btn action-button wunder_bar_button",
+    title = "View filter mapping",
+    suppressMessages(icon("solid fa-grip"))
+  )
+}
+
+#' @rdname module_filter_manager
+#' @keywords internal
+srv_filter_manager_panel <- function(id, filter, module_labels) {
+  moduleServer(id, function(input, output, session) {
+    observeEvent(input$show_filter_manager, {
+      logger::log_trace("wunder_bar_srv@1 show_filter_manager button has been clicked.")
+      showModal(
+        modalDialog(
+          ui_filter_manager(session$ns("filter_manager")),
+          class = "filter_manager_modal",
+          size = "l",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    })
+    srv_filter_manager(id, filter, module_labels)
+  })
+}
+
+
+#' @rdname module_filter_manager
+#' @keywords internal
+ui_filter_manager <- function(id) {
+  ns <- NS(id)
+
+  actionButton(ns("filter_manager"), NULL, icon = icon("filter"))
   tags$div(
     class = "filter_manager_content",
     tableOutput(ns("slices_table"))
@@ -42,8 +70,7 @@ filter_manager_ui <- function(id) {
 
 #' @rdname module_filter_manager
 #' @keywords internal
-#'
-filter_manager_srv <- function(id, filter, module_labels) {
+srv_filter_manager <- function(id, filter, module_labels) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("filter_manager_srv initializing.")
 
@@ -115,9 +142,11 @@ filter_manager_srv <- function(id, filter, module_labels) {
         # Report Previewer will not be displayed.
         mm[names(mm) != "Report previewer"]
       },
-      align = paste(c("l", rep("c", sum(module_labels != "Report previewer"))), collapse = ""),
+      # align = paste(c("l", rep("c", sum(module_labels != "Report previewer"))), collapse = ""),
       rownames = TRUE
     )
+
+    NULL
   })
 }
 
@@ -131,19 +160,15 @@ filter_manager_srv <- function(id, filter, module_labels) {
 #' and from there become available in other modules
 #' by setting `private$available_teal_slices` in each `FilteredData`.
 #'
-#' @param id (`character(1)`)
+#' @param module_label (`character(1)`)
 #'  `shiny` module id. Should be a `label` of a `teal_module`.
 #' @param module_fd (`FilteredData`)
 #'   Object containing the data to be filtered in a single `teal` module.
-#' @param slices_global (`reactiveVal`)
-#'   stores `teal_slices` with all available filters; allows the following actions:
-#'   - to disable/enable a specific filter in a module
-#'   - to restore saved filter settings
-#'   - to save current filter panel settings
+#'
 #' @return A `reactive` expression containing a `teal_slices` with the slices active in this module.
 #' @keywords internal
 #'
-filter_manager_module_srv <- function(module_label, module_fd) {
+srv_module_filter_manager <- function(module_label, module_fd) {
   checkmate::assert_character(module_label, max.len = 1, any.missing = FALSE)
   checkmate::assert_class(module_fd, "reactive")
 
