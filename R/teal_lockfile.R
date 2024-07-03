@@ -64,7 +64,7 @@ teal_lockfile <- function() {
 }
 
 create_renv_lockfile_2 <- function(lockfile_path = NULL, opts = NULL) {
-  lapply(1:15, function(x) {print(x); Sys.sleep(1)})
+  lapply(1:15, function(x) {print(paste0('teal:', x)); Sys.sleep(1)})
 }
 
 create_renv_lockfile <- function(lockfile_path = NULL, opts = NULL) {
