@@ -5,15 +5,15 @@ ui_data <- function(id, data, title, header, footer) {
     style = "display: inline-block;",
     if (inherits(data, "teal_data_module")) {
       actionButton(ns("open_teal_data_module"), NULL, icon = icon("database"))
-    } else if (inherits(data, "teal_data")) {
-      div("")
+    } else {
+      NULL
     }
   )
 }
 
 srv_data <- function(id, data, modules, filter) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
@@ -30,12 +30,9 @@ srv_data <- function(id, data, modules, filter) {
       data$server(id = "teal_data_module")
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
+    } else if (inherits(data, c("reactive", "reactiveVal"))) {
+      data
     }
-    # todo: teal as a module (requested by: @chlebowa, @kpagacz)
-    # if we want to support teal as a module we need a following (we need to open srv_teal for data being a reactive)
-    # } else if (inherits(data, c("reactive", "reactiveVal"))) {
-    #  data
-    # }
 
     teal_data_rv_validate <- validate_reactive_teal_data(teal_data_rv)
 
