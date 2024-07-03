@@ -203,7 +203,7 @@ srv_teal_module.teal_module <- function(id,
     #   filter_manager_module_srv needs to be called before filter_panel_srv
     #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
     #   and if it is not set, then it won't be available in the srv_filter_panel
-    filter_manager_module_srv(modules$label, module_fd = datasets)
+    srv_module_filter_manager(modules$label, module_fd = datasets)
     srv_filter_panel(
       "module_filter_panel",
       datasets = datasets,

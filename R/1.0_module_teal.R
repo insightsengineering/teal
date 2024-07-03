@@ -65,7 +65,6 @@ ui_teal_1.0 <- function(id,
       id = "teal-util-icons",
       style = "margin-left: auto;",
       data_elem,
-      actionButton(ns("filter_manager"), NULL, icon = icon("filter")),
       actionButton(ns("snapshot_manager"), NULL, icon = icon("floppy-disk")),
       actionButton(ns("bookmark_manager"), NULL, icon = icon("bookmark")),
       tags$button(
@@ -74,7 +73,8 @@ ui_teal_1.0 <- function(id,
         onclick = "toggleFilterPanel();", # see sidebar.js
         title = "Toggle filter panel",
         icon("fas fa-bars")
-      )
+      ),
+      ui_filter_manager_panel(ns("filter_manager"))
     ),
     tags$script(HTML("
       $(document).ready(function() {
@@ -148,22 +148,14 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       })
     }
 
-    # todo: make a module containing for this observer and for an icon on the UI side?
-    observeEvent(input$filter_manager, {
-      showModal(
-        modalDialog(
-          tags$div(
-            filter_manager_ui(session$ns("filter_manager"))
-          )
-        )
-      )
-    })
-    filter_manager_srv(
+    srv_filter_manager_panel(
       "filter_manager",
       filter = filter,
       module_labels = unlist(module_labels(modules), use.names = FALSE)
     )
 
+    # todo: make snapshot manager panel - in the same way as filter_manager_panel
+    #       keep button styling same as in wunder_bar
     observeEvent(input$snapshot_manager, {
       showModal(
         modalDialog(
@@ -180,7 +172,7 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       print("bookmark_manager clicked!")
     })
 
-    # comment: modules needs to be called after filter_manager_srv
+    # comment: modules needs to be called after srv_filter_manager_panel
     #          This is because they are using session$slices_global which is set in filter_manager_srv
     # todo: slices_global should be passed explicitly through arguments (easier to test)
     active_module <- srv_teal_module(
