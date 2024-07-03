@@ -49,6 +49,12 @@ srv_data <- function(id, data, modules, filter) {
       NULL
     })
 
+    setBookmarkExclude("open_teal_data_module")
+
+    # Excluding the ids using full namespace and global shiny app session.
+    app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
+    setBookmarkExclude(extract_ids(data$ui(session$ns("teal_data_module"))), session = app_session)
+
     observeEvent(input$open_teal_data_module, {
       if (input$open_teal_data_module > 1) {
         footer <- modalButton("Dismiss")
@@ -82,4 +88,22 @@ srv_data <- function(id, data, modules, filter) {
 
     data_rv
   })
+}
+
+
+#' @param ui (`shiny.tag`) UI object to extract ids from
+#' @keywords internal
+#'
+extract_ids <- function(ui) {
+  ids <- c()
+
+  if (is.list(ui)) {
+    if (!is.null(ui$id)) {
+      ids <- c(ids, ui$id)
+    }
+    for (element in ui) {
+      ids <- c(ids, extract_ids(element))
+    }
+  }
+  ids
 }
