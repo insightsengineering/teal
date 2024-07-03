@@ -86,12 +86,48 @@
 #'
 #' @author Aleksander Chlebowski
 #'
+NULL
 
+#' @rdname module_snapshot_manager_panel
+#' @keywords internal
+#'
+ui_snapshot_manager_panel <- function(id) {
+  ns <- NS(id)
+  tags$button(
+    id = ns("show_snapshot_manager"),
+    class = "btn action-button wunder_bar_button",
+    title = "View filter mapping",
+    suppressMessages(icon("camera"))
+  )
+}
+
+#' @rdname module_snapshot_manager_panel
+#' @keywords internal
+#'
+srv_snapshot_manager_panel <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    logger::log_trace("srv_snapshot_manager_panel initializing")
+    setBookmarkExclude(c("show_snapshot_manager"))
+    observeEvent(input$show_snapshot_manager, {
+      logger::log_trace("srv_snapshot_manager_panel@1 show_snapshot_manager button has been clicked.")
+      showModal(
+        modalDialog(
+          ui_snapshot_manager(session$ns("module")),
+          class = "snapshot_manager_modal",
+          size = "m",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    })
+    srv_snapshot_manager("module")
+  })
+}
 
 #' @rdname module_snapshot_manager
 #' @keywords internal
 #'
-snapshot_manager_ui <- function(id) {
+ui_snapshot_manager <- function(id) {
   ns <- NS(id)
   tags$div(
     class = "manager_content",
@@ -110,7 +146,7 @@ snapshot_manager_ui <- function(id) {
 #' @rdname module_snapshot_manager
 #' @keywords internal
 #'
-snapshot_manager_srv <- function(id) {
+srv_snapshot_manager <- function(id) {
   checkmate::assert_character(id)
 
   moduleServer(id, function(input, output, session) {

@@ -65,7 +65,6 @@ ui_teal_1.0 <- function(id,
       id = "teal-util-icons",
       style = "margin-left: auto;",
       data_elem,
-      actionButton(ns("snapshot_manager"), NULL, icon = icon("floppy-disk")),
       actionButton(ns("bookmark_manager"), NULL, icon = icon("bookmark")),
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
@@ -74,7 +73,8 @@ ui_teal_1.0 <- function(id,
         title = "Toggle filter panel",
         icon("fas fa-bars")
       ),
-      ui_filter_manager_panel(ns("filter_manager"))
+      ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
+      ui_filter_manager_panel(ns("filter_manager_panel"))
     ),
     tags$script(HTML("
       $(document).ready(function() {
@@ -133,7 +133,6 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
 
     # todo: introduce option `run_once` to not show data icon when app is loaded (in case when data don't change).
     data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
-
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
         logger::log_trace("srv_teal_module@1 initializing FilteredData")
@@ -149,23 +148,12 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
     }
 
     srv_filter_manager_panel(
-      "filter_manager",
+      "filter_manager_panel",
       filter = filter,
       module_labels = unlist(module_labels(modules), use.names = FALSE)
     )
 
-    # todo: make snapshot manager panel - in the same way as filter_manager_panel
-    #       keep button styling same as in wunder_bar
-    observeEvent(input$snapshot_manager, {
-      showModal(
-        modalDialog(
-          tags$div(
-            snapshot_manager_ui(session$ns("snapshot_manager"))
-          )
-        )
-      )
-    })
-    snapshot_manager_srv("snapshot_manager")
+    srv_snapshot_manager_panel("snapshot_manager_panel")
 
     # todo: bring back bookmark manager
     observeEvent(input$bookmark_manager, {
