@@ -9,7 +9,7 @@
 #' This module introduces bookmarks into `teal` apps: the `shiny` bookmarking mechanism becomes enabled
 #' and server-side bookmarks can be created.
 #'
-#' The bookmark manager presents a button with the bookmark icon and is placed in the [`wunder_bar`].
+#' The bookmark manager presents a button with the bookmark icon and is placed in the tab-bar.
 #' When clicked, the button creates a bookmark and opens a modal which displays the bookmark URL.
 #'
 #' `teal` does not guarantee that all modules (`teal_module` objects) are bookmarkable.
