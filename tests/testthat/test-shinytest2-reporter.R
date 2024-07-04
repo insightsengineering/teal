@@ -1,3 +1,6 @@
+testthat::skip_if_not_installed("shinytest2")
+testthat::skip_if_not_installed("rvest")
+
 testthat::test_that("e2e: reporter tab is created when a module has reporter", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(

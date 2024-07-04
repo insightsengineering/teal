@@ -31,7 +31,7 @@
 #'
 #' @seealso [`shinyvalidate::InputValidator`], [`shiny::validate`]
 #'
-#' @examples
+#' @examplesIf require("shinyvalidate")
 #' library(shiny)
 #' library(shinyvalidate)
 #'
