@@ -154,7 +154,7 @@ init <- function(data,
   teal.logger::log_system_info()
 
   # invoke lockfile creation
-  teal_lockfile()
+  process <- teal_lockfile()
 
   # argument transformations
   ## `modules` - landing module

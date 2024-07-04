@@ -43,8 +43,8 @@ teal_lockfile <- function() {
 
   # # capture.output is not needed if stdout = "|"
   # utils::capture.output( # Needed to suppress: 'Opening fd 1' message
-  callr::r_bg(
-    func = create_renv_lockfile_2,
+  process <- callr::r_bg(
+    func = create_renv_lockfile,
     args = list(
       lockfile_path = lockfile_path,
       opts = options()
@@ -61,13 +61,7 @@ teal_lockfile <- function() {
   # )
 
   logger::log_trace("lockfile creation started.")
-}
-
-create_renv_lockfile_2 <- function(lockfile_path = NULL, opts = NULL) {
-  lapply(1:15, function(x) {
-    print(paste0('teal:', x)))
-    Sys.sleep(1)
-  })
+  process
 }
 
 create_renv_lockfile <- function(lockfile_path = NULL, opts = NULL) {
