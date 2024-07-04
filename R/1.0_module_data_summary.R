@@ -202,3 +202,12 @@ get_object_filter_overview_array = function(filtered_teal_data, dataname) {
   }
 
 }
+
+# TODO
+get_object_filter_overview_SummarizedExperiment <- function(filtered_teal_data, dataname) {
+
+}
+# TODO
+get_object_filter_overview_MultiAssayExperiment <- function(filtered_teal_data, dataname) {
+
+}
