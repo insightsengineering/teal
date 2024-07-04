@@ -52,14 +52,26 @@ srv_data_summary = function(id, filtered_teal_data) {
         toggle_title(session$ns("minimise_filter_overview"), c("Restore panel", "Minimise Panel"))
       })
 
-      output$table <- renderUI({
+      output$table <- renderTable({
         logger::log_trace("srv_data_summary updating counts")
-        if (datanames(filtered_teal_data) == 0) {
+
+        # In case all objects in filtered_teal_data are character vectors check
+        # if there is at least one data.frame.
+        env <- filtered_teal_data()@env
+        is_df <-
+          vapply(ls(env), function(object) inherits(get(object, env = env), "data.frame"), logical(1))
+
+        dfnames <- names(is_df[is_df])
+        dfnames <- grep('_raw$', dfnames, invert = TRUE, value = TRUE)
+
+        if (datanames(filtered_teal_data()) == 0 && length(dfnames) == 0) {
           return(NULL)
         }
 
         filter_overview <-
-          get_filter_overview(filtered_teal_data) # TODO - adjust to work on filtered_teal_data
+          get_filter_overview(dfnames, filtered_teal_data)
+        # TODO - adjust so it extracts obs + subjects
+        # TODO - make it work for MAE
 
         attr(filter_overview$dataname, "label") <- "Data Name"
 
@@ -141,21 +153,16 @@ srv_data_summary = function(id, filtered_teal_data) {
   )
 }
 
-get_filter_overview = function(datanames, datasets) {
-  rows <- lapply(
-    datanames,
-    function(dataname) {
-      get_filter_overview(get_filtered_dataset(dataname, datasets))
-    }
-  )
+get_filter_overview = function(dfnames, filtered_teal_data) {
+  rows <- lapply(dfnames, get_filtered_dataframe, filtered_teal_data)
   unssuported_idx <- vapply(rows, function(x) all(is.na(x[-1])), logical(1))
   dplyr::bind_rows(c(rows[!unssuported_idx], rows[unssuported_idx]))
 }
 
-get_filtered_dataset = function(dataname = character(0), datasets) {
-  if (length(dataname) == 0) {
-    datasets
+get_filtered_dataframe = function(dfname = character(0), filtered_teal_data) {
+  if (length(dfname) == 0) {
+    filtered_teal_data()
   } else {
-    datasets$get_data(dataname, filtered = TRUE)
+    cbind(dataname = dfname, filtered_teal_data()@env[[dfname]])
   }
 }
