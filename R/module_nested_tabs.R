@@ -249,6 +249,12 @@ srv_teal_module.teal_module <- function(id,
         args <- c(args, data = list(filtered_teal_data))
       }
 
+      if (is_arg_used(modules$server, "transformers")) {
+        stopifnot(
+          "\"transformer\" argument also requires \"data\" argument." = is_arg_used(modules$server, "data")
+        )
+        args$data <- srv_teal_data_module("module-data_transform", data = args$data, transformers = args$transformers)
+      }
 
       if (is_arg_used(modules$server, "filter_panel_api")) {
         filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets())
