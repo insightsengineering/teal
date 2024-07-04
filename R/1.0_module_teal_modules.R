@@ -258,33 +258,17 @@ srv_teal_module.teal_module <- function(id,
     }
 
     # Call modules.
-    module_out <- if (isTRUE(session$restoreContext$active)) {
-      # todo: call_module() contains reactive elements datasets(), data_rv(), active_datanames().
-      #       this means it can't be just called as is. It needs to be put in a reactive context, which is a problem
-      #       for a comment below. This is a bug and needs to be fixed.
-      # When restoring bookmark, all modules must be initialized on app start.
-      # Delayed module initiation (below) precludes restoring state b/c inputs do not exist when restoring occurs.
+    module_out <- if (!inherits(modules, "teal_module_previewer")) {
       observeEvent(
         ignoreNULL = TRUE,
         once = TRUE,
         eventExpr = trigger_module(),
         handlerExpr = call_module()
       )
-    } else if (inherits(modules, "teal_module_previewer")) {
+    } else {
       # Report previewer must be initiated on app start for report cards to be included in bookmarks.
       # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
       call_module()
-    } else {
-      # When app starts normally, modules are initialized only when corresponding tabs are clicked.
-      # Observing trigger_module() induces the module only when output$data_reactive is triggered (see above).
-      observeEvent(
-        ignoreNULL = TRUE,
-        # todo: (question) what would happen if module will be called multiple times (when data is refreshed)
-        #       What are potential issues?
-        once = TRUE,
-        eventExpr = trigger_module(),
-        handlerExpr = call_module()
-      )
     }
 
     # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
