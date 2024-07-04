@@ -41,24 +41,18 @@ teal_lockfile <- function() {
 
   shiny::onStop(function() file.remove(lockfile_path))
 
-  # # capture.output is not needed if stdout = "|"
-  # utils::capture.output( # Needed to suppress: 'Opening fd 1' message
-  process <- callr::r_bg(
+  process <- callr::r_bg( # callr process needs to be assigned to an object so does shiny doesn't kill it on shinyApp
     func = create_renv_lockfile,
     args = list(
       lockfile_path = lockfile_path,
       opts = options()
     ),
-    # prints results to the console
-    stdout = "",
     # renv setup is orchestrated by its special S3 objects: renv::settings, renv::config and renv::paths
     #     `package` parameter include `renv` namespace inside the environment of `func = create_renv_lockfile`
     package = "renv",
     # callr process will use environmental variables from the main session (parent process)
     env = Sys.getenv()
-  ) # ,
-  #   type = "message"
-  # )
+  )
 
   logger::log_trace("lockfile creation started.")
   process
@@ -70,20 +64,16 @@ create_renv_lockfile <- function(lockfile_path = NULL, opts = NULL) {
 
   options(opts)
 
-  renv_logs <- utils::capture.output(
-    renv::snapshot(
-      lockfile = lockfile_path,
-      prompt = FALSE,
-      force = TRUE
-      # type = is taken from renv::settings$snapshot.type()
+  print( # print() is required for callr::r_bg to track output with $read_output()
+    utils::capture.output(
+      renv::snapshot(
+        lockfile = lockfile_path,
+        prompt = FALSE,
+        force = TRUE
+        # type = is taken from renv::settings$snapshot.type()
+      )
     )
   )
-  # print() is required for callr::r_bg to track console output
-  if (any(grepl("Lockfile written", renv_logs))) {
-    print("lockfile created successfully.")
-  } else {
-    print("lockfile created with issues.")
-  }
 }
 
 teal_lockfile_downloadhandler <- function() {
@@ -104,4 +94,20 @@ teal_lockfile_downloadhandler <- function() {
     },
     contentType = "application/json"
   )
+}
+
+lockfile_status <- function() {
+  process <- session$userData$lockfile_process
+  if (!process$is_alive()) {
+    renv_logs <- process$read_output()
+
+    if (any(grepl("Lockfile written", renv_logs))) {
+      logger::log_trace("lockfile created successfully.")
+    } else {
+      logger::log_trace("lockfile created with issues.")
+    }
+    TRUE
+  } else {
+    FALSE
+  }
 }
