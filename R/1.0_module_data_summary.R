@@ -44,6 +44,7 @@ srv_data_summary = function(id, filtered_teal_data) {
   moduleServer(
     id = id,
     function(input, output, session) {
+      shinyjs::hide(id = "teal-main_ui-filter-panel-overview") # this doesnt hide filter-panel-overiw from teal.slice YET
       logger::log_trace("srv_data_summary initializing")
 
       observeEvent(input$minimise_filter_overview, {
@@ -52,7 +53,7 @@ srv_data_summary = function(id, filtered_teal_data) {
         toggle_title(session$ns("minimise_filter_overview"), c("Restore panel", "Minimise Panel"))
       })
 
-      output$table <- renderTable({
+      output$table <- renderUI({
         logger::log_trace("srv_data_summary updating counts")
 
         # In case all objects in filtered_teal_data are character vectors check
@@ -64,7 +65,7 @@ srv_data_summary = function(id, filtered_teal_data) {
         dfnames <- names(is_df[is_df])
         dfnames <- grep('_raw$', dfnames, invert = TRUE, value = TRUE)
 
-        if (datanames(filtered_teal_data()) == 0 && length(dfnames) == 0) {
+        if (length(datanames(filtered_teal_data())) == 0 && length(dfnames) == 0) {
           return(NULL)
         }
 
@@ -103,7 +104,7 @@ srv_data_summary = function(id, filtered_teal_data) {
         }
 
         all_names <- c("dataname", "obs_str_summary", "subjects_summary")
-        filter_overview <- filter_overview[, colnames(filter_overview) %in% all_names]
+        filter_overview <- filter_overview[, colnames(filter_overview) %in% all_names, drop = FALSE]
 
         body_html <- apply(
           filter_overview,
