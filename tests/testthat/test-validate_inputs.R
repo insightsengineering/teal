@@ -11,6 +11,8 @@ testthat::test_that("invalid arguments raise errors", {
 
 
 testthat::test_that("disabled validators raise warnings (individual validators)", {
+  testthat::skip_if_not_installed("shinyvalidate")
+
   server <- function(input, output, session) {
     iv1 <- shinyvalidate::InputValidator$new()
     iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -36,6 +38,8 @@ testthat::test_that("disabled validators raise warnings (individual validators)"
 
 
 testthat::test_that("disabled validators raise warnings (validator list)", {
+  testthat::skip_if_not_installed("shinyvalidate")
+
   server <- function(input, output, session) {
     iv1 <- shinyvalidate::InputValidator$new()
     iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -61,6 +65,8 @@ testthat::test_that("disabled validators raise warnings (validator list)", {
 
 
 testthat::test_that("disabled validators raise warnings (nested validator list)", {
+  testthat::skip_if_not_installed("shinyvalidate")
+
   server <- function(input, output, session) {
     iv1 <- shinyvalidate::InputValidator$new()
     iv1$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -86,6 +92,8 @@ testthat::test_that("disabled validators raise warnings (nested validator list)"
 
 
 testthat::test_that("valid inputs produce desired output (individual validators)", {
+  testthat::skip_if_not_installed("shinyvalidate")
+
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -114,6 +122,8 @@ testthat::test_that("valid inputs produce desired output (individual validators)
 
 
 testthat::test_that("valid inputs produce desired output (validator list)", {
+  testthat::skip_if_not_installed("shinyvalidate")
+
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -142,6 +152,8 @@ testthat::test_that("valid inputs produce desired output (validator list)", {
 
 
 testthat::test_that("valid inputs produce desired output (nested validator list)", {
+  testthat::skip_if_not_installed("shinyvalidate")
+
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -170,6 +182,8 @@ testthat::test_that("valid inputs produce desired output (nested validator list)
 
 
 testthat::test_that("invalid inputs raise errors in output (individual validators)", {
+  testthat::skip_if_not_installed("shinyvalidate")
+
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -209,6 +223,8 @@ testthat::test_that("invalid inputs raise errors in output (individual validator
 
 
 testthat::test_that("invalid inputs raise errors in output (validator list)", {
+  testthat::skip_if_not_installed("shinyvalidate")
+
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -247,6 +263,8 @@ testthat::test_that("invalid inputs raise errors in output (validator list)", {
 })
 
 testthat::test_that("invalid inputs raise errors in output (nested validator list)", {
+  testthat::skip_if_not_installed("shinyvalidate")
+
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -286,6 +304,8 @@ testthat::test_that("invalid inputs raise errors in output (nested validator lis
 
 
 testthat::test_that("error message is formatted properly", {
+  testthat::skip_if_not_installed("shinyvalidate")
+
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
@@ -483,6 +503,8 @@ testthat::test_that("error message is formatted properly", {
 
 
 testthat::test_that("different validation modes produce proper messages", {
+  testthat::skip_if_not_installed("shinyvalidate")
+
   server <- function(input, output, session) {
     iv <- shinyvalidate::InputValidator$new()
     iv$add_rule("letter", shinyvalidate::sv_in_set(LETTERS, "choose a capital letter"))
