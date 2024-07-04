@@ -7,7 +7,7 @@ ui_data_summary = function(id) {
       class = "row",
       tags$div(
         class = "col-sm-9",
-        tags$label("Active Filter Summary", class = "text-primary mb-4")
+        tags$label("Active Filter Summary - teal", class = "text-primary mb-4")
       ),
       tags$div(
         class = "col-sm-3",
@@ -44,7 +44,7 @@ srv_data_summary = function(id, filtered_teal_data) {
   moduleServer(
     id = id,
     function(input, output, session) {
-      shinyjs::hide(id = "teal-main_ui-filter-panel-overview") # this doesnt hide filter-panel-overiw from teal.slice YET
+      #shinyjs::hide(id = "teal-main_ui-filter-panel-overview") # this doesnt hide filter-panel-overiw from teal.slice YET
       logger::log_trace("srv_data_summary initializing")
 
       observeEvent(input$minimise_filter_overview, {
@@ -56,22 +56,11 @@ srv_data_summary = function(id, filtered_teal_data) {
       output$table <- renderUI({
         logger::log_trace("srv_data_summary updating counts")
 
-        # In case all objects in filtered_teal_data are character vectors check
-        # if there is at least one data.frame.
-        env <- filtered_teal_data()@env
-        is_df <-
-          vapply(ls(env), function(object) inherits(get(object, env = env), "data.frame"), logical(1))
-
-        dfnames <- names(is_df[is_df])
-        dfnames <- grep('_raw$', dfnames, invert = TRUE, value = TRUE)
-
-        if (length(datanames(filtered_teal_data())) == 0 && length(dfnames) == 0) {
+        if (length(datanames(filtered_teal_data())) == 0) {
           return(NULL)
         }
 
-        filter_overview <-
-          get_filter_overview(dfnames, filtered_teal_data)
-        # TODO - make it work for MAE
+        filter_overview <- get_filter_overview(filtered_teal_data)
 
         attr(filter_overview$dataname, "label") <- "Data Name"
 
@@ -103,7 +92,7 @@ srv_data_summary = function(id, filtered_teal_data) {
         }
 
         all_names <- c("dataname", "obs_str_summary", "subjects_summary")
-        filter_overview <- filter_overview[, colnames(filter_overview) %in% all_names, drop = FALSE]
+        filter_overview <- filter_overview[, colnames(filter_overview) %in% all_names]
 
         body_html <- apply(
           filter_overview,
@@ -153,41 +142,63 @@ srv_data_summary = function(id, filtered_teal_data) {
   )
 }
 
-# TODO: extend for mae
+get_filter_overview <- function(filtered_teal_data){
+  rows <- lapply(
+    datanames(filtered_teal_data()),
+    get_object_filter_overview,
+    filtered_teal_data = filtered_teal_data
+  )
+  unssuported_idx <- vapply(rows, function(x) all(is.na(x[-1])), logical(1))
+  dplyr::bind_rows(c(rows[!unssuported_idx], rows[unssuported_idx]))
+}
+
+get_object_filter_overview <- function(filtered_teal_data, dataname) {
+  object <- filtered_teal_data()@env[[dataname]]
+  # not a regular S3 method, so we do not need to have dispatch for df/array/Matrix separately
+  if (inherits(object, c("data.frame", "DataFrame", "array", "Matrix"))) {
+    get_object_filter_overview_array(filtered_teal_data, dataname)
+  } else if (inherits(object, "SummarizedExperiment")) {
+    get_object_filter_overview_SummarizedExperiment(filtered_teal_data, dataname)
+  } else if (inherits(object, "MultiAssayExperiment")) {
+    get_object_filter_overview_MultiAssayExperiment(filtered_teal_data, dataname)
+  } else {
+    data.frame(
+      dataname = dataname,
+      obs = NA,
+      obs_filtered = NA
+    )
+  }
+}
 
 # dataframe
-get_filter_overview = function(dfnames, filtered_teal_data) {
+get_object_filter_overview_array = function(filtered_teal_data, dataname) {
   logger::log_trace("srv_data_overiew-get_filter_overview initialized")
-  # Gets filter overview subjects number and returns a list
-  # of the number of subjects of filtered/non-filtered datasets
 
-  lapply(
-    dfnames,
-    function(dfname) {
-      subject_keys <- if (length(parent(filtered_teal_data(), dfname)) > 0) {
-        join_keys(filtered_teal_data())[[dfname]][[dfname]]
-      } else {
-        character(0) # was self$get_keys() before
-      }
+  subject_keys <-
+    ##if (length(parent(filtered_teal_data(), dataname)) > 0) {
+    # if (dataname %in% names(join_keys(filtered_teal_data()))) {
+    #   join_keys(filtered_teal_data())[[dataname]][[dataname]]
+    # } else {
+    #   character(0) # was self$get_keys() before
+    # }
+    join_keys(filtered_teal_data())[[dataname]][[dataname]]
 
-      data <- filtered_teal_data()@env[[paste0(dfname, '_raw')]]
-      data_filtered <- filtered_teal_data()@env[[dfname]]
-      if (length(subject_keys) == 0) {
-        data.frame(
-          dataname = dfname,
-          obs = nrow(data),
-          obs_filtered = nrow(data_filtered)
-        )
-      } else {
-        data.frame(
-          dataname = dfname,
-          obs = nrow(data),
-          obs_filtered = nrow(data_filtered),
-          subjects = nrow(unique(data[subject_keys])),
-          subjects_filtered = nrow(unique(data_filtered[subject_keys]))
-        )
-      }
-    }
-  ) |>
-    dplyr::bind_rows()
+  data <- filtered_teal_data()@env[[paste0(dataname, '_raw')]]
+  data_filtered <- filtered_teal_data()@env[[dataname]]
+  if (length(subject_keys) == 0) {
+    data.frame(
+      dataname = dataname,
+      obs = nrow(data),
+      obs_filtered = nrow(data_filtered)
+    )
+  } else {
+    data.frame(
+      dataname = dataname,
+      obs = nrow(data),
+      obs_filtered = nrow(data_filtered),
+      subjects = nrow(unique(data[subject_keys])),
+      subjects_filtered = nrow(unique(data_filtered[subject_keys]))
+    )
+  }
+
 }
