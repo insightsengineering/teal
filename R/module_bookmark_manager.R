@@ -9,7 +9,7 @@
 #' This module introduces bookmarks into `teal` apps: the `shiny` bookmarking mechanism becomes enabled
 #' and server-side bookmarks can be created.
 #'
-#' The bookmark manager presents a button with the bookmark icon and is placed in the [`wunder_bar`].
+#' The bookmark manager presents a button with the bookmark icon and is placed in the tab-bar.
 #' When clicked, the button creates a bookmark and opens a modal which displays the bookmark URL.
 #'
 #' `teal` does not guarantee that all modules (`teal_module` objects) are bookmarkable.
@@ -38,51 +38,42 @@
 #' @name module_bookmark_manager
 #' @keywords internal
 #'
-bookmark_manager_ui <- function(id) {
+ui_bookmark_panel <- function(id, modules) {
   ns <- NS(id)
-  uiOutput(ns("bookmark_button"), inline = TRUE)
+
+  bookmark_option <- get_bookmarking_option()
+  is_unbookmarkable <- need_bookmarking(modules)
+
+  # Render bookmark warnings count
+  if (!all(is_unbookmarkable) && identical(bookmark_option, "server")) {
+    tags$button(
+      id = ns("do_bookmark"),
+      class = "btn action-button wunder_bar_button bookmark_manager_button",
+      title = "Add bookmark",
+      tags$span(
+        suppressMessages(icon("solid fa-bookmark")),
+        if (any(is_unbookmarkable)) {
+          tags$span(
+            sum(is_unbookmarkable),
+            class = "badge-warning badge-count text-white bg-danger"
+          )
+        }
+      )
+    )
+  }
 }
 
 #' @rdname module_bookmark_manager
 #' @keywords internal
 #'
-bookmark_manager_srv <- function(id, modules) {
+srv_bookmark_panel <- function(id, modules) {
   checkmate::assert_character(id)
   checkmate::assert_class(modules, "teal_modules")
   moduleServer(id, function(input, output, session) {
     logger::log_trace("bookmark_manager_srv initializing")
     ns <- session$ns
-    bookmark_option <- getShinyOption("bookmarkStore")
-    if (is.null(bookmark_option) && identical(getOption("shiny.bookmarkStore"), "server")) {
-      bookmark_option <- getOption("shiny.bookmarkStore")
-      # option alone doesn't activate bookmarking - we need to set shinyOptions
-      shinyOptions(bookmarkStore = bookmark_option)
-    }
-
-    is_unbookmarkable <- unlist(rapply2(
-      modules_bookmarkable(modules),
-      Negate(isTRUE)
-    ))
-
-    # Render bookmark warnings count
-    output$bookmark_button <- renderUI({
-      if (!all(is_unbookmarkable) && identical(bookmark_option, "server")) {
-        tags$button(
-          id = ns("do_bookmark"),
-          class = "btn action-button wunder_bar_button bookmark_manager_button",
-          title = "Add bookmark",
-          tags$span(
-            suppressMessages(icon("solid fa-bookmark")),
-            if (any(is_unbookmarkable)) {
-              tags$span(
-                sum(is_unbookmarkable),
-                class = "badge-warning badge-count text-white bg-danger"
-              )
-            }
-          )
-        )
-      }
-    })
+    bookmark_option <- get_bookmarking_option()
+    is_unbookmarkable <- need_bookmarking(modules)
 
     # Set up bookmarking callbacks ----
     # Register bookmark exclusions: do_bookmark button to avoid re-bookmarking
@@ -152,6 +143,29 @@ bookmark_manager_srv <- function(id, modules) {
     invisible(NULL)
   })
 }
+
+
+#' @rdname module_bookmark_manager
+#' @keywords internal
+get_bookmarking_option <- function() {
+  bookmark_option <- getShinyOption("bookmarkStore")
+  if (is.null(bookmark_option) && identical(getOption("shiny.bookmarkStore"), "server")) {
+    bookmark_option <- getOption("shiny.bookmarkStore")
+    # option alone doesn't activate bookmarking - we need to set shinyOptions
+    shinyOptions(bookmarkStore = bookmark_option)
+  }
+  bookmark_option
+}
+
+#' @rdname module_bookmark_manager
+#' @keywords internal
+need_bookmarking <- function(modules) {
+  unlist(rapply2(
+    modules_bookmarkable(modules),
+    Negate(isTRUE)
+  ))
+}
+
 
 # utilities ----
 

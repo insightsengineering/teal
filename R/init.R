@@ -235,7 +235,7 @@ init <- function(data,
   # Note: UI must be a function to support bookmarking.
   res <- list(
     ui = function(request) {
-      ui_teal_1.0(
+      ui_teal(
         id = id, data = if (inherits(data, "teal_data_module")) data,
         modules = modules, title = title, header = header, footer = footer
       )
@@ -244,7 +244,7 @@ init <- function(data,
       if (!is.null(landing_module)) {
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
-      srv_teal_1.0(id = id, data = data, modules = modules, filter = deep_copy_filter(filter))
+      srv_teal(id = id, data = data, modules = modules, filter = deep_copy_filter(filter))
     }
   )
 

@@ -1,19 +1,19 @@
 #' Create a UI of nested tabs of `teal_modules`
 #'
-#' @section `ui_nested_tabs`:
-#' Each `teal_modules` is translated to a `tabsetPanel` and each
+#' @section `ui_teal_module`:
+#' Each `teal_modules` is translated to a `bslib::navset_tab` and each
 #' of its children is another tab-module called recursively. The UI of a
 #' `teal_module` is obtained by calling its UI function.
 #'
 #' The `datasets` argument is required to resolve the `teal` arguments in an
 #' isolated context (with respect to reactivity).
 #'
-#' @section `srv_nested_tabs`:
+#' @section `srv_teal_module`:
 #' This module recursively calls all elements of `modules` and returns currently active one.
 #' - `teal_module` returns self as a active module.
 #' - `teal_modules` also returns module active within self which is determined by the `input$active_tab`.
 #'
-#' @name module_nested_tabs
+#' @name module_teal_module
 #'
 #' @inheritParams module_tabs_with_filters
 #'
@@ -22,37 +22,34 @@
 #' @param is_module_specific (`logical(1)`)
 #'  flag determining if the filter panel is global or module-specific.
 #'  When set to `TRUE`, a filter panel is called inside of each module tab.
-#' @param progress (`Progress`) object from `shiny`
 #'
 #' @return
-#' Depending on the class of `modules`, `ui_nested_tabs` returns:
+#' Depending on the class of `modules`, `ui_teal_module` returns:
 #'   - `teal_module`: instantiated UI of the module.
-#'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
+#'   - `teal_modules`: `bslib::navset_tab` with each tab corresponding to recursively
 #'     calling this function on it.
 #'
-#' `srv_nested_tabs` returns a reactive which returns the active module that corresponds to the selected tab.
+#' `srv_teal_module` returns a reactive which returns the active module that corresponds to the selected tab.
 #'
 #' @keywords internal
 NULL
 
-#' @rdname module_nested_tabs
-ui_nested_tabs <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) {
+#' @rdname module_teal_module
+ui_teal_module <- function(id, modules, depth = 0L) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_count(depth)
-  checkmate::assert_r6(progress, "Progress", null.ok = TRUE)
-  UseMethod("ui_nested_tabs", modules)
+  UseMethod("ui_teal_module", modules)
 }
 
-#' @rdname module_nested_tabs
+#' @rdname module_teal_module
 #' @export
-ui_nested_tabs.default <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) {
+ui_teal_module.default <- function(id, modules, depth = 0L) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
-#' @rdname module_nested_tabs
+#' @rdname module_teal_module
 #' @export
-ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) { # nolint: line_length.
-  checkmate::assert_list(datasets, types = c("list", "FilteredData"))
+ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
   ns <- NS(id)
   do.call(
     tabsetPanel,
@@ -69,13 +66,10 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
           tabPanel(
             title = module_label,
             value = module_id, # when clicked this tab value changes input$<tabset panel id>
-            ui_nested_tabs(
+            ui_teal_module(
               id = ns(module_id),
               modules = modules$children[[module_id]],
-              datasets = datasets[[module_label]],
-              depth = depth + 1L,
-              is_module_specific = is_module_specific,
-              progress = progress
+              depth = depth + 1L
             )
           )
         }
@@ -84,78 +78,69 @@ ui_nested_tabs.teal_modules <- function(id, modules, datasets, depth = 0L, is_mo
   )
 }
 
-#' @rdname module_nested_tabs
+#' @rdname module_teal_module
 #' @export
-ui_nested_tabs.teal_module <- function(id, modules, datasets, depth = 0L, is_module_specific = FALSE, progress = NULL) {
-  checkmate::assert_class(datasets, classes = "FilteredData")
+ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
-
-  if (!is.null(progress)) {
-    progress$inc(
-      amount = 1,
-      detail = sprintf("%s%%", round(progress$getValue() / progress$getMax(), 2L) * 100)
-    )
-  }
-
   args <- c(list(id = ns("module")), modules$ui_args)
-
-  teal_ui <- tags$div(
+  div(
     id = id,
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
       if (depth >= 2L) tags$div(style = "mt-6"),
-      do.call(modules$ui, args)
-    )
-  )
-
-  if (!is.null(modules$datanames) && is_module_specific) {
-    fluidRow(
-      column(width = 9, teal_ui, class = "teal_primary_col"),
-      column(
-        width = 3,
-        datasets$ui_filter_panel(ns("module_filter_panel")),
-        class = "teal_secondary_col"
+      fluidRow(
+        column(width = 9, do.call(modules$ui, args), class = "teal_primary_col"),
+        column(
+          width = 3,
+          ui_filter_panel(ns("module_filter_panel")),
+          class = "teal_secondary_col"
+        )
       )
     )
-  } else {
-    teal_ui
-  }
+  )
 }
 
-#' @rdname module_nested_tabs
-srv_nested_tabs <- function(id, datasets, modules, is_module_specific = FALSE,
+#' @rdname module_teal_module
+srv_teal_module <- function(id,
+                            data_rv,
+                            datasets,
+                            modules,
                             reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(reporter, "Reporter")
-  UseMethod("srv_nested_tabs", modules)
+  UseMethod("srv_teal_module", modules)
 }
 
-#' @rdname module_nested_tabs
+#' @rdname module_teal_module
 #' @export
-srv_nested_tabs.default <- function(id, datasets, modules, is_module_specific = FALSE,
+srv_teal_module.default <- function(id,
+                                    data_rv,
+                                    datasets,
+                                    modules,
                                     reporter = teal.reporter::Reporter$new()) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
-#' @rdname module_nested_tabs
+#' @rdname module_teal_module
 #' @export
-srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specific = FALSE,
+srv_teal_module.teal_modules <- function(id,
+                                         data_rv,
+                                         datasets,
+                                         modules,
                                          reporter = teal.reporter::Reporter$new()) {
-  checkmate::assert_list(datasets, types = c("list", "FilteredData"))
-
   moduleServer(id = id, module = function(input, output, session) {
-    logger::log_trace("srv_nested_tabs.teal_modules initializing the module { deparse1(modules$label) }.")
+    logger::log_trace("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
     labels <- vapply(modules$children, `[[`, character(1), "label")
     modules_reactive <- sapply(
       names(modules$children),
       function(module_id) {
-        srv_nested_tabs(
+        srv_teal_module(
           id = module_id,
-          datasets = datasets[[labels[module_id]]],
+          data_rv = data_rv,
+          datasets = datasets,
           modules = modules$children[[module_id]],
-          is_module_specific = is_module_specific,
           reporter = reporter
         )
       },
@@ -178,56 +163,93 @@ srv_nested_tabs.teal_modules <- function(id, datasets, modules, is_module_specif
   })
 }
 
-#' @rdname module_nested_tabs
+#' @rdname module_teal_module
 #' @export
-srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specific = TRUE,
+srv_teal_module.teal_module <- function(id,
+                                        data_rv,
+                                        datasets,
+                                        modules,
                                         reporter = teal.reporter::Reporter$new()) {
-  checkmate::assert_class(datasets, "FilteredData")
-  logger::log_trace("srv_nested_tabs.teal_module initializing the module: { deparse1(modules$label) }.")
-
+  logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
-    if (!is.null(modules$datanames) && is_module_specific) {
-      datasets$srv_filter_panel("module_filter_panel")
+    active_datanames <- reactive({
+      req(data_rv())
+      if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
+        teal_data_datanames(data_rv())
+      } else {
+        include_parent_datanames(
+          modules$datanames,
+          teal.data::join_keys(data_rv())
+        )
+      }
+    })
+    if (is.null(datasets)) {
+      datasets <- eventReactive(data_rv(), {
+        logger::log_trace("srv_teal_module@1 initializing module-specific FilteredData")
+
+        # Otherwise, FilteredData will be created in the modules' scope later
+        progress_data <- Progress$new(
+          max = length(unlist(module_labels(modules)))
+        )
+        on.exit(progress_data$close())
+        progress_data$set(message = "Preparing data filtering", detail = "0%")
+        filtered_data <- teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
+        filtered_data
+      })
     }
 
+    # manage module filters on the module level
+    # important:
+    #   filter_manager_module_srv needs to be called before filter_panel_srv
+    #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
+    #   and if it is not set, then it won't be available in the srv_filter_panel
+    srv_module_filter_manager(modules$label, module_fd = datasets)
+    srv_filter_panel(
+      "module_filter_panel",
+      datasets = datasets,
+      active_datanames = active_datanames
+    )
+
     # Create two triggers to limit reactivity between filter-panel and modules.
-    # We want to recalculate only visible modules
+    # We want to recalculate only visible modules (renderUI triggers only when visible, when tab is displayed)
     # - trigger the data when the tab is selected
     # - trigger module to be called when the tab is selected for the first time
     trigger_data <- reactiveVal(1L)
     trigger_module <- reactiveVal(NULL)
     output$data_reactive <- renderUI({
-      lapply(datasets$datanames(), function(x) {
-        datasets$get_data(x, filtered = TRUE)
-      })
+      req(datasets())
+      get_filter_expr(datasets())
       isolate(trigger_data(trigger_data() + 1))
       isolate(trigger_module(TRUE))
-
       NULL
     })
 
-    # collect arguments to run teal_module
-    args <- c(list(id = "module"), modules$server_args)
-    if (is_arg_used(modules$server, "reporter")) {
-      args <- c(args, list(reporter = reporter))
-    }
-
-    if (is_arg_used(modules$server, "datasets")) {
-      args <- c(args, datasets = datasets)
-    }
-
-    if (is_arg_used(modules$server, "data")) {
-      data <- eventReactive(trigger_data(), .datasets_to_data(modules, datasets))
-      args <- c(args, data = list(data))
-    }
-
-    if (is_arg_used(modules$server, "filter_panel_api")) {
-      filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets)
-      args <- c(args, filter_panel_api = filter_panel_api)
-    }
-
     # This function calls a module server function.
     call_module <- function() {
+      # collect arguments to run teal_module
+      args <- c(list(id = "module"), modules$server_args)
+      if (is_arg_used(modules$server, "reporter")) {
+        args <- c(args, list(reporter = reporter))
+      }
+
+      if (is_arg_used(modules$server, "datasets")) {
+        args <- c(args, datasets = datasets())
+        warning("datasets argument is not reactive and therefore it won't be updated when data is refreshed.")
+      }
+
+      if (is_arg_used(modules$server, "data")) {
+        filtered_teal_data <- eventReactive(trigger_data(), {
+          .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
+        })
+        args <- c(args, data = list(filtered_teal_data))
+      }
+
+
+      if (is_arg_used(modules$server, "filter_panel_api")) {
+        filter_panel_api <- teal.slice::FilterPanelAPI$new(datasets())
+        args <- c(args, filter_panel_api = filter_panel_api)
+      }
+
       if (is_arg_used(modules$server, "id")) {
         do.call(modules$server, args)
       } else {
@@ -236,83 +258,83 @@ srv_nested_tabs.teal_module <- function(id, datasets, modules, is_module_specifi
     }
 
     # Call modules.
-    if (isTRUE(session$restoreContext$active)) {
-      # When restoring bookmark, all modules must be initialized on app start.
-      # Delayed module initiation (below) precludes restoring state b/c inputs do not exist when restoring occurs.
-      call_module()
-    } else if (inherits(modules, "teal_module_previewer")) {
-      # Report previewer must be initiated on app start for report cards to be included in bookmarks.
-      # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-      call_module()
-    } else {
-      # When app starts normally, modules are initialized only when corresponding tabs are clicked.
-      # Observing trigger_module() induces the module only when output$data_reactive is triggered (see above).
+    module_out <- if (!inherits(modules, "teal_module_previewer")) {
       observeEvent(
         ignoreNULL = TRUE,
         once = TRUE,
         eventExpr = trigger_module(),
         handlerExpr = call_module()
       )
+    } else {
+      # Report previewer must be initiated on app start for report cards to be included in bookmarks.
+      # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
+      call_module()
+    }
+
+    # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
+    #       how to determine if module returns a ReporterCard so that reportPreviewer is needed?
+    #       Should we insertUI of the ReportPreviewer then?
+    #       What about attr(module, "reportable") - similar to attr(module, "bookmarkable")
+    if ("report" %in% names(module_out)) {
+      # (reactively) add card to the reporter
     }
 
     reactive(modules)
   })
 }
 
-#' Convert `FilteredData` to reactive list of datasets of the `teal_data` type.
-#'
-#' Converts `FilteredData` object to `teal_data` object containing datasets needed for a specific module.
-#' Please note that if a module needs a dataset which has a parent, then the parent will also be returned.
-#' A hash per `dataset` is calculated internally and returned in the code.
-#'
-#' @param module (`teal_module`) module where needed filters are taken from
-#' @param datasets (`FilteredData`) object where needed data are taken from
-#'
-#' @return A `teal_data` object.
-#'
-#' @keywords internal
-.datasets_to_data <- function(module, datasets) {
-  checkmate::assert_class(module, "teal_module")
-  checkmate::assert_class(datasets, "FilteredData")
-
-  datanames <- if (is.null(module$datanames) || identical(module$datanames, "all")) {
-    datasets$datanames()
-  } else {
-    include_parent_datanames(
-      module$datanames,
-      datasets$get_join_keys()
+.make_teal_data <- function(modules, data, datasets, datanames) {
+  new_datasets <- c(
+    # Filtered data
+    sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE),
+    # Raw (unfiltered data)
+    stats::setNames(
+      lapply(datanames, function(x) datasets$get_data(x, filtered = FALSE)),
+      sprintf("%s_raw", datanames)
     )
-  }
-
-  # list of reactive filtered data
-  data <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
-
-  hashes <- calculate_hashes(datanames, datasets)
-
-  code <- c(
-    get_rcode_str_install(),
-    get_rcode_libraries(),
-    get_datasets_code(datanames, datasets, hashes)
   )
 
+  data_code <- teal.data::get_code(data, datanames = datanames)
+  hashes_code <- .get_hashes_code(datasets, datanames)
+  raw_data_code <- sprintf("%1$s_raw <- %1$s", datanames)
+  filter_code <- get_filter_expr(datasets, datanames = datanames)
 
-  data <- do.call(
+  all_code <- paste(unlist(c(data_code, "", hashes_code, raw_data_code, "", filter_code)), collapse = "\n")
+  tdata <- do.call(
     teal.data::teal_data,
-    args = c(data, code = list(code), join_keys = list(datasets$get_join_keys()[datanames]))
+    c(
+      list(code = trimws(all_code, which = "right")),
+      list(join_keys = teal.data::join_keys(data)),
+      new_datasets
+    )
   )
 
-  data@verified <- attr(datasets, "verification_status")
-  data
+  tdata@verified <- data@verified
+  teal.data::datanames(tdata) <- datanames
+  tdata
 }
 
-#' Get the hash of a dataset
+#' Get code that tests the integrity of the reproducible data
 #'
-#' @param datanames (`character`) names of datasets
 #' @param datasets (`FilteredData`) object holding the data
+#' @param datanames (`character`) names of datasets
 #'
-#' @return A list of hashes per dataset.
+#' @return A character vector with the code lines.
 #' @keywords internal
 #'
-calculate_hashes <- function(datanames, datasets) {
-  sapply(datanames, function(x) rlang::hash(datasets$get_data(x, filtered = FALSE)), simplify = FALSE)
+.get_hashes_code <- function(datasets, datanames) {
+  vapply(
+    datanames,
+    function(dataname, datasets) {
+      hash <- rlang::hash(datasets$get_data(dataname, filtered = FALSE))
+      sprintf(
+        "stopifnot(%s == %s)",
+        deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+        deparse1(hash)
+      )
+    },
+    character(1L),
+    datasets = datasets,
+    USE.NAMES = FALSE
+  )
 }
