@@ -235,7 +235,10 @@ init <- function(data,
   # Note: UI must be a function to support bookmarking.
   res <- list(
     ui = function(request) {
-      ui_teal_1.0(id = id, data = data, modules = modules, title = title, header = header, footer = footer)
+      ui_teal_1.0(
+        id = id, data = if (inherits(data, "teal_data_module")) data,
+        modules = modules, title = title, header = header, footer = footer
+      )
     },
     server = function(input, output, session) {
       if (!is.null(landing_module)) {

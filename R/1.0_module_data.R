@@ -5,15 +5,15 @@ ui_data <- function(id, data, title, header, footer) {
     style = "display: inline-block;",
     if (inherits(data, "teal_data_module")) {
       actionButton(ns("open_teal_data_module"), NULL, icon = icon("database"))
-    } else if (inherits(data, "teal_data")) {
-      div("")
+    } else {
+      NULL
     }
   )
 }
 
 srv_data <- function(id, data, modules, filter) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
@@ -30,12 +30,9 @@ srv_data <- function(id, data, modules, filter) {
       data$server(id = "teal_data_module")
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
+    } else if (inherits(data, c("reactive", "reactiveVal"))) {
+      data
     }
-    # todo: teal as a module (requested by: @chlebowa, @kpagacz)
-    # if we want to support teal as a module we need a following (we need to open srv_teal for data being a reactive)
-    # } else if (inherits(data, c("reactive", "reactiveVal"))) {
-    #  data
-    # }
 
     teal_data_rv_validate <- validate_reactive_teal_data(teal_data_rv)
 
@@ -48,6 +45,8 @@ srv_data <- function(id, data, modules, filter) {
       }
       NULL
     })
+
+    setBookmarkExclude("open_teal_data_module")
 
     observeEvent(input$open_teal_data_module, {
       if (input$open_teal_data_module > 1) {
@@ -78,6 +77,21 @@ srv_data <- function(id, data, modules, filter) {
     data_rv <- reactiveVal(NULL)
     observeEvent(teal_data_rv_validate(), {
       data_rv(teal_data_rv_validate())
+    })
+
+    observeEvent(teal_data_rv_validate(), once = TRUE, {
+      # Excluding the ids from teal_data_module using full namespace and global shiny app session.
+      app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
+      setBookmarkExclude(
+        session$ns(
+          grep(
+            pattern = "teal_data_module-",
+            x = names(reactiveValuesToList(input)),
+            value = TRUE
+          )
+        ),
+        session = app_session
+      )
     })
 
     data_rv

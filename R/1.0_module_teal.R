@@ -1,11 +1,11 @@
 ui_teal_1.0 <- function(id,
-                        data,
                         modules,
+                        data = NULL,
                         title = build_app_title(),
                         header = tags$p(),
                         footer = tags$p()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_multi_class(data, "teal_data_module", null.ok = TRUE)
   checkmate::assert(
     .var.name = "title",
     checkmate::check_string(title),
@@ -65,16 +65,16 @@ ui_teal_1.0 <- function(id,
       id = "teal-util-icons",
       style = "margin-left: auto;",
       data_elem,
-      actionButton(ns("filter_manager"), NULL, icon = icon("filter")),
-      actionButton(ns("snapshot_manager"), NULL, icon = icon("floppy-disk")),
-      actionButton(ns("bookmark_manager"), NULL, icon = icon("bookmark")),
+      ui_bookmark_panel(ns("bookmark_manager"), modules),
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
         href = "javascript:void(0)",
         onclick = "toggleFilterPanel();", # see sidebar.js
         title = "Toggle filter panel",
         icon("fas fa-bars")
-      )
+      ),
+      ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
+      ui_filter_manager_panel(ns("filter_manager_panel"))
     ),
     tags$script(HTML("
       $(document).ready(function() {
@@ -96,7 +96,7 @@ ui_teal_1.0 <- function(id,
 
 srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
@@ -133,39 +133,6 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
 
     # todo: introduce option `run_once` to not show data icon when app is loaded (in case when data don't change).
     data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
-
-    # Restore filter from bookmarked state, if applicable.
-    filter_restored <- restoreValue("filter_state_on_bookmark", filter)
-    if (!is.teal_slices(filter_restored)) {
-      filter_restored <- as.teal_slices(filter_restored)
-    }
-
-    # Resolve mapping list to keep it constistent for filter manager.
-    # - when !module_specific then all filters are global
-    # - global_filters ids needs to be repeated in mapping for each module
-    if (!isTRUE(attr(filter_restored, "module_specific"))) {
-      attr(filter_restored, "mapping") <- list(
-        global_filters = isolate(sapply(filter_restored, `[[`, "id"))
-      )
-    }
-    module_labs <- module_labels(modules)
-    new_mapping <- sapply(
-      unlist(module_labs, use.names = FALSE),
-      simplify = FALSE,
-      function(module_lab) {
-        unlist(attr(filter_restored, "mapping")[c(module_lab, "global_filters")], use.names = FALSE)
-      }
-    )
-    attr(filter_restored, "mapping") <- new_mapping
-
-    # singleton controlled by filter-manager
-    session$userData$slices_global <- structure(
-      reactiveVal(filter_restored),
-      slices_mapping = list()
-    )
-
-    # todo: bookmark store/restore of teal_slices should be implemented here
-    #       Move it from snapshot_manager_srv to here or to filter_manager
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
         logger::log_trace("srv_teal_module@1 initializing FilteredData")
@@ -180,34 +147,24 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
       })
     }
 
+    srv_filter_manager_panel(
+      "filter_manager_panel",
+      filter = filter,
+      module_labels = unlist(module_labels(modules), use.names = FALSE)
+    )
+
+    srv_snapshot_manager_panel("snapshot_manager_panel")
+
+    srv_bookmark_panel("bookmark_manager", modules)
+
+    # comment: modules needs to be called after srv_filter_manager_panel
+    #          This is because they are using session$slices_global which is set in filter_manager_srv
+    # todo: slices_global should be passed explicitly through arguments (easier to test)
     active_module <- srv_teal_module(
       id = "root_module",
       data_rv = data_rv,
       datasets = datasets_rv,
-      modules = modules,
-      filter = filter_restored
+      modules = modules
     )
-
-    # todo: make a module containing for this observer and for an icon on the UI side?
-    observeEvent(input$filter_manager, {
-      showModal(
-        modalDialog(
-          tags$div(
-            filter_manager_ui(session$ns("filter_manager"))
-          )
-        )
-      )
-    })
-    filter_manager_srv("filter_manager", is_module_specific = isTRUE(attr(filter, "module_specific")))
-
-    # todo: connect snapshot manager with slices_global
-    observeEvent(input$snapshot_manager, {
-      print("snapshot_manager clicked!")
-    })
-
-    # todo: bring back bookmark manager
-    observeEvent(input$bookmark_manager, {
-      print("bookmark_manager clicked!")
-    })
   })
 }

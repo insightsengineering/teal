@@ -86,12 +86,48 @@
 #'
 #' @author Aleksander Chlebowski
 #'
+NULL
 
+#' @rdname module_snapshot_manager_panel
+#' @keywords internal
+#'
+ui_snapshot_manager_panel <- function(id) {
+  ns <- NS(id)
+  tags$button(
+    id = ns("show_snapshot_manager"),
+    class = "btn action-button wunder_bar_button",
+    title = "View filter mapping",
+    suppressMessages(icon("camera"))
+  )
+}
+
+#' @rdname module_snapshot_manager_panel
+#' @keywords internal
+#'
+srv_snapshot_manager_panel <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    logger::log_trace("srv_snapshot_manager_panel initializing")
+    setBookmarkExclude(c("show_snapshot_manager"))
+    observeEvent(input$show_snapshot_manager, {
+      logger::log_trace("srv_snapshot_manager_panel@1 show_snapshot_manager button has been clicked.")
+      showModal(
+        modalDialog(
+          ui_snapshot_manager(session$ns("module")),
+          class = "snapshot_manager_modal",
+          size = "m",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    })
+    srv_snapshot_manager("module")
+  })
+}
 
 #' @rdname module_snapshot_manager
 #' @keywords internal
 #'
-snapshot_manager_ui <- function(id) {
+ui_snapshot_manager <- function(id) {
   ns <- NS(id)
   tags$div(
     class = "manager_content",
@@ -110,13 +146,8 @@ snapshot_manager_ui <- function(id) {
 #' @rdname module_snapshot_manager
 #' @keywords internal
 #'
-snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
+srv_snapshot_manager <- function(id) {
   checkmate::assert_character(id)
-  checkmate::assert_true(is.reactive(slices_global))
-  checkmate::assert_class(isolate(slices_global()), "teal_slices")
-  checkmate::assert_true(is.reactive(mapping_matrix))
-  checkmate::assert_data_frame(isolate(mapping_matrix()), null.ok = TRUE)
-  checkmate::assert_list(datasets, types = "FilteredData", any.missing = FALSE, names = "named")
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("snapshot_manager_srv initializing")
@@ -128,29 +159,23 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
       "snapshot_name_accept", "snaphot_file_accept",
       "snapshot_name", "snapshot_file"
     ))
-    # Add current filter state to bookmark.
-    # This is done on the app session because the value is restored in `module_teal`
-    # and we don't want to have to use this module's name space there.
-    app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
-    app_session$onBookmark(function(state) {
-      logger::log_trace("snapshot_manager_srv@onBookmark: storing filter state")
-      snapshot <- as.list(slices_global(), recursive = TRUE)
-      attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
-      state$values$filter_state_on_bookmark <- snapshot
-    })
     # Add snapshot history to bookmark.
     session$onBookmark(function(state) {
       logger::log_trace("snapshot_manager_srv@onBookmark: storing snapshot and bookmark history")
       state$values$snapshot_history <- snapshot_history() # isolate this?
     })
 
+    slices_global <- session$userData$slices_global
+
     ns <- session$ns
 
     # Track global filter states ----
-    filter <- isolate(slices_global())
     snapshot_history <- reactiveVal({
       # Restore directly from bookmarked state, if applicable.
-      restoreValue(ns("snapshot_history"), list("Initial application state" = as.list(filter, recursive = TRUE)))
+      restoreValue(
+        ns("snapshot_history"),
+        list("Initial application state" = isolate(as.list(slices_global(), recursive = TRUE)))
+      )
     })
 
     # Snapshot current application state ----
@@ -189,7 +214,6 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
       } else {
         logger::log_trace("snapshot_manager_srv: snapshot name accepted, adding snapshot")
         snapshot <- as.list(slices_global(), recursive = TRUE)
-        attr(snapshot, "mapping") <- matrix_to_mapping(mapping_matrix())
         snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
         snapshot_history(snapshot_update)
@@ -259,16 +283,6 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
           snapshot_history(snapshot_update)
           ### Begin simplified restore procedure. ###
           logger::log_trace("snapshot_manager_srv: restoring snapshot")
-          mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
-          mapply(
-            function(filtered_data, filter_ids) {
-              filtered_data$clear_filter_states(force = TRUE)
-              slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
-              filtered_data$set_filter_state(slices)
-            },
-            filtered_data = datasets,
-            filter_ids = mapping_unfolded
-          )
           slices_global(snapshot_state)
           removeModal()
           ### End  simplified restore procedure. ###
@@ -284,16 +298,6 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
       ### Begin restore procedure. ###
       snapshot <- snapshot_history()[[s]]
       snapshot_state <- as.teal_slices(snapshot)
-      mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
-      mapply(
-        function(filtered_data, filter_ids) {
-          filtered_data$clear_filter_states(force = TRUE)
-          slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
-          filtered_data$set_filter_state(slices)
-        },
-        filtered_data = datasets,
-        filter_ids = mapping_unfolded
-      )
       slices_global(snapshot_state)
       removeModal()
       ### End restore procedure. ###
@@ -319,18 +323,7 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
           observers[[id_pickme]] <- observeEvent(input[[id_pickme]], {
             ### Begin restore procedure. ###
             snapshot <- snapshot_history()[[s]]
-            snapshot_state <- as.teal_slices(snapshot)
-            mapping_unfolded <- unfold_mapping(attr(snapshot_state, "mapping"), names(datasets))
-            mapply(
-              function(filtered_data, filter_ids) {
-                filtered_data$clear_filter_states(force = TRUE)
-                slices <- Filter(function(x) x$id %in% filter_ids, snapshot_state)
-                filtered_data$set_filter_state(slices)
-              },
-              filtered_data = datasets,
-              filter_ids = mapping_unfolded
-            )
-            slices_global(snapshot_state)
+            slices_global(as.teal_slices(snapshot))
             removeModal()
             ### End restore procedure. ###
           })
@@ -376,44 +369,4 @@ snapshot_manager_srv <- function(id, slices_global, mapping_matrix, datasets) {
 
     snapshot_history
   })
-}
-
-### utility functions ----
-
-#' Explicitly enumerate global filters.
-#'
-#' Transform module mapping such that global filters are explicitly specified for every module.
-#'
-#' @param mapping (named `list`) as stored in mapping parameter of `teal_slices`
-#' @param module_names (`character`) vector containing names of all modules in the app
-#' @return A `named_list` with one element per module, each element containing all filters applied to that module.
-#'
-#' @keywords internal
-#'
-unfold_mapping <- function(mapping, module_names) {
-  module_names <- structure(module_names, names = module_names)
-  lapply(module_names, function(x) c(mapping[[x]], mapping[["global_filters"]]))
-}
-
-#' Convert mapping matrix to filter mapping specification.
-#'
-#' Transform a mapping matrix, i.e. a data frame that maps each filter state to each module,
-#' to a list specification like the one used in the `mapping` attribute of `teal_slices`.
-#' Global filters are gathered in one list element.
-#' If a module has no active filters but the global ones, it will not be mentioned in the output.
-#'
-#' @param mapping_matrix (`data.frame`) of logical vectors where
-#'                       columns represent modules and row represent `teal_slice`s
-#' @return Named `list` like that in the `mapping` attribute of a `teal_slices` object.
-#'
-#' @keywords internal
-#'
-matrix_to_mapping <- function(mapping_matrix) {
-  mapping_matrix[] <- lapply(mapping_matrix, function(x) x | is.na(x))
-  global <- vapply(as.data.frame(t(mapping_matrix)), all, logical(1L))
-  global_filters <- names(global[global])
-  local_filters <- mapping_matrix[!rownames(mapping_matrix) %in% global_filters, ]
-
-  mapping <- c(lapply(local_filters, function(x) rownames(local_filters)[x]), list(global_filters = global_filters))
-  Filter(function(x) length(x) != 0L, mapping)
 }

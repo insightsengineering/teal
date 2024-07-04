@@ -106,7 +106,6 @@ srv_teal_module <- function(id,
                             data_rv,
                             datasets,
                             modules,
-                            filter = teal_slices(),
                             reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(reporter, "Reporter")
@@ -119,7 +118,6 @@ srv_teal_module.default <- function(id,
                                     data_rv,
                                     datasets,
                                     modules,
-                                    filter = teal_slices(),
                                     reporter = teal.reporter::Reporter$new()) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
@@ -130,7 +128,6 @@ srv_teal_module.teal_modules <- function(id,
                                          data_rv,
                                          datasets,
                                          modules,
-                                         filter = teal_slices(),
                                          reporter = teal.reporter::Reporter$new()) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_trace("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
@@ -144,7 +141,6 @@ srv_teal_module.teal_modules <- function(id,
           data_rv = data_rv,
           datasets = datasets,
           modules = modules$children[[module_id]],
-          filter = filter,
           reporter = reporter
         )
       },
@@ -173,7 +169,6 @@ srv_teal_module.teal_module <- function(id,
                                         data_rv,
                                         datasets,
                                         modules,
-                                        filter = teal_slices(),
                                         reporter = teal.reporter::Reporter$new()) {
   logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
@@ -199,7 +194,6 @@ srv_teal_module.teal_module <- function(id,
         on.exit(progress_data$close())
         progress_data$set(message = "Preparing data filtering", detail = "0%")
         filtered_data <- teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
-        # filtered_data$set_filter_state(filter)
         filtered_data
       })
     }
@@ -209,10 +203,9 @@ srv_teal_module.teal_module <- function(id,
     #   filter_manager_module_srv needs to be called before filter_panel_srv
     #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
     #   and if it is not set, then it won't be available in the srv_filter_panel
-    filter_manager_module_srv(modules$label, module_fd = datasets)
+    srv_module_filter_manager(modules$label, module_fd = datasets)
     srv_filter_panel(
       "module_filter_panel",
-      filter = teal_slices(),
       datasets = datasets,
       active_datanames = active_datanames
     )
@@ -266,28 +259,17 @@ srv_teal_module.teal_module <- function(id,
     }
 
     # Call modules.
-    module_out <- if (isTRUE(session$restoreContext$active)) {
-      # todo: call_module() contains reactive elements datasets(), data_rv(), active_datanames().
-      #       this means it can't be just called as is. It needs to be put in a reactive context, which is a problem
-      #       for a comment below. This is a bug and needs to be fixed.
-      # When restoring bookmark, all modules must be initialized on app start.
-      # Delayed module initiation (below) precludes restoring state b/c inputs do not exist when restoring occurs.
-      call_module()
-    } else if (inherits(modules, "teal_module_previewer")) {
-      # Report previewer must be initiated on app start for report cards to be included in bookmarks.
-      # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-      call_module()
-    } else {
-      # When app starts normally, modules are initialized only when corresponding tabs are clicked.
-      # Observing trigger_module() induces the module only when output$data_reactive is triggered (see above).
+    module_out <- if (!inherits(modules, "teal_module_previewer")) {
       observeEvent(
         ignoreNULL = TRUE,
-        # todo: (question) what would happen if module will be called multiple times (when data is refreshed)
-        #       What are potential issues?
         once = TRUE,
         eventExpr = trigger_module(),
         handlerExpr = call_module()
       )
+    } else {
+      # Report previewer must be initiated on app start for report cards to be included in bookmarks.
+      # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
+      call_module()
     }
 
     # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
