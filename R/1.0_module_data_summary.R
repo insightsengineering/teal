@@ -44,7 +44,7 @@ srv_data_summary = function(id, filtered_teal_data) {
   moduleServer(
     id = id,
     function(input, output, session) {
-      #shinyjs::hide(id = "teal-main_ui-filter-panel-overview") # this doesnt hide filter-panel-overiw from teal.slice YET
+      #shinyjs::hide(id = "teal-main_ui-filter_panel-overview") # this doesnt hide filter-panel-overiw from teal.slice YET
       logger::log_trace("srv_data_summary initializing")
 
       observeEvent(input$minimise_filter_overview, {
