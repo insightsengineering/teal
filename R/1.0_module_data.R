@@ -97,21 +97,3 @@ srv_data <- function(id, data, modules, filter) {
     data_rv
   })
 }
-
-
-#' @param ui (`shiny.tag`) UI object to extract ids from
-#' @keywords internal
-#'
-extract_ids <- function(ui) {
-  ids <- c()
-
-  if (is.list(ui)) {
-    if (!is.null(ui$id)) {
-      ids <- c(ids, ui$id)
-    }
-    for (element in ui) {
-      ids <- c(ids, extract_ids(element))
-    }
-  }
-  ids
-}
