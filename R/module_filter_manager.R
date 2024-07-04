@@ -78,14 +78,14 @@ srv_filter_manager <- function(id, filter, module_labels) {
     # Bookmark slices global with mapping.
     session$onBookmark(function(state) {
       logger::log_trace("filter_manager_srv@onBookmark: storing filter state")
-      # todo: fix the restore state on bookmarking
-      # old_filters <- as.list(slices_global(), recursive = TRUE)
-      # attr(snapshot, "mapping") <- attr(slices_global(), "mapping")
-      # state$values$filter_state_on_bookmark <- snapshot
+      state$values$filter_state_on_bookmark <- as.list(
+        session$userData$slices_global(),
+        recursive = TRUE
+      )
     })
 
     # Restore filter from bookmarked state, if applicable.
-    filter_restored <- restoreValue("filter_state_on_bookmark", filter)
+    filter_restored <- restoreValue(session$ns("filter_state_on_bookmark"), filter)
     if (!is.teal_slices(filter_restored)) {
       filter_restored <- as.teal_slices(filter_restored)
     }
