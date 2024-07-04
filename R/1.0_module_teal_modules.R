@@ -238,7 +238,6 @@ srv_teal_module.teal_module <- function(id,
       }
 
       if (is_arg_used(modules$server, "data")) {
-        srv_data_summary("data_summary", datasets = datasets(), active_datanames = active_datanames())
         filtered_teal_data <- eventReactive(trigger_data(), {
           .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
         })
