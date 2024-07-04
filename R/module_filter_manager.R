@@ -39,8 +39,9 @@ ui_filter_manager_panel <- function(id) {
 #' @keywords internal
 srv_filter_manager_panel <- function(id, filter, module_labels) {
   moduleServer(id, function(input, output, session) {
+    setBookmarkExclude(c("show_snapshot_manager"))
     observeEvent(input$show_filter_manager, {
-      logger::log_trace("wunder_bar_srv@1 show_filter_manager button has been clicked.")
+      logger::log_trace("srv_filter_manager_panel@1 show_filter_manager button has been clicked.")
       showModal(
         modalDialog(
           ui_filter_manager(session$ns("filter_manager")),
@@ -51,7 +52,7 @@ srv_filter_manager_panel <- function(id, filter, module_labels) {
         )
       )
     })
-    srv_filter_manager(id, filter, module_labels)
+    srv_filter_manager("filter_manager", filter, module_labels)
   })
 }
 
