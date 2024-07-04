@@ -35,10 +35,11 @@ ui_data_summary = function(id) {
 #'
 #' @param id (`character(1)`)
 #'   `shiny` module instance id.
-#' @param active_datanames (`character`) names of datasets
-#' @inheritParams module_tabs_with_filters
+#' @param filtered_teal_data (`reactive`) (`teal_data`) an output of `.make_teal_data()`
 #' @return `NULL`.
-srv_data_summary = function(id, datasets, active_datanames) {
+srv_data_summary = function(id, filtered_teal_data) {
+  checkmate::check_class(filtered_teal_data, "reactive")
+  checkmate::check_class(filtered_teal_data(), "teal_data")
 
   moduleServer(
     id = id,
@@ -53,46 +54,47 @@ srv_data_summary = function(id, datasets, active_datanames) {
 
       output$table <- renderUI({
         logger::log_trace("srv_data_summary updating counts")
-        if (length(active_datanames) == 0) {
+        if (datanames(filtered_teal_data) == 0) {
           return(NULL)
         }
 
-        datasets_df <- get_filter_overview(datanames = active_datanames, datasets = datasets)
+        filter_overview <-
+          get_filter_overview(filtered_teal_data) # TODO - adjust to work on filtered_teal_data
 
-        attr(datasets_df$dataname, "label") <- "Data Name"
+        attr(filter_overview$dataname, "label") <- "Data Name"
 
-        if (!is.null(datasets_df$obs)) {
+        if (!is.null(filter_overview$obs)) {
           # some datasets (MAE colData) doesn't return obs column
-          datasets_df <- transform(
-            datasets_df,
+          filter_overview <- transform(
+            filter_overview,
             obs_str_summary = ifelse(
               !is.na(obs),
               sprintf("%s/%s", obs_filtered, obs),
               ""
             )
           )
-          attr(datasets_df$obs_str_summary, "label") <- "Obs"
+          attr(filter_overview$obs_str_summary, "label") <- "Obs"
         }
 
 
-        if (!is.null(datasets_df$subjects)) {
+        if (!is.null(filter_overview$subjects)) {
           # some datasets (without keys) doesn't return subjects
-          datasets_df <- transform(
-            datasets_df,
+          filter_overview <- transform(
+            filter_overview,
             subjects_summary = ifelse(
               !is.na(subjects),
               sprintf("%s/%s", subjects_filtered, subjects),
               ""
             )
           )
-          attr(datasets_df$subjects_summary, "label") <- "Subjects"
+          attr(filter_overview$subjects_summary, "label") <- "Subjects"
         }
 
         all_names <- c("dataname", "obs_str_summary", "subjects_summary")
-        datasets_df <- datasets_df[, colnames(datasets_df) %in% all_names]
+        filter_overview <- filter_overview[, colnames(filter_overview) %in% all_names]
 
         body_html <- apply(
-          datasets_df,
+          filter_overview,
           1,
           function(x) {
             tags$tr(
@@ -104,7 +106,7 @@ srv_data_summary = function(id, datasets, active_datanames) {
                       title = "Unsupported dataset",
                       `data-container` = "body",
                       `data-toggle` = "popover",
-                      `data-content` = "object not supported by the filter panel"
+                      `data-content` = "object not supported by the data_summary module"
                     )
                   },
                   x[1]
@@ -116,10 +118,10 @@ srv_data_summary = function(id, datasets, active_datanames) {
         )
 
         header_labels <- vapply(
-          seq_along(datasets_df),
+          seq_along(filter_overview),
           function(i) {
-            label <- attr(datasets_df[[i]], "label")
-            ifelse(!is.null(label), label, names(datasets_df)[[i]])
+            label <- attr(filter_overview[[i]], "label")
+            ifelse(!is.null(label), label, names(filter_overview)[[i]])
           },
           character(1)
         )
