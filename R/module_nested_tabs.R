@@ -106,6 +106,7 @@ srv_teal_module <- function(id,
                             data_rv,
                             datasets,
                             modules,
+                            slices_global,
                             reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(reporter, "Reporter")
@@ -118,6 +119,7 @@ srv_teal_module.default <- function(id,
                                     data_rv,
                                     datasets,
                                     modules,
+                                    slices_global,
                                     reporter = teal.reporter::Reporter$new()) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
@@ -128,6 +130,7 @@ srv_teal_module.teal_modules <- function(id,
                                          data_rv,
                                          datasets,
                                          modules,
+                                         slices_global,
                                          reporter = teal.reporter::Reporter$new()) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_trace("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
@@ -141,6 +144,7 @@ srv_teal_module.teal_modules <- function(id,
           data_rv = data_rv,
           datasets = datasets,
           modules = modules$children[[module_id]],
+          slices_global = slices_global,
           reporter = reporter
         )
       },
@@ -169,6 +173,7 @@ srv_teal_module.teal_module <- function(id,
                                         data_rv,
                                         datasets,
                                         modules,
+                                        slices_global,
                                         reporter = teal.reporter::Reporter$new()) {
   logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
@@ -203,7 +208,7 @@ srv_teal_module.teal_module <- function(id,
     #   filter_manager_module_srv needs to be called before filter_panel_srv
     #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
     #   and if it is not set, then it won't be available in the srv_filter_panel
-    srv_module_filter_manager(modules$label, module_fd = datasets)
+    srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
     srv_filter_panel(
       "module_filter_panel",
       datasets = datasets,

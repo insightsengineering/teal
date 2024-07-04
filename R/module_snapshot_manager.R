@@ -104,7 +104,7 @@ ui_snapshot_manager_panel <- function(id) {
 #' @rdname module_snapshot_manager_panel
 #' @keywords internal
 #'
-srv_snapshot_manager_panel <- function(id) {
+srv_snapshot_manager_panel <- function(id, slices_global) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_snapshot_manager_panel initializing")
     setBookmarkExclude(c("show_snapshot_manager"))
@@ -120,7 +120,7 @@ srv_snapshot_manager_panel <- function(id) {
         )
       )
     })
-    srv_snapshot_manager("module")
+    srv_snapshot_manager("module", slices_global = slices_global)
   })
 }
 
@@ -146,7 +146,7 @@ ui_snapshot_manager <- function(id) {
 #' @rdname module_snapshot_manager
 #' @keywords internal
 #'
-srv_snapshot_manager <- function(id) {
+srv_snapshot_manager <- function(id, slices_global) {
   checkmate::assert_character(id)
 
   moduleServer(id, function(input, output, session) {
@@ -164,8 +164,6 @@ srv_snapshot_manager <- function(id) {
       logger::log_trace("snapshot_manager_srv@onBookmark: storing snapshot and bookmark history")
       state$values$snapshot_history <- snapshot_history() # isolate this?
     })
-
-    slices_global <- session$userData$slices_global
 
     ns <- session$ns
 
