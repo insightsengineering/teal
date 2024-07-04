@@ -71,7 +71,6 @@ srv_data_summary = function(id, filtered_teal_data) {
 
         filter_overview <-
           get_filter_overview(dfnames, filtered_teal_data)
-        # TODO - adjust so it extracts obs + subjects
         # TODO - make it work for MAE
 
         attr(filter_overview$dataname, "label") <- "Data Name"
@@ -154,16 +153,41 @@ srv_data_summary = function(id, filtered_teal_data) {
   )
 }
 
-get_filter_overview = function(dfnames, filtered_teal_data) {
-  rows <- lapply(dfnames, get_filtered_dataframe, filtered_teal_data)
-  unssuported_idx <- vapply(rows, function(x) all(is.na(x[-1])), logical(1))
-  dplyr::bind_rows(c(rows[!unssuported_idx], rows[unssuported_idx]))
-}
+# TODO: extend for mae
 
-get_filtered_dataframe = function(dfname = character(0), filtered_teal_data) {
-  if (length(dfname) == 0) {
-    filtered_teal_data()
-  } else {
-    cbind(dataname = dfname, filtered_teal_data()@env[[dfname]])
-  }
+# dataframe
+get_filter_overview = function(dfnames, filtered_teal_data) {
+  logger::log_trace("srv_data_overiew-get_filter_overview initialized")
+  # Gets filter overview subjects number and returns a list
+  # of the number of subjects of filtered/non-filtered datasets
+
+  lapply(
+    dfnames,
+    function(dfname) {
+      subject_keys <- if (length(parent(filtered_teal_data(), dfname)) > 0) {
+        join_keys(filtered_teal_data())[[dfname]][[dfname]]
+      } else {
+        character(0) # was self$get_keys() before
+      }
+
+      data <- filtered_teal_data()@env[[paste0(dfname, '_raw')]]
+      data_filtered <- filtered_teal_data()@env[[dfname]]
+      if (length(subject_keys) == 0) {
+        data.frame(
+          dataname = dfname,
+          obs = nrow(data),
+          obs_filtered = nrow(data_filtered)
+        )
+      } else {
+        data.frame(
+          dataname = dfname,
+          obs = nrow(data),
+          obs_filtered = nrow(data_filtered),
+          subjects = nrow(unique(data[subject_keys])),
+          subjects_filtered = nrow(unique(data_filtered[subject_keys]))
+        )
+      }
+    }
+  ) |>
+    dplyr::bind_rows()
 }
