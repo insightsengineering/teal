@@ -18,7 +18,7 @@ example_module <- function(label = "example teal module", datanames = "all") {
   ans <- module(
     label,
     server = function(id, data) {
-      checkmate::assert_class(data(), "teal_data")
+      checkmate::assert_class(isolate(data()), "teal_data")
       moduleServer(id, function(input, output, session) {
         updateSelectInput(
           inputId = "dataname",

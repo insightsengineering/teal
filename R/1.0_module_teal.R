@@ -65,7 +65,7 @@ ui_teal_1.0 <- function(id,
       id = "teal-util-icons",
       style = "margin-left: auto;",
       data_elem,
-      actionButton(ns("bookmark_manager"), NULL, icon = icon("bookmark")),
+      ui_bookmark_panel(ns("bookmark_manager"), modules),
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
         href = "javascript:void(0)",
@@ -155,10 +155,7 @@ srv_teal_1.0 <- function(id, data, modules, filter = teal_slices()) {
 
     srv_snapshot_manager_panel("snapshot_manager_panel")
 
-    # todo: bring back bookmark manager
-    observeEvent(input$bookmark_manager, {
-      print("bookmark_manager clicked!")
-    })
+    srv_bookmark_panel("bookmark_manager", modules)
 
     # comment: modules needs to be called after srv_filter_manager_panel
     #          This is because they are using session$slices_global which is set in filter_manager_srv
