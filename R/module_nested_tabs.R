@@ -93,6 +93,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         column(width = 9, do.call(modules$ui, args), class = "teal_primary_col"),
         column(
           width = 3,
+          ui_data_summary(ns("data_summary")),
           ui_filter_panel(ns("module_filter_panel")),
           class = "teal_secondary_col"
         )
