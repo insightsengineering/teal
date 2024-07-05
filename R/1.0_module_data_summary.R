@@ -143,6 +143,7 @@ srv_data_summary = function(id, filtered_teal_data) {
 }
 
 get_filter_overview <- function(filtered_teal_data){
+
   rows <- lapply(
     datanames(filtered_teal_data()),
     get_object_filter_overview,
@@ -154,19 +155,15 @@ get_filter_overview <- function(filtered_teal_data){
 
 get_object_filter_overview <- function(filtered_teal_data, dataname, experiment_name = NULL) {
 
-  object <- if (is.null(experiment_name)) {
-    filtered_teal_data()@env[[dataname]]
-  } else {
-    filtered_teal_data()@env[[dataname]][[experiment_name]]
-  }
+  object <- extract_data(filtered_teal_data, dataname, experiment_name)$raw
 
   # not a regular S3 method, so we do not need to have dispatch for df/array/Matrix separately
   if (inherits(object, c("data.frame", "DataFrame", "array", "Matrix"))) {
-    get_object_filter_overview_array(filtered_teal_data, dataname)
+    get_object_filter_overview_array(filtered_teal_data, dataname, experiment_name)
   } else if (inherits(object, "SummarizedExperiment")) { # the same as array
-    get_object_filter_overview_SummarizedExperiment(filtered_teal_data, dataname)
+    get_object_filter_overview_SummarizedExperiment(filtered_teal_data, dataname, experiment_name)
   } else if (inherits(object, "MultiAssayExperiment")) {
-    get_object_filter_overview_MultiAssayExperiment(filtered_teal_data, dataname)
+    get_object_filter_overview_MultiAssayExperiment(filtered_teal_data, dataname, experiment_name)
   } else {
     data.frame(
       dataname = dataname,
@@ -176,10 +173,12 @@ get_object_filter_overview <- function(filtered_teal_data, dataname, experiment_
   }
 }
 
-get_object_filter_overview_array = function(filtered_teal_data, dataname) {
+get_object_filter_overview_array = function(filtered_teal_data, dataname, experiment_name) {
   logger::log_trace("srv_data_overiew-get_filter_overview initialized")
 
-  subject_keys <-
+  subject_keys <- if (!is.null(experiment_name)) {
+    join_keys()
+  } else {
     ##if (length(parent(filtered_teal_data(), dataname)) > 0) {
     # if (dataname %in% names(join_keys(filtered_teal_data()))) {
     #   join_keys(filtered_teal_data())[[dataname]][[dataname]]
@@ -187,41 +186,59 @@ get_object_filter_overview_array = function(filtered_teal_data, dataname) {
     #   character(0) # was self$get_keys() before
     # }
     join_keys(filtered_teal_data())[[dataname]][[dataname]]
+  }
 
-  data <- filtered_teal_data()@env[[paste0(dataname, '_raw')]]
-  data_filtered <- filtered_teal_data()@env[[dataname]]
+  data <- extract_data(filtered_teal_data, dataname, experiment_name)
+
   if (length(subject_keys) == 0) {
     data.frame(
       dataname = dataname,
-      obs = nrow(data),
-      obs_filtered = nrow(data_filtered)
+      obs = nrow(data$raw),
+      obs_filtered = nrow(data$filtered)
     )
   } else {
     data.frame(
       dataname = dataname,
-      obs = nrow(data),
-      obs_filtered = nrow(data_filtered),
-      subjects = nrow(unique(data[subject_keys])),
-      subjects_filtered = nrow(unique(data_filtered[subject_keys]))
+      obs = nrow(data$raw),
+      obs_filtered = nrow(data$filtered),
+      subjects = nrow(unique(data$raw[subject_keys])),
+      subjects_filtered = nrow(unique(data$filtered[subject_keys]))
     )
   }
 
 }
 
-get_object_filter_overview_SummarizedExperiment <- function(filtered_teal_data, dataname) {
-  get_object_filter_overview_array(filtered_teal_data, dataname)
-}
-
-get_object_filter_overview_MultiAssayExperiment <- function(filtered_teal_data, dataname) {
+extract_data <- function(filtered_teal_data, dataname, experiment_name = NULL) {
 
   data <- filtered_teal_data()@env[[paste0(dataname, '_raw')]]
   data_filtered <- filtered_teal_data()@env[[dataname]]
 
-  experiment_names <- names(data)
+  if (!is.null(experiment_name)) {
+    data <- data[[experiment_name]]
+    data_filtered <- data_filtered[[experiment_name]]
+  }
+
+  return(
+    list(
+      raw = data,
+      filtered = data_filtered
+    )
+  )
+}
+
+get_object_filter_overview_SummarizedExperiment <- function(filtered_teal_data, dataname, experiment_name) {
+  get_object_filter_overview_array(filtered_teal_data, dataname, experiment_name)
+}
+
+get_object_filter_overview_MultiAssayExperiment <- function(filtered_teal_data, dataname, experiment_name) {
+
+  data <- extract_data(filtered_teal_data, dataname, experiment_name)
+
+  experiment_names <- names(data$raw)
   mae_info <- data.frame(
     dataname = dataname,
-    subjects = nrow(SummarizedExperiment::colData(data)),
-    subjects_filtered = nrow(SummarizedExperiment::colData(data_filtered))
+    subjects = nrow(SummarizedExperiment::colData(data$raw)),
+    subjects_filtered = nrow(SummarizedExperiment::colData(data$filtered))
   )
 
   experiment_obs_info <- do.call("rbind", lapply(
@@ -247,8 +264,8 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_teal_data, 
     experiment_names,
     function(experiment_name) {
       data.frame(
-        subjects = get_experiment_keys(data, data_unfiltered[[experiment_name]]),
-        subjects_filtered = get_experiment_keys(data, data[[experiment_name]])
+        subjects = get_experiment_keys(data$filtered, data$raw[[experiment_name]]),
+        subjects_filtered = get_experiment_keys(data$filtered, data$filtered[[experiment_name]])
       )
     }
   ))
