@@ -1,25 +1,3 @@
-# TODO: this function doesn't have to exist, it can be replaced by teal_data_module. The difference is the
-#  data argument which is not needed in the `teal_data_module`.
-
-#' Create transform module
-#'
-#' Function creates a transform module that can be added to the `teal_module` object.
-#' @param ui (`function(id)`) UI function for the module
-#' @param server (`function(id, data)`) Server function for the module. Must accept `data` as an argument and
-#' return a reactive `teal_data` object.
-#'
-#' @return `teal_data_module`
-#' @export
-teal_transform_module <- function(ui, server, label = "Transform data") {
-  checkmate::assert_function(ui, args = "id", nargs = 1)
-  checkmate::assert_function(server, args = c("id", "data"), nargs = 2)
-  structure(
-    list(ui = ui, server = server),
-    label = label,
-    class = "teal_data_module"
-  )
-}
-
 #' Execute teal_data_module
 #'
 #' Function executes the `teal_data_module` and returns the modified data.
