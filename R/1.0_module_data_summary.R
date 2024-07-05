@@ -170,7 +170,6 @@ get_object_filter_overview <- function(filtered_teal_data, dataname) {
   }
 }
 
-# dataframe
 get_object_filter_overview_array = function(filtered_teal_data, dataname) {
   logger::log_trace("srv_data_overiew-get_filter_overview initialized")
 
@@ -203,11 +202,51 @@ get_object_filter_overview_array = function(filtered_teal_data, dataname) {
 
 }
 
-# TODO
 get_object_filter_overview_SummarizedExperiment <- function(filtered_teal_data, dataname) {
-
+  get_object_filter_overview_array(filtered_teal_data, dataname)
 }
-# TODO
+
 get_object_filter_overview_MultiAssayExperiment <- function(filtered_teal_data, dataname) {
 
+  data <- filtered_teal_data()@env[[paste0(dataname, '_raw')]]
+  data_filtered <- filtered_teal_data()@env[[dataname]]
+
+  experiment_names <- names(data)
+  mae_info <- data.frame(
+    dataname = dataname,
+    subjects = nrow(SummarizedExperiment::colData(data)),
+    subjects_filtered = nrow(SummarizedExperiment::colData(data_filtered))
+  )
+
+  experiment_obs_info <- do.call("rbind", lapply(
+    experiment_names,
+    function(experiment_name) {
+      transform(
+        get_filter_overview(
+          data_unfiltered[[experiment_name]],
+          data_filtered[[experiment_name]],
+          experiment_name
+        ),
+        dataname = paste0(" - ", dataname)
+      )
+    }
+  ))
+
+  get_experiment_keys <- function(mae, experiment) {
+    sample_subset <- subset(MultiAssayExperiment::sampleMap(mae), subset = colname %in% colnames(experiment))
+    length(unique(sample_subset$primary))
+  }
+
+  experiment_subjects_info <- do.call("rbind", lapply(
+    experiment_names,
+    function(experiment_name) {
+      data.frame(
+        subjects = get_experiment_keys(data, data_unfiltered[[experiment_name]]),
+        subjects_filtered = get_experiment_keys(data, data[[experiment_name]])
+      )
+    }
+  ))
+
+  experiment_info <- cbind(experiment_obs_info, experiment_subjects_info)
+  dplyr::bind_rows(mae_info, experiment_info)
 }
