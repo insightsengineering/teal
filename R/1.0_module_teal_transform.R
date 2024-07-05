@@ -14,19 +14,7 @@ teal_transform_module <- function(ui, server, label = "Transform data") {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert_function(server, args = c("id", "data"), nargs = 2)
   structure(
-    list(ui = ui, server = function(id, data, ...) {
-      result <- server(id, data, ...)
-      tryCatch(
-        {
-          checkmate::test_class(isolate(result()), "teal_data")
-          result
-        },
-        error = function(err) {
-          browser()
-          data
-        }
-      )
-    }),
+    list(ui = ui, server = server),
     label = label,
     class = "teal_data_module"
   )
@@ -50,7 +38,6 @@ ui_teal_data_module <- function(id, transformers) {
   checkmate::assert_string(id)
   checkmate::assert_list(transformers, "teal_data_module", null.ok = TRUE)
   ns <- NS(id)
-  print(glue::glue("UI id: {ns(NULL)}"))
   lapply(
     seq_along(transformers),
     function(i) {
@@ -71,7 +58,6 @@ srv_teal_data_module <- function(id, data, transformers) {
   checkmate::assert_list(transformers, "teal_data_module", min.len = 0)
 
   moduleServer(id, function(input, output, session) {
-    print(glue::glue("SRV id: {session$ns(NULL)}"))
     Reduce(
       function(x, ix) transformers[[ix]]$server(id = sprintf("data_%d", ix), data = x),
       seq_along(transformers),

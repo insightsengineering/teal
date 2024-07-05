@@ -94,6 +94,9 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         column(
           width = 3,
           ui_filter_panel(ns("module_filter_panel")),
+          if (is_arg_used(modules$ui, "transformers")) {
+            ui_teal_data_module(ns("module-data_transform"), args$transformers)
+          },
           class = "teal_secondary_col"
         )
       )

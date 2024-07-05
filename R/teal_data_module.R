@@ -53,11 +53,15 @@
 #' @seealso [`teal.data::teal_data-class`], [teal.code::qenv()]
 #'
 #' @export
-teal_data_module <- function(ui, server) {
+teal_data_module <- function(ui, server, label = "data module") {
   checkmate::assert_function(ui, args = "id", nargs = 1)
-  checkmate::assert_function(server, args = "id", nargs = 1)
+  checkmate::assert(
+    checkmate::check_function(server, args = "id", nargs = 1),
+    checkmate::check_function(server, args = c("id", "data"), nargs = 2)
+  )
   structure(
     list(ui = ui, server = server),
+    label = label,
     class = "teal_data_module"
   )
 }
