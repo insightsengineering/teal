@@ -152,12 +152,18 @@ get_filter_overview <- function(filtered_teal_data){
   dplyr::bind_rows(c(rows[!unssuported_idx], rows[unssuported_idx]))
 }
 
-get_object_filter_overview <- function(filtered_teal_data, dataname) {
-  object <- filtered_teal_data()@env[[dataname]]
+get_object_filter_overview <- function(filtered_teal_data, dataname, experiment_name = NULL) {
+
+  object <- if (is.null(experiment_name)) {
+    filtered_teal_data()@env[[dataname]]
+  } else {
+    filtered_teal_data()@env[[dataname]][[experiment_name]]
+  }
+
   # not a regular S3 method, so we do not need to have dispatch for df/array/Matrix separately
   if (inherits(object, c("data.frame", "DataFrame", "array", "Matrix"))) {
     get_object_filter_overview_array(filtered_teal_data, dataname)
-  } else if (inherits(object, "SummarizedExperiment")) {
+  } else if (inherits(object, "SummarizedExperiment")) { # the same as array
     get_object_filter_overview_SummarizedExperiment(filtered_teal_data, dataname)
   } else if (inherits(object, "MultiAssayExperiment")) {
     get_object_filter_overview_MultiAssayExperiment(filtered_teal_data, dataname)
@@ -222,9 +228,9 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_teal_data, 
     experiment_names,
     function(experiment_name) {
       transform(
-        get_filter_overview(
-          data_unfiltered[[experiment_name]],
-          data_filtered[[experiment_name]],
+        get_object_filter_overview(
+          filtered_teal_data,
+          dataname,
           experiment_name
         ),
         dataname = paste0(" - ", dataname)
