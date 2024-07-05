@@ -243,14 +243,14 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_teal_data, 
 
   experiment_obs_info <- do.call("rbind", lapply(
     experiment_names,
-    function(experiment_name) {
+    function(expr_name) {
       transform(
         get_object_filter_overview(
           filtered_teal_data,
           dataname,
-          experiment_name
+          expr_name
         ),
-        dataname = paste0(" - ", dataname)
+        dataname = paste0(" - ", expr_name)
       )
     }
   ))
