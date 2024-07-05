@@ -23,6 +23,13 @@ ui_teal_data_module <- function(id, transformers) {
       div( # todo: accordion?
         title = attr(data_mod, "label"),
         icon = icon("pencil-square"),
+        div(
+          class = "has-error",
+          span(
+            class = "help-block",
+            textOutput(ns(sprintf("error_%d", i)))
+          )
+        ),
         data_mod$ui(id = ns(sprintf("data_%d", i)))
       )
     }
@@ -37,7 +44,15 @@ srv_teal_data_module <- function(id, data, transformers) {
 
   moduleServer(id, function(input, output, session) {
     Reduce(
-      function(x, ix) transformers[[ix]]$server(id = sprintf("data_%d", ix), data = x),
+      function(x, ix) {
+        res <- transformers[[ix]]$server(id = sprintf("data_%d", ix), data = x)
+        output[[sprintf("error_%d", ix)]] <- renderText({
+          if (!inherits(x(), "qenv.error") && inherits(res(), "qenv.error")) {
+            "An error occured with this transform. Please check the inputs."
+          }
+        })
+        res
+      },
       seq_along(transformers),
       init = data
     )
