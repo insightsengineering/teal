@@ -1,4 +1,4 @@
-ui_data_summary = function(id) {
+ui_data_summary <- function(id) {
   ns <- NS(id)
   tags$div(
     id = id, # not used, can be used to customize CSS behavior
@@ -37,14 +37,12 @@ ui_data_summary = function(id) {
 #'   `shiny` module instance id.
 #' @param filtered_teal_data (`reactive`) (`teal_data`) an output of `.make_teal_data()`
 #' @return `NULL`.
-srv_data_summary = function(id, filtered_teal_data) {
+srv_data_summary <- function(id, filtered_teal_data) {
   checkmate::check_class(filtered_teal_data, "reactive")
-  checkmate::check_class(filtered_teal_data(), "teal_data")
-
   moduleServer(
     id = id,
     function(input, output, session) {
-      #shinyjs::hide(id = "teal-main_ui-filter_panel-overview") # this doesnt hide filter-panel-overiw from teal.slice YET
+      # shinyjs::hide(id = "teal-main_ui-filter_panel-overview") # this doesnt hide filter-panel-overiw from teal.slice YET
       logger::log_trace("srv_data_summary initializing")
 
       observeEvent(input$minimise_filter_overview, {
@@ -54,6 +52,7 @@ srv_data_summary = function(id, filtered_teal_data) {
       })
 
       output$table <- renderUI({
+        req(inherits(filtered_teal_data(), "teal_data"))
         logger::log_trace("srv_data_summary updating counts")
 
         if (length(datanames(filtered_teal_data())) == 0) {
@@ -142,8 +141,7 @@ srv_data_summary = function(id, filtered_teal_data) {
   )
 }
 
-get_filter_overview <- function(filtered_teal_data){
-
+get_filter_overview <- function(filtered_teal_data) {
   rows <- lapply(
     datanames(filtered_teal_data()),
     get_object_filter_overview,
@@ -154,7 +152,6 @@ get_filter_overview <- function(filtered_teal_data){
 }
 
 get_object_filter_overview <- function(filtered_teal_data, dataname, experiment_name = NULL) {
-
   object <- extract_data(filtered_teal_data, dataname, experiment_name)$raw
 
   # not a regular S3 method, so we do not need to have dispatch for df/array/Matrix separately
@@ -173,13 +170,13 @@ get_object_filter_overview <- function(filtered_teal_data, dataname, experiment_
   }
 }
 
-get_object_filter_overview_array = function(filtered_teal_data, dataname, experiment_name) {
+get_object_filter_overview_array <- function(filtered_teal_data, dataname, experiment_name) {
   logger::log_trace("srv_data_overiew-get_filter_overview initialized")
 
   subject_keys <- if (!is.null(experiment_name)) {
     join_keys()
   } else {
-    ##if (length(parent(filtered_teal_data(), dataname)) > 0) {
+    ## if (length(parent(filtered_teal_data(), dataname)) > 0) {
     # if (dataname %in% names(join_keys(filtered_teal_data()))) {
     #   join_keys(filtered_teal_data())[[dataname]][[dataname]]
     # } else {
@@ -205,12 +202,10 @@ get_object_filter_overview_array = function(filtered_teal_data, dataname, experi
       subjects_filtered = nrow(unique(data$filtered[subject_keys]))
     )
   }
-
 }
 
 extract_data <- function(filtered_teal_data, dataname, experiment_name = NULL) {
-
-  data <- filtered_teal_data()@env[[paste0(dataname, '_raw')]]
+  data <- filtered_teal_data()@env[[paste0(dataname, "_raw")]]
   data_filtered <- filtered_teal_data()@env[[dataname]]
 
   if (!is.null(experiment_name)) {
@@ -231,7 +226,6 @@ get_object_filter_overview_SummarizedExperiment <- function(filtered_teal_data, 
 }
 
 get_object_filter_overview_MultiAssayExperiment <- function(filtered_teal_data, dataname, experiment_name) {
-
   data <- extract_data(filtered_teal_data, dataname, experiment_name)
 
   experiment_names <- names(data$raw)

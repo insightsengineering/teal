@@ -100,6 +100,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         column(
           width = 3,
           ui_filter_panel(ns("module_filter_panel")),
+          ui_data_summary(ns("data_summary")),
           class = "teal_secondary_col"
         )
       )
@@ -245,6 +246,7 @@ srv_teal_module.teal_module <- function(id,
     filtered_teal_data <- eventReactive(trigger_data(), {
       .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
     })
+    srv_data_summary("data_summary", filtered_teal_data)
 
     # Call modules.
     module_out <- if (!inherits(modules, "teal_module_previewer")) {
@@ -288,7 +290,6 @@ srv_teal_module.teal_module <- function(id,
 
   if (is_arg_used(modules$server, "data")) {
     args <- c(args, data = list(filtered_teal_data))
-    srv_data_summary("data_summary", filtered_teal_data)
   }
 
 
