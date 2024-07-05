@@ -22,7 +22,18 @@ ui_teal_data_module <- function(id, transformers) {
       data_mod <- transformers[[i]]
       div( # todo: accordion?
         title = attr(data_mod, "label"),
-        icon = icon("pencil-square"),
+        tags$span(
+          class= "text-primary mb-4",
+          icon("square-pen", lib = "font-awesome"),
+          attr(data_mod, "label")
+        ),
+        actionLink(
+          inputId = ns(sprintf("minimize_%d", i)),
+          label = NULL,
+          icon = icon("angle-down", lib = "font-awesome"),
+          title = "Minimise panel",
+          class = "remove pull-right"
+        ),
         div(
           class = "has-error",
           span(
@@ -30,7 +41,10 @@ ui_teal_data_module <- function(id, transformers) {
             textOutput(ns(sprintf("error_%d", i)))
           )
         ),
-        data_mod$ui(id = ns(sprintf("data_%d", i)))
+        div(
+          id = ns(sprintf("wrapper_data_%d", i)),
+          data_mod$ui(id = ns(sprintf("data_%d", i)))
+        )
       )
     }
   )
@@ -43,6 +57,27 @@ srv_teal_data_module <- function(id, data, transformers) {
   checkmate::assert_list(transformers, "teal_data_module", min.len = 0)
 
   moduleServer(id, function(input, output, session) {
+#
+#     observeEvent(input[[sprintf("minimize_%d", 1)]], {
+#       print("me")
+#       element_id <- sprintf("wrapper_data_%d", 1)
+#       shinyjs::toggle(element_id)
+#       teal.slice:::toggle_icon(session$ns(sprintf("minimize_%d", 1)), c("fa-angle-right", "fa-angle-down"))
+#       teal.slice:::toggle_title(session$ns(sprintf("minimize_%d", 1)), c("Restore panel", "Minimise Panel"))
+#     })
+
+    lapply(
+      seq_along(transformers),
+      function(ix) {
+        element_id <- sprintf("minimize_%d", ix)
+        observeEvent(input[[element_id]], {
+          shinyjs::toggle(sprintf("wrapper_data_%d", ix))
+          teal.slice:::toggle_icon(session$ns(element_id), c("fa-angle-right", "fa-angle-down"))
+          teal.slice:::toggle_title(session$ns(element_id), c("Restore panel", "Minimise Panel"))
+        })
+      }
+    )
+
     Reduce(
       function(x, ix) {
         res <- transformers[[ix]]$server(id = sprintf("data_%d", ix), data = x)
