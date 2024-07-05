@@ -25,7 +25,7 @@ mock_module_available_slices <- function(filtered_data_list, slices_global) {
 }
 
 testthat::test_that(
-  "srv_filter_manager returns table containing TRUE (active), FALSE (inactive), NA (unavailable) for each module",
+  "srv_filter_manager: returns table containing info about all slices (active, inactive, unavailable) for each module",
   {
     # module-specific filtered data
     fd1 <- teal.slice::init_filtered_data(list(iris = iris))
@@ -60,7 +60,7 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "srv_filter_manager returns table containing single column (global_filters) for global filter-panel",
+  "srv_filter_manager: returns table containing single column (global_filters) when !module_specific",
   {
     # global filtering - same FilteredData object for each module
     fd <- teal.slice::init_filtered_data(list(iris = iris, mtcars = mtcars, women = women))
@@ -93,7 +93,7 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "srv_module_filter_manager initially sets filters from slices_global mapped to module",
+  "srv_module_filter_manager: on init slices_global are mapped to module's FilteredData",
   {
     fd <- teal.slice::init_filtered_data(list(iris = iris, mtcars = mtcars))
     slices_global <- .make_slices_global(filter = example_filter, module_labels = c("m1", "m2", "m3"))
@@ -124,7 +124,7 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "srv_module_filter_manager sets available filters to the module's states",
+  "srv_module_filter_manager: on init available filters are set to the module's FilteredData",
   {
     fd <- teal.slice::init_filtered_data(list(iris = iris, mtcars = mtcars))
     slices_global <- .make_slices_global(filter = example_filter, module_labels = c("m1", "m2", "m3"))
@@ -154,7 +154,7 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "srv_module_filter_manager sets session$userData$module_slices_api",
+  "srv_module_filter_manager: on init sets session$userData$module_slices_api",
   {
     fd <- teal.slice::init_filtered_data(list(iris = iris, mtcars = mtcars))
     slices_global <- .make_slices_global(filter = example_filter, module_labels = c("m1", "m2", "m3"))
@@ -180,7 +180,7 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "srv_module_filter_manager filter set in the module is added to slices_global and mapped to the module",
+  "srv_module_filter_manager: filter set in the module is added to slices_global with module's mapping",
   {
     fd <- teal.slice::init_filtered_data(list(iris = iris, mtcars = mtcars))
     slices_global <- .make_slices_global(filter = example_filter, module_labels = c("m1", "m2", "m3"))
@@ -218,9 +218,8 @@ testthat::test_that(
   }
 )
 
-
 testthat::test_that(
-  "srv_module_filter_manager filter set in the module is added to slices_global and mapped to the module",
+  "srv_module_filter_manager: filter removed in the module makes changes in module's mapping",
   {
     fd <- teal.slice::init_filtered_data(list(iris = iris, mtcars = mtcars))
     slices_global <- .make_slices_global(filter = example_filter, module_labels = c("m1", "m2", "m3"))
@@ -251,12 +250,36 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "srv_module_filter_manager changins slices_global and mapping resets module's states",
+  "srv_module_filter_manager: changing state of active filter is reflected in slices_global",
   {
     fd <- teal.slice::init_filtered_data(list(iris = iris, mtcars = mtcars))
     slices_global <- .make_slices_global(filter = example_filter, module_labels = c("m1", "m2", "m3"))
     module_fd <- reactive(fd)
 
+    shiny::testServer(
+      app = srv_module_filter_manager,
+      args = list(
+        id = "m2",
+        module_fd = module_fd,
+        slices_global = slices_global
+      ),
+      expr = {
+        session$flushReact()
+        module_fd()$set_filter_state(
+          teal_slices(teal_slice(dataname = "iris", varname = "Species", selected = "setosa"))
+        )
+        testthat::expect_identical(slices_global()[[2]]$selected, "setosa")
+      }
+    )
+  }
+)
+
+testthat::test_that(
+  "srv_module_filter_manager: changing slices_global directly resets module's FilteredData",
+  {
+    fd <- teal.slice::init_filtered_data(list(iris = iris, mtcars = mtcars))
+    slices_global <- .make_slices_global(filter = example_filter, module_labels = c("m1", "m2", "m3"))
+    module_fd <- reactive(fd)
 
     shiny::testServer(
       app = srv_module_filter_manager,

@@ -1,12 +1,23 @@
 #' Manage multiple `FilteredData` objects
 #'
-#' Oversee filter states across the entire application.
+#' Oversee filter states across the entire application. The key role in this process is played by
+#' the single `slices_global` (`reactiveVal`) object which stores all `teal_slice` objects and
+#' mapping attribute to each module.
+#' `slices_global` is created by `.make_slices_global` function which in the same time resolves
+#' `attr("mapping")` to keep it consistent and ready for filter manager, by:
+#' - list elements contains slots for all modules (even if they don't have filters specified).
+#' - `global_filters` list element is removed in favour of module slots.
 #'
-#' This module observes changes in the filters in `slices_global`
+#' Filter-manager is split into two parts:
+#' - `ui/srv_filter_manager_panel` - This module observes changes in the filters in `slices_global`
 #' and displays them in a table utilising information from `mapping`:
-#' - &#9989; (`TRUE`) - filter is active in the module
-#' - &#10060; (`FALSE`) - filter is inactive in the module
-#' - &#128306; (`NA`) - filter is not available in the module
+#'   - &#9989; (`TRUE`) - filter is active in the module
+#'   - &#10060; (`FALSE`) - filter is inactive in the module
+#'   - &#128306; (`NA`) - filter is not available in the module
+#' - `ui/srv_module_filter_manager` - handling filter states for a single module and keeping
+#'   module `FilteredData` consistent with `slices_global`, so that local filters are always
+#'   reflected in the `slices_global` and its mapping.
+#'
 #'
 #' @param id (`character(1)`)
 #'  `shiny` module instance id.
@@ -14,10 +25,17 @@
 #' @param slices_global (`reactiveVal`)
 #'  containing `teal_slices`.
 #'
+#' @param module_fd (`FilteredData`)
+#'   Object containing the data to be filtered in a single `teal` module.
+#'
+#' @param filter (`teal_slices`)
+#'   initial `teal` filter settings.
+#'
+#' @param module_labels (`character`)
+#'  vector of module labels.
+#'
 #' @return
 #' Module returns a `slices_global` (`reactiveVal`) containing a `teal_slices` object with mapping.
-#' Module creates a slot `session$userData$module_slices_api` containing an empty list, which
-#' then is filled with information about available filters in each module.
 #'
 #' @name module_filter_manager
 #' @aliases filter_manager filter_manager_module
@@ -150,27 +168,8 @@ srv_filter_manager <- function(id, slices_global) {
   })
 }
 
-#' Module specific filter manager
-#'
-#' Tracks filter states in a single module.
-#'
-#' This module tracks the state of a single `FilteredData` object and global `teal_slices`
-#' and updates both objects as necessary. Filter states added in different modules
-#' Filter states added any individual module are added to global `teal_slices`
-#' and from there become available in other modules
-#' by setting `private$available_teal_slices` in each `FilteredData`.
-#'
-#' @param id (`character(1)`)
-#'  `shiny` module id. Should be a `label` of a `teal_module`.
-#'
-#' @param module_fd (`FilteredData`)
-#'   Object containing the data to be filtered in a single `teal` module.
-#'
-#' @inheritParams srv_filter_manager
-#'
-#' @return A `reactive` expression containing a `teal_slices` with the slices active in this module.
+#' @rdname module_filter_manager
 #' @keywords internal
-#'
 srv_module_filter_manager <- function(id, module_fd, slices_global) {
   checkmate::assert_string(id)
   checkmate::assert_class(module_fd, "reactive")
@@ -230,14 +229,12 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
       # Set ids of the filters in the mapping matrix for the module
       module_ids <- vapply(slices_module(), `[[`, character(1L), "id")
       mapping_matrix <- attr(slices_global(), "mapping")
-      # if (!setequal(module_ids, mapping_matrix[[id]]))
-      {
-        logger::log_trace("filter_manager_srv@2 updating filter mapping for module: { id }.")
-        mapping_matrix[[id]] <- module_ids
-        new_slices_global <- slices_global()
-        attr(new_slices_global, "mapping") <- mapping_matrix
-        slices_global(new_slices_global)
-      }
+
+      logger::log_trace("filter_manager_srv@2 updating filter mapping for module: { id }.")
+      mapping_matrix[[id]] <- module_ids
+      new_slices_global <- slices_global()
+      attr(new_slices_global, "mapping") <- mapping_matrix
+      slices_global(new_slices_global)
     })
 
     obs3 <- observeEvent(slices_global_module(), {
@@ -258,24 +255,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
   })
 }
 
-
-#' Make and restore `slices_global` object
-#'
-#' `slices_global` is `reactiveVal` used in `teal` as singleton where all filters and their mapping
-#' is stored. This object is shared between `srv_filter_manager`, `srv_module_filter_manager` and
-#' `srv_snapshot_manager` to pass information about active filters in each module.
-#' This function is called once on initialization of the app and either takes default filters or restore
-#' them from bookmarked state.
-#' @param filter (`teal_slices`)
-#'   initial `teal` filter settings.
-#' @param module_labels (`character`)
-#'  vector of module labels. Needed because `attr("mapping")` can be specified in a way that not all
-#'  modules have filters specified. This list is automatically recreated so that `attr("mapping")`
-#'  always contains all module labels. Also, `global_filters` list element is removed in favour
-#'  of module slots in order to keep the mapping consistent.
-#'
-#' @return
-#' `reactiveVal` containing a `teal_slices` object with mapping to all available modules.
+#' @rdname module_filter_manager
 #' @keywords internal
 .make_slices_global <- function(filter, module_labels) {
   # Restore filter from bookmarked state, if applicable.
