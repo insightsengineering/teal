@@ -263,7 +263,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
 .make_slices_global <- function(filter, modules) {
   # Restore filter from bookmarked state, if applicable.
   session <- shiny::getDefaultReactiveDomain()
-  filter_restored <- restoreValue("filter_manager_panel-filter_manager-filter_state_on_bookmark", filter)
+  filter_restored <- restoreValue(session$ns("filter_manager_panel-filter_manager-filter_state_on_bookmark"), filter)
   if (!is.teal_slices(filter_restored)) {
     filter_restored <- as.teal_slices(filter_restored)
   }
