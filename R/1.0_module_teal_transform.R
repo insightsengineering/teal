@@ -12,7 +12,7 @@
 #'
 #' @return `reactive` `teal_data`
 #' @export
-ui_teal_data_module <- function(id, transformers) {
+ui_teal_data_module <- function(id, transformers, class = "") {
   checkmate::assert_string(id)
   checkmate::assert_list(transformers, "teal_data_module", null.ok = TRUE)
   ns <- NS(id)
@@ -21,9 +21,10 @@ ui_teal_data_module <- function(id, transformers) {
     function(i) {
       data_mod <- transformers[[i]]
       div( # todo: accordion?
+        class = class,
         title = attr(data_mod, "label"),
         tags$span(
-          class= "text-primary mb-4",
+          class = "text-primary mb-4",
           icon("square-pen", lib = "font-awesome"),
           attr(data_mod, "label")
         ),
