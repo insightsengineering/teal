@@ -40,22 +40,23 @@ teal_lockfile <- function() {
   }
 
   if (!(is_in_test() || is_r_cmd_check())) {
-    current_plan <- future::plan()
-    # If there is already a tweaked plan - don't change it.
-    if (!inherits(current_plan, "tweaked")) {
-      new_plan <- future::plan(future::multisession, workers = 2)
-      shiny::onStop(function() future::plan(new_plan))
+    old_plan <- future::plan()
+    # If there is already a parallel (non-sequential) backend, reuse it.
+    if (inherits(old_plan, "sequential")) {
+      future::plan(future::multisession, workers = 2)
     }
 
     lockfile_task <- ExtendedTask$new(create_renv_lockfile)
-    lockfile_task$invoke(lockfile_path)
+    lockfile_task$invoke(close = inherits(old_plan, "sequential"), lockfile_path)
     logger::log_trace("lockfile creation invoked.")
   }
 }
 
-create_renv_lockfile <- function(lockfile_path = NULL) {
+create_renv_lockfile <- function(close = FALSE, lockfile_path = NULL) {
+  checkmate::assert_flag(close)
   checkmate::assert_string(lockfile_path, na.ok = TRUE)
-  promises::future_promise({
+  promise <- promises::future_promise({
+    # Below we can not use a file created in tempdir() directory.
     # If a file is created in tempdir(), it gets deleted on 'then(onFulfilled' part.
     shiny::onStop(function() file.remove(lockfile_path))
 
@@ -74,7 +75,14 @@ create_renv_lockfile <- function(lockfile_path = NULL) {
     }
 
     lockfile_path
-  }, seed = NULL)
+  })
+  if (close) {
+    # If the initial backend was only sequential, bring it back.
+    promises::then(promise, onFulfilled = function() {
+      future::plan(future::sequential)
+    })
+  }
+  promise
 }
 
 teal_lockfile_downloadhandler <- function() {
