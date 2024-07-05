@@ -202,6 +202,7 @@ srv_teal_module.teal_module <- function(id,
     })
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
+        req(data_rv(), "teal_data")
         logger::log_trace("srv_teal_module@1 initializing module-specific FilteredData")
 
         # Otherwise, FilteredData will be created in the modules' scope later
@@ -249,18 +250,21 @@ srv_teal_module.teal_module <- function(id,
     srv_data_summary("data_summary", filtered_teal_data)
 
     # Call modules.
-    module_out <- if (!inherits(modules, "teal_module_previewer")) {
-      observeEvent(
+    module_out <- reactiveVal(NULL)
+    if (!inherits(modules, "teal_module_previewer")) {
+      obs_module <- observeEvent(
         # wait for trigger_data() to be not NULL but only once:
         ignoreNULL = TRUE,
         once = TRUE,
         eventExpr = trigger_data(),
-        handlerExpr = .call_teal_module(modules, datasets, filtered_teal_data, reporter)
+        handlerExpr = {
+          module_out(.call_teal_module(modules, datasets, filtered_teal_data, reporter))
+        }
       )
     } else {
       # Report previewer must be initiated on app start for report cards to be included in bookmarks.
       # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-      .call_teal_module(modules, datasets, filtered_teal_data, reporter)
+      module_out(.call_teal_module(modules, datasets, filtered_teal_data, reporter))
     }
 
     # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
