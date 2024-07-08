@@ -147,14 +147,13 @@ get_filter_overview <- function(filtered_teal_data) {
     get_object_filter_overview,
     filtered_teal_data = filtered_teal_data
   )
-  unssuported_idx <- vapply(rows, function(x) all(is.na(x[-1])), logical(1))
+  unssuported_idx <- vapply(rows, function(x) all(is.na(x[-1])), logical(1)) # this is mainly for vectors
   dplyr::bind_rows(c(rows[!unssuported_idx], rows[unssuported_idx]))
 }
 
 get_object_filter_overview <- function(filtered_teal_data, dataname, experiment_name = NULL) {
   object <- extract_data(filtered_teal_data, dataname, experiment_name)$raw
 
-  # not a regular S3 method, so we do not need to have dispatch for df/array/Matrix separately
   if (inherits(object, c("data.frame", "DataFrame", "array", "Matrix", "SummarizedExperiment"))) {
     get_object_filter_overview_array(filtered_teal_data, dataname, experiment_name)
   } else if (inherits(object, "MultiAssayExperiment")) {
@@ -171,15 +170,7 @@ get_object_filter_overview <- function(filtered_teal_data, dataname, experiment_
 get_object_filter_overview_array <- function(filtered_teal_data, dataname, experiment_name) {
   logger::log_trace("srv_data_overiew-get_filter_overview initialized")
 
-  subject_keys <- if (!is.null(experiment_name)) {
-    join_keys()
-  } else {
-    ## if (length(parent(filtered_teal_data(), dataname)) > 0) {
-    # if (dataname %in% names(join_keys(filtered_teal_data()))) {
-    #   join_keys(filtered_teal_data())[[dataname]][[dataname]]
-    # } else {
-    #   character(0) # was self$get_keys() before
-    # }
+  subject_keys <- if (is.null(experiment_name)) {
     join_keys(filtered_teal_data())[[dataname]][[dataname]]
   }
 
