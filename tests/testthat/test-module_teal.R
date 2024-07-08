@@ -231,7 +231,7 @@ testthat::test_that("srv_teal: slices_global is initialized with slices specifie
   )
 })
 
-testthat::test_that("srv_teal: attr(slices_global, "mapping") is resolved for global_filters  when !module_specific", {
+testthat::test_that("srv_teal: attr(slices_global, 'mapping') is resolved for global_filters  when !module_specific", {
   init_filter <- teal_slices(
     teal_slice("iris", "Species"),
     teal_slice("mtcars", "cyl"),
@@ -259,7 +259,7 @@ testthat::test_that("srv_teal: attr(slices_global, "mapping") is resolved for gl
   )
 })
 
-testthat::test_that("srv_teal: attr(slices_global, "mapping") is resolved for global_filters  when module_specific", {
+testthat::test_that("srv_teal: attr(slices_global, 'mapping') is resolved for global_filters  when module_specific", {
   init_filter <- teal_slices(
     teal_slice("iris", "Species"),
     teal_slice("mtcars", "cyl"),
