@@ -260,7 +260,9 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
 
 #' @rdname module_filter_manager
 #' @keywords internal
-.make_slices_global <- function(filter, modules) {
+.make_slices_global <- function(filter, module_labels) {
+  checkmate::assert_class(filter, "teal_slices")
+  checkmate::assert_character(module_labels)
   # Restore filter from bookmarked state, if applicable.
   session <- shiny::getDefaultReactiveDomain()
   filter_restored <- restoreValue(session$ns("filter_manager_panel-filter_manager-filter_state_on_bookmark"), filter)
@@ -277,7 +279,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
     )
   }
   new_mapping <- sapply(
-    unlist(modules, use.names = FALSE),
+    unlist(module_labels, use.names = FALSE),
     simplify = FALSE,
     function(module_label) {
       unlist(attr(filter_restored, "mapping")[c(module_label, "global_filters")], use.names = FALSE)

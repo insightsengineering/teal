@@ -195,7 +195,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     }
 
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
-    slices_global <- .make_slices_global(filter, module_labels)
+    slices_global <- .make_slices_global(filter = filter, module_labels = module_labels)
     srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
 
     srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
