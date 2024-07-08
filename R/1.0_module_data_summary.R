@@ -171,7 +171,8 @@ get_object_filter_overview_array <- function(filtered_teal_data, dataname, exper
   logger::log_trace("srv_data_overiew-get_filter_overview initialized")
 
   subject_keys <- if (is.null(experiment_name)) {
-    join_keys(filtered_teal_data())[[dataname]][[dataname]]
+    #join_keys(filtered_teal_data())[[dataname]][[dataname]]
+    Reduce(intersect, join_keys(filtered_teal_data())[[dataname]])
   }
 
   data <- extract_data(filtered_teal_data, dataname, experiment_name)
