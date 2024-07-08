@@ -155,10 +155,8 @@ get_object_filter_overview <- function(filtered_teal_data, dataname, experiment_
   object <- extract_data(filtered_teal_data, dataname, experiment_name)$raw
 
   # not a regular S3 method, so we do not need to have dispatch for df/array/Matrix separately
-  if (inherits(object, c("data.frame", "DataFrame", "array", "Matrix"))) {
+  if (inherits(object, c("data.frame", "DataFrame", "array", "Matrix", "SummarizedExperiment"))) {
     get_object_filter_overview_array(filtered_teal_data, dataname, experiment_name)
-  } else if (inherits(object, "SummarizedExperiment")) { # the same as array
-    get_object_filter_overview_SummarizedExperiment(filtered_teal_data, dataname, experiment_name)
   } else if (inherits(object, "MultiAssayExperiment")) {
     get_object_filter_overview_MultiAssayExperiment(filtered_teal_data, dataname, experiment_name)
   } else {
@@ -219,10 +217,6 @@ extract_data <- function(filtered_teal_data, dataname, experiment_name = NULL) {
       filtered = data_filtered
     )
   )
-}
-
-get_object_filter_overview_SummarizedExperiment <- function(filtered_teal_data, dataname, experiment_name) {
-  get_object_filter_overview_array(filtered_teal_data, dataname, experiment_name)
 }
 
 get_object_filter_overview_MultiAssayExperiment <- function(filtered_teal_data, dataname, experiment_name) {
