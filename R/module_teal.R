@@ -2,42 +2,30 @@
 
 #' `teal` main app module
 #'
-#' This is the main `teal` app that puts everything together.
+#' This module is a central point of the `teal` app. It is called by [teal::init()] but can be also
+#' used as a standalone module in your custom application. It is responsible for creating the main
+#' `shiny` app layout and initializing all the necessary components:
+#' - [`module_data`] - for handling the `data`.
+#' - [`module_teal_module`] - for handling the `modules`.
+#' - [`module_filter_manager`] - for handling the `filter`.
+#' - [`module_snapshot_manager_panel`] - for handling the `snapshots`.
+#' - [`module_bookmark_panel`] - for handling the `bookmarks`.
 #'
-#' It displays the splash UI which is used to fetch the data, possibly
-#' prompting for a password input to fetch the data. Once the data is ready,
-#' the splash screen is replaced by the actual `teal` UI that is tabsetted and
-#' has a filter panel with `datanames` that are relevant for the current tab.
-#' Nested tabs are possible, but we limit it to two nesting levels for reasons
-#' of clarity of the UI.
-#'
-#' The splash screen functionality can also be used
-#' for non-delayed data which takes time to load into memory, avoiding
-#' `shiny` session timeouts.
-#'
-#' Server evaluates the `teal_data_rv` (delayed data mechanism) and creates the
-#' `datasets` object that is shared across modules.
-#' Once it is ready and non-`NULL`, the splash screen is replaced by the
-#' main `teal` UI that depends on the data.
-#' The currently active tab is tracked and the right filter panel
-#' updates the displayed datasets to filter for according to the active `datanames`
-#' of the tab.
+#' This module establishes reactive connection between the `data` and every other component in the app.
+#' Reactive change of the `data` triggers reload of the app and possibly keeping all inputs settings
+#' the same so the user can continue where one left off.
+#' Similar applies to [`module_bookmark_panel`] which allows to start a new session with restored
+#' inputs.
 #'
 #' @name module_teal
 #'
-#' @inheritParams module_teal_with_splash
-#'
-#' @param splash_ui (`shiny.tag`) UI to display initially,
-#'   can be a splash screen or a `shiny` module UI. For the latter, see
-#'   [init()] about how to call the corresponding server function.
-#'
-#' @param teal_data_rv (`reactive`)
-#'   returns the `teal_data`, only evaluated once, `NULL` value is ignored
+#' @inheritParams module_data
+#' @inheritParams init
 #'
 #' @return
 #' Returns a `reactive` expression which returns the currently active module.
 #'
-#' @keywords internal
+#' @export
 #'
 NULL
 
