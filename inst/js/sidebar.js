@@ -6,7 +6,7 @@ const hideSidebar = () => {
 };
 const showSidebar = () => {
   $(".teal_primary_col").removeClass("col-sm-12").addClass("col-sm-9");
-  $(".teal_secondary_col").delay(600).fadeIn(50);
+  $(".teal_secondary_col").fadeIn(650);
 };
 const toggleFilterPanel = () => {
   if (filter_open && !$(".teal_secondary_col").is(':visible')) {
