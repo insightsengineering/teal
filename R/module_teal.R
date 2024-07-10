@@ -8,15 +8,16 @@
 #' - [`module_data`] - for handling the `data`.
 #' - [`module_teal_module`] - for handling the `modules`.
 #' - [`module_filter_manager`] - for handling the `filter`.
-#' - [`module_snapshot_manager_panel`] - for handling the `snapshots`.
-#' - [`module_bookmark_panel`] - for handling the `bookmarks`.
+#' - [`module_snapshot_manager`] - for handling the `snapshots`.
+#' - [`module_bookmark_manager`] - for handling the `bookmarks`.
 #'
 #' This module establishes reactive connection between the `data` and every other component in the app.
 #' Reactive change of the `data` triggers reload of the app and possibly keeping all inputs settings
 #' the same so the user can continue where one left off.
-#' Similar applies to [`module_bookmark_panel`] which allows to start a new session with restored
+#' Similar applies to [`module_bookmark_manager`] which allows to start a new session with restored
 #' inputs.
 #'
+#' @rdname module_teal
 #' @name module_teal
 #'
 #' @inheritParams module_data
@@ -25,7 +26,6 @@
 #' @return
 #' Returns a `reactive` expression which returns the currently active module.
 #'
-#' @export
 #'
 NULL
 
@@ -84,7 +84,7 @@ ui_teal <- function(id,
   )
 
   data_elem <- ui_data(ns("data"), data = data, title = title, header = header, footer = footer)
-  tabs_elem <- ui_teal_module(id = ns("root_module"), modules = modules)
+  tabs_elem <- ui_teal_module(id = ns("teal_modules"), modules = modules)
 
   fluidPage(
     title = title,
@@ -111,7 +111,7 @@ ui_teal <- function(id,
     ),
     tags$script(HTML("
       $(document).ready(function() {
-        $('#teal-util-icons').appendTo('#root_module-active_tab');
+        $('#teal-util-icons').appendTo('#teal_modules-active_tab');
       });
     ")),
     tags$hr(),
@@ -193,7 +193,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     # comment: modules needs to be called after srv_filter_manager_panel
     #          This is because they are using session$slices_global which is set in filter_manager_srv
     srv_teal_module(
-      id = "root_module",
+      id = "teal_modules",
       data_rv = data_rv,
       datasets = datasets_rv,
       modules = modules,

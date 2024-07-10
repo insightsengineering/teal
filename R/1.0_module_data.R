@@ -21,7 +21,7 @@
 #'
 #' see [`validate_reactive_teal_data`] for more details.
 #'
-#' @inheritParams teal::init
+#' @inheritParams init
 #'
 #' @param data (`teal_data`, `teal_data_module` or `reactive` returning `teal_data`)
 #' @return A `reactiveVal` which is set to:
@@ -31,6 +31,7 @@
 #' stop the reactive cycle as `observeEvent` calls based on the data have `ignoreNULL = TRUE`.
 #'
 #' @rdname module_data
+#' @name module_data
 NULL
 
 #' @rdname module_data
@@ -98,7 +99,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     })
 
     if (inherits(data, "teal_data_module")) {
-      shinyjs::disable(selector = "#root_module-active_tab.nav-tabs a")
+      shinyjs::disable(selector = "#teal_modules-active_tab.nav-tabs a")
       shinyjs::click(id = "open_teal_data_module")
     }
 

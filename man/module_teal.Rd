@@ -10,28 +10,31 @@
 \usage{
 ui_filter_panel(id)
 
-srv_filter_panel(id, filter, datasets, active_datanames)
+srv_filter_panel(id, datasets, active_datanames)
 
 ui_teal(
   id,
-  splash_ui = tags$h2("Starting the Teal App"),
+  modules,
+  data = NULL,
   title = build_app_title(),
   header = tags$p(),
   footer = tags$p()
 )
 
-srv_teal(id, modules, teal_data_rv, filter = teal_slices())
+srv_teal(id, data, modules, filter = teal_slices())
 }
 \arguments{
 \item{id}{(\code{character(1)}) module id}
 
-\item{filter}{(\code{teal_slices}) filter object}
-
 \item{datasets}{(\code{reactive}) reactive \code{FilteredData} object}
 
-\item{splash_ui}{(\code{shiny.tag}) UI to display initially,
-can be a splash screen or a \code{shiny} module UI. For the latter, see
-\code{\link[=init]{init()}} about how to call the corresponding server function.}
+\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
+nested list of \code{teal_modules} or \code{teal_module} objects or a single
+\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
+will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+more details.}
+
+\item{data}{(\code{teal_data}, \code{teal_data_module} or \code{reactive} returning \code{teal_data})}
 
 \item{title}{(\code{shiny.tag} or \code{character(1)})
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
@@ -44,12 +47,7 @@ The header of the app.}
 \item{footer}{(\code{shiny.tag} or \code{character(1)})
 The footer of the app.}
 
-\item{modules}{(\code{teal_modules}) object containing the output modules which
-will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
-more details.}
-
-\item{teal_data_rv}{(\code{reactive})
-returns the \code{teal_data}, only evaluated once, \code{NULL} value is ignored}
+\item{filter}{(\code{teal_slices}) filter object}
 }
 \value{
 Returns a \code{reactive} expression which returns the currently active module.
@@ -57,26 +55,22 @@ Returns a \code{reactive} expression which returns the currently active module.
 \description{
 Reactive filter panel module in teal
 
-This is the main \code{teal} app that puts everything together.
+This module is a central point of the \code{teal} app. It is called by \code{\link[=init]{init()}} but can be also
+used as a standalone module in your custom application. It is responsible for creating the main
+\code{shiny} app layout and initializing all the necessary components:
+\itemize{
+\item \code{\link{module_data}} - for handling the \code{data}.
+\item \code{\link{module_teal_module}} - for handling the \code{modules}.
+\item \code{\link{module_filter_manager}} - for handling the \code{filter}.
+\item \code{\link{module_snapshot_manager}} - for handling the \code{snapshots}.
+\item \code{\link{module_bookmark_manager}} - for handling the \code{bookmarks}.
+}
 }
 \details{
-It displays the splash UI which is used to fetch the data, possibly
-prompting for a password input to fetch the data. Once the data is ready,
-the splash screen is replaced by the actual \code{teal} UI that is tabsetted and
-has a filter panel with \code{datanames} that are relevant for the current tab.
-Nested tabs are possible, but we limit it to two nesting levels for reasons
-of clarity of the UI.
-
-The splash screen functionality can also be used
-for non-delayed data which takes time to load into memory, avoiding
-\code{shiny} session timeouts.
-
-Server evaluates the \code{teal_data_rv} (delayed data mechanism) and creates the
-\code{datasets} object that is shared across modules.
-Once it is ready and non-\code{NULL}, the splash screen is replaced by the
-main \code{teal} UI that depends on the data.
-The currently active tab is tracked and the right filter panel
-updates the displayed datasets to filter for according to the active \code{datanames}
-of the tab.
+This module establishes reactive connection between the \code{data} and every other component in the app.
+Reactive change of the \code{data} triggers reload of the app and possibly keeping all inputs settings
+the same so the user can continue where one left off.
+Similar applies to \code{\link{module_bookmark_manager}} which allows to start a new session with restored
+inputs.
 }
 \keyword{internal}

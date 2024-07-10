@@ -16,6 +16,7 @@
 #' @inheritParams module_data
 #' @return (`reactive` returning `teal_data`)
 #' @rdname validate_reactive_teal_data
+#' @name validate_reactive_teal_data
 #' @keywords internal
 NULL
 
@@ -95,7 +96,7 @@ srv_validate_reactive_teal_data <- function(id, data, modules, filter) {
     output$response <- renderUI({
       if (!is.null(data_validated())) {
         showNotification("Data loaded successfully.", duration = 5)
-        shinyjs::enable(selector = "#root_module-active_tab.nav-tabs a")
+        shinyjs::enable(selector = "#teal_modules-active_tab.nav-tabs a")
         removeModal()
       }
       NULL
