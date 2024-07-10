@@ -225,7 +225,7 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
   ))
 
   get_experiment_keys <- function(mae, experiment) {
-    sample_subset <- subset(MultiAssayExperiment::sampleMap(mae), subset = colname %in% colnames(experiment))
+    sample_subset <- subset(mae@sampleMap, subset = colname %in% colnames(experiment))
     length(unique(sample_subset$primary))
   }
 
