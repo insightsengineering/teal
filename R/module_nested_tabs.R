@@ -99,6 +99,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         column(width = 9, do.call(modules$ui, args), class = "teal_primary_col"),
         column(
           width = 3,
+          ui_data_summary(ns("data_summary")),
           ui_filter_panel(ns("filter_panel")),
           class = "teal_secondary_col"
         )
@@ -246,6 +247,7 @@ srv_teal_module.teal_module <- function(id,
     filtered_teal_data <- eventReactive(trigger_data(), {
       .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
     })
+    srv_data_summary("data_summary", filtered_teal_data)
 
     # Call modules.
     module_out <- reactiveVal(NULL)
