@@ -205,8 +205,8 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
   experiment_names <- names(unfiltered_data)
   mae_info <- data.frame(
     dataname = dataname,
-    subjects = nrow(SummarizedExperiment::colData(unfiltered_data)),
-    subjects_filtered = nrow(SummarizedExperiment::colData(filtered_data))
+    subjects = nrow(unfiltered_data@colData),
+    subjects_filtered = nrow(filtered_data@colData)
   )
 
   experiment_obs_info <- do.call("rbind", lapply(
