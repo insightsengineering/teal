@@ -96,18 +96,23 @@ teal_lockfile_downloadhandler <- function() {
   )
 }
 
-lockfile_status <- function() {
-  process <- session$userData$lockfile_process
-  if (!process$is_alive()) {
-    renv_logs <- process$read_output()
-
-    if (any(grepl("Lockfile written", renv_logs))) {
-      logger::log_trace("lockfile created successfully.")
-    } else {
-      logger::log_trace("lockfile created with issues.")
-    }
-    TRUE
+lockfile_status <- function(process) {
+  renv_logs <- process$read_output()
+  if (any(grepl("Lockfile written", renv_logs))) {
+    logger::log_trace("lockfile created successfully.")
   } else {
-    FALSE
+    logger::log_trace("lockfile created with issues.")
   }
+}
+
+lockfile_status_tracker <- function(process) {
+  timer <- reactiveTimer(1000)
+
+  tracker <- observe({
+    timer()
+    if (!process$is_alive()) {
+      lockfile_status(process)
+      tracker$destroy()
+    }
+  })
 }
