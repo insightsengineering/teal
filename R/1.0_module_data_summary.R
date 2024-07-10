@@ -1,3 +1,24 @@
+#' Data summary
+#' @description
+#' Module and its utils to display the number of rows and subjects in the filtered and unfiltered data.
+#'
+#' @details Handling different data classes:
+#' `get_object_filter_overview()` is a pseudo S3 method which has variants for:
+#' - `array` (`data.frame`, `DataFrame`, `array`, `Matrix` and `SummarizedExperiment`): Method variant
+#' can be applied to any two-dimensional objects on which [ncol()] can be used.
+#' - `MultiAssayExperiment`: for which summary contains counts for `colData` and all `experiments`.
+#'
+#' @param id (`character(1)`)
+#'  `shiny` module instance id.
+#' @param teal_data (`reactive` returning `teal_data`)
+#'
+#' @name module_data_summary
+#' @rdname module_data_summary
+#' @return `NULL`.
+NULL
+
+#' @rdname module_data_summary
+#' @keywords internal
 ui_data_summary <- function(id) {
   ns <- NS(id)
   tags$div(
@@ -30,19 +51,13 @@ ui_data_summary <- function(id) {
   )
 }
 
-#' @description
-#' Server function to display the number of records in the filtered and unfiltered data.
-#'
-#' @param id (`character(1)`)
-#'   `shiny` module instance id.
-#' @param filtered_teal_data (`reactive`) (`teal_data`) an output of `.make_teal_data()`
-#' @return `NULL`.
-srv_data_summary <- function(id, filtered_teal_data) {
-  checkmate::check_class(filtered_teal_data, "reactive")
+#' @rdname module_data_summary
+#' @keywords internal
+srv_data_summary <- function(id, teal_data) {
+  checkmate::check_class(teal_data, "reactive")
   moduleServer(
     id = id,
     function(input, output, session) {
-      # shinyjs::hide(id = "teal-main_ui-filter_panel-overview") # this doesnt hide filter-panel-overiw from teal.slice YET
       logger::log_trace("srv_data_summary initializing")
 
       observeEvent(input$minimise_filter_overview, {
@@ -52,14 +67,14 @@ srv_data_summary <- function(id, filtered_teal_data) {
       })
 
       output$table <- renderUI({
-        req(inherits(filtered_teal_data(), "teal_data"))
+        req(inherits(teal_data(), "teal_data"))
         logger::log_trace("srv_data_summary updating counts")
 
-        if (length(datanames(filtered_teal_data())) == 0) {
+        if (length(datanames(teal_data())) == 0) {
           return(NULL)
         }
 
-        filter_overview <- get_filter_overview(filtered_teal_data)
+        filter_overview <- get_filter_overview(teal_data)
 
         attr(filter_overview$dataname, "label") <- "Data Name"
 
@@ -132,21 +147,21 @@ srv_data_summary <- function(id, filtered_teal_data) {
           tags$thead(header_html),
           tags$tbody(body_html)
         )
-        logger::log_trace("srv_data_summary updated counts")
         table_html
       })
-      logger::log_trace("srv_data_summary initialized")
       NULL
     }
   )
 }
 
+#' @rdname module_data_summary
+#' @keywords internal
 get_filter_overview <- function(teal_data) {
   logger::log_trace("srv_data_overiew-get_filter_overview initialized")
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
   filtered_data_objs <- sapply(datanames, function(name) teal_data()@env[[name]])
-  unfiltered_data_objs <- sapply(datanames, function(name) teal_data()@env[[paste0(name, '_raw')]])
+  unfiltered_data_objs <- sapply(datanames, function(name) teal_data()@env[[paste0(name, "_raw")]])
 
   rows <- lapply(
     datanames,
@@ -165,6 +180,8 @@ get_filter_overview <- function(teal_data) {
   dplyr::bind_rows(c(rows[!unssuported_idx], rows[unssuported_idx]))
 }
 
+#' @rdname module_data_summary
+#' @keywords internal
 get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname, joinkeys) {
   if (inherits(filtered_data, c("data.frame", "DataFrame", "array", "Matrix", "SummarizedExperiment"))) {
     get_object_filter_overview_array(filtered_data, unfiltered_data, dataname, joinkeys)
@@ -179,8 +196,9 @@ get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname,
   }
 }
 
+#' @rdname module_data_summary
+#' @keywords internal
 get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dataname, joinkeys) {
-
   subject_keys <- Reduce(intersect, joinkeys[[dataname]])
 
   if (length(subject_keys) == 0) {
@@ -200,8 +218,9 @@ get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dat
   }
 }
 
+#' @rdname module_data_summary
+#' @keywords internal
 get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfiltered_data, dataname) {
-
   experiment_names <- names(unfiltered_data)
   mae_info <- data.frame(
     dataname = dataname,
