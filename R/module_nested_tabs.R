@@ -100,7 +100,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         column(
           width = 3,
           ui_data_summary(ns("data_summary")),
-          ui_filter_panel(ns("module_filter_panel")),
+          ui_filter_panel(ns("filter_panel")),
           class = "teal_secondary_col"
         )
       )
@@ -223,7 +223,7 @@ srv_teal_module.teal_module <- function(id,
     #   and if it is not set, then it won't be available in the srv_filter_panel
     srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
     srv_filter_panel(
-      "module_filter_panel",
+      "filter_panel",
       datasets = datasets,
       active_datanames = active_datanames
     )

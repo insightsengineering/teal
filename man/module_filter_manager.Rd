@@ -2,48 +2,78 @@
 % Please edit documentation in R/module_filter_manager.R
 \name{module_filter_manager}
 \alias{module_filter_manager}
-\alias{filter_manager_ui}
 \alias{filter_manager}
-\alias{filter_manager_module}
-\alias{filter_manager_srv}
+\alias{slices_global}
+\alias{ui_filter_manager_panel}
+\alias{srv_filter_manager_panel}
+\alias{ui_filter_manager}
+\alias{srv_filter_manager}
+\alias{srv_module_filter_manager}
+\alias{.make_slices_global}
 \title{Manage multiple \code{FilteredData} objects}
 \usage{
-filter_manager_ui(id)
+ui_filter_manager_panel(id)
 
-filter_manager_srv(id, is_module_specific)
+srv_filter_manager_panel(id, slices_global)
+
+ui_filter_manager(id)
+
+srv_filter_manager(id, slices_global)
+
+srv_module_filter_manager(id, module_fd, slices_global)
+
+.make_slices_global(filter, module_labels)
 }
 \arguments{
 \item{id}{(\code{character(1)})
 \code{shiny} module instance id.}
 
-\item{datasets}{(named \code{list})
-A list, possibly nested, of \code{FilteredData} objects.
-Each \code{FilteredData} will be served to one module in the \code{teal} application.
-The structure of the list must reflect the nesting of modules in tabs
-and the names of the list must match the labels of their respective modules.}
+\item{slices_global}{(\code{reactiveVal})
+containing \code{teal_slices}.}
+
+\item{module_fd}{(\code{FilteredData})
+Object containing the data to be filtered in a single \code{teal} module.}
+
+\item{filter}{(\code{teal_slices})
+initial \code{teal} filter settings.}
 }
 \value{
-A \code{list} containing:
-
-objects used by other manager modules
-\itemize{
-\item \code{datasets_flat}: named list of \code{FilteredData} objects,
-\item \code{mapping_matrix}: \code{reactive} containing a \code{data.frame},
-\item \code{slices_global}: \code{reactiveVal} containing a \code{teal_slices} object,
-}
-
-objects used for testing
-\itemize{
-\item modules_out: \code{list} of \code{reactive}s, each holding a \code{teal_slices}, as returned by \code{filter_manager_module_srv}.
-}
+Module returns a \code{slices_global} (\code{reactiveVal}) containing a \code{teal_slices} object with mapping.
 }
 \description{
 Oversee filter states across the entire application.
 }
-\details{
-This module observes changes in the filters of each \code{FilteredData} object
-and keeps track of all filters used. A mapping of filters to modules
-is kept in the \code{mapping_matrix} object (which is actually a \code{data.frame})
-that tracks which filters (rows) are active in which modules (columns).
+\section{Slices global}{
+
+The key role in this process is played by the single \code{slices_global} (\code{reactiveVal}) object
+which stores all \code{teal_slice} objects and mapping to each module.
+\code{slices_global} is created by \code{.make_slices_global} function which in the same time resolves
+\code{attr("mapping")} to keep it consistent for filter manager:
+\itemize{
+\item list contains elements named after modules' labels containing \code{id} of active slices. Initially,
+app developer can specify mapping for some modules, and \code{make_slices_global} includes unspecified
+modules in the mapping list.
+\item element \code{global_filters} in the mapping list is removed in favour of module slots.
 }
+}
+
+\section{Filter manager}{
+
+Filter-manager is split into two parts:
+\enumerate{
+\item \code{ui/srv_filter_manager_panel} - Called once for the whole app. This module observes changes in
+the filters in \code{slices_global} and displays them in a table utilising information from \code{mapping}:
+}
+\itemize{
+\item ✅ (\code{TRUE}) - filter is active in the module
+\item ❌ (\code{FALSE}) - filter is inactive in the module
+\item 🔲 (\code{NA}) - filter is not available in the module
+}
+\enumerate{
+\item \code{ui/srv_module_filter_manager} - Called once for each \code{teal_module}. Handling filter states
+for of single module and keeping module \code{FilteredData} consistent with \code{slices_global}, so that
+local filters are always reflected in the \code{slices_global} and its mapping and vice versa.
+}
+}
+
 \keyword{internal}
