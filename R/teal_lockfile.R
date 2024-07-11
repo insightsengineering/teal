@@ -99,10 +99,11 @@ lockfile_status <- function(process) {
   )
   logger::log_trace(message)
   shiny::showNotification(message)
-  shinyjs::show("teal-lockFile")
+  shinyjs::show(selector = "#teal-lockFile")
 }
 
 lockfile_status_tracker <- function(process) {
+  checkmate::assert_class(process, "r_process")
   timer <- reactiveTimer(1000)
 
   tracker <- observe({
