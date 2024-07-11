@@ -98,11 +98,13 @@ teal_lockfile_downloadhandler <- function() {
 
 lockfile_status <- function(process) {
   renv_logs <- process$read_output()
-  if (any(grepl("Lockfile written", renv_logs))) {
-    logger::log_trace("lockfile created successfully.")
-  } else {
-    logger::log_trace("lockfile created with issues.")
-  }
+  message <- ifelse(
+    any(grepl("Lockfile written", renv_logs)),
+    "lockfile created successfully.",
+    "lockfile created with issues."
+  )
+  logger::log_trace(message)
+  shiny::showNotification(message)
 }
 
 lockfile_status_tracker <- function(process) {
