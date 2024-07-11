@@ -83,12 +83,6 @@ teal_lockfile_downloadhandler <- function() {
     },
     content = function(file) {
       teal_lockfile <- "teal_app.lock"
-      iter <- 1
-      while (!file.exists(teal_lockfile) && iter <= 100) {
-        logger::log_trace("lockfile not created yet, retrying...")
-        Sys.sleep(0.25)
-        iter <- iter + 1 # max wait time is 25 seconds
-      }
       file.copy(teal_lockfile, file)
       file
     },
@@ -105,6 +99,7 @@ lockfile_status <- function(process) {
   )
   logger::log_trace(message)
   shiny::showNotification(message)
+  shinyjs::show("teal-lockFile")
 }
 
 lockfile_status_tracker <- function(process) {

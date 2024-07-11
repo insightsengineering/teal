@@ -112,7 +112,7 @@ ui_teal <- function(id,
         footer,
         teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
         br(),
-        downloadLink(ns("lockFile"), "Download .lock file"),
+        shinyjs::hidden(downloadLink(ns("lockFile"), "Download .lock file")),
         textOutput(ns("identifier"))
       )
     )
