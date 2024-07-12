@@ -64,7 +64,7 @@ teal_lockfile <- function() {
     run = create_renv_lockfile,
     opts = options(),
     libpaths = .libPaths(),
-    sysenv = as.list(Sys.getenv()) # normally output is a class of "Dlist",
+    sysenv = as.list(Sys.getenv()), # normally output is a class of "Dlist"
     wd = getwd()
   )
   logger::log_trace("Lockfile creation started based on { getwd() }.")
@@ -104,6 +104,47 @@ create_renv_lockfile <- function(lockfile_path = NULL, opts, sysenv, libpaths, w
 
 #' @rdname teal_lockfile
 #' @keywords internal
+lockfile_status_tracker <- function(process) {
+  # todo: make sure that status doesn't need to be checked when file already existed
+  if (!is.null(isolate(process))) {
+    tracker <- observeEvent(process$status(), {
+      if (process$status() != "running") {
+        lockfile_status_handler(process)
+      }
+    })
+  }
+}
+
+#' @rdname teal_lockfile
+#' @keywords internal
+lockfile_status_handler <- function(process) {
+  # todo: make sure that we catch all possible status outputs
+  #     - normally getwd should be set to the app directory (snapshot based on the app files)
+  #     - what happens if app directory is set to a different location?
+  #     - what if setwd is set to a directory which doesn't contain anything
+  #     - check out possible ERROR and WARNING
+  renv_logs <- process$result()
+  if (any(grepl("Lockfile written to", renv_logs$out))) {
+    with <- if (any(grepl("WARNING:", renv_logs$out))) {
+      " with warning(s)"
+    } else if (any(grepl("ERROR:", renv_logs$out))) {
+      " with error(s)"
+    } else {
+      ""
+    }
+
+    logger::log_trace("Lockfile {renv_logs$lockfile_path} containing { renv_logs$length } packages created{ with }.")
+    shiny::showNotification("Lockfile available to download.")
+    shinyjs::show(selector = "#teal-lockFile")
+  } else {
+    warning("Lockfile creation failed.")
+    shiny::showNotification("Lockfile creation failed.", type = "warning")
+    shiny::removeUI(selector = "#teal-lockFile")
+  }
+}
+
+#' @rdname teal_lockfile
+#' @keywords internal
 teal_lockfile_downloadhandler <- function() {
   downloadHandler(
     filename = function() {
@@ -116,43 +157,4 @@ teal_lockfile_downloadhandler <- function() {
     },
     contentType = "application/json"
   )
-}
-
-#' @rdname teal_lockfile
-#' @keywords internal
-lockfile_status_handler <- function(process) {
-  renv_logs <- process$result()
-  message <- if (any(grepl("Lockfile written to", renv_logs$out))) {
-    with <- if (any(grepl("WARNING:", renv_logs$out))) {
-      "with warning(s)"
-    } else if (any(grepl("ERROR:", renv_logs$out))) {
-      "with error(s)"
-    } else {
-      ""
-    }
-
-    message <- sprintf(
-      "Lockfile %s containing %s packages saved %s.",
-      renv_logs$lockfile_path,
-      renv_logs$length,
-      with
-    )
-    shinyjs::show(selector = "#teal-lockFile")
-  } else {
-    "Lockfile creation failed."
-  }
-  logger::log_trace(message)
-  shiny::showNotification(message)
-}
-
-#' @rdname teal_lockfile
-#' @keywords internal
-lockfile_status_tracker <- function(process) {
-  if (!is.null(isolate(process))) {
-    tracker <- observeEvent(process$status(), {
-      if (process$status() != "running") {
-        lockfile_status_handler(process)
-      }
-    })
-  }
 }
