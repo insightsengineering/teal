@@ -1,7 +1,18 @@
-#' Generate lockfile for application reproducibility
+#' Generate lockfile for application's environment reproducibility
 #'
-#' This function is invoked during [teal::init] to create `renv`-compatible lockfile for use within the application.
+#' @section lockfile creation steps:
+#' Process is split into multiple steps.
 #'
+#' 1. `teal_lockfile` is executed in [init] before application starts. It is better when process starts in
+#' [init] as it is a one-time process and does not need to be repeated when each `shiny` session starts.
+#' Function invokes `ExtendedTask` with `create_renv_lockfile` to begin creation of the lockfile.
+#' 2. `ExtendedTask` with background `mirai` process is passed to the `lockfile_status_handler` to track the
+#' status of the task.
+#' 3. Once `ExtendedTask` is completed, `lockfile_status_handler` is triggered to log the status of the lockfile,
+#' send a notification to UI and show the download button.
+#' 4. `teal_lockfile_downloadhandler` is used to download the lockfile (when button is shown).
+#'
+#' @section Different ways of creating lockfile:
 #' The function leverages [renv::snapshot()], which offers multiple methods for lockfile creation.
 #'
 #' - User-specified:
@@ -33,6 +44,7 @@ teal_lockfile <- function() {
   if (!identical(user_lockfile, "")) {
     if (file.exists(user_lockfile)) {
       file.copy(user_lockfile, lockfile_path)
+      logger::log_trace('Lockfile set using option "teal.renv.lockfile" - skipping automatic creation.')
       return(invisible(NULL))
     } else {
       stop("lockfile provided through options('teal.renv.lockfile') does not exist.")
@@ -40,42 +52,54 @@ teal_lockfile <- function() {
   }
 
   shiny::onStop(function() file.remove(lockfile_path))
+  process <- ExtendedTask$new(function(...) {
+    mirai::mirai(
+      run(lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths),
+      ...
+    )
+  })
 
-  process <- callr::r_bg( # callr process needs to be assigned to an object so does shiny doesn't kill it on shinyApp
-    func = create_renv_lockfile,
-    args = list(
-      lockfile_path = lockfile_path,
-      opts = options()
-    ),
-    # renv setup is orchestrated by its special S3 objects: renv::settings, renv::config and renv::paths
-    #     `package` parameter include `renv` namespace inside the environment of `func = create_renv_lockfile`
-    package = "renv",
-    # callr process will use environmental variables from the main session (parent process)
-    env = Sys.getenv()
+  process$invoke(
+    lockfile_path = lockfile_path,
+    run = create_renv_lockfile,
+    opts = options(),
+    libpaths = .libPaths(),
+    sysenv = as.list(Sys.getenv()) # normally output is a class of "Dlist"
   )
+  logger::log_trace("Lockfile creation started based on { getwd() }.")
 
-  logger::log_trace("lockfile creation started.")
   process
 }
 
-create_renv_lockfile <- function(lockfile_path = NULL, opts = NULL) {
-  checkmate::assert_string(lockfile_path, na.ok = TRUE)
+#' @rdname teal_lockfile
+#' @keywords internal
+create_renv_lockfile <- function(lockfile_path = NULL, opts, sysenv, libpaths) {
+  checkmate::assert_string(lockfile_path)
   checkmate::assert_list(opts)
-
+  checkmate::assert_character(libpaths, min.len = 1)
+  checkmate::assert_class(sysenv, "list")
   options(opts)
+  lapply(names(sysenv), function(sysvar) do.call(Sys.setenv, sysenv[sysvar]))
+  .libPaths(libpaths)
 
-  print( # print() is required for callr::r_bg to track output with $read_output()
-    utils::capture.output(
-      renv::snapshot(
-        lockfile = lockfile_path,
-        prompt = FALSE,
-        force = TRUE
-        # type = is taken from renv::settings$snapshot.type()
-      )
+  out <- capture.output(
+    renv <- renv::snapshot(
+      lockfile = lockfile_path,
+      prompt = FALSE,
+      force = TRUE
+      # type = is taken from renv::settings$snapshot.type()
     )
+  )
+
+  list(
+    out = out,
+    lockfile_path = lockfile_path,
+    length = length(renv$Packages)
   )
 }
 
+#' @rdname teal_lockfile
+#' @keywords internal
 teal_lockfile_downloadhandler <- function() {
   downloadHandler(
     filename = function() {
@@ -90,27 +114,41 @@ teal_lockfile_downloadhandler <- function() {
   )
 }
 
-lockfile_status <- function(process) {
-  renv_logs <- process$read_output()
-  message <- ifelse(
-    any(grepl("Lockfile written", renv_logs)),
-    "lockfile created successfully.",
-    "lockfile created with issues."
-  )
+#' @rdname teal_lockfile
+#' @keywords internal
+lockfile_status_handler <- function(process) {
+  renv_logs <- process$result()
+  message <- if (any(grepl("Lockfile written to", renv_logs$out))) {
+    with <- if (any(grepl("WARNING:", renv_logs$out))) {
+      "with warning(s)"
+    } else if (any(grepl("ERROR:", renv_logs$out))) {
+      "with error(s)"
+    } else {
+      ""
+    }
+
+    message <- sprintf(
+      "Lockfile %s containing %s packages saved %s.",
+      renv_logs$lockfile_path,
+      renv_logs$length,
+      with
+    )
+    shinyjs::show(selector = "#teal-lockFile")
+  } else {
+    "Lockfile creation failed."
+  }
   logger::log_trace(message)
   shiny::showNotification(message)
-  shinyjs::show(selector = "#teal-lockFile")
 }
 
+#' @rdname teal_lockfile
+#' @keywords internal
 lockfile_status_tracker <- function(process) {
-  checkmate::assert_class(process, "r_process")
-  timer <- reactiveTimer(1000)
-
-  tracker <- observe({
-    timer()
-    if (!process$is_alive()) {
-      lockfile_status(process)
-      tracker$destroy()
-    }
-  })
+  if (!is.null(isolate(process))) {
+    tracker <- observeEvent(process$status(), {
+      if (process$status() != "running") {
+        lockfile_status_handler(process)
+      }
+    })
+  }
 }
