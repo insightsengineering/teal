@@ -54,7 +54,7 @@ teal_lockfile <- function() {
   shiny::onStop(function() file.remove(lockfile_path))
   process <- ExtendedTask$new(function(...) {
     mirai::mirai(
-      run(lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths),
+      run(lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd),
       ...
     )
   })
@@ -64,7 +64,8 @@ teal_lockfile <- function() {
     run = create_renv_lockfile,
     opts = options(),
     libpaths = .libPaths(),
-    sysenv = as.list(Sys.getenv()) # normally output is a class of "Dlist"
+    sysenv = as.list(Sys.getenv()) # normally output is a class of "Dlist",
+    wd = getwd()
   )
   logger::log_trace("Lockfile creation started based on { getwd() }.")
 
@@ -73,14 +74,17 @@ teal_lockfile <- function() {
 
 #' @rdname teal_lockfile
 #' @keywords internal
-create_renv_lockfile <- function(lockfile_path = NULL, opts, sysenv, libpaths) {
+create_renv_lockfile <- function(lockfile_path = NULL, opts, sysenv, libpaths, wd) {
+  # todo: need to setwd() to
   checkmate::assert_string(lockfile_path)
   checkmate::assert_list(opts)
-  checkmate::assert_character(libpaths, min.len = 1)
   checkmate::assert_class(sysenv, "list")
+  checkmate::assert_character(libpaths, min.len = 1)
+  checkmate::assert_directory(wd)
   options(opts)
   lapply(names(sysenv), function(sysvar) do.call(Sys.setenv, sysenv[sysvar]))
   .libPaths(libpaths)
+  setwd(wd)
 
   out <- capture.output(
     renv <- renv::snapshot(
