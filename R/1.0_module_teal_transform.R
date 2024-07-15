@@ -45,7 +45,8 @@ ui_teal_data_module <- function(id, transformers, class = "") {
         # ),
         div(
           id = ns(sprintf("wrapper_data_%d", i)),
-          data_mod$ui(id = ns(sprintf("data_%d", i)))
+          data_mod$ui(id = ns(sprintf("data_%d", i))),
+          ui_validate_reactive_teal_data(ns(sprintf("validate_%d", i)))
         )
       )
     }
@@ -86,10 +87,17 @@ srv_teal_data_module <- function(id, teal_data, transformers, modules) {
       function(x, i) {
         data <- transformers[[i]]$server(id = sprintf("data_%d", i), data = x)
         data_validated <- srv_validate_reactive_teal_data(
-          sprintf("validate_%d", i),
-          data = data
+          id = sprintf("validate_%d", i),
+          data = data,
+          modules = modules(modules)
         )
-        data_validated
+        reactive({
+          if (isTruthy(data_validated())) {
+            data_validated()
+          } else {
+            x()
+          }
+        })
       },
       seq_along(transformers),
       init = teal_data
