@@ -7,7 +7,7 @@
 #' as well as to save it to file in order to share it with an app developer or other users,
 #' who in turn can upload it to their own session.
 #'
-#' The snapshot manager is accessed with the camera icon in the [`wunder_bar`].
+#' The snapshot manager is accessed with the camera icon in the tabset bar.
 #' At the beginning of a session it presents three icons: a camera, an upload, and an circular arrow.
 #' Clicking the camera captures a snapshot, clicking the upload adds a snapshot from a file
 #' and applies the filter states therein, and clicking the arrow resets initial application state.
@@ -74,23 +74,20 @@
 #' @param id (`character(1)`) `shiny` module instance id.
 #' @param slices_global (`reactiveVal`) that contains a `teal_slices` object
 #'                      containing all `teal_slice`s existing in the app, both active and inactive.
-#' @param mapping_matrix (`reactive`) that contains a `data.frame` representation
-#'                       of the mapping of filter state ids (rows) to modules labels (columns);
-#'                       all columns are `logical` vectors.
-#' @param datasets non-nested (named `list`) of `FilteredData` objects.
 #'
 #' @return `list` containing the snapshot history, where each element is an unlisted `teal_slices` object.
 #'
 #' @name module_snapshot_manager
-#' @aliases snapshot snapshot_manager snapshot_manager_module
+#' @rdname module_snapshot_manager
+#'
+#' @aliases snapshot_manager
 #'
 #' @author Aleksander Chlebowski
 #'
 NULL
 
-#' @rdname module_snapshot_manager_panel
+#' @rdname module_snapshot_manager
 #' @keywords internal
-#'
 ui_snapshot_manager_panel <- function(id) {
   ns <- NS(id)
   tags$button(
@@ -101,7 +98,7 @@ ui_snapshot_manager_panel <- function(id) {
   )
 }
 
-#' @rdname module_snapshot_manager_panel
+#' @rdname module_snapshot_manager
 #' @keywords internal
 #'
 srv_snapshot_manager_panel <- function(id, slices_global) {
@@ -125,6 +122,7 @@ srv_snapshot_manager_panel <- function(id, slices_global) {
 }
 
 #' @rdname module_snapshot_manager
+#' @keywords internal
 #' @keywords internal
 #'
 ui_snapshot_manager <- function(id) {
@@ -217,7 +215,7 @@ srv_snapshot_manager <- function(id, slices_global) {
         snapshot_history(snapshot_update)
         removeModal()
         # Reopen filter manager modal by clicking button in the main application.
-        shinyjs::click(id = "teal-main_ui-wunder_bar-show_snapshot_manager", asis = TRUE)
+        shinyjs::click(id = "teal-wunder_bar-show_snapshot_manager", asis = TRUE)
       }
     })
 

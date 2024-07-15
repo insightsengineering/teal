@@ -1,6 +1,43 @@
+#' Data module for teal
+#'
+#' Fundamental data class for teal is [teal.data::teal_data()]. Data can be
+#' passed in multiple ways:
+#' 1. Directly as a [teal.data::teal_data()] object.
+#' 2. As a `reactive` object returning [teal.data::teal_data()]. [See section](#reactive-teal_data).
+#'
+#' @section Reactive `teal_data`:
+#'
+#' [teal.data::teal_data()] can change depending on the reactive context and `srv_teal` will rebuild
+#' the app accordingly. There are two ways of interacting with the data:
+#' 1. Using a `reactive` object passed from outside the `teal` application. In this case, reactivity
+#' is controlled by external module and `srv_teal` will trigger accordingly to the changes.
+#' 2. Using [teal_data_module()] which is embedded in the `teal` application and data can be
+#' resubmitted when needed by the user.
+#'
+#' Since server of [teal_data_module()] must return `reactive` `teal_data` object, it means that
+#' both scenarios (1) and (2) are having the same effect for the reactivity of a `teal` application.
+#' The difference is that in the first case the data is controlled from outside the app and in the
+#' second case the data is controlled from custom module called inside of the app.
+#'
+#' see [`validate_reactive_teal_data`] for more details.
+#'
+#' @inheritParams init
+#'
+#' @param data (`teal_data`, `teal_data_module` or `reactive` returning `teal_data`)
+#' @return A `reactiveVal` which is set to:
+#' - `teal_data` when the object is validated
+#' - `NULL` when not validated.
+#' Important: `srv_data` suppress validate messages and returns `NULL` so that `srv_teal` can
+#' stop the reactive cycle as `observeEvent` calls based on the data have `ignoreNULL = TRUE`.
+#'
+#' @rdname module_data
+#' @name module_data
+NULL
+
+#' @rdname module_data
+#' @keywords internal
 ui_data <- function(id, data, title, header, footer) {
   ns <- shiny::NS(id)
-
   shiny::div(
     style = "display: inline-block;",
     if (inherits(data, "teal_data_module")) {
@@ -11,7 +48,9 @@ ui_data <- function(id, data, title, header, footer) {
   )
 }
 
-srv_data <- function(id, data, modules, filter) {
+#' @rdname module_data
+#' @keywords internal
+srv_data <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
   checkmate::assert_class(modules, "teal_modules")
@@ -24,9 +63,9 @@ srv_data <- function(id, data, modules, filter) {
       shinyjs::showLog()
     }
 
-    # teal_data_rv contains teal_data object
+    # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
-    teal_data_rv <- if (inherits(data, "teal_data_module")) {
+    data_unvalidated <- if (inherits(data, "teal_data_module")) {
       data$server(id = "teal_data_module")
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
@@ -34,17 +73,7 @@ srv_data <- function(id, data, modules, filter) {
       data
     }
 
-    teal_data_rv_validate <- validate_reactive_teal_data(teal_data_rv)
-
-    output$response <- renderUI({
-      data <- teal_data_rv_validate()
-      if (!is.null(data)) {
-        showNotification("Data loaded successfully.", duration = 5)
-        shinyjs::enable(selector = "#root_module-active_tab.nav-tabs a")
-        removeModal()
-      }
-      NULL
-    })
+    data_validated <- srv_validate_reactive_teal_data("validate_teal_data", data_unvalidated, modules, filter)
 
     setBookmarkExclude("open_teal_data_module")
 
@@ -61,7 +90,7 @@ srv_data <- function(id, data, modules, filter) {
           class = ifelse(easy_close, "blur_background", "hide_background"),
           tags$div(
             data$ui(session$ns("teal_data_module")),
-            uiOutput(session$ns("response"))
+            ui_validate_reactive_teal_data(session$ns("validate_teal_data"))
           ),
           footer = footer,
           easyClose = easy_close
@@ -70,16 +99,16 @@ srv_data <- function(id, data, modules, filter) {
     })
 
     if (inherits(data, "teal_data_module")) {
-      shinyjs::disable(selector = "#root_module-active_tab.nav-tabs a")
+      shinyjs::disable(selector = "#teal_modules-active_tab.nav-tabs a")
       shinyjs::click(id = "open_teal_data_module")
     }
 
     data_rv <- reactiveVal(NULL)
-    observeEvent(teal_data_rv_validate(), {
-      data_rv(teal_data_rv_validate())
+    observeEvent(data_validated(), {
+      data_rv(data_validated())
     })
 
-    observeEvent(teal_data_rv_validate(), once = TRUE, {
+    observeEvent(data_validated(), once = TRUE, {
       # Excluding the ids from teal_data_module using full namespace and global shiny app session.
       app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
       setBookmarkExclude(

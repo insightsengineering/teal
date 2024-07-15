@@ -29,13 +29,20 @@
 #' - set `options(shiny.bookmarkStore = "server")` before running the app
 #'
 #'
-#' @inheritParams module_wunder_bar
+#' @inheritParams init
 #'
 #' @return Invisible `NULL`.
 #'
 #' @aliases bookmark bookmark_manager bookmark_manager_module
 #'
 #' @name module_bookmark_manager
+#' @rdname module_bookmark_manager
+#'
+#' @keywords internal
+#'
+NULL
+
+#' @rdname module_bookmark_manager
 #' @keywords internal
 #'
 ui_bookmark_panel <- function(id, modules) {
@@ -65,7 +72,6 @@ ui_bookmark_panel <- function(id, modules) {
 
 #' @rdname module_bookmark_manager
 #' @keywords internal
-#'
 srv_bookmark_panel <- function(id, modules) {
   checkmate::assert_character(id)
   checkmate::assert_class(modules, "teal_modules")

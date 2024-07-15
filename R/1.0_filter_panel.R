@@ -20,7 +20,7 @@ srv_filter_panel <- function(id, datasets, active_datanames) {
   checkmate::assert_class(datasets, "reactive")
   moduleServer(id, function(input, output, session) {
     output$panel <- renderUI({
-      req(datasets())
+      req(inherits(datasets(), "FilteredData"))
       isolate({
         # render will be triggered only when FilteredData object changes (not when filters change)
         # technically it means that teal_data_module needs to be refreshed

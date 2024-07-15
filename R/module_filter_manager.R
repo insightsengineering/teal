@@ -1,22 +1,28 @@
 #' Manage multiple `FilteredData` objects
 #'
-#' Oversee filter states across the entire application. The key role in this process is played by
-#' the single `slices_global` (`reactiveVal`) object which stores all `teal_slice` objects and
-#' mapping attribute to each module.
-#' `slices_global` is created by `.make_slices_global` function which in the same time resolves
-#' `attr("mapping")` to keep it consistent and ready for filter manager, by:
-#' - list elements contains slots for all modules (even if they don't have filters specified).
-#' - `global_filters` list element is removed in favour of module slots.
+#' @description
+#' Oversee filter states across the entire application.
 #'
+#' @section Slices global:
+#' The key role in this process is played by the single `slices_global` (`reactiveVal`) object
+#' which stores all `teal_slice` objects and mapping to each module.
+#' `slices_global` is created by `.make_slices_global` function which in the same time resolves
+#' `attr("mapping")` to keep it consistent for filter manager:
+#' - list contains elements named after modules' labels containing `id` of active slices. Initially,
+#' app developer can specify mapping for some modules, and `make_slices_global` includes unspecified
+#' modules in the mapping list.
+#' - element `global_filters` in the mapping list is removed in favour of module slots.
+#'
+#' @section Filter manager:
 #' Filter-manager is split into two parts:
-#' - `ui/srv_filter_manager_panel` - This module observes changes in the filters in `slices_global`
-#' and displays them in a table utilising information from `mapping`:
+#' 1. `ui/srv_filter_manager_panel` - Called once for the whole app. This module observes changes in
+#' the filters in `slices_global` and displays them in a table utilising information from `mapping`:
 #'   - &#9989; (`TRUE`) - filter is active in the module
 #'   - &#10060; (`FALSE`) - filter is inactive in the module
 #'   - &#128306; (`NA`) - filter is not available in the module
-#' - `ui/srv_module_filter_manager` - handling filter states for a single module and keeping
-#'   module `FilteredData` consistent with `slices_global`, so that local filters are always
-#'   reflected in the `slices_global` and its mapping.
+#' 2. `ui/srv_module_filter_manager` - Called once for each `teal_module`. Handling filter states
+#' for of single module and keeping module `FilteredData` consistent with `slices_global`, so that
+#' local filters are always reflected in the `slices_global` and its mapping and vice versa.
 #'
 #'
 #' @param id (`character(1)`)
@@ -31,14 +37,11 @@
 #' @param filter (`teal_slices`)
 #'   initial `teal` filter settings.
 #'
-#' @param module_labels (`character`)
-#'  vector of module labels.
-#'
 #' @return
 #' Module returns a `slices_global` (`reactiveVal`) containing a `teal_slices` object with mapping.
 #'
 #' @name module_filter_manager
-#' @aliases filter_manager filter_manager_module
+#' @aliases filter_manager slices_global
 #'
 NULL
 
@@ -258,9 +261,11 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
 #' @rdname module_filter_manager
 #' @keywords internal
 .make_slices_global <- function(filter, module_labels) {
+  checkmate::assert_class(filter, "teal_slices")
+  checkmate::assert_character(module_labels)
   # Restore filter from bookmarked state, if applicable.
   session <- shiny::getDefaultReactiveDomain()
-  filter_restored <- restoreValue(session$ns("filter_state_on_bookmark"), filter)
+  filter_restored <- restoreValue(session$ns("filter_manager_panel-filter_manager-filter_state_on_bookmark"), filter)
   if (!is.teal_slices(filter_restored)) {
     filter_restored <- as.teal_slices(filter_restored)
   }
@@ -274,7 +279,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
     )
   }
   new_mapping <- sapply(
-    module_labels,
+    unlist(module_labels, use.names = FALSE),
     simplify = FALSE,
     function(module_label) {
       unlist(attr(filter_restored, "mapping")[c(module_label, "global_filters")], use.names = FALSE)

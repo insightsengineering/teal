@@ -160,7 +160,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       for (tab in tabs) {
         root <- "root"
         self$set_input(
-          sprintf("teal-main_ui-%s-active_tab", root),
+          sprintf("teal-%s-active_tab", root),
           get_unique_labels(tab),
           wait_ = FALSE
         )
@@ -614,8 +614,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       private$ns$module <- sprintf("%s-%s", active_ns, "module")
 
       component <- "filter_panel"
-      if (!is.null(self$get_html(sprintf("#teal-main_ui-%s", component)))) {
-        private$ns[[component]] <- sprintf("teal-main_ui-%s", component)
+      if (!is.null(self$get_html(sprintf("#teal-%s", component)))) {
+        private$ns[[component]] <- sprintf("teal-%s", component)
       } else {
         private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
       }

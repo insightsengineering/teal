@@ -2,21 +2,31 @@
 % Please edit documentation in R/module_bookmark_manager.R
 \name{module_bookmark_manager}
 \alias{module_bookmark_manager}
-\alias{bookmark_manager_ui}
 \alias{bookmark}
 \alias{bookmark_manager}
 \alias{bookmark_manager_module}
-\alias{bookmark_manager_srv}
+\alias{ui_bookmark_panel}
+\alias{srv_bookmark_panel}
+\alias{get_bookmarking_option}
+\alias{need_bookmarking}
 \title{App state management.}
 \usage{
-bookmark_manager_ui(id)
+ui_bookmark_panel(id, modules)
 
-bookmark_manager_srv(id, modules)
+srv_bookmark_panel(id, modules)
+
+get_bookmarking_option()
+
+need_bookmarking(modules)
 }
 \arguments{
-\item{id}{(\code{character(1)}) module id}
+\item{id}{(\code{character}) optional
+string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
+rather than a standalone \code{shiny} app. This is a legacy feature.}
 
-\item{modules}{(\code{teal_modules}) object containing the output modules which
+\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
+nested list of \code{teal_modules} or \code{teal_module} objects or a single
+\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 }
@@ -32,7 +42,7 @@ Capture and restore the global (app) input state.
 This module introduces bookmarks into \code{teal} apps: the \code{shiny} bookmarking mechanism becomes enabled
 and server-side bookmarks can be created.
 
-The bookmark manager presents a button with the bookmark icon and is placed in the \code{\link{wunder_bar}}.
+The bookmark manager presents a button with the bookmark icon and is placed in the tab-bar.
 When clicked, the button creates a bookmark and opens a modal which displays the bookmark URL.
 
 \code{teal} does not guarantee that all modules (\code{teal_module} objects) are bookmarkable.
