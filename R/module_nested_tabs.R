@@ -225,8 +225,7 @@ srv_teal_module.teal_module <- function(id,
     srv_filter_panel(
       "filter_panel",
       datasets = datasets,
-      active_datanames = active_datanames,
-      attr(isolate(slices_global()), "allow_add")
+      active_datanames = active_datanames
     )
 
     # Create trigger to limit reactivity between filter-panel and modules. We want to recalculate
