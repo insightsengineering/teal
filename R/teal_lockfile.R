@@ -126,12 +126,17 @@ renv_snapshot <- function(lockfile_path = NULL, opts, sysenv, libpaths, wd) {
 #' @rdname teal_lockfile
 #' @keywords internal
 teal_lockfile_tracker <- function(process) {
-  shinyjs::hide(selector = "#teal-lockFile")
-  tracker <- observeEvent(process$status(), {
-    if (process$status() != "running") {
-      teal_lockfile_handler(process)
-    }
-  })
+  checkmate::assert_class(process, "ExtendedTask", null.ok = TRUE)
+  if (inherits(process, "ExtendedTask")) {
+    tracker <- observeEvent(process$status(), {
+      if (process$status() != "running") {
+        teal_lockfile_handler(process)
+      }
+    })
+  } else {
+    # if it is not mirai then lockfile was provided through options (skip the process - file is ready)
+    shinyjs::show("teal-lockFile")
+  }
 }
 
 #' @rdname teal_lockfile
@@ -153,12 +158,11 @@ teal_lockfile_handler <- function(process) {
     }
 
     logger::log_trace("Lockfile {renv_logs$lockfile_path} containing { renv_logs$length } packages created{ with }.")
-    shiny::showNotification("Lockfile available to download.")
-    shinyjs::show(selector = "#teal-lockFile")
+    shiny::showNotification("Lockfile is available to download.")
+    shinyjs::show("teal-lockFile")
   } else {
     warning("Lockfile creation failed.")
     shiny::showNotification("Lockfile creation failed.", type = "warning")
-    shiny::removeUI(selector = "#teal-lockFile")
   }
 }
 
