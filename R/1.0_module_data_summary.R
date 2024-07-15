@@ -85,7 +85,7 @@ srv_data_summary <- function(id, teal_data) {
             obs_str_summary = ifelse(
               !is.na(obs),
               sprintf("%s/%s", obs_filtered, obs),
-              ""
+              ifelse(!is.na(obs_filtered), sprintf("%s/(new)", obs_filtered), "")
             )
           )
           attr(filter_overview$obs_str_summary, "label") <- "Obs"
@@ -204,7 +204,7 @@ get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dat
   if (length(subject_keys) == 0) {
     data.frame(
       dataname = dataname,
-      obs = nrow(unfiltered_data),
+      obs = ifelse(!is.null(nrow(unfiltered_data)), nrow(unfiltered_data), NA),
       obs_filtered = nrow(filtered_data)
     )
   } else {
