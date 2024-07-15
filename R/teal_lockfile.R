@@ -25,6 +25,9 @@
 #'
 #' @return Nothing. This function is executed for its side effect of creating a lockfile used in the `teal` application.
 #'
+#' @name teal_lockfile
+#' @rdname teal_lockfile
+#'
 #' @keywords internal
 teal_lockfile <- function() {
   lockfile_path <- "teal_app.lock"
@@ -58,6 +61,8 @@ teal_lockfile <- function() {
   process
 }
 
+#' @rdname teal_lockfile
+#' @keywords internal
 create_renv_lockfile <- function(lockfile_path = NULL, opts = NULL) {
   checkmate::assert_string(lockfile_path, na.ok = TRUE)
   checkmate::assert_list(opts)
@@ -76,6 +81,8 @@ create_renv_lockfile <- function(lockfile_path = NULL, opts = NULL) {
   )
 }
 
+#' @rdname teal_lockfile
+#' @keywords internal
 teal_lockfile_downloadhandler <- function() {
   downloadHandler(
     filename = function() {
@@ -90,6 +97,8 @@ teal_lockfile_downloadhandler <- function() {
   )
 }
 
+#' @rdname teal_lockfile
+#' @keywords internal
 lockfile_status <- function(process) {
   renv_logs <- process$read_output()
   message <- ifelse(
@@ -102,6 +111,8 @@ lockfile_status <- function(process) {
   shinyjs::show(selector = "#teal-lockFile")
 }
 
+#' @rdname teal_lockfile
+#' @keywords internal
 lockfile_status_tracker <- function(process) {
   checkmate::assert_class(process, "r_process")
   timer <- reactiveTimer(1000)

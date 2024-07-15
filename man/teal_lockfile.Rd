@@ -2,9 +2,21 @@
 % Please edit documentation in R/teal_lockfile.R
 \name{teal_lockfile}
 \alias{teal_lockfile}
+\alias{create_renv_lockfile}
+\alias{teal_lockfile_downloadhandler}
+\alias{lockfile_status}
+\alias{lockfile_status_tracker}
 \title{Generate lockfile for application reproducibility}
 \usage{
 teal_lockfile()
+
+create_renv_lockfile(lockfile_path = NULL, opts = NULL)
+
+teal_lockfile_downloadhandler()
+
+lockfile_status(process)
+
+lockfile_status_tracker(process)
 }
 \value{
 Nothing. This function is executed for its side effect of creating a lockfile used in the \code{teal} application.
