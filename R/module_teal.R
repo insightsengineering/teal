@@ -109,11 +109,18 @@ ui_teal <- function(id,
       ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
       ui_filter_manager_panel(ns("filter_manager_panel"))
     ),
-    tags$script(HTML("
-      $(document).ready(function() {
-        $('#teal-util-icons').appendTo('#teal_modules-active_tab');
-      });
-    ")),
+    tags$script(
+      HTML(
+        sprintf(
+          "
+            $(document).ready(function() {
+              $('#teal-util-icons').appendTo('#%s');
+            });
+          ",
+          ns("teal_modules-active_tab")
+        )
+      )
+    ),
     tags$hr(),
     tags$footer(
       tags$div(
