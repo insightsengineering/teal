@@ -53,7 +53,7 @@ send a notification to UI and show the download button.
 \item \code{teal_lockfile_downloadhandler} is used to download the lockfile (when button is shown).
 }
 
-Please note that if precomputed lockfile file path has been provided through \code{teal.renv.lockfile} option, then
+Please note that if pre-computed lockfile file path has been provided through \code{teal.renv.lockfile} option, then
 whole process is skipped and download lockfile button becomes available.
 }
 
