@@ -16,7 +16,7 @@ ui_filter_panel <- function(id) {
 }
 
 #' @rdname module_teal
-srv_filter_panel <- function(id, datasets, active_datanames) {
+srv_filter_panel <- function(id, datasets, active_datanames, allow_add = TRUE) {
   checkmate::assert_class(datasets, "reactive")
   moduleServer(id, function(input, output, session) {
     output$panel <- renderUI({
@@ -27,9 +27,9 @@ srv_filter_panel <- function(id, datasets, active_datanames) {
         logger::log_trace("srv_filter_panel rendering filter panel.")
 
         filtered_data <- datasets()
-        filtered_data$srv_filter_panel("filters", active_datanames = active_datanames)
+        filtered_data$srv_active("filters", active_datanames = active_datanames)
         # todo: make sure to bump the `teal.slice` version. Please use the branch `669_insertUI@main` in `teal.slice`.
-        filtered_data$ui_filter_panel(session$ns("filters"), active_datanames = active_datanames())
+        filtered_data$ui_active(session$ns("filters"), active_datanames = active_datanames, allow_add = allow_add)
       })
     })
   })
