@@ -10,7 +10,7 @@
 \usage{
 ui_filter_panel(id)
 
-srv_filter_panel(id, datasets, active_datanames, allow_add = TRUE)
+srv_filter_panel(id, datasets, active_datanames)
 
 ui_teal(
   id,
