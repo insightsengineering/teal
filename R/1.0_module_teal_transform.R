@@ -35,14 +35,6 @@ ui_teal_data_module <- function(id, transformers, class = "") {
           title = "Minimise panel",
           class = "remove pull-right"
         ),
-        ui_validate_reactive_teal_data(ns(sprintf("validate_%d", i))),
-        # div(
-        #   class = "has-error",
-        #   span(
-        #     class = "help-block",
-        #     textOutput(ns(sprintf("error_%d", i)))
-        #   )
-        # ),
         div(
           id = ns(sprintf("wrapper_data_%d", i)),
           data_mod$ui(id = ns(sprintf("data_%d", i))),
@@ -62,15 +54,6 @@ srv_teal_data_module <- function(id, teal_data, transformers, modules) {
   checkmate::assert_class(modules, "teal_module")
 
   moduleServer(id, function(input, output, session) {
-    #
-    #     observeEvent(input[[sprintf("minimize_%d", 1)]], {
-    #       print("me")
-    #       element_id <- sprintf("wrapper_data_%d", 1)
-    #       shinyjs::toggle(element_id)
-    #       teal.slice:::toggle_icon(session$ns(sprintf("minimize_%d", 1)), c("fa-angle-right", "fa-angle-down"))
-    #       teal.slice:::toggle_title(session$ns(sprintf("minimize_%d", 1)), c("Restore panel", "Minimise Panel"))
-    #     })
-
     lapply(
       seq_along(transformers),
       function(i) {
@@ -92,7 +75,7 @@ srv_teal_data_module <- function(id, teal_data, transformers, modules) {
           modules = modules(modules)
         )
         reactive({
-          if (isTruthy(data_validated())) {
+          if (!inherits(tryCatch(data_validated(), error = function(e) e), "error")) {
             data_validated()
           } else {
             x()

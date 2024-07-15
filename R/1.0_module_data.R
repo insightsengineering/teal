@@ -73,7 +73,13 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       data
     }
 
-    data_validated <- srv_validate_reactive_teal_data("validate_teal_data", data_unvalidated, modules, filter)
+    data_validated <- srv_validate_reactive_teal_data(
+      "validate_teal_data",
+      data_unvalidated,
+      modules,
+      filter,
+      allow_shiny_silent = TRUE
+    )
 
     setBookmarkExclude("open_teal_data_module")
 
