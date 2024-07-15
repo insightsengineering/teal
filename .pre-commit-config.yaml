@@ -17,7 +17,7 @@ repos:
         additional_dependencies:
           - davidgohel/flextable # Error: package 'flextable' is not available
           - davidgohel/gdtools # for flextable
-          - callr
+          - mirai
           - checkmate
           - jsonlite
           - lifecycle

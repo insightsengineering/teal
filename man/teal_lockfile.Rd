@@ -2,17 +2,63 @@
 % Please edit documentation in R/teal_lockfile.R
 \name{teal_lockfile}
 \alias{teal_lockfile}
-\title{Generate lockfile for application reproducibility}
+\alias{teal_lockfile_invoke}
+\alias{renv_snapshot}
+\alias{teal_lockfile_tracker}
+\alias{teal_lockfile_handler}
+\alias{teal_lockfile_downloadhandler}
+\title{Generate lockfile for application's environment reproducibility}
 \usage{
-teal_lockfile()
+teal_lockfile_invoke()
+
+renv_snapshot(lockfile_path = NULL, opts, sysenv, libpaths, wd)
+
+teal_lockfile_tracker(process)
+
+teal_lockfile_handler(process)
+
+teal_lockfile_downloadhandler()
+}
+\arguments{
+\item{lockfile_path}{(\code{character}) path to the lockfile (\code{"teal_app.lock"}).}
+
+\item{opts}{(\code{list}) options to be set in the \code{\link[mirai:daemon]{mirai::daemon()}}.}
+
+\item{sysenv}{(\code{list}) system environment variables to be set in the \code{\link[mirai:daemon]{mirai::daemon()}}.}
+
+\item{libpaths}{(\code{character}) library paths to be set in the \code{\link[mirai:daemon]{mirai::daemon()}}.}
+
+\item{wd}{(\code{character(1)}) working directory to be set in the \code{\link[mirai:daemon]{mirai::daemon()}}.}
+
+\item{process}{(\code{mirai}) process to track the status of the lockfile creation.}
 }
 \value{
-Nothing. This function is executed for its side effect of creating a lockfile used in the \code{teal} application.
+\code{ExtendedTask} processing \code{renv} lockfile or \code{NULL} if lockfile has been provided through options
+(skipping asynchronous process).
 }
 \description{
-This function is invoked during \link{init} to create \code{renv}-compatible lockfile for use within the application.
+Generate lockfile for application's environment reproducibility
 }
-\details{
+\section{lockfile creation steps}{
+
+Process is split into multiple steps.
+\enumerate{
+\item \code{teal_lockfile_invoke} is executed in \link{init} before application starts. It is better when task starts in
+\link{init} as it is a one-time process and does not need to be repeated when each \code{shiny} session starts.
+Function invokes \code{renv_snapshot} (via \code{ExtendedTask}) to begin creation of the lockfile.
+\item \code{ExtendedTask} with background \code{mirai} process is passed to the \code{teal_lockfile_handler} to track the
+status of the task.
+\item Once \code{ExtendedTask} is completed, \code{teal_lockfile_handler} is triggered to log the status of the lockfile,
+send a notification to UI and show the download button.
+\item \code{teal_lockfile_downloadhandler} is used to download the lockfile (when button is shown).
+}
+
+Please note that if precomputed lockfile file path has been provided through \code{teal.renv.lockfile} option, then
+whole process is skipped and download lockfile button becomes available.
+}
+
+\section{Different ways of creating lockfile}{
+
 The function leverages \code{\link[renv:snapshot]{renv::snapshot()}}, which offers multiple methods for lockfile creation.
 \itemize{
 \item User-specified:
@@ -34,6 +80,7 @@ directory, set \code{renv::settings$snapshot.type("explicit")}. The naming conve
 }
 }
 }
+
 \section{lockfile usage}{
 
 After creating the lockfile, you can restore the application environment using \code{renv::restore()}.

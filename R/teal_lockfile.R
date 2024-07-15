@@ -1,16 +1,26 @@
 #' Generate lockfile for application's environment reproducibility
 #'
+#' @param process (`mirai`) process to track the status of the lockfile creation.
+#' @param lockfile_path (`character`) path to the lockfile (`"teal_app.lock"`).
+#' @param opts (`list`) options to be set in the [mirai::daemon()].
+#' @param sysenv (`list`) system environment variables to be set in the [mirai::daemon()].
+#' @param libpaths (`character`) library paths to be set in the [mirai::daemon()].
+#' @param wd (`character(1)`) working directory to be set in the [mirai::daemon()].
+#'
 #' @section lockfile creation steps:
 #' Process is split into multiple steps.
 #'
-#' 1. `teal_lockfile` is executed in [init] before application starts. It is better when process starts in
+#' 1. `teal_lockfile_invoke` is executed in [init] before application starts. It is better when task starts in
 #' [init] as it is a one-time process and does not need to be repeated when each `shiny` session starts.
-#' Function invokes `ExtendedTask` with `create_renv_lockfile` to begin creation of the lockfile.
-#' 2. `ExtendedTask` with background `mirai` process is passed to the `lockfile_status_handler` to track the
+#' Function invokes `renv_snapshot` (via `ExtendedTask`) to begin creation of the lockfile.
+#' 2. `ExtendedTask` with background `mirai` process is passed to the `teal_lockfile_handler` to track the
 #' status of the task.
-#' 3. Once `ExtendedTask` is completed, `lockfile_status_handler` is triggered to log the status of the lockfile,
+#' 3. Once `ExtendedTask` is completed, `teal_lockfile_handler` is triggered to log the status of the lockfile,
 #' send a notification to UI and show the download button.
 #' 4. `teal_lockfile_downloadhandler` is used to download the lockfile (when button is shown).
+#'
+#' Please note that if pre-computed lockfile file path has been provided through `teal.renv.lockfile` option, then
+#' whole process is skipped and download lockfile button becomes available.
 #'
 #' @section Different ways of creating lockfile:
 #' The function leverages [renv::snapshot()], which offers multiple methods for lockfile creation.
@@ -34,24 +44,34 @@
 #'
 #' @seealso [renv::snapshot()], [renv::restore()].
 #'
-#' @return Nothing. This function is executed for its side effect of creating a lockfile used in the `teal` application.
+#' @return
+#'  `ExtendedTask` processing `renv` lockfile or `NULL` if lockfile has been provided through options
+#'  (skipping asynchronous process).
+#'
+#' @name teal_lockfile
+#' @rdname teal_lockfile
 #'
 #' @keywords internal
-teal_lockfile <- function() {
+NULL
+
+#' @rdname teal_lockfile
+#' @keywords internal
+teal_lockfile_invoke <- function() {
   lockfile_path <- "teal_app.lock"
+  shiny::onStop(function() file.remove(lockfile_path))
+
   # If user has setup the file, there is no need to compute a new one.
   user_lockfile <- getOption("teal.renv.lockfile", "")
   if (!identical(user_lockfile, "")) {
     if (file.exists(user_lockfile)) {
       file.copy(user_lockfile, lockfile_path)
       logger::log_trace('Lockfile set using option "teal.renv.lockfile" - skipping automatic creation.')
-      return(invisible(NULL))
+      return(NULL)
     } else {
       stop("lockfile provided through options('teal.renv.lockfile') does not exist.")
     }
   }
 
-  shiny::onStop(function() file.remove(lockfile_path))
   process <- ExtendedTask$new(function(...) {
     mirai::mirai(
       run(lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd),
@@ -61,7 +81,7 @@ teal_lockfile <- function() {
 
   process$invoke(
     lockfile_path = lockfile_path,
-    run = create_renv_lockfile,
+    run = renv_snapshot,
     opts = options(),
     libpaths = .libPaths(),
     sysenv = as.list(Sys.getenv()), # normally output is a class of "Dlist"
@@ -74,24 +94,25 @@ teal_lockfile <- function() {
 
 #' @rdname teal_lockfile
 #' @keywords internal
-create_renv_lockfile <- function(lockfile_path = NULL, opts, sysenv, libpaths, wd) {
-  # todo: need to setwd() to
+renv_snapshot <- function(lockfile_path = NULL, opts, sysenv, libpaths, wd) {
   checkmate::assert_string(lockfile_path)
   checkmate::assert_list(opts)
   checkmate::assert_class(sysenv, "list")
   checkmate::assert_character(libpaths, min.len = 1)
   checkmate::assert_directory(wd)
+
+  # mirai starts in vanilla session in the R.home directory. We need to pass all session related info
   options(opts)
   lapply(names(sysenv), function(sysvar) do.call(Sys.setenv, sysenv[sysvar]))
   .libPaths(libpaths)
   setwd(wd)
 
-  out <- capture.output(
+  out <- utils::capture.output(
     renv <- renv::snapshot(
       lockfile = lockfile_path,
       prompt = FALSE,
       force = TRUE
-      # type = is taken from renv::settings$snapshot.type()
+      # type is taken from renv::settings$snapshot.type()
     )
   )
 
@@ -104,20 +125,18 @@ create_renv_lockfile <- function(lockfile_path = NULL, opts, sysenv, libpaths, w
 
 #' @rdname teal_lockfile
 #' @keywords internal
-lockfile_status_tracker <- function(process) {
-  # todo: make sure that status doesn't need to be checked when file already existed
-  if (!is.null(isolate(process))) {
-    tracker <- observeEvent(process$status(), {
-      if (process$status() != "running") {
-        lockfile_status_handler(process)
-      }
-    })
-  }
+teal_lockfile_tracker <- function(process) {
+  shinyjs::hide(selector = "#teal-lockFile")
+  tracker <- observeEvent(process$status(), {
+    if (process$status() != "running") {
+      teal_lockfile_handler(process)
+    }
+  })
 }
 
 #' @rdname teal_lockfile
 #' @keywords internal
-lockfile_status_handler <- function(process) {
+teal_lockfile_handler <- function(process) {
   # todo: make sure that we catch all possible status outputs
   #     - normally getwd should be set to the app directory (snapshot based on the app files)
   #     - what happens if app directory is set to a different location?
