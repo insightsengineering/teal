@@ -250,7 +250,18 @@ srv_teal_module.teal_module <- function(id,
     filtered_teal_data <- eventReactive(trigger_data(), {
       .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
     })
-    srv_data_summary("data_summary", filtered_teal_data)
+    transformed_teal_data <- if (is_arg_used(modules$server, "transformers")) {
+      srv_teal_data_module(
+        "module-data_transform",
+        teal_data = filtered_teal_data,
+        transformers = modules$server_args$transformers,
+        modules = modules
+      )
+    } else {
+      filtered_teal_data
+    }
+
+    srv_data_summary("data_summary", transformed_teal_data)
 
     # Call modules.
     module_out <- reactiveVal(NULL)
@@ -261,13 +272,13 @@ srv_teal_module.teal_module <- function(id,
         once = TRUE,
         eventExpr = trigger_data(),
         handlerExpr = {
-          module_out(.call_teal_module(modules, datasets, filtered_teal_data, reporter))
+          module_out(.call_teal_module(modules, datasets, transformed_teal_data, reporter))
         }
       )
     } else {
       # Report previewer must be initiated on app start for report cards to be included in bookmarks.
       # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-      module_out(.call_teal_module(modules, datasets, filtered_teal_data, reporter))
+      module_out(.call_teal_module(modules, datasets, transformed_teal_data, reporter))
     }
 
     # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module

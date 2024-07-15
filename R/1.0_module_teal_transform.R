@@ -35,13 +35,14 @@ ui_teal_data_module <- function(id, transformers, class = "") {
           title = "Minimise panel",
           class = "remove pull-right"
         ),
-        div(
-          class = "has-error",
-          span(
-            class = "help-block",
-            textOutput(ns(sprintf("error_%d", i)))
-          )
-        ),
+        ui_validate_reactive_teal_data(sprintf("validate_%d", i)),
+        # div(
+        #   class = "has-error",
+        #   span(
+        #     class = "help-block",
+        #     textOutput(ns(sprintf("error_%d", i)))
+        #   )
+        # ),
         div(
           id = ns(sprintf("wrapper_data_%d", i)),
           data_mod$ui(id = ns(sprintf("data_%d", i)))
@@ -53,26 +54,28 @@ ui_teal_data_module <- function(id, transformers, class = "") {
 
 #' @rdname module_teal_module
 #' @export
-srv_teal_data_module <- function(id, data, transformers) {
+srv_teal_data_module <- function(id, teal_data, transformers, modules) {
   checkmate::assert_string(id)
+  checkmate::assert_class(teal_data, "reactive")
   checkmate::assert_list(transformers, "teal_data_module", min.len = 0)
+  checkmate::assert_class(modules, "teal_module")
 
   moduleServer(id, function(input, output, session) {
-#
-#     observeEvent(input[[sprintf("minimize_%d", 1)]], {
-#       print("me")
-#       element_id <- sprintf("wrapper_data_%d", 1)
-#       shinyjs::toggle(element_id)
-#       teal.slice:::toggle_icon(session$ns(sprintf("minimize_%d", 1)), c("fa-angle-right", "fa-angle-down"))
-#       teal.slice:::toggle_title(session$ns(sprintf("minimize_%d", 1)), c("Restore panel", "Minimise Panel"))
-#     })
+    #
+    #     observeEvent(input[[sprintf("minimize_%d", 1)]], {
+    #       print("me")
+    #       element_id <- sprintf("wrapper_data_%d", 1)
+    #       shinyjs::toggle(element_id)
+    #       teal.slice:::toggle_icon(session$ns(sprintf("minimize_%d", 1)), c("fa-angle-right", "fa-angle-down"))
+    #       teal.slice:::toggle_title(session$ns(sprintf("minimize_%d", 1)), c("Restore panel", "Minimise Panel"))
+    #     })
 
     lapply(
       seq_along(transformers),
-      function(ix) {
-        element_id <- sprintf("minimize_%d", ix)
+      function(i) {
+        element_id <- sprintf("minimize_%d", i)
         observeEvent(input[[element_id]], {
-          shinyjs::toggle(sprintf("wrapper_data_%d", ix))
+          shinyjs::toggle(sprintf("wrapper_data_%d", i))
           teal.slice:::toggle_icon(session$ns(element_id), c("fa-angle-right", "fa-angle-down"))
           teal.slice:::toggle_title(session$ns(element_id), c("Restore panel", "Minimise Panel"))
         })
@@ -80,17 +83,16 @@ srv_teal_data_module <- function(id, data, transformers) {
     )
 
     Reduce(
-      function(x, ix) {
-        res <- transformers[[ix]]$server(id = sprintf("data_%d", ix), data = x)
-        output[[sprintf("error_%d", ix)]] <- renderText({
-          if (!inherits(x(), "qenv.error") && inherits(res(), "qenv.error")) {
-            "An error occured with this transform. Please check the inputs."
-          }
-        })
-        res
+      function(x, i) {
+        data <- transformers[[i]]$server(id = sprintf("data_%d", i), data = x)
+        data_validated <- srv_validate_reactive_teal_data(
+          sprintf("validate_%d", i),
+          data = data
+        )
+        data_validated
       },
       seq_along(transformers),
-      init = data
+      init = teal_data
     )
   })
 }

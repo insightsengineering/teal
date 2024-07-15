@@ -28,13 +28,14 @@ ui_validate_reactive_teal_data <- function(id) {
 
 #' @rdname validate_reactive_teal_data
 #' @keywords internal
-srv_validate_reactive_teal_data <- function(id, data, modules, filter) {
+srv_validate_reactive_teal_data <- function(id, data, modules = NULL, filter = teal_slices()) {
   moduleServer(id, function(input, output, session) {
     if (!is.reactive(data)) {
       stop("The `teal_data_module` passed to `data` must return a reactive expression.", call. = FALSE)
     }
     data_validated <- reactive({
       # custom module can return error
+      browser()
       data_out <- tryCatch(data(), error = function(e) e)
 
       # there is an empty reactive cycle on init!
@@ -86,7 +87,9 @@ srv_validate_reactive_teal_data <- function(id, data, modules, filter) {
         warning("`data` object has no datanames. Default datanames are set using `teal_data`'s environment.")
       }
 
-      .validate_module_datanames(data_out, modules)
+      if (!is.null(modules)) {
+        .validate_module_datanames(data_out, modules)
+      }
 
       .validate_filter_datanames(data_out, filter)
 
