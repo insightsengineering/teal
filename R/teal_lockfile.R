@@ -100,12 +100,16 @@ teal_lockfile_downloadhandler <- function() {
 #' @rdname teal_lockfile
 #' @keywords internal
 lockfile_status <- function(process) {
-  renv_logs <- process$read_output()
-  message <- ifelse(
-    any(grepl("Lockfile written", renv_logs)),
-    "lockfile created successfully.",
-    "lockfile created with issues."
-  )
+  if (!is.null(process)) {
+    renv_logs <- process$read_output()
+    message <- ifelse(
+      any(grepl("Lockfile written", renv_logs)),
+      "lockfile created successfully.",
+      "lockfile created with issues."
+    )
+  } else {
+    message <- "lockfile is available."
+  }
   logger::log_trace(message)
   shiny::showNotification(message)
   shinyjs::show(selector = "#teal-lockFile")
@@ -114,12 +118,11 @@ lockfile_status <- function(process) {
 #' @rdname teal_lockfile
 #' @keywords internal
 lockfile_status_tracker <- function(process) {
-  checkmate::assert_class(process, "r_process")
   timer <- reactiveTimer(1000)
 
   tracker <- observe({
     timer()
-    if (!process$is_alive()) {
+    if (is.null(process) || !process$is_alive()) {
       lockfile_status(process)
       tracker$destroy()
     }
