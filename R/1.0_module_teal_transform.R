@@ -35,7 +35,7 @@ ui_teal_data_module <- function(id, transformers, class = "") {
           title = "Minimise panel",
           class = "remove pull-right"
         ),
-        ui_validate_reactive_teal_data(sprintf("validate_%d", i)),
+        ui_validate_reactive_teal_data(ns(sprintf("validate_%d", i))),
         # div(
         #   class = "has-error",
         #   span(

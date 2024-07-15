@@ -35,7 +35,6 @@ srv_validate_reactive_teal_data <- function(id, data, modules = NULL, filter = t
     }
     data_validated <- reactive({
       # custom module can return error
-      browser()
       data_out <- tryCatch(data(), error = function(e) e)
 
       # there is an empty reactive cycle on init!
