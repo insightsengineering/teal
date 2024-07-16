@@ -261,7 +261,6 @@ srv_teal_module.teal_module <- function(id,
       filtered_teal_data
     }
 
-
     srv_data_summary("data_summary", transformed_teal_data)
 
     # Call modules.
