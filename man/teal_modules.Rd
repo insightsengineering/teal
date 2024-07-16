@@ -25,7 +25,8 @@ module(
   filters,
   datanames = "all",
   server_args = NULL,
-  ui_args = NULL
+  ui_args = NULL,
+  transformers = NULL
 )
 
 modules(..., label = "root")
@@ -78,6 +79,13 @@ a subset of datasets which are appended to the \code{data} argument in server fu
 \item{server_args}{(named \code{list}) with additional arguments passed on to the server function.}
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
+
+\item{transformers}{(\code{list}) with \code{teal_data_module} that will be applied to transform the data.
+Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
+If so, the module developer is responsible to display the UI in the module itself.
+
+When the transformation does not have sufficient input data, the resulting data will fallback
+to the last successful transform or, in case there are none, to the filtered data.}
 
 \item{...}{\itemize{
 \item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) Objects to wrap into a tab.

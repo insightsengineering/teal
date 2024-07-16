@@ -101,8 +101,8 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
           width = 3,
           ui_data_summary(ns("data_summary")),
           ui_filter_panel(ns("filter_panel")),
-          if (is_arg_used(modules$ui, "transformers")) {
-            ui_teal_data_module(ns("module-data_transform"), args$transformers, class = "well")
+          if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
+            ui_teal_data_module(ns("module-data_transform"), modules$transformers, class = "well")
           },
           class = "teal_secondary_col"
         )
@@ -250,16 +250,13 @@ srv_teal_module.teal_module <- function(id,
     filtered_teal_data <- eventReactive(trigger_data(), {
       .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
     })
-    transformed_teal_data <- if (is_arg_used(modules$server, "transformers")) {
-      srv_teal_data_module(
-        "module-data_transform",
-        teal_data = filtered_teal_data,
-        transformers = modules$server_args$transformers,
-        modules = modules
-      )
-    } else {
-      filtered_teal_data
-    }
+
+    transformed_teal_data <- srv_teal_data_module(
+      "module-data_transform",
+      teal_data = filtered_teal_data,
+      transformers = modules$transformers,
+      modules = modules
+    )
 
     srv_data_summary("data_summary", transformed_teal_data)
 

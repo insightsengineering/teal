@@ -50,8 +50,12 @@ ui_teal_data_module <- function(id, transformers, class = "") {
 srv_teal_data_module <- function(id, teal_data, transformers, modules) {
   checkmate::assert_string(id)
   checkmate::assert_class(teal_data, "reactive")
-  checkmate::assert_list(transformers, "teal_data_module", min.len = 0)
+  checkmate::assert_list(transformers, "teal_data_module", null.ok = TRUE)
   checkmate::assert_class(modules, "teal_module")
+
+  if (length(transformers) == 0L) {
+    return(teal_data)
+  }
 
   moduleServer(id, function(input, output, session) {
     lapply(
