@@ -77,8 +77,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       "validate_teal_data",
       data_unvalidated,
       modules,
-      filter,
-      allow_shiny_silent = TRUE
+      filter
     )
 
     setBookmarkExclude("open_teal_data_module")
