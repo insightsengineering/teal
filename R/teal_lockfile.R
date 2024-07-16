@@ -134,7 +134,7 @@ teal_lockfile_tracker <- function(process) {
       }
     })
   } else {
-    # if it is not mirai then lockfile was provided through options (skip the process - file is ready)
+    # If it is not mirai proces, then lockfile was provided through options. Skip the process - file is ready.
     shinyjs::show("teal-lockFile")
   }
 }
