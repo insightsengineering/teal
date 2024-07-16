@@ -103,7 +103,7 @@ renv_snapshot <- function(lockfile_path = NULL, opts, sysenv, libpaths, wd) {
 
   # mirai starts in vanilla session in the R.home directory. We need to pass all session related info
   options(opts)
-  lapply(names(sysenv), function(sysvar) do.call(Sys.setenv, sysenv[sysvar]))
+  do.call(Sys.setenv, sysenv)
   .libPaths(libpaths)
   setwd(wd)
 
