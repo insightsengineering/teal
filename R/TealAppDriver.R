@@ -460,7 +460,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::check_string(input)
 
       input_id_prefix <- sprintf(
-        "%s-active-%s-filter-%s_%s-inputs",
+        "%s-filters-%s-filter-%s_%s-inputs",
         self$active_filters_ns(),
         dataset_name,
         dataset_name,
@@ -484,7 +484,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
       # Generate correct namespace
       slices_input_id <- sprintf(
-        "%s-active-%s-filter-%s_%s-inputs-%s",
+        "%s-filters-%s-filter-%s_%s-inputs-%s",
         self$active_filters_ns(),
         dataset_name,
         dataset_name,
@@ -614,8 +614,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       private$ns$module <- sprintf("%s-%s", active_ns, "module")
 
       component <- "filter_panel"
-      if (!is.null(self$get_html(sprintf("#teal-%s", component)))) {
-        private$ns[[component]] <- sprintf("teal-%s", component)
+      if (!is.null(self$get_html(sprintf("#%s-%s-panel", active_ns, component)))) {
+        private$ns[[component]] <- sprintf("%s-%s", active_ns, component)
       } else {
         private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
       }
