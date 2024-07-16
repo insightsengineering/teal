@@ -64,8 +64,8 @@ srv_teal_data_module <- function(id, teal_data, transformers, modules) {
         element_id <- sprintf("minimize_%d", i)
         observeEvent(input[[element_id]], {
           shinyjs::toggle(sprintf("wrapper_data_%d", i))
-          teal.slice:::toggle_icon(session$ns(element_id), c("fa-angle-right", "fa-angle-down"))
-          teal.slice:::toggle_title(session$ns(element_id), c("Restore panel", "Minimise Panel"))
+          toggle_icon(session$ns(element_id), c("fa-angle-right", "fa-angle-down"))
+          toggle_title(session$ns(element_id), c("Restore panel", "Minimise Panel"))
         })
       }
     )
