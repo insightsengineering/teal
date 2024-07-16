@@ -28,7 +28,7 @@ ui_data_summary <- function(id) {
       class = "row",
       tags$div(
         class = "col-sm-9",
-        tags$label("Active Filter Summary - teal", class = "text-primary mb-4")
+        tags$label("Active Filter Summary", class = "text-primary mb-4")
       ),
       tags$div(
         class = "col-sm-3",
