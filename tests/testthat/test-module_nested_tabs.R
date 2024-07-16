@@ -280,6 +280,27 @@ testthat::test_that("srv_teal_module: data code contains proprocessing, hashes a
   )
 })
 
+testthat::test_that("srv_teal_module: transform doesn't return anything initially", {
+
+})
+
+testthat::test_that("srv_teal_module: transform is triggered when trigger_data changes", {
+
+})
+
+
+testthat::test_that("srv_teal_module: transform returns modified data", {
+
+})
+
+testthat::test_that("srv_teal_module: failing single transform returns unmodified data", {
+  # This is very important test!
+})
+
+testthat::test_that("srv_teal_module: transform returns modified data even if one of sub-transforms fails", {
+  # This is very important test!
+})
+
 testthat::test_that("srv_teal_module: active_datanames is resolved when modules$datanames = all or NULL", {
   testServer(
     app = srv_teal_module,
@@ -314,7 +335,8 @@ testthat::test_that("srv_teal_module: active_datanames is resolved when modules$
   )
 })
 
-testthat::test_that("srv_teal_module: is called only once when trigger_data changes. Retrigger doesn't call module", {
+testthat::test_that("srv_teal_module: teal_module is called when data is ready", {
+  # This is very important test!
   testServer(
     app = srv_teal_module,
     args = list(
@@ -324,9 +346,26 @@ testthat::test_that("srv_teal_module: is called only once when trigger_data chan
     ),
     expr = {
       testthat::expect_null(module_out())
+      testthat::expect_error(transformed_teal_data())
+      session$flushReact()
+      testthat::expect_s4_class(transformed_teal_data(), "teal_data")
+      testthat::expect_true(is.numeric(module_out()))
+    }
+  )
+})
+
+testthat::test_that("srv_teal_module: data retrigger doesn't call teal_module again", {
+  # This is very important test!
+  testServer(
+    app = srv_teal_module,
+    args = list(
+      id = "test",
+      data_rv = reactive(teal.data::teal_data(iris = iris, mtcars = mtcars)),
+      modules = module(server = function(id, data) runif(1))
+    ),
+    expr = {
       session$flushReact()
       number_1 <- module_out()
-      testthat::expect_true(is.numeric(number_1))
       testthat::expect_true(obs_module$.destroyed)
 
       trigger_data(2L)
@@ -337,7 +376,11 @@ testthat::test_that("srv_teal_module: is called only once when trigger_data chan
   )
 })
 
-out <- shiny::testServer(
+testthat::test_that("srv_teal_module: teal_module receives filtered and transformed data", {
+  # This is very important test!
+})
+
+shiny::testServer(
   app = srv_teal_module,
   args = list(
     id = "test",
