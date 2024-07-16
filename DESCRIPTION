@@ -93,6 +93,7 @@ Collate:
     '1.0_filter_panel.R'
     '1.0_module_data.R'
     '1.0_module_data_summary.R'
+    '1.0_module_teal_transform.R'
     '1.0_validate_reactive_teal_data.R'
     'TealAppDriver.R'
     'dummy_functions.R'

@@ -74,7 +74,11 @@ srv_teal_data_module <- function(id, teal_data, transformers, modules) {
           data = data,
           modules = modules(modules)
         )
-        .fallback_on_failure(data_current = data_validated, data_previous = x)
+        .fallback_on_failure(
+          data_current = data_validated,
+          data_previous = x,
+          label = sprintf("Transform module %d", i)
+        )
       },
       seq_along(transformers),
       init = teal_data
@@ -92,13 +96,16 @@ srv_teal_data_module <- function(id, teal_data, transformers, modules) {
 #' @param data_current (`reactive`) Current data
 #' @param data_previous (`reactive`) Previous data
 #' @return `reactive` `teal_data`
-.fallback_on_failure <- function(data_current, data_previous) {
+.fallback_on_failure <- function(data_current, data_previous, label) {
   checkmate::assert_class(data_current, "reactive")
   checkmate::assert_class(data_previous, "reactive")
+  checkmate::assert_string(label)
   reactive({
     if (!inherits(tryCatch(data_current(), error = function(e) e), "error")) {
+      logger::log_trace("{ label } evaluated successfully.")
       data_current()
     } else {
+      logger::log_trace("{ label } failed, falling back to previous data.")
       data_previous()
     }
   })

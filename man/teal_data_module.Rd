@@ -11,7 +11,7 @@
 \alias{within.teal_data_module}
 \title{Data module for \code{teal} applications}
 \usage{
-teal_data_module(ui, server)
+teal_data_module(ui, server, label = "data module")
 
 \S4method{eval_code}{teal_data_module,character}(object, code)
 
@@ -24,6 +24,8 @@ teal_data_module(ui, server)
 \item{server}{(\verb{function(id)})
 \code{shiny} module server function; must only take \code{id} argument;
 must return reactive expression containing \code{teal_data} object}
+
+\item{label}{(\code{character(1)}) Label of the module.}
 
 \item{object}{(\code{teal_data_module})}
 

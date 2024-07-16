@@ -8,7 +8,12 @@
 \usage{
 ui_validate_reactive_teal_data(id)
 
-srv_validate_reactive_teal_data(id, data, modules, filter)
+srv_validate_reactive_teal_data(
+  id,
+  data,
+  modules = NULL,
+  filter = teal_slices()
+)
 }
 \arguments{
 \item{id}{(\code{character}) optional

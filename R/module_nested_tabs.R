@@ -267,10 +267,10 @@ srv_teal_module.teal_module <- function(id,
     module_out <- reactiveVal(NULL)
     if (!inherits(modules, "teal_module_previewer")) {
       obs_module <- observeEvent(
-        # wait for trigger_data() to be not NULL but only once:
+        # wait for transformed_teal_data() to be not NULL but only once:
         ignoreNULL = TRUE,
         once = TRUE,
-        eventExpr = trigger_data(),
+        eventExpr = transformed_teal_data(),
         handlerExpr = {
           module_out(.call_teal_module(modules, datasets, transformed_teal_data, reporter))
         }

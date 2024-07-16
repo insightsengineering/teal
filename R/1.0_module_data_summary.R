@@ -157,7 +157,6 @@ srv_data_summary <- function(id, teal_data) {
 #' @rdname module_data_summary
 #' @keywords internal
 get_filter_overview <- function(teal_data) {
-  logger::log_trace("srv_data_overiew-get_filter_overview initialized")
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
   filtered_data_objs <- sapply(datanames, function(name) teal_data()@env[[name]])
@@ -174,7 +173,6 @@ get_filter_overview <- function(teal_data) {
       )
     }
   )
-  logger::log_trace("srv_data_overiew-get_filter_overview finalized")
 
   unssuported_idx <- vapply(rows, function(x) all(is.na(x[-1])), logical(1)) # this is mainly for vectors
   dplyr::bind_rows(c(rows[!unssuported_idx], rows[unssuported_idx]))
