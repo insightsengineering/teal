@@ -74,16 +74,32 @@ srv_teal_data_module <- function(id, teal_data, transformers, modules) {
           data = data,
           modules = modules(modules)
         )
-        reactive({
-          if (!inherits(tryCatch(data_validated(), error = function(e) e), "error")) {
-            data_validated()
-          } else {
-            x()
-          }
-        })
+        .fallback_on_failure(data_current = data_validated, data_previous = x)
       },
       seq_along(transformers),
       init = teal_data
     )
+  })
+}
+
+
+#' Fallback on failure
+#'
+#' Function returns the previous data if the current data is invalid. In `teal` we try to prevent the error
+#' from being thrown and instead we replace failing transform module data output with data input from the
+#' previous module (or from previous `teal` reactive tree elements).
+#'
+#' @param data_current (`reactive`) Current data
+#' @param data_previous (`reactive`) Previous data
+#' @return `reactive` `teal_data`
+.fallback_on_failure <- function(data_current, data_previous) {
+  checkmate::assert_class(data_current, "reactive")
+  checkmate::assert_class(data_previous, "reactive")
+  reactive({
+    if (!inherits(tryCatch(data_current(), error = function(e) e), "error")) {
+      data_current()
+    } else {
+      data_previous()
+    }
   })
 }
