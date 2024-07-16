@@ -12,7 +12,8 @@ srv_validate_reactive_teal_data(
   id,
   data,
   modules = NULL,
-  filter = teal_slices()
+  filter = teal_slices(),
+  validate_shiny_silent_error = FALSE
 )
 }
 \arguments{
@@ -30,6 +31,10 @@ more details.}
 
 \item{filter}{(\code{teal_slices})
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
+
+\item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and
+error message is displayed.
+Default is \code{FALSE} to handle empty reactive cycle on init.}
 }
 \value{
 (\code{reactive} returning \code{teal_data})

@@ -76,7 +76,8 @@ srv_teal_data_module <- function(id, teal_data, transformers, modules) {
         data_validated <- srv_validate_reactive_teal_data(
           id = sprintf("validate_%d", i),
           data = data,
-          modules = modules(modules)
+          modules = modules(modules),
+          validate_shiny_silent_error = TRUE
         )
         .fallback_on_failure(
           data_current = data_validated,

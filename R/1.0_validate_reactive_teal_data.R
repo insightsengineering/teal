@@ -27,8 +27,11 @@ ui_validate_reactive_teal_data <- function(id) {
 }
 
 #' @rdname validate_reactive_teal_data
+#' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
+#' error message is displayed.
+#' Default is `FALSE` to handle empty reactive cycle on init.
 #' @keywords internal
-srv_validate_reactive_teal_data <- function(id, data, modules = NULL, filter = teal_slices()) {
+srv_validate_reactive_teal_data <- function(id, data, modules = NULL, filter = teal_slices(), validate_shiny_silent_error = FALSE) {
   moduleServer(id, function(input, output, session) {
     if (!is.reactive(data)) {
       stop("The `teal_data_module` passed to `data` must return a reactive expression.", call. = FALSE)
@@ -39,7 +42,16 @@ srv_validate_reactive_teal_data <- function(id, data, modules = NULL, filter = t
 
       # there is an empty reactive cycle on init!
       if (inherits(data_out, "shiny.silent.error") && identical(data_out$message, "")) {
-        return(NULL)
+        if (!validate_shiny_silent_error) {
+          return(NULL)
+        } else {
+          validate(
+            need(
+              FALSE,
+              ifelse(nzchar(data_out$message), data_out$message, "Error with module. Check your inputs.")
+            )
+          )
+        }
       }
 
       # to handle qenv.error
