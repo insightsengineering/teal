@@ -73,19 +73,19 @@ teal_lockfile_invoke <- function() {
   }
 
 
-  run_mirai <- function(lockfile_path, opts, sysenv, libpaths, wd) {
+  run_renv_mirai <- function(lockfile_path, opts, sysenv, libpaths, wd) {
     mirai::mirai(
-      renv_snapshot(lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd),
+      renv_snapshot(
+        lockfile_path = lockfile_path,
+        opts = opts,
+        sysenv = sysenv,
+        libpaths = libpaths,
+        wd = wd
+      ),
     )
   }
-  process <- ExtendedTask$new(run_mirai)
-  #
-  # process <- ExtendedTask$new(function(...) {
-  #   mirai::mirai(
-  #     run(lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd),
-  #     ...
-  #   )
-  # })
+
+  process <- ExtendedTask$new(run_renv_mirai)
 
   process$invoke(
     lockfile_path = lockfile_path,
@@ -168,7 +168,6 @@ teal_lockfile_handler <- function(process) {
     shiny::showNotification(paste0("Lockfile created", with, " and available to download."))
     shinyjs::show("teal-lockFile")
   } else {
-    # Unsure it will ever happen.
     warning("Lockfile creation failed.")
     shiny::showNotification("Lockfile creation failed.", type = "warning")
   }
