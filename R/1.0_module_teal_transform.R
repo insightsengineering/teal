@@ -101,7 +101,7 @@ srv_teal_data_module <- function(id, teal_data, transformers, modules) {
   checkmate::assert_class(data_previous, "reactive")
   checkmate::assert_string(label)
   reactive({
-    if (!inherits(tryCatch(data_current(), error = function(e) e), "error")) {
+    if (inherits(tryCatch(data_current(), error = function(e) e), "teal_data")) {
       logger::log_trace("{ label } evaluated successfully.")
       data_current()
     } else {
