@@ -83,7 +83,7 @@ teal_lockfile_invoke <- function() {
 
   suppressWarnings({ # 'package:stats' may not be available when loading
     process$invoke(
-      run = teal:::renv_snapshot,
+      run = renv_snapshot,
       lockfile_path = lockfile_path,
       opts = options(),
       libpaths = .libPaths(),
