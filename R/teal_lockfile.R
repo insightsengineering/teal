@@ -72,7 +72,6 @@ teal_lockfile_invoke <- function() {
     }
   }
 
-
   run_renv_mirai <- function(lockfile_path, opts, sysenv, libpaths, wd) {
     mirai::mirai(
       renv_snapshot(
