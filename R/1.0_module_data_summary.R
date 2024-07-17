@@ -302,6 +302,7 @@ get_filter_overview <- function(teal_data) {
   )
 
   unssuported_idx <- vapply(rows, function(x) all(is.na(x[-1])), logical(1)) # this is mainly for vectors
+  # todo: remove dplyr dependency
   dplyr::bind_rows(c(rows[!unssuported_idx], rows[unssuported_idx]))
 }
 
