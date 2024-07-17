@@ -72,21 +72,27 @@ teal_lockfile_invoke <- function() {
     }
   }
 
-  run_renv_mirai <- function(lockfile_path, opts, sysenv, libpaths, wd) {
-    mirai::mirai(
-      teal:::renv_snapshot(
+  process <- ExtendedTask$new(
+    function(run, lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd) {
+      mirai::mirai(
+        run(
+          lockfile_path = lockfile_path,
+          opts = opts,
+          sysenv = sysenv,
+          libpaths = libpaths,
+          wd = wd
+        ),
         lockfile_path = lockfile_path,
         opts = opts,
         sysenv = sysenv,
         libpaths = libpaths,
         wd = wd
       )
-    )
-  }
-
-  process <- ExtendedTask$new(run_renv_mirai)
+    }
+  )
 
   process$invoke(
+    run = renv_snapshot,
     lockfile_path = lockfile_path,
     opts = options(),
     libpaths = .libPaths(),
