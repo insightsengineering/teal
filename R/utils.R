@@ -116,7 +116,7 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
 #' @return A `character(1)` containing error message or `TRUE` if validation passes.
 #' @keywords internal
 check_modules_datanames <- function(modules, datanames) {
-  checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_character(datanames)
 
   recursive_check_datanames <- function(modules, datanames) {
