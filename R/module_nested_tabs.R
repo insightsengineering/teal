@@ -102,7 +102,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
           ui_data_summary(ns("data_summary")),
           ui_filter_panel(ns("filter_panel")),
           if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
-            ui_teal_data_module(ns("module-data_transform"), modules$transformers, class = "well")
+            ui_teal_transform_module(ns("module-data_transform"), modules$transformers, class = "well")
           },
           class = "teal_secondary_col"
         )
@@ -251,9 +251,9 @@ srv_teal_module.teal_module <- function(id,
       .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
     })
 
-    transformed_teal_data <- srv_teal_data_module(
+    transformed_teal_data <- srv_teal_transform_module(
       "module-data_transform",
-      teal_data = filtered_teal_data,
+      data = filtered_teal_data,
       transformers = modules$transformers,
       modules = modules
     )

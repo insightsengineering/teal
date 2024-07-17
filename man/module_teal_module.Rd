@@ -3,8 +3,8 @@
 %   R/module_nested_tabs.R
 \name{module_teal_module}
 \alias{module_teal_module}
-\alias{ui_teal_data_module}
-\alias{srv_teal_data_module}
+\alias{ui_teal_transform_module}
+\alias{srv_teal_transform_module}
 \alias{ui_teal_module}
 \alias{ui_teal_module.default}
 \alias{ui_teal_module.teal_modules}
@@ -15,9 +15,9 @@
 \alias{srv_teal_module.teal_module}
 \title{Execute teal_data_module}
 \usage{
-ui_teal_data_module(id, transformers, class = "")
+ui_teal_transform_module(id, transformers, class = "")
 
-srv_teal_data_module(id, teal_data, transformers, modules)
+srv_teal_transform_module(id, teal_data, transformers, modules)
 
 ui_teal_module(id, modules, depth = 0L)
 
