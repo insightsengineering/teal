@@ -21,7 +21,9 @@ ui_teal_data_module <- function(id, transformers, class = "") {
     function(i) {
       data_mod <- transformers[[i]]
       div( # todo: accordion?
-        class = class,
+        # class .teal_validated changes the color of the boarder on error in ui_validate_reactive_teal_data
+        #   For details see tealValidate.js file.
+        class = c(class, "teal_validated"),
         title = attr(data_mod, "label"),
         tags$span(
           class = "text-primary mb-4",

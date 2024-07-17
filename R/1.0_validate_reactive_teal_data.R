@@ -23,7 +23,7 @@ NULL
 #' @rdname validate_reactive_teal_data
 #' @keywords internal
 ui_validate_reactive_teal_data <- function(id) {
-  uiOutput(NS(id, "response"))
+  uiOutput(NS(id, "response"), class = "teal_validate")
 }
 
 #' @rdname validate_reactive_teal_data
