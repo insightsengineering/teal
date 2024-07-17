@@ -80,7 +80,7 @@ teal_lockfile_invoke <- function() {
         sysenv = sysenv,
         libpaths = libpaths,
         wd = wd
-      ),
+      )
     )
   }
 
