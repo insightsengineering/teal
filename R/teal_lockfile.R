@@ -75,19 +75,8 @@ teal_lockfile_invoke <- function() {
   process <- ExtendedTask$new(
     function(run, lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd) {
       mirai::mirai(
-        run(
-          lockfile_path = lockfile_path,
-          opts = opts,
-          sysenv = sysenv,
-          libpaths = libpaths,
-          wd = wd
-        ),
-        run = run,
-        lockfile_path = lockfile_path,
-        opts = opts,
-        sysenv = sysenv,
-        libpaths = libpaths,
-        wd = wd
+        run(lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd),
+        run = run, lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd
       )
     }
   )
