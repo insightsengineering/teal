@@ -31,7 +31,11 @@ ui_validate_reactive_teal_data <- function(id) {
 #' error message is displayed.
 #' Default is `FALSE` to handle empty reactive cycle on init.
 #' @keywords internal
-srv_validate_reactive_teal_data <- function(id, data, modules = NULL, filter = teal_slices(), validate_shiny_silent_error = FALSE) {
+srv_validate_reactive_teal_data <- function(id,
+                                            data,
+                                            modules = NULL,
+                                            filter = teal_slices(),
+                                            validate_shiny_silent_error = FALSE) {
   moduleServer(id, function(input, output, session) {
     if (!is.reactive(data)) {
       stop("The `teal_data_module` passed to `data` must return a reactive expression.", call. = FALSE)

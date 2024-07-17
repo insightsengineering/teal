@@ -66,7 +66,14 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
     data_validated <- if (inherits(data, "teal_data_module")) {
-      srv_teal_data("teal_data_module", data = reactive(NULL), transformer = data, modules = modules, filter = filter)
+      srv_teal_data(
+        "teal_data_module",
+        data = reactive(NULL),
+        transformer = data,
+        modules = modules,
+        filter = filter,
+        validate_shiny_silent_error = FALSE
+      )
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, c("reactive", "reactiveVal"))) {

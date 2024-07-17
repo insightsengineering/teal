@@ -87,8 +87,7 @@ srv_teal_transform_module <- function(id, data, transformers, modules) {
           id = name,
           data = x,
           transformer = transformers[[name]],
-          modules = modules,
-          filter = teal_slices()
+          modules = modules
         )
       },
       names(transformers),
@@ -108,7 +107,14 @@ ui_teal_data <- function(id, transformer) {
   )
 }
 
-srv_teal_data <- function(id, data, transformer, modules = NULL, filter = teal_slices()) {
+# todo: filter formal can be moved away from here as it doesn't throw validate error (just notification)
+# it could be moved to more appropriate place (place related with filter panel)
+srv_teal_data <- function(id,
+                          data,
+                          transformer,
+                          modules = NULL,
+                          filter = teal_slices(),
+                          validate_shiny_silent_error = TRUE) {
   checkmate::assert_string(id)
   checkmate::assert_class(data, "reactive")
   checkmate::assert_class(transformer, "teal_data_module")
