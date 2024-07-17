@@ -82,6 +82,7 @@ teal_lockfile_invoke <- function() {
           libpaths = libpaths,
           wd = wd
         ),
+        run = run,
         lockfile_path = lockfile_path,
         opts = opts,
         sysenv = sysenv,
@@ -91,14 +92,16 @@ teal_lockfile_invoke <- function() {
     }
   )
 
-  process$invoke(
-    run = renv_snapshot,
-    lockfile_path = lockfile_path,
-    opts = options(),
-    libpaths = .libPaths(),
-    sysenv = as.list(Sys.getenv()), # normally output is a class of "Dlist"
-    wd = getwd()
-  )
+  suppressWarnings({ # 'package:stats' may not be available when loading
+    process$invoke(
+      run = teal:::renv_snapshot,
+      lockfile_path = lockfile_path,
+      opts = options(),
+      libpaths = .libPaths(),
+      sysenv = as.list(Sys.getenv()), # normally output is a class of "Dlist"
+      wd = getwd()
+    )
+  })
   logger::log_trace("Lockfile creation started based on { getwd() }.")
 
   process
