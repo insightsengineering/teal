@@ -110,6 +110,8 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
 
     data_rv <- reactiveVal(NULL)
     observeEvent(data_validated(), {
+      showNotification("Data loaded successfully.", duration = 5)
+      shinyjs::enable(selector = "#teal_modules-active_tab.nav-tabs a")
       data_rv(data_validated())
     })
 
