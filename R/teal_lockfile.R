@@ -149,11 +149,6 @@ teal_lockfile_tracker <- function(process) {
 #' @rdname teal_lockfile
 #' @keywords internal
 teal_lockfile_handler <- function(process) {
-  # todo: make sure that we catch all possible status outputs
-  #     - normally getwd should be set to the app directory (snapshot based on the app files)
-  #     - what happens if app directory is set to a different location?
-  #     - what if setwd is set to a directory which doesn't contain anything
-  #     - check out possible ERROR and WARNING
   renv_logs <- process$result()
   if (any(grepl("Lockfile written to", renv_logs$out))) {
     with <- if (any(grepl("WARNING:", renv_logs$out))) {
