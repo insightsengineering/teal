@@ -193,6 +193,7 @@ srv_teal_module.teal_module <- function(id,
   logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     active_datanames <- reactive({
+      # todo: are active_datanames enough here - what if datanames changes in the transform?
       req(data_rv())
       if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
         teal_data_datanames(data_rv())
@@ -205,17 +206,8 @@ srv_teal_module.teal_module <- function(id,
     })
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
-        req(data_rv(), "teal_data")
         logger::log_trace("srv_teal_module@1 initializing module-specific FilteredData")
-
-        # Otherwise, FilteredData will be created in the modules' scope later
-        progress_data <- Progress$new(
-          max = length(unlist(module_labels(modules)))
-        )
-        on.exit(progress_data$close())
-        progress_data$set(message = "Preparing data filtering", detail = "0%")
-        filtered_data <- teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
-        filtered_data
+        teal_data_to_filtered_data(data_rv(), datanames = active_datanames(), filter = slices_global())
       })
     }
 

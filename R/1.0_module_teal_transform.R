@@ -4,11 +4,9 @@
 #' Modules' execution order is determined by the order provided to `...` argument.
 #' Reactive data output of the previous module is used as input for the next module, so the final
 #' data is the product of all consecutive transformations.
-#' @name module_teal_module
+#' @name module_teal_transform_module
 #'
-#' @param id (`character(1)`) Module id
-#' @param data (`reactive`) `teal_data`
-#' @param ... (`teal_data_module`)
+#' @param class (`character`) Additional CSS class for whole wrapper div (optional)
 #'
 #' @return `reactive` `teal_data`
 #' @export
@@ -96,7 +94,19 @@ srv_teal_transform_module <- function(id, data, transformers, modules) {
   })
 }
 
+#' `teal_data` transform/load module
 #'
+#'
+#' @param id (`character(1)`) Module id
+#' @param data (`reactive teal_data`)
+#' @param transformer (`list of teal_data_module` or `teal_data_module`)
+#' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
+#'
+#' @return `reactive` `teal_data`
+#'
+#' @rdname module_teal_data
+#' @name module_teal_data
+#' @keywords internatl
 ui_teal_data <- function(id, transformer) {
   checkmate::assert_string(id)
   checkmate::assert_class(transformer, "teal_data_module")
@@ -113,13 +123,11 @@ srv_teal_data <- function(id,
                           data,
                           transformer,
                           modules = NULL,
-                          filter = teal_slices(),
                           validate_shiny_silent_error = TRUE) {
   checkmate::assert_string(id)
   checkmate::assert_class(data, "reactive")
   checkmate::assert_class(transformer, "teal_data_module")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
-  checkmate::assert_class(filter, "teal_slices")
 
   moduleServer(id, function(input, output, session) {
     data_out <- if (is_arg_used(transformer$server, "data")) {
@@ -127,12 +135,10 @@ srv_teal_data <- function(id,
     } else {
       transformer$server(id = "data")
     }
-
     data_validated <- srv_validate_reactive_teal_data(
       id = "validate",
       data = data_out,
       modules = modules,
-      filter = filter,
       validate_shiny_silent_error = TRUE
     )
     .fallback_on_failure(

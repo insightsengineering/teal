@@ -71,7 +71,6 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
         data = reactive(NULL),
         transformer = data,
         modules = modules,
-        filter = filter,
         validate_shiny_silent_error = FALSE
       )
     } else if (inherits(data, "teal_data")) {

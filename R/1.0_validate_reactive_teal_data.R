@@ -34,7 +34,6 @@ ui_validate_reactive_teal_data <- function(id) {
 srv_validate_reactive_teal_data <- function(id,
                                             data,
                                             modules = NULL,
-                                            filter = teal_slices(),
                                             validate_shiny_silent_error = FALSE) {
   moduleServer(id, function(input, output, session) {
     if (!is.reactive(data)) {
@@ -52,34 +51,23 @@ srv_validate_reactive_teal_data <- function(id,
           validate(
             need(
               FALSE,
-              ifelse(nzchar(data_out$message), data_out$message, "Error with module. Check your inputs.")
+              paste(
+                data_out$message,
+                "\n Check your inputs or contact app developer if error persists."
+              )
             )
           )
         }
       }
 
-      # to handle qenv.error
-      if (inherits(data_out, "qenv.error")) {
+      # to handle errors and qenv.error(s)
+      if (inherits(data_out, c("qenv.error", "error"))) {
         validate(
           need(
             FALSE,
             paste(
               "Error when executing `teal_data_module` passed to `data`:\n ",
               paste(data_out$message, collapse = "\n"),
-              "\n Check your inputs or contact app developer if error persists."
-            )
-          )
-        )
-      }
-
-      # to handle module non-qenv errors
-      if (inherits(data_out, "error")) {
-        validate(
-          need(
-            FALSE,
-            paste(
-              "Error when executing `teal_data_module` passed to `data`:\n ",
-              paste(data_out$message, collpase = "\n"),
               "\n Check your inputs or contact app developer if error persists."
             )
           )
@@ -105,8 +93,6 @@ srv_validate_reactive_teal_data <- function(id,
       if (!is.null(modules)) {
         .validate_module_datanames(data_out, modules)
       }
-
-      .validate_filter_datanames(data_out, filter)
 
       data_out
     })
