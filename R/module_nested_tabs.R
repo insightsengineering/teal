@@ -195,7 +195,7 @@ srv_teal_module.teal_module <- function(id,
     active_datanames <- reactive({
       # todo: are active_datanames enough here - what if datanames changes in the transform?
       req(data_rv())
-      if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
+      datanames <- if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
         teal_data_datanames(data_rv())
       } else {
         include_parent_datanames(
@@ -203,6 +203,8 @@ srv_teal_module.teal_module <- function(id,
           teal.data::join_keys(data_rv())
         )
       }
+      # Remove datanames that are not **YET** in the data
+      intersect(datanames, datasets()$datanames())
     })
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
@@ -312,7 +314,6 @@ srv_teal_module.teal_module <- function(id,
 }
 
 .make_teal_data <- function(modules, data, datasets = NULL, datanames) {
-  datanames <- intersect(datanames, datasets$datanames())
   new_datasets <- c(
     # Filtered data
     sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE),
