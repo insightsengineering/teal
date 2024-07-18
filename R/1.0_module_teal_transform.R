@@ -42,6 +42,7 @@ ui_teal_data_modules <- function(id, transformers, class = "") {
     names(transformers),
     function(name) {
       data_mod <- transformers[[name]]
+      wrapper_id <- ns(sprintf("wrapper_%s", name))
       div( # todo: accordion?
         # class .teal_validated changes the color of the boarder on error in ui_validate_reactive_teal_data
         #   For details see tealValidate.js file.
@@ -52,15 +53,13 @@ ui_teal_data_modules <- function(id, transformers, class = "") {
           icon("square-pen", lib = "font-awesome"),
           attr(data_mod, "label")
         ),
-        actionLink(
-          inputId = ns(sprintf("minimize_%s", name)),
-          label = NULL,
-          icon = icon("angle-down", lib = "font-awesome"),
-          title = "Minimise panel",
-          class = "remove pull-right"
+        tags$i(
+          class = "remove pull-right fa fa-angle-down",
+          title = "fold/expand transform panel",
+          onclick = sprintf("togglePanelItem(this, '%s', 'fa-angle-right', 'fa-angle-down');", wrapper_id)
         ),
         div(
-          id = ns(sprintf("wrapper_%s", name)),
+          id = wrapper_id,
           ui_teal_data_module(id = ns(name), transformer = transformers[[name]])
         )
       )
@@ -86,19 +85,6 @@ srv_teal_data_modules <- function(id, data, transformers, modules) {
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_data_modules initializing.")
-    # todo: move this to javascript so that server only returns data
-    lapply(
-      names(transformers),
-      function(name) {
-        element_id <- sprintf("minimize_%s", name)
-        observeEvent(input[[element_id]], {
-          shinyjs::toggle(sprintf("wrapper_%s", name))
-          toggle_icon(session$ns(element_id), c("fa-angle-right", "fa-angle-down"))
-          toggle_title(session$ns(element_id), c("Restore panel", "Minimise Panel"))
-        })
-      }
-    )
-
     Reduce(
       function(x, name) {
         srv_teal_data_module(
