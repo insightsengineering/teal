@@ -60,3 +60,7 @@ a.disabled {
 .teal_validated:has(.shiny-output-error) {
   border: 1px solid red;
 }
+
+.teal_validated:has(.teal-output-warning) {
+  border: 1px solid orange;
+}

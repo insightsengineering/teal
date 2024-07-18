@@ -24,7 +24,8 @@ NULL
 #' @keywords internal
 ui_validate_reactive_teal_data <- function(id) {
   # todo: format error message nicely. Add (⚠) icon.
-  uiOutput(NS(id, "response"), class = "teal_validate")
+  uiOutput(NS(id, "shiny_error"))
+  uiOutput(NS(id, "shiny_warning"))
 }
 
 #' @rdname validate_reactive_teal_data
@@ -91,28 +92,22 @@ srv_validate_reactive_teal_data <- function(id,
         warning("`data` object has no datanames. Default datanames are set using `teal_data`'s environment.")
       }
 
-      if (!is.null(modules)) {
-        .validate_module_datanames(modules = modules, datanames = teal_data_datanames(data_out))
-      }
 
       data_out
     })
 
-    output$response <- renderUI({
-      if (!is.null(data_validated())) {
-        removeModal()
-      }
+    output$shiny_errors <- renderUI({
+      data_validated()
       NULL
+    })
+
+    output$shiny_warnings <- renderUI({
+      is_modules_ok <- check_modules_datanames(modules = modules, datanames = teal_data_datanames(data_validated()))
+      if (!isTRUE(is_modules_ok)) {
+        span(is_modules_ok, class = "teal-output-warning")
+      }
     })
 
     data_validated
   })
-}
-
-.validate_module_datanames <- function(modules, datanames) {
-  is_modules_ok <- check_modules_datanames(modules, datanames)
-  if (!isTRUE(is_modules_ok)) {
-    # todo: how to throw exception to the UI and continue in the same time?
-    validate(need(isTRUE(is_modules_ok), sprintf("%s. Contact app developer.", is_modules_ok)))
-  }
 }

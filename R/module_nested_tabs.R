@@ -312,6 +312,7 @@ srv_teal_module.teal_module <- function(id,
 }
 
 .make_teal_data <- function(modules, data, datasets = NULL, datanames) {
+  datanames <- intersect(datanames, datasets$datanames())
   new_datasets <- c(
     # Filtered data
     sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE),
