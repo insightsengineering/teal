@@ -1,16 +1,35 @@
-#' Execute teal_data_module
+#' `teal_data` transform/load module
 #'
-#' Function executes the `teal_data_module` and returns the modified data.
-#' Modules' execution order is determined by the order provided to `...` argument.
-#' Reactive data output of the previous module is used as input for the next module, so the final
-#' data is the product of all consecutive transformations.
-#' @name module_teal_transform_module
+#' Module consumes `teal_data_module` elements and returns validated data:
+#' - `srv/ui_teal_data_module`: executes a single `teal_data_module`
+#' - `srv/ui_teal_data_modules` executes multiple `teal_data_module` elements successively by passing
+#' output of previous module to the next one.
 #'
+#' This is a low level module to handle data-loading or data-transformation as in both cases output
+#' is a reactive and validated `teal_data`. Data loading can be considered as transformation module
+#' of empty (initial) data object.
+#'
+#' Output `reactive` `teal_data` is validated by [`validate_reactive_teal_data`].
+#' Module makes sure that returned data doesn't break an app, so the [.fallback_on_failure()] is
+#' implemented.
+#'
+#' @param id (`character(1)`) Module id
+#' @param data (`reactive teal_data`)
+#' @param transformers,transformer (`list of teal_data_module` or `teal_data_module`)
+#' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
+#' @param validate_shiny_silent_error (`logical(1)`)
 #' @param class (`character`) Additional CSS class for whole wrapper div (optional)
 #'
 #' @return `reactive` `teal_data`
-#' @export
-ui_teal_transform_module <- function(id, transformers, class = "") {
+#'
+#' @rdname module_teal_data_module
+#' @name module_teal_data_module
+#' @keywords internal
+NULL
+
+#' @rdname module_teal_data_module
+#' @keywords internal
+ui_teal_data_modules <- function(id, transformers, class = "") {
   checkmate::assert_string(id)
   checkmate::assert_list(transformers, "teal_data_module", null.ok = TRUE)
   ns <- NS(id)
@@ -42,16 +61,16 @@ ui_teal_transform_module <- function(id, transformers, class = "") {
         ),
         div(
           id = ns(sprintf("wrapper_%s", name)),
-          ui_teal_data(id = ns(name), transformer = transformers[[name]])
+          ui_teal_data_module(id = ns(name), transformer = transformers[[name]])
         )
       )
     }
   )
 }
 
-#' @rdname module_teal_module
-#' @export
-srv_teal_transform_module <- function(id, data, transformers, modules) {
+#' @rdname module_teal_data_module
+#' @keywords internal
+srv_teal_data_modules <- function(id, data, transformers, modules) {
   checkmate::assert_string(id)
   checkmate::assert_class(data, "reactive")
   checkmate::assert_list(transformers, "teal_data_module", null.ok = TRUE)
@@ -66,7 +85,7 @@ srv_teal_transform_module <- function(id, data, transformers, modules) {
   names(transformers) <- ids
 
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_teal_transform_module initializing.")
+    logger::log_trace("srv_teal_data_modules initializing.")
     # todo: move this to javascript so that server only returns data
     lapply(
       names(transformers),
@@ -82,7 +101,7 @@ srv_teal_transform_module <- function(id, data, transformers, modules) {
 
     Reduce(
       function(x, name) {
-        srv_teal_data(
+        srv_teal_data_module(
           id = name,
           data = x,
           transformer = transformers[[name]],
@@ -95,20 +114,9 @@ srv_teal_transform_module <- function(id, data, transformers, modules) {
   })
 }
 
-#' `teal_data` transform/load module
-#'
-#'
-#' @param id (`character(1)`) Module id
-#' @param data (`reactive teal_data`)
-#' @param transformer (`list of teal_data_module` or `teal_data_module`)
-#' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
-#'
-#' @return `reactive` `teal_data`
-#'
-#' @rdname module_teal_data
-#' @name module_teal_data
-#' @keywords internatl
-ui_teal_data <- function(id, transformer) {
+#' @rdname module_teal_data_module
+#' @keywords internal
+ui_teal_data_module <- function(id, transformer) {
   checkmate::assert_string(id)
   checkmate::assert_class(transformer, "teal_data_module")
   ns <- NS(id)
@@ -118,20 +126,21 @@ ui_teal_data <- function(id, transformer) {
   )
 }
 
-# todo: filter formal can be moved away from here as it doesn't throw validate error (just notification)
-# it could be moved to more appropriate place (place related with filter panel)
-srv_teal_data <- function(id,
-                          data,
-                          transformer,
-                          modules = NULL,
-                          validate_shiny_silent_error = TRUE) {
+
+#' @rdname module_teal_data_module
+#' @keywords internal
+srv_teal_data_module <- function(id,
+                                 data,
+                                 transformer,
+                                 modules = NULL,
+                                 validate_shiny_silent_error = TRUE) {
   checkmate::assert_string(id)
   checkmate::assert_class(data, "reactive")
   checkmate::assert_class(transformer, "teal_data_module")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
 
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_teal_data initializing.")
+    logger::log_trace("srv_teal_data_module initializing.")
 
     data_out <- if (is_arg_used(transformer$server, "data")) {
       transformer$server(id = "data", data = data)

@@ -12,7 +12,6 @@ srv_validate_reactive_teal_data(
   id,
   data,
   modules = NULL,
-  filter = teal_slices(),
   validate_shiny_silent_error = FALSE
 )
 }
@@ -28,9 +27,6 @@ nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
-
-\item{filter}{(\code{teal_slices})
-Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 
 \item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and
 error message is displayed.

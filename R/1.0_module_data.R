@@ -66,7 +66,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
     data_validated <- if (inherits(data, "teal_data_module")) {
-      srv_teal_data(
+      srv_teal_data_module(
         "teal_data_module",
         data = reactive(NULL),
         transformer = data,
@@ -93,7 +93,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
         modalDialog(
           class = ifelse(easy_close, "blur_background", "hide_background"),
           tags$div(
-            ui_teal_data(session$ns("teal_data_module"), transformer = data)
+            ui_teal_data_module(session$ns("teal_data_module"), transformer = data)
           ),
           footer = footer,
           easyClose = easy_close

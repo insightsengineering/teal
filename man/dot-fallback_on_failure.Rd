@@ -4,18 +4,19 @@
 \alias{.fallback_on_failure}
 \title{Fallback on failure}
 \usage{
-.fallback_on_failure(data_current, data_previous, label)
+.fallback_on_failure(this, that, label)
 }
 \arguments{
-\item{data_current}{(\code{reactive}) Current data}
+\item{this}{(\code{reactive}) Current reactive}
 
-\item{data_previous}{(\code{reactive}) Previous data}
+\item{that}{(\code{reactive}) Previous reactive}
 }
 \value{
 \code{reactive} \code{teal_data}
 }
 \description{
-Function returns the previous data if the current data is invalid. In \code{teal} we try to prevent the error
-from being thrown and instead we replace failing transform module data output with data input from the
-previous module (or from previous \code{teal} reactive tree elements).
+Function returns the previous reactive if the current reactive is invalid (throws error or returns NULL).
+Application: In \code{teal} we try to prevent the error from being thrown and instead we replace failing
+transform module data output with data input from the previous module (or from previous \code{teal} reactive
+tree elements).
 }
