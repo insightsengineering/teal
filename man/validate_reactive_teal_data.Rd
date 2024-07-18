@@ -6,7 +6,7 @@
 \alias{srv_validate_reactive_teal_data}
 \title{Validate reactive \code{teal_data}}
 \usage{
-ui_validate_reactive_teal_data(id, add_wrapper = FALSE)
+ui_validate_reactive_teal_data(id)
 
 srv_validate_reactive_teal_data(
   id,

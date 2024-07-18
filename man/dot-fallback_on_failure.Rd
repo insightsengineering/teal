@@ -7,9 +7,11 @@
 .fallback_on_failure(this, that, label)
 }
 \arguments{
-\item{this}{(\code{reactive}) Current reactive}
+\item{this}{(\code{reactive}) Current reactive.}
 
-\item{that}{(\code{reactive}) Previous reactive}
+\item{that}{(\code{reactive}) Previous reactive.}
+
+\item{label}{(\code{character}) Label for identifying problematic \code{teal_data_module} transform in logging.}
 }
 \value{
 \code{reactive} \code{teal_data}
