@@ -119,3 +119,45 @@ srv_validate_reactive_teal_data <- function(id,
     data_validated
   })
 }
+
+ui_teal_module_validation_error <- function(id) {
+  uiOutput(NS(id, "message"))
+}
+
+srv_teal_module_validation_error <- function(id, modules, data) {
+  moduleServer(id, function(input, output, session) {
+    is_modules_ok_rv <- reactive({
+      req(data())
+      check_modules_datanames(
+        modules = modules,
+        datanames = datanames(data())
+      )
+    })
+
+    # check_modules_datanames()
+    module_teal_data <- reactive({
+      req(is_modules_ok_rv())
+
+      if (isTRUE(is_modules_ok_rv())) {
+        data()
+      } else {
+        validate(need(FALSE, is_modules_ok_rv())) # this prevents the module from being rendered
+      }
+    })
+
+
+    output$message <- renderUI({
+      if (!isTRUE(req(is_modules_ok_rv()))) {
+        tags$div(
+          class = "teal-validation-error",
+          tags$p(is_modules_ok_rv()),
+          tags$p(
+            "Check your inputs, data and transformation modules.",
+            "Contact app developer if error persists."
+          )
+        )
+      }
+    })
+    module_teal_data
+  })
+}

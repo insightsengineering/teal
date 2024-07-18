@@ -96,7 +96,12 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
     tagList(
       if (depth >= 2L) tags$div(style = "mt-6"),
       fluidRow(
-        column(width = 9, do.call(modules$ui, args), class = "teal_primary_col"),
+        column(
+          width = 9,
+          ui_teal_module_validation_error(ns("teal_validation_error")),
+          do.call(modules$ui, args),
+          class = "teal_primary_col"
+        ),
         column(
           width = 3,
           ui_data_summary(ns("data_summary")),
@@ -257,22 +262,24 @@ srv_teal_module.teal_module <- function(id,
 
     srv_data_summary("data_summary", transformed_teal_data)
 
+    module_teal_data <- srv_teal_module_validation_error("teal_validation_error", modules, transformed_teal_data)
+
     # Call modules.
     module_out <- reactiveVal(NULL)
     if (!inherits(modules, "teal_module_previewer")) {
       obs_module <- observeEvent(
-        # wait for transformed_teal_data() to be not NULL but only once:
+        # wait for module_teal_data() to be not NULL but only once:
         ignoreNULL = TRUE,
         once = TRUE,
-        eventExpr = transformed_teal_data(),
+        eventExpr = module_teal_data(),
         handlerExpr = {
-          module_out(.call_teal_module(modules, datasets, transformed_teal_data, reporter))
+          module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
         }
       )
     } else {
       # Report previewer must be initiated on app start for report cards to be included in bookmarks.
       # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-      module_out(.call_teal_module(modules, datasets, transformed_teal_data, reporter))
+      module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
     }
 
     # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module

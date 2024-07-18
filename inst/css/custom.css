@@ -94,3 +94,17 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 #shiny-modal:has(.hide_background) {
   background-color: white;
 }
+
+.teal-validation-error p:nth-child(1)::before {
+  content: "\1F6A8";
+  padding-right: 0.5em;
+}
+
+.teal-validation-error {
+  width: 100%;
+  border: 1px solid red;
+  background-color: rgba(223, 70, 97, 0.1);
+  padding: 1em 1em 0 1em;
+  border-radius: 4px;
+  margin: 1em 0 1em 0;
+}
