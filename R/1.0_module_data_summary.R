@@ -75,7 +75,6 @@ srv_data_summary <- function(id, teal_data) {
         }
 
         filter_overview <- get_filter_overview(teal_data)
-
         attr(filter_overview$dataname, "label") <- "Data Name"
 
         if (!is.null(filter_overview$obs)) {
@@ -304,7 +303,7 @@ get_filter_overview <- function(teal_data) {
   logger::log_trace("srv_data_overiew-get_filter_overview finalized")
 
   unssuported_idx <- vapply(rows, function(x) all(is.na(x[-1])), logical(1)) # this is mainly for vectors
-  rbind(c(rows[!unssuported_idx], rows[unssuported_idx]))
+  do.call(rbind, c(rows[!unssuported_idx], rows[unssuported_idx]))
 }
 
 #' @rdname module_data_summary
@@ -355,6 +354,8 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
   experiment_names <- names(unfiltered_data)
   mae_info <- data.frame(
     dataname = dataname,
+    obs = NA,
+    obs_filtered = NA,
     subjects = nrow(unfiltered_data@colData),
     subjects_filtered = nrow(filtered_data@colData)
   )
@@ -389,6 +390,6 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
     }
   ))
 
-  experiment_info <- cbind(experiment_obs_info, experiment_subjects_info)
+  experiment_info <- cbind(subset(experiment_obs_info, select = dataname:obs_filtered), experiment_subjects_info)
   rbind(mae_info, experiment_info)
 }
