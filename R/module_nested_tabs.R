@@ -266,8 +266,7 @@ srv_teal_module.teal_module <- function(id,
     module_teal_data <- srv_validate_reactive_teal_data(
       "validate_datanames",
       data = transformed_teal_data,
-      modules = modules,
-      validate_shiny_silent_error = TRUE
+      modules = modules
     )
 
     # Call modules.
