@@ -196,7 +196,7 @@ get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dat
   if (length(subject_keys) == 0) {
     data.frame(
       dataname = dataname,
-      obs = nrow(unfiltered_data),
+      obs = ifelse(!is.null(nrow(unfiltered_data)), nrow(unfiltered_data), NA),
       obs_filtered = nrow(filtered_data),
       subjects = NA,
       subjects_filtered = NA
