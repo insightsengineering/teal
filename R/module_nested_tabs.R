@@ -98,7 +98,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       fluidRow(
         column(
           width = 9,
-          ui_validate_datanames(ns("validate_datanames")),
+          ui_validate_reactive_teal_data(ns("validate_datanames")),
           do.call(modules$ui, args),
           class = "teal_primary_col"
         ),
@@ -262,7 +262,13 @@ srv_teal_module.teal_module <- function(id,
 
     srv_data_summary("data_summary", transformed_teal_data)
 
-    module_teal_data <- srv_validate_datanames("validate_datanames", modules, transformed_teal_data)
+    # module_teal_data <- srv_validate_datanames("validate_datanames", modules, transformed_teal_data)
+    module_teal_data <- srv_validate_reactive_teal_data(
+      "validate_datanames",
+      data = transformed_teal_data,
+      modules = modules,
+      validate_shiny_silent_error = TRUE
+    )
 
     # Call modules.
     module_out <- reactiveVal(NULL)
