@@ -157,10 +157,9 @@ srv_validate_datanames <- function(id, modules, data) {
       if (isTRUE(is_modules_ok_rv())) {
         data()
       } else {
-        validate(need(FALSE, is_modules_ok_rv())) # this prevents the module from being rendered
+        validate(need(FALSE, is_modules_ok_rv())) # prevents the module from being rendered
       }
     })
-
 
     output$message <- renderUI({
       if (!isTRUE(req(is_modules_ok_rv()))) {
