@@ -27,7 +27,7 @@ testthat::test_that("snapshot manager holds initial state in history", {
   })
 
   shiny::testServer(
-    app = snapshot_manager_srv,
+    app = srv_snapshot_manager,
     args = list(
       id = "test",
       slices_global = slices_global,
