@@ -120,11 +120,27 @@ srv_validate_reactive_teal_data <- function(id,
   })
 }
 
-ui_teal_module_validation_error <- function(id) {
+#' Validate reactive `teal_data` datanames
+#'
+#' @inheritParams module_data
+#' @return (`reactive` returning `teal_data`)
+#' @rdname validate_datanames
+#' @name validate_datanames
+#' @keywords internal
+NULL
+
+#' @rdname validate_datanames
+#' @keywords internal
+ui_validate_datanames <- function(id) {
   uiOutput(NS(id, "message"))
 }
 
-srv_teal_module_validation_error <- function(id, modules, data) {
+#' @rdname validate_datanames
+#' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
+#' error message is displayed.
+#' Default is `FALSE` to handle empty reactive cycle on init.
+#' @keywords internal
+srv_validate_datanames <- function(id, modules, data) {
   moduleServer(id, function(input, output, session) {
     is_modules_ok_rv <- reactive({
       req(data())
