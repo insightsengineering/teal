@@ -284,7 +284,7 @@ testthat::test_that("srv_teal_module: teal_module gets data even if any transfor
       session$flushReact()
       out <- module_out()
       # subset keeps the old dataframe row.names where dplyr::filter used in the app resets row.names to 1:nrow()
-      testthat::expect_identical(out()[["iris"]], subset(iris, Species == "virginica") |> `rownames<-`(1:50) |> head(6))
+      testthat::expect_identical(out()[["iris"]], subset(iris, Species == "virginica") %>% `rownames<-`(1:50) %>% head(6))
       testthat::expect_identical(out()[["mtcars"]], head(mtcars, 6))
     }
   )
@@ -394,7 +394,7 @@ testthat::test_that("srv_teal_module: teal_module receives filtered data with fi
       session$flushReact()
       out <- module_out()
       # subset keeps the old dataframe row.names where dplyr::filter used in the app resets row.names to 1:nrow()
-      testthat::expect_identical(out()[["iris"]], subset(iris, Species == "virginica") |> `rownames<-`(1:50))
+      testthat::expect_identical(out()[["iris"]], subset(iris, Species == "virginica") %>% `rownames<-`(1:50))
       testthat::expect_identical(out()[["mtcars"]], subset(mtcars, cyl == 6))
       hashes <- lapply(c("data3", "iris", "mtcars"), function(dataname) {
         sprintf(
@@ -448,8 +448,8 @@ testthat::test_that("srv_teal_module: teal_module receives transformed data with
       session$flushReact()
       out <- module_out()
       # subset keeps the old dataframe row.names where dplyr::filter used in the app resets row.names to 1:nrow()
-      testthat::expect_identical(out()[["iris"]], subset(iris, Species == "virginica") |> `rownames<-`(1:50) |> head(6))
-      testthat::expect_identical(out()[["mtcars"]], subset(mtcars, cyl == 6) |> head(6))
+      testthat::expect_identical(out()[["iris"]], subset(iris, Species == "virginica") %>% `rownames<-`(1:50) %>% head(6))
+      testthat::expect_identical(out()[["mtcars"]], subset(mtcars, cyl == 6) %>% head(6))
       hashes <- lapply(c("data3", "iris", "mtcars"), function(dataname) {
         sprintf(
           "stopifnot(rlang::hash(%s) == \"%s\")",
