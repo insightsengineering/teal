@@ -43,9 +43,12 @@ srv_validate_reactive_teal_data <- function(id,
     if (!is.reactive(data)) {
       stop("The `teal_data_module` passed to `data` must return a reactive expression.", call. = FALSE)
     }
+
+    data_out_rv <- reactive(tryCatch(data(), error = function(e) e))
+
     data_validated <- reactive({
       # custom module can return error
-      data_out <- tryCatch(data(), error = function(e) e)
+      data_out <- data_out_rv()
 
       # there is an empty reactive cycle on init!
       if (inherits(data_out, "shiny.silent.error") && identical(data_out$message, "")) {
@@ -57,7 +60,8 @@ srv_validate_reactive_teal_data <- function(id,
               FALSE,
               paste(
                 data_out$message,
-                "\n Check your inputs or contact app developer if error persists."
+                "Check your inputs or contact app developer if error persists.",
+                sep = ifelse(identical(data_out$message, ""), "", "\n")
               )
             )
           )
@@ -104,9 +108,11 @@ srv_validate_reactive_teal_data <- function(id,
     })
 
     output$shiny_warnings <- renderUI({
-      is_modules_ok <- check_modules_datanames(modules = modules, datanames = teal_data_datanames(data_validated()))
-      if (!isTRUE(is_modules_ok)) {
-        span(is_modules_ok, class = "teal-output-warning")
+      if (inherits(data_out_rv(), "teal_data")) {
+        is_modules_ok <- check_modules_datanames(modules = modules, datanames = teal_data_datanames(data_validated()))
+        if (!isTRUE(is_modules_ok)) {
+          tags$div(is_modules_ok, class = "teal-output-warning")
+        }
       }
     })
 

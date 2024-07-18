@@ -138,7 +138,7 @@ check_modules_datanames <- function(modules, datanames) {
       extra_datanames <- setdiff(modules$datanames, c("all", datanames))
       if (length(extra_datanames)) {
         sprintf(
-          "- Module '%s' uses datanames not available in 'data': (%s) not in (%s)",
+          "Module '%s' uses datanames not available in 'data': (%s) not in (%s)",
           modules$label,
           toString(dQuote(extra_datanames, q = FALSE)),
           toString(dQuote(datanames, q = FALSE))
