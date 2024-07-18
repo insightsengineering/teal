@@ -21,6 +21,7 @@ NULL
 #' @keywords internal
 ui_data_summary <- function(id) {
   ns <- NS(id)
+  content_id <- ns("filters_overview_contents")
   tags$div(
     id = id, # not used, can be used to customize CSS behavior
     class = "well",
@@ -32,17 +33,15 @@ ui_data_summary <- function(id) {
       ),
       tags$div(
         class = "col-sm-3",
-        actionLink(
-          ns("minimise_filter_overview"),
-          label = NULL,
-          icon = icon("angle-down", lib = "font-awesome"),
-          title = "Minimise panel",
-          class = "remove pull-right"
+        tags$i(
+          class = "remove pull-right fa fa-angle-down",
+          title = "fold/expand transform panel",
+          onclick = sprintf("togglePanelItem(this, '%s', 'fa-angle-right', 'fa-angle-down');", content_id)
         )
       )
     ),
     tags$div(
-      id = ns("filters_overview_contents"),
+      id = content_id,
       tags$div(
         class = "teal_active_summary_filter_panel",
         tableOutput(ns("table"))
@@ -59,12 +58,6 @@ srv_data_summary <- function(id, teal_data) {
     id = id,
     function(input, output, session) {
       logger::log_trace("srv_data_summary initializing")
-
-      observeEvent(input$minimise_filter_overview, {
-        shinyjs::toggle("filters_overview_contents")
-        toggle_icon(session$ns("minimise_filter_overview"), c("fa-angle-right", "fa-angle-down"))
-        toggle_title(session$ns("minimise_filter_overview"), c("Restore panel", "Minimise Panel"))
-      })
 
       output$table <- renderUI({
         req(inherits(teal_data(), "teal_data"))
@@ -152,133 +145,6 @@ srv_data_summary <- function(id, teal_data) {
       NULL
     }
   )
-}
-
-
-#' Toggle button properties.
-#'
-#' Switch between different icons or titles on a button.
-#'
-#' Wrapper functions that use `shinyjs::runjs` to change button properties in response to events,
-#' typically clicking those very buttons.
-#' `shiny`'s `actionButton` and `actionLink` create `<a>` tags,
-#' which may contain a child `<i>` tag that specifies an icon to be displayed.
-#' `toggle_icon` calls the `toggleClass` (when `one_way = FALSE`) or
-#' `removeClass` and `addClass` methods (when `one_way = TRUE`) to change icons.
-#' `toggle_title` calls the `attr` method to modify the `Title` attribute of the button.
-#'
-#' @param input_id (`character(1)`) (name-spaced) id of the button
-#' @param icons,titles (`character(2)`) vector specifying values between which to toggle
-#' @param one_way (`logical(1)`) flag specifying whether to keep toggling;
-#'                if TRUE, the target will be changed
-#'                from the first element of `icons`/`titles` to the second
-#'
-#' @return `NULL`, invisibly.
-#'
-#' @examples
-#' # use non-exported function from teal.slice
-#' toggle_icon <- getFromNamespace("toggle_icon", "teal.slice")
-#'
-#' library(shiny)
-#' library(shinyjs)
-#'
-#' ui <- fluidPage(
-#'   useShinyjs(),
-#'   actionButton("hide_content", label = "hide", icon = icon("xmark")),
-#'   actionButton("show_content", label = "show", icon = icon("check")),
-#'   actionButton("toggle_content", label = "toggle", icon = icon("angle-down")),
-#'   tags$br(),
-#'   tags$div(
-#'     id = "content",
-#'     verbatimTextOutput("printout")
-#'   )
-#' )
-#'
-#' server <- function(input, output, session) {
-#'   observeEvent(input$hide_content,
-#'     {
-#'       hide("content")
-#'       toggle_icon("toggle_content", c("fa-angle-down", "fa-angle-right"), one_way = TRUE)
-#'     },
-#'     ignoreInit = TRUE
-#'   )
-#'
-#'   observeEvent(input$show_content,
-#'     {
-#'       show("content")
-#'       toggle_icon("toggle_content", c("fa-angle-right", "fa-angle-down"), one_way = TRUE)
-#'     },
-#'     ignoreInit = TRUE
-#'   )
-#'
-#'   observeEvent(input$toggle_content,
-#'     {
-#'       toggle("content")
-#'       toggle_icon("toggle_content", c("fa-angle-right", "fa-angle-down"))
-#'     },
-#'     ignoreInit = TRUE
-#'   )
-#'
-#'   output$printout <- renderPrint({
-#'     head(faithful, 10)
-#'   })
-#' }
-#' if (interactive()) {
-#'   shinyApp(ui, server)
-#' }
-#'
-#' @name toggle_button
-#' @rdname toggle_button
-#' @keywords internal
-toggle_icon <- function(input_id, icons, one_way = FALSE) {
-  checkmate::assert_string(input_id)
-  checkmate::assert_character(icons, len = 2L)
-  checkmate::assert_flag(one_way)
-
-  expr <-
-    if (one_way) {
-      sprintf(
-        "$('#%s i').removeClass('%s').addClass('%s');",
-        input_id, icons[1], icons[2]
-      )
-    } else {
-      sprintf("$('#%s i').toggleClass('%s');", input_id, paste(icons, collapse = " "))
-    }
-
-  shinyjs::runjs(expr)
-
-  invisible(NULL)
-}
-
-#' @rdname toggle_button
-#' @keywords internal
-toggle_title <- function(input_id, titles, one_way = FALSE) {
-  checkmate::assert_string(input_id)
-  checkmate::assert_character(titles, len = 2L)
-  checkmate::assert_flag(one_way)
-
-  expr <-
-    if (one_way) {
-      sprintf(
-        "$('a#%s').attr('title', '%s');",
-        input_id, titles[2]
-      )
-    } else {
-      sprintf(
-        paste0(
-          "var button_id = 'a#%1$s';",
-          "var curr = $(button_id).attr('title');",
-          "if (curr == '%2$s') { $(button_id).attr('title', '%3$s');",
-          "} else { $(button_id).attr('title', '%2$s');",
-          "}"
-        ),
-        input_id, titles[1], titles[2]
-      )
-    }
-
-  shinyjs::runjs(expr)
-
-  invisible(NULL)
 }
 
 #' @rdname module_data_summary
