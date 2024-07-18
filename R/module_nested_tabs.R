@@ -198,13 +198,16 @@ srv_teal_module.teal_module <- function(id,
       datanames <- if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
         teal_data_datanames(data_rv())
       } else {
-        include_parent_datanames(
-          modules$datanames,
-          teal.data::join_keys(data_rv())
+        # Remove datanames that are not **YET** in the data (may be added with teal_data_module transforms)
+        # Check is deferred when module is called
+        intersect(
+          include_parent_datanames(
+            modules$datanames,
+            teal.data::join_keys(data_rv())
+          ),
+          datanames(data_rv())
         )
       }
-      # Remove datanames that are not **YET** in the data
-      intersect(datanames, datasets()$datanames())
     })
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
@@ -300,7 +303,6 @@ srv_teal_module.teal_module <- function(id,
   if (is_arg_used(modules$server, "data")) {
     args <- c(args, data = list(filtered_teal_data))
   }
-
 
   if (is_arg_used(modules$server, "filter_panel_api")) {
     args <- c(args, filter_panel_api = teal.slice::FilterPanelAPI$new(datasets()))
