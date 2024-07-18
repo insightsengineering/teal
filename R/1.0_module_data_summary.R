@@ -318,7 +318,9 @@ get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname,
     data.frame(
       dataname = dataname,
       obs = NA,
-      obs_filtered = NA
+      obs_filtered = NA,
+      subjects = NA,
+      subjects_filtered = NA
     )
   }
 }
@@ -332,7 +334,9 @@ get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dat
     data.frame(
       dataname = dataname,
       obs = nrow(unfiltered_data),
-      obs_filtered = nrow(filtered_data)
+      obs_filtered = nrow(filtered_data),
+      subjects = NA,
+      subjects_filtered = NA
     )
   } else {
     data.frame(
