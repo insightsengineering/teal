@@ -66,6 +66,7 @@ srv_teal_transform_module <- function(id, data, transformers, modules) {
   names(transformers) <- ids
 
   moduleServer(id, function(input, output, session) {
+    logger::log_trace("srv_teal_transform_module initializing.")
     # todo: move this to javascript so that server only returns data
     lapply(
       names(transformers),
@@ -130,6 +131,8 @@ srv_teal_data <- function(id,
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
 
   moduleServer(id, function(input, output, session) {
+    logger::log_trace("srv_teal_data initializing.")
+
     data_out <- if (is_arg_used(transformer$server, "data")) {
       transformer$server(id = "data", data = data)
     } else {
@@ -139,7 +142,7 @@ srv_teal_data <- function(id,
       id = "validate",
       data = data_out,
       modules = modules,
-      validate_shiny_silent_error = TRUE
+      validate_shiny_silent_error = validate_shiny_silent_error
     )
     .fallback_on_failure(
       this = data_validated,
