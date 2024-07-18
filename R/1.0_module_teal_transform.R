@@ -133,6 +133,7 @@ srv_teal_data_module <- function(id,
     } else {
       transformer$server(id = "data")
     }
+
     data_validated <- srv_validate_reactive_teal_data(
       id = "validate",
       data = data_out,
