@@ -23,6 +23,7 @@ NULL
 #' @rdname validate_reactive_teal_data
 #' @keywords internal
 ui_validate_reactive_teal_data <- function(id) {
+  # todo: format error message nicely. Add (⚠) icon.
   uiOutput(NS(id, "response"), class = "teal_validate")
 }
 
@@ -91,7 +92,7 @@ srv_validate_reactive_teal_data <- function(id,
       }
 
       if (!is.null(modules)) {
-        .validate_module_datanames(data_out, modules)
+        .validate_module_datanames(modules = modules, datanames = teal_data_datanames(data_out))
       }
 
       data_out
@@ -108,22 +109,10 @@ srv_validate_reactive_teal_data <- function(id,
   })
 }
 
-
-.validate_module_datanames <- function(data, modules) {
-  is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
+.validate_module_datanames <- function(modules, datanames) {
+  is_modules_ok <- check_modules_datanames(modules, datanames)
   if (!isTRUE(is_modules_ok)) {
+    # todo: how to throw exception to the UI and continue in the same time?
     validate(need(isTRUE(is_modules_ok), sprintf("%s. Contact app developer.", is_modules_ok)))
-  }
-}
-
-.validate_filter_datanames <- function(data, filter) {
-  is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
-  if (!isTRUE(is_filter_ok)) {
-    showNotification(
-      "Some filters were not applied because of incompatibility with data. Contact app developer.",
-      type = "warning",
-      duration = 10
-    )
-    warning(is_filter_ok)
   }
 }
