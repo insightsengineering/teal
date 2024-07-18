@@ -393,3 +393,5 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
   experiment_info <- cbind(subset(experiment_obs_info, select = dataname:obs_filtered), experiment_subjects_info)
   rbind(mae_info, experiment_info)
 }
+
+globalVariables(c('obs', 'obs_filtered', 'subjects', 'subjects_filtered', 'colname'))
