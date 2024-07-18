@@ -98,7 +98,10 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       fluidRow(
         column(
           width = 9,
-          ui_validate_reactive_teal_data(ns("validate_datanames")),
+          div(
+            class = "teal_validated",
+            ui_validate_reactive_teal_data(ns("validate_datanames"))
+          ),
           do.call(modules$ui, args),
           class = "teal_primary_col"
         ),
