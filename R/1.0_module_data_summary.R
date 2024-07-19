@@ -77,25 +77,19 @@ srv_data_summary <- function(id, teal_data) {
         filter_overview <- get_filter_overview(teal_data)
         attr(filter_overview$dataname, "label") <- "Data Name"
 
-        if (!is.null(filter_overview$obs)) {
-          # some datasets (MAE colData) doesn't return obs column
-          filter_overview$obs_str_summary <- ifelse(
-            !is.na(filter_overview$obs),
-            sprintf("%s/%s", filter_overview$obs_filtered, filter_overview$obs),
-            ""
-          )
-          attr(filter_overview$obs_str_summary, "label") <- "Obs"
-        }
+        filter_overview$obs_str_summary <- ifelse(
+          !is.na(filter_overview$obs),
+          sprintf("%s/%s", filter_overview$obs_filtered, filter_overview$obs),
+          ""
+        )
+        attr(filter_overview$obs_str_summary, "label") <- "Obs"
 
-        if (!is.null(filter_overview$subjects)) {
-          # some datasets (without keys) doesn't return subjects
-          filter_overview$subjects_summary <- ifelse(
-            !is.na(filter_overview$subjects),
-            sprintf("%s/%s", filter_overview$subjects_filtered, filter_overview$subjects),
-            ""
-          )
-          attr(filter_overview$subjects_summary, "label") <- "Subjects"
-        }
+        filter_overview$subjects_summary <- ifelse(
+          !is.na(filter_overview$subjects),
+          sprintf("%s/%s", filter_overview$subjects_filtered, filter_overview$subjects),
+          ""
+        )
+        attr(filter_overview$subjects_summary, "label") <- "Subjects"
 
         all_names <- c("dataname", "obs_str_summary", "subjects_summary")
         filter_overview <- filter_overview[, colnames(filter_overview) %in% all_names]
