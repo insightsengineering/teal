@@ -79,27 +79,20 @@ srv_data_summary <- function(id, teal_data) {
 
         if (!is.null(filter_overview$obs)) {
           # some datasets (MAE colData) doesn't return obs column
-          filter_overview <- transform(
-            filter_overview,
-            obs_str_summary = ifelse(
-              !is.na(obs),
-              sprintf("%s/%s", obs_filtered, obs),
+          filter_overview$obs_str_summary <- ifelse(
+              !is.na(filter_overview$obs),
+              sprintf("%s/%s", filter_overview$obs_filtered, filter_overview$obs),
               ""
-            )
           )
           attr(filter_overview$obs_str_summary, "label") <- "Obs"
         }
 
-
         if (!is.null(filter_overview$subjects)) {
           # some datasets (without keys) doesn't return subjects
-          filter_overview <- transform(
-            filter_overview,
-            subjects_summary = ifelse(
-              !is.na(subjects),
-              sprintf("%s/%s", subjects_filtered, subjects),
+          filter_overview$subjects_summary <- ifelse(
+              !is.na(filter_overview$subjects),
+              sprintf("%s/%s", filter_overview$subjects_filtered, filter_overview$subjects),
               ""
-            )
           )
           attr(filter_overview$subjects_summary, "label") <- "Subjects"
         }
@@ -376,7 +369,7 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
   ))
 
   get_experiment_keys <- function(mae, experiment) {
-    sample_subset <- subset(mae@sampleMap, subset = colname %in% colnames(experiment))
+    sample_subset <- mae@sampleMap[mae@sampleMap$colname %in% colnames(experiment), ]
     length(unique(sample_subset$primary))
   }
 
@@ -390,8 +383,6 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
     }
   ))
 
-  experiment_info <- cbind(subset(experiment_obs_info, select = dataname:obs_filtered), experiment_subjects_info)
+  experiment_info <- cbind(experiment_obs_info[, c('dataname', 'obs', 'obs_filtered')], experiment_subjects_info)
   rbind(mae_info, experiment_info)
 }
-
-globalVariables(c("obs", "obs_filtered", "subjects", "subjects_filtered", "colname"))
