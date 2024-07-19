@@ -286,8 +286,8 @@ get_filter_overview <- function(teal_data) {
   logger::log_trace("srv_data_overiew-get_filter_overview initialized")
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
-  filtered_data_objs <- sapply(datanames, function(name) teal_data()@env[[name]])
-  unfiltered_data_objs <- sapply(datanames, function(name) teal_data()@env[[paste0(name, "_raw")]])
+  filtered_data_objs <- sapply(datanames, function(name) teal_data()@env[[name]], simplify = FALSE)
+  unfiltered_data_objs <- sapply(datanames, function(name) teal_data()@env[[paste0(name, "_raw")]], simplify = FALSE)
 
   rows <- lapply(
     datanames,
