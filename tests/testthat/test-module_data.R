@@ -19,7 +19,7 @@ testthat::test_that("srv_data fails when teal_data_module doesn't return a react
   )
 })
 
-testthat::test_that("srv_data: data_validated throws original error with note to app user but module doesn't fail", {
+testthat::test_that("srv_data: data_validated throws original error but module doesn't fail", {
   shiny::testServer(
     app = srv_data,
     args = list(
@@ -30,13 +30,13 @@ testthat::test_that("srv_data: data_validated throws original error with note to
     expr = {
       testthat::expect_error(
         data_validated(),
-        "this is an error \n \n Check your inputs or contact app developer"
+        "this is an error"
       )
     }
   )
 })
 
-testthat::test_that("srv_data: data_validated throws original validate with note to app user but module doesn't fail", {
+testthat::test_that("srv_data: data_validated throws original validate message but module doesn't fail", {
   shiny::testServer(
     app = srv_data,
     args = list(
@@ -47,13 +47,25 @@ testthat::test_that("srv_data: data_validated throws original validate with note
     expr = {
       testthat::expect_error(
         data_validated(),
-        "this is a validation error \n \n Check your inputs or contact app developer"
+        "this is a validation error"
       )
     }
   )
 })
 
-testthat::test_that("srv_data: data_validated is NULL when reactive returns silent.error", {
+testthat::test_that("srv_data: data_validated throws an error when reactive returns silent.error", {
+  # QUESTION: should this return NULL?
+  # THEN in 1.0_module_data substitute
+  #    } else if (inherits(data, c("reactive", "reactiveVal"))) {
+  #    data
+  # with
+  #    } else if (inherits(data, c("reactive", "reactiveVal"))) {
+  #      if (is.null(tryCatch(data(), error = function(cond) NULL))) {
+  #        NULL
+  #      } else {
+  #        data
+  #      }
+  #    }
   shiny::testServer(
     app = srv_data,
     args = list(
@@ -62,12 +74,15 @@ testthat::test_that("srv_data: data_validated is NULL when reactive returns sile
       modules = modules(example_module())
     ),
     expr = {
-      testthat::expect_null(data_validated())
+      testthat::expect_error(data_validated())
     }
   )
 })
 
-testthat::test_that("srv_data: data_validated throws original validate with note to app user but module doesn't fail", {
+testthat::test_that("srv_data: data_validated returns qenv.error if data is qenv.error", {
+  # I THINK THIS REQUIERES DEEPER INVESTIAGTION AS I AM NOT SURE WE CAN LATER HANDLE "qenv.error"
+  # I THINK WE SHOULD HANDLE and return a message instead of "qenv.error"
+  # PROBABLY REQUIRE CHANGES in 1.0_module_data
   shiny::testServer(
     app = srv_data,
     args = list(
@@ -76,10 +91,12 @@ testthat::test_that("srv_data: data_validated throws original validate with note
       modules = modules(example_module())
     ),
     expr = {
-      testthat::expect_error(
+      testthat::expect_s3_class(
         data_validated(),
-        "test.+Check your inputs or contact app developer"
+        "qenv.error"
       )
     }
   )
 })
+
+# IMPORTANT: we stopped adding a note about CONTACTING THE APP DEVELOPER
