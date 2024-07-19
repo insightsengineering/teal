@@ -339,8 +339,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return `data.frame`
     get_active_data_summary_table = function() {
      summary_table <-
-        app$active_data_summary_element('table') %>%
-        app$get_html_rvest() %>%
+        self$active_data_summary_element('table') %>%
+        self$get_html_rvest() %>%
         rvest::html_table(fill = TRUE) %>%
         .[[1]]
 
