@@ -80,9 +80,9 @@ srv_data_summary <- function(id, teal_data) {
         if (!is.null(filter_overview$obs)) {
           # some datasets (MAE colData) doesn't return obs column
           filter_overview$obs_str_summary <- ifelse(
-              !is.na(filter_overview$obs),
-              sprintf("%s/%s", filter_overview$obs_filtered, filter_overview$obs),
-              ""
+            !is.na(filter_overview$obs),
+            sprintf("%s/%s", filter_overview$obs_filtered, filter_overview$obs),
+            ""
           )
           attr(filter_overview$obs_str_summary, "label") <- "Obs"
         }
@@ -90,9 +90,9 @@ srv_data_summary <- function(id, teal_data) {
         if (!is.null(filter_overview$subjects)) {
           # some datasets (without keys) doesn't return subjects
           filter_overview$subjects_summary <- ifelse(
-              !is.na(filter_overview$subjects),
-              sprintf("%s/%s", filter_overview$subjects_filtered, filter_overview$subjects),
-              ""
+            !is.na(filter_overview$subjects),
+            sprintf("%s/%s", filter_overview$subjects_filtered, filter_overview$subjects),
+            ""
           )
           attr(filter_overview$subjects_summary, "label") <- "Subjects"
         }
@@ -384,6 +384,6 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
     }
   ))
 
-  experiment_info <- cbind(experiment_obs_info[, c('dataname', 'obs', 'obs_filtered')], experiment_subjects_info)
+  experiment_info <- cbind(experiment_obs_info[, c("dataname", "obs", "obs_filtered")], experiment_subjects_info)
   rbind(mae_info, experiment_info)
 }
