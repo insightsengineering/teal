@@ -201,7 +201,6 @@ srv_teal_module.teal_module <- function(id,
   logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     active_datanames <- reactive({
-      # todo: are active_datanames enough here - what if datanames changes in the transform?
       req(data_rv())
       datanames <- if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
         teal_data_datanames(data_rv())
@@ -213,7 +212,7 @@ srv_teal_module.teal_module <- function(id,
             modules$datanames,
             teal.data::join_keys(data_rv())
           ),
-          datanames(data_rv())
+          teal.data::datanames(data_rv())
         )
       }
     })
@@ -271,6 +270,23 @@ srv_teal_module.teal_module <- function(id,
       data = transformed_teal_data,
       modules = modules
     )
+    # todo: Datasets in teal_data handed over to module should be limited to module$datanames
+    #       Summary shouldn't display datanames that are not in module$datanames
+    #       During ddl and transform we should keep all the datasets which might be needed in transform
+    # so:
+    #  - keep all datasets in ddl
+    #  - make filter panel only from module$datanames (or available subset) - make a .resolve_module_datanames function
+    #    which does the same thing as active_datanames() because we will need it in the later stage
+    #  - make a teal_data (filtered_teal_data) containing everything. No code substitution, no datanames restriction.
+    #  - transformed_teal_data can add any datasets to teal_data object
+    #  - at the end, validate and use .resolve_module_datanames again to determine relevant datanames.
+    #    Set datanames in the teal_data object so that app developer don't have to bother about `teal.data::datanames` #    in each transform module which adds datasets. Restrict the code to the "resolved" datanames. Remove bindings
+    #    which are not in the resolved datanames.
+    #  - send data to teal_module and to the summary
+    # side comment:
+    #  - looks like the only purpose of the `teal.data::datanames` is to limit the datasets for modules which have
+    #    $datanames = "all". Otherwise, it is not needed as modules$datanames is the primary source of truth.
+
 
     # Call modules.
     module_out <- reactiveVal(NULL)

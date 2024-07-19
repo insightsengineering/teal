@@ -23,7 +23,6 @@ NULL
 #' @rdname validate_reactive_teal_data
 #' @keywords internal
 ui_validate_reactive_teal_data <- function(id) {
-  # todo: format error message nicely. Add (⚠) icon.
   tagList(
     uiOutput(NS(id, "shiny_errors")),
     uiOutput(NS(id, "shiny_warnings"))
