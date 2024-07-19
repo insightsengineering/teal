@@ -106,6 +106,7 @@ srv_data_summary <- function(id, teal_data) {
 
         all_names <- c("dataname", "obs_str_summary", "subjects_summary")
         filter_overview <- filter_overview[, colnames(filter_overview) %in% all_names]
+        filter_overview <- Filter(function(col) !all(col == ""), filter_overview)
 
         body_html <- apply(
           filter_overview,
@@ -286,8 +287,8 @@ get_filter_overview <- function(teal_data) {
   logger::log_trace("srv_data_overiew-get_filter_overview initialized")
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
-  filtered_data_objs <- sapply(datanames, function(name) teal_data()@env[[name]], simplify = FALSE)
-  unfiltered_data_objs <- sapply(datanames, function(name) teal_data()@env[[paste0(name, "_raw")]], simplify = FALSE)
+  filtered_data_objs <- sapply(datanames, function(name) teal.code::get_env(teal_data())[[name]], simplify = FALSE)
+  unfiltered_data_objs <- sapply(datanames, function(name) teal.code::get_env(teal_data())[[paste0(name, "_raw")]], simplify = FALSE)
 
   rows <- lapply(
     datanames,
