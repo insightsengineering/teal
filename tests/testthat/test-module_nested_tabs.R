@@ -234,7 +234,7 @@ testthat::test_that("srv_teal_module: data objects contain datanames = modules$d
       testthat::expect_identical(active_datanames(), "iris")
       testthat::expect_identical(datasets()$datanames(), "iris")
       testthat::expect_identical(teal.data::datanames(filtered_teal_data()), "iris")
-      testthat::expect_identical(ls(filtered_teal_data()@env), c("iris", "iris_raw"))
+      testthat::expect_identical(ls(teal.code::get_env(filtered_teal_data())), c("iris", "iris_raw"))
     }
   )
 })
@@ -293,7 +293,7 @@ testthat::test_that("srv_teal_module: active_datanames is resolved when modules$
       testthat::expect_identical(active_datanames(), c("iris", "mtcars"))
       testthat::expect_identical(datasets()$datanames(), c("iris", "mtcars"))
       testthat::expect_identical(teal.data::datanames(filtered_teal_data()), c("iris", "mtcars"))
-      testthat::expect_identical(ls(filtered_teal_data()@env), c("iris", "iris_raw", "mtcars", "mtcars_raw"))
+      testthat::expect_identical(ls(teal.code::get_env(filtered_teal_data())), c("iris", "iris_raw", "mtcars", "mtcars_raw"))
     }
   )
 
@@ -309,7 +309,7 @@ testthat::test_that("srv_teal_module: active_datanames is resolved when modules$
       testthat::expect_identical(active_datanames(), c("iris", "mtcars"))
       testthat::expect_identical(datasets()$datanames(), c("iris", "mtcars"))
       testthat::expect_identical(teal.data::datanames(filtered_teal_data()), c("iris", "mtcars"))
-      testthat::expect_identical(ls(filtered_teal_data()@env), c("iris", "iris_raw", "mtcars", "mtcars_raw"))
+      testthat::expect_identical(ls(teal.code::get_env(filtered_teal_data())), c("iris", "iris_raw", "mtcars", "mtcars_raw"))
     }
   )
 })
