@@ -163,11 +163,12 @@ srv_teal_data_module <- function(id,
   checkmate::assert_class(this, "reactive")
   checkmate::assert_class(that, "reactive")
   checkmate::assert_string(label)
+
   reactive({
-    evaluated <- tryCatch(this(), error = function(e) e)
-    if (!inherits(evaluated, "error") && !is.null(evaluated)) {
+    res <- try(this())
+    if (inherits(res, "teal_data")) {
       logger::log_trace("{ label } evaluated successfully.")
-      this()
+      res
     } else {
       logger::log_trace("{ label } failed, falling back to previous data.")
       that()
