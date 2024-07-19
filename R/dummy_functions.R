@@ -20,11 +20,21 @@ example_module <- function(label = "example teal module", datanames = "all", tra
     server = function(id, data) {
       checkmate::assert_class(isolate(data()), "teal_data")
       moduleServer(id, function(input, output, session) {
-        updateSelectInput(
-          inputId = "dataname",
-          choices = isolate(teal.data::datanames(data())),
-          selected = restoreInput(session$ns("dataname"), NULL)
-        )
+        datanames_rv <- reactive({
+          teal.data::datanames(req(data()))
+        })
+
+        observeEvent(datanames_rv(), {
+          selected <- isolate(input$dataname)
+          if (identical(selected, "")) selected <- restoreInput(session$ns("dataname"), NULL)
+          updateSelectInput(
+            session = session,
+            inputId = "dataname",
+            choices = datanames_rv(),
+            selected = selected
+          )
+        })
+
         output$text <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]

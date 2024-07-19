@@ -206,6 +206,23 @@ testthat::test_that("srv_teal_module: teal_module doesn't start when input data 
   )
 })
 
+testthat::test_that("srv_teal_module: teal_module starts even if are datanames not sufficient", {
+  testServer(
+    app = srv_teal_module,
+    args = list(
+      id = "test",
+      data_rv = reactive(teal.data::teal_data(iris = iris, mtcars = mtcars)),
+      modules = module(server = function(id, data) -99L, dataname = c("iris", "dontexist"))
+    ),
+    expr = {
+      testthat::expect_null(module_out())
+      session$flushReact()
+      testthat::expect_identical(trigger_data(), 1L)
+      testthat::expect_identical(module_out(), -99L)
+    }
+  )
+})
+
 testthat::test_that("srv_teal_module: data retrigger doesn't call teal_module again", {
   testServer(
     app = srv_teal_module,
@@ -302,6 +319,41 @@ testthat::test_that("srv_teal_module: teal_module gets data with datasets == mod
       out <- module_out()
       testthat::expect_identical(teal.data::datanames(out()), c("iris", "data3"))
       testthat::expect_identical(ls(out()@env), c("data3", "data3_raw", "iris", "iris_raw"))
+    }
+  )
+})
+
+testthat::test_that("srv_teal_module: teal_module doesn't get extra data added in a transform", {
+  testServer(
+    app = srv_teal_module,
+    args = list(
+      id = "test",
+      data_rv = reactive(teal.data::teal_data(iris = iris, mtcars = mtcars)),
+      modules = module(
+        server = function(id, data) data,
+        datanames = c("iris", "data3"),
+        transformers = list(
+          teal_data_module(
+            ui = function(id) NULL,
+            server = function(id, data) {
+              moduleServer(id, function(input, output, session) {
+                reactive({
+                  within(data(), {
+                    data3 <- data.frame(x = 1)
+                    data4 <- data.frame(y = 2)
+                  })
+                })
+              })
+            }
+          )
+        )
+      )
+    ),
+    expr = {
+      session$flushReact()
+      out <- module_out()
+      testthat::expect_identical(teal.data::datanames(out()), c("iris", "data3"))
+      testthat::expect_identical(ls(out()@env), c("data3", "iris", "iris_raw"))
     }
   )
 })
@@ -571,3 +623,135 @@ testthat::test_that("srv_teal_module.teal_module passes Reporter if specified", 
     }
   )
 })
+
+testthat::test_that("srv_teal_module: summary table displays Obs only column if all datasets have no join keys", {
+  testServer(
+    app = srv_teal_module,
+    args = list(
+      id = "test",
+      data_rv = reactive(teal.data::teal_data(iris = iris, mtcars = mtcars)),
+      modules = module(server = function(id, data) data)
+    ),
+    expr = {
+      session$flushReact()
+      testthat::expect_identical(
+        summary_table(),
+        data.frame(
+          `Data Name` = c("iris", "mtcars"),
+          Obs = c("150/150", "32/32"),
+          check.names = FALSE
+        )
+      )
+    }
+  )
+})
+
+testthat::test_that("srv_teal_module: summary table displays Subjects with count based on foreign key column", {
+  testServer(
+    app = srv_teal_module,
+    args = list(
+      id = "test",
+      data_rv = reactive({
+        data <- within(teal.data::teal_data(), {
+          df_parent <- data.frame(id = 1:10, x = letters[1:10])
+          df_child <- data.frame(id = 1:20, parent_id = rep(1:10, each = 2), y = letters[1:20])
+          mtcars <- mtcars
+        })
+        teal.data::join_keys(data) <- teal.data::join_keys(
+          teal.data::join_key("df_parent", "df_child", keys = c(id = "parent_id")),
+          teal.data::join_key("df_parent", keys = c(id = "id")),
+          teal.data::join_key("df_child", keys = "id")
+        )
+        data
+      }),
+      modules = module(server = function(id, data) data)
+    ),
+    expr = {
+      session$flushReact()
+      # todo: datanames in a summary should be presented in topological order
+      testthat::expect_identical(
+        summary_table(),
+        data.frame(
+          `Data Name` = c("df_parent", "df_child", "mtcars"),
+          Obs = c("10/10", "20/20", "32/32"),
+          Subjects = c("10/10", "10/10", ""),
+          check.names = FALSE
+        )
+      )
+    }
+  )
+})
+
+testthat::test_that("srv_teal_module: summary table displays parent's Subjects with count based on primary key ", {
+  testServer(
+    app = srv_teal_module,
+    args = list(
+      id = "test",
+      data_rv = reactive({
+        data <- within(teal.data::teal_data(), {
+          df_parent <- data.frame(id = 1:10, x = letters[1:10])
+          mtcars <- mtcars
+        })
+        teal.data::join_keys(data) <- teal.data::join_keys(
+          teal.data::join_key("df_parent", "df_child", keys = c(id = "parent_id")),
+          teal.data::join_key("df_parent", keys = c(id = "id"))
+        )
+        data
+      }),
+      modules = module(server = function(id, data) data)
+    ),
+    expr = {
+      session$flushReact()
+      testthat::expect_identical(
+        summary_table(),
+        data.frame(
+          `Data Name` = c("df_parent", "mtcars"),
+          Obs = c("10/10", "32/32"),
+          Subjects = c("10/10", ""),
+          check.names = FALSE
+        )
+      )
+    }
+  )
+})
+
+testthat::test_that("srv_teal_module: summary table reflects filters and displays subjects by their unique id count", {
+  testServer(
+    app = srv_teal_module,
+    args = list(
+      id = "test",
+      data_rv = reactive({
+        data <- teal.data::teal_data(iris = iris, mtcars = mtcars)
+        data
+      }),
+      modules = module(server = function(id, data) data)
+    ),
+    expr = {
+      datasets()$set_filter_state(teal_slices(teal_slice("iris", "Species", selected = "versicolor")))
+      datasets()$set_filter_state(teal_slices(teal_slice("mtcars", "cyl", selected = "6")))
+      session$flushReact()
+      testthat::expect_identical(
+        summary_table(),
+        data.frame(
+          `Data Name` = c("iris", "mtcars"),
+          Obs = c("50/150", "7/32"),
+          check.names = FALSE
+        )
+      )
+    }
+  )
+})
+
+testthat::test_that("srv_teal_module: summary table reflects transforms", {
+
+})
+
+testthat::test_that("srv_teal_module: summary table displays only module$datanames", {
+
+})
+
+testthat::test_that("srv_teal_module: summary table displays subset of module$datanames if not sufficient", {
+
+})
+
+# todo: check join keys in data() passed to the teal_module

@@ -133,6 +133,7 @@ srv_teal_data_module <- function(id,
     } else {
       transformer$server(id = "data")
     }
+
     data_validated <- srv_validate_reactive_teal_data(
       id = "validate",
       data = data_out,
@@ -154,8 +155,9 @@ srv_teal_data_module <- function(id,
 #' transform module data output with data input from the previous module (or from previous `teal` reactive
 #' tree elements).
 #'
-#' @param this (`reactive`) Current reactive
-#' @param that (`reactive`) Previous reactive
+#' @param this (`reactive`) Current reactive.
+#' @param that (`reactive`) Previous reactive.
+#' @param label (`character`) Label for identifying problematic `teal_data_module` transform in logging.
 #' @return `reactive` `teal_data`
 .fallback_on_failure <- function(this, that, label) {
   checkmate::assert_class(this, "reactive")
