@@ -262,7 +262,7 @@ srv_teal_module.teal_module <- function(id,
       modules = modules
     )
 
-    srv_data_summary("data_summary", transformed_teal_data)
+    summary_table <- srv_data_summary("data_summary", transformed_teal_data)
 
     # module_teal_data <- srv_validate_datanames("validate_datanames", modules, transformed_teal_data)
     module_teal_data <- srv_validate_reactive_teal_data(

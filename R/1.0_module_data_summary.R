@@ -59,28 +59,27 @@ srv_data_summary <- function(id, teal_data) {
     function(input, output, session) {
       logger::log_trace("srv_data_summary initializing")
 
-      output$table <- renderUI({
+      summary_table <- reactive({
         req(inherits(teal_data(), "teal_data"))
-        logger::log_trace("srv_data_summary updating counts")
 
         if (length(datanames(teal_data())) == 0) {
           return(NULL)
         }
 
         filter_overview <- get_filter_overview(teal_data)
-        attr(filter_overview$dataname, "label") <- "Data Name"
+        filter_overview <- Filter(function(x) !all(is.na(x)), filter_overview)
+        names(filter_overview)[[1]] <- "Data Name"
 
         if (!is.null(filter_overview$obs)) {
           # some datasets (MAE colData) doesn't return obs column
           filter_overview <- transform(
             filter_overview,
-            obs_str_summary = ifelse(
+            Obs = ifelse(
               !is.na(obs),
               sprintf("%s/%s", obs_filtered, obs),
               ifelse(!is.na(obs_filtered), sprintf("%s/(new)", obs_filtered), "")
             )
           )
-          attr(filter_overview$obs_str_summary, "label") <- "Obs"
         }
 
 
@@ -88,18 +87,20 @@ srv_data_summary <- function(id, teal_data) {
           # some datasets (without keys) doesn't return subjects
           filter_overview <- transform(
             filter_overview,
-            subjects_summary = ifelse(
+            `Subjects` = ifelse(
               !is.na(subjects),
               sprintf("%s/%s", subjects_filtered, subjects),
               ""
             )
           )
-          attr(filter_overview$subjects_summary, "label") <- "Subjects"
         }
+        filter_overview[, colnames(filter_overview) %in% c("Data Name", "Obs", "Subjects")]
+      })
 
-        all_names <- c("dataname", "obs_str_summary", "subjects_summary")
-        filter_overview <- filter_overview[, colnames(filter_overview) %in% all_names]
-
+      output$table <- renderUI({
+        req(inherits(summary_table(), "data.frame"))
+        logger::log_trace("srv_data_summary updating counts")
+        filter_overview <- summary_table()
         body_html <- apply(
           filter_overview,
           1,
@@ -124,14 +125,7 @@ srv_data_summary <- function(id, teal_data) {
           }
         )
 
-        header_labels <- vapply(
-          seq_along(filter_overview),
-          function(i) {
-            label <- attr(filter_overview[[i]], "label")
-            ifelse(!is.null(label), label, names(filter_overview)[[i]])
-          },
-          character(1)
-        )
+        header_labels <- names(filter_overview)
         header_html <- tags$tr(tagList(lapply(header_labels, tags$td)))
 
         table_html <- tags$table(
@@ -141,7 +135,8 @@ srv_data_summary <- function(id, teal_data) {
         )
         table_html
       })
-      NULL
+
+      summary_table # testing purpose
     }
   )
 }
@@ -157,11 +152,25 @@ get_filter_overview <- function(teal_data) {
   rows <- lapply(
     datanames,
     function(dataname) {
+      parent <- teal.data::parent(joinkeys, dataname)
+
+      # todo: what should we display for a parent dataset?
+      #     - Obs and Subjects
+      #     - Obs only
+      #     - Subjects only
+      # todo: summary table should be ordered by topological order
+      # todo (for later): summary table should be displayed in a way that child datasets
+      #       are indented under their parent dataset to form a tree structure
+      subject_keys <- if (length(parent) > 0) {
+        names(joinkeys[dataname, parent])
+      } else {
+        joinkeys[dataname, dataname]
+      }
       get_object_filter_overview(
         filtered_data = filtered_data_objs[[dataname]],
         unfiltered_data = unfiltered_data_objs[[dataname]],
         dataname = dataname,
-        joinkeys = joinkeys
+        subject_keys = subject_keys
       )
     }
   )
@@ -172,9 +181,9 @@ get_filter_overview <- function(teal_data) {
 
 #' @rdname module_data_summary
 #' @keywords internal
-get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname, joinkeys) {
+get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname, subject_keys) {
   if (inherits(filtered_data, c("data.frame", "DataFrame", "array", "Matrix", "SummarizedExperiment"))) {
-    get_object_filter_overview_array(filtered_data, unfiltered_data, dataname, joinkeys)
+    get_object_filter_overview_array(filtered_data, unfiltered_data, dataname, subject_keys)
   } else if (inherits(filtered_data, "MultiAssayExperiment")) {
     get_object_filter_overview_MultiAssayExperiment(filtered_data, unfiltered_data, dataname)
   } else {
@@ -190,9 +199,7 @@ get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname,
 
 #' @rdname module_data_summary
 #' @keywords internal
-get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dataname, joinkeys) {
-  subject_keys <- Reduce(intersect, joinkeys[[dataname]])
-
+get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dataname, subject_keys) {
   if (length(subject_keys) == 0) {
     data.frame(
       dataname = dataname,
@@ -232,7 +239,7 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
           filtered_data[[experiment_name]],
           unfiltered_data[[experiment_name]],
           dataname = experiment_name,
-          joinkeys = join_keys() # empty join keys
+          subject_keys = join_keys() # empty join keys
         ),
         dataname = paste0(" - ", experiment_name)
       )
