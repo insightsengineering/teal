@@ -56,11 +56,36 @@
 #' @export
 teal_data_module <- function(ui, server, label = "data module") {
   checkmate::assert_function(ui, args = "id", nargs = 1)
-  checkmate::assert(
-    checkmate::check_function(server, args = "id", nargs = 1),
-    # todo: allow for teal_data_module$server to have 'data' argument or break this in teal_transformer_module
-    checkmate::check_function(server, args = c("id", "data"), nargs = 2)
-  )
+  # checkmate::assert(
+  #   checkmate::check_function(server, args = "id", nargs = 1),
+  #   # todo: allow for teal_data_module$server to have 'data' argument or break this in teal_transformer_module
+  #   checkmate::check_function(server, args = c("id", "data"), nargs = 2)
+  # )
+
+  # ABOVE CHECKS ARE crossing each others paths, consider below
+  # teal_data_module(ui = function(id) tags$div(), server = function(id, x) NULL)
+  # Error: Assertion failed. One of the following must apply:
+  #   * checkmate::check_function(server): Must have exactly 1 formal arguments, but has 2
+  #   * checkmate::check_function(server): Must have formal arguments: data
+  # THORWS 2 message that does not make sense - must have 1 formal argument, but requires data and id
+  # IMHO this should be rewrite into
+
+  fser <- formals(server)
+  f_len <- length(fser)
+  if (f_len == 1) {
+    if (names(fser) != "id") {
+      stop("If server has one argument it needs to be called 'id'.")
+    }
+  } else if (f_len == 2) {
+    if (!all(names(fser) %in% c("id", "data"))) {
+      stop("If server has two arguments they need to be called 'id' and 'data'.")
+    }
+  } else {
+    stop(
+      "server needs to have at least one parameter called 'id' and at most 2 parameters where second is called 'data'."
+    )
+  }
+
   structure(
     list(ui = ui, server = server),
     label = label,

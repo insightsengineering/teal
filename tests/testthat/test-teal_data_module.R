@@ -12,9 +12,9 @@ testthat::test_that("teal_data_module throws when ui has other formals than id o
   )
 })
 
-testthat::test_that("teal_data_module throws when server has other formals than id only", {
+testthat::test_that("teal_data_module throws when server has other formals than id and data only", {
   testthat::expect_error(
     teal_data_module(ui = function(id) tags$div(), server = function(id, x) NULL),
-    "Must have exactly 1 formal arguments"
+    "If server has two arguments they need to be called 'id' and 'data'."
   )
 })
