@@ -68,7 +68,7 @@ testthat::test_that(
     testthat::skip_if_not_installed("MultiAssayExperiment")
     skip_if_too_deep(5)
 
-    data <- teal.data::teal_data() |>
+    data <- teal.data::teal_data() %>%
       within(
         {
           mtcars1 <- mtcars
