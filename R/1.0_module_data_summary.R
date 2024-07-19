@@ -146,8 +146,8 @@ srv_data_summary <- function(id, teal_data) {
 get_filter_overview <- function(teal_data) {
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
-  filtered_data_objs <- sapply(datanames, function(name) teal_data()@env[[name]])
-  unfiltered_data_objs <- sapply(datanames, function(name) teal_data()@env[[paste0(name, "_raw")]])
+  filtered_data_objs <- sapply(datanames, function(name) teal_data()@env[[name]], simplify = FALSE)
+  unfiltered_data_objs <- sapply(datanames, function(name) teal_data()@env[[paste0(name, "_raw")]], simplify = FALSE)
 
   rows <- lapply(
     datanames,
