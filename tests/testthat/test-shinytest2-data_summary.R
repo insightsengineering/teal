@@ -39,10 +39,10 @@ testthat::test_that("e2e: data summary is displayed with 2 columns data without 
 testthat::test_that("e2e: data summary is displayed with 3 columns for data with join keys", {
   skip_if_too_deep(5)
 
-  data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = mtcars)
+  data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0,1), test = c('a', 'b')))
 
   teal.data::join_keys(data) <- teal.data::join_keys(
-    teal.data::join_key('mtcars1', 'mtcars2', keys = c('am', 'gear'))
+    teal.data::join_key('mtcars2', 'mtcars1', keys = c('am'))
   )
 
   app <- TealAppDriver$new(
@@ -54,8 +54,8 @@ testthat::test_that("e2e: data summary is displayed with 3 columns for data with
     as.data.frame(app$get_active_data_summary_table()),
     data.frame(
       `Data Name` = c('mtcars1', 'mtcars2'),
-      Obs = c('32/32', '330/320'),
-      Subjects = c('4/4', '4/4'),
+      Obs = c('32/32', '2/2'),
+      Subjects = c('2/2', '2/2'),
       check.names = FALSE
     )
   )
@@ -72,7 +72,7 @@ testthat::test_that(
       within(
         {
           mtcars1 <- mtcars
-          mtcars2 <- mtcars
+          mtcars2 = data.frame(am = c(0,1), test = c('a', 'b'))
           iris <- iris
           library(MultiAssayExperiment)
           data("miniACC", package = "MultiAssayExperiment", envir = environment())
@@ -83,7 +83,7 @@ testthat::test_that(
       )
 
     teal.data::join_keys(data) <- teal.data::join_keys(
-      teal.data::join_key('mtcars1', 'mtcars2', keys = c('am', 'gear'))
+      teal.data::join_key('mtcars2', 'mtcars1', keys = c('am'))
     )
 
     app <- TealAppDriver$new(
@@ -98,8 +98,8 @@ testthat::test_that(
           "CO2", "iris", "miniACC", "- RNASeq2GeneNorm", "- gistict", "- RPPAArray", "- Mutations", "- miRNASeqGene",
           "mtcars1", "mtcars2", "factors"
         ),
-        Obs = c("84/84", "150/150", "", "198/198", "198/198", "33/33", "97/97", "471/471", "32/32", "330/32", ""),
-        Subjects = c("", "", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "4/4", "4/4", ""),
+        Obs = c("84/84", "150/150", "", "198/198", "198/198", "33/33", "97/97", "471/471", "32/32", "2/2", ""),
+        Subjects = c("", "", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "2/2", "2/2", ""),
         check.names = FALSE
       )
     )
