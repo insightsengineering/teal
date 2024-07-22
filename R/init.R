@@ -210,6 +210,7 @@ init <- function(data,
     is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
     if (!isTRUE(is_modules_ok)) {
       logger::log_error(is_modules_ok)
+      # todo: datanames shouldn't fail the app as transformers may create the dataset
       checkmate::assert(is_modules_ok, .var.name = "modules")
     }
 
