@@ -67,42 +67,27 @@ srv_data_summary <- function(id, teal_data) {
         }
 
         filter_overview <- get_filter_overview(teal_data)
-        filter_overview <- Filter(function(x) !all(is.na(x)), filter_overview)
         names(filter_overview)[[1]] <- "Data Name"
 
-        if (!is.null(filter_overview$obs)) {
-          # some datasets (MAE colData) doesn't return obs column
-          filter_overview <- transform(
-            filter_overview,
-            Obs = ifelse(
-              !is.na(obs),
-              sprintf("%s/%s", obs_filtered, obs),
-              ifelse(!is.na(obs_filtered), sprintf("%s/(new)", obs_filtered), "")
-            )
-          )
-        }
+        filter_overview$Obs <- ifelse(
+          !is.na(filter_overview$obs),
+          sprintf("%s/%s", filter_overview$obs_filtered, filter_overview$obs),
+          ""
+        )
 
+        filter_overview$Subjects <- ifelse(
+          !is.na(filter_overview$subjects),
+          sprintf("%s/%s", filter_overview$subjects_filtered, filter_overview$subjects),
+          ""
+        )
 
-        if (!is.null(filter_overview$subjects)) {
-          # some datasets (without keys) doesn't return subjects
-          filter_overview <- transform(
-            filter_overview,
-            `Subjects` = ifelse(
-              !is.na(subjects),
-              sprintf("%s/%s", subjects_filtered, subjects),
-              ""
-            )
-          )
-        }
-        filter_overview[, colnames(filter_overview) %in% c("Data Name", "Obs", "Subjects")]
+        filter_overview <- filter_overview[, colnames(filter_overview) %in% c("Data Name", "Obs", "Subjects")]
+        Filter(function(col) !all(col == ""), filter_overview)
       })
 
       output$table <- renderUI({
-        req(inherits(summary_table(), "data.frame"))
-        logger::log_trace("srv_data_summary updating counts")
-        filter_overview <- summary_table()
         body_html <- apply(
-          filter_overview,
+          summary_table(),
           1,
           function(x) {
             tags$tr(
@@ -125,7 +110,7 @@ srv_data_summary <- function(id, teal_data) {
           }
         )
 
-        header_labels <- names(filter_overview)
+        header_labels <- names(summary_table())
         header_html <- tags$tr(tagList(lapply(header_labels, tags$td)))
 
         table_html <- tags$table(
@@ -146,8 +131,8 @@ srv_data_summary <- function(id, teal_data) {
 get_filter_overview <- function(teal_data) {
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
-  filtered_data_objs <- sapply(datanames, function(name) teal_data()@env[[name]], simplify = FALSE)
-  unfiltered_data_objs <- sapply(datanames, function(name) teal_data()@env[[paste0(name, "_raw")]], simplify = FALSE)
+  filtered_data_objs <- sapply(datanames, function(name) teal.code::get_env(teal_data())[[name]], simplify = FALSE)
+  unfiltered_data_objs <- sapply(datanames, function(name) teal.code::get_env(teal_data())[[paste0(name, "_raw")]], simplify = FALSE)
 
   rows <- lapply(
     datanames,
@@ -247,7 +232,7 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
   ))
 
   get_experiment_keys <- function(mae, experiment) {
-    sample_subset <- subset(mae@sampleMap, subset = colname %in% colnames(experiment))
+    sample_subset <- mae@sampleMap[mae@sampleMap$colname %in% colnames(experiment), ]
     length(unique(sample_subset$primary))
   }
 
@@ -261,6 +246,6 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
     }
   ))
 
-  experiment_info <- cbind(subset(experiment_obs_info, select = dataname:obs_filtered), experiment_subjects_info)
+  experiment_info <- cbind(experiment_obs_info[, c("dataname", "obs", "obs_filtered")], experiment_subjects_info)
   rbind(mae_info, experiment_info)
 }
