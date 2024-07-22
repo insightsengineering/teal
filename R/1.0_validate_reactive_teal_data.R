@@ -23,47 +23,58 @@ NULL
 #' @rdname validate_reactive_teal_data
 #' @keywords internal
 ui_validate_reactive_teal_data <- function(id) {
-  uiOutput(NS(id, "response"))
+  tagList(
+    uiOutput(NS(id, "shiny_errors")),
+    uiOutput(NS(id, "shiny_warnings"))
+  )
 }
 
 #' @rdname validate_reactive_teal_data
+#' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
+#' error message is displayed.
+#' Default is `FALSE` to handle empty reactive cycle on init.
 #' @keywords internal
-srv_validate_reactive_teal_data <- function(id, data, modules, filter) {
+srv_validate_reactive_teal_data <- function(id,
+                                            data,
+                                            modules = NULL,
+                                            validate_shiny_silent_error = FALSE) {
   moduleServer(id, function(input, output, session) {
     if (!is.reactive(data)) {
       stop("The `teal_data_module` passed to `data` must return a reactive expression.", call. = FALSE)
     }
+
+    data_out_rv <- reactive(tryCatch(data(), error = function(e) e))
+
     data_validated <- reactive({
       # custom module can return error
-      data_out <- tryCatch(data(), error = function(e) e)
+      data_out <- data_out_rv()
 
       # there is an empty reactive cycle on init!
       if (inherits(data_out, "shiny.silent.error") && identical(data_out$message, "")) {
-        return(NULL)
+        if (!validate_shiny_silent_error) {
+          return(NULL)
+        } else {
+          validate(
+            need(
+              FALSE,
+              paste(
+                data_out$message,
+                "Check your inputs or contact app developer if error persists.",
+                sep = ifelse(identical(data_out$message, ""), "", "\n")
+              )
+            )
+          )
+        }
       }
 
-      # to handle qenv.error
-      if (inherits(data_out, "qenv.error")) {
+      # to handle errors and qenv.error(s)
+      if (inherits(data_out, c("qenv.error", "error"))) {
         validate(
           need(
             FALSE,
             paste(
               "Error when executing `teal_data_module` passed to `data`:\n ",
               paste(data_out$message, collapse = "\n"),
-              "\n Check your inputs or contact app developer if error persists."
-            )
-          )
-        )
-      }
-
-      # to handle module non-qenv errors
-      if (inherits(data_out, "error")) {
-        validate(
-          need(
-            FALSE,
-            paste(
-              "Error when executing `teal_data_module` passed to `data`:\n ",
-              paste(data_out$message, collpase = "\n"),
               "\n Check your inputs or contact app developer if error persists."
             )
           )
@@ -86,42 +97,24 @@ srv_validate_reactive_teal_data <- function(id, data, modules, filter) {
         warning("`data` object has no datanames. Default datanames are set using `teal_data`'s environment.")
       }
 
-      .validate_module_datanames(data_out, modules)
-
-      .validate_filter_datanames(data_out, filter)
 
       data_out
     })
 
-    output$response <- renderUI({
-      if (!is.null(data_validated())) {
-        showNotification("Data loaded successfully.", duration = 5)
-        shinyjs::enable(selector = "#teal_modules-active_tab.nav-tabs a")
-        removeModal()
-      }
+    output$shiny_errors <- renderUI({
+      data_validated()
       NULL
+    })
+
+    output$shiny_warnings <- renderUI({
+      if (inherits(data_out_rv(), "teal_data")) {
+        is_modules_ok <- check_modules_datanames(modules = modules, datanames = teal_data_datanames(data_validated()))
+        if (!isTRUE(is_modules_ok)) {
+          tags$div(is_modules_ok, class = "teal-output-warning")
+        }
+      }
     })
 
     data_validated
   })
-}
-
-
-.validate_module_datanames <- function(data, modules) {
-  is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
-  if (!isTRUE(is_modules_ok)) {
-    validate(need(isTRUE(is_modules_ok), sprintf("%s. Contact app developer.", is_modules_ok)))
-  }
-}
-
-.validate_filter_datanames <- function(data, filter) {
-  is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
-  if (!isTRUE(is_filter_ok)) {
-    showNotification(
-      "Some filters were not applied because of incompatibility with data. Contact app developer.",
-      type = "warning",
-      duration = 10
-    )
-    warning(is_filter_ok)
-  }
 }

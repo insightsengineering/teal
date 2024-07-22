@@ -65,15 +65,19 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
 
     # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
-    data_unvalidated <- if (inherits(data, "teal_data_module")) {
-      data$server(id = "teal_data_module")
+    data_validated <- if (inherits(data, "teal_data_module")) {
+      srv_teal_data_module(
+        "teal_data_module",
+        data = reactive(NULL),
+        transformer = data,
+        modules = modules,
+        validate_shiny_silent_error = FALSE
+      )
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, c("reactive", "reactiveVal"))) {
       data
     }
-
-    data_validated <- srv_validate_reactive_teal_data("validate_teal_data", data_unvalidated, modules, filter)
 
     setBookmarkExclude("open_teal_data_module")
 
@@ -89,8 +93,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
         modalDialog(
           class = ifelse(easy_close, "blur_background", "hide_background"),
           tags$div(
-            data$ui(session$ns("teal_data_module")),
-            ui_validate_reactive_teal_data(session$ns("validate_teal_data"))
+            ui_teal_data_module(session$ns("teal_data_module"), transformer = data)
           ),
           footer = footer,
           easyClose = easy_close
@@ -105,6 +108,9 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
 
     data_rv <- reactiveVal(NULL)
     observeEvent(data_validated(), {
+      removeModal()
+      showNotification("Data loaded successfully.", duration = 5)
+      shinyjs::enable(selector = "#teal_modules-active_tab.nav-tabs a")
       data_rv(data_validated())
     })
 

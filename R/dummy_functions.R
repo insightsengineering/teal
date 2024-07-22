@@ -13,22 +13,33 @@
 #'   shinyApp(app$ui, app$server)
 #' }
 #' @export
-example_module <- function(label = "example teal module", datanames = "all") {
+example_module <- function(label = "example teal module", datanames = "all", transformers = list()) {
   checkmate::assert_string(label)
   ans <- module(
     label,
     server = function(id, data) {
       checkmate::assert_class(isolate(data()), "teal_data")
       moduleServer(id, function(input, output, session) {
-        updateSelectInput(
-          inputId = "dataname",
-          choices = isolate(teal.data::datanames(data())),
-          selected = restoreInput(session$ns("dataname"), NULL)
-        )
+        datanames_rv <- reactive({
+          teal.data::datanames(req(data()))
+        })
+
+        observeEvent(datanames_rv(), {
+          selected <- isolate(input$dataname)
+          if (identical(selected, "")) selected <- restoreInput(session$ns("dataname"), NULL)
+          updateSelectInput(
+            session = session,
+            inputId = "dataname",
+            choices = datanames_rv(),
+            selected = selected
+          )
+        })
+
         output$text <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]
         })
+
         teal.widgets::verbatim_popup_srv(
           id = "rcode",
           verbatim_content = reactive(teal.code::get_code(data())),
@@ -46,7 +57,8 @@ example_module <- function(label = "example teal module", datanames = "all") {
         )
       )
     },
-    datanames = datanames
+    datanames = datanames,
+    transformers = transformers
   )
   attr(ans, "teal_bookmarkable") <- TRUE
   ans

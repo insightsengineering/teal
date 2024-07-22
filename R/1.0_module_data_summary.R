@@ -21,6 +21,7 @@ NULL
 #' @keywords internal
 ui_data_summary <- function(id) {
   ns <- NS(id)
+  content_id <- ns("filters_overview_contents")
   tags$div(
     id = id, # not used, can be used to customize CSS behavior
     class = "well",
@@ -32,17 +33,15 @@ ui_data_summary <- function(id) {
       ),
       tags$div(
         class = "col-sm-3",
-        actionLink(
-          ns("minimise_filter_overview"),
-          label = NULL,
-          icon = icon("angle-down", lib = "font-awesome"),
-          title = "Minimise panel",
-          class = "remove pull-right"
+        tags$i(
+          class = "remove pull-right fa fa-angle-down",
+          title = "fold/expand transform panel",
+          onclick = sprintf("togglePanelItem(this, '%s', 'fa-angle-right', 'fa-angle-down');", content_id)
         )
       )
     ),
     tags$div(
-      id = ns("filters_overview_contents"),
+      id = content_id,
       tags$div(
         class = "teal_active_summary_filter_panel",
         tableOutput(ns("table"))
@@ -60,43 +59,35 @@ srv_data_summary <- function(id, teal_data) {
     function(input, output, session) {
       logger::log_trace("srv_data_summary initializing")
 
-      observeEvent(input$minimise_filter_overview, {
-        shinyjs::toggle("filters_overview_contents")
-        toggle_icon(session$ns("minimise_filter_overview"), c("fa-angle-right", "fa-angle-down"))
-        toggle_title(session$ns("minimise_filter_overview"), c("Restore panel", "Minimise Panel"))
-      })
-
-      output$table <- renderUI({
+      summary_table <- reactive({
         req(inherits(teal_data(), "teal_data"))
-        logger::log_trace("srv_data_summary updating counts")
 
         if (length(datanames(teal_data())) == 0) {
           return(NULL)
         }
 
         filter_overview <- get_filter_overview(teal_data)
-        attr(filter_overview$dataname, "label") <- "Data Name"
+        names(filter_overview)[[1]] <- "Data Name"
 
-        filter_overview$obs_str_summary <- ifelse(
+        filter_overview$Obs <- ifelse(
           !is.na(filter_overview$obs),
           sprintf("%s/%s", filter_overview$obs_filtered, filter_overview$obs),
           ""
         )
-        attr(filter_overview$obs_str_summary, "label") <- "Obs"
 
-        filter_overview$subjects_summary <- ifelse(
+        filter_overview$Subjects <- ifelse(
           !is.na(filter_overview$subjects),
           sprintf("%s/%s", filter_overview$subjects_filtered, filter_overview$subjects),
           ""
         )
-        attr(filter_overview$subjects_summary, "label") <- "Subjects"
 
-        all_names <- c("dataname", "obs_str_summary", "subjects_summary")
-        filter_overview <- filter_overview[, colnames(filter_overview) %in% all_names]
-        filter_overview <- Filter(function(col) !all(col == ""), filter_overview)
+        filter_overview <- filter_overview[, colnames(filter_overview) %in% c("Data Name", "Obs", "Subjects")]
+        Filter(function(col) !all(col == ""), filter_overview)
+      })
 
+      output$table <- renderUI({
         body_html <- apply(
-          filter_overview,
+          summary_table(),
           1,
           function(x) {
             tags$tr(
@@ -119,14 +110,7 @@ srv_data_summary <- function(id, teal_data) {
           }
         )
 
-        header_labels <- vapply(
-          seq_along(filter_overview),
-          function(i) {
-            label <- attr(filter_overview[[i]], "label")
-            ifelse(!is.null(label), label, names(filter_overview)[[i]])
-          },
-          character(1)
-        )
+        header_labels <- names(summary_table())
         header_html <- tags$tr(tagList(lapply(header_labels, tags$td)))
 
         table_html <- tags$table(
@@ -136,142 +120,15 @@ srv_data_summary <- function(id, teal_data) {
         )
         table_html
       })
-      NULL
+
+      summary_table # testing purpose
     }
   )
-}
-
-
-#' Toggle button properties.
-#'
-#' Switch between different icons or titles on a button.
-#'
-#' Wrapper functions that use `shinyjs::runjs` to change button properties in response to events,
-#' typically clicking those very buttons.
-#' `shiny`'s `actionButton` and `actionLink` create `<a>` tags,
-#' which may contain a child `<i>` tag that specifies an icon to be displayed.
-#' `toggle_icon` calls the `toggleClass` (when `one_way = FALSE`) or
-#' `removeClass` and `addClass` methods (when `one_way = TRUE`) to change icons.
-#' `toggle_title` calls the `attr` method to modify the `Title` attribute of the button.
-#'
-#' @param input_id (`character(1)`) (name-spaced) id of the button
-#' @param icons,titles (`character(2)`) vector specifying values between which to toggle
-#' @param one_way (`logical(1)`) flag specifying whether to keep toggling;
-#'                if TRUE, the target will be changed
-#'                from the first element of `icons`/`titles` to the second
-#'
-#' @return `NULL`, invisibly.
-#'
-#' @examples
-#' # use non-exported function from teal.slice
-#' toggle_icon <- getFromNamespace("toggle_icon", "teal.slice")
-#'
-#' library(shiny)
-#' library(shinyjs)
-#'
-#' ui <- fluidPage(
-#'   useShinyjs(),
-#'   actionButton("hide_content", label = "hide", icon = icon("xmark")),
-#'   actionButton("show_content", label = "show", icon = icon("check")),
-#'   actionButton("toggle_content", label = "toggle", icon = icon("angle-down")),
-#'   tags$br(),
-#'   tags$div(
-#'     id = "content",
-#'     verbatimTextOutput("printout")
-#'   )
-#' )
-#'
-#' server <- function(input, output, session) {
-#'   observeEvent(input$hide_content,
-#'     {
-#'       hide("content")
-#'       toggle_icon("toggle_content", c("fa-angle-down", "fa-angle-right"), one_way = TRUE)
-#'     },
-#'     ignoreInit = TRUE
-#'   )
-#'
-#'   observeEvent(input$show_content,
-#'     {
-#'       show("content")
-#'       toggle_icon("toggle_content", c("fa-angle-right", "fa-angle-down"), one_way = TRUE)
-#'     },
-#'     ignoreInit = TRUE
-#'   )
-#'
-#'   observeEvent(input$toggle_content,
-#'     {
-#'       toggle("content")
-#'       toggle_icon("toggle_content", c("fa-angle-right", "fa-angle-down"))
-#'     },
-#'     ignoreInit = TRUE
-#'   )
-#'
-#'   output$printout <- renderPrint({
-#'     head(faithful, 10)
-#'   })
-#' }
-#' if (interactive()) {
-#'   shinyApp(ui, server)
-#' }
-#'
-#' @name toggle_button
-#' @rdname toggle_button
-#' @keywords internal
-toggle_icon <- function(input_id, icons, one_way = FALSE) {
-  checkmate::assert_string(input_id)
-  checkmate::assert_character(icons, len = 2L)
-  checkmate::assert_flag(one_way)
-
-  expr <-
-    if (one_way) {
-      sprintf(
-        "$('#%s i').removeClass('%s').addClass('%s');",
-        input_id, icons[1], icons[2]
-      )
-    } else {
-      sprintf("$('#%s i').toggleClass('%s');", input_id, paste(icons, collapse = " "))
-    }
-
-  shinyjs::runjs(expr)
-
-  invisible(NULL)
-}
-
-#' @rdname toggle_button
-#' @keywords internal
-toggle_title <- function(input_id, titles, one_way = FALSE) {
-  checkmate::assert_string(input_id)
-  checkmate::assert_character(titles, len = 2L)
-  checkmate::assert_flag(one_way)
-
-  expr <-
-    if (one_way) {
-      sprintf(
-        "$('a#%s').attr('title', '%s');",
-        input_id, titles[2]
-      )
-    } else {
-      sprintf(
-        paste0(
-          "var button_id = 'a#%1$s';",
-          "var curr = $(button_id).attr('title');",
-          "if (curr == '%2$s') { $(button_id).attr('title', '%3$s');",
-          "} else { $(button_id).attr('title', '%2$s');",
-          "}"
-        ),
-        input_id, titles[1], titles[2]
-      )
-    }
-
-  shinyjs::runjs(expr)
-
-  invisible(NULL)
 }
 
 #' @rdname module_data_summary
 #' @keywords internal
 get_filter_overview <- function(teal_data) {
-  logger::log_trace("srv_data_overiew-get_filter_overview initialized")
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
   filtered_data_objs <- sapply(datanames, function(name) teal.code::get_env(teal_data())[[name]], simplify = FALSE)
@@ -280,15 +137,28 @@ get_filter_overview <- function(teal_data) {
   rows <- lapply(
     datanames,
     function(dataname) {
+      parent <- teal.data::parent(joinkeys, dataname)
+
+      # todo: what should we display for a parent dataset?
+      #     - Obs and Subjects
+      #     - Obs only
+      #     - Subjects only
+      # todo: summary table should be ordered by topological order
+      # todo (for later): summary table should be displayed in a way that child datasets
+      #       are indented under their parent dataset to form a tree structure
+      subject_keys <- if (length(parent) > 0) {
+        names(joinkeys[dataname, parent])
+      } else {
+        joinkeys[dataname, dataname]
+      }
       get_object_filter_overview(
         filtered_data = filtered_data_objs[[dataname]],
         unfiltered_data = unfiltered_data_objs[[dataname]],
         dataname = dataname,
-        joinkeys = joinkeys
+        subject_keys = subject_keys
       )
     }
   )
-  logger::log_trace("srv_data_overiew-get_filter_overview finalized")
 
   unssuported_idx <- vapply(rows, function(x) all(is.na(x[-1])), logical(1)) # this is mainly for vectors
   do.call(rbind, c(rows[!unssuported_idx], rows[unssuported_idx]))
@@ -296,9 +166,9 @@ get_filter_overview <- function(teal_data) {
 
 #' @rdname module_data_summary
 #' @keywords internal
-get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname, joinkeys) {
+get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname, subject_keys) {
   if (inherits(filtered_data, c("data.frame", "DataFrame", "array", "Matrix", "SummarizedExperiment"))) {
-    get_object_filter_overview_array(filtered_data, unfiltered_data, dataname, joinkeys)
+    get_object_filter_overview_array(filtered_data, unfiltered_data, dataname, subject_keys)
   } else if (inherits(filtered_data, "MultiAssayExperiment")) {
     get_object_filter_overview_MultiAssayExperiment(filtered_data, unfiltered_data, dataname)
   } else {
@@ -314,13 +184,11 @@ get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname,
 
 #' @rdname module_data_summary
 #' @keywords internal
-get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dataname, joinkeys) {
-  subject_keys <- Reduce(intersect, joinkeys[[dataname]])
-
+get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dataname, subject_keys) {
   if (length(subject_keys) == 0) {
     data.frame(
       dataname = dataname,
-      obs = nrow(unfiltered_data),
+      obs = ifelse(!is.null(nrow(unfiltered_data)), nrow(unfiltered_data), NA),
       obs_filtered = nrow(filtered_data),
       subjects = NA,
       subjects_filtered = NA
@@ -356,7 +224,7 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfil
           filtered_data[[experiment_name]],
           unfiltered_data[[experiment_name]],
           dataname = experiment_name,
-          joinkeys = join_keys() # empty join keys
+          subject_keys = join_keys() # empty join keys
         ),
         dataname = paste0(" - ", experiment_name)
       )

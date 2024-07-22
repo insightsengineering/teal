@@ -96,11 +96,22 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
     tagList(
       if (depth >= 2L) tags$div(style = "mt-6"),
       fluidRow(
-        column(width = 9, do.call(modules$ui, args), class = "teal_primary_col"),
+        column(
+          width = 9,
+          div(
+            class = "teal_validated",
+            ui_validate_reactive_teal_data(ns("validate_datanames"))
+          ),
+          do.call(modules$ui, args),
+          class = "teal_primary_col"
+        ),
         column(
           width = 3,
           ui_data_summary(ns("data_summary")),
           ui_filter_panel(ns("filter_panel")),
+          if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
+            ui_teal_data_modules(ns("data_transform"), modules$transformers, class = "well")
+          },
           class = "teal_secondary_col"
         )
       )
@@ -191,28 +202,24 @@ srv_teal_module.teal_module <- function(id,
   moduleServer(id = id, module = function(input, output, session) {
     active_datanames <- reactive({
       req(data_rv())
-      if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
+      datanames <- if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
         teal_data_datanames(data_rv())
       } else {
-        include_parent_datanames(
-          modules$datanames,
-          teal.data::join_keys(data_rv())
+        # Remove datanames that are not **YET** in the data (may be added with teal_data_module transforms)
+        # Check is deferred when module is called
+        intersect(
+          include_parent_datanames(
+            modules$datanames,
+            teal.data::join_keys(data_rv())
+          ),
+          teal.data::datanames(data_rv())
         )
       }
     })
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
-        req(data_rv(), "teal_data")
         logger::log_trace("srv_teal_module@1 initializing module-specific FilteredData")
-
-        # Otherwise, FilteredData will be created in the modules' scope later
-        progress_data <- Progress$new(
-          max = length(unlist(module_labels(modules)))
-        )
-        on.exit(progress_data$close())
-        progress_data$set(message = "Preparing data filtering", detail = "0%")
-        filtered_data <- teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
-        filtered_data
+        teal_data_to_filtered_data(data_rv(), datanames = active_datanames(), filter = slices_global())
       })
     }
 
@@ -247,24 +254,70 @@ srv_teal_module.teal_module <- function(id,
     filtered_teal_data <- eventReactive(trigger_data(), {
       .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
     })
-    srv_data_summary("data_summary", filtered_teal_data)
+
+    # Prevent shiny silent error to be propagated, data fallbacks to NULL
+    # To prevent observers from running (ignoreNULL is default value of eventReactive/observeEvent)
+    # filtered_teal_data <- reactive({
+    #   # todo: it should be triggered only when module is visible
+    #   if (inherits(try(filtered_teal_data(), silent = TRUE), "teal_data")) {
+    #     logger::log_info("Data is already initialized.")
+    #     filtered_teal_data()
+    #   } else {
+    #     logger::log_info("fallback to empty teal data")
+    #     NULL
+    #   }
+    # })
+
+    transformed_teal_data <- srv_teal_data_modules(
+      "data_transform",
+      data = filtered_teal_data,
+      transformers = modules$transformers,
+      modules = modules
+    )
+
+    summary_table <- srv_data_summary("data_summary", transformed_teal_data)
+
+    # module_teal_data <- srv_validate_datanames("validate_datanames", modules, transformed_teal_data)
+    module_teal_data <- srv_validate_reactive_teal_data(
+      "validate_datanames",
+      data = transformed_teal_data,
+      modules = modules
+    )
+    # todo: Datasets in teal_data handed over to module should be limited to module$datanames
+    #       Summary shouldn't display datanames that are not in module$datanames
+    #       During ddl and transform we should keep all the datasets which might be needed in transform
+    # so:
+    #  - keep all datasets in ddl
+    #  - make filter panel only from module$datanames (or available subset) - make a .resolve_module_datanames function
+    #    which does the same thing as active_datanames() because we will need it in the later stage
+    #  - make a teal_data (filtered_teal_data) containing everything. No code substitution, no datanames restriction.
+    #  - transformed_teal_data can add any datasets to teal_data object
+    #  - at the end, validate and use .resolve_module_datanames again to determine relevant datanames.
+    #    Set datanames in the teal_data object so that app developer don't have to bother about `teal.data::datanames`
+    #    in each transform module which adds datasets. Restrict the code to the "resolved" datanames. Remove bindings
+    #    which are not in the resolved datanames.
+    #  - send data to teal_module and to the summary
+    # side comment:
+    #  - looks like the only purpose of the `teal.data::datanames` is to limit the datasets for modules which have
+    #    $datanames = "all". Otherwise, it is not needed as modules$datanames is the primary source of truth.
+
 
     # Call modules.
     module_out <- reactiveVal(NULL)
     if (!inherits(modules, "teal_module_previewer")) {
       obs_module <- observeEvent(
-        # wait for trigger_data() to be not NULL but only once:
+        # wait for module_teal_data() to be not NULL but only once:
         ignoreNULL = TRUE,
         once = TRUE,
-        eventExpr = trigger_data(),
+        eventExpr = module_teal_data(),
         handlerExpr = {
-          module_out(.call_teal_module(modules, datasets, filtered_teal_data, reporter))
+          module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
         }
       )
     } else {
       # Report previewer must be initiated on app start for report cards to be included in bookmarks.
       # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-      module_out(.call_teal_module(modules, datasets, filtered_teal_data, reporter))
+      module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
     }
 
     # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
@@ -295,7 +348,6 @@ srv_teal_module.teal_module <- function(id,
   if (is_arg_used(modules$server, "data")) {
     args <- c(args, data = list(filtered_teal_data))
   }
-
 
   if (is_arg_used(modules$server, "filter_panel_api")) {
     args <- c(args, filter_panel_api = teal.slice::FilterPanelAPI$new(datasets()))

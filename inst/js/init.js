@@ -3,3 +3,6 @@
 
 // this code alows the show R code "copy to clipbaord" button to work
 var clipboard = new ClipboardJS('.btn[data-clipboard-target]');
+
+
+

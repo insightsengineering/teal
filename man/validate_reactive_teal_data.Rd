@@ -8,7 +8,12 @@
 \usage{
 ui_validate_reactive_teal_data(id)
 
-srv_validate_reactive_teal_data(id, data, modules, filter)
+srv_validate_reactive_teal_data(
+  id,
+  data,
+  modules = NULL,
+  validate_shiny_silent_error = FALSE
+)
 }
 \arguments{
 \item{id}{(\code{character}) optional
@@ -23,8 +28,9 @@ nested list of \code{teal_modules} or \code{teal_module} objects or a single
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{filter}{(\code{teal_slices})
-Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
+\item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and
+error message is displayed.
+Default is \code{FALSE} to handle empty reactive cycle on init.}
 }
 \value{
 (\code{reactive} returning \code{teal_data})
