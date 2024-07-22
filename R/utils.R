@@ -270,7 +270,7 @@ create_app_id <- function(data, modules) {
   checkmate::assert_class(modules, "teal_modules")
 
   data <- if (inherits(data, "teal_data")) {
-    as.list(data@env)
+    as.list(teal.code::get_env(data))
   } else if (inherits(data, "teal_data_module")) {
     deparse1(body(data$server))
   }

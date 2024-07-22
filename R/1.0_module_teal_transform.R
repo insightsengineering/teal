@@ -85,18 +85,29 @@ srv_teal_data_modules <- function(id, data, transformers, modules) {
 
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_data_modules initializing.")
-    Reduce(
-      function(x, name) {
-        srv_teal_data_module(
-          id = name,
-          data = x,
-          transformer = transformers[[name]],
-          modules = modules
-        )
-      },
-      names(transformers),
-      init = data
-    )
+
+    # modules can be called once when the data is initialized
+    initialize_module <- reactiveVal(FALSE)
+    observeEvent(data(), {
+      req(inherits(data(), "teal_data"))
+      initialize_module(TRUE)
+    })
+    reactive({
+      req(initialize_module())
+      transformed_teal_data <- Reduce(
+        function(x, name) {
+          srv_teal_data_module(
+            id = name,
+            data = x,
+            transformer = transformers[[name]],
+            modules = modules
+          )
+        },
+        names(transformers),
+        init = data
+      )
+      transformed_teal_data()
+    })
   })
 }
 

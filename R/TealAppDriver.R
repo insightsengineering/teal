@@ -221,6 +221,26 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       private$ns$filter_panel
     },
     #' @description
+    #' Get the active shiny name space for interacting with the data-summary panel.
+    #'
+    #' @return (`string`) The active shiny name space of the data-summary component.
+    active_data_summary_ns = function() {
+      if (identical(private$ns$data_summary, character(0))) {
+        private$set_active_ns()
+      }
+      private$ns$data_summary
+    },
+    #' @description
+    #' Get the active shiny name space bound with a custom `element` name.
+    #'
+    #' @param element `character(1)` custom element name.
+    #'
+    #' @return (`string`) The active shiny name space of the component bound with the input `element`.
+    active_data_summary_element = function(element) {
+      checkmate::assert_string(element)
+      sprintf("#%s-%s", self$active_data_summary_ns(), element)
+    },
+    #' @description
     #' Get the input from the module in the `teal` app.
     #' This function will only access inputs from the name space of the current active teal module.
     #'
@@ -313,6 +333,25 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       )
 
       available_datasets[displayed_datasets_index]
+    },
+    #' @description
+    #' Get the active data summary table
+    #' @return `data.frame`
+    get_active_data_summary_table = function() {
+      summary_table <-
+        self$active_data_summary_element("table") %>%
+        self$get_html_rvest() %>%
+        rvest::html_table(fill = TRUE) %>%
+        .[[1]]
+
+      col_names <- unlist(summary_table[1, ], use.names = FALSE)
+      summary_table <- summary_table[-1, ]
+      colnames(summary_table) <- col_names
+      if (nrow(summary_table) > 0) {
+        summary_table
+      } else {
+        NULL
+      }
     },
     #' @description
     #' Test if `DOM` elements are visible on the page with a JavaScript call.
@@ -613,11 +652,14 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       }
       private$ns$module <- sprintf("%s-%s", active_ns, "module")
 
-      component <- "filter_panel"
-      if (!is.null(self$get_html(sprintf("#%s-%s-panel", active_ns, component)))) {
-        private$ns[[component]] <- sprintf("%s-%s", active_ns, component)
-      } else {
-        private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
+      components <- c("filter_panel", "data_summary")
+      for (component in components) {
+        if (!is.null(self$get_html(sprintf("#%s-%s-panel", active_ns, component))) ||
+          !is.null(self$get_html(sprintf("#%s-%s-table", active_ns, component)))) {
+          private$ns[[component]] <- sprintf("%s-%s", active_ns, component)
+        } else {
+          private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
+        }
       }
     },
     # @description

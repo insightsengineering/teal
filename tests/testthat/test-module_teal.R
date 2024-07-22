@@ -123,7 +123,7 @@ testthat::test_that("srv_teal: data_rv is NULL when data reactive returns qenv.e
     app = srv_teal,
     args = list(
       id = "test",
-      data = reactive(teal.data::teal_data() |> within(stop("Error"))),
+      data = reactive(teal.data::teal_data() %>% within(stop("Error"))),
       modules = modules(example_module())
     ),
     expr = {
