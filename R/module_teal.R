@@ -177,7 +177,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
-        req(data_rv())
+        req(data_rv()) # todo: check if it is needed
         logger::log_trace("srv_teal_module@1 initializing FilteredData")
         teal_data_to_filtered_data(data_rv(), filter = filter)
       })

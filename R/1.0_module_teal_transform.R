@@ -86,28 +86,18 @@ srv_teal_data_modules <- function(id, data, transformers, modules) {
   moduleServer(id, function(input, output, session) {
     logger::log_trace("srv_teal_data_modules initializing.")
 
-    # modules can be called once when the data is initialized
-    initialize_module <- reactiveVal(FALSE)
-    observeEvent(data(), {
-      req(inherits(data(), "teal_data"))
-      initialize_module(TRUE)
-    })
-    reactive({
-      req(initialize_module())
-      transformed_teal_data <- Reduce(
-        function(x, name) {
-          srv_teal_data_module(
-            id = name,
-            data = x,
-            transformer = transformers[[name]],
-            modules = modules
-          )
-        },
-        names(transformers),
-        init = data
-      )
-      transformed_teal_data()
-    })
+    transformed_teal_data <- Reduce(
+      function(x, name) {
+        srv_teal_data_module(
+          id = name,
+          data = x,
+          transformer = transformers[[name]],
+          modules = modules
+        )
+      },
+      names(transformers),
+      init = data
+    )
   })
 }
 
@@ -151,6 +141,7 @@ srv_teal_data_module <- function(id,
       modules = modules,
       validate_shiny_silent_error = validate_shiny_silent_error
     )
+
     .fallback_on_failure(
       this = data_validated,
       that = data,
@@ -175,9 +166,8 @@ srv_teal_data_module <- function(id,
   checkmate::assert_class(that, "reactive")
   checkmate::assert_string(label)
 
-  # todo:
   reactive({
-    res <- try(this())
+    res <- try(this(), silent = TRUE)
     if (inherits(res, "teal_data")) {
       logger::log_trace("{ label } evaluated successfully.")
       res

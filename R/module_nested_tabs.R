@@ -255,6 +255,19 @@ srv_teal_module.teal_module <- function(id,
       .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
     })
 
+    # Prevent shiny silent error to be propagated, data fallbacks to NULL
+    # To prevent observers from running (ignoreNULL is default value of eventReactive/observeEvent)
+    # filtered_teal_data <- reactive({
+    #   # todo: it should be triggered only when module is visible
+    #   if (inherits(try(filtered_teal_data(), silent = TRUE), "teal_data")) {
+    #     logger::log_info("Data is already initialized.")
+    #     filtered_teal_data()
+    #   } else {
+    #     logger::log_info("fallback to empty teal data")
+    #     NULL
+    #   }
+    # })
+
     transformed_teal_data <- srv_teal_data_modules(
       "data_transform",
       data = filtered_teal_data,
