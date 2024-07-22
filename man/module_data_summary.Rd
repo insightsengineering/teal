@@ -16,13 +16,18 @@ srv_data_summary(id, teal_data)
 
 get_filter_overview(teal_data)
 
-get_object_filter_overview(filtered_data, unfiltered_data, dataname, joinkeys)
+get_object_filter_overview(
+  filtered_data,
+  unfiltered_data,
+  dataname,
+  subject_keys
+)
 
 get_object_filter_overview_array(
   filtered_data,
   unfiltered_data,
   dataname,
-  joinkeys
+  subject_keys
 )
 
 get_object_filter_overview_MultiAssayExperiment(
