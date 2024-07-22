@@ -72,7 +72,7 @@ srv_data_summary <- function(id, teal_data) {
         filter_overview$Obs <- ifelse(
           !is.na(filter_overview$obs),
           sprintf("%s/%s", filter_overview$obs_filtered, filter_overview$obs),
-          ""
+          ifelse(!is.na(filter_overview$obs_filtered), sprintf("%s", filter_overview$obs_filtered), "")
         )
 
         filter_overview$Subjects <- ifelse(
@@ -196,7 +196,7 @@ get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dat
   } else {
     data.frame(
       dataname = dataname,
-      obs = nrow(unfiltered_data),
+      obs = ifelse(!is.null(nrow(unfiltered_data)), nrow(unfiltered_data), NA),
       obs_filtered = nrow(filtered_data),
       subjects = nrow(unique(unfiltered_data[subject_keys])),
       subjects_filtered = nrow(unique(filtered_data[subject_keys]))
