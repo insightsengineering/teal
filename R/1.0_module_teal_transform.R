@@ -175,6 +175,7 @@ srv_teal_data_module <- function(id,
   checkmate::assert_class(that, "reactive")
   checkmate::assert_string(label)
 
+  # todo:
   reactive({
     res <- try(this())
     if (inherits(res, "teal_data")) {
@@ -182,7 +183,7 @@ srv_teal_data_module <- function(id,
       res
     } else {
       logger::log_trace("{ label } failed, falling back to previous data.")
-      that()
+      isolate(that())
     }
   })
 }

@@ -280,7 +280,8 @@ srv_teal_module.teal_module <- function(id,
     #  - make a teal_data (filtered_teal_data) containing everything. No code substitution, no datanames restriction.
     #  - transformed_teal_data can add any datasets to teal_data object
     #  - at the end, validate and use .resolve_module_datanames again to determine relevant datanames.
-    #    Set datanames in the teal_data object so that app developer don't have to bother about `teal.data::datanames` #    in each transform module which adds datasets. Restrict the code to the "resolved" datanames. Remove bindings
+    #    Set datanames in the teal_data object so that app developer don't have to bother about `teal.data::datanames`
+    #    in each transform module which adds datasets. Restrict the code to the "resolved" datanames. Remove bindings
     #    which are not in the resolved datanames.
     #  - send data to teal_module and to the summary
     # side comment:
