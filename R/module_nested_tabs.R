@@ -255,17 +255,12 @@ srv_teal_module.teal_module <- function(id,
       .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
     })
 
-    # Needs to be wrapped in reactive to avoid initialization issues when there
-    # filtered data.
-    transformed_teal_data <- reactive({
-      req(filtered_teal_data())
-      srv_teal_data_modules(
-        "data_transform",
-        data = filtered_teal_data,
-        transformers = modules$transformers,
-        modules = modules
-      )()
-    })
+    transformed_teal_data <- srv_teal_data_modules(
+      "data_transform",
+      data = filtered_teal_data,
+      transformers = modules$transformers,
+      modules = modules
+    )
 
     summary_table <- srv_data_summary("data_summary", transformed_teal_data)
 
