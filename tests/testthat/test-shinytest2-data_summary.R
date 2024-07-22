@@ -8,7 +8,7 @@ testthat::test_that("e2e: data summary list only data names if there is no MAE o
   testthat::expect_identical(
     as.data.frame(app$get_active_data_summary_table()),
     data.frame(
-      `Data Name` = c('x'),
+      `Data Name` = c("x"),
       check.names = FALSE
     )
   )
@@ -27,8 +27,8 @@ testthat::test_that("e2e: data summary is displayed with 2 columns data without 
   testthat::expect_identical(
     as.data.frame(app$get_active_data_summary_table()),
     data.frame(
-      `Data Name` = c('iris', 'mtcars'),
-      Obs = c('150/150', '32/32'),
+      `Data Name` = c("iris", "mtcars"),
+      Obs = c("150/150", "32/32"),
       check.names = FALSE
     )
   )
@@ -39,10 +39,10 @@ testthat::test_that("e2e: data summary is displayed with 2 columns data without 
 testthat::test_that("e2e: data summary is displayed with 3 columns for data with join keys", {
   skip_if_too_deep(5)
 
-  data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0,1), test = c('a', 'b')))
+  data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
 
   teal.data::join_keys(data) <- teal.data::join_keys(
-    teal.data::join_key('mtcars2', 'mtcars1', keys = c('am'))
+    teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
   )
 
   app <- TealAppDriver$new(
@@ -53,9 +53,9 @@ testthat::test_that("e2e: data summary is displayed with 3 columns for data with
   testthat::expect_identical(
     as.data.frame(app$get_active_data_summary_table()),
     data.frame(
-      `Data Name` = c('mtcars1', 'mtcars2'),
-      Obs = c('32/32', '2/2'),
-      Subjects = c('2/2', '2/2'),
+      `Data Name` = c("mtcars1", "mtcars2"),
+      Obs = c("32/32", "2/2"),
+      Subjects = c("2/2", "2/2"),
       check.names = FALSE
     )
   )
@@ -64,26 +64,25 @@ testthat::test_that("e2e: data summary is displayed with 3 columns for data with
 })
 
 testthat::test_that(
-  "e2e: data summary is displayed properly if teal_data include data.frames with join keys, MAE objects and vectors", {
+  "e2e: data summary is displayed properly if teal_data include data.frames with join keys, MAE objects and vectors",
+  {
     testthat::skip_if_not_installed("MultiAssayExperiment")
     skip_if_too_deep(5)
 
     data <- teal.data::teal_data() %>%
-      within(
-        {
-          mtcars1 <- mtcars
-          mtcars2 = data.frame(am = c(0,1), test = c('a', 'b'))
-          iris <- iris
-          library(MultiAssayExperiment)
-          data("miniACC", package = "MultiAssayExperiment", envir = environment())
-          CO2 <- CO2
-          factors <- names(Filter(isTRUE, vapply(CO2, is.factor, logical(1L))))
-          CO2[factors] <- lapply(CO2[factors], as.character)
-        }
-      )
+      within({
+        mtcars1 <- mtcars
+        mtcars2 <- data.frame(am = c(0, 1), test = c("a", "b"))
+        iris <- iris
+        library(MultiAssayExperiment)
+        data("miniACC", package = "MultiAssayExperiment", envir = environment())
+        CO2 <- CO2
+        factors <- names(Filter(isTRUE, vapply(CO2, is.factor, logical(1L))))
+        CO2[factors] <- lapply(CO2[factors], as.character)
+      })
 
     teal.data::join_keys(data) <- teal.data::join_keys(
-      teal.data::join_key('mtcars2', 'mtcars1', keys = c('am'))
+      teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
     )
 
     app <- TealAppDriver$new(
@@ -104,5 +103,6 @@ testthat::test_that(
       )
     )
 
-  app$stop()
-})
+    app$stop()
+  }
+)

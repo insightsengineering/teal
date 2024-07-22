@@ -338,8 +338,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Get the active data summary table
     #' @return `data.frame`
     get_active_data_summary_table = function() {
-     summary_table <-
-        self$active_data_summary_element('table') %>%
+      summary_table <-
+        self$active_data_summary_element("table") %>%
         self$get_html_rvest() %>%
         rvest::html_table(fill = TRUE) %>%
         .[[1]]
@@ -655,7 +655,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       components <- c("filter_panel", "data_summary")
       for (component in components) {
         if (!is.null(self$get_html(sprintf("#%s-%s-panel", active_ns, component))) ||
-            !is.null(self$get_html(sprintf("#%s-%s-table", active_ns, component)))) {
+          !is.null(self$get_html(sprintf("#%s-%s-table", active_ns, component)))) {
           private$ns[[component]] <- sprintf("%s-%s", active_ns, component)
         } else {
           private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
