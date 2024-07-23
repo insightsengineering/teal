@@ -41,7 +41,7 @@ ui_data <- function(id, data, title, header, footer) {
   shiny::div(
     style = "display: inline-block;",
     if (inherits(data, "teal_data_module")) {
-      actionButton(ns("open_teal_data_module"), NULL, icon = icon("database"))
+      ui_teal_data_module(ns("teal_data_module"), transformer = data)
     } else {
       NULL
     }
@@ -79,27 +79,27 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       .fallback_on_failure(this = data, that = reactive(NULL), label = "Reactive data")
     }
 
-    setBookmarkExclude("open_teal_data_module")
+    # setBookmarkExclude("open_teal_data_module")
 
-    observeEvent(input$open_teal_data_module, {
-      if (input$open_teal_data_module > 1) {
-        footer <- modalButton("Dismiss")
-        easy_close <- TRUE
-      } else {
-        footer <- NULL
-        easy_close <- FALSE
-      }
-      showModal(
-        modalDialog(
-          class = ifelse(easy_close, "blur_background", "hide_background"),
-          tags$div(
-            ui_teal_data_module(session$ns("teal_data_module"), transformer = data)
-          ),
-          footer = footer,
-          easyClose = easy_close
-        )
-      )
-    })
+    # observeEvent(input$open_teal_data_module, {
+    #   if (input$open_teal_data_module > 1) {
+    #     footer <- modalButton("Dismiss")
+    #     easy_close <- TRUE
+    #   } else {
+    #     footer <- NULL
+    #     easy_close <- FALSE
+    #   }
+    #   showModal(
+    #     modalDialog(
+    #       class = ifelse(easy_close, "blur_background", "hide_background"),
+    #       tags$div(
+    #         ui_teal_data_module(session$ns("teal_data_module"), transformer = data)
+    #       ),
+    #       footer = footer,
+    #       easyClose = easy_close
+    #     )
+    #   )
+    # })
 
     if (inherits(data, "teal_data_module")) {
       shinyjs::disable(selector = "#teal_modules-active_tab.nav-tabs a")

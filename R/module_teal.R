@@ -84,7 +84,8 @@ ui_teal <- function(id,
   )
 
   data_elem <- ui_data(ns("data"), data = data, title = title, header = header, footer = footer)
-  tabs_elem <- ui_teal_module(id = ns("teal_modules"), modules = modules)
+  modules$children <- c(list(teal_data_module = data_elem), modules$children)
+  tabs_elem <- ui_teal_module(id = ns("teal_modules"), modules = modules, data_ui = data_elem)
 
   fluidPage(
     title = title,
@@ -97,8 +98,8 @@ ui_teal <- function(id,
     tags$div(
       id = "teal-util-icons",
       style = "margin-left: auto;",
-      data_elem,
-      ui_bookmark_panel(ns("bookmark_manager"), modules),
+      # data_elem,
+      # ui_bookmark_panel(ns("bookmark_manager"), modules),
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
         href = "javascript:void(0)",
@@ -189,7 +190,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
 
-    srv_bookmark_panel("bookmark_manager", modules)
+    # srv_bookmark_panel("bookmark_manager", modules)
 
     # comment: modules needs to be called after srv_filter_manager_panel
     #          This is because they are using session$slices_global which is set in filter_manager_srv
