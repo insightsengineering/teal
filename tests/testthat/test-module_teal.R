@@ -885,12 +885,12 @@ testthat::describe("srv_teal summary table", {
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
+        session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
         testthat::expect_identical(
           module_output_table(output, "module_1"),
           data.frame(
-            `Data Name` = c("iris", "mtcars"),
+            "Data Name" = c("iris", "mtcars"),
             Obs = c("150/150", "32/32"),
             check.names = FALSE
           )
@@ -899,17 +899,264 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("displays Subjects with count based on foreign key column")
+  testthat::it("displays Subjects with count based on foreign key column", {
+    data <- teal_data(
+      a = data.frame(id = seq(3), name = letters[seq(3)]),
+      b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
+    )
+    join_keys(data) <- join_keys(
+      join_key("a", "b", keys = "id")
+    )
+    datanames(data) <- c("a", "b")
 
-  testthat::it("displays parent's Subjects with count based on primary key ")
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c("a", "b"),
+            Obs = c("3/3", "6/6"),
+            Subjects = c("", "3/3"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
 
-  testthat::it("reflects filters and displays subjects by their unique id count")
+  testthat::it("displays parent's Subjects with count based on primary key", {
+    data <- teal_data(
+      a = data.frame(id = seq(3), name = letters[seq(3)]),
+      b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
+    )
+    join_keys(data) <- join_keys(
+      join_key("a", keys = "id"),
+      join_key("b", keys = c("id", "id2"))
+    )
+    datanames(data) <- c("a", "b")
 
-  testthat::it("reflects transforms")
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c("a", "b"),
+            Obs = c("3/3", "6/6"),
+            Subjects = c("3/3", "6/6"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
 
-  testthat::it("displays only module$datanames")
+  testthat::it("displays parent's Subjects with count based on primary and foreign key", {
+    data <- teal_data(
+      a = data.frame(id = seq(3), name = letters[seq(3)]),
+      b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
+    )
+    join_keys(data) <- join_keys(
+      join_key("a", keys = "id"),
+      join_key("b", keys = c("id", "id2")),
+      join_key("a", "b", keys = "id")
+    )
+    datanames(data) <- c("a", "b")
 
-  testthat::it("displays subset of module$datanames if not sufficient")
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c("a", "b"),
+            Obs = c("3/3", "6/6"),
+            Subjects = c("3/3", "3/3"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
+
+  testthat::it("reflects filters and displays subjects by their unique id count", {
+    data <- teal_data(
+      a = data.frame(id = seq(3), name = letters[seq(3)]),
+      b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
+    )
+    join_keys(data) <- join_keys(
+      join_key("a", keys = "id"),
+      join_key("b", keys = c("id", "id2")),
+      join_key("a", "b", keys = "id")
+    )
+    datanames(data) <- c("a", "b")
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data)),
+        filter = teal_slices(teal_slice("a", "name", selected = "a"))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c("a", "b"),
+            Obs = c("1/3", "2/6"),
+            Subjects = c("1/3", "1/3"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
+
+  testthat::it("reflects added filters and displays subjects by their unique id count", {
+    data <- teal_data(
+      a = data.frame(id = seq(3), name = letters[seq(3)]),
+      b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
+    )
+    join_keys(data) <- join_keys(
+      join_key("a", keys = "id"),
+      join_key("b", keys = c("id", "id2")),
+      join_key("a", "b", keys = "id")
+    )
+    datanames(data) <- c("a", "b")
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        slices_global(
+          teal_slices(teal_slice("a", "name", selected = "a"))
+        )
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c("a", "b"),
+            Obs = c("1/3", "2/6"),
+            Subjects = c("1/3", "1/3"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
+
+  testthat::it("reflects transforms", {
+    testthat::it("displays parent's Subjects with count based on primary key", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal_data(iris = iris),
+          modules = modules(
+            module(
+              "module_1",
+              server = function(id, data) data,
+              transformers = transform_list["iris"]
+            )
+          )
+        ),
+        expr = {
+          session$setInputs("teal_modules-active_tab" = "module_1")
+          session$flushReact()
+          testthat::expect_identical(
+            module_output_table(output, "module_1"),
+            data.frame(
+              "Data Name" = c("iris"),
+              Obs = c("6/150"),
+              check.names = FALSE
+            )
+          )
+        }
+      )
+    })
+  })
+
+  testthat::it("displays only module$datanames", {
+    data <- teal_data(iris = iris, mtcars = mtcars)
+    datanames(data) <- c("iris", "mtcars")
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data, datanames = "iris"))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c("iris"),
+            Obs = c("150/150"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
+
+  testthat::it("displays subset of module$datanames if not sufficient", {
+    data <- teal_data(iris = iris, mtcars = mtcars)
+    datanames(data) <- c("iris", "mtcars")
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data, datanames = c("iris", "iris2")))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c("iris"),
+            Obs = c("150/150"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
 })
 
 
