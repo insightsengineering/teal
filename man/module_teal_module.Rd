@@ -26,7 +26,8 @@ srv_teal_module(
   modules,
   datasets = NULL,
   slices_global = reactiveVal(teal_slices()),
-  reporter = teal.reporter::Reporter$new()
+  reporter = teal.reporter::Reporter$new(),
+  is_active = reactive(TRUE)
 )
 
 \method{srv_teal_module}{default}(
@@ -35,7 +36,8 @@ srv_teal_module(
   modules,
   datasets = NULL,
   slices_global = reactiveVal(teal_slices()),
-  reporter = teal.reporter::Reporter$new()
+  reporter = teal.reporter::Reporter$new(),
+  is_active = reactive(TRUE)
 )
 
 \method{srv_teal_module}{teal_modules}(
@@ -44,7 +46,8 @@ srv_teal_module(
   modules,
   datasets = NULL,
   slices_global = reactiveVal(teal_slices()),
-  reporter = teal.reporter::Reporter$new()
+  reporter = teal.reporter::Reporter$new(),
+  is_active = reactive(TRUE)
 )
 
 \method{srv_teal_module}{teal_module}(
@@ -53,11 +56,14 @@ srv_teal_module(
   modules,
   datasets = NULL,
   slices_global = reactiveVal(teal_slices()),
-  reporter = teal.reporter::Reporter$new()
+  reporter = teal.reporter::Reporter$new(),
+  is_active = reactive(TRUE)
 )
 }
 \arguments{
-\item{id}{(\code{character(1)}) module id}
+\item{id}{(\code{character}) optional
+string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
+rather than a standalone \code{shiny} app. This is a legacy feature.}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
