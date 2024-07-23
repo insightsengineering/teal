@@ -84,7 +84,9 @@ ui_teal <- function(id,
   )
 
   data_elem <- ui_data(ns("data"), data = data, title = title, header = header, footer = footer)
-  modules$children <- c(list(teal_data_module = data_elem), modules$children)
+  if (!is.null(data)) {
+    modules$children <- c(list(teal_data_module = data_elem), modules$children)
+  }
   tabs_elem <- ui_teal_module(id = ns("teal_modules"), modules = modules, data_ui = data_elem)
 
   fluidPage(
