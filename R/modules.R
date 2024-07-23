@@ -444,6 +444,9 @@ module_labels <- function(modules) {
 #' @keywords internal
 modules_bookmarkable <- function(modules) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+  if (inherits(modules$children[[1]], "shiny.tag")) {
+    modules$children[[1]] <- NULL
+  }
   if (inherits(modules, "teal_modules")) {
     setNames(
       lapply(modules$children, modules_bookmarkable),

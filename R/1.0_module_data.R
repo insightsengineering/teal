@@ -79,28 +79,6 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       .fallback_on_failure(this = data, that = reactive(NULL), label = "Reactive data")
     }
 
-    # setBookmarkExclude("open_teal_data_module")
-
-    # observeEvent(input$open_teal_data_module, {
-    #   if (input$open_teal_data_module > 1) {
-    #     footer <- modalButton("Dismiss")
-    #     easy_close <- TRUE
-    #   } else {
-    #     footer <- NULL
-    #     easy_close <- FALSE
-    #   }
-    #   showModal(
-    #     modalDialog(
-    #       class = ifelse(easy_close, "blur_background", "hide_background"),
-    #       tags$div(
-    #         ui_teal_data_module(session$ns("teal_data_module"), transformer = data)
-    #       ),
-    #       footer = footer,
-    #       easyClose = easy_close
-    #     )
-    #   )
-    # })
-
     if (inherits(data, "teal_data_module")) {
       shinyjs::disable(selector = ".teal-body .nav li a")
       shinyjs::click(id = "open_teal_data_module")

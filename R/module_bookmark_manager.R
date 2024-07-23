@@ -159,6 +159,7 @@ get_bookmarking_option <- function() {
   if (is.null(bookmark_option) && identical(getOption("shiny.bookmarkStore"), "server")) {
     bookmark_option <- getOption("shiny.bookmarkStore")
     # option alone doesn't activate bookmarking - we need to set shinyOptions
+    shinyOptions(bookmarkStore = bookmark_option)
   }
   bookmark_option
 }

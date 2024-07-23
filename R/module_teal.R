@@ -100,8 +100,7 @@ ui_teal <- function(id,
     tags$div(
       id = "teal-util-icons",
       style = "margin-left: auto;",
-      # data_elem,
-      # ui_bookmark_panel(ns("bookmark_manager"), modules),
+      ui_bookmark_panel(ns("bookmark_manager"), modules),
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
         href = "javascript:void(0)",
@@ -193,7 +192,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
 
-    # srv_bookmark_panel("bookmark_manager", modules)
+    srv_bookmark_panel("bookmark_manager", modules)
 
     # comment: modules needs to be called after srv_filter_manager_panel
     #          This is because they are using session$slices_global which is set in filter_manager_srv
@@ -204,5 +203,9 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       modules = modules,
       slices_global = slices_global
     )
+
+    if (inherits(data, "teal_data_module")) {
+      setBookmarkExclude(c("teal_modules-active_tab"))
+    }
   })
 }
