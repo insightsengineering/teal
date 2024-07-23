@@ -112,7 +112,8 @@ ui_teal <- function(id,
         footer,
         teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
         br(),
-        shinyjs::hidden(downloadLink(ns("lockFile"), "Download .lock file")),
+        tags$span("", id = ns("lockFileStatus")),
+        shinyjs::disabled(downloadLink(ns("lockFileLink"), "Download lockfile")),
         textOutput(ns("identifier"))
       )
     )
@@ -136,7 +137,7 @@ srv_teal <- function(id, modules, teal_data_rv, filter = teal_slices()) {
       title = "SessionInfo"
     )
 
-    output$lockFile <- teal_lockfile_downloadhandler()
+    output$lockFileLink <- teal_lockfile_downloadhandler()
 
     # `JavaScript` code
     run_js_files(files = "init.js")

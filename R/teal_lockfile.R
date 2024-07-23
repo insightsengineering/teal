@@ -56,21 +56,27 @@ NULL
 
 #' @rdname teal_lockfile
 #' @keywords internal
-teal_lockfile_invoke <- function() {
+teal_lockfile_external <- function() {
   lockfile_path <- "teal_app.lock"
   shiny::onStop(function() file.remove(lockfile_path))
 
-  # If user has setup the file, there is no need to compute a new one.
   user_lockfile <- getOption("teal.renv.lockfile", "")
-  if (!identical(user_lockfile, "")) {
-    if (file.exists(user_lockfile)) {
-      file.copy(user_lockfile, lockfile_path)
-      logger::log_trace('Lockfile set using option "teal.renv.lockfile" - skipping automatic creation.')
-      return(NULL)
-    } else {
-      stop("lockfile provided through options('teal.renv.lockfile') does not exist.")
-    }
+
+  if (file.exists(user_lockfile)) {
+    file.copy(user_lockfile, lockfile_path)
+    shinyjs::enable("teal-lockFileLink")
+    logger::log_trace('Lockfile set using option "teal.renv.lockfile" - skipping automatic creation.')
+    return(NULL)
+  } else {
+    stop("lockfile provided through options('teal.renv.lockfile') does not exist.")
   }
+}
+
+#' @rdname teal_lockfile
+#' @keywords internal
+teal_lockfile_process_invoke <- function() {
+  lockfile_path <- "teal_app.lock"
+  shiny::onStop(function() file.remove(lockfile_path))
 
   process <- ExtendedTask$new(
     function(run, lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd) {
@@ -112,7 +118,7 @@ renv_snapshot <- function(lockfile_path = NULL, opts, sysenv, libpaths, wd) {
   setwd(wd)
 
   out <- utils::capture.output(
-    renv <- renv::snapshot(
+    res <- renv::snapshot(
       lockfile = lockfile_path,
       prompt = FALSE,
       force = TRUE
@@ -122,47 +128,46 @@ renv_snapshot <- function(lockfile_path = NULL, opts, sysenv, libpaths, wd) {
 
   list(
     out = out,
-    lockfile_path = lockfile_path,
-    length = length(renv$Packages)
+    res = res,
+    path = lockfile_path
   )
 }
 
 #' @rdname teal_lockfile
 #' @keywords internal
-teal_lockfile_tracker <- function(process) {
-  checkmate::assert_class(process, "ExtendedTask", null.ok = TRUE)
-  if (inherits(process, "ExtendedTask")) {
-    tracker <- observeEvent(process$status(), {
-      if (process$status() != "running") {
-        teal_lockfile_handler(process)
+teal_lockfile_process_tracker <- function(process) {
+  checkmate::assert_class(process, "ExtendedTask")
+
+  observeEvent(process$status(), {
+    if (process$status() == "initial" || process$status() == "running") {
+      shinyjs::html("teal-lockFileStatus", "Creating lockfile...")
+    } else if (process$status() == "success") {
+      result <- process$result()
+      browser()
+      if (any(grepl("Lockfile written to", result$out))) {
+        logger::log_trace("Lockfile {result$path} containing { length(result$res$Packages) } packages created.")
+        if (any(grepl("WARNING:", result$out)) || any(grepl("ERROR:", result$out))) {
+          logger::log_warn("Lockfile created with warning(s) or error(s):")
+          for (i in result$out) {
+            logger::log_warn(i)
+          }
+        }
+
+        shinyjs::html("teal-lockFileStatus", "Application lockfile ready.")
+        shinyjs::hide("teal-lockFileStatus", anim = TRUE)
+
+        shinyjs::enable("teal-lockFileLink")
+      } else {
+        warning("Lockfile creation failed.")
+        shinyjs::html("teal-lockFileStatus", "Lockfile creation failed.")
+        shinyjs::disable("teal-lockFileLink")
       }
-    })
-  } else {
-    # If it is not mirai proces, then lockfile was provided through options. Skip the process - file is ready.
-    shinyjs::show("teal-lockFile")
-  }
-}
-
-#' @rdname teal_lockfile
-#' @keywords internal
-teal_lockfile_handler <- function(process) {
-  renv_logs <- process$result()
-  if (any(grepl("Lockfile written to", renv_logs$out))) {
-    with <- if (any(grepl("WARNING:", renv_logs$out))) {
-      " with warning(s)"
-    } else if (any(grepl("ERROR:", renv_logs$out))) {
-      " with error(s)"
-    } else {
-      ""
+    } else if (process$status() == "error") {
+      warning("Lockfile creation failed.")
+      shinyjs::html("teal-lockFileStatus", "Lockfile creation failed.")
+        shinyjs::disable("teal-lockFileLink")
     }
-
-    logger::log_trace("Lockfile {renv_logs$lockfile_path} containing { renv_logs$length } packages created{ with }.")
-    shiny::showNotification(paste0("Lockfile created", with, " and available to download."))
-    shinyjs::show("teal-lockFile")
-  } else {
-    warning("Lockfile creation failed.")
-    shiny::showNotification("Lockfile creation failed.", type = "warning")
-  }
+  })
 }
 
 #' @rdname teal_lockfile
