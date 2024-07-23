@@ -41,41 +41,39 @@
 NULL
 
 #' @rdname module_teal_module
-ui_teal_module <- function(id, modules, depth = 0L, data_ui = NULL) {
-  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+ui_teal_module <- function(id, modules, depth = 0L) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module", "shiny.tag"))
   checkmate::assert_count(depth)
   UseMethod("ui_teal_module", modules)
 }
 
 #' @rdname module_teal_module
 #' @export
-ui_teal_module.default <- function(id, modules, depth = 0L, data_ui = NULL) {
+ui_teal_module.default <- function(id, modules, depth = 0L) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname module_teal_module
 #' @export
-ui_teal_module.teal_modules <- function(id, modules, depth = 0L, data_ui = NULL) {
+ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
   ns <- NS(id)
-  do.call(
-    tabsetPanel,
-    c(
-      # by giving an id, we can reactively respond to tab changes
-      list(
-        id = ns("active_tab"),
-        type = if (modules$label == "root") "pills" else "tabs"
-      ),
-      lapply(
-        names(modules$children),
-        function(module_id) {
-          if (module_id == "teal_data_module") {
-            tabPanel(
-              title = "Data Module",
-              value = "teal_data_module",
-              data_ui
-            )
-          } else {
+  tags$div(
+    class = "teal-body",
+    do.call(
+      tabsetPanel,
+      c(
+        # by giving an id, we can reactively respond to tab changes
+        list(
+          id = ns("active_tab"),
+          type = if (modules$label == "root") "pills" else "tabs"
+        ),
+        lapply(
+          names(modules$children),
+          function(module_id) {
             module_label <- modules$children[[module_id]]$label
+            if (is.null(module_label)) {
+              module_label <- icon("database")
+            }
             tabPanel(
               title = module_label,
               value = module_id, # when clicked this tab value changes input$<tabset panel id>
@@ -86,10 +84,16 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L, data_ui = NULL)
               )
             )
           }
-        }
+        )
       )
     )
   )
+}
+
+#' @rdname module_teal_module
+#' @export
+ui_teal_module.shiny.tag <- function(id, modules, depth = 0L) {
+  modules
 }
 
 #' @rdname module_teal_module
