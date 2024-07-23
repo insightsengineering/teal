@@ -125,7 +125,8 @@ srv_teal_module <- function(id,
                             modules,
                             datasets = NULL,
                             slices_global = reactiveVal(teal_slices()),
-                            reporter = teal.reporter::Reporter$new()) {
+                            reporter = teal.reporter::Reporter$new(),
+                            is_active = reactive(TRUE)) {
   checkmate::assert_string(id)
   checkmate::assert_class(data_rv, "reactive")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
@@ -143,7 +144,8 @@ srv_teal_module.default <- function(id,
                                     modules,
                                     datasets = NULL,
                                     slices_global = reactiveVal(teal_slices()),
-                                    reporter = teal.reporter::Reporter$new()) {
+                                    reporter = teal.reporter::Reporter$new(),
+                                    is_active = reactive(TRUE)) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
@@ -154,12 +156,12 @@ srv_teal_module.teal_modules <- function(id,
                                          modules,
                                          datasets = NULL,
                                          slices_global = reactiveVal(teal_slices()),
-                                         reporter = teal.reporter::Reporter$new()) {
+                                         reporter = teal.reporter::Reporter$new(),
+                                         is_active = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_trace("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
-    labels <- vapply(modules$children, `[[`, character(1), "label")
-    modules_reactive <- sapply(
+    modules_output <- sapply(
       names(modules$children),
       function(module_id) {
         srv_teal_module(
@@ -168,25 +170,14 @@ srv_teal_module.teal_modules <- function(id,
           modules = modules$children[[module_id]],
           datasets = datasets,
           slices_global = slices_global,
-          reporter = reporter
+          reporter = reporter,
+          is_active = reactive(is_active() && input$active_tab == module_id)
         )
       },
       simplify = FALSE
     )
 
-    # when not ready input$active_tab would return NULL - this would fail next reactive
-    input_validated <- eventReactive(input$active_tab, input$active_tab, ignoreNULL = TRUE)
-    get_active_module <- reactive({
-      if (length(modules$children) == 1L) {
-        # single tab is active by default
-        modules_reactive[[1]]()
-      } else {
-        # switch to active tab
-        modules_reactive[[input_validated()]]()
-      }
-    })
-
-    get_active_module
+    modules_output
   })
 }
 
@@ -197,7 +188,8 @@ srv_teal_module.teal_module <- function(id,
                                         modules,
                                         datasets = NULL,
                                         slices_global = reactiveVal(teal_slices()),
-                                        reporter = teal.reporter::Reporter$new()) {
+                                        reporter = teal.reporter::Reporter$new(),
+                                        is_active = reactive(TRUE)) {
   logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     active_datanames <- reactive({
@@ -212,7 +204,7 @@ srv_teal_module.teal_module <- function(id,
             modules$datanames,
             teal.data::join_keys(data_rv())
           ),
-          teal.data::datanames(data_rv())
+          teal_data_datanames(data_rv())
         )
       }
     })
@@ -229,44 +221,13 @@ srv_teal_module.teal_module <- function(id,
     #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
     #   and if it is not set, then it won't be available in the srv_filter_panel
     srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
-    srv_filter_panel(
+    filtered_teal_data <- srv_filter_panel(
       "filter_panel",
       datasets = datasets,
-      active_datanames = active_datanames
+      active_datanames = active_datanames,
+      data_rv = data_rv,
+      is_active = is_active
     )
-
-    # Create trigger to limit reactivity between filter-panel and modules. We want to recalculate
-    #  only visible modules. Tigger_data triggers only if all conditions are met:
-    #  - tab is selected (renderUI triggers only when visible, when tab is displayed)
-    #  - when data truthy (datasets is not null, no validate errors etc.)
-    #  - when filters are changed (get_filter_expr)
-    trigger_data <- reactiveVal(NULL)
-    output$data_reactive <- renderUI({
-      req(inherits(datasets(), "FilteredData"))
-      get_filter_expr(datasets())
-      isolate({
-        new_val <- `if`(is.null(trigger_data()), 1L, trigger_data() + 1L)
-        trigger_data(new_val)
-      })
-      NULL
-    })
-
-    filtered_teal_data <- eventReactive(trigger_data(), {
-      .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
-    })
-
-    # Prevent shiny silent error to be propagated, data fallbacks to NULL
-    # To prevent observers from running (ignoreNULL is default value of eventReactive/observeEvent)
-    # filtered_teal_data <- reactive({
-    #   # todo: it should be triggered only when module is visible
-    #   if (inherits(try(filtered_teal_data(), silent = TRUE), "teal_data")) {
-    #     logger::log_info("Data is already initialized.")
-    #     filtered_teal_data()
-    #   } else {
-    #     logger::log_info("fallback to empty teal data")
-    #     NULL
-    #   }
-    # })
 
     transformed_teal_data <- srv_teal_data_modules(
       "data_transform",
@@ -277,12 +238,6 @@ srv_teal_module.teal_module <- function(id,
 
     summary_table <- srv_data_summary("data_summary", transformed_teal_data)
 
-    # module_teal_data <- srv_validate_datanames("validate_datanames", modules, transformed_teal_data)
-    module_teal_data <- srv_validate_reactive_teal_data(
-      "validate_datanames",
-      data = transformed_teal_data,
-      modules = modules
-    )
     # todo: Datasets in teal_data handed over to module should be limited to module$datanames
     #       Summary shouldn't display datanames that are not in module$datanames
     #       During ddl and transform we should keep all the datasets which might be needed in transform
@@ -309,15 +264,15 @@ srv_teal_module.teal_module <- function(id,
         # wait for module_teal_data() to be not NULL but only once:
         ignoreNULL = TRUE,
         once = TRUE,
-        eventExpr = module_teal_data(),
+        eventExpr = transformed_teal_data(),
         handlerExpr = {
-          module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
+          module_out(.call_teal_module(modules, datasets, transformed_teal_data, reporter))
         }
       )
     } else {
       # Report previewer must be initiated on app start for report cards to be included in bookmarks.
       # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-      module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
+      module_out(.call_teal_module(modules, datasets, transformed_teal_data, reporter))
     }
 
     # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
@@ -328,7 +283,7 @@ srv_teal_module.teal_module <- function(id,
       # (reactively) add card to the reporter
     }
 
-    reactive(modules)
+    module_out
   })
 }
 
@@ -358,60 +313,4 @@ srv_teal_module.teal_module <- function(id,
   } else {
     do.call(callModule, c(args, list(module = modules$server)))
   }
-}
-
-.make_teal_data <- function(modules, data, datasets = NULL, datanames) {
-  new_datasets <- c(
-    # Filtered data
-    sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE),
-    # Raw (unfiltered data)
-    stats::setNames(
-      lapply(datanames, function(x) datasets$get_data(x, filtered = FALSE)),
-      sprintf("%s_raw", datanames)
-    )
-  )
-
-  data_code <- teal.data::get_code(data, datanames = datanames)
-  hashes_code <- .get_hashes_code(datasets = datasets, datanames)
-  raw_data_code <- sprintf("%1$s_raw <- %1$s", datanames)
-  filter_code <- get_filter_expr(datasets = datasets, datanames = datanames)
-
-  all_code <- paste(unlist(c(data_code, "", hashes_code, raw_data_code, "", filter_code)), collapse = "\n")
-  tdata <- do.call(
-    teal.data::teal_data,
-    c(
-      list(code = trimws(all_code, which = "right")),
-      list(join_keys = teal.data::join_keys(data)),
-      new_datasets
-    )
-  )
-
-  tdata@verified <- data@verified
-  teal.data::datanames(tdata) <- datanames
-  tdata
-}
-
-#' Get code that tests the integrity of the reproducible data
-#'
-#' @param datasets (`FilteredData`) object holding the data
-#' @param datanames (`character`) names of datasets
-#'
-#' @return A character vector with the code lines.
-#' @keywords internal
-#'
-.get_hashes_code <- function(datasets = NULL, datanames) {
-  vapply(
-    datanames,
-    function(dataname, datasets) {
-      hash <- rlang::hash(datasets$get_data(dataname, filtered = FALSE))
-      sprintf(
-        "stopifnot(%s == %s)",
-        deparse1(bquote(rlang::hash(.(as.name(dataname))))),
-        deparse1(hash)
-      )
-    },
-    character(1L),
-    datasets = datasets,
-    USE.NAMES = FALSE
-  )
 }
