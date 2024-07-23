@@ -14,7 +14,23 @@ srv_filter_panel(id, datasets, active_datanames, data_rv, is_active)
 .make_teal_data(modules, data, datasets = NULL, datanames)
 }
 \arguments{
+\item{id}{(\code{character}) optional
+string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
+rather than a standalone \code{shiny} app. This is a legacy feature.}
+
+\item{datasets}{(\code{reactive} returning \code{FilteredData} or \code{NULL})
+When \code{datasets} is passed from the parent module (\code{srv_teal}) then \code{dataset} is a singleton
+which implies in filter-panel to be "global". When \code{NULL} then filter-panel is "module-specific".}
+
 \item{active_datanames}{(\code{reactive} returning \code{character}) this module's datanames}
+
+\item{data_rv}{(\code{reactive} returning \code{teal_data})}
+
+\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
+nested list of \code{teal_modules} or \code{teal_module} objects or a single
+\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
+will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+more details.}
 }
 \description{
 Reactive filter panel module in teal
