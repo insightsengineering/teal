@@ -165,7 +165,7 @@ teal_lockfile_process_tracker <- function(process) {
     } else if (process$status() == "error") {
       warning("Lockfile creation failed.")
       shinyjs::html("teal-lockFileStatus", "Lockfile creation failed.")
-        shinyjs::disable("teal-lockFileLink")
+      shinyjs::disable("teal-lockFileLink")
     }
   })
 }
