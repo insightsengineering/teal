@@ -138,7 +138,6 @@ ui_teal <- function(id,
 }
 
 #' @rdname module_teal
-#' @keywords internal
 srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
@@ -180,7 +179,9 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
-        req(inherits(data_rv(), "teal_data"))
+        if (!inherits(data_rv(), "teal_data")) {
+          stop("data_rv must be teal_data object.")
+        }
         logger::log_trace("srv_teal_module@1 initializing FilteredData")
         teal_data_to_filtered_data(data_rv(), filter = filter)
       })

@@ -6,6 +6,39 @@ module_output_table <- function(output, id) {
   as.data.frame(rvest::html_table(rvest::read_html(html), header = TRUE)[[1]])
 }
 
+transform_list <- list(
+  fail = teal_data_module(
+    ui = function(id) NULL,
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          stop("oh no!")
+        })
+      })
+    }
+  ),
+  iris = teal_data_module(
+    ui = function(id) NULL,
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          within(data(), iris <- head(iris))
+        })
+      })
+    }
+  ),
+  mtcars = teal_data_module(
+    ui = function(id) NULL,
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          within(data(), mtcars <- head(mtcars))
+        })
+      })
+    }
+  )
+)
+
 testthat::describe("srv_teal arguments", {
   testthat::it("accepts data to be teal_data", {
     testthat::expect_no_error(
@@ -96,7 +129,7 @@ testthat::describe("srv_teal arguments", {
 })
 
 
-# teal_module output --------
+# teal_module --------
 testthat::describe("srv_teal teal_modules", {
   testthat::it("are not called by default", {
     shiny::testServer(
@@ -404,7 +437,23 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are called and data is passed even if are datanames in `teal_data` are not sufficient")
+  testthat::test_that("receives data with datasets == module$datanames")
+
+  testthat::it("is called and receives data if datanames in `teal_data` are not sufficient")
+
+  testthat::test_that("doesn't receive extra data added in a transform")
+
+  testthat::test_that("receives all data when module$datanames = \"all\"")
+
+  testthat::test_that("srv_teal_module.teal_module does not pass data if not in the args explicitly")
+
+  testthat::test_that("srv_teal_module.teal_module passes (deprecated) datasets to the server module")
+
+  testthat::test_that("srv_teal_module.teal_module passes server_args to the ...")
+
+  testthat::test_that("srv_teal_module.teal_module passes filter_panel_api if specified")
+
+  testthat::test_that("srv_teal_module.teal_module passes Reporter if specified")
 })
 
 testthat::describe("srv_teal filters", {
@@ -606,8 +655,221 @@ testthat::describe("srv_teal filters", {
   })
 })
 
-testthat::describe("srv_teal teal_module(s) transforms", {
+testthat::describe("srv_teal teal_module(s) transformer", {
+  testthat::it("evaluates custom qenv call and pass update teal_data to the module", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = transform_list[c("iris", "mtcars")]
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], head(iris))
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(mtcars))
+        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+      }
+    )
+  })
 
+  testthat::it("evaluates custom qenv call after filter is applied", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal_data(), {
+          iris <- iris
+          mtcars <- mtcars
+        })),
+        filter = teal_slices(
+          teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+          teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)
+        ),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = transform_list[c("iris", "mtcars")]
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+
+        expected_iris <- subset(iris, Species == "versicolor")
+        rownames(expected_iris) <- NULL
+        expected_iris <- head(expected_iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 6)))
+        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+
+        expected_code <- paste(collapse = "\n", c(
+          "iris <- iris",
+          "mtcars <- mtcars",
+          "",
+          sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+          sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+          "iris_raw <- iris",
+          "mtcars_raw <- mtcars",
+          "",
+          'iris <- dplyr::filter(iris, Species == "versicolor")',
+          "mtcars <- dplyr::filter(mtcars, cyl == 6)",
+          "iris <- head(iris)",
+          "mtcars <- head(mtcars)"
+        ))
+        testthat::expect_identical(
+          teal.code::get_code(modules_output$module_1()()),
+          expected_code
+        )
+      }
+    )
+  })
+
+  testthat::it("is reactive to the filter changes", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal_data(), {
+          iris <- iris
+          mtcars <- mtcars
+        })),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = transform_list[c("iris", "mtcars")]
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        slices_global(teal_slices(teal_slice(dataname = "mtcars", varname = "cyl", selected = "4")))
+        session$flushReact()
+
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], head(iris))
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 4)))
+        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+
+        expected_code <- paste(collapse = "\n", c(
+          "iris <- iris",
+          "mtcars <- mtcars",
+          "",
+          sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+          sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+          "iris_raw <- iris",
+          "mtcars_raw <- mtcars",
+          "",
+          "mtcars <- dplyr::filter(mtcars, cyl == 4)",
+          "iris <- head(iris)",
+          "mtcars <- head(mtcars)"
+        ))
+        testthat::expect_identical(
+          teal.code::get_code(modules_output$module_1()()),
+          expected_code
+        )
+      }
+    )
+  })
+
+  testthat::it("fails when transformer doesn't return reactive", {
+    testthat::expect_error(
+      testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris),
+          modules = modules(
+            module(
+              server = function(id, data) data,
+              transformers = list(
+                teal_data_module(
+                  ui = function(id) NULL,
+                  server = function(id, data) "whatever"
+                )
+              )
+            )
+          )
+        ),
+        expr = {
+        }
+      ),
+      "must return a reactive expression"
+    )
+  })
+
+  testthat::it("continues when transformer throws validation error and returns unchanged data", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = list(
+              teal_data_module(
+                ui = function(id) NULL,
+                server = function(id, data) {
+                  reactive(validate(need(FALSE, "my error")))
+                }
+              )
+            )
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+      }
+    )
+  })
+
+  testthat::it("continues when transformer throws validation error and returns unchanged data", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = list(
+              teal_data_module(
+                ui = function(id) NULL,
+                server = function(id, data) {
+                  reactive(validate(need(FALSE, "my error")))
+                }
+              )
+            )
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+      }
+    )
+  })
+
+  testthat::it("continues when transformer throws qenv error and returns unchanged data")
+
+  testthat::it("isn't called when `data` is not teal_data")
+  # when reactive returned teal_data_module is not triggered (for example when button isn't clicked)
 })
 
 testthat::describe("srv_teal summary table", {
