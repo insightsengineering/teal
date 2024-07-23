@@ -1,5 +1,10 @@
 # comment: srv_teal is exported so the tests here are extensive and cover srv_data as well.
 #          testing of srv_data is not needed.
+module_output_table <- function(output, id) {
+  table_id <- sprintf("teal_modules-%s-data_summary-table", id)
+  html <- output[[table_id]]$html
+  as.data.frame(rvest::html_table(rvest::read_html(html), header = TRUE)[[1]])
+}
 
 testthat::describe("srv_teal arguments", {
   testthat::it("accepts data to be teal_data", {
@@ -92,7 +97,7 @@ testthat::describe("srv_teal arguments", {
 
 
 # teal_module output --------
-testthat::describe("teal_module(s)", {
+testthat::describe("srv_teal teal_modules", {
   testthat::it("are not called by default", {
     shiny::testServer(
       app = srv_teal,
@@ -402,7 +407,7 @@ testthat::describe("teal_module(s)", {
   testthat::it("are called and data is passed even if are datanames in `teal_data` are not sufficient")
 })
 
-testthat::describe("srv_teal slices_global(s)", {
+testthat::describe("srv_teal filters", {
   testthat::it("srv_teal: slices_global is initialized with slices specified in filter", {
     init_filter <- teal_slices(
       teal_slice("iris", "Species"),
@@ -477,10 +482,160 @@ testthat::describe("srv_teal slices_global(s)", {
       }
     )
   })
+
+  testthat::it("modules receive reactive data with filtered data, raw data and filter code", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal_data(), {
+          iris <- iris
+          mtcars <- mtcars
+        })),
+        filter = teal_slices(
+          teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+          teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)
+        ),
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+
+        expected_iris <- subset(iris, Species == "versicolor")
+        rownames(expected_iris) <- NULL
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+
+        expected_mtcars <- subset(mtcars, cyl == 6)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+
+        expected_code <- paste0(
+          c(
+            "iris <- iris",
+            "mtcars <- mtcars",
+            "",
+            sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+            sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+            "iris_raw <- iris",
+            "mtcars_raw <- mtcars",
+            "",
+            'iris <- dplyr::filter(iris, Species == "versicolor")',
+            "mtcars <- dplyr::filter(mtcars, cyl == 6)"
+          ),
+          collapse = "\n"
+        )
+        testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
+      }
+    )
+  })
+
+  testthat::it("modules receive reactive data based on the changes in slices_global", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal_data(), {
+          iris <- iris
+          mtcars <- mtcars
+        })),
+        filter = teal_slices(
+          teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+          teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)
+        ),
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        slices_global(teal_slices(teal_slice(dataname = "mtcars", varname = "cyl", selected = "4")))
+        session$flushReact()
+
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+
+        expected_mtcars <- subset(mtcars, cyl == 4)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+
+        expected_code <- paste0(
+          c(
+            "iris <- iris",
+            "mtcars <- mtcars",
+            "",
+            sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+            sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+            "iris_raw <- iris",
+            "mtcars_raw <- mtcars",
+            "",
+            "mtcars <- dplyr::filter(mtcars, cyl == 4)"
+          ),
+          collapse = "\n"
+        )
+        testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
+      }
+    )
+  })
+
+  testthat::it("filter is applied to the teal_module's data only if the tab is selected", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal_data(), {
+          iris <- iris
+          mtcars <- mtcars
+        })),
+        modules = modules(
+          module("module_1", server = function(id, data) data),
+          module("module_2", server = function(id, data) data)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        session$setInputs(`teal_modules-active_tab` = "module_2")
+        slices_global(teal_slices(teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)))
+        session$flushReact()
+
+        testthat::expect_identical(modules_output$module_2()()[["mtcars"]], subset(mtcars, cyl == 6))
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], subset(mtcars, cyl == 6))
+      }
+    )
+  })
+})
+
+testthat::describe("srv_teal teal_module(s) transforms", {
+
 })
 
 testthat::describe("srv_teal summary table", {
-  testthat::it("displays Obs only column if all datasets have no join keys")
+  testthat::it("displays Obs only column if all datasets have no join keys", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal_data(), {
+          iris <- iris
+          mtcars <- mtcars
+        })),
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1"),
+          data.frame(
+            `Data Name` = c("iris", "mtcars"),
+            Obs = c("150/150", "32/32"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
 
   testthat::it("displays Subjects with count based on foreign key column")
 
