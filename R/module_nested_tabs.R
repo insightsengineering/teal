@@ -256,7 +256,11 @@ srv_teal_module.teal_module <- function(id,
     # side comment:
     #  - looks like the only purpose of the `teal.data::datanames` is to limit the datasets for modules which have
     #    $datanames = "all". Otherwise, it is not needed as modules$datanames is the primary source of truth.
-
+    module_teal_data <- srv_validate_reactive_teal_data(
+      "validate_datanames",
+      data = transformed_teal_data,
+      modules = modules
+    )
 
     # Call modules.
     module_out <- reactiveVal(NULL)
@@ -265,15 +269,15 @@ srv_teal_module.teal_module <- function(id,
         # wait for module_teal_data() to be not NULL but only once:
         ignoreNULL = TRUE,
         once = TRUE,
-        eventExpr = transformed_teal_data(),
+        eventExpr = module_teal_data(),
         handlerExpr = {
-          module_out(.call_teal_module(modules, datasets, transformed_teal_data, reporter))
+          module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
         }
       )
     } else {
       # Report previewer must be initiated on app start for report cards to be included in bookmarks.
       # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-      module_out(.call_teal_module(modules, datasets, transformed_teal_data, reporter))
+      module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
     }
 
     # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
