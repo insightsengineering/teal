@@ -79,13 +79,14 @@ srv_bookmark_panel <- function(id, modules) {
     logger::log_trace("bookmark_manager_srv initializing")
     ns <- session$ns
     bookmark_option <- get_bookmarking_option()
+    if (!inherits(session, "session_proxy")) shinyOptions(bookmarkStore = bookmark_option)
     is_unbookmarkable <- need_bookmarking(modules)
 
     # Set up bookmarking callbacks ----
     # Register bookmark exclusions: do_bookmark button to avoid re-bookmarking
     setBookmarkExclude(c("do_bookmark"))
     # This bookmark can only be used on the app session.
-    app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
+    app_session <- .subset2(session, "parent")
     app_session$onBookmarked(function(url) {
       logger::log_trace("bookmark_manager_srv@onBookmarked: bookmark button clicked, registering bookmark")
       modal_content <- if (bookmark_option != "server") {
@@ -158,7 +159,6 @@ get_bookmarking_option <- function() {
   if (is.null(bookmark_option) && identical(getOption("shiny.bookmarkStore"), "server")) {
     bookmark_option <- getOption("shiny.bookmarkStore")
     # option alone doesn't activate bookmarking - we need to set shinyOptions
-    shinyOptions(bookmarkStore = bookmark_option)
   }
   bookmark_option
 }
