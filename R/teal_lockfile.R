@@ -143,7 +143,6 @@ teal_lockfile_process_tracker <- function(process) {
       shinyjs::html("teal-lockFileStatus", "Creating lockfile...")
     } else if (process$status() == "success") {
       result <- process$result()
-      browser()
       if (any(grepl("Lockfile written to", result$out))) {
         logger::log_trace("Lockfile {result$path} containing { length(result$res$Packages) } packages created.")
         if (any(grepl("WARNING:", result$out)) || any(grepl("ERROR:", result$out))) {
