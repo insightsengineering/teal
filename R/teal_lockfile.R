@@ -56,10 +56,22 @@ NULL
 
 #' @rdname teal_lockfile
 #' @keywords internal
-teal_lockfile_external <- function() {
+teal_lockfile <- function() {
   lockfile_path <- "teal_app.lock"
   shiny::onStop(function() file.remove(lockfile_path))
 
+  user_lockfile <- getOption("teal.renv.lockfile", "")
+  if (!identical(user_lockfile, "")) {
+    teal_lockfile_external()
+  } else {
+    teal_lockfile_process_invoke()
+  }
+}
+
+#' @rdname teal_lockfile
+#' @keywords internal
+teal_lockfile_external <- function() {
+  lockfile_path <- "teal_app.lock"
   user_lockfile <- getOption("teal.renv.lockfile", "")
 
   if (file.exists(user_lockfile)) {
@@ -76,7 +88,6 @@ teal_lockfile_external <- function() {
 #' @keywords internal
 teal_lockfile_process_invoke <- function() {
   lockfile_path <- "teal_app.lock"
-  shiny::onStop(function() file.remove(lockfile_path))
 
   process <- ExtendedTask$new(
     function(run, lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd) {

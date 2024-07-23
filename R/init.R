@@ -154,13 +154,7 @@ init <- function(data,
   teal.logger::log_system_info()
 
   # invoke lockfile creation
-  user_lockfile <- getOption("teal.renv.lockfile", "")
-  lockfile_process <- NULL
-  if (!identical(user_lockfile, "")) {
-    teal_lockfile_external()
-  } else {
-    lockfile_process <- teal_lockfile_process_invoke()
-  }
+  lockfile_process <- teal_lockfile()
 
   # argument transformations
   ## `modules` - landing module
