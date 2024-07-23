@@ -2,7 +2,7 @@
 #'
 #' Reactive filter panel module in teal
 #'
-#' @inheritParams module_nested_tabs
+#' @inheritParams module_teal_module
 #' @param active_datanames (`reactive` returning `character`) this module's datanames
 #' @name filter_panel
 #' @keywords internal

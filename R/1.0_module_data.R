@@ -68,7 +68,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     data_validated <- if (inherits(data, "teal_data_module")) {
       srv_teal_data_module(
         "teal_data_module",
-        data = reactive(NULL),
+        data = reactive(NULL), # to .fallback_on_failure to NULL
         transformer = data,
         modules = modules,
         validate_shiny_silent_error = FALSE
@@ -76,7 +76,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, c("reactive", "reactiveVal"))) {
-      data
+      .fallback_on_failure(this = data, that = reactive(NULL), label = "Reactive data")
     }
 
     setBookmarkExclude("open_teal_data_module")
@@ -106,12 +106,11 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       shinyjs::click(id = "open_teal_data_module")
     }
 
-    data_rv <- reactiveVal(NULL)
     observeEvent(data_validated(), {
       removeModal()
       showNotification("Data loaded successfully.", duration = 5)
       shinyjs::enable(selector = "#teal_modules-active_tab.nav-tabs a")
-      data_rv(data_validated())
+      data_validated()
     })
 
     observeEvent(data_validated(), once = TRUE, {
@@ -129,6 +128,6 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       )
     })
 
-    data_rv
+    data_validated
   })
 }

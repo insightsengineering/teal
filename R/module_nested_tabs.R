@@ -193,7 +193,7 @@ srv_teal_module.teal_module <- function(id,
   logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     active_datanames <- reactive({
-      req(data_rv())
+      req(inherits(data_rv(), "teal_data"))
       datanames <- if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
         teal_data_datanames(data_rv())
       } else {
@@ -210,6 +210,7 @@ srv_teal_module.teal_module <- function(id,
     })
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
+        req(inherits(data_rv(), "teal_data"))
         logger::log_trace("srv_teal_module@1 initializing module-specific FilteredData")
         teal_data_to_filtered_data(data_rv(), datanames = active_datanames(), filter = slices_global())
       })
