@@ -102,14 +102,14 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     # })
 
     if (inherits(data, "teal_data_module")) {
-      shinyjs::disable(selector = "#teal_modules-active_tab.nav-tabs a")
+      shinyjs::disable(selector = ".teal-body .nav li a")
       shinyjs::click(id = "open_teal_data_module")
     }
 
     observeEvent(data_validated(), {
       removeModal()
       showNotification("Data loaded successfully.", duration = 5)
-      shinyjs::enable(selector = "#teal_modules-active_tab.nav-tabs a")
+      shinyjs::enable(selector = ".teal-body .nav li a")
       data_validated()
     })
 
