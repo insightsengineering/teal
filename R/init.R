@@ -206,12 +206,10 @@ init <- function(data,
     if (length(teal_data_datanames(data)) == 0) {
       stop("The environment of `data` is empty.")
     }
-    # in case of teal_data_module this check is postponed to the srv_teal_with_splash
+
     is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
     if (!isTRUE(is_modules_ok)) {
-      logger::log_error(is_modules_ok)
-      # todo: datanames shouldn't fail the app as transformers may create the dataset
-      checkmate::assert(is_modules_ok, .var.name = "modules")
+      logger::log_warn(is_modules_ok)
     }
 
     is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
