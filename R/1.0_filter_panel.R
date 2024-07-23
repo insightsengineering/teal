@@ -118,6 +118,8 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
       FALSE
     }
   })
+
+
   trigger_data <- reactiveVal(NULL)
   observe({
     if (isTRUE(is_active() && filter_changed())) {
