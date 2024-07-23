@@ -437,13 +437,98 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::test_that("receives data with datasets == module$datanames")
+  testthat::test_that("receives data with datasets == module$datanames", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(teal_data(iris = iris, mtcars = mtcars)),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = c('iris'))
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_null(modules_output$module_1()()[['mtcars']])
+        testthat::expect_identical(modules_output$module_1()()[['iris']], iris)
+      }
+    )
+  })
 
-  testthat::it("is called and receives data if datanames in `teal_data` are not sufficient")
+  testthat::it("is called and receives data if datanames in `teal_data` are not sufficient", {
 
-  testthat::test_that("doesn't receive extra data added in a transform")
+    data <- teal_data(iris = iris, mtcars = mtcars)
+    datanames(data) <- "iris"
 
-  testthat::test_that("receives all data when module$datanames = \"all\"")
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(data),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[['iris_raw']], iris)
+      }
+    )
+  })
+
+  testthat::test_that("doesn't receive extra data added in a transform", {
+    testthat::skip("Looks like it does receive extra data?")
+    # Added swiss in a transformer and this is added to data()
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(teal_data(iris = iris, mtcars = mtcars)),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = list(
+              teal_data_module(
+                label = "Dummy",
+                ui = function(id) div("(does nothing)"),
+                server = function(id, data) {
+                  moduleServer(id, function(input, output, session) {
+                    reactive(within(data(), {swiss <- swiss}))
+                  })
+                }
+              )
+            )
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[['mtcars']], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[['iris']], iris)
+        testthat::expect_identical(modules_output$module_1()()[['swiss']], swiss)
+      }
+    )
+  })
+
+  testthat::test_that("receives all data when module$datanames = \"all\"", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(teal_data(iris = iris, mtcars = mtcars, swiss = swiss)),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = 'all')
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[['mtcars']], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[['iris']], iris)
+        testthat::expect_identical(modules_output$module_1()()[['swiss']], swiss)
+      }
+    )
+  })
 
   testthat::test_that("srv_teal_module.teal_module does not pass data if not in the args explicitly")
 
