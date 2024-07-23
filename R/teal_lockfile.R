@@ -58,7 +58,11 @@ NULL
 #' @keywords internal
 teal_lockfile <- function() {
   lockfile_path <- "teal_app.lock"
-  shiny::onStop(function() file.remove(lockfile_path))
+  shiny::onStop(function() {
+    if (file.exists(lockfile_path)) {
+      file.remove(lockfile_path)
+    }
+  })
 
   user_lockfile <- getOption("teal.renv.lockfile", "")
   if (!identical(user_lockfile, "")) {
@@ -90,24 +94,30 @@ teal_lockfile_process_invoke <- function() {
   lockfile_path <- "teal_app.lock"
 
   process <- ExtendedTask$new(
-    function(run, lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd) {
+    function() {
       mirai::mirai(
-        run(lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd),
-        run = run, lockfile_path = lockfile_path, opts = opts, sysenv = sysenv, libpaths = libpaths, wd = wd
+        {
+          options(opts)
+          do.call(Sys.setenv, sysenv)
+          .libPaths(libpaths)
+          setwd(wd)
+
+          run(lockfile_path = lockfile_path)
+        },
+        run = renv_snapshot,
+        lockfile_path = lockfile_path,
+        opts = options(),
+        libpaths = .libPaths(),
+        sysenv = as.list(Sys.getenv()),
+        wd = getwd()
       )
     }
   )
 
   suppressWarnings({ # 'package:stats' may not be available when loading
-    process$invoke(
-      run = renv_snapshot,
-      lockfile_path = lockfile_path,
-      opts = options(),
-      libpaths = .libPaths(),
-      sysenv = as.list(Sys.getenv()), # normally output is a class of "Dlist"
-      wd = getwd()
-    )
+    process$invoke()
   })
+
   logger::log_trace("Lockfile creation started based on { getwd() }.")
 
   process
@@ -115,18 +125,8 @@ teal_lockfile_process_invoke <- function() {
 
 #' @rdname teal_lockfile
 #' @keywords internal
-renv_snapshot <- function(lockfile_path = NULL, opts, sysenv, libpaths, wd) {
+renv_snapshot <- function(lockfile_path) {
   checkmate::assert_string(lockfile_path)
-  checkmate::assert_list(opts)
-  checkmate::assert_class(sysenv, "list")
-  checkmate::assert_character(libpaths, min.len = 1)
-  checkmate::assert_directory(wd)
-
-  # mirai starts in vanilla session in the R.home directory. We need to pass all session related info
-  options(opts)
-  do.call(Sys.setenv, sysenv)
-  .libPaths(libpaths)
-  setwd(wd)
 
   out <- utils::capture.output(
     res <- renv::snapshot(
