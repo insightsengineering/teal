@@ -80,8 +80,6 @@
 #' @name module_snapshot_manager
 #' @rdname module_snapshot_manager
 #'
-#' @aliases snapshot_manager
-#'
 #' @author Aleksander Chlebowski
 #'
 NULL
@@ -165,12 +163,14 @@ srv_snapshot_manager <- function(id, slices_global) {
 
     ns <- session$ns
 
+    module_labels <- names(attr(shiny::isolate(slices_global()), "mapping"))
+
     # Track global filter states ----
     snapshot_history <- reactiveVal({
       # Restore directly from bookmarked state, if applicable.
       restoreValue(
         ns("snapshot_history"),
-        list("Initial application state" = isolate(as.list(slices_global(), recursive = TRUE)))
+        list("Initial application state" = .to_snapshot(slices_global()))
       )
     })
 
@@ -209,7 +209,7 @@ srv_snapshot_manager <- function(id, slices_global) {
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         logger::log_debug("snapshot_manager_srv: snapshot name accepted, adding snapshot")
-        snapshot <- as.list(slices_global(), recursive = TRUE)
+        snapshot <- .to_snapshot(slices_global())
         snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
         snapshot_history(snapshot_update)
@@ -273,7 +273,7 @@ srv_snapshot_manager <- function(id, slices_global) {
         } else {
           # Add to snapshot history.
           logger::log_debug("snapshot_manager_srv: snapshot loaded, adding to history")
-          snapshot <- as.list(snapshot_state, recursive = TRUE)
+          snapshot <- .to_snapshot(slices_global())
           snapshot_update <- c(snapshot_history(), list(snapshot))
           names(snapshot_update)[length(snapshot_update)] <- snapshot_name
           snapshot_history(snapshot_update)
@@ -293,7 +293,9 @@ srv_snapshot_manager <- function(id, slices_global) {
       s <- "Initial application state"
       ### Begin restore procedure. ###
       snapshot <- snapshot_history()[[s]]
+      # todo: as.teal_slices looses module-mapping if is not global
       snapshot_state <- as.teal_slices(snapshot)
+      snapshot_state <- .resolve_global_mapping(snapshot_state, module_labels)
       slices_global(snapshot_state)
       removeModal()
       ### End restore procedure. ###
@@ -319,7 +321,9 @@ srv_snapshot_manager <- function(id, slices_global) {
           observers[[id_pickme]] <- observeEvent(input[[id_pickme]], {
             ### Begin restore procedure. ###
             snapshot <- snapshot_history()[[s]]
-            slices_global(as.teal_slices(snapshot))
+            snapshot_state <- as.teal_slices(snapshot)
+            snapshot_state <- .resolve_global_mapping(snapshot_state, module_labels)
+            slices_global(snapshot_state)
             removeModal()
             ### End restore procedure. ###
           })
@@ -333,6 +337,7 @@ srv_snapshot_manager <- function(id, slices_global) {
             content = function(file) {
               snapshot <- snapshot_history()[[s]]
               snapshot_state <- as.teal_slices(snapshot)
+              snapshot_state <- .resolve_global_mapping(snapshot_state, module_labels)
               slices_store(tss = snapshot_state, file = file)
             }
           )
@@ -364,5 +369,15 @@ srv_snapshot_manager <- function(id, slices_global) {
     })
 
     snapshot_history
+  })
+}
+
+
+.to_snapshot <- function(slices) {
+  shiny::isolate({
+    if (!isTRUE(attr(slices, "module_specific"))) {
+      attr(slices, "mapping") <- unique(unlist(attr(slices, "mapping")))
+    }
+    as.list(slices, recursive = TRUE)
   })
 }

@@ -1534,7 +1534,7 @@ testthat::describe("srv_teal filter manager", {
 
 testthat::describe("srv_teal snapshot manager", {
   testthat::it("clicking reset button restores initial filters state", {
-    init_filter <- teal_slices(
+    initial_slices <- teal_slices(
       teal_slice("iris", "Species"),
       teal_slice("mtcars", "cyl")
     )
@@ -1543,11 +1543,15 @@ testthat::describe("srv_teal snapshot manager", {
       args = list(
         id = "test",
         data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(example_module()),
-        filter = init_filter
+        modules = modules(module("module_1", server = function(id, data) data)),
+        filter = initial_slices
       ),
       expr = {
-
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        slices_global(teal_slices())
+        browser()
+        session$setInputs("snapshot_manager_panel-module-snapshot_reset" = TRUE)
+        testthat::expect_identical(as.list(slices_global()), as.list(initial_slices))
       }
     )
   })
