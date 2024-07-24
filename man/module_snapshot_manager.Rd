@@ -2,7 +2,6 @@
 % Please edit documentation in R/module_snapshot_manager.R
 \name{module_snapshot_manager}
 \alias{module_snapshot_manager}
-\alias{snapshot_manager}
 \alias{ui_snapshot_manager_panel}
 \alias{srv_snapshot_manager_panel}
 \alias{ui_snapshot_manager}
