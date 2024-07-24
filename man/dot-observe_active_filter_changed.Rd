@@ -4,7 +4,7 @@
 \alias{.observe_active_filter_changed}
 \title{Trigger only active module when filter is changed}
 \usage{
-.observe_active_filter_changed(datasets, is_active, active_datanames)
+.observe_active_filter_changed(datasets, is_active, active_datanames, data_rv)
 }
 \value{
 A \code{reactiveVal} which is triggered when filter is changed and this module is selected.
