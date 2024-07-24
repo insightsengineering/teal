@@ -563,7 +563,6 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        browser()
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
         testthat::expect_identical(modules_output$module_1()()[["mtcars2"]], mtcars2)
