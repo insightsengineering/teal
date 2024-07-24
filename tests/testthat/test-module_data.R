@@ -124,5 +124,4 @@ testthat::describe("srv_data: data_validated", {
       }
     )
   })
-
 })
