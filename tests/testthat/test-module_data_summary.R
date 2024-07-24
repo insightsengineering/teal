@@ -127,11 +127,13 @@ testthat::test_that("srv_data_summary calculates counts properly for mixture of 
       iris <- iris[1:50, ]
       iris_raw <- iris
       library(MultiAssayExperiment)
+      # nolint start: object_name.
       data("miniACC", package = "MultiAssayExperiment", envir = environment())
-      miniACC_raw <- miniACC
-      CO2_raw <- CO2 <- CO2
+      mini_ACC_raw <- miniACC
+      CO2_raw <- CO2
       factors_raw <- factors <- names(Filter(isTRUE, vapply(CO2, is.factor, logical(1L))))
       CO2[factors] <- lapply(CO2[factors], as.character)
+      # nolint end: object_name.
     })
 
   teal.data::join_keys(data) <- teal.data::join_keys(

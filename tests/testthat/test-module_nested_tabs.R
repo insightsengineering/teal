@@ -300,7 +300,10 @@ testthat::test_that("srv_teal_module: teal_module gets data even if any transfor
       datasets()$set_filter_state(teal_slices(teal_slice("iris", "Species", selected = "virginica")))
       session$flushReact()
       out <- module_out()
-      testthat::expect_identical(out()[["iris"]], subset(iris, Species == "virginica") %>% `rownames<-`(1:50) %>% head(6))
+      testthat::expect_identical(
+        out()[["iris"]],
+        subset(iris, Species == "virginica") %>% `rownames<-`(1:50) %>% head(6)
+      )
       testthat::expect_identical(out()[["mtcars"]], head(mtcars, 6))
     }
   )
@@ -479,7 +482,10 @@ testthat::test_that("srv_teal_module: teal_module receives transformed data with
       datasets()$set_filter_state(teal_slices(teal_slice("mtcars", "cyl", selected = "6")))
       session$flushReact()
       out <- module_out()
-      testthat::expect_identical(out()[["iris"]], subset(iris, Species == "virginica") %>% `rownames<-`(1:50) %>% head(6))
+      testthat::expect_identical(
+        out()[["iris"]],
+        subset(iris, Species == "virginica") %>% `rownames<-`(1:50) %>% head(6)
+      )
       testthat::expect_identical(out()[["mtcars"]], subset(mtcars, cyl == 6) %>% head(6))
       testthat::expect_identical(
         teal.data::get_code(out()),

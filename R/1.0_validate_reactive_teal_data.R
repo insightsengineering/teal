@@ -34,7 +34,7 @@ ui_validate_reactive_teal_data <- function(id) {
 #' error message is displayed.
 #' Default is `FALSE` to handle empty reactive cycle on init.
 #' @keywords internal
-srv_validate_reactive_teal_data <- function(id,
+srv_validate_reactive_teal_data <- function(id, # nolint: object_length
                                             data,
                                             modules = NULL,
                                             validate_shiny_silent_error = FALSE) {

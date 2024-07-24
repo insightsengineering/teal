@@ -91,15 +91,15 @@ testthat::describe("srv_data: data_validated", {
       args = list(
         id = "test",
         data = reactive(within(teal.data::teal_data(), {
-          IRIS <- iris
-          MTCARS <- mtcars
-          IRIS <- head(IRIS)
+          iris <- datasets::iris
+          mtcars <- mtcars
+          iris <- head(iris)
         })),
         modules = modules(example_module())
       ),
       expr = {
         hashes <- vapply(
-          c("IRIS", "MTCARS"),
+          c("iris", "mtcars"),
           function(dataname) {
             sprintf(
               "stopifnot(rlang::hash(%s) == \"%s\") # @linksto %1$s",
