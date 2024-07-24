@@ -45,7 +45,7 @@ transform_list <- list(
           new_data <- within(data(), {
             new_dataset <- data.frame(a = 1:3, b = 4:6)
           })
-          datanames(new_data) <- c(datanames(new_data), "new_dataset")
+          teal.data::datanames(new_data) <- c(teal.data::datanames(new_data), "new_dataset")
           new_data
         })
       })
@@ -470,7 +470,7 @@ testthat::describe("srv_teal teal_modules", {
 
   testthat::it("is called and receives data if datanames in `teal_data` are not sufficient", {
     data <- teal_data(iris = iris, mtcars = mtcars)
-    datanames(data) <- "iris"
+    teal.data::datanames(data) <- "iris"
 
     shiny::testServer(
       app = srv_teal,
@@ -574,7 +574,7 @@ testthat::describe("srv_teal teal_modules", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = teal_data(iris = iris, mtcars = mtcars),
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
         modules = modules(
           module("module_1", server = function(id, ...) {
             list(...)$data
@@ -595,7 +595,7 @@ testthat::describe("srv_teal teal_modules", {
         app = srv_teal,
         args = list(
           id = "test",
-          data = teal_data(iris = iris, mtcars = mtcars),
+          data = teal.data::teal_data(iris = iris, mtcars = mtcars),
           modules = modules(
             module("module_1", server = function(id, datasets) datasets)
           )
@@ -614,7 +614,7 @@ testthat::describe("srv_teal teal_modules", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = teal_data(iris = iris, mtcars = mtcars),
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
         modules = modules(
           module(
             "module_1",
@@ -640,7 +640,7 @@ testthat::describe("srv_teal teal_modules", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = teal_data(iris = iris, mtcars = mtcars),
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
         modules = modules(
           module("module_1", server = function(id, filter_panel_api) filter_panel_api)
         )
@@ -657,7 +657,7 @@ testthat::describe("srv_teal teal_modules", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = teal_data(iris = iris, mtcars = mtcars),
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
         modules = modules(
           module("module_1", server = function(id, reporter) reporter)
         )
@@ -751,7 +751,7 @@ testthat::describe("srv_teal filters", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = reactive(within(teal_data(), {
+        data = reactive(within(teal.data::teal_data(), {
           iris <- iris
           mtcars <- mtcars
         })),
@@ -798,7 +798,7 @@ testthat::describe("srv_teal filters", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = reactive(within(teal_data(), {
+        data = reactive(within(teal.data::teal_data(), {
           iris <- iris
           mtcars <- mtcars
         })),
@@ -844,7 +844,7 @@ testthat::describe("srv_teal filters", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = reactive(within(teal_data(), mtcars <- mtcars)),
+        data = reactive(within(teal.data::teal_data(), mtcars <- mtcars)),
         filter = teal_slices(
           teal_slice(dataname = "mtcars", varname = "cyl", selected = 4)
         ),
@@ -881,7 +881,7 @@ testthat::describe("srv_teal filters", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = reactive(within(teal_data(), {
+        data = reactive(within(teal.data::teal_data(), {
           iris <- iris
           mtcars <- mtcars
         })),
@@ -910,7 +910,7 @@ testthat::describe("srv_teal filters", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = reactive(within(teal_data(), {
+        data = reactive(within(teal.data::teal_data(), {
           iris <- iris
           mtcars <- mtcars
         })),
@@ -965,7 +965,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = reactive(within(teal_data(), {
+        data = reactive(within(teal.data::teal_data(), {
           iris <- iris
           mtcars <- mtcars
         })),
@@ -1019,7 +1019,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = reactive(within(teal_data(), {
+        data = reactive(within(teal.data::teal_data(), {
           iris <- iris
           mtcars <- mtcars
         })),
@@ -1158,7 +1158,7 @@ testthat::describe("srv_teal summary table", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = reactive(within(teal_data(), {
+        data = reactive(within(teal.data::teal_data(), {
           iris <- iris
           mtcars <- mtcars
         })),
@@ -1180,14 +1180,14 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("displays Subjects with count based on foreign key column", {
-    data <- teal_data(
+    data <- teal.data::teal_data(
       a = data.frame(id = seq(3), name = letters[seq(3)]),
       b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
     )
-    join_keys(data) <- join_keys(
-      join_key("a", "b", keys = "id")
+    teal.data::join_keys(data) <- teal.data::join_keys(
+      teal.data::join_key("a", "b", keys = "id")
     )
-    datanames(data) <- c("a", "b")
+    teal.data::datanames(data) <- c("a", "b")
 
     shiny::testServer(
       app = srv_teal,
@@ -1213,15 +1213,15 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("displays parent's Subjects with count based on primary key", {
-    data <- teal_data(
+    data <- teal.data::teal_data(
       a = data.frame(id = seq(3), name = letters[seq(3)]),
       b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
     )
-    join_keys(data) <- join_keys(
-      join_key("a", keys = "id"),
-      join_key("b", keys = c("id", "id2"))
+    teal.data::join_keys(data) <- teal.data::join_keys(
+      teal.data::join_key("a", keys = "id"),
+      teal.data::join_key("b", keys = c("id", "id2"))
     )
-    datanames(data) <- c("a", "b")
+    teal.data::datanames(data) <- c("a", "b")
 
     shiny::testServer(
       app = srv_teal,
@@ -1247,16 +1247,16 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("displays parent's Subjects with count based on primary and foreign key", {
-    data <- teal_data(
+    data <- teal.data::teal_data(
       a = data.frame(id = seq(3), name = letters[seq(3)]),
       b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
     )
-    join_keys(data) <- join_keys(
-      join_key("a", keys = "id"),
-      join_key("b", keys = c("id", "id2")),
-      join_key("a", "b", keys = "id")
+    teal.data::join_keys(data) <- teal.data::join_keys(
+      teal.data::join_key("a", keys = "id"),
+      teal.data::join_key("b", keys = c("id", "id2")),
+      teal.data::join_key("a", "b", keys = "id")
     )
-    datanames(data) <- c("a", "b")
+    teal.data::datanames(data) <- c("a", "b")
 
     shiny::testServer(
       app = srv_teal,
@@ -1282,16 +1282,16 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("reflects filters and displays subjects by their unique id count", {
-    data <- teal_data(
+    data <- teal.data::teal_data(
       a = data.frame(id = seq(3), name = letters[seq(3)]),
       b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
     )
-    join_keys(data) <- join_keys(
-      join_key("a", keys = "id"),
-      join_key("b", keys = c("id", "id2")),
-      join_key("a", "b", keys = "id")
+    teal.data::join_keys(data) <- teal.data::join_keys(
+      teal.data::join_key("a", keys = "id"),
+      teal.data::join_key("b", keys = c("id", "id2")),
+      teal.data::join_key("a", "b", keys = "id")
     )
-    datanames(data) <- c("a", "b")
+    teal.data::datanames(data) <- c("a", "b")
 
     shiny::testServer(
       app = srv_teal,
@@ -1318,16 +1318,16 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("reflects added filters and displays subjects by their unique id count", {
-    data <- teal_data(
+    data <- teal.data::teal_data(
       a = data.frame(id = seq(3), name = letters[seq(3)]),
       b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
     )
-    join_keys(data) <- join_keys(
-      join_key("a", keys = "id"),
-      join_key("b", keys = c("id", "id2")),
-      join_key("a", "b", keys = "id")
+    teal.data::join_keys(data) <- teal.data::join_keys(
+      teal.data::join_key("a", keys = "id"),
+      teal.data::join_key("b", keys = c("id", "id2")),
+      teal.data::join_key("a", "b", keys = "id")
     )
-    datanames(data) <- c("a", "b")
+    teal.data::datanames(data) <- c("a", "b")
 
     shiny::testServer(
       app = srv_teal,
@@ -1360,7 +1360,7 @@ testthat::describe("srv_teal summary table", {
       app = srv_teal,
       args = list(
         id = "test",
-        data = teal_data(iris = iris),
+        data = teal.data::teal_data(iris = iris),
         modules = modules(
           module(
             "module_1",
@@ -1390,7 +1390,7 @@ testthat::describe("srv_teal summary table", {
         app = srv_teal,
         args = list(
           id = "test",
-          data = teal_data(iris = iris),
+          data = teal.data::teal_data(iris = iris),
           modules = modules(
             module(
               "module_1",
@@ -1416,8 +1416,8 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("displays only module$datanames", {
-    data <- teal_data(iris = iris, mtcars = mtcars)
-    datanames(data) <- c("iris", "mtcars")
+    data <- teal.data::teal_data(iris = iris, mtcars = mtcars)
+    teal.data::datanames(data) <- c("iris", "mtcars")
 
     shiny::testServer(
       app = srv_teal,
@@ -1442,8 +1442,8 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("displays subset of module$datanames if not sufficient", {
-    data <- teal_data(iris = iris, mtcars = mtcars)
-    datanames(data) <- c("iris", "mtcars")
+    data <- teal.data::teal_data(iris = iris, mtcars = mtcars)
+    teal.data::datanames(data) <- c("iris", "mtcars")
 
     shiny::testServer(
       app = srv_teal,
