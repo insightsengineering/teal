@@ -87,15 +87,15 @@ srv_teal_data_modules <- function(id, data, transformers, modules) {
     logger::log_trace("srv_teal_data_modules initializing.")
 
     transformed_teal_data <- Reduce(
-      function(x, name) {
+      function(previous_result, name) {
         srv_teal_data_module(
           id = name,
-          data = x,
+          data = previous_result,
           transformer = transformers[[name]],
           modules = modules
         )
       },
-      names(transformers),
+      x = names(transformers),
       init = data
     )
   })
