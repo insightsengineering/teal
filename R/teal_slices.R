@@ -87,6 +87,7 @@ teal_slices <- function(...,
       mapping <- list(global_filters = all_slice_id)
     }
     if (!module_specific) {
+      mapping[["global_filters"]] <- unique(unlist(mapping))
       mapping[setdiff(names(mapping), "global_filters")] <- NULL
     }
 
