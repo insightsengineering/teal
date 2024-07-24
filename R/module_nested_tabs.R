@@ -216,7 +216,7 @@ srv_teal_module.teal_module <- function(id,
           stop("data_rv must be teal_data object.")
         }
         logger::log_trace("srv_teal_module@1 initializing module-specific FilteredData")
-        teal_data_to_filtered_data(data_rv(), datanames = active_datanames(), filter = slices_global())
+        teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
       })
     }
 

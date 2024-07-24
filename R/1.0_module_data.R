@@ -110,7 +110,16 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       removeModal()
       showNotification("Data loaded successfully.", duration = 5)
       shinyjs::enable(selector = "#teal_modules-active_tab.nav-tabs a")
-      data_validated()
+
+      is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data_validated()))
+      if (!isTRUE(is_filter_ok)) {
+        showNotification(
+          "Some filters were not applied because of incompatibility with data. Contact app developer.",
+          type = "warning",
+          duration = 10
+        )
+        warning(is_filter_ok)
+      }
     })
 
     observeEvent(data_validated(), once = TRUE, {
@@ -127,6 +136,8 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
         session = app_session
       )
     })
+
+
 
     # Adds signature protection to the datanames in the data
     reactive(.add_signature_to_data(data_validated()))

@@ -180,7 +180,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
           stop("data_rv must be teal_data object.")
         }
         logger::log_trace("srv_teal_module@1 initializing FilteredData")
-        teal_data_to_filtered_data(data_rv(), filter = filter)
+        teal_data_to_filtered_data(data_rv())
       })
     }
 

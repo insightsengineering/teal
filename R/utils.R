@@ -59,19 +59,9 @@ include_parent_datanames <- function(dataname, join_keys) {
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
 #' @return A `FilteredData` object.
 #' @keywords internal
-teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x), filter = teal_slices()) {
+teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   checkmate::assert_class(x, "teal_data")
   checkmate::assert_character(datanames, min.chars = 1L, any.missing = FALSE)
-
-  is_filter_ok <- check_filter_datanames(filter, datanames)
-  if (!isTRUE(is_filter_ok)) {
-    showNotification(
-      "Some filters were not applied because of incompatibility with data. Contact app developer.",
-      type = "warning",
-      duration = 10
-    )
-    warning(is_filter_ok)
-  }
 
   # Otherwise, FilteredData will be created in the modules' scope later
   ans <- teal.slice::init_filtered_data(
