@@ -531,15 +531,104 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::test_that("srv_teal_module.teal_module does not pass data if not in the args explicitly")
+  testthat::test_that("srv_teal_module.teal_module does not pass data if not in the args explicitly", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id) {
+            data
+          })
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1(), utils::data)
+      }
+    )
+  })
 
-  testthat::test_that("srv_teal_module.teal_module passes (deprecated) datasets to the server module")
+  testthat::test_that("srv_teal_module.teal_module passes (deprecated) datasets to the server module", {
+    testthat::expect_warning(
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal_data(iris = iris, mtcars = mtcars),
+          modules = modules(
+            module("module_1", server = function(id, datasets) datasets)
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          testthat::expect_s3_class(modules_output$module_1(), "FilteredData")
+        }
+      ),
+      "`datasets` argument in the server is deprecated and will be removed in the next release"
+    )
+  })
 
-  testthat::test_that("srv_teal_module.teal_module passes server_args to the ...")
+  testthat::test_that("srv_teal_module.teal_module passes server_args to the ...", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module(
+            "module_1",
+            server = function(id, data, ...) {
+              data
+            },
+            server_args = list(x = 1L, y = 2L)
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(
+          modules$children$module_1$server_args,
+          list(x = 1L, y = 2L)
+        )
+      }
+    )
+  })
 
-  testthat::test_that("srv_teal_module.teal_module passes filter_panel_api if specified")
+  testthat::test_that("srv_teal_module.teal_module passes filter_panel_api if specified", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, filter_panel_api) filter_panel_api)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_s3_class(modules_output$module_1(), "FilterPanelAPI")
+      }
+    )
+  })
 
-  testthat::test_that("srv_teal_module.teal_module passes Reporter if specified")
+  testthat::test_that("srv_teal_module.teal_module passes Reporter if specified", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, reporter) reporter)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_s3_class(module_out(), "Reporter")
+      }
+    )
+  })
 })
 
 testthat::describe("srv_teal filters", {
