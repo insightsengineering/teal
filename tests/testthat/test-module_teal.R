@@ -545,7 +545,6 @@ testthat::describe("srv_teal teal_modules", {
   })
 
   testthat::it("receives parent data when module$datanames limited to a child data but join keys are provided", {
-
     mtcars2 <- data.frame(am = c(0, 1), test = c("a", "b"))
     data <- teal.data::teal_data(mtcars = mtcars, mtcars2 = mtcars2)
 
