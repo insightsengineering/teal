@@ -76,7 +76,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, c("reactive", "reactiveVal"))) {
-      .fallback_on_failure(this = data, that = reactive(NULL), label = "Reactive data")
+      .fallback_on_failure(this = data, that = reactive(req(FALSE)), label = "Reactive data")
     }
 
     setBookmarkExclude("open_teal_data_module")
