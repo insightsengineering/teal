@@ -45,6 +45,7 @@ navbar:
 
     github:
       icon: fa-github
+      aria-label: View on Github
       href: https://github.com/insightsengineering/teal
 
 articles:
@@ -97,8 +98,6 @@ reference:
       - teal_data_module
       - module
       - modules
-      - srv_teal_with_splash
-      - ui_teal_with_splash
       - teal_slices
   - title: Helper Functions
     desc: Helper functions for `teal`

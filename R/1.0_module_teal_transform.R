@@ -161,6 +161,7 @@ srv_teal_data_module <- function(id,
 #' @param that (`reactive`) Previous reactive.
 #' @param label (`character`) Label for identifying problematic `teal_data_module` transform in logging.
 #' @return `reactive` `teal_data`
+#' @keywords internal
 .fallback_on_failure <- function(this, that, label) {
   checkmate::assert_class(this, "reactive")
   checkmate::assert_class(that, "reactive")
