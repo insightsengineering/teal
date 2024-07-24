@@ -142,7 +142,6 @@ testthat::describe("srv_teal arguments", {
   })
 })
 
-
 # teal_module --------
 testthat::describe("srv_teal teal_modules", {
   testthat::it("are not called by default", {
@@ -451,27 +450,27 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::test_that("receives data with datasets == module$datanames")
+  testthat::it("receives data with datasets == module$datanames")
 
   testthat::it("is called and receives data if datanames in `teal_data` are not sufficient")
 
-  testthat::test_that("doesn't receive extra data added in a transform")
+  testthat::it("doesn't receive extra data added in a transform")
 
-  testthat::test_that("receives all data when module$datanames = \"all\"")
+  testthat::it("receives all data when module$datanames = \"all\"")
 
-  testthat::test_that("srv_teal_module.teal_module does not pass data if not in the args explicitly")
+  testthat::it("srv_teal_module.teal_module does not pass data if not in the args explicitly")
 
-  testthat::test_that("srv_teal_module.teal_module passes (deprecated) datasets to the server module")
+  testthat::it("srv_teal_module.teal_module passes (deprecated) datasets to the server module")
 
-  testthat::test_that("srv_teal_module.teal_module passes server_args to the ...")
+  testthat::it("srv_teal_module.teal_module passes server_args to the ...")
 
-  testthat::test_that("srv_teal_module.teal_module passes filter_panel_api if specified")
+  testthat::it("srv_teal_module.teal_module passes filter_panel_api if specified")
 
-  testthat::test_that("srv_teal_module.teal_module passes Reporter if specified")
+  testthat::it("srv_teal_module.teal_module passes Reporter if specified")
 })
 
 testthat::describe("srv_teal filters", {
-  testthat::it("srv_teal: slices_global is initialized with slices specified in filter", {
+  testthat::it("slices_global is initialized with slices specified in filter", {
     init_filter <- teal_slices(
       teal_slice("iris", "Species"),
       teal_slice("mtcars", "cyl")
@@ -491,7 +490,7 @@ testthat::describe("srv_teal filters", {
     )
   })
 
-  testthat::it("srv_teal: attr(slices_global, 'mapping') is resolved for global_filters  when !module_specific", {
+  testthat::it("attr(slices_global, 'mapping')$global_filters is resolved to modules when !module_specific", {
     init_filter <- teal_slices(
       teal_slice("iris", "Species"),
       teal_slice("mtcars", "cyl"),
@@ -519,7 +518,7 @@ testthat::describe("srv_teal filters", {
     )
   })
 
-  testthat::it("srv_teal: attr(slices_global, 'mapping') is resolved for global_filters  when module_specific", {
+  testthat::it("attr(slices_global, 'mapping')$global_filters is resolved  to modules when module_specific", {
     init_filter <- teal_slices(
       teal_slice("iris", "Species"),
       teal_slice("mtcars", "cyl"),
@@ -593,7 +592,7 @@ testthat::describe("srv_teal filters", {
     )
   })
 
-  testthat::it("modules receive reactive data based on the changes in slices_global", {
+  testthat::it("modules receive reactive data based on the changes in existing filter", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -639,6 +638,43 @@ testthat::describe("srv_teal filters", {
     )
   })
 
+  testthat::it("modules receive reactive data based on old and added filter", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal_data(), mtcars <- mtcars)),
+        filter = teal_slices(
+          teal_slice(dataname = "mtcars", varname = "cyl", selected = 4)
+        ),
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        old_slices <- slices_global()
+        new_slices <- teal_slices(teal_slice(dataname = "mtcars", varname = "mpg", selected = c(25, Inf)))
+        slices_global(c(old_slices, new_slices))
+        session$flushReact()
+        expected_mtcars <- subset(mtcars, cyl == 4 & mpg >= 25)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+
+        expected_code <- paste0(
+          c(
+            "mtcars <- mtcars",
+            "",
+            sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+            "mtcars_raw <- mtcars",
+            "",
+            "mtcars <- dplyr::filter(mtcars, cyl == 4 & (mpg >= 25 & mpg <= 34))"
+          ),
+          collapse = "\n"
+        )
+        testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
+      }
+    )
+  })
+
   testthat::it("filter is applied to the teal_module's data only if the tab is selected", {
     shiny::testServer(
       app = srv_teal,
@@ -664,6 +700,35 @@ testthat::describe("srv_teal filters", {
 
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], subset(mtcars, cyl == 6))
+      }
+    )
+  })
+
+  testthat::it("added slice to slices_global is applied to module only mapping is set", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal_data(), {
+          iris <- iris
+          mtcars <- mtcars
+        })),
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        new_slices <- teal_slices(
+          teal_slice(dataname = "mtcars", varname = "cyl", selected = "4"),
+          mapping = list()
+        )
+        slices_global(new_slices)
+        session$flushReact()
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+
+        attr(new_slices, "mapping")$module_1 <- c("mtcars cyl")
+        slices_global(new_slices)
+        session$flushReact()
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], subset(mtcars, cyl == 4))
       }
     )
   })
@@ -1202,5 +1267,88 @@ testthat::describe("srv_teal summary table", {
   })
 })
 
+testthat::describe("srv_teal filter manager", {
+  testthat::describe("mapping table reflects initial filters state", {
+    testthat::it("returns empty mapping table if no filters set", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+          modules = modules(module("module_1", server = function(id, data) data))
+        ),
+        expr = {
+          session$setInputs("teal_modules-active_tab" = "module_1")
+          session$flushReact()
+          testthat::expect_equal(
+            mapping_table(),
+            data.frame(
+              `Global filters` = logical(0),
+              row.names = integer(0),
+              check.names = FALSE
+            )
+          )
+        }
+      )
+    })
+    testthat::it("returns table with global filters if some filters are set", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+          modules = modules(module("module_1", server = function(id, data) data)),
+          filter = teal_slices(
+            teal_slice("iris", "Species"),
+            teal_slice("mtcars", "cyl")
+          )
+        ),
+        expr = {
+          session$setInputs("teal_modules-active_tab" = "module_1")
+          session$flushReact()
+          testthat::expect_identical(
+            mapping_table(),
+            data.frame(
+              `Global filters` = c(TRUE, TRUE),
+              row.names = c("iris Species", "mtcars cyl"),
+              check.names = FALSE
+            )
+          )
+        }
+      )
+    })
+    testthat::it("returns table reflecting filters active in the modules when module_specific")
+    testthat::it("returns table changes when slices global changes")
+  })
 
-# todo: if possible, test if the filters are set globally in slices_global (via srv_module_filter_manager)
+  testthat::describe("mapping table reflects changes in a module's FilteredData", {
+    # use session$userData$module_slices_api[[<module_id>]]$set_filter_state() to interact directly with
+    #   module's FilteredData
+    testthat::it("addition in module's slice appends a new filter and activates to this module when module_specific")
+    testthat::it("removal in the module's slice deactivates a filter to this module only when module_specific")
+    testthat::it("change in the module slice adds a new filter to all modules when !module_specific")
+    testthat::it("removal in the module's slice deactivates a filter to all modules when !module_specific")
+  })
+})
+
+testthat::describe("srv_teal snapshot manager", {
+  testthat::it("clicking reset button restores initial filters state", {
+    init_filter <- teal_slices(
+      teal_slice("iris", "Species"),
+      teal_slice("mtcars", "cyl")
+    )
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(example_module()),
+        filter = init_filter
+      ),
+      expr = {
+
+      }
+    )
+  })
+  # WIP more
+})
