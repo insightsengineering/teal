@@ -132,10 +132,12 @@ get_filter_overview <- function(teal_data) {
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
   filtered_data_objs <- sapply(
-    datanames, function(name) teal.code::get_env(teal_data())[[name]], simplify = FALSE
+    datanames, function(name) teal.code::get_env(teal_data())[[name]],
+    simplify = FALSE
   )
   unfiltered_data_objs <- sapply(
-    datanames, function(name) teal.code::get_env(teal_data())[[paste0(name, "_raw")]], simplify = FALSE
+    datanames, function(name) teal.code::get_env(teal_data())[[paste0(name, "_raw")]],
+    simplify = FALSE
   )
 
   rows <- lapply(
