@@ -184,16 +184,9 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       })
     }
 
+    session$userData$module_slices_api <- list()
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- .make_slices_global(filter = filter, module_labels = module_labels)
-    srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
-
-    srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
-
-    srv_bookmark_panel("bookmark_manager", modules)
-
-    # comment: modules needs to be called after srv_filter_manager_panel
-    #          This is because they are using session$slices_global which is set in filter_manager_srv
     modules_output <- srv_teal_module(
       id = "teal_modules",
       data_rv = data_rv,
@@ -201,5 +194,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       modules = modules,
       slices_global = slices_global
     )
+    mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
+    snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
+    srv_bookmark_panel("bookmark_manager", modules)
   })
 }

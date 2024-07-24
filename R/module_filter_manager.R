@@ -112,10 +112,6 @@ srv_filter_manager <- function(id, slices_global) {
       )
     })
 
-    # singleton needed to receive information from modules' `FilteredData`. Needed to determine filters
-    #  not available for specific modules (e.g. filters which are for datanames not used in a module)
-    session$userData$module_slices_api <- list()
-
     mapping_table <- reactive({
       # We want this to be reactive on slices_global() only as get_available_teal_slices()
       #   is dependent on slices_global().
@@ -167,7 +163,7 @@ srv_filter_manager <- function(id, slices_global) {
       rownames = TRUE
     )
 
-    NULL
+    mapping_table # for testing purpose
   })
 }
 
@@ -203,8 +199,9 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
 
       # this needed in filter_manager_srv
       session$userData$module_slices_api[[id]] <- list(
-        get_available_teal_slices = module_fd()$get_available_teal_slices()
-        # in the future we can add more methods to share information across modules (for example setting filters)
+        # in the future we can add more methods to share information across modules
+        get_available_teal_slices = module_fd()$get_available_teal_slices(),
+        set_filter_state = module_fd()$set_filter_state
       )
     })
 
