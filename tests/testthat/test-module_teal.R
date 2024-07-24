@@ -539,13 +539,14 @@ testthat::describe("srv_teal teal_modules", {
         data = teal_data(iris = iris, mtcars = mtcars),
         modules = modules(
           module("module_1", server = function(id, ...) {
-            testthat::expect_null(list(...)$data)
+            list(...)$data
           })
         )
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         session$flushReact()
+        testthat::expect_null(modules_output$module_1())
       }
     )
   })
