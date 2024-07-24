@@ -83,3 +83,43 @@ testthat::test_that("srv_data: data_validated throws original validate with note
     }
   )
 })
+
+testthat::test_that("srv_data: data_validated returns data with signature (hash) code", {
+  shiny::testServer(
+    app = srv_data,
+    args = list(
+      id = "test",
+      data = reactive(within(teal.data::teal_data(), {
+        IRIS <- iris
+        MTCARS <- mtcars
+        IRIS <- head(IRIS)
+      })),
+      modules = modules(example_module())
+    ),
+    expr = {
+      hashes <- vapply(
+        c("IRIS", "MTCARS"),
+        function(dataname) {
+          sprintf(
+            "stopifnot(rlang::hash(%s) == \"%s\") # @linksto %1$s",
+            dataname,
+            rlang::hash(data_validated()[[sprintf("%s", dataname)]])
+          )
+        },
+        character(1L),
+        USE.NAMES = FALSE
+      )
+
+      testthat::expect_identical(
+        get_code(data_output()),
+        paste(
+          c(
+            get_code(data_validated()),
+            hashes
+          ),
+          collapse = "\n"
+        )
+      )
+    }
+  )
+})

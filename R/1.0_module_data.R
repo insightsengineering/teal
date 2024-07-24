@@ -128,6 +128,49 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       )
     })
 
-    data_validated
+    # Adds signature protection to the datanames in the data
+    data_output <- reactive(.inject_signature_in_data(data_validated()))
   })
+}
+
+#' Adds signature protection to the datanames in the data
+#' @param data (`teal_data`)
+#' @return `teal_data` with additional code that has signature of the datanames
+#' @keywords internal
+.inject_signature_in_data <- function(data) {
+  Reduce(
+    function(result, expr) {
+      # todo: question: is this safe? or should we use `eval_code` and run the rlang::hash again
+      result@code <- c(get_code(result), expr)
+      result
+    },
+    x = .get_hashes_code(data),
+    init = data
+  )
+}
+
+#' Get code that tests the integrity of the reproducible data
+#'
+#' @param datasets (`FilteredData`) object holding the data
+#' @param datanames (`character`) names of datasets
+#'
+#' @return A character vector with the code lines.
+#' @keywords internal
+#'
+.get_hashes_code <- function(data, datanames = teal_data_datanames(data)) {
+  # todo: this should be based on data_rv object not on datasets
+  vapply(
+    datanames,
+    function(dataname, datasets) {
+      hash <- rlang::hash(data[[dataname]])
+      sprintf(
+        "stopifnot(%s == %s) # @linksto %s",
+        deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+        deparse1(hash),
+        dataname
+      )
+    },
+    character(1L),
+    USE.NAMES = TRUE
+  )
 }

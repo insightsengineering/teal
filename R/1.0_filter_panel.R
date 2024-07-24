@@ -52,11 +52,10 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
   )
 
   data_code <- teal.data::get_code(data, datanames = datanames)
-  hashes_code <- .get_hashes_code(datasets = datasets, datanames)
   raw_data_code <- sprintf("%1$s_raw <- %1$s", datanames)
   filter_code <- get_filter_expr(datasets = datasets, datanames = datanames)
 
-  all_code <- paste(unlist(c(data_code, "", hashes_code, raw_data_code, "", filter_code)), collapse = "\n")
+  all_code <- paste(unlist(c(data_code, raw_data_code, "", filter_code)), collapse = "\n")
   tdata <- do.call(
     teal.data::teal_data,
     c(
@@ -69,32 +68,6 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
   tdata@verified <- data@verified
   teal.data::datanames(tdata) <- datanames
   tdata
-}
-
-#' Get code that tests the integrity of the reproducible data
-#'
-#' @param datasets (`FilteredData`) object holding the data
-#' @param datanames (`character`) names of datasets
-#'
-#' @return A character vector with the code lines.
-#' @keywords internal
-#'
-.get_hashes_code <- function(datasets = NULL, datanames) {
-  # todo: this should be based on data_rv object not on datasets
-  vapply(
-    datanames,
-    function(dataname, datasets) {
-      hash <- rlang::hash(datasets$get_data(dataname, filtered = FALSE))
-      sprintf(
-        "stopifnot(%s == %s)",
-        deparse1(bquote(rlang::hash(.(as.name(dataname))))),
-        deparse1(hash)
-      )
-    },
-    character(1L),
-    datasets = datasets,
-    USE.NAMES = FALSE
-  )
 }
 
 #' Trigger only active module when filter is changed
