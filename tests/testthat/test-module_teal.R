@@ -444,19 +444,18 @@ testthat::describe("srv_teal teal_modules", {
         id = "test",
         data = reactive(teal_data(iris = iris, mtcars = mtcars)),
         modules = modules(
-          module("module_1", server = function(id, data) data, datanames = c('iris'))
+          module("module_1", server = function(id, data) data, datanames = c("iris"))
         )
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_null(modules_output$module_1()()[['mtcars']])
-        testthat::expect_identical(modules_output$module_1()()[['iris']], iris)
+        testthat::expect_null(modules_output$module_1()()[["mtcars"]])
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
       }
     )
   })
 
   testthat::it("is called and receives data if datanames in `teal_data` are not sufficient", {
-
     data <- teal_data(iris = iris, mtcars = mtcars)
     datanames(data) <- "iris"
 
@@ -471,7 +470,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(modules_output$module_1()()[['iris_raw']], iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
       }
     )
   })
@@ -494,7 +493,9 @@ testthat::describe("srv_teal teal_modules", {
                 ui = function(id) div("(does nothing)"),
                 server = function(id, data) {
                   moduleServer(id, function(input, output, session) {
-                    reactive(within(data(), {swiss <- swiss}))
+                    reactive(within(data(), {
+                      swiss <- swiss
+                    }))
                   })
                 }
               )
@@ -504,9 +505,9 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(modules_output$module_1()()[['mtcars']], mtcars)
-        testthat::expect_identical(modules_output$module_1()()[['iris']], iris)
-        testthat::expect_identical(modules_output$module_1()()[['swiss']], swiss)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["swiss"]], swiss)
       }
     )
   })
@@ -518,14 +519,14 @@ testthat::describe("srv_teal teal_modules", {
         id = "test",
         data = reactive(teal_data(iris = iris, mtcars = mtcars, swiss = swiss)),
         modules = modules(
-          module("module_1", server = function(id, data) data, datanames = 'all')
+          module("module_1", server = function(id, data) data, datanames = "all")
         )
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(modules_output$module_1()()[['mtcars']], mtcars)
-        testthat::expect_identical(modules_output$module_1()()[['iris']], iris)
-        testthat::expect_identical(modules_output$module_1()()[['swiss']], swiss)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["swiss"]], swiss)
       }
     )
   })
