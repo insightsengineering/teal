@@ -31,7 +31,7 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
       })
     })
 
-    trigger_data <- .observe_active_filter_changed(datasets, is_active, active_datanames)
+    trigger_data <- .observe_active_filter_changed(datasets, is_active, active_datanames, data_rv)
 
     eventReactive(trigger_data(), {
       .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
@@ -106,13 +106,16 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
 
 #' @return A `reactiveVal` which is triggered when filter is changed and this module is selected.
 #' @keywords internal
-.observe_active_filter_changed <- function(datasets, is_active, active_datanames) {
-  previous_filter <- reactiveVal(NULL)
+.observe_active_filter_changed <- function(datasets, is_active, active_datanames, data_rv) {
+  previous_signature <- reactiveVal(NULL)
   filter_changed <- reactive({
     req(inherits(datasets(), "FilteredData"))
-    new_filter <- get_filter_expr(datasets = datasets(), datanames = active_datanames())
-    if (!identical(previous_filter(), new_filter)) {
-      previous_filter(new_filter)
+    new_signature <- c(
+      get_code(data_rv()),
+      get_filter_expr(datasets = datasets(), datanames = active_datanames())
+    )
+    if (!identical(previous_signature(), new_signature)) {
+      previous_signature(new_signature)
       TRUE
     } else {
       FALSE
