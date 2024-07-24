@@ -531,6 +531,33 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
+  testthat::it("receives parent data when module$datanames limited to a child data but join keys are provided", {
+
+    mtcars2 <- data.frame(am = c(0, 1), test = c("a", "b"))
+    data <- teal.data::teal_data(mtcars = mtcars, mtcars2 = mtcars2)
+
+    teal.data::join_keys(data) <- teal.data::join_keys(
+      teal.data::join_key("mtcars2", "mtcars", keys = c("am"))
+    )
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(data),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = "mtcars")
+        )
+      ),
+      expr = {
+        browser()
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars2"]], mtcars2)
+      }
+    )
+  })
+
   testthat::it("srv_teal_module.teal_module does not pass data if not in the args explicitly", {
     shiny::testServer(
       app = srv_teal,
