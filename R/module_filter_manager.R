@@ -66,7 +66,7 @@ srv_filter_manager_panel <- function(id, slices_global) {
   moduleServer(id, function(input, output, session) {
     setBookmarkExclude(c("show_filter_manager"))
     observeEvent(input$show_filter_manager, {
-      logger::log_trace("srv_filter_manager_panel@1 show_filter_manager button has been clicked.")
+      logger::log_debug("srv_filter_manager_panel@1 show_filter_manager button has been clicked.")
       showModal(
         modalDialog(
           ui_filter_manager(session$ns("filter_manager")),
@@ -101,11 +101,11 @@ srv_filter_manager <- function(id, slices_global) {
   checkmate::assert_class(isolate(slices_global()), "teal_slices")
 
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("filter_manager_srv initializing.")
+    logger::log_debug("filter_manager_srv initializing.")
 
     # Bookmark slices global with mapping.
     session$onBookmark(function(state) {
-      logger::log_trace("filter_manager_srv@onBookmark: storing filter state")
+      logger::log_debug("filter_manager_srv@onBookmark: storing filter state")
       state$values$filter_state_on_bookmark <- as.list(
         slices_global(),
         recursive = TRUE
@@ -145,7 +145,7 @@ srv_filter_manager <- function(id, slices_global) {
 
     output$slices_table <- renderTable(
       expr = {
-        logger::log_trace("filter_manager_srv@1 rendering slices_table.")
+        logger::log_debug("filter_manager_srv@1 rendering slices_table.")
         mm <- mapping_table()
 
         # Display logical values as UTF characters.
@@ -176,7 +176,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
   checkmate::assert_class(isolate(slices_global()), "teal_slices")
 
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("filter_manager_srv initializing for module: { id }.")
+    logger::log_debug("filter_manager_srv initializing for module: { id }.")
     # Track filter global and local states.
     slices_global_module <- reactive({
       .filter_module_slices(module_label = id, slices = slices_global())
@@ -185,7 +185,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
 
     # Set (reactively) available filters for the module.
     obs1 <- observeEvent(module_fd(), {
-      logger::log_trace("filter_manager_srv@1 setting initial slices for module: { id }.")
+      logger::log_debug("filter_manager_srv@1 setting initial slices for module: { id }.")
       # Filters relevant for the module in module-specific app.
       slices <- slices_global_module()
       # Setting filter states from slices_global:
@@ -212,7 +212,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
       global_ids <- vapply(slices_global(), `[[`, character(1L), "id")
       new_slices <- setdiff_teal_slices(slices_module(), slices_global())
       if (length(new_slices)) {
-        logger::log_trace("filter_manager_srv@2 new filter added to module: { id }. Updating slices_global.")
+        logger::log_debug("filter_manager_srv@2 new filter added to module: { id }. Updating slices_global.")
         lapply(new_slices, function(slice) {
           # In case the new state has the same id as an existing one, add a suffix
           if (slice$id %in% global_ids) {
@@ -230,7 +230,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
       module_ids <- vapply(slices_module(), `[[`, character(1L), "id")
       mapping_matrix <- attr(slices_global(), "mapping")
 
-      logger::log_trace("filter_manager_srv@2 updating filter mapping for module: { id }.")
+      logger::log_debug("filter_manager_srv@2 updating filter mapping for module: { id }.")
       mapping_matrix[[id]] <- module_ids
       new_slices_global <- slices_global()
       attr(new_slices_global, "mapping") <- mapping_matrix
@@ -245,7 +245,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
         # global are updated automatically so slices_module -> slices_global_module are equal.
         # this if is valid only when a change is made on the global level so the change needs to be propagated down
         # to the module (for example through snapshot manager). If it happens both slices are different
-        logger::log_trace("filter_manager_srv@3 (N.B.) global state has changed for a module:{ id }.")
+        logger::log_debug("filter_manager_srv@3 (N.B.) global state has changed for a module:{ id }.")
         module_fd()$clear_filter_states()
         module_fd()$set_filter_state(slices_global_module())
       }

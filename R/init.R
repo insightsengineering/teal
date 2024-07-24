@@ -100,7 +100,7 @@ init <- function(data,
                  header = tags$p(),
                  footer = tags$p(),
                  id = character(0)) {
-  logger::log_trace("init initializing teal app with: data ('{ class(data) }').")
+  logger::log_debug("init initializing teal app with: data ('{ class(data) }').")
 
   # argument checking (independent)
   ## `data`
@@ -248,7 +248,7 @@ init <- function(data,
     }
   )
 
-  logger::log_trace("init teal app has been initialized.")
+  logger::log_debug("init teal app has been initialized.")
 
   res
 }

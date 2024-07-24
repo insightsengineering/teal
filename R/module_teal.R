@@ -142,7 +142,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(filter, "teal_slices")
 
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_teal initializing.")
+    logger::log_debug("srv_teal initializing.")
 
     output$identifier <- renderText(
       paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
@@ -168,7 +168,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       once = TRUE,
       handlerExpr = {
         session$userData$timezone <- input$timezone
-        logger::log_trace("srv_teal@1 Timezone set to client's timezone: { input$timezone }.")
+        logger::log_debug("srv_teal@1 Timezone set to client's timezone: { input$timezone }.")
       }
     )
 
@@ -179,7 +179,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         if (!inherits(data_rv(), "teal_data")) {
           stop("data_rv must be teal_data object.")
         }
-        logger::log_trace("srv_teal_module@1 initializing FilteredData")
+        logger::log_debug("srv_teal_module@1 initializing FilteredData")
         teal_data_to_filtered_data(data_rv())
       })
     }

@@ -57,7 +57,7 @@ srv_data_summary <- function(id, teal_data) {
   moduleServer(
     id = id,
     function(input, output, session) {
-      logger::log_trace("srv_data_summary initializing")
+      logger::log_debug("srv_data_summary initializing")
 
       summary_table <- reactive({
         req(inherits(teal_data(), "teal_data"))

@@ -57,7 +57,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(filter, "teal_slices")
 
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_data initializing.")
+    logger::log_debug("srv_data initializing.")
 
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()

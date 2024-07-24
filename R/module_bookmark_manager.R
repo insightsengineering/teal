@@ -76,7 +76,7 @@ srv_bookmark_panel <- function(id, modules) {
   checkmate::assert_character(id)
   checkmate::assert_class(modules, "teal_modules")
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("bookmark_manager_srv initializing")
+    logger::log_debug("bookmark_manager_srv initializing")
     ns <- session$ns
     bookmark_option <- get_bookmarking_option()
     if (!inherits(session, "session_proxy")) shinyOptions(bookmarkStore = bookmark_option)
@@ -88,7 +88,7 @@ srv_bookmark_panel <- function(id, modules) {
     # This bookmark can only be used on the app session.
     app_session <- .subset2(session, "parent")
     app_session$onBookmarked(function(url) {
-      logger::log_trace("bookmark_manager_srv@onBookmarked: bookmark button clicked, registering bookmark")
+      logger::log_debug("bookmark_manager_srv@onBookmarked: bookmark button clicked, registering bookmark")
       modal_content <- if (bookmark_option != "server") {
         msg <- sprintf(
           "Bookmarking has been set to \"%s\".\n%s\n%s",
@@ -143,7 +143,7 @@ srv_bookmark_panel <- function(id, modules) {
 
     # manually trigger bookmarking because of the problems reported on windows with bookmarkButton in teal
     observeEvent(input$do_bookmark, {
-      logger::log_trace("bookmark_manager_srv@1 do_bookmark module clicked.")
+      logger::log_debug("bookmark_manager_srv@1 do_bookmark module clicked.")
       session$doBookmark()
     })
 

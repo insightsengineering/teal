@@ -159,7 +159,7 @@ srv_teal_module.teal_modules <- function(id,
                                          reporter = teal.reporter::Reporter$new(),
                                          is_active = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
-    logger::log_trace("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
+    logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
     modules_output <- sapply(
       names(modules$children),
@@ -190,7 +190,7 @@ srv_teal_module.teal_module <- function(id,
                                         slices_global = reactiveVal(teal_slices()),
                                         reporter = teal.reporter::Reporter$new(),
                                         is_active = reactive(TRUE)) {
-  logger::log_trace("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
+  logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     active_datanames <- reactive({
       if (!inherits(data_rv(), "teal_data")) {
@@ -215,7 +215,7 @@ srv_teal_module.teal_module <- function(id,
         if (!inherits(data_rv(), "teal_data")) {
           stop("data_rv must be teal_data object.")
         }
-        logger::log_trace("srv_teal_module@1 initializing module-specific FilteredData")
+        logger::log_debug("srv_teal_module@1 initializing module-specific FilteredData")
         teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
       })
     }
