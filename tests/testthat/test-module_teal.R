@@ -450,23 +450,226 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives data with datasets == module$datanames")
+  testthat::it("receives data with datasets == module$datanames", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(teal_data(iris = iris, mtcars = mtcars)),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = c("iris"))
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_null(modules_output$module_1()()[["mtcars"]])
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+      }
+    )
+  })
 
-  testthat::it("is called and receives data if datanames in `teal_data` are not sufficient")
+  testthat::it("is called and receives data if datanames in `teal_data` are not sufficient", {
+    data <- teal_data(iris = iris, mtcars = mtcars)
+    datanames(data) <- "iris"
 
-  testthat::it("doesn't receive extra data added in a transform")
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(data),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+      }
+    )
+  })
 
-  testthat::it("receives all data when module$datanames = \"all\"")
+  testthat::it("doesn't receive extra data added in a transform", {
+    testthat::skip("Looks like it does receive extra data?")
+    # Added swiss in a transformer and this is added to data()
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(teal_data(iris = iris, mtcars = mtcars)),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = list(
+              teal_data_module(
+                label = "Dummy",
+                ui = function(id) div("(does nothing)"),
+                server = function(id, data) {
+                  moduleServer(id, function(input, output, session) {
+                    reactive(within(data(), {
+                      swiss <- swiss
+                    }))
+                  })
+                }
+              )
+            )
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["swiss"]], swiss)
+      }
+    )
+  })
 
-  testthat::it("srv_teal_module.teal_module does not pass data if not in the args explicitly")
+  testthat::it("receives all data when module$datanames = \"all\"", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(teal_data(iris = iris, mtcars = mtcars, swiss = swiss)),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = "all")
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["swiss"]], swiss)
+      }
+    )
+  })
 
-  testthat::it("srv_teal_module.teal_module passes (deprecated) datasets to the server module")
+  testthat::it("receives parent data when module$datanames limited to a child data but join keys are provided", {
 
-  testthat::it("srv_teal_module.teal_module passes server_args to the ...")
+    mtcars2 <- data.frame(am = c(0, 1), test = c("a", "b"))
+    data <- teal.data::teal_data(mtcars = mtcars, mtcars2 = mtcars2)
 
-  testthat::it("srv_teal_module.teal_module passes filter_panel_api if specified")
+    teal.data::join_keys(data) <- teal.data::join_keys(
+      teal.data::join_key("mtcars2", "mtcars", keys = c("am"))
+    )
 
-  testthat::it("srv_teal_module.teal_module passes Reporter if specified")
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(data),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = "mtcars")
+        )
+      ),
+      expr = {
+        browser()
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars2"]], mtcars2)
+      }
+    )
+  })
+
+  testthat::it("srv_teal_module.teal_module does not pass data if not in the args explicitly", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, ...) {
+            list(...)$data
+          })
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        session$flushReact()
+        testthat::expect_null(modules_output$module_1())
+      }
+    )
+  })
+
+  testthat::it("srv_teal_module.teal_module passes (deprecated) datasets to the server module", {
+    testthat::expect_warning(
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal_data(iris = iris, mtcars = mtcars),
+          modules = modules(
+            module("module_1", server = function(id, datasets) datasets)
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          testthat::expect_s3_class(modules_output$module_1(), "FilteredData")
+        }
+      ),
+      "`datasets` argument in the server is deprecated and will be removed in the next release"
+    )
+  })
+
+  testthat::it("srv_teal_module.teal_module passes server_args to the ...", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module(
+            "module_1",
+            server = function(id, data, ...) {
+              data
+            },
+            server_args = list(x = 1L, y = 2L)
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(
+          modules$children$module_1$server_args,
+          list(x = 1L, y = 2L)
+        )
+      }
+    )
+  })
+
+  testthat::it("srv_teal_module.teal_module passes filter_panel_api if specified", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, filter_panel_api) filter_panel_api)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_s3_class(modules_output$module_1(), "FilterPanelAPI")
+      }
+    )
+  })
+
+  testthat::it("srv_teal_module.teal_module passes Reporter if specified", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, reporter) reporter)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_s3_class(modules_output$module_1(), "Reporter")
+      }
+    )
+  })
 })
 
 testthat::describe("srv_teal filters", {
