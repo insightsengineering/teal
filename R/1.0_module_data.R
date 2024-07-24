@@ -68,7 +68,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     data_validated <- if (inherits(data, "teal_data_module")) {
       srv_teal_data_module(
         "teal_data_module",
-        data = reactive(NULL), # to .fallback_on_failure to NULL
+        data = reactive(req(FALSE)), # to .fallback_on_failure to shiny.silent.error
         transformer = data,
         modules = modules,
         validate_shiny_silent_error = FALSE
