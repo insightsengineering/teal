@@ -129,7 +129,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     })
 
     # Adds signature protection to the datanames in the data
-    data_output <- reactive(.add_signature_to_data(data_validated()))
+    reactive(.add_signature_to_data(data_validated()))
   })
 }
 
@@ -143,14 +143,19 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
   tdata <- do.call(
     teal.data::teal_data,
     c(
-      list(code = trimws(c(get_code(data), hashes), which = "right")),
+      list(code = trimws(c(teal.code::get_code(data), hashes), which = "right")),
       list(join_keys = teal.data::join_keys(data)),
-      sapply(datanames(data), teal.code::get_var, object = data, simplify = FALSE)
+      sapply(
+        ls(teal.code::get_env(data)),
+        teal.code::get_var,
+        object = data,
+        simplify = FALSE
+      )
     )
   )
 
   tdata@verified <- data@verified
-  teal.data::datanames(tdata) <- datanames(data)
+  teal.data::datanames(tdata) <- teal.data::datanames(data)
   tdata
 }
 
