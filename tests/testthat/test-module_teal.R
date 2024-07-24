@@ -437,7 +437,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::test_that("receives data with datasets == module$datanames", {
+  testthat::it("receives data with datasets == module$datanames", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -475,7 +475,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::test_that("doesn't receive extra data added in a transform", {
+  testthat::it("doesn't receive extra data added in a transform", {
     testthat::skip("Looks like it does receive extra data?")
     # Added swiss in a transformer and this is added to data()
     shiny::testServer(
@@ -512,7 +512,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::test_that("receives all data when module$datanames = \"all\"", {
+  testthat::it("receives all data when module$datanames = \"all\"", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -531,7 +531,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::test_that("srv_teal_module.teal_module does not pass data if not in the args explicitly", {
+  testthat::it("srv_teal_module.teal_module does not pass data if not in the args explicitly", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -551,7 +551,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::test_that("srv_teal_module.teal_module passes (deprecated) datasets to the server module", {
+  testthat::it("srv_teal_module.teal_module passes (deprecated) datasets to the server module", {
     testthat::expect_warning(
       shiny::testServer(
         app = srv_teal,
@@ -571,7 +571,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::test_that("srv_teal_module.teal_module passes server_args to the ...", {
+  testthat::it("srv_teal_module.teal_module passes server_args to the ...", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -597,7 +597,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::test_that("srv_teal_module.teal_module passes filter_panel_api if specified", {
+  testthat::it("srv_teal_module.teal_module passes filter_panel_api if specified", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -614,7 +614,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::test_that("srv_teal_module.teal_module passes Reporter if specified", {
+  testthat::it("srv_teal_module.teal_module passes Reporter if specified", {
     shiny::testServer(
       app = srv_teal,
       args = list(
