@@ -36,6 +36,20 @@ transform_list <- list(
         })
       })
     }
+  ),
+  add_dataset = teal_data_module(
+    ui = function(id) NULL,
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          new_data <- within(data(), {
+            new_dataset <- data.frame(a = 1:3, b = 4:6)
+          })
+          datanames(new_data) <- c(datanames(new_data), "new_dataset")
+          new_data
+        })
+      })
+    }
   )
 )
 
@@ -1075,7 +1089,36 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("reflects transforms", {
+  testthat::it("reflects transform adding new dataset", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(iris = iris),
+        modules = modules(
+          module(
+            "module_1",
+            server = function(id, data) data,
+            transformers = transform_list["add_dataset"]
+          )
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c("iris", "new_dataset"),
+            Obs = c("150/150", "3"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
+
+  testthat::it("reflects transform filtering", {
     testthat::it("displays parent's Subjects with count based on primary key", {
       shiny::testServer(
         app = srv_teal,
