@@ -625,7 +625,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_s3_class(module_out(), "Reporter")
+        testthat::expect_s3_class(modules_output$module_1(), "Reporter")
       }
     )
   })
