@@ -137,8 +137,6 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       )
     })
 
-
-
     # Adds signature protection to the datanames in the data
     reactive(.add_signature_to_data(data_validated()))
   })

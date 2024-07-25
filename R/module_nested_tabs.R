@@ -193,10 +193,8 @@ srv_teal_module.teal_module <- function(id,
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     active_datanames <- reactive({
-      if (!inherits(data_rv(), "teal_data")) {
-        stop("data_rv must be teal_data object.")
-      }
-      datanames <- if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
+      stopifnot("data_rv must be teal_data object." = inherits(data_rv(), "teal_data"))
+      if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
         teal_data_datanames(data_rv())
       } else {
         # Remove datanames that are not **YET** in the data (may be added with teal_data_module transforms)
