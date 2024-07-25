@@ -163,14 +163,12 @@ srv_snapshot_manager <- function(id, slices_global) {
 
     ns <- session$ns
 
-    module_labels <- names(attr(shiny::isolate(slices_global()), "mapping"))
-
     # Track global filter states ----
     snapshot_history <- reactiveVal({
       # Restore directly from bookmarked state, if applicable.
       restoreValue(
         ns("snapshot_history"),
-        list("Initial application state" = .slices_to_list(slices_global()))
+        list("Initial application state" = shiny::isolate(as.list(slices_global$all_slices(), recursive = TRUE)))
       )
     })
 
@@ -209,7 +207,7 @@ srv_snapshot_manager <- function(id, slices_global) {
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         logger::log_debug("snapshot_manager_srv: snapshot name accepted, adding snapshot")
-        snapshot <- .slices_to_list(slices_global())
+        snapshot <- as.list(slices_global$all_slices(), recursive = TRUE)
         snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
         snapshot_history(snapshot_update)
@@ -264,7 +262,7 @@ srv_snapshot_manager <- function(id, slices_global) {
             "File appears to be corrupt.",
             type = "error"
           )
-        } else if (!identical(attr(snapshot_state, "app_id"), attr(slices_global(), "app_id"))) {
+        } else if (!identical(attr(snapshot_state, "app_id"), attr(slices_global$all_slices(), "app_id"))) {
           logger::log_debug("snapshot_manager_srv: snapshot not compatible with app")
           showNotification(
             "This snapshot file is not compatible with the app and cannot be loaded.",
@@ -273,13 +271,15 @@ srv_snapshot_manager <- function(id, slices_global) {
         } else {
           # Add to snapshot history.
           logger::log_debug("snapshot_manager_srv: snapshot loaded, adding to history")
-          snapshot <- .slices_to_list(slices_global())
+          snapshot <- as.list(slices_global$all_slices(), recursive = TRUE)
           snapshot_update <- c(snapshot_history(), list(snapshot))
           names(snapshot_update)[length(snapshot_update)] <- snapshot_name
           snapshot_history(snapshot_update)
           ### Begin simplified restore procedure. ###
           logger::log_debug("snapshot_manager_srv: restoring snapshot")
-          slices_global(snapshot_state)
+          slices_global$slices_reset()
+          slices_global$slices_append(snapshot_state)
+          slices_global$slices_activate(attr(snapshot_state, "mapping"))
           removeModal()
           ### End  simplified restore procedure. ###
         }
@@ -295,8 +295,8 @@ srv_snapshot_manager <- function(id, slices_global) {
       snapshot <- snapshot_history()[[s]]
       # todo: as.teal_slices looses module-mapping if is not global
       snapshot_state <- as.teal_slices(snapshot)
-      snapshot_state <- .resolve_global_mapping(snapshot_state, module_labels)
-      slices_global(snapshot_state)
+      slices_global$slices_reset()
+      slices_global$slices_append(snapshot_state)
       removeModal()
       ### End restore procedure. ###
     })
@@ -322,8 +322,10 @@ srv_snapshot_manager <- function(id, slices_global) {
             ### Begin restore procedure. ###
             snapshot <- snapshot_history()[[s]]
             snapshot_state <- as.teal_slices(snapshot)
-            snapshot_state <- .resolve_global_mapping(snapshot_state, module_labels)
-            slices_global(snapshot_state)
+
+            slices_global$slices_reset()
+            slices_global$slices_append(snapshot_state)
+            slices_global$slices_activate(attr(snapshot_state, "mapping"))
             removeModal()
             ### End restore procedure. ###
           })
@@ -337,7 +339,6 @@ srv_snapshot_manager <- function(id, slices_global) {
             content = function(file) {
               snapshot <- snapshot_history()[[s]]
               snapshot_state <- as.teal_slices(snapshot)
-              snapshot_state <- .resolve_global_mapping(snapshot_state, module_labels)
               slices_store(tss = snapshot_state, file = file)
             }
           )

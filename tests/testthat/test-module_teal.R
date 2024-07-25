@@ -685,8 +685,8 @@ testthat::describe("srv_teal filters", {
         filter = init_filter
       ),
       expr = {
-        testthat::expect_length(setdiff_teal_slices(slices_global(), init_filter), 0)
-        testthat::expect_length(setdiff_teal_slices(init_filter, slices_global()), 0)
+        testthat::expect_length(setdiff_teal_slices(slices_global$all_slices(), init_filter), 0)
+        testthat::expect_length(setdiff_teal_slices(init_filter, slices_global$all_slices()), 0)
       }
     )
   })
@@ -708,8 +708,9 @@ testthat::describe("srv_teal filters", {
         filter = init_filter
       ),
       expr = {
+        browser()
         testthat::expect_identical(
-          attr(slices_global(), "mapping"),
+          attr(slices_global$all_slices(), "mapping"),
           list(
             `module-1` = c("iris Species", "mtcars cyl"),
             `module-2` = c("iris Species", "mtcars cyl")
@@ -849,6 +850,7 @@ testthat::describe("srv_teal filters", {
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
+        browser()
         session$setInputs(`teal_modules-active_tab` = "module_1")
         old_slices <- slices_global()
         new_slices <- teal_slices(teal_slice(dataname = "mtcars", varname = "mpg", selected = c(25, Inf)))

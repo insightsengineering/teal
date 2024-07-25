@@ -25,7 +25,7 @@ srv_teal_module(
   data_rv,
   modules,
   datasets = NULL,
-  slices_global = reactiveVal(teal_slices()),
+  slices_global = slicesGlobal$new(teal_slices(), id),
   reporter = teal.reporter::Reporter$new(),
   is_active = reactive(TRUE)
 )
@@ -35,7 +35,7 @@ srv_teal_module(
   data_rv,
   modules,
   datasets = NULL,
-  slices_global = reactiveVal(teal_slices()),
+  slices_global = slicesGlobal$new(teal_slices(), id),
   reporter = teal.reporter::Reporter$new(),
   is_active = reactive(TRUE)
 )
@@ -45,7 +45,7 @@ srv_teal_module(
   data_rv,
   modules,
   datasets = NULL,
-  slices_global = reactiveVal(teal_slices()),
+  slices_global = slicesGlobal$new(teal_slices(), id),
   reporter = teal.reporter::Reporter$new(),
   is_active = reactive(TRUE)
 )
@@ -55,7 +55,7 @@ srv_teal_module(
   data_rv,
   modules,
   datasets = NULL,
-  slices_global = reactiveVal(teal_slices()),
+  slices_global = slicesGlobal$new(teal_slices(), id),
   reporter = teal.reporter::Reporter$new(),
   is_active = reactive(TRUE)
 )
