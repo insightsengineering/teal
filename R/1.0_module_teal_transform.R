@@ -107,7 +107,7 @@ srv_teal_data_modules <- function(id, data, transformers, modules) {
       # Keep previous datanames and add new ones according to modules$datanames
       teal.data::datanames(data_output) <- unique(
         c(
-          datanames(isolated(data())), #
+          datanames(isolate(data())), #
           intersect( # Match with modules$datanames (keep all new objects if "all")
             setdiff( # Only look at newly generated environment objects
               ls_data_output,
