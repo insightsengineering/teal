@@ -691,7 +691,7 @@ testthat::describe("srv_teal filters", {
     )
   })
 
-  testthat::it("attr(slices_global, 'mapping')$global_filters is resolved to modules when !module_specific", {
+  testthat::it("slices_global keeps active filters in <mapping>$global_filters when !module_specific", {
     init_filter <- teal_slices(
       teal_slice("iris", "Species"),
       teal_slice("mtcars", "cyl"),
@@ -708,19 +708,17 @@ testthat::describe("srv_teal filters", {
         filter = init_filter
       ),
       expr = {
-        browser()
         testthat::expect_identical(
           attr(slices_global$all_slices(), "mapping"),
           list(
-            `module-1` = c("iris Species", "mtcars cyl"),
-            `module-2` = c("iris Species", "mtcars cyl")
+            `global_filters` = c("iris Species", "mtcars cyl")
           )
         )
       }
     )
   })
 
-  testthat::it("attr(slices_global, 'mapping')$global_filters is resolved  to modules when module_specific", {
+  testthat::it("attr(slices_global, 'mapping')$global_filters is resolved to modules when module_specific", {
     init_filter <- teal_slices(
       teal_slice("iris", "Species"),
       teal_slice("mtcars", "cyl"),
@@ -737,7 +735,7 @@ testthat::describe("srv_teal filters", {
       ),
       expr = {
         testthat::expect_identical(
-          attr(slices_global(), "mapping"),
+          attr(slices_global$all_slices(), "mapping"),
           list(
             `module-1` = c("iris Species", "mtcars cyl"),
             `module-2` = c("iris Species", "mtcars cyl")
@@ -794,6 +792,10 @@ testthat::describe("srv_teal filters", {
   })
 
   testthat::it("modules receive reactive data based on the changes in existing filter", {
+    existing_filters <- teal_slices(
+      teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+      teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)
+    )
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -802,20 +804,21 @@ testthat::describe("srv_teal filters", {
           iris <- iris
           mtcars <- mtcars
         })),
-        filter = teal_slices(
-          teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
-          teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)
-        ),
+        filter = existing_filters,
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        slices_global(teal_slices(teal_slice(dataname = "mtcars", varname = "cyl", selected = "4")))
+        slices_global$slices_set(
+          teal_slices(
+            teal_slice("mtcars", varname = "cyl", selected = "4")
+          )
+        )
         session$flushReact()
-
+        # iris is not active
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
-
+        # mtcars has been modified
         expected_mtcars <- subset(mtcars, cyl == 4)
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
         testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
@@ -850,11 +853,11 @@ testthat::describe("srv_teal filters", {
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
-        browser()
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        old_slices <- slices_global()
-        new_slices <- teal_slices(teal_slice(dataname = "mtcars", varname = "mpg", selected = c(25, Inf)))
-        slices_global(c(old_slices, new_slices))
+        slices_global$slices_append(
+          teal_slices(teal_slice(dataname = "mtcars", varname = "mpg", selected = c(25, Inf)))
+        )
+        slices_global$slices_active(list(global_filters = c("mtcars cyl", "mtcars mpg")))
         session$flushReact()
         expected_mtcars <- subset(mtcars, cyl == 4 & mpg >= 25)
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
@@ -892,7 +895,9 @@ testthat::describe("srv_teal filters", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         session$setInputs(`teal_modules-active_tab` = "module_2")
-        slices_global(teal_slices(teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)))
+        slices_global$slices_set(
+          teal_slices(teal_slice(dataname = "mtcars", varname = "cyl", selected = 6))
+        )
         session$flushReact()
 
         testthat::expect_identical(modules_output$module_2()()[["mtcars"]], subset(mtcars, cyl == 6))
@@ -921,12 +926,12 @@ testthat::describe("srv_teal filters", {
           teal_slice(dataname = "mtcars", varname = "cyl", selected = "4"),
           mapping = list()
         )
-        slices_global(new_slices)
+        slices_global$slices_set(new_slices)
         session$flushReact()
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
 
         attr(new_slices, "mapping")$module_1 <- c("mtcars cyl")
-        slices_global(new_slices)
+        slices_global$slices_set(new_slices)
         session$flushReact()
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], subset(mtcars, cyl == 4))
       }
@@ -1031,7 +1036,9 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        slices_global(teal_slices(teal_slice(dataname = "mtcars", varname = "cyl", selected = "4")))
+        slices_global$slices_set(
+          teal_slices(teal_slice(dataname = "mtcars", varname = "cyl", selected = "4"))
+        )
         session$flushReact()
 
         testthat::expect_identical(modules_output$module_1()()[["iris"]], head(iris))
@@ -1335,7 +1342,7 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        slices_global(
+        slices_global$slices_set(
           teal_slices(teal_slice("a", "name", selected = "a"))
         )
         session$flushReact()
@@ -1545,9 +1552,12 @@ testthat::describe("srv_teal snapshot manager", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        slices_global(teal_slices())
+        slices_global$slices_set(teal_slices())
         session$setInputs("snapshot_manager_panel-module-snapshot_reset" = TRUE)
-        testthat::expect_identical(as.list(slices_global()), as.list(initial_slices))
+        session$flushReact()
+        testthat::expect_identical(
+          as.list(slices_global$all_slices()), as.list(initial_slices)
+        )
       }
     )
   })

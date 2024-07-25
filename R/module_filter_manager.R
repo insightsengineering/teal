@@ -207,7 +207,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
       this_slices <- slices_module()
       slices_global$slices_append(this_slices) # append new slices to the all_slices list
       mapping_elem <- setNames(nm = id, list(vapply(this_slices, `[[`, character(1L), "id")))
-      slices_global$slices_activate(mapping_elem)
+      slices_global$slices_active(mapping_elem)
     })
 
     obs3 <- observeEvent(slices_global_module(), {
@@ -255,9 +255,9 @@ slicesGlobal <- methods::setRefClass("slicesGlobal",
           })
           attr(slices, "mapping") <- new_mapping
         }
-        .self$all_slices <<- shiny::reactiveVal()
+        .self$all_slices <<- shiny::reactiveVal(slices)
         .self$slices_append(slices)
-        .self$slices_activate(attr(slices, "mapping"))
+        .self$slices_active(attr(slices, "mapping"))
         invisible(.self)
       })
     },
@@ -298,7 +298,7 @@ slicesGlobal <- methods::setRefClass("slicesGlobal",
         invisible(.self)
       })
     },
-    slices_activate = function(mapping_elem) {
+    slices_active = function(mapping_elem) {
       shiny::isolate({
         if (.self$is_module_specific) {
           new_mapping <- modifyList(attr(.self$all_slices(), "mapping"), mapping_elem)
@@ -308,7 +308,7 @@ slicesGlobal <- methods::setRefClass("slicesGlobal",
 
         if (!identical(new_mapping, attr(.self$all_slices(), "mapping"))) {
           mapping_modules <- toString(names(new_mapping))
-          logger::log_debug("slicesGlobal@slices_activate: changing mapping for module(s): { mapping_modules }.")
+          logger::log_debug("slicesGlobal@slices_active: changing mapping for module(s): { mapping_modules }.")
           new_slices <- .self$all_slices()
           attr(new_slices, "mapping") <- new_mapping
           .self$all_slices(new_slices)
@@ -319,7 +319,7 @@ slicesGlobal <- methods::setRefClass("slicesGlobal",
     },
     # - only new filters are appended to the $all_slices
     # - mapping is not updated here
-    slices_append = function(slices) {
+    slices_append = function(slices, activate = FALSE) {
       shiny::isolate({
         if (!is.teal_slices(slices)) {
           slices <- as.teal_slices(slices)
@@ -339,15 +339,11 @@ slicesGlobal <- methods::setRefClass("slicesGlobal",
             }
           })
 
-          new_slices_all <- if (is.null(.self$all_slices())) {
-            .self$all_slices(new_slices)
-          } else {
-            # we don't want to replace mapping when adding new ones
-            new_slices_all <- c(.self$all_slices(), new_slices)
-            attr(new_slices_all, "mapping") <- old_mapping
-            .self$all_slices(new_slices_all)
-          }
+          new_slices_all <- c(.self$all_slices(), new_slices)
+          attr(new_slices_all, "mapping") <- old_mapping
+          .self$all_slices(new_slices_all)
         }
+
         invisible(.self)
       })
     },
@@ -362,18 +358,14 @@ slicesGlobal <- methods::setRefClass("slicesGlobal",
         )
       }
     },
-    slices_reset = function() {
+    slices_set = function(slices) {
       shiny::isolate({
-        .self$all_slices(NULL)
+        if (!is.teal_slices(slices)) {
+          slices <- as.teal_slices(slices)
+        }
+        .self$all_slices(slices)
         invisible(.self)
       })
-    },
-    slices_to_list = function() {
-      slices <- .self$all_slices
-      if (!.self$is_module_specific) {
-        attr(slices, "mapping")[["global_filters"]] <- unique(unlist(attr(slices, "mapping")))
-      }
-      as.list(slices, recursive = TRUE)
     },
     show = function() {
       shiny::isolate(print(.self$all_slices()))

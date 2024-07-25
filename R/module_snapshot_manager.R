@@ -277,9 +277,7 @@ srv_snapshot_manager <- function(id, slices_global) {
           snapshot_history(snapshot_update)
           ### Begin simplified restore procedure. ###
           logger::log_debug("snapshot_manager_srv: restoring snapshot")
-          slices_global$slices_reset()
-          slices_global$slices_append(snapshot_state)
-          slices_global$slices_activate(attr(snapshot_state, "mapping"))
+          slices_global$slices_set(snapshot_state)
           removeModal()
           ### End  simplified restore procedure. ###
         }
@@ -295,8 +293,7 @@ srv_snapshot_manager <- function(id, slices_global) {
       snapshot <- snapshot_history()[[s]]
       # todo: as.teal_slices looses module-mapping if is not global
       snapshot_state <- as.teal_slices(snapshot)
-      slices_global$slices_reset()
-      slices_global$slices_append(snapshot_state)
+      slices_global$slices_set(snapshot_state)
       removeModal()
       ### End restore procedure. ###
     })
@@ -323,9 +320,7 @@ srv_snapshot_manager <- function(id, slices_global) {
             snapshot <- snapshot_history()[[s]]
             snapshot_state <- as.teal_slices(snapshot)
 
-            slices_global$slices_reset()
-            slices_global$slices_append(snapshot_state)
-            slices_global$slices_activate(attr(snapshot_state, "mapping"))
+            slices_global$slices_set(snapshot_state)
             removeModal()
             ### End restore procedure. ###
           })
