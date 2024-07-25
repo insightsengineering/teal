@@ -305,3 +305,21 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
     slices
   )
 }
+
+#' `teal_slices` to list
+#'
+#' Wrapper on `as.list.teal_slices` that is used internally in `teal`
+#' `filter_manager` always sets mapping for each module individually even if `!module_specific`
+#' This means that we need to set `<mapping>$global_filters` to all active filters when global
+#' filter are used.
+#' @param slices (`teal_slices`)
+#' @return `list`
+#' @keywords internal
+.slices_to_list <- function(slices) {
+  shiny::isolate({
+    if (!isTRUE(attr(slices, "module_specific"))) {
+      attr(slices, "mapping")[["global_filters"]] <- unique(unlist(attr(slices, "mapping")))
+    }
+    as.list(slices, recursive = TRUE)
+  })
+}

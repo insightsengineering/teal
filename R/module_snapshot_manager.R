@@ -170,7 +170,7 @@ srv_snapshot_manager <- function(id, slices_global) {
       # Restore directly from bookmarked state, if applicable.
       restoreValue(
         ns("snapshot_history"),
-        list("Initial application state" = .to_snapshot(slices_global()))
+        list("Initial application state" = .slices_to_list(slices_global()))
       )
     })
 
@@ -209,7 +209,7 @@ srv_snapshot_manager <- function(id, slices_global) {
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         logger::log_debug("snapshot_manager_srv: snapshot name accepted, adding snapshot")
-        snapshot <- .to_snapshot(slices_global())
+        snapshot <- .slices_to_list(slices_global())
         snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
         snapshot_history(snapshot_update)
@@ -273,7 +273,7 @@ srv_snapshot_manager <- function(id, slices_global) {
         } else {
           # Add to snapshot history.
           logger::log_debug("snapshot_manager_srv: snapshot loaded, adding to history")
-          snapshot <- .to_snapshot(slices_global())
+          snapshot <- .slices_to_list(slices_global())
           snapshot_update <- c(snapshot_history(), list(snapshot))
           names(snapshot_update)[length(snapshot_update)] <- snapshot_name
           snapshot_history(snapshot_update)
@@ -369,15 +369,5 @@ srv_snapshot_manager <- function(id, slices_global) {
     })
 
     snapshot_history
-  })
-}
-
-
-.to_snapshot <- function(slices) {
-  shiny::isolate({
-    if (!isTRUE(attr(slices, "module_specific"))) {
-      attr(slices, "mapping") <- unique(unlist(attr(slices, "mapping")))
-    }
-    as.list(slices, recursive = TRUE)
   })
 }
