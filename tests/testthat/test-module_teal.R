@@ -280,7 +280,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_null(data_rv())
+        testthat::expect_error(data_rv())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -333,7 +333,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_null(data_rv())
+        testthat::expect_error(data_rv())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -360,7 +360,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_null(data_rv())
+        testthat::expect_error(data_rv())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -545,11 +545,11 @@ testthat::describe("srv_teal teal_modules", {
   })
 
   testthat::it("receives parent data when module$datanames limited to a child data but join keys are provided", {
-    mtcars2 <- data.frame(am = c(0, 1), test = c("a", "b"))
-    data <- teal.data::teal_data(mtcars = mtcars, mtcars2 = mtcars2)
-
+    parent <- data.frame(id = 1:3, test = letters[1:3])
+    child <- data.frame(id = 1:9, parent_id = rep(1:3, each = 3), test2 = letters[1:9])
+    data <- teal_data(parent = parent, child = child)
     teal.data::join_keys(data) <- teal.data::join_keys(
-      teal.data::join_key("mtcars2", "mtcars", keys = c("am"))
+      teal.data::join_key("parent", "child", c(id = "parent_id"))
     )
 
     shiny::testServer(
@@ -558,13 +558,13 @@ testthat::describe("srv_teal teal_modules", {
         id = "test",
         data = reactive(data),
         modules = modules(
-          module("module_1", server = function(id, data) data, datanames = "mtcars")
+          module("module_1", server = function(id, data) data, datanames = "child")
         )
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
-        testthat::expect_identical(modules_output$module_1()()[["mtcars2"]], mtcars2)
+        testthat::expect_identical(modules_output$module_1()()[["parent"]], parent)
+        testthat::expect_identical(modules_output$module_1()()[["child"]], child)
       }
     )
   })
@@ -777,7 +777,6 @@ testthat::describe("srv_teal filters", {
           c(
             "iris <- iris",
             "mtcars <- mtcars",
-            "",
             sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
             sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
             "iris_raw <- iris",
@@ -824,7 +823,6 @@ testthat::describe("srv_teal filters", {
           c(
             "iris <- iris",
             "mtcars <- mtcars",
-            "",
             sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
             sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
             "iris_raw <- iris",
@@ -863,7 +861,6 @@ testthat::describe("srv_teal filters", {
         expected_code <- paste0(
           c(
             "mtcars <- mtcars",
-            "",
             sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
             "mtcars_raw <- mtcars",
             "",
@@ -995,7 +992,6 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
-          "",
           sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
           sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
           "iris_raw <- iris",
@@ -1044,7 +1040,6 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
-          "",
           sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
           sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
           "iris_raw <- iris",
@@ -1549,7 +1544,6 @@ testthat::describe("srv_teal snapshot manager", {
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
         slices_global(teal_slices())
-        browser()
         session$setInputs("snapshot_manager_panel-module-snapshot_reset" = TRUE)
         testthat::expect_identical(as.list(slices_global()), as.list(initial_slices))
       }
