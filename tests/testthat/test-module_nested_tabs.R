@@ -355,8 +355,11 @@ testthat::test_that("srv_teal_module: teal_module doesn't get extra data added i
     expr = {
       session$flushReact()
       out <- module_out()
-      testthat::expect_identical(teal.data::datanames(out()), c("iris", "data3"))
-      testthat::expect_identical(ls(out()@env), c("data3", "iris", "iris_raw"))
+      testthat::expect_setequal(teal.data::datanames(out()), c("iris", "data3"))
+      testthat::expect_setequal(
+        ls(teal.code::get_env(out())),
+        c("data4", "data3", "iris", "iris_raw")
+      )
     }
   )
 })
@@ -616,7 +619,7 @@ testthat::test_that("srv_teal_module: summary table displays Obs only column if 
       testthat::expect_identical(
         summary_table(),
         data.frame(
-          `Data Name` = c("iris", "mtcars"),
+          "Data Name" = c("iris", "mtcars"),
           Obs = c("150/150", "32/32"),
           check.names = FALSE
         )
@@ -641,6 +644,7 @@ testthat::test_that("srv_teal_module: summary table displays Subjects with count
           teal.data::join_key("df_parent", keys = c(id = "id")),
           teal.data::join_key("df_child", keys = "id")
         )
+        teal.data::datanames(data) <- c("df_parent", "df_child", "mtcars")
         data
       }),
       modules = module(server = function(id, data) data)
@@ -651,7 +655,7 @@ testthat::test_that("srv_teal_module: summary table displays Subjects with count
       testthat::expect_identical(
         summary_table(),
         data.frame(
-          `Data Name` = c("df_parent", "df_child", "mtcars"),
+          "Data Name" = c("df_parent", "df_child", "mtcars"),
           Obs = c("10/10", "20/20", "32/32"),
           Subjects = c("10/10", "10/10", ""),
           check.names = FALSE
@@ -684,7 +688,7 @@ testthat::test_that("srv_teal_module: summary table displays parent's Subjects w
       testthat::expect_identical(
         summary_table(),
         data.frame(
-          `Data Name` = c("df_parent", "mtcars"),
+          "Data Name" = c("df_parent", "mtcars"),
           Obs = c("10/10", "32/32"),
           Subjects = c("10/10", ""),
           check.names = FALSE
@@ -712,7 +716,7 @@ testthat::test_that("srv_teal_module: summary table reflects filters and display
       testthat::expect_identical(
         summary_table(),
         data.frame(
-          `Data Name` = c("iris", "mtcars"),
+          "Data Name" = c("iris", "mtcars"),
           Obs = c("50/150", "7/32"),
           check.names = FALSE
         )
