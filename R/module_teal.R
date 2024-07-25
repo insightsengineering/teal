@@ -96,7 +96,10 @@ ui_teal <- function(id,
     tags$header(header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
-    tabs_elem,
+    tags$div(
+      class = "teal-body",
+      tabs_elem
+    ),
     tags$div(
       id = "teal-util-icons",
       style = "margin-left: auto;",

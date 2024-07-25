@@ -57,34 +57,31 @@ ui_teal_module.default <- function(id, modules, depth = 0L) {
 #' @export
 ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
   ns <- NS(id)
-  tags$div(
-    class = "teal-body",
-    do.call(
-      tabsetPanel,
-      c(
-        # by giving an id, we can reactively respond to tab changes
-        list(
-          id = ns("active_tab"),
-          type = if (modules$label == "root") "pills" else "tabs"
-        ),
-        lapply(
-          names(modules$children),
-          function(module_id) {
-            module_label <- modules$children[[module_id]]$label
-            if (is.null(module_label)) {
-              module_label <- icon("database")
-            }
-            tabPanel(
-              title = module_label,
-              value = module_id, # when clicked this tab value changes input$<tabset panel id>
-              ui_teal_module(
-                id = ns(module_id),
-                modules = modules$children[[module_id]],
-                depth = depth + 1L
-              )
-            )
+  do.call(
+    tabsetPanel,
+    c(
+      # by giving an id, we can reactively respond to tab changes
+      list(
+        id = ns("active_tab"),
+        type = if (modules$label == "root") "pills" else "tabs"
+      ),
+      lapply(
+        names(modules$children),
+        function(module_id) {
+          module_label <- modules$children[[module_id]]$label
+          if (is.null(module_label)) {
+            module_label <- icon("database")
           }
-        )
+          tabPanel(
+            title = module_label,
+            value = module_id, # when clicked this tab value changes input$<tabset panel id>
+            ui_teal_module(
+              id = ns(module_id),
+              modules = modules$children[[module_id]],
+              depth = depth + 1L
+            )
+          )
+        }
       )
     )
   )
