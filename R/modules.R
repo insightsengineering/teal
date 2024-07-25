@@ -124,17 +124,12 @@
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
 #' }
-
 #' @rdname teal_modules
 #' @export
 #'
 module <- function(label = "module",
-                   server = function(id, ...) {
-                     moduleServer(id, function(input, output, session) {})
-                   },
-                   ui = function(id, ...) {
-                     tags$p(paste0("This module has no UI (id: ", id, " )"))
-                   },
+                   server = function(id, ...) moduleServer(id, function(input, output, session) NULL),
+                   ui = function(id, ...) tags$p(paste0("This module has no UI (id: ", id, " )")),
                    filters,
                    datanames = "all",
                    server_args = NULL,

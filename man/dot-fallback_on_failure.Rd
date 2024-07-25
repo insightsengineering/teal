@@ -22,3 +22,4 @@ Application: In \code{teal} we try to prevent the error from being thrown and in
 transform module data output with data input from the previous module (or from previous \code{teal} reactive
 tree elements).
 }
+\keyword{internal}

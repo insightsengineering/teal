@@ -84,18 +84,18 @@ srv_teal_data_modules <- function(id, data, transformers, modules) {
   names(transformers) <- ids
 
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_teal_data_modules initializing.")
+    logger::log_debug("srv_teal_data_modules initializing.")
 
     transformed_teal_data <- Reduce(
-      function(x, name) {
+      function(previous_result, name) {
         srv_teal_data_module(
           id = name,
-          data = x,
+          data = previous_result,
           transformer = transformers[[name]],
           modules = modules
         )
       },
-      names(transformers),
+      x = names(transformers),
       init = data
     )
   })
@@ -127,7 +127,7 @@ srv_teal_data_module <- function(id,
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
 
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_teal_data_module initializing.")
+    logger::log_debug("srv_teal_data_module initializing.")
 
     data_out <- if (is_arg_used(transformer$server, "data")) {
       transformer$server(id = "data", data = data)
@@ -161,6 +161,7 @@ srv_teal_data_module <- function(id,
 #' @param that (`reactive`) Previous reactive.
 #' @param label (`character`) Label for identifying problematic `teal_data_module` transform in logging.
 #' @return `reactive` `teal_data`
+#' @keywords internal
 .fallback_on_failure <- function(this, that, label) {
   checkmate::assert_class(this, "reactive")
   checkmate::assert_class(that, "reactive")
@@ -169,10 +170,10 @@ srv_teal_data_module <- function(id,
   reactive({
     res <- try(this(), silent = TRUE)
     if (inherits(res, "teal_data")) {
-      logger::log_trace("{ label } evaluated successfully.")
+      logger::log_debug("{ label } evaluated successfully.")
       res
     } else {
-      logger::log_trace("{ label } failed, falling back to previous data.")
+      logger::log_debug("{ label } failed, falling back to previous data.")
       isolate(that())
     }
   })

@@ -74,7 +74,7 @@ testthat::test_that("srv_data_summary produces subjects column if there are join
         data.frame(
           X1 = c("Data Name", "mtcars1", "mtcars2"),
           X2 = c("Obs", "30/32", "2/2"),
-          X3 = c("Subjects", "2/2", "2/2")
+          X3 = c("Subjects", "2/2", "")
         )
       )
     }
@@ -127,11 +127,13 @@ testthat::test_that("srv_data_summary calculates counts properly for mixture of 
       iris <- iris[1:50, ]
       iris_raw <- iris
       library(MultiAssayExperiment)
+      # nolint start: object_name.
       data("miniACC", package = "MultiAssayExperiment", envir = environment())
-      miniACC_raw <- miniACC
-      CO2_raw <- CO2 <- CO2
+      mini_ACC_raw <- miniACC
+      CO2_raw <- CO2
       factors_raw <- factors <- names(Filter(isTRUE, vapply(CO2, is.factor, logical(1L))))
       CO2[factors] <- lapply(CO2[factors], as.character)
+      # nolint end: object_name.
     })
 
   teal.data::join_keys(data) <- teal.data::join_keys(
@@ -155,7 +157,7 @@ testthat::test_that("srv_data_summary calculates counts properly for mixture of 
             "- Mutations", "- miRNASeqGene", "CO2", "factors"
           ),
           X2 = c("Obs", "30/32", "2/2", "50/50", "", "198/198", "198/198", "33/33", "97/97", "471/471", "84/84", ""),
-          X3 = c("Subjects", "2/2", "2/2", "", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "", "")
+          X3 = c("Subjects", "2/2", "", "", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "", "")
         )
       )
     }

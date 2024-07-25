@@ -57,7 +57,7 @@ srv_data_summary <- function(id, teal_data) {
   moduleServer(
     id = id,
     function(input, output, session) {
-      logger::log_trace("srv_data_summary initializing")
+      logger::log_debug("srv_data_summary initializing")
 
       summary_table <- reactive({
         req(inherits(teal_data(), "teal_data"))
@@ -131,8 +131,14 @@ srv_data_summary <- function(id, teal_data) {
 get_filter_overview <- function(teal_data) {
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
-  filtered_data_objs <- sapply(datanames, function(name) teal.code::get_env(teal_data())[[name]], simplify = FALSE)
-  unfiltered_data_objs <- sapply(datanames, function(name) teal.code::get_env(teal_data())[[paste0(name, "_raw")]], simplify = FALSE)
+  filtered_data_objs <- sapply(
+    datanames, function(name) teal.code::get_env(teal_data())[[name]],
+    simplify = FALSE
+  )
+  unfiltered_data_objs <- sapply(
+    datanames, function(name) teal.code::get_env(teal_data())[[paste0(name, "_raw")]],
+    simplify = FALSE
+  )
 
   rows <- lapply(
     datanames,
@@ -184,7 +190,10 @@ get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname,
 
 #' @rdname module_data_summary
 #' @keywords internal
-get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dataname, subject_keys) {
+get_object_filter_overview_array <- function(filtered_data, # nolint: object_length.
+                                             unfiltered_data,
+                                             dataname,
+                                             subject_keys) {
   if (length(subject_keys) == 0) {
     data.frame(
       dataname = dataname,
@@ -206,7 +215,9 @@ get_object_filter_overview_array <- function(filtered_data, unfiltered_data, dat
 
 #' @rdname module_data_summary
 #' @keywords internal
-get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, unfiltered_data, dataname) {
+get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, # nolint: object_length, object_name.
+                                                            unfiltered_data,
+                                                            dataname) {
   experiment_names <- names(unfiltered_data)
   mae_info <- data.frame(
     dataname = dataname,

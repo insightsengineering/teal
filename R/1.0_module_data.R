@@ -57,7 +57,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(filter, "teal_slices")
 
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_data initializing.")
+    logger::log_debug("srv_data initializing.")
 
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
@@ -68,7 +68,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     data_validated <- if (inherits(data, "teal_data_module")) {
       srv_teal_data_module(
         "teal_data_module",
-        data = reactive(NULL), # to .fallback_on_failure to NULL
+        data = reactive(req(FALSE)), # to .fallback_on_failure to shiny.silent.error
         transformer = data,
         modules = modules,
         validate_shiny_silent_error = FALSE
@@ -76,7 +76,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (inherits(data, c("reactive", "reactiveVal"))) {
-      .fallback_on_failure(this = data, that = reactive(NULL), label = "Reactive data")
+      .fallback_on_failure(this = data, that = reactive(req(FALSE)), label = "Reactive data")
     }
 
     if (inherits(data, "teal_data_module")) {
@@ -85,10 +85,18 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     }
 
     observeEvent(data_validated(), {
-      removeModal()
       showNotification("Data loaded successfully.", duration = 5)
       shinyjs::enable(selector = ".teal-body .nav li a")
-      data_validated()
+
+      is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data_validated()))
+      if (!isTRUE(is_filter_ok)) {
+        showNotification(
+          "Some filters were not applied because of incompatibility with data. Contact app developer.",
+          type = "warning",
+          duration = 10
+        )
+        warning(is_filter_ok)
+      }
     })
 
     observeEvent(data_validated(), once = TRUE, {
@@ -106,6 +114,61 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       )
     })
 
-    data_validated
+
+
+    # Adds signature protection to the datanames in the data
+    reactive(.add_signature_to_data(data_validated()))
   })
+}
+
+#' Adds signature protection to the datanames in the data
+#' @param data (`teal_data`)
+#' @return `teal_data` with additional code that has signature of the datanames
+#' @keywords internal
+.add_signature_to_data <- function(data) {
+  hashes <- .get_hashes_code(data)
+
+  tdata <- do.call(
+    teal.data::teal_data,
+    c(
+      list(code = trimws(c(teal.code::get_code(data), hashes), which = "right")),
+      list(join_keys = teal.data::join_keys(data)),
+      sapply(
+        ls(teal.code::get_env(data)),
+        teal.code::get_var,
+        object = data,
+        simplify = FALSE
+      )
+    )
+  )
+
+  tdata@verified <- data@verified
+  teal.data::datanames(tdata) <- teal.data::datanames(data)
+  tdata
+}
+
+#' Get code that tests the integrity of the reproducible data
+#'
+#' @param datasets (`FilteredData`) object holding the data
+#' @param datanames (`character`) names of datasets
+#'
+#' @return A character vector with the code lines.
+#' @keywords internal
+#'
+.get_hashes_code <- function(data, datanames = teal_data_datanames(data)) {
+  # todo: this should be based on data_rv object not on datasets
+  vapply(
+    datanames,
+    function(dataname, datasets) {
+      hash <- rlang::hash(data[[dataname]])
+      sprintf(
+        "stopifnot(%s == %s) # @linksto %s",
+        deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+        deparse1(hash),
+        dataname
+      )
+    },
+    character(1L),
+    USE.NAMES = TRUE
+  )
 }

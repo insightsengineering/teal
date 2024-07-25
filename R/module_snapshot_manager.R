@@ -80,8 +80,6 @@
 #' @name module_snapshot_manager
 #' @rdname module_snapshot_manager
 #'
-#' @aliases snapshot_manager
-#'
 #' @author Aleksander Chlebowski
 #'
 NULL
@@ -103,10 +101,10 @@ ui_snapshot_manager_panel <- function(id) {
 #'
 srv_snapshot_manager_panel <- function(id, slices_global) {
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_snapshot_manager_panel initializing")
+    logger::log_debug("srv_snapshot_manager_panel initializing")
     setBookmarkExclude(c("show_snapshot_manager"))
     observeEvent(input$show_snapshot_manager, {
-      logger::log_trace("srv_snapshot_manager_panel@1 show_snapshot_manager button has been clicked.")
+      logger::log_debug("srv_snapshot_manager_panel@1 show_snapshot_manager button has been clicked.")
       showModal(
         modalDialog(
           ui_snapshot_manager(session$ns("module")),
@@ -148,7 +146,7 @@ srv_snapshot_manager <- function(id, slices_global) {
   checkmate::assert_character(id)
 
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("snapshot_manager_srv initializing")
+    logger::log_debug("snapshot_manager_srv initializing")
 
     # Set up bookmarking callbacks ----
     # Register bookmark exclusions (all buttons and text fields).
@@ -159,25 +157,27 @@ srv_snapshot_manager <- function(id, slices_global) {
     ))
     # Add snapshot history to bookmark.
     session$onBookmark(function(state) {
-      logger::log_trace("snapshot_manager_srv@onBookmark: storing snapshot and bookmark history")
+      logger::log_debug("snapshot_manager_srv@onBookmark: storing snapshot and bookmark history")
       state$values$snapshot_history <- snapshot_history() # isolate this?
     })
 
     ns <- session$ns
+
+    module_labels <- names(attr(shiny::isolate(slices_global()), "mapping"))
 
     # Track global filter states ----
     snapshot_history <- reactiveVal({
       # Restore directly from bookmarked state, if applicable.
       restoreValue(
         ns("snapshot_history"),
-        list("Initial application state" = isolate(as.list(slices_global(), recursive = TRUE)))
+        list("Initial application state" = .to_snapshot(slices_global()))
       )
     })
 
     # Snapshot current application state ----
     # Name snaphsot.
     observeEvent(input$snapshot_add, {
-      logger::log_trace("snapshot_manager_srv: snapshot_add button clicked")
+      logger::log_debug("snapshot_manager_srv: snapshot_add button clicked")
       showModal(
         modalDialog(
           textInput(ns("snapshot_name"), "Name the snapshot", width = "100%", placeholder = "Meaningful, unique name"),
@@ -191,25 +191,25 @@ srv_snapshot_manager <- function(id, slices_global) {
     })
     # Store snaphsot.
     observeEvent(input$snapshot_name_accept, {
-      logger::log_trace("snapshot_manager_srv: snapshot_name_accept button clicked")
+      logger::log_debug("snapshot_manager_srv: snapshot_name_accept button clicked")
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
-        logger::log_trace("snapshot_manager_srv: snapshot name rejected")
+        logger::log_debug("snapshot_manager_srv: snapshot name rejected")
         showNotification(
           "Please name the snapshot.",
           type = "message"
         )
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else if (is.element(make.names(snapshot_name), make.names(names(snapshot_history())))) {
-        logger::log_trace("snapshot_manager_srv: snapshot name rejected")
+        logger::log_debug("snapshot_manager_srv: snapshot name rejected")
         showNotification(
           "This name is in conflict with other snapshot names. Please choose a different one.",
           type = "message"
         )
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
-        logger::log_trace("snapshot_manager_srv: snapshot name accepted, adding snapshot")
-        snapshot <- as.list(slices_global(), recursive = TRUE)
+        logger::log_debug("snapshot_manager_srv: snapshot name accepted, adding snapshot")
+        snapshot <- .to_snapshot(slices_global())
         snapshot_update <- c(snapshot_history(), list(snapshot))
         names(snapshot_update)[length(snapshot_update)] <- snapshot_name
         snapshot_history(snapshot_update)
@@ -222,7 +222,7 @@ srv_snapshot_manager <- function(id, slices_global) {
     # Upload a snapshot file ----
     # Select file.
     observeEvent(input$snapshot_load, {
-      logger::log_trace("snapshot_manager_srv: snapshot_load button clicked")
+      logger::log_debug("snapshot_manager_srv: snapshot_load button clicked")
       showModal(
         modalDialog(
           fileInput(ns("snapshot_file"), "Choose snapshot file", accept = ".json", width = "100%"),
@@ -241,14 +241,14 @@ srv_snapshot_manager <- function(id, slices_global) {
     })
     # Store new snapshot to list and restore filter states.
     observeEvent(input$snaphot_file_accept, {
-      logger::log_trace("snapshot_manager_srv: snapshot_file_accept button clicked")
+      logger::log_debug("snapshot_manager_srv: snapshot_file_accept button clicked")
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
-        logger::log_trace("snapshot_manager_srv: no snapshot name provided, naming after file")
+        logger::log_debug("snapshot_manager_srv: no snapshot name provided, naming after file")
         snapshot_name <- tools::file_path_sans_ext(input$snapshot_file$name)
       }
       if (is.element(make.names(snapshot_name), make.names(names(snapshot_history())))) {
-        logger::log_trace("snapshot_manager_srv: snapshot name rejected")
+        logger::log_debug("snapshot_manager_srv: snapshot name rejected")
         showNotification(
           "This name is in conflict with other snapshot names. Please choose a different one.",
           type = "message"
@@ -256,29 +256,29 @@ srv_snapshot_manager <- function(id, slices_global) {
         updateTextInput(inputId = "snapshot_name", value = "", placeholder = "Meaningful, unique name")
       } else {
         # Restore snapshot and verify app compatibility.
-        logger::log_trace("snapshot_manager_srv: snapshot name accepted, loading snapshot")
+        logger::log_debug("snapshot_manager_srv: snapshot name accepted, loading snapshot")
         snapshot_state <- try(slices_restore(input$snapshot_file$datapath))
         if (!inherits(snapshot_state, "modules_teal_slices")) {
-          logger::log_trace("snapshot_manager_srv: snapshot file corrupt")
+          logger::log_debug("snapshot_manager_srv: snapshot file corrupt")
           showNotification(
             "File appears to be corrupt.",
             type = "error"
           )
         } else if (!identical(attr(snapshot_state, "app_id"), attr(slices_global(), "app_id"))) {
-          logger::log_trace("snapshot_manager_srv: snapshot not compatible with app")
+          logger::log_debug("snapshot_manager_srv: snapshot not compatible with app")
           showNotification(
             "This snapshot file is not compatible with the app and cannot be loaded.",
             type = "warning"
           )
         } else {
           # Add to snapshot history.
-          logger::log_trace("snapshot_manager_srv: snapshot loaded, adding to history")
-          snapshot <- as.list(snapshot_state, recursive = TRUE)
+          logger::log_debug("snapshot_manager_srv: snapshot loaded, adding to history")
+          snapshot <- .to_snapshot(slices_global())
           snapshot_update <- c(snapshot_history(), list(snapshot))
           names(snapshot_update)[length(snapshot_update)] <- snapshot_name
           snapshot_history(snapshot_update)
           ### Begin simplified restore procedure. ###
-          logger::log_trace("snapshot_manager_srv: restoring snapshot")
+          logger::log_debug("snapshot_manager_srv: restoring snapshot")
           slices_global(snapshot_state)
           removeModal()
           ### End  simplified restore procedure. ###
@@ -289,11 +289,13 @@ srv_snapshot_manager <- function(id, slices_global) {
 
     # Restore initial state ----
     observeEvent(input$snapshot_reset, {
-      logger::log_trace("snapshot_manager_srv: snapshot_reset button clicked, restoring snapshot")
+      logger::log_debug("snapshot_manager_srv: snapshot_reset button clicked, restoring snapshot")
       s <- "Initial application state"
       ### Begin restore procedure. ###
       snapshot <- snapshot_history()[[s]]
+      # todo: as.teal_slices looses module-mapping if is not global
       snapshot_state <- as.teal_slices(snapshot)
+      snapshot_state <- .resolve_global_mapping(snapshot_state, module_labels)
       slices_global(snapshot_state)
       removeModal()
       ### End restore procedure. ###
@@ -308,7 +310,7 @@ srv_snapshot_manager <- function(id, slices_global) {
     divs <- reactiveValues()
 
     observeEvent(snapshot_history(), {
-      logger::log_trace("snapshot_manager_srv: snapshot history modified, updating snapshot list")
+      logger::log_debug("snapshot_manager_srv: snapshot history modified, updating snapshot list")
       lapply(names(snapshot_history())[-1L], function(s) {
         id_pickme <- sprintf("pickme_%s", make.names(s))
         id_saveme <- sprintf("saveme_%s", make.names(s))
@@ -319,7 +321,9 @@ srv_snapshot_manager <- function(id, slices_global) {
           observers[[id_pickme]] <- observeEvent(input[[id_pickme]], {
             ### Begin restore procedure. ###
             snapshot <- snapshot_history()[[s]]
-            slices_global(as.teal_slices(snapshot))
+            snapshot_state <- as.teal_slices(snapshot)
+            snapshot_state <- .resolve_global_mapping(snapshot_state, module_labels)
+            slices_global(snapshot_state)
             removeModal()
             ### End restore procedure. ###
           })
@@ -333,6 +337,7 @@ srv_snapshot_manager <- function(id, slices_global) {
             content = function(file) {
               snapshot <- snapshot_history()[[s]]
               snapshot_state <- as.teal_slices(snapshot)
+              snapshot_state <- .resolve_global_mapping(snapshot_state, module_labels)
               slices_store(tss = snapshot_state, file = file)
             }
           )
@@ -364,5 +369,15 @@ srv_snapshot_manager <- function(id, slices_global) {
     })
 
     snapshot_history
+  })
+}
+
+
+.to_snapshot <- function(slices) {
+  shiny::isolate({
+    if (!isTRUE(attr(slices, "module_specific"))) {
+      attr(slices, "mapping") <- unique(unlist(attr(slices, "mapping")))
+    }
+    as.list(slices, recursive = TRUE)
   })
 }

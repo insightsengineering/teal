@@ -76,9 +76,11 @@ testthat::test_that(
         iris <- iris
         library(MultiAssayExperiment)
         data("miniACC", package = "MultiAssayExperiment", envir = environment())
+        # nolint start: object_name.
         CO2 <- CO2
         factors <- names(Filter(isTRUE, vapply(CO2, is.factor, logical(1L))))
         CO2[factors] <- lapply(CO2[factors], as.character)
+        # nolint end: object_name.
       })
 
     teal.data::join_keys(data) <- teal.data::join_keys(

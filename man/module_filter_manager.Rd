@@ -10,6 +10,8 @@
 \alias{srv_filter_manager}
 \alias{srv_module_filter_manager}
 \alias{.make_slices_global}
+\alias{.resolve_global_mapping}
+\alias{.filter_module_slices}
 \title{Manage multiple \code{FilteredData} objects}
 \usage{
 ui_filter_manager_panel(id)
@@ -23,6 +25,10 @@ srv_filter_manager(id, slices_global)
 srv_module_filter_manager(id, module_fd, slices_global)
 
 .make_slices_global(filter, module_labels)
+
+.resolve_global_mapping(filter, module_labels)
+
+.filter_module_slices(module_label, slices)
 }
 \arguments{
 \item{id}{(\code{character(1)})

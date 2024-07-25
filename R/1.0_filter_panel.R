@@ -23,7 +23,7 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
       isolate({
         # render will be triggered only when FilteredData object changes (not when filters change)
         # technically it means that teal_data_module needs to be refreshed
-        logger::log_trace("srv_filter_panel rendering filter panel.")
+        logger::log_debug("srv_filter_panel rendering filter panel.")
         filtered_data <- datasets()
         filtered_data$srv_active("filters", active_datanames = active_datanames)
         # todo: make sure to bump the `teal.slice` version. Please use the branch `669_insertUI@main` in `teal.slice`.
@@ -31,7 +31,7 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
       })
     })
 
-    trigger_data <- .observe_active_filter_changed(datasets, is_active, active_datanames)
+    trigger_data <- .observe_active_filter_changed(datasets, is_active, active_datanames, data_rv)
 
     eventReactive(trigger_data(), {
       .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
@@ -52,11 +52,10 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
   )
 
   data_code <- teal.data::get_code(data, datanames = datanames)
-  hashes_code <- .get_hashes_code(datasets = datasets, datanames)
   raw_data_code <- sprintf("%1$s_raw <- %1$s", datanames)
   filter_code <- get_filter_expr(datasets = datasets, datanames = datanames)
 
-  all_code <- paste(unlist(c(data_code, "", hashes_code, raw_data_code, "", filter_code)), collapse = "\n")
+  all_code <- paste(unlist(c(data_code, raw_data_code, "", filter_code)), collapse = "\n")
   tdata <- do.call(
     teal.data::teal_data,
     c(
@@ -71,32 +70,6 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
   tdata
 }
 
-#' Get code that tests the integrity of the reproducible data
-#'
-#' @param datasets (`FilteredData`) object holding the data
-#' @param datanames (`character`) names of datasets
-#'
-#' @return A character vector with the code lines.
-#' @keywords internal
-#'
-.get_hashes_code <- function(datasets = NULL, datanames) {
-  # todo: this should be based on data_rv object not on datasets
-  vapply(
-    datanames,
-    function(dataname, datasets) {
-      hash <- rlang::hash(datasets$get_data(dataname, filtered = FALSE))
-      sprintf(
-        "stopifnot(%s == %s)",
-        deparse1(bquote(rlang::hash(.(as.name(dataname))))),
-        deparse1(hash)
-      )
-    },
-    character(1L),
-    datasets = datasets,
-    USE.NAMES = FALSE
-  )
-}
-
 #' Trigger only active module when filter is changed
 #'
 #' Creates a trigger to limit reactivity between filter-panel and modules. We want to recalculate
@@ -106,19 +79,21 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
 
 #' @return A `reactiveVal` which is triggered when filter is changed and this module is selected.
 #' @keywords internal
-.observe_active_filter_changed <- function(datasets, is_active, active_datanames) {
-  previous_filter <- reactiveVal(NULL)
+.observe_active_filter_changed <- function(datasets, is_active, active_datanames, data_rv) {
+  previous_signature <- reactiveVal(NULL)
   filter_changed <- reactive({
     req(inherits(datasets(), "FilteredData"))
-    new_filter <- get_filter_expr(datasets = datasets(), datanames = active_datanames())
-    if (!identical(previous_filter(), new_filter)) {
-      previous_filter(new_filter)
+    new_signature <- c(
+      get_code(data_rv()),
+      get_filter_expr(datasets = datasets(), datanames = active_datanames())
+    )
+    if (!identical(previous_signature(), new_signature)) {
+      previous_signature(new_signature)
       TRUE
     } else {
       FALSE
     }
   })
-
 
   trigger_data <- reactiveVal(NULL)
   observe({
