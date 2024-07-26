@@ -101,7 +101,7 @@ ui_teal <- function(id,
       tabs_elem
     ),
     tags$div(
-      id = "teal-util-icons",
+      id = ns("teal-util-icons"),
       style = "margin-left: auto;",
       ui_bookmark_panel(ns("bookmark_manager"), modules),
       tags$button(
@@ -119,9 +119,10 @@ ui_teal <- function(id,
         sprintf(
           "
             $(document).ready(function() {
-              $('#teal-util-icons').appendTo('#%s');
+              $('#%s').appendTo('#%s');
             });
           ",
+          ns("teal-util-icons"),
           ns("teal_modules-active_tab")
         )
       )

@@ -53,7 +53,7 @@ ui_filter_manager_panel <- function(id) {
     id = ns("show_filter_manager"),
     class = "btn action-button wunder_bar_button",
     title = "View filter mapping",
-    suppressMessages(icon("solid fa-grip"))
+    suppressMessages(icon("fas fa-grip"))
   )
 }
 
