@@ -81,7 +81,7 @@ When \code{datasets} is passed from the parent module (\code{srv_teal}) then \co
 which implies in filter-panel to be "global". When \code{NULL} then filter-panel is "module-specific".}
 
 \item{slices_global}{(\code{reactiveVal} returning \code{modules_teal_slices})
-see \code{\link{slices_global}}}
+see \code{\link{module_filter_manager}}}
 }
 \value{
 Depending on the class of \code{modules}, \code{ui_teal_module} returns:

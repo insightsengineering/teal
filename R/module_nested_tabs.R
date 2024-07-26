@@ -20,7 +20,7 @@
 #' @param data_rv (`reactive` returning `teal_data`)
 #'
 #' @param slices_global (`reactiveVal` returning `modules_teal_slices`)
-#'   see [`slices_global`]
+#'   see [`module_filter_manager`]
 #'
 #' @param depth (`integer(1)`)
 #'  number which helps to determine depth of the modules nesting.

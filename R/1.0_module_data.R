@@ -170,7 +170,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
 
 #' Get code that tests the integrity of the reproducible data
 #'
-#' @param datasets (`FilteredData`) object holding the data
+#' @param data (`teal_data`) object holding the data
 #' @param datanames (`character`) names of datasets
 #'
 #' @return A character vector with the code lines.
