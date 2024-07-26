@@ -200,7 +200,8 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
         id,
         list(
           get_available_teal_slices = module_fd()$get_available_teal_slices(),
-          set_filter_state = module_fd()$set_filter_state
+          set_filter_state = module_fd()$set_filter_state, # for testing purpose
+          get_filter_state = module_fd()$get_filter_state # for testing purpose
         )
       )
     })
