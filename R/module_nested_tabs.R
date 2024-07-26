@@ -208,12 +208,19 @@ srv_teal_module.teal_module <- function(id,
       }
     })
     if (is.null(datasets)) {
-      datasets <- eventReactive(data_rv(), {
+      datasets <- reactiveVal(NULL)
+      datasets_obs <- observeEvent(data_rv(), {
         if (!inherits(data_rv(), "teal_data")) {
           stop("data_rv must be teal_data object.")
         }
         logger::log_debug("srv_teal_module@1 initializing module-specific FilteredData")
-        teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
+
+        # Remove filter states from previous FilteredDataset
+        if (!is.null(datasets())) datasets()$clear_filter_states()
+
+        datasets(
+          teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
+        )
       })
     }
 
