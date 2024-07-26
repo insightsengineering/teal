@@ -87,6 +87,14 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     observeEvent(data_validated(), {
       showNotification("Data loaded successfully.", duration = 5)
       shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("teal_data_body")))
+      if (attr(data, "once")) {
+        shinyjs::hide(
+          selector = sprintf(
+            ".teal-body:has('#%s') a[data-value='teal_data_module']",
+            session$ns("teal_data_body")
+          )
+        )
+      }
 
       is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data_validated()))
       if (!isTRUE(is_filter_ok)) {

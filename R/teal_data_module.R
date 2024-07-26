@@ -22,6 +22,10 @@
 #'  `shiny` module server function; must only take `id` argument;
 #'  must return reactive expression containing `teal_data` object
 #' @param label (`character(1)`) Label of the module.
+#' @param once (`logical(1)`) Applicable only when used in the `data` argument of `init`.
+#'  If `TRUE`, the data module can only be consumed once. After the successful consumption,
+#'  the data module tab will disappear and the user will not be able to interact with the UI of the module.
+#'  The common usecase for using `once` as `TRUE` is when `teal_data_module` is used for authentication.
 #'
 #' @return
 #' `teal_data_module` returns an object of class `teal_data_module`.
@@ -54,7 +58,7 @@
 #' @seealso [`teal.data::teal_data-class`], [teal.code::qenv()]
 #'
 #' @export
-teal_data_module <- function(ui, server, label = "data module") {
+teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert(
     checkmate::check_function(server, args = "id", nargs = 1),
@@ -64,6 +68,7 @@ teal_data_module <- function(ui, server, label = "data module") {
   structure(
     list(ui = ui, server = server),
     label = label,
-    class = "teal_data_module"
+    class = "teal_data_module",
+    once = once
   )
 }
