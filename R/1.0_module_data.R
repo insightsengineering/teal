@@ -88,9 +88,17 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       showNotification("Data loaded successfully.", duration = 5)
       shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("teal_data_body")))
       if (isTRUE(attr(data, "once"))) {
+        # Hiding the data module tab.
         shinyjs::hide(
           selector = sprintf(
             ".teal-body:has('#%s') a[data-value='teal_data_module']",
+            session$ns("teal_data_body")
+          )
+        )
+        # Clicking the second tab, which is the first module.
+        shinyjs::runjs(
+          sprintf(
+            "document.querySelector('.teal-body:has(#%s) .nav li:nth-child(2) a').click();",
             session$ns("teal_data_body")
           )
         )
