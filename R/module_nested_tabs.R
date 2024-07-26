@@ -124,14 +124,14 @@ srv_teal_module <- function(id,
                             data_rv,
                             modules,
                             datasets = NULL,
-                            slices_global = slicesGlobal$new(teal_slices(), id),
+                            slices_global,
                             reporter = teal.reporter::Reporter$new(),
                             is_active = reactive(TRUE)) {
   checkmate::assert_string(id)
   checkmate::assert_class(data_rv, "reactive")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(datasets, "reactive", null.ok = TRUE)
-  checkmate::assert_class(slices_global, "slicesGlobal")
+  checkmate::assert_class(slices_global, ".slicesGlobal")
   checkmate::assert_class(reporter, "Reporter")
   UseMethod("srv_teal_module", modules)
 }
@@ -142,7 +142,7 @@ srv_teal_module.default <- function(id,
                                     data_rv,
                                     modules,
                                     datasets = NULL,
-                                    slices_global = slicesGlobal$new(teal_slices(), id),
+                                    slices_global,
                                     reporter = teal.reporter::Reporter$new(),
                                     is_active = reactive(TRUE)) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
@@ -154,7 +154,7 @@ srv_teal_module.teal_modules <- function(id,
                                          data_rv,
                                          modules,
                                          datasets = NULL,
-                                         slices_global = slicesGlobal$new(teal_slices(), id),
+                                         slices_global,
                                          reporter = teal.reporter::Reporter$new(),
                                          is_active = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
@@ -186,7 +186,7 @@ srv_teal_module.teal_module <- function(id,
                                         data_rv,
                                         modules,
                                         datasets = NULL,
-                                        slices_global = slicesGlobal$new(teal_slices(), id),
+                                        slices_global,
                                         reporter = teal.reporter::Reporter$new(),
                                         is_active = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")

@@ -450,7 +450,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives data with datasets == module$datanames", {
+  testthat::it("receives data with datasets and raw datasets == module$datanames", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -464,6 +464,8 @@ testthat::describe("srv_teal teal_modules", {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1()()[["mtcars"]])
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_null(modules_output$module_1()()[["mtcars_raw"]])
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
       }
     )
   })
@@ -483,14 +485,13 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
       }
     )
   })
 
-  testthat::it("doesn't receive extra data added in a transform", {
-    testthat::skip("Looks like it does receive extra data?")
-    # Added swiss in a transformer and this is added to data()
+  testthat::it("receives extra data added in a transform", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -506,9 +507,7 @@ testthat::describe("srv_teal teal_modules", {
                 ui = function(id) div("(does nothing)"),
                 server = function(id, data) {
                   moduleServer(id, function(input, output, session) {
-                    reactive(within(data(), {
-                      swiss <- swiss
-                    }))
+                    reactive(within(data(), swiss <- swiss))
                   })
                 }
               )
@@ -520,7 +519,10 @@ testthat::describe("srv_teal teal_modules", {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["swiss"]], swiss)
+        testthat::expect_identical(modules_output$module_1()()[["swiss_raw"]], NULL)
       }
     )
   })
@@ -540,6 +542,9 @@ testthat::describe("srv_teal teal_modules", {
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["swiss"]], swiss)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["swiss_raw"]], swiss)
       }
     )
   })
@@ -671,271 +676,773 @@ testthat::describe("srv_teal teal_modules", {
 })
 
 testthat::describe("srv_teal filters", {
-  testthat::it("slices_global is initialized with slices specified in filter", {
-    init_filter <- teal_slices(
-      teal_slice("iris", "Species"),
-      teal_slice("mtcars", "cyl")
-    )
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(example_module()),
-        filter = init_filter
-      ),
-      expr = {
-        testthat::expect_length(setdiff_teal_slices(slices_global$all_slices(), init_filter), 0)
-        testthat::expect_length(setdiff_teal_slices(init_filter, slices_global$all_slices()), 0)
-      }
-    )
-  })
-
-  testthat::it("slices_global keeps active filters in <mapping>$global_filters when !module_specific", {
-    init_filter <- teal_slices(
-      teal_slice("iris", "Species"),
-      teal_slice("mtcars", "cyl"),
-      mapping = list(
-        global_filters = c("iris Species", "mtcars cyl")
+  testthat::describe("srv_teal, slices set on init", {
+    testthat::it("are added to .SlicesGlobal with attr(, 'mapping')$global_filters when `!module_specific`", {
+      init_filter <- teal_slices(
+        teal_slice("iris", "Species"),
+        teal_slice("mtcars", "cyl"),
+        mapping = list(
+          global_filters = c("iris Species", "mtcars cyl")
+        ),
+        module_specific = FALSE
       )
-    )
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(example_module(label = "module-1"), example_module(label = "module-2")),
-        filter = init_filter
-      ),
-      expr = {
-        testthat::expect_identical(
-          attr(slices_global$all_slices(), "mapping"),
-          list(
-            `global_filters` = c("iris Species", "mtcars cyl")
-          )
-        )
-      }
-    )
-  })
-
-  testthat::it("attr(slices_global, 'mapping')$global_filters is resolved to modules when module_specific", {
-    init_filter <- teal_slices(
-      teal_slice("iris", "Species"),
-      teal_slice("mtcars", "cyl"),
-      mapping = list(global_filters = c("iris Species", "mtcars cyl")),
-      module_specific = TRUE
-    )
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(example_module(label = "module-1"), example_module(label = "module-2")),
-        filter = init_filter
-      ),
-      expr = {
-        testthat::expect_identical(
-          attr(slices_global$all_slices(), "mapping"),
-          list(
-            `module-1` = c("iris Species", "mtcars cyl"),
-            `module-2` = c("iris Species", "mtcars cyl")
-          )
-        )
-      }
-    )
-  })
-
-  testthat::it("modules receive reactive data with filtered data, raw data and filter code", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = reactive(within(teal.data::teal_data(), {
-          iris <- iris
-          mtcars <- mtcars
-        })),
-        filter = teal_slices(
-          teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
-          teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+          modules = modules(example_module(label = "module-1"), example_module(label = "module-2")),
+          filter = init_filter
         ),
-        modules = modules(module("module_1", server = function(id, data) data))
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-
-        expected_iris <- subset(iris, Species == "versicolor")
-        rownames(expected_iris) <- NULL
-        testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
-        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
-
-        expected_mtcars <- subset(mtcars, cyl == 6)
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
-        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
-
-        expected_code <- paste0(
-          c(
-            "iris <- iris",
-            "mtcars <- mtcars",
-            sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-            sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
-            "iris_raw <- iris",
-            "mtcars_raw <- mtcars",
-            "",
-            'iris <- dplyr::filter(iris, Species == "versicolor")',
-            "mtcars <- dplyr::filter(mtcars, cyl == 6)"
-          ),
-          collapse = "\n"
-        )
-        testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
-      }
-    )
-  })
-
-  testthat::it("modules receive reactive data based on the changes in existing filter", {
-    existing_filters <- teal_slices(
-      teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
-      teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)
-    )
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = reactive(within(teal.data::teal_data(), {
-          iris <- iris
-          mtcars <- mtcars
-        })),
-        filter = existing_filters,
-        modules = modules(module("module_1", server = function(id, data) data))
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-        slices_global$slices_set(
-          teal_slices(
-            teal_slice("mtcars", varname = "cyl", selected = "4")
+        expr = {
+          testthat::expect_identical(
+            attr(slices_global$all_slices(), "mapping"),
+            list(
+              `global_filters` = c("iris Species", "mtcars cyl")
+            )
           )
+        }
+      )
+    })
+    testthat::it("are added to .SlicesGlobal with attr(, 'mapping')$<modules label> when `module_specific`", {
+      init_filter <- teal_slices(
+        teal_slice("iris", "Species"),
+        teal_slice("mtcars", "cyl"),
+        module_specific = TRUE,
+        mapping = list(
+          global_filters = c("iris Species", "mtcars cyl")
         )
-        session$flushReact()
-        # iris is not active
-        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
-        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
-        # mtcars has been modified
-        expected_mtcars <- subset(mtcars, cyl == 4)
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
-        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
-
-        expected_code <- paste0(
-          c(
-            "iris <- iris",
-            "mtcars <- mtcars",
-            sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-            sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
-            "iris_raw <- iris",
-            "mtcars_raw <- mtcars",
-            "",
-            "mtcars <- dplyr::filter(mtcars, cyl == 4)"
-          ),
-          collapse = "\n"
-        )
-        testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
-      }
-    )
-  })
-
-  testthat::it("modules receive reactive data based on old and added filter", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = reactive(within(teal.data::teal_data(), mtcars <- mtcars)),
-        filter = teal_slices(
-          teal_slice(dataname = "mtcars", varname = "cyl", selected = 4)
+      )
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+          modules = modules(example_module(label = "module-1"), example_module(label = "module-2")),
+          filter = init_filter
         ),
-        modules = modules(module("module_1", server = function(id, data) data))
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-        slices_global$slices_append(
-          teal_slices(teal_slice(dataname = "mtcars", varname = "mpg", selected = c(25, Inf)))
-        )
-        slices_global$slices_active(list(global_filters = c("mtcars cyl", "mtcars mpg")))
-        session$flushReact()
-        expected_mtcars <- subset(mtcars, cyl == 4 & mpg >= 25)
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
-        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+        expr = {
+          testthat::expect_identical(
+            attr(slices_global$all_slices(), "mapping"),
+            list(
+              `module-1` = c("iris Species", "mtcars cyl"),
+              `module-2` = c("iris Species", "mtcars cyl")
+            )
+          )
+        }
+      )
+    })
 
-        expected_code <- paste0(
-          c(
-            "mtcars <- mtcars",
-            sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
-            "mtcars_raw <- mtcars",
-            "",
-            "mtcars <- dplyr::filter(mtcars, cyl == 4 & (mpg >= 25 & mpg <= 34))"
+    testthat::it("are applied to all modules' data if `!module_specific` (data & code)", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          filter = teal_slices(
+            teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+            teal_slice(dataname = "mtcars", varname = "cyl", selected = 6),
+            module_specific = FALSE
           ),
-          collapse = "\n"
-        )
-        testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
-      }
-    )
+          modules = modules(
+            module("module_1", server = function(id, data) data),
+            module("module_2", server = function(id, data) data)
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          session$setInputs(`teal_modules-active_tab` = "module_2")
+
+          expected_iris <- subset(iris, Species == "versicolor")
+          rownames(expected_iris) <- NULL
+          expected_mtcars <- subset(mtcars, cyl == 6)
+          expected_code <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars",
+              "",
+              'iris <- dplyr::filter(iris, Species == "versicolor")',
+              "mtcars <- dplyr::filter(mtcars, cyl == 6)"
+            ),
+            collapse = "\n"
+          )
+
+          testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
+
+          testthat::expect_identical(modules_output$module_2()()[["iris"]], expected_iris)
+          testthat::expect_identical(modules_output$module_2()()[["mtcars"]], expected_mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_2()()), expected_code)
+        }
+      )
+    })
+
+    testthat::it("are not applied to any module data if mapping = list()", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          filter = teal_slices(
+            teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+            teal_slice(dataname = "mtcars", varname = "cyl", selected = 6),
+            module_specific = FALSE,
+            mapping = list()
+          ),
+          modules = modules(module("module_1", server = function(id, data) data))
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          session$setInputs(`teal_modules-active_tab` = "module_2")
+
+          expected_code <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars"
+            ),
+            collapse = "\n"
+          )
+
+          testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
+        }
+      )
+    })
+
+    testthat::it("are applied to modules specified in mapping when `module_specific` (data & code)", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          filter = teal_slices(
+            teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+            teal_slice(dataname = "mtcars", varname = "cyl", selected = 6),
+            module_specific = TRUE,
+            mapping = list(
+              `module_1` = c("iris Species"),
+              `module_2` = c("mtcars cyl")
+            )
+          ),
+          modules = modules(
+            module("module_1", server = function(id, data) data),
+            module("module_2", server = function(id, data) data)
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          session$setInputs(`teal_modules-active_tab` = "module_2")
+
+          expected_iris <- subset(iris, Species == "versicolor")
+          rownames(expected_iris) <- NULL
+          expected_mtcars <- subset(mtcars, cyl == 6)
+          expected_code1 <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars",
+              "",
+              'iris <- dplyr::filter(iris, Species == "versicolor")'
+            ),
+            collapse = "\n"
+          )
+          expected_code2 <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars",
+              "",
+              "mtcars <- dplyr::filter(mtcars, cyl == 6)"
+            ),
+            collapse = "\n"
+          )
+
+          testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code1)
+
+          testthat::expect_identical(modules_output$module_2()()[["iris"]], iris)
+          testthat::expect_identical(modules_output$module_2()()[["mtcars"]], expected_mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_2()()), expected_code2)
+        }
+      )
+    })
+    testthat::it("are applied to all modules if set in global_filters when `module_specific` (data & code)", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          filter = teal_slices(
+            teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+            teal_slice(dataname = "iris", varname = "Sepal.Length", selected = c(5, 6)),
+            teal_slice(dataname = "mtcars", varname = "cyl", selected = 6),
+            module_specific = TRUE,
+            mapping = list(
+              `global_filters` = c("iris Species", "mtcars cyl"),
+              `module_1` = c("iris Sepal.Length")
+            )
+          ),
+          modules = modules(
+            module("module_1", server = function(id, data) data),
+            module("module_2", server = function(id, data) data)
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          session$setInputs(`teal_modules-active_tab` = "module_2")
+
+          expected_iris1 <- subset(iris, Species == "versicolor" & Sepal.Length >= 5 & Sepal.Length <= 6)
+          rownames(expected_iris1) <- NULL
+          expected_iris2 <- subset(iris, Species == "versicolor")
+          rownames(expected_iris2) <- NULL
+          expected_mtcars <- subset(mtcars, cyl == 6)
+          expected_code1 <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars",
+              "",
+              'iris <- dplyr::filter(iris, Species == "versicolor" & (Sepal.Length >= 5 & Sepal.Length <= 6))',
+              "mtcars <- dplyr::filter(mtcars, cyl == 6)"
+            ),
+            collapse = "\n"
+          )
+          expected_code2 <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars",
+              "",
+              'iris <- dplyr::filter(iris, Species == "versicolor")',
+              "mtcars <- dplyr::filter(mtcars, cyl == 6)"
+            ),
+            collapse = "\n"
+          )
+
+          testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris1)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code1)
+          testthat::expect_identical(modules_output$module_2()()[["iris"]], expected_iris2)
+          testthat::expect_identical(modules_output$module_2()()[["mtcars"]], expected_mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_2()()), expected_code2)
+        }
+      )
+    })
+    testthat::it("are not applied to any module data if mapping=list() when `module_specific`", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          filter = teal_slices(
+            teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+            teal_slice(dataname = "iris", varname = "Sepal.Length", selected = c(5, 6)),
+            teal_slice(dataname = "mtcars", varname = "cyl", selected = 6),
+            module_specific = TRUE,
+            mapping = list()
+          ),
+          modules = modules(
+            module("module_1", server = function(id, data) data),
+            module("module_2", server = function(id, data) data)
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          session$setInputs(`teal_modules-active_tab` = "module_2")
+
+          expected_code <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars"
+            ),
+            collapse = "\n"
+          )
+          testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
+          testthat::expect_identical(modules_output$module_2()()[["iris"]], iris)
+          testthat::expect_identical(modules_output$module_2()()[["mtcars"]], mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_2()()), expected_code)
+        }
+      )
+    })
   })
 
-  testthat::it("filter is applied to the teal_module's data only if the tab is selected", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = reactive(within(teal.data::teal_data(), {
-          iris <- iris
-          mtcars <- mtcars
-        })),
-        modules = modules(
-          module("module_1", server = function(id, data) data),
-          module("module_2", server = function(id, data) data)
-        )
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-        session$setInputs(`teal_modules-active_tab` = "module_2")
-        slices_global$slices_set(
-          teal_slices(teal_slice(dataname = "mtcars", varname = "cyl", selected = 6))
-        )
-        session$flushReact()
+  testthat::describe("srv_teal, slices set in runtime", {
+    testthat::it("adding slices to module's FilteredData is applied to all modules if `!module_specific`", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          modules = modules(
+            module("module_1", server = function(id, data) data),
+            module("module_2", server = function(id, data) data)
+          ),
+          filter = teal_slices(module_specific = FALSE)
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          session$setInputs(`teal_modules-active_tab` = "module_2")
+          session$setInputs(`teal_modules-module_2-filter_panel-filters-iris-iris-filter-var_to_add` = "Species")
+          species_slice <- slices_global$all_slices()[[1]]
+          species_slice$selected <- "versicolor"
+          session$flushReact()
+          expected_iris <- subset(iris, Species == "versicolor")
+          rownames(expected_iris) <- NULL
+          expected_code <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars",
+              "",
+              'iris <- dplyr::filter(iris, Species == "versicolor")'
+            ),
+            collapse = "\n"
+          )
+          testthat::expect_identical(modules_output$module_2()()[["iris"]], expected_iris)
+          testthat::expect_identical(modules_output$module_2()()[["mtcars"]], mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_2()()), expected_code)
 
-        testthat::expect_identical(modules_output$module_2()()[["mtcars"]], subset(mtcars, cyl == 6))
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+          session$setInputs(`teal_modules-active_tab` = "module_1") # switch back to module_1 to apply slice there
+          testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
+        }
+      )
+    })
+    testthat::it("removing slices from module's FilteredData is applied to all modules if `!module_specific`", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          modules = modules(
+            module("module_1", server = function(id, data) data),
+            module("module_2", server = function(id, data) data)
+          ),
+          filter = teal_slices(
+            teal_slice("iris", varname = "Species", selected = "versicolor"),
+            module_specific = FALSE
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          session$setInputs(`teal_modules-active_tab` = "module_2")
+          session$setInputs(`teal_modules-module_2-filter_panel-filters-iris-filter-iris_Species-remove` = "Species")
+          session$flushReact()
+          expected_code <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars"
+            ),
+            collapse = "\n"
+          )
+          testthat::expect_identical(modules_output$module_2()()[["iris"]], iris)
+          testthat::expect_identical(modules_output$module_2()()[["mtcars"]], mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_2()()), expected_code)
 
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], subset(mtcars, cyl == 6))
-      }
-    )
+          session$setInputs(`teal_modules-active_tab` = "module_1") # switch back to module_1 to apply slice there
+          testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
+        }
+      )
+    })
+
+    testthat::it("adding slices to module's FilteredData is applied to this module only if `module_specific`", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          modules = modules(
+            module("module_1", server = function(id, data) data),
+            module("module_2", server = function(id, data) data)
+          ),
+          filter = teal_slices(module_specific = TRUE)
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          session$setInputs(`teal_modules-active_tab` = "module_2")
+          session$setInputs(`teal_modules-module_2-filter_panel-filters-iris-iris-filter-var_to_add` = "Species")
+          species_slice <- slices_global$all_slices()[[1]]
+          species_slice$selected <- "versicolor"
+          session$flushReact()
+          expected_iris <- subset(iris, Species == "versicolor")
+          rownames(expected_iris) <- NULL
+          expected_code <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars",
+              "",
+              'iris <- dplyr::filter(iris, Species == "versicolor")'
+            ),
+            collapse = "\n"
+          )
+          testthat::expect_identical(modules_output$module_2()()[["iris"]], expected_iris)
+          testthat::expect_identical(modules_output$module_2()()[["mtcars"]], mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_2()()), expected_code)
+
+          session$setInputs(`teal_modules-active_tab` = "module_1") # switch back to module_1 to apply slice there
+          testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+        }
+      )
+    })
+    testthat::it("removing slices from module's FilteredData is applied to this module only if `module_specific`", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          modules = modules(
+            module("module_1", server = function(id, data) data),
+            module("module_2", server = function(id, data) data)
+          ),
+          filter = teal_slices(
+            teal_slice("iris", varname = "Species", selected = "versicolor"),
+            module_specific = TRUE,
+            mapping = list(global_filters = c("iris Species"))
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          session$setInputs(`teal_modules-active_tab` = "module_2")
+          session$setInputs(`teal_modules-module_2-filter_panel-filters-iris-filter-iris_Species-remove` = "Species")
+          session$flushReact()
+          expected_code <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars"
+            ),
+            collapse = "\n"
+          )
+          testthat::expect_identical(modules_output$module_2()()[["iris"]], iris)
+          testthat::expect_identical(modules_output$module_2()()[["mtcars"]], mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_2()()), expected_code)
+          session$setInputs(`teal_modules-active_tab` = "module_1") # switch back to module_1 to apply slice there
+
+          expected_iris <- subset(iris, Species == "versicolor")
+          expected_code2 <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars",
+              "",
+              'iris <- dplyr::filter(iris, Species == "versicolor")'
+            ),
+            collapse = "\n"
+          )
+          rownames(expected_iris) <- NULL
+          testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code2)
+        }
+      )
+    })
   })
 
-  testthat::it("added slice to slices_global is applied to module only mapping is set", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = reactive(within(teal.data::teal_data(), {
-          iris <- iris
-          mtcars <- mtcars
-        })),
-        modules = modules(module("module_1", server = function(id, data) data))
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-        new_slices <- teal_slices(
-          teal_slice(dataname = "mtcars", varname = "cyl", selected = "4"),
-          mapping = list()
-        )
-        slices_global$slices_set(new_slices)
-        session$flushReact()
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+  testthat::describe("srv_teal, mapping table", {
 
-        attr(new_slices, "mapping")$module_1 <- c("mtcars cyl")
-        slices_global$slices_set(new_slices)
-        session$flushReact()
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], subset(mtcars, cyl == 4))
-      }
-    )
+  })
+
+  testthat::describe("srv_teal global filters", {
+    testthat::it("not possible to change module_specific during app run")
+
+    testthat::it("applies slices by filtering data, creating raw data and adding a filter code", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          filter = teal_slices(
+            teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+            teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)
+          ),
+          modules = modules(module("module_1", server = function(id, data) data))
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+
+          expected_iris <- subset(iris, Species == "versicolor")
+          rownames(expected_iris) <- NULL
+          testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
+          testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+
+          expected_mtcars <- subset(mtcars, cyl == 6)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+
+          expected_code <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars",
+              "",
+              'iris <- dplyr::filter(iris, Species == "versicolor")',
+              "mtcars <- dplyr::filter(mtcars, cyl == 6)"
+            ),
+            collapse = "\n"
+          )
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
+        }
+      )
+    })
+
+    testthat::it("change in the slicesGlobal causes module's data filtering", {
+      existing_filters <- teal_slices(
+        teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+        teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)
+      )
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          filter = existing_filters,
+          modules = modules(module("module_1", server = function(id, data) data))
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          slices_global$slices_set(
+            teal_slices(
+              teal_slice("mtcars", varname = "cyl", selected = "4")
+            )
+          )
+          session$flushReact()
+          # iris is not active
+          testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+          testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+          # mtcars has been modified
+          expected_mtcars <- subset(mtcars, cyl == 4)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+
+          expected_code <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "iris_raw <- iris",
+              "mtcars_raw <- mtcars",
+              "",
+              "mtcars <- dplyr::filter(mtcars, cyl == 4)"
+            ),
+            collapse = "\n"
+          )
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
+        }
+      )
+    })
+
+    testthat::it("modules receive reactive data based on old and added filter", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), mtcars <- mtcars)),
+          filter = teal_slices(
+            teal_slice(dataname = "mtcars", varname = "cyl", selected = 4)
+          ),
+          modules = modules(module("module_1", server = function(id, data) data))
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          slices_global$slices_append(
+            teal_slices(teal_slice(dataname = "mtcars", varname = "mpg", selected = c(25, Inf)))
+          )
+          slices_global$slices_active(list(global_filters = c("mtcars cyl", "mtcars mpg")))
+          session$flushReact()
+          expected_mtcars <- subset(mtcars, cyl == 4 & mpg >= 25)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+
+          expected_code <- paste0(
+            c(
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              "mtcars_raw <- mtcars",
+              "",
+              "mtcars <- dplyr::filter(mtcars, cyl == 4 & (mpg >= 25 & mpg <= 34))"
+            ),
+            collapse = "\n"
+          )
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
+        }
+      )
+    })
+
+    testthat::it("filter is applied to the teal_module's data only if the tab is selected", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          modules = modules(
+            module("module_1", server = function(id, data) data),
+            module("module_2", server = function(id, data) data)
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          session$setInputs(`teal_modules-active_tab` = "module_2")
+          slices_global$slices_set(
+            teal_slices(teal_slice(dataname = "mtcars", varname = "cyl", selected = 6))
+          )
+          session$flushReact()
+
+          testthat::expect_identical(modules_output$module_2()()[["mtcars"]], subset(mtcars, cyl == 6))
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], subset(mtcars, cyl == 6))
+        }
+      )
+    })
+
+    testthat::it("added slice to slices_global is applied to module only mapping is set", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          modules = modules(module("module_1", server = function(id, data) data))
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          new_slices <- teal_slices(
+            teal_slice(dataname = "mtcars", varname = "cyl", selected = "4"),
+            mapping = list()
+          )
+          slices_global$slices_set(new_slices)
+          session$flushReact()
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], mtcars)
+
+          attr(new_slices, "mapping")$module_1 <- c("mtcars cyl")
+          slices_global$slices_set(new_slices)
+          session$flushReact()
+          testthat::expect_identical(modules_output$module_1()()[["mtcars"]], subset(mtcars, cyl == 4))
+        }
+      )
+    })
+  })
+
+  testthat::describe("filters module-specific", {
+    testthat::it("resolves attr(slices_global, 'mapping')$global_filters to modules' labels when module_specific", {
+      init_filter <- teal_slices(
+        teal_slice("iris", "Species"),
+        teal_slice("mtcars", "cyl"),
+        mapping = list(global_filters = c("iris Species", "mtcars cyl")),
+        module_specific = TRUE
+      )
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+          modules = modules(example_module(label = "module-1"), example_module(label = "module-2")),
+          filter = init_filter
+        ),
+        expr = {
+          testthat::expect_identical(
+            attr(slices_global$all_slices(), "mapping"),
+            list(
+              `module-1` = c("iris Species", "mtcars cyl"),
+              `module-2` = c("iris Species", "mtcars cyl")
+            )
+          )
+        }
+      )
+    })
   })
 })
 
@@ -1538,25 +2045,27 @@ testthat::describe("srv_teal filter manager", {
 
 testthat::describe("srv_teal snapshot manager", {
   testthat::it("clicking reset button restores initial filters state", {
-    initial_slices <- teal_slices(
-      teal_slice("iris", "Species"),
-      teal_slice("mtcars", "cyl")
-    )
     shiny::testServer(
       app = srv_teal,
       args = list(
         id = "test",
         data = teal.data::teal_data(iris = iris, mtcars = mtcars),
         modules = modules(module("module_1", server = function(id, data) data)),
-        filter = initial_slices
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          teal_slice("mtcars", "cyl")
+        )
       ),
       expr = {
+        initial_slices <- slices_global$all_slices()
         session$setInputs("teal_modules-active_tab" = "module_1")
         slices_global$slices_set(teal_slices())
+        session$flushReact()
         session$setInputs("snapshot_manager_panel-module-snapshot_reset" = TRUE)
         session$flushReact()
         testthat::expect_identical(
-          as.list(slices_global$all_slices()), as.list(initial_slices)
+          attr(slices_global$all_slices(), "mapping"),
+          attr(initial_slices, "mapping")
         )
       }
     )

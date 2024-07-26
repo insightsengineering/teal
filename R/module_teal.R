@@ -185,7 +185,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     }
 
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
-    slices_global <- slicesGlobal$new(filter, module_labels)
+    slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
       id = "teal_modules",
       data_rv = data_rv,
