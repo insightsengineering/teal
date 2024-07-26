@@ -154,7 +154,6 @@ testthat::describe("srv_teal arguments", {
   })
 })
 
-# teal_module --------
 testthat::describe("srv_teal teal_modules", {
   testthat::it("are not called by default", {
     shiny::testServer(
@@ -482,8 +481,8 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("is called and receives data if datanames in `teal_data` are not sufficient", {
-    data <- teal_data(iris = iris, mtcars = mtcars)
+  testthat::it("is called and receives data even if datanames in `teal_data` are not sufficient", {
+    data <- teal_data(iris = iris)
     teal.data::datanames(data) <- "iris"
 
     shiny::testServer(
@@ -492,11 +491,12 @@ testthat::describe("srv_teal teal_modules", {
         id = "test",
         data = reactive(data),
         modules = modules(
-          module("module_1", server = function(id, data) data)
+          module("module_1", server = function(id, data) data, datanames = c("iris", "mtcars"))
         )
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), "iris")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
       }
