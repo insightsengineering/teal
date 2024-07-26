@@ -97,6 +97,7 @@ ui_teal <- function(id,
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
     tags$div(
+      id = ns("teal_body"),
       class = "teal-body",
       tabs_elem
     ),
@@ -107,7 +108,7 @@ ui_teal <- function(id,
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
         href = "javascript:void(0)",
-        onclick = "toggleFilterPanel();", # see sidebar.js
+        onclick = sprintf("toggleFilterPanel('%s');", ns("teal_body")),
         title = "Toggle filter panel",
         icon("fas fa-bars")
       ),

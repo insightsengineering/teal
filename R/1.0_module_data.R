@@ -39,6 +39,7 @@ NULL
 ui_data <- function(id, data, title, header, footer) {
   ns <- shiny::NS(id)
   shiny::div(
+    id = ns("teal_data_body"),
     style = "display: inline-block;",
     if (inherits(data, "teal_data_module")) {
       ui_teal_data_module(ns("teal_data_module"), transformer = data)
@@ -80,13 +81,12 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     }
 
     if (inherits(data, "teal_data_module")) {
-      shinyjs::disable(selector = ".teal-body .nav li a")
-      shinyjs::click(id = "open_teal_data_module")
+      shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("teal_data_body")))
     }
 
     observeEvent(data_validated(), {
       showNotification("Data loaded successfully.", duration = 5)
-      shinyjs::enable(selector = ".teal-body .nav li a")
+      shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("teal_data_body")))
 
       is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data_validated()))
       if (!isTRUE(is_filter_ok)) {
