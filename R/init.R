@@ -154,7 +154,7 @@ init <- function(data,
   teal.logger::log_system_info()
 
   # invoke lockfile creation
-  process <- teal_lockfile_invoke()
+  lockfile_process <- teal_lockfile()
 
   # argument transformations
   ## `modules` - landing module
@@ -231,7 +231,11 @@ init <- function(data,
       if (!is.null(landing_module)) {
         do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
       }
-      teal_lockfile_tracker(process)
+
+      if (!is.null(lockfile_process)) {
+        teal_lockfile_process_tracker(lockfile_process)
+      }
+
       srv_teal_with_splash(id = id, data = data, modules = modules, filter = deep_copy_filter(filter))
     }
   )

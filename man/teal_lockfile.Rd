@@ -2,25 +2,29 @@
 % Please edit documentation in R/teal_lockfile.R
 \name{teal_lockfile}
 \alias{teal_lockfile}
-\alias{teal_lockfile_invoke}
+\alias{teal_lockfile_external}
+\alias{teal_lockfile_process_invoke}
 \alias{renv_snapshot}
-\alias{teal_lockfile_tracker}
-\alias{teal_lockfile_handler}
+\alias{teal_lockfile_process_tracker}
 \alias{teal_lockfile_downloadhandler}
 \title{Generate lockfile for application's environment reproducibility}
 \usage{
-teal_lockfile_invoke()
+teal_lockfile()
 
-renv_snapshot(lockfile_path = NULL, opts, sysenv, libpaths, wd)
+teal_lockfile_external()
 
-teal_lockfile_tracker(process)
+teal_lockfile_process_invoke()
 
-teal_lockfile_handler(process)
+renv_snapshot(lockfile_path)
+
+teal_lockfile_process_tracker(process)
 
 teal_lockfile_downloadhandler()
 }
 \arguments{
 \item{lockfile_path}{(\code{character}) path to the lockfile (\code{"teal_app.lock"}).}
+
+\item{process}{(\code{mirai}) process to track the status of the lockfile creation.}
 
 \item{opts}{(\code{list}) options to be set in the \code{\link[mirai:daemon]{mirai::daemon()}}.}
 
@@ -29,8 +33,6 @@ teal_lockfile_downloadhandler()
 \item{libpaths}{(\code{character}) library paths to be set in the \code{\link[mirai:daemon]{mirai::daemon()}}.}
 
 \item{wd}{(\code{character(1)}) working directory to be set in the \code{\link[mirai:daemon]{mirai::daemon()}}.}
-
-\item{process}{(\code{mirai}) process to track the status of the lockfile creation.}
 }
 \value{
 \code{ExtendedTask} processing \code{renv} lockfile or \code{NULL} if lockfile has been provided through options
