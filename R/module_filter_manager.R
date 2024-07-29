@@ -237,6 +237,8 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
 methods::setOldClass("reactiveVal")
 methods::setOldClass("reactivevalues")
 
+
+#' @importFrom methods new
 #' @rdname module_filter_manager
 #' @keywords internal
 .slicesGlobal <- methods::setRefClass(".slicesGlobal",
