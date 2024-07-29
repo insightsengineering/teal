@@ -65,6 +65,8 @@ transform_list <<- list(
   )
 )
 
+setdiff_teal_slices <<- getFromNamespace("setdiff_teal_slices", "teal")
+
 testthat::describe("srv_teal arguments", {
   testthat::it("accepts data to be teal_data", {
     testthat::expect_no_error(
