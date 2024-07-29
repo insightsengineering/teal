@@ -1,20 +1,30 @@
 #' Filter panel module in teal
 #'
-#' Reactive filter panel module in teal
+#' Creates filter panel module from `teal_data` object and returns `teal_data`. It is build in a way
+#' that filter panel changes and anything what happens before (e.g. [`module_data`]) is triggering
+#' further reactive events only if something has changed and if the module is visible. Thanks to
+#' this special implementation all modules' data are recalculated only for those modules which are
+#' currently displayed.
+#'
+#' @return A `eventReactive` which triggers only if all conditions are met:
+#'  - tab is selected (`is_active`)
+#'  - when filters are changed (`get_filter_expr` is different than previous)
 #'
 #' @inheritParams module_teal_module
-#' @param active_datanames (`reactive` returning `character`) this module's `datanames`
-#' @name filter_panel
+#' @param active_datanames (`reactive` returning `character`) this module's data names
+#' @name module_filter_panel
 #' @keywords internal
 NULL
 
-#' @rdname filter_panel
+#' @keywords internal
+#' @rdname module_filter_panel
 ui_filter_panel <- function(id) {
   ns <- shiny::NS(id)
   uiOutput(ns("panel"))
 }
 
-#' @rdname filter_panel
+#' @keywords internal
+#' @rdname module_filter_panel
 srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active) {
   checkmate::assert_class(datasets, "reactive")
   moduleServer(id, function(input, output, session) {
@@ -39,7 +49,8 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
   })
 }
 
-#' @rdname filter_panel
+#' @keywords internal
+#' @rdname module_filter_panel
 .make_teal_data <- function(modules, data, datasets = NULL, datanames) {
   new_datasets <- c(
     # Filtered data
@@ -70,14 +81,7 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
   tdata
 }
 
-#' Trigger only active module when filter is changed
-#'
-#' Creates a trigger to limit reactivity between filter-panel and modules. We want to recalculate
-#'  only active (currently visible) modules. `trigger_data` triggers only if all conditions are met:
-#'  - tab is selected (`is_active`)
-#'  - when filters are changed (`get_filter_expr` is different than previous)
-
-#' @return A `reactiveVal` which is triggered when filter is changed and this module is selected.
+#' @rdname module_filter_panel
 #' @keywords internal
 .observe_active_filter_changed <- function(datasets, is_active, active_datanames, data_rv) {
   previous_signature <- reactiveVal(NULL)
