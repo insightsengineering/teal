@@ -83,6 +83,7 @@ ui_teal <- function(id,
     )
   )
 
+  bookmark_panel_ui <- ui_bookmark_panel(ns("bookmark_manager"), modules)
   data_elem <- ui_data(ns("data"), data = data, title = title, header = header, footer = footer)
   if (!is.null(data)) {
     modules$children <- c(list(teal_data_module = data_elem), modules$children)
@@ -104,7 +105,7 @@ ui_teal <- function(id,
     tags$div(
       id = ns("options_buttons"),
       style = "margin-left: auto;",
-      ui_bookmark_panel(ns("bookmark_manager"), modules),
+      bookmark_panel_ui,
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
         href = "javascript:void(0)",
