@@ -50,7 +50,7 @@ ui_bookmark_panel <- function(id, modules) {
 
   bookmark_option <- get_bookmarking_option()
   is_unbookmarkable <- need_bookmarking(modules)
-  if (!inherits(session, "session_proxy")) shinyOptions(bookmarkStore = bookmark_option)
+  shinyOptions(bookmarkStore = bookmark_option)
 
   # Render bookmark warnings count
   if (!all(is_unbookmarkable) && identical(bookmark_option, "server")) {
