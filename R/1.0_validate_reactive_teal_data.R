@@ -6,10 +6,10 @@
 #' - `reactive` throws a `shiny.error` - happens when module creating [teal_data()] fails.
 #' - `reactive` returns `qenv.error` - happens when [teal_data()] evaluates a failing code.
 #' - `reactive` object doesn't return [teal_data()].
-#' - [teal_data()] object lacks any datanames specified in the `modules` argument.
+#' - [teal_data()] object lacks any `datanames` specified in the `modules` argument.
 #'
 #' Any errors or warnings are displayed in the app pointing out to the reason of failure.
-#' In all above, reactive cycle is halted and `teal` doesn't continue sending data further. On init,
+#' In all above, reactive cycle is halted and `teal` doesn't continue sending data further. On `init`,
 #' halting reactive cycle stops an app load, while on subsequent reactive cycles, data just remains
 #' unchanged and user is able to continue using the app.
 #'
@@ -32,7 +32,7 @@ ui_validate_reactive_teal_data <- function(id) {
 #' @rdname validate_reactive_teal_data
 #' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
 #' error message is displayed.
-#' Default is `FALSE` to handle empty reactive cycle on init.
+#' Default is `FALSE` to handle empty reactive cycle on `init`.
 #' @keywords internal
 srv_validate_reactive_teal_data <- function(id, # nolint: object_length
                                             data,

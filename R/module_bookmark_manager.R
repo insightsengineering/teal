@@ -50,7 +50,6 @@ ui_bookmark_panel <- function(id, modules) {
 
   bookmark_option <- get_bookmarking_option()
   is_unbookmarkable <- need_bookmarking(modules)
-  # option alone doesn't activate bookmarking - we need to set shinyOptions
   shinyOptions(bookmarkStore = bookmark_option)
 
   # Render bookmark warnings count

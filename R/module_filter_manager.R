@@ -23,7 +23,7 @@
 #' @section Filter manager:
 #' Filter-manager is split into two parts:
 #' 1. `ui/srv_filter_manager_panel` - Called once for the whole app. This module observes changes in
-#' the filters in `slices_global` and displays them in a table utilising information from `mapping`:
+#' the filters in `slices_global` and displays them in a table utilizing information from `mapping`:
 #'   - &#9989; (`TRUE`) - filter is active in the module
 #'   - &#10060; (`FALSE`) - filter is inactive in the module
 #'   - &#128306; (`NA`) - filter is not available in the module
@@ -44,6 +44,7 @@
 #' @return
 #' Module returns a `slices_global` (`reactiveVal`) containing a `teal_slices` object with mapping.
 #'
+#' @name module_filter_manager
 #' @rdname module_filter_manager
 #'
 NULL
@@ -158,7 +159,6 @@ srv_filter_manager <- function(id, slices_global) {
         }
         mm
       },
-      # align = paste(c("l", rep("c", sum(module_labels != "Report previewer"))), collapse = ""),
       rownames = TRUE
     )
 
@@ -236,9 +236,11 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
 methods::setOldClass("reactiveVal")
 methods::setOldClass("reactivevalues")
 
+
+#' @importFrom methods new
 #' @rdname module_filter_manager
 #' @keywords internal
-.slicesGlobal <- methods::setRefClass(".slicesGlobal",
+.slicesGlobal <- methods::setRefClass(".slicesGlobal", # nolint
   fields = list(
     all_slices = "reactiveVal",
     module_slices_api = "reactivevalues"

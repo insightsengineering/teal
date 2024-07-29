@@ -96,6 +96,7 @@ reference:
     contents:
       - init
       - teal_data_module
+      - module_teal
       - module
       - modules
       - teal_slices

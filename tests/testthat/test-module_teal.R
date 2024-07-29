@@ -1,12 +1,12 @@
 # comment: srv_teal is exported so the tests here are extensive and cover srv_data as well.
 #          testing of srv_data is not needed.
-module_output_table <- function(output, id) {
+module_output_table <<- function(output, id) {
   table_id <- sprintf("teal_modules-%s-data_summary-table", id)
   html <- output[[table_id]]$html
   as.data.frame(rvest::html_table(rvest::read_html(html), header = TRUE)[[1]])
 }
 
-is_slices_equivalent <- function(x, y, with_attrs = TRUE) {
+is_slices_equivalent <<- function(x, y, with_attrs = TRUE) {
   x_list <- as.list(x, recursive = TRUE)
   y_list <- as.list(y, recursive = TRUE)
   attributes(x_list) <- NULL
@@ -18,7 +18,7 @@ is_slices_equivalent <- function(x, y, with_attrs = TRUE) {
   identical(x_list, y_list)
 }
 
-transform_list <- list(
+transform_list <<- list(
   fail = teal_data_module(
     ui = function(id) NULL,
     server = function(id, data) {
@@ -64,6 +64,8 @@ transform_list <- list(
     }
   )
 )
+
+setdiff_teal_slices <<- getFromNamespace("setdiff_teal_slices", "teal")
 
 testthat::describe("srv_teal arguments", {
   testthat::it("accepts data to be teal_data", {
