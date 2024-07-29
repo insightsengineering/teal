@@ -159,7 +159,6 @@ srv_filter_manager <- function(id, slices_global) {
         }
         mm
       },
-      # align = paste(c("l", rep("c", sum(module_labels != "Report previewer"))), collapse = ""),
       rownames = TRUE
     )
 
@@ -241,7 +240,7 @@ methods::setOldClass("reactivevalues")
 #' @importFrom methods new
 #' @rdname module_filter_manager
 #' @keywords internal
-.slicesGlobal <- methods::setRefClass(".slicesGlobal",
+.slicesGlobal <- methods::setRefClass(".slicesGlobal", # nolint
   fields = list(
     all_slices = "reactiveVal",
     module_slices_api = "reactivevalues"
