@@ -36,6 +36,30 @@ testthat::test_that("e2e: data summary is displayed with 2 columns data without 
   app$stop()
 })
 
+testthat::test_that("e2e: data summary displays datasets by topological_sort of join_keys", {
+  skip_if_too_deep(5)
+
+  data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
+
+  teal.data::join_keys(data) <- teal.data::join_keys(
+    teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
+  )
+
+  app <- TealAppDriver$new(
+    data = data,
+    modules = example_module()
+  )
+
+  testthat::expect_identical(
+    testthat::expect_identical(
+      as.data.frame(app$get_active_data_summary_table())[["Data Name"]],
+      c("mtcars2", "mtcars1")
+    )
+  )
+
+  app$stop()
+})
+
 testthat::test_that("e2e: data summary is displayed with 3 columns for data with join keys", {
   skip_if_too_deep(5)
 
@@ -53,9 +77,9 @@ testthat::test_that("e2e: data summary is displayed with 3 columns for data with
   testthat::expect_identical(
     as.data.frame(app$get_active_data_summary_table()),
     data.frame(
-      `Data Name` = c("mtcars1", "mtcars2"),
-      Obs = c("32/32", "2/2"),
-      Subjects = c("2/2", "2/2"),
+      `Data Name` = c("mtcars2", "mtcars1"),
+      Obs = c("2/2", "32/32"),
+      Subjects = c("", "2/2"),
       check.names = FALSE
     )
   )
@@ -97,10 +121,10 @@ testthat::test_that(
       data.frame(
         `Data Name` = c(
           "CO2", "iris", "miniACC", "- RNASeq2GeneNorm", "- gistict", "- RPPAArray", "- Mutations", "- miRNASeqGene",
-          "mtcars1", "mtcars2", "factors"
+          "mtcars2", "mtcars1", "factors"
         ),
-        Obs = c("84/84", "150/150", "", "198/198", "198/198", "33/33", "97/97", "471/471", "32/32", "2/2", ""),
-        Subjects = c("", "", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "2/2", "2/2", ""),
+        Obs = c("84/84", "150/150", "", "198/198", "198/198", "33/33", "97/97", "471/471", "2/2", "32/32", ""),
+        Subjects = c("", "", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "", "2/2", ""),
         check.names = FALSE
       )
     )
@@ -108,3 +132,21 @@ testthat::test_that(
     app$stop()
   }
 )
+
+testthat::test_that("e2e: data summary displays datasets by datanames() order if no join_keys", {
+  skip_if_too_deep(5)
+
+  data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
+
+  app <- TealAppDriver$new(
+    data = data,
+    modules = example_module()
+  )
+
+  testthat::expect_identical(
+    as.data.frame(app$get_active_data_summary_table())[["Data Name"]],
+    c("mtcars1", "mtcars2")
+  )
+
+  app$stop()
+})

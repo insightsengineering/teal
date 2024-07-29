@@ -140,8 +140,17 @@ get_filter_overview <- function(teal_data) {
     simplify = FALSE
   )
 
-  rows <- lapply(
+  child_parent <- sapply(
     datanames,
+    function(i) teal.data::parent(joinkeys, i),
+    USE.NAMES = TRUE,
+    simplify = FALSE
+  )
+  ordered_datanames <- topological_sort(child_parent)
+  ordered_datanames <- intersect(ordered_datanames, datanames)
+
+  rows <- lapply(
+    ordered_datanames,
     function(dataname) {
       parent <- teal.data::parent(joinkeys, dataname)
 
@@ -149,7 +158,6 @@ get_filter_overview <- function(teal_data) {
       #     - Obs and Subjects
       #     - Obs only
       #     - Subjects only
-      # todo: summary table should be ordered by topological order
       # todo (for later): summary table should be displayed in a way that child datasets
       #       are indented under their parent dataset to form a tree structure
       subject_keys <- if (length(parent) > 0) {
@@ -259,4 +267,18 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, # nol
 
   experiment_info <- cbind(experiment_obs_info[, c("dataname", "obs", "obs_filtered")], experiment_subjects_info)
   rbind(mae_info, experiment_info)
+}
+
+
+#' @inherit teal.data::topological_sort description details params title
+#' @examples
+#' # use non-exported function from teal.slice
+#' topological_sort <- getFromNamespace("topological_sort", "teal.slice")
+#'
+#' topological_sort(list(A = c(), B = c("A"), C = c("B"), D = c("A")))
+#' topological_sort(list(D = c("A"), A = c(), B = c("A"), C = c("B")))
+#' topological_sort(list(D = c("A"), B = c("A"), C = c("B"), A = c()))
+#' @keywords internal
+topological_sort <- function(graph) {
+  utils::getFromNamespace("topological_sort", ns = "teal.data")(graph)
 }
