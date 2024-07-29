@@ -4,32 +4,32 @@ resize is placed at end of functions
 b/c in embedded apps it will throw errors that cause the function to exit early
 */
 var filter_open = {};
-const hideSidebar = (teal_body) => {
-  $(`#${teal_body} .teal_secondary_col`).fadeOut(1);
-  $(`#${teal_body} .teal_primary_col`)
+const hideSidebar = (tabpanel_wrapper) => {
+  $(`#${tabpanel_wrapper} .teal_secondary_col`).fadeOut(1);
+  $(`#${tabpanel_wrapper} .teal_primary_col`)
     .removeClass("col-sm-9")
     .addClass("col-sm-12");
 };
-const showSidebar = (teal_body) => {
-  $(`#${teal_body} .teal_primary_col`)
+const showSidebar = (tabpanel_wrapper) => {
+  $(`#${tabpanel_wrapper} .teal_primary_col`)
     .removeClass("col-sm-12")
     .addClass("col-sm-9");
-  $(`#${teal_body} .teal_secondary_col`).fadeIn(650);
+  $(`#${tabpanel_wrapper} .teal_secondary_col`).fadeIn(650);
 };
-const toggleFilterPanel = (teal_body) => {
-  console.log(`#${teal_body} .teal_secondary_col`);
-  console.log(filter_open[teal_body] === undefined);
-  if (filter_open[teal_body] === undefined) {
-    filter_open[teal_body] = true;
+const toggleFilterPanel = (tabpanel_wrapper) => {
+  console.log(`#${tabpanel_wrapper} .teal_secondary_col`);
+  console.log(filter_open[tabpanel_wrapper] === undefined);
+  if (filter_open[tabpanel_wrapper] === undefined) {
+    filter_open[tabpanel_wrapper] = true;
   }
   if (
-    filter_open[teal_body] &&
-    !$(`#${teal_body} .teal_secondary_col`).is(":visible")
+    filter_open[tabpanel_wrapper] &&
+    !$(`#${tabpanel_wrapper} .teal_secondary_col`).is(":visible")
   ) {
-    showSidebar(teal_body);
+    showSidebar(tabpanel_wrapper);
     return;
   }
-  filter_open[teal_body] = !filter_open[teal_body];
-  if (filter_open[teal_body]) showSidebar(teal_body);
-  else hideSidebar(teal_body);
+  filter_open[tabpanel_wrapper] = !filter_open[tabpanel_wrapper];
+  if (filter_open[tabpanel_wrapper]) showSidebar(tabpanel_wrapper);
+  else hideSidebar(tabpanel_wrapper);
 };

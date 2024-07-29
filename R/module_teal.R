@@ -97,18 +97,18 @@ ui_teal <- function(id,
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
     tags$div(
-      id = ns("teal_body"),
+      id = ns("tabpanel_wrapper"),
       class = "teal-body",
       tabs_elem
     ),
     tags$div(
-      id = ns("teal-util-icons"),
+      id = ns("options_buttons"),
       style = "margin-left: auto;",
       ui_bookmark_panel(ns("bookmark_manager"), modules),
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
         href = "javascript:void(0)",
-        onclick = sprintf("toggleFilterPanel('%s');", ns("teal_body")),
+        onclick = sprintf("toggleFilterPanel('%s');", ns("tabpanel_wrapper")),
         title = "Toggle filter panel",
         icon("fas fa-bars")
       ),
@@ -123,7 +123,7 @@ ui_teal <- function(id,
               $('#%s').appendTo('#%s');
             });
           ",
-          ns("teal-util-icons"),
+          ns("options_buttons"),
           ns("teal_modules-active_tab")
         )
       )
@@ -205,8 +205,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
     srv_bookmark_panel("bookmark_manager", modules)
 
-    if (inherits(data, "teal_data_module")) {
-      setBookmarkExclude(c("teal_modules-active_tab"))
-    }
+    # if (inherits(data, "teal_data_module")) {
+    #   setBookmarkExclude(c("teal_modules-active_tab"))
+    # }
   })
 }

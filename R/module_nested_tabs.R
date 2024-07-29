@@ -169,6 +169,12 @@ srv_teal_module.teal_modules <- function(id,
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
+    observeEvent(input$active_tab, once = TRUE, {
+      if (input$active_tab == "teal_data_module") {
+        setBookmarkExclude("active_tab")
+      }
+    })
+
     modules_output <- sapply(
       names(modules$children),
       function(module_id) {

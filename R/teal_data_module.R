@@ -23,9 +23,10 @@
 #'  must return reactive expression containing `teal_data` object
 #' @param label (`character(1)`) Label of the module.
 #' @param once (`logical(1)`) Applicable only when used in the `data` argument of `init`.
-#'  If `TRUE`, the data module can only be consumed once. After the successful consumption,
-#'  the data module tab will disappear and the user will not be able to interact with the UI of the module.
-#'  The common usecase for using `once` as `TRUE` is when `teal_data_module` is used for authentication.
+#'  If `TRUE`, the data module will be shown only once and will disappear after successful data loading.
+#'  App user will no longer be able to interact with this module anymore.
+#'  If `FALSE`, the data module can be reused multiple times.
+#'  App user will be able to interact and change the data output from the module multiple times.
 #'
 #' @return
 #' `teal_data_module` returns an object of class `teal_data_module`.

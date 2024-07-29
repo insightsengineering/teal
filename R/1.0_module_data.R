@@ -39,7 +39,7 @@ NULL
 ui_data <- function(id, data, title, header, footer) {
   ns <- shiny::NS(id)
   shiny::div(
-    id = ns("teal_data_body"),
+    id = ns("content"),
     style = "display: inline-block;",
     if (inherits(data, "teal_data_module")) {
       ui_teal_data_module(ns("teal_data_module"), transformer = data)
@@ -81,25 +81,25 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     }
 
     if (inherits(data, "teal_data_module")) {
-      shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("teal_data_body")))
+      shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
     }
 
     observeEvent(data_validated(), {
       showNotification("Data loaded successfully.", duration = 5)
-      shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("teal_data_body")))
+      shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
       if (isTRUE(attr(data, "once"))) {
         # Hiding the data module tab.
         shinyjs::hide(
           selector = sprintf(
             ".teal-body:has('#%s') a[data-value='teal_data_module']",
-            session$ns("teal_data_body")
+            session$ns("content")
           )
         )
         # Clicking the second tab, which is the first module.
         shinyjs::runjs(
           sprintf(
             "document.querySelector('.teal-body:has(#%s) .nav li:nth-child(2) a').click();",
-            session$ns("teal_data_body")
+            session$ns("content")
           )
         )
       }
