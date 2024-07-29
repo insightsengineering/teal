@@ -13,8 +13,8 @@ A \code{reactiveVal} which is triggered when filter is changed and this module i
 Creates a trigger to limit reactivity between filter-panel and modules. We want to recalculate
 only active (currently visible) modules. \code{trigger_data} triggers only if all conditions are met:
 \itemize{
-\item tab is selected (is_active)
-\item when filters are changed (get_filter_expr is different than previous)
+\item tab is selected (\code{is_active})
+\item when filters are changed (\code{get_filter_expr} is different than previous)
 }
 }
 \keyword{internal}

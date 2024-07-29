@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.0_module_data.R
 \name{.add_signature_to_data}
 \alias{.add_signature_to_data}
-\title{Adds signature protection to the datanames in the data}
+\title{Adds signature protection to the \code{datanames} in the data}
 \usage{
 .add_signature_to_data(data)
 }
@@ -10,9 +10,9 @@
 \item{data}{(\code{teal_data})}
 }
 \value{
-\code{teal_data} with additional code that has signature of the datanames
+\code{teal_data} with additional code that has signature of the \code{datanames}
 }
 \description{
-Adds signature protection to the datanames in the data
+Adds signature protection to the \code{datanames} in the data
 }
 \keyword{internal}

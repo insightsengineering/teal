@@ -3,7 +3,7 @@
 #' Reactive filter panel module in teal
 #'
 #' @inheritParams module_teal_module
-#' @param active_datanames (`reactive` returning `character`) this module's datanames
+#' @param active_datanames (`reactive` returning `character`) this module's `datanames`
 #' @name filter_panel
 #' @keywords internal
 NULL
@@ -74,8 +74,8 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
 #'
 #' Creates a trigger to limit reactivity between filter-panel and modules. We want to recalculate
 #'  only active (currently visible) modules. `trigger_data` triggers only if all conditions are met:
-#'  - tab is selected (is_active)
-#'  - when filters are changed (get_filter_expr is different than previous)
+#'  - tab is selected (`is_active`)
+#'  - when filters are changed (`get_filter_expr` is different than previous)
 
 #' @return A `reactiveVal` which is triggered when filter is changed and this module is selected.
 #' @keywords internal

@@ -22,7 +22,7 @@ rather than a standalone \code{shiny} app. This is a legacy feature.}
 When \code{datasets} is passed from the parent module (\code{srv_teal}) then \code{dataset} is a singleton
 which implies in filter-panel to be "global". When \code{NULL} then filter-panel is "module-specific".}
 
-\item{active_datanames}{(\code{reactive} returning \code{character}) this module's datanames}
+\item{active_datanames}{(\code{reactive} returning \code{character}) this module's \code{datanames}}
 
 \item{data_rv}{(\code{reactive} returning \code{teal_data})}
 

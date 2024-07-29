@@ -67,7 +67,7 @@ to \code{SlicesGlobal} which updates \code{attr(, "mapping")} accordingly.
 Filter-manager is split into two parts:
 \enumerate{
 \item \code{ui/srv_filter_manager_panel} - Called once for the whole app. This module observes changes in
-the filters in \code{slices_global} and displays them in a table utilising information from \code{mapping}:
+the filters in \code{slices_global} and displays them in a table utilizing information from \code{mapping}:
 }
 \itemize{
 \item ✅ (\code{TRUE}) - filter is active in the module

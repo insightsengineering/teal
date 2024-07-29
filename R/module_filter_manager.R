@@ -23,7 +23,7 @@
 #' @section Filter manager:
 #' Filter-manager is split into two parts:
 #' 1. `ui/srv_filter_manager_panel` - Called once for the whole app. This module observes changes in
-#' the filters in `slices_global` and displays them in a table utilising information from `mapping`:
+#' the filters in `slices_global` and displays them in a table utilizing information from `mapping`:
 #'   - &#9989; (`TRUE`) - filter is active in the module
 #'   - &#10060; (`FALSE`) - filter is inactive in the module
 #'   - &#128306; (`NA`) - filter is not available in the module

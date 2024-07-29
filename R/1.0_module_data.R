@@ -142,9 +142,9 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
   })
 }
 
-#' Adds signature protection to the datanames in the data
+#' Adds signature protection to the `datanames` in the data
 #' @param data (`teal_data`)
-#' @return `teal_data` with additional code that has signature of the datanames
+#' @return `teal_data` with additional code that has signature of the `datanames`
 #' @keywords internal
 .add_signature_to_data <- function(data) {
   hashes <- .get_hashes_code(data)
@@ -171,7 +171,7 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
 #' Get code that tests the integrity of the reproducible data
 #'
 #' @param data (`teal_data`) object holding the data
-#' @param datanames (`character`) names of datasets
+#' @param datanames (`character`) names of `datasets`
 #'
 #' @return A character vector with the code lines.
 #' @keywords internal
