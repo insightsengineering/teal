@@ -4,14 +4,21 @@
 #' Oversee filter states across the entire application.
 #'
 #' @section Slices global:
-#' The key role in this process is played by the single `slices_global` (`reactiveVal`) object
-#' which stores all `teal_slice` objects and mapping to each module.
-#' `slices_global` is created by `.make_slices_global` function which in the same time resolves
-#' `attr("mapping")` to keep it consistent for filter manager:
-#' - list contains elements named after modules' labels containing `id` of active slices. Initially,
-#' app developer can specify mapping for some modules, and `make_slices_global` includes unspecified
-#' modules in the mapping list.
-#' - element `global_filters` in the mapping list is removed in favour of module slots.
+#' The key role in maintaining the module-specific filter states is played by the `.slicesGlobal`
+#' object. It is a reference class that holds the following fields:
+#' - `all_slices` (`reactiveVal`) - reactive value containing all filters registered in an app.
+#' - `module_slices_api` (`reactiveValues`) - reactive field containing references to each modules'
+#' `FilteredData` object methods. At this moment it is used only in `srv_filter_manager` to display
+#' the filter states in a table combining informations from `all_slices` and from
+#' `FilteredData$get_available_teal_slices()`.
+#'
+#' During a session only new filters are added to `all_slices` unless [`module_snapshot_manager`] is
+#' used to restore previous state. Filters from `all_slices` can be activated or deactivated in a
+#' module which is linked (both ways) by `attr(, "mapping")` so that:
+#' - If module's filter is added or removed in its `FilteredData` object, this information is passed
+#'   to `SlicesGlobal` which updates `attr(, "mapping")` accordingly.
+#' - When mapping changes in a `SlicesGlobal`, filters are set or removed from module's
+#'  `FilteredData`.
 #'
 #' @section Filter manager:
 #' Filter-manager is split into two parts:
@@ -34,14 +41,10 @@
 #' @param module_fd (`FilteredData`)
 #'   Object containing the data to be filtered in a single `teal` module.
 #'
-#' @param filter (`teal_slices`)
-#'   initial `teal` filter settings.
-#'
 #' @return
 #' Module returns a `slices_global` (`reactiveVal`) containing a `teal_slices` object with mapping.
 #'
-#' @name module_filter_manager
-#' @aliases filter_manager slices_global
+#' @rdname module_filter_manager
 #'
 NULL
 
@@ -61,8 +64,7 @@ ui_filter_manager_panel <- function(id) {
 #' @keywords internal
 srv_filter_manager_panel <- function(id, slices_global) {
   checkmate::assert_string(id)
-  checkmate::assert_class(slices_global, "reactiveVal")
-  checkmate::assert_class(isolate(slices_global()), "teal_slices")
+  checkmate::assert_class(slices_global, ".slicesGlobal")
   moduleServer(id, function(input, output, session) {
     setBookmarkExclude(c("show_filter_manager"))
     observeEvent(input$show_filter_manager, {
@@ -97,8 +99,7 @@ ui_filter_manager <- function(id) {
 #' @keywords internal
 srv_filter_manager <- function(id, slices_global) {
   checkmate::assert_string(id)
-  checkmate::assert_class(slices_global, "reactiveVal")
-  checkmate::assert_class(isolate(slices_global()), "teal_slices")
+  checkmate::assert_class(slices_global, ".slicesGlobal")
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("filter_manager_srv initializing.")
@@ -107,37 +108,35 @@ srv_filter_manager <- function(id, slices_global) {
     session$onBookmark(function(state) {
       logger::log_debug("filter_manager_srv@onBookmark: storing filter state")
       state$values$filter_state_on_bookmark <- as.list(
-        slices_global(),
+        slices_global$all_slices(),
         recursive = TRUE
       )
     })
 
     mapping_table <- reactive({
-      # We want this to be reactive on slices_global() only as get_available_teal_slices()
-      #   is dependent on slices_global().
-      is_global <- !isTRUE(attr(slices_global(), "module_specific"))
+      # We want this to be reactive on slices_global$all_slices() only as get_available_teal_slices()
+      #   is dependent on slices_global$all_slices().
       module_labels <- setdiff(
-        names(attr(slices_global(), "mapping")),
+        names(attr(slices_global$all_slices(), "mapping")),
         "Report previewer"
       )
       isolate({
         mm <- as.data.frame(
-          lapply(
-            if (is_global) module_labels[1] else module_labels,
+          sapply(
+            module_labels,
+            simplify = FALSE,
             function(module_label) {
-              available_slices <- session$userData$module_slices_api[[module_label]]$get_available_teal_slices()
-              global_ids <- sapply(slices_global(), `[[`, "id", simplify = FALSE)
-              module_ids <- unlist(attr(slices_global(), "mapping")[module_label])
-              ids_active <- global_ids %in% module_ids
-              ids_allowed <- vapply(available_slices, `[[`, character(1L), "id")
-              setNames(
-                ifelse(global_ids %in% ids_allowed, ids_active, NA),
-                global_ids
-              )
+              available_slices <- slices_global$module_slices_api[[module_label]]$get_available_teal_slices()
+              global_ids <- sapply(slices_global$all_slices(), `[[`, "id", simplify = FALSE)
+              module_ids <- sapply(slices_global$slices_get(module_label), `[[`, "id", simplify = FALSE)
+              allowed_ids <- vapply(available_slices, `[[`, character(1L), "id")
+              active_ids <- global_ids %in% module_ids
+              setNames(nm = global_ids, ifelse(global_ids %in% allowed_ids, active_ids, NA))
             }
-          )
+          ),
+          check.names = FALSE
         )
-        colnames(mm) <- if (is_global) "Global filters" else module_labels
+        colnames(mm)[colnames(mm) == "global_filters"] <- "Global filters"
 
         mm
       })
@@ -172,14 +171,13 @@ srv_filter_manager <- function(id, slices_global) {
 srv_module_filter_manager <- function(id, module_fd, slices_global) {
   checkmate::assert_string(id)
   checkmate::assert_class(module_fd, "reactive")
-  checkmate::assert_class(slices_global, "reactiveVal")
-  checkmate::assert_class(isolate(slices_global()), "teal_slices")
+  checkmate::assert_class(slices_global, ".slicesGlobal")
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_module_filter_manager initializing for module: { id }.")
     # Track filter global and local states.
     slices_global_module <- reactive({
-      .filter_module_slices(module_label = id, slices = slices_global())
+      slices_global$slices_get(module_label = id)
     })
     slices_module <- reactive(req(module_fd())$get_filter_state())
 
@@ -194,49 +192,26 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
       module_fd()$set_filter_state(slices)
 
       # irrelevant filters are discarded in FilteredData$set_available_teal_slices
-      # it means we don't need to subset slices_global() from filters refering to irrelevant datasets
-      module_fd()$set_available_teal_slices(slices_global)
+      # it means we don't need to subset slices_global$all_slices() from filters refering to irrelevant datasets
+      module_fd()$set_available_teal_slices(slices_global$all_slices)
 
       # this needed in filter_manager_srv
-      session$userData$module_slices_api[[id]] <- list(
-        # in the future we can add more methods to share information across modules
-        get_available_teal_slices = module_fd()$get_available_teal_slices(),
-        set_filter_state = module_fd()$set_filter_state
+      slices_global$module_slices_api_set(
+        id,
+        list(
+          get_available_teal_slices = module_fd()$get_available_teal_slices(),
+          set_filter_state = module_fd()$set_filter_state, # for testing purpose
+          get_filter_state = module_fd()$get_filter_state # for testing purpose
+        )
       )
     })
 
     # Update global state and mapping matrix when module filters change.
     obs2 <- observeEvent(slices_module(), priority = 0, {
-      # if is needed as c.teal_slices recreates an object.
-      # It means `c(slices)` is not identical to `slices`
-      global_ids <- vapply(slices_global(), `[[`, character(1L), "id")
-      new_slices <- setdiff_teal_slices(slices_module(), slices_global())
-      if (length(new_slices)) {
-        logger::log_debug("srv_module_filter_manager@2 new filter added to module: { id }. Updating slices_global.")
-        lapply(new_slices, function(slice) {
-          # In case the new state has the same id as an existing one, add a suffix
-          if (slice$id %in% global_ids) {
-            slice$id <- utils::tail(make.unique(c(global_ids, slice$id), sep = "_"), 1)
-          }
-        })
-        new_slices_global <- c(slices_global(), new_slices)
-        slices_global(new_slices_global)
-
-        # because new filters has been added we need to update global_ids variable
-        global_ids <- vapply(slices_global(), `[[`, character(1L), "id")
-      }
-
-      # Set ids of the filters in the mapping matrix for the module
-      module_ids <- vapply(slices_module(), `[[`, character(1L), "id")
-      mapping_matrix <- attr(slices_global(), "mapping")
-
-      if (!setequal(module_ids, mapping_matrix[[id]])) {
-        logger::log_debug("srv_module_filter_manager@2 updating filter mapping for module: { id }.")
-        mapping_matrix[[id]] <- module_ids
-        new_slices_global <- slices_global()
-        attr(new_slices_global, "mapping") <- mapping_matrix
-        slices_global(new_slices_global)
-      }
+      this_slices <- slices_module()
+      slices_global$slices_append(this_slices) # append new slices to the all_slices list
+      mapping_elem <- setNames(nm = id, list(vapply(this_slices, `[[`, character(1L), "id")))
+      slices_global$slices_active(mapping_elem)
     })
 
     obs3 <- observeEvent(slices_global_module(), {
@@ -257,69 +232,149 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
   })
 }
 
-#' @rdname module_filter_manager
-#' @keywords internal
-.make_slices_global <- function(filter, module_labels) {
-  checkmate::assert_class(filter, "teal_slices")
-  checkmate::assert_character(module_labels)
-  # Restore filter from bookmarked state, if applicable.
-  session <- shiny::getDefaultReactiveDomain()
-  filter_restored <- restoreValue(session$ns("filter_manager_panel-filter_manager-filter_state_on_bookmark"), filter)
-  if (!is.teal_slices(filter_restored)) {
-    filter_restored <- as.teal_slices(filter_restored)
-  }
-
-  # "global_filters" needs to be referenced in mapping to each module
-  filter_resolved <- .resolve_global_mapping(filter_restored, module_labels)
-
-  reactiveVal(filter_resolved)
-}
+#' @importFrom shiny reactiveVal reactiveValues
+methods::setOldClass("reactiveVal")
+methods::setOldClass("reactivevalues")
 
 #' @rdname module_filter_manager
 #' @keywords internal
-.resolve_global_mapping <- function(filter, module_labels) {
-  if (!isTRUE(attr(filter, "module_specific"))) {
-    attr(filter, "mapping")[["global_filters"]] <- unique(unlist(attr(filter, "mapping")))
-  }
+.slicesGlobal <- methods::setRefClass(".slicesGlobal",
+  fields = list(
+    all_slices = "reactiveVal",
+    module_slices_api = "reactivevalues"
+  ),
+  methods = list(
+    initialize = function(slices = teal_slices(), module_labels) {
+      shiny::isolate({
+        checkmate::assert_class(slices, "teal_slices")
+        # needed on init to not mix "global_filters" with module-specific-slots
+        if (isTRUE(attr(slices, "module_specific"))) {
+          old_mapping <- attr(slices, "mapping")
+          new_mapping <- sapply(module_labels, simplify = FALSE, function(module_label) {
+            unique(unlist(old_mapping[c(module_label, "global_filters")]))
+          })
+          attr(slices, "mapping") <- new_mapping
+        }
+        .self$all_slices <<- shiny::reactiveVal(slices)
+        .self$module_slices_api <<- shiny::reactiveValues()
+        .self$slices_append(slices)
+        .self$slices_active(attr(slices, "mapping"))
+        invisible(.self)
+      })
+    },
+    is_module_specific = function() {
+      isTRUE(attr(.self$all_slices(), "module_specific"))
+    },
+    module_slices_api_set = function(module_label, functions_list) {
+      shiny::isolate({
+        if (!.self$is_module_specific()) {
+          module_label <- "global_filters"
+        }
+        if (!identical(.self$module_slices_api[[module_label]], functions_list)) {
+          .self$module_slices_api[[module_label]] <- functions_list
+        }
+        invisible(.self)
+      })
+    },
+    slices_deactivate_all = function(module_label) {
+      shiny::isolate({
+        new_slices <- .self$all_slices()
+        old_mapping <- attr(new_slices, "mapping")
 
+        new_mapping <- if (.self$is_module_specific()) {
+          new_module_mapping <- setNames(nm = module_label, list(character(0)))
+          modifyList(old_mapping, new_module_mapping)
+        } else if (missing(module_label)) {
+          lapply(
+            attr(.self$all_slices(), "mapping"),
+            function(x) character(0)
+          )
+        } else {
+          old_mapping[[module_label]] <- character(0)
+          old_mapping
+        }
 
-  new_mapping <- sapply(
-    unlist(module_labels, use.names = FALSE),
-    simplify = FALSE,
-    function(module_label) {
-      unlist(attr(filter, "mapping")[c(module_label, "global_filters")], use.names = FALSE)
+        if (!identical(new_mapping, old_mapping)) {
+          logger::log_debug(".slicesGlobal@slices_deactivate_all: deactivating all slices.")
+          attr(new_slices, "mapping") <- new_mapping
+          .self$all_slices(new_slices)
+        }
+        invisible(.self)
+      })
+    },
+    slices_active = function(mapping_elem) {
+      shiny::isolate({
+        if (.self$is_module_specific()) {
+          new_mapping <- modifyList(attr(.self$all_slices(), "mapping"), mapping_elem)
+        } else {
+          new_mapping <- setNames(nm = "global_filters", list(unique(unlist(mapping_elem))))
+        }
+
+        if (!identical(new_mapping, attr(.self$all_slices(), "mapping"))) {
+          mapping_modules <- toString(names(new_mapping))
+          logger::log_debug(".slicesGlobal@slices_active: changing mapping for module(s): { mapping_modules }.")
+          new_slices <- .self$all_slices()
+          attr(new_slices, "mapping") <- new_mapping
+          .self$all_slices(new_slices)
+        }
+
+        invisible(.self)
+      })
+    },
+    # - only new filters are appended to the $all_slices
+    # - mapping is not updated here
+    slices_append = function(slices, activate = FALSE) {
+      shiny::isolate({
+        if (!is.teal_slices(slices)) {
+          slices <- as.teal_slices(slices)
+        }
+
+        # to make sure that we don't unnecessary trigger $all_slices <reactiveVal>
+        new_slices <- setdiff_teal_slices(slices, .self$all_slices())
+        old_mapping <- attr(.self$all_slices(), "mapping")
+        if (length(new_slices)) {
+          new_ids <- vapply(new_slices, `[[`, character(1L), "id")
+          logger::log_debug(".slicesGlobal@slices_append: appending new slice(s): { new_ids }.")
+          slices_ids <- vapply(.self$all_slices(), `[[`, character(1L), "id")
+          lapply(new_slices, function(slice) {
+            # In case the new state has the same id as an existing one, add a suffix
+            if (slice$id %in% slices_ids) {
+              slice$id <- utils::tail(make.unique(c(slices_ids, slice$id), sep = "_"), 1)
+            }
+          })
+
+          new_slices_all <- c(.self$all_slices(), new_slices)
+          attr(new_slices_all, "mapping") <- old_mapping
+          .self$all_slices(new_slices_all)
+        }
+
+        invisible(.self)
+      })
+    },
+    slices_get = function(module_label) {
+      if (missing(module_label)) {
+        .self$all_slices()
+      } else {
+        module_ids <- unlist(attr(.self$all_slices(), "mapping")[c(module_label, "global_filters")])
+        Filter(
+          function(slice) slice$id %in% module_ids,
+          .self$all_slices()
+        )
+      }
+    },
+    slices_set = function(slices) {
+      shiny::isolate({
+        if (!is.teal_slices(slices)) {
+          slices <- as.teal_slices(slices)
+        }
+        .self$all_slices(slices)
+        invisible(.self)
+      })
+    },
+    show = function() {
+      shiny::isolate(print(.self$all_slices()))
+      invisible(.self)
     }
   )
-  new_mapping["global_filters"] <- NULL
-  attr(filter, "mapping") <- new_mapping
-
-  filter
-}
-
-#' @rdname module_filter_manager
-#' @keywords internal
-.filter_module_slices <- function(module_label, slices) {
-  module_ids <- unlist(attr(slices, "mapping")[module_label])
-  Filter(
-    function(slice) slice$id %in% module_ids,
-    slices
-  )
-}
-
-#' `teal_slices` to list
-#'
-#' Wrapper on `as.list.teal_slices` that is used internally in `teal`
-#' `filter_manager` always sets mapping for each module individually even if `!module_specific`
-#' This means that we need to set `<mapping>$global_filters` to all active filters when global
-#' filter are used.
-#' @param slices (`teal_slices`)
-#' @return `list`
-#' @keywords internal
-.slices_to_list <- function(slices) {
-  shiny::isolate({
-    if (!isTRUE(attr(slices, "module_specific"))) {
-      attr(slices, "mapping")[["global_filters"]] <- unique(unlist(attr(slices, "mapping")))
-    }
-    as.list(slices, recursive = TRUE)
-  })
-}
+)
+# todo: prevent any teal_slices attribute except mapping

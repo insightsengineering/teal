@@ -7,9 +7,9 @@
 .get_hashes_code(data, datanames = teal_data_datanames(data))
 }
 \arguments{
-\item{datanames}{(\code{character}) names of datasets}
+\item{data}{(\code{teal_data}) object holding the data}
 
-\item{datasets}{(\code{FilteredData}) object holding the data}
+\item{datanames}{(\code{character}) names of datasets}
 }
 \value{
 A character vector with the code lines.

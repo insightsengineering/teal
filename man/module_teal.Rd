@@ -66,4 +66,3 @@ the same so the user can continue where one left off.
 Similar applies to \code{\link{module_bookmark_manager}} which allows to start a new session with restored
 inputs.
 }
-\keyword{internal}

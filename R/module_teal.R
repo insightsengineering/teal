@@ -30,7 +30,7 @@
 NULL
 
 #' @rdname module_teal
-#' @keywords internal
+#' @export
 ui_teal <- function(id,
                     modules,
                     data = NULL,
@@ -142,6 +142,7 @@ ui_teal <- function(id,
 }
 
 #' @rdname module_teal
+#' @export
 srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
@@ -191,9 +192,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       })
     }
 
-    session$userData$module_slices_api <- list()
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
-    slices_global <- .make_slices_global(filter = filter, module_labels = module_labels)
+    slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
       id = "teal_modules",
       data_rv = data_rv,

@@ -20,7 +20,7 @@
 #' @param data_rv (`reactive` returning `teal_data`)
 #'
 #' @param slices_global (`reactiveVal` returning `modules_teal_slices`)
-#'   see [`slices_global`]
+#'   see [`module_filter_manager`]
 #'
 #' @param depth (`integer(1)`)
 #'  number which helps to determine depth of the modules nesting.
@@ -133,15 +133,14 @@ srv_teal_module <- function(id,
                             data_rv,
                             modules,
                             datasets = NULL,
-                            slices_global = reactiveVal(teal_slices()),
+                            slices_global,
                             reporter = teal.reporter::Reporter$new(),
                             is_active = reactive(TRUE)) {
   checkmate::assert_string(id)
   checkmate::assert_class(data_rv, "reactive")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   checkmate::assert_class(datasets, "reactive", null.ok = TRUE)
-  checkmate::assert_class(slices_global, "reactiveVal")
-  checkmate::assert_class(isolate(slices_global()), "modules_teal_slices")
+  checkmate::assert_class(slices_global, ".slicesGlobal")
   checkmate::assert_class(reporter, "Reporter")
   UseMethod("srv_teal_module", modules)
 }
@@ -152,7 +151,7 @@ srv_teal_module.default <- function(id,
                                     data_rv,
                                     modules,
                                     datasets = NULL,
-                                    slices_global = reactiveVal(teal_slices()),
+                                    slices_global,
                                     reporter = teal.reporter::Reporter$new(),
                                     is_active = reactive(TRUE)) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
@@ -164,7 +163,7 @@ srv_teal_module.teal_modules <- function(id,
                                          data_rv,
                                          modules,
                                          datasets = NULL,
-                                         slices_global = reactiveVal(teal_slices()),
+                                         slices_global,
                                          reporter = teal.reporter::Reporter$new(),
                                          is_active = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
@@ -196,16 +195,14 @@ srv_teal_module.teal_module <- function(id,
                                         data_rv,
                                         modules,
                                         datasets = NULL,
-                                        slices_global = reactiveVal(teal_slices()),
+                                        slices_global,
                                         reporter = teal.reporter::Reporter$new(),
                                         is_active = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     active_datanames <- reactive({
-      if (!inherits(data_rv(), "teal_data")) {
-        stop("data_rv must be teal_data object.")
-      }
-      datanames <- if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
+      stopifnot("data_rv must be teal_data object." = inherits(data_rv(), "teal_data"))
+      if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
         teal_data_datanames(data_rv())
       } else {
         # Remove datanames that are not **YET** in the data (may be added with teal_data_module transforms)
