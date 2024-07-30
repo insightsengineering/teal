@@ -55,7 +55,7 @@ testthat::test_that("e2e: data summary is displayed with 3 columns for data with
     data.frame(
       `Data Name` = c("mtcars1", "mtcars2"),
       Obs = c("32/32", "2/2"),
-      Subjects = c("2/2", "2/2"),
+      Subjects = c("2/2", ""),
       check.names = FALSE
     )
   )
@@ -100,7 +100,7 @@ testthat::test_that(
           "mtcars1", "mtcars2", "factors"
         ),
         Obs = c("84/84", "150/150", "", "198/198", "198/198", "33/33", "97/97", "471/471", "32/32", "2/2", ""),
-        Subjects = c("", "", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "2/2", "2/2", ""),
+        Subjects = c("", "", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "2/2", "", ""),
         check.names = FALSE
       )
     )
