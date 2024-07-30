@@ -191,22 +191,7 @@ srv_teal_module.teal_module <- function(id,
                                         is_active = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
-    active_datanames <- reactive({
-      stopifnot("data_rv must be teal_data object." = inherits(data_rv(), "teal_data"))
-      if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-        teal_data_datanames(data_rv())
-      } else {
-        # Remove datanames that are not **YET** in the data (may be added with teal_data_module transforms)
-        # Check is deferred when module is called
-        intersect(
-          include_parent_datanames(
-            modules$datanames,
-            teal.data::join_keys(data_rv())
-          ),
-          teal_data_datanames(data_rv())
-        )
-      }
-    })
+    active_datanames <- reactive(.resolve_module_datanames(data = data_rv(), modules = modules))
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
         if (!inherits(data_rv(), "teal_data")) {
@@ -238,30 +223,20 @@ srv_teal_module.teal_module <- function(id,
       modules = modules
     )
 
-    summary_table <- srv_data_summary("data_summary", transformed_teal_data)
+    module_teal_data <- reactive({
+      all_teal_data <- transformed_teal_data()
+      # todo: create a new teal_data object with code subset, datasets and datanames (not just limit datanames)
+      teal.data::datanames(all_teal_data) <- .resolve_module_datanames(data = all_teal_data, modules = modules)
+      all_teal_data
+    })
 
-    # todo: Datasets in teal_data handed over to module should be limited to module$datanames
-    #       Summary shouldn't display datanames that are not in module$datanames
-    #       During ddl and transform we should keep all the datasets which might be needed in transform
-    # so:
-    #  - keep all datasets in ddl
-    #  - make filter panel only from module$datanames (or available subset) - make a .resolve_module_datanames function
-    #    which does the same thing as active_datanames() because we will need it in the later stage
-    #  - make a teal_data (filtered_teal_data) containing everything. No code substitution, no datanames restriction.
-    #  - transformed_teal_data can add any datasets to teal_data object
-    #  - at the end, validate and use .resolve_module_datanames again to determine relevant datanames.
-    #    Set datanames in the teal_data object so that app developer don't have to bother about `teal.data::datanames`
-    #    in each transform module which adds datasets. Restrict the code to the "resolved" datanames. Remove bindings
-    #    which are not in the resolved datanames.
-    #  - send data to teal_module and to the summary
-    # side comment:
-    #  - looks like the only purpose of the `teal.data::datanames` is to limit the datasets for modules which have
-    #    $datanames = "all". Otherwise, it is not needed as modules$datanames is the primary source of truth.
-    module_teal_data <- srv_validate_reactive_teal_data(
+    module_teal_data_validated <- srv_validate_reactive_teal_data(
       "validate_datanames",
-      data = transformed_teal_data,
+      data = module_teal_data,
       modules = modules
     )
+
+    summary_table <- srv_data_summary("data_summary", module_teal_data)
 
     # Call modules.
     module_out <- reactiveVal(NULL)
@@ -270,9 +245,9 @@ srv_teal_module.teal_module <- function(id,
         # wait for module_teal_data() to be not NULL but only once:
         ignoreNULL = TRUE,
         once = TRUE,
-        eventExpr = module_teal_data(),
+        eventExpr = module_teal_data_validated(),
         handlerExpr = {
-          module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
+          module_out(.call_teal_module(modules, datasets, module_teal_data_validated, reporter))
         }
       )
     } else {
@@ -318,5 +293,17 @@ srv_teal_module.teal_module <- function(id,
     do.call(modules$server, args)
   } else {
     do.call(callModule, c(args, list(module = modules$server)))
+  }
+}
+
+.resolve_module_datanames <- function(data, modules) {
+  stopifnot("data_rv must be teal_data object." = inherits(data, "teal_data"))
+  if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
+    teal_data_datanames(data)
+  } else {
+    intersect(
+      include_parent_datanames(modules$datanames, teal.data::join_keys(data)),
+      ls(teal.code::get_env(data))
+    )
   }
 }

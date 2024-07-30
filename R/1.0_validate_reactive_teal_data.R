@@ -93,10 +93,6 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
         )
       )
 
-      if (!length(teal.data::datanames(data_out))) {
-        warning("`data` object has no datanames. Default datanames are set using `teal_data`'s environment.")
-      }
-
 
       data_out
     })
