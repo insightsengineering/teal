@@ -42,7 +42,7 @@ NULL
 
 #' @rdname module_teal_module
 ui_teal_module <- function(id, modules, depth = 0L) {
-  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module", "shiny.tag"))
   checkmate::assert_count(depth)
   UseMethod("ui_teal_module", modules)
 }
@@ -69,6 +69,9 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
         names(modules$children),
         function(module_id) {
           module_label <- modules$children[[module_id]]$label
+          if (is.null(module_label)) {
+            module_label <- icon("database")
+          }
           tabPanel(
             title = module_label,
             value = module_id, # when clicked this tab value changes input$<tabset panel id>
@@ -82,6 +85,12 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
       )
     )
   )
+}
+
+#' @rdname module_teal_module
+#' @export
+ui_teal_module.shiny.tag <- function(id, modules, depth = 0L) {
+  modules
 }
 
 #' @rdname module_teal_module

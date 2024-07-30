@@ -65,8 +65,6 @@ transform_list <<- list(
   )
 )
 
-setdiff_teal_slices <<- getFromNamespace("setdiff_teal_slices", "teal.slice")
-
 testthat::describe("srv_teal arguments", {
   testthat::it("accepts data to be teal_data", {
     testthat::expect_no_error(
@@ -771,6 +769,7 @@ testthat::describe("srv_teal filters", {
           filter = init_filter
         ),
         expr = {
+          setdiff_teal_slices <- getFromNamespace("setdiff_teal_slices", "teal.slice")
           testthat::expect_length(setdiff_teal_slices(slices_global$all_slices(), init_filter), 0)
           testthat::expect_identical(
             attr(slices_global$all_slices(), "mapping"),

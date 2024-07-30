@@ -11,7 +11,7 @@
 \alias{within.teal_data_module}
 \title{Data module for \code{teal} applications}
 \usage{
-teal_data_module(ui, server, label = "data module")
+teal_data_module(ui, server, label = "data module", once = TRUE)
 
 \S4method{eval_code}{teal_data_module,character}(object, code)
 
@@ -26,6 +26,12 @@ teal_data_module(ui, server, label = "data module")
 must return reactive expression containing \code{teal_data} object}
 
 \item{label}{(\code{character(1)}) Label of the module.}
+
+\item{once}{(\code{logical(1)}) Applicable only when used in the \code{data} argument of \code{init}.
+If \code{TRUE}, the data module will be shown only once and will disappear after successful data loading.
+App user will no longer be able to interact with this module anymore.
+If \code{FALSE}, the data module can be reused multiple times.
+App user will be able to interact and change the data output from the module multiple times.}
 
 \item{object}{(\code{teal_data_module})}
 

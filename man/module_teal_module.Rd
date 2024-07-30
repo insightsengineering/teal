@@ -5,6 +5,7 @@
 \alias{ui_teal_module}
 \alias{ui_teal_module.default}
 \alias{ui_teal_module.teal_modules}
+\alias{ui_teal_module.shiny.tag}
 \alias{ui_teal_module.teal_module}
 \alias{srv_teal_module}
 \alias{srv_teal_module.default}
@@ -17,6 +18,8 @@ ui_teal_module(id, modules, depth = 0L)
 \method{ui_teal_module}{default}(id, modules, depth = 0L)
 
 \method{ui_teal_module}{teal_modules}(id, modules, depth = 0L)
+
+\method{ui_teal_module}{shiny.tag}(id, modules, depth = 0L)
 
 \method{ui_teal_module}{teal_module}(id, modules, depth = 0L)
 

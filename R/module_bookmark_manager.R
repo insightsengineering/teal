@@ -59,7 +59,7 @@ ui_bookmark_panel <- function(id, modules) {
       class = "btn action-button wunder_bar_button bookmark_manager_button",
       title = "Add bookmark",
       tags$span(
-        suppressMessages(icon("solid fa-bookmark")),
+        suppressMessages(icon("fas fa-bookmark")),
         if (any(is_unbookmarkable)) {
           tags$span(
             sum(is_unbookmarkable),
@@ -158,7 +158,6 @@ get_bookmarking_option <- function() {
   bookmark_option <- getShinyOption("bookmarkStore")
   if (is.null(bookmark_option) && identical(getOption("shiny.bookmarkStore"), "server")) {
     bookmark_option <- getOption("shiny.bookmarkStore")
-    # option alone doesn't activate bookmarking - we need to set shinyOptions
   }
   bookmark_option
 }
