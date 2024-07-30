@@ -193,7 +193,7 @@ teal_data_datanames <- function(data) {
   if (length(teal.data::datanames(data))) {
     teal.data::datanames(data)
   } else {
-    ls(teal.code::get_env(data), all.names = TRUE)
+    grep("_raw$", ls(teal.code::get_env(data), all.names = TRUE), value = TRUE, invert = TRUE)
   }
 }
 
