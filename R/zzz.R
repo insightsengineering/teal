@@ -34,3 +34,6 @@ RcodeBlock <- getFromNamespace("RcodeBlock", "teal.reporter") # nolint: object_n
 # Use non-exported function(s) from teal.code
 # This one is here because lang2calls should not be exported from teal.code
 lang2calls <- getFromNamespace("lang2calls", "teal.code")
+
+# Needed in teal_data_datanames
+topological_sort <- getFromNamespace("topological_sort", "teal.data")
