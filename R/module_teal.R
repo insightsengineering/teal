@@ -206,8 +206,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
     srv_bookmark_panel("bookmark_manager", modules)
 
-    # if (inherits(data, "teal_data_module")) {
-    #   setBookmarkExclude(c("teal_modules-active_tab"))
-    # }
+    if (inherits(data, "teal_data_module")) {
+      setBookmarkExclude(c("teal_modules-active_tab"))
+    }
   })
 }
