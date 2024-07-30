@@ -75,9 +75,8 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
       new_datasets
     )
   )
-
   tdata@verified <- data@verified
-  teal.data::datanames(tdata) <- datanames
+  teal.data::datanames(tdata) <- character(0)
   tdata
 }
 

@@ -85,8 +85,7 @@ srv_teal_data_modules <- function(id, data, transformers, modules) {
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data_modules initializing.")
-
-    transformed_teal_data <- Reduce(
+    Reduce(
       function(previous_result, name) {
         srv_teal_data_module(
           id = name,
@@ -98,31 +97,6 @@ srv_teal_data_modules <- function(id, data, transformers, modules) {
       x = names(transformers),
       init = data
     )
-
-    # Update datanames with generated datasets from transfomers
-    data_output_rv <- reactive({
-      data_output <- transformed_teal_data()
-      ls_data_output <- ls(teal.code::get_env(data_output), all.names = TRUE)
-
-      # Keep previous datanames and add new ones according to modules$datanames
-      teal.data::datanames(data_output) <- unique(
-        c(
-          datanames(isolate(data())), #
-          intersect( # Match with modules$datanames (keep all new objects if "all")
-            setdiff( # Only look at newly generated environment objects
-              ls_data_output,
-              ls(teal.code::get_env((isolate(data()))), all.names = TRUE)
-            ),
-            if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-              ls_data_output
-            } else {
-              modules$datanames
-            }
-          )
-        )
-      )
-      data_output
-    })
   })
 }
 
