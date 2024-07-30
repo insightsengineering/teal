@@ -70,9 +70,9 @@ Filter-manager is split into two parts:
 the filters in \code{slices_global} and displays them in a table utilizing information from \code{mapping}:
 }
 \itemize{
-\item \figure{yes.png} (\code{TRUE}) - filter is active in the module
-\item \figure{no.png} (\code{FALSE}) - filter is inactive in the module
-\item \figure{na.png} (\code{NA}) - filter is not available in the module
+\item (\code{TRUE}) - filter is active in the module
+\item (\code{FALSE}) - filter is inactive in the module
+\item (\code{NA}) - filter is not available in the module
 }
 \enumerate{
 \item \code{ui/srv_module_filter_manager} - Called once for each \code{teal_module}. Handling filter states
