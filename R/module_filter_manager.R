@@ -24,9 +24,9 @@
 #' Filter-manager is split into two parts:
 #' 1. `ui/srv_filter_manager_panel` - Called once for the whole app. This module observes changes in
 #' the filters in `slices_global` and displays them in a table utilizing information from `mapping`:
-#'   - &#9989; (`TRUE`) - filter is active in the module
-#'   - &#10060; (`FALSE`) - filter is inactive in the module
-#'   - &#128306; (`NA`) - filter is not available in the module
+#'   - (`TRUE`) - filter is active in the module
+#'   - (`FALSE`) - filter is inactive in the module
+#'   - (`NA`) - filter is not available in the module
 #' 2. `ui/srv_module_filter_manager` - Called once for each `teal_module`. Handling filter states
 #' for of single module and keeping module `FilteredData` consistent with `slices_global`, so that
 #' local filters are always reflected in the `slices_global` and its mapping and vice versa.
