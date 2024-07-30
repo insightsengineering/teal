@@ -44,6 +44,7 @@
 #' @return
 #' Module returns a `slices_global` (`reactiveVal`) containing a `teal_slices` object with mapping.
 #'
+#' @encoding UTF-8
 #' @name module_filter_manager
 #' @rdname module_filter_manager
 #'
