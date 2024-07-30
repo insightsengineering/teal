@@ -192,7 +192,7 @@ teal_data_datanames <- function(data) {
   checkmate::assert_class(data, "teal_data")
   if (length(teal.data::datanames(data))) {
     datanames <- teal.data::datanames(data)
-    join_keys <- teal.data::join_keys(data)
+    joinkeys <- teal.data::join_keys(data)
     if (length(join_keys()) > 0) {
       child_parent <- sapply(
         datanames,
