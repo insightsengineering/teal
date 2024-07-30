@@ -1,96 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="init" timestamp="2024-07-30T08:08:41Z" hostname="c90971890ced" tests="10" skipped="1" failures="0" errors="0" time="0.526">
-    <testcase time="0.108" classname="init" name="init_data_accepts_teal_data_object"/>
+  <testsuite name="init" timestamp="2024-07-30T09:15:51Z" hostname="55b4f3065f27" tests="10" skipped="1" failures="0" errors="0" time="0.532">
+    <testcase time="0.107" classname="init" name="init_data_accepts_teal_data_object"/>
     <testcase time="0.0630000000000001" classname="init" name="init_data_accepts_teal_data_module"/>
-    <testcase time="0.0649999999999999" classname="init" name="init_modules_accepts_a_teal_modules_object"/>
+    <testcase time="0.0679999999999999" classname="init" name="init_modules_accepts_a_teal_modules_object"/>
     <testcase time="0.031" classname="init" name="init_modules_accepts_a_list_of_teal_module_elements"/>
-    <testcase time="0.093" classname="init" name="init_modules_accepts_a_teal_module_object"/>
-    <testcase time="0.052" classname="init" name="init_filter_accepts_teal_slices_"/>
-    <testcase time="0.0089999999999999" classname="init" name="init_filter_accepts_teal_slices_"/>
-    <testcase time="0.038" classname="init" name="init_throws_when_an_empty_data_is_used"/>
+    <testcase time="0.0960000000000001" classname="init" name="init_modules_accepts_a_teal_module_object"/>
+    <testcase time="0.0519999999999998" classname="init" name="init_filter_accepts_teal_slices_"/>
+    <testcase time="0.00900000000000012" classname="init" name="init_filter_accepts_teal_slices_"/>
+    <testcase time="0.0389999999999999" classname="init" name="init_throws_when_an_empty_data_is_used"/>
     <testcase time="0.004" classname="init" name="init_throws_when_datanames_in_modules_incompatible_w_datanames_in_data">
       <skipped message="Reason: To decide ('test-init.R:60:3')"/>
     </testcase>
     <testcase time="0.0629999999999999" classname="init" name="init_throws_when_dataname_in_filter_incompatible_w_datanames_in_data"/>
   </testsuite>
-  <testsuite name="module_teal" timestamp="2024-07-30T08:08:42Z" hostname="c90971890ced" tests="129" skipped="1" failures="0" errors="1" time="32.908">
-    <testcase time="0.117" classname="module_teal" name="accepts_data_to_be_teal_data"/>
-    <testcase time="0.0640000000000001" classname="module_teal" name="accepts_data_to_be_teal_data_module_returning_reactive_teal_data"/>
-    <testcase time="0.05" classname="module_teal" name="accepts_data_to_a_reactive_or_reactiveVal_teal_data"/>
-    <testcase time="0.0569999999999999" classname="module_teal" name="accepts_data_to_a_reactive_or_reactiveVal_teal_data"/>
+  <testsuite name="module_teal" timestamp="2024-07-30T09:15:52Z" hostname="55b4f3065f27" tests="137" skipped="1" failures="0" errors="1" time="34.044">
+    <testcase time="0.118" classname="module_teal" name="accepts_data_to_be_teal_data"/>
+    <testcase time="0.0629999999999999" classname="module_teal" name="accepts_data_to_be_teal_data_module_returning_reactive_teal_data"/>
+    <testcase time="0.0509999999999999" classname="module_teal" name="accepts_data_to_a_reactive_or_reactiveVal_teal_data"/>
+    <testcase time="0.0490000000000002" classname="module_teal" name="accepts_data_to_a_reactive_or_reactiveVal_teal_data"/>
     <testcase time="0.0600000000000001" classname="module_teal" name="fails_when_data_is_not_teal_data_or_teal_data_module"/>
-    <testcase time="0.026" classname="module_teal" name="app_fails_when_teal_data_module_doesn_t_return_a_reactive"/>
-    <testcase time="0.0960000000000001" classname="module_teal" name="are_not_called_by_default"/>
+    <testcase time="0.0259999999999998" classname="module_teal" name="app_fails_when_teal_data_module_doesn_t_return_a_reactive"/>
+    <testcase time="0.0970000000000002" classname="module_teal" name="are_not_called_by_default"/>
     <testcase time="0.00299999999999989" classname="module_teal" name="are_not_called_by_default"/>
     <testcase time="0.00300000000000011" classname="module_teal" name="are_not_called_by_default"/>
-    <testcase time="0.0649999999999999" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_is_teal_data_"/>
-    <testcase time="0.655" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_is_teal_data_"/>
+    <testcase time="0.0659999999999998" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_is_teal_data_"/>
+    <testcase time="0.666" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_is_teal_data_"/>
     <testcase time="0.00300000000000011" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_is_teal_data_"/>
-    <testcase time="0.0819999999999999" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_is_teal_data_"/>
-    <testcase time="0.00099999999999989" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_is_teal_data_"/>
-    <testcase time="0.0900000000000003" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_returns_reactive_teal_data_"/>
-    <testcase time="0.367" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_returns_reactive_teal_data_"/>
-    <testcase time="0.00299999999999967" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_returns_reactive_teal_data_"/>
-    <testcase time="0.0630000000000002" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_returns_reactive_teal_data_"/>
-    <testcase time="0.00099999999999989" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_returns_reactive_teal_data_"/>
-    <testcase time="0.0950000000000002" classname="module_teal" name="are_called_once_their_tab_is_selected_and_teal_data_module_returns_reactive_teal_data_"/>
-    <testcase time="0.497" classname="module_teal" name="are_called_once_their_tab_is_selected_and_teal_data_module_returns_reactive_teal_data_"/>
-    <testcase time="0.004" classname="module_teal" name="are_called_once_their_tab_is_selected_and_teal_data_module_returns_reactive_teal_data_"/>
-    <testcase time="0.0489999999999999" classname="module_teal" name="are_called_once_their_tab_is_selected_and_teal_data_module_returns_reactive_teal_data_"/>
-    <testcase time="0.00100000000000033" classname="module_teal" name="are_called_once_their_tab_is_selected_and_teal_data_module_returns_reactive_teal_data_"/>
-    <testcase time="0.069" classname="module_teal" name="are_called_with_data_argument_being_teal_data_"/>
-    <testcase time="0.199" classname="module_teal" name="are_called_with_data_argument_being_teal_data_"/>
-    <testcase time="0.077" classname="module_teal" name="are_not_called_when_the_teal_data_module_doesn_t_return_teal_data"/>
-    <testcase time="0.0190000000000001" classname="module_teal" name="are_not_called_when_the_teal_data_module_doesn_t_return_teal_data"/>
-    <testcase time="0.0719999999999996" classname="module_teal" name="are_not_called_when_the_teal_data_module_doesn_t_return_teal_data"/>
-    <testcase time="0.0760000000000005" classname="module_teal" name="are_not_called_when_the_teal_data_module_returns_validation_error"/>
-    <testcase time="0.0809999999999995" classname="module_teal" name="are_not_called_when_the_teal_data_module_returns_validation_error"/>
-    <testcase time="0.0760000000000005" classname="module_teal" name="are_not_called_when_the_teal_data_module_throw_en_error"/>
-    <testcase time="0.0119999999999996" classname="module_teal" name="are_not_called_when_the_teal_data_module_throw_en_error"/>
-    <testcase time="0.0790000000000006" classname="module_teal" name="are_not_called_when_the_teal_data_module_throw_en_error"/>
+    <testcase time="0.085" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_is_teal_data_"/>
+    <testcase time="0.00200000000000022" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_is_teal_data_"/>
+    <testcase time="0.0899999999999999" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_returns_reactive_teal_data_"/>
+    <testcase time="0.376" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_returns_reactive_teal_data_"/>
+    <testcase time="0.00300000000000011" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_returns_reactive_teal_data_"/>
+    <testcase time="0.04" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_returns_reactive_teal_data_"/>
+    <testcase time="0.00199999999999978" classname="module_teal" name="are_called_once_their_tab_is_selected_and_data_returns_reactive_teal_data_"/>
+    <testcase time="0.101" classname="module_teal" name="are_called_once_their_tab_is_selected_and_teal_data_module_returns_reactive_teal_data_"/>
+    <testcase time="0.49" classname="module_teal" name="are_called_once_their_tab_is_selected_and_teal_data_module_returns_reactive_teal_data_"/>
+    <testcase time="0.00300000000000011" classname="module_teal" name="are_called_once_their_tab_is_selected_and_teal_data_module_returns_reactive_teal_data_"/>
+    <testcase time="0.0409999999999999" classname="module_teal" name="are_called_once_their_tab_is_selected_and_teal_data_module_returns_reactive_teal_data_"/>
+    <testcase time="0.00199999999999978" classname="module_teal" name="are_called_once_their_tab_is_selected_and_teal_data_module_returns_reactive_teal_data_"/>
+    <testcase time="0.0740000000000003" classname="module_teal" name="are_called_with_data_argument_being_teal_data_"/>
+    <testcase time="0.204" classname="module_teal" name="are_called_with_data_argument_being_teal_data_"/>
+    <testcase time="0.0780000000000003" classname="module_teal" name="are_not_called_when_the_teal_data_module_doesn_t_return_teal_data"/>
+    <testcase time="0.0129999999999999" classname="module_teal" name="are_not_called_when_the_teal_data_module_doesn_t_return_teal_data"/>
+    <testcase time="0.0800000000000001" classname="module_teal" name="are_not_called_when_the_teal_data_module_doesn_t_return_teal_data"/>
+    <testcase time="0.0780000000000003" classname="module_teal" name="are_not_called_when_the_teal_data_module_returns_validation_error"/>
+    <testcase time="0.0839999999999996" classname="module_teal" name="are_not_called_when_the_teal_data_module_returns_validation_error"/>
+    <testcase time="0.077" classname="module_teal" name="are_not_called_when_the_teal_data_module_throw_en_error"/>
+    <testcase time="0.0140000000000002" classname="module_teal" name="are_not_called_when_the_teal_data_module_throw_en_error"/>
+    <testcase time="0.0809999999999995" classname="module_teal" name="are_not_called_when_the_teal_data_module_throw_en_error"/>
+    <testcase time="0.0780000000000003" classname="module_teal" name="are_not_called_when_the_teal_data_module_returns_qenv.error"/>
+    <testcase time="0.0220000000000002" classname="module_teal" name="are_not_called_when_the_teal_data_module_returns_qenv.error"/>
     <testcase time="0.0759999999999996" classname="module_teal" name="are_not_called_when_the_teal_data_module_returns_qenv.error"/>
-    <testcase time="0.0140000000000002" classname="module_teal" name="are_not_called_when_the_teal_data_module_returns_qenv.error"/>
-    <testcase time="0.0789999999999997" classname="module_teal" name="are_not_called_when_the_teal_data_module_returns_qenv.error"/>
-    <testcase time="0.0759999999999996" classname="module_teal" name="are_receiving_reactive_data_which_triggers_on_change"/>
-    <testcase time="0.403" classname="module_teal" name="are_receiving_reactive_data_which_triggers_on_change"/>
-    <testcase time="0.355" classname="module_teal" name="are_receiving_reactive_data_which_triggers_on_change"/>
-    <testcase time="0.0870000000000006" classname="module_teal" name="are_not_called_again_when_data_changes"/>
-    <testcase time="0.228" classname="module_teal" name="are_not_called_again_when_data_changes"/>
-    <testcase time="0.196" classname="module_teal" name="are_not_called_again_when_data_changes"/>
-    <testcase time="0.371" classname="module_teal" name="receives_data_with_datasets_and_raw_datasets_module_datanames"/>
+    <testcase time="0.085" classname="module_teal" name="are_receiving_reactive_data_which_triggers_on_change"/>
+    <testcase time="0.408" classname="module_teal" name="are_receiving_reactive_data_which_triggers_on_change"/>
+    <testcase time="0.345" classname="module_teal" name="are_receiving_reactive_data_which_triggers_on_change"/>
+    <testcase time="0.0890000000000004" classname="module_teal" name="are_not_called_again_when_data_changes"/>
+    <testcase time="0.233" classname="module_teal" name="are_not_called_again_when_data_changes"/>
+    <testcase time="0.207" classname="module_teal" name="are_not_called_again_when_data_changes"/>
+    <testcase time="0.404" classname="module_teal" name="receives_data_with_datasets_and_raw_datasets_module_datanames"/>
     <testcase time="0.00199999999999978" classname="module_teal" name="receives_data_with_datasets_and_raw_datasets_module_datanames"/>
-    <testcase time="0.00300000000000011" classname="module_teal" name="receives_data_with_datasets_and_raw_datasets_module_datanames"/>
-    <testcase time="0.00199999999999978" classname="module_teal" name="receives_data_with_datasets_and_raw_datasets_module_datanames"/>
-    <testcase time="0.316" classname="module_teal" name="is_called_and_receives_data_even_if_datanames_in_teal_data_are_not_sufficient"/>
-    <testcase time="0.00200000000000067" classname="module_teal" name="is_called_and_receives_data_even_if_datanames_in_teal_data_are_not_sufficient"/>
+    <testcase time="0.00400000000000045" classname="module_teal" name="receives_data_with_datasets_and_raw_datasets_module_datanames"/>
+    <testcase time="0.000999999999999446" classname="module_teal" name="receives_data_with_datasets_and_raw_datasets_module_datanames"/>
+    <testcase time="0.304" classname="module_teal" name="is_called_and_receives_data_even_if_datanames_in_teal_data_are_not_sufficient"/>
     <testcase time="0.00199999999999978" classname="module_teal" name="is_called_and_receives_data_even_if_datanames_in_teal_data_are_not_sufficient"/>
-    <testcase time="0.415" classname="module_teal" name="receives_extra_data_added_in_a_transform"/>
-    <testcase time="0.00199999999999978" classname="module_teal" name="receives_extra_data_added_in_a_transform"/>
-    <testcase time="0.00199999999999978" classname="module_teal" name="receives_extra_data_added_in_a_transform"/>
-    <testcase time="0.00200000000000067" classname="module_teal" name="receives_extra_data_added_in_a_transform"/>
-    <testcase time="0.00199999999999978" classname="module_teal" name="receives_extra_data_added_in_a_transform"/>
-    <testcase time="0.00199999999999978" classname="module_teal" name="receives_extra_data_added_in_a_transform"/>
-    <testcase time="0.67" classname="module_teal" name="receives_all_data_when_module_datanames_all_"/>
-    <testcase time="0.00199999999999978" classname="module_teal" name="receives_all_data_when_module_datanames_all_"/>
+    <testcase time="0.00199999999999978" classname="module_teal" name="is_called_and_receives_data_even_if_datanames_in_teal_data_are_not_sufficient"/>
+    <testcase time="0.586" classname="module_teal" name="receives_extra_datanames_added_in_a_transform_if_specified_in_module_datanames"/>
+    <testcase time="0.00199999999999978" classname="module_teal" name="receives_extra_datanames_added_in_a_transform_if_specified_in_module_datanames"/>
+    <testcase time="0.00100000000000033" classname="module_teal" name="receives_extra_datanames_added_in_a_transform_if_specified_in_module_datanames"/>
+    <testcase time="0.00199999999999978" classname="module_teal" name="receives_extra_datanames_added_in_a_transform_if_specified_in_module_datanames"/>
+    <testcase time="0.00200000000000067" classname="module_teal" name="receives_extra_datanames_added_in_a_transform_if_specified_in_module_datanames"/>
+    <testcase time="0.00199999999999978" classname="module_teal" name="receives_extra_datanames_added_in_a_transform_if_specified_in_module_datanames"/>
+    <testcase time="0.000999999999999446" classname="module_teal" name="receives_extra_datanames_added_in_a_transform_if_specified_in_module_datanames"/>
+    <testcase time="0.396000000000001" classname="module_teal" name="doesn_t_receive_extra_datanames_in_a_transform_if_not_specified_in_module_datanames"/>
+    <testcase time="0.00199999999999978" classname="module_teal" name="doesn_t_receive_extra_datanames_in_a_transform_if_not_specified_in_module_datanames"/>
+    <testcase time="0.00199999999999978" classname="module_teal" name="doesn_t_receive_extra_datanames_in_a_transform_if_not_specified_in_module_datanames"/>
+    <testcase time="0.00199999999999978" classname="module_teal" name="doesn_t_receive_extra_datanames_in_a_transform_if_not_specified_in_module_datanames"/>
+    <testcase time="0.00100000000000033" classname="module_teal" name="doesn_t_receive_extra_datanames_in_a_transform_if_not_specified_in_module_datanames"/>
+    <testcase time="0.00199999999999978" classname="module_teal" name="doesn_t_receive_extra_datanames_in_a_transform_if_not_specified_in_module_datanames"/>
+    <testcase time="0.00199999999999978" classname="module_teal" name="doesn_t_receive_extra_datanames_in_a_transform_if_not_specified_in_module_datanames"/>
+    <testcase time="0.443" classname="module_teal" name="receives_all_data_when_module_datanames_all_"/>
     <testcase time="0.00200000000000067" classname="module_teal" name="receives_all_data_when_module_datanames_all_"/>
-    <testcase time="0.00199999999999978" classname="module_teal" name="receives_all_data_when_module_datanames_all_"/>
-    <testcase time="0.00100000000000033" classname="module_teal" name="receives_all_data_when_module_datanames_all_"/>
-    <testcase time="0.00199999999999978" classname="module_teal" name="receives_all_data_when_module_datanames_all_"/>
-    <testcase time="0.471" classname="module_teal" name="receives_parent_data_when_module_datanames_limited_to_a_child_data_but_join_keys_are_provided"/>
+    <testcase time="0.00200000000000067" classname="module_teal" name="receives_all_data_when_module_datanames_all_"/>
+    <testcase time="0.00199999999999889" classname="module_teal" name="receives_all_data_when_module_datanames_all_"/>
+    <testcase time="0.00100000000000122" classname="module_teal" name="receives_all_data_when_module_datanames_all_"/>
+    <testcase time="0.00199999999999889" classname="module_teal" name="receives_all_data_when_module_datanames_all_"/>
+    <testcase time="0.462" classname="module_teal" name="receives_parent_data_when_module_datanames_limited_to_a_child_data_but_join_keys_are_provided"/>
     <testcase time="0.00200000000000067" classname="module_teal" name="receives_parent_data_when_module_datanames_limited_to_a_child_data_but_join_keys_are_provided"/>
-    <testcase time="0.385" classname="module_teal" name="srv_teal_module.teal_module_does_not_pass_data_if_not_in_the_args_explicitly"/>
-    <testcase time="0.362" classname="module_teal" name="srv_teal_module.teal_module_passes_deprecated_datasets_to_the_server_module"/>
-    <testcase time="0.0149999999999988" classname="module_teal" name="srv_teal_module.teal_module_passes_deprecated_datasets_to_the_server_module"/>
-    <testcase time="0.348000000000001" classname="module_teal" name="srv_teal_module.teal_module_passes_server_args_to_the_..."/>
-    <testcase time="0.363" classname="module_teal" name="srv_teal_module.teal_module_passes_filter_panel_api_if_specified"/>
-    <testcase time="0.368" classname="module_teal" name="srv_teal_module.teal_module_passes_Reporter_if_specified"/>
-    <testcase time="0.0879999999999992" classname="module_teal" name="is_set_to_initial_filters_when_module_specific"/>
-    <testcase time="0.0820000000000007" classname="module_teal" name="is_set_to_initial_filters_with_resolved_attr_mapping_modules_label_when_module_specific_">
-      <error type="error" message="Error in `setdiff_teal_slices(slices_global$all_slices(), init_filter)`: could not find function &quot;setdiff_teal_slices&quot; ('test-module_teal.R:734:11')">Error in `setdiff_teal_slices(slices_global$all_slices(), init_filter)`: could not find function "setdiff_teal_slices"
+    <testcase time="0.409000000000001" classname="module_teal" name="srv_teal_module.teal_module_does_not_pass_data_if_not_in_the_args_explicitly"/>
+    <testcase time="0.375" classname="module_teal" name="srv_teal_module.teal_module_passes_deprecated_datasets_to_the_server_module"/>
+    <testcase time="0.0199999999999996" classname="module_teal" name="srv_teal_module.teal_module_passes_deprecated_datasets_to_the_server_module"/>
+    <testcase time="0.359999999999999" classname="module_teal" name="srv_teal_module.teal_module_passes_server_args_to_the_..."/>
+    <testcase time="0.377000000000001" classname="module_teal" name="srv_teal_module.teal_module_passes_filter_panel_api_if_specified"/>
+    <testcase time="0.382999999999999" classname="module_teal" name="srv_teal_module.teal_module_passes_Reporter_if_specified"/>
+    <testcase time="0.0920000000000005" classname="module_teal" name="is_set_to_initial_filters_when_module_specific"/>
+    <testcase time="0.0790000000000006" classname="module_teal" name="is_set_to_initial_filters_with_resolved_attr_mapping_modules_label_when_module_specific_">
+      <error type="error" message="Error in `setdiff_teal_slices(slices_global$all_slices(), init_filter)`: could not find function &quot;setdiff_teal_slices&quot; ('test-module_teal.R:774:11')">Error in `setdiff_teal_slices(slices_global$all_slices(), init_filter)`: could not find function "setdiff_teal_slices"
 Backtrace:
      ▆
-  1. ├─shiny::testServer(...) at test-module_teal.R:725:7
+  1. ├─shiny::testServer(...) at test-module_teal.R:765:7
   2. │ ├─shiny:::withMockContext(...)
   3. │ │ ├─shiny::isolate(...)
   4. │ │ │ ├─shiny::..stacktraceoff..(...)
@@ -111,192 +119,193 @@ Backtrace:
  19. │ │ └─withr::with_options(...)
  20. │ │   └─base::force(code)
  21. │ └─rlang::eval_tidy(quosure, mask, rlang::caller_env())
- 22. └─testthat::expect_length(...) at test-module_teal.R:734:11
+ 22. └─testthat::expect_length(...) at test-module_teal.R:774:11
  23.   └─testthat::quasi_label(enquo(object), arg = "object")
  24.     └─rlang::eval_bare(expr, quo_get_env(quo))</error>
     </testcase>
-    <testcase time="1.323" classname="module_teal" name="slices_in_slicesGlobal_and_in_FilteredData_refer_to_the_same_object"/>
+    <testcase time="1.347" classname="module_teal" name="slices_in_slicesGlobal_and_in_FilteredData_refer_to_the_same_object"/>
     <testcase time="0.00799999999999912" classname="module_teal" name="slices_in_slicesGlobal_and_in_FilteredData_refer_to_the_same_object"/>
-    <testcase time="1.154" classname="module_teal" name="appends_new_slice_and_activates_in_global_filters_when_added_in_a_module_if_module_specific"/>
-    <testcase time="1.13" classname="module_teal" name="deactivates_in_global_filters_when_removed_from_module_if_module_specific"/>
-    <testcase time="0.935" classname="module_teal" name="appends_new_slice_and_activates_in_module_when_added_in_a_module_if_module_specific"/>
-    <testcase time="1.158" classname="module_teal" name="appends_added_duplicated_slice_and_makes_new_slice_id_unique"/>
-    <testcase time="1.325" classname="module_teal" name="deactivates_in_module_when_removed_from_module_if_module_specific"/>
-    <testcase time="0.0940000000000012" classname="module_teal" name="auto_resolves_to_mapping_m_when_setting_slices_with_mapping_global_filters_in_module_specific_">
-      <skipped message="Reason: need a fix in a .slicesGlobal ('test-module_teal.R:956:11')"/>
+    <testcase time="1.164" classname="module_teal" name="appends_new_slice_and_activates_in_global_filters_when_added_in_a_module_if_module_specific"/>
+    <testcase time="1.155" classname="module_teal" name="deactivates_in_global_filters_when_removed_from_module_if_module_specific"/>
+    <testcase time="1.015" classname="module_teal" name="appends_new_slice_and_activates_in_module_when_added_in_a_module_if_module_specific"/>
+    <testcase time="1.332" classname="module_teal" name="appends_added_duplicated_slice_and_makes_new_slice_id_unique"/>
+    <testcase time="1.074" classname="module_teal" name="deactivates_in_module_when_removed_from_module_if_module_specific"/>
+    <testcase time="0.0920000000000023" classname="module_teal" name="auto_resolves_to_mapping_m_when_setting_slices_with_mapping_global_filters_in_module_specific_">
+      <skipped message="Reason: need a fix in a .slicesGlobal ('test-module_teal.R:996:11')"/>
     </testcase>
-    <testcase time="1.059" classname="module_teal" name="sets_filters_from_mapping_mod_to_all_modules_FilteredData_when_module_specific"/>
-    <testcase time="0.922999999999998" classname="module_teal" name="sets_filters_from_mapping_mod_to_module_s_FilteredData_when_module_specific"/>
+    <testcase time="1.096" classname="module_teal" name="sets_filters_from_mapping_mod_to_all_modules_FilteredData_when_module_specific"/>
+    <testcase time="1.138" classname="module_teal" name="sets_filters_from_mapping_mod_to_module_s_FilteredData_when_module_specific"/>
     <testcase time="0.00799999999999912" classname="module_teal" name="sets_filters_from_mapping_mod_to_module_s_FilteredData_when_module_specific"/>
-    <testcase time="1.254" classname="module_teal" name="sets_filters_from_mapping_global_filters_to_all_modules_FilteredData_when_module_specific"/>
-    <testcase time="0.0189999999999984" classname="module_teal" name="sets_filters_from_mapping_global_filters_to_all_modules_FilteredData_when_module_specific"/>
-    <testcase time="1.151" classname="module_teal" name="change_in_the_slicesGlobal_causes_module_s_data_filtering"/>
+    <testcase time="1.194" classname="module_teal" name="sets_filters_from_mapping_global_filters_to_all_modules_FilteredData_when_module_specific"/>
+    <testcase time="0.00899999999999679" classname="module_teal" name="sets_filters_from_mapping_global_filters_to_all_modules_FilteredData_when_module_specific"/>
+    <testcase time="0.902000000000001" classname="module_teal" name="change_in_the_slicesGlobal_causes_module_s_data_filtering"/>
     <testcase time="0.00200000000000244" classname="module_teal" name="change_in_the_slicesGlobal_causes_module_s_data_filtering"/>
-    <testcase time="0.00300000000000011" classname="module_teal" name="change_in_the_slicesGlobal_causes_module_s_data_filtering"/>
-    <testcase time="0.000999999999997669" classname="module_teal" name="change_in_the_slicesGlobal_causes_module_s_data_filtering"/>
-    <testcase time="0.00200000000000244" classname="module_teal" name="change_in_the_slicesGlobal_causes_module_s_data_filtering"/>
-    <testcase time="0.372999999999998" classname="module_teal" name="returns_no_rows_if_no_filters_set"/>
-    <testcase time="0.789000000000001" classname="module_teal" name="returns_global_filters_with_active_true_inactive_false_unavailable_na"/>
-    <testcase time="0.0130000000000017" classname="module_teal" name="returns_global_filters_with_active_true_inactive_false_unavailable_na"/>
-    <testcase time="0.869" classname="module_teal" name="returns_column_per_module_with_active_true_inactive_false_unavailable_na"/>
-    <testcase time="0.00999999999999801" classname="module_teal" name="returns_column_per_module_with_active_true_inactive_false_unavailable_na"/>
-    <testcase time="0.41" classname="module_teal" name="evaluates_custom_qenv_call_and_pass_update_teal_data_to_the_module"/>
+    <testcase time="0.00199999999999889" classname="module_teal" name="change_in_the_slicesGlobal_causes_module_s_data_filtering"/>
+    <testcase time="0.00199999999999889" classname="module_teal" name="change_in_the_slicesGlobal_causes_module_s_data_filtering"/>
+    <testcase time="0.00199999999999889" classname="module_teal" name="change_in_the_slicesGlobal_causes_module_s_data_filtering"/>
+    <testcase time="0.390000000000001" classname="module_teal" name="returns_no_rows_if_no_filters_set"/>
+    <testcase time="0.897000000000002" classname="module_teal" name="returns_global_filters_with_active_true_inactive_false_unavailable_na"/>
+    <testcase time="0.00799999999999912" classname="module_teal" name="returns_global_filters_with_active_true_inactive_false_unavailable_na"/>
+    <testcase time="0.931000000000001" classname="module_teal" name="returns_column_per_module_with_active_true_inactive_false_unavailable_na"/>
+    <testcase time="0.0109999999999992" classname="module_teal" name="returns_column_per_module_with_active_true_inactive_false_unavailable_na"/>
+    <testcase time="0.449999999999999" classname="module_teal" name="evaluates_custom_qenv_call_and_pass_update_teal_data_to_the_module"/>
     <testcase time="0.00199999999999889" classname="module_teal" name="evaluates_custom_qenv_call_and_pass_update_teal_data_to_the_module"/>
+    <testcase time="0.00300000000000011" classname="module_teal" name="evaluates_custom_qenv_call_and_pass_update_teal_data_to_the_module"/>
     <testcase time="0.00200000000000244" classname="module_teal" name="evaluates_custom_qenv_call_and_pass_update_teal_data_to_the_module"/>
-    <testcase time="0.00199999999999889" classname="module_teal" name="evaluates_custom_qenv_call_and_pass_update_teal_data_to_the_module"/>
-    <testcase time="0.616" classname="module_teal" name="evaluates_custom_qenv_call_after_filter_is_applied"/>
+    <testcase time="0.704000000000001" classname="module_teal" name="evaluates_custom_qenv_call_after_filter_is_applied"/>
     <testcase time="0.00199999999999889" classname="module_teal" name="evaluates_custom_qenv_call_after_filter_is_applied"/>
-    <testcase time="0.00200000000000244" classname="module_teal" name="evaluates_custom_qenv_call_after_filter_is_applied"/>
+    <testcase time="0.00300000000000011" classname="module_teal" name="evaluates_custom_qenv_call_after_filter_is_applied"/>
     <testcase time="0.00199999999999889" classname="module_teal" name="evaluates_custom_qenv_call_after_filter_is_applied"/>
     <testcase time="0.00199999999999889" classname="module_teal" name="evaluates_custom_qenv_call_after_filter_is_applied"/>
-    <testcase time="0.694000000000003" classname="module_teal" name="is_reactive_to_the_filter_changes"/>
+    <testcase time="0.912000000000003" classname="module_teal" name="is_reactive_to_the_filter_changes"/>
     <testcase time="0.00199999999999889" classname="module_teal" name="is_reactive_to_the_filter_changes"/>
     <testcase time="0.00300000000000011" classname="module_teal" name="is_reactive_to_the_filter_changes"/>
-    <testcase time="0.00100000000000122" classname="module_teal" name="is_reactive_to_the_filter_changes"/>
     <testcase time="0.00199999999999889" classname="module_teal" name="is_reactive_to_the_filter_changes"/>
-    <testcase time="0.0719999999999992" classname="module_teal" name="fails_when_transformer_doesn_t_return_reactive"/>
-    <testcase time="0.337" classname="module_teal" name="continues_when_transformer_throws_validation_error_and_returns_unchanged_data"/>
-    <testcase time="0.00200000000000244" classname="module_teal" name="continues_when_transformer_throws_validation_error_and_returns_unchanged_data"/>
-    <testcase time="0.311" classname="module_teal" name="continues_when_transformer_throws_validation_error_and_returns_unchanged_data"/>
+    <testcase time="0.00200000000000244" classname="module_teal" name="is_reactive_to_the_filter_changes"/>
+    <testcase time="0.0689999999999991" classname="module_teal" name="fails_when_transformer_doesn_t_return_reactive"/>
+    <testcase time="0.277000000000001" classname="module_teal" name="continues_when_transformer_throws_validation_error_and_returns_unchanged_data"/>
+    <testcase time="0.00300000000000011" classname="module_teal" name="continues_when_transformer_throws_validation_error_and_returns_unchanged_data"/>
+    <testcase time="0.291999999999998" classname="module_teal" name="continues_when_transformer_throws_validation_error_and_returns_unchanged_data"/>
     <testcase time="0.00199999999999889" classname="module_teal" name="continues_when_transformer_throws_validation_error_and_returns_unchanged_data"/>
-    <testcase time="0.445" classname="module_teal" name="displays_Obs_only_column_if_all_datasets_have_no_join_keys"/>
-    <testcase time="0.440999999999999" classname="module_teal" name="displays_Subjects_with_count_based_on_foreign_key_column"/>
-    <testcase time="0.564" classname="module_teal" name="displays_parent_s_Subjects_with_count_based_on_primary_key"/>
-    <testcase time="0.369" classname="module_teal" name="displays_parent_s_Subjects_with_count_based_on_primary_and_foreign_key"/>
-    <testcase time="0.465" classname="module_teal" name="reflects_filters_and_displays_subjects_by_their_unique_id_count"/>
-    <testcase time="0.605" classname="module_teal" name="reflects_added_filters_and_displays_subjects_by_their_unique_id_count"/>
-    <testcase time="0.297000000000001" classname="module_teal" name="reflects_transform_adding_new_dataset"/>
-    <testcase time="0.297000000000001" classname="module_teal" name="displays_parent_s_Subjects_with_count_based_on_primary_key"/>
-    <testcase time="0.363999999999997" classname="module_teal" name="displays_only_module_datanames"/>
-    <testcase time="0.361000000000001" classname="module_teal" name="displays_subset_of_module_datanames_if_not_sufficient"/>
-    <testcase time="2.111" classname="module_teal" name="clicking_reset_button_restores_initial_filters_state_when_module_specific"/>
+    <testcase time="0.409000000000002" classname="module_teal" name="displays_Obs_only_column_if_all_datasets_have_no_join_keys"/>
+    <testcase time="0.579999999999998" classname="module_teal" name="displays_Subjects_with_count_based_on_foreign_key_column"/>
+    <testcase time="0.353000000000002" classname="module_teal" name="displays_parent_s_Subjects_with_count_based_on_primary_key"/>
+    <testcase time="0.367999999999999" classname="module_teal" name="displays_parent_s_Subjects_with_count_based_on_primary_and_foreign_key"/>
+    <testcase time="0.470000000000002" classname="module_teal" name="reflects_filters_and_displays_subjects_by_their_unique_id_count"/>
+    <testcase time="0.613999999999997" classname="module_teal" name="reflects_added_filters_and_displays_subjects_by_their_unique_id_count"/>
+    <testcase time="0.304000000000002" classname="module_teal" name="reflects_transform_adding_new_dataset"/>
+    <testcase time="0.288999999999998" classname="module_teal" name="displays_parent_s_Subjects_with_count_based_on_primary_key"/>
+    <testcase time="0.361000000000001" classname="module_teal" name="displays_only_module_datanames"/>
+    <testcase time="0.367000000000001" classname="module_teal" name="displays_subset_of_module_datanames_if_not_sufficient"/>
+    <testcase time="2.098" classname="module_teal" name="clicking_reset_button_restores_initial_filters_state_when_module_specific"/>
     <testcase time="0.00999999999999801" classname="module_teal" name="clicking_reset_button_restores_initial_filters_state_when_module_specific"/>
-    <testcase time="1.481" classname="module_teal" name="clicking_reset_button_restores_initial_filters_with_respect_to_mapping_state_when_module_specific"/>
+    <testcase time="1.791" classname="module_teal" name="clicking_reset_button_restores_initial_filters_with_respect_to_mapping_state_when_module_specific"/>
     <testcase time="0.00900000000000034" classname="module_teal" name="clicking_reset_button_restores_initial_filters_with_respect_to_mapping_state_when_module_specific"/>
-    <testcase time="0.00800000000000267" classname="module_teal" name="clicking_reset_button_restores_initial_filters_with_respect_to_mapping_state_when_module_specific"/>
+    <testcase time="0.00900000000000034" classname="module_teal" name="clicking_reset_button_restores_initial_filters_with_respect_to_mapping_state_when_module_specific"/>
   </testsuite>
-  <testsuite name="modules" timestamp="2024-07-30T08:09:15Z" hostname="c90971890ced" tests="95" skipped="0" failures="0" errors="0" time="0.377">
-    <testcase time="0.0459999999999994" classname="modules" name="Calling_module_does_not_throw"/>
+  <testsuite name="modules" timestamp="2024-07-30T09:16:26Z" hostname="55b4f3065f27" tests="95" skipped="0" failures="0" errors="0" time="0.461">
+    <testcase time="0.0620000000000047" classname="modules" name="Calling_module_does_not_throw"/>
     <testcase time="0.00300000000000011" classname="modules" name="module_requires_label_argument_to_be_a_string_different_than_global_filters_"/>
-    <testcase time="0.00399999999999778" classname="modules" name="module_requires_label_argument_to_be_a_string_different_than_global_filters_"/>
+    <testcase time="0.00600000000000023" classname="modules" name="module_requires_label_argument_to_be_a_string_different_than_global_filters_"/>
+    <testcase time="0.00499999999999545" classname="modules" name="module_requires_label_argument_to_be_a_string_different_than_global_filters_"/>
     <testcase time="0.00500000000000256" classname="modules" name="module_requires_label_argument_to_be_a_string_different_than_global_filters_"/>
-    <testcase time="0.00399999999999778" classname="modules" name="module_requires_label_argument_to_be_a_string_different_than_global_filters_"/>
-    <testcase time="0.00399999999999778" classname="modules" name="module_requires_label_argument_to_be_a_string_different_than_global_filters_"/>
-    <testcase time="0.00400000000000489" classname="modules" name="module_warns_when_server_contains_datasets_argument"/>
+    <testcase time="0.00499999999999545" classname="modules" name="module_requires_label_argument_to_be_a_string_different_than_global_filters_"/>
+    <testcase time="0.00500000000000256" classname="modules" name="module_warns_when_server_contains_datasets_argument"/>
     <testcase time="0.00300000000000011" classname="modules" name="module_expects_server_being_a_shiny_server_module_with_any_argument"/>
-    <testcase time="0.000999999999997669" classname="modules" name="module_expects_server_being_a_shiny_server_module_with_any_argument"/>
     <testcase time="0.00200000000000244" classname="modules" name="module_expects_server_being_a_shiny_server_module_with_any_argument"/>
-    <testcase time="0.00900000000000034" classname="modules" name="module_expects_server_being_a_shiny_server_module_with_any_argument"/>
+    <testcase time="0.000999999999997669" classname="modules" name="module_expects_server_being_a_shiny_server_module_with_any_argument"/>
+    <testcase time="0.00500000000000256" classname="modules" name="module_expects_server_being_a_shiny_server_module_with_any_argument"/>
     <testcase time="0.00399999999999778" classname="modules" name="module_expects_server_being_a_shiny_server_module_with_any_argument"/>
     <testcase time="0.00399999999999778" classname="modules" name="module_requires_server_args_argument_to_be_a_list"/>
     <testcase time="0.00100000000000477" classname="modules" name="module_requires_server_args_argument_to_be_a_list"/>
     <testcase time="0.000999999999997669" classname="modules" name="module_requires_server_args_argument_to_be_a_list"/>
-    <testcase time="0.00500000000000256" classname="modules" name="module_requires_server_args_argument_to_be_a_list"/>
-    <testcase time="0.00399999999999778" classname="modules" name="module_requires_server_args_argument_to_be_a_list"/>
-    <testcase time="0.00300000000000011" classname="modules" name="module_expects_all_server_args_being_a_server_arguments_or_passed_through_..._"/>
-    <testcase time="0.00199999999999534" classname="modules" name="module_expects_all_server_args_being_a_server_arguments_or_passed_through_..._"/>
-    <testcase time="0.00400000000000489" classname="modules" name="module_expects_all_server_args_being_a_server_arguments_or_passed_through_..._"/>
-    <testcase time="0.00300000000000011" classname="modules" name="module_requires_ui_args_argument_to_be_a_list"/>
-    <testcase time="0.00199999999999534" classname="modules" name="module_requires_ui_args_argument_to_be_a_list"/>
-    <testcase time="0.00100000000000477" classname="modules" name="module_requires_ui_args_argument_to_be_a_list"/>
-    <testcase time="0.00399999999999778" classname="modules" name="module_requires_ui_args_argument_to_be_a_list"/>
-    <testcase time="0.00500000000000256" classname="modules" name="module_requires_ui_args_argument_to_be_a_list"/>
-    <testcase time="0.00600000000000023" classname="modules" name="module_throws_when_ui_has_data_or_datasets_argument"/>
-    <testcase time="0.00399999999999778" classname="modules" name="module_throws_when_ui_has_data_or_datasets_argument"/>
-    <testcase time="0.00300000000000011" classname="modules" name="module_expects_ui_being_a_shiny_ui_module_with_any_argument"/>
-    <testcase time="0.00200000000000244" classname="modules" name="module_expects_ui_being_a_shiny_ui_module_with_any_argument"/>
+    <testcase time="0.00400000000000489" classname="modules" name="module_requires_server_args_argument_to_be_a_list"/>
+    <testcase time="0.00499999999999545" classname="modules" name="module_requires_server_args_argument_to_be_a_list"/>
+    <testcase time="0.0150000000000006" classname="modules" name="module_expects_all_server_args_being_a_server_arguments_or_passed_through_..._"/>
+    <testcase time="0.00100000000000477" classname="modules" name="module_expects_all_server_args_being_a_server_arguments_or_passed_through_..._"/>
+    <testcase time="0.00599999999999312" classname="modules" name="module_expects_all_server_args_being_a_server_arguments_or_passed_through_..._"/>
+    <testcase time="0.00400000000000489" classname="modules" name="module_requires_ui_args_argument_to_be_a_list"/>
+    <testcase time="0.000999999999997669" classname="modules" name="module_requires_ui_args_argument_to_be_a_list"/>
+    <testcase time="0.00200000000000244" classname="modules" name="module_requires_ui_args_argument_to_be_a_list"/>
+    <testcase time="0.00600000000000023" classname="modules" name="module_requires_ui_args_argument_to_be_a_list"/>
+    <testcase time="0.00600000000000023" classname="modules" name="module_requires_ui_args_argument_to_be_a_list"/>
+    <testcase time="0.0069999999999979" classname="modules" name="module_throws_when_ui_has_data_or_datasets_argument"/>
+    <testcase time="0.00500000000000256" classname="modules" name="module_throws_when_ui_has_data_or_datasets_argument"/>
     <testcase time="0.00399999999999778" classname="modules" name="module_expects_ui_being_a_shiny_ui_module_with_any_argument"/>
-    <testcase time="0.00300000000000011" classname="modules" name="module_expects_all_ui_args_being_a_ui_arguments_or_passed_through_..._"/>
-    <testcase time="0.000999999999997669" classname="modules" name="module_expects_all_ui_args_being_a_ui_arguments_or_passed_through_..._"/>
-    <testcase time="0.00500000000000256" classname="modules" name="module_expects_all_ui_args_being_a_ui_arguments_or_passed_through_..._"/>
-    <testcase time="0.00300000000000011" classname="modules" name="module_requires_datanames_argument_to_be_a_character_or_NULL"/>
-    <testcase time="0.000999999999997669" classname="modules" name="module_requires_datanames_argument_to_be_a_character_or_NULL"/>
-    <testcase time="0.000999999999997669" classname="modules" name="module_requires_datanames_argument_to_be_a_character_or_NULL"/>
+    <testcase time="0.000999999999997669" classname="modules" name="module_expects_ui_being_a_shiny_ui_module_with_any_argument"/>
+    <testcase time="0.00500000000000256" classname="modules" name="module_expects_ui_being_a_shiny_ui_module_with_any_argument"/>
+    <testcase time="0.00399999999999778" classname="modules" name="module_expects_all_ui_args_being_a_ui_arguments_or_passed_through_..._"/>
+    <testcase time="0.00200000000000244" classname="modules" name="module_expects_all_ui_args_being_a_ui_arguments_or_passed_through_..._"/>
+    <testcase time="0.00600000000000023" classname="modules" name="module_expects_all_ui_args_being_a_ui_arguments_or_passed_through_..._"/>
     <testcase time="0.00399999999999778" classname="modules" name="module_requires_datanames_argument_to_be_a_character_or_NULL"/>
-    <testcase time="0.00200000000000244" classname="modules" name="module_requires_datanames_argument_to_be_a_character_or_NULL"/>
-    <testcase time="0.00300000000000011" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
+    <testcase time="0.00100000000000477" classname="modules" name="module_requires_datanames_argument_to_be_a_character_or_NULL"/>
+    <testcase time="0.00199999999999534" classname="modules" name="module_requires_datanames_argument_to_be_a_character_or_NULL"/>
+    <testcase time="0.00500000000000256" classname="modules" name="module_requires_datanames_argument_to_be_a_character_or_NULL"/>
+    <testcase time="0.00199999999999534" classname="modules" name="module_requires_datanames_argument_to_be_a_character_or_NULL"/>
+    <testcase time="0.00400000000000489" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
     <testcase time="0.000999999999997669" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
+    <testcase time="0.00200000000000244" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
+    <testcase time="0.000999999999997669" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
+    <testcase time="0.000999999999997669" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
+    <testcase time="0.00200000000000244" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
     <testcase time="0.000999999999997669" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
     <testcase time="0.00100000000000477" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
-    <testcase time="0.00199999999999534" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
-    <testcase time="0.00100000000000477" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
-    <testcase time="0.000999999999997669" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
-    <testcase time="0.000999999999997669" classname="modules" name="module_returns_list_of_class_teal_module_containing_input_objects"/>
-    <testcase time="0.00600000000000023" classname="modules" name="modules_gives_error_if_no_arguments_other_than_label_are_used"/>
-    <testcase time="0.00500000000000256" classname="modules" name="modules_gives_error_if_no_arguments_other_than_label_are_used"/>
-    <testcase time="0.00300000000000011" classname="modules" name="modules_requires_label_argument_to_be_a_string_"/>
-    <testcase time="0.00399999999999778" classname="modules" name="modules_requires_label_argument_to_be_a_string_"/>
+    <testcase time="0.0069999999999979" classname="modules" name="modules_gives_error_if_no_arguments_other_than_label_are_used"/>
+    <testcase time="0.00399999999999778" classname="modules" name="modules_gives_error_if_no_arguments_other_than_label_are_used"/>
+    <testcase time="0.00400000000000489" classname="modules" name="modules_requires_label_argument_to_be_a_string_"/>
+    <testcase time="0.00499999999999545" classname="modules" name="modules_requires_label_argument_to_be_a_string_"/>
     <testcase time="0.00500000000000256" classname="modules" name="modules_requires_label_argument_to_be_a_string_"/>
-    <testcase time="0.00300000000000011" classname="modules" name="modules_accept_teal_module_in_..."/>
-    <testcase time="0.00300000000000011" classname="modules" name="modules_accept_multiple_teal_module_objects_in_..."/>
+    <testcase time="0.00800000000000267" classname="modules" name="modules_accept_teal_module_in_..."/>
+    <testcase time="0.00399999999999778" classname="modules" name="modules_accept_multiple_teal_module_objects_in_..."/>
     <testcase time="0.00399999999999778" classname="modules" name="modules_accept_multiple_teal_module_and_teal_modules_objects_in_..."/>
-    <testcase time="0.00600000000000023" classname="modules" name="modules_does_not_accept_objects_other_than_teal_module_s_in_..."/>
-    <testcase time="0.00600000000000023" classname="modules" name="modules_does_not_accept_objects_other_than_teal_module_s_in_..."/>
-    <testcase time="0.00300000000000011" classname="modules" name="modules_returns_teal_modules_object_with_label_and_children_slot"/>
-    <testcase time="0.00200000000000244" classname="modules" name="modules_returns_teal_modules_object_with_label_and_children_slot"/>
-    <testcase time="0.00300000000000011" classname="modules" name="modules_returns_children_as_list_with_list_named_after_label_attributes"/>
+    <testcase time="0.00800000000000267" classname="modules" name="modules_does_not_accept_objects_other_than_teal_module_s_in_..."/>
+    <testcase time="0.0069999999999979" classname="modules" name="modules_does_not_accept_objects_other_than_teal_module_s_in_..."/>
+    <testcase time="0.00400000000000489" classname="modules" name="modules_returns_teal_modules_object_with_label_and_children_slot"/>
+    <testcase time="0.00199999999999534" classname="modules" name="modules_returns_teal_modules_object_with_label_and_children_slot"/>
+    <testcase time="0.00400000000000489" classname="modules" name="modules_returns_children_as_list_with_list_named_after_label_attributes"/>
     <testcase time="0.000999999999997669" classname="modules" name="modules_returns_children_as_list_with_list_named_after_label_attributes"/>
     <testcase time="0.00200000000000244" classname="modules" name="modules_returns_children_as_list_with_list_named_after_label_attributes"/>
-    <testcase time="0.0109999999999957" classname="modules" name="modules_returns_useful_error_message_if_label_argument_not_explicitly_named"/>
-    <testcase time="0.00300000000000011" classname="modules" name="modules_returns_children_as_list_with_unique_names_if_labels_are_duplicated"/>
-    <testcase time="0.00100000000000477" classname="modules" name="modules_returns_children_as_list_with_unique_names_if_labels_are_duplicated"/>
-    <testcase time="0.00199999999999534" classname="modules" name="modules_returns_children_as_list_with_unique_names_if_labels_are_duplicated"/>
-    <testcase time="0.00300000000000011" classname="modules" name="modules_depth_accepts_depth_as_integer"/>
-    <testcase time="0.00500000000000256" classname="modules" name="modules_depth_accepts_depth_as_integer"/>
-    <testcase time="0.00300000000000011" classname="modules" name="modules_depth_returns_depth_0_by_default"/>
-    <testcase time="0.00300000000000011" classname="modules" name="modules_depth_accepts_modules_to_be_teal_module_or_teal_modules"/>
+    <testcase time="0.0069999999999979" classname="modules" name="modules_returns_useful_error_message_if_label_argument_not_explicitly_named"/>
+    <testcase time="0.00399999999999778" classname="modules" name="modules_returns_children_as_list_with_unique_names_if_labels_are_duplicated"/>
+    <testcase time="0.00200000000000244" classname="modules" name="modules_returns_children_as_list_with_unique_names_if_labels_are_duplicated"/>
+    <testcase time="0.000999999999997669" classname="modules" name="modules_returns_children_as_list_with_unique_names_if_labels_are_duplicated"/>
+    <testcase time="0.00400000000000489" classname="modules" name="modules_depth_accepts_depth_as_integer"/>
+    <testcase time="0.00600000000000023" classname="modules" name="modules_depth_accepts_depth_as_integer"/>
+    <testcase time="0.00399999999999778" classname="modules" name="modules_depth_returns_depth_0_by_default"/>
+    <testcase time="0.00399999999999778" classname="modules" name="modules_depth_accepts_modules_to_be_teal_module_or_teal_modules"/>
     <testcase time="0.00200000000000244" classname="modules" name="modules_depth_accepts_modules_to_be_teal_module_or_teal_modules"/>
-    <testcase time="0.00300000000000011" classname="modules" name="modules_depth_returns_depth_same_as_input_for_teal_module"/>
+    <testcase time="0.00399999999999778" classname="modules" name="modules_depth_returns_depth_same_as_input_for_teal_module"/>
     <testcase time="0.00399999999999778" classname="modules" name="modules_depth_increases_depth_by_1_for_each_teal_modules"/>
-    <testcase time="0.000999999999997669" classname="modules" name="modules_depth_increases_depth_by_1_for_each_teal_modules"/>
-    <testcase time="0.007000000000005" classname="modules" name="is_arg_used_throws_error_if_object_is_not_teal_module_or_teal_modules"/>
+    <testcase time="0.00200000000000244" classname="modules" name="modules_depth_increases_depth_by_1_for_each_teal_modules"/>
+    <testcase time="0.00800000000000267" classname="modules" name="is_arg_used_throws_error_if_object_is_not_teal_module_or_teal_modules"/>
     <testcase time="0.00399999999999778" classname="modules" name="is_arg_used_throws_error_if_object_is_not_teal_module_or_teal_modules"/>
-    <testcase time="0.00399999999999778" classname="modules" name="is_arg_used_returns_true_if_teal_module_has_given_arg_in_server_function_args"/>
-    <testcase time="0.00500000000000256" classname="modules" name="is_arg_used_returns_false_if_teal_module_does_not_have_reporter_in_server_function_args"/>
-    <testcase time="0.00499999999999545" classname="modules" name="is_arg_used_returns_false_if_teal_modules_has_no_children_using_given_arg_"/>
+    <testcase time="0.00500000000000256" classname="modules" name="is_arg_used_returns_true_if_teal_module_has_given_arg_in_server_function_args"/>
+    <testcase time="0.00499999999999545" classname="modules" name="is_arg_used_returns_false_if_teal_module_does_not_have_reporter_in_server_function_args"/>
+    <testcase time="0.00500000000000256" classname="modules" name="is_arg_used_returns_false_if_teal_modules_has_no_children_using_given_arg_"/>
     <testcase time="0.00300000000000011" classname="modules" name="is_arg_used_returns_false_if_teal_modules_has_no_children_using_given_arg_"/>
-    <testcase time="0.00500000000000256" classname="modules" name="is_arg_used_returns_true_if_teal_modules_has_at_least_one_child_using_given_arg_"/>
+    <testcase time="0.00600000000000023" classname="modules" name="is_arg_used_returns_true_if_teal_modules_has_at_least_one_child_using_given_arg_"/>
+    <testcase time="0.00800000000000267" classname="modules" name="is_arg_used_returns_true_if_teal_modules_has_at_least_one_child_using_given_arg_"/>
     <testcase time="0.00300000000000011" classname="modules" name="is_arg_used_returns_true_if_teal_modules_has_at_least_one_child_using_given_arg_"/>
-    <testcase time="0.00300000000000011" classname="modules" name="is_arg_used_returns_true_if_teal_modules_has_at_least_one_child_using_given_arg_"/>
-    <testcase time="0.00500000000000256" classname="modules" name="is_arg_used_returns_TRUE_FALSE_when_the_arg_is_in_function_formals"/>
-    <testcase time="0.00199999999999534" classname="modules" name="is_arg_used_returns_TRUE_FALSE_when_the_arg_is_in_function_formals"/>
-    <testcase time="0.007000000000005" classname="modules" name="is_arg_used_accepts_arg_to_be_a_string_only"/>
-    <testcase time="0.00399999999999778" classname="modules" name="is_arg_used_accepts_arg_to_be_a_string_only"/>
+    <testcase time="0.00599999999999312" classname="modules" name="is_arg_used_returns_TRUE_FALSE_when_the_arg_is_in_function_formals"/>
+    <testcase time="0.00300000000000011" classname="modules" name="is_arg_used_returns_TRUE_FALSE_when_the_arg_is_in_function_formals"/>
+    <testcase time="0.00900000000000034" classname="modules" name="is_arg_used_accepts_arg_to_be_a_string_only"/>
+    <testcase time="0.00600000000000023" classname="modules" name="is_arg_used_accepts_arg_to_be_a_string_only"/>
     <testcase time="0.00500000000000256" classname="modules" name="is_arg_used_accepts_arg_to_be_a_string_only"/>
+    <testcase time="0.00800000000000267" classname="modules" name="append_module_throws_error_when_modules_is_not_inherited_from_teal_modules"/>
     <testcase time="0.00600000000000023" classname="modules" name="append_module_throws_error_when_modules_is_not_inherited_from_teal_modules"/>
-    <testcase time="0.00499999999999545" classname="modules" name="append_module_throws_error_when_modules_is_not_inherited_from_teal_modules"/>
-    <testcase time="0.0069999999999979" classname="modules" name="append_module_throws_error_is_module_is_not_inherited_from_teal_module"/>
-    <testcase time="0.00400000000000489" classname="modules" name="append_module_throws_error_is_module_is_not_inherited_from_teal_module"/>
-    <testcase time="0.00499999999999545" classname="modules" name="append_module_appends_a_module_to_children_of_not_nested_teal_modules"/>
-    <testcase time="0.00500000000000256" classname="modules" name="append_module_appends_a_module_to_children_of_nested_teal_modules"/>
-    <testcase time="0.00399999999999778" classname="modules" name="append_module_produces_teal_modules_with_unique_named_children"/>
-    <testcase time="0.00400000000000489" classname="modules" name="format.teal_modules_returns_proper_structure"/>
+    <testcase time="0.00799999999999557" classname="modules" name="append_module_throws_error_is_module_is_not_inherited_from_teal_module"/>
+    <testcase time="0.00600000000000023" classname="modules" name="append_module_throws_error_is_module_is_not_inherited_from_teal_module"/>
+    <testcase time="0.00500000000000256" classname="modules" name="append_module_appends_a_module_to_children_of_not_nested_teal_modules"/>
+    <testcase time="0.00600000000000023" classname="modules" name="append_module_appends_a_module_to_children_of_nested_teal_modules"/>
+    <testcase time="0.00499999999999545" classname="modules" name="append_module_produces_teal_modules_with_unique_named_children"/>
+    <testcase time="0.00500000000000256" classname="modules" name="format.teal_modules_returns_proper_structure"/>
   </testsuite>
-  <testsuite name="rcode_utils" timestamp="2024-07-30T08:09:15Z" hostname="c90971890ced" tests="7" skipped="0" failures="0" errors="0" time="0.057">
+  <testsuite name="rcode_utils" timestamp="2024-07-30T09:16:26Z" hostname="55b4f3065f27" tests="7" skipped="0" failures="0" errors="0" time="0.06">
     <testcase time="0.00600000000000023" classname="rcode_utils" name="With_no_teal.load_nest_code_option_set_get_rcode_str_install_returns_default_string"/>
     <testcase time="0.00300000000000011" classname="rcode_utils" name="With_teal.load_nest_code_option_set_to_character_get_rcode_str_install_returns_option_value"/>
-    <testcase time="0.000999999999997669" classname="rcode_utils" name="With_teal.load_nest_code_option_set_to_character_get_rcode_str_install_returns_option_value"/>
+    <testcase time="0.00200000000000244" classname="rcode_utils" name="With_teal.load_nest_code_option_set_to_character_get_rcode_str_install_returns_option_value"/>
     <testcase time="0.00300000000000011" classname="rcode_utils" name="When_teal.load_nest_code_option_is_not_character_get_rcode_str_install_silently_returns_default_string"/>
     <testcase time="0.000999999999997669" classname="rcode_utils" name="When_teal.load_nest_code_option_is_not_character_get_rcode_str_install_silently_returns_default_string"/>
     <testcase time="0.0290000000000035" classname="rcode_utils" name="get_rcode_libraries_returns_current_session_packages"/>
-    <testcase time="0.0139999999999958" classname="rcode_utils" name="get_datasets_code_returns_code_only_for_specified_datanames"/>
+    <testcase time="0.0159999999999982" classname="rcode_utils" name="get_datasets_code_returns_code_only_for_specified_datanames"/>
   </testsuite>
-  <testsuite name="report_previewer_module" timestamp="2024-07-30T08:09:15Z" hostname="c90971890ced" tests="5" skipped="0" failures="0" errors="0" time="0.021">
-    <testcase time="0.00900000000000034" classname="report_previewer_module" name="report_previewer_module_throws_error_if_label_is_not_string"/>
-    <testcase time="0.00400000000000489" classname="report_previewer_module" name="report_previewer_module_throws_error_if_label_is_not_string"/>
+  <testsuite name="report_previewer_module" timestamp="2024-07-30T09:16:26Z" hostname="55b4f3065f27" tests="5" skipped="0" failures="0" errors="0" time="0.026">
+    <testcase time="0.00999999999999801" classname="report_previewer_module" name="report_previewer_module_throws_error_if_label_is_not_string"/>
+    <testcase time="0.00600000000000023" classname="report_previewer_module" name="report_previewer_module_throws_error_if_label_is_not_string"/>
     <testcase time="0.00399999999999778" classname="report_previewer_module" name="report_previewer_module_throws_no_error_and_stores_label_if_label_is_string"/>
-    <testcase time="0.000999999999997669" classname="report_previewer_module" name="report_previewer_module_throws_no_error_and_stores_label_if_label_is_string"/>
-    <testcase time="0.00300000000000011" classname="report_previewer_module" name="report_previewer_module_default_label_is_Report_previewer_"/>
+    <testcase time="0.00200000000000244" classname="report_previewer_module" name="report_previewer_module_throws_no_error_and_stores_label_if_label_is_string"/>
+    <testcase time="0.00399999999999778" classname="report_previewer_module" name="report_previewer_module_default_label_is_Report_previewer_"/>
   </testsuite>
-  <testsuite name="shinytest2-data_summary" timestamp="2024-07-30T08:09:15Z" hostname="c90971890ced" tests="4" skipped="0" failures="0" errors="0" time="22.973">
-    <testcase time="3.541" classname="shinytest2_data_summary" name="e2e_data_summary_list_only_data_names_if_there_is_no_MAE_or_data.frames_in_teal_data"/>
-    <testcase time="3.04499999999999" classname="shinytest2_data_summary" name="e2e_data_summary_is_displayed_with_2_columns_data_without_keys"/>
-    <testcase time="3.236" classname="shinytest2_data_summary" name="e2e_data_summary_is_displayed_with_3_columns_for_data_with_join_keys"/>
-    <testcase time="13.151" classname="shinytest2_data_summary" name="e2e_data_summary_is_displayed_properly_if_teal_data_include_data.frames_with_join_keys_MAE_objects_and_vectors"/>
+  <testsuite name="shinytest2-data_summary" timestamp="2024-07-30T09:16:26Z" hostname="55b4f3065f27" tests="5" skipped="0" failures="0" errors="0" time="23.415">
+    <testcase time="3.626" classname="shinytest2_data_summary" name="e2e_data_summary_list_only_data_names_if_there_is_no_MAE_or_data.frames_in_teal_data"/>
+    <testcase time="3.15799999999999" classname="shinytest2_data_summary" name="e2e_data_summary_is_displayed_with_2_columns_data_without_keys"/>
+    <testcase time="3.26300000000001" classname="shinytest2_data_summary" name="e2e_data_summary_is_displayed_with_3_columns_for_data_with_join_keys"/>
+    <testcase time="5.104" classname="shinytest2_data_summary" name="e2e_data_summary_is_displayed_properly_if_teal_data_include_data.frames_with_join_keys_MAE_objects_and_vectors"/>
+    <testcase time="8.264" classname="shinytest2_data_summary" name="e2e_data_summary_is_displayed_properly_if_teal_data_include_data.frames_with_join_keys_MAE_objects_and_vectors"/>
   </testsuite>
-  <testsuite name="shinytest2-filter_panel" timestamp="2024-07-30T08:09:38Z" hostname="c90971890ced" tests="3" skipped="0" failures="0" errors="2" time="30.856">
-    <testcase time="9.513" classname="shinytest2_filter_panel" name="e2e_module_content_is_updated_when_a_data_is_filtered_in_filter_panel"/>
-    <testcase time="10.738" classname="shinytest2_filter_panel" name="e2e_filtering_a_module_specific_filter_is_refected_in_other_shared_module">
+  <testsuite name="shinytest2-filter_panel" timestamp="2024-07-30T09:16:50Z" hostname="55b4f3065f27" tests="3" skipped="0" failures="0" errors="2" time="31.539">
+    <testcase time="9.50299999999999" classname="shinytest2_filter_panel" name="e2e_module_content_is_updated_when_a_data_is_filtered_in_filter_panel"/>
+    <testcase time="11.169" classname="shinytest2_filter_panel" name="e2e_filtering_a_module_specific_filter_is_refected_in_other_shared_module">
       <error type="error" message="Error in `app$get_active_data_filters(&quot;iris&quot;)`: Assertion on 'dataset_name' failed: Must be a subset of the empty set, i.e. also empty. ('test-shinytest2-filter_panel.R:48:3')">Error in `app$get_active_data_filters("iris")`: Assertion on 'dataset_name' failed: Must be a subset of the empty set, i.e. also empty.
 Backtrace:
     ▆
@@ -308,7 +317,7 @@ Backtrace:
  6.     └─checkmate::makeAssertion(x, res, .var.name, add)
  7.       └─checkmate:::mstop(...)</error>
     </testcase>
-    <testcase time="10.605" classname="shinytest2_filter_panel" name="e2e_filtering_a_module_specific_filter_is_not_refected_in_other_unshared_modules">
+    <testcase time="10.867" classname="shinytest2_filter_panel" name="e2e_filtering_a_module_specific_filter_is_not_refected_in_other_unshared_modules">
       <error type="error" message="Error in `app$get_active_data_filters(&quot;mtcars&quot;)`: Assertion on 'dataset_name' failed: Must be a subset of the empty set, i.e. also empty. ('test-shinytest2-filter_panel.R:87:3')">Error in `app$get_active_data_filters("mtcars")`: Assertion on 'dataset_name' failed: Must be a subset of the empty set, i.e. also empty.
 Backtrace:
     ▆
@@ -321,35 +330,35 @@ Backtrace:
  7.       └─checkmate:::mstop(...)</error>
     </testcase>
   </testsuite>
-  <testsuite name="shinytest2-init" timestamp="2024-07-30T08:10:09Z" hostname="c90971890ced" tests="17" skipped="0" failures="0" errors="0" time="26.188">
-    <testcase time="7.95400000000001" classname="shinytest2_init" name="e2e_teal_app_initializes_with_no_errors"/>
-    <testcase time="7.93599999999999" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
-    <testcase time="2.288" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
-    <testcase time="0.00400000000000489" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
-    <testcase time="0.00100000000000477" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
-    <testcase time="0.00300000000000011" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
+  <testsuite name="shinytest2-init" timestamp="2024-07-30T09:17:21Z" hostname="55b4f3065f27" tests="17" skipped="0" failures="0" errors="0" time="27.018">
+    <testcase time="8.111" classname="shinytest2_init" name="e2e_teal_app_initializes_with_no_errors"/>
+    <testcase time="8.27200000000001" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
+    <testcase time="2.291" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
+    <testcase time="0.00399999999999068" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
     <testcase time="0.00200000000000955" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
     <testcase time="0.00399999999999068" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
     <testcase time="0.00100000000000477" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
+    <testcase time="0.00400000000000489" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
+    <testcase time="0.000999999999990564" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
+    <testcase time="0.00200000000000955" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
+    <testcase time="0.000999999999990564" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
     <testcase time="0.00100000000000477" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
     <testcase time="0.00199999999999534" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
-    <testcase time="0.00100000000000477" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
-    <testcase time="0.000999999999990564" classname="shinytest2_init" name="e2e_teal_app_initializes_with_sessionInfo_modal"/>
-    <testcase time="7.943" classname="shinytest2_init" name="e2e_init_creates_UI_containing_specified_title_favicon_header_and_footer"/>
-    <testcase time="0.0330000000000013" classname="shinytest2_init" name="e2e_init_creates_UI_containing_specified_title_favicon_header_and_footer"/>
-    <testcase time="0.007000000000005" classname="shinytest2_init" name="e2e_init_creates_UI_containing_specified_title_favicon_header_and_footer"/>
-    <testcase time="0.007000000000005" classname="shinytest2_init" name="e2e_init_creates_UI_containing_specified_title_favicon_header_and_footer"/>
+    <testcase time="8.27300000000001" classname="shinytest2_init" name="e2e_init_creates_UI_containing_specified_title_favicon_header_and_footer"/>
+    <testcase time="0.0339999999999918" classname="shinytest2_init" name="e2e_init_creates_UI_containing_specified_title_favicon_header_and_footer"/>
+    <testcase time="0.00800000000000978" classname="shinytest2_init" name="e2e_init_creates_UI_containing_specified_title_favicon_header_and_footer"/>
+    <testcase time="0.00699999999999079" classname="shinytest2_init" name="e2e_init_creates_UI_containing_specified_title_favicon_header_and_footer"/>
   </testsuite>
-  <testsuite name="shinytest2-landing_popup" timestamp="2024-07-30T08:10:35Z" hostname="c90971890ced" tests="11" skipped="0" failures="10" errors="1" time="40.646">
-    <testcase time="8.205" classname="shinytest2_landing_popup" name="e2e_teal_app_with_landing_popup_module_initializes_with_no_errors">
+  <testsuite name="shinytest2-landing_popup" timestamp="2024-07-30T09:17:48Z" hostname="55b4f3065f27" tests="11" skipped="0" failures="10" errors="1" time="41.717">
+    <testcase time="8.494" classname="shinytest2_landing_popup" name="e2e_teal_app_with_landing_popup_module_initializes_with_no_errors">
       <failure type="failure" message="app$get_text(&quot;#landingpopup b&quot;) not equal to &quot;A welcome message!&quot;. ('test-shinytest2-landing_popup.R:14:3')">app$get_text("#landingpopup b") not equal to "A welcome message!".
 target is NULL, current is character</failure>
     </testcase>
-    <testcase time="7.96300000000001" classname="shinytest2_landing_popup" name="e2e_app_with_default_landing_popup_module_creates_modal_containing_a_button">
+    <testcase time="8.12299999999999" classname="shinytest2_landing_popup" name="e2e_app_with_default_landing_popup_module_creates_modal_containing_a_button">
       <failure type="failure" message="app$get_text(&quot;#shiny-modal-wrapper button&quot;) not equal to &quot;Accept&quot;. ('test-shinytest2-landing_popup.R:31:3')">app$get_text("#shiny-modal-wrapper button") not equal to "Accept".
 target is NULL, current is character</failure>
     </testcase>
-    <testcase time="7.94" classname="shinytest2_landing_popup" name="e2e_when_default_landing_popup_module_is_closed_it_shows_the_underlying_teal_app">
+    <testcase time="8.24300000000002" classname="shinytest2_landing_popup" name="e2e_when_default_landing_popup_module_is_closed_it_shows_the_underlying_teal_app">
       <error type="error" message="Error in `app_find_node_id(self, private, input = input, output = output,  ('test-shinytest2-landing_popup.R:50:3')">Error in `app_find_node_id(self, private, input = input, output = output, 
     selector = selector)`: Cannot find HTML element with selector #shiny-modal-wrapper button[data-dismiss='modal']
 Backtrace:
@@ -361,70 +370,70 @@ Backtrace:
  5.         └─shinytest2:::app_abort(...)
  6.           └─rlang::abort(..., app = self, call = call)</error>
     </testcase>
-    <testcase time="8.167" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
+    <testcase time="8.369" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
       <failure type="failure" message="app$get_text(&quot;.modal-title&quot;) not equal to `modal_title`. ('test-shinytest2-landing_popup.R:103:5')">app$get_text(".modal-title") not equal to `modal_title`.
 target is NULL, current is character</failure>
     </testcase>
-    <testcase time="0.0159999999999911" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
+    <testcase time="0.0169999999999959" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
       <failure type="failure" message="trimws(app$get_text(&quot;.modal-body&quot;)) not equal to `modal_content_message`. ('test-shinytest2-landing_popup.R:108:5')">trimws(app$get_text(".modal-body")) not equal to `modal_content_message`.
 Lengths differ: 0 is not 1</failure>
     </testcase>
-    <testcase time="0.01400000000001" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
+    <testcase time="0.0149999999999864" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
       <failure type="failure" message="app$get_text(&quot;.btn-default:nth-child(1)&quot;) not equal to modal_btns$go$text. ('test-shinytest2-landing_popup.R:113:5')">app$get_text(".btn-default:nth-child(1)") not equal to modal_btns$go$text.
 target is NULL, current is character</failure>
     </testcase>
-    <testcase time="0.0139999999999816" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
+    <testcase time="0.0150000000000148" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
       <failure type="failure" message="app$get_text(phash(modal_btns$more$id)) not equal to modal_btns$more$text. ('test-shinytest2-landing_popup.R:118:5')">app$get_text(phash(modal_btns$more$id)) not equal to modal_btns$more$text.
 target is NULL, current is character</failure>
     </testcase>
-    <testcase time="0.0240000000000009" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
+    <testcase time="0.0250000000000057" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
       <failure type="failure" message="app$get_attr(phash(modal_btns$more$id), &quot;onclick&quot;) not equal to modal_btns$more$onclick. ('test-shinytest2-landing_popup.R:123:5')">app$get_attr(phash(modal_btns$more$id), "onclick") not equal to modal_btns$more$onclick.
 Lengths differ: 0 is not 1</failure>
     </testcase>
-    <testcase time="0.0150000000000148" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
+    <testcase time="0.0149999999999864" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
       <failure type="failure" message="app$get_text(phash(modal_btns$reject$id)) not equal to modal_btns$reject$text. ('test-shinytest2-landing_popup.R:128:5')">app$get_text(phash(modal_btns$reject$id)) not equal to modal_btns$reject$text.
 target is NULL, current is character</failure>
     </testcase>
-    <testcase time="0.0250000000000057" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
+    <testcase time="0.0219999999999914" classname="shinytest2_landing_popup" name="e2e_app_with_customized_landing_popup_module_creates_modal_containing_specified_title_content_and_buttons">
       <failure type="failure" message="app$get_attr(phash(modal_btns$reject$id), &quot;onclick&quot;) not equal to modal_btns$reject$onclick. ('test-shinytest2-landing_popup.R:133:5')">app$get_attr(phash(modal_btns$reject$id), "onclick") not equal to modal_btns$reject$onclick.
 Lengths differ: 0 is not 1</failure>
     </testcase>
-    <testcase time="8.26299999999998" classname="shinytest2_landing_popup" name="e2e_when_customized_button_in_landing_popup_module_is_clicked_it_redirects_to_a_certain_page">
+    <testcase time="8.37900000000002" classname="shinytest2_landing_popup" name="e2e_when_customized_button_in_landing_popup_module_is_clicked_it_redirects_to_a_certain_page">
       <failure type="failure" message="app$get_attr(&quot;#read&quot;, &quot;onclick&quot;) not equal to `onclick_text`. ('test-shinytest2-landing_popup.R:155:3')">app$get_attr("#read", "onclick") not equal to `onclick_text`.
 Lengths differ: 0 is not 1</failure>
     </testcase>
   </testsuite>
-  <testsuite name="shinytest2-module_bookmark_manager" timestamp="2024-07-30T08:11:16Z" hostname="c90971890ced" tests="4" skipped="0" failures="0" errors="0" time="35.582">
-    <testcase time="8.352" classname="shinytest2_module_bookmark_manager" name="bookmark_manager_button_is_not_rendered_by_default"/>
-    <testcase time="8.26400000000001" classname="shinytest2_module_bookmark_manager" name="bookmark_manager_button_is_not_rendered_when_enableBookmarking_url_"/>
-    <testcase time="8.298" classname="shinytest2_module_bookmark_manager" name="bookmark_manager_button_is_rendered_when_enableBookmarking_server_"/>
-    <testcase time="10.668" classname="shinytest2_module_bookmark_manager" name="bookmark_manager_button_shows_modal_with_url_containing_state_id_when_clicked"/>
+  <testsuite name="shinytest2-module_bookmark_manager" timestamp="2024-07-30T09:18:30Z" hostname="55b4f3065f27" tests="4" skipped="0" failures="0" errors="0" time="36.035">
+    <testcase time="8.37" classname="shinytest2_module_bookmark_manager" name="bookmark_manager_button_is_not_rendered_by_default"/>
+    <testcase time="8.55099999999999" classname="shinytest2_module_bookmark_manager" name="bookmark_manager_button_is_not_rendered_when_enableBookmarking_url_"/>
+    <testcase time="8.31299999999999" classname="shinytest2_module_bookmark_manager" name="bookmark_manager_button_is_rendered_when_enableBookmarking_server_"/>
+    <testcase time="10.801" classname="shinytest2_module_bookmark_manager" name="bookmark_manager_button_shows_modal_with_url_containing_state_id_when_clicked"/>
   </testsuite>
-  <testsuite name="shinytest2-modules" timestamp="2024-07-30T08:11:51Z" hostname="c90971890ced" tests="6" skipped="0" failures="4" errors="0" time="44.359">
-    <testcase time="7.85499999999999" classname="shinytest2_modules" name="e2e_the_module_server_logic_is_only_triggered_when_the_teal_module_becomes_active"/>
+  <testsuite name="shinytest2-modules" timestamp="2024-07-30T09:19:06Z" hostname="55b4f3065f27" tests="6" skipped="0" failures="4" errors="0" time="44.762">
+    <testcase time="7.91399999999999" classname="shinytest2_modules" name="e2e_the_module_server_logic_is_only_triggered_when_the_teal_module_becomes_active"/>
     <testcase time="0.613" classname="shinytest2_modules" name="e2e_the_module_server_logic_is_only_triggered_when_the_teal_module_becomes_active">
       <failure type="failure" message="length(test_exports) not equal to 2. ('test-shinytest2-modules.R:35:3')">length(test_exports) not equal to 2.
 1/1 mismatches
 [1] 1 - 2 == -1</failure>
     </testcase>
-    <testcase time="10.093" classname="shinytest2_modules" name="e2e_filter_panel_only_shows_the_data_supplied_using_datanames">
+    <testcase time="10.064" classname="shinytest2_modules" name="e2e_filter_panel_only_shows_the_data_supplied_using_datanames">
       <failure type="failure" message="app$get_active_filter_vars() not identical to &quot;mtcars&quot;. ('test-shinytest2-modules.R:49:3')">app$get_active_filter_vars() not identical to "mtcars".
 target is NULL, current is character</failure>
     </testcase>
-    <testcase time="10.051" classname="shinytest2_modules" name="e2e_filter_panel_shows_all_the_datasets_when_datanames_is_all">
+    <testcase time="10.294" classname="shinytest2_modules" name="e2e_filter_panel_shows_all_the_datasets_when_datanames_is_all">
       <failure type="failure" message="app$get_active_filter_vars() not identical to c(&quot;iris&quot;, &quot;mtcars&quot;). ('test-shinytest2-modules.R:65:3')">app$get_active_filter_vars() not identical to c("iris", "mtcars").
 target is NULL, current is character</failure>
     </testcase>
-    <testcase time="7.97299999999998" classname="shinytest2_modules" name="e2e_filter_panel_is_not_displayed_when_datanames_is_NULL">
+    <testcase time="8.03700000000001" classname="shinytest2_modules" name="e2e_filter_panel_is_not_displayed_when_datanames_is_NULL">
       <failure type="failure" message="... %&gt;% rvest::html_attr(&quot;style&quot;) not identical to &quot;display: none;&quot;. ('test-shinytest2-modules.R:81:3')">... %&gt;% rvest::html_attr("style") not identical to "display: none;".
 1/1 mismatches
 x[1]: NA
 y[1]: "display: none;"</failure>
     </testcase>
-    <testcase time="7.774" classname="shinytest2_modules" name="e2e_all_the_nested_teal_modules_are_initiated_as_expected"/>
+    <testcase time="7.84" classname="shinytest2_modules" name="e2e_all_the_nested_teal_modules_are_initiated_as_expected"/>
   </testsuite>
-  <testsuite name="shinytest2-reporter" timestamp="2024-07-30T08:12:36Z" hostname="c90971890ced" tests="3" skipped="0" failures="0" errors="3" time="50.182">
-    <testcase time="8.48099999999999" classname="shinytest2_reporter" name="e2e_reporter_tab_is_created_when_a_module_has_reporter">
+  <testsuite name="shinytest2-reporter" timestamp="2024-07-30T09:19:51Z" hostname="55b4f3065f27" tests="3" skipped="0" failures="0" errors="3" time="50.523">
+    <testcase time="8.36699999999999" classname="shinytest2_reporter" name="e2e_reporter_tab_is_created_when_a_module_has_reporter">
       <error type="error" message="Error in `UseMethod(&quot;read_xml&quot;)`: no applicable method for 'read_xml' applied to an object of class &quot;NULL&quot; ('test-shinytest2-reporter.R:8:3')">Error in `UseMethod("read_xml")`: no applicable method for 'read_xml' applied to an object of class "NULL"
 Backtrace:
     ▆
@@ -437,7 +446,7 @@ Backtrace:
  7.     │ └─base::withCallingHandlers(...)
  8.     └─xml2::read_xml(x, encoding = encoding, ..., as_html = TRUE, options = options)</error>
     </testcase>
-    <testcase time="7.876" classname="shinytest2_reporter" name="e2e_reporter_tab_is_not_created_when_a_module_has_no_reporter">
+    <testcase time="8.25999999999999" classname="shinytest2_reporter" name="e2e_reporter_tab_is_not_created_when_a_module_has_no_reporter">
       <error type="error" message="Error in `UseMethod(&quot;read_xml&quot;)`: no applicable method for 'read_xml' applied to an object of class &quot;NULL&quot; ('test-shinytest2-reporter.R:28:3')">Error in `UseMethod("read_xml")`: no applicable method for 'read_xml' applied to an object of class "NULL"
 Backtrace:
     ▆
@@ -450,7 +459,7 @@ Backtrace:
  7.     │ └─base::withCallingHandlers(...)
  8.     └─xml2::read_xml(x, encoding = encoding, ..., as_html = TRUE, options = options)</error>
     </testcase>
-    <testcase time="33.825" classname="shinytest2_reporter" name="e2e_adding_a_report_card_in_a_module_adds_it_in_the_report_previewer_tab">
+    <testcase time="33.896" classname="shinytest2_reporter" name="e2e_adding_a_report_card_in_a_module_adds_it_in_the_report_previewer_tab">
       <error type="error" message="Error in `app_find_node_id(self, private, input = input, output = output,  ('test-shinytest2-reporter.R:70:3')">Error in `app_find_node_id(self, private, input = input, output = output, 
     selector = selector)`: Cannot find HTML element with selector #teal-teal_modules-module_with_reporter-module-pcards .accordion-toggle
 Backtrace:
@@ -463,14 +472,14 @@ Backtrace:
  6.           └─rlang::abort(..., app = self, call = call)</error>
     </testcase>
   </testsuite>
-  <testsuite name="shinytest2-show-rcode" timestamp="2024-07-30T08:13:26Z" hostname="c90971890ced" tests="9" skipped="0" failures="2" errors="0" time="10.373">
-    <testcase time="8.03100000000001" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
-    <testcase time="2.291" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
-    <testcase time="0.00399999999996226" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
-    <testcase time="0.0010000000000332" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
-    <testcase time="0.0040000000000191" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
-    <testcase time="0.00399999999996226" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
-    <testcase time="0.007000000000005" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal">
+  <testsuite name="shinytest2-show-rcode" timestamp="2024-07-30T09:20:41Z" hostname="55b4f3065f27" tests="9" skipped="0" failures="2" errors="0" time="10.828">
+    <testcase time="8.46600000000001" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
+    <testcase time="2.30000000000001" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
+    <testcase time="0.00499999999999545" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
+    <testcase time="0.00200000000000955" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
+    <testcase time="0.00599999999997181" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
+    <testcase time="0.0050000000000523" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
+    <testcase time="0.00999999999999091" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal">
       <failure type="failure" message="`r_code` does not match &quot;# Add any code to install/load your NEST environment here&quot;. ('test-shinytest2-show-rcode.R:48:3')">`r_code` does not match "# Add any code to install/load your NEST environment here".
 Actual value: "iris &lt;- iris\nmtcars &lt;- mtcars\nstopifnot(rlang::hash(iris) == "34844aba7bde36f5a34f6d8e39803508")\nstopifnot(rlang::hash(mtcars) == "d0487363db4e6cc64fdb740cb6617fc0")\niris_raw &lt;- iris\nmtcars_raw &lt;- mtcars"
 Backtrace:
@@ -478,7 +487,7 @@ Backtrace:
  1. └─testthat::expect_match(...) at test-shinytest2-show-rcode.R:48:3
  2.   └─testthat:::expect_match_(...)</failure>
     </testcase>
-    <testcase time="0.0169999999999959" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal">
+    <testcase time="0.0199999999999818" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal">
       <failure type="failure" message="`r_code` does not match &quot;library(teal.code)&quot;. ('test-shinytest2-show-rcode.R:49:3')">`r_code` does not match "library(teal.code)".
 Actual value: "iris &lt;- iris\nmtcars &lt;- mtcars\nstopifnot(rlang::hash(iris) == "34844aba7bde36f5a34f6d8e39803508")\nstopifnot(rlang::hash(mtcars) == "d0487363db4e6cc64fdb740cb6617fc0")\niris_raw &lt;- iris\nmtcars_raw &lt;- mtcars"
 Backtrace:
@@ -488,8 +497,8 @@ Backtrace:
     </testcase>
     <testcase time="0.01400000000001" classname="shinytest2_show_rcode" name="e2e_teal_app_initializes_with_Show_R_Code_modal"/>
   </testsuite>
-  <testsuite name="shinytest2-teal_data_module" timestamp="2024-07-30T08:13:36Z" hostname="c90971890ced" tests="3" skipped="0" failures="0" errors="3" time="9.605">
-    <testcase time="3.23000000000002" classname="shinytest2_teal_data_module" name="e2e_teal_data_module_will_have_a_delayed_load_of_datasets">
+  <testsuite name="shinytest2-teal_data_module" timestamp="2024-07-30T09:20:52Z" hostname="55b4f3065f27" tests="3" skipped="0" failures="0" errors="3" time="9.891">
+    <testcase time="3.30700000000002" classname="shinytest2_teal_data_module" name="e2e_teal_data_module_will_have_a_delayed_load_of_datasets">
       <error type="error" message="Error in `app_find_node_id(self, private, input = input, output = output,  ('test-shinytest2-teal_data_module.R:31:3')">Error in `app_find_node_id(self, private, input = input, output = output, 
     selector = selector)`: Cannot find HTML element with selector #teal_data_module-submit.shiny-bound-input
 Backtrace:
@@ -501,7 +510,7 @@ Backtrace:
  5.         └─shinytest2:::app_abort(...)
  6.           └─rlang::abort(..., app = self, call = call)</error>
     </testcase>
-    <testcase time="3.21799999999996" classname="shinytest2_teal_data_module" name="e2e_teal_data_module_shows_validation_errors">
+    <testcase time="3.24799999999999" classname="shinytest2_teal_data_module" name="e2e_teal_data_module_shows_validation_errors">
       <error type="error" message="Error in `app_find_node_id(self, private, input = input, output = output,  ('test-shinytest2-teal_data_module.R:66:3')">Error in `app_find_node_id(self, private, input = input, output = output, 
     selector = selector)`: Cannot find HTML element with selector #teal_data_module-submit.shiny-bound-input
 Backtrace:
@@ -513,7 +522,7 @@ Backtrace:
  5.         └─shinytest2:::app_abort(...)
  6.           └─rlang::abort(..., app = self, call = call)</error>
     </testcase>
-    <testcase time="3.15700000000004" classname="shinytest2_teal_data_module" name="e2e_teal_data_module_inputs_change_teal_data_object_that_is_passed_to_teal_main_UI">
+    <testcase time="3.33600000000001" classname="shinytest2_teal_data_module" name="e2e_teal_data_module_inputs_change_teal_data_object_that_is_passed_to_teal_main_UI">
       <error type="error" message="Error in `app_find_node_id(self, private, input = input, output = output,  ('test-shinytest2-teal_data_module.R:111:3')">Error in `app_find_node_id(self, private, input = input, output = output, 
     selector = selector)`: Cannot find HTML element with selector #teal_data_module-submit.shiny-bound-input
 Backtrace:
@@ -526,8 +535,8 @@ Backtrace:
  6.           └─rlang::abort(..., app = self, call = call)</error>
     </testcase>
   </testsuite>
-  <testsuite name="shinytest2-teal_slices" timestamp="2024-07-30T08:13:46Z" hostname="c90971890ced" tests="2" skipped="0" failures="0" errors="2" time="22.616">
-    <testcase time="11.605" classname="shinytest2_teal_slices" name="e2e_teal_slices_filters_are_initialized_when_global_filters_are_created">
+  <testsuite name="shinytest2-teal_slices" timestamp="2024-07-30T09:21:02Z" hostname="55b4f3065f27" tests="2" skipped="0" failures="0" errors="2" time="23.366">
+    <testcase time="11.962" classname="shinytest2_teal_slices" name="e2e_teal_slices_filters_are_initialized_when_global_filters_are_created">
       <error type="error" message="Error in `app$get_active_data_filters(&quot;iris&quot;)`: Assertion on 'dataset_name' failed: Must be a subset of the empty set, i.e. also empty. ('test-shinytest2-teal_slices.R:17:3')">Error in `app$get_active_data_filters("iris")`: Assertion on 'dataset_name' failed: Must be a subset of the empty set, i.e. also empty.
 Backtrace:
     ▆
@@ -539,7 +548,7 @@ Backtrace:
  6.     └─checkmate::makeAssertion(x, res, .var.name, add)
  7.       └─checkmate:::mstop(...)</error>
     </testcase>
-    <testcase time="11.011" classname="shinytest2_teal_slices" name="e2e_teal_slices_filters_are_initialized_when_module_specific_filters_are_created">
+    <testcase time="11.404" classname="shinytest2_teal_slices" name="e2e_teal_slices_filters_are_initialized_when_module_specific_filters_are_created">
       <error type="error" message="Error in `app$get_active_data_filters(&quot;iris&quot;)`: Assertion on 'dataset_name' failed: Must be a subset of the empty set, i.e. also empty. ('test-shinytest2-teal_slices.R:65:3')">Error in `app$get_active_data_filters("iris")`: Assertion on 'dataset_name' failed: Must be a subset of the empty set, i.e. also empty.
 Backtrace:
     ▆
@@ -552,55 +561,55 @@ Backtrace:
  7.       └─checkmate:::mstop(...)</error>
     </testcase>
   </testsuite>
-  <testsuite name="shinytest2-utils" timestamp="2024-07-30T08:14:08Z" hostname="c90971890ced" tests="4" skipped="0" failures="1" errors="0" time="10.348">
-    <testcase time="8.15100000000001" classname="shinytest2_utils" name="e2e_show_hide_hamburger_works_as_expected"/>
-    <testcase time="0.0960000000000036" classname="shinytest2_utils" name="e2e_show_hide_hamburger_works_as_expected">
+  <testsuite name="shinytest2-utils" timestamp="2024-07-30T09:21:25Z" hostname="55b4f3065f27" tests="4" skipped="0" failures="1" errors="0" time="10.474">
+    <testcase time="8.27600000000001" classname="shinytest2_utils" name="e2e_show_hide_hamburger_works_as_expected"/>
+    <testcase time="0.0939999999999941" classname="shinytest2_utils" name="e2e_show_hide_hamburger_works_as_expected">
       <failure type="failure" message="grepl(&quot;display: block;&quot;, secondary_attrs$style) is not TRUE ('test-shinytest2-utils.R:21:3')">grepl("display: block;", secondary_attrs$style) is not TRUE
 
 `actual`:   FALSE
 `expected`: TRUE </failure>
     </testcase>
-    <testcase time="2.09899999999999" classname="shinytest2_utils" name="e2e_show_hide_hamburger_works_as_expected"/>
-    <testcase time="0.00200000000000955" classname="shinytest2_utils" name="e2e_show_hide_hamburger_works_as_expected"/>
+    <testcase time="2.101" classname="shinytest2_utils" name="e2e_show_hide_hamburger_works_as_expected"/>
+    <testcase time="0.0029999999999859" classname="shinytest2_utils" name="e2e_show_hide_hamburger_works_as_expected"/>
   </testsuite>
-  <testsuite name="shinytest2-wunder_bar" timestamp="2024-07-30T08:14:19Z" hostname="c90971890ced" tests="4" skipped="0" failures="0" errors="0" time="21.943">
-    <testcase time="8.27299999999997" classname="shinytest2_wunder_bar" name="wunder_bar_srv_clicking_filter_icon_opens_filter_manager_modal"/>
-    <testcase time="2.71899999999999" classname="shinytest2_wunder_bar" name="wunder_bar_srv_clicking_filter_icon_opens_filter_manager_modal"/>
-    <testcase time="8.221" classname="shinytest2_wunder_bar" name="wunder_bar_srv_clicking_snapshot_icon_opens_snapshot_manager_modal"/>
-    <testcase time="2.73000000000002" classname="shinytest2_wunder_bar" name="wunder_bar_srv_clicking_snapshot_icon_opens_snapshot_manager_modal"/>
+  <testsuite name="shinytest2-wunder_bar" timestamp="2024-07-30T09:21:36Z" hostname="55b4f3065f27" tests="4" skipped="0" failures="0" errors="0" time="22.38">
+    <testcase time="8.57999999999998" classname="shinytest2_wunder_bar" name="wunder_bar_srv_clicking_filter_icon_opens_filter_manager_modal"/>
+    <testcase time="2.72800000000001" classname="shinytest2_wunder_bar" name="wunder_bar_srv_clicking_filter_icon_opens_filter_manager_modal"/>
+    <testcase time="8.334" classname="shinytest2_wunder_bar" name="wunder_bar_srv_clicking_snapshot_icon_opens_snapshot_manager_modal"/>
+    <testcase time="2.738" classname="shinytest2_wunder_bar" name="wunder_bar_srv_clicking_snapshot_icon_opens_snapshot_manager_modal"/>
   </testsuite>
-  <testsuite name="tdata" timestamp="2024-07-30T08:14:41Z" hostname="c90971890ced" tests="41" skipped="0" failures="0" errors="0" time="0.34">
-    <testcase time="0.0520000000000209" classname="tdata" name="new_tdata_accepts_reactive_and_not_reactive_MAE_and_data.frames"/>
-    <testcase time="0.007000000000005" classname="tdata" name="new_tdata_throws_error_if_data_is_not_a_list_with_unique_names"/>
-    <testcase time="0.00499999999999545" classname="tdata" name="new_tdata_throws_error_if_data_is_not_a_list_with_unique_names"/>
+  <testsuite name="tdata" timestamp="2024-07-30T09:21:58Z" hostname="55b4f3065f27" tests="41" skipped="0" failures="0" errors="0" time="0.346">
+    <testcase time="0.0529999999999973" classname="tdata" name="new_tdata_accepts_reactive_and_not_reactive_MAE_and_data.frames"/>
+    <testcase time="0.00799999999998136" classname="tdata" name="new_tdata_throws_error_if_data_is_not_a_list_with_unique_names"/>
+    <testcase time="0.0050000000000523" classname="tdata" name="new_tdata_throws_error_if_data_is_not_a_list_with_unique_names"/>
     <testcase time="0.00499999999999545" classname="tdata" name="new_tdata_throws_error_if_data_is_not_a_list_with_unique_names"/>
     <testcase time="0.007000000000005" classname="tdata" name="new_tdata_throws_error_if_contents_of_data_list_are_not_of_correct_type"/>
+    <testcase time="0.00699999999994816" classname="tdata" name="new_tdata_throws_error_if_code_is_not_character_or_reactive_character"/>
     <testcase time="0.007000000000005" classname="tdata" name="new_tdata_throws_error_if_code_is_not_character_or_reactive_character"/>
-    <testcase time="0.00599999999997181" classname="tdata" name="new_tdata_throws_error_if_code_is_not_character_or_reactive_character"/>
-    <testcase time="0.00600000000002865" classname="tdata" name="new_tdata_accepts_character_and_reactive_characters_for_code_argument"/>
-    <testcase time="0.0029999999999859" classname="tdata" name="new_tdata_accepts_character_and_reactive_characters_for_code_argument"/>
-    <testcase time="0.007000000000005" classname="tdata" name="new_tdata_throws_error_if_join_keys_is_not_of_class_join_keys"/>
+    <testcase time="0.00499999999999545" classname="tdata" name="new_tdata_accepts_character_and_reactive_characters_for_code_argument"/>
+    <testcase time="0.0040000000000191" classname="tdata" name="new_tdata_accepts_character_and_reactive_characters_for_code_argument"/>
+    <testcase time="0.00699999999994816" classname="tdata" name="new_tdata_throws_error_if_join_keys_is_not_of_class_join_keys"/>
     <testcase time="0.00499999999999545" classname="tdata" name="new_tdata_throws_no_error_if_join_keys_is_of_class_join_keys"/>
     <testcase time="0.007000000000005" classname="tdata" name="new_tdata_throws_error_if_metadata_is_not_a_list_with_unique_names_a_subset_of_the_names_of_data"/>
     <testcase time="0.00499999999999545" classname="tdata" name="new_tdata_throws_error_if_metadata_is_not_a_list_with_unique_names_a_subset_of_the_names_of_data"/>
-    <testcase time="0.00499999999999545" classname="tdata" name="new_tdata_throws_error_if_metadata_is_not_a_list_with_unique_names_a_subset_of_the_names_of_data"/>
-    <testcase time="0.00499999999999545" classname="tdata" name="new_tdata_does_not_throw_error_with_valid_metadata"/>
-    <testcase time="0.00599999999997181" classname="tdata" name="get_metadata_returns_NULL_if_no_metadata"/>
-    <testcase time="0.00599999999997181" classname="tdata" name="get_metadata_returns_NULL_if_no_metadata_for_given_dataset"/>
-    <testcase time="0.00499999999999545" classname="tdata" name="get_metadata_returns_metadata_for_given_dataset"/>
-    <testcase time="0.007000000000005" classname="tdata" name="get_metadata_returns_NULL_if_dataset_doesn_t_exist"/>
+    <testcase time="0.0050000000000523" classname="tdata" name="new_tdata_throws_error_if_metadata_is_not_a_list_with_unique_names_a_subset_of_the_names_of_data"/>
+    <testcase time="0.00599999999997181" classname="tdata" name="new_tdata_does_not_throw_error_with_valid_metadata"/>
+    <testcase time="0.00600000000002865" classname="tdata" name="get_metadata_returns_NULL_if_no_metadata"/>
+    <testcase time="0.00699999999994816" classname="tdata" name="get_metadata_returns_NULL_if_no_metadata_for_given_dataset"/>
+    <testcase time="0.0050000000000523" classname="tdata" name="get_metadata_returns_metadata_for_given_dataset"/>
+    <testcase time="0.00699999999994816" classname="tdata" name="get_metadata_returns_NULL_if_dataset_doesn_t_exist"/>
     <testcase time="0.00600000000002865" classname="tdata" name="get_code_returns_empty_character_if_tdata_object_has_no_code"/>
     <testcase time="0.007000000000005" classname="tdata" name="get_code_returns_character_of_code_if_tdata_object_has_code"/>
-    <testcase time="0.00399999999996226" classname="tdata" name="get_code_returns_character_of_code_if_tdata_object_has_code"/>
+    <testcase time="0.00499999999999545" classname="tdata" name="get_code_returns_character_of_code_if_tdata_object_has_code"/>
     <testcase time="0.00499999999999545" classname="tdata" name="get_code_tdata_accepts_tdata"/>
-    <testcase time="0.0080000000000382" classname="tdata" name="get_code_tdata_throws_error_when_input_is_not_tdata"/>
-    <testcase time="0.00499999999999545" classname="tdata" name="get_code_tdata_throws_error_when_input_is_not_tdata"/>
+    <testcase time="0.00799999999998136" classname="tdata" name="get_code_tdata_throws_error_when_input_is_not_tdata"/>
+    <testcase time="0.00600000000002865" classname="tdata" name="get_code_tdata_throws_error_when_input_is_not_tdata"/>
     <testcase time="0.00499999999999545" classname="tdata" name="get_code_tdata_returns_character_code"/>
     <testcase time="0.0459999999999923" classname="tdata" name="tdata2env_returns_environment_containing_tdata_contents_"/>
     <testcase time="0.00200000000000955" classname="tdata" name="tdata2env_returns_environment_containing_tdata_contents_"/>
-    <testcase time="0.02800000000002" classname="tdata" name="tdata2env_returns_environment_containing_tdata_contents_"/>
-    <testcase time="0.00699999999994816" classname="tdata" name="tdata2env_throws_error_if_argument_is_not_tdata"/>
-    <testcase time="0.00600000000002865" classname="tdata" name="join_keys_returns_NULL_if_no_join_keys_object_exists_inside_tdata"/>
+    <testcase time="0.0269999999999868" classname="tdata" name="tdata2env_returns_environment_containing_tdata_contents_"/>
+    <testcase time="0.007000000000005" classname="tdata" name="tdata2env_throws_error_if_argument_is_not_tdata"/>
+    <testcase time="0.007000000000005" classname="tdata" name="join_keys_returns_NULL_if_no_join_keys_object_exists_inside_tdata"/>
     <testcase time="0.007000000000005" classname="tdata" name="join_keys_returns_join_keys_object_if_it_exists_inside_tdata"/>
     <testcase time="0.00599999999997181" classname="tdata" name="as_tdata_accepts_all_possible_inputs"/>
     <testcase time="0.00499999999999545" classname="tdata" name="as_tdata_accepts_all_possible_inputs"/>
@@ -610,195 +619,195 @@ Backtrace:
     <testcase time="0.000999999999976353" classname="tdata" name="as_tdata_always_returns_tdata_object"/>
     <testcase time="0.007000000000005" classname="tdata" name="datasets_are_maintained_during_conversion"/>
     <testcase time="0.0040000000000191" classname="tdata" name="datasets_are_maintained_during_conversion"/>
-    <testcase time="0.00799999999998136" classname="tdata" name="as_tdata_maintains_code_during_conversion"/>
+    <testcase time="0.00699999999994816" classname="tdata" name="as_tdata_maintains_code_during_conversion"/>
   </testsuite>
-  <testsuite name="teal_data_module-eval_code" timestamp="2024-07-30T08:14:41Z" hostname="c90971890ced" tests="16" skipped="0" failures="0" errors="0" time="0.11">
-    <testcase time="0.00599999999997181" classname="teal_data_module_eval_code" name="within.teal_data_module_returns_an_object_with_teal_data_module_class"/>
+  <testsuite name="teal_data_module-eval_code" timestamp="2024-07-30T09:21:59Z" hostname="55b4f3065f27" tests="16" skipped="0" failures="0" errors="0" time="0.113">
+    <testcase time="0.007000000000005" classname="teal_data_module_eval_code" name="within.teal_data_module_returns_an_object_with_teal_data_module_class"/>
     <testcase time="0.00300000000004275" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_ui_has_modified_namespace_for_id"/>
     <testcase time="0.00199999999995271" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_ui_has_modified_namespace_for_id"/>
     <testcase time="0.0010000000000332" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_ui_has_modified_namespace_for_id"/>
-    <testcase time="0.0129999999999768" classname="teal_data_module_eval_code" name="within.teal_data_module_modifies_the_reactive_tea_data_object"/>
-    <testcase time="0.0010000000000332" classname="teal_data_module_eval_code" name="within.teal_data_module_modifies_the_reactive_tea_data_object"/>
-    <testcase time="0.0159999999999627" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_will_execute_several_times_until_error"/>
-    <testcase time="0.0080000000000382" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_will_execute_several_times_until_error"/>
-    <testcase time="0.00199999999995271" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_will_execute_several_times_until_error"/>
+    <testcase time="0.021000000000015" classname="teal_data_module_eval_code" name="within.teal_data_module_modifies_the_reactive_tea_data_object"/>
+    <testcase time="0.00199999999995271" classname="teal_data_module_eval_code" name="within.teal_data_module_modifies_the_reactive_tea_data_object"/>
+    <testcase time="0.01400000000001" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_will_execute_several_times_until_error"/>
+    <testcase time="0.00900000000001455" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_will_execute_several_times_until_error"/>
+    <testcase time="0.000999999999976353" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_will_execute_several_times_until_error"/>
     <testcase time="0.01400000000001" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_throws_error_when_original_teal_data_module_result_is_not_reactive"/>
-    <testcase time="0.01400000000001" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_propagates_qenv_error_from_the_original_first_call"/>
-    <testcase time="0.00200000000000955" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_propagates_qenv_error_from_the_original_first_call"/>
-    <testcase time="0.0110000000000241" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_handles_an_arbitrary_object_other_than_teal_data_or_qenv.error_"/>
-    <testcase time="0.00199999999995271" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_handles_an_arbitrary_object_other_than_teal_data_or_qenv.error_"/>
-    <testcase time="0.0130000000000337" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_handles_a_NULL_result"/>
-    <testcase time="0.00200000000000955" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_handles_a_NULL_result"/>
+    <testcase time="0.0120000000000005" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_propagates_qenv_error_from_the_original_first_call"/>
+    <testcase time="0.0010000000000332" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_propagates_qenv_error_from_the_original_first_call"/>
+    <testcase time="0.0109999999999673" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_handles_an_arbitrary_object_other_than_teal_data_or_qenv.error_"/>
+    <testcase time="0.0010000000000332" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_handles_an_arbitrary_object_other_than_teal_data_or_qenv.error_"/>
+    <testcase time="0.0120000000000005" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_handles_a_NULL_result"/>
+    <testcase time="0.00199999999995271" classname="teal_data_module_eval_code" name="eval_code.teal_data_module_handles_a_NULL_result"/>
   </testsuite>
-  <testsuite name="teal_data_module" timestamp="2024-07-30T08:14:41Z" hostname="c90971890ced" tests="5" skipped="0" failures="0" errors="0" time="0.03">
-    <testcase time="0.00599999999997181" classname="teal_data_module" name="teal_data_module_returns_teal_data_module"/>
-    <testcase time="0.00600000000002865" classname="teal_data_module" name="teal_data_module_throws_when_ui_has_other_formals_than_id_only"/>
-    <testcase time="0.00799999999998136" classname="teal_data_module" name="teal_data_module_throws_when_server_has_other_formals_than_id_only"/>
+  <testsuite name="teal_data_module" timestamp="2024-07-30T09:21:59Z" hostname="55b4f3065f27" tests="5" skipped="0" failures="0" errors="0" time="0.028">
+    <testcase time="0.0050000000000523" classname="teal_data_module" name="teal_data_module_returns_teal_data_module"/>
+    <testcase time="0.00699999999994816" classname="teal_data_module" name="teal_data_module_throws_when_ui_has_other_formals_than_id_only"/>
+    <testcase time="0.007000000000005" classname="teal_data_module" name="teal_data_module_throws_when_server_has_other_formals_than_id_only"/>
     <testcase time="0.00499999999999545" classname="teal_data_module" name="teal_data_module_throws_when_server_has_other_formals_than_id_only"/>
-    <testcase time="0.00499999999999545" classname="teal_data_module" name="teal_data_module_throws_when_server_has_other_formals_than_id_only"/>
+    <testcase time="0.0040000000000191" classname="teal_data_module" name="teal_data_module_throws_when_server_has_other_formals_than_id_only"/>
   </testsuite>
-  <testsuite name="teal_reporter" timestamp="2024-07-30T08:14:41Z" hostname="c90971890ced" tests="25" skipped="0" failures="0" errors="0" time="0.127">
+  <testsuite name="teal_reporter" timestamp="2024-07-30T09:21:59Z" hostname="55b4f3065f27" tests="25" skipped="0" failures="0" errors="0" time="0.123">
     <testcase time="0.00900000000001455" classname="teal_reporter" name="TealReportCard_object_can_be_initialized"/>
     <testcase time="0.00499999999999545" classname="teal_reporter" name="TealReportCard_inherits_from_ReportCard"/>
     <testcase time="0.00499999999999545" classname="teal_reporter" name="TealReportCard_new_returns_an_object_of_type_TealReportCard"/>
-    <testcase time="0.00900000000001455" classname="teal_reporter" name="TealReportCard_get_content_returns_content_with_metadata"/>
+    <testcase time="0.00999999999999091" classname="teal_reporter" name="TealReportCard_get_content_returns_content_with_metadata"/>
+    <testcase time="0.0010000000000332" classname="teal_reporter" name="TealReportCard_get_content_returns_content_with_metadata"/>
     <testcase time="0.000999999999976353" classname="teal_reporter" name="TealReportCard_get_content_returns_content_with_metadata"/>
-    <testcase time="0.00200000000000955" classname="teal_reporter" name="TealReportCard_get_content_returns_content_with_metadata"/>
     <testcase time="0.000999999999976353" classname="teal_reporter" name="TealReportCard_get_content_returns_content_with_metadata"/>
     <testcase time="0.0010000000000332" classname="teal_reporter" name="TealReportCard_get_content_returns_content_with_metadata"/>
     <testcase time="0.00399999999996226" classname="teal_reporter" name="TealReportCard_append_src_accepts_a_character"/>
-    <testcase time="0.00300000000004275" classname="teal_reporter" name="TealReportCard_append_src_returns_self"/>
-    <testcase time="0.00399999999996226" classname="teal_reporter" name="TealReportCard_append_src_returns_title_and_content"/>
-    <testcase time="0.0040000000000191" classname="teal_reporter" name="TealReportCard_append_encodings_accepts_list_of_character"/>
+    <testcase time="0.0040000000000191" classname="teal_reporter" name="TealReportCard_append_src_returns_self"/>
+    <testcase time="0.0040000000000191" classname="teal_reporter" name="TealReportCard_append_src_returns_title_and_content"/>
+    <testcase time="0.00399999999996226" classname="teal_reporter" name="TealReportCard_append_encodings_accepts_list_of_character"/>
     <testcase time="0.0040000000000191" classname="teal_reporter" name="TealReportCard_append_encodings_returns_self"/>
-    <testcase time="0.00399999999996226" classname="teal_reporter" name="TealReportCard_append_encodings_returns_title_and_content"/>
-    <testcase time="0.0010000000000332" classname="teal_reporter" name="TealReportCard_append_encodings_returns_title_and_content"/>
-    <testcase time="0.00599999999997181" classname="teal_reporter" name="TealReportCard_append_fs_accepts_only_a_teal_slices"/>
-    <testcase time="0.0169999999999959" classname="teal_reporter" name="TealReportCard_append_fs_accepts_only_a_teal_slices"/>
+    <testcase time="0.0040000000000191" classname="teal_reporter" name="TealReportCard_append_encodings_returns_title_and_content"/>
+    <testcase time="0.000999999999976353" classname="teal_reporter" name="TealReportCard_append_encodings_returns_title_and_content"/>
+    <testcase time="0.007000000000005" classname="teal_reporter" name="TealReportCard_append_fs_accepts_only_a_teal_slices"/>
+    <testcase time="0.00799999999998136" classname="teal_reporter" name="TealReportCard_append_fs_accepts_only_a_teal_slices"/>
     <testcase time="0.007000000000005" classname="teal_reporter" name="TealReportCard_append_fs_returns_self"/>
-    <testcase time="0.007000000000005" classname="teal_reporter" name="TealReportCard_append_fs_returns_title_and_content"/>
+    <testcase time="0.0080000000000382" classname="teal_reporter" name="TealReportCard_append_fs_returns_title_and_content"/>
     <testcase time="0.0029999999999859" classname="teal_reporter" name="TealReportCard_append_fs_returns_title_and_content"/>
     <testcase time="0.0040000000000191" classname="teal_reporter" name="TealSlicesBlock_new_accepts_teal_slices_only"/>
     <testcase time="0.00499999999999545" classname="teal_reporter" name="TealSlicesBlock_new_accepts_teal_slices_only"/>
-    <testcase time="0.00600000000002865" classname="teal_reporter" name="TealSlicesBlock_get_content_returns_yaml_character"/>
+    <testcase time="0.00799999999998136" classname="teal_reporter" name="TealSlicesBlock_get_content_returns_yaml_character"/>
     <testcase time="0.007000000000005" classname="teal_reporter" name="TealSlicesBlock_to_list_returns_list_containing_teal_slices"/>
     <testcase time="0.00799999999998136" classname="teal_reporter" name="TealSlicesBlock_from_list_retains_states_from_a_list"/>
   </testsuite>
-  <testsuite name="teal_slices-store" timestamp="2024-07-30T08:14:41Z" hostname="c90971890ced" tests="15" skipped="0" failures="0" errors="0" time="0.13">
-    <testcase time="0.0330000000000155" classname="teal_slices_store" name="teal_slice_store_restore_supports_NULL_and_character_0_for_choices_and_selected"/>
-    <testcase time="0.0029999999999859" classname="teal_slices_store" name="teal_slice_store_restore_supports_NULL_and_character_0_for_choices_and_selected"/>
-    <testcase time="0.0029999999999859" classname="teal_slices_store" name="teal_slice_store_restore_supports_NULL_and_character_0_for_choices_and_selected"/>
+  <testsuite name="teal_slices-store" timestamp="2024-07-30T09:21:59Z" hostname="55b4f3065f27" tests="15" skipped="0" failures="0" errors="0" time="0.137">
+    <testcase time="0.0339999999999918" classname="teal_slices_store" name="teal_slice_store_restore_supports_NULL_and_character_0_for_choices_and_selected"/>
+    <testcase time="0.00300000000004275" classname="teal_slices_store" name="teal_slice_store_restore_supports_NULL_and_character_0_for_choices_and_selected"/>
+    <testcase time="0.00399999999996226" classname="teal_slices_store" name="teal_slice_store_restore_supports_NULL_and_character_0_for_choices_and_selected"/>
     <testcase time="0.0130000000000337" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_POSIXct_timestamps_in_selected"/>
     <testcase time="0.0029999999999859" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_POSIXct_timestamps_in_selected"/>
-    <testcase time="0.0120000000000005" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_Date_dates_in_selected"/>
-    <testcase time="0.0029999999999859" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_Date_dates_in_selected"/>
-    <testcase time="0.0120000000000005" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_POSIXct_timestamps_in_choices"/>
+    <testcase time="0.0129999999999768" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_Date_dates_in_selected"/>
+    <testcase time="0.00300000000004275" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_Date_dates_in_selected"/>
+    <testcase time="0.0129999999999768" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_POSIXct_timestamps_in_choices"/>
     <testcase time="0.0029999999999859" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_POSIXct_timestamps_in_choices"/>
-    <testcase time="0.0120000000000005" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_Date_timestamps_in_choices"/>
-    <testcase time="0.00300000000004275" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_Date_timestamps_in_choices"/>
-    <testcase time="0.0129999999999768" classname="teal_slices_store" name="teal_slice_store_restore_restores_mixed_Date_characters_as_characters_in_selected"/>
-    <testcase time="0.0120000000000005" classname="teal_slices_store" name="teal_slice_store_restore_restores_characters_as_characters_in_selected_and_choices"/>
-    <testcase time="0.00200000000000955" classname="teal_slices_store" name="teal_slice_store_restore_restores_characters_as_characters_in_selected_and_choices"/>
-    <testcase time="0.0029999999999859" classname="teal_slices_store" name="teal_slice_store_restore_restores_characters_as_characters_in_selected_and_choices"/>
+    <testcase time="0.0130000000000337" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_Date_timestamps_in_choices"/>
+    <testcase time="0.0029999999999859" classname="teal_slices_store" name="teal_slice_store_restore_supports_saving_Date_timestamps_in_choices"/>
+    <testcase time="0.01400000000001" classname="teal_slices_store" name="teal_slice_store_restore_restores_mixed_Date_characters_as_characters_in_selected"/>
+    <testcase time="0.0129999999999768" classname="teal_slices_store" name="teal_slice_store_restore_restores_characters_as_characters_in_selected_and_choices"/>
+    <testcase time="0.0010000000000332" classname="teal_slices_store" name="teal_slice_store_restore_restores_characters_as_characters_in_selected_and_choices"/>
+    <testcase time="0.00399999999996226" classname="teal_slices_store" name="teal_slice_store_restore_restores_characters_as_characters_in_selected_and_choices"/>
   </testsuite>
-  <testsuite name="teal_slices" timestamp="2024-07-30T08:14:41Z" hostname="c90971890ced" tests="18" skipped="0" failures="0" errors="0" time="0.103">
+  <testsuite name="teal_slices" timestamp="2024-07-30T09:21:59Z" hostname="55b4f3065f27" tests="18" skipped="0" failures="0" errors="0" time="0.106">
     <testcase time="0.007000000000005" classname="teal_slices" name="teal_slices_produces_teal_slices_object_with_teal_specific_attributes"/>
-    <testcase time="0.000999999999976353" classname="teal_slices" name="teal_slices_produces_teal_slices_object_with_teal_specific_attributes"/>
-    <testcase time="0.00300000000004275" classname="teal_slices" name="teal_slices_produces_teal_slices_object_with_teal_specific_attributes"/>
-    <testcase time="0.000999999999976353" classname="teal_slices" name="teal_slices_produces_teal_slices_object_with_teal_specific_attributes"/>
-    <testcase time="0.00499999999999545" classname="teal_slices" name="teal_slices_fails_when_inexisting_teal_slice_id_is_specified_in_mapping"/>
-    <testcase time="0.00799999999998136" classname="teal_slices" name="teal_slices_fails_when_inexisting_teal_slice_id_is_specified_in_mapping"/>
-    <testcase time="0.007000000000005" classname="teal_slices" name="teal_slices_processes_filter_mapping"/>
-    <testcase time="0.007000000000005" classname="teal_slices" name="teal_slices_processes_filter_mapping"/>
+    <testcase time="0.0010000000000332" classname="teal_slices" name="teal_slices_produces_teal_slices_object_with_teal_specific_attributes"/>
+    <testcase time="0.00199999999995271" classname="teal_slices" name="teal_slices_produces_teal_slices_object_with_teal_specific_attributes"/>
+    <testcase time="0.0010000000000332" classname="teal_slices" name="teal_slices_produces_teal_slices_object_with_teal_specific_attributes"/>
+    <testcase time="0.00599999999997181" classname="teal_slices" name="teal_slices_fails_when_inexisting_teal_slice_id_is_specified_in_mapping"/>
+    <testcase time="0.007000000000005" classname="teal_slices" name="teal_slices_fails_when_inexisting_teal_slice_id_is_specified_in_mapping"/>
+    <testcase time="0.0080000000000382" classname="teal_slices" name="teal_slices_processes_filter_mapping"/>
+    <testcase time="0.00799999999998136" classname="teal_slices" name="teal_slices_processes_filter_mapping"/>
     <testcase time="0.0120000000000005" classname="teal_slices" name="teal_slices_drops_non_global_filters_if_module_specific_FALSE"/>
     <testcase time="0.007000000000005" classname="teal_slices" name="teal_slices_drops_non_global_filters_if_module_specific_FALSE"/>
-    <testcase time="0.0120000000000005" classname="teal_slices" name="deep_copy_filters_copies_teal_slice_changes_pointer_of_teal_slice_object_but_values_remain_the_same"/>
-    <testcase time="0.00399999999996226" classname="teal_slices" name="deep_copy_filters_copies_teal_slice_changes_pointer_of_teal_slice_object_but_values_remain_the_same"/>
-    <testcase time="0.00499999999999545" classname="teal_slices" name="teal_slices_mapping_should_be_an_empty_list_or_a_named_list_or_missing"/>
-    <testcase time="0.0040000000000191" classname="teal_slices" name="teal_slices_mapping_should_be_an_empty_list_or_a_named_list_or_missing"/>
-    <testcase time="0.0040000000000191" classname="teal_slices" name="teal_slices_mapping_should_be_an_empty_list_or_a_named_list_or_missing"/>
+    <testcase time="0.0129999999999768" classname="teal_slices" name="deep_copy_filters_copies_teal_slice_changes_pointer_of_teal_slice_object_but_values_remain_the_same"/>
+    <testcase time="0.0040000000000191" classname="teal_slices" name="deep_copy_filters_copies_teal_slice_changes_pointer_of_teal_slice_object_but_values_remain_the_same"/>
+    <testcase time="0.00599999999997181" classname="teal_slices" name="teal_slices_mapping_should_be_an_empty_list_or_a_named_list_or_missing"/>
+    <testcase time="0.00300000000004275" classname="teal_slices" name="teal_slices_mapping_should_be_an_empty_list_or_a_named_list_or_missing"/>
+    <testcase time="0.00399999999996226" classname="teal_slices" name="teal_slices_mapping_should_be_an_empty_list_or_a_named_list_or_missing"/>
+    <testcase time="0.00600000000002865" classname="teal_slices" name="teal_slices_mapping_should_be_an_empty_list_or_a_named_list_or_missing"/>
     <testcase time="0.00499999999999545" classname="teal_slices" name="teal_slices_mapping_should_be_an_empty_list_or_a_named_list_or_missing"/>
     <testcase time="0.00599999999997181" classname="teal_slices" name="teal_slices_mapping_should_be_an_empty_list_or_a_named_list_or_missing"/>
-    <testcase time="0.00499999999999545" classname="teal_slices" name="teal_slices_mapping_should_be_an_empty_list_or_a_named_list_or_missing"/>
   </testsuite>
-  <testsuite name="utils" timestamp="2024-07-30T08:14:42Z" hostname="c90971890ced" tests="41" skipped="0" failures="0" errors="0" time="67.331">
-    <testcase time="0.007000000000005" classname="utils" name="get_teal_bs_theme"/>
-    <testcase time="0.0240000000000009" classname="utils" name="get_teal_bs_theme"/>
+  <testsuite name="utils" timestamp="2024-07-30T09:21:59Z" hostname="55b4f3065f27" tests="41" skipped="0" failures="0" errors="0" time="67.945">
+    <testcase time="0.0080000000000382" classname="utils" name="get_teal_bs_theme"/>
+    <testcase time="0.0229999999999677" classname="utils" name="get_teal_bs_theme"/>
     <testcase time="0.00200000000000955" classname="utils" name="get_teal_bs_theme"/>
     <testcase time="0.000999999999976353" classname="utils" name="get_teal_bs_theme"/>
     <testcase time="0.0110000000000241" classname="utils" name="report_card_template_function_returns_TealReportCard_object_with_appropriate_content_and_labels"/>
-    <testcase time="0.000999999999976353" classname="utils" name="report_card_template_function_returns_TealReportCard_object_with_appropriate_content_and_labels"/>
-    <testcase time="0.0010000000000332" classname="utils" name="report_card_template_function_returns_TealReportCard_object_with_appropriate_content_and_labels"/>
     <testcase time="0.00200000000000955" classname="utils" name="report_card_template_function_returns_TealReportCard_object_with_appropriate_content_and_labels"/>
     <testcase time="0.000999999999976353" classname="utils" name="report_card_template_function_returns_TealReportCard_object_with_appropriate_content_and_labels"/>
+    <testcase time="0.00200000000000955" classname="utils" name="report_card_template_function_returns_TealReportCard_object_with_appropriate_content_and_labels"/>
+    <testcase time="0.0010000000000332" classname="utils" name="report_card_template_function_returns_TealReportCard_object_with_appropriate_content_and_labels"/>
     <testcase time="0.000999999999976353" classname="utils" name="report_card_template_function_returns_TealReportCard_object_with_appropriate_content_and_labels"/>
-    <testcase time="0.0120000000000005" classname="utils" name="teal_data_to_filtered_data_return_FilteredData_class"/>
-    <testcase time="0.0040000000000191" classname="utils" name="teal_data_datanames_returns_names_of_the_env_s_objects_when_datanames_not_set"/>
-    <testcase time="0.0040000000000191" classname="utils" name="teal_data_datanames_returns_datanames_which_are_set_by_teal.data_datanames"/>
+    <testcase time="0.0110000000000241" classname="utils" name="teal_data_to_filtered_data_return_FilteredData_class"/>
+    <testcase time="0.00499999999999545" classname="utils" name="teal_data_datanames_returns_names_of_the_env_s_objects_when_datanames_not_set"/>
+    <testcase time="0.00399999999996226" classname="utils" name="teal_data_datanames_returns_datanames_which_are_set_by_teal.data_datanames"/>
+    <testcase time="0.0040000000000191" classname="utils" name="validate_app_title_tag_works_on_validating_the_title_tag"/>
     <testcase time="0.00499999999999545" classname="utils" name="validate_app_title_tag_works_on_validating_the_title_tag"/>
     <testcase time="0.0040000000000191" classname="utils" name="validate_app_title_tag_works_on_validating_the_title_tag"/>
+    <testcase time="0.00499999999999545" classname="utils" name="validate_app_title_tag_works_on_validating_the_title_tag"/>
     <testcase time="0.00399999999996226" classname="utils" name="validate_app_title_tag_works_on_validating_the_title_tag"/>
-    <testcase time="0.0040000000000191" classname="utils" name="validate_app_title_tag_works_on_validating_the_title_tag"/>
-    <testcase time="0.0040000000000191" classname="utils" name="validate_app_title_tag_works_on_validating_the_title_tag"/>
-    <testcase time="0.00399999999996226" classname="utils" name="build_app_title_builts_a_valid_tag"/>
+    <testcase time="0.0130000000000337" classname="utils" name="build_app_title_builts_a_valid_tag"/>
     <testcase time="0.00200000000000955" classname="utils" name="build_app_title_builts_a_valid_tag"/>
-    <testcase time="0.0040000000000191" classname="utils" name="create_app_id_data_accepts_teal_data_or_teal_data_module"/>
-    <testcase time="0.00200000000000955" classname="utils" name="create_app_id_data_accepts_teal_data_or_teal_data_module"/>
-    <testcase time="0.00399999999996226" classname="utils" name="create_app_id_data_accepts_teal_data_or_teal_data_module"/>
+    <testcase time="0.00499999999999545" classname="utils" name="create_app_id_data_accepts_teal_data_or_teal_data_module"/>
+    <testcase time="0.000999999999976353" classname="utils" name="create_app_id_data_accepts_teal_data_or_teal_data_module"/>
+    <testcase time="0.00499999999999545" classname="utils" name="create_app_id_data_accepts_teal_data_or_teal_data_module"/>
     <testcase time="0.0040000000000191" classname="utils" name="create_app_id_modules_accepts_modules"/>
     <testcase time="0.00499999999999545" classname="utils" name="create_app_id_modules_accepts_modules"/>
     <testcase time="0.0040000000000191" classname="utils" name="create_app_id_returns_a_character_string"/>
-    <testcase time="0.00899999999995771" classname="utils" name="create_app_id_returns_different_hash_for_different_data"/>
-    <testcase time="0.00900000000001455" classname="utils" name="create_app_id_returns_different_hash_for_different_modules"/>
-    <testcase time="0.0040000000000191" classname="utils" name="defunction_returns_a_string_when_passed_a_function"/>
-    <testcase time="0.0029999999999859" classname="utils" name="defunction_returns_non_function_atomic_as_is"/>
+    <testcase time="0.00999999999999091" classname="utils" name="create_app_id_returns_different_hash_for_different_data"/>
+    <testcase time="0.0109999999999673" classname="utils" name="create_app_id_returns_different_hash_for_different_modules"/>
+    <testcase time="0.00300000000004275" classname="utils" name="defunction_returns_a_string_when_passed_a_function"/>
+    <testcase time="0.00399999999996226" classname="utils" name="defunction_returns_non_function_atomic_as_is"/>
+    <testcase time="0.0010000000000332" classname="utils" name="defunction_returns_non_function_atomic_as_is"/>
     <testcase time="0.000999999999976353" classname="utils" name="defunction_returns_non_function_atomic_as_is"/>
     <testcase time="0.0010000000000332" classname="utils" name="defunction_returns_non_function_atomic_as_is"/>
-    <testcase time="0.0010000000000332" classname="utils" name="defunction_returns_non_function_atomic_as_is"/>
-    <testcase time="0.0029999999999859" classname="utils" name="defunction_recursively_goes_down_a_list"/>
-    <testcase time="67.143" classname="utils" name="create_renv_lockfile_creates_a_lock_file_during_the_execution"/>
-    <testcase time="0.007000000000005" classname="utils" name="create_renv_lockfile_creates_a_lock_file_during_the_execution"/>
-    <testcase time="0.00600000000002865" classname="utils" name="create_renv_lockfile_creates_a_lock_file_during_the_execution"/>
+    <testcase time="0.00399999999996226" classname="utils" name="defunction_recursively_goes_down_a_list"/>
+    <testcase time="67.741" classname="utils" name="create_renv_lockfile_creates_a_lock_file_during_the_execution"/>
+    <testcase time="0.00599999999997181" classname="utils" name="create_renv_lockfile_creates_a_lock_file_during_the_execution"/>
     <testcase time="0.007000000000005" classname="utils" name="create_renv_lockfile_creates_a_lock_file_during_the_execution"/>
     <testcase time="0.00599999999997181" classname="utils" name="create_renv_lockfile_creates_a_lock_file_during_the_execution"/>
     <testcase time="0.00600000000002865" classname="utils" name="create_renv_lockfile_creates_a_lock_file_during_the_execution"/>
+    <testcase time="0.007000000000005" classname="utils" name="create_renv_lockfile_creates_a_lock_file_during_the_execution"/>
     <testcase time="0.00399999999996226" classname="utils" name="create_renv_lockfile_creates_a_lock_file_during_the_execution"/>
   </testsuite>
-  <testsuite name="validate_has_data" timestamp="2024-07-30T08:15:49Z" hostname="c90971890ced" tests="17" skipped="0" failures="0" errors="0" time="0.095">
+  <testsuite name="validate_has_data" timestamp="2024-07-30T09:23:07Z" hostname="55b4f3065f27" tests="17" skipped="0" failures="0" errors="0" time="0.095">
     <testcase time="0.0180000000000291" classname="validate_has_data" name="validate_has_data_throws_no_error_when_data_has_at_least_as_many_rows_as_min_nrow"/>
-    <testcase time="0.000999999999976353" classname="validate_has_data" name="validate_has_data_throws_no_error_when_data_has_at_least_as_many_rows_as_min_nrow"/>
-    <testcase time="0.007000000000005" classname="validate_has_data" name="validate_has_data_throws_error_when_min_nrow_rows_of_data"/>
-    <testcase time="0.0040000000000191" classname="validate_has_data" name="validate_has_data_accepts_logical_complete_argument"/>
-    <testcase time="0.00200000000000955" classname="validate_has_data" name="validate_has_data_accepts_logical_complete_argument"/>
-    <testcase time="0.00599999999997181" classname="validate_has_data" name="validate_has_data_throws_error_when_data_has_NA_and_complete_is_set_to_TRUE"/>
+    <testcase time="0.00200000000000955" classname="validate_has_data" name="validate_has_data_throws_no_error_when_data_has_at_least_as_many_rows_as_min_nrow"/>
+    <testcase time="0.00599999999997181" classname="validate_has_data" name="validate_has_data_throws_error_when_min_nrow_rows_of_data"/>
+    <testcase time="0.00499999999999545" classname="validate_has_data" name="validate_has_data_accepts_logical_complete_argument"/>
+    <testcase time="0.0010000000000332" classname="validate_has_data" name="validate_has_data_accepts_logical_complete_argument"/>
+    <testcase time="0.007000000000005" classname="validate_has_data" name="validate_has_data_throws_error_when_data_has_NA_and_complete_is_set_to_TRUE"/>
+    <testcase time="0.00399999999996226" classname="validate_has_data" name="validate_has_data_accepts_logical_allow_inf_argument"/>
     <testcase time="0.0040000000000191" classname="validate_has_data" name="validate_has_data_accepts_logical_allow_inf_argument"/>
-    <testcase time="0.0040000000000191" classname="validate_has_data" name="validate_has_data_accepts_logical_allow_inf_argument"/>
-    <testcase time="0.00699999999994816" classname="validate_has_data" name="validate_has_data_accepts_throws_error_when_data_has_Inf_values_and_allow_inf_is_set_to_FALSE"/>
-    <testcase time="0.00600000000002865" classname="validate_has_data" name="validate_has_data_accepts_throws_error_when_data_has_Inf_values_and_allow_inf_is_set_to_FALSE"/>
+    <testcase time="0.007000000000005" classname="validate_has_data" name="validate_has_data_accepts_throws_error_when_data_has_Inf_values_and_allow_inf_is_set_to_FALSE"/>
+    <testcase time="0.00599999999997181" classname="validate_has_data" name="validate_has_data_accepts_throws_error_when_data_has_Inf_values_and_allow_inf_is_set_to_FALSE"/>
     <testcase time="0.0040000000000191" classname="validate_has_data" name="validate_has_data_accepts_throws_error_when_data_has_Inf_values_and_allow_inf_is_set_to_FALSE"/>
-    <testcase time="0.00399999999996226" classname="validate_has_data" name="validate_has_data_allow_inf_argument_ignores_non_numeric_columns"/>
-    <testcase time="0.00499999999999545" classname="validate_has_data" name="validate_has_data_allow_inf_argument_ignores_non_numeric_columns"/>
-    <testcase time="0.00600000000002865" classname="validate_has_data" name="validate_has_data_returns_message_when_msg_argument_is_set"/>
-    <testcase time="0.00599999999997181" classname="validate_has_data" name="validate_has_data_returns_message_msg_argument_is_set_and_complete_is_set_to_TRUE"/>
+    <testcase time="0.0040000000000191" classname="validate_has_data" name="validate_has_data_allow_inf_argument_ignores_non_numeric_columns"/>
+    <testcase time="0.0040000000000191" classname="validate_has_data" name="validate_has_data_allow_inf_argument_ignores_non_numeric_columns"/>
+    <testcase time="0.00599999999997181" classname="validate_has_data" name="validate_has_data_returns_message_when_msg_argument_is_set"/>
+    <testcase time="0.007000000000005" classname="validate_has_data" name="validate_has_data_returns_message_msg_argument_is_set_and_complete_is_set_to_TRUE"/>
     <testcase time="0.00600000000002865" classname="validate_has_data" name="validate_has_data_returns_throws_error_with_non_character_msg_input"/>
-    <testcase time="0.00499999999999545" classname="validate_has_data" name="validate_has_data_returns_throws_error_with_non_character_msg_input"/>
+    <testcase time="0.00399999999996226" classname="validate_has_data" name="validate_has_data_returns_throws_error_with_non_character_msg_input"/>
   </testsuite>
-  <testsuite name="validate_inputs" timestamp="2024-07-30T08:15:49Z" hostname="c90971890ced" tests="36" skipped="0" failures="0" errors="0" time="0.481">
-    <testcase time="0.00900000000001455" classname="validate_inputs" name="invalid_arguments_raise_errors"/>
+  <testsuite name="validate_inputs" timestamp="2024-07-30T09:23:07Z" hostname="55b4f3065f27" tests="36" skipped="0" failures="0" errors="0" time="0.495">
+    <testcase time="0.0100000000000477" classname="validate_inputs" name="invalid_arguments_raise_errors"/>
     <testcase time="0.00399999999996226" classname="validate_inputs" name="invalid_arguments_raise_errors"/>
-    <testcase time="0.0190000000000055" classname="validate_inputs" name="disabled_validators_raise_warnings_individual_validators_"/>
-    <testcase time="0.0149999999999864" classname="validate_inputs" name="disabled_validators_raise_warnings_validator_list_"/>
-    <testcase time="0.0150000000000432" classname="validate_inputs" name="disabled_validators_raise_warnings_nested_validator_list_"/>
-    <testcase time="0.0979999999999563" classname="validate_inputs" name="valid_inputs_produce_desired_output_individual_validators_"/>
+    <testcase time="0.0330000000000155" classname="validate_inputs" name="disabled_validators_raise_warnings_individual_validators_"/>
+    <testcase time="0.0160000000000196" classname="validate_inputs" name="disabled_validators_raise_warnings_validator_list_"/>
+    <testcase time="0.0149999999999864" classname="validate_inputs" name="disabled_validators_raise_warnings_nested_validator_list_"/>
+    <testcase time="0.08299999999997" classname="validate_inputs" name="valid_inputs_produce_desired_output_individual_validators_"/>
     <testcase time="0.021000000000015" classname="validate_inputs" name="valid_inputs_produce_desired_output_validator_list_"/>
-    <testcase time="0.0169999999999959" classname="validate_inputs" name="valid_inputs_produce_desired_output_nested_validator_list_"/>
+    <testcase time="0.0180000000000291" classname="validate_inputs" name="valid_inputs_produce_desired_output_nested_validator_list_"/>
     <testcase time="0.0219999999999914" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_individual_validators_"/>
-    <testcase time="0.0190000000000055" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_individual_validators_"/>
-    <testcase time="0.0190000000000055" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_individual_validators_"/>
-    <testcase time="0.021000000000015" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_validator_list_"/>
-    <testcase time="0.0199999999999818" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_validator_list_"/>
+    <testcase time="0.0199999999999818" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_individual_validators_"/>
+    <testcase time="0.0199999999999818" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_individual_validators_"/>
+    <testcase time="0.0220000000000482" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_validator_list_"/>
+    <testcase time="0.0209999999999582" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_validator_list_"/>
     <testcase time="0.0190000000000055" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_validator_list_"/>
-    <testcase time="0.0219999999999914" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_nested_validator_list_"/>
-    <testcase time="0.0190000000000055" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_nested_validator_list_"/>
-    <testcase time="0.0200000000000387" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_nested_validator_list_"/>
-    <testcase time="0.0249999999999773" classname="validate_inputs" name="error_message_is_formatted_properly"/>
+    <testcase time="0.0230000000000246" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_nested_validator_list_"/>
+    <testcase time="0.0199999999999818" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_nested_validator_list_"/>
+    <testcase time="0.021000000000015" classname="validate_inputs" name="invalid_inputs_raise_errors_in_output_nested_validator_list_"/>
+    <testcase time="0.0269999999999868" classname="validate_inputs" name="error_message_is_formatted_properly"/>
+    <testcase time="0.007000000000005" classname="validate_inputs" name="error_message_is_formatted_properly"/>
     <testcase time="0.00599999999997181" classname="validate_inputs" name="error_message_is_formatted_properly"/>
     <testcase time="0.00600000000002865" classname="validate_inputs" name="error_message_is_formatted_properly"/>
-    <testcase time="0.00599999999997181" classname="validate_inputs" name="error_message_is_formatted_properly"/>
     <testcase time="0.007000000000005" classname="validate_inputs" name="error_message_is_formatted_properly"/>
-    <testcase time="0.0010000000000332" classname="validate_inputs" name="error_message_is_formatted_properly"/>
-    <testcase time="0.0029999999999859" classname="validate_inputs" name="error_message_is_formatted_properly"/>
-    <testcase time="0.000999999999976353" classname="validate_inputs" name="error_message_is_formatted_properly"/>
-    <testcase time="0.00300000000004275" classname="validate_inputs" name="error_message_is_formatted_properly"/>
+    <testcase time="0.00200000000000955" classname="validate_inputs" name="error_message_is_formatted_properly"/>
     <testcase time="0.00200000000000955" classname="validate_inputs" name="error_message_is_formatted_properly"/>
     <testcase time="0.00199999999995271" classname="validate_inputs" name="error_message_is_formatted_properly"/>
     <testcase time="0.00200000000000955" classname="validate_inputs" name="error_message_is_formatted_properly"/>
-    <testcase time="0.0010000000000332" classname="validate_inputs" name="error_message_is_formatted_properly"/>
+    <testcase time="0.00200000000000955" classname="validate_inputs" name="error_message_is_formatted_properly"/>
+    <testcase time="0.00200000000000955" classname="validate_inputs" name="error_message_is_formatted_properly"/>
+    <testcase time="0.00200000000000955" classname="validate_inputs" name="error_message_is_formatted_properly"/>
+    <testcase time="0.00200000000000955" classname="validate_inputs" name="error_message_is_formatted_properly"/>
+    <testcase time="0.00199999999995271" classname="validate_inputs" name="error_message_is_formatted_properly"/>
+    <testcase time="0.00200000000000955" classname="validate_inputs" name="error_message_is_formatted_properly"/>
     <testcase time="0.0029999999999859" classname="validate_inputs" name="error_message_is_formatted_properly"/>
-    <testcase time="0.00200000000000955" classname="validate_inputs" name="error_message_is_formatted_properly"/>
-    <testcase time="0.00200000000000955" classname="validate_inputs" name="error_message_is_formatted_properly"/>
-    <testcase time="0.0229999999999677" classname="validate_inputs" name="different_validation_modes_produce_proper_messages"/>
-    <testcase time="0.0029999999999859" classname="validate_inputs" name="different_validation_modes_produce_proper_messages"/>
+    <testcase time="0.0240000000000009" classname="validate_inputs" name="different_validation_modes_produce_proper_messages"/>
     <testcase time="0.0040000000000191" classname="validate_inputs" name="different_validation_modes_produce_proper_messages"/>
+    <testcase time="0.0029999999999859" classname="validate_inputs" name="different_validation_modes_produce_proper_messages"/>
   </testsuite>
 </testsuites>
