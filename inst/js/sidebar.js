@@ -17,8 +17,6 @@ const showSidebar = (tabpanel_wrapper) => {
   $(`#${tabpanel_wrapper} .teal_secondary_col`).fadeIn(650);
 };
 const toggleFilterPanel = (tabpanel_wrapper) => {
-  console.log(`#${tabpanel_wrapper} .teal_secondary_col`);
-  console.log(filter_open[tabpanel_wrapper] === undefined);
   if (filter_open[tabpanel_wrapper] === undefined) {
     filter_open[tabpanel_wrapper] = true;
   }
