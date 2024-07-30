@@ -39,9 +39,10 @@ NULL
 ui_data <- function(id, data, title, header, footer) {
   ns <- shiny::NS(id)
   shiny::div(
+    id = ns("content"),
     style = "display: inline-block;",
     if (inherits(data, "teal_data_module")) {
-      actionButton(ns("open_teal_data_module"), NULL, icon = icon("database"))
+      ui_teal_data_module(ns("teal_data_module"), transformer = data)
     } else {
       NULL
     }
@@ -79,37 +80,29 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
       .fallback_on_failure(this = data, that = reactive(req(FALSE)), label = "Reactive data")
     }
 
-    setBookmarkExclude("open_teal_data_module")
-
-    observeEvent(input$open_teal_data_module, {
-      if (input$open_teal_data_module > 1) {
-        footer <- modalButton("Dismiss")
-        easy_close <- TRUE
-      } else {
-        footer <- NULL
-        easy_close <- FALSE
-      }
-      showModal(
-        modalDialog(
-          class = ifelse(easy_close, "blur_background", "hide_background"),
-          tags$div(
-            ui_teal_data_module(session$ns("teal_data_module"), transformer = data)
-          ),
-          footer = footer,
-          easyClose = easy_close
-        )
-      )
-    })
-
     if (inherits(data, "teal_data_module")) {
-      shinyjs::disable(selector = "#teal_modules-active_tab.nav-tabs a")
-      shinyjs::click(id = "open_teal_data_module")
+      shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
     }
 
     observeEvent(data_validated(), {
-      removeModal()
       showNotification("Data loaded successfully.", duration = 5)
-      shinyjs::enable(selector = "#teal_modules-active_tab.nav-tabs a")
+      shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+      if (isTRUE(attr(data, "once"))) {
+        # Hiding the data module tab.
+        shinyjs::hide(
+          selector = sprintf(
+            ".teal-body:has('#%s') a[data-value='teal_data_module']",
+            session$ns("content")
+          )
+        )
+        # Clicking the second tab, which is the first module.
+        shinyjs::runjs(
+          sprintf(
+            "document.querySelector('.teal-body:has(#%s) .nav li:nth-child(2) a').click();",
+            session$ns("content")
+          )
+        )
+      }
 
       is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data_validated()))
       if (!isTRUE(is_filter_ok)) {

@@ -83,7 +83,11 @@ ui_teal <- function(id,
     )
   )
 
+  bookmark_panel_ui <- ui_bookmark_panel(ns("bookmark_manager"), modules)
   data_elem <- ui_data(ns("data"), data = data, title = title, header = header, footer = footer)
+  if (!is.null(data)) {
+    modules$children <- c(list(teal_data_module = data_elem), modules$children)
+  }
   tabs_elem <- ui_teal_module(id = ns("teal_modules"), modules = modules)
 
   fluidPage(
@@ -93,16 +97,19 @@ ui_teal <- function(id,
     tags$header(header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
-    tabs_elem,
     tags$div(
-      id = "teal-util-icons",
+      id = ns("tabpanel_wrapper"),
+      class = "teal-body",
+      tabs_elem
+    ),
+    tags$div(
+      id = ns("options_buttons"),
       style = "margin-left: auto;",
-      data_elem,
-      ui_bookmark_panel(ns("bookmark_manager"), modules),
+      bookmark_panel_ui,
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
         href = "javascript:void(0)",
-        onclick = "toggleFilterPanel();", # see sidebar.js
+        onclick = sprintf("toggleFilterPanel('%s');", ns("tabpanel_wrapper")),
         title = "Toggle filter panel",
         icon("fas fa-bars")
       ),
@@ -114,9 +121,10 @@ ui_teal <- function(id,
         sprintf(
           "
             $(document).ready(function() {
-              $('#teal-util-icons').appendTo('#%s');
+              $('#%s').appendTo('#%s');
             });
           ",
+          ns("options_buttons"),
           ns("teal_modules-active_tab")
         )
       )
@@ -197,5 +205,9 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
     srv_bookmark_panel("bookmark_manager", modules)
+
+    if (inherits(data, "teal_data_module")) {
+      setBookmarkExclude(c("teal_modules-active_tab"))
+    }
   })
 }
