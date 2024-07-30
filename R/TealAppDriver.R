@@ -158,13 +158,11 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     navigate_teal_tab = function(tabs) {
       checkmate::check_character(tabs, min.len = 1)
       for (tab in tabs) {
-        root <- "root"
         self$set_input(
-          sprintf("teal-%s-active_tab", root),
+          "teal-teal_modules-active_tab",
           get_unique_labels(tab),
           wait_ = FALSE
         )
-        root <- sprintf("%s-%s", private$modules$label, get_unique_labels(tab))
       }
       self$wait_for_idle()
       private$set_active_ns()
@@ -322,12 +320,12 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
       displayed_datasets_index <- self$is_visible(
-        sprintf("#%s-active-filter_active_vars_contents > span", self$active_filters_ns())
+        sprintf("#%s-filters-filter_active_vars_contents > span", self$active_filters_ns())
       )
 
       available_datasets <- self$get_text(
         sprintf(
-          "#%s-active-filter_active_vars_contents .filter_panel_dataname",
+          "#%s-filters-filter_active_vars_contents .filter_panel_dataname",
           self$active_filters_ns()
         )
       )
@@ -404,7 +402,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         function(x) {
           var_names <- self$get_text(
             sprintf(
-              "#%s-active-%s-filters .filter-card-varname",
+              "#%s-filters-%s .filter-card-varname",
               self$active_filters_ns(),
               x
             )
@@ -675,7 +673,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
       input_id_prefix <- sprintf(
-        "%s-active-%s-filter-%s_%s-inputs",
+        "%s-filters-%s-filter-%s_%s-inputs",
         self$active_filters_ns(),
         dataset_name,
         dataset_name,
