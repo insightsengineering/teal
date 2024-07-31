@@ -70,6 +70,7 @@ testthat::test_that("e2e: filter panel shows all the datasets when datanames is 
 })
 
 testthat::test_that("e2e: filter panel is not displayed when datanames is NULL", {
+  # TODO - this is not satisfied
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
