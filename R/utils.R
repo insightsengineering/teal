@@ -200,7 +200,7 @@ teal_data_datanames <- function(data) {
         USE.NAMES = TRUE,
         simplify = FALSE
       )
-      union(topological_sort(child_parent), datanames)
+      unlist(union(topological_sort(child_parent), datanames))
     } else {
       datanames
     }
