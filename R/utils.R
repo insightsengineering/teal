@@ -191,21 +191,9 @@ check_filter_datanames <- function(filters, datanames) {
 teal_data_datanames <- function(data) {
   checkmate::assert_class(data, "teal_data")
   if (length(teal.data::datanames(data))) {
-    datanames <- teal.data::datanames(data)
-    joinkeys <- teal.data::join_keys(data)
-    if (length(join_keys) > 0) {
-      child_parent <- sapply(
-        datanames,
-        function(name) teal.data::parent(joinkeys, name),
-        USE.NAMES = TRUE,
-        simplify = FALSE
-      )
-      union(unlist(topological_sort(child_parent)), datanames)
-    } else {
-      datanames
-    }
+    teal.data::datanames(data)
   } else {
-    grep("_raw$", ls(teal.code::get_env(data), all.names = TRUE), value = TRUE, invert = TRUE)
+    ls(teal.code::get_env(data), all.names = TRUE)
   }
 }
 
