@@ -4,7 +4,7 @@
 \alias{module_filter_panel}
 \alias{ui_filter_panel}
 \alias{srv_filter_panel}
-\alias{.make_teal_data}
+\alias{.make_filtered_teal_data}
 \alias{.observe_active_filter_changed}
 \title{Filter panel module in teal}
 \usage{
@@ -12,7 +12,7 @@ ui_filter_panel(id)
 
 srv_filter_panel(id, datasets, active_datanames, data_rv, is_active)
 
-.make_teal_data(modules, data, datasets = NULL, datanames)
+.make_filtered_teal_data(modules, data, datasets = NULL, datanames)
 
 .observe_active_filter_changed(datasets, is_active, active_datanames, data_rv)
 }
