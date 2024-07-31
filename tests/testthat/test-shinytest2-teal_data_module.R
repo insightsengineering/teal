@@ -28,7 +28,10 @@ testthat::test_that("e2e: teal_data_module will have a delayed load of datasets"
     modules = example_module(label = "Example Module")
   )
 
-  app$click("teal_data_module-submit")
+  app$click("teal-data-teal_data_module-data-submit")
+  # TODO: when teal_data_module is used,
+  # app$active_module_ns() returns teal_data_module as label of the module
+  # instead of modules label
   testthat::expect_setequal(app$get_active_filter_vars(), c("dataset1", "dataset2"))
 
   app$stop()
@@ -63,7 +66,7 @@ testthat::test_that("e2e: teal_data_module shows validation errors", {
     modules = example_module(label = "Example Module")
   )
 
-  app$click("teal_data_module-submit")
+  app$click("teal-data-teal_data_module-data-submit")
 
   app$expect_validation_error()
 
@@ -108,12 +111,16 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
   )
 
   app$set_input("teal_data_module-new_column", "A_New_Column")
-  app$click("teal_data_module-submit")
+  app$click("teal-data-teal_data_module-data-submit")
 
   # This may fail if teal_data_module does not perform the transformation
   testthat::expect_no_error(app$add_filter_var("dataset1", "A_New_Column"))
 
   testthat::expect_setequal(
+    # TODO: the same as in the first test -
+    # get_active_data_filters assumes module label is a part of the namespace
+    # where when teal_data_module is an input to data it uses teal_data_module
+    # phrase in name of the active namespace.
     app$get_active_data_filters("dataset1")$A_New_Column,
     unique(sprintf("%s new", iris$Species))
   )

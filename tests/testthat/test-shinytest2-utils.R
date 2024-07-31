@@ -18,7 +18,7 @@ testthat::test_that("e2e: show/hide hamburger works as expected", {
   secondary_attrs <- get_class_attributes(app, ".teal_secondary_col")
 
   testthat::expect_true(grepl("col-sm-9", primary_attrs$class))
-  testthat::expect_true(grepl("display: block;", secondary_attrs$style))
+  testthat::expect_true(is.na(secondary_attrs$style))
 
   app$click(selector = ".btn.action-button.filter_hamburger")
   primary_attrs <- get_class_attributes(app, ".teal_primary_col")
