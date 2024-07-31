@@ -178,23 +178,15 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     # This variable is overwritten in `srv_teal` or `srv_teal_module`
     # depending on whether `module_specific` is `TRUE`.
-    datasets_rv <- NULL
-
-    datasets_obs <- if (!isTRUE(attr(filter, "module_specific"))) {
-      datasets_rv <- reactiveVal(NULL)
-      observeEvent(data_rv(), {
+    datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
+      eventReactive(data_rv(), {
         if (!inherits(data_rv(), "teal_data")) {
           stop("data_rv must be teal_data object.")
         }
         logger::log_debug("srv_teal@1 initializing FilteredData")
 
-        # Remove filter states from previous FilteredDataset
-        if (!is.null(datasets_rv())) datasets_rv()$clear_filter_states()
-
-        datasets_rv(teal_data_to_filtered_data(data_rv()))
+        teal_data_to_filtered_data(data_rv())
       })
-    } else {
-      datasets_rv <- NULL
     }
 
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
