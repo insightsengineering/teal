@@ -193,7 +193,7 @@ teal_data_datanames <- function(data) {
   if (length(teal.data::datanames(data))) {
     datanames <- teal.data::datanames(data)
     joinkeys <- teal.data::join_keys(data)
-    if (length(join_keys()) > 0) {
+    if (length(join_keys) > 0) {
       child_parent <- sapply(
         datanames,
         function(name) teal.data::parent(joinkeys, name),
