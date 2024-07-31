@@ -319,6 +319,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
+      private$set_active_ns()
       displayed_datasets_index <- self$is_visible(
         sprintf("#%s-filters-filter_active_vars_contents > span", self$active_filters_ns())
       )
@@ -431,10 +432,19 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     add_filter_var = function(dataset_name, var_name, ...) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
+      private$set_active_ns()
+      self$click(
+        sprintf(
+          "%s-filters-%s-toggle_add_panel",
+          private$ns$filter_panel,
+          dataset_name
+        )
+      )
       self$set_input(
         sprintf(
-          "%s-add-%s-filter-var_to_add",
-          self$active_filters_ns(),
+          "%s-filters-%s-%s-filter-var_to_add",
+          private$ns$filter_panel,
+          dataset_name,
           dataset_name
         ),
         var_name,

@@ -29,9 +29,6 @@ testthat::test_that("e2e: teal_data_module will have a delayed load of datasets"
   )
 
   app$click("teal-data-teal_data_module-data-submit")
-  # TODO: when teal_data_module is used,
-  # app$active_module_ns() returns teal_data_module as label of the module
-  # instead of modules label
   testthat::expect_setequal(app$get_active_filter_vars(), c("dataset1", "dataset2"))
 
   app$stop()
@@ -110,7 +107,7 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
     modules = example_module(label = "Example Module")
   )
 
-  app$set_input("teal_data_module-new_column", "A_New_Column")
+  app$set_input("teal-data-teal_data_module-data-new_column", "A_New_Column")
   app$click("teal-data-teal_data_module-data-submit")
 
   # This may fail if teal_data_module does not perform the transformation
