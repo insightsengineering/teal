@@ -44,14 +44,14 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
     trigger_data <- .observe_active_filter_changed(datasets, is_active, active_datanames, data_rv)
 
     eventReactive(trigger_data(), {
-      .make_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
+      .make_filtered_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_datanames())
     })
   })
 }
 
 #' @keywords internal
 #' @rdname module_filter_panel
-.make_teal_data <- function(modules, data, datasets = NULL, datanames) {
+.make_filtered_teal_data <- function(modules, data, datasets = NULL, datanames) {
   new_datasets <- c(
     # Filtered data
     sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE),
@@ -76,7 +76,8 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
     )
   )
   tdata@verified <- data@verified
-  teal.data::datanames(tdata) <- character(0)
+  # we want to keep same datanames that app dev initially set with respect to new teal_data's @env
+  teal.data::datanames(tdata) <- intersect(teal.data::datanames(data), teal_data_ls(tdata))
   tdata
 }
 

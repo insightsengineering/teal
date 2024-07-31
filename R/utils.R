@@ -193,8 +193,12 @@ teal_data_datanames <- function(data) {
   if (length(teal.data::datanames(data))) {
     teal.data::datanames(data)
   } else {
-    grep("_raw$", ls(teal.code::get_env(data), all.names = TRUE), value = TRUE, invert = TRUE)
+    teal_data_ls(data)
   }
+}
+
+teal_data_ls <- function(data) {
+  grep("_raw$", ls(teal.code::get_env(data), all.names = TRUE), value = TRUE, invert = TRUE)
 }
 
 #' Function for validating the title parameter of `teal::init`
