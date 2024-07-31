@@ -312,7 +312,7 @@ srv_teal_module.teal_module <- function(id,
   } else {
     intersect(
       include_parent_datanames(modules$datanames, teal.data::join_keys(data)),
-      ls(teal.code::get_env(data))
+      teal_data_ls(data)
     )
   }
 }

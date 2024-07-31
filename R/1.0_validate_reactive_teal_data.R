@@ -104,7 +104,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
 
     output$shiny_warnings <- renderUI({
       if (inherits(data_out_rv(), "teal_data")) {
-        is_modules_ok <- check_modules_datanames(modules = modules, datanames = teal_data_datanames(data_validated()))
+        is_modules_ok <- check_modules_datanames(modules = modules, datanames = teal_data_ls(data_validated()))
         if (!isTRUE(is_modules_ok)) {
           tags$div(is_modules_ok, class = "teal-output-warning")
         }
