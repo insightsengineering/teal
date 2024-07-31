@@ -181,7 +181,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
     })
     slices_module <- reactive(req(module_fd())$get_filter_state())
 
-    datasets_previous <- reactiveVal(NULL)
+    module_fd_previous <- reactiveVal(NULL)
 
     # Set (reactively) available filters for the module.
     obs1 <- observeEvent(module_fd(), priority = 1, {
@@ -192,10 +192,10 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
       # 1. when app initializes slices_global set to initial filters (specified by app developer)
       # 2. when data reinitializes slices_global reflects latest filter states
 
-      if (!is.null(datasets_previous())) {
-        datasets_previous()$clear_filter_states()
+      if (!is.null(module_fd_previous())) {
+        module_fd_previous()$clear_filter_states()
       }
-      datasets_previous(module_fd())
+      module_fd_previous(module_fd())
       module_fd()$set_filter_state(slices)
 
       # irrelevant filters are discarded in FilteredData$set_available_teal_slices
