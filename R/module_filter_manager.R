@@ -23,10 +23,10 @@
 #' @section Filter manager:
 #' Filter-manager is split into two parts:
 #' 1. `ui/srv_filter_manager_panel` - Called once for the whole app. This module observes changes in
-#' the filters in `slices_global` and displays them in a table utilising information from `mapping`:
-#'   - &#9989; (`TRUE`) - filter is active in the module
-#'   - &#10060; (`FALSE`) - filter is inactive in the module
-#'   - &#128306; (`NA`) - filter is not available in the module
+#' the filters in `slices_global` and displays them in a table utilizing information from `mapping`:
+#'   - (`TRUE`) - filter is active in the module
+#'   - (`FALSE`) - filter is inactive in the module
+#'   - (`NA`) - filter is not available in the module
 #' 2. `ui/srv_module_filter_manager` - Called once for each `teal_module`. Handling filter states
 #' for of single module and keeping module `FilteredData` consistent with `slices_global`, so that
 #' local filters are always reflected in the `slices_global` and its mapping and vice versa.
@@ -44,6 +44,9 @@
 #' @return
 #' Module returns a `slices_global` (`reactiveVal`) containing a `teal_slices` object with mapping.
 #'
+#' @encoding UTF-8
+#'
+#' @name module_filter_manager
 #' @rdname module_filter_manager
 #'
 NULL
@@ -56,7 +59,7 @@ ui_filter_manager_panel <- function(id) {
     id = ns("show_filter_manager"),
     class = "btn action-button wunder_bar_button",
     title = "View filter mapping",
-    suppressMessages(icon("solid fa-grip"))
+    suppressMessages(icon("fas fa-grip"))
   )
 }
 
@@ -158,7 +161,6 @@ srv_filter_manager <- function(id, slices_global) {
         }
         mm
       },
-      # align = paste(c("l", rep("c", sum(module_labels != "Report previewer"))), collapse = ""),
       rownames = TRUE
     )
 
@@ -244,9 +246,11 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
 methods::setOldClass("reactiveVal")
 methods::setOldClass("reactivevalues")
 
+
+#' @importFrom methods new
 #' @rdname module_filter_manager
 #' @keywords internal
-.slicesGlobal <- methods::setRefClass(".slicesGlobal",
+.slicesGlobal <- methods::setRefClass(".slicesGlobal", # nolint
   fields = list(
     all_slices = "reactiveVal",
     module_slices_api = "reactivevalues"

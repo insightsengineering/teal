@@ -13,8 +13,17 @@ testthat::test_that("teal_data_module throws when ui has other formals than id o
 })
 
 testthat::test_that("teal_data_module throws when server has other formals than id only", {
+  # Depending on the console width, the message is printed with \n sign in different places
   testthat::expect_error(
     teal_data_module(ui = function(id) tags$div(), server = function(id, x) NULL),
-    "Must have exactly 1 formal arguments"
+    "Assertion failed. One of the following must apply:"
+  )
+  testthat::expect_error(
+    teal_data_module(ui = function(id) tags$div(), server = function(id, x) NULL),
+    ".*exactly 1 formal.*"
+  )
+  testthat::expect_error(
+    teal_data_module(ui = function(id) tags$div(), server = function(id, x) NULL),
+    ".*formal arguments.*"
   )
 })

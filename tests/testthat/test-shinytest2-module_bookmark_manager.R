@@ -3,7 +3,7 @@ testthat::test_that("bookmark_manager_button is not rendered by default", {
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module"),
-    options = options()
+    options = list()
   )
   on.exit(app$stop())
   testthat::expect_null(
@@ -14,11 +14,10 @@ testthat::test_that("bookmark_manager_button is not rendered by default", {
 
 testthat::test_that("bookmark_manager_button is not rendered when enableBookmarking = 'url'", {
   skip_if_too_deep(5)
-  options(shiny.bookmarkStore = "url")
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module"),
-    options = options()
+    options = list(shiny.bookmarkStore = "url")
   )
   on.exit(app$stop())
   testthat::expect_null(
@@ -29,11 +28,10 @@ testthat::test_that("bookmark_manager_button is not rendered when enableBookmark
 
 testthat::test_that("bookmark_manager_button is rendered when enableBookmarking = 'server'", {
   skip_if_too_deep(5)
-  options(shiny.bookmarkStore = "server")
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module"),
-    options = options()
+    options = list(shiny.bookmarkStore = "server")
   )
   on.exit(app$stop())
   testthat::expect_true(!is.null(app$get_html(".bookmark_manager_button")))
@@ -41,11 +39,10 @@ testthat::test_that("bookmark_manager_button is rendered when enableBookmarking 
 
 testthat::test_that("bookmark_manager_button shows modal with url containing state_id when clicked", {
   skip_if_too_deep(5)
-  options(shiny.bookmarkStore = "server")
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module"),
-    options = options()
+    options = list(shiny.bookmarkStore = "server")
   )
   bookmark_button_id <- app$get_attr(".bookmark_manager_button", "id")
   app$click(bookmark_button_id)

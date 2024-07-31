@@ -62,7 +62,7 @@ srv_data_summary <- function(id, teal_data) {
       summary_table <- reactive({
         req(inherits(teal_data(), "teal_data"))
 
-        if (length(datanames(teal_data())) == 0) {
+        if (length(teal.data::datanames(teal_data())) == 0) {
           return(NULL)
         }
 

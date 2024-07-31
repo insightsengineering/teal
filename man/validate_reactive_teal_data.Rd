@@ -30,7 +30,7 @@ more details.}
 
 \item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and
 error message is displayed.
-Default is \code{FALSE} to handle empty reactive cycle on init.}
+Default is \code{FALSE} to handle empty reactive cycle on \code{init}.}
 }
 \value{
 (\code{reactive} returning \code{teal_data})
@@ -46,11 +46,11 @@ Validate reactive \code{teal_data}
 \item \code{reactive} throws a \code{shiny.error} - happens when module creating \code{\link[=teal_data]{teal_data()}} fails.
 \item \code{reactive} returns \code{qenv.error} - happens when \code{\link[=teal_data]{teal_data()}} evaluates a failing code.
 \item \code{reactive} object doesn't return \code{\link[=teal_data]{teal_data()}}.
-\item \code{\link[=teal_data]{teal_data()}} object lacks any datanames specified in the \code{modules} argument.
+\item \code{\link[=teal_data]{teal_data()}} object lacks any \code{datanames} specified in the \code{modules} argument.
 }
 
 Any errors or warnings are displayed in the app pointing out to the reason of failure.
-In all above, reactive cycle is halted and \code{teal} doesn't continue sending data further. On init,
+In all above, reactive cycle is halted and \code{teal} doesn't continue sending data further. On \code{init},
 halting reactive cycle stops an app load, while on subsequent reactive cycles, data just remains
 unchanged and user is able to continue using the app.
 }

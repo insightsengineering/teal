@@ -9,7 +9,7 @@
 \arguments{
 \item{data}{(\code{teal_data}) object holding the data}
 
-\item{datanames}{(\code{character}) names of datasets}
+\item{datanames}{(\code{character}) names of \code{datasets}}
 }
 \value{
 A character vector with the code lines.

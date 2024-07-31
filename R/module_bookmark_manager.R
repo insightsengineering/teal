@@ -50,7 +50,7 @@ ui_bookmark_panel <- function(id, modules) {
 
   bookmark_option <- get_bookmarking_option()
   is_unbookmarkable <- need_bookmarking(modules)
-  if (!inherits(session, "session_proxy")) shinyOptions(bookmarkStore = bookmark_option)
+  shinyOptions(bookmarkStore = bookmark_option)
 
   # Render bookmark warnings count
   if (!all(is_unbookmarkable) && identical(bookmark_option, "server")) {
@@ -59,7 +59,7 @@ ui_bookmark_panel <- function(id, modules) {
       class = "btn action-button wunder_bar_button bookmark_manager_button",
       title = "Add bookmark",
       tags$span(
-        suppressMessages(icon("solid fa-bookmark")),
+        suppressMessages(icon("fas fa-bookmark")),
         if (any(is_unbookmarkable)) {
           tags$span(
             sum(is_unbookmarkable),
@@ -158,7 +158,6 @@ get_bookmarking_option <- function() {
   bookmark_option <- getShinyOption("bookmarkStore")
   if (is.null(bookmark_option) && identical(getOption("shiny.bookmarkStore"), "server")) {
     bookmark_option <- getOption("shiny.bookmarkStore")
-    # option alone doesn't activate bookmarking - we need to set shinyOptions
   }
   bookmark_option
 }

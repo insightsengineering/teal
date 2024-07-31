@@ -28,7 +28,8 @@ testthat::test_that("e2e: teal_data_module will have a delayed load of datasets"
     modules = example_module(label = "Example Module")
   )
 
-  app$click("teal_data_module-submit")
+  app$click("teal-data-teal_data_module-data-submit")
+  app$navigate_teal_tab("Example Module")
   testthat::expect_setequal(app$get_active_filter_vars(), c("dataset1", "dataset2"))
 
   app$stop()
@@ -63,7 +64,7 @@ testthat::test_that("e2e: teal_data_module shows validation errors", {
     modules = example_module(label = "Example Module")
   )
 
-  app$click("teal_data_module-submit")
+  app$click("teal-data-teal_data_module-data-submit")
 
   app$expect_validation_error()
 
@@ -107,8 +108,9 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
     modules = example_module(label = "Example Module")
   )
 
-  app$set_input("teal_data_module-new_column", "A_New_Column")
-  app$click("teal_data_module-submit")
+  app$set_input("teal-data-teal_data_module-data-new_column", "A_New_Column")
+  app$click("teal-data-teal_data_module-data-submit")
+  app$navigate_teal_tab("Example Module")
 
   # This may fail if teal_data_module does not perform the transformation
   testthat::expect_no_error(app$add_filter_var("dataset1", "A_New_Column"))
