@@ -51,10 +51,8 @@ testthat::test_that("e2e: data summary displays datasets by topological_sort of 
   )
 
   testthat::expect_identical(
-    testthat::expect_identical(
-      as.data.frame(app$get_active_data_summary_table())[["Data Name"]],
-      c("mtcars2", "mtcars1")
-    )
+    as.data.frame(app$get_active_data_summary_table())[["Data Name"]],
+    c("mtcars2", "mtcars1")
   )
 
   app$stop()
