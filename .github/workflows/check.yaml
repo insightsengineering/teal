@@ -50,6 +50,7 @@ jobs:
     with:
       additional-env-vars: |
         _R_CHECK_EXAMPLE_TIMING_THRESHOLD_=6
+        NOT_CRAN=true
       enforce-note-blocklist: true
       concurrency-group: non-cran
       unit-test-report-directory: unit-test-report-non-cran
