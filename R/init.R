@@ -34,6 +34,8 @@
 #' @param id (`character`) optional
 #'   string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
+#' @param landing_popup (`teal_module`) optional
+#'   A `landing_popup_module` to show up as soon as the teal app is initialized.
 #'
 #' @return Named list containing server and UI functions.
 #'
@@ -99,7 +101,8 @@ init <- function(data,
                  title = build_app_title(),
                  header = tags$p(),
                  footer = tags$p(),
-                 id = character(0)) {
+                 id = character(0),
+                 landing_popup = NULL) {
   logger::log_debug("init initializing teal app with: data ('{ class(data) }').")
 
   # argument checking (independent)
@@ -159,10 +162,15 @@ init <- function(data,
   # argument transformations
   ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
-  landing_module <- NULL
   if (length(landing) == 1L) {
-    landing_module <- landing[[1L]]
+    landing_popup <- landing[[1L]]
     modules <- drop_module(modules, "teal_module_landing")
+    # TODO: verify the version before release.
+    lifecycle::deprecate_soft(
+      when = "0.16",
+      what = "landing_popup_module()",
+      details = "The `landing_popup_module` is supposed to be called as the `landing_popup` argument of the `init` instead of passing it as a module inside the `modules` argument of `init`"
+    )
   } else if (length(landing) > 1L) {
     stop("Only one `landing_popup_module` can be used.")
   }
@@ -245,8 +253,8 @@ init <- function(data,
       # todo: remove landing page from here to srv_teal
       #       - fix srv_data first to not use modal (can't display two in the same time)
       #       https://github.com/insightsengineering/teal/issues/1244
-      if (!is.null(landing_module)) {
-        do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
+      if (!is.null(landing_popup)) {
+        do.call(landing_popup$server, c(list(id = "landing_module_shiny_id"), landing_popup$server_args))
       }
       srv_teal(id = ns("teal"), data = data, modules = modules, filter = deep_copy_filter(filter))
     }
