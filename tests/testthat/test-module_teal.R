@@ -1846,6 +1846,31 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
+  testthat::it("displays parent before child when join_keys are provided", {
+    data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
+
+    teal.data::join_keys(data) <- teal.data::join_keys(
+      teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
+    )
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1")[["Data Name"]],
+          c("mtcars2", "mtcars1")
+        )
+      }
+    )
+  })
+
   testthat::it("displays subset of module$datanames if not sufficient", {
     data <- teal.data::teal_data(iris = iris, mtcars = mtcars)
     teal.data::datanames(data) <- c("iris", "mtcars")
