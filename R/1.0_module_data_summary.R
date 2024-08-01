@@ -35,7 +35,7 @@ ui_data_summary <- function(id) {
         class = "col-sm-3",
         tags$i(
           class = "remove pull-right fa fa-angle-down",
-          title = "fold/expand transform panel",
+          title = "fold/expand data summary panel",
           onclick = sprintf("togglePanelItem(this, '%s', 'fa-angle-right', 'fa-angle-down');", content_id)
         )
       )
