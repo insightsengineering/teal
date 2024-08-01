@@ -51,11 +51,8 @@ jobs:
       additional-env-vars: |
         _R_CHECK_EXAMPLE_TIMING_THRESHOLD_=6
       enforce-note-blocklist: true
-      publish-unit-test-report-gh-pages: false
-      junit-xml-comparison: false
       concurrency-group: non-cran
-      disable-unit-test-reports: true
-      skip-r-cmd-install: true
+      unit-test-report-directory: unit-test-report-non-cran
       note-blocklist: |
         checking dependencies in R code .* NOTE
         checking R code for possible problems .* NOTE
