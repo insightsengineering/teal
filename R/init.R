@@ -118,6 +118,7 @@ init <- function(data,
     )
   }
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_class(landing_popup, "teal_module_landing", null.ok = TRUE)
 
   ## `modules`
   checkmate::assert(
