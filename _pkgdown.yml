@@ -64,6 +64,7 @@ articles:
   contents:
     - including-data-in-teal-applications
     - data-as-shiny-module
+    - data-transform-as-shiny-module
 - title: Extending `teal`
   navbar: Extending `teal`
   contents:
@@ -96,6 +97,7 @@ reference:
     contents:
       - init
       - teal_data_module
+      - teal_transform_module
       - module_teal
       - module
       - modules

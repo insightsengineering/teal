@@ -61,15 +61,71 @@
 #' @export
 teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
   checkmate::assert_function(ui, args = "id", nargs = 1)
-  checkmate::assert(
-    checkmate::check_function(server, args = "id", nargs = 1),
-    # todo: allow for teal_data_module$server to have 'data' argument or break this in teal_transformer_module
-    checkmate::check_function(server, args = c("id", "data"), nargs = 2)
-  )
+  checkmate::check_function(server, args = "id", nargs = 1)
   structure(
     list(ui = ui, server = server),
     label = label,
     class = "teal_data_module",
     once = once
+  )
+}
+
+#' Data module for `teal` transformers.
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `teal_data_module` object for custom transformation of data for pre-processing before passing the data into the module.
+#'
+#' @details
+#' `teal_transform_module` creates a `teal_data_module` object to transform the data in a `teal` application
+#' after it has been passed through the filter panel and before it is passed to the modules which uses the transform module.
+#'
+#' See vignette `vignette("data-transform-as-shiny-module", package = "teal")` for more details.
+#'
+#'
+#' @inheritParams teal_data_module
+#' @param server (`function(id, data)`)
+#' `shiny` module server function; that takes `id` and `data` argument,
+#' where the `id` is the module id and `data` is the reactive `teal_data` input.
+#' The server function must return reactive expression containing `teal_data` object.
+
+#' @examples
+#' my_transformers <- list(
+#'   teal_transform_module(
+#'     label = "Custom transform for iris",
+#'     ui = function(id) {
+#'       ns <- NS(id)
+#'       tags$div(
+#'         numericInput(ns("n_rows"), "Number of rows to subset", value = 6, min = 1, max = 150, step = 1)
+#'       )
+#'     },
+#'     server = function(id, data) {
+#'       moduleServer(id, function(input, output, session) {
+#'         reactive({
+#'           data() %>%
+#'             within(
+#'               {
+#'                 iris <- head(iris, num_rows)
+#'               },
+#'               num_rows = input$n_rows
+#'             )
+#'         })
+#'       })
+#'     }
+#'   )
+#' )
+#'
+#' @name teal_transform_module
+#' @seealso [`teal_data_module`], [teal_data_module()]
+#'
+#' @export
+teal_transform_module <- function(ui, server, label = "transform module") {
+  checkmate::assert_function(ui, args = "id", nargs = 1)
+  checkmate::check_function(server, args = c("id", "data"), nargs = 2)
+  structure(
+    list(ui = ui, server = server),
+    label = label,
+    class = "teal_data_module"
   )
 }
