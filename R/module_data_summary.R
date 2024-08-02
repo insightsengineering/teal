@@ -12,13 +12,14 @@
 #'  `shiny` module instance id.
 #' @param teal_data (`reactive` returning `teal_data`)
 #'
+#'
 #' @name module_data_summary
 #' @rdname module_data_summary
+#' @keywords internal
 #' @return `NULL`.
 NULL
 
 #' @rdname module_data_summary
-#' @keywords internal
 ui_data_summary <- function(id) {
   ns <- NS(id)
   content_id <- ns("filters_overview_contents")
@@ -35,7 +36,7 @@ ui_data_summary <- function(id) {
         class = "col-sm-3",
         tags$i(
           class = "remove pull-right fa fa-angle-down",
-          title = "fold/expand transform panel",
+          title = "fold/expand data summary panel",
           onclick = sprintf("togglePanelItem(this, '%s', 'fa-angle-right', 'fa-angle-down');", content_id)
         )
       )
@@ -51,7 +52,6 @@ ui_data_summary <- function(id) {
 }
 
 #' @rdname module_data_summary
-#' @keywords internal
 srv_data_summary <- function(id, teal_data) {
   checkmate::check_class(teal_data, "reactive")
   moduleServer(
@@ -127,7 +127,6 @@ srv_data_summary <- function(id, teal_data) {
 }
 
 #' @rdname module_data_summary
-#' @keywords internal
 get_filter_overview <- function(teal_data) {
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
@@ -149,7 +148,6 @@ get_filter_overview <- function(teal_data) {
       #     - Obs and Subjects
       #     - Obs only
       #     - Subjects only
-      # todo: summary table should be ordered by topological order
       # todo (for later): summary table should be displayed in a way that child datasets
       #       are indented under their parent dataset to form a tree structure
       subject_keys <- if (length(parent) > 0) {
@@ -171,7 +169,9 @@ get_filter_overview <- function(teal_data) {
 }
 
 #' @rdname module_data_summary
-#' @keywords internal
+#' @param filtered_data (`list`) of filtered objects
+#' @param unfiltered_data (`list`) of unfiltered objects
+#' @param dataname (`character(1)`)
 get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname, subject_keys) {
   if (inherits(filtered_data, c("data.frame", "DataFrame", "array", "Matrix", "SummarizedExperiment"))) {
     get_object_filter_overview_array(filtered_data, unfiltered_data, dataname, subject_keys)
@@ -189,7 +189,6 @@ get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname,
 }
 
 #' @rdname module_data_summary
-#' @keywords internal
 get_object_filter_overview_array <- function(filtered_data, # nolint: object_length.
                                              unfiltered_data,
                                              dataname,
@@ -214,7 +213,6 @@ get_object_filter_overview_array <- function(filtered_data, # nolint: object_len
 }
 
 #' @rdname module_data_summary
-#' @keywords internal
 get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, # nolint: object_length, object_name.
                                                             unfiltered_data,
                                                             dataname) {

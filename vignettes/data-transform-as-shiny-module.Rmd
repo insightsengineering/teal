@@ -1,0 +1,165 @@
+---
+title: "Data Transform as shiny Module"
+author: "NEST CoreDev"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Data Transform as shiny Module}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+When data transformations need to occur inside the teal app, they typically happen within the teal module development by the teal module developer. This results in the transformation code being tightly coupled with the teal module. Any changes to the data transformation logic require updating the teal module, which can impact the teal app development until the module is updated.
+With the new `teal_transform_module()` function, it is possible to provide a more dynamic data transformation capability that can be customized by the teal app developer, not just the teal module developer.
+The `teal_transform_module()` function is essentially a Shiny module that takes `ui` and `server` arguments and can be provided to the `transformer` argument in a `module()`. When provided, teal will execute the data transformation logic for the specified module when it is loaded. 
+In addition, this approach makes it easier for teal app developers to handle additional data transformations while using the teal modules R packages like `teal.modules.general` and `teal.modules.clinical`.
+Let’s explore this new way to manage custom data transformations in teal apps.
+
+## Creating your first custom data transformation module
+
+We initialize a simple teal app where we pass `iris` and `mtcars` as the input datasets.
+
+```{r, message = FALSE, warning = FALSE}
+library(teal)
+```
+
+```{r}
+data <- within(teal_data(), {
+  iris <- iris
+  mtcars <- mtcars
+})
+
+app <- init(
+  data = data,
+  modules = teal::example_module()
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+Lets create a simple `teal_transform_module` that returns the first n number of rows of `iris` based on the user input.
+
+We do this by creating the `ui` with the `numericInput` for the user to input the number of rows to be displayed.
+In the `server` function we take in the reactive `data` and perform this transformation and return the new reactive `data`.
+
+```{r}
+library(teal)
+data <- within(teal_data(), {
+  iris <- iris
+  mtcars <- mtcars
+})
+datanames(data) <- c("iris", "mtcars")
+
+my_transformers <- list(
+  teal_transform_module(
+    label = "Custom transform for iris",
+    ui = function(id) {
+      ns <- NS(id)
+      tags$div(
+        numericInput(ns("n_rows"), "Number of rows to subset", value = 6, min = 1, max = 150, step = 1)
+      )
+    },
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          within(data(),
+            {
+              iris <- head(iris, num_rows)
+            },
+            num_rows = input$n_rows
+          )
+        })
+      })
+    }
+  )
+)
+
+app <- init(
+  data = data,
+  modules = teal::example_module(transformers = my_transformers)
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+Note that we can add multiple teal transforms by adding calling `teal_transform_module` in a list and passing the list of teal transforms to the `transformers` argument of the module call.
+
+Lets add another transformation to the `mtcars` dataset to create a column with the `rownames` of `mtcars`.
+Also, note that this module does not have interactive UI elements.
+
+```{r}
+library(teal)
+data <- within(teal_data(), {
+  iris <- iris
+  mtcars <- mtcars
+})
+datanames(data) <- c("iris", "mtcars")
+
+my_transformers <- list(
+  teal_transform_module(
+    label = "Custom transform for iris",
+    ui = function(id) {
+      ns <- NS(id)
+      tags$div(
+        numericInput(ns("n_rows"), "Number of rows to subset", value = 6, min = 1, max = 150, step = 1)
+      )
+    },
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          within(data(),
+            {
+              iris <- head(iris, num_rows)
+            },
+            num_rows = input$n_rows
+          )
+        })
+      })
+    }
+  ),
+  teal_transform_module(
+    label = "Custom transform for mtcars",
+    ui = function(id) {
+      ns <- NS(id)
+      tags$div(
+        "Adding rownames column to mtcars"
+      )
+    },
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          within(data(), {
+            mtcars$rownames <- rownames(mtcars)
+            rownames(mtcars) <- NULL
+          })
+        })
+      })
+    }
+  )
+)
+
+app <- init(
+  data = data,
+  modules = teal::example_module(transformers = my_transformers)
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+## Custom placement of the transform UI
+
+When a custom transformation is used, the UI for the transformation is placed below the filter panel.
+However, there is a way to customize the placement of the UI inside the module content.
+
+This can only be done when the module allocates a dedicated space for the transform UI.
+
+Let's create a custom module that has a dedicated space for the transform UI inside the module content.

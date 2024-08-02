@@ -30,20 +30,16 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
   )
   # Check for Copy buttons.
   testthat::expect_equal(
-    app$active_module_element("rcode-copy_button1") %>%
-      app$get_text(),
+    app$get_text(app$active_module_element("rcode-copy_button1")),
     "Copy to Clipboard"
   )
   testthat::expect_equal(
-    app$active_module_element("rcode-copy_button2") %>%
-      app$get_text(),
+    app$get_text(app$active_module_element("rcode-copy_button2")),
     "Copy to Clipboard"
   )
 
   # Check R code output.
-  r_code <-
-    app$active_module_element("rcode-verbatim_content") %>%
-    app$get_text()
+  r_code <- app$get_text(app$active_module_element("rcode-verbatim_content"))
 
   testthat::expect_match(r_code, "iris <- iris", fixed = TRUE)
   testthat::expect_match(r_code, "iris_raw <- iris", fixed = TRUE)

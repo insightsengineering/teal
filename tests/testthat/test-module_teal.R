@@ -19,7 +19,7 @@ is_slices_equivalent <<- function(x, y, with_attrs = TRUE) {
 }
 
 transform_list <<- list(
-  fail = teal_data_module(
+  fail = teal_transform_module(
     ui = function(id) NULL,
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
@@ -29,7 +29,7 @@ transform_list <<- list(
       })
     }
   ),
-  iris = teal_data_module(
+  iris = teal_transform_module(
     ui = function(id) NULL,
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
@@ -39,7 +39,7 @@ transform_list <<- list(
       })
     }
   ),
-  mtcars = teal_data_module(
+  mtcars = teal_transform_module(
     ui = function(id) NULL,
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
@@ -49,7 +49,7 @@ transform_list <<- list(
       })
     }
   ),
-  add_dataset = teal_data_module(
+  add_dataset = teal_transform_module(
     ui = function(id) NULL,
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
@@ -577,7 +577,7 @@ testthat::describe("srv_teal teal_modules", {
             label = "module_1",
             server = function(id, data) data,
             transformers = list(
-              teal_data_module(
+              teal_transform_module(
                 label = "Dummy",
                 ui = function(id) div("(does nothing)"),
                 server = function(id, data) {
@@ -616,7 +616,7 @@ testthat::describe("srv_teal teal_modules", {
             label = "module_1",
             server = function(id, data) data,
             transformers = list(
-              teal_data_module(
+              teal_transform_module(
                 label = "Dummy",
                 ui = function(id) div("(does nothing)"),
                 server = function(id, data) {
@@ -653,7 +653,7 @@ testthat::describe("srv_teal teal_modules", {
             label = "module_1",
             server = function(id, data) data,
             transformers = list(
-              teal_data_module(
+              teal_transform_module(
                 label = "Dummy",
                 ui = function(id) div("(does nothing)"),
                 server = function(id, data) {
@@ -685,7 +685,7 @@ testthat::describe("srv_teal teal_modules", {
             label = "module_1",
             server = function(id, data) data,
             transformers = list(
-              teal_data_module(
+              teal_transform_module(
                 label = "Dummy",
                 ui = function(id) div("(does nothing)"),
                 server = function(id, data) {
@@ -1477,7 +1477,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
             module(
               server = function(id, data) data,
               transformers = list(
-                teal_data_module(
+                teal_transform_module(
                   ui = function(id) NULL,
                   server = function(id, data) "whatever"
                 )
@@ -1503,7 +1503,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
             label = "module_1",
             server = function(id, data) data,
             transformers = list(
-              teal_data_module(
+              teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
                   reactive(validate(need(FALSE, "my error")))
@@ -1532,7 +1532,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
             label = "module_1",
             server = function(id, data) data,
             transformers = list(
-              teal_data_module(
+              teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
                   reactive(validate(need(FALSE, "my error")))
@@ -1841,6 +1841,31 @@ testthat::describe("srv_teal summary table", {
             Obs = c("150/150"),
             check.names = FALSE
           )
+        )
+      }
+    )
+  })
+
+  testthat::it("displays parent before child when join_keys are provided", {
+    data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
+
+    teal.data::join_keys(data) <- teal.data::join_keys(
+      teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
+    )
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1")[["Data Name"]],
+          c("mtcars2", "mtcars1")
         )
       }
     )

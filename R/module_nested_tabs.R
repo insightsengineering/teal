@@ -1,15 +1,11 @@
 #' Create a UI of nested tabs of `teal_modules`
 #'
-#' @section `ui_teal_module`:
-#' Each `teal_modules` is translated to a `bslib::navset_tab` and each
+#' On the UI side each `teal_modules` is translated to a `tabsetPanel` and each
 #' of its children is another tab-module called recursively. The UI of a
 #' `teal_module` is obtained by calling its UI function.
 #'
-#' The `datasets` argument is required to resolve the `teal` arguments in an
-#' isolated context (with respect to reactivity).
-#'
-#' @section `srv_teal_module`:
-#' This module recursively calls all elements of `modules` and returns currently active one.
+#' On the server side module recursively calls all elements of `modules` and returns currently
+#' active one.
 #' - `teal_module` returns self as a active module.
 #' - `teal_modules` also returns module active within self which is determined by the `input$active_tab`.
 #'
@@ -117,9 +113,9 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         column(
           width = 3,
           ui_data_summary(ns("data_summary")),
-          ui_filter_panel(ns("filter_panel")),
+          ui_filter_data(ns("filter_panel")),
           if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
-            ui_teal_data_modules(ns("data_transform"), modules$transformers, class = "well")
+            ui_transform_data(ns("data_transform"), transforms = modules$transformers, class = "well")
           },
           class = "teal_secondary_col"
         )
@@ -218,7 +214,7 @@ srv_teal_module.teal_module <- function(id,
     #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
     #   and if it is not set, then it won't be available in the srv_filter_panel
     srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
-    filtered_teal_data <- srv_filter_panel(
+    filtered_teal_data <- srv_filter_data(
       "filter_panel",
       datasets = datasets,
       active_datanames = active_datanames,
@@ -226,10 +222,10 @@ srv_teal_module.teal_module <- function(id,
       is_active = is_active
     )
 
-    transformed_teal_data <- srv_teal_data_modules(
+    transformed_teal_data <- srv_transform_data(
       "data_transform",
       data = filtered_teal_data,
-      transformers = modules$transformers,
+      transforms = modules$transformers,
       modules = modules
     )
 

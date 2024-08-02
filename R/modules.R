@@ -49,7 +49,7 @@
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
 #' @param indent (`integer(1)`) Indention level; each nested element is indented one level more.
-#' @param transformers (`list`) with `teal_data_module` that will be applied to transform the data.
+#' @param transformers (`list` of `teal_data_module`) that will be applied to transform the data.
 #' Each transform module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the list.
 #' If so, the module developer is responsible to display the UI in the module itself.
 #'
@@ -134,7 +134,7 @@ module <- function(label = "module",
                    datanames = "all",
                    server_args = NULL,
                    ui_args = NULL,
-                   transformers = NULL) {
+                   transformers = list()) {
   # argument checking (independent)
   ## `label`
   checkmate::assert_string(label)
@@ -242,7 +242,7 @@ module <- function(label = "module",
   }
 
   ## `transformers`
-  checkmate::assert_list(transformers, null.ok = TRUE, types = "teal_data_module")
+  checkmate::assert_list(transformers, types = "teal_data_module")
 
   structure(
     list(

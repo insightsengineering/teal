@@ -2,25 +2,30 @@
 
 #' `teal` main app module
 #'
-#' This module is a central point of the `teal` app. It is called by [teal::init()] but can be also
-#' used as a standalone module in your custom application. It is responsible for creating the main
-#' `shiny` app layout and initializing all the necessary components:
-#' - [`module_data`] - for handling the `data`.
-#' - [`module_teal_module`] - for handling the `modules`.
-#' - [`module_filter_manager`] - for handling the `filter`.
-#' - [`module_snapshot_manager`] - for handling the `snapshots`.
-#' - [`module_bookmark_manager`] - for handling the `bookmarks`.
+#' Module to create a `teal` app. This module (`ui` and `server`) is called directly by [init()] after
+#' initial argument checking and setting default values. This module can be called directly and
+#' included in your custom application.
 #'
-#' This module establishes reactive connection between the `data` and every other component in the app.
-#' Reactive change of the `data` triggers reload of the app and possibly keeping all inputs settings
-#' the same so the user can continue where one left off.
-#' Similar applies to [`module_bookmark_manager`] which allows to start a new session with restored
-#' inputs.
+#' Please note that [init()] adds `reporter_previewer_module` automatically, which is not a case
+#' when calling `ui/srv_teal` directly.
+#'
+#' Module is responsible for creating the main `shiny` app layout and initializing all the necessary
+#' components. This module establishes reactive connection between the input `data` and every other
+#' component in the app. Reactive change of the `data` triggers reload of the app and possibly
+#' keeping all inputs settings the same so the user can continue where one left off.
+#'
+#' @section data flow in `teal` application:
+#' `teal` supports multiple data inputs (see `data` in [`module_init_data`]) but eventually, they are
+#' all converted to `reactive` returning `teal_data` in `module_teal`. There are several operations
+#' on this `reactive teal_data` object:
+#' - data loading in [`module_init_data`]
+#' - data filtering in [`module_filter_data`]
+#' - data transformation in [`module_transform_data`]
 #'
 #' @rdname module_teal
 #' @name module_teal
 #'
-#' @inheritParams module_data
+#' @inheritParams module_init_data
 #' @inheritParams init
 #'
 #' @return
@@ -84,7 +89,7 @@ ui_teal <- function(id,
   )
 
   bookmark_panel_ui <- ui_bookmark_panel(ns("bookmark_manager"), modules)
-  data_elem <- ui_data(ns("data"), data = data, title = title, header = header, footer = footer)
+  data_elem <- ui_init_data(ns("data"), data = data)
   if (!is.null(data)) {
     modules$children <- c(list(teal_data_module = data_elem), modules$children)
   }
@@ -182,10 +187,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     )
 
     # todo: introduce option `run_once` to not show data icon when app is loaded (in case when data don't change).
-    data_rv <- srv_data("data", data = data, modules = modules, filter = filter)
-
-    # This variable is overwritten in `srv_teal` or `srv_teal_module`
-    # depending on whether `module_specific` is `TRUE`.
+    data_rv <- srv_init_data("data", data = data, modules = modules, filter = filter)
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
         if (!inherits(data_rv(), "teal_data")) {

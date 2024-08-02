@@ -85,9 +85,10 @@ testthat::test_that("e2e: init creates UI containing specified title, favicon, h
     app_title
   )
   testthat::expect_equal(
-    app$get_html_rvest("head > link[rel='icon']") %>%
-      rvest::html_elements("link") %>%
-      rvest::html_attr("href"),
+    rvest::html_attr(
+      rvest::html_elements(app$get_html_rvest("head > link[rel='icon']"), "link"),
+      "href"
+    ),
     app_favicon
   )
   testthat::expect_match(

@@ -15,7 +15,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
-    #' @param data,modules,filter,title,header,footer arguments passed to `init`
+    #' @param data,modules,filter,title,header,footer,landing_popup arguments passed to `init`
     #' @param timeout (`numeric`) Default number of milliseconds for any timeout or
     #' timeout_ parameter in the `TealAppDriver` class.
     #' Defaults to 20s.
@@ -37,6 +37,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
                           title = build_app_title(),
                           header = tags$p(),
                           footer = tags$p(),
+                          landing_popup = NULL,
                           timeout = rlang::missing_arg(),
                           load_timeout = rlang::missing_arg(),
                           ...) {
@@ -49,7 +50,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         filter = filter,
         title = title,
         header = header,
-        footer = footer
+        footer = footer,
+        landing_popup = landing_popup,
       )
 
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
@@ -272,9 +274,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     get_active_module_table_output = function(table_id, which = 1) {
       checkmate::check_number(which, lower = 1)
       checkmate::check_string(table_id)
-      table <- self$active_module_element(table_id) %>%
-        self$get_html_rvest() %>%
-        rvest::html_table(fill = TRUE)
+      table <- rvest::html_table(
+        self$get_html_rvest(self$active_module_element(table_id)),
+        fill = TRUE
+      )
       if (length(table) == 0) {
         data.frame()
       } else {
@@ -336,11 +339,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Get the active data summary table
     #' @return `data.frame`
     get_active_data_summary_table = function() {
-      summary_table <-
-        self$active_data_summary_element("table") %>%
-        self$get_html_rvest() %>%
-        rvest::html_table(fill = TRUE) %>%
-        .[[1]]
+      summary_table <- rvest::html_table(
+        self$get_html_rvest(self$active_data_summary_element("table")),
+        fill = TRUE
+      )[[1]]
 
       col_names <- unlist(summary_table[1, ], use.names = FALSE)
       summary_table <- summary_table[-1, ]
@@ -400,14 +402,17 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       active_filters <- lapply(
         datasets,
         function(x) {
-          var_names <- self$get_text(
-            sprintf(
-              "#%s-filters-%s .filter-card-varname",
-              self$active_filters_ns(),
-              x
+          var_names <- gsub(
+            pattern = "\\s",
+            replacement = "",
+            self$get_text(
+              sprintf(
+                "#%s-filters-%s .filter-card-varname",
+                self$active_filters_ns(),
+                x
+              )
             )
-          ) %>%
-            gsub(pattern = "\\s", replacement = "")
+          )
           structure(
             lapply(var_names, private$get_active_filter_selection, dataset_name = x),
             names = var_names
@@ -580,9 +585,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' @return The `character` vector.
     get_attr = function(selector, attribute) {
-      self$get_html_rvest("html") %>%
-        rvest::html_nodes(selector) %>%
-        rvest::html_attr(attribute)
+      rvest::html_attr(
+        rvest::html_nodes(self$get_html_rvest("html"), selector),
+        attribute
+      )
     },
     #' @description
     #' Wrapper around `get_html` that passes the output directly to `rvest::read_html`.
@@ -640,14 +646,13 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       all_inputs <- self$get_values()$input
       active_tab_inputs <- all_inputs[grepl("-active_tab$", names(all_inputs))]
 
-      tab_ns <- lapply(names(active_tab_inputs), function(name) {
+      tab_ns <- unlist(lapply(names(active_tab_inputs), function(name) {
         gsub(
           pattern = "-active_tab$",
           replacement = sprintf("-%s", active_tab_inputs[[name]]),
           name
         )
-      }) %>%
-        unlist()
+      }))
       active_ns <- tab_ns[1]
       if (length(tab_ns) > 1) {
         for (i in 2:length(tab_ns)) {
