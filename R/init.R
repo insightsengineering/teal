@@ -251,9 +251,6 @@ init <- function(data,
       )
     },
     server = function(input, output, session) {
-      # todo: remove landing page from here to srv_teal
-      #       - fix srv_data first to not use modal (can't display two in the same time)
-      #       https://github.com/insightsengineering/teal/issues/1244
       if (!is.null(landing_popup)) {
         do.call(landing_popup$server, c(list(id = "landing_module_shiny_id"), landing_popup$server_args))
       }

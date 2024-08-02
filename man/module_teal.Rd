@@ -51,6 +51,11 @@ Returns a \code{reactive} expression which returns the currently active module.
 Module to create a \code{teal} app. This module (\code{ui} and \code{server}) is called directly by \code{\link[=init]{init()}} after
 initial argument checking and setting default values. This module can be called directly and
 included in your custom application.
+}
+\details{
+Please note that \code{\link[=init]{init()}} adds \code{reporter_previewer_module} automatically, which is not a case
+when calling \code{ui/srv_teal} directly.
+
 Module is responsible for creating the main \code{shiny} app layout and initializing all the necessary
 components. This module establishes reactive connection between the input \code{data} and every other
 component in the app. Reactive change of the \code{data} triggers reload of the app and possibly

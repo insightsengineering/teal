@@ -5,6 +5,10 @@
 #' Module to create a `teal` app. This module (`ui` and `server`) is called directly by [init()] after
 #' initial argument checking and setting default values. This module can be called directly and
 #' included in your custom application.
+#'
+#' Please note that [init()] adds `reporter_previewer_module` automatically, which is not a case
+#' when calling `ui/srv_teal` directly.
+#'
 #' Module is responsible for creating the main `shiny` app layout and initializing all the necessary
 #' components. This module establishes reactive connection between the input `data` and every other
 #' component in the app. Reactive change of the `data` triggers reload of the app and possibly
