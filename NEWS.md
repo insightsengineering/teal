@@ -1,5 +1,8 @@
 # teal 0.15.2.9047
 
+### Breaking changes
+* The `landing_popup_module()` needs to be passed as the `landing_popup` argument of `init` instead of being passed as a module of the `modules` argument of `init`
+
 ### Enhancement
 * Provided progress bar for modules loading and data filtering during teal app startup.
 

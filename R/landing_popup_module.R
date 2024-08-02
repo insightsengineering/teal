@@ -17,11 +17,11 @@
 #' app1 <- init(
 #'   data = teal_data(iris = iris),
 #'   modules = modules(
-#'     landing_popup_module(
-#'       content = "A place for the welcome message or a disclaimer statement.",
-#'       buttons = modalButton("Proceed")
-#'     ),
 #'     example_module()
+#'   ),
+#'   landing_popup = landing_popup_module(
+#'     content = "A place for the welcome message or a disclaimer statement.",
+#'     buttons = modalButton("Proceed")
 #'   )
 #' )
 #' if (interactive()) {
@@ -31,21 +31,21 @@
 #' app2 <- init(
 #'   data = teal_data(iris = iris),
 #'   modules = modules(
-#'     landing_popup_module(
-#'       title = "Welcome",
-#'       content = tags$b(
-#'         "A place for the welcome message or a disclaimer statement.",
-#'         style = "color: red;"
-#'       ),
-#'       buttons = tagList(
-#'         modalButton("Proceed"),
-#'         actionButton("read", "Read more",
-#'           onclick = "window.open('http://google.com', '_blank')"
-#'         ),
-#'         actionButton("close", "Reject", onclick = "window.close()")
-#'       )
-#'     ),
 #'     example_module()
+#'   ),
+#'   landing_popup = landing_popup_module(
+#'     title = "Welcome",
+#'     content = tags$b(
+#'       "A place for the welcome message or a disclaimer statement.",
+#'       style = "color: red;"
+#'     ),
+#'     buttons = tagList(
+#'       modalButton("Proceed"),
+#'       actionButton("read", "Read more",
+#'                    onclick = "window.open('http://google.com', '_blank')"
+#'       ),
+#'       actionButton("close", "Reject", onclick = "window.close()")
+#'     )
 #'   )
 #' )
 #'

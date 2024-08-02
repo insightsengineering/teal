@@ -3,11 +3,11 @@ testthat::test_that("e2e: teal app with landing_popup_module initializes with no
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
-      landing_popup_module(
-        title = "Welcome",
-        content = tags$b("A welcome message!", style = "color: red;")
-      ),
       example_module()
+    ),
+    landing_popup = landing_popup_module(
+      title = "Welcome",
+      content = tags$b("A welcome message!", style = "color: red;")
     )
   )
 
@@ -23,9 +23,9 @@ testthat::test_that("e2e: app with default landing_popup_module creates modal co
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
-      landing_popup_module(),
       example_module()
-    )
+    ),
+    landing_popup = landing_popup_module()
   )
 
   testthat::expect_equal(
@@ -41,9 +41,9 @@ testthat::test_that("e2e: when default landing_popup_module is closed, it shows 
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
-      landing_popup_module(),
       example_module()
-    )
+    ),
+    landing_popup = landing_popup_module()
   )
 
   # Button is clicked.
@@ -91,12 +91,12 @@ testthat::test_that(
     app <- TealAppDriver$new(
       data = simple_teal_data(),
       modules = modules(
-        landing_popup_module(
-          title = modal_title,
-          content = modal_content,
-          buttons = modal_buttons
-        ),
         example_module()
+      ),
+      landing_popup = landing_popup_module(
+        title = modal_title,
+        content = modal_content,
+        buttons = modal_buttons
       )
     )
 
@@ -145,10 +145,10 @@ testthat::test_that("e2e: when customized button in landing_popup_module is clic
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(
-      landing_popup_module(
-        buttons = actionButton("read", "Read more", onclick = onclick_text)
-      ),
       example_module()
+    ),
+    landing_popup = landing_popup_module(
+      buttons = actionButton("read", "Read more", onclick = onclick_text)
     )
   )
 
