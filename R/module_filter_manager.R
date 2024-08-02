@@ -178,14 +178,22 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
     })
     slices_module <- reactive(req(module_fd())$get_filter_state())
 
+    module_fd_previous <- reactiveVal(NULL)
+
     # Set (reactively) available filters for the module.
     obs1 <- observeEvent(module_fd(), priority = 1, {
       logger::log_debug("srv_module_filter_manager@1 setting initial slices for module: { id }.")
       # Filters relevant for the module in module-specific app.
       slices <- slices_global_module()
+
+      # Clean up previous filter states and refresh cache of previous module_fd with current
+      if (!is.null(module_fd_previous())) module_fd_previous()$finalize()
+      module_fd_previous(module_fd())
+
       # Setting filter states from slices_global:
       # 1. when app initializes slices_global set to initial filters (specified by app developer)
       # 2. when data reinitializes slices_global reflects latest filter states
+
       module_fd()$set_filter_state(slices)
 
       # irrelevant filters are discarded in FilteredData$set_available_teal_slices

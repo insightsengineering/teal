@@ -193,7 +193,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         if (!inherits(data_rv(), "teal_data")) {
           stop("data_rv must be teal_data object.")
         }
-        logger::log_debug("srv_teal_module@1 initializing FilteredData")
+        logger::log_debug("srv_teal@1 initializing FilteredData")
+
         teal_data_to_filtered_data(data_rv())
       })
     }
