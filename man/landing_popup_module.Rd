@@ -59,7 +59,7 @@ app2 <- init(
     buttons = tagList(
       modalButton("Proceed"),
       actionButton("read", "Read more",
-                   onclick = "window.open('http://google.com', '_blank')"
+        onclick = "window.open('http://google.com', '_blank')"
       ),
       actionButton("close", "Reject", onclick = "window.close()")
     )
