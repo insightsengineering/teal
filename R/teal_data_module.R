@@ -61,7 +61,7 @@
 #' @export
 teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
   checkmate::assert_function(ui, args = "id", nargs = 1)
-  checkmate::check_function(server, args = "id", nargs = 1)
+  checkmate::assert_function(server, args = "id", nargs = 1)
   structure(
     list(ui = ui, server = server),
     label = label,
@@ -122,7 +122,7 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' @export
 teal_transform_module <- function(ui, server, label = "transform module") {
   checkmate::assert_function(ui, args = "id", nargs = 1)
-  checkmate::check_function(server, args = c("id", "data"), nargs = 2)
+  checkmate::assert_function(server, args = c("id", "data"), nargs = 2)
   structure(
     list(ui = ui, server = server),
     label = label,
