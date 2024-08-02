@@ -97,25 +97,16 @@ calling this function on it.
 \code{srv_teal_module} returns a reactive which returns the active module that corresponds to the selected tab.
 }
 \description{
-Create a UI of nested tabs of \code{teal_modules}
-}
-\section{\code{ui_teal_module}}{
-
-Each \code{teal_modules} is translated to a \code{bslib::navset_tab} and each
+On the UI side each \code{teal_modules} is translated to a \code{tabsetPanel} and each
 of its children is another tab-module called recursively. The UI of a
 \code{teal_module} is obtained by calling its UI function.
-
-The \code{datasets} argument is required to resolve the \code{teal} arguments in an
-isolated context (with respect to reactivity).
 }
-
-\section{\code{srv_teal_module}}{
-
-This module recursively calls all elements of \code{modules} and returns currently active one.
+\details{
+On the server side module recursively calls all elements of \code{modules} and returns currently
+active one.
 \itemize{
 \item \code{teal_module} returns self as a active module.
 \item \code{teal_modules} also returns module active within self which is determined by the \code{input$active_tab}.
 }
 }
-
 \keyword{internal}

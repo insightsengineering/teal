@@ -52,7 +52,6 @@
 NULL
 
 #' @rdname module_filter_manager
-#' @keywords internal
 ui_filter_manager_panel <- function(id) {
   ns <- NS(id)
   tags$button(
@@ -86,9 +85,7 @@ srv_filter_manager_panel <- function(id, slices_global) {
   })
 }
 
-
 #' @rdname module_filter_manager
-#' @keywords internal
 ui_filter_manager <- function(id) {
   ns <- NS(id)
   actionButton(ns("filter_manager"), NULL, icon = icon("filter"))
@@ -99,7 +96,6 @@ ui_filter_manager <- function(id) {
 }
 
 #' @rdname module_filter_manager
-#' @keywords internal
 srv_filter_manager <- function(id, slices_global) {
   checkmate::assert_string(id)
   checkmate::assert_class(slices_global, ".slicesGlobal")
@@ -169,7 +165,6 @@ srv_filter_manager <- function(id, slices_global) {
 }
 
 #' @rdname module_filter_manager
-#' @keywords internal
 srv_module_filter_manager <- function(id, module_fd, slices_global) {
   checkmate::assert_string(id)
   checkmate::assert_class(module_fd, "reactive")
@@ -238,10 +233,8 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
 methods::setOldClass("reactiveVal")
 methods::setOldClass("reactivevalues")
 
-
 #' @importFrom methods new
 #' @rdname module_filter_manager
-#' @keywords internal
 .slicesGlobal <- methods::setRefClass(".slicesGlobal", # nolint
   fields = list(
     all_slices = "reactiveVal",

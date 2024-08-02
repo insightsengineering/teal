@@ -5,8 +5,7 @@ testthat::test_that("e2e: reporter tab is created when a module has reporter", {
     modules = report_module(label = "Module with Reporter")
   )
 
-  teal_tabs <- app$get_html_rvest(selector = "#teal-teal_modules-active_tab") %>%
-    rvest::html_elements("a")
+  teal_tabs <- rvest::html_elements(app$get_html_rvest(selector = "#teal-teal_modules-active_tab"), "a")
   tab_names <- setNames(
     rvest::html_attr(teal_tabs, "data-value"),
     rvest::html_text(teal_tabs)
@@ -25,8 +24,10 @@ testthat::test_that("e2e: reporter tab is not created when a module has no repor
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
-  teal_tabs <- app$get_html_rvest(selector = "#teal-teal_modules-active_tab") %>%
-    rvest::html_elements("a")
+  teal_tabs <- rvest::html_elements(
+    app$get_html_rvest(selector = "#teal-teal_modules-active_tab"),
+    "a"
+  )
   tab_names <- setNames(
     rvest::html_attr(teal_tabs, "data-value"),
     rvest::html_text(teal_tabs)

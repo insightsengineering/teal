@@ -85,7 +85,6 @@
 NULL
 
 #' @rdname module_snapshot_manager
-#' @keywords internal
 ui_snapshot_manager_panel <- function(id) {
   ns <- NS(id)
   tags$button(
@@ -97,8 +96,6 @@ ui_snapshot_manager_panel <- function(id) {
 }
 
 #' @rdname module_snapshot_manager
-#' @keywords internal
-#'
 srv_snapshot_manager_panel <- function(id, slices_global) {
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_snapshot_manager_panel initializing")
@@ -120,9 +117,6 @@ srv_snapshot_manager_panel <- function(id, slices_global) {
 }
 
 #' @rdname module_snapshot_manager
-#' @keywords internal
-#' @keywords internal
-#'
 ui_snapshot_manager <- function(id) {
   ns <- NS(id)
   tags$div(
@@ -140,8 +134,6 @@ ui_snapshot_manager <- function(id) {
 }
 
 #' @rdname module_snapshot_manager
-#' @keywords internal
-#'
 srv_snapshot_manager <- function(id, slices_global) {
   checkmate::assert_character(id)
 
